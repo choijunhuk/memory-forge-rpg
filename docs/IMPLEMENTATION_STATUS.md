@@ -10,8 +10,8 @@
 
 | 작업 | 상태 | 정확한 요구/완료 조건 |
 |---|---|---|
-| P1 JS→C# 트레이스 생성기 | IN_PROGRESS | §16.2·§20.9 P1-1. `tools/gen_traces.mjs`와 회귀8개·전체 출력/재생 검증 완료. 실제700short+300full=1000개·273748명령·275748해시 재생 PASS. [전체 증거](../reports/cross_language_20261015/replay.json). 상대 검토·통합을 거쳐 C# 실제 명령 재생으로 이어감. JS oracle 성공은 C# 동치 아님. |
-| C# 전체 Battle·Run·기억 저장 | NOT_IMPLEMENTED | C#은 Rng/Gacha/Stats/ReservationBook과 새 canonical 직렬화·해시 기반이 있음. 시작/종료2000해시는 PASS지만 명령 실행은0개. 전체 전투/탐사/기억 저장은 미구현. netstandard2.1/C#8·정수/BigInteger·컬렉션 순서·동일 명령별 해시1000개와 기존 CoreChecks를 모두 수용해야 함. |
+| P1 JS→C# 트레이스 생성기 | IN_PROGRESS | §16.2·§20.9 P1-1. `tools/gen_traces.mjs`와 회귀9개·전체 출력/재생 검증 완료. 실제700short+300full=1000개·273748명령·275748해시 재생 PASS. [전체 증거](../reports/cross_language_20261015/replay.json). 상대 검토·통합을 거쳐 C# 실제 명령 재생으로 이어감. JS oracle 성공은 C# 동치 아님. |
+| C# 전체 Battle·Run·기억 저장 | IN_PROGRESS | C#은 Rng/Gacha/Stats/ReservationBook·canonical 기반과 실제 Battle.Create/begin을 구현했다. [전투 시작267사례·2220검사](../reports/csharp_opening_20261015/) 및 Unity PlayMode5개 PASS; 상대 Opus 리뷰·Git 통합은 별도 기록. 시작/종료2000해시 PASS와 구별하며 전체1000 Run 트레이스 명령 재생은0개. play/ult/end·전체 전투/탐사/기억 저장은 미구현. netstandard2.1/C#8·정수/BigInteger·컬렉션 순서·동일 명령별 해시1000개와 기존 CoreChecks를 모두 수용해야 함. |
 | 후반 본편 활성화 | BLOCKED_ACCEPTANCE | JS 여섯 행동·HTML·23종 후보 있음. 최신40시나리오/조우 확대는44조우×40×3=5280회, 목표 미달21개. C#·서사/연출·목표 미달 해소 전 `authored` 활성화/본편 완료 선언 금지. |
 | 실제 Unity 게임 수직 슬라이스 | PARTIAL(환경만) | 실제 Editor의 연결 검증 씬·프리팹·Play·EditMode3개·macOS 연결 앱 빌드는 확인. 로비→편성→지도→전투→보상→저장·서버·실기기는 미완료. |
 | 서버 앱·저장v2 접합 | NOT_IMPLEMENTED | §17 전체 및 §8.11·§17.5: 소유권·버전·고정 잠금·원장·이력·멱등·rollback·다기기 동시성. 스키마/JS 로컬 저장으로 대체 불가. |
@@ -89,7 +89,7 @@ P1/P2 완료로 개발을 끝내지 않는다. 이 표와 아래 장별 요구�
 | 원문 요구사항 | 현재 상태 | 코드·시험·기록 근거 | 남은 인수 조건/한계 |
 |---|---|---|---|
 | **§5.1 기본 수치 (`data.rules`)** | IMPLEMENTED(JS) | [rules][data]·[Battle][js]·[엔진 시험][engine-tests] | C#·서버 판정 동치 |
-| **§5.2 전투 구성** | IMPLEMENTED(JS) | [Battle.create][js]·[엔진 시험][engine-tests] | C# 직렬화·공유 체력·카드 개체 동치 |
+| **§5.2 전투 구성** | IMPLEMENTED(JS) | [Battle.create][js]·[엔진 시험][engine-tests] | [C# Create/begin267사례](../reports/csharp_opening_20261015/) 완료; 전체 전투 동치는 별도 |
 | **§5.3 턴 진행 순서** | IMPLEMENTED(JS) | [startTurn/endTurn][js]·[첫 턴 회귀][review-tests] | C# 전체 턴 경계 트레이스 |
 | **§5.4 카드 사용** | IMPLEMENTED(JS) | [check/precheck/resolveCard][js]·[엔진 시험][engine-tests] | C# 실패 무변경·해결 중 종료 동치 |
 | **§5.5 시간 예약** | PARTIAL(JS/C# 유틸) | [Battle][js]·[ReservationBook][reservation]·[후반 시험][late-tests] | C# 전체 Battle의 절대 만기·최신 지연/봉인 동치 |
@@ -102,8 +102,8 @@ P1/P2 완료로 개발을 끝내지 않는다. 이 표와 아래 장별 요구�
 | **§5.12 피해·방어 수식** | IMPLEMENTED(JS) | [Battle/Stats][js]·[벡터][vectors]·[엔진 시험][engine-tests] | C# 전체 피해/방어/회복 BigInteger·반올림 동치 |
 | **§5.13 손패·더미** | IMPLEMENTED(JS) | [Battle][js]·[성장 회귀][review-tests] | 더미 보존·무료 토큰·메아리의 C# 동치 |
 | **§5.14 종료** | IMPLEMENTED(JS) | [치명 다단 시험][lethal-tests]·[플레이어 반사 시험][player-reflect] | 종료 뒤 효과 중단·예약 회수 C# 동치 |
-| **§5.15 명령·결정론·공개 정보** | PARTIAL | [command/publicView][js]·[엔진 시험][engine-tests] | JS 원자성/멱등은 있음; 서버 비공개 상태·CSPRNG·동시성 미구현 |
-| **§5.16 첫 턴 경계의 회귀 기준** | IMPLEMENTED(JS) | [첫 턴 회귀][review-tests]·[Battle][js] | 첫/둘째 턴·시작 성장 이벤트 C# 트레이스 |
+| **§5.15 명령·결정론·공개 정보** | PARTIAL | [command/publicView][js]·[엔진 시험][engine-tests] | JS 및 C# begin 원자성/멱등·공개 정보 검사 있음; JS 상속 rid 결함은 다음 수정 단위. 서버 비공개 상태·CSPRNG·동시성 미구현 |
+| **§5.16 첫 턴 경계의 회귀 기준** | IMPLEMENTED(JS) | [첫 턴 회귀][review-tests]·[Battle][js] | [C# 첫 턴·시작 성장267사례](../reports/csharp_opening_20261015/) 확인; 둘째 턴·방벽 등 카드 경계는 남음 |
 | **§5.17 진화 카드의 성장 계열 판정** | IMPLEMENTED(JS) | [growthRoot/isGrowthInst][js]·[성장 회귀][review-tests] | 유효 진화 계보·토큰 복제 C# 동치 |
 | **§5.18 성장 이벤트와 공생 이끼** | IMPLEMENTED(JS) | [applyGrowth][js]·[성장 회귀][review-tests] | 이끼 실제 성장 이벤트·효과별 상한 C# 동치 |
 
@@ -278,7 +278,7 @@ P1/P2 완료로 개발을 끝내지 않는다. 이 표와 아래 장별 요구�
 | 원문 요구사항 | 현재 상태 | 코드·시험·기록 근거 | 남은 인수 조건/한계 |
 |---|---|---|---|
 | **§16.1 구성** | PARTIAL | [콘텐츠 빌드][content-build]·[JS][js]·[기존 C#][core] | 공유 전체 C# DLL·권위 서버·콘텐츠 해시 배포 연결 |
-| **§16.2 규칙 코어 이식 (JS → C#)** | IN_PROGRESS | [트레이스 생성기][traces]·[트레이스 시험][trace-tests]·[기존 C#][core] | JS oracle1000개 재생·C#2000스냅샷/정렬JSON 검사 완료; C# Battle/Run/저장 명령 재생 동치는 미구현 |
+| **§16.2 규칙 코어 이식 (JS → C#)** | IN_PROGRESS | [트레이스 생성기][traces]·[트레이스 시험][trace-tests]·[기존 C#][core] | JS oracle1000개 재생·C#2000스냅샷/정렬JSON 검사와 [실제begin267사례](../reports/csharp_opening_20261015/) 완료; 전체 Battle/Run/저장 명령 재생 동치는 미구현 |
 | **§16.3 결정론과 숨겨진 정보** | PARTIAL | [publicView][js]·[API 계약][api] | 서버 비공개 RNG/뽑을더미·모집 CSPRNG·문의 재생 구현 |
 | **§16.4 Unity 클라이언트** | PARTIAL(연결 검증) | [Unity 프로젝트][unity]·[실행 증거][env] | 게임 전체 가로 UI·서버·Addressables/리그·Android IL2CPP·성능 수용 |
 | **§16.5 서버** | NOT_IMPLEMENTED(서버 앱) | [스키마][schema]·[API 계약][api] | 인증/세션·무결성·명령·원장·속도제한 실제 ASP.NET 앱 |
@@ -397,7 +397,7 @@ P1/P2 완료로 개발을 끝내지 않는다. 이 표와 아래 장별 요구�
 
 ## 증거 읽는 법과 갱신
 
-[엔진 최종 로그][engine-final]는 현재140개 JS 시험 PASS를 담지만 현재 세션의 병렬 변경 뒤 최종 검증은 주 담당자가 다시 판정한다. [최신 확대 결과][balance-latest]의 목표 미달21개는 이전 [후반 결과][late]의1320회/32개와 표본 수가 다르므로 동일 조건 개선율로 섞지 않는다. 라이브 적20종·후보23종·4~6장 잠금을 유지한다.
+[밸런스 단위 엔진 로그][engine-final]는168개 PASS이며, 다음 [C# opening 단위](../reports/csharp_opening_20261015/node_tests.txt)는178개 PASS다. 각 로그의 소스와 실행 범위를 구별한다. [최신 확대 결과][balance-latest]의 목표 미달21개는 이전 [후반 결과][late]의1320회/32개와 표본 수가 다르므로 동일 조건 개선율로 섞지 않는다. 라이브 적20종·후보23종·4~6장 잠금을 유지한다.
 
 이 장부 작성 시 문서/인계 검사 결과는 주 담당자에게 회수한다. 새로운 증거가 생기면 해당 행의 구현/시험/검토/통합 상태와 경로를 갱신하고, 기존 실행 기록은 삭제하지 않는다. 근거가 없는 칸은 NOT_RUN/미구현/대기로 남긴다.
 

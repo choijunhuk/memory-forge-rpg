@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      MemoryForgeMcpSmokeBefore_0: 3327111762200980353
   mipmapLimitGroupName:
   pSDRemoveMatte: 0
   userData:

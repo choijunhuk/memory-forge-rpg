@@ -67,3 +67,5 @@ Unity MCP는 실제 Scene·Prefab·UI·Animation·Console·Play 시험·임포�
 P1/P2나 연결 작업이 끝났다는 이유로 전체 개발을 끝내지 않는다. 정책·권한·환경·구독 한도로 막힌 작업만 보류하고 가능한 다음 작업을 선택한다. 현재 세션 밖에서 개발이 계속된다고 약속하지 않는다. 원본 설계·수치·정책·콘텐츠·비공개 원격·기존 변경을 보존하고 기능·시험 삭제로 통과시키지 않는다.
 
 공유 Core의 기본 .NET 명령도 패키지 안에 산출물을 만들지 않도록 [Directory.Build.props](../core/Directory.Build.props)에 출력 경로를 고정했다. [기본 명령 실제 실행](../reports/ai_environment_20261015/default_dotnet_run.txt)·[파일 배치](../reports/ai_environment_20261015/shared_core_layout.json)·[Editor 오류 전용 조회](../reports/ai_environment_20261015/shared_core_errors_only.json)를 확인했다. 도메인 리로드의 MCP 전송 경고1개는 [합산 Console 기록](../reports/ai_environment_20261015/shared_core_console.json)에 보존한다. [최종 한정 재검토](../ops/ai/tasks/P1-UNITY-OUTPUT-VERIFY.result.json)는 차단 해제 판정이다.
+
+전투 시작 이식 후 같은 공유 Core의 [PlayMode5/5](../reports/csharp_opening_20261015/unity_playmode.json)와 [EditMode3/3](../reports/csharp_opening_20261015/unity_editmode.json)를 새로 실행했다. 5개 중3개가 실제 Battle 시작·요청 재시도·사망/봉투 생존이다. [Console 오류0/전송 경고1](../reports/csharp_opening_20261015/unity_console.json)을 구분하며 이전 macOS 연결 앱 빌드를 새 전투 게임 빌드로 재분류하지 않는다.

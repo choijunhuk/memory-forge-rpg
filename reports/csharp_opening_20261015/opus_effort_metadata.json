@@ -1,0 +1,34 @@
+[
+  {
+    "type": "assistant",
+    "at": "2026-10-14T23:19:29.017Z",
+    "metadata": {
+      "effort": "max",
+      "perTurnEffort": "max"
+    }
+  },
+  {
+    "type": "assistant",
+    "at": "2026-10-14T23:19:29.607Z",
+    "metadata": {
+      "effort": "max",
+      "perTurnEffort": "max"
+    }
+  },
+  {
+    "type": "assistant",
+    "at": "2026-10-14T23:21:05.529Z",
+    "metadata": {
+      "effort": "max",
+      "perTurnEffort": "max"
+    }
+  },
+  {
+    "type": "assistant",
+    "at": "2026-10-14T23:21:13.411Z",
+    "metadata": {
+      "effort": "max",
+      "perTurnEffort": "max"
+    }
+  }
+]

@@ -1,0 +1,90 @@
+{
+  "success": true,
+  "message": "Test job status retrieved.",
+  "error": null,
+  "data": {
+    "job_id": "1ccd4ed812244bffbf28c985d68d4a8c",
+    "status": "succeeded",
+    "mode": "PlayMode",
+    "started_unix_ms": 1792019596146,
+    "finished_unix_ms": 1792019602060,
+    "last_update_unix_ms": 1792019602060,
+    "progress": {
+      "completed": 5,
+      "total": 5,
+      "current_test_full_name": null,
+      "current_test_started_unix_ms": null,
+      "last_finished_test_full_name": "MemoryForge.PlayModeTests.SharedCorePlayModeTests.SharedRngAndReservationsKeepTheirStateAcrossARealTurn",
+      "last_finished_unix_ms": 1792019602047,
+      "stuck_suspected": false,
+      "editor_is_focused": false,
+      "run_in_background": false,
+      "focus_nudge_attempts": null,
+      "focus_nudge_limit": null,
+      "focus_nudge_status": null,
+      "blocked_reason": null,
+      "failures_so_far": [],
+      "failures_capped": false
+    },
+    "error": null,
+    "result": {
+      "mode": "PlayMode",
+      "summary": {
+        "total": 5,
+        "passed": 5,
+        "failed": 0,
+        "skipped": 0,
+        "durationSeconds": 0.0480429,
+        "resultState": "Passed"
+      },
+      "results": [
+        {
+          "name": "AuthoredOpeningAndIdempotentRetryExecuteInsidePlayMode",
+          "fullName": "MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.AuthoredOpeningAndIdempotentRetryExecuteInsidePlayMode",
+          "state": "Passed",
+          "durationSeconds": 0.0255758,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "CircuitTerminationAndEnvelopeSurvivalExecuteInsidePlayMode(False)",
+          "fullName": "MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.CircuitTerminationAndEnvelopeSurvivalExecuteInsidePlayMode(False)",
+          "state": "Passed",
+          "durationSeconds": 0.0011971,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "CircuitTerminationAndEnvelopeSurvivalExecuteInsidePlayMode(True)",
+          "fullName": "MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.CircuitTerminationAndEnvelopeSurvivalExecuteInsidePlayMode(True)",
+          "state": "Passed",
+          "durationSeconds": 0.0004077,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "SharedCoreHashesTheSameJsonInTheRunningPlayer",
+          "fullName": "MemoryForge.PlayModeTests.SharedCorePlayModeTests.SharedCoreHashesTheSameJsonInTheRunningPlayer",
+          "state": "Passed",
+          "durationSeconds": 0.0004202,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "SharedRngAndReservationsKeepTheirStateAcrossARealTurn",
+          "fullName": "MemoryForge.PlayModeTests.SharedCorePlayModeTests.SharedRngAndReservationsKeepTheirStateAcrossARealTurn",
+          "state": "Passed",
+          "durationSeconds": 0.0021612,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        }
+      ]
+    }
+  },
+  "hint": null
+}

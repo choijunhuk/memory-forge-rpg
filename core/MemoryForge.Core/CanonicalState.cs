@@ -115,7 +115,7 @@ namespace MemoryForge.Core
             text.Append(']');
         }
 
-        private static void AppendString(StringBuilder text, string value)
+        internal static void AppendString(StringBuilder text, string value)
         {
             text.Append('"');
             for (int i = 0; i < value.Length; i++)

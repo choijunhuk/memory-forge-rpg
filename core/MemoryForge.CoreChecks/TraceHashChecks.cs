@@ -48,7 +48,7 @@ static class TraceHashChecks
             CheckFixtureRejections(root, manifestLine, firstScenarioLine);
         CheckGzipRejections();
         Console.WriteLine($"TraceFixtureValidationChecks: {checks - previousChecks - (failures - previousFailures)}/{checks - previousChecks} passed");
-        Console.WriteLine("BattleRunCommandReplay: NOT_IMPLEMENTED (0 commands executed in C#; snapshot hashes are not command parity)");
+        Console.WriteLine("BattleRunCommandReplay: NOT_IMPLEMENTED (0 full Run replay commands executed in C#; opening commands are checked separately)");
         return failures;
     }
 
