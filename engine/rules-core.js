@@ -452,7 +452,7 @@
     // ───── commands (atomic + idempotent) ─────
     command(req) {
       const digest = JSON.stringify({ v: req.v, kind: req.kind, args: req.args || {} });
-      if (req.rid && this.receipts[req.rid]) {
+      if (req.rid && Object.hasOwn(this.receipts, req.rid)) {
         if (this.receipts[req.rid].digest !== digest) throw new RuleError('IDEMPOTENCY_CONFLICT');
         return clone(this.receipts[req.rid].resp);
       }
@@ -471,7 +471,7 @@
       cand.checkInvariants();
       const resp = { v: cand.s.v, phase: cand.s.phase, ev: cand.s.ev };
       this.s = cand.s;
-      if (req.rid) this.receipts[req.rid] = { digest, resp: clone(resp) };
+      if (req.rid) Object.defineProperty(this.receipts, req.rid, { value: { digest, resp: clone(resp) }, enumerable: true, writable: true, configurable: true });
       return resp;
     }
     // convenience for UIs and bots

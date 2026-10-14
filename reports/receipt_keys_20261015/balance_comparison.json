@@ -1,0 +1,6 @@
+{
+  "trials": 1320,
+  "allScenariosTrialsStatisticsAssessmentUnchanged": true,
+  "failedMetrics": 32,
+  "sourceDifference": "engine source provenance only"
+}

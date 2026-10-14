@@ -5,4 +5,8 @@
 - 완료: 12개 상속 이름과 일반 대조에서 첫 요청·own 영수증/JSON 저장·버전 진행 후 재시도·내용 충돌 우선순위·응답 분리·실패 rid 재사용·prototype 보존을 검증한다. 26개 집중 시험 RED는 일반2 PASS/상속24 FAIL이다.
 - 소유: 별도 codex/csharp-battle-opening worktree의 Sol61 Max가 새 `engine/tests/battle_receipt_keys.test.mjs`와 로컬 RED 로그만 작성했다. 엔진 쓰기는 현재 C# opening 검토·통합 뒤 별도 배정한다. root가 반대 Opus Max 리뷰·검증·통합·PR2를 소유한다.
 - 수정 후보: Battle.command의 own lookup + 계산 속성 spread 저장. 기존 memory-v2 경로와 같은 규칙을 재사용한다. engine source hash 변경 후 opening267 및 전체1000 traces를 실제 재생성/재검증하고, 과거 balance/corpus의 원래 출처를 덮어쓰지 않는다.
-- 상태: REPRODUCED_RED; 엔진은 아직 변경하지 않음.
+- 초기 상태: REPRODUCED_RED; 아래 구현·검증 결과로 갱신.
+
+## 구현·검증 결과
+
+최종 own lookup + defineProperty 두 줄 수정,26/26 PASS·Opus Max APPROVE. spread 저장은 객체 전체 복사와 identity 변경 때문에 거절했다. 실제 재생성한 opening267·Run1000/273748명령·275748해시 및 동일조건밸런스1320회의 전체 기록은 출처 해시 외에 동일하다. HTML 재빌드·UI13+10·JS204·기존 C#전체 검사와 입력 보존을 확인했다. 전체 Run C#명령 재생은0개, 다음 end 코드는 별도 worktree에서 개발 중이다. 최신 근거는 reports/receipt_keys_20261015/verification.json이다.

@@ -102,7 +102,7 @@ P1/P2 완료로 개발을 끝내지 않는다. 이 표와 아래 장별 요구�
 | **§5.12 피해·방어 수식** | IMPLEMENTED(JS) | [Battle/Stats][js]·[벡터][vectors]·[엔진 시험][engine-tests] | C# 전체 피해/방어/회복 BigInteger·반올림 동치 |
 | **§5.13 손패·더미** | IMPLEMENTED(JS) | [Battle][js]·[성장 회귀][review-tests] | 더미 보존·무료 토큰·메아리의 C# 동치 |
 | **§5.14 종료** | IMPLEMENTED(JS) | [치명 다단 시험][lethal-tests]·[플레이어 반사 시험][player-reflect] | 종료 뒤 효과 중단·예약 회수 C# 동치 |
-| **§5.15 명령·결정론·공개 정보** | PARTIAL | [command/publicView][js]·[엔진 시험][engine-tests] | JS 및 C# begin 원자성/멱등·공개 정보 검사 있음; JS 상속 rid 결함은 다음 수정 단위. 서버 비공개 상태·CSPRNG·동시성 미구현 |
+| **§5.15 명령·결정론·공개 정보** | PARTIAL | [command/publicView][js]·[엔진 시험][engine-tests] | JS 및 C# begin 원자성/멱등·공개 정보 검사 있음; [JS 상속 rid 수정·26회귀](../reports/receipt_keys_20261015/) 완료. 서버 비공개 상태·CSPRNG·동시성 미구현 |
 | **§5.16 첫 턴 경계의 회귀 기준** | IMPLEMENTED(JS) | [첫 턴 회귀][review-tests]·[Battle][js] | [C# 첫 턴·시작 성장267사례](../reports/csharp_opening_20261015/) 확인; 둘째 턴·방벽 등 카드 경계는 남음 |
 | **§5.17 진화 카드의 성장 계열 판정** | IMPLEMENTED(JS) | [growthRoot/isGrowthInst][js]·[성장 회귀][review-tests] | 유효 진화 계보·토큰 복제 C# 동치 |
 | **§5.18 성장 이벤트와 공생 이끼** | IMPLEMENTED(JS) | [applyGrowth][js]·[성장 회귀][review-tests] | 이끼 실제 성장 이벤트·효과별 상한 C# 동치 |
@@ -315,7 +315,7 @@ P1/P2 완료로 개발을 끝내지 않는다. 이 표와 아래 장별 요구�
 | 원문 요구사항 | 현재 상태 | 코드·시험·기록 근거 | 남은 인수 조건/한계 |
 |---|---|---|---|
 | **§19.1 이번 재검증 상태** | PARTIAL | [P0][p0]·[후반][late]·[현재 환경][env] | 과거 PASS를 새 실행에 합산하지 않음; 제품 단계 수용 별도 |
-| **§19.2 엔진 단위 시험이 보장하는 것** | IMPLEMENTED(JS 시험) | [엔진 시험][engine-tests]·[회귀][review-tests]·[168개 최신 로그][engine-final] | 테스트 범위 밖 C#/서버/사람 플레이는 별도 |
+| **§19.2 엔진 단위 시험이 보장하는 것** | IMPLEMENTED(JS 시험) | [엔진 시험][engine-tests]·[회귀][review-tests]·[204개 최신 로그][receipt-engine] | 테스트 범위 밖 C#/서버/사람 플레이는 별도 |
 | **§19.3 제품 단계 인수 시험 (P1 이후 추가)** | NOT_IMPLEMENTED(제품 수용) | [제품 수용 원문](source_v0.8.1/19_chapter.md) | C#1000·서버100병렬/구매·분포·실기기/성능 인수 |
 | **§19.4 밸런스 목표와 현재값 (기준 전투, 시작 덱)** | PARTIAL(목표 FAIL) | [최신 확대 결과][balance-latest] | 5280회 중 미달21개; 사람10판·공명/장비 전구간 수용 필요 |
 | **§19.5 문서 보존·릴리스 검사** | IMPLEMENTED(문서 검사) | [보존 검사][doc-check]·[인계/PDF 검사][handoff] | 원문·카드·시트·프롬프트·표 행·음성 시험을 재배포마다 유지 |
@@ -465,3 +465,4 @@ P1/P2 완료로 개발을 끝내지 않는다. 이 표와 아래 장별 요구�
 [balance-code]: ../engine/tests/balance_probe.mjs
 [balance-latest]: ../reports/balance_audit_20261015/expanded_after_summary.json
 [engine-final]: ../reports/balance_audit_20261015/engine_final.txt
+[receipt-engine]: ../reports/receipt_keys_20261015/node_tests.txt
