@@ -1,0 +1,8 @@
+Default documented command, SDK10.0.402, no --artifacts-path override
+['dotnet', 'run', '--project', 'core/MemoryForge.CoreChecks', '--', '.']
+CoreChecks: 202/202 passed
+CanonicalJsonChecks: 87/87 passed
+CanonicalSnapshotChecks: 2000/2000 hashes verified; scenarios=1000/1000 (700 short, 300 full); sourceFiles=5; commandEnvelopes=273748
+TraceFixtureValidationChecks: 13/13 passed
+BattleRunCommandReplay: NOT_IMPLEMENTED (0 commands executed in C#; snapshot hashes are not command parity)
+exit_code=0

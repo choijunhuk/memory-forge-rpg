@@ -1,0 +1,107 @@
+{
+  "task_id": "ENV-DOTNET10-CORECHECKS",
+  "status": "PASS",
+  "started_at": "2026-10-14T21:43:38.358395+00:00",
+  "requirements": {
+    "source": "docs/AI_WORKFLOW.md §7 and §10; parent delegated environment task",
+    "game_role": "Enable unchanged C# core cross-language checks for RNG, gacha, stats and reservation contracts",
+    "completion": [
+      "Official osx-arm64 .NET10 SDK installed in ignored local directory",
+      "Microsoft SHA512 verified before extraction",
+      "Unchanged CoreChecks builds and runs with telemetry disabled",
+      "Global SDK unchanged"
+    ],
+    "allowed_writes": [
+      "ops/ai/local/dotnet-sdk10/",
+      "reports/ai_environment_20261015/dotnet.json",
+      "reports/ai_environment_20261015/core_checks.txt"
+    ]
+  },
+  "sources": [
+    "https://builds.dotnet.microsoft.com/dotnet/release-metadata/10.0/releases.json",
+    "https://dotnet.microsoft.com/en-us/download/dotnet/10.0",
+    "https://learn.microsoft.com/en-us/dotnet/core/install/macos",
+    "https://dotnet.microsoft.com/en-us/platform/free"
+  ],
+  "sdk_version": "10.0.402",
+  "release_date": "2026-10-13",
+  "release_type": "lts",
+  "artifact": {
+    "name": "dotnet-sdk-osx-arm64.tar.gz",
+    "rid": "osx-arm64",
+    "url": "https://builds.dotnet.microsoft.com/dotnet/Sdk/10.0.402/dotnet-sdk-10.0.402-osx-arm64.tar.gz",
+    "hash": "ee0d379c144ebddef6efe851e1514883d1b695430d13b3fb13e8153f8476e1e5ac7abc42c08668471aaf4d738ff367cf53009845f94d224ba126febe74d00b75"
+  },
+  "host": {
+    "architecture": "arm64",
+    "macos": "26.6.2"
+  },
+  "install_dir": "ops/ai/local/dotnet-sdk10",
+  "global_sdks_before": "9.0.201 [/usr/local/share/dotnet/sdk]",
+  "preflight_manifest": {
+    "exit_code": 1,
+    "output": "> memory-forge-rpg@0.8.1-aio.2 verify:manifest\n> python3 tools/ai/verify_manifest.py\n\n{\n  \"release\": \"0.8.1-aio.2\",\n  \"entries\": 423,\n  \"pass\": false,\n  \"errors\": [\n    \"CHANGED .github/workflows/ci.yml\",\n    \"CHANGED AGENTS.md\",\n    \"CHANGED CLAUDE.md\",\n    \"CHANGED Memory_Forge_Complete_Design.pdf\",\n    \"CHANGED START_HERE.txt\",\n    \"CHANGED docs/AI_Start_Guide.md\",\n    \"CHANGED docs/AI_WORKFLOW.md\",\n    \"CHANGED docs/CURRENT.md\",\n    \"CHANGED docs/Memory_Forge_v0.8.1_Restored_Design.pdf\",\n    \"CHANGED docs/START_CLAUDE.md\",\n    \"CHANGED docs/START_CODEX.md\",\n    \"CHANGED docs/decisions_v0.8.1.md\",\n    \"CHANGED docs/design/gen/errors.md\",\n    \"CHANGED engine/rules-core.js\",\n    \"CHANGED engine/tests/balance_probe.mjs\",\n    \"CHANGED engine/tests/fuzz_runs.mjs\",\n    \"CHANGED engine/tests/review_v071.test.mjs\",\n    \"CHANGED package.json\",\n    \"CHANGED proposals/memory_v2.cjs\",\n    \"CHANGED prototype/index.html\",\n    \"CHANGED prototype/src/ui.js\",\n    \"CHANGED tools/build_prototype.mjs\",\n    \"CHANGED tools/gen_docs.mjs\"\n  ]\n}",
+    "interpretation": "Existing development changes against original delivery manifest; manifests preserved"
+  },
+  "missing_referenced_docs": [
+    "docs/AI_ENVIRONMENT.md"
+  ],
+  "source_sha256_before": {
+    "core/MemoryForge.CoreChecks/MemoryForge.CoreChecks.csproj": "eee22850e9343a7648f082e7b29e4cdd967742dfdd6d0f72b19d5a02fe9a5ae4",
+    "core/MemoryForge.CoreChecks/Program.cs": "7986855448bb5bf24fc571aab3641210e7458074be33853892ae111faa3ce27d",
+    "core/MemoryForge.Core/Rng.cs": "eec6245e3f35eb654d3251a38eec1afeb54b9015d3712c304c3d58f982aee6ac",
+    "core/MemoryForge.Core/ReservationBook.cs": "7f485f7eec6e45296d796c16be969d803f863b0c68c457da105963eea0ade5e9",
+    "core/MemoryForge.Core/Gacha.cs": "dc70eb1d65df06906ca33271e4bfe93b9096e937066cd90431711f89d788bb01",
+    "core/MemoryForge.Core/MemoryForge.Core.csproj": "82286007225827fe694c7c67b501a02d714c7916bf74247cefc03f425e14c221",
+    "core/MemoryForge.Core/Stats.cs": "c65ea42643ac26e050450e3d85abf342aeb01d6dce8b95257f2a2566c546486c"
+  },
+  "environment_policy": {
+    "DOTNET_CLI_TELEMETRY_OPTOUT": "1",
+    "DOTNET_SKIP_FIRST_TIME_EXPERIENCE": "1",
+    "DOTNET_GENERATE_ASPNET_CERTIFICATE": "false",
+    "DOTNET_NOLOGO": "1",
+    "cli_home_and_package_cache": "isolated under ignored ops/ai/local/dotnet-sdk10",
+    "global_PATH_modified": false,
+    "system_files_modified": false
+  },
+  "download": {
+    "bytes": 230833757,
+    "sha512": "ee0d379c144ebddef6efe851e1514883d1b695430d13b3fb13e8153f8476e1e5ac7abc42c08668471aaf4d738ff367cf53009845f94d224ba126febe74d00b75",
+    "checksum_match": true
+  },
+  "installed_at": "2026-10-14T21:43:58.732818+00:00",
+  "sdk_info": {
+    "command": "<repo>/ops/ai/local/dotnet-sdk10/dotnet --info",
+    "exit_code": 0,
+    "output": ".NET SDK:\n Version:           10.0.402\n Commit:            a8dd0577c5\n Workload version:  10.0.400-manifests.da132f47\n MSBuild version:   18.9.15+a8dd0577c\n\n런타임 환경:\n OS Name:     Mac OS X\n OS Version:  26.6\n OS Platform: Darwin\n RID:         osx-arm64\n Base Path:   <repo>/ops/ai/local/dotnet-sdk10/sdk/10.0.402/\n\n설치된 .NET 워크로드:\n표시할 설치된 워크로드가 없습니다.\n새 매니페스트를 설치할 때 use workload sets 사용하도록 구성됩니다.\n워크로드 집합이 설치되어 있지 않습니다. \"dotnet workload restore\"를 실행하여 워크로드 집합을 설치하세요.\n\nHost:\n  Version:      10.0.13\n  Architecture: arm64\n  Commit:       4099f83977\n\n.NET SDKs installed:\n  10.0.402 [<repo>/ops/ai/local/dotnet-sdk10/sdk]\n\n.NET runtimes installed:\n  Microsoft.AspNetCore.App 10.0.13 [<repo>/ops/ai/local/dotnet-sdk10/shared/Microsoft.AspNetCore.App]\n  Microsoft.NETCore.App 10.0.13 [<repo>/ops/ai/local/dotnet-sdk10/shared/Microsoft.NETCore.App]\n\nOther architectures found:\n  x64   [/usr/local/share/dotnet/x64]\n    registered at [/etc/dotnet/install_location_x64]\n\nEnvironment variables:\n  DOTNET_ADD_GLOBAL_TOOLS_TO_PATH          [0]\n  DOTNET_CLI_HOME                          [<repo>/ops/ai/local/dotnet-sdk10/cli-home]\n  DOTNET_CLI_TELEMETRY_OPTOUT              [1]\n  DOTNET_CLI_WORKLOAD_UPDATE_NOTIFY_DISABLE [1]\n  DOTNET_GENERATE_ASPNET_CERTIFICATE       [false]\n  DOTNET_MULTILEVEL_LOOKUP                 [0]\n  DOTNET_NOLOGO                            [1]\n  DOTNET_ROOT                              [<repo>/ops/ai/local/dotnet-sdk10]\n  DOTNET_SKIP_FIRST_TIME_EXPERIENCE        [1]\n\nglobal.json file:\n  Not found\n\nLearn more:\n  https://aka.ms/dotnet/info\n\nDownload .NET:\n  https://aka.ms/dotnet/download\n"
+  },
+  "build": {
+    "command": "<repo>/ops/ai/local/dotnet-sdk10/dotnet build core/MemoryForge.CoreChecks/MemoryForge.CoreChecks.csproj --configuration Release --artifacts-path <repo>/ops/ai/local/dotnet-sdk10/artifacts --nologo",
+    "exit_code": 0,
+    "output": "  복원할 프로젝트를 확인하는 중...\n  <repo>/core/MemoryForge.CoreChecks/MemoryForge.CoreChecks.csproj을(를) 57밀리초 동안 복원했습니다.\n  <repo>/core/MemoryForge.Core/MemoryForge.Core.csproj을(를) 3.66초 동안 복원했습니다.\n  MemoryForge.Core -> <repo>/ops/ai/local/dotnet-sdk10/artifacts/bin/MemoryForge.Core/release/MemoryForge.Core.dll\n  MemoryForge.CoreChecks -> <repo>/ops/ai/local/dotnet-sdk10/artifacts/bin/MemoryForge.CoreChecks/release/MemoryForge.CoreChecks.dll\n\n빌드했습니다.\n    경고 0개\n    오류 0개\n\n경과 시간: 00:00:06.07\n"
+  },
+  "checks": {
+    "command": "<repo>/ops/ai/local/dotnet-sdk10/dotnet <repo>/ops/ai/local/dotnet-sdk10/artifacts/bin/MemoryForge.CoreChecks/release/MemoryForge.CoreChecks.dll <repo>",
+    "exit_code": 0,
+    "output": "CoreChecks: 202/202 passed\n"
+  },
+  "source_sha256_after": {
+    "core/MemoryForge.CoreChecks/MemoryForge.CoreChecks.csproj": "eee22850e9343a7648f082e7b29e4cdd967742dfdd6d0f72b19d5a02fe9a5ae4",
+    "core/MemoryForge.CoreChecks/Program.cs": "7986855448bb5bf24fc571aab3641210e7458074be33853892ae111faa3ce27d",
+    "core/MemoryForge.Core/Rng.cs": "eec6245e3f35eb654d3251a38eec1afeb54b9015d3712c304c3d58f982aee6ac",
+    "core/MemoryForge.Core/ReservationBook.cs": "7f485f7eec6e45296d796c16be969d803f863b0c68c457da105963eea0ade5e9",
+    "core/MemoryForge.Core/Gacha.cs": "dc70eb1d65df06906ca33271e4bfe93b9096e937066cd90431711f89d788bb01",
+    "core/MemoryForge.Core/MemoryForge.Core.csproj": "82286007225827fe694c7c67b501a02d714c7916bf74247cefc03f425e14c221",
+    "core/MemoryForge.Core/Stats.cs": "c65ea42643ac26e050450e3d85abf342aeb01d6dce8b95257f2a2566c546486c"
+  },
+  "source_files_unchanged": true,
+  "global_sdks_after": "9.0.201 [/usr/local/share/dotnet/sdk]",
+  "global_sdks_unchanged": true,
+  "completed_at": "2026-10-14T21:44:31.453808+00:00",
+  "verification_limits": [
+    "C# CoreChecks covers existing RNG/gacha/stats/reservation contracts only",
+    "Not Unity Editor, Play Mode, full Battle/Run parity, server, device or payment acceptance",
+    "Original delivery manifest has existing development drift; checksums were not regenerated",
+    "Opposite-AI independent review remains parent-owned"
+  ]
+}

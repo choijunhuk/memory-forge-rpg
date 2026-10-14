@@ -34,7 +34,7 @@
       "status": "PASS",
       "count": 13,
       "log": "reports/ai_environment_20261015/handoff_final.txt",
-      "log_sha256": "af095a882b9dd7d4d2061622fa76c0428952c23241bd01c6b8cbad6c0f411f94"
+      "log_sha256": "44311074d8ee01585a4f31891f4611a683891f91236cd1acc91da2bf676fd7c2"
     },
     {
       "name": "memory_ui",
@@ -73,9 +73,13 @@
     "setup_preserved": true
   },
   "opposite_ai_review": {
-    "status": "APPROVED core nine units",
-    "receipt": "ops/ai/tasks/P1-FINAL-CROSS-REVIEW.result.json",
-    "scope": "Combat/probe/traces/canonical/runner/Unity smoke; separate ZIP guard and shared-core delta review pending"
+    "status": "APPROVED all completed units",
+    "receipts": [
+      "ops/ai/tasks/P1-FINAL-CROSS-REVIEW.result.json",
+      "ops/ai/tasks/P1-INTEGRATION-DELTA-REVIEW.result.json",
+      "ops/ai/tasks/P1-UNITY-OUTPUT-VERIFY.result.json"
+    ],
+    "scope": "No full C# Battle/Run or gameplay balance acceptance claimed"
   },
   "not_run": [
     "human gameplay acceptance",

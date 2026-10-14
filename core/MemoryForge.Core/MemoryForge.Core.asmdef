@@ -1,0 +1,7 @@
+{
+  "name": "MemoryForge.Core",
+  "rootNamespace": "MemoryForge.Core",
+  "references": [],
+  "autoReferenced": true,
+  "noEngineReferences": true
+}

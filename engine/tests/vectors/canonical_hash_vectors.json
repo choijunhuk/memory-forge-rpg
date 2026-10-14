@@ -1,0 +1,184 @@
+{
+  "schema": "mf-canonical-hash-v1",
+  "sources": {
+    "tools/gen_hash_vectors.mjs": "22dd5d418a84cd13ea750beaa1d6ce439ccfeac35489b4e68e6e843b9931c96b",
+    "tools/gen_traces.mjs": "f071d6d815e7fe3f41d602824d6437fa0e2c9d9b043f33c929e7b7b600a05963"
+  },
+  "vectors": [
+    {
+      "id": "null",
+      "value": null,
+      "canonical": "null",
+      "sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "id": "empty-object",
+      "value": {},
+      "canonical": "{}",
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    },
+    {
+      "id": "empty-array",
+      "value": [],
+      "canonical": "[]",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "id": "booleans",
+      "value": {
+        "yes": true,
+        "no": false
+      },
+      "canonical": "{\"no\":false,\"yes\":true}",
+      "sha256": "80a5e568f1553cd56b6e00f49e454f89cb46a7f45098fd493923bdb9f5dc0e9e"
+    },
+    {
+      "id": "numeric-looking-keys",
+      "value": {
+        "1": "one",
+        "2": "two",
+        "10": "ten",
+        "01": "leading",
+        "4294967295": "last"
+      },
+      "canonical": "{\"01\":\"leading\",\"1\":\"one\",\"10\":\"ten\",\"2\":\"two\",\"4294967295\":\"last\"}",
+      "sha256": "57aff948326e6215a75ee50d4fa488f76a44bf4ac760ca49dd5a08f321a03dbe"
+    },
+    {
+      "id": "recursive-diagnostics",
+      "value": {
+        "log": [
+          1
+        ],
+        "ev": [
+          2
+        ],
+        "keep": [
+          {
+            "log": [
+              3
+            ],
+            "ev": [
+              4
+            ],
+            "z": 2,
+            "a": {
+              "log": 5,
+              "keep": true
+            }
+          }
+        ],
+        "nested": {
+          "ev": 6,
+          "log": 7
+        }
+      },
+      "canonical": "{\"keep\":[{\"a\":{\"keep\":true},\"z\":2}],\"nested\":{}}",
+      "sha256": "c65939bd16f44b17a64d0aeaf8c9a77718da58d9a092d7ff429e909d06a1f4d0"
+    },
+    {
+      "id": "all-controls",
+      "value": "\u0000\u0001\u0002\u0003\u0004\u0005\u0006\u0007\b\t\n\u000b\f\r\u000e\u000f\u0010\u0011\u0012\u0013\u0014\u0015\u0016\u0017\u0018\u0019\u001a\u001b\u001c\u001d\u001e\u001f",
+      "canonical": "\"\\u0000\\u0001\\u0002\\u0003\\u0004\\u0005\\u0006\\u0007\\b\\t\\n\\u000b\\f\\r\\u000e\\u000f\\u0010\\u0011\\u0012\\u0013\\u0014\\u0015\\u0016\\u0017\\u0018\\u0019\\u001a\\u001b\\u001c\\u001d\\u001e\\u001f\"",
+      "sha256": "f144bcffbdbaea0a670956fb0a3edd44ce6bc4dedc77c30cfc14f40034044739"
+    },
+    {
+      "id": "quotes-slashes",
+      "value": "\"\\/<> &",
+      "canonical": "\"\\\"\\\\/<> &\"",
+      "sha256": "d994c71a51eed8fa66ee4046e0ebc4e2671914bbf8fc0ac025269274ffa6cb43"
+    },
+    {
+      "id": "unicode-preserved",
+      "value": "기억 café é    😀",
+      "canonical": "\"기억 café é    😀\"",
+      "sha256": "f4cfee276854368a46f1a91591304a68929f7c10793fedb978308ba106721210"
+    },
+    {
+      "id": "surrogate-pairs",
+      "value": "𐀀􏿿",
+      "canonical": "\"𐀀􏿿\"",
+      "sha256": "f66ee6ebfc339a9a088ba6aad2b9f9220a172ea0d0e26c1997e0eca868d7d0f8"
+    },
+    {
+      "id": "lone-surrogates",
+      "value": "\ud800x\udfff\udbff",
+      "canonical": "\"\\ud800x\\udfff\\udbff\"",
+      "sha256": "dd70ab3fdf0d0d494c4a98cd5f76c5615e39cb90d81e71c16f6c348f3e61cfae"
+    },
+    {
+      "id": "surrogate-boundary-keys",
+      "value": {
+        "": 4,
+        "\udfff": 3,
+        "𐀀": 2,
+        "\ud800": 1,
+        "a": 5
+      },
+      "canonical": "{\"a\":5,\"\\ud800\":1,\"𐀀\":2,\"\\udfff\":3,\"\":4}",
+      "sha256": "48533489a2ea8236048d1c66b0614c84c32d81a05277e0d5829e146981a548a6"
+    },
+    {
+      "id": "safe-integer-boundaries",
+      "value": [
+        9007199254740991,
+        -9007199254740991,
+        4294967295,
+        -2147483648,
+        -1,
+        0
+      ],
+      "canonical": "[9007199254740991,-9007199254740991,4294967295,-2147483648,-1,0]",
+      "sha256": "b22e2750986e7ea0f18600b87a9b8a05a9342d69af5046db386164a683d84174"
+    },
+    {
+      "id": "array-order-a",
+      "value": [
+        3,
+        2,
+        1
+      ],
+      "canonical": "[3,2,1]",
+      "sha256": "30c8681f9b840aceee56b737f3b126ae67ec4eb71d2881db831f86014fba016d"
+    },
+    {
+      "id": "array-order-b",
+      "value": [
+        1,
+        2,
+        3
+      ],
+      "canonical": "[1,2,3]",
+      "sha256": "a615eeaee21de5179de080de8c3052c8da901138406ba71c38c032845f7d54f4"
+    },
+    {
+      "id": "nested-objects-arrays",
+      "value": [
+        {
+          "2": "b",
+          "10": "a"
+        },
+        null,
+        [
+          false,
+          {
+            "z": 1,
+            "a": 2
+          }
+        ]
+      ],
+      "canonical": "[{\"10\":\"a\",\"2\":\"b\"},null,[false,{\"a\":2,\"z\":1}]]",
+      "sha256": "d54c31a01321b9f9d6fbee6bd802f5a245bc714003fdbdff2beea87abe980a04"
+    },
+    {
+      "id": "ordinary-special-keys",
+      "value": {
+        "toString": 2,
+        "__proto__": 1,
+        "constructor": 3
+      },
+      "canonical": "{\"__proto__\":1,\"constructor\":3,\"toString\":2}",
+      "sha256": "ad348bda822640ac8119fc9279e0bc46ae53f9b9b1b0aacdcebf4b0fd198051d"
+    }
+  ]
+}

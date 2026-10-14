@@ -1,0 +1,6 @@
+{
+  "name": "MemoryForge.PlayModeTests",
+  "references": ["MemoryForge.Core"],
+  "optionalUnityReferences": ["TestAssemblies"],
+  "autoReferenced": false
+}

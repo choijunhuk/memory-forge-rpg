@@ -2,13 +2,14 @@
 """Build current release hashes AFTER verification; not an input-repair command."""
 from pathlib import Path
 import hashlib,json
+from delivery_files import delivery_files, handoff_files, private_path
 ROOT=Path(__file__).resolve().parents[2]
 SKIP={'MANIFEST_AIO.json','MANIFEST.sha256'}
 def files():
- for p in sorted(ROOT.rglob('*')):
-  if not p.is_file():continue
+ for p in handoff_files(ROOT):
+  if private_path(p.relative_to(ROOT)):raise ValueError(f'Local account files cannot be delivered: {p.relative_to(ROOT).as_posix()}')
+ for p in delivery_files(ROOT):
   rel=p.relative_to(ROOT)
-  if any(x in rel.parts for x in ['.git','node_modules','__pycache__']):continue
   if rel.as_posix() in SKIP:continue
   yield p,rel.as_posix()
 items=[]

@@ -1,0 +1,21 @@
+{
+  "session_id": "4f90a3bc-f540-472f-9f55-08a4b75d143e",
+  "model": "claude-opus-5-5",
+  "requestedEffort": "max",
+  "cliSessionMetadata": [
+    {
+      "recordType": "assistant",
+      "subtype": null,
+      "keyPath": "$.effort",
+      "value": "max"
+    },
+    {
+      "recordType": "assistant",
+      "subtype": null,
+      "keyPath": "$.perTurnEffort",
+      "value": "max"
+    }
+  ],
+  "scope": "CLI configuration/session evidence; not server-internal reasoning visibility",
+  "observedMetadataEntries": 194
+}

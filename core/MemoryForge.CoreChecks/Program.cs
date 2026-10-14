@@ -114,7 +114,8 @@ static class Program
         Check(Throws(() => new ReservationBook(4, 1), "CAPACITY_RANGE"), "ctor range");
 
         Console.WriteLine($"CoreChecks: {checks - failures}/{checks} passed");
-        return failures == 0 ? 0 : 1;
+        int traceFailures = TraceHashChecks.Run(root);
+        return failures == 0 && traceFailures == 0 ? 0 : 1;
     }
 
     static bool Throws(Action a, string code) { try { a(); return false; } catch (RuleException e) { return e.Code == code; } }

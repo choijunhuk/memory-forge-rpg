@@ -1,0 +1,13 @@
+{
+  "scope": "Technical connection scene; no full gameplay or Android acceptance",
+  "build_job": "build-e947faa2df",
+  "launch": "PASS via CUA actual built app",
+  "visible": [
+    "MEMORY FORGE",
+    "Unity MCP connected",
+    "Development verification scene"
+  ],
+  "quit": "PASS CUA app inventory no longer lists player",
+  "errors": [],
+  "log": "Player.log filtered locally; raw file excluded"
+}

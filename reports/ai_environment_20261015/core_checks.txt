@@ -1,0 +1,86 @@
+Task: ENV-DOTNET10-CORECHECKS
+SDK: 10.0.402
+RID: osx-arm64
+Microsoft SHA512: MATCH
+DOTNET_CLI_TELEMETRY_OPTOUT=1
+Global SDKs unchanged: True
+Core source and project files unchanged: True
+
+SDK INFO
+<repo>/ops/ai/local/dotnet-sdk10/dotnet --info
+exit_code=0
+.NET SDK:
+ Version:           10.0.402
+ Commit:            a8dd0577c5
+ Workload version:  10.0.400-manifests.da132f47
+ MSBuild version:   18.9.15+a8dd0577c
+
+런타임 환경:
+ OS Name:     Mac OS X
+ OS Version:  26.6
+ OS Platform: Darwin
+ RID:         osx-arm64
+ Base Path:   <repo>/ops/ai/local/dotnet-sdk10/sdk/10.0.402/
+
+설치된 .NET 워크로드:
+표시할 설치된 워크로드가 없습니다.
+새 매니페스트를 설치할 때 use workload sets 사용하도록 구성됩니다.
+워크로드 집합이 설치되어 있지 않습니다. "dotnet workload restore"를 실행하여 워크로드 집합을 설치하세요.
+
+Host:
+  Version:      10.0.13
+  Architecture: arm64
+  Commit:       4099f83977
+
+.NET SDKs installed:
+  10.0.402 [<repo>/ops/ai/local/dotnet-sdk10/sdk]
+
+.NET runtimes installed:
+  Microsoft.AspNetCore.App 10.0.13 [<repo>/ops/ai/local/dotnet-sdk10/shared/Microsoft.AspNetCore.App]
+  Microsoft.NETCore.App 10.0.13 [<repo>/ops/ai/local/dotnet-sdk10/shared/Microsoft.NETCore.App]
+
+Other architectures found:
+  x64   [/usr/local/share/dotnet/x64]
+    registered at [/etc/dotnet/install_location_x64]
+
+Environment variables:
+  DOTNET_ADD_GLOBAL_TOOLS_TO_PATH          [0]
+  DOTNET_CLI_HOME                          [<repo>/ops/ai/local/dotnet-sdk10/cli-home]
+  DOTNET_CLI_TELEMETRY_OPTOUT              [1]
+  DOTNET_CLI_WORKLOAD_UPDATE_NOTIFY_DISABLE [1]
+  DOTNET_GENERATE_ASPNET_CERTIFICATE       [false]
+  DOTNET_MULTILEVEL_LOOKUP                 [0]
+  DOTNET_NOLOGO                            [1]
+  DOTNET_ROOT                              [<repo>/ops/ai/local/dotnet-sdk10]
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE        [1]
+
+global.json file:
+  Not found
+
+Learn more:
+  https://aka.ms/dotnet/info
+
+Download .NET:
+  https://aka.ms/dotnet/download
+
+
+BUILD
+<repo>/ops/ai/local/dotnet-sdk10/dotnet build core/MemoryForge.CoreChecks/MemoryForge.CoreChecks.csproj --configuration Release --artifacts-path <repo>/ops/ai/local/dotnet-sdk10/artifacts --nologo
+exit_code=0
+  복원할 프로젝트를 확인하는 중...
+  <repo>/core/MemoryForge.CoreChecks/MemoryForge.CoreChecks.csproj을(를) 57밀리초 동안 복원했습니다.
+  <repo>/core/MemoryForge.Core/MemoryForge.Core.csproj을(를) 3.66초 동안 복원했습니다.
+  MemoryForge.Core -> <repo>/ops/ai/local/dotnet-sdk10/artifacts/bin/MemoryForge.Core/release/MemoryForge.Core.dll
+  MemoryForge.CoreChecks -> <repo>/ops/ai/local/dotnet-sdk10/artifacts/bin/MemoryForge.CoreChecks/release/MemoryForge.CoreChecks.dll
+
+빌드했습니다.
+    경고 0개
+    오류 0개
+
+경과 시간: 00:00:06.07
+
+
+CORE CHECKS
+<repo>/ops/ai/local/dotnet-sdk10/dotnet <repo>/ops/ai/local/dotnet-sdk10/artifacts/bin/MemoryForge.CoreChecks/release/MemoryForge.CoreChecks.dll <repo>
+exit_code=0
+CoreChecks: 202/202 passed

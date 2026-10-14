@@ -1,0 +1,18 @@
+AssertionError [ERR_ASSERTION]: Trace policy cannot pick an empty list
+    at pick (file:///Users/choi/Documents/Memory_forge/tools/gen_traces.mjs:106:33)
+    at playBattle (file:///Users/choi/Documents/Memory_forge/tools/gen_traces.mjs:146:22)
+    at generateScenario (file:///Users/choi/Documents/Memory_forge/tools/gen_traces.mjs:191:22)
+    at chunks (file:///Users/choi/Documents/Memory_forge/tools/gen_traces.mjs:283:21)
+    at chunks.next (<anonymous>)
+    at nextSyncWithSyncValues (node:internal/streams/from:96:42)
+    at readable._read (node:internal/streams/from:61:9)
+    at Readable.read (node:internal/streams/readable:742:12)
+    at flow (node:internal/streams/readable:1290:53)
+    at resume_ (node:internal/streams/readable:1269:3) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 0,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}

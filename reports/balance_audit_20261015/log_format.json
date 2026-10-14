@@ -1,0 +1,29 @@
+{
+  "scope": "generated current-run text reports only; no test results removed",
+  "changes": [
+    {
+      "path": "reports/balance_audit_20261015/provenance_red.txt",
+      "original_sha256": "4d195792b9e2e9acc10b740ac5e9b351d3cc94d79f49ddbd3a60043b8fa41cbd",
+      "normalized_sha256": "9cb5f6ceb01b855f9b7e818a39a6af18b3a3fb3b17f4f965eac3c8de3b5f70cc",
+      "change": "trailing spaces/tabs only; original raw bytes preserved locally"
+    },
+    {
+      "path": "reports/balance_audit_20261015/post_resolution_red.txt",
+      "original_sha256": "2c5df0557f13d00258ab28f5aaa523073b225276feda574d5e1348d344705092",
+      "normalized_sha256": "34253cb65de65e0bacfff318d0415ab5851ade4d381a9ffab07314ea948a10c5",
+      "change": "trailing spaces/tabs only; original raw bytes preserved locally"
+    },
+    {
+      "path": "reports/balance_audit_20261015/reflect_red.txt",
+      "original_sha256": "b8ec6048fcc12f1a4d0232545d3183ebe304f70cf202510af7ab3b703ad3c847",
+      "normalized_sha256": "8070bfad366a67002c1ef7ba9ec28442bba4e3fe050d1a6839c9356f608a3c9d",
+      "change": "trailing spaces/tabs only; original raw bytes preserved locally"
+    },
+    {
+      "path": "reports/balance_audit_20261015/multihit_red.txt",
+      "original_sha256": "664713f35c32cf1c6ec5987ca54739189ca320224aa1703699069dc5f3640533",
+      "normalized_sha256": "9844f8b40f4c9face5cd0eaf4c1fb4278d9105de2e7d4cc6213ae1fe9ce6afa5",
+      "change": "trailing spaces/tabs only; original raw bytes preserved locally"
+    }
+  ]
+}

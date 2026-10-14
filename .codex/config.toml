@@ -1,0 +1,7 @@
+# Memory Forge: explicit model, quality-first default; use max for core work.
+model = "gpt-6.1-sol"
+model_reasoning_effort = "high"
+forced_login_method = "chatgpt"
+
+[mcp_servers.unityMCP]
+url = "http://127.0.0.1:8080/mcp"

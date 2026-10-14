@@ -15,9 +15,9 @@
 test at engine/tests/reflect_ultimate.test.mjs:18:40
 ✖ sera ultimate damage does not trigger card-only reflect (3.725ms)
   AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
-  
+
   240 !== 243
-  
+
       at TestContext.<anonymous> (file:///Users/choi/Documents/Memory_forge/engine/tests/reflect_ultimate.test.mjs:24:10)
       at Test.runInAsyncScope (node:async_hooks:226:14)
       at Test.run (node:internal/test_runner/test:1201:25)
@@ -34,9 +34,9 @@ test at engine/tests/reflect_ultimate.test.mjs:18:40
 test at engine/tests/reflect_ultimate.test.mjs:18:40
 ✖ lumi ultimate damage does not trigger card-only reflect (0.50025ms)
   AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
-  
+
   228 !== 243
-  
+
       at TestContext.<anonymous> (file:///Users/choi/Documents/Memory_forge/engine/tests/reflect_ultimate.test.mjs:24:10)
       at Test.runInAsyncScope (node:async_hooks:226:14)
       at Test.run (node:internal/test_runner/test:1201:25)

@@ -24,9 +24,11 @@ jobs:
       - run: sudo apt-get update && sudo apt-get install -y postgresql-16 poppler-utils fonts-nanum
       - run: node content/build.mjs data && git diff --exit-code data/
       - run: node tools/gen_vectors.mjs && git diff --exit-code engine/tests/vectors/
+      - run: node tools/gen_hash_vectors.mjs && git diff --exit-code engine/tests/vectors/canonical_hash_vectors.json
       - run: bash tools/run_all_checks.sh
       - run: npm run test:memory-ui
       - run: node engine/tests/fuzz_runs.mjs 100 full --late
       - run: node engine/tests/balance_probe.mjs 350 --late --out reports/paired_balance_late.json
+      - run: node tools/review/balance_causes.mjs reports/paired_balance_late.json reports/paired_balance_causes.json
       - run: npm run test:late-ui
       - run: python3 tools/check_integrated_release.py

@@ -8,6 +8,7 @@
     "CLAUDE.md",
     "START_HERE.txt",
     "core/MemoryForge.CoreChecks/Program.cs",
+    "core/README.md",
     "docs/AI_Start_Guide.md",
     "docs/AI_WORKFLOW.md",
     "docs/CURRENT.md",
@@ -201,7 +202,7 @@
       "path": "core/README.md",
       "input_sha256": "01965585b6487e88defa2ad6164b44d475de7224687f158e02907a980ffcab24",
       "previous_development_sha256": "01965585b6487e88defa2ad6164b44d475de7224687f158e02907a980ffcab24",
-      "current_sha256": "01965585b6487e88defa2ad6164b44d475de7224687f158e02907a980ffcab24"
+      "current_sha256": "cf40f08f3caadc6722a42f4b20dbbf72793f1dfb3d4e0a5e4396ad857775488a"
     },
     {
       "path": "data/design_policy_v0.8.json",
@@ -513,7 +514,7 @@
       "path": "docs/decisions_v0.8.1.md",
       "input_sha256": "ba9a2ff9b6c0e5ed08b6dfd250ac766573f90b430d0e2aa27c0afe33a2ccd63a",
       "previous_development_sha256": "a7a213568985787b10d6ecd43249d6fc30bae354c7659f4a46250647037ffbb0",
-      "current_sha256": "d7c9549fe04629e76c161326f6f5be5bdb5c5805c72bc965169335f45fd11f15"
+      "current_sha256": "f768c45bd8bcbac986abb2e0eab9f17ac6194552e2172482c6dcf410f36a6fdc"
     },
     {
       "path": "docs/decisions_v0.8.md",
@@ -2403,7 +2404,7 @@
       "path": "tools/ai/build_manifest.py",
       "input_sha256": "1936ca643e82ff58c71e723ad8402142e25095249b6cf78897bda635bc273427",
       "previous_development_sha256": "1936ca643e82ff58c71e723ad8402142e25095249b6cf78897bda635bc273427",
-      "current_sha256": "f14f89f2aa8f0fcc70d8f92259fab4a748522058eed192342e861513e5525d04"
+      "current_sha256": "4fbfe0ee5942b9cabd286ebbb8c8d16728056b304749a27c5b6099295f717a8c"
     },
     {
       "path": "tools/ai/check_local.py",
@@ -2421,7 +2422,7 @@
       "path": "tools/ai/test_handoff.py",
       "input_sha256": "ad69dbe8190e28fbb27710a5c1bedb2fee3471f3372e3673b9b8549a48c4b5f1",
       "previous_development_sha256": "ad69dbe8190e28fbb27710a5c1bedb2fee3471f3372e3673b9b8549a48c4b5f1",
-      "current_sha256": "0fe5e49caca346a56b8f34333cef04350ba7b96f40c5a346edf0d026c526ebdd"
+      "current_sha256": "7a81b70e112743afe31b132746be62393a3a354d23d1e874c241fe947b52c40b"
     },
     {
       "path": "tools/ai/verify_manifest.py",

@@ -1,0 +1,49 @@
+{
+  "version": "2026-10-15-quality-continuous",
+  "models": {
+    "codex": "gpt-6.1-sol",
+    "claude": "claude-opus-5-5"
+  },
+  "effort": {
+    "default": "high",
+    "allowed": [
+      "high",
+      "max"
+    ],
+    "core_and_final_review": "max",
+    "claude_planning_story_characters_final_review": "max",
+    "autonomous_escalation": true
+  },
+  "fallbacks": [],
+  "billing": "existing_subscription_included_allowance_only",
+  "api_auth_allowed": false,
+  "extra_usage_allowed": false,
+  "purchased_credit_spend_allowed": false,
+  "auto_recharge_allowed": false,
+  "image_generation_owner": "Codex",
+  "claude_invocation": "official CLI, subscription auth + verified account usage controls before inference",
+  "unity": {
+    "version": "6000.0.46f1",
+    "project": "client/MemoryForgeUnity",
+    "mcp_version": "10.3.0",
+    "mcp_commit": "aa5fc638d623f56178d50329d9ad8c541a57fe66",
+    "endpoint": "http://127.0.0.1:8080/mcp",
+    "telemetry": false,
+    "paid_asset_generation": false,
+    "single_writer": true
+  },
+  "workflow": [
+    "requirements",
+    "implementation",
+    "tests",
+    "opposite_AI_review",
+    "fix",
+    "reverify",
+    "integrate",
+    "next_unblocked_requirement"
+  ],
+  "continuous_scope": "current execution session; no claim of work after session exit",
+  "reviews_max_unresolved_rounds": 2,
+  "protected_design": "v0.8.1 complete original, numbers and live data preserved",
+  "private_repository": true
+}
