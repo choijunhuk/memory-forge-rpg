@@ -1,0 +1,15 @@
+{
+  "version": "0.8.1-aio.2",
+  "billing": "existing_subscription_included_allowance_only",
+  "orchestrator": "Codex",
+  "worker": "official Claude Code CLI",
+  "image_generation_owner": "Codex",
+  "fallbacks": [],
+  "worker_concurrency_default": 1,
+  "extra_usage_allowed": false,
+  "purchased_credit_spend_allowed": false,
+  "api_auth_allowed": false,
+  "actual_user_auth_verified": false,
+  "actual_cli_call_verified": false,
+  "enforcement": "agent instructions; account-level billing controls require environment verification"
+}

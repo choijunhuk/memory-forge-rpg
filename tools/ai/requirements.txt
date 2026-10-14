@@ -1,0 +1,4 @@
+# Only for delivery PDF generation and handoff PDF tests; no AI API dependencies.
+reportlab>=4,<5
+pypdf>=5,<7
+PyMuPDF>=1.24,<2

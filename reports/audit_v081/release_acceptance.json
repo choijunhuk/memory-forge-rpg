@@ -1,0 +1,64 @@
+{
+  "version": "0.8.1",
+  "document": "docs/Memory_Forge_v0.8.1_Restored_Design.pdf",
+  "pdf": {
+    "pass": true,
+    "pages": 154,
+    "all_runtime_ids_present": true,
+    "prompt_blocks": {
+      "SHEET": 12,
+      "KEYART": 11,
+      "CUTIN": 11,
+      "SD": 11,
+      "EXPR": 11
+    },
+    "all_pages_rendered": true,
+    "out_of_page_words": 0,
+    "bookmarks": 246,
+    "sha256": "c0e580dcb8db0b6f863220ca2d5b011332386ad44fab1c2e81a4a291b767b48a"
+  },
+  "document_contract": "PASS",
+  "document_regression_tests": "9/9 PASS",
+  "source_lines_accounted": 1970,
+  "unaccounted_source_lines": 0,
+  "original_v08_files_missing": 0,
+  "current_engine_tests": "51/51 PASS",
+  "current_economy_tests": "23/23 PASS",
+  "independent_memory_tests": "14/14 PASS, unconnected",
+  "fuzz_runs": {
+    "short": 100,
+    "full": 40,
+    "unexpected_exceptions": 0
+  },
+  "browser": {
+    "status": "PASS",
+    "method": "setContent/in-memory HTML; seed injection only",
+    "viewports": [
+      1280,
+      390
+    ],
+    "runs": 4,
+    "clear": 2,
+    "defeat": 2,
+    "screens": 16,
+    "clicks": 1388,
+    "not_validated": [
+      "file:// loading",
+      "hosting origin",
+      "persistence origin",
+      "network reconnect",
+      "physical Android"
+    ]
+  },
+  "not_run_or_unimplemented": [
+    "C# independent rerun",
+    "PostgreSQL independent rerun",
+    "Unity",
+    "server application",
+    "C# Battle/Run full port",
+    "memory_v2 integration",
+    "real payments",
+    "physical devices"
+  ],
+  "zip_final_check": "See same-version external delivery receipt for ZIP SHA-256. Every package entry is verified after final creation."
+}

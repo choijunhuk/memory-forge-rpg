@@ -1,0 +1,1 @@
+{"runs":40,"clears":27,"defeats":13,"battles":326,"turns":1305,"commands":7158,"rejectedTop":[["SLOT_FULL",2136],["AP_LOW",831],["FIXED_MARK_REQUIRED",713],["RESTRAINT_UNAVAILABLE",490],["NO_EMPTY_SLOT",269],["NOT_DEFERRABLE",138],["COINS_LOW",30],["DEBT_CAP",26],["RESERVATION_REQUIRED",4],["CANNOT_HEAL",1]],"unexpected":0}

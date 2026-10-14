@@ -1,0 +1,526 @@
+openapi: 3.1.0
+info:
+  title: Memory Forge account & game server API
+  version: 0.7.0
+  description: |
+    Server-authoritative API for Memory Forge (기억 공방) v0.7.
+    - Every mutating call carries `requestId` (idempotency). Same id + same payload → the stored response;
+      same id + different payload → 409 IDEMPOTENCY_CONFLICT.
+    - Battle/run commands also carry `expectedVersion`; a mismatch → 409 STALE_VERSION.
+    - Hidden information (RNG state, draw order, future intents beyond `next`) is never returned.
+    - Gacha rolls use a CSPRNG on the server; the pity state machine is the one in engine/rules-core.js (Gacha)
+      and core/MemoryForge.Core/Gacha.cs, verified by engine/tests/vectors.
+    - All money/currency changes write `ledger` rows in the same DB transaction as the change.
+servers:
+  - url: https://dev-api.memoryforge.example/v1
+    description: development (mock purchases allowed)
+  - url: https://api.memoryforge.example/v1
+    description: production (mock purchases rejected at startup and per request)
+security:
+  - bearer: []
+tags:
+  - { name: auth }
+  - { name: account }
+  - { name: gacha }
+  - { name: collection }
+  - { name: runs }
+  - { name: battles }
+  - { name: live }
+  - { name: shop }
+paths:
+  /auth/session:
+    post:
+      tags: [auth]
+      security: []
+      summary: Sign in (Play Games / guest) and get a bearer token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [provider, credential]
+              properties:
+                provider: { type: string, enum: [guest, google_play_games, dev] }
+                credential: { type: string, description: server auth code or guest device secret }
+      responses:
+        '200':
+          description: session
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token: { type: string }
+                  accountId: { type: string, format: uuid }
+                  isNew: { type: boolean }
+        '401': { $ref: '#/components/responses/Error' }
+  /account:
+    get:
+      tags: [account]
+      summary: Account snapshot (progress, wallet, inventory, stamina computed now)
+      responses:
+        '200':
+          description: snapshot
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/AccountSnapshot' }
+  /content/version:
+    get:
+      tags: [account]
+      security: []
+      summary: Active rules version and content hash (client downloads data/game_data.json by hash)
+      responses:
+        '200':
+          description: version
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  rulesVersion: { type: string, example: 0.7.0 }
+                  contentHash: { type: string }
+                  url: { type: string, format: uri }
+  /gacha/banners:
+    get:
+      tags: [gacha]
+      summary: Active banners with rates, pity counters and featured items
+      responses:
+        '200':
+          description: banners
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/BannerView' }
+  /gacha/banners/{bannerId}/rates:
+    get:
+      tags: [gacha]
+      security: []
+      summary: Probability disclosure (base, soft pity table, consolidated rate, item list)
+      parameters: [ { $ref: '#/components/parameters/BannerId' } ]
+      responses:
+        '200': { description: rate table, content: { application/json: { schema: { $ref: '#/components/schemas/RateTable' } } } }
+  /gacha/pull:
+    post:
+      tags: [gacha]
+      summary: Pull 1 or 10 times. Tickets are spent first, then crystals (free before paid unless the banner says otherwise).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [requestId, bannerId, count]
+              properties:
+                requestId: { $ref: '#/components/schemas/RequestId' }
+                bannerId: { type: string }
+                count: { type: integer, enum: [1, 10] }
+      responses:
+        '200':
+          description: results in order
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results: { type: array, items: { $ref: '#/components/schemas/PullResult' } }
+                  pity: { $ref: '#/components/schemas/Pity' }
+                  wallet: { $ref: '#/components/schemas/Wallet' }
+        '409': { $ref: '#/components/responses/Error' }
+        '422': { $ref: '#/components/responses/Error' }
+  /gacha/selector:
+    post:
+      tags: [gacha]
+      summary: Claim the standard-banner selector (after 300 standard + beginner pulls, once)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [requestId, charId]
+              properties:
+                requestId: { $ref: '#/components/schemas/RequestId' }
+                charId: { type: string }
+      responses:
+        '200': { description: granted, content: { application/json: { schema: { $ref: '#/components/schemas/PullResult' } } } }
+        '422': { $ref: '#/components/responses/Error' }
+  /gacha/history:
+    get:
+      tags: [gacha]
+      summary: Pull history (90 days, newest first)
+      parameters:
+        - { name: bannerId, in: query, schema: { type: string } }
+        - { name: cursor, in: query, schema: { type: string } }
+      responses:
+        '200': { description: page, content: { application/json: { schema: { type: object, properties: { items: { type: array, items: { $ref: '#/components/schemas/PullResult' } }, next: { type: string } } } } } }
+  /characters:
+    get:
+      tags: [collection]
+      summary: Owned characters with derived stats (power, HP, capacity)
+      responses:
+        '200': { description: list, content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/CharacterView' } } } } }
+  /characters/{charId}/{action}:
+    post:
+      tags: [collection]
+      summary: Growth actions. Costs are read from data/game_data.json → progression.levelling.
+      parameters:
+        - { name: charId, in: path, required: true, schema: { type: string } }
+        - { name: action, in: path, required: true, schema: { type: string, enum: [level-up, ascend, skill-up, gear-craft, gear-enhance, gift] } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [requestId]
+              properties:
+                requestId: { $ref: '#/components/schemas/RequestId' }
+                items: { type: object, additionalProperties: { type: integer, minimum: 0 }, description: 'level-up: xp items to consume; gift: gift id → qty' }
+                line: { type: string, enum: [card, ult] }
+                slot: { type: string, enum: [armor, accessory] }
+      responses:
+        '200': { description: updated, content: { application/json: { schema: { $ref: '#/components/schemas/CharacterView' } } } }
+        '422': { $ref: '#/components/responses/Error' }
+  /weapons:
+    get:
+      tags: [collection]
+      summary: Owned weapons
+      responses:
+        '200': { description: list, content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/WeaponView' } } } } }
+  /weapons/{instanceId}/{action}:
+    post:
+      tags: [collection]
+      summary: Weapon growth and equipping
+      parameters:
+        - { name: instanceId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { name: action, in: path, required: true, schema: { type: string, enum: [level-up, ascend, equip, unequip] } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [requestId]
+              properties:
+                requestId: { $ref: '#/components/schemas/RequestId' }
+                items: { type: object, additionalProperties: { type: integer, minimum: 0 } }
+                charId: { type: string }
+      responses:
+        '200': { description: updated, content: { application/json: { schema: { $ref: '#/components/schemas/WeaponView' } } } }
+        '422': { $ref: '#/components/responses/Error' }
+  /memory-decks:
+    get:
+      tags: [collection]
+      summary: Saved memory decks per character (written only by run memory commits)
+      responses:
+        '200': { description: decks, content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/MemoryDeck' } } } } }
+  /runs:
+    post:
+      tags: [runs]
+      summary: Start a run (story chapter, event or free run). Stats are derived on the server from collection rows.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [requestId, mode, party]
+              properties:
+                requestId: { $ref: '#/components/schemas/RequestId' }
+                mode: { type: string, enum: [story, event, free] }
+                chapter: { type: integer, minimum: 0, maximum: 6 }
+                length: { type: string, enum: [short, full] }
+                difficulty: { type: string, enum: [normal, hard] }
+                useMemory: { type: boolean, default: true }
+                party:
+                  type: array
+                  minItems: 3
+                  maxItems: 3
+                  items: { type: object, required: [charId], properties: { charId: { type: string }, weaponInstanceId: { type: string, format: uuid } } }
+      responses:
+        '200': { description: run created, content: { application/json: { schema: { $ref: '#/components/schemas/RunView' } } } }
+        '409': { $ref: '#/components/responses/Error' }
+  /runs/{runId}/commands:
+    post:
+      tags: [runs]
+      summary: Apply one command (map, reward, rest, forge, shop, event, battle). Atomic; failure changes nothing.
+      parameters: [ { $ref: '#/components/parameters/RunId' } ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/Command' }
+      responses:
+        '200': { description: events + new public state, content: { application/json: { schema: { $ref: '#/components/schemas/CommandResult' } } } }
+        '409': { $ref: '#/components/responses/Error' }
+        '422': { $ref: '#/components/responses/Error' }
+  /runs/{runId}/memory-commit:
+    post:
+      tags: [runs]
+      summary: Save the selected changes to memory decks (capacity per character; defeat keeps exactly one change)
+      parameters: [ { $ref: '#/components/parameters/RunId' } ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [requestId, selection]
+              properties:
+                requestId: { $ref: '#/components/schemas/RequestId' }
+                selection: { type: object, additionalProperties: { type: array, items: { type: integer, minimum: 0 } }, description: 'charId → indices of memoryChanges()' }
+                assign: { type: object, additionalProperties: { type: string }, description: 'common card key → charId' }
+      responses:
+        '200': { description: saved decks, content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/MemoryDeck' } } } } }
+        '422': { $ref: '#/components/responses/Error' }
+  /battles:
+    post:
+      tags: [battles]
+      summary: Start a single battle using saved memory decks (weekly boss, record rift floor, growth dungeon, event)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [requestId, kind, contentId, party]
+              properties:
+                requestId: { $ref: '#/components/schemas/RequestId' }
+                kind: { type: string, enum: [weekly_boss, rift, dungeon, event] }
+                contentId: { type: string }
+                difficulty: { type: integer, minimum: 1, maximum: 5 }
+                party: { type: array, minItems: 3, maxItems: 3, items: { type: object, properties: { charId: { type: string }, weaponInstanceId: { type: string, format: uuid } } } }
+      responses:
+        '200': { description: battle created, content: { application/json: { schema: { $ref: '#/components/schemas/CommandResult' } } } }
+        '422': { $ref: '#/components/responses/Error' }
+  /battles/{battleId}/commands:
+    post:
+      tags: [battles]
+      summary: Battle command (play / ult / end). Same contract as run commands.
+      parameters: [ { name: battleId, in: path, required: true, schema: { type: string, format: uuid } } ]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/Command' } } } }
+      responses:
+        '200': { description: result, content: { application/json: { schema: { $ref: '#/components/schemas/CommandResult' } } } }
+        '409': { $ref: '#/components/responses/Error' }
+        '422': { $ref: '#/components/responses/Error' }
+  /dungeons/{dungeonId}/sweep:
+    post:
+      tags: [battles]
+      summary: Instant clears after a 3-star clear (same rewards, same stamina)
+      parameters: [ { name: dungeonId, in: path, required: true, schema: { type: string } } ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object, required: [requestId, times], properties: { requestId: { $ref: '#/components/schemas/RequestId' }, times: { type: integer, minimum: 1, maximum: 12 } } }
+      responses:
+        '200': { description: rewards, content: { application/json: { schema: { $ref: '#/components/schemas/Grant' } } } }
+        '422': { $ref: '#/components/responses/Error' }
+  /missions:
+    get:
+      tags: [live]
+      summary: Daily / weekly / season missions with progress
+      responses:
+        '200': { description: missions, content: { application/json: { schema: { type: array, items: { type: object, properties: { id: { type: string }, period: { type: string }, progress: { type: integer }, goal: { type: integer }, claimed: { type: boolean }, reward: { $ref: '#/components/schemas/Grant' } } } } } } }
+  /missions/{missionId}/claim:
+    post:
+      tags: [live]
+      parameters: [ { name: missionId, in: path, required: true, schema: { type: string } } ]
+      requestBody: { required: true, content: { application/json: { schema: { type: object, required: [requestId], properties: { requestId: { $ref: '#/components/schemas/RequestId' } } } } } }
+      responses:
+        '200': { description: granted, content: { application/json: { schema: { $ref: '#/components/schemas/Grant' } } } }
+        '422': { $ref: '#/components/responses/Error' }
+  /pass:
+    get:
+      tags: [live]
+      responses:
+        '200': { description: pass state, content: { application/json: { schema: { type: object, properties: { seasonId: { type: string }, level: { type: integer }, xp: { type: integer }, premium: { type: boolean }, plus: { type: boolean }, claimedFree: { type: array, items: { type: integer } }, claimedPremium: { type: array, items: { type: integer } } } } } } }
+  /mail:
+    get:
+      tags: [live]
+      responses:
+        '200': { description: inbox, content: { application/json: { schema: { type: array, items: { type: object, properties: { mailId: { type: string, format: uuid }, title: { type: string }, body: { type: string }, attachments: { $ref: '#/components/schemas/Grant' }, expiresAt: { type: string, format: date-time } } } } } } }
+  /mail/{mailId}/claim:
+    post:
+      tags: [live]
+      parameters: [ { name: mailId, in: path, required: true, schema: { type: string, format: uuid } } ]
+      requestBody: { required: true, content: { application/json: { schema: { type: object, required: [requestId], properties: { requestId: { $ref: '#/components/schemas/RequestId' } } } } } }
+      responses:
+        '200': { description: granted, content: { application/json: { schema: { $ref: '#/components/schemas/Grant' } } } }
+  /shop:
+    get:
+      tags: [shop]
+      summary: Products with prices, contents and limits (no random paid items other than recruitment)
+      responses:
+        '200': { description: catalog, content: { application/json: { schema: { type: array, items: { type: object, properties: { productId: { type: string }, kind: { type: string }, priceKrw: { type: integer }, contents: { $ref: '#/components/schemas/Grant' }, limit: { type: integer }, remaining: { type: integer } } } } } } }
+  /purchases/verify:
+    post:
+      tags: [shop]
+      summary: Verify a Google Play purchase token on the server, grant once, then acknowledge/consume
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object, required: [requestId, productId, purchaseToken], properties: { requestId: { $ref: '#/components/schemas/RequestId' }, productId: { type: string }, purchaseToken: { type: string } } }
+      responses:
+        '200': { description: granted (or already granted), content: { application/json: { schema: { $ref: '#/components/schemas/Grant' } } } }
+        '402': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+  /shop/exchange:
+    post:
+      tags: [shop]
+      summary: Exchange shards / afterglow / tokens for tickets and materials (monthly limits)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object, required: [requestId, offerId, qty], properties: { requestId: { $ref: '#/components/schemas/RequestId' }, offerId: { type: string }, qty: { type: integer, minimum: 1 } } }
+      responses:
+        '200': { description: exchanged, content: { application/json: { schema: { $ref: '#/components/schemas/Grant' } } } }
+        '422': { $ref: '#/components/responses/Error' }
+components:
+  securitySchemes:
+    bearer: { type: http, scheme: bearer }
+  parameters:
+    BannerId: { name: bannerId, in: path, required: true, schema: { type: string } }
+    RunId: { name: runId, in: path, required: true, schema: { type: string, format: uuid } }
+  responses:
+    Error:
+      description: Rule or protocol error
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+  schemas:
+    RequestId: { type: string, minLength: 8, maxLength: 64, description: 'client-generated (UUID v7 recommended); reused on retry' }
+    Error:
+      type: object
+      required: [code]
+      properties:
+        code: { type: string, description: 'engine RuleError codes (AP_LOW, SLOT_FULL, DEBT_CAP, …) or server codes (IDEMPOTENCY_CONFLICT, STALE_VERSION, CRYSTALS_LOW, NOT_ENOUGH_ITEMS, LOCKED_BY_ACCOUNT_LEVEL, WEEKLY_LIMIT, PURCHASE_INVALID, MOCK_FORBIDDEN, …)' }
+        message: { type: string }
+        detail: { type: object }
+    Wallet:
+      type: object
+      additionalProperties: { type: integer, minimum: 0 }
+      description: 'crystal_paid, crystal_free, credit, ticket_limited, ticket_weapon, ticket_standard, shard, afterglow, boss_token, event_token'
+    Grant:
+      type: object
+      properties:
+        currencies: { type: object, additionalProperties: { type: integer } }
+        items: { type: object, additionalProperties: { type: integer } }
+        characters: { type: array, items: { type: string } }
+        weapons: { type: array, items: { type: string } }
+    AccountSnapshot:
+      type: object
+      properties:
+        accountId: { type: string, format: uuid }
+        level: { type: integer }
+        xp: { type: integer }
+        stamina: { type: integer }
+        staminaFullAt: { type: string, format: date-time }
+        storyCleared: { type: integer }
+        wallet: { $ref: '#/components/schemas/Wallet' }
+        inventory: { type: object, additionalProperties: { type: integer } }
+        unlocks: { type: array, items: { type: string } }
+    Pity:
+      type: object
+      properties:
+        pool: { type: string, enum: [character, weapon, standard, beginner] }
+        n: { type: integer }
+        guaranteed: { type: boolean }
+        srN: { type: integer }
+        total: { type: integer }
+    BannerView:
+      type: object
+      properties:
+        id: { type: string }
+        kind: { type: string, enum: [character, weapon, standard, beginner] }
+        name: { type: string }
+        featuredSsr: { type: string }
+        featuredSr: { type: array, items: { type: string } }
+        startsAt: { type: string, format: date-time }
+        endsAt: { type: string, format: date-time }
+        pity: { $ref: '#/components/schemas/Pity' }
+        costPerPull: { type: integer }
+        ticket: { type: string }
+    RateTable:
+      type: object
+      properties:
+        ssrBaseBps: { type: integer }
+        srBaseBps: { type: integer }
+        softPity: { type: array, items: { type: object, properties: { pull: { type: integer }, ssrBps: { type: integer } } } }
+        hardPity: { type: integer }
+        featuredShareBps: { type: integer }
+        consolidatedSsrRate: { type: number }
+        items: { type: array, items: { type: object, properties: { id: { type: string }, rarity: { type: string }, featured: { type: boolean }, bps: { type: integer } } } }
+    PullResult:
+      type: object
+      properties:
+        rarity: { type: string, enum: [SSR, SR, R] }
+        kind: { type: string, enum: [char, weapon, item] }
+        id: { type: string }
+        featured: { type: boolean }
+        lost: { type: boolean, description: lost the 50:50 / 75:25 (next SSR is featured) }
+        isNew: { type: boolean }
+        resonance: { type: integer, minimum: 0, maximum: 6 }
+        refine: { type: integer, minimum: 1, maximum: 5 }
+        shards: { type: integer }
+        afterglow: { type: integer }
+        pityAt: { type: integer }
+    CharacterView:
+      type: object
+      properties:
+        charId: { type: string }
+        copies: { type: integer }
+        resonance: { type: integer }
+        level: { type: integer }
+        ascension: { type: integer }
+        skillCard: { type: integer }
+        skillUlt: { type: integer }
+        armor: { type: [integer, 'null'] }
+        accessory: { type: [integer, 'null'] }
+        affinity: { type: integer }
+        derived: { type: object, properties: { power: { type: integer }, power4: { type: integer }, hp: { type: integer }, gearBps: { type: integer }, capacity: { type: integer } } }
+        weaponInstanceId: { type: [string, 'null'] }
+    WeaponView:
+      type: object
+      properties:
+        instanceId: { type: string, format: uuid }
+        weaponId: { type: string }
+        rarity: { type: string }
+        refine: { type: integer }
+        level: { type: integer }
+        ascension: { type: integer }
+        equippedBy: { type: [string, 'null'] }
+    MemoryDeck:
+      type: object
+      properties:
+        charId: { type: string }
+        version: { type: integer }
+        capacityUsed: { type: integer }
+        capacity: { type: integer }
+        specs: { type: array, items: { type: object, properties: { id: { type: string }, plus: { type: boolean }, mods: { type: object, properties: { c: { type: string }, e: { type: string } } }, from: { type: string } } } }
+    Command:
+      type: object
+      required: [requestId, expectedVersion, kind]
+      properties:
+        requestId: { $ref: '#/components/schemas/RequestId' }
+        expectedVersion: { type: integer }
+        kind: { type: string, enum: [enter, play, ult, end, takeCard, skipCard, takeRelic, takePart, evolve, proceed, rest, forgeOffer, forgeApply, forgeRemove, applyPart, buy, event, archive] }
+        args: { type: object, description: 'play: {uid, mode: now|next|after, target, picks[]}; ult: {actor, target}; enter: {nodeId}; …' }
+    CommandResult:
+      type: object
+      properties:
+        version: { type: integer }
+        phase: { type: string }
+        events: { type: array, items: { type: object } }
+        state: { type: object, description: 'PUBLIC view only: hand, piles as counts (draw pile order hidden), enemies with intent+next, reservations, statuses' }
+    RunView:
+      type: object
+      properties:
+        runId: { type: string, format: uuid }
+        version: { type: integer }
+        phase: { type: string }
+        state: { type: object }

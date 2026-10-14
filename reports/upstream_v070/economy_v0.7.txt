@@ -1,0 +1,10 @@
+Memory Forge v0.7.0 economy verification (exact)
+character banner: mean SSR 53.41 pulls, consolidated 1.872%, featured mean 80.12, worst 160
+weapon banner: mean SSR 48.30, featured mean 60.37, worst 140
+F2P 42 days: crystals 13920 (base 11520), limited tickets 9 → 96.0 pulls max / 81.0 base
+P(featured limited within F2P season pulls, from 0 pity): max 68.9% / base 61.7%
+full build per character: charXP 360000, weaponXP 180000, credits 1485000, books 236, cores 14
+farming: 131 runs = 2620 stamina = 9.7 days; cores 2.33 weeks of weekly boss
+builds per 42 days: by stamina 4.33, by cores 2.86
+account: AL20 9.3 days, AL40 32.8 days, AL60 70.4 days
+DESIGN_PROPOSAL — exact math of the configured rules; not live balance, not a revenue forecast.

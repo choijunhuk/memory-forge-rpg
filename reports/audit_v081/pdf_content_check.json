@@ -1,0 +1,22 @@
+{
+  "pages": 154,
+  "all_runtime_ids_found": true,
+  "missing": {
+    "cards": [],
+    "characters": [],
+    "weapons": [],
+    "parts": [],
+    "relics": [],
+    "enemies": [],
+    "events": []
+  },
+  "prompt_count": {
+    "SHEET": 12,
+    "KEYART": 11,
+    "CUTIN": 11,
+    "SD": 11,
+    "EXPR": 11
+  },
+  "bookmarks": 246,
+  "text_characters": 225410
+}

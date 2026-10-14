@@ -1,0 +1,199 @@
+{
+ "version": "0.7.0",
+ "gacha": {
+  "character": {
+   "mean": 53.411048379172726,
+   "consolidatedRate": 0.018722718058272438,
+   "cdf": {
+    "10": 0.07718058804273666,
+    "30": 0.21413098727512903,
+    "50": 0.33075735386701566,
+    "60": 0.3824098948388365,
+    "66": 0.45299712232802786,
+    "70": 0.8334092127169872,
+    "75": 0.9978156315490919,
+    "80": 0.9999999999999989
+   },
+   "hard": 80,
+   "sumProb": 0.9999999999999991,
+   "featuredMean": 80.1165725687591,
+   "featuredWorst": 160,
+   "pFeaturedWithin": {
+    "50": 0.19582940101762572,
+    "80": 0.6122889239827682,
+    "96": 0.688885963171935,
+    "120": 0.7803449998821296,
+    "140": 0.9537540128755752,
+    "160": 0.9999999999999984
+   }
+  },
+  "weapon": {
+   "mean": 48.297666191276754,
+   "consolidatedRate": 0.020704934189565753,
+   "cdf": {
+    "10": 0.08644111695931739,
+    "30": 0.23755304456607304,
+    "50": 0.36366952295884225,
+    "60": 0.4656030243957886,
+    "66": 0.970871835154801,
+    "70": 0.9999999999999994
+   },
+   "hard": 70,
+   "sumProb": 0.9999999999999994,
+   "featuredMean": 60.372082739095944,
+   "featuredWorst": 140,
+   "pFeaturedWithin": {
+    "50": 0.29143220846123624,
+    "80": 0.827805450719467,
+    "96": 0.8662470666221357,
+    "120": 0.9113008867556707,
+    "140": 1.0000000000000053,
+    "160": 1.0000000000000053
+   }
+  },
+  "standard": {
+   "mean": 53.411048379172726,
+   "consolidatedRate": 0.018722718058272438,
+   "cdf": {
+    "10": 0.07718058804273666,
+    "30": 0.21413098727512903,
+    "50": 0.33075735386701566,
+    "60": 0.3824098948388365,
+    "66": 0.45299712232802786,
+    "70": 0.8334092127169872,
+    "75": 0.9978156315490919,
+    "80": 0.9999999999999989
+   },
+   "hard": 80,
+   "sumProb": 0.9999999999999991
+  },
+  "beginner": {
+   "mean": 41.34466923337695,
+   "consolidatedRate": 0.024186914989096458,
+   "cdf": {
+    "10": 0.07718058804273666,
+    "30": 0.21413098727512903,
+    "50": 0.999999999999999
+   },
+   "hard": 50,
+   "sumProb": 0.9999999999999991
+  }
+ },
+ "season": {
+  "crystalsMax": 13920,
+  "crystalsBase": 11520,
+  "limitedTickets": 9,
+  "standardTickets": 12,
+  "limitedPullsMax": 96.0,
+  "limitedPullsBase": 81.0,
+  "tableSum": 13920,
+  "declaredF2p": {
+   "crystals": 13920,
+   "limitedTicket": 9,
+   "standardTicket": 12
+  },
+  "pFeaturedWithinMaxPulls": 0.688885963171935,
+  "pFeaturedWithinBasePulls": 0.6174943608212677
+ },
+ "fullBuild": {
+  "charXp": 360000,
+  "weaponXp": 180000,
+  "seals": 40,
+  "alloys": 20,
+  "books": 236,
+  "cores": 14,
+  "polish": 280,
+  "credits": {
+   "charLevel": 180000,
+   "charAscension": 130000,
+   "weaponLevel": 90000,
+   "weaponAscension": 65000,
+   "skills": 760000,
+   "gear": 260000
+  },
+  "creditsTotal": 1485000
+ },
+ "farming": {
+  "runs": {
+   "dg_ink": 15,
+   "dg_oil": 20,
+   "dg_seal": 14,
+   "dg_book": 30,
+   "dg_polish": 14,
+   "dg_credit": 38
+  },
+  "totalRuns": 131,
+  "stamina": 2620,
+  "daysOfStamina": 9.703703703703704,
+  "coresPerWeek": 6,
+  "eventCoresPerSeason": 4,
+  "weeksOfWeeklyBoss": 2.3333333333333335,
+  "fullBuildsPer42dByStamina": 4.32824427480916,
+  "fullBuildsPer42dByCores": 2.857142857142857
+ },
+ "account": [
+  {
+   "target": 20,
+   "xp": 5320,
+   "xpPerDay": 570,
+   "days": 9.333333333333334
+  },
+  {
+   "target": 40,
+   "xp": 18720,
+   "xpPerDay": 570,
+   "days": 32.8421052631579
+  },
+  {
+   "target": 60,
+   "xp": 40120,
+   "xpPerDay": 570,
+   "days": 70.3859649122807
+  }
+ ],
+ "products": {
+  "packs": [
+   {
+    "id": "pk_160",
+    "krw": 2400,
+    "crystals": 160,
+    "krwPerPull": 2400.0,
+    "krwPerPullFirst": 1200.0
+   },
+   {
+    "id": "pk_800",
+    "krw": 11000,
+    "crystals": 800,
+    "krwPerPull": 2200.0,
+    "krwPerPullFirst": 1100.0
+   },
+   {
+    "id": "pk_1680",
+    "krw": 22000,
+    "crystals": 1680,
+    "krwPerPull": 2095.2380952380954,
+    "krwPerPullFirst": 1047.6190476190477
+   },
+   {
+    "id": "pk_3440",
+    "krw": 44000,
+    "crystals": 3440,
+    "krwPerPull": 2046.5116279069769,
+    "krwPerPullFirst": 1023.2558139534884
+   },
+   {
+    "id": "pk_7000",
+    "krw": 88000,
+    "crystals": 7000,
+    "krwPerPull": 2011.4285714285713,
+    "krwPerPullFirst": 1005.7142857142857
+   }
+  ],
+  "monthlyTotal": 3000,
+  "monthlyKrwPerPull": 368.0,
+  "passKrwPerPull": 806.25,
+  "hardPityKrwAtBestPack": 160914.2857142857,
+  "fullPityKrwAtBestPack": 321828.5714285714
+ },
+ "status": "DESIGN_PROPOSAL — exact math of the configured rules; not live balance, not a revenue forecast."
+}

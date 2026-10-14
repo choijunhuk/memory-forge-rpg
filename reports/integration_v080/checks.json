@@ -1,0 +1,97 @@
+[
+  {
+    "name": "js_syntax",
+    "command": [
+      "node",
+      "--check",
+      "engine/rules-core.js"
+    ],
+    "executed": true,
+    "status": "PASS",
+    "exit_code": 0,
+    "seconds": 0.06,
+    "log": "reports/integration_v080/js_syntax.log"
+  },
+  {
+    "name": "js_reference_tests",
+    "command": [
+      "node",
+      "--test",
+      "engine/tests/engine.test.mjs",
+      "engine/tests/review_v071.test.mjs"
+    ],
+    "executed": true,
+    "status": "PASS",
+    "exit_code": 0,
+    "seconds": 0.46,
+    "log": "reports/integration_v080/js_reference_tests.log",
+    "reported_test_count": "51"
+  },
+  {
+    "name": "memory_proposal_tests",
+    "command": [
+      "node",
+      "--test",
+      "proposals/tests/memory_v2.test.cjs"
+    ],
+    "executed": true,
+    "status": "PASS",
+    "exit_code": 0,
+    "seconds": 0.13,
+    "log": "reports/integration_v080/memory_proposal_tests.log",
+    "reported_test_count": "14"
+  },
+  {
+    "name": "html_build",
+    "command": [
+      "node",
+      "tools/build_prototype.mjs",
+      "--no-data"
+    ],
+    "executed": true,
+    "status": "PASS",
+    "exit_code": 0,
+    "seconds": 0.05,
+    "log": "reports/integration_v080/html_build.log"
+  },
+  {
+    "name": "python_tests",
+    "command": [
+      "/opt/pyvenv/bin/python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests"
+    ],
+    "executed": true,
+    "status": "PASS",
+    "exit_code": 0,
+    "seconds": 1.97,
+    "log": "reports/integration_v080/python_tests.log",
+    "reported_test_count": "23"
+  },
+  {
+    "name": "csharp_existing_checks",
+    "executed": false,
+    "status": "NOT_RUN",
+    "reason": "No available dotnet runtime was detected; inherited reports are not a new execution."
+  },
+  {
+    "name": "browser_existing_smoke",
+    "executed": false,
+    "status": "NOT_RUN",
+    "reason": "Playwright module not resolved in this package; no browser pass inferred."
+  },
+  {
+    "name": "integrated_release_inventory",
+    "command": [
+      "/opt/pyvenv/bin/python3",
+      "tools/check_integrated_release.py"
+    ],
+    "executed": true,
+    "status": "FAIL",
+    "exit_code": 1,
+    "log": "reports/integration_v080/integrated_release_inventory.log"
+  }
+]

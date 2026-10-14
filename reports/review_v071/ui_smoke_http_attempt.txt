@@ -1,0 +1,15 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+page.goto: net::ERR_BLOCKED_BY_ADMINISTRATOR at http://127.0.0.1:8765/index.html?seed=7195
+Call log:
+  - navigating to "http://127.0.0.1:8765/index.html?seed=7195", waiting until "load"
+
+    at newPage (/mnt/data/mf_v071_review/working/memory-forge-rpg/prototype/tests/smoke.mjs:33:14)
+    at async file:///mnt/data/mf_v071_review/working/memory-forge-rpg/prototype/tests/smoke.mjs:55:16 {
+  name: 'Error'
+}
+
+Node.js v22.16.0
+EXIT_CODE:1

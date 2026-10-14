@@ -1,0 +1,3 @@
+# Claude instructions
+
+Read AGENTS.md, docs/CURRENT.md and docs/START_CLAUDE.md. Work from the fullv0.8.1 manuscript, not the incompletev0.8. The other agent must cross-review changes. Artbriefs/promptpack are design drafts, not implemented assets. Apply9.1common scope without turning neutral-reference poses into a restriction on action keyart. Runtime/target/option states must remain distinct.

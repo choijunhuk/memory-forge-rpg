@@ -1,0 +1,32 @@
+{
+  "v070": {
+    "zip_bytes": 2897354,
+    "sha256": "cf16e434d0d8cf980ed1b94b053f3e92420995a29caa3cb703f3ee65942216e2",
+    "files": 128,
+    "uncompressed": 4974340,
+    "crc_bad": null,
+    "top": [
+      "memory-forge-rpg"
+    ]
+  },
+  "v071": {
+    "zip_bytes": 5922235,
+    "sha256": "66093c3c1ebeea12ddb74dc26e2b1a1c575dffffeafff1123bb52f3076a36d19",
+    "files": 218,
+    "uncompressed": 8734086,
+    "crc_bad": null,
+    "top": [
+      "memory-forge-rpg"
+    ]
+  },
+  "v080": {
+    "zip_bytes": 6681770,
+    "sha256": "01b5755d1581064508f8a8b4e88234e8bd632c4a1b20a8769424f921759e93d6",
+    "files": 249,
+    "uncompressed": 10151689,
+    "crc_bad": null,
+    "top": [
+      "memory-forge-rpg"
+    ]
+  }
+}

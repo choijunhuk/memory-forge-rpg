@@ -1,0 +1,38 @@
+{
+  "root": "review/baseline",
+  "fix1": {
+    "block": 0,
+    "counter": 0
+  },
+  "fix2": {
+    "growthCards": 0,
+    "growthSum": 0,
+    "blockAfterGuard": 9
+  },
+  "fix4": {
+    "block": 12
+  },
+  "eternal": {
+    "block": 0,
+    "growth": 1
+  },
+  "fix3": {
+    "priorUpgrade": true,
+    "afterUpgrade": false
+  },
+  "memoryCap": {
+    "capacity": 6,
+    "resultCost": 3,
+    "cards": [
+      "sera_round",
+      "sera_cover",
+      "sera_aim",
+      "sera_timed",
+      "com_guard",
+      "sera_flash"
+    ]
+  },
+  "memoryDuplicate": {
+    "count": 1
+  }
+}

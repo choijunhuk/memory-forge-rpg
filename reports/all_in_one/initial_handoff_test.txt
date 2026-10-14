@@ -1,0 +1,1 @@
+Initial handoff test: 11/12 passed. One assertion expected the exact guard phrase 모든 조건이 확인된 뒤에만, while guide used the equivalent 위 확인이 끝난 뒤에만. Normalized the source guard phrase across all current entrypoints; the assertion and billing requirement were not removed. Final rerun recorded separately.

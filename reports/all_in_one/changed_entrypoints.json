@@ -1,0 +1,15 @@
+{
+  "docs/START_CODEX.md": "docs/archive/launch_before_all_in_one/docs/START_CODEX.md.original",
+  "docs/START_CLAUDE.md": "docs/archive/launch_before_all_in_one/docs/START_CLAUDE.md.original",
+  "AGENTS.md": "docs/archive/launch_before_all_in_one/AGENTS.md.original",
+  "CLAUDE.md": "docs/archive/launch_before_all_in_one/CLAUDE.md.original",
+  "docs/CURRENT.md": "docs/archive/launch_before_all_in_one/docs/CURRENT.md.original",
+  "README.md": "docs/archive/launch_before_all_in_one/README.md.original",
+  "docs/README_FIRST.md": "docs/archive/launch_before_all_in_one/docs/README_FIRST.md.original",
+  "client/README.md": "docs/archive/launch_before_all_in_one/client/README.md.original",
+  "core/README.md": "docs/archive/launch_before_all_in_one/core/README.md.original",
+  "server/README.md": "docs/archive/launch_before_all_in_one/server/README.md.original",
+  ".gitignore": "docs/archive/launch_before_all_in_one/.gitignore.original",
+  "package.json": "docs/archive/launch_before_all_in_one/package.json.original",
+  "MANIFEST.sha256": "docs/archive/launch_before_all_in_one/MANIFEST.sha256.original"
+}

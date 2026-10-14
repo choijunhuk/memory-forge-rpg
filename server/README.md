@@ -1,0 +1,9 @@
+# server/ — 계정·게임 서버 (스키마·API 명세 완료, 애플리케이션 코드는 P1-2)
+
+- `schema.sql`: PostgreSQL 16 스키마. `tools/check_schema.sh`가 임시 클러스터에 실제로 적용하고 `tests/schema_checks.sql`(잔액 음수 금지, 멱등 키, 천장 범위, 무기 장착 제약, 주간 3회, 진행 중 탐사 1개 등)을 실행한다.
+- `openapi.yaml`: OpenAPI 3.1, 27개 경로. `openapi-spec-validator`로 검증.
+- 모든 쓰기 요청의 트랜잭션 골격·잠금 순서: `docs/design_v0.8.1.md` §17.2. 모집 난수는 CSPRNG, 천장 상태 기계는 `core/MemoryForge.Core/Gacha.cs`.
+- 구현 지시문: `docs/design_v0.8.1.md` §20.3 P1-2.
+
+
+현재 실행·구독·자동 호출·이미지 담당 지침은 `docs/AI_WORKFLOW.md`다. 위 과거 실행 예시는 새 실행 증거가 아니다.

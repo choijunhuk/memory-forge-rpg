@@ -1,0 +1,13 @@
+# Agent contract — Memory Forge v0.8.1
+
+Current entry: docs/CURRENT.md. Current design: docs/design_v0.8.1.md (24 anchored chapter sources). Runtime and data remain the reviewed0.7 lineage; target design is not implemented by version label.
+
+1. Read docs/decisions_v0.8.1.md and the current/target flags before edits.
+2. Work in a separate branch/worktree. One Unity scene/prefab editor lease; MCP read tasks do not grant production access.
+3. Cross-review with the other agent. Never claim tests, compilation, Unity, devices, DB, payments or deployment without fresh evidence.
+4. Preserve private repo intent. Do not expose production credentials or real user data. Production write/deploy/payment requires human approval.
+5. Keep prices, gacha, permanent asset semantics and character ages within explicit approved scope; routine implementation may proceed autonomously.
+6. Edit docs/source_v0.8.1 and rebuild with npm run docs. All23chapters,10sheets and50prompts must survive. Numbered character headings are not chapter boundaries.
+7. Run npm test, npm run test:proposals, Python tests, npm run test:docs. No failed inventory may be called a complete delivery.
+8. Latest checksums: MANIFEST_v0.8.1.json and MANIFEST.sha256. Historical files under docs/archive and old manifest versions are not current.
+9. memory_v2 is independent and unconnected. FullRun/HTML/server/migration acceptance is required before changing its state.

@@ -1,0 +1,3 @@
+# 첫 안내
+
+저장소 루트 `README.md` → `docs/CURRENT.md` → `docs/design_v0.8.1.md` 0장 순서로 읽는다. AI에는 START_CODEX.md / START_CLAUDE.md를 전달한다. 이전 v0.8의 통합 검사 FAIL은 실제 결함이었으며 이번 복구 근거는 reports/audit_v081에 보존했다.

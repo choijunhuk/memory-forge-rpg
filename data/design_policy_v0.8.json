@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "designVersion": "0.8.0",
+  "execution_reference": {
+    "engine": "engine/rules-core.js",
+    "data": "data/game_data.json",
+    "business_unchanged": true
+  },
+  "memory": {
+    "active_policy": "v0.7_legacy",
+    "target_policy": "preserve_before_v2",
+    "v2_module": "proposals/memory_v2.cjs",
+    "run_connected": false,
+    "html_connected": false,
+    "server_connected": false,
+    "target_defeat_max_changes": 1,
+    "target_allow_keep_before": true,
+    "validate_final_total_cost": true
+  },
+  "capacity": {
+    "target_base": 6,
+    "target_ascension_2_bonus": 1,
+    "target_ascension_4_bonus": 2,
+    "target_resonance_bonus": 0,
+    "active_migration_done": false
+  },
+  "ending": {
+    "target_main_seals": 6,
+    "target_affinity_pieces": 20,
+    "main_requires_character_ownership": false,
+    "implemented": false
+  },
+  "rift": {
+    "target_early_floors": [
+      1,
+      2,
+      3
+    ],
+    "target_early_teams": 1,
+    "target_late_floors": [
+      4,
+      5,
+      6
+    ],
+    "target_late_teams": 2,
+    "progressor_implemented": false
+  },
+  "art": {
+    "source": "art/briefs/characters_v0.8.json",
+    "age_metadata_migrated": false
+  },
+  "pricing_and_gacha": {
+    "change_authorization": "not_changed_in_this_release",
+    "candidate_55_percent_applied": false,
+    "candidate_free_income_increase_applied": false
+  }
+}

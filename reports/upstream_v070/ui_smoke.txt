@@ -1,0 +1,106 @@
+gacha ok {"pulls":185,"chars":5,"weapons":7}
+gacha ok {"pulls":185,"chars":5,"weapons":7}
+{
+ "clicks": 1388,
+ "battles": 7,
+ "turns": 80,
+ "plays": 428,
+ "picks": 23,
+ "runs": [
+  {
+   "viewport": 1280,
+   "party": [
+    "sera",
+    "harin",
+    "rien"
+   ],
+   "length": "short",
+   "diff": "normal",
+   "archive": "continue",
+   "outcome": "clear",
+   "hp": 115,
+   "battles": 5,
+   "memory": [
+    "sera",
+    "harin",
+    "rien"
+   ]
+  },
+  {
+   "viewport": 390,
+   "party": [
+    "ravien",
+    "yuri",
+    "lumi"
+   ],
+   "length": "short",
+   "diff": "normal",
+   "archive": "return",
+   "outcome": "clear",
+   "hp": 87,
+   "battles": 4,
+   "memory": [
+    "ravien",
+    "yuri",
+    "lumi"
+   ]
+  },
+  {
+   "viewport": 1280,
+   "party": [
+    "sion",
+    "kaya",
+    "nia"
+   ],
+   "length": "full",
+   "diff": "normal",
+   "archive": "continue",
+   "outcome": "defeat",
+   "hp": 0,
+   "battles": 6,
+   "memory": [
+    "sion",
+    "kaya",
+    "nia"
+   ]
+  },
+  {
+   "viewport": 390,
+   "party": [
+    "aila",
+    "ravien",
+    "lumi"
+   ],
+   "length": "short",
+   "diff": "hard",
+   "archive": "return",
+   "outcome": "defeat",
+   "hp": 0,
+   "battles": 4,
+   "memory": [
+    "aila",
+    "ravien",
+    "lumi"
+   ]
+  }
+ ],
+ "screens": [
+  "party",
+  "gacha",
+  "codex",
+  "memory",
+  "settings",
+  "home",
+  "map",
+  "battle",
+  "reward",
+  "rest",
+  "forge",
+  "save",
+  "result",
+  "event",
+  "shop",
+  "archive"
+ ]
+}
+SMOKE OK

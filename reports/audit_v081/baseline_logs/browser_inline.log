@@ -1,0 +1,17 @@
+gacha ok {"pulls":185,"chars":5,"weapons":7}
+gacha ok {"pulls":185,"chars":5,"weapons":7}
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+locator.click: Target page, context or browser has been closed
+Call log:
+  - waiting for locator('.hand .card:not(.cant)').first()
+    - locator resolved to <button data-uid="c13" data-key="k13" data-act="card" data-id="lumi_jab" aria-label="섬광 찌르기" class="card attr-volt  ">…</button>
+  - attempting click action
+    - waiting for element to be visible, enabled and stable
+
+    at playRun (/mnt/data/mf_v08_reaudit/v080/memory-forge-rpg/prototype/tests/smoke.mjs:151:27)
+    at async file:///mnt/data/mf_v08_reaudit/v080/memory-forge-rpg/prototype/tests/smoke.mjs:243:3
+
+Node.js v22.16.0

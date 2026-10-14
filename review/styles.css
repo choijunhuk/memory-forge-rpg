@@ -1,0 +1,40 @@
+
+@font-face { font-family: NotoKR; src: url(file:///usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc); font-weight: 400; }
+@font-face { font-family: NotoKR; src: url(file:///usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc); font-weight: 700; }
+@page { size:A4; margin:17mm 17mm 17mm 17mm;
+ @top-left { content: "MEMORY FORGE  /  INDEPENDENT REVIEW";font-family:NotoKR;font-size:7.5pt;color:#546176; }
+ @top-right { content: "v0.7.1-audit  ·  2026.10.14";font-family:NotoKR;font-size:7.5pt;color:#546176; }
+ @bottom-left { content: "기술 수정 / 정책 제안 / 미검증 범위를 구분한 인계판";font-family:NotoKR;font-size:7.2pt;color:#657185; }
+ @bottom-right { content:counter(page) " / " counter(pages);font-family:NotoKR;font-size:8pt;color:#23344b; }
+}
+body {font-family:NotoKR,sans-serif;font-size:11pt;line-height:1.66;color:#1c2b3e;margin:0;word-break:keep-all;overflow-wrap:anywhere;}
+section {break-before:page;}
+section:first-child {break-before:auto;}
+.eyebrow {font-size:8.4pt;letter-spacing:1px;color:#17746a;font-weight:700;margin-bottom:3mm;}
+h1 {font-size:21pt;line-height:1.28;letter-spacing:-.3px;margin:0 0 6mm 0;color:#122941;bookmark-level:1;}
+h3 {font-size:12pt;margin:5mm 0 2mm;color:#14786c;break-after:avoid;bookmark-level:none;}
+p {margin:0 0 3.1mm 0;orphans:3;widows:3;}
+strong {font-weight:700;color:#122941;}
+table {border-collapse:collapse;width:100%;font-size:9.6pt;line-height:1.53;table-layout:auto;margin:3.5mm 0 4mm;}
+th {background:#20364d;color:white;text-align:left;padding:2.3mm 2mm;font-weight:700;}
+td {border-bottom:.4pt solid #d6e0e8;vertical-align:top;padding:2.0mm 2mm;}
+tr:nth-child(even) td {background:#f0f5f8;}
+tr {break-inside:avoid;}
+.character th:first-child,.character td:first-child{width:34mm;min-width:34mm;}
+th:first-child,td:first-child {min-width:23mm;}
+thead {display:table-header-group;}
+blockquote {border-left:3px solid #c99640;background:#fff8e9;padding:3mm 3.5mm;margin:4mm 0;font-size:9.5pt;}
+blockquote p {margin:0;}
+code {font-family:NotoKR,sans-serif;font-size:.88em;background:#eef3f6;color:#154e60;}
+pre {background:#eef3f6;border:1px solid #d7e2e9;padding:3mm;line-height:1.6;font-size:8.6pt;white-space:pre-wrap;word-break:break-all;}
+pre code {font-size:inherit;}
+ol {padding-left:6mm;margin:2mm 0 4mm;}
+li {margin-bottom:2mm;}
+img {max-width:100%;}
+.wide-shot {width:174mm;border:.5pt solid #9fb0bf;}
+.phone-shot {float:right;width:62mm;margin:0 0 4mm 5mm;border:.5pt solid #9fb0bf;}
+.cover {padding-top:15mm;}
+.cover h1 {font-size:30pt;line-height:1.3;margin-bottom:10mm;}
+.cover p {font-size:11pt;line-height:1.85;}
+.cover table {font-size:10pt;}
+a {color:#176c74;text-decoration:none;word-break:break-all;}

@@ -1,0 +1,172 @@
+TAP version 13
+# Subtest: xoshiro128** via splitmix32 is deterministic and bounded
+ok 1 - xoshiro128** via splitmix32 is deterministic and bounded
+  ---
+  duration_ms: 4.697389
+  type: 'test'
+  ...
+# Subtest: rng vectors file matches (cross-language contract)
+ok 2 - rng vectors file matches (cross-language contract)
+  ---
+  duration_ms: 1.137957
+  type: 'test'
+  ...
+# Subtest: indexData is idempotent
+ok 3 - indexData is idempotent
+  ---
+  duration_ms: 0.209455
+  type: 'test'
+  ...
+# Subtest: begin: 4 AP, 5 cards, enemies show current and next intent
+ok 4 - begin: 4 AP, 5 cards, enemies show current and next intent
+  ---
+  duration_ms: 2.715885
+  type: 'test'
+  ...
+# Subtest: immediate damage uses printed value at reference power (power4 160)
+ok 5 - immediate damage uses printed value at reference power (power4 160)
+  ---
+  duration_ms: 3.052911
+  type: 'test'
+  ...
+# Subtest: reservation slots: next 2, after 1, SLOT_FULL, resolve at next turn start with rv
+ok 6 - reservation slots: next 2, after 1, SLOT_FULL, resolve at next turn start with rv
+  ---
+  duration_ms: 1.70617
+  type: 'test'
+  ...
+# Subtest: a failing command changes nothing (atomic) and precheck is pure
+ok 7 - a failing command changes nothing (atomic) and precheck is pure
+  ---
+  duration_ms: 1.196936
+  type: 'test'
+  ...
+# Subtest: idempotency: same rid returns the stored response; changed payload conflicts; stale version rejected
+ok 8 - idempotency: same rid returns the stored response; changed payload conflicts; stale version rejected
+  ---
+  duration_ms: 0.809024
+  type: 'test'
+  ...
+# Subtest: break: weakness hits empty the gauge → stun, +25% damage taken, +1 AP next turn
+ok 9 - break: weakness hits empty the gauge → stun, +25% damage taken, +1 AP next turn
+  ---
+  duration_ms: 3.202125
+  type: 'test'
+  ...
+# Subtest: hand never exceeds the cap; card count is conserved (invariants)
+ok 10 - hand never exceeds the cap; card count is conserved (invariants)
+  ---
+  duration_ms: 1.550787
+  type: 'test'
+  ...
+# Subtest: contracts: loan raises AP now and repays next turn; DEBT_CAP enforced
+ok 11 - contracts: loan raises AP now and repays next turn; DEBT_CAP enforced
+  ---
+  duration_ms: 0.753651
+  type: 'test'
+  ...
+# Subtest: stats: reference values, level/weapon/gear derivation and stage parity
+ok 12 - stats: reference values, level/weapon/gear derivation and stage parity
+  ---
+  duration_ms: 0.463626
+  type: 'test'
+  ...
+# Subtest: stage level scales enemy HP; accessory adds to the additive damage group
+ok 13 - stage level scales enemy HP; accessory adds to the additive damage group
+  ---
+  duration_ms: 1.704979
+  type: 'test'
+  ...
+# Subtest: map: every path has at least 3 fights before the boss
+ok 14 - map: every path has at least 3 fights before the boss
+  ---
+  duration_ms: 62.18206
+  type: 'test'
+  ...
+# Subtest: memory save: capacity is enforced, defeat keeps one change, saved deck rebuilds the next run
+ok 15 - memory save: capacity is enforced, defeat keeps one change, saved deck rebuilds the next run
+  ---
+  duration_ms: 2.1726
+  type: 'test'
+  ...
+# Subtest: capacity grows with ascension 2 and 4 and resonance 4
+ok 16 - capacity grows with ascension 2 and 4 and resonance 4
+  ---
+  duration_ms: 0.122504
+  type: 'test'
+  ...
+# Subtest: character banner: SSR by pull 80 at the latest; lost 50:50 guarantees the next featured
+ok 17 - character banner: SSR by pull 80 at the latest; lost 50:50 guarantees the next featured
+  ---
+  duration_ms: 8.221717
+  type: 'test'
+  ...
+# Subtest: SR or better at least every 10 pulls on every banner
+ok 18 - SR or better at least every 10 pulls on every banner
+  ---
+  duration_ms: 13.485576
+  type: 'test'
+  ...
+# Subtest: weapon banner: 70 hard pity, 75% featured, guarantee after a loss
+ok 19 - weapon banner: 70 hard pity, 75% featured, guarantee after a loss
+  ---
+  duration_ms: 41.304842
+  type: 'test'
+  ...
+# Subtest: Gacha.stats mean equals the exact survival-sum and Monte Carlo agrees (±3%)
+ok 20 - Gacha.stats mean equals the exact survival-sum and Monte Carlo agrees (±3%)
+  ---
+  duration_ms: 64.961951
+  type: 'test'
+  ...
+# Subtest: beginner banner: 10-pulls only, 8 tickets each, SSR guaranteed within 50
+ok 21 - beginner banner: 10-pulls only, 8 tickets each, SSR guaranteed within 50
+  ---
+  duration_ms: 0.509865
+  type: 'test'
+  ...
+# Subtest: pull count must be 1 or 10; standard selector after 300 pulls, once
+ok 22 - pull count must be 1 or 10; standard selector after 300 pulls, once
+  ---
+  duration_ms: 0.582875
+  type: 'test'
+  ...
+# Subtest: duplicates: 2nd copy = resonance 1, capped at 6; weapons refine to R5
+ok 23 - duplicates: 2nd copy = resonance 1, capped at 6; weapons refine to R5
+  ---
+  duration_ms: 0.12698
+  type: 'test'
+  ...
+# Subtest: gacha vectors (cross-language contract): same seed → same 30 results
+ok 24 - gacha vectors (cross-language contract): same seed → same 30 results
+  ---
+  duration_ms: 2.058519
+  type: 'test'
+  ...
+# Subtest: echo-circuit and copy tokens stay cost 0 after the turn they were created
+ok 25 - echo-circuit and copy tokens stay cost 0 after the turn they were created
+  ---
+  duration_ms: 1.316897
+  type: 'test'
+  ...
+# Subtest: defence and heals scale with vitality, flat player damage with power, enemy flat damage with stage %
+ok 26 - defence and heals scale with vitality, flat player damage with power, enemy flat damage with stage %
+  ---
+  duration_ms: 2.421774
+  type: 'test'
+  ...
+# Subtest: shop offers two distinct relics; event options respect their stated rarity
+ok 27 - shop offers two distinct relics; event options respect their stated rarity
+  ---
+  duration_ms: 8.177059
+  type: 'test'
+  ...
+1..27
+# tests 27
+# suites 0
+# pass 27
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 309.30409

@@ -1,0 +1,146 @@
+[
+  {
+    "chapter": 0,
+    "title": "기억 공방 / Memory Forge — v0.7 통합 설계서",
+    "original_chars": 3571,
+    "restored_chars": 2173
+  },
+  {
+    "chapter": 1,
+    "title": "1. 3분 요약",
+    "original_chars": 2557,
+    "restored_chars": 2765
+  },
+  {
+    "chapter": 2,
+    "title": "2. 콘셉트와 방향",
+    "original_chars": 2088,
+    "restored_chars": 2102
+  },
+  {
+    "chapter": 3,
+    "title": "3. 게임 루프와 콘텐츠 지도",
+    "original_chars": 2179,
+    "restored_chars": 2406
+  },
+  {
+    "chapter": 4,
+    "title": "4. 세계관과 이야기",
+    "original_chars": 3226,
+    "restored_chars": 5298
+  },
+  {
+    "chapter": 5,
+    "title": "5. 전투 규칙 (완전 명세)",
+    "original_chars": 12092,
+    "restored_chars": 15095
+  },
+  {
+    "chapter": 6,
+    "title": "6. 카드·효과 DSL·개조",
+    "original_chars": 9294,
+    "restored_chars": 15724
+  },
+  {
+    "chapter": 7,
+    "title": "7. 탐사(로그라이트)",
+    "original_chars": 6905,
+    "restored_chars": 7074
+  },
+  {
+    "chapter": 8,
+    "title": "8. 기억 저장 (카제나식 세이브)",
+    "original_chars": 2123,
+    "restored_chars": 7356
+  },
+  {
+    "chapter": 9,
+    "title": "9. 캐릭터",
+    "original_chars": 33876,
+    "restored_chars": 43760
+  },
+  {
+    "chapter": 10,
+    "title": "10. 무기·적·구역 데이터",
+    "original_chars": 9141,
+    "restored_chars": 11173
+  },
+  {
+    "chapter": 11,
+    "title": "11. 계정 성장",
+    "original_chars": 8616,
+    "restored_chars": 10142
+  },
+  {
+    "chapter": 12,
+    "title": "12. 모집(가챠)·재화·상품",
+    "original_chars": 6516,
+    "restored_chars": 17164
+  },
+  {
+    "chapter": 13,
+    "title": "13. 라이브 운영",
+    "original_chars": 2216,
+    "restored_chars": 3225
+  },
+  {
+    "chapter": 14,
+    "title": "14. UI·UX",
+    "original_chars": 3938,
+    "restored_chars": 5232
+  },
+  {
+    "chapter": 15,
+    "title": "15. 아트·연출·사운드",
+    "original_chars": 45007,
+    "restored_chars": 3116
+  },
+  {
+    "chapter": 16,
+    "title": "16. 기술 설계",
+    "original_chars": 3843,
+    "restored_chars": 4074
+  },
+  {
+    "chapter": 17,
+    "title": "17. 서버: 데이터베이스·트랜잭션·API",
+    "original_chars": 5090,
+    "restored_chars": 5343
+  },
+  {
+    "chapter": 18,
+    "title": "18. 운영·배포·정책 준수",
+    "original_chars": 2253,
+    "restored_chars": 2185
+  },
+  {
+    "chapter": 19,
+    "title": "19. 시험·검증·밸런스 목표",
+    "original_chars": 3208,
+    "restored_chars": 3429
+  },
+  {
+    "chapter": 20,
+    "title": "20. 단계별 제작 계획 (AI 에이전트용)",
+    "original_chars": 5204,
+    "restored_chars": 7460
+  },
+  {
+    "chapter": 21,
+    "title": "21. v0.6 평가 반영 목록",
+    "original_chars": 2036,
+    "restored_chars": 2234
+  },
+  {
+    "chapter": 22,
+    "title": "22. 남은 결정과 위험",
+    "original_chars": 998,
+    "restored_chars": 1096
+  },
+  {
+    "chapter": 23,
+    "title": "23. 부록",
+    "original_chars": 7700,
+    "restored_chars": 8993
+  }
+]

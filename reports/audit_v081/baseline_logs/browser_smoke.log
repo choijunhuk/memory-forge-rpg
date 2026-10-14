@@ -1,0 +1,14 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+page.goto: net::ERR_BLOCKED_BY_ADMINISTRATOR at file:///mnt/data/mf_v08_reaudit/v080/memory-forge-rpg/prototype/index.html?seed=7195
+Call log:
+  - navigating to "file:///mnt/data/mf_v08_reaudit/v080/memory-forge-rpg/prototype/index.html?seed=7195", waiting until "load"
+
+    at newPage (/mnt/data/mf_v08_reaudit/v080/memory-forge-rpg/prototype/tests/smoke.mjs:39:21)
+    at async file:///mnt/data/mf_v08_reaudit/v080/memory-forge-rpg/prototype/tests/smoke.mjs:61:16 {
+  name: 'Error'
+}
+
+Node.js v22.16.0

@@ -1,0 +1,14 @@
+{
+  "task_id": "replace-before-use",
+  "status": "DRAFT",
+  "base_commit": null,
+  "worktree": null,
+  "branch": null,
+  "allowed_files": [],
+  "request_file": null,
+  "acceptance_commands": [],
+  "session_id": null,
+  "result_commit": null,
+  "report_path": null,
+  "blocking_reason": null
+}

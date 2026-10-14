@@ -1,0 +1,1 @@
+{"characters":10,"cards":173,"uniquePool":120,"common":18,"weaponCards":22,"weapons":22,"parts":16,"relics":32,"enemies":20,"events":8}

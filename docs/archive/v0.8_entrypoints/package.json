@@ -1,0 +1,26 @@
+{
+  "name": "memory-forge-rpg",
+  "version": "0.7.1-audit",
+  "private": true,
+  "description": "Memory Forge v0.7.1 audit candidate — v0.7 economy and memory-save policy retained",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build:data": "node content/build.mjs data",
+    "build:proto": "node tools/build_prototype.mjs",
+    "vectors": "node tools/gen_vectors.mjs",
+    "test": "node --test engine/tests/*.test.mjs",
+    "fuzz": "node engine/tests/fuzz_runs.mjs 100 short && node engine/tests/fuzz_runs.mjs 40 full",
+    "balance": "node engine/tests/balance_probe.mjs 300",
+    "smoke": "node prototype/tests/smoke.mjs 2",
+    "docs": "node tools/gen_docs.mjs && node tools/build_docs.mjs",
+    "check": "tools/run_all_checks.sh",
+    "audit:economy": "python3 tools/review/economy_audit.py",
+    "test:proposals": "node --test proposals/tests/*.test.cjs"
+  },
+  "devDependencies": {
+    "marked": "^15.0.0",
+    "playwright": "^1.56.0"
+  }
+}

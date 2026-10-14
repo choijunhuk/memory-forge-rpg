@@ -1,0 +1,102 @@
+[
+  {
+    "name": "syntax",
+    "command": [
+      "node",
+      "--check",
+      "engine/rules-core.js"
+    ],
+    "exit_code": 0,
+    "status": "PASS",
+    "seconds": 0.04,
+    "log": "syntax.log"
+  },
+  {
+    "name": "js_tests",
+    "command": [
+      "bash",
+      "-lc",
+      "node --test engine/tests/*.test.mjs"
+    ],
+    "exit_code": 0,
+    "status": "PASS",
+    "seconds": 0.46,
+    "log": "js_tests.log"
+  },
+  {
+    "name": "proposal_tests",
+    "command": [
+      "bash",
+      "-lc",
+      "node --test proposals/tests/*.test.cjs"
+    ],
+    "exit_code": 0,
+    "status": "PASS",
+    "seconds": 0.11,
+    "log": "proposal_tests.log"
+  },
+  {
+    "name": "python_tests",
+    "command": [
+      "/opt/pyvenv/bin/python",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-v"
+    ],
+    "exit_code": 0,
+    "status": "PASS",
+    "seconds": 1.65,
+    "log": "python_tests.log"
+  },
+  {
+    "name": "fuzz_short",
+    "command": [
+      "node",
+      "engine/tests/fuzz_runs.mjs",
+      "100",
+      "short"
+    ],
+    "exit_code": 0,
+    "status": "PASS",
+    "seconds": 3.86,
+    "log": "fuzz_short.log"
+  },
+  {
+    "name": "fuzz_full",
+    "command": [
+      "node",
+      "engine/tests/fuzz_runs.mjs",
+      "40",
+      "full"
+    ],
+    "exit_code": 0,
+    "status": "PASS",
+    "seconds": 2.77,
+    "log": "fuzz_full.log"
+  },
+  {
+    "name": "economy_audit",
+    "command": [
+      "/opt/pyvenv/bin/python",
+      "tools/review/economy_audit.py"
+    ],
+    "exit_code": 0,
+    "status": "PASS",
+    "seconds": 0.88,
+    "log": "economy_audit.log"
+  },
+  {
+    "name": "original_inventory",
+    "command": [
+      "/opt/pyvenv/bin/python",
+      "tools/check_integrated_release.py"
+    ],
+    "exit_code": 1,
+    "status": "FAIL",
+    "seconds": 0.8,
+    "log": "original_inventory.log"
+  }
+]

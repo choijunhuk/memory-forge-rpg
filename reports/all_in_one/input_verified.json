@@ -1,0 +1,9 @@
+{
+  "input_zip": "/mnt/data/Memory_Forge_v0.8.1_Verified/Memory_Forge_v0.8.1_Full_Handoff.zip",
+  "input_sha256": "6d67c9f15d0fab6957d145e90118820992af9d6c67169d71f8bec667d4c7a66f",
+  "zip_crc": "PASS",
+  "manifest": "PASS",
+  "manifest_entries": 380,
+  "game_spec": "0.8.1",
+  "rules": "0.7.0"
+}

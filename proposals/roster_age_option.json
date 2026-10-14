@@ -1,0 +1,18 @@
+{
+  "status": "PROPOSED_NOT_APPLIED",
+  "purpose": "젊은 성인 중심의 대안. 미성년 4명 유지. 실제 캐릭터 외형·경력·서사 검토 후 승인 필요.",
+  "adults": {
+    "sera": 22,
+    "ravien": 24,
+    "harin": 22,
+    "aila": 21,
+    "sion": 23,
+    "lumi": 20
+  },
+  "minors_unchanged": {
+    "nia": 17,
+    "yuri": 16,
+    "rien": 17,
+    "kaya": 17
+  }
+}

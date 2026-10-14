@@ -1,0 +1,12 @@
+{
+  "pages": 39,
+  "bookmarks": 39,
+  "out_of_page_blocks": [],
+  "replacement_glyphs": 0,
+  "renderers_used": [
+    "PyMuPDF",
+    "pdftoppm (sample p25)"
+  ],
+  "visual_review": "all-page contact sheets plus full-size selected pages; no clipping observed in the audit PDF",
+  "fonts_bundled_as_files": false
+}

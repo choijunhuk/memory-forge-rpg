@@ -1,0 +1,138 @@
+{
+  "release": "0.8.1-aio.2",
+  "date": "2026-10-15",
+  "checks": [
+    {
+      "name": "js",
+      "command": [
+        "npm",
+        "test"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "duration_sec": 1.52,
+      "log": "js.txt"
+    },
+    {
+      "name": "memory_v2",
+      "command": [
+        "npm",
+        "run",
+        "test:proposals"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "duration_sec": 0.42,
+      "log": "memory_v2.txt"
+    },
+    {
+      "name": "python_economy",
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "duration_sec": 3.06,
+      "log": "python_economy.txt"
+    },
+    {
+      "name": "document_contract",
+      "command": [
+        "npm",
+        "run",
+        "test:docs"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "duration_sec": 3.03,
+      "log": "document_contract.txt"
+    },
+    {
+      "name": "handoff",
+      "command": [
+        "npm",
+        "run",
+        "test:handoff"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "duration_sec": 2.97,
+      "log": "handoff.txt"
+    },
+    {
+      "name": "fuzz",
+      "command": [
+        "npm",
+        "run",
+        "fuzz"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "duration_sec": 10.96,
+      "log": "fuzz.txt"
+    },
+    {
+      "name": "claude_subscription_login",
+      "status": "NOT_RUN",
+      "reason": "No access to user runtime or account settings"
+    },
+    {
+      "name": "claude_actual_cli_call",
+      "status": "NOT_RUN",
+      "reason": "Claude CLI not installed here; no model requests made"
+    },
+    {
+      "name": "codex_image_generation",
+      "status": "NOT_RUN",
+      "reason": "No Codex user session invoked"
+    },
+    {
+      "name": "CSharp_Unity_server_payment",
+      "status": "NOT_RUN",
+      "reason": "Existing source only; not built or run in this packaging pass"
+    },
+    {
+      "name": "whole_pdf_rebuild",
+      "command": [
+        "npm",
+        "run",
+        "docs"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "duration_sec": 33.66,
+      "log": "pdf_rebuild.txt",
+      "scope": "separate validation copy, delivered original game PDF not overwritten"
+    },
+    {
+      "name": "current_check_entrypoint",
+      "command": [
+        "npm",
+        "run",
+        "check"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "log": "current_check_entrypoint.txt"
+    },
+    {
+      "name": "original_file_and_pdf_preservation",
+      "status": "PASS",
+      "original_files": 382,
+      "identical": 369,
+      "intentional_updated_archived": 13,
+      "game_pdf_pages_preserved": 154,
+      "page_render_matches": 154,
+      "internal_links_checked": 72,
+      "new_frontmatter_visually_reviewed": 5
+    }
+  ],
+  "all_executed_checks_pass": true,
+  "scope_note": "No AI API/CLI model calls or user account changes were made. Existing reports are historical. New checks ran in a separate validation copy."
+}

@@ -1,0 +1,316 @@
+TAP version 13
+# Subtest: xoshiro128** via splitmix32 is deterministic and bounded
+ok 1 - xoshiro128** via splitmix32 is deterministic and bounded
+  ---
+  duration_ms: 7.094058
+  type: 'test'
+  ...
+# Subtest: rng vectors file matches (cross-language contract)
+ok 2 - rng vectors file matches (cross-language contract)
+  ---
+  duration_ms: 1.547534
+  type: 'test'
+  ...
+# Subtest: indexData is idempotent
+ok 3 - indexData is idempotent
+  ---
+  duration_ms: 0.232602
+  type: 'test'
+  ...
+# Subtest: begin: 4 AP, 5 cards, enemies show current and next intent
+ok 4 - begin: 4 AP, 5 cards, enemies show current and next intent
+  ---
+  duration_ms: 3.792222
+  type: 'test'
+  ...
+# Subtest: immediate damage uses printed value at reference power (power4 160)
+ok 5 - immediate damage uses printed value at reference power (power4 160)
+  ---
+  duration_ms: 5.002168
+  type: 'test'
+  ...
+# Subtest: reservation slots: next 2, after 1, SLOT_FULL, resolve at next turn start with rv
+ok 6 - reservation slots: next 2, after 1, SLOT_FULL, resolve at next turn start with rv
+  ---
+  duration_ms: 3.516579
+  type: 'test'
+  ...
+# Subtest: a failing command changes nothing (atomic) and precheck is pure
+ok 7 - a failing command changes nothing (atomic) and precheck is pure
+  ---
+  duration_ms: 1.738077
+  type: 'test'
+  ...
+# Subtest: idempotency: same rid returns the stored response; changed payload conflicts; stale version rejected
+ok 8 - idempotency: same rid returns the stored response; changed payload conflicts; stale version rejected
+  ---
+  duration_ms: 1.790115
+  type: 'test'
+  ...
+# Subtest: break: weakness hits empty the gauge → stun, +25% damage taken, +1 AP next turn
+ok 9 - break: weakness hits empty the gauge → stun, +25% damage taken, +1 AP next turn
+  ---
+  duration_ms: 6.051076
+  type: 'test'
+  ...
+# Subtest: hand never exceeds the cap; card count is conserved (invariants)
+ok 10 - hand never exceeds the cap; card count is conserved (invariants)
+  ---
+  duration_ms: 3.578213
+  type: 'test'
+  ...
+# Subtest: contracts: loan raises AP now and repays next turn; DEBT_CAP enforced
+ok 11 - contracts: loan raises AP now and repays next turn; DEBT_CAP enforced
+  ---
+  duration_ms: 1.614077
+  type: 'test'
+  ...
+# Subtest: stats: reference values, level/weapon/gear derivation and stage parity
+ok 12 - stats: reference values, level/weapon/gear derivation and stage parity
+  ---
+  duration_ms: 0.820413
+  type: 'test'
+  ...
+# Subtest: stage level scales enemy HP; accessory adds to the additive damage group
+ok 13 - stage level scales enemy HP; accessory adds to the additive damage group
+  ---
+  duration_ms: 3.72143
+  type: 'test'
+  ...
+# Subtest: map: every path has at least 3 fights before the boss
+ok 14 - map: every path has at least 3 fights before the boss
+  ---
+  duration_ms: 101.616647
+  type: 'test'
+  ...
+# Subtest: memory save: capacity is enforced, defeat keeps one change, saved deck rebuilds the next run
+ok 15 - memory save: capacity is enforced, defeat keeps one change, saved deck rebuilds the next run
+  ---
+  duration_ms: 2.401149
+  type: 'test'
+  ...
+# Subtest: capacity grows with ascension 2 and 4 and resonance 4
+ok 16 - capacity grows with ascension 2 and 4 and resonance 4
+  ---
+  duration_ms: 0.178302
+  type: 'test'
+  ...
+# Subtest: character banner: SSR by pull 80 at the latest; lost 50:50 guarantees the next featured
+ok 17 - character banner: SSR by pull 80 at the latest; lost 50:50 guarantees the next featured
+  ---
+  duration_ms: 10.53421
+  type: 'test'
+  ...
+# Subtest: SR or better at least every 10 pulls on every banner
+ok 18 - SR or better at least every 10 pulls on every banner
+  ---
+  duration_ms: 21.422177
+  type: 'test'
+  ...
+# Subtest: weapon banner: 70 hard pity, 75% featured, guarantee after a loss
+ok 19 - weapon banner: 70 hard pity, 75% featured, guarantee after a loss
+  ---
+  duration_ms: 41.560885
+  type: 'test'
+  ...
+# Subtest: Gacha.stats mean equals the exact survival-sum and Monte Carlo agrees (±3%)
+ok 20 - Gacha.stats mean equals the exact survival-sum and Monte Carlo agrees (±3%)
+  ---
+  duration_ms: 85.733532
+  type: 'test'
+  ...
+# Subtest: beginner banner: 10-pulls only, 8 tickets each, SSR guaranteed within 50
+ok 21 - beginner banner: 10-pulls only, 8 tickets each, SSR guaranteed within 50
+  ---
+  duration_ms: 0.568426
+  type: 'test'
+  ...
+# Subtest: pull count must be 1 or 10; standard selector after 300 pulls, once
+ok 22 - pull count must be 1 or 10; standard selector after 300 pulls, once
+  ---
+  duration_ms: 0.738351
+  type: 'test'
+  ...
+# Subtest: duplicates: 2nd copy = resonance 1, capped at 6; weapons refine to R5
+ok 23 - duplicates: 2nd copy = resonance 1, capped at 6; weapons refine to R5
+  ---
+  duration_ms: 0.217284
+  type: 'test'
+  ...
+# Subtest: gacha vectors (cross-language contract): same seed → same 30 results
+ok 24 - gacha vectors (cross-language contract): same seed → same 30 results
+  ---
+  duration_ms: 2.615276
+  type: 'test'
+  ...
+# Subtest: echo-circuit and copy tokens stay cost 0 after the turn they were created
+ok 25 - echo-circuit and copy tokens stay cost 0 after the turn they were created
+  ---
+  duration_ms: 1.737076
+  type: 'test'
+  ...
+# Subtest: defence and heals scale with vitality, flat player damage with power, enemy flat damage with stage %
+ok 26 - defence and heals scale with vitality, flat player damage with power, enemy flat damage with stage %
+  ---
+  duration_ms: 2.713769
+  type: 'test'
+  ...
+# Subtest: shop offers two distinct relics; event options respect their stated rarity
+ok 27 - shop offers two distinct relics; event options respect their stated rarity
+  ---
+  duration_ms: 9.402648
+  type: 'test'
+  ...
+# Subtest: R071-01 battle-start block 26 and counter 2 survive first-turn boundary
+ok 28 - R071-01 battle-start block 26 and counter 2 survive first-turn boundary
+  ---
+  duration_ms: 6.486274
+  type: 'test'
+  ...
+# Subtest: R071-02 ordinary second-turn boundary still clears first-turn block and counter
+ok 29 - R071-02 ordinary second-turn boundary still clears first-turn block and counter
+  ---
+  duration_ms: 1.376926
+  type: 'test'
+  ...
+# Subtest: R071-03 bulwark retention still applies on later turns
+ok 30 - R071-03 bulwark retention still applies on later turns
+  ---
+  duration_ms: 0.801568
+  type: 'test'
+  ...
+# Subtest: R071-04 evolved family is 3 cards / 9 growth and resolves the +6 passive
+ok 31 - R071-04 evolved family is 3 cards / 9 growth and resolves the +6 passive
+  ---
+  duration_ms: 2.432807
+  type: 'test'
+  ...
+# Subtest: R071-05 evolved cards meet growthInHand but are ineligible to grow again
+ok 32 - R071-05 evolved cards meet growthInHand but are ineligible to grow again
+  ---
+  duration_ms: 0.894101
+  type: 'test'
+  ...
+# Subtest: R071-06 forged from metadata does not turn a non-growth card into a growth card
+ok 33 - R071-06 forged from metadata does not turn a non-growth card into a growth card
+  ---
+  duration_ms: 0.600335
+  type: 'test'
+  ...
+# Subtest: R071-07 loading a mature evolved card does not emit a growth event
+ok 34 - R071-07 loading a mature evolved card does not emit a growth event
+  ---
+  duration_ms: 0.684761
+  type: 'test'
+  ...
+# Subtest: R071-08 mature cocoon copied by 탈피 retains lineage and free flag
+ok 35 - R071-08 mature cocoon copied by 탈피 retains lineage and free flag
+  ---
+  duration_ms: 1.514973
+  type: 'test'
+  ...
+# Subtest: R071-09 echo-delivered evolved card retains lineage / half-power / free
+ok 36 - R071-09 echo-delivered evolved card retains lineage / half-power / free
+  ---
+  duration_ms: 2.403744
+  type: 'test'
+  ...
+# Subtest: R071-10 symbiotic moss fires for actual growth in growLowest + growAll
+ok 37 - R071-10 symbiotic moss fires for actual growth in growLowest + growAll
+  ---
+  duration_ms: 2.462873
+  type: 'test'
+  ...
+# Subtest: R071-11 eternal_seed triggers moss and block persists on turn 1
+ok 38 - R071-11 eternal_seed triggers moss and block persists on turn 1
+  ---
+  duration_ms: 1.102948
+  type: 'test'
+  ...
+# Subtest: R071-12 saturated growth has no moss reward or growth counter increment
+ok 39 - R071-12 saturated growth has no moss reward or growth counter increment
+  ---
+  duration_ms: 0.546735
+  type: 'test'
+  ...
+# Subtest: R071-13 ordinary growth respects once-per-card and party cap
+ok 40 - R071-13 ordinary growth respects once-per-card and party cap
+  ---
+  duration_ms: 1.499484
+  type: 'test'
+  ...
+# Subtest: R071-14 explicit uncapped growth sources do not consume ordinary reservation growth budget
+ok 41 - R071-14 explicit uncapped growth sources do not consume ordinary reservation growth budget
+  ---
+  duration_ms: 0.587982
+  type: 'test'
+  ...
+# Subtest: R071-15 capped increment clamps at 3 and emits one growth event for that card
+ok 42 - R071-15 capped increment clamps at 3 and emits one growth event for that card
+  ---
+  duration_ms: 0.520056
+  type: 'test'
+  ...
+# Subtest: R071-16 invalid growth snapshot is rejected
+ok 43 - R071-16 invalid growth snapshot is rejected
+  ---
+  duration_ms: 1.179279
+  type: 'test'
+  ...
+# Subtest: R071-memory invalid negative selection is atomic
+ok 44 - R071-memory invalid negative selection is atomic
+  ---
+  duration_ms: 4.5616
+  type: 'test'
+  ...
+# Subtest: R071-memory invalid outside selection is atomic
+ok 45 - R071-memory invalid outside selection is atomic
+  ---
+  duration_ms: 1.223062
+  type: 'test'
+  ...
+# Subtest: R071-memory invalid unknown selection is atomic
+ok 46 - R071-memory invalid unknown selection is atomic
+  ---
+  duration_ms: 1.379331
+  type: 'test'
+  ...
+# Subtest: R071-memory invalid string selection is atomic
+ok 47 - R071-memory invalid string selection is atomic
+  ---
+  duration_ms: 1.096807
+  type: 'test'
+  ...
+# Subtest: R071-memory invalid duplicates selection is atomic
+ok 48 - R071-memory invalid duplicates selection is atomic
+  ---
+  duration_ms: 1.045592
+  type: 'test'
+  ...
+# Subtest: R071-memory invalid array selection is atomic
+ok 49 - R071-memory invalid array selection is atomic
+  ---
+  duration_ms: 0.946057
+  type: 'test'
+  ...
+# Subtest: R071-23 save-policy regression explicitly documents v0.7 baseline reset (not silently altered)
+ok 50 - R071-23 save-policy regression explicitly documents v0.7 baseline reset (not silently altered)
+  ---
+  duration_ms: 1.70172
+  type: 'test'
+  ...
+# Subtest: R071-24 unknown enemy action fails instead of silently doing nothing
+ok 51 - R071-24 unknown enemy action fails instead of silently doing nothing
+  ---
+  duration_ms: 0.557315
+  type: 'test'
+  ...
+1..51
+# tests 51
+# suites 0
+# pass 51
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 418.268063

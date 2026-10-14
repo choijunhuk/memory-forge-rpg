@@ -1,0 +1,10 @@
+
+> memory-forge-rpg@0.8.1-aio.2 check
+> python3 tools/ai/check_local.py
+
+js PASS
+memory PASS
+economy PASS
+docs PASS
+handoff PASS
+

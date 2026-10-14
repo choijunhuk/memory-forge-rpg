@@ -1,0 +1,1 @@
+vectors: rng 5, below 4, gacha 5×300, stats 4, stage 60

@@ -1,0 +1,4 @@
+parts 24
+markdown chars 183676
+lint (Hangul+digit in prose) 0
+pdf docs/Memory_Forge_v0.7_Design.pdf 2151 KB, 99 pages

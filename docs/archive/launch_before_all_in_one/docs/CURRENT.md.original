@@ -1,0 +1,11 @@
+# 현재 기준
+
+문서·패키지: **v0.8.1**. 통합 본문: `docs/design_v0.8.1.md`. PDF: `docs/Memory_Forge_v0.8.1_Restored_Design.pdf`.
+
+현행 데이터: `data/game_data.json` rules0.7.0. 실행 참조: `engine/rules-core.js`(v0.7.1 수정 계승), `prototype/index.html`. 세 버전을 혼동하지 않는다.
+
+최신 문서 소스: `docs/source_v0.8.1/`. 현재 아트 프롬프트: `art/briefs/prompts_v0.8.1.json`. 캐릭터별 서사·아트 보완은 본문9장.
+
+상태·판단: `docs/decisions_v0.8.1.md`, `reports/audit_v081/status.json`, `release_acceptance.json`.
+
+v0.8 본문은 실제 누락이 있어 현행 기준으로 쓰지 않는다. 삭제하지 않고 비교 자료로 보존했다. 저장v2·무료용량·본편결말·초기1팀안은 문서 목표이며 아직 실행 연결 전이다.

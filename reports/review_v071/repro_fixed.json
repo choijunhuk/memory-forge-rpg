@@ -1,0 +1,38 @@
+{
+  "root": "active audit candidate",
+  "fix1": {
+    "block": 26,
+    "counter": 2
+  },
+  "fix2": {
+    "growthCards": 3,
+    "growthSum": 9,
+    "blockAfterGuard": 15
+  },
+  "fix4": {
+    "block": 24
+  },
+  "eternal": {
+    "block": 3,
+    "growth": 1
+  },
+  "fix3": {
+    "priorUpgrade": true,
+    "afterUpgrade": false
+  },
+  "memoryCap": {
+    "capacity": 6,
+    "resultCost": 3,
+    "cards": [
+      "sera_round",
+      "sera_cover",
+      "sera_aim",
+      "sera_timed",
+      "com_guard",
+      "sera_flash"
+    ]
+  },
+  "memoryDuplicate": {
+    "count": 1
+  }
+}

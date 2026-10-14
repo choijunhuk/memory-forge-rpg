@@ -1,0 +1,49 @@
+[
+  {
+    "name": "js",
+    "command": [
+      "bash",
+      "-lc",
+      "node --test engine/tests/*.test.mjs"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "python",
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-v"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "memory",
+    "command": [
+      "bash",
+      "-lc",
+      "node --test proposals/tests/*.test.cjs"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "docs",
+    "command": [
+      "python3",
+      "tools/check_integrated_release.py"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "doc_negative",
+    "command": [
+      "python3",
+      "tools/audit/test_document_contract.py"
+    ],
+    "exit_code": 0
+  }
+]

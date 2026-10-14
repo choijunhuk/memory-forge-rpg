@@ -1,0 +1,123 @@
+{
+  "generated_utc": "2026-10-14T11:40:14.664204+00:00",
+  "package": "0.7.1-audit",
+  "source_rules_version": "0.7.0",
+  "data_modified": false,
+  "environment": {
+    "node": "v22.16.0",
+    "python": "3.13.5",
+    "browser": "system Chromium via Playwright; in-memory HTML loading"
+  },
+  "checks": {
+    "baseline_manifest": {
+      "state": "PASS",
+      "evidence": "review_v071/original_manifest.txt"
+    },
+    "baseline_js": {
+      "state": "PASS",
+      "tests": 27,
+      "evidence": "review_v071/baseline_js.txt"
+    },
+    "baseline_python": {
+      "state": "PASS",
+      "tests": 17,
+      "evidence": "review_v071/baseline_python.txt"
+    },
+    "active_js": {
+      "state": "PASS",
+      "tests": 51,
+      "evidence": "review_v071/patched_js_final.txt"
+    },
+    "python": {
+      "state": "PASS",
+      "tests": 23,
+      "evidence": "review_v071/patched_python_final.txt"
+    },
+    "proposed_memory_v2": {
+      "state": "PASS_ISOLATED_ONLY",
+      "tests": 14,
+      "evidence": "review_v071/proposal_memory_tests.txt"
+    },
+    "short_fuzz": {
+      "state": "PASS",
+      "runs": 100,
+      "clears": 93,
+      "defeats": 7,
+      "unexpected": 0,
+      "evidence": "review_v071/fuzz_short_final.txt"
+    },
+    "full_fuzz": {
+      "state": "PASS",
+      "runs": 40,
+      "clears": 27,
+      "defeats": 13,
+      "unexpected": 0,
+      "evidence": "review_v071/fuzz_full_final.txt"
+    },
+    "ui_smoke": {
+      "state": "PASS_LIMITED",
+      "runs": 4,
+      "viewports": [
+        [
+          1280,
+          860
+        ],
+        [
+          390,
+          844
+        ]
+      ],
+      "clears": 2,
+      "defeats": 2,
+      "screens": 16,
+      "mode": "page.setContent; test seed injected by harness",
+      "evidence": "review_v071/ui_smoke_final.txt"
+    },
+    "data_rebuild": {
+      "state": "PASS_IDENTICAL_TO_INPUT",
+      "evidence": "review_v071/data_rebuild.txt"
+    },
+    "vectors": {
+      "state": "PASS_IDENTICAL_TO_INPUT",
+      "counted_files": 1,
+      "evidence": "review_v071/vectors_final.txt"
+    },
+    "docs_generator": {
+      "state": "PASS",
+      "generated_files": 19,
+      "documented_ops": 39,
+      "evidence": "review_v071/doc_generator_check.txt"
+    },
+    "csharp_checks": {
+      "state": "NOT_RERUN",
+      "reason": "dotnet not available; upstream log archived separately"
+    },
+    "postgres_schema": {
+      "state": "NOT_RERUN",
+      "reason": "PostgreSQL binaries not available"
+    },
+    "openapi_validation": {
+      "state": "NOT_RERUN",
+      "reason": "validator not installed"
+    }
+  },
+  "not_done": [
+    "memory v2 Run/UI/server integration and migration",
+    "C# Battle/Run port",
+    "Unity client or MCP session",
+    "server application",
+    "zones 3-5 enemy logic and complete story",
+    "real device tests",
+    "real payments",
+    "human fun/appeal testing",
+    "production deployment",
+    "GitHub remote creation or CI run",
+    "hosted URL update",
+    "file/HTTP origin and localStorage test"
+  ],
+  "known_limitations": [
+    "Default Run.commitMemory still uses v0.7 defeat/base reconstruction policy.",
+    "390px screenshot suggests header/HP occlusion; overlap accessibility tests still needed.",
+    "Character ages, BM and progression unchanged; alternatives are proposals."
+  ]
+}

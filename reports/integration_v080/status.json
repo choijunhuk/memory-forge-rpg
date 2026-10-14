@@ -1,0 +1,160 @@
+{
+  "bundleVersion": "0.8.0",
+  "documentKind": "complete_integrated_design_and_reference_handoff",
+  "basedOn": "v0.7 + v0.7.1 audited reference",
+  "economyChanged": false,
+  "liveServiceDeployed": false,
+  "features": {
+    "start_turn_block_counter": {
+      "spec": "integrated",
+      "reference": "inherited_patched_JS",
+      "product": "not_implemented"
+    },
+    "evolution_family_and_moss": {
+      "spec": "integrated",
+      "reference": "inherited_patched_JS",
+      "product": "not_implemented"
+    },
+    "preserve_previous_memory_v2": {
+      "spec": "integrated_target",
+      "reference": "standalone_module",
+      "runHtmlConnected": false,
+      "serverConnected": false
+    },
+    "free_memory_capacity": {
+      "spec": "integrated_target_6_plus_1_plus_2",
+      "runtime": "existing_v0.7_rule_until_atomic_migration"
+    },
+    "rift_team_relief": {
+      "spec": "integrated_target",
+      "progressor": "not_implemented"
+    },
+    "story_ending_without_gacha": {
+      "spec": "integrated_target",
+      "campaignRewards": "not_implemented"
+    },
+    "character_art_briefs": {
+      "spec": "integrated_10_characters",
+      "images": "not_generated",
+      "ageMetadata": "original_preserved_young_adult_plan_explicit"
+    },
+    "late_enemy_operations": {
+      "spec": "integrated",
+      "runtime": "not_claimed_complete"
+    },
+    "unity_client": {
+      "status": "not_implemented"
+    },
+    "production_server": {
+      "status": "not_implemented"
+    },
+    "CSharp_full_battle": {
+      "status": "not_implemented"
+    }
+  },
+  "checks": [
+    {
+      "name": "js_syntax",
+      "command": [
+        "node",
+        "--check",
+        "engine/rules-core.js"
+      ],
+      "executed": true,
+      "status": "PASS",
+      "exit_code": 0,
+      "seconds": 0.06,
+      "log": "reports/integration_v080/js_syntax.log"
+    },
+    {
+      "name": "js_reference_tests",
+      "command": [
+        "node",
+        "--test",
+        "engine/tests/engine.test.mjs",
+        "engine/tests/review_v071.test.mjs"
+      ],
+      "executed": true,
+      "status": "PASS",
+      "exit_code": 0,
+      "seconds": 0.46,
+      "log": "reports/integration_v080/js_reference_tests.log",
+      "reported_test_count": "51"
+    },
+    {
+      "name": "memory_proposal_tests",
+      "command": [
+        "node",
+        "--test",
+        "proposals/tests/memory_v2.test.cjs"
+      ],
+      "executed": true,
+      "status": "PASS",
+      "exit_code": 0,
+      "seconds": 0.13,
+      "log": "reports/integration_v080/memory_proposal_tests.log",
+      "reported_test_count": "14"
+    },
+    {
+      "name": "html_build",
+      "command": [
+        "node",
+        "tools/build_prototype.mjs",
+        "--no-data"
+      ],
+      "executed": true,
+      "status": "PASS",
+      "exit_code": 0,
+      "seconds": 0.05,
+      "log": "reports/integration_v080/html_build.log"
+    },
+    {
+      "name": "python_tests",
+      "command": [
+        "/opt/pyvenv/bin/python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "executed": true,
+      "status": "PASS",
+      "exit_code": 0,
+      "seconds": 1.97,
+      "log": "reports/integration_v080/python_tests.log",
+      "reported_test_count": "23"
+    },
+    {
+      "name": "csharp_existing_checks",
+      "executed": false,
+      "status": "NOT_RUN",
+      "reason": "No available dotnet runtime was detected; inherited reports are not a new execution."
+    },
+    {
+      "name": "browser_existing_smoke",
+      "executed": false,
+      "status": "NOT_RUN",
+      "reason": "Playwright module not resolved in this package; no browser pass inferred."
+    },
+    {
+      "name": "integrated_release_inventory",
+      "command": [
+        "/opt/pyvenv/bin/python3",
+        "tools/check_integrated_release.py"
+      ],
+      "executed": true,
+      "status": "FAIL",
+      "exit_code": 1,
+      "log": "reports/integration_v080/integrated_release_inventory.log"
+    }
+  ],
+  "reference_sha256": "230e86a485dd860565739bc395c8bf028415d2b3e2b4b2ba99321657081581df",
+  "business_source_hashes": {
+    "content/gacha.mjs": "6e762335fdc978866346c214d03dce00089cbe22bc5394ae73731518090aa7b1",
+    "content/progression.mjs": "52ecc3f5cbef70cf4fefb0321ffb3136b54383dcc0ad8d8f0fcdef75257447ad"
+  },
+  "business_sources_preserved": true,
+  "document_source": "docs/design_v0.8.md",
+  "policy_state_source": "data/design_policy_v0.8.json"
+}

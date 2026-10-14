@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/mnt/data/mf_v08_reaudit/v080/memory-forge-rpg/tools/check_integrated_release.py", line 16, in <module>
+    assert re.search(r'^#{1,3}\s+'+str(n)+r'\.\s',text,re.M), f'Missing full chapter {n}'
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Missing full chapter 11

@@ -1,0 +1,61 @@
+{
+  "version": "0.8.1",
+  "checks": [
+    {
+      "name": "입력 ZIP CRC / 원본 PDF",
+      "status": "PASS",
+      "detail": "v0.7·v0.7.1·v0.8 ZIP 정상, v0.8 PDF 102쪽 전부 열림. 본문 누락 여부는 별도 검사"
+    },
+    {
+      "name": "v0.8 원본 통합 검사",
+      "status": "FAIL — 원본 결함",
+      "detail": "기존 integrated_release_inventory 종료1. 실패 로그를 보존"
+    },
+    {
+      "name": "JS 참조 엔진",
+      "status": "PASS",
+      "detail": "51/51; 첫 턴·진화·이끼 회귀 포함"
+    },
+    {
+      "name": "독립 저장 v2 모듈",
+      "status": "PASS",
+      "detail": "14/14; 실제 Run·HTML·DB·서버 미연결"
+    },
+    {
+      "name": "Python 경제",
+      "status": "PASS",
+      "detail": "23/23 및 독립 경제 계산"
+    },
+    {
+      "name": "탐사 퍼즈",
+      "status": "PASS",
+      "detail": "짧게100회·정규40회, 예상 밖 예외0. 사람 플레이 테스트 아님"
+    },
+    {
+      "name": "현재 PDF·문서 보존 검사",
+      "status": "PASS",
+      "detail": "24장앵커(본문23장)+10명×12카드+173ID+유물32·부품16·사건8+50프롬프트. 누락회귀9개 및 PDF전체렌더/내용 검사"
+    },
+    {
+      "name": "현재 ZIP 매니페스트",
+      "status": "PASS — 최종 출고 재대조",
+      "detail": "패키지파일 SHA-256·CRC 전체대조. 최종 ZIP 자체해시와 결과는 외부 재검증 결과.json 및 release_acceptance.json에 기록"
+    },
+    {
+      "name": "브라우저 자동 검사",
+      "status": "PASS — 인라인 한정",
+      "detail": "1280/390 폭·16화면·4탐사(완주2/패배2),1388클릭. 동일 UI·규칙, 시드만 주입. file URL·호스팅·저장 원점·네트워크·실기기 검증 아님"
+    },
+    {
+      "name": "C#·DB 재실행",
+      "status": "NOT_RUN",
+      "detail": "현재 dotnet·PostgreSQL 실행 도구 없음. 과거202개 통과 기록은 새 실행이 아님"
+    },
+    {
+      "name": "Unity·서버·실기기·실결제",
+      "status": "NOT_RUN / 미구현",
+      "detail": "문서·독립 코어·HTML 검사를 제품 전체 완료로 확대하지 않음"
+    }
+  ],
+  "scope": "실행 엔진·수치 데이터는 v0.8과 동일하다. 새 통합 목표는 설계 기준이며 연결되지 않은 기능은 구현 완료로 표시하지 않는다. 현재 ZIP의 최종 검증 결과는 외부 재검증 결과.json에도 기록한다. 문서 발행 뒤 생성되는 체크섬은 PDF 본문에 자기참조 형태로 넣지 않는다."
+}

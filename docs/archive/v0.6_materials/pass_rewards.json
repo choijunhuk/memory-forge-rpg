@@ -1,0 +1,567 @@
+{
+  "version": "0.6",
+  "season_days": 42,
+  "levels": [
+    {
+      "level": 1,
+      "free": {
+        "credits": 6000
+      },
+      "paid_additional": {
+        "credits": 16000
+      }
+    },
+    {
+      "level": 2,
+      "free": {
+        "credits": 6000,
+        "character_xp_records": 12
+      },
+      "paid_additional": {
+        "credits": 16000,
+        "character_xp_records": 30
+      }
+    },
+    {
+      "level": 3,
+      "free": {
+        "credits": 6000,
+        "weapon_xp_stones": 6
+      },
+      "paid_additional": {
+        "credits": 16000,
+        "weapon_xp_stones": 15
+      }
+    },
+    {
+      "level": 4,
+      "free": {
+        "credits": 6000,
+        "skill_books": 3
+      },
+      "paid_additional": {
+        "credits": 16000,
+        "skill_books": 6
+      }
+    },
+    {
+      "level": 5,
+      "free": {
+        "credits": 6000,
+        "equipment_polish": 6
+      },
+      "paid_additional": {
+        "credits": 16000,
+        "equipment_polish": 12
+      }
+    },
+    {
+      "level": 6,
+      "free": {
+        "credits": 6000,
+        "character_xp_records": 12
+      },
+      "paid_additional": {
+        "credits": 16000,
+        "character_xp_records": 30
+      }
+    },
+    {
+      "level": 7,
+      "free": {
+        "credits": 6000,
+        "weapon_xp_stones": 6
+      },
+      "paid_additional": {
+        "credits": 16000,
+        "weapon_xp_stones": 15
+      }
+    },
+    {
+      "level": 8,
+      "free": {
+        "credits": 6000,
+        "skill_books": 3
+      },
+      "paid_additional": {
+        "credits": 16000,
+        "skill_books": 6
+      }
+    },
+    {
+      "level": 9,
+      "free": {
+        "credits": 6000,
+        "equipment_polish": 6
+      },
+      "paid_additional": {
+        "credits": 16000,
+        "equipment_polish": 12
+      }
+    },
+    {
+      "level": 10,
+      "free": {
+        "credits": 6000,
+        "crystals": 160,
+        "standard_tickets": 1
+      },
+      "paid_additional": {
+        "credits": 16000,
+        "crystals": 320,
+        "pickup_tickets": 1,
+        "stamina_batteries_60": 1
+      }
+    },
+    {
+      "level": 11,
+      "free": {
+        "credits": 6000
+      },
+      "paid_additional": {
+        "credits": 16000
+      }
+    },
+    {
+      "level": 12,
+      "free": {
+        "credits": 6000,
+        "character_xp_records": 12
+      },
+      "paid_additional": {
+        "credits": 16000,
+        "character_xp_records": 30
+      }
+    },
+    {
+      "level": 13,
+      "free": {
+        "credits": 6000,
+        "weapon_xp_stones": 6
+      },
+      "paid_additional": {
+        "credits": 16000,
+        "weapon_xp_stones": 15
+      }
+    },
+    {
+      "level": 14,
+      "free": {
+        "credits": 6000,
+        "skill_books": 3
+      },
+      "paid_additional": {
+        "credits": 16000,
+        "skill_books": 6
+      }
+    },
+    {
+      "level": 15,
+      "free": {
+        "credits": 6000,
+        "equipment_polish": 6
+      },
+      "paid_additional": {
+        "credits": 16000,
+        "equipment_polish": 12
+      }
+    },
+    {
+      "level": 16,
+      "free": {
+        "credits": 6000,
+        "character_xp_records": 12
+      },
+      "paid_additional": {
+        "credits": 16000,
+        "character_xp_records": 30
+      }
+    },
+    {
+      "level": 17,
+      "free": {
+        "credits": 6000,
+        "weapon_xp_stones": 6
+      },
+      "paid_additional": {
+        "credits": 16000,
+        "weapon_xp_stones": 15
+      }
+    },
+    {
+      "level": 18,
+      "free": {
+        "credits": 6000,
+        "skill_books": 3
+      },
+      "paid_additional": {
+        "credits": 16000,
+        "skill_books": 6
+      }
+    },
+    {
+      "level": 19,
+      "free": {
+        "credits": 6000,
+        "equipment_polish": 6
+      },
+      "paid_additional": {
+        "credits": 16000,
+        "equipment_polish": 12
+      }
+    },
+    {
+      "level": 20,
+      "free": {
+        "credits": 6000,
+        "crystals": 240,
+        "standard_tickets": 1,
+        "stamina_batteries_60": 1
+      },
+      "paid_additional": {
+        "credits": 16000,
+        "crystals": 320,
+        "pickup_tickets": 1,
+        "stamina_batteries_60": 1
+      }
+    },
+    {
+      "level": 21,
+      "free": {
+        "credits": 6000
+      },
+      "paid_additional": {
+        "credits": 16000
+      }
+    },
+    {
+      "level": 22,
+      "free": {
+        "credits": 6000,
+        "character_xp_records": 12
+      },
+      "paid_additional": {
+        "credits": 16000,
+        "character_xp_records": 30
+      }
+    },
+    {
+      "level": 23,
+      "free": {
+        "credits": 6000,
+        "weapon_xp_stones": 6
+      },
+      "paid_additional": {
+        "credits": 16000,
+        "weapon_xp_stones": 15
+      }
+    },
+    {
+      "level": 24,
+      "free": {
+        "credits": 6000,
+        "skill_books": 3
+      },
+      "paid_additional": {
+        "credits": 16000,
+        "skill_books": 6
+      }
+    },
+    {
+      "level": 25,
+      "free": {
+        "credits": 6000,
+        "equipment_polish": 6
+      },
+      "paid_additional": {
+        "credits": 16000,
+        "equipment_polish": 12
+      }
+    },
+    {
+      "level": 26,
+      "free": {
+        "credits": 6000,
+        "character_xp_records": 12
+      },
+      "paid_additional": {
+        "credits": 16000,
+        "character_xp_records": 30
+      }
+    },
+    {
+      "level": 27,
+      "free": {
+        "credits": 6000,
+        "weapon_xp_stones": 6
+      },
+      "paid_additional": {
+        "credits": 16000,
+        "weapon_xp_stones": 15
+      }
+    },
+    {
+      "level": 28,
+      "free": {
+        "credits": 6000,
+        "skill_books": 3
+      },
+      "paid_additional": {
+        "credits": 16000,
+        "skill_books": 6
+      }
+    },
+    {
+      "level": 29,
+      "free": {
+        "credits": 6000,
+        "equipment_polish": 6
+      },
+      "paid_additional": {
+        "credits": 16000,
+        "equipment_polish": 12
+      }
+    },
+    {
+      "level": 30,
+      "free": {
+        "credits": 6000,
+        "crystals": 240,
+        "standard_tickets": 1
+      },
+      "paid_additional": {
+        "credits": 16000,
+        "crystals": 320,
+        "pickup_tickets": 1,
+        "stamina_batteries_60": 1,
+        "craftable_weapon_selector_lv1_r1": 1
+      }
+    },
+    {
+      "level": 31,
+      "free": {
+        "credits": 6000
+      },
+      "paid_additional": {
+        "credits": 16000
+      }
+    },
+    {
+      "level": 32,
+      "free": {
+        "credits": 6000,
+        "character_xp_records": 12
+      },
+      "paid_additional": {
+        "credits": 16000,
+        "character_xp_records": 30
+      }
+    },
+    {
+      "level": 33,
+      "free": {
+        "credits": 6000,
+        "weapon_xp_stones": 6
+      },
+      "paid_additional": {
+        "credits": 16000,
+        "weapon_xp_stones": 15
+      }
+    },
+    {
+      "level": 34,
+      "free": {
+        "credits": 6000,
+        "skill_books": 3
+      },
+      "paid_additional": {
+        "credits": 16000,
+        "skill_books": 6
+      }
+    },
+    {
+      "level": 35,
+      "free": {
+        "credits": 6000,
+        "equipment_polish": 6
+      },
+      "paid_additional": {
+        "credits": 16000,
+        "equipment_polish": 12
+      }
+    },
+    {
+      "level": 36,
+      "free": {
+        "credits": 6000,
+        "character_xp_records": 12
+      },
+      "paid_additional": {
+        "credits": 16000,
+        "character_xp_records": 30
+      }
+    },
+    {
+      "level": 37,
+      "free": {
+        "credits": 6000,
+        "weapon_xp_stones": 6
+      },
+      "paid_additional": {
+        "credits": 16000,
+        "weapon_xp_stones": 15
+      }
+    },
+    {
+      "level": 38,
+      "free": {
+        "credits": 6000,
+        "skill_books": 3
+      },
+      "paid_additional": {
+        "credits": 16000,
+        "skill_books": 6
+      }
+    },
+    {
+      "level": 39,
+      "free": {
+        "credits": 6000,
+        "equipment_polish": 6
+      },
+      "paid_additional": {
+        "credits": 16000,
+        "equipment_polish": 12
+      }
+    },
+    {
+      "level": 40,
+      "free": {
+        "credits": 6000,
+        "crystals": 320,
+        "standard_tickets": 1,
+        "stamina_batteries_60": 1
+      },
+      "paid_additional": {
+        "credits": 16000,
+        "crystals": 320,
+        "pickup_tickets": 1,
+        "stamina_batteries_60": 1
+      }
+    },
+    {
+      "level": 41,
+      "free": {
+        "credits": 6000
+      },
+      "paid_additional": {
+        "credits": 16000
+      }
+    },
+    {
+      "level": 42,
+      "free": {
+        "credits": 6000,
+        "character_xp_records": 12
+      },
+      "paid_additional": {
+        "credits": 16000,
+        "character_xp_records": 30
+      }
+    },
+    {
+      "level": 43,
+      "free": {
+        "credits": 6000,
+        "weapon_xp_stones": 6
+      },
+      "paid_additional": {
+        "credits": 16000,
+        "weapon_xp_stones": 15
+      }
+    },
+    {
+      "level": 44,
+      "free": {
+        "credits": 6000,
+        "skill_books": 3
+      },
+      "paid_additional": {
+        "credits": 16000,
+        "skill_books": 6
+      }
+    },
+    {
+      "level": 45,
+      "free": {
+        "credits": 6000,
+        "equipment_polish": 6
+      },
+      "paid_additional": {
+        "credits": 16000,
+        "equipment_polish": 12
+      }
+    },
+    {
+      "level": 46,
+      "free": {
+        "credits": 6000,
+        "character_xp_records": 12
+      },
+      "paid_additional": {
+        "credits": 16000,
+        "character_xp_records": 30
+      }
+    },
+    {
+      "level": 47,
+      "free": {
+        "credits": 6000,
+        "weapon_xp_stones": 6
+      },
+      "paid_additional": {
+        "credits": 16000,
+        "weapon_xp_stones": 15
+      }
+    },
+    {
+      "level": 48,
+      "free": {
+        "credits": 6000,
+        "skill_books": 3
+      },
+      "paid_additional": {
+        "credits": 16000,
+        "skill_books": 6
+      }
+    },
+    {
+      "level": 49,
+      "free": {
+        "credits": 6000,
+        "equipment_polish": 6
+      },
+      "paid_additional": {
+        "credits": 16000,
+        "equipment_polish": 12
+      }
+    },
+    {
+      "level": 50,
+      "free": {
+        "credits": 6000,
+        "crystals": 480,
+        "standard_tickets": 2,
+        "completion_cores": 2,
+        "profile_decor": 1
+      },
+      "paid_additional": {
+        "credits": 16000,
+        "crystals": 320,
+        "pickup_tickets": 2,
+        "profile_decor": 1
+      }
+    }
+  ],
+  "change_note": "Rewards unchanged from v0.4; metadata updated."
+}

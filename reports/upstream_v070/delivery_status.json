@@ -1,0 +1,22 @@
+{
+  "generated": "2026-10-14T19:36:52+09:00",
+  "environment": {"node": "v22.22.0", "python": "3.13.16", "dotnet": "10.0.112", "postgres": "16.15"},
+  "results": {
+    "build_data": "pass",
+    "gen_vectors": "pass",
+    "engine_tests": "pass",
+    "fuzz_short": "pass",
+    "fuzz_full": "pass",
+    "balance_probe": "pass",
+    "csharp_checks": "pass",
+    "economy_verify": "pass",
+    "python_tests": "pass",
+    "schema_check": "pass",
+    "openapi_check": "pass",
+    "build_prototype": "pass",
+    "ui_smoke": "pass",
+    "gen_docs": "pass",
+    "doc_build_run": "pass"
+  },
+  "not_done": ["Unity client", "server application code", "C# battle/run port", "zones 3-5 content", "art/audio", "Android device tests", "human playtests", "load tests", "real payments"]
+}

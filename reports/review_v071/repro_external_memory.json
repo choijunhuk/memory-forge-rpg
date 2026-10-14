@@ -1,0 +1,40 @@
+{
+  "root": "isolated rejected external memory patch",
+  "fix1": {
+    "block": 0,
+    "counter": 0
+  },
+  "fix2": {
+    "growthCards": 0,
+    "growthSum": 0,
+    "blockAfterGuard": 9
+  },
+  "fix4": {
+    "block": 12
+  },
+  "eternal": {
+    "block": 0,
+    "growth": 1
+  },
+  "fix3": {
+    "priorUpgrade": true,
+    "afterUpgrade": true
+  },
+  "memoryCap": {
+    "capacity": 6,
+    "resultCost": 9,
+    "cards": [
+      "sera_round",
+      "sera_cover",
+      "sera_aim",
+      "sera_timed",
+      "com_guard",
+      "sera_phase",
+      "sera_lock",
+      "sera_flash"
+    ]
+  },
+  "memoryDuplicate": {
+    "count": 2
+  }
+}

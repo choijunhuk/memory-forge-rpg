@@ -1,0 +1,16 @@
+node_modules/
+**/bin/
+**/obj/
+*.log
+.DS_Store
+prototype/tests/shots/
+docs/design_v0.7.html
+__pycache__/
+
+# Per-machine credentials and local agent billing evidence
+.env
+.env.*
+!.env.example
+.claude/settings.local.json
+ops/ai/local/
+.codex/auth.json

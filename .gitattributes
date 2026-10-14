@@ -1,0 +1,7 @@
+* text=auto eol=lf
+*.png binary
+*.pdf binary
+data/game_data.json linguist-generated=true
+docs/design/gen/*.md linguist-generated=true
+engine/tests/vectors/*.json linguist-generated=true
+prototype/index.html linguist-generated=true

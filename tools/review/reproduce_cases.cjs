@@ -1,0 +1,14 @@
+const fs=require('fs');const path=require('path');
+const root=process.argv[2] || path.resolve(__dirname,'../..');const M=require(path.resolve(root,'engine/rules-core.js'));const D=JSON.parse(fs.readFileSync(path.join(root,'data/game_data.json')));const ix=M.indexData(D);
+const party=[{charId:'sera',res:0},{charId:'harin',res:0},{charId:'nia',res:0}];
+const out={root};
+function B(setup={}) {return M.Battle.create(D,{party,deck:[{id:'harin_shield'}],hp:200,maxHp:243,enemies:['e_shelf'],...setup});}
+let b=B({party:[{charId:'harin',res:4},{charId:'nia',weaponId:'w_ledger_lock',refine:5}],relics:['bronze_cog']});b.do('begin');out.fix1={block:b.s.block,counter:b.s.counter};
+b=B({party:[{charId:'yuri',res:0}],deck:[{id:'yuri_cocoon_guard',from:'yuri_cocoon'},{id:'yuri_sprout_thorn',from:'yuri_sprout'},{id:'yuri_root_net',from:'yuri_root'}]});b.do('begin');out.fix2={growthCards:b.counterVal('growthCards'),growthSum:b.counterVal('growthSum')};let u=b.s.zones.hand.find(u=>b.s.cards[u].id==='yuri_cocoon_guard');b.do('play',{uid:u,mode:'now'});out.fix2.blockAfterGuard=b.s.block;
+b=B({party:[{charId:'yuri',res:6,gauge:100}],deck:[{id:'yuri_cocoon_guard',from:'yuri_cocoon'},{id:'yuri_sprout'},{id:'yuri_root'}],relics:['symbiotic_moss']});b.do('begin');b.do('ult',{actor:'yuri'});out.fix4={block:b.s.block};
+b=B({party:[{charId:'yuri',res:0}],deck:[{id:'yuri_cocoon'}],relics:['eternal_seed','symbiotic_moss']});b.do('begin');out.eternal={block:b.s.block,growth:b.s.cards[b.s.zones.hand[0]].growth};
+let r=M.Run.create(D,{party,seed:21});r.s.deck.find(c=>c.id==='sera_round').plus=true;r.s.phase='VICTORY';r.s.pending={type:'save',defeat:false};let first=r.commitMemory({sera:[0]});r=M.Run.create(D,{party,seed:22,memory:first});r.s.deck.push({id:'harin_frostwall',key:'k99',owner:'harin',gained:true});r.s.phase='DEFEAT';r.s.pending={type:'save',defeat:true};let second=r.commitMemory({sera:[],harin:[0]});out.fix3={priorUpgrade:!!first.sera.find(c=>c.id==='sera_round').plus,afterUpgrade:!!second.sera.find(c=>c.id==='sera_round').plus};
+let prior={sera:[...M.Run.baseKit(ix,'sera'),{id:'sera_phase'},{id:'sera_lock'}]};
+r=M.Run.create(D,{party,memory:prior,seed:22});r.s.deck.push({id:'sera_flash',key:'knew',owner:'sera',gained:true});r.s.pending={type:'save',defeat:true};r.s.phase='DEFEAT';let info=r.memoryChanges().sera;let idx=info.changes.findIndex(c=>c.key==='knew');let mem=r.commitMemory({sera:[idx]});let check=M.Run.create(D,{party,memory:mem,seed:23});out.memoryCap={capacity:info.capacity,resultCost:check.memoryChanges().sera.changes.reduce((n,c)=>n+c.cost,0),cards:mem.sera.map(x=>x.id)};
+r=M.Run.create(D,{party,memory:prior,seed:22});r.s.pending={type:'save',defeat:true};r.s.phase='DEFEAT';info=r.memoryChanges().sera;idx=info.changes.findIndex(c=>c.id==='sera_phase');mem=r.commitMemory({sera:[idx]});out.memoryDuplicate={count:mem.sera.filter(c=>c.id==='sera_phase').length};
+console.log(JSON.stringify(out,null,2));

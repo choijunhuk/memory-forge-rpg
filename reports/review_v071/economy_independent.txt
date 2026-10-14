@@ -1,0 +1,198 @@
+{
+  "method": "50-digit Decimal; first-SSR PMF and convolution; not Monte Carlo",
+  "means": {
+    "ssr_character": 53.41104837917278,
+    "featured_character": 80.11657256875917,
+    "featured_weapon": 60.37208273909598
+  },
+  "cdf_scenarios": [
+    {
+      "featured_ratio": 0.5,
+      "pulls": 41,
+      "probability": 0.1616512516908803
+    },
+    {
+      "featured_ratio": 0.5,
+      "pulls": 46,
+      "probability": 0.18071959337935684
+    },
+    {
+      "featured_ratio": 0.5,
+      "pulls": 50,
+      "probability": 0.19582940101762394
+    },
+    {
+      "featured_ratio": 0.5,
+      "pulls": 81,
+      "probability": 0.617494360821272
+    },
+    {
+      "featured_ratio": 0.5,
+      "pulls": 96,
+      "probability": 0.6888859631719445
+    },
+    {
+      "featured_ratio": 0.5,
+      "pulls": 110,
+      "probability": 0.7453079806215075
+    },
+    {
+      "featured_ratio": 0.5,
+      "pulls": 115,
+      "probability": 0.7633389441403539
+    },
+    {
+      "featured_ratio": 0.5,
+      "pulls": 120,
+      "probability": 0.7803449998821324
+    },
+    {
+      "featured_ratio": 0.5,
+      "pulls": 160,
+      "probability": 1.0
+    },
+    {
+      "featured_ratio": 0.55,
+      "pulls": 41,
+      "probability": 0.1735447806461308
+    },
+    {
+      "featured_ratio": 0.55,
+      "pulls": 46,
+      "probability": 0.1935382664081152
+    },
+    {
+      "featured_ratio": 0.55,
+      "pulls": 50,
+      "probability": 0.20932219630256316
+    },
+    {
+      "featured_ratio": 0.55,
+      "pulls": 81,
+      "probability": 0.6557449247391448
+    },
+    {
+      "featured_ratio": 0.55,
+      "pulls": 96,
+      "probability": 0.71999736685475
+    },
+    {
+      "featured_ratio": 0.55,
+      "pulls": 110,
+      "probability": 0.7707771825593568
+    },
+    {
+      "featured_ratio": 0.55,
+      "pulls": 115,
+      "probability": 0.7870050497263185
+    },
+    {
+      "featured_ratio": 0.55,
+      "pulls": 120,
+      "probability": 0.8023104998939191
+    },
+    {
+      "featured_ratio": 0.55,
+      "pulls": 160,
+      "probability": 1.0
+    }
+  ],
+  "banner_timing_scenario": {
+    "assumptions": [
+      "zero initial currency, zero pity, no guarantee",
+      "all 96 recurring pulls, no weapon spending",
+      "D21 crystals 6560 per inherited accounting model; assume 5 tickets by D21",
+      "stop pulling each target at first copy; saved pulls carried into second banner",
+      "A only D1-D21; B D22-D42; first-clear/launch/shop-loop rewards excluded"
+    ],
+    "first_banner_budget": 46,
+    "season_budget": 96,
+    "P_first_banner_A": 0.18071959337935684,
+    "P_B": 0.5912582009872378,
+    "P_both": 0.08309183119465019,
+    "P_at_least_one": 0.6888859631719445,
+    "P_neither": 0.31111403682805555
+  },
+  "pack_min_cost_no_first_bonus": {
+    "12800": {
+      "cost_krw": 165000,
+      "received_crystals": 12800,
+      "packs": [
+        [
+          3440,
+          44000
+        ],
+        [
+          3440,
+          44000
+        ],
+        [
+          3440,
+          44000
+        ],
+        [
+          1680,
+          22000
+        ],
+        [
+          800,
+          11000
+        ]
+      ]
+    },
+    "25600": {
+      "cost_krw": 326200,
+      "received_crystals": 25600,
+      "packs": [
+        [
+          7000,
+          88000
+        ],
+        [
+          7000,
+          88000
+        ],
+        [
+          3440,
+          44000
+        ],
+        [
+          3440,
+          44000
+        ],
+        [
+          3440,
+          44000
+        ],
+        [
+          800,
+          11000
+        ],
+        [
+          160,
+          2400
+        ],
+        [
+          160,
+          2400
+        ],
+        [
+          160,
+          2400
+        ]
+      ]
+    }
+  },
+  "progression_cores": {
+    "ascend_to_60_per_character": 6,
+    "skill_10_10_per_character": 8,
+    "full_per_character": 14,
+    "six_lv60_skill8_characters": 36,
+    "six_full_characters": 84,
+    "season_best_case_cores": 40
+  },
+  "review_compensation_rule": {
+    "max_losses_since_last_featured_with_guarantee_reset": 1,
+    "proposed_two_losses_trigger_reachable": false
+  }
+}

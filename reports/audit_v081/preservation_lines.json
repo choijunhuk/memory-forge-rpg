@@ -1,0 +1,174 @@
+{
+  "note": "Per-line source coverage after recorded literal edits. Explicitly rewritten editorial/status sections excluded and recorded; not a claim of unchanged wording.",
+  "chapters": [
+    {
+      "chapter": 0,
+      "eligible_source_lines": 0,
+      "matched": 0,
+      "editorial_section_lines": 59,
+      "unaccounted": 0
+    },
+    {
+      "chapter": 1,
+      "eligible_source_lines": 25,
+      "matched": 25,
+      "editorial_section_lines": 0,
+      "unaccounted": 0
+    },
+    {
+      "chapter": 2,
+      "eligible_source_lines": 23,
+      "matched": 23,
+      "editorial_section_lines": 0,
+      "unaccounted": 0
+    },
+    {
+      "chapter": 3,
+      "eligible_source_lines": 33,
+      "matched": 33,
+      "editorial_section_lines": 0,
+      "unaccounted": 0
+    },
+    {
+      "chapter": 4,
+      "eligible_source_lines": 34,
+      "matched": 34,
+      "editorial_section_lines": 0,
+      "unaccounted": 0
+    },
+    {
+      "chapter": 5,
+      "eligible_source_lines": 161,
+      "matched": 161,
+      "editorial_section_lines": 0,
+      "unaccounted": 0
+    },
+    {
+      "chapter": 6,
+      "eligible_source_lines": 150,
+      "matched": 150,
+      "editorial_section_lines": 0,
+      "unaccounted": 0
+    },
+    {
+      "chapter": 7,
+      "eligible_source_lines": 117,
+      "matched": 117,
+      "editorial_section_lines": 0,
+      "unaccounted": 0
+    },
+    {
+      "chapter": 8,
+      "eligible_source_lines": 33,
+      "matched": 33,
+      "editorial_section_lines": 0,
+      "unaccounted": 0
+    },
+    {
+      "chapter": 9,
+      "eligible_source_lines": 526,
+      "matched": 526,
+      "editorial_section_lines": 14,
+      "unaccounted": 0
+    },
+    {
+      "chapter": 10,
+      "eligible_source_lines": 109,
+      "matched": 109,
+      "editorial_section_lines": 0,
+      "unaccounted": 0
+    },
+    {
+      "chapter": 11,
+      "eligible_source_lines": 158,
+      "matched": 158,
+      "editorial_section_lines": 0,
+      "unaccounted": 0
+    },
+    {
+      "chapter": 12,
+      "eligible_source_lines": 107,
+      "matched": 107,
+      "editorial_section_lines": 0,
+      "unaccounted": 0
+    },
+    {
+      "chapter": 13,
+      "eligible_source_lines": 31,
+      "matched": 31,
+      "editorial_section_lines": 0,
+      "unaccounted": 0
+    },
+    {
+      "chapter": 14,
+      "eligible_source_lines": 61,
+      "matched": 61,
+      "editorial_section_lines": 0,
+      "unaccounted": 0
+    },
+    {
+      "chapter": 15,
+      "eligible_source_lines": 29,
+      "matched": 29,
+      "editorial_section_lines": 70,
+      "unaccounted": 0
+    },
+    {
+      "chapter": 16,
+      "eligible_source_lines": 46,
+      "matched": 46,
+      "editorial_section_lines": 0,
+      "unaccounted": 0
+    },
+    {
+      "chapter": 17,
+      "eligible_source_lines": 58,
+      "matched": 58,
+      "editorial_section_lines": 0,
+      "unaccounted": 0
+    },
+    {
+      "chapter": 18,
+      "eligible_source_lines": 19,
+      "matched": 19,
+      "editorial_section_lines": 10,
+      "unaccounted": 0
+    },
+    {
+      "chapter": 19,
+      "eligible_source_lines": 16,
+      "matched": 16,
+      "editorial_section_lines": 11,
+      "unaccounted": 0
+    },
+    {
+      "chapter": 20,
+      "eligible_source_lines": 45,
+      "matched": 45,
+      "editorial_section_lines": 4,
+      "unaccounted": 0
+    },
+    {
+      "chapter": 21,
+      "eligible_source_lines": 18,
+      "matched": 18,
+      "editorial_section_lines": 0,
+      "unaccounted": 0
+    },
+    {
+      "chapter": 22,
+      "eligible_source_lines": 9,
+      "matched": 9,
+      "editorial_section_lines": 8,
+      "unaccounted": 0
+    },
+    {
+      "chapter": 23,
+      "eligible_source_lines": 162,
+      "matched": 162,
+      "editorial_section_lines": 0,
+      "unaccounted": 0
+    }
+  ],
+  "unaccounted": []
+}

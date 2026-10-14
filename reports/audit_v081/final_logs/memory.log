@@ -1,0 +1,94 @@
+TAP version 13
+# Subtest: M2-01 no selection preserves every prior card and trait
+ok 1 - M2-01 no selection preserves every prior card and trait
+  ---
+  duration_ms: 4.023859
+  type: 'test'
+  ...
+# Subtest: M2-02 one new card preserves other characters previous upgrades
+ok 2 - M2-02 one new card preserves other characters previous upgrades
+  ---
+  duration_ms: 1.411139
+  type: 'test'
+  ...
+# Subtest: M2-03 prior six plus delta three is rejected against full result
+ok 3 - M2-03 prior six plus delta three is rejected against full result
+  ---
+  duration_ms: 1.944087
+  type: 'test'
+  ...
+# Subtest: M2-04 an already saved addition is not offered as a new delta
+ok 4 - M2-04 an already saved addition is not offered as a new delta
+  ---
+  duration_ms: 0.493638
+  type: 'test'
+  ...
+# Subtest: M2-05 duplicate card types have independent stable identities
+ok 5 - M2-05 duplicate card types have independent stable identities
+  ---
+  duration_ms: 1.02279
+  type: 'test'
+  ...
+# Subtest: M2-06 picking evolution does not also import an unselected upgrade
+ok 6 - M2-06 picking evolution does not also import an unselected upgrade
+  ---
+  duration_ms: 0.799152
+  type: 'test'
+  ...
+# Subtest: M2-07 bundled new rare card charges rarity, upgrade and rare part
+ok 7 - M2-07 bundled new rare card charges rarity, upgrade and rare part
+  ---
+  duration_ms: 0.889818
+  type: 'test'
+  ...
+# Subtest: M2-08 more than one selected delta is rejected
+ok 8 - M2-08 more than one selected delta is rejected
+  ---
+  duration_ms: 0.325533
+  type: 'test'
+  ...
+# Subtest: M2-09 invalid change ID cannot modify the snapshot
+ok 9 - M2-09 invalid change ID cannot modify the snapshot
+  ---
+  duration_ms: 0.595012
+  type: 'test'
+  ...
+# Subtest: M2-10 missing or colliding stable identities are rejected
+ok 10 - M2-10 missing or colliding stable identities are rejected
+  ---
+  duration_ms: 0.401138
+  type: 'test'
+  ...
+# Subtest: M2-11 chosen part update imports only the server-derived changed slot
+ok 11 - M2-11 chosen part update imports only the server-derived changed slot
+  ---
+  duration_ms: 1.242764
+  type: 'test'
+  ...
+# Subtest: M2-12 temporary parts and invalid slot assignments are not persistent
+ok 12 - M2-12 temporary parts and invalid slot assignments are not persistent
+  ---
+  duration_ms: 0.253314
+  type: 'test'
+  ...
+# Subtest: M2-13 removal preserves the other card of the same type
+ok 13 - M2-13 removal preserves the other card of the same type
+  ---
+  duration_ms: 0.988699
+  type: 'test'
+  ...
+# Subtest: M2-14 arbitrary card replacement is not accepted as evolution
+ok 14 - M2-14 arbitrary card replacement is not accepted as evolution
+  ---
+  duration_ms: 0.29702
+  type: 'test'
+  ...
+1..14
+# tests 14
+# suites 0
+# pass 14
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 83.533352

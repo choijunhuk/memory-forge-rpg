@@ -1,0 +1,7 @@
+
+> memory-forge-rpg@0.8.1-aio.2 fuzz
+> node engine/tests/fuzz_runs.mjs 100 short && node engine/tests/fuzz_runs.mjs 40 full
+
+{"runs":100,"clears":93,"defeats":7,"battles":571,"turns":2279,"commands":12193,"rejectedTop":[["SLOT_FULL",4235],["AP_LOW",981],["RESTRAINT_UNAVAILABLE",905],["NO_EMPTY_SLOT",894],["FIXED_MARK_REQUIRED",631],["COINS_LOW",56],["DEBT_CAP",13],["RESERVATION_REQUIRED",8],["NOT_DEFERRABLE",7]],"unexpected":0}
+{"runs":40,"clears":27,"defeats":13,"battles":363,"turns":1519,"commands":8292,"rejectedTop":[["SLOT_FULL",2439],["AP_LOW",1098],["RESTRAINT_UNAVAILABLE",890],["NO_EMPTY_SLOT",508],["FIXED_MARK_REQUIRED",457],["NOT_DEFERRABLE",245],["RESERVE_ONLY",67],["COINS_LOW",21],["RESERVATION_REQUIRED",3],["CANNOT_HEAL",2]],"unexpected":0}
+
