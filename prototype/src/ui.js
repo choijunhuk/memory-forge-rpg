@@ -11,6 +11,21 @@
     get(k, d) { try { const v = window.localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
     set(k, v) { try { window.localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* storage unavailable */ } },
     del(k) { try { window.localStorage.removeItem(k); } catch (e) { /* ignore */ } },
+    // strict variants for memory v2 / checkpoint: failures are reported, never swallowed
+    raw(k) { try { return { ok: true, raw: window.localStorage.getItem(k) }; } catch (e) { return { ok: false, error: e }; } },
+    putRaw(k, str) { try { window.localStorage.setItem(k, str); return true; } catch (e) { console.error('storage write failed', k, e); return false; } },
+    put(k, v) { let str; try { str = JSON.stringify(v); } catch (e) { console.error('storage serialize failed', k, e); return false; } return store.putRaw(k, str); },
+    remove(k) { try { window.localStorage.removeItem(k); return true; } catch (e) { console.error('storage remove failed', k, e); return false; } },
+  };
+  // memory v2 keys. mf07_memory is the legacy map: read-only here, never overwritten or deleted.
+  const MEM_KEY = 'mf08_memory';
+  const LEGACY_MEM_KEY = 'mf07_memory';
+  const LEGACY_BACKUP_KEY = 'mf08_memory_legacy_backup';
+  const CKPT_KEY = 'mf08_checkpoint';
+  const clone = (v) => JSON.parse(JSON.stringify(v));
+  const newId = (prefix) => {
+    try { if (window.crypto && window.crypto.randomUUID) return `${prefix}_${window.crypto.randomUUID()}`; } catch (e) { /* fall through */ }
+    return `${prefix}_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 10)}`;
   };
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const ATTR = Object.fromEntries(DATA.attributes.map((a) => [a.id, a]));
@@ -44,14 +59,15 @@
   const app = {
     screen: 'home', run: null, sel: null, target: null, picker: null, modal: null, toast: null, toastTimer: 0,
     gacha: store.get('mf07_gacha', null) || MF.Gacha.newState(20261014),
-    memory: store.get('mf07_memory', {}),
+    // memory: map alias of memoryState.memory for existing callers; loaded by loadMemory() below
+    memory: {}, memoryState: null, memStatus: { ok: false, code: 'LOADING' },
+    pendingSave: null, saveError: null, lastSave: null, ckptError: null, ckptNotice: null,
     settings: Object.assign({ scale: 100, allOwned: true }, store.get('mf07_settings', {})),
     party: Object.assign({ chars: ['sera', 'harin', 'rien'], weapons: {}, length: 'short', difficulty: 'normal', useMemory: true }, store.get('mf07_party', {})),
     gachaTab: 'limited_lumi', lastPull: [], codexChar: 'sera', codexTab: 'chars', saveSel: null, lastDmg: {}, logOpen: false,
   };
   if (!app.gacha.crystals && !app.gacha.spent.pulls) { app.gacha.crystals = 16000; app.gacha.tickets.limitedTicket = 5; }
   const saveGacha = () => store.set('mf07_gacha', app.gacha);
-  const saveMemory = () => store.set('mf07_memory', app.memory);
   const saveSettings = () => store.set('mf07_settings', app.settings);
   const saveParty = () => store.set('mf07_party', app.party);
   function toast(msg) { app.toast = msg; clearTimeout(app.toastTimer); app.toastTimer = setTimeout(() => { app.toast = null; render(); }, 2600); }
@@ -64,6 +80,23 @@
     ULT_NOT_READY: '필살기 게이지가 부족해요.', CRYSTALS_LOW: '결정이 부족해요.', COINS_LOW: '동전이 부족해요.', CANNOT_HEAL: '기억의 모루 때문에 회복할 수 없어요.',
     WOULD_KILL: '체력이 부족해 고를 수 없어요.', BEGINNER_LIMIT: '초심자 모집은 50회까지예요.', OVER_CAPACITY: '기억 용량을 넘었어요.', DEFEAT_KEEP_ONE: '패배 시에는 변경 1개만 남길 수 있어요.',
     BEGINNER_TEN_ONLY: '초심자 모집은 10회 단위만 가능해요.', BAD_COUNT: '1회 또는 10회만 모집할 수 있어요.', ZONE_NOT_AUTHORED: '아직 열리지 않은 구역이에요.', WRONG_PHASE: '지금은 할 수 없는 행동이에요.',
+    // memory v2 commit / storage
+    VERSION_CONFLICT: '다른 탭이나 기기에서 기억 덱이 먼저 바뀌었어요. 최신 기억 덱을 불러왔고, 이번 저장은 반영하지 않았어요.',
+    REQUEST_CONFLICT: '같은 요청 번호로 다른 내용이 이미 처리됐어요. 이번 저장은 반영하지 않았어요.',
+    INVALID_SELECTION: '고른 변화가 이번 탐사의 변화 목록과 맞지 않아요.', INVALID_SNAPSHOT: '탐사 기록이 손상돼 저장할 수 없어요.',
+    IDENTITY_REQUIRED: '카드 개체 정보(key)가 없어 저장할 수 없어요.', INVALID_CARD: '허용되지 않는 카드가 있어 저장할 수 없어요.',
+    INVALID_PART: '허용되지 않는 부품이 있어 저장할 수 없어요.', INVALID_ASSIGNMENT: '공용 카드 배정이 올바르지 않아요.',
+    INVALID_EVOLUTION: '허용되지 않는 진화가 있어 저장할 수 없어요.', RUN_MISMATCH: '이 탐사와 저장 요청이 맞지 않아요.',
+    CHECKPOINT_WRITE_FAILED: '진행 기록을 먼저 남기지 못해 기억 저장을 시작하지 않았어요. 기억 덱은 바뀌지 않았어요. 다시 시도해 주세요.',
+    MEMORY_WRITE_FAILED: '기억 덱을 저장소에 쓰지 못했어요. 기억 덱과 탐사는 바뀌지 않았어요. 같은 요청으로 다시 시도할 수 있어요.',
+    MEMORY_MISSING: '기억 기록이 저장소에서 사라졌어요(다른 탭에서 지웠을 수 있어요). 새로고침해서 다시 불러오세요.',
+    MEMORY_QUARANTINED: '격리된 기억 덱이 있는 캐릭터가 편성돼 있어요.', LEGACY_RUN: '이 탐사는 이전 저장 방식으로 시작돼 기억 v2 저장을 할 수 없어요.',
+    STORAGE_UNAVAILABLE: '이 브라우저 저장소를 쓸 수 없어요. 기억 덱을 읽거나 저장할 수 없어 탐사 시작과 기억 저장을 막았어요.',
+    MEMORY_MALFORMED: '저장된 기억 기록(mf08_memory)을 읽을 수 없어요. 자동으로 덮어쓰지 않았어요.',
+    LEGACY_MALFORMED: '이전 기억 기록(mf07_memory)을 읽을 수 없어요. 원본은 그대로 두었고 자동으로 기본 덱을 쓰지 않았어요.',
+    BACKUP_WRITE_FAILED: '이전 기억 원본의 백업을 쓰지 못해 이관을 멈췄어요. 원본은 그대로예요.',
+    MIGRATION_FAILED: '이전 기억을 새 형식(v2)으로 옮기지 못했어요. 원본은 그대로예요.',
+    ENGINE_V2_MISSING: '엔진에 기억 저장 v2 모듈(MemoryV2)이 없어 기억 덱을 불러오지 않았어요.', LOADING: '기억 덱을 불러오는 중이에요.',
   };
   const errMsg = (e) => ERR[e.code] || e.message || String(e);
 
@@ -115,6 +148,159 @@
     </button>`;
   }
 
+  // ───────── memory v2 storage (local prototype adapter, not a server) ─────────
+  const QUARANTINE_TEXT = { OVER_CAPACITY: '용량 초과', IDENTITY_REQUIRED: '카드 개체 정보 없음', INVALID_CARD: '허용되지 않는 카드', INVALID_PART: '허용되지 않는 부품', INVALID_EVOLUTION: '허용되지 않는 진화', INVALID_ASSIGNMENT: '잘못된 공용 카드 배정', INVALID_SNAPSHOT: '형식 오류' };
+  const RECOVERABLE_MEM = ['MEMORY_MALFORMED', 'LEGACY_MALFORMED'];
+  function validMemoryRecord(r) {
+    return !!r && typeof r === 'object' && !Array.isArray(r) && r.schema === 'mf-memory-v2' && Number.isInteger(r.version) && r.version >= 0
+      && !!r.memory && typeof r.memory === 'object' && !Array.isArray(r.memory);
+  }
+  function readMemoryRecord() {
+    const cur = store.raw(MEM_KEY);
+    if (!cur.ok) return { ok: false, code: 'STORAGE_UNAVAILABLE' };
+    if (cur.raw === null) return { ok: true, record: null };
+    let r;
+    try { r = JSON.parse(cur.raw); } catch (e) { return { ok: false, code: 'MEMORY_MALFORMED' }; }
+    if (!validMemoryRecord(r)) return { ok: false, code: 'MEMORY_MALFORMED' };
+    return { ok: true, record: r };
+  }
+  function setMemory(record, status) {
+    app.memoryState = record;
+    app.memory = record ? record.memory : {};
+    app.memStatus = status;
+  }
+  function capacityFor(cid) { return MF.Run.capacityOf(IX, { charId: cid, res: resOf(cid) }); }
+  function capacitiesNow() { return Object.fromEntries(DATA.characters.map((ch) => [ch.id, capacityFor(ch.id)])); }
+  // keeps the exact original bytes; an existing different backup is never overwritten
+  function backupLegacyRaw(raw) {
+    const b = store.raw(LEGACY_BACKUP_KEY);
+    if (!b.ok) return null;
+    if (b.raw === null) return store.putRaw(LEGACY_BACKUP_KEY, raw) ? LEGACY_BACKUP_KEY : null;
+    if (b.raw === raw) return LEGACY_BACKUP_KEY;
+    const k = `${LEGACY_BACKUP_KEY}_${Date.now()}`;
+    return store.putRaw(k, raw) ? k : null;
+  }
+  // dry-run migration from mf07_memory → mf08_memory. allowUnreadable is only used by the explicit recovery action.
+  function migrateLegacy(opts = {}) {
+    const legacy = store.raw(LEGACY_MEM_KEY);
+    if (!legacy.ok) return { ok: false, code: 'STORAGE_UNAVAILABLE' };
+    let map = {}; let backupKey = null; let unreadable = false;
+    if (legacy.raw !== null) {
+      backupKey = backupLegacyRaw(legacy.raw);
+      if (!backupKey) return { ok: false, code: 'BACKUP_WRITE_FAILED' };
+      try { map = JSON.parse(legacy.raw); } catch (e) { map = null; }
+      if (!map || typeof map !== 'object' || Array.isArray(map)) {
+        if (!opts.allowUnreadable) return { ok: false, code: 'LEGACY_MALFORMED' };
+        map = {}; unreadable = true;
+      }
+    }
+    let rec;
+    try { rec = MF.MemoryV2.migrate(DATA, map, capacitiesNow()); } catch (e) { console.error(e); return { ok: false, code: 'MIGRATION_FAILED', detail: e.code || e.message }; }
+    if (!validMemoryRecord(rec)) return { ok: false, code: 'MIGRATION_FAILED', detail: 'invalid record' };
+    rec.migration = Object.assign({
+      from: LEGACY_MEM_KEY, backupKey, legacyFound: legacy.raw !== null, legacyBytes: legacy.raw ? legacy.raw.length : 0,
+      legacyUnreadable: unreadable, quarantined: Object.keys(rec.quarantine || {}), at: new Date().toISOString(), dryRunDeterministic: true,
+    }, opts.meta || {});
+    if (!store.put(MEM_KEY, rec)) return { ok: false, code: 'MEMORY_WRITE_FAILED' };
+    return { ok: true, record: rec, migrated: true };
+  }
+  function loadMemory() {
+    if (!MF.MemoryV2 || typeof MF.MemoryV2.migrate !== 'function') { setMemory(null, { ok: false, code: 'ENGINE_V2_MISSING' }); return; }
+    const cur = readMemoryRecord();
+    if (!cur.ok) { setMemory(null, cur); return; }
+    if (cur.record) { setMemory(cur.record, { ok: true }); return; }
+    const m = migrateLegacy();
+    setMemory(m.ok ? m.record : null, m.ok ? { ok: true, migrated: true } : m);
+  }
+  // explicit user action only: keep corrupt bytes aside, then rebuild from the untouched legacy key
+  function recoverMemory() {
+    const cur = store.raw(MEM_KEY);
+    if (!cur.ok) { setMemory(null, { ok: false, code: 'STORAGE_UNAVAILABLE' }); return false; }
+    let keptAs = null;
+    if (cur.raw !== null) { keptAs = `${MEM_KEY}_corrupt_${Date.now()}`; if (!store.putRaw(keptAs, cur.raw)) { setMemory(null, { ok: false, code: 'BACKUP_WRITE_FAILED' }); return false; } }
+    const m = migrateLegacy({ allowUnreadable: true, meta: { recovered: true, corruptCopy: keptAs } });
+    setMemory(m.ok ? m.record : null, m.ok ? { ok: true, migrated: true } : m);
+    return m.ok;
+  }
+  function quarantineOf(cid) {
+    const r = app.memoryState;
+    if (!r || !r.quarantine || !r.quarantine[cid]) return null;
+    if (r.quarantineCleared && r.quarantineCleared[cid]) return null;
+    return r.quarantine[cid];
+  }
+  const quarantineText = (q) => `${QUARANTINE_TEXT[q.code] || q.code || '알 수 없는 이유'}`;
+  // explicit test actions (clearMem/resetMemory): latest record, history + version bump, backups/quarantine kept
+  function mutateMemory(reason, cids) {
+    const latest = readMemoryRecord();
+    if (!latest.ok) { setMemory(null, latest); return false; }
+    if (!latest.record) { toast(ERR.MEMORY_MISSING); return false; }
+    const rec = clone(latest.record);
+    const all = [...new Set([...Object.keys(rec.memory), ...Object.keys(rec.quarantine || {})])];
+    const targets = cids || all;
+    const at = new Date().toISOString();
+    rec.history = Array.isArray(rec.history) ? rec.history : [];
+    rec.history.push({ type: reason, at, fromVersion: rec.version, toVersion: rec.version + 1, chars: targets, memory: clone(reason === 'resetMemory' ? rec.memory : Object.fromEntries(targets.filter((c) => rec.memory[c]).map((c) => [c, rec.memory[c]]))) });
+    for (const c of targets) {
+      delete rec.memory[c];
+      if (rec.quarantine && rec.quarantine[c]) { rec.quarantineCleared = rec.quarantineCleared || {}; rec.quarantineCleared[c] = { at, version: rec.version + 1, reason }; }
+    }
+    rec.version += 1;
+    if (!store.put(MEM_KEY, rec)) { toast('기억 덱 기록을 저장소에 쓰지 못했어요. 아무것도 바뀌지 않았어요.'); return false; }
+    setMemory(rec, { ok: true });
+    return true;
+  }
+  const staleRunNote = () => (app.run && app.run.s.phase !== 'DONE' ? ' 진행 중 탐사는 출발 당시 기억 버전 기준이라, 끝낼 때 저장은 충돌로 거절돼요(기존 덱 덮어쓰기 없음).' : '');
+
+  // ───────── checkpoint (in-progress run, save selection, pending request) ─────────
+  function writeCheckpoint() {
+    if (!app.run) return true;
+    const ok = store.put(CKPT_KEY, { schema: 'mf08-checkpoint', v: 1, at: new Date().toISOString(), screen: app.screen, run: app.run.s, saveSel: app.saveSel, pendingSave: app.pendingSave, lastSave: app.lastSave });
+    app.ckptError = ok ? null : 'WRITE_FAILED';
+    return ok;
+  }
+  function clearCheckpoint() {
+    const ok = store.remove(CKPT_KEY);
+    app.ckptError = ok ? null : 'REMOVE_FAILED';
+    return ok;
+  }
+  function loadCheckpoint() {
+    const r = store.raw(CKPT_KEY);
+    if (!r.ok) { app.ckptNotice = '진행 기록(체크포인트)을 읽을 수 없어요. 저장소를 쓸 수 없는 상태예요.'; return null; }
+    if (r.raw === null) return null;
+    try {
+      const c = JSON.parse(r.raw);
+      if (!c || c.schema !== 'mf08-checkpoint' || !c.run) throw new Error('bad checkpoint');
+      return c;
+    } catch (e) {
+      const k = `${CKPT_KEY}_corrupt_${Date.now()}`;
+      app.ckptNotice = store.putRaw(k, r.raw) ? `진행 기록을 읽을 수 없어 복원하지 않았어요. 원본은 ${k}에 보관했어요.` : '진행 기록을 읽을 수 없어 복원하지 않았어요. 원본 보관에도 실패했으니 새 탐사를 시작하면 덮어써져요.';
+      return null;
+    }
+  }
+  function restoreRunState(snap) {
+    app.run = new MF.Run(DATA, snap.run);
+    app.saveSel = snap.saveSel && typeof snap.saveSel === 'object' ? snap.saveSel : null;
+    app.pendingSave = snap.pendingSave || null;
+    app.lastSave = snap.lastSave || null;
+    if (snap.screen) app.screen = snap.screen;
+  }
+  function noticeBar() {
+    const items = [];
+    const ms = app.memStatus;
+    if (ms && !ms.ok) items.push(`<b>기억 덱</b> ${esc(ERR[ms.code] || ms.code)}${ms.detail ? ` <span class="muted">(${esc(ms.detail)})</span>` : ''}${RECOVERABLE_MEM.includes(ms.code) ? ' <button class="btn small" data-act="memRecoverAsk">원본 보관 후 다시 이관</button>' : ''}`);
+    if (app.ckptError) items.push(`<b>진행 기록</b> ${app.ckptError === 'REMOVE_FAILED' ? '끝난 탐사의 진행 기록을 지우지 못했어요. 새로고침하면 다시 나타날 수 있어요.' : '진행 기록을 저장하지 못했어요. 새로고침하면 진행이 사라질 수 있고, 그동안 기억 저장은 막혀요.'} <button class="btn small" data-act="ckptRetry">다시 시도</button>`);
+    if (app.ckptNotice) items.push(`<b>진행 기록</b> ${esc(app.ckptNotice)} <button class="btn small" data-act="ckptNoticeClose">확인</button>`);
+    if (!items.length) return '';
+    return `<div class="wrap" style="padding-bottom:0"><div class="panel grid" role="alert" style="border-color:var(--warn,#e0795f)">${items.map((t) => `<div>${t}</div>`).join('')}</div></div>`;
+  }
+  // reasons that block starting a run (shown in party view, enforced in startRun)
+  function startBlockers(cids) {
+    const out = [];
+    if (!app.memStatus.ok) out.push(ERR[app.memStatus.code] || app.memStatus.code);
+    for (const cid of cids) { const q = quarantineOf(cid); if (q) out.push(`${charOf(cid).name}: 이전 기억 덱이 이관 검사에서 격리됐어요(${quarantineText(q)}). 기본 덱으로 몰래 바꾸지 않았어요. 기억 덱 화면에서 확인하세요.`); }
+    return out;
+  }
+
   // ───────── navigation & render ─────────
   const NAV = [['home', '공방'], ['party', '탐사'], ['gacha', '모집'], ['codex', '도감'], ['memory', '기억 덱'], ['settings', '설정']];
   function render() {
@@ -125,7 +311,7 @@
       <button data-act="help">규칙</button></div></nav>`;
     let body = '';
     try { body = view(); } catch (e) { console.error(e); body = `<div class="wrap"><div class="panel">화면을 그리다 오류가 났어요: ${esc(e.message)}</div></div>`; }
-    root.innerHTML = nav + body + (app.modal ? modalView() : '') + (app.toast ? `<div class="toast" role="status">${esc(app.toast)}</div>` : '');
+    root.innerHTML = nav + noticeBar() + body + (app.modal ? modalView() : '') + (app.toast ? `<div class="toast" role="status">${esc(app.toast)}</div>` : '');
   }
   function isRunScreen() { return ['map', 'battle', 'reward', 'rest', 'forge', 'shop', 'event', 'archive', 'save', 'result'].includes(app.screen); }
   function view() {
@@ -193,12 +379,14 @@
     }).join('');
     const weaponRows = chosen.map((cid) => {
       const ch = charOf(cid); const list = weaponsFor(cid); const cur = p.weapons[cid] && list.some((w) => w.id === p.weapons[cid]) ? p.weapons[cid] : list.find((w) => w.rarity === 'R').id;
-      const mem = app.memory[cid];
+      const mem = app.memory[cid]; const q = quarantineOf(cid);
       return `<div class="item"><h4>${esc(ch.name)} <span class="muted">· ${WTYPE[ch.weapon]}</span></h4>
         <label class="muted" for="w-${cid}">무기</label>
         <select id="w-${cid}" data-act="weapon" data-id="${cid}">${list.map((w) => `<option value="${w.id}" ${w.id === cur ? 'selected' : ''}>${esc(w.name)} (${w.rarity}${w.rarity !== 'R' ? ` R${MF.Gacha.refine(app.gacha, w.id)}` : ''})</option>`).join('')}</select>
-        <p>${mem ? `저장된 기억 덱 사용 가능(${mem.length}장)` : '기본 기억 덱(시작 카드 4장 + 공용 1장)'}</p></div>`;
+        <p>${q ? `<span class="pill warn">기억 덱 격리됨 · ${esc(quarantineText(q))}</span>` : mem ? `저장된 기억 덱 사용 가능(${mem.length}장)` : '기본 기억 덱(시작 카드 4장 + 공용 1장)'}</p>
+        ${!p.useMemory && mem && !q ? '<p class="muted">이번 탐사는 기본 덱으로 하지만, 저장할 때는 출발 전 기억 덱이 기준이 되어 그대로 보존돼요.</p>' : ''}</div>`;
     }).join('');
+    const blockers = chosen.length === 3 ? startBlockers(chosen) : [];
     return `<div class="wrap grid">
       <div class="row" style="justify-content:space-between"><div><div class="eyebrow">편성</div><h2>캐릭터 3명을 고르세요</h2></div>
         <div class="row"><span class="muted">${app.settings.allOwned ? '테스트 모드: 전원 사용 가능' : '보유 캐릭터만'}</span></div></div>
@@ -208,7 +396,8 @@
         <div class="row"><span class="muted">탐사 길이</span><span class="seg"><button data-act="len" data-v="short" class="${p.length === 'short' ? 'on' : ''}">짧게(1구역)</button><button data-act="len" data-v="full" class="${p.length === 'full' ? 'on' : ''}">정규(2구역)</button></span>
           <span class="muted">난이도</span><span class="seg"><button data-act="diff" data-v="normal" class="${p.difficulty === 'normal' ? 'on' : ''}">보통</button><button data-act="diff" data-v="hard" class="${p.difficulty === 'hard' ? 'on' : ''}">어려움</button></span>
           <span class="muted">덱</span><span class="seg"><button data-act="usemem" data-v="1" class="${p.useMemory ? 'on' : ''}">저장된 기억</button><button data-act="usemem" data-v="0" class="${!p.useMemory ? 'on' : ''}">기본 덱</button></span></div>
-        <div class="row"><button class="btn primary" data-act="startRun" ${chosen.length === 3 ? '' : 'disabled'}>탐사 시작</button><span class="muted">${chosen.length}/3 선택 · 짧게는 약 15분, 정규는 약 30분</span></div>
+        <div class="row"><button class="btn primary" data-act="startRun" ${chosen.length === 3 && !blockers.length ? '' : 'disabled'}>탐사 시작</button><span class="muted">${chosen.length}/3 선택 · 짧게는 약 15분, 정규는 약 30분</span></div>
+        ${blockers.length ? `<div class="grid" role="alert">${blockers.map((t) => `<span class="pill warn" style="white-space:normal">시작할 수 없어요: ${esc(t)}</span>`).join('')}</div>` : ''}
       </div></div>`;
   }
 
@@ -472,6 +661,7 @@
       afterBattleCmd(before);
     } catch (e) { toast(errMsg(e)); }
     app.sel = null; app.target = null; app.picker = null; if (app.modal && app.modal.type === 'picker') app.modal = null;
+    writeCheckpoint();
     render();
   }
   function afterBattleCmd(before) {
@@ -533,30 +723,114 @@
     return `<div class="panel grid"><div class="eyebrow">기록소</div><h2>첫 구역의 기록을 확정했다</h2><p>여기서 돌아가면 지금까지의 덱을 기억으로 저장할 수 있어요. 계속 가면 체력 15%를 회복하고 다음 구역으로 갑니다(패배하면 변경 1개만 남아요).</p>
       <div class="row"><button class="btn primary" data-act="archive" data-v="continue">계속 탐사</button><button class="btn" data-act="archive" data-v="return">귀환하고 저장</button></div></div>`;
   }
-  function viewSave() {
-    const run = app.run; const s = run.s; const info = run.memoryChanges(); const defeat = s.pending && s.pending.defeat;
-    if (!app.saveSel) {
-      app.saveSel = {};
-      for (const [cid, inf] of Object.entries(info)) { app.saveSel[cid] = []; let used = 0; if (!defeat) inf.changes.forEach((c, i) => { if (used + c.cost <= inf.capacity) { app.saveSel[cid].push(i); used += c.cost; } }); }
+  // ───────── memory v2 save screen ─────────
+  const KIND_LABEL = { add: '추가', remove: '제거', evolve: '진화', upgrade: '강화', part: '부품' };
+  const isV2Run = (run) => !!run && typeof run.previewMemory === 'function' && typeof run.s.runId === 'string' && Number.isInteger(run.s.memoryVersion);
+  const saveLocked = () => !!(app.pendingSave && app.pendingSave.status === 'sent');
+  function specName(sp) { const def = IX.cards[sp.id]; return `${def ? def.name : sp.id}${sp.plus ? '+' : ''}`; }
+  function specPill(sp, cls, note) {
+    const mods = sp.mods ? [sp.mods.c, sp.mods.e].filter((p) => p).map((p) => (IX.parts[p] ? IX.parts[p].name : p)) : [];
+    return `<span class="pill ${cls || ''}" title="${esc(mods.join(', '))}">${esc(specName(sp))}${mods.length ? ' ⚙' : ''}${note ? ` <small>${esc(note)}</small>` : ''}</span>`;
+  }
+  const specSig = (sp) => JSON.stringify([sp.id, !!sp.plus, sp.from || null, (sp.mods && sp.mods.c) || null, (sp.mods && sp.mods.e) || null, sp.assigned || null]);
+  // saveSel: {cid: [deltaId]} — sanitized against the current change list (old index-based selections are dropped)
+  function ensureSaveSel(info) {
+    const prev = app.saveSel && typeof app.saveSel === 'object' ? app.saveSel : {};
+    const next = {};
+    for (const [cid, inf] of Object.entries(info)) {
+      const valid = new Set(inf.changes.map((c) => c.id));
+      next[cid] = [...new Set((Array.isArray(prev[cid]) ? prev[cid] : []).filter((x) => typeof x === 'string' && valid.has(x)))];
     }
-    const total = Object.values(app.saveSel).reduce((a, l) => a + l.length, 0);
+    app.saveSel = next;
+  }
+  // flatten in deterministic change-list order so the same choice always yields the same request body
+  function flattenSel(info, sel) {
+    const out = [];
+    for (const [cid, inf] of Object.entries(info)) { const set = new Set((sel || app.saveSel)[cid] || []); for (const c of inf.changes) if (set.has(c.id)) out.push(c.id); }
+    return out;
+  }
+  function safePreview(run, ids) { try { return run.previewMemory(ids); } catch (e) { return null; } }
+  function viewSave() {
+    const run = app.run; const s = run.s; const defeat = !!(s.pending && s.pending.defeat);
+    const errPanel = app.saveError ? `<div class="panel grid" role="alert"><b>저장하지 못했어요</b><p>${esc(ERR[app.saveError.code] || app.saveError.detail || app.saveError.code)}</p>${app.saveError.detail && ERR[app.saveError.code] ? `<p class="muted">${esc(app.saveError.detail)}</p>` : ''}</div>` : '';
+    if (!isV2Run(run)) {
+      return `<div class="panel grid" role="alert"><div class="eyebrow">${defeat ? '패배' : '탐사 종료'}</div><h2>이 탐사는 기억 v2로 저장할 수 없어요</h2>
+        <p>${esc(ERR.LEGACY_RUN)} 기억 덱은 바뀌지 않아요.</p>
+        <div class="row"><button class="btn" data-act="skipSave">기억을 건드리지 않고 탐사 닫기</button></div></div>`;
+    }
+    const info = run.memoryChanges();
+    const locked = saveLocked();
+    if (locked) app.saveSel = Object.fromEntries(Object.keys(info).map((cid) => [cid, app.pendingSave.body.selectedChangeIds.filter((id) => info[cid].changes.some((c) => c.id === id))]));
+    ensureSaveSel(info);
+    const flat = flattenSel(info);
+    let pv = safePreview(run, flat);
+    if (!pv) { app.saveSel = null; ensureSaveSel(info); pv = safePreview(run, []); }
+    const memOk = app.memStatus.ok;
+    const reasons = [];
+    if (!memOk) reasons.push(ERR[app.memStatus.code] || app.memStatus.code);
+    if (pv && pv.error === 'DEFEAT_KEEP_ONE') reasons.push(`패배하면 이번 탐사의 변화는 파티 전체에서 1개까지만 남길 수 있어요. 지금 ${flat.length}개를 골랐어요.`);
+    if (pv && pv.error === 'OVER_CAPACITY') reasons.push(`용량을 넘는 캐릭터가 있어요: ${Object.keys(info).filter((cid) => pv.used[cid] > pv.capacities[cid]).map((cid) => `${charOf(cid).name} ${pv.used[cid]}/${pv.capacities[cid]}`).join(', ')}. 결과 덱 전체 비용으로 계산해요.`);
+    if (pv && pv.error && !['DEFEAT_KEEP_ONE', 'OVER_CAPACITY'].includes(pv.error)) reasons.push(ERR[pv.error] || pv.error);
+    if (!pv) reasons.push(ERR.INVALID_SNAPSHOT);
+    if (app.ckptError) reasons.push('진행 기록을 저장할 수 없어 기억 저장을 막았어요.');
+    if (locked) reasons.push('이전 저장 요청의 결과를 아직 확인하지 못했어요. 같은 요청으로 다시 확인하세요.');
+    const canSubmit = !reasons.length;
     const blocks = Object.entries(info).map(([cid, inf]) => {
       const ch = charOf(cid); const sel = new Set(app.saveSel[cid]);
-      const used = [...sel].reduce((a, i) => a + inf.changes[i].cost, 0);
-      return `<div class="panel grid"><div class="row" style="justify-content:space-between"><h3>${emblem(ch, 26)} ${esc(ch.name)}</h3><span class="pill ${used > inf.capacity ? 'warn' : 'brass'}">기억 용량 ${used}/${inf.capacity}</span></div>
-        ${inf.changes.length ? inf.changes.map((c, i) => `<label class="row" style="justify-content:space-between;border-bottom:1px solid var(--line);padding:4px 0"><span><input type="checkbox" id="sv-${cid}-${i}" data-act="saveToggle" data-cid="${cid}" data-i="${i}" ${sel.has(i) ? 'checked' : ''}> ${esc(c.label)}</span><span class="num muted">용량 ${c.cost}</span></label>`).join('') : '<p class="muted">바뀐 점이 없어요.</p>'}
+      const cap = pv ? pv.capacities[cid] : inf.capacity; const used = pv ? pv.used[cid] : inf.usedBefore;
+      const result = (pv && pv.memory[cid]) || inf.before;
+      const beforeByKey = new Map(inf.before.map((x) => [x.key, x]));
+      const resultKeys = new Set(result.map((x) => x.key));
+      const resultPills = result.map((sp) => {
+        const b = beforeByKey.get(sp.key);
+        if (!b) return specPill(sp, 'time', '새로');
+        return specSig(b) !== specSig(sp) ? specPill(sp, 'brass', '바뀜') : specPill(sp);
+      }).join('');
+      const dropped = inf.before.filter((b) => !resultKeys.has(b.key));
+      const notKept = inf.changes.filter((c) => !sel.has(c.id));
+      const rows = inf.changes.map((c) => {
+        const on = sel.has(c.id);
+        let hint = '선택됨';
+        if (!on) {
+          const alt = safePreview(run, flattenSel(info, { ...app.saveSel, [cid]: [...app.saveSel[cid], c.id] }));
+          if (!alt) hint = '-';
+          else if (alt.error === 'DEFEAT_KEEP_ONE') hint = '패배: 1개까지';
+          else hint = `고르면 결과 용량 ${alt.used[cid]}/${alt.capacities[cid]}${alt.error === 'OVER_CAPACITY' ? ' · 초과' : ''}`;
+        }
+        return `<label class="row" style="justify-content:space-between;border-bottom:1px solid var(--line);padding:4px 0"><span><input type="checkbox" data-act="saveToggle" data-cid="${esc(cid)}" data-id="${esc(c.id)}" ${on ? 'checked' : ''} ${locked ? 'disabled' : ''}> <span class="pill">${esc(KIND_LABEL[c.kind] || c.kind)}</span> ${esc(c.label)}</span><span class="num muted">${esc(hint)}</span></label>`;
+      }).join('');
+      return `<div class="panel grid"><div class="row" style="justify-content:space-between"><h3>${emblem(ch, 26)} ${esc(ch.name)}</h3>
+          <span class="row" style="gap:6px"><span class="pill">출발 전 용량 ${inf.usedBefore}/${inf.capacity}</span><span class="pill ${used > cap ? 'warn' : 'brass'}">결과 용량 ${used}/${cap}</span></span></div>
+        <div><div class="eyebrow">출발 전에 있던 기억 — 유지</div><div class="row">${inf.before.map((sp) => specPill(sp)).join('') || '<span class="muted">없음</span>'}</div></div>
+        <div><div class="eyebrow">이번 탐사에서 생긴 변화 ${inf.changes.length}개</div>
+          ${inf.changes.length ? rows : '<p class="muted">바뀐 점이 없어요. 출발 전 기억이 그대로 유지돼요.</p>'}
+          ${inf.changes.length && !locked ? `<div class="row">${defeat ? '' : `<button class="btn small" data-act="saveFill" data-cid="${esc(cid)}">용량 안에서 순서대로 고르기</button>`}<button class="btn small" data-act="saveClear" data-cid="${esc(cid)}">이 캐릭터 선택 해제</button></div>` : ''}</div>
+        <div><div class="eyebrow">결과 덱 미리보기 ${result.length}장</div><div class="row">${resultPills || '<span class="muted">없음</span>'}</div>
+          ${dropped.length ? `<div class="row"><span class="muted">이번 저장으로 빠지는 카드</span>${dropped.map((sp) => specPill(sp, 'warn', '빠짐')).join('')}</div>` : ''}
+          ${notKept.length ? `<p class="muted">이번에 남기지 못하는 변화 ${notKept.length}개: ${notKept.map((c) => esc(c.label)).join(', ')}</p>` : ''}</div>
       </div>`;
     }).join('');
     const commons = s.deck.filter((c) => c.owner === 'common' && c.gained);
-    const assign = commons.length ? `<div class="panel grid"><h3>공용 카드는 누구의 기억에 넣을까요?</h3>${commons.map((c) => `<div class="row"><span>${esc(IX.cards[c.id].name)}</span><select id="as-${c.key}" data-act="assign" data-key="${c.key}">${s.party.map((p) => `<option value="${p.charId}" ${c.assigned === p.charId ? 'selected' : ''}>${esc(charOf(p.charId).name)}</option>`).join('')}</select></div>`).join('')}</div>` : '';
-    return `<div class="panel"><div class="eyebrow">${defeat ? '패배 · 잔존 기억' : '탐사 종료 · 기억 저장'}</div><h2>${defeat ? '하나만 남길 수 있어요' : '이번 탐사의 덱을 기억으로 남기세요'}</h2>
-      <p class="muted">${defeat ? '패배하면 이번 탐사에서 바뀐 것 중 1개만 저장돼요.' : '캐릭터마다 기억 용량 안에서 저장해요. 저장한 덱은 다음 탐사의 시작 덱이 되고, 주간 보스·기록 균열에서도 써요.'} 선택: ${total}개</p></div>
-      ${assign}${blocks}<div class="row"><button class="btn primary" data-act="commitSave">저장하고 끝내기</button><button class="btn" data-act="skipSave">저장하지 않기</button></div>`;
+    const assign = commons.length ? `<div class="panel grid"><h3>공용 카드는 누구의 기억에 넣을까요?</h3><p class="muted">배정을 바꾸면 고른 변화가 초기화돼요.</p>${commons.map((c) => `<div class="row"><span>${esc(IX.cards[c.id].name)}</span><select id="as-${esc(c.key)}" data-act="assign" data-key="${esc(c.key)}" ${locked ? 'disabled' : ''}>${s.party.map((p) => `<option value="${esc(p.charId)}" ${c.assigned === p.charId ? 'selected' : ''}>${esc(charOf(p.charId).name)}</option>`).join('')}</select></div>`).join('')}</div>` : '';
+    const pend = app.pendingSave;
+    const pendPanel = locked ? `<div class="panel grid" role="alert"><b>저장 요청 결과 확인 필요</b><p>저장 요청(${esc(pend.requestId.slice(-8))})을 보낸 뒤 결과를 확인하지 못했어요. 새 요청이 아니라 같은 요청으로 다시 확인해요. 탐사를 패배로 처리하지 않았어요.</p>
+      <div class="row"><button class="btn primary" data-act="saveRetry">같은 요청으로 다시 확인</button><button class="btn" data-act="saveRelease">요청을 버리고 다시 고르기</button></div>
+      <p class="muted">다시 고르면 새 요청이 되며, 이전 요청이 이미 반영됐다면 버전 충돌로 거절돼요.</p></div>` : '';
+    return `<div class="panel"><div class="eyebrow">${defeat ? '패배 · 잔존 기억' : '탐사 종료 · 기억 저장'}</div><h2>${defeat ? '출발 전 기억은 지켜져요. 이번 변화는 하나까지' : '이번 탐사의 변화를 골라 기억에 더하세요'}</h2>
+      <p class="muted">${defeat ? '패배해도 출발 전 기억 덱은 그대로예요. 이번 탐사에서 생긴 변화 중 파티 전체에서 1개까지 더할 수 있어요. 아무것도 고르지 않으면 기존 덱이 유지돼요.' : '출발 전 기억 덱에 이번 탐사의 변화를 여러 개 더할 수 있어요. 용량은 고른 것의 합이 아니라 완성된 결과 덱 전체로 계산해요. 저장한 덱은 다음 탐사의 시작 덱이 되고, 주간 보스·기록 균열에서도 써요.'}
+      선택: ${flat.length}개${defeat ? ' / 1' : ''}</p>
+      <p class="muted">이 저장은 이 브라우저 안의 시험용 로컬 저장이에요(서버 저장 아님) · 기억 버전 ${esc(String(s.memoryVersion))}</p></div>
+      ${errPanel}${pendPanel}${assign}${blocks}
+      ${reasons.length ? `<div class="grid" role="status">${reasons.map((t) => `<span class="pill warn" style="white-space:normal">저장 버튼을 쓸 수 없는 이유: ${esc(t)}</span>`).join('')}</div>` : ''}
+      <div class="row"><button class="btn primary" data-act="commitSave" ${canSubmit ? '' : 'disabled'}>${flat.length ? `고른 변화 ${flat.length}개 저장하고 끝내기` : '변화 없이 저장(기존 덱 유지)'}</button>
+        <button class="btn" data-act="keepAsk">기존 덱 유지하고 끝내기</button>
+        <button class="btn small" data-act="skipSave" title="저장소에 아무것도 쓰지 않고 탐사만 닫아요">저장하지 않고 탐사 닫기</button></div>`;
   }
   function viewResult() {
     const s = app.run.s; const r = s.result || {};
     return `<div class="panel grid"><div class="eyebrow">탐사 결과</div><h2>${r.outcome === 'defeat' ? '패배' : r.outcome === 'return' ? '기록소 귀환' : '탐사 완주'}</h2>
-      <dl class="kv"><dt>전투</dt><dd>${s.stats.battles}회 (엘리트 ${s.stats.elites})</dd><dt>처치</dt><dd>${s.stats.kills}</dd><dt>남은 체력</dt><dd>${s.hp}/${s.maxHp}</dd><dt>유물</dt><dd>${s.relics.map((x) => esc(IX.relics[x].name)).join(', ') || '-'}</dd></dl>
+      <dl class="kv"><dt>전투</dt><dd>${s.stats.battles}회 (엘리트 ${s.stats.elites})</dd><dt>처치</dt><dd>${s.stats.kills}</dd><dt>남은 체력</dt><dd>${s.hp}/${s.maxHp}</dd><dt>유물</dt><dd>${s.relics.map((x) => esc(IX.relics[x].name)).join(', ') || '-'}</dd>
+        ${app.lastSave ? `<dt>기억</dt><dd>${app.lastSave.kind === 'closed' ? '저장하지 않고 닫음 · 기억 덱 변화 없음' : `${app.lastSave.kind === 'keep' ? '기존 덱 유지' : `변화 ${app.lastSave.count}개 저장`} · 기억 버전 ${esc(String(app.lastSave.version))}${app.lastSave.used ? ` · ${Object.entries(app.lastSave.used).map(([cid, u]) => `${esc(charOf(cid) ? charOf(cid).name : cid)} 용량 ${esc(String(u))}`).join(', ')}` : ''}`}</dd>` : ''}</dl>
       <div class="row"><button class="btn primary" data-act="newRun">다시 탐사</button><button class="btn" data-act="nav" data-to="memory">기억 덱 보기</button><button class="btn" data-act="nav" data-to="gacha">모집하러 가기</button></div></div>`;
   }
 
@@ -640,16 +914,28 @@
 
   // ───────── memory & settings ─────────
   function viewMemory() {
+    const rec = app.memoryState; const v2 = !!(MF.MemoryV2 && typeof MF.MemoryV2.cost === 'function');
     const rows = DATA.characters.map((ch) => {
-      const mem = app.memory[ch.id];
-      const specs = mem || MF.Run.baseKit(IX, ch.id);
-      let cost = 0; let cap = 0;
-      try { const r = MF.Run.create(DATA, { party: [{ charId: ch.id, res: resOf(ch.id) }], memory: mem ? { [ch.id]: mem } : undefined, seed: 1 }); const inf = r.memoryChanges()[ch.id]; cost = inf.changes.reduce((a, c) => a + c.cost, 0); cap = inf.capacity; } catch (e) { /* ignore */ }
-      return `<div class="panel grid"><div class="row" style="justify-content:space-between"><h3>${emblem(ch, 26)} ${esc(ch.name)}</h3><span class="pill ${mem ? 'brass' : ''}">${mem ? `저장됨 · 용량 ${cost}/${cap}` : '기본 덱'}</span></div>
-        <div class="row">${specs.map((sp) => `<span class="pill">${esc(IX.cards[sp.id].name)}${sp.plus ? '+' : ''}${sp.mods && (sp.mods.c || sp.mods.e) ? ' ⚙' : ''}</span>`).join('')}</div>
-        ${mem ? `<div class="row"><button class="btn small danger" data-act="clearMem" data-id="${ch.id}">기본 덱으로 되돌리기</button></div>` : ''}</div>`;
+      const mem = app.memory[ch.id]; const q = quarantineOf(ch.id);
+      const baseline = v2 && typeof MF.MemoryV2.baseline === 'function' ? MF.MemoryV2.baseline(DATA, ch.id) : MF.Run.baseKit(IX, ch.id);
+      const specs = mem || baseline;
+      // full-result cost vs baseline and capacity, read directly (no throwaway legacy Run)
+      let cost = null; let cap = null;
+      try { cap = capacityFor(ch.id); } catch (e) { console.error(e); }
+      try { if (v2) cost = MF.MemoryV2.cost(DATA, ch.id, specs, baseline); } catch (e) { console.error(e); }
+      const costTxt = `용량 ${cost === null ? '?' : cost}/${cap === null ? '?' : cap}`;
+      const over = cost !== null && cap !== null && cost > cap;
+      const pill = q ? `<span class="pill warn">격리됨 · ${esc(quarantineText(q))}</span>` : `<span class="pill ${over ? 'warn' : mem ? 'brass' : ''}">${mem ? `저장됨 · ${costTxt}` : `기본 덱 · ${costTxt}`}</span>`;
+      const qOrig = q && Array.isArray(q.original) ? q.original : null;
+      return `<div class="panel grid"><div class="row" style="justify-content:space-between"><h3>${emblem(ch, 26)} ${esc(ch.name)}</h3>${pill}</div>
+        ${q ? `<p class="muted">이전 기억 덱(${qOrig ? `${qOrig.length}장` : '원본'})이 이관 검사에서 격리됐어요. 잘라내거나 기본 덱으로 몰래 바꾸지 않았고, 원본은 백업과 격리 기록에 남아 있어요. 이 캐릭터는 확인 전까지 탐사에 편성할 수 없어요.</p>
+          ${qOrig ? `<div class="row">${qOrig.map((sp) => (sp && sp.id ? specPill(sp, 'warn') : '')).join('')}</div>` : ''}` : `<div class="row">${specs.map((sp) => specPill(sp)).join('')}</div>`}
+        ${mem || q ? `<div class="row"><button class="btn small danger" data-act="clearMem" data-id="${esc(ch.id)}" ${app.memStatus.ok ? '' : 'disabled'}>기본 덱으로 되돌리기</button></div>` : ''}</div>`;
     }).join('');
-    return `<div class="wrap grid"><div><div class="eyebrow">기억 덱</div><h2>캐릭터별 저장된 덱</h2><p class="muted">탐사를 끝내면 바뀐 카드·강화·부품·진화를 기억 용량 안에서 저장해요. 공명 4단계마다 용량 +1.</p></div><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(280px,1fr))">${rows}</div></div>`;
+    const hist = rec && Array.isArray(rec.history) ? rec.history.length : 0;
+    const mig = rec && rec.migration;
+    const meta = rec ? `<p class="muted">기억 버전 ${esc(String(rec.version))} · 이력 ${hist}건${mig ? ` · 이관 ${esc(mig.at || '')}${mig.legacyFound ? ` (원본 ${esc(String(mig.legacyBytes))}바이트 백업: ${esc(mig.backupKey || '-')})` : ' (이전 기록 없음)'}${mig.legacyUnreadable ? ' · 원본을 읽을 수 없어 빈 기억으로 시작' : ''}` : ''}${rec.quarantine && Object.keys(rec.quarantine).length ? ` · 격리 ${Object.keys(rec.quarantine).length}건` : ''} · 이 브라우저 안의 시험용 로컬 저장</p>` : `<p class="pill warn" style="white-space:normal">${esc(ERR[app.memStatus.code] || app.memStatus.code)}</p>`;
+    return `<div class="wrap grid"><div><div class="eyebrow">기억 덱</div><h2>캐릭터별 저장된 덱</h2><p class="muted">탐사를 끝내면 출발 전 기억 덱에 이번 탐사의 카드·강화·부품·진화 변화를 골라 더해요. 용량은 기본 덱 대비 결과 덱 전체 비용이에요. 공명 4단계마다 용량 +1.</p>${meta}</div><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(280px,1fr))">${rows}</div></div>`;
   }
   function viewSettings() {
     const s = app.settings;
@@ -692,6 +978,9 @@
       inner = `<h2>${esc(req.label)} 고르기 (${pk.picks.length + 1}/${pk.reqs.reduce((a, r) => a + r.n, 0)})</h2><div class="pick-grid">${opts.map((u) => cardFace(b.s.cards[u], { def: b.effDef(b.s.cards[u]), act: 'pick' })).join('') || '<p class="muted">고를 카드가 없어요.</p>'}</div><div class="row"><button class="btn" data-act="pickAuto">자동으로 고르기</button><button class="btn" data-act="closeModal">취소</button></div>`;
     } else if (m.type === 'info') {
       inner = m.html;
+    } else if (m.type === 'confirm') {
+      // m.act is always an internal action name; texts are escaped
+      inner = `<h2>${esc(m.title)}</h2><p>${esc(m.body)}</p><div class="row"><button class="btn primary" data-act="${esc(m.act)}">${esc(m.label)}</button></div>`;
     }
     return `<div class="modal-bg" data-act="bgClose"><div class="modal" role="dialog" aria-modal="true">${inner}<div class="row" style="justify-content:flex-end"><button class="btn" data-act="closeModal">닫기</button></div></div></div>`;
   }
@@ -703,14 +992,68 @@
       const list = weaponsFor(cid); const wid = p.weapons[cid] && list.some((w) => w.id === p.weapons[cid]) ? p.weapons[cid] : list.find((w) => w.rarity === 'R').id;
       return { charId: cid, res: resOf(cid), weaponId: wid, refine: IX.weapons[wid].rarity === 'R' ? 1 : MF.Gacha.refine(app.gacha, wid) };
     });
-    const memory = {};
-    if (p.useMemory) for (const x of party) if (app.memory[x.charId]) memory[x.charId] = app.memory[x.charId];
+    // re-read the latest record (another tab may have saved/reset) and refuse unsafe starts
+    const latest = readMemoryRecord();
+    if (!latest.ok) { setMemory(null, latest); toast(ERR[latest.code] || latest.code); return; }
+    if (latest.record) setMemory(latest.record, { ok: true });
+    const blockers = startBlockers(party.map((x) => x.charId));
+    if (!app.memoryState || blockers.length) { toast(blockers[0] || ERR.MEMORY_MISSING); return; }
+    // v2: the persistent "before" is always passed; useMemory:false only plays with the base kit
+    const memory = clone(app.memoryState.memory);
     const diff = p.difficulty === 'hard' ? { hp: 120, dmg: 125 } : { hp: 100, dmg: 100 };
     runCounter += 1;
     const seed = URL_SEED !== null ? URL_SEED + runCounter : ((Date.now() & 0x7fffffff) || 1);
-    app.run = MF.Run.create(DATA, { party, memory, seed, length: p.length, difficulty: diff });
+    const runId = newId('run');
+    app.run = MF.Run.create(DATA, { party, memory, seed, length: p.length, difficulty: diff, memoryPolicy: 'v2', memoryVersion: app.memoryState.version, runId, ...(p.useMemory ? {} : { useMemory: false }) });
     app.run.s.visited = [];
     app.saveSel = null; app.sel = null; app.target = null; app.partyForce = false;
+    app.pendingSave = null; app.saveError = null; app.lastSave = null;
+    syncRunScreen();
+    writeCheckpoint();
+  }
+  // memory v2 commit through the local adapter. Order: pending DTO → checkpoint → latest record → candidate commit → memory write → live update.
+  function submitSave(ids, kind) {
+    const run = app.run;
+    if (!run || !['VICTORY', 'DEFEAT'].includes(run.s.phase)) return;
+    if (!isV2Run(run)) { app.saveError = { code: 'LEGACY_RUN' }; return; }
+    if (!app.memStatus.ok) { app.saveError = { code: app.memStatus.code }; return; }
+    const body = { expectedMemoryVersion: run.s.memoryVersion, runId: run.s.runId, selectedChangeIds: [...ids] };
+    const prev = app.pendingSave;
+    const same = prev && prev.body && JSON.stringify(prev.body) === JSON.stringify(body);
+    app.pendingSave = same ? { ...prev, status: 'sent', attempts: (prev.attempts || 1) + 1 } : { requestId: newId('req'), body, kind, status: 'sent', attempts: 1, at: new Date().toISOString() };
+    if (!writeCheckpoint()) {
+      // nothing was sent: keep the same requestId for the retry but do not lock the selection
+      app.pendingSave = { ...app.pendingSave, status: 'unsent' };
+      app.saveError = { code: 'CHECKPOINT_WRITE_FAILED' };
+      return;
+    }
+    const pend = app.pendingSave;
+    const latest = readMemoryRecord();
+    if (!latest.ok) { app.saveError = { code: latest.code }; return; } // pending kept: same requestId on retry
+    if (!latest.record) { app.saveError = { code: 'MEMORY_MISSING' }; return; }
+    const candidate = new MF.Run(DATA, clone(run.s));
+    let out;
+    try {
+      out = candidate.commitMemory({ requestId: pend.requestId, ...pend.body }, latest.record);
+    } catch (err) {
+      // deterministic rejection: nothing was written, so the request is closed and the choice is editable again
+      console.warn('commitMemory rejected', err);
+      app.pendingSave = null;
+      if (err.code === 'VERSION_CONFLICT') setMemory(latest.record, { ok: true });
+      app.saveError = { code: err.code || 'INVALID_SNAPSHOT', detail: err.code ? null : String(err.message || err) };
+      writeCheckpoint();
+      return;
+    }
+    const next = { ...out.state };
+    for (const k of ['migration', 'quarantineCleared']) if (latest.record[k] !== undefined && next[k] === undefined) next[k] = latest.record[k];
+    if (!validMemoryRecord(next)) { app.saveError = { code: 'INVALID_SNAPSHOT', detail: 'commit returned an invalid record' }; return; }
+    if (!store.put(MEM_KEY, next)) { app.saveError = { code: 'MEMORY_WRITE_FAILED' }; return; } // live memory/run untouched; pending kept
+    setMemory(next, { ok: true });
+    app.run = candidate;
+    app.pendingSave = null; app.saveSel = null; app.saveError = null;
+    app.lastSave = { kind, requestId: pend.requestId, count: pend.body.selectedChangeIds.length, version: out.response.version, used: out.response.used };
+    writeCheckpoint();
+    toast(kind === 'keep' ? '기존 기억 덱을 그대로 유지했어요.' : '기억을 저장했어요.');
     syncRunScreen();
   }
   function act(el, ev) {
@@ -834,16 +1177,48 @@
       }
       case 'archive': run.archive(d.v); syncRunScreen(); break;
       case 'saveToggle': {
-        const set = new Set(app.saveSel[d.cid]); const i = Number(d.i);
-        if (set.has(i)) set.delete(i); else set.add(i);
-        app.saveSel[d.cid] = [...set]; break;
+        // selections are delta ID strings per character; the defeat limit is shown, not silently enforced
+        if (saveLocked()) break;
+        if (!app.saveSel) app.saveSel = {};
+        const set = new Set(Array.isArray(app.saveSel[d.cid]) ? app.saveSel[d.cid] : []); const id = d.id;
+        if (set.has(id)) set.delete(id); else set.add(id);
+        app.saveSel[d.cid] = [...set]; app.saveError = null; break;
       }
+      case 'saveFill': {
+        if (saveLocked() || !isV2Run(run)) break;
+        const info = run.memoryChanges(); ensureSaveSel(info);
+        for (const c of info[d.cid] ? info[d.cid].changes : []) {
+          if (app.saveSel[d.cid].includes(c.id)) continue;
+          const trial = { ...app.saveSel, [d.cid]: [...app.saveSel[d.cid], c.id] };
+          const pv = safePreview(run, flattenSel(info, trial));
+          if (pv && !pv.error) app.saveSel = trial;
+        }
+        app.saveError = null; break;
+      }
+      case 'saveClear': if (!saveLocked() && app.saveSel) { app.saveSel[d.cid] = []; app.saveError = null; } break;
       case 'commitSave': {
-        try { const mem = run.commitMemory(app.saveSel); Object.assign(app.memory, mem); saveMemory(); toast('기억을 저장했어요.'); app.saveSel = null; syncRunScreen(); } catch (err) { toast(errMsg(err)); }
+        if (!isV2Run(run)) { app.saveError = { code: 'LEGACY_RUN' }; break; }
+        const info = run.memoryChanges(); ensureSaveSel(info);
+        const ids = flattenSel(info); const pv = safePreview(run, ids);
+        if (!pv) { app.saveError = { code: 'INVALID_SELECTION' }; break; }
+        if (pv.error) { toast(errMsg({ code: pv.error })); break; }
+        submitSave(ids, ids.length ? 'save' : 'keep');
         break;
       }
-      case 'skipSave': run.s.pending = { type: 'done' }; run.s.phase = 'DONE'; app.saveSel = null; syncRunScreen(); break;
-      case 'newRun': app.run = null; app.screen = 'party'; break;
+      case 'keepAsk': {
+        const defeat = !!(run.s.pending && run.s.pending.defeat);
+        app.modal = { type: 'confirm', title: '기존 기억 덱을 유지할까요?', body: `${defeat ? '패배했지만 ' : ''}출발 전 기억 덱이 그대로 남고, 이번 탐사의 변화는 저장하지 않아요. 자동 초기화는 없어요.`, act: 'keepConfirm', label: '기존 덱 유지하고 끝내기' };
+        break;
+      }
+      case 'keepConfirm': app.modal = null; if (saveLocked()) app.pendingSave = null; submitSave([], 'keep'); break;
+      case 'saveRetry': if (app.pendingSave) submitSave(app.pendingSave.body.selectedChangeIds, app.pendingSave.kind || 'save'); break;
+      case 'saveRelease': app.pendingSave = null; app.saveError = null; break;
+      case 'skipSave': run.s.pending = { type: 'done' }; run.s.phase = 'DONE'; app.saveSel = null; app.pendingSave = null; app.saveError = null; app.lastSave = { kind: 'closed' }; syncRunScreen(); break;
+      case 'newRun': app.run = null; app.screen = 'party'; app.pendingSave = null; app.saveError = null; app.lastSave = null; clearCheckpoint(); break;
+      case 'memRecoverAsk': app.modal = { type: 'confirm', title: '기억 기록을 다시 이관할까요?', body: '읽을 수 없는 기억 기록은 별도 키에 그대로 보관하고, 이전 기억(mf07_memory) 원본을 지우지 않은 채 새 기록을 만들어요. 이전 기억도 읽을 수 없으면 빈 기억으로 시작하고 그 사실을 기록에 남겨요.', act: 'memRecover', label: '원본 보관 후 다시 이관' }; break;
+      case 'memRecover': app.modal = null; toast(recoverMemory() ? '기억 기록을 다시 만들었어요. 원본은 보관돼 있어요.' : '다시 이관하지 못했어요. 원본은 그대로예요.'); break;
+      case 'ckptRetry': if (app.run) { if (writeCheckpoint()) toast('진행 기록을 저장했어요.'); } else if (clearCheckpoint()) toast('진행 기록을 정리했어요.'); break;
+      case 'ckptNoticeClose': app.ckptNotice = null; break;
       case 'gtab': app.gachaTab = d.id; app.lastPull = []; break;
       case 'pull': {
         try { app.lastPull = MF.Gacha.pull(DATA, app.gacha, app.gachaTab, Number(d.n)); saveGacha(); } catch (err) { toast(errMsg(err)); }
@@ -861,14 +1236,15 @@
       }
       case 'ctab': app.codexTab = d.v; break;
       case 'cchar': app.codexChar = d.id; break;
-      case 'clearMem': delete app.memory[d.id]; saveMemory(); break;
+      case 'clearMem': if (mutateMemory('clearMem', [d.id])) toast(`${charOf(d.id).name}의 기억 덱을 기본 덱으로 되돌렸어요. 이전 덱은 이력에 남겼어요.${staleRunNote()}`); break;
       case 'scale': app.settings.scale = Number(d.v); saveSettings(); break;
       case 'allOwned': app.settings.allOwned = d.v === '1'; saveSettings(); break;
       case 'resetGacha': app.gacha = MF.Gacha.newState(20261014); app.gacha.crystals = 16000; app.gacha.tickets.limitedTicket = 5; saveGacha(); toast('모집 기록을 초기화했어요.'); break;
-      case 'resetMemory': app.memory = {}; saveMemory(); toast('기억 덱을 초기화했어요.'); break;
-      case 'abandon': app.run = null; app.screen = 'home'; break;
+      case 'resetMemory': if (mutateMemory('resetMemory')) toast(`기억 덱을 초기화했어요. 이전 덱은 이력에, 원본 백업과 격리 기록은 그대로 남아 있어요.${staleRunNote()}`); break;
+      case 'abandon': app.run = null; app.screen = 'home'; app.pendingSave = null; app.saveError = null; app.lastSave = null; app.saveSel = null; clearCheckpoint(); break;
       default: return;
     }
+    if (app.run) writeCheckpoint();
     render();
   }
   document.addEventListener('click', (ev) => {
@@ -880,7 +1256,11 @@
   document.addEventListener('change', (ev) => {
     const el = ev.target;
     if (el.dataset.act === 'weapon') { app.party.weapons[el.dataset.id] = el.value; saveParty(); render(); }
-    if (el.dataset.act === 'assign') { try { app.run.assign(el.dataset.key, el.value); app.saveSel = null; } catch (e) { toast(errMsg(e)); } render(); }
+    if (el.dataset.act === 'assign') {
+      if (saveLocked()) { toast('저장 요청 결과를 확인하기 전에는 배정을 바꿀 수 없어요.'); render(); return; }
+      try { app.run.assign(el.dataset.key, el.value); app.saveSel = null; app.saveError = null; } catch (e) { toast(errMsg(e)); }
+      writeCheckpoint(); render();
+    }
     if (el.dataset.act === 'saveToggle') act(el, ev);
   });
   document.addEventListener('keydown', (ev) => {
@@ -889,11 +1269,25 @@
   });
 
   // hot-reload friendly boot (keeps an in-progress run across republishes when the viewer supports it)
+  // otherwise the local checkpoint restores the run (reload is never treated as a defeat)
   function start(data) {
-    try { if (data && data.run) { app.run = new MF.Run(DATA, data.run); if (data.screen) app.screen = data.screen; } } catch (e) { /* ignore stale snapshot */ }
+    loadMemory();
+    let restored = false;
+    try { if (data && data.run) { restoreRunState(data); restored = true; } } catch (e) { /* ignore stale snapshot */ }
+    if (!restored) {
+      const ck = loadCheckpoint();
+      if (ck) {
+        try { restoreRunState(ck); if (app.run.s.phase !== 'DONE' && !['memory', 'settings', 'codex', 'gacha', 'home'].includes(app.screen)) syncRunScreen(); }
+        catch (e) {
+          console.error(e); app.run = null; app.saveSel = null; app.pendingSave = null; app.lastSave = null;
+          const k = `${CKPT_KEY}_corrupt_${Date.now()}`;
+          app.ckptNotice = store.put(k, ck) ? `저장된 진행 기록을 복원하지 못했어요. 원본은 ${k}에 보관했어요.` : '저장된 진행 기록을 복원하지 못했어요. 원본 보관에도 실패했으니 새 탐사를 시작하면 덮어써져요.';
+        }
+      }
+    }
     render();
   }
-  try { if (window.claude && window.claude.hot && window.claude.hot.snapshot) window.claude.hot.snapshot(() => ({ run: app.run ? app.run.s : null, screen: app.screen })); } catch (e) { /* optional */ }
+  try { if (window.claude && window.claude.hot && window.claude.hot.snapshot) window.claude.hot.snapshot(() => ({ run: app.run ? app.run.s : null, screen: app.screen, saveSel: app.saveSel, pendingSave: app.pendingSave, lastSave: app.lastSave })); } catch (e) { /* optional */ }
   if (window.claude && window.claude.hot && window.claude.hot.ready) window.claude.hot.ready(start); else start((window.claude && window.claude.hot && window.claude.hot.data) || {});
   window.__mf = app;
 })();
