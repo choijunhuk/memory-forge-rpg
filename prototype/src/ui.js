@@ -152,8 +152,10 @@
   const QUARANTINE_TEXT = { OVER_CAPACITY: '용량 초과', IDENTITY_REQUIRED: '카드 개체 정보 없음', INVALID_CARD: '허용되지 않는 카드', INVALID_PART: '허용되지 않는 부품', INVALID_EVOLUTION: '허용되지 않는 진화', INVALID_ASSIGNMENT: '잘못된 공용 카드 배정', INVALID_SNAPSHOT: '형식 오류' };
   const RECOVERABLE_MEM = ['MEMORY_MALFORMED', 'LEGACY_MALFORMED'];
   function validMemoryRecord(r) {
-    return !!r && typeof r === 'object' && !Array.isArray(r) && r.schema === 'mf-memory-v2' && Number.isInteger(r.version) && r.version >= 0
-      && !!r.memory && typeof r.memory === 'object' && !Array.isArray(r.memory);
+    if (!r || typeof r !== 'object' || Array.isArray(r) || r.schema !== 'mf-memory-v2' || !Number.isInteger(r.version) || r.version < 0 ||
+        !Array.isArray(r.history) || !r.receipts || typeof r.receipts !== 'object' || Array.isArray(r.receipts) ||
+        !r.quarantine || typeof r.quarantine !== 'object' || Array.isArray(r.quarantine)) return false;
+    try { MF.MemoryV2.inspect(DATA, r.memory); return true; } catch (e) { return false; }
   }
   function readMemoryRecord() {
     const cur = store.raw(MEM_KEY);
@@ -298,6 +300,10 @@
     const out = [];
     if (!app.memStatus.ok) out.push(ERR[app.memStatus.code] || app.memStatus.code);
     for (const cid of cids) { const q = quarantineOf(cid); if (q) out.push(`${charOf(cid).name}: 이전 기억 덱이 이관 검사에서 격리됐어요(${quarantineText(q)}). 기본 덱으로 몰래 바꾸지 않았어요. 기억 덱 화면에서 확인하세요.`); }
+    if (app.memoryState) for (const cid of cids) {
+      const specs = app.memoryState.memory[cid];
+      if (specs && MF.MemoryV2.cost(DATA, cid, specs, MF.MemoryV2.baseline(DATA, cid)) > capacityFor(cid)) out.push(`${charOf(cid).name}: 기존 기억이 현재 용량을 넘어요. 원본을 유지한 채 기억 덱 화면에서 확인하세요.`);
+    }
     return out;
   }
 
@@ -995,7 +1001,8 @@
     // re-read the latest record (another tab may have saved/reset) and refuse unsafe starts
     const latest = readMemoryRecord();
     if (!latest.ok) { setMemory(null, latest); toast(ERR[latest.code] || latest.code); return; }
-    if (latest.record) setMemory(latest.record, { ok: true });
+    if (!latest.record) { setMemory(null, { ok: false, code: 'MEMORY_MISSING' }); toast(ERR.MEMORY_MISSING); return; }
+    setMemory(latest.record, { ok: true });
     const blockers = startBlockers(party.map((x) => x.charId));
     if (!app.memoryState || blockers.length) { toast(blockers[0] || ERR.MEMORY_MISSING); return; }
     // v2: the persistent "before" is always passed; useMemory:false only plays with the base kit
@@ -1004,7 +1011,8 @@
     runCounter += 1;
     const seed = URL_SEED !== null ? URL_SEED + runCounter : ((Date.now() & 0x7fffffff) || 1);
     const runId = newId('run');
-    app.run = MF.Run.create(DATA, { party, memory, seed, length: p.length, difficulty: diff, memoryPolicy: 'v2', memoryVersion: app.memoryState.version, runId, ...(p.useMemory ? {} : { useMemory: false }) });
+    try { app.run = MF.Run.create(DATA, { party, memory, seed, length: p.length, difficulty: diff, memoryPolicy: 'v2', memoryVersion: app.memoryState.version, runId, ...(p.useMemory ? {} : { useMemory: false }) }); }
+    catch (err) { toast(errMsg(err)); return; }
     app.run.s.visited = [];
     app.saveSel = null; app.sel = null; app.target = null; app.partyForce = false;
     app.pendingSave = null; app.saveError = null; app.lastSave = null;

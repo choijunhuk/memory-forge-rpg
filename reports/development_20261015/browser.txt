@@ -1,0 +1,25 @@
+
+> memory-forge-rpg@0.8.1-aio.2 test:memory-ui
+> node --test prototype/tests/memory_v2.mjs
+
+✔ legacy migration preserves the exact old bytes in a separate backup (267.741208ms)
+✔ visible exploration defeats the party and no-selection save preserves its previous upgrade across reloads (661.541875ms)
+✔ full-result six plus three selection shows capacity error and disables commit (156.229166ms)
+✔ two same-kind cards expose separate stable-key toggles for one upgrade (184.778417ms)
+✔ evolution-only selection preserves the card without its unselected upgrade (181.923125ms)
+✔ storage-write failure leaves live memory and run unchanged for retry after reload (283.972292ms)
+✔ newer storage version rejects a stale in-progress save (208.342458ms)
+✔ malformed v2 non-array character rows blocks start and preserves its raw record (122.326333ms)
+✔ malformed v2 missing history blocks start and preserves its raw record (124.49325ms)
+✔ malformed v2 missing receipts blocks start and preserves its raw record (105.536667ms)
+✔ deleting v2 memory after boot blocks a new run instead of using cached memory (158.331083ms)
+✔ an oversized but well-formed v2 deck blocks start without truncation or render errors (121.347917ms)
+✔ memory and save layouts fit desktop, mobile, and 130 percent text (476.084417ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3900.662625

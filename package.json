@@ -18,6 +18,7 @@
     "check": "python3 tools/ai/check_local.py",
     "audit:economy": "python3 tools/review/economy_audit.py",
     "test:proposals": "node --test proposals/tests/*.test.cjs",
+    "test:memory-ui": "node --test prototype/tests/memory_v2.mjs",
     "docs:source": "python3 tools/build_integrated_design.py",
     "test:docs": "python3 tools/check_integrated_release.py && python3 tools/audit/test_document_contract.py",
     "docs:legacy": "node tools/gen_docs.mjs && node tools/build_docs.mjs",

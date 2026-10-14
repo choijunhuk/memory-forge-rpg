@@ -20,6 +20,7 @@ const guardJs = (src, name) => {
   return src;
 };
 const css = read('prototype/src/style.css');
+const memory = guardJs(read('proposals/memory_v2.cjs'), 'memory_v2.cjs');
 const engine = guardJs(read('engine/rules-core.js'), 'rules-core.js');
 const ui = guardJs(read('prototype/src/ui.js'), 'ui.js');
 
@@ -29,7 +30,7 @@ const html = `<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="claude:viewport-fit-sides" content="cover">
-<title>기억 공방 v0.7.1 검토용 테스트</title>
+<title>기억 공방 — 저장 v2 개발 시제품</title>
 <meta name="description" content="Memory Forge v${data.meta.version} 플레이어블 프로토타입 — 기억 덱 로그라이트 전투, 반천장 모집, 공명·재련.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -40,9 +41,12 @@ ${css}
 </head>
 <body>
 <div id="app" aria-live="polite"><div class="boot">기억 공방을 여는 중…</div></div>
-<details style="max-width:1150px;margin:24px auto;padding:16px;color:#b8c5d6;font:14px sans-serif"><summary>v0.7.1 검토판 주의</summary><p>첫 턴 방어·성장 계열·공생 이끼를 수정했습니다. 기본 패배 저장은 v0.7 정책이며 이전 덱의 미선택 변경을 잃을 수 있습니다. 새 저장 v2는 아직 연결하지 않았습니다. 확률·수급·나이는 원본 유지입니다.</p></details>
+<details style="max-width:1150px;margin:24px auto;padding:16px;color:#b8c5d6;font:14px sans-serif"><summary>저장 v2 개발 시제품 안내</summary><p>현재 HTML은 기존 기억을 보존하는 저장 v2를 사용합니다. 실제 브라우저에서 패배 후 보존·변화 선택·용량 초과·재로딩·저장 실패 재시도를 검증했습니다. 저장은 이 브라우저의 로컬 시험용이며 서버·C#·Unity·실기기 검증은 별도입니다. 확률·수급·나이는 원본 유지입니다.</p></details>
 <noscript><p style="padding:24px">이 프로토타입은 자바스크립트가 필요해요.</p></noscript>
 <script id="mf-data" type="application/json">${json}</script>
+<script>
+${memory}
+</script>
 <script>
 ${engine}
 </script>

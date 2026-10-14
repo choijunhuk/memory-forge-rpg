@@ -15,6 +15,7 @@
 | `CANNOT_HEAL` | 기억의 모루 때문에 회복할 수 없어요. |
 | `CAPACITY_INVARIANT` | 내부 불변식/데이터 오류(사용자에게는 "문제가 생겼어요" + 오류 보고) |
 | `CARD_ZONE_CONSERVATION` | 내부 불변식/데이터 오류(사용자에게는 "문제가 생겼어요" + 오류 보고) |
+| `CHARACTER_SET_MISMATCH` | 출발 전후의 캐릭터 목록이 일치하지 않아요. |
 | `COINS_LOW` | 동전이 부족해요. |
 | `CRYSTALS_LOW` | 결정이 부족해요. |
 | `DEBT_CAP` | 부채 상한을 넘어요. |
@@ -25,7 +26,15 @@
 | `GAUGE_RANGE` | 내부 불변식/데이터 오류(사용자에게는 "문제가 생겼어요" + 오류 보고) |
 | `GROWTH_INVARIANT` | 내부 불변식/데이터 오류(사용자에게는 "문제가 생겼어요" + 오류 보고) |
 | `IDEMPOTENCY_CONFLICT` | 같은 요청 번호로 다른 내용이 왔어요(재시도 오류). |
+| `IDENTITY_REQUIRED` | 카드 개체 키가 없거나 중복됐어요. |
+| `INVALID_ASSIGNMENT` | 공용 카드 배정이 올바르지 않아요. |
+| `INVALID_CARD` | 허용되지 않는 카드예요. |
+| `INVALID_EVOLUTION` | 진화 계보가 올바르지 않아요. |
 | `INVALID_MODE` | 잘못된 사용 방식이에요. |
+| `INVALID_PART` | 영구 저장할 수 없는 부품이에요. |
+| `INVALID_SELECTION` | 선택한 탐사 변화가 유효하지 않아요. |
+| `INVALID_SNAPSHOT` | 기억 기록의 형식이 올바르지 않아요. 원본을 유지하고 확인하세요. |
+| `INVALID_UPGRADE` | 강화 기록이 올바르지 않아요. |
 | `LOAN_OVERFLOW` | 행동력 최대치(9)를 넘어요. |
 | `NODE_UNREACHABLE` | 지금 갈 수 없는 칸이에요. |
 | `NOT_DEFERRABLE` | 다음 턴에 갚을 부채가 없어요. |
@@ -39,10 +48,14 @@
 | `OVER_CAPACITY` | 기억 용량을 넘었어요. |
 | `PARTY_SIZE` | 내부 불변식/데이터 오류(사용자에게는 "문제가 생겼어요" + 오류 보고) |
 | `PULL_DESTINATION_FULL` | 다음 턴 칸이 가득 차서 앞당길 수 없어요. |
+| `REASSIGNMENT_REQUIRES_SEPARATE_FLOW` | 기존 기억의 공용 카드 배정은 여기서 변경할 수 없어요. |
+| `REQUEST_CONFLICT` | 같은 요청 번호에 다른 내용이 있어요. |
 | `RESERVATION_REQUIRED` | 앞당길 예약이 없어요. |
 | `RESERVE_ONLY` | 이 카드는 예약 전용이에요. |
 | `RESTRAINT_UNAVAILABLE` | 이번 턴엔 절제 계약을 맺을 수 없어요. |
 | `RNG_BOUND` | 내부 불변식/데이터 오류(사용자에게는 "문제가 생겼어요" + 오류 보고) |
+| `RUN_ID_REQUIRED` | 탐사 식별자가 없어요. |
+| `RUN_MISMATCH` | 다른 탐사의 저장 요청이에요. |
 | `SELECTOR_BAD_CHOICE` | 상시 SSR 캐릭터 중에서만 고를 수 있어요. |
 | `SELECTOR_NOT_READY` | 상시 모집 300회를 채워야 선택할 수 있어요. |
 | `SELECTOR_USED` | 선택권은 이미 사용했어요. |
@@ -57,6 +70,8 @@
 | `UNKNOWN_COMMAND` | 내부 불변식/데이터 오류(사용자에게는 "문제가 생겼어요" + 오류 보고) |
 | `UNKNOWN_ENEMY` | 내부 불변식/데이터 오류(사용자에게는 "문제가 생겼어요" + 오류 보고) |
 | `UNSUPPORTED_EFFECT` | 내부 불변식/데이터 오류(사용자에게는 "문제가 생겼어요" + 오류 보고) |
+| `UNSUPPORTED_TRANSFORMATION` | 허용되지 않는 카드 변환이에요. |
+| `VERSION_CONFLICT` | 다른 저장이 먼저 반영됐어요. 최신 기억을 확인하세요. |
 | `WOULD_KILL` | 체력이 부족해 고를 수 없어요. |
 | `WRONG_PHASE` | 지금은 할 수 없는 행동이에요. |
 | `ZONE_NOT_AUTHORED` | 아직 열리지 않은 구역이에요(콘텐츠 준비 중). |

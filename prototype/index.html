@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="claude:viewport-fit-sides" content="cover">
-<title>기억 공방 v0.7.1 검토용 테스트</title>
+<title>기억 공방 — 저장 v2 개발 시제품</title>
 <meta name="description" content="Memory Forge v0.7.0 플레이어블 프로토타입 — 기억 덱 로그라이트 전투, 반천장 모집, 공명·재련.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -284,11 +284,133 @@ table.cards th { color: var(--muted); font-weight: 600; }
 </style>
 </head>
 <body>
-<aside id="mf-v080-status" style="padding:10px 14px;border-bottom:1px solid #b99b66;background:#fff7dd;color:#352b19;font:14px/1.5 sans-serif;position:relative;z-index:9999">기억 공방 v0.8 설계 통합판 · 테스트용 참조 화면. 저장 v2는 아직 연결 전이며 이 화면은 기존 저장 정책을 사용합니다. 실제 계정·결제 데이터는 입력하지 마세요.</aside>
 <div id="app" aria-live="polite"><div class="boot">기억 공방을 여는 중…</div></div>
-<details style="max-width:1150px;margin:24px auto;padding:16px;color:#b8c5d6;font:14px sans-serif"><summary>v0.7.1 검토판 주의</summary><p>첫 턴 방어·성장 계열·공생 이끼를 수정했습니다. 기본 패배 저장은 v0.7 정책이며 이전 덱의 미선택 변경을 잃을 수 있습니다. 새 저장 v2는 아직 연결하지 않았습니다. 확률·수급·나이는 원본 유지입니다.</p></details>
+<details style="max-width:1150px;margin:24px auto;padding:16px;color:#b8c5d6;font:14px sans-serif"><summary>저장 v2 개발 시제품 안내</summary><p>현재 HTML은 기존 기억을 보존하는 저장 v2를 사용합니다. 실제 브라우저에서 패배 후 보존·변화 선택·용량 초과·재로딩·저장 실패 재시도를 검증했습니다. 저장은 이 브라우저의 로컬 시험용이며 서버·C#·Unity·실기기 검증은 별도입니다. 확률·수급·나이는 원본 유지입니다.</p></details>
 <noscript><p style="padding:24px">이 프로토타입은 자바스크립트가 필요해요.</p></noscript>
 <script id="mf-data" type="application/json">{"meta":{"version":"0.7.0","generated":"content/build.mjs","rating":"15+","referencePower":40},"rules":{"apPerTurn":4,"apMax":9,"handDraw":5,"handMax":10,"slots":{"next":2,"after":1,"nextMax":3,"afterMax":2,"totalMax":5},"debtCap":4,"growthCapPerBattle":3,"gaugeMax":100,"gaugePerCard":10,"gaugeTurnCap":30,"breakApBonus":1,"breakApBonusMaxPerTurn":2,"brokenDamageBps":2500,"vulnerableBps":2500,"weakBps":2500,"upgradeMult":1.3,"capacityBase":6,"memoryCost":{"addB":1,"addA":2,"addS":3,"addCommon":1,"upgrade":1,"partCommon":1,"partRare":2,"evolution":2,"remove":1}},"attributes":[{"id":"volt","name":"전격","color":"#ffd84d","icon":"bolt"},{"id":"flame","name":"화염","color":"#ff7a3d","icon":"flame"},{"id":"frost","name":"빙결","color":"#7cc8ff","icon":"snow"},{"id":"void","name":"공허","color":"#b68cff","icon":"void"},{"id":"none","name":"무속성","color":"#9aa6b8","icon":"dot"}],"weaponTypes":[{"id":"ranged","name":"원거리"},{"id":"melee","name":"근접"},{"id":"device","name":"장치"},{"id":"ritual","name":"의식"}],"statuses":[{"id":"vul","name":"취약","side":"enemy","text":"받는 피해 +25%. 라운드 종료 시 1 감소."},{"id":"weak","name":"약화","side":"both","text":"주는 피해 -25%. 적은 라운드 종료, 파티는 플레이어 턴 종료 시 1 감소."},{"id":"mark","name":"표식","side":"enemy","text":"고정 대상 카드의 조건. 라운드 종료 시 1 감소."},{"id":"burn","name":"화상","side":"enemy","text":"라운드 종료 시 화상 수치만큼 피해(방어 무시) 후 1 감소."},{"id":"str","name":"힘","side":"enemy","text":"공격 1회마다 피해 +수치. 지속."},{"id":"broken","name":"균열","side":"enemy","text":"균열 게이지 0: 다음 행동 1회 취소, 다음 플레이어 턴 종료까지 받는 피해 +25%. 파티 다음 턴 행동력 +1(턴당 최대 +2)."},{"id":"counter","name":"반격","side":"party","text":"적의 공격 1회마다 공격한 적에게 반격 수치만큼 피해. 플레이어 턴 시작 시 0."},{"id":"charge","name":"충전","side":"party","text":"다음 피해 카드 1장의 피해 +n%. 사용하거나 기간이 끝나면 사라짐."},{"id":"reflect","name":"반사","side":"enemy","text":"카드 피해를 받을 때마다 파티가 반사 수치만큼 피해. 적 행동 시작 시 사라짐."}],"keywords":[{"id":"exhaust","name":"소멸","text":"사용 후 이번 전투에서 제외(소멸 더미)."},{"id":"contract","name":"계약","text":"즉시 사용 전용. 부채·봉인 등 미래 비용이 있다."},{"id":"uses","name":"전투당 n회","text":"n회 사용하면 소멸."},{"id":"reserve","name":"예약","text":"비용을 지금 내고 다음 턴(또는 다다음 턴) 시작에 해결. 예약 수치가 따로 적힌 카드는 그 수치를 쓴다."},{"id":"reserveOnly","name":"예약 전용","text":"즉시 사용할 수 없다."},{"id":"afterOnly","name":"다다음 턴 전용","text":"다다음 턴 예약만 가능."},{"id":"fixed","name":"고정 대상","text":"표식이 있는 적만 지정 가능. 해결 시 대상이 죽었거나 표식이 없으면 불발(비용 환급 없음)."},{"id":"growth","name":"성장","text":"예약으로 해결될 때 성장 +1(카드당 전투 1회, 파티 전투당 3회). 성장 3이면 전투 보상 화면에서 진화 분기 선택."},{"id":"overload","name":"과부하 n","text":"사용 시 파티 체력 n을 잃는다(방어 무시)."},{"id":"shock","name":"충격 n","text":"속성과 관계없이 적의 균열 게이지를 n 깎는다."}],"characters":[{"id":"sera","name":"세라","en":"Sera","rarity":"SSR","pool":"standard","attr":"volt","weapon":"ranged","role":"예약 폭발 딜러","archetype":"A 시간 예약","age":24,"tier":"adult","oneLine":"미래의 한 발을 먼저 쏘아 두는 시간 저격수.","personality":"침착하고 건조한 농담을 한다. 미래는 보이는데 자기 과거는 군데군데 비어 있다.","storyHook":"사라진 기억 한 칸에 \"쏘지 못한 한 발\"이 남아 있다.","passive":{"id":"sera_foresight","name":"선견","params":{"bps":2500},"text":"세라의 예약 공격이 균열 상태인 적에게 명중하면 피해 +25%."},"ult":{"name":"시간 관통탄","eff":[{"op":"dmg","v":28,"brk":4,"pierce":3000},{"op":"slot","next":1,"after":0}],"text":"적 1명에게 피해 28(관통 30%, 균열 4). 이번 턴 다음 턴 예약 칸 +1."},"resonance":[{"n":1,"text":"유리탄이 예약으로 해결되면 카드 1장 뽑기(턴당 1회).","fx":{"type":"hook","id":"sera_r1"}},{"n":2,"text":"선견 보너스 +25% → +40%.","fx":{"type":"passiveParam","param":"bps","value":4000}},{"n":3,"text":"고유 카드 스킬 레벨 +2(피해·방어 ×1.08).","fx":{"type":"skillLv","delta":2}},{"n":4,"text":"시한 포격 균열 +2. 기억 용량 +1.","fx":{"type":"multi","list":[{"type":"cardMod","cards":["sera_timed"],"prop":"brk","add":2},{"type":"capacity","n":1}]}},{"n":5,"text":"필살기 레벨 +2(필살기 수치 ×1.08).","fx":{"type":"ultLv","delta":2}},{"n":6,"text":"필살기를 쓴 다음 턴 시작에 해결되는 세라의 예약 공격 피해 +50%.","fx":{"type":"hook","id":"sera_r6"}}],"visual":{"height":170,"build":"늘씬한 성인 체형","hair":"긴 은백색 머리, 낮게 묶은 포니테일","eyes":"시계 바늘 무늬가 비치는 호박색 눈","outfit":"몸에 붙는 검은 바디수트 위에 앞을 연 황동 톱니 장식 남색 롱코트, 허벅지 홀스터, 손가락 없는 장갑","weapon":"모래시계 약실이 달린 장거리 저격총","motif":"모래시계·시계 바늘","palette":["#1d2b4f","#d9dde6","#ffd84d"],"expression":"차분하고 조용한 미소"},"voice":"낮고 또렷한 톤, 짧은 문장"},{"id":"nia","name":"니아","en":"Nia","rarity":"SR","pool":"standard","attr":"void","weapon":"device","role":"전투 중 개조 서포터","archetype":"C 카드 개조","age":17,"tier":"teen","starter":true,"oneLine":"싸우는 도중에도 카드를 뜯어고치는 공방 막내 엔지니어.","personality":"말이 많고 밝다. 남의 기억은 척척 고치면서 자기 기억은 열어 보지 않는다.","storyHook":"공방의 금고 하나에 \"열지 말 것\"이라고 쓴 자기 이름표가 붙어 있다.","passive":{"id":"nia_handiwork","name":"손재주","params":{"bps":1500},"text":"개조(임시 포함)가 붙은 카드의 피해·방어 +15%."},"ult":{"name":"총괄 정비","eff":[{"op":"costdown","n":1,"pick":"all"},{"op":"draw","n":1}],"text":"이번 턴 손패의 모든 카드 비용 -1(최소 0). 카드 1장 뽑기."},"resonance":[{"n":1,"text":"미세 조정 사용 가능 횟수 +1(전투당 3회).","fx":{"type":"cardMod","cards":["nia_tune"],"prop":"uses","add":1}},{"n":2,"text":"손재주 보너스 +15% → +25%.","fx":{"type":"passiveParam","param":"bps","value":2500}},{"n":3,"text":"고유 카드 스킬 레벨 +2(피해·방어 ×1.08).","fx":{"type":"skillLv","delta":2}},{"n":4,"text":"전투 시작 시 손패의 카드 1장에 임시 회로 \"증폭\" 부착. 기억 용량 +1.","fx":{"type":"multi","list":[{"type":"battleStart","eff":[{"op":"tune","part":"amp","pick":"random"}]},{"type":"capacity","n":1}]}},{"n":5,"text":"필살기 레벨 +2(필살기 수치 ×1.08).","fx":{"type":"ultLv","delta":2}},{"n":6,"text":"필살기 사용 시 손패의 모든 카드에 \"증폭\" 부착.","fx":{"type":"ultExtra","eff":[{"op":"tune","part":"amp","pick":"all"}]}}],"visual":{"height":158,"build":"10대 후반 소녀","hair":"흰 브릿지가 들어간 짙은 청록색 단발, 부스스함","eyes":"보라빛이 도는 큰 눈","outfit":"허리에 묶은 오버사이즈 작업 재킷, 기름 얼룩 반팔 티셔츠, 카고 반바지, 공구 벨트, 작업 부츠","weapon":"기계식 만능 공구 건틀릿과 소형 드론","motif":"렌치·회로 기판","palette":["#0f3d3e","#111827","#9b7bff"],"expression":"장난스러운 웃음"},"voice":"빠르고 높은 톤, 감탄사가 많다"},{"id":"yuri","name":"유리","en":"Yuri","rarity":"SSR","pool":"standard","attr":"frost","weapon":"ritual","role":"성장·진화 탱커/서포터","archetype":"E 살아 있는 카드","age":16,"tier":"teen","oneLine":"카드 속에서 자라는 생명을 동료라고 부르는 식물학자.","personality":"수줍고 다정하다. 사람보다 카드 속 작은 생물과 먼저 인사한다.","storyHook":"얼어붙은 온실에 아직 깨어나지 않은 씨앗 하나가 있다.","passive":{"id":"yuri_symbiosis","name":"공생 결속","params":{"perGrowth":2},"text":"성장 1 이상인 카드가 해결될 때 성장치 ×2 만큼 방어 추가."},"ult":{"name":"만개","eff":[{"op":"growLowest","n":2},{"op":"blk","v":12}],"text":"성장이 가장 낮은 성장 카드 2장 성장 +1(전투 상한과 별도). 방어 12."},"resonance":[{"n":1,"text":"전투당 파티 성장 상한 3 → 4.","fx":{"type":"rule","key":"growthCap","value":4}},{"n":2,"text":"공생 결속 방어 성장×2 → ×3.","fx":{"type":"passiveParam","param":"perGrowth","value":3}},{"n":3,"text":"고유 카드 스킬 레벨 +2(피해·방어 ×1.08).","fx":{"type":"skillLv","delta":2}},{"n":4,"text":"진화 카드의 피해·방어 +15%. 기억 용량 +1.","fx":{"type":"multi","list":[{"type":"hook","id":"yuri_r4","bps":1500},{"type":"capacity","n":1}]}},{"n":5,"text":"필살기 레벨 +2(필살기 수치 ×1.08).","fx":{"type":"ultLv","delta":2}},{"n":6,"text":"필살기 사용 시 덱의 모든 성장 카드 성장 +1(상한 무시, 전투당 1회).","fx":{"type":"ultExtra","eff":[{"op":"growAll"}],"once":true}}],"visual":{"height":155,"build":"10대 소녀","hair":"끝이 투명한 유리처럼 비치는 연청색 긴 웨이브","eyes":"맑고 순한 눈매","outfit":"민소매 여름 원피스 위에 긴 식물학자 가운, 샌들, 허리에 서리 낀 유리병","weapon":"작은 생물이 빛나는 테라리움 등불 지팡이","motif":"유리 고치·새싹","palette":["#bfe6ff","#9de0c8","#f4fbff"],"expression":"수줍은 미소"},"voice":"조용하고 부드러운 톤, 말끝을 흐린다"},{"id":"ravien","name":"라비엔","en":"Ravien","rarity":"SSR","pool":"standard","attr":"flame","weapon":"device","role":"계약·자원 운용 딜러","archetype":"F 차입·상환","age":28,"tier":"adult","oneLine":"미래의 행동력을 빌려 오늘 이기는 계약 중개인.","personality":"여유롭고 짓궂지만 약속에는 누구보다 엄격하다.","storyHook":"그녀 자신도 아직 갚지 못한 계약서 한 장을 품고 다닌다.","passive":{"id":"ravien_credit","name":"신용","params":{"bps":2000},"text":"부채가 있는 동안 라비엔의 공격 피해 +20%."},"ult":{"name":"채무 탕감","eff":[{"op":"clearDebt"},{"op":"dmg","v":6,"tgt":"all","scale":{"per":"lastCount","k":6,"max":30}},{"op":"dmg","v":6,"tgt":"all"}],"text":"모든 부채를 없애고, 없앤 부채 1당 모든 적에게 피해 6, 이후 모든 적에게 피해 6."},"resonance":[{"n":1,"text":"선불 계약을 전투당 2회 사용 가능.","fx":{"type":"cardMod","cards":["ravien_advance"],"prop":"uses","add":1}},{"n":2,"text":"신용 보너스 +20% → +35%.","fx":{"type":"passiveParam","param":"bps","value":3500}},{"n":3,"text":"고유 카드 스킬 레벨 +2(피해·방어 ×1.08).","fx":{"type":"skillLv","delta":2}},{"n":4,"text":"부채 상한 4 → 5. 기억 용량 +1.","fx":{"type":"multi","list":[{"type":"rule","key":"debtCap","value":5},{"type":"capacity","n":1}]}},{"n":5,"text":"필살기 레벨 +2(필살기 수치 ×1.08).","fx":{"type":"ultLv","delta":2}},{"n":6,"text":"필살기를 쓰면 다음 턴 행동력 +1.","fx":{"type":"ultExtra","eff":[{"op":"apNext","n":1}]}}],"visual":{"height":175,"build":"우아하고 볼륨감 있는 성인 체형","hair":"웨이브 진 와인빛 긴 머리","eyes":"날카로운 초록 눈","outfit":"가슴선이 깊게 파인 검은 베스트, 트임이 깊은 펜슬 스커트, 가터 스타킹, 느슨하게 맨 붉은 넥타이, 긴 검은 장갑","weapon":"황금 저울 펜던트와 불타는 봉인의 계약서","motif":"저울·밀랍 인장","palette":["#8c1c2b","#141014","#d4a24c"],"expression":"여유로운 미소"},"voice":"낮고 느긋한 톤, 존댓말 속 장난기"},{"id":"harin","name":"하린","en":"Harin","rarity":"SR","pool":"standard","attr":"frost","weapon":"melee","role":"방어·반격 탱커","archetype":"방어 반격","age":26,"tier":"adult","starter":true,"oneLine":"방패를 펼치면 칼날이 되는 경계 수호대장.","personality":"무뚝뚝하고 농담이 서툴다. 귀여운 것에 약한 걸 숨긴다.","storyHook":"지키지 못한 경계선 하나를 매일 밤 다시 걷는다.","passive":{"id":"harin_stance","name":"반격 자세","params":{"n":1},"text":"하린의 카드로 방어를 얻을 때마다 반격 1(적의 공격 1회마다 그 적에게 피해)."},"ult":{"name":"빙벽","eff":[{"op":"blk","v":30},{"op":"counter","n":6}],"text":"방어 30, 반격 6."},"resonance":[{"n":1,"text":"반격 태세의 반격 +2.","fx":{"type":"cardMod","cards":["harin_counter"],"prop":"n","add":2}},{"n":2,"text":"반격 자세 획득량 1 → 2.","fx":{"type":"passiveParam","param":"n","value":2}},{"n":3,"text":"고유 카드 스킬 레벨 +2(피해·방어 ×1.08).","fx":{"type":"skillLv","delta":2}},{"n":4,"text":"전투 시작 시 방어 10. 기억 용량 +1.","fx":{"type":"multi","list":[{"type":"battleStart","eff":[{"op":"blk","v":10}]},{"type":"capacity","n":1}]}},{"n":5,"text":"필살기 레벨 +2(필살기 수치 ×1.08).","fx":{"type":"ultLv","delta":2}},{"n":6,"text":"필살기 후 2턴 동안 반격 피해 2배.","fx":{"type":"ultExtra","eff":[{"op":"buff","s":"counterDouble","n":1,"turns":2}]}}],"visual":{"height":180,"build":"키 크고 탄탄한 성인 체형","hair":"짧은 짙은 남색 머리","eyes":"왼쪽 눈썹 위 흉터, 회청색 눈","outfit":"어깨와 허리 라인이 드러나는 경량 서리빛 갑주, 한쪽 어깨에 두른 긴 망토, 하이웨이스트 전투 바지","weapon":"펼치면 칼날이 되는 대형 방패","motif":"서리 결정·성벽","palette":["#eef6ff","#5b7ea6","#1b2a3d"],"expression":"무표정, 가끔 서툰 미소"},"voice":"낮고 단단한 톤"},{"id":"rien","name":"리엔","en":"Rien","rarity":"SR","pool":"standard","attr":"volt","weapon":"ritual","role":"즉시 연쇄 서브딜러","archetype":"잔향 연쇄","age":17,"tier":"teen","starter":true,"oneLine":"침묵을 싫어하는 거리의 바이올리니스트.","personality":"에너지가 넘치고 수다스럽다. 조용해지면 불안해서 일부러 소리를 낸다.","storyHook":"그녀가 연주하는 곡 중 한 곡만은 끝까지 기억나지 않는다.","passive":{"id":"rien_echo","name":"잔향","params":{"max":3},"text":"리엔이 편성되어 있으면, 직전 카드와 다른 캐릭터의 카드를 낼 때마다 잔향 +1(최대 3, 턴 시작 시 0)."},"ult":{"name":"앙코르","eff":[{"op":"freeNext","n":2},{"op":"echo","n":3}],"text":"이번 턴 다음에 내는 카드 2장 비용 0. 잔향 +3."},"resonance":[{"n":1,"text":"첫 음 피해 +3.","fx":{"type":"cardMod","cards":["rien_note"],"prop":"dmg","add":3}},{"n":2,"text":"잔향 최대 3 → 4.","fx":{"type":"passiveParam","param":"max","value":4}},{"n":3,"text":"고유 카드 스킬 레벨 +2(피해·방어 ×1.08).","fx":{"type":"skillLv","delta":2}},{"n":4,"text":"턴 시작 시 잔향 1. 기억 용량 +1.","fx":{"type":"multi","list":[{"type":"rule","key":"echoStart","value":1},{"type":"capacity","n":1}]}},{"n":5,"text":"필살기 레벨 +2(필살기 수치 ×1.08).","fx":{"type":"ultLv","delta":2}},{"n":6,"text":"앙코르의 비용 0 카드 2장 → 3장.","fx":{"type":"ultReplace","eff":[{"op":"freeNext","n":3},{"op":"echo","n":3}]}}],"visual":{"height":160,"build":"10대 후반 소녀","hair":"분홍빛 금발 트윈테일, 끝으로 갈수록 그라데이션","eyes":"노란빛 생기 있는 눈","outfit":"음파 무늬 오버사이즈 후디, 플리츠 스커트와 검은 레깅스, 하이탑 운동화, 헤드폰","weapon":"현이 빛나는 전자 바이올린","motif":"음표·파형","palette":["#ffd84d","#ff4fa3","#ffffff"],"expression":"활짝 웃는 얼굴"},"voice":"밝고 높은 톤, 리듬감 있는 말투"},{"id":"aila","name":"에일라","en":"Aila","rarity":"SR","pool":"standard","attr":"frost","weapon":"ritual","role":"회복·정화 힐러","archetype":"회복 전환","age":23,"tier":"adult","oneLine":"따뜻한 기억만 골라 보관하는 기록 보관소의 관리인.","personality":"조용하고 다정하지만 사람을 지킬 때는 단호하다.","storyHook":"보관소 맨 아래 칸에 자기 기억만 비어 있는 서랍이 있다.","passive":{"id":"aila_warmth","name":"온기의 기록","params":{"pct":50},"text":"최대 체력을 넘는 회복량의 50%를 방어로 얻는다."},"ult":{"name":"새벽 종","eff":[{"op":"heal","v":20},{"op":"cleanse"},{"op":"blk","v":10}],"text":"회복 20, 해로운 효과 모두 제거, 방어 10."},"resonance":[{"n":1,"text":"맑은 종 회복 +2.","fx":{"type":"cardMod","cards":["aila_bell"],"prop":"heal","add":2}},{"n":2,"text":"온기의 기록 50% → 80%.","fx":{"type":"passiveParam","param":"pct","value":80}},{"n":3,"text":"고유 카드 스킬 레벨 +2(피해·방어 ×1.08).","fx":{"type":"skillLv","delta":2}},{"n":4,"text":"전투 시작 시 회복 10. 기억 용량 +1.","fx":{"type":"multi","list":[{"type":"battleStart","eff":[{"op":"heal","v":10}]},{"type":"capacity","n":1}]}},{"n":5,"text":"필살기 레벨 +2(필살기 수치 ×1.08).","fx":{"type":"ultLv","delta":2}},{"n":6,"text":"필살기의 초과 회복은 100% 방어로 전환.","fx":{"type":"hook","id":"aila_r6"}}],"visual":{"height":168,"build":"단정한 성인 체형","hair":"라벤더빛 은발 긴 땋은 머리","eyes":"부드러운 보랏빛 눈","outfit":"등이 깊게 드러나는 서리 자수 기록관 로브, 넓은 소매, 옆트임 치마","weapon":"은빛 종이 달린 작은 등불","motif":"종·눈송이","palette":["#c9b8ff","#ffffff","#a8d8ff"],"expression":"다정한 미소"},"voice":"차분하고 따뜻한 톤"},{"id":"sion","name":"시온","en":"Sion","rarity":"SSR","pool":"standard","attr":"void","weapon":"melee","role":"소멸 활용 딜러","archetype":"망각(덱 압축)","age":27,"tier":"adult","oneLine":"사람을 지키려고 기억을 지우는 금서고의 사서.","personality":"냉정하고 말수가 적다. 지운 기억의 무게를 혼자 짊어진다.","storyHook":"그녀가 처음 지운 기억은 자기 자신에 관한 것이었다.","passive":{"id":"sion_shelf","name":"망각의 서가","params":{"perBps":400,"maxBps":4000},"text":"이번 전투에서 소멸한 카드 1장당 시온의 공격 피해 +4%(최대 +40%)."},"ult":{"name":"백지화","eff":[{"op":"exhaustHand"},{"op":"dmg","v":7,"tgt":"all","hits":0,"hitsScale":{"per":"lastCount","k":1,"max":10}}],"text":"손패를 모두 소멸시키고, 소멸한 카드 1장당 모든 적에게 피해 7."},"resonance":[{"n":1,"text":"지우개가 카드 2장 뽑기.","fx":{"type":"cardMod","cards":["sion_erase"],"prop":"draw","add":1}},{"n":2,"text":"망각의 서가 최대 +40% → +60%.","fx":{"type":"passiveParam","param":"maxBps","value":6000}},{"n":3,"text":"고유 카드 스킬 레벨 +2(피해·방어 ×1.08).","fx":{"type":"skillLv","delta":2}},{"n":4,"text":"전투 시작 시 소멸 수 +3으로 계산. 기억 용량 +1.","fx":{"type":"multi","list":[{"type":"rule","key":"exhaustStart","value":3},{"type":"capacity","n":1}]}},{"n":5,"text":"필살기 레벨 +2(필살기 수치 ×1.08).","fx":{"type":"ultLv","delta":2}},{"n":6,"text":"백지화 후 소멸한 수만큼 카드 뽑기(최대 5).","fx":{"type":"ultExtra","eff":[{"op":"draw","n":0,"scale":{"per":"lastCount","k":1,"max":5}}]}}],"visual":{"height":172,"build":"늘씬하고 차가운 인상의 성인 체형","hair":"허리까지 오는 곧은 흑발","eyes":"반무테 안경 너머 은회색 눈","outfit":"책갈피 사슬이 달린 몸에 맞는 짙은 보라 롱코트, 하이웨이스트 미니스커트, 사이하이 부츠","weapon":"거대한 책갈피 모양의 장검, 주변에 떠다니는 찢긴 페이지","motif":"책갈피·찢긴 페이지","palette":["#3b2a5a","#0e0b14","#c7ccd6"],"expression":"무심한 눈빛"},"voice":"낮고 건조한 톤"},{"id":"kaya","name":"카야","en":"Kaya","rarity":"SSR","pool":"limited","attr":"flame","weapon":"ranged","role":"표식 처형 딜러","archetype":"표식 추리","age":17,"tier":"teen","limitedSeason":1,"limitedPhase":"D22","oneLine":"잃어버린 기억을 쫓는 자칭 명탐정 소녀.","personality":"자신만만하고 승부욕이 강하다. \"범인은 바로—!\"를 외치고 싶어 한다.","storyHook":"그녀가 쫓는 마지막 사건의 의뢰인은 다름 아닌 공방장이다.","passive":{"id":"kaya_deduction","name":"추리","params":{},"text":"표식이 있는 적을 처치하면 행동력 +1, 카드 1장 뽑기(턴당 1회)."},"ult":{"name":"결정적 증거","eff":[{"op":"st","s":"mark","n":3,"tgt":"all"},{"op":"dmg","v":15,"tgt":"all","brk":2}],"text":"모든 적에게 표식 3을 남기고 피해 15(균열 2)."},"resonance":[{"n":1,"text":"단서 포착 표식 +1.","fx":{"type":"cardMod","cards":["kaya_clue"],"prop":"n","add":1}},{"n":2,"text":"추리 발동 시 무작위 적에게 화상 3.","fx":{"type":"hook","id":"kaya_r2"}},{"n":3,"text":"고유 카드 스킬 레벨 +2(피해·방어 ×1.08).","fx":{"type":"skillLv","delta":2}},{"n":4,"text":"전투 시작 시 무작위 적 표식 2. 기억 용량 +1.","fx":{"type":"multi","list":[{"type":"battleStart","eff":[{"op":"st","s":"mark","n":2,"tgt":"rand"}]},{"type":"capacity","n":1}]}},{"n":5,"text":"필살기 레벨 +2(필살기 수치 ×1.08).","fx":{"type":"ultLv","delta":2}},{"n":6,"text":"결정적 증거로 적을 처치하면 필살기 게이지 50 환급.","fx":{"type":"hook","id":"kaya_r6"}}],"visual":{"height":161,"build":"10대 후반 소녀","hair":"적갈색 옆으로 땋은 머리","eyes":"자신감 있는 주황빛 눈, 돋보기 모노클","outfit":"깃털 장식 탐정 모자, 짧은 망토, 반팔 셔츠와 조끼, 반바지, 롱부츠, 반장갑","weapon":"달아오른 볼트를 쏘는 석궁","motif":"돋보기·지문","palette":["#ff7a3d","#6b3f22","#f7ead3"],"expression":"의기양양한 미소"},"voice":"또랑또랑하고 극적인 톤"},{"id":"lumi","name":"루미","en":"Lumi","rarity":"SSR","pool":"limited","attr":"volt","weapon":"melee","role":"체력 대가 폭딜러","archetype":"과부하","age":22,"tier":"adult","limitedSeason":1,"limitedPhase":"D1","oneLine":"시간보다 빨리 달리던 전직 퀵서비스 라이더.","personality":"무모하고 밝다. 위험할수록 웃는다.","storyHook":"배달하지 못한 마지막 소포가 아직 그녀의 가방에 있다.","passive":{"id":"lumi_critical","name":"임계 질주","params":{"bps":3000,"pct":50},"text":"파티 체력이 50% 이하면 루미의 공격 피해 +30%."},"ult":{"name":"번개 질주","eff":[{"op":"dmg","v":8,"tgt":"rand","hits":5,"brk":1},{"op":"if","cond":{"c":"hpBelow","pct":50},"then":[{"op":"dmg","v":8,"tgt":"rand","hits":2,"brk":1}],"else":[]}],"text":"무작위 적에게 피해 8을 5회. 파티 체력 50% 이하면 2회 추가."},"resonance":[{"n":1,"text":"질주의 과부하 3 → 1.","fx":{"type":"cardMod","cards":["lumi_dash"],"prop":"selfdmg","add":-2}},{"n":2,"text":"임계 질주 +30% → +45%, 발동 기준 50% → 60%.","fx":{"type":"multi","list":[{"type":"passiveParam","param":"bps","value":4500},{"type":"passiveParam","param":"pct","value":60}]}},{"n":3,"text":"고유 카드 스킬 레벨 +2(피해·방어 ×1.08).","fx":{"type":"skillLv","delta":2}},{"n":4,"text":"전투마다 첫 과부하의 체력 대가 0. 기억 용량 +1.","fx":{"type":"multi","list":[{"type":"rule","key":"firstOverloadFree","value":true},{"type":"capacity","n":1}]}},{"n":5,"text":"필살기 레벨 +2(필살기 수치 ×1.08).","fx":{"type":"ultLv","delta":2}},{"n":6,"text":"번개 질주 타격 +3회.","fx":{"type":"ultReplace","eff":[{"op":"dmg","v":8,"tgt":"rand","hits":8,"brk":1},{"op":"if","cond":{"c":"hpBelow","pct":50},"then":[{"op":"dmg","v":8,"tgt":"rand","hits":2,"brk":1}],"else":[]}]}}],"visual":{"height":167,"build":"탄탄한 운동선수형 성인 체형","hair":"전기 파란 브릿지가 들어간 짧고 뻗친 금발","eyes":"날카로운 하늘색 눈","outfit":"어깨까지 흘러내린 빛나는 회로 라인 퀵서비스 재킷, 크롭 스포츠 톱, 바이크 쇼츠, 빛 궤적을 남기는 운동화","weapon":"전격 쌍단검","motif":"번개·속도선","palette":["#2b7bff","#ffe14d","#0b0d12"],"expression":"이를 드러낸 대담한 웃음"},"voice":"빠르고 시원한 톤"}],"startingCommon":{"sera":"com_guard","nia":"com_slash","yuri":"com_slash","ravien":"com_guard","harin":"com_slash","rien":"com_guard","aila":"com_slash","sion":"com_guard","kaya":"com_guard","lumi":"com_guard"},"cards":[{"id":"sera_round","name":"유리탄","owner":"sera","rar":"B","cost":1,"type":"atk","res":"y","eff":[{"op":"dmg","v":8,"rv":12}],"kw":[],"flavor":"깨지기 쉬운 탄환일수록 정확해야 한다.","start":true,"attr":"volt"},{"id":"sera_cover","name":"엄폐 사격","owner":"sera","rar":"B","cost":1,"type":"atk","res":"y","eff":[{"op":"blk","v":5,"rv":7},{"op":"dmg","v":4,"rv":6}],"kw":[],"start":true,"attr":"volt"},{"id":"sera_aim","name":"정조준","owner":"sera","rar":"B","cost":1,"type":"skl","res":"y","eff":[{"op":"buff","s":"charge","n":4000,"turns":2}],"kw":[],"start":true,"attr":"volt"},{"id":"sera_reload","name":"재장전","owner":"sera","rar":"B","cost":0,"type":"skl","res":"n","eff":[{"op":"draw","n":2},{"op":"discard","n":1}],"kw":[],"attr":"volt"},{"id":"sera_timed","name":"시한 포격","owner":"sera","rar":"A","cost":2,"type":"atk","res":"o","eff":[{"op":"dmg","v":16,"rv":22,"ra":30,"brk":3}],"kw":[],"flavor":"기다린 만큼 무거워지는 탄.","start":true,"attr":"volt"},{"id":"sera_calc","name":"탄도 계산","owner":"sera","rar":"A","cost":1,"type":"skl","res":"n","eff":[{"op":"slot","next":1,"after":0},{"op":"draw","n":1}],"kw":[],"attr":"volt"},{"id":"sera_pull","name":"시간 당기기","owner":"sera","rar":"A","cost":0,"type":"skl","res":"n","eff":[{"op":"pull"}],"kw":[],"uses":2,"attr":"volt"},{"id":"sera_double","name":"연속 저격","owner":"sera","rar":"A","cost":1,"type":"atk","res":"y","eff":[{"op":"dmg","v":4,"rv":6,"hits":2},{"op":"if","cond":{"c":"marked"},"then":[{"op":"dmg","v":4,"rv":6}],"else":[]}],"kw":[],"attr":"volt"},{"id":"sera_phase","name":"위상 저격","owner":"sera","rar":"S","cost":2,"type":"atk","res":"y","eff":[{"op":"dmg","v":16,"rv":24,"brk":2,"pierce":5000}],"kw":[],"attr":"volt"},{"id":"sera_lock","name":"미래 확정","owner":"sera","rar":"S","cost":1,"type":"skl","res":"n","eff":[{"op":"buff","s":"seraLock","n":3000,"turns":2}],"kw":[],"attr":"volt"},{"id":"sera_flash","name":"섬광 탄막","owner":"sera","rar":"S","cost":2,"type":"atk","res":"y","eff":[{"op":"dmg","v":7,"rv":10,"tgt":"all"}],"kw":[],"attr":"volt"},{"id":"sera_last","name":"종언의 초침","owner":"sera","rar":"S","cost":3,"type":"atk","res":"after","eff":[{"op":"dmg","v":45,"ra":45,"brk":5}],"kw":["exhaust"],"attr":"volt"},{"id":"nia_wrench","name":"스패너 타격","owner":"nia","rar":"B","cost":1,"type":"atk","res":"y","eff":[{"op":"dmg","v":7,"rv":10}],"kw":[],"start":true,"attr":"void"},{"id":"nia_barrier","name":"응급 차폐막","owner":"nia","rar":"B","cost":1,"type":"skl","res":"y","eff":[{"op":"blk","v":7,"rv":10}],"kw":[],"start":true,"attr":"void"},{"id":"nia_tune","name":"미세 조정","owner":"nia","rar":"B","cost":0,"type":"skl","res":"n","eff":[{"op":"tune","part":"amp","pick":"one"}],"kw":[],"uses":2,"start":true,"attr":"void"},{"id":"nia_scan","name":"구조 분석","owner":"nia","rar":"B","cost":1,"type":"skl","res":"y","eff":[{"op":"st","s":"vul","n":2,"tgt":"one"},{"op":"draw","n":1}],"kw":[],"start":true,"attr":"void"},{"id":"nia_drone","name":"보조 드론","owner":"nia","rar":"A","cost":1,"type":"skl","res":"y","eff":[{"op":"create","card":"nia_drone_shot","n":2,"zone":"hand"}],"kw":[],"attr":"void"},{"id":"nia_overclock","name":"과열 개조","owner":"nia","rar":"A","cost":1,"type":"skl","res":"n","eff":[{"op":"costdown","n":1,"pick":"one"},{"op":"tune","part":"overheat","pick":"same"}],"kw":[],"attr":"void"},{"id":"nia_rebuild","name":"재조립","owner":"nia","rar":"A","cost":1,"type":"skl","res":"n","eff":[{"op":"recall"},{"op":"blk","v":4}],"kw":[],"attr":"void"},{"id":"nia_shock","name":"공허 방전","owner":"nia","rar":"A","cost":2,"type":"atk","res":"y","eff":[{"op":"dmg","v":14,"rv":20,"brk":2},{"op":"if","cond":{"c":"modded"},"then":[{"op":"breakBonus","n":2}],"else":[]}],"kw":[],"attr":"void"},{"id":"nia_blueprint","name":"설계도 전개","owner":"nia","rar":"S","cost":1,"type":"skl","res":"n","eff":[{"op":"power","id":"blueprint","bps":2000}],"kw":["exhaust"],"attr":"void"},{"id":"nia_assembly","name":"즉석 조립","owner":"nia","rar":"S","cost":2,"type":"skl","res":"n","eff":[{"op":"tune","part":"amp","pick":"all"}],"kw":["exhaust"],"attr":"void"},{"id":"nia_fieldlab","name":"이동 공방","owner":"nia","rar":"S","cost":1,"type":"skl","res":"y","eff":[{"op":"draw","n":2,"rn":3}],"kw":[],"attr":"void"},{"id":"nia_masterwork","name":"걸작","owner":"nia","rar":"S","cost":3,"type":"atk","res":"y","eff":[{"op":"dmg","v":24,"rv":34,"brk":3,"scale":{"per":"tempParts","k":3,"max":18}}],"kw":[],"attr":"void"},{"id":"nia_drone_shot","name":"드론 사격","owner":"nia","rar":"T","cost":0,"type":"atk","res":"n","eff":[{"op":"dmg","v":4}],"kw":["exhaust"],"pool":false,"attr":"void"},{"id":"yuri_cocoon","name":"유리 고치","owner":"yuri","rar":"B","cost":1,"type":"skl","res":"y","eff":[{"op":"blk","v":6,"rv":8},{"op":"grow"}],"kw":[],"evo":["yuri_cocoon_guard","yuri_cocoon_prey"],"growth":true,"start":true,"attr":"frost"},{"id":"yuri_sprout","name":"새싹 화살","owner":"yuri","rar":"B","cost":1,"type":"atk","res":"y","eff":[{"op":"dmg","v":6,"rv":8},{"op":"grow"}],"kw":[],"evo":["yuri_sprout_thorn","yuri_sprout_pollen"],"growth":true,"start":true,"attr":"frost"},{"id":"yuri_root","name":"공생 뿌리","owner":"yuri","rar":"B","cost":1,"type":"skl","res":"y","eff":[{"op":"blk","v":4,"rv":6},{"op":"draw","n":1},{"op":"grow"}],"kw":[],"evo":["yuri_root_net","yuri_root_hunt"],"growth":true,"start":true,"attr":"frost"},{"id":"yuri_dew","name":"이슬 맺기","owner":"yuri","rar":"B","cost":0,"type":"skl","res":"n","eff":[{"op":"growPick","n":1}],"kw":["exhaust"],"start":true,"attr":"frost"},{"id":"yuri_greenhouse","name":"온실","owner":"yuri","rar":"A","cost":1,"type":"skl","res":"n","eff":[{"op":"power","id":"greenhouse","blk":3}],"kw":["exhaust"],"attr":"frost"},{"id":"yuri_frostbloom","name":"서리꽃","owner":"yuri","rar":"A","cost":2,"type":"atk","res":"y","eff":[{"op":"dmg","v":10,"rv":14,"tgt":"all"},{"op":"grow"}],"kw":[],"evo":["yuri_frostbloom_ice","yuri_frostbloom_snow"],"growth":true,"attr":"frost"},{"id":"yuri_tend","name":"돌봄","owner":"yuri","rar":"A","cost":1,"type":"skl","res":"y","eff":[{"op":"heal","v":6,"rv":8},{"op":"if","cond":{"c":"growthInHand","n":2},"then":[{"op":"draw","n":1}],"else":[]}],"kw":[],"attr":"frost"},{"id":"yuri_mutual","name":"상리공생","owner":"yuri","rar":"A","cost":1,"type":"atk","res":"y","eff":[{"op":"dmg","v":7,"rv":10,"scale":{"per":"growthSum","k":1,"max":12}}],"kw":[],"attr":"frost"},{"id":"yuri_metamorph","name":"탈피","owner":"yuri","rar":"S","cost":1,"type":"skl","res":"n","eff":[{"op":"copyPick","filter":"growth"}],"kw":[],"attr":"frost"},{"id":"yuri_canopy","name":"수관","owner":"yuri","rar":"S","cost":2,"type":"skl","res":"y","eff":[{"op":"blk","v":14,"rv":20,"scale":{"per":"growthCards","k":2,"max":10}}],"kw":[],"attr":"frost"},{"id":"yuri_seedvault","name":"씨앗 금고","owner":"yuri","rar":"S","cost":1,"type":"skl","res":"y","eff":[{"op":"draw","n":1,"rn":2},{"op":"grow"}],"kw":[],"evo":["yuri_seedvault_plenty","yuri_seedvault_fruit"],"growth":true,"attr":"frost"},{"id":"yuri_worldtree","name":"세계수","owner":"yuri","rar":"S","cost":3,"type":"skl","res":"n","eff":[{"op":"growAll"},{"op":"blk","v":15}],"kw":["exhaust"],"attr":"frost"},{"id":"yuri_cocoon_guard","name":"유리 고치: 수호","owner":"yuri","rar":"S","cost":1,"type":"skl","res":"y","eff":[{"op":"blk","v":9,"rv":13}],"kw":[],"flavor":"수호형 진화","pool":false,"attr":"frost"},{"id":"yuri_cocoon_prey","name":"유리 고치: 포식","owner":"yuri","rar":"S","cost":1,"type":"atk","res":"y","eff":[{"op":"dmg","v":9,"rv":12,"brk":2},{"op":"if","cond":{"c":"killedThis"},"then":[{"op":"draw","n":1}],"else":[]}],"kw":[],"flavor":"포식형 진화","pool":false,"attr":"frost"},{"id":"yuri_sprout_thorn","name":"새싹 화살: 가시덤불","owner":"yuri","rar":"S","cost":1,"type":"atk","res":"y","eff":[{"op":"dmg","v":5,"rv":7,"hits":2}],"kw":[],"pool":false,"attr":"frost"},{"id":"yuri_sprout_pollen","name":"새싹 화살: 꽃가루","owner":"yuri","rar":"S","cost":1,"type":"atk","res":"y","eff":[{"op":"dmg","v":7,"rv":10},{"op":"st","s":"weak","n":1,"tgt":"same"}],"kw":[],"pool":false,"attr":"frost"},{"id":"yuri_root_net","name":"공생 뿌리: 보호망","owner":"yuri","rar":"S","cost":1,"type":"skl","res":"y","eff":[{"op":"blk","v":8,"rv":11},{"op":"draw","n":1}],"kw":[],"pool":false,"attr":"frost"},{"id":"yuri_root_hunt","name":"공생 뿌리: 사냥망","owner":"yuri","rar":"S","cost":1,"type":"skl","res":"y","eff":[{"op":"draw","n":2},{"op":"st","s":"mark","n":1,"tgt":"rand"}],"kw":[],"pool":false,"attr":"frost"},{"id":"yuri_frostbloom_ice","name":"서리꽃: 빙화","owner":"yuri","rar":"S","cost":2,"type":"atk","res":"y","eff":[{"op":"dmg","v":13,"rv":18,"tgt":"all"}],"kw":[],"pool":false,"attr":"frost"},{"id":"yuri_frostbloom_snow","name":"서리꽃: 만년설","owner":"yuri","rar":"S","cost":2,"type":"atk","res":"y","eff":[{"op":"dmg","v":10,"rv":14,"tgt":"all"},{"op":"st","s":"weak","n":1,"tgt":"all"}],"kw":[],"pool":false,"attr":"frost"},{"id":"yuri_seedvault_plenty","name":"씨앗 금고: 풍요","owner":"yuri","rar":"S","cost":1,"type":"skl","res":"y","eff":[{"op":"draw","n":2,"rn":3}],"kw":[],"pool":false,"attr":"frost"},{"id":"yuri_seedvault_fruit","name":"씨앗 금고: 결실","owner":"yuri","rar":"S","cost":1,"type":"skl","res":"y","eff":[{"op":"draw","n":1,"rn":2},{"op":"ap","n":1}],"kw":[],"pool":false,"attr":"frost"},{"id":"ravien_advance","name":"선불 계약","owner":"ravien","rar":"B","cost":0,"type":"skl","res":"n","eff":[{"op":"loan","n":2}],"kw":["contract"],"uses":1,"start":true,"attr":"flame"},{"id":"ravien_strike","name":"인장 타격","owner":"ravien","rar":"B","cost":1,"type":"atk","res":"y","eff":[{"op":"dmg","v":8,"rv":11},{"op":"if","cond":{"c":"debt"},"then":[{"op":"st","s":"burn","n":2,"tgt":"same"}],"else":[]}],"kw":[],"start":true,"attr":"flame"},{"id":"ravien_restraint","name":"절제 계약","owner":"ravien","rar":"B","cost":0,"type":"skl","res":"n","eff":[{"op":"restraint"}],"kw":["contract"],"start":true,"attr":"flame"},{"id":"ravien_collateral","name":"담보 계약","owner":"ravien","rar":"B","cost":0,"type":"skl","res":"n","eff":[{"op":"collateral","v":16}],"kw":["contract"],"start":true,"attr":"flame"},{"id":"ravien_defer","name":"유예 협상","owner":"ravien","rar":"A","cost":0,"type":"skl","res":"n","eff":[{"op":"defer"}],"kw":["contract"],"attr":"flame"},{"id":"ravien_interest","name":"이자 징수","owner":"ravien","rar":"A","cost":1,"type":"atk","res":"y","eff":[{"op":"dmg","v":6,"rv":9,"scale":{"per":"debt","k":4,"max":20}}],"kw":[],"attr":"flame"},{"id":"ravien_seal","name":"불꽃 인장","owner":"ravien","rar":"A","cost":1,"type":"skl","res":"y","eff":[{"op":"st","s":"burn","n":4,"rn":6,"tgt":"one"}],"kw":[],"attr":"flame"},{"id":"ravien_penalty","name":"위약 조항","owner":"ravien","rar":"A","cost":1,"type":"atk","res":"y","eff":[{"op":"dmg","v":10,"rv":14,"brk":2},{"op":"if","cond":{"c":"burning"},"then":[{"op":"breakBonus","n":1}],"else":[]}],"kw":[],"attr":"flame"},{"id":"ravien_bigloan","name":"대출 한도","owner":"ravien","rar":"S","cost":1,"type":"skl","res":"n","eff":[{"op":"loan","n":3}],"kw":["contract"],"uses":1,"attr":"flame"},{"id":"ravien_auction","name":"경매","owner":"ravien","rar":"S","cost":2,"type":"atk","res":"y","eff":[{"op":"dmg","v":18,"rv":25,"brk":2,"scale":{"per":"targetBurn","k":1,"max":20}}],"kw":[],"attr":"flame"},{"id":"ravien_goldscale","name":"황금 저울질","owner":"ravien","rar":"S","cost":1,"type":"skl","res":"n","eff":[{"op":"draw","n":0,"scale":{"per":"contracts","k":1,"max":3}}],"kw":[],"attr":"flame"},{"id":"ravien_settlement","name":"최종 결산","owner":"ravien","rar":"S","cost":3,"type":"atk","res":"y","eff":[{"op":"dmg","v":14,"rv":20,"tgt":"all","brk":2},{"op":"breakBonusAll","scale":{"per":"debt","k":1,"max":4}}],"kw":[],"attr":"flame"},{"id":"harin_shield","name":"경계 방패","owner":"harin","rar":"B","cost":1,"type":"skl","res":"y","eff":[{"op":"blk","v":8,"rv":11}],"kw":[],"start":true,"attr":"frost"},{"id":"harin_bash","name":"방패 강타","owner":"harin","rar":"B","cost":1,"type":"atk","res":"y","eff":[{"op":"dmg","v":6,"rv":9,"brk":2}],"kw":[],"start":true,"attr":"frost"},{"id":"harin_counter","name":"반격 태세","owner":"harin","rar":"B","cost":1,"type":"skl","res":"y","eff":[{"op":"blk","v":5,"rv":7},{"op":"counter","n":3}],"kw":[],"start":true,"attr":"frost"},{"id":"harin_taunt","name":"도발","owner":"harin","rar":"B","cost":0,"type":"skl","res":"n","eff":[{"op":"if","cond":{"c":"intentAttack"},"then":[{"op":"st","s":"weak","n":1,"tgt":"one"}],"else":[]},{"op":"blk","v":3}],"kw":[],"start":true,"attr":"frost"},{"id":"harin_frostwall","name":"서리 장벽","owner":"harin","rar":"A","cost":2,"type":"skl","res":"y","eff":[{"op":"blk","v":14,"rv":20}],"kw":[],"attr":"frost"},{"id":"harin_retaliate","name":"보복","owner":"harin","rar":"A","cost":1,"type":"atk","res":"n","eff":[{"op":"dmg","v":0,"scale":{"per":"block","k":1,"max":30}}],"kw":[],"attr":"frost"},{"id":"harin_hold","name":"버티기","owner":"harin","rar":"A","cost":1,"type":"skl","res":"y","eff":[{"op":"blk","v":6,"rv":13}],"kw":[],"attr":"frost"},{"id":"harin_iceguard","name":"빙결 수호","owner":"harin","rar":"A","cost":1,"type":"skl","res":"y","eff":[{"op":"blk","v":7,"rv":10},{"op":"st","s":"weak","n":1,"tgt":"one"}],"kw":[],"attr":"frost"},{"id":"harin_bulwark","name":"불굴","owner":"harin","rar":"S","cost":2,"type":"skl","res":"n","eff":[{"op":"power","id":"bulwark","keep":10}],"kw":["exhaust"],"attr":"frost"},{"id":"harin_glacier","name":"빙하 압박","owner":"harin","rar":"S","cost":2,"type":"atk","res":"y","eff":[{"op":"dmg","v":10,"rv":14,"brk":2,"scale":{"per":"counter","k":2,"max":20}}],"kw":[],"attr":"frost"},{"id":"harin_oath","name":"수호 맹세","owner":"harin","rar":"S","cost":1,"type":"skl","res":"y","eff":[{"op":"blk","v":10,"rv":14},{"op":"counter","n":5}],"kw":[],"attr":"frost"},{"id":"harin_avalanche","name":"눈사태","owner":"harin","rar":"S","cost":3,"type":"atk","res":"y","eff":[{"op":"dmg","v":12,"rv":16,"tgt":"all","brk":2},{"op":"blk","v":12}],"kw":[],"attr":"frost"},{"id":"rien_note","name":"첫 음","owner":"rien","rar":"B","cost":0,"type":"atk","res":"n","eff":[{"op":"dmg","v":4},{"op":"echo","n":1}],"kw":[],"start":true,"attr":"volt"},{"id":"rien_chord","name":"화음","owner":"rien","rar":"B","cost":1,"type":"atk","res":"y","eff":[{"op":"dmg","v":6,"rv":8,"scale":{"per":"echo","k":3,"max":12}}],"kw":[],"start":true,"attr":"volt"},{"id":"rien_rest","name":"쉼표","owner":"rien","rar":"B","cost":1,"type":"skl","res":"y","eff":[{"op":"blk","v":6,"rv":8},{"op":"if","cond":{"c":"echo","n":1},"then":[{"op":"draw","n":1}],"else":[]}],"kw":[],"start":true,"attr":"volt"},{"id":"rien_tempo","name":"템포 업","owner":"rien","rar":"B","cost":0,"type":"skl","res":"n","eff":[{"op":"draw","n":1},{"op":"echo","n":1}],"kw":[],"uses":2,"start":true,"attr":"volt"},{"id":"rien_crescendo","name":"크레셴도","owner":"rien","rar":"A","cost":1,"type":"atk","res":"n","eff":[{"op":"dmg","v":5,"hits":1,"hitsScale":{"per":"echo","k":1,"max":4}}],"kw":[],"attr":"volt"},{"id":"rien_duet","name":"이중주","owner":"rien","rar":"A","cost":1,"type":"skl","res":"n","eff":[{"op":"nextBoost","bps":5000}],"kw":[],"attr":"volt"},{"id":"rien_feedback","name":"피드백","owner":"rien","rar":"A","cost":1,"type":"atk","res":"y","eff":[{"op":"dmg","v":5,"rv":7,"tgt":"all"},{"op":"if","cond":{"c":"echo","n":3},"then":[{"op":"ap","n":1}],"else":[]}],"kw":[],"attr":"volt"},{"id":"rien_harmony","name":"하모니","owner":"rien","rar":"A","cost":1,"type":"skl","res":"n","eff":[{"op":"heal","v":4,"scale":{"per":"echo","k":2,"max":8}}],"kw":[],"attr":"volt"},{"id":"rien_solo","name":"독주","owner":"rien","rar":"S","cost":2,"type":"atk","res":"n","eff":[{"op":"dmg","v":10,"brk":2,"scale":{"per":"echo","k":6,"max":24}},{"op":"breakBonus","scale":{"per":"echo","k":1,"max":4}}],"kw":[],"attr":"volt"},{"id":"rien_echochamber","name":"메아리 방","owner":"rien","rar":"S","cost":1,"type":"skl","res":"n","eff":[{"op":"power","id":"echochamber"}],"kw":["exhaust"],"attr":"volt"},{"id":"rien_amplify","name":"앰프","owner":"rien","rar":"S","cost":0,"type":"skl","res":"n","eff":[{"op":"echo","n":2}],"kw":["exhaust"],"attr":"volt"},{"id":"rien_finale","name":"피날레","owner":"rien","rar":"S","cost":3,"type":"atk","res":"n","eff":[{"op":"dmg","v":10,"tgt":"all","hits":1,"hitsScale":{"per":"echo","k":1,"max":4}}],"kw":["exhaust"],"attr":"volt"},{"id":"aila_bell","name":"맑은 종","owner":"aila","rar":"B","cost":1,"type":"skl","res":"y","eff":[{"op":"heal","v":5,"rv":7}],"kw":[],"start":true,"attr":"frost"},{"id":"aila_frostlight","name":"서리빛","owner":"aila","rar":"B","cost":1,"type":"atk","res":"y","eff":[{"op":"dmg","v":7,"rv":10}],"kw":[],"start":true,"attr":"frost"},{"id":"aila_veil","name":"장막","owner":"aila","rar":"B","cost":1,"type":"skl","res":"y","eff":[{"op":"blk","v":7,"rv":10},{"op":"cleanseOne","s":"weak"}],"kw":[],"start":true,"attr":"frost"},{"id":"aila_prayer","name":"기도문","owner":"aila","rar":"B","cost":0,"type":"skl","res":"n","eff":[{"op":"buff","s":"healUp","n":5000,"turns":1},{"op":"draw","n":1}],"kw":[],"start":true,"attr":"frost"},{"id":"aila_cleanse","name":"정화","owner":"aila","rar":"A","cost":1,"type":"skl","res":"n","eff":[{"op":"cleanse"},{"op":"blk","v":4,"scale":{"per":"lastCount","k":4,"max":16}}],"kw":[],"attr":"frost"},{"id":"aila_mend","name":"봉합","owner":"aila","rar":"A","cost":1,"type":"skl","res":"y","eff":[{"op":"heal","v":8,"rv":12}],"kw":[],"attr":"frost"},{"id":"aila_snowfall","name":"눈송이","owner":"aila","rar":"A","cost":1,"type":"atk","res":"y","eff":[{"op":"dmg","v":4,"rv":6,"tgt":"all"},{"op":"st","s":"weak","n":1,"tgt":"all"}],"kw":[],"attr":"frost"},{"id":"aila_sanctuary","name":"성역","owner":"aila","rar":"A","cost":2,"type":"skl","res":"y","eff":[{"op":"blk","v":12,"rv":17},{"op":"heal","v":4}],"kw":[],"attr":"frost"},{"id":"aila_lullaby","name":"자장가","owner":"aila","rar":"S","cost":1,"type":"skl","res":"n","eff":[{"op":"st","s":"weak","n":2,"tgt":"one"},{"op":"heal","v":4}],"kw":[],"attr":"frost"},{"id":"aila_rebirth","name":"재생의 기록","owner":"aila","rar":"S","cost":2,"type":"skl","res":"n","eff":[{"op":"power","id":"rebirth","heal":3}],"kw":["exhaust"],"attr":"frost"},{"id":"aila_overflow","name":"넘치는 온기","owner":"aila","rar":"S","cost":1,"type":"skl","res":"y","eff":[{"op":"heal","v":10,"rv":14,"overflowBlock":100}],"kw":[],"attr":"frost"},{"id":"aila_dawnhymn","name":"새벽 성가","owner":"aila","rar":"S","cost":3,"type":"skl","res":"n","eff":[{"op":"heal","v":15},{"op":"blk","v":15},{"op":"dmg","v":8,"tgt":"all"}],"kw":["exhaust"],"attr":"frost"},{"id":"sion_cut","name":"책갈피 베기","owner":"sion","rar":"B","cost":1,"type":"atk","res":"y","eff":[{"op":"dmg","v":8,"rv":11}],"kw":[],"start":true,"attr":"void"},{"id":"sion_erase","name":"지우개","owner":"sion","rar":"B","cost":0,"type":"skl","res":"n","eff":[{"op":"exhaustPick","from":"hand","n":1},{"op":"draw","n":1}],"kw":[],"start":true,"attr":"void"},{"id":"sion_bind","name":"봉인","owner":"sion","rar":"B","cost":1,"type":"skl","res":"y","eff":[{"op":"blk","v":7,"rv":10}],"kw":[],"start":true,"attr":"void"},{"id":"sion_void","name":"공허 파편","owner":"sion","rar":"B","cost":1,"type":"atk","res":"y","eff":[{"op":"dmg","v":12,"rv":16,"brk":2}],"kw":["exhaust"],"start":true,"attr":"void"},{"id":"sion_forget","name":"망각","owner":"sion","rar":"A","cost":1,"type":"skl","res":"n","eff":[{"op":"exhaustPick","from":"discard","n":2},{"op":"blk","v":5,"scale":{"per":"lastCount","k":5,"max":10},"base0":true}],"kw":[],"attr":"void"},{"id":"sion_index","name":"색인","owner":"sion","rar":"A","cost":1,"type":"skl","res":"y","eff":[{"op":"draw","n":2,"rn":3}],"kw":[],"attr":"void"},{"id":"sion_pageblade","name":"페이지 칼날","owner":"sion","rar":"A","cost":1,"type":"atk","res":"y","eff":[{"op":"dmg","v":5,"rv":7,"scale":{"per":"exhausted","k":2,"max":16}}],"kw":[],"attr":"void"},{"id":"sion_silence","name":"침묵의 장","owner":"sion","rar":"A","cost":2,"type":"skl","res":"n","eff":[{"op":"st","s":"weak","n":2,"tgt":"one"},{"op":"st","s":"vul","n":2,"tgt":"same"}],"kw":[],"attr":"void"},{"id":"sion_requiem","name":"레퀴엠","owner":"sion","rar":"S","cost":2,"type":"atk","res":"y","eff":[{"op":"dmg","v":16,"rv":22,"brk":3}],"kw":[],"attr":"void"},{"id":"sion_oblivion","name":"망각의 서","owner":"sion","rar":"S","cost":1,"type":"skl","res":"n","eff":[{"op":"power","id":"oblivion","blk":3}],"kw":["exhaust"],"attr":"void"},{"id":"sion_burnbook","name":"금서 소각","owner":"sion","rar":"S","cost":0,"type":"atk","res":"n","eff":[{"op":"exhaustHand"},{"op":"dmg","v":6,"tgt":"rand","hits":0,"hitsScale":{"per":"lastCount","k":1,"max":10}}],"kw":[],"attr":"void"},{"id":"sion_lastpage","name":"마지막 페이지","owner":"sion","rar":"S","cost":3,"type":"atk","res":"y","eff":[{"op":"dmg","v":30,"rv":40,"brk":4}],"kw":["exhaust"],"attr":"void"},{"id":"kaya_bolt","name":"화염 볼트","owner":"kaya","rar":"B","cost":1,"type":"atk","res":"y","eff":[{"op":"dmg","v":8,"rv":11}],"kw":[],"start":true,"attr":"flame"},{"id":"kaya_clue","name":"단서 포착","owner":"kaya","rar":"B","cost":0,"type":"skl","res":"n","eff":[{"op":"st","s":"mark","n":2,"tgt":"one"}],"kw":[],"start":true,"attr":"flame"},{"id":"kaya_deduce","name":"추리 사격","owner":"kaya","rar":"B","cost":1,"type":"atk","res":"y","eff":[{"op":"dmg","v":12,"rv":16,"brk":2,"tgt":"fixed"}],"kw":[],"start":true,"attr":"flame"},{"id":"kaya_cover","name":"연막","owner":"kaya","rar":"B","cost":1,"type":"skl","res":"y","eff":[{"op":"blk","v":7,"rv":10}],"kw":[],"start":true,"attr":"flame"},{"id":"kaya_tracking","name":"추적","owner":"kaya","rar":"A","cost":1,"type":"skl","res":"y","eff":[{"op":"st","s":"mark","n":3,"tgt":"one"},{"op":"st","s":"burn","n":3,"tgt":"same"}],"kw":[],"attr":"flame"},{"id":"kaya_crossfire","name":"교차 사격","owner":"kaya","rar":"A","cost":2,"type":"atk","res":"y","eff":[{"op":"dmg","v":7,"rv":10,"hits":2},{"op":"if","cond":{"c":"marked"},"then":[{"op":"dmg","v":7,"rv":10}],"else":[]}],"kw":[],"attr":"flame"},{"id":"kaya_interrogate","name":"심문","owner":"kaya","rar":"A","cost":1,"type":"skl","res":"n","eff":[{"op":"st","s":"vul","n":2,"tgt":"fixed"},{"op":"draw","n":1}],"kw":[],"attr":"flame"},{"id":"kaya_ignite","name":"점화 볼트","owner":"kaya","rar":"A","cost":1,"type":"atk","res":"y","eff":[{"op":"dmg","v":6,"rv":9},{"op":"st","s":"burn","n":3,"tgt":"same"},{"op":"if","cond":{"c":"marked"},"then":[{"op":"st","s":"burn","n":3,"tgt":"same"}],"else":[]}],"kw":[],"attr":"flame"},{"id":"kaya_verdict","name":"판결","owner":"kaya","rar":"S","cost":2,"type":"atk","res":"y","eff":[{"op":"dmg","v":20,"rv":28,"brk":3,"tgt":"fixed","mult":[{"if":{"c":"targetHpBelow","pct":30},"x":2}]}],"kw":[],"attr":"flame"},{"id":"kaya_casefile","name":"사건 파일","owner":"kaya","rar":"S","cost":1,"type":"skl","res":"n","eff":[{"op":"power","id":"casefile","bps":2000}],"kw":["exhaust"],"attr":"flame"},{"id":"kaya_flare","name":"조명탄","owner":"kaya","rar":"S","cost":1,"type":"skl","res":"n","eff":[{"op":"st","s":"mark","n":2,"tgt":"all"},{"op":"draw","n":1}],"kw":[],"attr":"flame"},{"id":"kaya_closecase","name":"사건 종결","owner":"kaya","rar":"S","cost":3,"type":"atk","res":"y","eff":[{"op":"dmg","v":36,"rv":48,"brk":5,"tgt":"fixed"},{"op":"if","cond":{"c":"killedThis"},"then":[{"op":"ap","n":2}],"else":[]}],"kw":["exhaust"],"attr":"flame"},{"id":"lumi_jab","name":"섬광 찌르기","owner":"lumi","rar":"B","cost":1,"type":"atk","res":"y","eff":[{"op":"dmg","v":8,"rv":11}],"kw":[],"start":true,"attr":"volt"},{"id":"lumi_dash","name":"질주","owner":"lumi","rar":"B","cost":0,"type":"atk","res":"n","eff":[{"op":"selfdmg","v":3},{"op":"dmg","v":7},{"op":"draw","n":1}],"kw":[],"start":true,"attr":"volt"},{"id":"lumi_guard","name":"회피 기동","owner":"lumi","rar":"B","cost":1,"type":"skl","res":"y","eff":[{"op":"blk","v":7,"rv":10}],"kw":[],"start":true,"attr":"volt"},{"id":"lumi_spark","name":"방전","owner":"lumi","rar":"B","cost":1,"type":"atk","res":"y","eff":[{"op":"dmg","v":4,"rv":6,"hits":2}],"kw":[],"start":true,"attr":"volt"},{"id":"lumi_overdrive","name":"오버드라이브","owner":"lumi","rar":"A","cost":0,"type":"skl","res":"n","eff":[{"op":"selfdmg","v":5},{"op":"ap","n":2}],"kw":[],"uses":2,"attr":"volt"},{"id":"lumi_chain","name":"연쇄 번개","owner":"lumi","rar":"A","cost":2,"type":"atk","res":"y","eff":[{"op":"dmg","v":7,"rv":10,"tgt":"all"}],"kw":[],"attr":"volt"},{"id":"lumi_adrenaline","name":"아드레날린","owner":"lumi","rar":"A","cost":1,"type":"skl","res":"n","eff":[{"op":"draw","n":0,"scale":{"per":"missingHp10","k":1,"max":3}}],"kw":[],"attr":"volt"},{"id":"lumi_thunderstep","name":"천둥 걸음","owner":"lumi","rar":"A","cost":1,"type":"atk","res":"n","eff":[{"op":"selfdmg","v":4},{"op":"dmg","v":18,"brk":2}],"kw":[],"attr":"volt"},{"id":"lumi_limitbreak","name":"한계 돌파","owner":"lumi","rar":"S","cost":1,"type":"skl","res":"n","eff":[{"op":"selfdmg","v":6},{"op":"buff","s":"lumiRush","n":5000,"turns":1}],"kw":[],"attr":"volt"},{"id":"lumi_lightning","name":"낙뢰","owner":"lumi","rar":"S","cost":2,"type":"atk","res":"y","eff":[{"op":"dmg","v":22,"rv":30,"brk":3}],"kw":[],"attr":"volt"},{"id":"lumi_secondwind","name":"재충전","owner":"lumi","rar":"S","cost":1,"type":"skl","res":"n","eff":[{"op":"heal","v":8},{"op":"buff","s":"overloadFree","n":1,"turns":1}],"kw":[],"attr":"volt"},{"id":"lumi_storm","name":"폭풍의 핵","owner":"lumi","rar":"S","cost":3,"type":"atk","res":"n","eff":[{"op":"selfdmg","v":8},{"op":"dmg","v":8,"tgt":"rand","hits":6}],"kw":["exhaust"],"attr":"volt"},{"id":"com_slash","name":"기본 공격","owner":"common","rar":"B","cost":1,"type":"atk","res":"y","eff":[{"op":"dmg","v":6,"rv":9,"shock":1}],"kw":[],"attr":"none"},{"id":"com_guard","name":"기본 방어","owner":"common","rar":"B","cost":1,"type":"skl","res":"y","eff":[{"op":"blk","v":6,"rv":9}],"kw":[],"attr":"none"},{"id":"com_sort","name":"정리","owner":"common","rar":"B","cost":0,"type":"skl","res":"n","eff":[{"op":"draw","n":1},{"op":"discard","n":1}],"kw":[],"uses":2,"attr":"none"},{"id":"com_patch","name":"응급 수리","owner":"common","rar":"B","cost":1,"type":"skl","res":"y","eff":[{"op":"heal","v":6,"rv":8}],"kw":["exhaust"],"attr":"none"},{"id":"com_capacitor","name":"시간 축전기","owner":"common","rar":"A","cost":1,"type":"skl","res":"o","eff":[{"op":"ap","n":2}],"kw":[],"attr":"none"},{"id":"com_focus","name":"집중","owner":"common","rar":"B","cost":0,"type":"skl","res":"n","eff":[{"op":"buff","s":"charge","n":2500,"turns":1}],"kw":["exhaust"],"attr":"none"},{"id":"com_shockwave","name":"충격파","owner":"common","rar":"A","cost":2,"type":"atk","res":"y","eff":[{"op":"dmg","v":5,"rv":7,"tgt":"all","shock":1}],"kw":[],"attr":"none"},{"id":"com_barrier","name":"공용 차폐","owner":"common","rar":"A","cost":2,"type":"skl","res":"y","eff":[{"op":"blk","v":12,"rv":17}],"kw":[],"attr":"none"},{"id":"com_recall","name":"회상","owner":"common","rar":"A","cost":1,"type":"skl","res":"n","eff":[{"op":"recall"}],"kw":[],"attr":"none"},{"id":"com_flash","name":"섬광탄","owner":"common","rar":"A","cost":0,"type":"skl","res":"n","eff":[{"op":"st","s":"weak","n":1,"tgt":"all"}],"kw":["exhaust"],"attr":"none"},{"id":"com_pin","name":"고정핀","owner":"common","rar":"B","cost":1,"type":"skl","res":"y","eff":[{"op":"st","s":"vul","n":2,"rn":3,"tgt":"one"}],"kw":[],"attr":"none"},{"id":"com_rally","name":"사기 진작","owner":"common","rar":"A","cost":1,"type":"skl","res":"n","eff":[{"op":"gauge","n":15,"who":"all"}],"kw":[],"attr":"none"},{"id":"com_salvage","name":"재활용","owner":"common","rar":"A","cost":0,"type":"skl","res":"n","eff":[{"op":"exhaustPick","from":"hand","n":1},{"op":"ap","n":1}],"kw":[],"attr":"none"},{"id":"com_overwatch","name":"경계 사격","owner":"common","rar":"B","cost":1,"type":"atk","res":"o","eff":[{"op":"dmg","v":11,"rv":11,"shock":1}],"kw":[],"attr":"none"},{"id":"com_bandage","name":"붕대","owner":"common","rar":"B","cost":0,"type":"skl","res":"n","eff":[{"op":"heal","v":3}],"kw":["exhaust"],"attr":"none"},{"id":"com_tactics","name":"전술 노트","owner":"common","rar":"A","cost":1,"type":"skl","res":"n","eff":[{"op":"draw","n":2}],"kw":[],"attr":"none"},{"id":"com_anchor","name":"시간 닻","owner":"common","rar":"A","cost":1,"type":"skl","res":"n","eff":[{"op":"slot","next":0,"after":1},{"op":"draw","n":1}],"kw":[],"attr":"none"},{"id":"com_breaker","name":"균열 쐐기","owner":"common","rar":"S","cost":1,"type":"atk","res":"y","eff":[{"op":"dmg","v":4,"rv":6,"shock":3}],"kw":[],"attr":"none"},{"id":"smudge","name":"얼룩","owner":"curse","rar":"C","cost":1,"type":"skl","res":"n","eff":[],"kw":["exhaust"],"attr":"none","flavor":"턴 종료 시 손에 있으면 파티 체력 2를 잃는다.","pool":false},{"id":"penalty_note","name":"위약금","owner":"curse","rar":"C","cost":2,"type":"skl","res":"n","eff":[],"kw":["exhaust"],"attr":"none","flavor":"사용하면 사라지는 빚 문서.","pool":false},{"id":"wc_sera","name":"조준경 고정","owner":"weapon","rar":"S","cost":1,"type":"skl","res":"n","eff":[{"op":"slot","next":1,"after":0},{"op":"buff","s":"charge","n":3000,"turns":2}],"kw":[],"attr":"volt"},{"id":"wc_yuri","name":"등불 빛","owner":"weapon","rar":"S","cost":1,"type":"skl","res":"y","eff":[{"op":"blk","v":6,"rv":9},{"op":"growPick","n":1}],"kw":[],"attr":"frost"},{"id":"wc_ravien","name":"저울질","owner":"weapon","rar":"S","cost":0,"type":"skl","res":"n","eff":[{"op":"draw","n":0,"scale":{"per":"debt","k":1,"max":2}},{"op":"st","s":"burn","n":2,"tgt":"all"}],"kw":[],"attr":"flame"},{"id":"wc_sion","name":"책장 넘기기","owner":"weapon","rar":"S","cost":1,"type":"atk","res":"y","eff":[{"op":"dmg","v":7,"rv":10},{"op":"exhaustPick","from":"hand","n":1}],"kw":[],"attr":"void"},{"id":"wc_kaya","name":"추적 화살","owner":"weapon","rar":"S","cost":1,"type":"atk","res":"y","eff":[{"op":"dmg","v":7,"rv":10},{"op":"st","s":"mark","n":2,"tgt":"same"}],"kw":[],"attr":"flame"},{"id":"wc_lumi","name":"섬전","owner":"weapon","rar":"S","cost":0,"type":"atk","res":"n","eff":[{"op":"selfdmg","v":2},{"op":"dmg","v":9,"brk":2}],"kw":[],"attr":"volt"},{"id":"wc_star_bow","name":"별빛 화살","owner":"weapon","rar":"A","cost":1,"type":"atk","res":"y","eff":[{"op":"dmg","v":9,"rv":13}],"kw":[],"attr":"wielder"},{"id":"wc_frost_blade","name":"결정 베기","owner":"weapon","rar":"A","cost":1,"type":"atk","res":"y","eff":[{"op":"dmg","v":10,"rv":13,"brk":2}],"kw":[],"attr":"wielder"},{"id":"wc_clock_core","name":"태엽 감기","owner":"weapon","rar":"A","cost":1,"type":"skl","res":"n","eff":[{"op":"draw","n":2}],"kw":[],"attr":"wielder"},{"id":"wc_silver_hymnal","name":"성가","owner":"weapon","rar":"A","cost":1,"type":"skl","res":"y","eff":[{"op":"heal","v":4,"rv":6},{"op":"blk","v":4,"rv":6}],"kw":[],"attr":"wielder"},{"id":"wc_hunter_rifle","name":"조준 사격","owner":"weapon","rar":"A","cost":1,"type":"atk","res":"y","eff":[{"op":"dmg","v":8,"rv":11}],"kw":[],"attr":"wielder"},{"id":"wc_mech_bow","name":"연발 화살","owner":"weapon","rar":"A","cost":1,"type":"atk","res":"y","eff":[{"op":"dmg","v":4,"rv":6,"hits":2}],"kw":[],"attr":"wielder"},{"id":"wc_guard_saber","name":"세이버 일격","owner":"weapon","rar":"A","cost":1,"type":"atk","res":"y","eff":[{"op":"dmg","v":9,"rv":12}],"kw":[],"attr":"wielder"},{"id":"wc_iron_tonfa","name":"톤파 연타","owner":"weapon","rar":"A","cost":1,"type":"atk","res":"y","eff":[{"op":"dmg","v":6,"rv":8},{"op":"blk","v":4}],"kw":[],"attr":"wielder"},{"id":"wc_pocket_engine","name":"엔진 점화","owner":"weapon","rar":"A","cost":1,"type":"skl","res":"y","eff":[{"op":"draw","n":1},{"op":"gauge","n":10,"who":"self"}],"kw":[],"attr":"wielder"},{"id":"wc_ledger_lock","name":"잠금","owner":"weapon","rar":"A","cost":1,"type":"skl","res":"y","eff":[{"op":"blk","v":8,"rv":11}],"kw":[],"attr":"wielder"},{"id":"wc_choir_bell","name":"종소리","owner":"weapon","rar":"A","cost":1,"type":"skl","res":"y","eff":[{"op":"heal","v":4,"rv":6}],"kw":[],"attr":"wielder"},{"id":"wc_glass_rod","name":"굴절막","owner":"weapon","rar":"A","cost":1,"type":"skl","res":"y","eff":[{"op":"blk","v":5,"rv":7},{"op":"dmg","v":4,"rv":5}],"kw":[],"attr":"wielder"},{"id":"wc_basic_ranged","name":"권총 사격","owner":"weapon","rar":"B","cost":1,"type":"atk","res":"y","eff":[{"op":"dmg","v":7,"rv":10}],"kw":[],"attr":"wielder"},{"id":"wc_basic_melee","name":"단검 찌르기","owner":"weapon","rar":"B","cost":1,"type":"atk","res":"y","eff":[{"op":"dmg","v":7,"rv":9}],"kw":[],"attr":"wielder"},{"id":"wc_basic_device","name":"공구 방벽","owner":"weapon","rar":"B","cost":1,"type":"skl","res":"y","eff":[{"op":"blk","v":6,"rv":8}],"kw":[],"attr":"wielder"},{"id":"wc_basic_ritual","name":"작은 기도","owner":"weapon","rar":"B","cost":1,"type":"skl","res":"y","eff":[{"op":"heal","v":3,"rv":4},{"op":"blk","v":3,"rv":4}],"kw":[],"attr":"wielder"}],"weapons":[{"id":"w_sera","name":"영겁의 조준경","type":"ranged","rarity":"SSR","signature":"sera","pool":"standard","passive":{"id":"w_reservedDmg","name":"먼 미래의 표적","values":[1200,1500,1800,2100,2400],"scope":"wielder","text":"장착자의 예약 공격 피해 +{v}%."},"card":"wc_sera"},{"id":"w_yuri","name":"온실 등불","type":"ritual","rarity":"SSR","signature":"yuri","pool":"standard","passive":{"id":"w_growthHeal","name":"생장의 빛","values":[2,2,3,3,4],"scope":"party","text":"성장 카드가 해결될 때 파티 회복 {v}."},"card":"wc_yuri"},{"id":"w_ravien","name":"황금 저울","type":"device","rarity":"SSR","signature":"ravien","pool":"standard","passive":{"id":"w_debtDmg","name":"균형 감각","values":[800,1000,1200,1400,1600],"scope":"party","text":"부채가 있을 때 파티 공격 피해 +{v}%."},"card":"wc_ravien"},{"id":"w_sion","name":"망각의 책갈피","type":"melee","rarity":"SSR","signature":"sion","pool":"standard","passive":{"id":"w_exhaustGuard","name":"접힌 페이지","values":[2,2,3,3,4],"scope":"party","text":"카드가 소멸할 때 방어 {v}."},"card":"wc_sion"},{"id":"w_kaya","name":"추적자의 석궁","type":"ranged","rarity":"SSR","signature":"kaya","pool":"limited","passive":{"id":"w_markedDmg","name":"빗나가지 않는 화살","values":[1200,1500,1800,2100,2400],"scope":"wielder","text":"장착자가 표식 적에게 주는 피해 +{v}%."},"card":"wc_kaya"},{"id":"w_lumi","name":"섬전 쌍인","type":"melee","rarity":"SSR","signature":"lumi","pool":"limited","passive":{"id":"w_lowHpDmg","name":"한계선","values":[1200,1500,1800,2100,2400],"scope":"wielder","text":"파티 체력 50% 이하일 때 장착자 피해 +{v}%."},"card":"wc_lumi"},{"id":"w_star_bow","name":"별자리 장궁","type":"ranged","rarity":"SSR","pool":"standard","passive":{"id":"w_reservedDmg","name":"별의 궤도","values":[1000,1250,1500,1750,2000],"scope":"wielder","text":"장착자의 예약 공격 피해 +{v}%."},"card":"wc_star_bow"},{"id":"w_frost_blade","name":"서리 결정검","type":"melee","rarity":"SSR","pool":"standard","passive":{"id":"w_brokenDmg","name":"결정 파쇄","values":[1000,1250,1500,1750,2000],"scope":"wielder","text":"장착자가 균열 상태 적에게 주는 피해 +{v}%."},"card":"wc_frost_blade"},{"id":"w_clock_core","name":"태엽 핵심","type":"device","rarity":"SSR","pool":"standard","passive":{"id":"w_startDraw","name":"첫 태엽","values":[1,1,1,2,2],"scope":"party","text":"전투 첫 턴에 카드 {v}장 추가로 뽑기."},"card":"wc_clock_core"},{"id":"w_silver_hymnal","name":"은빛 성가집","type":"ritual","rarity":"SSR","pool":"standard","passive":{"id":"w_healUp","name":"은빛 선율","values":[1000,1250,1500,1750,2000],"scope":"party","text":"파티 회복량 +{v}%."},"card":"wc_silver_hymnal"},{"id":"w_hunter_rifle","name":"사냥용 소총","type":"ranged","rarity":"SR","pool":"standard","passive":{"id":"w_firstAtk","name":"첫 사격","values":[1500,1875,2250,2625,3000],"scope":"wielder","text":"전투 첫 공격 카드 피해 +{v}%."},"card":"wc_hunter_rifle"},{"id":"w_mech_bow","name":"기계 활","type":"ranged","rarity":"SR","pool":"standard","passive":{"id":"w_multiHit","name":"연사 기구","values":[1,1,2,2,3],"scope":"wielder","text":"다중 타격 카드의 첫 타격 피해 +{v}."},"card":"wc_mech_bow"},{"id":"w_guard_saber","name":"경비대 세이버","type":"melee","rarity":"SR","pool":"standard","passive":{"id":"w_breakDmg","name":"돌파 훈련","values":[800,1000,1200,1400,1600],"scope":"wielder","text":"균열 상태 적에게 피해 +{v}%."},"card":"wc_guard_saber"},{"id":"w_iron_tonfa","name":"강철 톤파","type":"melee","rarity":"SR","pool":"standard","passive":{"id":"w_blockOnAtk","name":"막고 친다","values":[2,2,3,3,4],"scope":"wielder","text":"장착자의 공격 카드 사용 시 방어 {v}."},"card":"wc_iron_tonfa"},{"id":"w_pocket_engine","name":"포켓 엔진","type":"device","rarity":"SR","pool":"standard","passive":{"id":"w_gaugeUp","name":"예열","values":[1000,1250,1500,1750,2000],"scope":"wielder","text":"장착자 필살기 게이지 획득 +{v}%."},"card":"wc_pocket_engine"},{"id":"w_ledger_lock","name":"장부 자물쇠","type":"device","rarity":"SR","pool":"standard","passive":{"id":"w_startBlock","name":"잠금 장치","values":[4,5,6,7,8],"scope":"wielder","text":"전투 시작 시 방어 {v}."},"card":"wc_ledger_lock"},{"id":"w_choir_bell","name":"성가대 종","type":"ritual","rarity":"SR","pool":"standard","passive":{"id":"w_healUp","name":"합창","values":[800,1000,1200,1400,1600],"scope":"party","text":"파티 회복량 +{v}%."},"card":"wc_choir_bell"},{"id":"w_glass_rod","name":"유리 지팡이","type":"ritual","rarity":"SR","pool":"standard","passive":{"id":"w_blockUp","name":"굴절","values":[800,1000,1200,1400,1600],"scope":"wielder","text":"장착자 방어 +{v}%."},"card":"wc_glass_rod"},{"id":"w_basic_ranged","name":"훈련용 권총","type":"ranged","rarity":"R","pool":"craft","passive":{"id":"w_none","name":"-","values":[0,0,0,0,0],"scope":"wielder","text":"패시브 없음(제련핵으로 정련 시 피해·방어 +{v}%).","refineAlt":[0,300,600,900,1200]},"card":"wc_basic_ranged"},{"id":"w_basic_melee","name":"훈련용 단검","type":"melee","rarity":"R","pool":"craft","passive":{"id":"w_none","name":"-","values":[0,0,0,0,0],"scope":"wielder","text":"패시브 없음(제련핵으로 정련 시 피해·방어 +{v}%).","refineAlt":[0,300,600,900,1200]},"card":"wc_basic_melee"},{"id":"w_basic_device","name":"기본 공구","type":"device","rarity":"R","pool":"craft","passive":{"id":"w_none","name":"-","values":[0,0,0,0,0],"scope":"wielder","text":"패시브 없음(제련핵으로 정련 시 피해·방어 +{v}%).","refineAlt":[0,300,600,900,1200]},"card":"wc_basic_device"},{"id":"w_basic_ritual","name":"기본 성구","type":"ritual","rarity":"R","pool":"craft","passive":{"id":"w_none","name":"-","values":[0,0,0,0,0],"scope":"wielder","text":"패시브 없음(제련핵으로 정련 시 피해·방어 +{v}%).","refineAlt":[0,300,600,900,1200]},"card":"wc_basic_ritual"}],"parts":[{"id":"amp","slot":"temp","name":"증폭","rarity":"temp","text":"이번 전투 동안 피해·방어 +30%.","fx":{"addBps":3000}},{"id":"overheat","slot":"temp","name":"과열","rarity":"temp","text":"이번 전투 동안 피해 +50%, 사용 후 소멸.","fx":{"addBps":5000,"exhaust":true}},{"id":"c_delay","slot":"circuit","name":"지연 증폭","rarity":"common","text":"예약 해결 시 피해·방어 +40%, 즉시 사용 시 -10%.","fx":{"resBps":4000,"immBps":-1000}},{"id":"c_quick","slot":"circuit","name":"즉발 회로","rarity":"common","text":"즉시 사용 시 피해·방어 +20%. 예약 불가.","fx":{"immBps":2000,"noReserve":true}},{"id":"c_precise","slot":"circuit","name":"정밀 회로","rarity":"common","text":"균열 수치 +1.","fx":{"brk":1}},{"id":"c_echo","slot":"circuit","name":"메아리 회로","rarity":"rare","text":"예약으로 해결되면 다음 턴 손에 50% 위력의 소멸 사본(비용 0) 추가.","fx":{"echoCopy":5000}},{"id":"c_far","slot":"circuit","name":"원거리 전송","rarity":"rare","text":"다다음 턴 예약 시 피해·방어 +70%.","fx":{"afterBps":7000}},{"id":"c_lite","slot":"circuit","name":"경량 회로","rarity":"rare","text":"비용 -1(최소 0), 피해·방어 -25%.","fx":{"cost":-1,"allBps":-2500}},{"id":"e_pierce","slot":"engraving","name":"관통","rarity":"common","text":"피해의 50%가 방어를 무시.","fx":{"pierce":5000}},{"id":"e_guard","slot":"engraving","name":"보호","rarity":"common","text":"해결 시 방어 4.","fx":{"extraBlock":4}},{"id":"e_recall","slot":"engraving","name":"회수","rarity":"common","text":"해결 시 카드 1장 뽑기(턴당 1회).","fx":{"drawOnce":1}},{"id":"e_mark","slot":"engraving","name":"표식","rarity":"common","text":"피해를 준 적에게 표식 1.","fx":{"markOnHit":1}},{"id":"e_burn","slot":"engraving","name":"연소","rarity":"common","text":"피해를 준 적에게 화상 2.","fx":{"burnOnHit":2}},{"id":"e_chill","slot":"engraving","name":"냉각","rarity":"common","text":"피해를 준 적에게 약화 1.","fx":{"weakOnHit":1}},{"id":"e_gauge","slot":"engraving","name":"가속","rarity":"rare","text":"해결 시 소유자 필살기 게이지 +10.","fx":{"gauge":10}},{"id":"e_sacrifice","slot":"engraving","name":"소멸 대가","rarity":"rare","text":"피해·방어 +50%. 사용 후 소멸.","fx":{"allBps":5000,"exhaust":true}}],"relics":[{"id":"empty_clock","name":"빈 시계","rarity":"common","text":"전투마다 첫 예약 카드 비용 -1(최소 0)."},{"id":"memory_envelope","name":"기억의 봉투","rarity":"common","text":"이번 탐사에서 처음 받는 치명 피해를 체력 1로 버틴다(1회)."},{"id":"unfinished_score","name":"미완성 악보","rarity":"common","text":"한 턴에 세 캐릭터의 카드를 모두 쓰면 카드 1장 뽑기(턴당 1회)."},{"id":"symbiotic_moss","name":"공생 이끼","rarity":"common","text":"성장이 일어날 때마다 방어 3."},{"id":"credit_ledger","name":"외상 장부","rarity":"common","text":"부채가 있는 턴의 첫 공격 피해 +20%."},{"id":"virtue_of_refusal","name":"거절의 미덕","rarity":"common","text":"카드 보상을 거절하면 최대 체력 +2(탐사당 4회)."},{"id":"forge_ember","name":"공방의 불씨","rarity":"common","text":"휴식·공방 노드를 한 번 더 이용(각 2회)."},{"id":"bronze_cog","name":"청동 톱니","rarity":"common","text":"전투 시작 시 방어 8."},{"id":"pocket_brazier","name":"휴대용 화로","rarity":"common","text":"전투 시작 시 무작위 적에게 화상 4."},{"id":"silver_needle","name":"은빛 바늘","rarity":"common","text":"적이 균열 상태가 될 때마다 파티 회복 3."},{"id":"old_compass","name":"낡은 나침반","rarity":"common","text":"휴식 노드의 회복량 +10%p."},{"id":"lucky_coin","name":"행운의 동전","rarity":"common","text":"전투 보상 동전 +10."},{"id":"time_stamp","name":"타임 스탬프","rarity":"common","text":"예약 카드가 해결될 때 소유자 필살기 게이지 +5."},{"id":"frost_crystal","name":"서리 결정","rarity":"common","text":"매 턴 첫 빙결 피해의 균열 +1."},{"id":"volt_coil","name":"전류 코일","rarity":"common","text":"매 턴 첫 전격 카드 피해 +4."},{"id":"void_shard","name":"공허의 조각","rarity":"common","text":"카드가 소멸할 때 무작위 적에게 피해 3."},{"id":"ember_ring","name":"불씨 반지","rarity":"common","text":"화상 상태인 적에게 주는 피해 +10%."},{"id":"quick_hands","name":"재빠른 손","rarity":"common","text":"전투 첫 턴에 카드 2장 추가로 뽑기."},{"id":"cracked_hourglass","name":"금 간 모래시계","rarity":"rare","text":"다다음 턴 예약 칸 +1. 매 전투 첫 턴 행동력 -1."},{"id":"twin_pendulum","name":"쌍둥이 시계추","rarity":"rare","text":"다음 턴 예약 칸 +1. 손패 최대 9장."},{"id":"precision_lens","name":"정밀 렌즈","rarity":"rare","text":"예약으로 해결되는 공격의 균열 +1."},{"id":"golden_quill","name":"황금 깃펜","rarity":"rare","text":"개조된 카드의 피해·방어 +15%."},{"id":"eternal_seed","name":"영원의 씨앗","rarity":"rare","text":"전투 시작 시 무작위 성장 카드 1장 성장 +1."},{"id":"contract_seal","name":"계약 인장","rarity":"rare","text":"부채 상한 +1."},{"id":"tuning_fork","name":"공명 소리굽쇠","rarity":"rare","text":"잔향 최대 +1, 턴 시작 시 잔향 1."},{"id":"oblivion_ink","name":"망각의 잉크","rarity":"rare","text":"매 턴 처음 카드가 소멸하면 행동력 +1."},{"id":"detective_notebook","name":"탐정의 수첩","rarity":"rare","text":"표식이 있는 적을 처치하면 동전 +10, 카드 1장 뽑기."},{"id":"lightning_rod","name":"피뢰침","rarity":"rare","text":"과부하로 잃은 체력의 50%만큼 방어를 얻는다."},{"id":"chrono_crown","name":"시간술사의 왕관","rarity":"boss","text":"매 턴 행동력 +1. 카드 보상 선택지가 3장에서 2장으로 줄어든다."},{"id":"infinite_circuit","name":"무한 회로","rarity":"boss","text":"다음 턴 예약 칸 +1. 턴 시작 시 파티 체력 2를 잃는다."},{"id":"memory_anvil","name":"기억의 모루","rarity":"boss","text":"전투 시작 시 손패의 카드 2장에 \"증폭\" 부착. 휴식 노드에서 회복할 수 없다."},{"id":"eye_of_rift","name":"균열의 눈","rarity":"boss","text":"모든 카드 피해의 균열 +1. 전투 시작 시 덱에 얼룩 1장 추가."}],"enemies":[{"id":"e_moth","name":"기억 나방","zone":1,"tier":"normal","hp":18,"weak":["flame","volt"],"brk":3,"pattern":[{"t":"atk","d":12},{"t":"atk","d":7,"h":2},{"t":"buff","str":1}]},{"id":"e_cog","name":"톱니 병정","zone":1,"tier":"normal","hp":24,"weak":["volt","void"],"brk":4,"pattern":[{"t":"def","b":6},{"t":"atk","d":18},{"t":"atk","d":14}]},{"id":"e_smudge","name":"잉크 얼룩","zone":1,"tier":"normal","hp":15,"weak":["frost","flame"],"brk":2,"pattern":[{"t":"insert","card":"smudge","n":1},{"t":"atk","d":13},{"t":"atk","d":10}]},{"id":"e_hound","name":"시계 사냥개","zone":1,"tier":"normal","hp":22,"weak":["frost","void"],"brk":3,"pattern":[{"t":"atk","d":17},{"t":"atk","d":9,"h":2},{"t":"def","b":5}]},{"id":"e_lantern","name":"흐린 등불","zone":1,"tier":"normal","hp":20,"weak":["void","volt"],"brk":3,"pattern":[{"t":"debuff","s":"weak","n":1},{"t":"atk","d":18},{"t":"heal","n":6,"who":"lowest"}]},{"id":"e_page","name":"떠도는 페이지","zone":1,"tier":"normal","hp":12,"weak":["flame"],"brk":2,"pattern":[{"t":"atk","d":7,"h":2},{"t":"atk","d":12}]},{"id":"e_bellwarden","name":"종지기","zone":1,"tier":"elite","hp":60,"weak":["frost","flame"],"brk":7,"pattern":[{"t":"charge","label":"종 들어 올리기"},{"t":"atk","d":48,"label":"종 내려치기"},{"t":"def","b":12,"str":2},{"t":"atk","d":12,"h":2}]},{"id":"e_mirrorclerk","name":"거울 서기","zone":1,"tier":"elite","hp":52,"weak":["volt","void"],"brk":6,"pattern":[{"t":"reflect","n":3,"label":"반사 거울"},{"t":"atk","d":24},{"t":"atk","d":13,"h":2}]},{"id":"e_gardener","name":"시든 정원사","zone":1,"tier":"elite","hp":55,"weak":["flame"],"brk":6,"passive":{"id":"seedHeal","n":5},"pattern":[{"t":"summon","e":"e_seed","n":2,"label":"씨앗 뿌리기"},{"t":"atk","d":25},{"t":"atk","d":14,"h":2}]},{"id":"e_seed","name":"씨앗","zone":1,"tier":"minion","hp":6,"weak":["flame","frost","volt","void"],"brk":1,"pattern":[{"t":"def","b":2}]},{"id":"e_scribe","name":"서명 망령","zone":2,"tier":"normal","hp":34,"weak":["frost","volt"],"brk":4,"pattern":[{"t":"atk","d":17},{"t":"atkdebuff","d":11,"s":"weak","n":1},{"t":"def","b":8}]},{"id":"e_shelf","name":"무너진 서가","zone":2,"tier":"normal","hp":46,"weak":["flame","void"],"brk":5,"pattern":[{"t":"def","b":10},{"t":"atk","d":25},{"t":"blockAll","b":6}]},{"id":"e_inkswarm","name":"잉크 떼","zone":2,"tier":"normal","hp":16,"weak":["frost"],"brk":2,"pattern":[{"t":"atk","d":7,"h":2},{"t":"insert","card":"smudge","n":1}]},{"id":"e_keeper","name":"열쇠지기","zone":2,"tier":"normal","hp":38,"weak":["volt","flame"],"brk":4,"pattern":[{"t":"buff","str":2},{"t":"atk","d":13,"h":2},{"t":"atk","d":20}]},{"id":"e_censor","name":"검열관","zone":2,"tier":"elite","hp":95,"weak":["void","frost"],"brk":8,"pattern":[{"t":"debuff","s":"weak","n":2},{"t":"atk","d":26},{"t":"charge","label":"검열 낭독"},{"t":"atk","d":49,"label":"삭제 판정"}]},{"id":"e_twinink","name":"쌍둥이 잉크","zone":2,"tier":"elite","hp":80,"weak":["flame","volt"],"brk":7,"pattern":[{"t":"atk","d":12,"h":3},{"t":"reflect","n":4},{"t":"def","b":16}]},{"id":"b_bell","name":"종을 삼킨 기록관","zone":1,"tier":"boss","hp":130,"weak":["frost","volt"],"brk":10,"pattern":[{"t":"atkdebuff","d":12,"s":"weak","n":1,"label":"탐색"},{"t":"def","b":25,"label":"보호막"},{"t":"expose","n":2,"then":{"t":"atk","d":52},"label":"약점 노출·강타"},{"t":"atk","d":11,"h":3,"label":"종소리 연타"}]},{"id":"b_notary","name":"거울의 공증인","zone":1,"tier":"boss","hp":125,"weak":["void","flame"],"brk":9,"pattern":[{"t":"reflect","n":4,"label":"반사 거울"},{"t":"atk","d":22},{"t":"atk","d":10,"h":3},{"t":"charge","label":"판결 준비"},{"t":"atk","d":50,"label":"판결"}]},{"id":"b_garden","name":"잠든 정원","zone":1,"tier":"boss","hp":125,"weak":["flame","frost"],"brk":9,"passive":{"id":"seedHeal","n":7},"pattern":[{"t":"summon","e":"e_seed","n":2,"label":"씨앗 뿌리기"},{"t":"atk","d":22},{"t":"atkdebuff","d":14,"s":"weak","n":1},{"t":"atk","d":12,"h":2}]},{"id":"b_archivist","name":"기록소의 대사서","zone":2,"tier":"boss","hp":230,"weak":["void","volt"],"brk":12,"pattern":[{"t":"blockAll","b":20,"label":"봉인 서가"},{"t":"atk","d":28},{"t":"insert","card":"smudge","n":2},{"t":"charge","label":"망각 낭독"},{"t":"atk","d":55,"label":"망각 낭독"}]}],"encounters":{"1":{"normal":[["e_moth","e_moth"],["e_cog","e_smudge"],["e_hound"],["e_lantern","e_page","e_page"],["e_cog","e_page"],["e_smudge","e_smudge","e_moth"],["e_hound","e_page"]],"elite":[["e_bellwarden"],["e_mirrorclerk"],["e_gardener"]],"boss":[["b_bell"],["b_notary"],["b_garden"]]},"2":{"normal":[["e_scribe","e_inkswarm"],["e_shelf"],["e_keeper","e_inkswarm"],["e_scribe","e_scribe"],["e_inkswarm","e_inkswarm","e_inkswarm"]],"elite":[["e_censor"],["e_twinink"]],"boss":[["b_archivist"]]}},"events":[{"id":"ev_promise","name":"멈춘 약속","text":"시곗바늘이 멈춘 광장에서 누군가 지키지 못한 약속을 내민다.","choices":[{"label":"약속을 대신 짊어진다","text":"최대 체력 -10%, 무작위 희귀 부품 1개","fx":{"maxHpPct":-10,"partRare":1}},{"label":"대가를 치른다","text":"동전 -40, 무작위 일반 부품 1개","fx":{"coins":-40,"part":1},"need":{"coins":40}},{"label":"지나친다","text":"아무 일도 일어나지 않는다","fx":{}}]},{"id":"ev_mirror","name":"깨진 거울","text":"조각난 거울마다 다른 순간의 내가 비친다.","choices":[{"label":"한 조각을 집는다","text":"체력 -6, 카드 1장 복제","fx":{"hp":-6,"cardCopy":1}},{"label":"조각을 묻는다","text":"동전 -30, 카드 1장 제거","fx":{"coins":-30,"cardRemove":1},"need":{"coins":30}},{"label":"지나친다","text":"아무 일도 일어나지 않는다","fx":{}}]},{"id":"ev_busker","name":"떠도는 악사","text":"태엽 손풍금을 든 악사가 동전 몇 닢에 노래를 들려주겠다고 한다.","choices":[{"label":"노래를 청한다","text":"동전 -25, 무작위 일반 유물 1개","fx":{"coins":-25,"relic":"common"},"need":{"coins":25}},{"label":"같이 쉰다","text":"체력 15 회복","fx":{"heal":15}},{"label":"지나친다","text":"아무 일도 일어나지 않는다","fx":{}}]},{"id":"ev_merchant","name":"기억 상인","text":"\"흠 없는 기억은 비싸고, 얼룩진 기억은 싸지요.\"","choices":[{"label":"변주를 산다","text":"동전 -60, 카드 변주 1회","fx":{"coins":-60,"variation":1},"need":{"coins":60}},{"label":"얼룩을 판다","text":"덱에 얼룩 1장, 동전 +50","fx":{"curse":"smudge","coins":50}},{"label":"지나친다","text":"아무 일도 일어나지 않는다","fx":{}}]},{"id":"ev_archive","name":"잊힌 서고","text":"먼지 쌓인 서가에 아무도 빌려 가지 않은 기억이 꽂혀 있다.","choices":[{"label":"정리한다","text":"최대 체력 -5, 카드 2장 제거","fx":{"maxHp":-5,"cardRemove":2}},{"label":"한 권 빌린다","text":"무작위 고급 카드 1장 획득","fx":{"card":"A"}},{"label":"지나친다","text":"아무 일도 일어나지 않는다","fx":{}}]},{"id":"ev_rift","name":"시간의 틈","text":"공기가 갈라진 틈 너머로 조금 이른 미래가 보인다.","choices":[{"label":"먼저 들어간다","text":"체력 -8, 다음 전투 첫 턴 행동력 +2","fx":{"hp":-8,"nextApBonus":2}},{"label":"틈을 닫는다","text":"체력 10 회복","fx":{"heal":10}}]},{"id":"ev_spirit","name":"온실의 정령","text":"작은 정령이 시든 잎을 내밀며 고개를 갸웃한다.","choices":[{"label":"돌봐 준다","text":"성장 카드 1장 성장 +1(이번 탐사 유지)","fx":{"growth":1}},{"label":"함께 쉰다","text":"체력 12 회복","fx":{"heal":12}}]},{"id":"ev_contracts","name":"계약서 더미","text":"서명만 하면 되는 계약서가 바람에 날린다.","choices":[{"label":"서명한다","text":"동전 +80, 덱에 위약금 1장","fx":{"coins":80,"curse":"penalty_note"}},{"label":"지나친다","text":"아무 일도 일어나지 않는다","fx":{}}]}],"gacha":{"costPerPull":160,"tenPullDiscount":false,"curves":{"character":{"ssrBase":80,"softStart":66,"softStep":700,"hard":80,"srBase":600,"srGuarantee":10,"featuredSsrBps":5000,"featuredSrBps":5000},"weapon":{"ssrBase":90,"softStart":60,"softStep":800,"hard":70,"srBase":700,"srGuarantee":10,"featuredSsrBps":7500,"featuredSrBps":7500},"standard":{"ssrBase":80,"softStart":66,"softStep":700,"hard":80,"srBase":600,"srGuarantee":10,"selectorAt":300},"beginner":{"ssrBase":80,"softStart":66,"softStep":700,"hard":50,"srBase":600,"srGuarantee":10,"maxPulls":50,"tenPullTickets":8}},"pityRules":["한정 캐릭터 배너끼리 천장 카운트와 확정(풀천장) 상태를 공유하고 다음 한정 배너로 이월한다.","무기 배너끼리 천장 카운트와 확정 상태를 공유·이월한다. 캐릭터 배너와는 별개다.","상시 배너 카운트는 별개이며 초심자 배너 뽑기는 상시 300회 선택권 누적에 포함한다.","10회 뽑기는 1회를 순서대로 10번 처리한다. 매 회차가 천장·확정 규칙을 갖는다.","SR 이상이 9회 연속 나오지 않으면 10번째는 SR 이상 확정(SSR 확률은 현재 천장 곡선 그대로)."],"pools":{"standardSsrChars":["sera","yuri","ravien","sion"],"srChars":["nia","harin","rien","aila"],"standardSsrWeapons":["w_star_bow","w_frost_blade","w_clock_core","w_silver_hymnal","w_sera","w_yuri","w_ravien","w_sion"],"srWeapons":["w_hunter_rifle","w_mech_bow","w_guard_saber","w_iron_tonfa","w_pocket_engine","w_ledger_lock","w_choir_bell","w_glass_rod"]},"banners":[{"id":"limited_lumi","kind":"character","name":"섬광의 질주","featuredSsr":"lumi","featuredSr":["nia","rien"],"days":[1,21],"ticket":"limitedTicket"},{"id":"limited_kaya","kind":"character","name":"추적의 불꽃","featuredSsr":"kaya","featuredSr":["harin","aila"],"days":[22,42],"ticket":"limitedTicket"},{"id":"weapon_lumi","kind":"weapon","name":"섬전 무기고","featuredSsr":"w_lumi","featuredSr":["w_iron_tonfa","w_pocket_engine"],"days":[1,21],"ticket":"weaponTicket"},{"id":"weapon_kaya","kind":"weapon","name":"추적자 무기고","featuredSsr":"w_kaya","featuredSr":["w_hunter_rifle","w_choir_bell"],"days":[22,42],"ticket":"weaponTicket"},{"id":"standard","kind":"standard","name":"상시 모집: 공방의 문","ticket":"standardTicket"},{"id":"beginner","kind":"beginner","name":"첫 공방 모집","ticket":"standardTicket"}],"duplicates":{"character":"두 번째 획득부터 공명 +1(최대 공명 6 = 총 7장). 첫 획득은 결정체 0, 공명 단계 중복은 SSR 10·SR 2, 공명 6 이후는 SSR 25·SR 5.","weapon":"두 번째 획득부터 정련 +1(최대 R5 = 총 5개). 무기는 매번 SSR 10·SR 2, R5 이후는 SSR 25·SR 5.","shardSsr":10,"shardSsrOverflow":25,"shardSr":2,"shardSrOverflow":5,"afterglowR":15},"exchange":[{"item":"limitedTicket","costShards":5,"monthlyLimit":5},{"item":"weaponTicket","costShards":5,"monthlyLimit":5},{"item":"standardTicket","costAfterglow":75,"monthlyLimit":5},{"item":"limitedTicket","costAfterglow":75,"monthlyLimit":5}],"rItems":["잔향 기록: 경험치","잔향 기록: 크레딧","잔향 기록: 연마석"],"seasonIncome":{"days":42,"note":"v0.6 기준선 A안을 유지. 실제 운영 보상표는 이 표를 원장으로 서버가 지급.","f2pRecurring":[{"src":"일일 임무","per":60,"times":42,"crystals":2520},{"src":"주간 임무","per":420,"times":6,"crystals":2520},{"src":"주간 탐사 첫 완주","per":200,"times":6,"crystals":1200},{"src":"주간 누적 접속","per":160,"times":6,"crystals":960},{"src":"시즌 이벤트","per":2880,"times":1,"crystals":2880},{"src":"무료 패스","per":1440,"times":1,"crystals":1440},{"src":"기록 균열(최대)","per":800,"times":3,"crystals":2400,"optional":true}],"tickets":{"limitedTicket":9,"limitedSources":"시즌 이벤트 상점 5 + 무료 패스 4","standardTicket":12,"standardSources":"주간 임무 2×6"},"f2p":{"crystals":13920,"limitedTicket":9,"standardTicket":12},"oneTime":{"story":"storyChapters.firstClear 합계","beginnerBanner":"첫 공방 모집 50회 = 상시권 40장(10회=8장)","launch":{"crystals":1600,"standardTicket":10}}}},"progression":{"accountLevel":{"cap":60,"xp":{"per":20,"base":80},"xpSources":{"staminaSpent":1,"dailyMissionComplete":300,"storyFirstClear":200,"weeklyBossClaim":100},"unlocks":[{"lv":1,"what":"탐사(프롤로그), 모집, 기억 저장"},{"lv":3,"what":"1장, 도감"},{"lv":5,"what":"잉크·크레딧 던전, 일일 임무"},{"lv":8,"what":"2장, 인연(선물·에피소드)"},{"lv":10,"what":"캐릭터 1차 승급, 태엽 공장·인장 회랑, 장비 제작"},{"lv":15,"what":"3장, 주간 보스, 금서 열람실"},{"lv":20,"what":"캐릭터 2차 승급, 기록 균열, 연마 작업장"},{"lv":22,"what":"4장"},{"lv":30,"what":"캐릭터 3차 승급, 5장"},{"lv":38,"what":"6장"},{"lv":40,"what":"캐릭터 4차 승급(Lv.60)"}]},"affinity":{"maxLevel":10,"xpPerLevel":100,"sources":{"battleTogether":5,"dailyBattleCap":50,"giftSmall":20,"giftMid":50,"giftLarge":100,"preferredMult":1.5},"rewards":[{"lv":2,"reward":"프로필·생일 해금"},{"lv":3,"reward":"인연 에피소드 1 + 결정 50"},{"lv":4,"reward":"로비 대사 추가"},{"lv":5,"reward":"인연 에피소드 2 + 결정 50 + 공방장의 기억 조각 1"},{"lv":6,"reward":"전투 대사 추가"},{"lv":7,"reward":"인연 에피소드 3 + 결정 50"},{"lv":8,"reward":"로비 상호작용 추가"},{"lv":9,"reward":"공방장의 기억 조각 2"},{"lv":10,"reward":"인연 에피소드 4(최종) + 결정 100 + 의상 색 변경 1 + 칭호"}]},"dungeonStars":{"star1":"승리","star2":"4턴 이내 승리","star3":"승리 시 파티 체력 50% 이상","sweepUnlock":3,"sweepMax":12},"dungeonTiers":[{"tier":1,"stage":10,"pct":25},{"tier":2,"stage":20,"pct":40},{"tier":3,"stage":30,"pct":55},{"tier":4,"stage":40,"pct":70},{"tier":5,"stage":50,"pct":85},{"tier":6,"stage":60,"pct":100}],"dungeons":[{"id":"dg_ink","name":"잉크 저장고","unlock":5,"cost":20,"yield":{"ink":24000},"note":"캐릭터 경험치(잉크 아이템 합산 환산)"},{"id":"dg_credit","name":"반짝이는 금고","unlock":5,"cost":20,"yield":{"credits":40000}},{"id":"dg_oil","name":"태엽 공장","unlock":10,"cost":20,"yield":{"oil":12000,"alloy":1}},{"id":"dg_seal","name":"인장 회랑","unlock":10,"cost":20,"yield":{"seal":3}},{"id":"dg_book","name":"금서 열람실","unlock":15,"cost":20,"yield":{"book":8}},{"id":"dg_polish","name":"연마 작업장","unlock":20,"cost":20,"yield":{"polish":20}}],"exchangeShops":{"shard":{"currency":"shard","name":"기억 결정체 교환","resetMonthly":true,"items":[{"item":"ticket_limited","cost":5,"limit":5},{"item":"ticket_weapon","cost":5,"limit":5},{"item":"skin_dye","cost":30,"limit":1,"note":"보유 캐릭터 의상 색 변경 1회"}]},"afterglow":{"currency":"afterglow","name":"잔광 교환","resetMonthly":true,"items":[{"item":"ticket_standard","cost":75,"limit":5},{"item":"ticket_limited","cost":75,"limit":5},{"item":"credit","cost":1,"qty":400,"limit":500},{"item":"gift_mid","cost":20,"limit":20}]},"bossToken":{"currency":"boss_token","name":"보스 토큰 교환","resetWeekly":true,"items":[{"item":"refine_core","cost":60,"limit":2,"note":"기본(R) 무기 정련 1단계"},{"item":"book","cost":10,"limit":6},{"item":"polish","cost":5,"limit":20}]},"event":{"currency":"event_token","name":"시즌 이벤트 상점(이벤트마다)","items":[{"item":"ticket_limited","cost":400,"limit":3,"note":"첫 이벤트 3장, 두 번째 이벤트 2장 = 시즌 5장"},{"item":"crystal_free","cost":100,"qty":80,"limit":6},{"item":"core","cost":300,"limit":2},{"item":"gift_large","cost":60,"limit":10},{"item":"event_relic_unlock","cost":500,"limit":1,"note":"이벤트 탐사 전용 유물 상시화"}]}},"levelling":{"charXp":{"k":40,"a":4,"sqDiv":10},"weaponXpRatio":0.5,"creditsPerXp":0.5,"xpItems":[{"id":"ink_s","name":"기록 잉크(소)","xp":1000},{"id":"ink_m","name":"기록 잉크(중)","xp":5000},{"id":"ink_l","name":"기록 잉크(대)","xp":20000}],"weaponXpItems":[{"id":"oil_s","name":"태엽 기름(소)","xp":1000},{"id":"oil_m","name":"태엽 기름(중)","xp":5000},{"id":"oil_l","name":"태엽 기름(대)","xp":20000}],"charAscension":[{"stage":1,"cap":30,"account":10,"seals":4,"cores":0,"credits":10000},{"stage":2,"cap":40,"account":20,"seals":8,"cores":0,"credits":20000},{"stage":3,"cap":50,"account":30,"seals":12,"cores":2,"credits":40000},{"stage":4,"cap":60,"account":40,"seals":16,"cores":4,"credits":60000}],"weaponAscension":[{"stage":1,"cap":30,"alloys":2,"credits":5000},{"stage":2,"cap":40,"alloys":4,"credits":10000},{"stage":3,"cap":50,"alloys":6,"credits":20000},{"stage":4,"cap":60,"alloys":8,"credits":30000}],"skillCosts":[{"to":2,"books":2,"credits":5000,"cores":0},{"to":3,"books":4,"credits":10000,"cores":0},{"to":4,"books":6,"credits":15000,"cores":0},{"to":5,"books":8,"credits":20000,"cores":0},{"to":6,"books":10,"credits":30000,"cores":0},{"to":7,"books":14,"credits":40000,"cores":0},{"to":8,"books":18,"credits":60000,"cores":0},{"to":9,"books":24,"credits":80000,"cores":2},{"to":10,"books":32,"credits":120000,"cores":2}],"skillLines":["card","ult"],"gearCraft":{"polish":20,"credits":10000},"gearEnhance":{"polishPerLevel":1,"creditsPerLevel":1000}},"materials":[{"id":"credits","name":"크레딧","use":"모든 육성"},{"id":"ink","name":"기록 잉크","use":"캐릭터 경험치"},{"id":"oil","name":"태엽 기름","use":"무기 경험치"},{"id":"seal","name":"기억 인장","use":"캐릭터 승급"},{"id":"alloy","name":"기계 합금","use":"무기 승급"},{"id":"book","name":"공방 교본","use":"스킬 레벨"},{"id":"polish","name":"연마재","use":"장비 제작·강화"},{"id":"core","name":"승급 핵","use":"캐릭터 승급 3·4단계, 스킬 Lv.9·10"},{"id":"gift","name":"선물","use":"인연 경험치"}],"missions":{"daily":{"points":100,"tasks":[{"id":"d_login","text":"접속","pts":20},{"id":"d_stamina","text":"집중 120 사용","pts":20},{"id":"d_battle","text":"전투 3회 승리","pts":20},{"id":"d_level","text":"캐릭터 또는 무기 레벨 올리기 1회","pts":20},{"id":"d_affinity","text":"인연 선물 1회 또는 로비 대화 1회","pts":20}],"milestones":[{"at":20,"crystals":10,"credits":10000},{"at":40,"crystals":10,"stamina":30},{"at":60,"crystals":10,"ink_m":2},{"at":80,"crystals":10,"credits":10000},{"at":100,"crystals":20,"passXp":1000}]},"weekly":{"crystals":420,"standardTicket":2,"passXp":4000,"tasks":["일일 임무 5일 완료","주간 보스 보상 3회","탐사 2회 완주","기억 저장 1회","성장 던전 20회"]},"weeklyRun":{"crystals":200,"text":"이번 주 탐사(짧게 이상) 첫 완주 보상"},"attendance":{"weeklyCrystals":160,"text":"7일 누적 접속 보상(주 단위, 연속 불필요)"}},"products":{"crystalPacks":[{"id":"pk_160","crystals":160,"krw":2400,"firstBonus":160},{"id":"pk_800","crystals":800,"krw":11000,"firstBonus":800},{"id":"pk_1680","crystals":1680,"krw":22000,"firstBonus":1680},{"id":"pk_3440","crystals":3440,"krw":44000,"firstBonus":3440},{"id":"pk_7000","crystals":7000,"krw":88000,"firstBonus":7000}],"monthly":{"id":"monthly","name":"공방 정기권","krw":6900,"days":30,"upfrontPaid":300,"dailyFree":90,"total":3000,"autoRenew":false,"maxStackDays":180},"pass":{"id":"pass","name":"시즌 패스","krw":12900,"levels":50,"xpPerLevel":1000,"crystals":2560,"limitedTicket":0,"plus":{"krw":24900,"levelsGranted":10,"extra":"한정 의상 1(패스 전용)"}},"skins":[{"tier":1,"krw":9900,"scope":"일러스트·로비 모델 색/소품 변경"},{"tier":2,"krw":19800,"scope":"새 의상(로비·전투 모델·일러스트)"},{"tier":3,"krw":29800,"scope":"새 의상 + 필살기 연출·전용 대사"}],"rules":["유료/무료 결정을 분리 원장으로 관리(환불·청약철회 대응)","모든 상품 페이지에 구성·확률·기간 표시","랜덤 상품은 모집(가챠) 외에 판매하지 않는다"]},"recordRift":{"unlock":20,"cycleDays":14,"cyclesPerSeason":3,"floors":[{"floor":1,"stage":40,"reward":200},{"floor":2,"stage":45,"reward":160},{"floor":3,"stage":50,"reward":160},{"floor":4,"stage":55,"reward":120},{"floor":5,"stage":60,"reward":80},{"floor":6,"stage":60,"hpBps":12500,"dmgBps":12000,"reward":80}],"battlesPerFloor":3,"rule":"층마다 3연전. 1·3전은 1파티, 2전은 2파티(서로 다른 6명). 파티별 체력은 층 안에서 이어진다. 저장된 기억 덱만 사용(탐사 보상 없음). 층마다 균열 규칙 1개(14일마다 교체).","modifiers":[{"id":"rift_reserve","name":"시간의 틈","text":"예약으로 해결되는 피해 +30%, 즉시 피해 -10%."},{"id":"rift_break","name":"금 간 거울","text":"균열 게이지 +50%, 균열 시 받는 피해 +50%(기본 +25% 대신)."},{"id":"rift_ink","name":"번지는 잉크","text":"매 턴 시작 시 얼룩 1장이 버린 더미에 섞인다. 소멸시킨 카드 1장당 피해 +3%."},{"id":"rift_debt","name":"이자의 밤","text":"부채 상한 +2, 부채가 있으면 모든 피해 +15%."},{"id":"rift_bloom","name":"서리 온실","text":"성장 상한 +2, 성장 카드 해결 시 방어 +3."},{"id":"rift_echo","name":"공명하는 무대","text":"잔향 최대 +2, 서로 다른 캐릭터 카드를 연속 3장 내면 행동력 +1(턴당 1회)."}]},"seasonIncome":{"days":42,"note":"v0.6 기준선 A안을 유지. 실제 운영 보상표는 이 표를 원장으로 서버가 지급.","f2pRecurring":[{"src":"일일 임무","per":60,"times":42,"crystals":2520},{"src":"주간 임무","per":420,"times":6,"crystals":2520},{"src":"주간 탐사 첫 완주","per":200,"times":6,"crystals":1200},{"src":"주간 누적 접속","per":160,"times":6,"crystals":960},{"src":"시즌 이벤트","per":2880,"times":1,"crystals":2880},{"src":"무료 패스","per":1440,"times":1,"crystals":1440},{"src":"기록 균열(최대)","per":800,"times":3,"crystals":2400,"optional":true}],"tickets":{"limitedTicket":9,"limitedSources":"시즌 이벤트 상점 5 + 무료 패스 4","standardTicket":12,"standardSources":"주간 임무 2×6"},"f2p":{"crystals":13920,"limitedTicket":9,"standardTicket":12},"oneTime":{"story":"storyChapters.firstClear 합계","beginnerBanner":"첫 공방 모집 50회 = 상시권 40장(10회=8장)","launch":{"crystals":1600,"standardTicket":10}}},"stamina":{"name":"집중","cap":240,"regenMinutes":6,"dailyRegen":240,"missionBonusPerDay":30,"refillCrystals":[50,100,100,150],"refillAmount":60,"overflowCap":999},"stats":{"levelCap":60,"referencePower":40,"referenceHpPerChar":81,"charPower":{"base":20,"num":14,"den":60},"weaponPower":{"SSR":{"base":2,"k":6},"SR":{"base":1,"k":5},"R":{"base":1,"k":3}},"hpBase":60,"gear":{"maxEnhance":15,"armorFlatBase":2,"armorBpsBase":300,"armorBpsPer":60,"accessoryBpsBase":250,"accessoryBpsPer":50},"skill":{"maxLevel":10,"bpsPerLevel":400,"resonanceBonus":2},"capacity":{"base":6,"ascension":[{"asc":2,"add":1},{"asc":4,"add":1}]},"stageScale":{"refWeapon":"SR"}},"storyChapters":[{"ch":0,"name":"프롤로그: 자정에 멈춘 시계","stage":1,"zones":[1],"bosses":["b_bell"],"firstClear":{"crystals":300,"standardTicket":5},"unlockAccount":1,"tutorial":true},{"ch":1,"name":"1장: 잉크가 번지는 거리","stage":8,"zones":[1],"bosses":["b_bell"],"firstClear":{"crystals":600,"standardTicket":2},"unlockAccount":3},{"ch":2,"name":"2장: 열지 말 것","stage":16,"zones":[1],"bosses":["b_notary"],"firstClear":{"crystals":600,"limitedTicket":1},"unlockAccount":8},{"ch":3,"name":"3장: 잠긴 기록소","stage":26,"zones":[1,2],"bosses":["b_garden","b_archivist"],"firstClear":{"crystals":800,"limitedTicket":1},"unlockAccount":15},{"ch":4,"name":"4장: 갚지 못한 계약","stage":36,"zones":[3],"bosses":["b_usurer"],"firstClear":{"crystals":800,"limitedTicket":1},"unlockAccount":22,"authored":false},{"ch":5,"name":"5장: 끝나지 않는 곡","stage":46,"zones":[4],"bosses":["b_overture"],"firstClear":{"crystals":800,"limitedTicket":1},"unlockAccount":30,"authored":false},{"ch":6,"name":"6장: 마지막 태엽","stage":56,"zones":[4,5],"bosses":["b_overture","b_nameless"],"firstClear":{"crystals":1000,"limitedTicket":2},"unlockAccount":38,"authored":false}],"weeklyBoss":{"unlock":15,"claimsPerWeek":3,"resetDay":"MON 05:00 KST","perClaim":{"core":2,"credits":20000,"bossToken":40},"difficulty":[{"lv":1,"stage":30},{"lv":2,"stage":40},{"lv":3,"stage":50},{"lv":4,"stage":60},{"lv":5,"stage":60,"hpBps":13000,"dmgBps":12000}],"note":"보상은 주 3회, 모든 보스 공유. 연습·재도전은 무제한(보상 없음). 저장된 기억 덱으로 1전투."}}}</script>
+<script>
+/* Stable-identity memory operations. The original one-delta proposal remains available as recover.
+   before/after are server-created snapshots, never arbitrary client payloads.
+   schema: { characterId: [{ key: persistedInstanceKey, id, plus?, from?, mods?, assigned? }] }
+   Selection is a server-derived change ID. Capacity is checked on the COMPLETE result.
+*/
+(function(root){
+'use strict';
+const clone=o=>JSON.parse(JSON.stringify(o));
+function fail(code){const e=new Error(code);e.code=code;throw e;}
+function inspect(data,snap){
+ if(!snap||typeof snap!=='object'||Array.isArray(snap))fail('INVALID_SNAPSHOT');
+ const cards=Object.fromEntries(data.cards.map(c=>[c.id,c]));
+ const parts=Object.fromEntries(data.parts.map(p=>[p.id,p]));
+ const known=new Set(data.characters.map(c=>c.id));const seen=new Set();
+ for(const [cid,rows] of Object.entries(snap)){
+  if(!known.has(cid)||!Array.isArray(rows))fail('INVALID_SNAPSHOT');
+  for(const sp of rows){
+   if(!sp||typeof sp!=='object')fail('INVALID_CARD');
+   if(typeof sp.key!=='string'||!sp.key||seen.has(sp.key))fail('IDENTITY_REQUIRED');seen.add(sp.key);
+   const d=cards[sp.id];if(!d||!['common',cid].includes(d.owner)||sp.token||sp.weapon)fail('INVALID_CARD');
+   if(d.owner==='common'&&sp.assigned!==cid)fail('INVALID_ASSIGNMENT');
+   if(sp.from){const origin=cards[sp.from];if(!origin?.growth||origin.owner!==cid||!origin.evo?.includes(sp.id))fail('INVALID_EVOLUTION');}
+   if(data.cards.some(c=>c.evo?.includes(sp.id))&&!sp.from)fail('INVALID_EVOLUTION');
+   if(sp.plus!==undefined&&typeof sp.plus!=='boolean')fail('INVALID_UPGRADE');
+   if(sp.mods!=null&&(typeof sp.mods!=='object'||Array.isArray(sp.mods)||Object.keys(sp.mods).some(sl=>!['c','e'].includes(sl))))fail('INVALID_PART');
+   for(const sl of ['c','e'])if(sp.mods?.[sl]){const p=parts[sp.mods[sl]];if(!p||p.slot!==({c:'circuit',e:'engraving'}[sl]))fail('INVALID_PART');}
+  }
+ }
+ return {cards,parts};
+}
+function listChanges(data,before,after){
+ inspect(data,before);inspect(data,after);
+ if(JSON.stringify(Object.keys(before).sort())!==JSON.stringify(Object.keys(after).sort()))fail('CHARACTER_SET_MISMATCH');
+ const owners=new Map(Object.entries(before).flatMap(([cid,rows])=>rows.map(c=>[c.key,cid])));
+ for(const [cid,rows] of Object.entries(after))for(const c of rows)if(owners.has(c.key)&&owners.get(c.key)!==cid)fail('REASSIGNMENT_REQUIRES_SEPARATE_FLOW');
+ const out=[];const push=(cid,key,kind,value)=>out.push({id:`delta:${encodeURIComponent(cid)}:${encodeURIComponent(key)}:${kind}${kind==='part'?':'+value.slot:''}`,cid,key,kind,value});
+ for(const cid of Object.keys(before).sort()){
+  const old=new Map(before[cid].map(c=>[c.key,c]));const now=new Map(after[cid].map(c=>[c.key,c]));
+  for(const [key,a] of old){
+   const b=now.get(key);if(!b){push(cid,key,'remove');continue;}
+   if(a.assigned!==b.assigned)fail('REASSIGNMENT_REQUIRES_SEPARATE_FLOW');
+   if(a.id!==b.id||a.from!==b.from){
+    const root=data.cards.find(c=>c.id===(a.from||a.id));
+    if(!root?.growth||a.from||b.from!==a.id||!root.evo?.includes(b.id))fail('UNSUPPORTED_TRANSFORMATION');
+    push(cid,key,'evolve',{id:b.id,from:b.from});
+   }
+   if(!!a.plus!==!!b.plus)push(cid,key,'upgrade',!!b.plus);
+   for(const sl of ['c','e'])if((a.mods?.[sl]||null)!==(b.mods?.[sl]||null))push(cid,key,'part',{slot:sl,part:b.mods?.[sl]||null});
+  }
+  for(const [key,c] of now)if(!old.has(key))push(cid,key,'add',clone(c));
+ }
+ return out;
+}
+function baseline(data,cid){
+ return [...data.cards.filter(c=>c.owner===cid&&c.start).map(c=>({id:c.id})),{id:data.startingCommon[cid],assigned:cid}].map((sp,i)=>({...sp,key:`base:${cid}:${i}`}));
+}
+function cost(data,cid,specs,baseSpecs){
+ const {cards,parts}=inspect(data,{[cid]:specs});const C=data.rules.memoryCost;
+ const base=baseSpecs||baseline(data,cid);
+ const pool=[...specs];let total=0;
+ const upgradeCost=c=>(c.plus?C.upgrade:0)+(c.from?C.evolution:0)+['c','e'].reduce((s,sl)=>s+(c.mods?.[sl]?(parts[c.mods[sl]].rarity==='rare'?C.partRare:C.partCommon):0),0);
+ for(const sp of base){const i=pool.findIndex(c=>baseSpecs?c.key===sp.key:(c.from||c.id)===sp.id);if(i<0)total+=C.remove;else total+=upgradeCost(pool.splice(i,1)[0]);}
+ for(const c of pool){const d=cards[c.from||c.id];total+=(d.owner==='common'?C.addCommon:({B:C.addB,A:C.addA,S:C.addS}[d.rar]||C.addA))+upgradeCost(c);}
+ return total;
+}
+function applyChanges(before,changes){
+ const out=clone(before);
+ for(const ch of changes){
+  const rows=out[ch.cid];const idx=rows.findIndex(c=>c.key===ch.key);
+  if(ch.kind==='add')rows.push(clone(ch.value));
+  else if(ch.kind==='remove')rows.splice(idx,1);
+  else if(ch.kind==='evolve'){rows[idx].id=ch.value.id;rows[idx].from=ch.value.from;}
+  else if(ch.kind==='upgrade')rows[idx].plus=ch.value;
+  else if(ch.kind==='part')rows[idx].mods={...rows[idx].mods,[ch.value.slot]:ch.value.part};
+ }
+ return out;
+}
+function apply(data,before,after,selectedIds,capacities,options={}){
+ if(!Array.isArray(selectedIds)||selectedIds.some(id=>typeof id!=='string')||new Set(selectedIds).size!==selectedIds.length)fail('INVALID_SELECTION');
+ const changes=listChanges(data,before,after);
+ const selected=selectedIds.map(id=>{const ch=changes.find(c=>c.id===id);if(!ch)fail('INVALID_SELECTION');return ch;});
+ const out=applyChanges(before,selected);
+ inspect(data,out);
+ let error=options.defeat&&selectedIds.length>1?'DEFEAT_KEEP_ONE':null;
+ const used={};for(const cid of Object.keys(out)){used[cid]=cost(data,cid,out[cid],options.baseline?.[cid]);if(!Number.isInteger(capacities[cid])||used[cid]>capacities[cid])error=error||'OVER_CAPACITY';}
+ if(error&&!options.preview)fail(error);
+ return {memory:out,used,error};
+}
+function recover(data,before,after,selectedIds,capacities){
+ if(!Array.isArray(selectedIds)||selectedIds.length>1)fail('DEFEAT_KEEP_ONE');
+ const {memory,used}=apply(data,before,after,selectedIds,capacities,{defeat:true});return {memory,used};
+}
+function migrate(data,legacy,capacities){
+ if(!legacy||typeof legacy!=='object'||Array.isArray(legacy))fail('INVALID_SNAPSHOT');
+ const state={schema:'mf-memory-v2',version:0,memory:{},quarantine:{},legacyBackup:clone(legacy),history:[],receipts:{}};
+ const seen=new Set();
+ for(const cid of Object.keys(legacy).sort()){
+  try{
+   if(!data.characters.some(c=>c.id===cid)||!Array.isArray(legacy[cid]))fail('INVALID_SNAPSHOT');
+   const remaining=baseline(data,cid);
+   const rows=legacy[cid].map((raw,i)=>{
+    const sp=typeof raw==='string'?{id:raw}:clone(raw);
+    if(!sp||typeof sp!=='object')fail('INVALID_CARD');
+    const pos=remaining.findIndex(b=>b.id===(sp.from||sp.id));const b=pos<0?null:remaining.splice(pos,1)[0];
+    if(!sp.key)sp.key=b?.key||`legacy:${cid}:${i}`;
+    if(data.cards.find(c=>c.id===sp.id)?.owner==='common'&&!sp.assigned)sp.assigned=cid;
+    return sp;
+   });
+   inspect(data,{[cid]:rows});
+   if(rows.some(c=>seen.has(c.key)))fail('IDENTITY_REQUIRED');
+   if(!Number.isInteger(capacities[cid])||cost(data,cid,rows,baseline(data,cid))>capacities[cid])fail('OVER_CAPACITY');
+   state.memory[cid]=rows;rows.forEach(c=>seen.add(c.key));
+  }catch(e){state.quarantine[cid]={code:e.code||'INVALID_SNAPSHOT',original:clone(legacy[cid])};}
+ }
+ return state;
+}
+const api={inspect,listChanges,cost,recover,baseline,apply,applyChanges,migrate};
+if(typeof module!=='undefined'&&module.exports)module.exports=api;
+root.MFMemoryV2=api;
+})(typeof globalThis!=='undefined'?globalThis:this);
+
+</script>
 <script>
 /*
  * Memory Forge v0.7 — executable rules reference (battle · run · memory save · gacha).
@@ -303,6 +425,7 @@ table.cards th { color: var(--muted); font-weight: 600; }
   // ───────────────────────── basics ─────────────────────────
   class RuleError extends Error { constructor(code, detail) { super(code); this.code = code; this.detail = detail; } }
   const clone = (o) => JSON.parse(JSON.stringify(o));
+  const MemoryV2 = typeof module !== 'undefined' && module.exports ? require('../proposals/memory_v2.cjs') : root.MFMemoryV2;
   const BPS = 10000;
 
   // xoshiro128** seeded through splitmix32 (128-bit state; seed is chosen by the server, never the client)
@@ -1748,21 +1871,45 @@ table.cards th { color: var(--muted); font-weight: 600; }
         runFlags: { envelopeUsed: false, refusals: 0, nextApBonus: 0 }, offered: {}, result: null, startMemory: clone(setup.memory || {}),
         seqCard: 0,
       };
+      if (setup.memoryPolicy === 'v2') {
+        if (!s.party.length || new Set(s.party.map(p => p.charId)).size !== s.party.length || s.party.some(p => !ix.chars[p.charId])) throw new RuleError('INVALID_SNAPSHOT');
+        if (typeof setup.runId !== 'string' || !setup.runId) throw new RuleError('RUN_ID_REQUIRED');
+        if (!Number.isInteger(setup.memoryVersion ?? 0) || (setup.memoryVersion ?? 0) < 0) throw new RuleError('INVALID_SNAPSHOT');
+        s.schema = 'mf-run-memory-v2'; s.memoryPolicy = 'v2'; s.runId = setup.runId; s.memoryVersion = setup.memoryVersion ?? 0;
+        s.memoryBaseline = {}; s.memoryBefore = {};
+        for (const p of s.party) {
+          s.memoryBaseline[p.charId] = MemoryV2.baseline(data, p.charId);
+          s.memoryBefore[p.charId] = clone(setup.memory?.[p.charId] || s.memoryBaseline[p.charId]);
+        }
+        MemoryV2.inspect(data, s.memoryBefore);
+        for (const p of s.party) if (MemoryV2.cost(data, p.charId, s.memoryBefore[p.charId], s.memoryBaseline[p.charId]) > Run.capacityOf(ix, p)) throw new RuleError('OVER_CAPACITY');
+      }
       // party max HP = sum of character HP (60 + Lv + armour); reference battle = 81 per character
       for (const p of s.party) { const d = Stats.derive(ix, p); Object.assign(p, { power4: d.power4, hp: d.hp, gearBps: d.gearBps, skillLv: d.skillLv, ultLv: d.ultLv }); }
       s.maxHp = s.party.reduce((a, p) => a + p.hp, 0); s.hp = s.maxHp; s.hpRef = s.maxHp;
       // deck = each character's memory deck (or base kit) + weapon card
       for (const p of s.party) {
-        const specs = (setup.memory && setup.memory[p.charId]) || Run.baseKit(ix, p.charId);
-        for (const sp of specs) s.deck.push({ ...clone(sp), key: `k${++s.seqCard}`, owner: ix.cards[sp.id].owner, assigned: sp.assigned || (ix.cards[sp.id].owner === 'common' ? p.charId : null) });
+        const specs = s.memoryPolicy === 'v2' ? clone(setup.useMemory === false ? s.memoryBaseline[p.charId] : s.memoryBefore[p.charId]) : ((setup.memory && setup.memory[p.charId]) || Run.baseKit(ix, p.charId));
+        if (s.memoryPolicy === 'v2' && setup.useMemory === false) for (const sp of specs) {
+          if (!s.memoryBefore[p.charId].some(old => old.key === sp.key && old.id === sp.id && !old.from)) sp.key = Run.nextCardKey(s);
+        }
+        for (const sp of specs) s.deck.push({ ...clone(sp), key: s.memoryPolicy === 'v2' ? sp.key : Run.nextCardKey(s), owner: ix.cards[sp.id].owner, assigned: sp.assigned || (ix.cards[sp.id].owner === 'common' ? p.charId : null) });
         const w = ix.weapons[p.weaponId] || ix.weapons[Run.defaultWeapon(ix, p.charId)];
-        s.deck.push({ id: w.card, key: `k${++s.seqCard}`, owner: 'weapon', wielder: p.charId, weapon: true });
+        s.deck.push({ id: w.card, key: Run.nextCardKey(s), owner: 'weapon', wielder: p.charId, weapon: true });
       }
       for (const p of s.party) s.offered[p.charId] = 0;
       for (const z of s.zones) if (!data.encounters[String(z)]) throw new RuleError('ZONE_NOT_AUTHORED', { zone: z });
       s.zone = s.zones[0];
       s.map = Run.genMap(s, s.zone);
-      return new Run(data, s);
+      const run = new Run(data, s);
+      if (s.memoryPolicy === 'v2' && setup.useMemory === false) s.playBefore = run.deckMemorySnapshot();
+      return run;
+    }
+    static nextCardKey(s) {
+      if (s.memoryPolicy !== 'v2') return `k${++s.seqCard}`;
+      let key;
+      do { key = `run:${s.runId}:${++s.seqCard}`; } while (s.deck.some(c => c.key === key) || Object.values(s.memoryBefore).some(rows => rows.some(c => c.key === key)));
+      return key;
     }
     static baseKit(ix, charId) {
       const ch = ix.chars[charId];
@@ -1874,7 +2021,7 @@ table.cards th { color: var(--muted); font-weight: 600; }
       s.hp = bs.hp; s.runFlags = { ...s.runFlags, ...bs.runFlags };
       // persist growth from battle instances back to the run deck
       for (const c of Object.values(bs.cards)) if (c.key) { const d = s.deck.find((x) => x.key === c.key); if (d) d.growth = c.growth; }
-      if (bs.phase === 'DEFEAT') { s.phase = 'DEFEAT'; s.result = { outcome: 'defeat', floor: s.floor }; this.log('패배'); s.pending = { type: 'save', defeat: true }; this.battle = null; s.battle = null; return; }
+      if (bs.phase === 'DEFEAT') { s.phase = 'DEFEAT'; s.result = { outcome: 'defeat', floor: s.floor }; this.log('패배'); s.pending = { type: 'save', defeat: true }; this.captureMemory(); this.battle = null; s.battle = null; return; }
       s.stats.battles += 1; s.stats.kills += bs.enemies.filter((e) => !e.alive).length;
       const type = s.battleType;
       if (type === 'elite') s.stats.elites += 1;
@@ -1944,7 +2091,7 @@ table.cards th { color: var(--muted); font-weight: 600; }
       const s = this.s; const p = s.pending;
       if (!p || p.type !== 'reward' || !p.cards.includes(cardId)) throw new RuleError('BAD_REWARD');
       const def = this.ix.cards[cardId];
-      s.deck.push({ id: cardId, key: `k${++s.seqCard}`, owner: def.owner, assigned: def.owner === 'common' ? s.party[0].charId : null, gained: true });
+      s.deck.push({ id: cardId, key: Run.nextCardKey(s), owner: def.owner, assigned: def.owner === 'common' ? s.party[0].charId : null, gained: true });
       p.cards = []; this.log(`카드 획득: ${def.name}`);
     }
     skipCard() {
@@ -1979,21 +2126,23 @@ table.cards th { color: var(--muted); font-weight: 600; }
       s.pending = null;
       if (n && n.type === 'boss') {
         if (s.zoneIdx < s.zones.length - 1) { s.phase = 'ARCHIVE'; s.pending = { type: 'archive' }; return; }
-        s.phase = 'VICTORY'; s.result = { outcome: 'clear', floor: s.floor }; s.pending = { type: 'save', defeat: false }; return;
+        s.phase = 'VICTORY'; s.result = { outcome: 'clear', floor: s.floor }; s.pending = { type: 'save', defeat: false }; this.captureMemory(); return;
       }
       s.phase = 'MAP';
     }
     archive(choice) {
       const s = this.s;
       if (s.phase !== 'ARCHIVE') throw new RuleError('WRONG_PHASE');
-      if (choice === 'return') { s.phase = 'VICTORY'; s.result = { outcome: 'return', floor: s.floor }; s.pending = { type: 'save', defeat: false }; return; }
+      if (choice === 'return') { s.phase = 'VICTORY'; s.result = { outcome: 'return', floor: s.floor }; s.pending = { type: 'save', defeat: false }; this.captureMemory(); return; }
       s.hp = Math.min(s.maxHp, s.hp + Math.floor(s.maxHp * 0.15));
       s.zoneIdx += 1; s.zone = s.zones[s.zoneIdx]; s.pos = null; s.floor = 0; s.map = Run.genMap(s, s.zone); s.phase = 'MAP'; s.pending = null;
     }
     assign(key, charId) {
       const d = this.s.deck.find((c) => c.key === key);
       if (!d || d.owner !== 'common' || !this.s.party.some((p) => p.charId === charId)) throw new RuleError('BAD_ASSIGN');
+      if (this.s.memoryPolicy === 'v2' && Object.values(this.s.memoryBefore).some(rows => rows.some(c => c.key === key))) throw new RuleError('REASSIGNMENT_REQUIRES_SEPARATE_FLOW');
       d.assigned = charId;
+      if (this.s.pending?.type === 'save') this.captureMemory();
     }
     // rest
     rest(choice, key) {
@@ -2036,8 +2185,10 @@ table.cards th { color: var(--muted); font-weight: 600; }
       const s = this.s; const i = s.partsFound.indexOf(partId); if (i < 0) throw new RuleError('NO_PART');
       const d = s.deck.find((c) => c.key === key); if (!d || d.weapon) throw new RuleError('BAD_CARD');
       const part = this.ix.parts[partId];
+      if (s.memoryPolicy === 'v2' && (!part || !['circuit', 'engraving'].includes(part.slot))) throw new RuleError('INVALID_PART');
       d.mods = { ...(d.mods || {}), [part.slot === 'circuit' ? 'c' : 'e']: partId };
       s.partsFound.splice(i, 1);
+      if (s.pending?.type === 'save') this.captureMemory();
     }
     // shop
     makeShop() {
@@ -2061,7 +2212,7 @@ table.cards th { color: var(--muted); font-weight: 600; }
       if (!item) throw new RuleError('NOT_FOR_SALE');
       if (s.coins < item.price) throw new RuleError('COINS_LOW');
       s.coins -= item.price; item.sold = true;
-      if (kind === 'cards') { const def = this.ix.cards[id]; s.deck.push({ id, key: `k${++s.seqCard}`, owner: def.owner, assigned: def.owner === 'common' ? s.party[0].charId : null, gained: true }); }
+      if (kind === 'cards') { const def = this.ix.cards[id]; s.deck.push({ id, key: Run.nextCardKey(s), owner: def.owner, assigned: def.owner === 'common' ? s.party[0].charId : null, gained: true }); }
       if (kind === 'parts') s.partsFound.push(id);
       if (kind === 'relics') s.relics.push(id);
     }
@@ -2080,9 +2231,9 @@ table.cards th { color: var(--muted); font-weight: 600; }
       if (fx.maxHp) { s.maxHp += hpk(fx.maxHp); s.hp = Math.min(s.hp, s.maxHp); }
       if (fx.maxHpPct) { s.maxHp = Math.max(1, Math.floor(s.maxHp * (100 + fx.maxHpPct) / 100)); s.hp = Math.min(s.hp, s.maxHp); }
       if (fx.nextApBonus) s.runFlags.nextApBonus = (s.runFlags.nextApBonus || 0) + fx.nextApBonus;
-      if (fx.curse) s.deck.push({ id: fx.curse, key: `k${++s.seqCard}`, owner: 'curse', gained: true });
+      if (fx.curse) s.deck.push({ id: fx.curse, key: Run.nextCardKey(s), owner: 'curse', gained: true });
       if (fx.relic) { const r = this.relicChoices(fx.relic === 'common' ? 'common' : 'elite')[0]; if (r) s.relics.push(r); }
-      if (fx.card) { const chs = s.party.map((x) => x.charId); const pool = this.data.cards.filter((c) => chs.includes(c.owner) && c.rar === fx.card && c.pool !== false); const c = Rng.pick(s.rng, pool); s.deck.push({ id: c.id, key: `k${++s.seqCard}`, owner: c.owner, gained: true }); }
+      if (fx.card) { const chs = s.party.map((x) => x.charId); const pool = this.data.cards.filter((c) => chs.includes(c.owner) && c.rar === fx.card && c.pool !== false); const c = Rng.pick(s.rng, pool); s.deck.push({ id: c.id, key: Run.nextCardKey(s), owner: c.owner, gained: true }); }
       if (fx.part) s.partsFound.push(...this.partChoices(false, fx.part, true).slice(0, 1));
       if (fx.partRare) s.partsFound.push(...this.partChoices(true, 1));
       if (fx.variation) { s.phase = 'FORGE'; s.pending = { type: 'forge', uses: fx.variation, offers: null, fromEvent: true }; return; }
@@ -2090,7 +2241,7 @@ table.cards th { color: var(--muted); font-weight: 600; }
       // card choices: key may be one deck key or an array (one per copied/removed card). Missing picks fall back to
       // curses first, then the first non-weapon card (used by bots and by the prototype's auto-pick).
       const keys = Array.isArray(key) ? key : (key ? [key] : []);
-      if (fx.cardCopy) { const d = s.deck.find((c) => c.key === keys[0] && !c.weapon) || s.deck.find((c) => !c.weapon); s.deck.push({ ...clone(d), key: `k${++s.seqCard}`, gained: true }); }
+      if (fx.cardCopy) { const d = s.deck.find((c) => c.key === keys[0] && !c.weapon) || s.deck.find((c) => !c.weapon); s.deck.push({ ...clone(d), key: Run.nextCardKey(s), gained: true }); }
       if (fx.cardRemove) {
         for (let k = 0; k < fx.cardRemove; k++) {
           let i = keys[k] ? s.deck.findIndex((c) => c.key === keys[k] && !c.weapon) : -1;
@@ -2116,6 +2267,23 @@ table.cards th { color: var(--muted); font-weight: 600; }
       return cap;
     }
     memoryChanges() {
+      if (this.s.memoryPolicy === 'v2') {
+        const s = this.s; const after = s.memoryAfter || this.memorySnapshot();
+        const changes = MemoryV2.listChanges(this.data, s.memoryBefore, after);
+        const out = {};
+        for (const p of s.party) {
+          const cid = p.charId;
+          out[cid] = { capacity: Run.capacityOf(this.ix, p), before: clone(s.memoryBefore[cid]), after: clone(after[cid]),
+            usedBefore: MemoryV2.cost(this.data, cid, s.memoryBefore[cid], s.memoryBaseline[cid]),
+            changes: changes.filter(ch => ch.cid === cid).map(ch => {
+              const card = [...after[cid], ...s.memoryBefore[cid]].find(c => c.key === ch.key);
+              const name = this.ix.cards[card.id].name;
+              const label = ch.kind === 'add' ? `${name} 추가` : ch.kind === 'remove' ? `${name} 제거` : ch.kind === 'evolve' ? `${name} 진화` : ch.kind === 'upgrade' ? `${name} 강화 변경` : `${name} ${ch.value.slot === 'c' ? '회로' : '각인'} ${ch.value.part ? '교체' : '제거'}`;
+              return { ...ch, label };
+            }) };
+        }
+        return out;
+      }
       const s = this.s; const ix = this.ix; const C = ix.rules.memoryCost; const out = {};
       for (const p of s.party) {
         const base = Run.baseKit(ix, p.charId);
@@ -2144,7 +2312,8 @@ table.cards th { color: var(--muted); font-weight: 600; }
       return out;
     }
     // selection: {charId: [indices of changes to keep]} → returns new memory {charId:[spec]}
-    commitMemory(selection) {
+    commitMemory(selection, currentMemory) {
+      if (this.s.memoryPolicy === 'v2') return this.commitMemoryV2(selection, currentMemory);
       const s = this.s; const ix = this.ix;
       if (!s.pending || s.pending.type !== 'save') throw new RuleError('WRONG_PHASE');
       const all = this.memoryChanges();
@@ -2183,6 +2352,71 @@ table.cards th { color: var(--muted); font-weight: 600; }
       }
       s.savedMemory = memory; s.pending = { type: 'done' }; s.phase = 'DONE';
       return memory;
+    }
+
+    deckMemorySnapshot() {
+      const out = Object.fromEntries(this.s.party.map(p => [p.charId, []]));
+      for (const c of this.s.deck) {
+        const def = this.ix.cards[c.id];
+        if (!def || c.weapon || c.token || ![...this.s.party.map(p => p.charId), 'common'].includes(def.owner)) continue;
+        const cid = def.owner === 'common' ? c.assigned : def.owner;
+        if (!out[cid]) throw new RuleError('INVALID_ASSIGNMENT');
+        const sp = { key: c.key, id: c.id };
+        if (c.plus) sp.plus = true;
+        if (c.from) sp.from = c.from;
+        if (c.mods) sp.mods = clone(c.mods);
+        if (def.owner === 'common') sp.assigned = cid;
+        out[cid].push(sp);
+      }
+      MemoryV2.inspect(this.data, out);
+      return out;
+    }
+    memorySnapshot() {
+      const after = this.deckMemorySnapshot(); const s = this.s;
+      if (!s.playBefore) return after;
+      // Playing the base kit does not itself remove or revert persistent cards.
+      const changes = MemoryV2.listChanges(this.data, s.playBefore, after);
+      const savedKeys = new Set(Object.values(s.memoryBefore).flatMap(rows => rows.map(c => c.key)));
+      const additions = new Map();
+      for (const ch of changes) if (!savedKeys.has(ch.key) && ch.kind !== 'remove') additions.set(ch.key, { ...ch, kind: 'add', value: after[ch.cid].find(c => c.key === ch.key) });
+      const result = MemoryV2.applyChanges(s.memoryBefore, [...changes.filter(ch => savedKeys.has(ch.key)), ...additions.values()]);
+      MemoryV2.inspect(this.data, result);
+      return result;
+    }
+    captureMemory() { if (this.s.memoryPolicy === 'v2') this.s.memoryAfter = this.memorySnapshot(); }
+    previewMemory(selectedIds) {
+      const s = this.s;
+      if (s.memoryPolicy !== 'v2' || s.pending?.type !== 'save') throw new RuleError('WRONG_PHASE');
+      const capacities = Object.fromEntries(s.party.map(p => [p.charId, Run.capacityOf(this.ix, p)]));
+      return { ...MemoryV2.apply(this.data, s.memoryBefore, s.memoryAfter || this.memorySnapshot(), selectedIds, capacities,
+        { defeat: !!s.pending.defeat, baseline: s.memoryBaseline, preview: true }), capacities };
+    }
+    commitMemoryV2(request, current) {
+      const s = this.s;
+      if (!request || typeof request.requestId !== 'string' || !request.requestId || !Number.isInteger(request.expectedMemoryVersion) || request.expectedMemoryVersion < 0 ||
+          !Array.isArray(request.selectedChangeIds) || request.selectedChangeIds.some(id => typeof id !== 'string') || new Set(request.selectedChangeIds).size !== request.selectedChangeIds.length) throw new RuleError('INVALID_SELECTION');
+      if (request.runId !== s.runId) throw new RuleError('RUN_MISMATCH');
+      if (!current || current.schema !== 'mf-memory-v2' || !Number.isInteger(current.version) || current.version < 0 || !Array.isArray(current.history) || !current.receipts || typeof current.receipts !== 'object' || Array.isArray(current.receipts)) throw new RuleError('INVALID_SNAPSHOT');
+      MemoryV2.inspect(this.data, current.memory);
+      const body = JSON.stringify({ runId: request.runId, expectedMemoryVersion: request.expectedMemoryVersion, selectedChangeIds: [...request.selectedChangeIds].sort() });
+      const finish = response => { s.savedMemory = clone(response.memory); s.pending = { type: 'done' }; s.phase = 'DONE'; };
+      if (Object.hasOwn(current.receipts, request.requestId)) {
+        const receipt = current.receipts[request.requestId];
+        if (receipt.body !== body) throw new RuleError('REQUEST_CONFLICT');
+        const response = clone(receipt.response); finish(response); return { state: clone(current), response };
+      }
+      if (s.pending?.type !== 'save' || !['VICTORY', 'DEFEAT'].includes(s.phase)) throw new RuleError('WRONG_PHASE');
+      if (request.expectedMemoryVersion !== s.memoryVersion || current.version !== request.expectedMemoryVersion) throw new RuleError('VERSION_CONFLICT');
+      for (const p of s.party) if (JSON.stringify(current.memory[p.charId] || s.memoryBaseline[p.charId]) !== JSON.stringify(s.memoryBefore[p.charId])) throw new RuleError('VERSION_CONFLICT');
+      const result = this.previewMemory(request.selectedChangeIds);
+      if (result.error) throw new RuleError(result.error);
+      const state = clone(current); state.memory = { ...state.memory, ...result.memory }; state.version += 1;
+      MemoryV2.inspect(this.data, state.memory);
+      state.history.push({ runId: s.runId, requestId: request.requestId, version: state.version, before: clone(s.memoryBefore), memory: clone(result.memory), selectedChangeIds: [...request.selectedChangeIds] });
+      const response = { memory: clone(result.memory), used: result.used, version: state.version };
+      state.receipts = { ...state.receipts, [request.requestId]: { body, response: clone(response) } };
+      finish(response);
+      return { state, response };
     }
   }
 
@@ -2302,7 +2536,7 @@ table.cards th { color: var(--muted); font-weight: 600; }
     },
   };
 
-  const MFCore = { RuleError, Rng, indexData, cardText, opText, Battle, Run, Gacha, Stats, NODE_NAME, upgradeOps };
+  const MFCore = { RuleError, Rng, indexData, cardText, opText, Battle, Run, Gacha, Stats, MemoryV2, NODE_NAME, upgradeOps };
   if (typeof module !== 'undefined' && module.exports) module.exports = MFCore;
   root.MFCore = MFCore;
 })(typeof globalThis !== 'undefined' ? globalThis : this);
@@ -2322,6 +2556,21 @@ table.cards th { color: var(--muted); font-weight: 600; }
     get(k, d) { try { const v = window.localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
     set(k, v) { try { window.localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* storage unavailable */ } },
     del(k) { try { window.localStorage.removeItem(k); } catch (e) { /* ignore */ } },
+    // strict variants for memory v2 / checkpoint: failures are reported, never swallowed
+    raw(k) { try { return { ok: true, raw: window.localStorage.getItem(k) }; } catch (e) { return { ok: false, error: e }; } },
+    putRaw(k, str) { try { window.localStorage.setItem(k, str); return true; } catch (e) { console.error('storage write failed', k, e); return false; } },
+    put(k, v) { let str; try { str = JSON.stringify(v); } catch (e) { console.error('storage serialize failed', k, e); return false; } return store.putRaw(k, str); },
+    remove(k) { try { window.localStorage.removeItem(k); return true; } catch (e) { console.error('storage remove failed', k, e); return false; } },
+  };
+  // memory v2 keys. mf07_memory is the legacy map: read-only here, never overwritten or deleted.
+  const MEM_KEY = 'mf08_memory';
+  const LEGACY_MEM_KEY = 'mf07_memory';
+  const LEGACY_BACKUP_KEY = 'mf08_memory_legacy_backup';
+  const CKPT_KEY = 'mf08_checkpoint';
+  const clone = (v) => JSON.parse(JSON.stringify(v));
+  const newId = (prefix) => {
+    try { if (window.crypto && window.crypto.randomUUID) return `${prefix}_${window.crypto.randomUUID()}`; } catch (e) { /* fall through */ }
+    return `${prefix}_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 10)}`;
   };
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const ATTR = Object.fromEntries(DATA.attributes.map((a) => [a.id, a]));
@@ -2355,14 +2604,15 @@ table.cards th { color: var(--muted); font-weight: 600; }
   const app = {
     screen: 'home', run: null, sel: null, target: null, picker: null, modal: null, toast: null, toastTimer: 0,
     gacha: store.get('mf07_gacha', null) || MF.Gacha.newState(20261014),
-    memory: store.get('mf07_memory', {}),
+    // memory: map alias of memoryState.memory for existing callers; loaded by loadMemory() below
+    memory: {}, memoryState: null, memStatus: { ok: false, code: 'LOADING' },
+    pendingSave: null, saveError: null, lastSave: null, ckptError: null, ckptNotice: null,
     settings: Object.assign({ scale: 100, allOwned: true }, store.get('mf07_settings', {})),
     party: Object.assign({ chars: ['sera', 'harin', 'rien'], weapons: {}, length: 'short', difficulty: 'normal', useMemory: true }, store.get('mf07_party', {})),
     gachaTab: 'limited_lumi', lastPull: [], codexChar: 'sera', codexTab: 'chars', saveSel: null, lastDmg: {}, logOpen: false,
   };
   if (!app.gacha.crystals && !app.gacha.spent.pulls) { app.gacha.crystals = 16000; app.gacha.tickets.limitedTicket = 5; }
   const saveGacha = () => store.set('mf07_gacha', app.gacha);
-  const saveMemory = () => store.set('mf07_memory', app.memory);
   const saveSettings = () => store.set('mf07_settings', app.settings);
   const saveParty = () => store.set('mf07_party', app.party);
   function toast(msg) { app.toast = msg; clearTimeout(app.toastTimer); app.toastTimer = setTimeout(() => { app.toast = null; render(); }, 2600); }
@@ -2375,6 +2625,23 @@ table.cards th { color: var(--muted); font-weight: 600; }
     ULT_NOT_READY: '필살기 게이지가 부족해요.', CRYSTALS_LOW: '결정이 부족해요.', COINS_LOW: '동전이 부족해요.', CANNOT_HEAL: '기억의 모루 때문에 회복할 수 없어요.',
     WOULD_KILL: '체력이 부족해 고를 수 없어요.', BEGINNER_LIMIT: '초심자 모집은 50회까지예요.', OVER_CAPACITY: '기억 용량을 넘었어요.', DEFEAT_KEEP_ONE: '패배 시에는 변경 1개만 남길 수 있어요.',
     BEGINNER_TEN_ONLY: '초심자 모집은 10회 단위만 가능해요.', BAD_COUNT: '1회 또는 10회만 모집할 수 있어요.', ZONE_NOT_AUTHORED: '아직 열리지 않은 구역이에요.', WRONG_PHASE: '지금은 할 수 없는 행동이에요.',
+    // memory v2 commit / storage
+    VERSION_CONFLICT: '다른 탭이나 기기에서 기억 덱이 먼저 바뀌었어요. 최신 기억 덱을 불러왔고, 이번 저장은 반영하지 않았어요.',
+    REQUEST_CONFLICT: '같은 요청 번호로 다른 내용이 이미 처리됐어요. 이번 저장은 반영하지 않았어요.',
+    INVALID_SELECTION: '고른 변화가 이번 탐사의 변화 목록과 맞지 않아요.', INVALID_SNAPSHOT: '탐사 기록이 손상돼 저장할 수 없어요.',
+    IDENTITY_REQUIRED: '카드 개체 정보(key)가 없어 저장할 수 없어요.', INVALID_CARD: '허용되지 않는 카드가 있어 저장할 수 없어요.',
+    INVALID_PART: '허용되지 않는 부품이 있어 저장할 수 없어요.', INVALID_ASSIGNMENT: '공용 카드 배정이 올바르지 않아요.',
+    INVALID_EVOLUTION: '허용되지 않는 진화가 있어 저장할 수 없어요.', RUN_MISMATCH: '이 탐사와 저장 요청이 맞지 않아요.',
+    CHECKPOINT_WRITE_FAILED: '진행 기록을 먼저 남기지 못해 기억 저장을 시작하지 않았어요. 기억 덱은 바뀌지 않았어요. 다시 시도해 주세요.',
+    MEMORY_WRITE_FAILED: '기억 덱을 저장소에 쓰지 못했어요. 기억 덱과 탐사는 바뀌지 않았어요. 같은 요청으로 다시 시도할 수 있어요.',
+    MEMORY_MISSING: '기억 기록이 저장소에서 사라졌어요(다른 탭에서 지웠을 수 있어요). 새로고침해서 다시 불러오세요.',
+    MEMORY_QUARANTINED: '격리된 기억 덱이 있는 캐릭터가 편성돼 있어요.', LEGACY_RUN: '이 탐사는 이전 저장 방식으로 시작돼 기억 v2 저장을 할 수 없어요.',
+    STORAGE_UNAVAILABLE: '이 브라우저 저장소를 쓸 수 없어요. 기억 덱을 읽거나 저장할 수 없어 탐사 시작과 기억 저장을 막았어요.',
+    MEMORY_MALFORMED: '저장된 기억 기록(mf08_memory)을 읽을 수 없어요. 자동으로 덮어쓰지 않았어요.',
+    LEGACY_MALFORMED: '이전 기억 기록(mf07_memory)을 읽을 수 없어요. 원본은 그대로 두었고 자동으로 기본 덱을 쓰지 않았어요.',
+    BACKUP_WRITE_FAILED: '이전 기억 원본의 백업을 쓰지 못해 이관을 멈췄어요. 원본은 그대로예요.',
+    MIGRATION_FAILED: '이전 기억을 새 형식(v2)으로 옮기지 못했어요. 원본은 그대로예요.',
+    ENGINE_V2_MISSING: '엔진에 기억 저장 v2 모듈(MemoryV2)이 없어 기억 덱을 불러오지 않았어요.', LOADING: '기억 덱을 불러오는 중이에요.',
   };
   const errMsg = (e) => ERR[e.code] || e.message || String(e);
 
@@ -2426,6 +2693,165 @@ table.cards th { color: var(--muted); font-weight: 600; }
     </button>`;
   }
 
+  // ───────── memory v2 storage (local prototype adapter, not a server) ─────────
+  const QUARANTINE_TEXT = { OVER_CAPACITY: '용량 초과', IDENTITY_REQUIRED: '카드 개체 정보 없음', INVALID_CARD: '허용되지 않는 카드', INVALID_PART: '허용되지 않는 부품', INVALID_EVOLUTION: '허용되지 않는 진화', INVALID_ASSIGNMENT: '잘못된 공용 카드 배정', INVALID_SNAPSHOT: '형식 오류' };
+  const RECOVERABLE_MEM = ['MEMORY_MALFORMED', 'LEGACY_MALFORMED'];
+  function validMemoryRecord(r) {
+    if (!r || typeof r !== 'object' || Array.isArray(r) || r.schema !== 'mf-memory-v2' || !Number.isInteger(r.version) || r.version < 0 ||
+        !Array.isArray(r.history) || !r.receipts || typeof r.receipts !== 'object' || Array.isArray(r.receipts) ||
+        !r.quarantine || typeof r.quarantine !== 'object' || Array.isArray(r.quarantine)) return false;
+    try { MF.MemoryV2.inspect(DATA, r.memory); return true; } catch (e) { return false; }
+  }
+  function readMemoryRecord() {
+    const cur = store.raw(MEM_KEY);
+    if (!cur.ok) return { ok: false, code: 'STORAGE_UNAVAILABLE' };
+    if (cur.raw === null) return { ok: true, record: null };
+    let r;
+    try { r = JSON.parse(cur.raw); } catch (e) { return { ok: false, code: 'MEMORY_MALFORMED' }; }
+    if (!validMemoryRecord(r)) return { ok: false, code: 'MEMORY_MALFORMED' };
+    return { ok: true, record: r };
+  }
+  function setMemory(record, status) {
+    app.memoryState = record;
+    app.memory = record ? record.memory : {};
+    app.memStatus = status;
+  }
+  function capacityFor(cid) { return MF.Run.capacityOf(IX, { charId: cid, res: resOf(cid) }); }
+  function capacitiesNow() { return Object.fromEntries(DATA.characters.map((ch) => [ch.id, capacityFor(ch.id)])); }
+  // keeps the exact original bytes; an existing different backup is never overwritten
+  function backupLegacyRaw(raw) {
+    const b = store.raw(LEGACY_BACKUP_KEY);
+    if (!b.ok) return null;
+    if (b.raw === null) return store.putRaw(LEGACY_BACKUP_KEY, raw) ? LEGACY_BACKUP_KEY : null;
+    if (b.raw === raw) return LEGACY_BACKUP_KEY;
+    const k = `${LEGACY_BACKUP_KEY}_${Date.now()}`;
+    return store.putRaw(k, raw) ? k : null;
+  }
+  // dry-run migration from mf07_memory → mf08_memory. allowUnreadable is only used by the explicit recovery action.
+  function migrateLegacy(opts = {}) {
+    const legacy = store.raw(LEGACY_MEM_KEY);
+    if (!legacy.ok) return { ok: false, code: 'STORAGE_UNAVAILABLE' };
+    let map = {}; let backupKey = null; let unreadable = false;
+    if (legacy.raw !== null) {
+      backupKey = backupLegacyRaw(legacy.raw);
+      if (!backupKey) return { ok: false, code: 'BACKUP_WRITE_FAILED' };
+      try { map = JSON.parse(legacy.raw); } catch (e) { map = null; }
+      if (!map || typeof map !== 'object' || Array.isArray(map)) {
+        if (!opts.allowUnreadable) return { ok: false, code: 'LEGACY_MALFORMED' };
+        map = {}; unreadable = true;
+      }
+    }
+    let rec;
+    try { rec = MF.MemoryV2.migrate(DATA, map, capacitiesNow()); } catch (e) { console.error(e); return { ok: false, code: 'MIGRATION_FAILED', detail: e.code || e.message }; }
+    if (!validMemoryRecord(rec)) return { ok: false, code: 'MIGRATION_FAILED', detail: 'invalid record' };
+    rec.migration = Object.assign({
+      from: LEGACY_MEM_KEY, backupKey, legacyFound: legacy.raw !== null, legacyBytes: legacy.raw ? legacy.raw.length : 0,
+      legacyUnreadable: unreadable, quarantined: Object.keys(rec.quarantine || {}), at: new Date().toISOString(), dryRunDeterministic: true,
+    }, opts.meta || {});
+    if (!store.put(MEM_KEY, rec)) return { ok: false, code: 'MEMORY_WRITE_FAILED' };
+    return { ok: true, record: rec, migrated: true };
+  }
+  function loadMemory() {
+    if (!MF.MemoryV2 || typeof MF.MemoryV2.migrate !== 'function') { setMemory(null, { ok: false, code: 'ENGINE_V2_MISSING' }); return; }
+    const cur = readMemoryRecord();
+    if (!cur.ok) { setMemory(null, cur); return; }
+    if (cur.record) { setMemory(cur.record, { ok: true }); return; }
+    const m = migrateLegacy();
+    setMemory(m.ok ? m.record : null, m.ok ? { ok: true, migrated: true } : m);
+  }
+  // explicit user action only: keep corrupt bytes aside, then rebuild from the untouched legacy key
+  function recoverMemory() {
+    const cur = store.raw(MEM_KEY);
+    if (!cur.ok) { setMemory(null, { ok: false, code: 'STORAGE_UNAVAILABLE' }); return false; }
+    let keptAs = null;
+    if (cur.raw !== null) { keptAs = `${MEM_KEY}_corrupt_${Date.now()}`; if (!store.putRaw(keptAs, cur.raw)) { setMemory(null, { ok: false, code: 'BACKUP_WRITE_FAILED' }); return false; } }
+    const m = migrateLegacy({ allowUnreadable: true, meta: { recovered: true, corruptCopy: keptAs } });
+    setMemory(m.ok ? m.record : null, m.ok ? { ok: true, migrated: true } : m);
+    return m.ok;
+  }
+  function quarantineOf(cid) {
+    const r = app.memoryState;
+    if (!r || !r.quarantine || !r.quarantine[cid]) return null;
+    if (r.quarantineCleared && r.quarantineCleared[cid]) return null;
+    return r.quarantine[cid];
+  }
+  const quarantineText = (q) => `${QUARANTINE_TEXT[q.code] || q.code || '알 수 없는 이유'}`;
+  // explicit test actions (clearMem/resetMemory): latest record, history + version bump, backups/quarantine kept
+  function mutateMemory(reason, cids) {
+    const latest = readMemoryRecord();
+    if (!latest.ok) { setMemory(null, latest); return false; }
+    if (!latest.record) { toast(ERR.MEMORY_MISSING); return false; }
+    const rec = clone(latest.record);
+    const all = [...new Set([...Object.keys(rec.memory), ...Object.keys(rec.quarantine || {})])];
+    const targets = cids || all;
+    const at = new Date().toISOString();
+    rec.history = Array.isArray(rec.history) ? rec.history : [];
+    rec.history.push({ type: reason, at, fromVersion: rec.version, toVersion: rec.version + 1, chars: targets, memory: clone(reason === 'resetMemory' ? rec.memory : Object.fromEntries(targets.filter((c) => rec.memory[c]).map((c) => [c, rec.memory[c]]))) });
+    for (const c of targets) {
+      delete rec.memory[c];
+      if (rec.quarantine && rec.quarantine[c]) { rec.quarantineCleared = rec.quarantineCleared || {}; rec.quarantineCleared[c] = { at, version: rec.version + 1, reason }; }
+    }
+    rec.version += 1;
+    if (!store.put(MEM_KEY, rec)) { toast('기억 덱 기록을 저장소에 쓰지 못했어요. 아무것도 바뀌지 않았어요.'); return false; }
+    setMemory(rec, { ok: true });
+    return true;
+  }
+  const staleRunNote = () => (app.run && app.run.s.phase !== 'DONE' ? ' 진행 중 탐사는 출발 당시 기억 버전 기준이라, 끝낼 때 저장은 충돌로 거절돼요(기존 덱 덮어쓰기 없음).' : '');
+
+  // ───────── checkpoint (in-progress run, save selection, pending request) ─────────
+  function writeCheckpoint() {
+    if (!app.run) return true;
+    const ok = store.put(CKPT_KEY, { schema: 'mf08-checkpoint', v: 1, at: new Date().toISOString(), screen: app.screen, run: app.run.s, saveSel: app.saveSel, pendingSave: app.pendingSave, lastSave: app.lastSave });
+    app.ckptError = ok ? null : 'WRITE_FAILED';
+    return ok;
+  }
+  function clearCheckpoint() {
+    const ok = store.remove(CKPT_KEY);
+    app.ckptError = ok ? null : 'REMOVE_FAILED';
+    return ok;
+  }
+  function loadCheckpoint() {
+    const r = store.raw(CKPT_KEY);
+    if (!r.ok) { app.ckptNotice = '진행 기록(체크포인트)을 읽을 수 없어요. 저장소를 쓸 수 없는 상태예요.'; return null; }
+    if (r.raw === null) return null;
+    try {
+      const c = JSON.parse(r.raw);
+      if (!c || c.schema !== 'mf08-checkpoint' || !c.run) throw new Error('bad checkpoint');
+      return c;
+    } catch (e) {
+      const k = `${CKPT_KEY}_corrupt_${Date.now()}`;
+      app.ckptNotice = store.putRaw(k, r.raw) ? `진행 기록을 읽을 수 없어 복원하지 않았어요. 원본은 ${k}에 보관했어요.` : '진행 기록을 읽을 수 없어 복원하지 않았어요. 원본 보관에도 실패했으니 새 탐사를 시작하면 덮어써져요.';
+      return null;
+    }
+  }
+  function restoreRunState(snap) {
+    app.run = new MF.Run(DATA, snap.run);
+    app.saveSel = snap.saveSel && typeof snap.saveSel === 'object' ? snap.saveSel : null;
+    app.pendingSave = snap.pendingSave || null;
+    app.lastSave = snap.lastSave || null;
+    if (snap.screen) app.screen = snap.screen;
+  }
+  function noticeBar() {
+    const items = [];
+    const ms = app.memStatus;
+    if (ms && !ms.ok) items.push(`<b>기억 덱</b> ${esc(ERR[ms.code] || ms.code)}${ms.detail ? ` <span class="muted">(${esc(ms.detail)})</span>` : ''}${RECOVERABLE_MEM.includes(ms.code) ? ' <button class="btn small" data-act="memRecoverAsk">원본 보관 후 다시 이관</button>' : ''}`);
+    if (app.ckptError) items.push(`<b>진행 기록</b> ${app.ckptError === 'REMOVE_FAILED' ? '끝난 탐사의 진행 기록을 지우지 못했어요. 새로고침하면 다시 나타날 수 있어요.' : '진행 기록을 저장하지 못했어요. 새로고침하면 진행이 사라질 수 있고, 그동안 기억 저장은 막혀요.'} <button class="btn small" data-act="ckptRetry">다시 시도</button>`);
+    if (app.ckptNotice) items.push(`<b>진행 기록</b> ${esc(app.ckptNotice)} <button class="btn small" data-act="ckptNoticeClose">확인</button>`);
+    if (!items.length) return '';
+    return `<div class="wrap" style="padding-bottom:0"><div class="panel grid" role="alert" style="border-color:var(--warn,#e0795f)">${items.map((t) => `<div>${t}</div>`).join('')}</div></div>`;
+  }
+  // reasons that block starting a run (shown in party view, enforced in startRun)
+  function startBlockers(cids) {
+    const out = [];
+    if (!app.memStatus.ok) out.push(ERR[app.memStatus.code] || app.memStatus.code);
+    for (const cid of cids) { const q = quarantineOf(cid); if (q) out.push(`${charOf(cid).name}: 이전 기억 덱이 이관 검사에서 격리됐어요(${quarantineText(q)}). 기본 덱으로 몰래 바꾸지 않았어요. 기억 덱 화면에서 확인하세요.`); }
+    if (app.memoryState) for (const cid of cids) {
+      const specs = app.memoryState.memory[cid];
+      if (specs && MF.MemoryV2.cost(DATA, cid, specs, MF.MemoryV2.baseline(DATA, cid)) > capacityFor(cid)) out.push(`${charOf(cid).name}: 기존 기억이 현재 용량을 넘어요. 원본을 유지한 채 기억 덱 화면에서 확인하세요.`);
+    }
+    return out;
+  }
+
   // ───────── navigation & render ─────────
   const NAV = [['home', '공방'], ['party', '탐사'], ['gacha', '모집'], ['codex', '도감'], ['memory', '기억 덱'], ['settings', '설정']];
   function render() {
@@ -2436,7 +2862,7 @@ table.cards th { color: var(--muted); font-weight: 600; }
       <button data-act="help">규칙</button></div></nav>`;
     let body = '';
     try { body = view(); } catch (e) { console.error(e); body = `<div class="wrap"><div class="panel">화면을 그리다 오류가 났어요: ${esc(e.message)}</div></div>`; }
-    root.innerHTML = nav + body + (app.modal ? modalView() : '') + (app.toast ? `<div class="toast" role="status">${esc(app.toast)}</div>` : '');
+    root.innerHTML = nav + noticeBar() + body + (app.modal ? modalView() : '') + (app.toast ? `<div class="toast" role="status">${esc(app.toast)}</div>` : '');
   }
   function isRunScreen() { return ['map', 'battle', 'reward', 'rest', 'forge', 'shop', 'event', 'archive', 'save', 'result'].includes(app.screen); }
   function view() {
@@ -2504,12 +2930,14 @@ table.cards th { color: var(--muted); font-weight: 600; }
     }).join('');
     const weaponRows = chosen.map((cid) => {
       const ch = charOf(cid); const list = weaponsFor(cid); const cur = p.weapons[cid] && list.some((w) => w.id === p.weapons[cid]) ? p.weapons[cid] : list.find((w) => w.rarity === 'R').id;
-      const mem = app.memory[cid];
+      const mem = app.memory[cid]; const q = quarantineOf(cid);
       return `<div class="item"><h4>${esc(ch.name)} <span class="muted">· ${WTYPE[ch.weapon]}</span></h4>
         <label class="muted" for="w-${cid}">무기</label>
         <select id="w-${cid}" data-act="weapon" data-id="${cid}">${list.map((w) => `<option value="${w.id}" ${w.id === cur ? 'selected' : ''}>${esc(w.name)} (${w.rarity}${w.rarity !== 'R' ? ` R${MF.Gacha.refine(app.gacha, w.id)}` : ''})</option>`).join('')}</select>
-        <p>${mem ? `저장된 기억 덱 사용 가능(${mem.length}장)` : '기본 기억 덱(시작 카드 4장 + 공용 1장)'}</p></div>`;
+        <p>${q ? `<span class="pill warn">기억 덱 격리됨 · ${esc(quarantineText(q))}</span>` : mem ? `저장된 기억 덱 사용 가능(${mem.length}장)` : '기본 기억 덱(시작 카드 4장 + 공용 1장)'}</p>
+        ${!p.useMemory && mem && !q ? '<p class="muted">이번 탐사는 기본 덱으로 하지만, 저장할 때는 출발 전 기억 덱이 기준이 되어 그대로 보존돼요.</p>' : ''}</div>`;
     }).join('');
+    const blockers = chosen.length === 3 ? startBlockers(chosen) : [];
     return `<div class="wrap grid">
       <div class="row" style="justify-content:space-between"><div><div class="eyebrow">편성</div><h2>캐릭터 3명을 고르세요</h2></div>
         <div class="row"><span class="muted">${app.settings.allOwned ? '테스트 모드: 전원 사용 가능' : '보유 캐릭터만'}</span></div></div>
@@ -2519,7 +2947,8 @@ table.cards th { color: var(--muted); font-weight: 600; }
         <div class="row"><span class="muted">탐사 길이</span><span class="seg"><button data-act="len" data-v="short" class="${p.length === 'short' ? 'on' : ''}">짧게(1구역)</button><button data-act="len" data-v="full" class="${p.length === 'full' ? 'on' : ''}">정규(2구역)</button></span>
           <span class="muted">난이도</span><span class="seg"><button data-act="diff" data-v="normal" class="${p.difficulty === 'normal' ? 'on' : ''}">보통</button><button data-act="diff" data-v="hard" class="${p.difficulty === 'hard' ? 'on' : ''}">어려움</button></span>
           <span class="muted">덱</span><span class="seg"><button data-act="usemem" data-v="1" class="${p.useMemory ? 'on' : ''}">저장된 기억</button><button data-act="usemem" data-v="0" class="${!p.useMemory ? 'on' : ''}">기본 덱</button></span></div>
-        <div class="row"><button class="btn primary" data-act="startRun" ${chosen.length === 3 ? '' : 'disabled'}>탐사 시작</button><span class="muted">${chosen.length}/3 선택 · 짧게는 약 15분, 정규는 약 30분</span></div>
+        <div class="row"><button class="btn primary" data-act="startRun" ${chosen.length === 3 && !blockers.length ? '' : 'disabled'}>탐사 시작</button><span class="muted">${chosen.length}/3 선택 · 짧게는 약 15분, 정규는 약 30분</span></div>
+        ${blockers.length ? `<div class="grid" role="alert">${blockers.map((t) => `<span class="pill warn" style="white-space:normal">시작할 수 없어요: ${esc(t)}</span>`).join('')}</div>` : ''}
       </div></div>`;
   }
 
@@ -2783,6 +3212,7 @@ table.cards th { color: var(--muted); font-weight: 600; }
       afterBattleCmd(before);
     } catch (e) { toast(errMsg(e)); }
     app.sel = null; app.target = null; app.picker = null; if (app.modal && app.modal.type === 'picker') app.modal = null;
+    writeCheckpoint();
     render();
   }
   function afterBattleCmd(before) {
@@ -2844,30 +3274,114 @@ table.cards th { color: var(--muted); font-weight: 600; }
     return `<div class="panel grid"><div class="eyebrow">기록소</div><h2>첫 구역의 기록을 확정했다</h2><p>여기서 돌아가면 지금까지의 덱을 기억으로 저장할 수 있어요. 계속 가면 체력 15%를 회복하고 다음 구역으로 갑니다(패배하면 변경 1개만 남아요).</p>
       <div class="row"><button class="btn primary" data-act="archive" data-v="continue">계속 탐사</button><button class="btn" data-act="archive" data-v="return">귀환하고 저장</button></div></div>`;
   }
-  function viewSave() {
-    const run = app.run; const s = run.s; const info = run.memoryChanges(); const defeat = s.pending && s.pending.defeat;
-    if (!app.saveSel) {
-      app.saveSel = {};
-      for (const [cid, inf] of Object.entries(info)) { app.saveSel[cid] = []; let used = 0; if (!defeat) inf.changes.forEach((c, i) => { if (used + c.cost <= inf.capacity) { app.saveSel[cid].push(i); used += c.cost; } }); }
+  // ───────── memory v2 save screen ─────────
+  const KIND_LABEL = { add: '추가', remove: '제거', evolve: '진화', upgrade: '강화', part: '부품' };
+  const isV2Run = (run) => !!run && typeof run.previewMemory === 'function' && typeof run.s.runId === 'string' && Number.isInteger(run.s.memoryVersion);
+  const saveLocked = () => !!(app.pendingSave && app.pendingSave.status === 'sent');
+  function specName(sp) { const def = IX.cards[sp.id]; return `${def ? def.name : sp.id}${sp.plus ? '+' : ''}`; }
+  function specPill(sp, cls, note) {
+    const mods = sp.mods ? [sp.mods.c, sp.mods.e].filter((p) => p).map((p) => (IX.parts[p] ? IX.parts[p].name : p)) : [];
+    return `<span class="pill ${cls || ''}" title="${esc(mods.join(', '))}">${esc(specName(sp))}${mods.length ? ' ⚙' : ''}${note ? ` <small>${esc(note)}</small>` : ''}</span>`;
+  }
+  const specSig = (sp) => JSON.stringify([sp.id, !!sp.plus, sp.from || null, (sp.mods && sp.mods.c) || null, (sp.mods && sp.mods.e) || null, sp.assigned || null]);
+  // saveSel: {cid: [deltaId]} — sanitized against the current change list (old index-based selections are dropped)
+  function ensureSaveSel(info) {
+    const prev = app.saveSel && typeof app.saveSel === 'object' ? app.saveSel : {};
+    const next = {};
+    for (const [cid, inf] of Object.entries(info)) {
+      const valid = new Set(inf.changes.map((c) => c.id));
+      next[cid] = [...new Set((Array.isArray(prev[cid]) ? prev[cid] : []).filter((x) => typeof x === 'string' && valid.has(x)))];
     }
-    const total = Object.values(app.saveSel).reduce((a, l) => a + l.length, 0);
+    app.saveSel = next;
+  }
+  // flatten in deterministic change-list order so the same choice always yields the same request body
+  function flattenSel(info, sel) {
+    const out = [];
+    for (const [cid, inf] of Object.entries(info)) { const set = new Set((sel || app.saveSel)[cid] || []); for (const c of inf.changes) if (set.has(c.id)) out.push(c.id); }
+    return out;
+  }
+  function safePreview(run, ids) { try { return run.previewMemory(ids); } catch (e) { return null; } }
+  function viewSave() {
+    const run = app.run; const s = run.s; const defeat = !!(s.pending && s.pending.defeat);
+    const errPanel = app.saveError ? `<div class="panel grid" role="alert"><b>저장하지 못했어요</b><p>${esc(ERR[app.saveError.code] || app.saveError.detail || app.saveError.code)}</p>${app.saveError.detail && ERR[app.saveError.code] ? `<p class="muted">${esc(app.saveError.detail)}</p>` : ''}</div>` : '';
+    if (!isV2Run(run)) {
+      return `<div class="panel grid" role="alert"><div class="eyebrow">${defeat ? '패배' : '탐사 종료'}</div><h2>이 탐사는 기억 v2로 저장할 수 없어요</h2>
+        <p>${esc(ERR.LEGACY_RUN)} 기억 덱은 바뀌지 않아요.</p>
+        <div class="row"><button class="btn" data-act="skipSave">기억을 건드리지 않고 탐사 닫기</button></div></div>`;
+    }
+    const info = run.memoryChanges();
+    const locked = saveLocked();
+    if (locked) app.saveSel = Object.fromEntries(Object.keys(info).map((cid) => [cid, app.pendingSave.body.selectedChangeIds.filter((id) => info[cid].changes.some((c) => c.id === id))]));
+    ensureSaveSel(info);
+    const flat = flattenSel(info);
+    let pv = safePreview(run, flat);
+    if (!pv) { app.saveSel = null; ensureSaveSel(info); pv = safePreview(run, []); }
+    const memOk = app.memStatus.ok;
+    const reasons = [];
+    if (!memOk) reasons.push(ERR[app.memStatus.code] || app.memStatus.code);
+    if (pv && pv.error === 'DEFEAT_KEEP_ONE') reasons.push(`패배하면 이번 탐사의 변화는 파티 전체에서 1개까지만 남길 수 있어요. 지금 ${flat.length}개를 골랐어요.`);
+    if (pv && pv.error === 'OVER_CAPACITY') reasons.push(`용량을 넘는 캐릭터가 있어요: ${Object.keys(info).filter((cid) => pv.used[cid] > pv.capacities[cid]).map((cid) => `${charOf(cid).name} ${pv.used[cid]}/${pv.capacities[cid]}`).join(', ')}. 결과 덱 전체 비용으로 계산해요.`);
+    if (pv && pv.error && !['DEFEAT_KEEP_ONE', 'OVER_CAPACITY'].includes(pv.error)) reasons.push(ERR[pv.error] || pv.error);
+    if (!pv) reasons.push(ERR.INVALID_SNAPSHOT);
+    if (app.ckptError) reasons.push('진행 기록을 저장할 수 없어 기억 저장을 막았어요.');
+    if (locked) reasons.push('이전 저장 요청의 결과를 아직 확인하지 못했어요. 같은 요청으로 다시 확인하세요.');
+    const canSubmit = !reasons.length;
     const blocks = Object.entries(info).map(([cid, inf]) => {
       const ch = charOf(cid); const sel = new Set(app.saveSel[cid]);
-      const used = [...sel].reduce((a, i) => a + inf.changes[i].cost, 0);
-      return `<div class="panel grid"><div class="row" style="justify-content:space-between"><h3>${emblem(ch, 26)} ${esc(ch.name)}</h3><span class="pill ${used > inf.capacity ? 'warn' : 'brass'}">기억 용량 ${used}/${inf.capacity}</span></div>
-        ${inf.changes.length ? inf.changes.map((c, i) => `<label class="row" style="justify-content:space-between;border-bottom:1px solid var(--line);padding:4px 0"><span><input type="checkbox" id="sv-${cid}-${i}" data-act="saveToggle" data-cid="${cid}" data-i="${i}" ${sel.has(i) ? 'checked' : ''}> ${esc(c.label)}</span><span class="num muted">용량 ${c.cost}</span></label>`).join('') : '<p class="muted">바뀐 점이 없어요.</p>'}
+      const cap = pv ? pv.capacities[cid] : inf.capacity; const used = pv ? pv.used[cid] : inf.usedBefore;
+      const result = (pv && pv.memory[cid]) || inf.before;
+      const beforeByKey = new Map(inf.before.map((x) => [x.key, x]));
+      const resultKeys = new Set(result.map((x) => x.key));
+      const resultPills = result.map((sp) => {
+        const b = beforeByKey.get(sp.key);
+        if (!b) return specPill(sp, 'time', '새로');
+        return specSig(b) !== specSig(sp) ? specPill(sp, 'brass', '바뀜') : specPill(sp);
+      }).join('');
+      const dropped = inf.before.filter((b) => !resultKeys.has(b.key));
+      const notKept = inf.changes.filter((c) => !sel.has(c.id));
+      const rows = inf.changes.map((c) => {
+        const on = sel.has(c.id);
+        let hint = '선택됨';
+        if (!on) {
+          const alt = safePreview(run, flattenSel(info, { ...app.saveSel, [cid]: [...app.saveSel[cid], c.id] }));
+          if (!alt) hint = '-';
+          else if (alt.error === 'DEFEAT_KEEP_ONE') hint = '패배: 1개까지';
+          else hint = `고르면 결과 용량 ${alt.used[cid]}/${alt.capacities[cid]}${alt.error === 'OVER_CAPACITY' ? ' · 초과' : ''}`;
+        }
+        return `<label class="row" style="justify-content:space-between;border-bottom:1px solid var(--line);padding:4px 0"><span><input type="checkbox" data-act="saveToggle" data-cid="${esc(cid)}" data-id="${esc(c.id)}" ${on ? 'checked' : ''} ${locked ? 'disabled' : ''}> <span class="pill">${esc(KIND_LABEL[c.kind] || c.kind)}</span> ${esc(c.label)}</span><span class="num muted">${esc(hint)}</span></label>`;
+      }).join('');
+      return `<div class="panel grid"><div class="row" style="justify-content:space-between"><h3>${emblem(ch, 26)} ${esc(ch.name)}</h3>
+          <span class="row" style="gap:6px"><span class="pill">출발 전 용량 ${inf.usedBefore}/${inf.capacity}</span><span class="pill ${used > cap ? 'warn' : 'brass'}">결과 용량 ${used}/${cap}</span></span></div>
+        <div><div class="eyebrow">출발 전에 있던 기억 — 유지</div><div class="row">${inf.before.map((sp) => specPill(sp)).join('') || '<span class="muted">없음</span>'}</div></div>
+        <div><div class="eyebrow">이번 탐사에서 생긴 변화 ${inf.changes.length}개</div>
+          ${inf.changes.length ? rows : '<p class="muted">바뀐 점이 없어요. 출발 전 기억이 그대로 유지돼요.</p>'}
+          ${inf.changes.length && !locked ? `<div class="row">${defeat ? '' : `<button class="btn small" data-act="saveFill" data-cid="${esc(cid)}">용량 안에서 순서대로 고르기</button>`}<button class="btn small" data-act="saveClear" data-cid="${esc(cid)}">이 캐릭터 선택 해제</button></div>` : ''}</div>
+        <div><div class="eyebrow">결과 덱 미리보기 ${result.length}장</div><div class="row">${resultPills || '<span class="muted">없음</span>'}</div>
+          ${dropped.length ? `<div class="row"><span class="muted">이번 저장으로 빠지는 카드</span>${dropped.map((sp) => specPill(sp, 'warn', '빠짐')).join('')}</div>` : ''}
+          ${notKept.length ? `<p class="muted">이번에 남기지 못하는 변화 ${notKept.length}개: ${notKept.map((c) => esc(c.label)).join(', ')}</p>` : ''}</div>
       </div>`;
     }).join('');
     const commons = s.deck.filter((c) => c.owner === 'common' && c.gained);
-    const assign = commons.length ? `<div class="panel grid"><h3>공용 카드는 누구의 기억에 넣을까요?</h3>${commons.map((c) => `<div class="row"><span>${esc(IX.cards[c.id].name)}</span><select id="as-${c.key}" data-act="assign" data-key="${c.key}">${s.party.map((p) => `<option value="${p.charId}" ${c.assigned === p.charId ? 'selected' : ''}>${esc(charOf(p.charId).name)}</option>`).join('')}</select></div>`).join('')}</div>` : '';
-    return `<div class="panel"><div class="eyebrow">${defeat ? '패배 · 잔존 기억' : '탐사 종료 · 기억 저장'}</div><h2>${defeat ? '하나만 남길 수 있어요' : '이번 탐사의 덱을 기억으로 남기세요'}</h2>
-      <p class="muted">${defeat ? '패배하면 이번 탐사에서 바뀐 것 중 1개만 저장돼요.' : '캐릭터마다 기억 용량 안에서 저장해요. 저장한 덱은 다음 탐사의 시작 덱이 되고, 주간 보스·기록 균열에서도 써요.'} 선택: ${total}개</p></div>
-      ${assign}${blocks}<div class="row"><button class="btn primary" data-act="commitSave">저장하고 끝내기</button><button class="btn" data-act="skipSave">저장하지 않기</button></div>`;
+    const assign = commons.length ? `<div class="panel grid"><h3>공용 카드는 누구의 기억에 넣을까요?</h3><p class="muted">배정을 바꾸면 고른 변화가 초기화돼요.</p>${commons.map((c) => `<div class="row"><span>${esc(IX.cards[c.id].name)}</span><select id="as-${esc(c.key)}" data-act="assign" data-key="${esc(c.key)}" ${locked ? 'disabled' : ''}>${s.party.map((p) => `<option value="${esc(p.charId)}" ${c.assigned === p.charId ? 'selected' : ''}>${esc(charOf(p.charId).name)}</option>`).join('')}</select></div>`).join('')}</div>` : '';
+    const pend = app.pendingSave;
+    const pendPanel = locked ? `<div class="panel grid" role="alert"><b>저장 요청 결과 확인 필요</b><p>저장 요청(${esc(pend.requestId.slice(-8))})을 보낸 뒤 결과를 확인하지 못했어요. 새 요청이 아니라 같은 요청으로 다시 확인해요. 탐사를 패배로 처리하지 않았어요.</p>
+      <div class="row"><button class="btn primary" data-act="saveRetry">같은 요청으로 다시 확인</button><button class="btn" data-act="saveRelease">요청을 버리고 다시 고르기</button></div>
+      <p class="muted">다시 고르면 새 요청이 되며, 이전 요청이 이미 반영됐다면 버전 충돌로 거절돼요.</p></div>` : '';
+    return `<div class="panel"><div class="eyebrow">${defeat ? '패배 · 잔존 기억' : '탐사 종료 · 기억 저장'}</div><h2>${defeat ? '출발 전 기억은 지켜져요. 이번 변화는 하나까지' : '이번 탐사의 변화를 골라 기억에 더하세요'}</h2>
+      <p class="muted">${defeat ? '패배해도 출발 전 기억 덱은 그대로예요. 이번 탐사에서 생긴 변화 중 파티 전체에서 1개까지 더할 수 있어요. 아무것도 고르지 않으면 기존 덱이 유지돼요.' : '출발 전 기억 덱에 이번 탐사의 변화를 여러 개 더할 수 있어요. 용량은 고른 것의 합이 아니라 완성된 결과 덱 전체로 계산해요. 저장한 덱은 다음 탐사의 시작 덱이 되고, 주간 보스·기록 균열에서도 써요.'}
+      선택: ${flat.length}개${defeat ? ' / 1' : ''}</p>
+      <p class="muted">이 저장은 이 브라우저 안의 시험용 로컬 저장이에요(서버 저장 아님) · 기억 버전 ${esc(String(s.memoryVersion))}</p></div>
+      ${errPanel}${pendPanel}${assign}${blocks}
+      ${reasons.length ? `<div class="grid" role="status">${reasons.map((t) => `<span class="pill warn" style="white-space:normal">저장 버튼을 쓸 수 없는 이유: ${esc(t)}</span>`).join('')}</div>` : ''}
+      <div class="row"><button class="btn primary" data-act="commitSave" ${canSubmit ? '' : 'disabled'}>${flat.length ? `고른 변화 ${flat.length}개 저장하고 끝내기` : '변화 없이 저장(기존 덱 유지)'}</button>
+        <button class="btn" data-act="keepAsk">기존 덱 유지하고 끝내기</button>
+        <button class="btn small" data-act="skipSave" title="저장소에 아무것도 쓰지 않고 탐사만 닫아요">저장하지 않고 탐사 닫기</button></div>`;
   }
   function viewResult() {
     const s = app.run.s; const r = s.result || {};
     return `<div class="panel grid"><div class="eyebrow">탐사 결과</div><h2>${r.outcome === 'defeat' ? '패배' : r.outcome === 'return' ? '기록소 귀환' : '탐사 완주'}</h2>
-      <dl class="kv"><dt>전투</dt><dd>${s.stats.battles}회 (엘리트 ${s.stats.elites})</dd><dt>처치</dt><dd>${s.stats.kills}</dd><dt>남은 체력</dt><dd>${s.hp}/${s.maxHp}</dd><dt>유물</dt><dd>${s.relics.map((x) => esc(IX.relics[x].name)).join(', ') || '-'}</dd></dl>
+      <dl class="kv"><dt>전투</dt><dd>${s.stats.battles}회 (엘리트 ${s.stats.elites})</dd><dt>처치</dt><dd>${s.stats.kills}</dd><dt>남은 체력</dt><dd>${s.hp}/${s.maxHp}</dd><dt>유물</dt><dd>${s.relics.map((x) => esc(IX.relics[x].name)).join(', ') || '-'}</dd>
+        ${app.lastSave ? `<dt>기억</dt><dd>${app.lastSave.kind === 'closed' ? '저장하지 않고 닫음 · 기억 덱 변화 없음' : `${app.lastSave.kind === 'keep' ? '기존 덱 유지' : `변화 ${app.lastSave.count}개 저장`} · 기억 버전 ${esc(String(app.lastSave.version))}${app.lastSave.used ? ` · ${Object.entries(app.lastSave.used).map(([cid, u]) => `${esc(charOf(cid) ? charOf(cid).name : cid)} 용량 ${esc(String(u))}`).join(', ')}` : ''}`}</dd>` : ''}</dl>
       <div class="row"><button class="btn primary" data-act="newRun">다시 탐사</button><button class="btn" data-act="nav" data-to="memory">기억 덱 보기</button><button class="btn" data-act="nav" data-to="gacha">모집하러 가기</button></div></div>`;
   }
 
@@ -2951,16 +3465,28 @@ table.cards th { color: var(--muted); font-weight: 600; }
 
   // ───────── memory & settings ─────────
   function viewMemory() {
+    const rec = app.memoryState; const v2 = !!(MF.MemoryV2 && typeof MF.MemoryV2.cost === 'function');
     const rows = DATA.characters.map((ch) => {
-      const mem = app.memory[ch.id];
-      const specs = mem || MF.Run.baseKit(IX, ch.id);
-      let cost = 0; let cap = 0;
-      try { const r = MF.Run.create(DATA, { party: [{ charId: ch.id, res: resOf(ch.id) }], memory: mem ? { [ch.id]: mem } : undefined, seed: 1 }); const inf = r.memoryChanges()[ch.id]; cost = inf.changes.reduce((a, c) => a + c.cost, 0); cap = inf.capacity; } catch (e) { /* ignore */ }
-      return `<div class="panel grid"><div class="row" style="justify-content:space-between"><h3>${emblem(ch, 26)} ${esc(ch.name)}</h3><span class="pill ${mem ? 'brass' : ''}">${mem ? `저장됨 · 용량 ${cost}/${cap}` : '기본 덱'}</span></div>
-        <div class="row">${specs.map((sp) => `<span class="pill">${esc(IX.cards[sp.id].name)}${sp.plus ? '+' : ''}${sp.mods && (sp.mods.c || sp.mods.e) ? ' ⚙' : ''}</span>`).join('')}</div>
-        ${mem ? `<div class="row"><button class="btn small danger" data-act="clearMem" data-id="${ch.id}">기본 덱으로 되돌리기</button></div>` : ''}</div>`;
+      const mem = app.memory[ch.id]; const q = quarantineOf(ch.id);
+      const baseline = v2 && typeof MF.MemoryV2.baseline === 'function' ? MF.MemoryV2.baseline(DATA, ch.id) : MF.Run.baseKit(IX, ch.id);
+      const specs = mem || baseline;
+      // full-result cost vs baseline and capacity, read directly (no throwaway legacy Run)
+      let cost = null; let cap = null;
+      try { cap = capacityFor(ch.id); } catch (e) { console.error(e); }
+      try { if (v2) cost = MF.MemoryV2.cost(DATA, ch.id, specs, baseline); } catch (e) { console.error(e); }
+      const costTxt = `용량 ${cost === null ? '?' : cost}/${cap === null ? '?' : cap}`;
+      const over = cost !== null && cap !== null && cost > cap;
+      const pill = q ? `<span class="pill warn">격리됨 · ${esc(quarantineText(q))}</span>` : `<span class="pill ${over ? 'warn' : mem ? 'brass' : ''}">${mem ? `저장됨 · ${costTxt}` : `기본 덱 · ${costTxt}`}</span>`;
+      const qOrig = q && Array.isArray(q.original) ? q.original : null;
+      return `<div class="panel grid"><div class="row" style="justify-content:space-between"><h3>${emblem(ch, 26)} ${esc(ch.name)}</h3>${pill}</div>
+        ${q ? `<p class="muted">이전 기억 덱(${qOrig ? `${qOrig.length}장` : '원본'})이 이관 검사에서 격리됐어요. 잘라내거나 기본 덱으로 몰래 바꾸지 않았고, 원본은 백업과 격리 기록에 남아 있어요. 이 캐릭터는 확인 전까지 탐사에 편성할 수 없어요.</p>
+          ${qOrig ? `<div class="row">${qOrig.map((sp) => (sp && sp.id ? specPill(sp, 'warn') : '')).join('')}</div>` : ''}` : `<div class="row">${specs.map((sp) => specPill(sp)).join('')}</div>`}
+        ${mem || q ? `<div class="row"><button class="btn small danger" data-act="clearMem" data-id="${esc(ch.id)}" ${app.memStatus.ok ? '' : 'disabled'}>기본 덱으로 되돌리기</button></div>` : ''}</div>`;
     }).join('');
-    return `<div class="wrap grid"><div><div class="eyebrow">기억 덱</div><h2>캐릭터별 저장된 덱</h2><p class="muted">탐사를 끝내면 바뀐 카드·강화·부품·진화를 기억 용량 안에서 저장해요. 공명 4단계마다 용량 +1.</p></div><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(280px,1fr))">${rows}</div></div>`;
+    const hist = rec && Array.isArray(rec.history) ? rec.history.length : 0;
+    const mig = rec && rec.migration;
+    const meta = rec ? `<p class="muted">기억 버전 ${esc(String(rec.version))} · 이력 ${hist}건${mig ? ` · 이관 ${esc(mig.at || '')}${mig.legacyFound ? ` (원본 ${esc(String(mig.legacyBytes))}바이트 백업: ${esc(mig.backupKey || '-')})` : ' (이전 기록 없음)'}${mig.legacyUnreadable ? ' · 원본을 읽을 수 없어 빈 기억으로 시작' : ''}` : ''}${rec.quarantine && Object.keys(rec.quarantine).length ? ` · 격리 ${Object.keys(rec.quarantine).length}건` : ''} · 이 브라우저 안의 시험용 로컬 저장</p>` : `<p class="pill warn" style="white-space:normal">${esc(ERR[app.memStatus.code] || app.memStatus.code)}</p>`;
+    return `<div class="wrap grid"><div><div class="eyebrow">기억 덱</div><h2>캐릭터별 저장된 덱</h2><p class="muted">탐사를 끝내면 출발 전 기억 덱에 이번 탐사의 카드·강화·부품·진화 변화를 골라 더해요. 용량은 기본 덱 대비 결과 덱 전체 비용이에요. 공명 4단계마다 용량 +1.</p>${meta}</div><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(280px,1fr))">${rows}</div></div>`;
   }
   function viewSettings() {
     const s = app.settings;
@@ -3003,6 +3529,9 @@ table.cards th { color: var(--muted); font-weight: 600; }
       inner = `<h2>${esc(req.label)} 고르기 (${pk.picks.length + 1}/${pk.reqs.reduce((a, r) => a + r.n, 0)})</h2><div class="pick-grid">${opts.map((u) => cardFace(b.s.cards[u], { def: b.effDef(b.s.cards[u]), act: 'pick' })).join('') || '<p class="muted">고를 카드가 없어요.</p>'}</div><div class="row"><button class="btn" data-act="pickAuto">자동으로 고르기</button><button class="btn" data-act="closeModal">취소</button></div>`;
     } else if (m.type === 'info') {
       inner = m.html;
+    } else if (m.type === 'confirm') {
+      // m.act is always an internal action name; texts are escaped
+      inner = `<h2>${esc(m.title)}</h2><p>${esc(m.body)}</p><div class="row"><button class="btn primary" data-act="${esc(m.act)}">${esc(m.label)}</button></div>`;
     }
     return `<div class="modal-bg" data-act="bgClose"><div class="modal" role="dialog" aria-modal="true">${inner}<div class="row" style="justify-content:flex-end"><button class="btn" data-act="closeModal">닫기</button></div></div></div>`;
   }
@@ -3014,14 +3543,70 @@ table.cards th { color: var(--muted); font-weight: 600; }
       const list = weaponsFor(cid); const wid = p.weapons[cid] && list.some((w) => w.id === p.weapons[cid]) ? p.weapons[cid] : list.find((w) => w.rarity === 'R').id;
       return { charId: cid, res: resOf(cid), weaponId: wid, refine: IX.weapons[wid].rarity === 'R' ? 1 : MF.Gacha.refine(app.gacha, wid) };
     });
-    const memory = {};
-    if (p.useMemory) for (const x of party) if (app.memory[x.charId]) memory[x.charId] = app.memory[x.charId];
+    // re-read the latest record (another tab may have saved/reset) and refuse unsafe starts
+    const latest = readMemoryRecord();
+    if (!latest.ok) { setMemory(null, latest); toast(ERR[latest.code] || latest.code); return; }
+    if (!latest.record) { setMemory(null, { ok: false, code: 'MEMORY_MISSING' }); toast(ERR.MEMORY_MISSING); return; }
+    setMemory(latest.record, { ok: true });
+    const blockers = startBlockers(party.map((x) => x.charId));
+    if (!app.memoryState || blockers.length) { toast(blockers[0] || ERR.MEMORY_MISSING); return; }
+    // v2: the persistent "before" is always passed; useMemory:false only plays with the base kit
+    const memory = clone(app.memoryState.memory);
     const diff = p.difficulty === 'hard' ? { hp: 120, dmg: 125 } : { hp: 100, dmg: 100 };
     runCounter += 1;
     const seed = URL_SEED !== null ? URL_SEED + runCounter : ((Date.now() & 0x7fffffff) || 1);
-    app.run = MF.Run.create(DATA, { party, memory, seed, length: p.length, difficulty: diff });
+    const runId = newId('run');
+    try { app.run = MF.Run.create(DATA, { party, memory, seed, length: p.length, difficulty: diff, memoryPolicy: 'v2', memoryVersion: app.memoryState.version, runId, ...(p.useMemory ? {} : { useMemory: false }) }); }
+    catch (err) { toast(errMsg(err)); return; }
     app.run.s.visited = [];
     app.saveSel = null; app.sel = null; app.target = null; app.partyForce = false;
+    app.pendingSave = null; app.saveError = null; app.lastSave = null;
+    syncRunScreen();
+    writeCheckpoint();
+  }
+  // memory v2 commit through the local adapter. Order: pending DTO → checkpoint → latest record → candidate commit → memory write → live update.
+  function submitSave(ids, kind) {
+    const run = app.run;
+    if (!run || !['VICTORY', 'DEFEAT'].includes(run.s.phase)) return;
+    if (!isV2Run(run)) { app.saveError = { code: 'LEGACY_RUN' }; return; }
+    if (!app.memStatus.ok) { app.saveError = { code: app.memStatus.code }; return; }
+    const body = { expectedMemoryVersion: run.s.memoryVersion, runId: run.s.runId, selectedChangeIds: [...ids] };
+    const prev = app.pendingSave;
+    const same = prev && prev.body && JSON.stringify(prev.body) === JSON.stringify(body);
+    app.pendingSave = same ? { ...prev, status: 'sent', attempts: (prev.attempts || 1) + 1 } : { requestId: newId('req'), body, kind, status: 'sent', attempts: 1, at: new Date().toISOString() };
+    if (!writeCheckpoint()) {
+      // nothing was sent: keep the same requestId for the retry but do not lock the selection
+      app.pendingSave = { ...app.pendingSave, status: 'unsent' };
+      app.saveError = { code: 'CHECKPOINT_WRITE_FAILED' };
+      return;
+    }
+    const pend = app.pendingSave;
+    const latest = readMemoryRecord();
+    if (!latest.ok) { app.saveError = { code: latest.code }; return; } // pending kept: same requestId on retry
+    if (!latest.record) { app.saveError = { code: 'MEMORY_MISSING' }; return; }
+    const candidate = new MF.Run(DATA, clone(run.s));
+    let out;
+    try {
+      out = candidate.commitMemory({ requestId: pend.requestId, ...pend.body }, latest.record);
+    } catch (err) {
+      // deterministic rejection: nothing was written, so the request is closed and the choice is editable again
+      console.warn('commitMemory rejected', err);
+      app.pendingSave = null;
+      if (err.code === 'VERSION_CONFLICT') setMemory(latest.record, { ok: true });
+      app.saveError = { code: err.code || 'INVALID_SNAPSHOT', detail: err.code ? null : String(err.message || err) };
+      writeCheckpoint();
+      return;
+    }
+    const next = { ...out.state };
+    for (const k of ['migration', 'quarantineCleared']) if (latest.record[k] !== undefined && next[k] === undefined) next[k] = latest.record[k];
+    if (!validMemoryRecord(next)) { app.saveError = { code: 'INVALID_SNAPSHOT', detail: 'commit returned an invalid record' }; return; }
+    if (!store.put(MEM_KEY, next)) { app.saveError = { code: 'MEMORY_WRITE_FAILED' }; return; } // live memory/run untouched; pending kept
+    setMemory(next, { ok: true });
+    app.run = candidate;
+    app.pendingSave = null; app.saveSel = null; app.saveError = null;
+    app.lastSave = { kind, requestId: pend.requestId, count: pend.body.selectedChangeIds.length, version: out.response.version, used: out.response.used };
+    writeCheckpoint();
+    toast(kind === 'keep' ? '기존 기억 덱을 그대로 유지했어요.' : '기억을 저장했어요.');
     syncRunScreen();
   }
   function act(el, ev) {
@@ -3145,16 +3730,48 @@ table.cards th { color: var(--muted); font-weight: 600; }
       }
       case 'archive': run.archive(d.v); syncRunScreen(); break;
       case 'saveToggle': {
-        const set = new Set(app.saveSel[d.cid]); const i = Number(d.i);
-        if (set.has(i)) set.delete(i); else set.add(i);
-        app.saveSel[d.cid] = [...set]; break;
+        // selections are delta ID strings per character; the defeat limit is shown, not silently enforced
+        if (saveLocked()) break;
+        if (!app.saveSel) app.saveSel = {};
+        const set = new Set(Array.isArray(app.saveSel[d.cid]) ? app.saveSel[d.cid] : []); const id = d.id;
+        if (set.has(id)) set.delete(id); else set.add(id);
+        app.saveSel[d.cid] = [...set]; app.saveError = null; break;
       }
+      case 'saveFill': {
+        if (saveLocked() || !isV2Run(run)) break;
+        const info = run.memoryChanges(); ensureSaveSel(info);
+        for (const c of info[d.cid] ? info[d.cid].changes : []) {
+          if (app.saveSel[d.cid].includes(c.id)) continue;
+          const trial = { ...app.saveSel, [d.cid]: [...app.saveSel[d.cid], c.id] };
+          const pv = safePreview(run, flattenSel(info, trial));
+          if (pv && !pv.error) app.saveSel = trial;
+        }
+        app.saveError = null; break;
+      }
+      case 'saveClear': if (!saveLocked() && app.saveSel) { app.saveSel[d.cid] = []; app.saveError = null; } break;
       case 'commitSave': {
-        try { const mem = run.commitMemory(app.saveSel); Object.assign(app.memory, mem); saveMemory(); toast('기억을 저장했어요.'); app.saveSel = null; syncRunScreen(); } catch (err) { toast(errMsg(err)); }
+        if (!isV2Run(run)) { app.saveError = { code: 'LEGACY_RUN' }; break; }
+        const info = run.memoryChanges(); ensureSaveSel(info);
+        const ids = flattenSel(info); const pv = safePreview(run, ids);
+        if (!pv) { app.saveError = { code: 'INVALID_SELECTION' }; break; }
+        if (pv.error) { toast(errMsg({ code: pv.error })); break; }
+        submitSave(ids, ids.length ? 'save' : 'keep');
         break;
       }
-      case 'skipSave': run.s.pending = { type: 'done' }; run.s.phase = 'DONE'; app.saveSel = null; syncRunScreen(); break;
-      case 'newRun': app.run = null; app.screen = 'party'; break;
+      case 'keepAsk': {
+        const defeat = !!(run.s.pending && run.s.pending.defeat);
+        app.modal = { type: 'confirm', title: '기존 기억 덱을 유지할까요?', body: `${defeat ? '패배했지만 ' : ''}출발 전 기억 덱이 그대로 남고, 이번 탐사의 변화는 저장하지 않아요. 자동 초기화는 없어요.`, act: 'keepConfirm', label: '기존 덱 유지하고 끝내기' };
+        break;
+      }
+      case 'keepConfirm': app.modal = null; if (saveLocked()) app.pendingSave = null; submitSave([], 'keep'); break;
+      case 'saveRetry': if (app.pendingSave) submitSave(app.pendingSave.body.selectedChangeIds, app.pendingSave.kind || 'save'); break;
+      case 'saveRelease': app.pendingSave = null; app.saveError = null; break;
+      case 'skipSave': run.s.pending = { type: 'done' }; run.s.phase = 'DONE'; app.saveSel = null; app.pendingSave = null; app.saveError = null; app.lastSave = { kind: 'closed' }; syncRunScreen(); break;
+      case 'newRun': app.run = null; app.screen = 'party'; app.pendingSave = null; app.saveError = null; app.lastSave = null; clearCheckpoint(); break;
+      case 'memRecoverAsk': app.modal = { type: 'confirm', title: '기억 기록을 다시 이관할까요?', body: '읽을 수 없는 기억 기록은 별도 키에 그대로 보관하고, 이전 기억(mf07_memory) 원본을 지우지 않은 채 새 기록을 만들어요. 이전 기억도 읽을 수 없으면 빈 기억으로 시작하고 그 사실을 기록에 남겨요.', act: 'memRecover', label: '원본 보관 후 다시 이관' }; break;
+      case 'memRecover': app.modal = null; toast(recoverMemory() ? '기억 기록을 다시 만들었어요. 원본은 보관돼 있어요.' : '다시 이관하지 못했어요. 원본은 그대로예요.'); break;
+      case 'ckptRetry': if (app.run) { if (writeCheckpoint()) toast('진행 기록을 저장했어요.'); } else if (clearCheckpoint()) toast('진행 기록을 정리했어요.'); break;
+      case 'ckptNoticeClose': app.ckptNotice = null; break;
       case 'gtab': app.gachaTab = d.id; app.lastPull = []; break;
       case 'pull': {
         try { app.lastPull = MF.Gacha.pull(DATA, app.gacha, app.gachaTab, Number(d.n)); saveGacha(); } catch (err) { toast(errMsg(err)); }
@@ -3172,14 +3789,15 @@ table.cards th { color: var(--muted); font-weight: 600; }
       }
       case 'ctab': app.codexTab = d.v; break;
       case 'cchar': app.codexChar = d.id; break;
-      case 'clearMem': delete app.memory[d.id]; saveMemory(); break;
+      case 'clearMem': if (mutateMemory('clearMem', [d.id])) toast(`${charOf(d.id).name}의 기억 덱을 기본 덱으로 되돌렸어요. 이전 덱은 이력에 남겼어요.${staleRunNote()}`); break;
       case 'scale': app.settings.scale = Number(d.v); saveSettings(); break;
       case 'allOwned': app.settings.allOwned = d.v === '1'; saveSettings(); break;
       case 'resetGacha': app.gacha = MF.Gacha.newState(20261014); app.gacha.crystals = 16000; app.gacha.tickets.limitedTicket = 5; saveGacha(); toast('모집 기록을 초기화했어요.'); break;
-      case 'resetMemory': app.memory = {}; saveMemory(); toast('기억 덱을 초기화했어요.'); break;
-      case 'abandon': app.run = null; app.screen = 'home'; break;
+      case 'resetMemory': if (mutateMemory('resetMemory')) toast(`기억 덱을 초기화했어요. 이전 덱은 이력에, 원본 백업과 격리 기록은 그대로 남아 있어요.${staleRunNote()}`); break;
+      case 'abandon': app.run = null; app.screen = 'home'; app.pendingSave = null; app.saveError = null; app.lastSave = null; app.saveSel = null; clearCheckpoint(); break;
       default: return;
     }
+    if (app.run) writeCheckpoint();
     render();
   }
   document.addEventListener('click', (ev) => {
@@ -3191,7 +3809,11 @@ table.cards th { color: var(--muted); font-weight: 600; }
   document.addEventListener('change', (ev) => {
     const el = ev.target;
     if (el.dataset.act === 'weapon') { app.party.weapons[el.dataset.id] = el.value; saveParty(); render(); }
-    if (el.dataset.act === 'assign') { try { app.run.assign(el.dataset.key, el.value); app.saveSel = null; } catch (e) { toast(errMsg(e)); } render(); }
+    if (el.dataset.act === 'assign') {
+      if (saveLocked()) { toast('저장 요청 결과를 확인하기 전에는 배정을 바꿀 수 없어요.'); render(); return; }
+      try { app.run.assign(el.dataset.key, el.value); app.saveSel = null; app.saveError = null; } catch (e) { toast(errMsg(e)); }
+      writeCheckpoint(); render();
+    }
     if (el.dataset.act === 'saveToggle') act(el, ev);
   });
   document.addEventListener('keydown', (ev) => {
@@ -3200,11 +3822,25 @@ table.cards th { color: var(--muted); font-weight: 600; }
   });
 
   // hot-reload friendly boot (keeps an in-progress run across republishes when the viewer supports it)
+  // otherwise the local checkpoint restores the run (reload is never treated as a defeat)
   function start(data) {
-    try { if (data && data.run) { app.run = new MF.Run(DATA, data.run); if (data.screen) app.screen = data.screen; } } catch (e) { /* ignore stale snapshot */ }
+    loadMemory();
+    let restored = false;
+    try { if (data && data.run) { restoreRunState(data); restored = true; } } catch (e) { /* ignore stale snapshot */ }
+    if (!restored) {
+      const ck = loadCheckpoint();
+      if (ck) {
+        try { restoreRunState(ck); if (app.run.s.phase !== 'DONE' && !['memory', 'settings', 'codex', 'gacha', 'home'].includes(app.screen)) syncRunScreen(); }
+        catch (e) {
+          console.error(e); app.run = null; app.saveSel = null; app.pendingSave = null; app.lastSave = null;
+          const k = `${CKPT_KEY}_corrupt_${Date.now()}`;
+          app.ckptNotice = store.put(k, ck) ? `저장된 진행 기록을 복원하지 못했어요. 원본은 ${k}에 보관했어요.` : '저장된 진행 기록을 복원하지 못했어요. 원본 보관에도 실패했으니 새 탐사를 시작하면 덮어써져요.';
+        }
+      }
+    }
     render();
   }
-  try { if (window.claude && window.claude.hot && window.claude.hot.snapshot) window.claude.hot.snapshot(() => ({ run: app.run ? app.run.s : null, screen: app.screen })); } catch (e) { /* optional */ }
+  try { if (window.claude && window.claude.hot && window.claude.hot.snapshot) window.claude.hot.snapshot(() => ({ run: app.run ? app.run.s : null, screen: app.screen, saveSel: app.saveSel, pendingSave: app.pendingSave, lastSave: app.lastSave })); } catch (e) { /* optional */ }
   if (window.claude && window.claude.hot && window.claude.hot.ready) window.claude.hot.ready(start); else start((window.claude && window.claude.hot && window.claude.hot.data) || {});
   window.__mf = app;
 })();

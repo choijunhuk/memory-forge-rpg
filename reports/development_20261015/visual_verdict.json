@@ -1,0 +1,8 @@
+{
+  "score": 94,
+  "verdict": "pass",
+  "category_match": true,
+  "differences": [],
+  "suggestions": [],
+  "reasoning": "기존 남색 패널, 청록·금색 강조, 카드·타이포그래피를 유지하면서 출발 전/결과 덱을 구분한다. 1280/390 폭과 130% 글자에서 내용이 잘리지 않고 세로 스크롤로 이어진다."
+}

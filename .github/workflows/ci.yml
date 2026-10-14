@@ -25,4 +25,5 @@ jobs:
       - run: node content/build.mjs data && git diff --exit-code data/
       - run: node tools/gen_vectors.mjs && git diff --exit-code engine/tests/vectors/
       - run: tools/run_all_checks.sh
+      - run: npm run test:memory-ui
       - run: python3 tools/check_integrated_release.py

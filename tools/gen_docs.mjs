@@ -248,7 +248,8 @@ put('dsl.md', table(['op', '의미', '파라미터'], Object.entries(OPS).map(([
 
 // ───────── error codes ─────────
 const src = readFileSync(join(root, 'engine', 'rules-core.js'), 'utf8');
-const codes = new Set([...src.matchAll(/RuleError\('([A-Z_]+)'/g)].map((m) => m[1]).concat(['RESERVE_ONLY', 'NOT_RESERVABLE']));
+const memorySrc = readFileSync(join(root, 'proposals', 'memory_v2.cjs'), 'utf8');
+const codes = new Set([...src.matchAll(/RuleError\('([A-Z_]+)'/g), ...memorySrc.matchAll(/fail\('([A-Z_]+)'/g)].map((m) => m[1]).concat(['RESERVE_ONLY', 'NOT_RESERVABLE']));
 const MSG = {
   AP_LOW: '행동력이 부족해요.', SLOT_FULL: '그 턴의 예약 칸이 가득 찼어요.', BAD_TARGET: '대상을 먼저 고르세요.', FIXED_MARK_REQUIRED: '표식이 있는 적만 고를 수 있어요.', NOT_RESERVABLE: '이 카드는 예약할 수 없어요.',
   RESERVE_ONLY: '이 카드는 예약 전용이에요.', DEBT_CAP: '부채 상한을 넘어요.', LOAN_OVERFLOW: '행동력 최대치(9)를 넘어요.', NOT_DEFERRABLE: '다음 턴에 갚을 부채가 없어요.', RESTRAINT_UNAVAILABLE: '이번 턴엔 절제 계약을 맺을 수 없어요.',
@@ -260,6 +261,12 @@ const MSG = {
   NOT_FOR_SALE: '판매 중이 아니에요.', BAD_UPGRADE: '강화할 수 없는 카드예요.', BAD_CARD: '선택할 수 없는 카드예요.', BAD_REWARD: '받을 수 없는 보상이에요.', BAD_EVOLUTION: '선택할 수 없는 진화예요.', BAD_PART: '선택할 수 없는 부품이에요.',
   NO_PART: '부품이 없어요.', BAD_CHOICE: '선택할 수 없어요.', BAD_ASSIGN: '그 캐릭터에게 배정할 수 없어요.', NO_BATTLE: '진행 중인 전투가 없어요.', UNKNOWN_BANNER: '없는 모집이에요.',
   ZONE_NOT_AUTHORED: '아직 열리지 않은 구역이에요(콘텐츠 준비 중).',
+  INVALID_ASSIGNMENT: '공용 카드 배정이 올바르지 않아요.', INVALID_CARD: '허용되지 않는 카드예요.', INVALID_PART: '영구 저장할 수 없는 부품이에요.',
+  INVALID_EVOLUTION: '진화 계보가 올바르지 않아요.', INVALID_UPGRADE: '강화 기록이 올바르지 않아요.', IDENTITY_REQUIRED: '카드 개체 키가 없거나 중복됐어요.',
+  INVALID_SNAPSHOT: '기억 기록의 형식이 올바르지 않아요. 원본을 유지하고 확인하세요.', INVALID_SELECTION: '선택한 탐사 변화가 유효하지 않아요.',
+  CHARACTER_SET_MISMATCH: '출발 전후의 캐릭터 목록이 일치하지 않아요.', UNSUPPORTED_TRANSFORMATION: '허용되지 않는 카드 변환이에요.',
+  REASSIGNMENT_REQUIRES_SEPARATE_FLOW: '기존 기억의 공용 카드 배정은 여기서 변경할 수 없어요.', RUN_ID_REQUIRED: '탐사 식별자가 없어요.',
+  RUN_MISMATCH: '다른 탐사의 저장 요청이에요.', REQUEST_CONFLICT: '같은 요청 번호에 다른 내용이 있어요.', VERSION_CONFLICT: '다른 저장이 먼저 반영됐어요. 최신 기억을 확인하세요.',
 };
 const internal = ['CAPACITY_INVARIANT', 'CARD_ZONE_CONSERVATION', 'DEBT_INVARIANT', 'ENEMY_RANGE', 'GAUGE_RANGE', 'GROWTH_INVARIANT', 'STATE_RANGE', 'RNG_BOUND', 'UNKNOWN_ACTOR', 'UNKNOWN_CARD', 'UNKNOWN_CHARACTER', 'UNKNOWN_COMMAND', 'UNKNOWN_ENEMY', 'UNSUPPORTED_EFFECT', 'PARTY_SIZE'];
 const errRows = [...codes].sort().map((c) => [`\`${c}\``, internal.includes(c) ? '내부 불변식/데이터 오류(사용자에게는 "문제가 생겼어요" + 오류 보고)' : (MSG[c] || (() => { console.error('NO MESSAGE', c); process.exit(1); })())]);

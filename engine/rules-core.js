@@ -11,6 +11,7 @@
   // ───────────────────────── basics ─────────────────────────
   class RuleError extends Error { constructor(code, detail) { super(code); this.code = code; this.detail = detail; } }
   const clone = (o) => JSON.parse(JSON.stringify(o));
+  const MemoryV2 = typeof module !== 'undefined' && module.exports ? require('../proposals/memory_v2.cjs') : root.MFMemoryV2;
   const BPS = 10000;
 
   // xoshiro128** seeded through splitmix32 (128-bit state; seed is chosen by the server, never the client)
@@ -1456,21 +1457,45 @@
         runFlags: { envelopeUsed: false, refusals: 0, nextApBonus: 0 }, offered: {}, result: null, startMemory: clone(setup.memory || {}),
         seqCard: 0,
       };
+      if (setup.memoryPolicy === 'v2') {
+        if (!s.party.length || new Set(s.party.map(p => p.charId)).size !== s.party.length || s.party.some(p => !ix.chars[p.charId])) throw new RuleError('INVALID_SNAPSHOT');
+        if (typeof setup.runId !== 'string' || !setup.runId) throw new RuleError('RUN_ID_REQUIRED');
+        if (!Number.isInteger(setup.memoryVersion ?? 0) || (setup.memoryVersion ?? 0) < 0) throw new RuleError('INVALID_SNAPSHOT');
+        s.schema = 'mf-run-memory-v2'; s.memoryPolicy = 'v2'; s.runId = setup.runId; s.memoryVersion = setup.memoryVersion ?? 0;
+        s.memoryBaseline = {}; s.memoryBefore = {};
+        for (const p of s.party) {
+          s.memoryBaseline[p.charId] = MemoryV2.baseline(data, p.charId);
+          s.memoryBefore[p.charId] = clone(setup.memory?.[p.charId] || s.memoryBaseline[p.charId]);
+        }
+        MemoryV2.inspect(data, s.memoryBefore);
+        for (const p of s.party) if (MemoryV2.cost(data, p.charId, s.memoryBefore[p.charId], s.memoryBaseline[p.charId]) > Run.capacityOf(ix, p)) throw new RuleError('OVER_CAPACITY');
+      }
       // party max HP = sum of character HP (60 + Lv + armour); reference battle = 81 per character
       for (const p of s.party) { const d = Stats.derive(ix, p); Object.assign(p, { power4: d.power4, hp: d.hp, gearBps: d.gearBps, skillLv: d.skillLv, ultLv: d.ultLv }); }
       s.maxHp = s.party.reduce((a, p) => a + p.hp, 0); s.hp = s.maxHp; s.hpRef = s.maxHp;
       // deck = each character's memory deck (or base kit) + weapon card
       for (const p of s.party) {
-        const specs = (setup.memory && setup.memory[p.charId]) || Run.baseKit(ix, p.charId);
-        for (const sp of specs) s.deck.push({ ...clone(sp), key: `k${++s.seqCard}`, owner: ix.cards[sp.id].owner, assigned: sp.assigned || (ix.cards[sp.id].owner === 'common' ? p.charId : null) });
+        const specs = s.memoryPolicy === 'v2' ? clone(setup.useMemory === false ? s.memoryBaseline[p.charId] : s.memoryBefore[p.charId]) : ((setup.memory && setup.memory[p.charId]) || Run.baseKit(ix, p.charId));
+        if (s.memoryPolicy === 'v2' && setup.useMemory === false) for (const sp of specs) {
+          if (!s.memoryBefore[p.charId].some(old => old.key === sp.key && old.id === sp.id && !old.from)) sp.key = Run.nextCardKey(s);
+        }
+        for (const sp of specs) s.deck.push({ ...clone(sp), key: s.memoryPolicy === 'v2' ? sp.key : Run.nextCardKey(s), owner: ix.cards[sp.id].owner, assigned: sp.assigned || (ix.cards[sp.id].owner === 'common' ? p.charId : null) });
         const w = ix.weapons[p.weaponId] || ix.weapons[Run.defaultWeapon(ix, p.charId)];
-        s.deck.push({ id: w.card, key: `k${++s.seqCard}`, owner: 'weapon', wielder: p.charId, weapon: true });
+        s.deck.push({ id: w.card, key: Run.nextCardKey(s), owner: 'weapon', wielder: p.charId, weapon: true });
       }
       for (const p of s.party) s.offered[p.charId] = 0;
       for (const z of s.zones) if (!data.encounters[String(z)]) throw new RuleError('ZONE_NOT_AUTHORED', { zone: z });
       s.zone = s.zones[0];
       s.map = Run.genMap(s, s.zone);
-      return new Run(data, s);
+      const run = new Run(data, s);
+      if (s.memoryPolicy === 'v2' && setup.useMemory === false) s.playBefore = run.deckMemorySnapshot();
+      return run;
+    }
+    static nextCardKey(s) {
+      if (s.memoryPolicy !== 'v2') return `k${++s.seqCard}`;
+      let key;
+      do { key = `run:${s.runId}:${++s.seqCard}`; } while (s.deck.some(c => c.key === key) || Object.values(s.memoryBefore).some(rows => rows.some(c => c.key === key)));
+      return key;
     }
     static baseKit(ix, charId) {
       const ch = ix.chars[charId];
@@ -1582,7 +1607,7 @@
       s.hp = bs.hp; s.runFlags = { ...s.runFlags, ...bs.runFlags };
       // persist growth from battle instances back to the run deck
       for (const c of Object.values(bs.cards)) if (c.key) { const d = s.deck.find((x) => x.key === c.key); if (d) d.growth = c.growth; }
-      if (bs.phase === 'DEFEAT') { s.phase = 'DEFEAT'; s.result = { outcome: 'defeat', floor: s.floor }; this.log('패배'); s.pending = { type: 'save', defeat: true }; this.battle = null; s.battle = null; return; }
+      if (bs.phase === 'DEFEAT') { s.phase = 'DEFEAT'; s.result = { outcome: 'defeat', floor: s.floor }; this.log('패배'); s.pending = { type: 'save', defeat: true }; this.captureMemory(); this.battle = null; s.battle = null; return; }
       s.stats.battles += 1; s.stats.kills += bs.enemies.filter((e) => !e.alive).length;
       const type = s.battleType;
       if (type === 'elite') s.stats.elites += 1;
@@ -1652,7 +1677,7 @@
       const s = this.s; const p = s.pending;
       if (!p || p.type !== 'reward' || !p.cards.includes(cardId)) throw new RuleError('BAD_REWARD');
       const def = this.ix.cards[cardId];
-      s.deck.push({ id: cardId, key: `k${++s.seqCard}`, owner: def.owner, assigned: def.owner === 'common' ? s.party[0].charId : null, gained: true });
+      s.deck.push({ id: cardId, key: Run.nextCardKey(s), owner: def.owner, assigned: def.owner === 'common' ? s.party[0].charId : null, gained: true });
       p.cards = []; this.log(`카드 획득: ${def.name}`);
     }
     skipCard() {
@@ -1687,21 +1712,23 @@
       s.pending = null;
       if (n && n.type === 'boss') {
         if (s.zoneIdx < s.zones.length - 1) { s.phase = 'ARCHIVE'; s.pending = { type: 'archive' }; return; }
-        s.phase = 'VICTORY'; s.result = { outcome: 'clear', floor: s.floor }; s.pending = { type: 'save', defeat: false }; return;
+        s.phase = 'VICTORY'; s.result = { outcome: 'clear', floor: s.floor }; s.pending = { type: 'save', defeat: false }; this.captureMemory(); return;
       }
       s.phase = 'MAP';
     }
     archive(choice) {
       const s = this.s;
       if (s.phase !== 'ARCHIVE') throw new RuleError('WRONG_PHASE');
-      if (choice === 'return') { s.phase = 'VICTORY'; s.result = { outcome: 'return', floor: s.floor }; s.pending = { type: 'save', defeat: false }; return; }
+      if (choice === 'return') { s.phase = 'VICTORY'; s.result = { outcome: 'return', floor: s.floor }; s.pending = { type: 'save', defeat: false }; this.captureMemory(); return; }
       s.hp = Math.min(s.maxHp, s.hp + Math.floor(s.maxHp * 0.15));
       s.zoneIdx += 1; s.zone = s.zones[s.zoneIdx]; s.pos = null; s.floor = 0; s.map = Run.genMap(s, s.zone); s.phase = 'MAP'; s.pending = null;
     }
     assign(key, charId) {
       const d = this.s.deck.find((c) => c.key === key);
       if (!d || d.owner !== 'common' || !this.s.party.some((p) => p.charId === charId)) throw new RuleError('BAD_ASSIGN');
+      if (this.s.memoryPolicy === 'v2' && Object.values(this.s.memoryBefore).some(rows => rows.some(c => c.key === key))) throw new RuleError('REASSIGNMENT_REQUIRES_SEPARATE_FLOW');
       d.assigned = charId;
+      if (this.s.pending?.type === 'save') this.captureMemory();
     }
     // rest
     rest(choice, key) {
@@ -1744,8 +1771,10 @@
       const s = this.s; const i = s.partsFound.indexOf(partId); if (i < 0) throw new RuleError('NO_PART');
       const d = s.deck.find((c) => c.key === key); if (!d || d.weapon) throw new RuleError('BAD_CARD');
       const part = this.ix.parts[partId];
+      if (s.memoryPolicy === 'v2' && (!part || !['circuit', 'engraving'].includes(part.slot))) throw new RuleError('INVALID_PART');
       d.mods = { ...(d.mods || {}), [part.slot === 'circuit' ? 'c' : 'e']: partId };
       s.partsFound.splice(i, 1);
+      if (s.pending?.type === 'save') this.captureMemory();
     }
     // shop
     makeShop() {
@@ -1769,7 +1798,7 @@
       if (!item) throw new RuleError('NOT_FOR_SALE');
       if (s.coins < item.price) throw new RuleError('COINS_LOW');
       s.coins -= item.price; item.sold = true;
-      if (kind === 'cards') { const def = this.ix.cards[id]; s.deck.push({ id, key: `k${++s.seqCard}`, owner: def.owner, assigned: def.owner === 'common' ? s.party[0].charId : null, gained: true }); }
+      if (kind === 'cards') { const def = this.ix.cards[id]; s.deck.push({ id, key: Run.nextCardKey(s), owner: def.owner, assigned: def.owner === 'common' ? s.party[0].charId : null, gained: true }); }
       if (kind === 'parts') s.partsFound.push(id);
       if (kind === 'relics') s.relics.push(id);
     }
@@ -1788,9 +1817,9 @@
       if (fx.maxHp) { s.maxHp += hpk(fx.maxHp); s.hp = Math.min(s.hp, s.maxHp); }
       if (fx.maxHpPct) { s.maxHp = Math.max(1, Math.floor(s.maxHp * (100 + fx.maxHpPct) / 100)); s.hp = Math.min(s.hp, s.maxHp); }
       if (fx.nextApBonus) s.runFlags.nextApBonus = (s.runFlags.nextApBonus || 0) + fx.nextApBonus;
-      if (fx.curse) s.deck.push({ id: fx.curse, key: `k${++s.seqCard}`, owner: 'curse', gained: true });
+      if (fx.curse) s.deck.push({ id: fx.curse, key: Run.nextCardKey(s), owner: 'curse', gained: true });
       if (fx.relic) { const r = this.relicChoices(fx.relic === 'common' ? 'common' : 'elite')[0]; if (r) s.relics.push(r); }
-      if (fx.card) { const chs = s.party.map((x) => x.charId); const pool = this.data.cards.filter((c) => chs.includes(c.owner) && c.rar === fx.card && c.pool !== false); const c = Rng.pick(s.rng, pool); s.deck.push({ id: c.id, key: `k${++s.seqCard}`, owner: c.owner, gained: true }); }
+      if (fx.card) { const chs = s.party.map((x) => x.charId); const pool = this.data.cards.filter((c) => chs.includes(c.owner) && c.rar === fx.card && c.pool !== false); const c = Rng.pick(s.rng, pool); s.deck.push({ id: c.id, key: Run.nextCardKey(s), owner: c.owner, gained: true }); }
       if (fx.part) s.partsFound.push(...this.partChoices(false, fx.part, true).slice(0, 1));
       if (fx.partRare) s.partsFound.push(...this.partChoices(true, 1));
       if (fx.variation) { s.phase = 'FORGE'; s.pending = { type: 'forge', uses: fx.variation, offers: null, fromEvent: true }; return; }
@@ -1798,7 +1827,7 @@
       // card choices: key may be one deck key or an array (one per copied/removed card). Missing picks fall back to
       // curses first, then the first non-weapon card (used by bots and by the prototype's auto-pick).
       const keys = Array.isArray(key) ? key : (key ? [key] : []);
-      if (fx.cardCopy) { const d = s.deck.find((c) => c.key === keys[0] && !c.weapon) || s.deck.find((c) => !c.weapon); s.deck.push({ ...clone(d), key: `k${++s.seqCard}`, gained: true }); }
+      if (fx.cardCopy) { const d = s.deck.find((c) => c.key === keys[0] && !c.weapon) || s.deck.find((c) => !c.weapon); s.deck.push({ ...clone(d), key: Run.nextCardKey(s), gained: true }); }
       if (fx.cardRemove) {
         for (let k = 0; k < fx.cardRemove; k++) {
           let i = keys[k] ? s.deck.findIndex((c) => c.key === keys[k] && !c.weapon) : -1;
@@ -1824,6 +1853,23 @@
       return cap;
     }
     memoryChanges() {
+      if (this.s.memoryPolicy === 'v2') {
+        const s = this.s; const after = s.memoryAfter || this.memorySnapshot();
+        const changes = MemoryV2.listChanges(this.data, s.memoryBefore, after);
+        const out = {};
+        for (const p of s.party) {
+          const cid = p.charId;
+          out[cid] = { capacity: Run.capacityOf(this.ix, p), before: clone(s.memoryBefore[cid]), after: clone(after[cid]),
+            usedBefore: MemoryV2.cost(this.data, cid, s.memoryBefore[cid], s.memoryBaseline[cid]),
+            changes: changes.filter(ch => ch.cid === cid).map(ch => {
+              const card = [...after[cid], ...s.memoryBefore[cid]].find(c => c.key === ch.key);
+              const name = this.ix.cards[card.id].name;
+              const label = ch.kind === 'add' ? `${name} 추가` : ch.kind === 'remove' ? `${name} 제거` : ch.kind === 'evolve' ? `${name} 진화` : ch.kind === 'upgrade' ? `${name} 강화 변경` : `${name} ${ch.value.slot === 'c' ? '회로' : '각인'} ${ch.value.part ? '교체' : '제거'}`;
+              return { ...ch, label };
+            }) };
+        }
+        return out;
+      }
       const s = this.s; const ix = this.ix; const C = ix.rules.memoryCost; const out = {};
       for (const p of s.party) {
         const base = Run.baseKit(ix, p.charId);
@@ -1852,7 +1898,8 @@
       return out;
     }
     // selection: {charId: [indices of changes to keep]} → returns new memory {charId:[spec]}
-    commitMemory(selection) {
+    commitMemory(selection, currentMemory) {
+      if (this.s.memoryPolicy === 'v2') return this.commitMemoryV2(selection, currentMemory);
       const s = this.s; const ix = this.ix;
       if (!s.pending || s.pending.type !== 'save') throw new RuleError('WRONG_PHASE');
       const all = this.memoryChanges();
@@ -1891,6 +1938,71 @@
       }
       s.savedMemory = memory; s.pending = { type: 'done' }; s.phase = 'DONE';
       return memory;
+    }
+
+    deckMemorySnapshot() {
+      const out = Object.fromEntries(this.s.party.map(p => [p.charId, []]));
+      for (const c of this.s.deck) {
+        const def = this.ix.cards[c.id];
+        if (!def || c.weapon || c.token || ![...this.s.party.map(p => p.charId), 'common'].includes(def.owner)) continue;
+        const cid = def.owner === 'common' ? c.assigned : def.owner;
+        if (!out[cid]) throw new RuleError('INVALID_ASSIGNMENT');
+        const sp = { key: c.key, id: c.id };
+        if (c.plus) sp.plus = true;
+        if (c.from) sp.from = c.from;
+        if (c.mods) sp.mods = clone(c.mods);
+        if (def.owner === 'common') sp.assigned = cid;
+        out[cid].push(sp);
+      }
+      MemoryV2.inspect(this.data, out);
+      return out;
+    }
+    memorySnapshot() {
+      const after = this.deckMemorySnapshot(); const s = this.s;
+      if (!s.playBefore) return after;
+      // Playing the base kit does not itself remove or revert persistent cards.
+      const changes = MemoryV2.listChanges(this.data, s.playBefore, after);
+      const savedKeys = new Set(Object.values(s.memoryBefore).flatMap(rows => rows.map(c => c.key)));
+      const additions = new Map();
+      for (const ch of changes) if (!savedKeys.has(ch.key) && ch.kind !== 'remove') additions.set(ch.key, { ...ch, kind: 'add', value: after[ch.cid].find(c => c.key === ch.key) });
+      const result = MemoryV2.applyChanges(s.memoryBefore, [...changes.filter(ch => savedKeys.has(ch.key)), ...additions.values()]);
+      MemoryV2.inspect(this.data, result);
+      return result;
+    }
+    captureMemory() { if (this.s.memoryPolicy === 'v2') this.s.memoryAfter = this.memorySnapshot(); }
+    previewMemory(selectedIds) {
+      const s = this.s;
+      if (s.memoryPolicy !== 'v2' || s.pending?.type !== 'save') throw new RuleError('WRONG_PHASE');
+      const capacities = Object.fromEntries(s.party.map(p => [p.charId, Run.capacityOf(this.ix, p)]));
+      return { ...MemoryV2.apply(this.data, s.memoryBefore, s.memoryAfter || this.memorySnapshot(), selectedIds, capacities,
+        { defeat: !!s.pending.defeat, baseline: s.memoryBaseline, preview: true }), capacities };
+    }
+    commitMemoryV2(request, current) {
+      const s = this.s;
+      if (!request || typeof request.requestId !== 'string' || !request.requestId || !Number.isInteger(request.expectedMemoryVersion) || request.expectedMemoryVersion < 0 ||
+          !Array.isArray(request.selectedChangeIds) || request.selectedChangeIds.some(id => typeof id !== 'string') || new Set(request.selectedChangeIds).size !== request.selectedChangeIds.length) throw new RuleError('INVALID_SELECTION');
+      if (request.runId !== s.runId) throw new RuleError('RUN_MISMATCH');
+      if (!current || current.schema !== 'mf-memory-v2' || !Number.isInteger(current.version) || current.version < 0 || !Array.isArray(current.history) || !current.receipts || typeof current.receipts !== 'object' || Array.isArray(current.receipts)) throw new RuleError('INVALID_SNAPSHOT');
+      MemoryV2.inspect(this.data, current.memory);
+      const body = JSON.stringify({ runId: request.runId, expectedMemoryVersion: request.expectedMemoryVersion, selectedChangeIds: [...request.selectedChangeIds].sort() });
+      const finish = response => { s.savedMemory = clone(response.memory); s.pending = { type: 'done' }; s.phase = 'DONE'; };
+      if (Object.hasOwn(current.receipts, request.requestId)) {
+        const receipt = current.receipts[request.requestId];
+        if (receipt.body !== body) throw new RuleError('REQUEST_CONFLICT');
+        const response = clone(receipt.response); finish(response); return { state: clone(current), response };
+      }
+      if (s.pending?.type !== 'save' || !['VICTORY', 'DEFEAT'].includes(s.phase)) throw new RuleError('WRONG_PHASE');
+      if (request.expectedMemoryVersion !== s.memoryVersion || current.version !== request.expectedMemoryVersion) throw new RuleError('VERSION_CONFLICT');
+      for (const p of s.party) if (JSON.stringify(current.memory[p.charId] || s.memoryBaseline[p.charId]) !== JSON.stringify(s.memoryBefore[p.charId])) throw new RuleError('VERSION_CONFLICT');
+      const result = this.previewMemory(request.selectedChangeIds);
+      if (result.error) throw new RuleError(result.error);
+      const state = clone(current); state.memory = { ...state.memory, ...result.memory }; state.version += 1;
+      MemoryV2.inspect(this.data, state.memory);
+      state.history.push({ runId: s.runId, requestId: request.requestId, version: state.version, before: clone(s.memoryBefore), memory: clone(result.memory), selectedChangeIds: [...request.selectedChangeIds] });
+      const response = { memory: clone(result.memory), used: result.used, version: state.version };
+      state.receipts = { ...state.receipts, [request.requestId]: { body, response: clone(response) } };
+      finish(response);
+      return { state, response };
     }
   }
 
@@ -2010,7 +2122,7 @@
     },
   };
 
-  const MFCore = { RuleError, Rng, indexData, cardText, opText, Battle, Run, Gacha, Stats, NODE_NAME, upgradeOps };
+  const MFCore = { RuleError, Rng, indexData, cardText, opText, Battle, Run, Gacha, Stats, MemoryV2, NODE_NAME, upgradeOps };
   if (typeof module !== 'undefined' && module.exports) module.exports = MFCore;
   root.MFCore = MFCore;
 })(typeof globalThis !== 'undefined' ? globalThis : this);
