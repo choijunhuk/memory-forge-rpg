@@ -1,0 +1,1 @@
+generated 19 files in docs/design/gen; ops 39/39 documented, conds 10, counters 12, error codes 76

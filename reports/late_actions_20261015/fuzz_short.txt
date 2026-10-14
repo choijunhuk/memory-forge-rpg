@@ -1,0 +1,1 @@
+{"mode": "live zones 1/2", "runs": 100, "clears": 93, "defeats": 7, "battles": 571, "turns": 2279, "commands": 12193, "rejectedTop": [["SLOT_FULL", 4235], ["AP_LOW", 981], ["RESTRAINT_UNAVAILABLE", 905], ["NO_EMPTY_SLOT", 894], ["FIXED_MARK_REQUIRED", 631], ["COINS_LOW", 56], ["DEBT_CAP", 13], ["RESERVATION_REQUIRED", 8], ["NOT_DEFERRABLE", 7]], "unexpected": 0}

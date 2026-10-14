@@ -253,7 +253,7 @@
       if (!setup.party || setup.party.length < 1 || setup.party.length > 3) throw new RuleError('PARTY_SIZE');
       const s = {
         schema: 'mf-battle-0.7', v: 0, turn: 0, phase: 'CREATED', rng: Rng.seed(setup.seed ?? 20261014), seq: 0,
-        hp: setup.hp, maxHp: setup.maxHp, block: 0, counter: 0, ap: 0, apNext: setup.nextApBonus || 0, breakApTurn: 0,
+        hp: setup.hp, maxHp: setup.maxHp, block: 0, counter: 0, ap: 0, apNext: setup.nextApBonus || 0, apDrainNext: 0, silenceUntil: 0, breakApTurn: 0,
         pst: { weak: 0 }, buffs: [], debts: [], debtCap: R.debtCap, restraint: { active: false, usedTurn: 0 }, bonus: { turn: 0, avail: false },
         drawPenalty: 0, sealedUntil: 0, slotsBase: { next: R.slots.next, after: R.slots.after }, slotsTemp: { next: 0, after: 0 },
         growthCount: 0, growthCap: R.growthCapPerBattle, played: 0, lastOwner: null, ownersThisTurn: [],
@@ -391,6 +391,7 @@
       for (const p of this.partsOf(inst)) if (p.fx.cost) cost += p.fx.cost;
       if (def.costIf && this.cond(def.costIf.cond, { inst })) cost += def.costIf.delta;
       if (mode !== 'now' && this.has('empty_clock') && !s.battleFlags.emptyClockUsed) cost -= 1;
+      if (mode !== 'now' && s.silenceUntil > 0 && s.silenceUntil >= s.turn) cost += 1;
       if (s.freeNext > 0) cost = 0;
       return Math.max(0, cost);
     }
@@ -419,6 +420,34 @@
     }
     slotsUsed(kind) { const due = this.s.turn + (kind === 'next' ? 1 : 2); return this.s.res.filter((r) => r.due === due).length; }
     freeSlots(kind) { return this.slotCapacity(kind) - this.slotsUsed(kind); }
+    nextPlayerSlotCapacity(due) {
+      const s = this.s; const turn = s.turn + 1; const R = this.ix.rules.slots;
+      // Temporary slots expire before the affected player turn.
+      if (due === turn + 1) return Math.max(0, Math.min(R.nextMax, s.slotsBase.next) - (s.sealedUntil >= turn ? 1 : 0));
+      return due === turn + 2 ? Math.min(R.afterMax, s.slotsBase.after) : 0;
+    }
+    previewDelay() {
+      const s = this.s; const r = s.res.slice().sort((a, b) => b.order - a.order)[0];
+      if (!r) return null;
+      const to = r.due + 1;
+      return { uid: r.uid, from: r.due, to, kind: r.kind,
+        discarded: s.res.filter(x => x !== r && x.due === to).length >= this.nextPlayerSlotCapacity(to) };
+    }
+    nextTurnDrain() {
+      const s = this.s;
+      const pending = s.phase === 'PLAYER' ? this.alive().reduce((n, e) => {
+        const pat = e.pattern || this.ix.enemies[e.id].pattern; const mv = pat[e.pi % pat.length];
+        return n + (!e.stunned && mv.t === 'apDrain' ? mv.n : 0);
+      }, 0) : 0;
+      return (s.apDrainNext || 0) + pending;
+    }
+    nextTurnAp() {
+      const s = this.s; const R = this.ix.rules;
+      const due = s.debts.filter(d => d.due <= s.turn + 1).reduce((total, d) => total + d.n, 0);
+      const ap = R.apPerTurn + s.apNext + (this.has('chrono_crown') ? 1 : 0)
+        - (s.turn === 0 && this.has('cracked_hourglass') ? 1 : 0) - due - this.nextTurnDrain();
+      return Math.max(0, Math.min(R.apMax, ap));
+    }
 
     // ───── commands (atomic + idempotent) ─────
     command(req) {
@@ -469,6 +498,7 @@
 
     startTurn(first = false) {
       const s = this.s; const R = this.ix.rules;
+      const ap = this.nextTurnAp();
       s.turn += 1; s.phase = 'RESOLVING';
       // v0.7.1: battle-start effects belong to turn 1; clear only at subsequent turn boundaries.
       if (!first) {
@@ -483,13 +513,11 @@
       for (const a of s.actors) a.gaugeTurn = 0;
       for (const c of Object.values(s.cards)) c.costMod = 0;
       // action points: base + carried bonus (+relics) - due debts
-      let ap = R.apPerTurn + s.apNext;
-      if (this.has('chrono_crown')) ap += 1;
-      if (first && this.has('cracked_hourglass')) ap -= 1;
       s.apNext = 0;
       const due = s.debts.filter((d) => d.due <= s.turn).reduce((a, d) => a + d.n, 0);
       s.debts = s.debts.filter((d) => d.due > s.turn);
-      s.ap = Math.max(0, Math.min(R.apMax, ap - due));
+      s.apDrainNext = 0;
+      s.ap = ap;
       if (due) this.ev('repay', { n: due });
       if (this.has('infinite_circuit')) { this.loseHp(this.scaleVit(2), 'relic'); if (this.checkEnd()) return; }
       // due reservations resolve in (due, order)
@@ -522,7 +550,7 @@
 
     setIntents() {
       for (const e of this.alive()) {
-        const pat = this.ix.enemies[e.id].pattern;
+        const pat = e.pattern || this.ix.enemies[e.id].pattern;
         if (e.stunned) { e.intent = { t: 'stun', label: '균열: 행동 불가' }; e.next = pat[(e.pi + 1) % pat.length]; }
         else { e.intent = pat[e.pi % pat.length]; e.next = pat[(e.pi + 1) % pat.length]; }
       }
@@ -540,11 +568,12 @@
       s.zones.discard.push(...s.zones.hand); s.zones.hand = [];
       if (this.checkEnd()) return;
       if (s.pst.weak > 0) s.pst.weak -= 1;
+      if (s.silenceUntil <= s.turn) s.silenceUntil = 0;
       // enemy phase
       for (const e of [...s.enemies]) {
         if (!e.alive) continue;
         e.block = 0; e.st.reflect = 0;
-        const pat = this.ix.enemies[e.id].pattern;
+        const pat = e.pattern || this.ix.enemies[e.id].pattern;
         if (e.stunned) { e.stunned = false; e.pi = (e.pi + 1) % pat.length; this.ev('stunSkip', { uid: e.uid }); continue; }
         const mv = pat[e.pi % pat.length];
         e.pi = (e.pi + 1) % pat.length;
@@ -575,11 +604,11 @@
     enemyMove(e, mv) {
       const s = this.s;
       switch (mv.t) {
-        case 'atk': for (let h = 0; h < (mv.h || 1); h++) { this.enemyHit(e, mv.d); if (this.isOver()) return; } break;
+        case 'atk': { const phase = e.phaseIndex; for (let h = 0; h < (mv.h || 1); h++) { this.enemyHit(e, mv.d); if (this.isOver() || !e.alive || e.phaseIndex !== phase) return; } break; }
         case 'def': e.block += mv.b; if (mv.str) e.st.str += mv.str; break;
         case 'buff': e.st.str += mv.str; break;
         case 'debuff': s.pst[mv.s] = (s.pst[mv.s] || 0) + mv.n; this.ev('partyDebuff', { s: mv.s, n: mv.n }); break;
-        case 'atkdebuff': for (let h = 0; h < (mv.h || 1); h++) { this.enemyHit(e, mv.d); if (this.isOver()) return; } s.pst[mv.s] = (s.pst[mv.s] || 0) + mv.n; break;
+        case 'atkdebuff': { const phase = e.phaseIndex; for (let h = 0; h < (mv.h || 1); h++) { this.enemyHit(e, mv.d); if (this.isOver() || !e.alive || e.phaseIndex !== phase) return; } s.pst[mv.s] = (s.pst[mv.s] || 0) + mv.n; break; }
         case 'charge': this.ev('charge', { uid: e.uid }); break;
         case 'summon': for (let k = 0; k < mv.n; k++) if (this.alive().length < 5) { const m = Battle.addEnemy(s, this.ix, mv.e); this.setIntentsFor(m); } break;
         case 'heal': { const tgt = this.alive().sort((a, b) => a.hp / a.maxHp - b.hp / b.maxHp)[0]; if (tgt) { tgt.hp = Math.min(tgt.maxHp, tgt.hp + mv.n); this.ev('enemyHeal', { uid: tgt.uid, n: mv.n }); } break; }
@@ -587,10 +616,49 @@
         case 'reflect': e.st.reflect = mv.n; break;
         case 'expose': e.st.vul += mv.n; this.ev('expose', { uid: e.uid }); if (mv.then) this.enemyMove(e, mv.then); break;
         case 'blockAll': for (const x of this.alive()) x.block += mv.b; break;
+        case 'apDrain':
+          if (!Number.isInteger(mv.n) || mv.n < 0) throw new RuleError('INVALID_ENEMY_MOVE');
+          s.apDrainNext = (s.apDrainNext || 0) + mv.n;
+          this.ev('apDrain', { uid: e.uid, n: mv.n }); break;
+        case 'sealSlot': {
+          const due = s.turn + 2;
+          const fallback = s.sealedUntil >= s.turn + 1 || s.res.filter(r => r.due === due).length >= this.nextPlayerSlotCapacity(due);
+          if (fallback) e.block += 10; else s.sealedUntil = s.turn + 1;
+          this.ev('sealSlot', { uid: e.uid, until: s.sealedUntil, fallback }); break;
+        }
+        case 'delayRes': {
+          const preview = this.previewDelay();
+          if (!preview) { this.ev('delayRes', { uid: null, discarded: false }); break; }
+          const r = s.res.find(x => x.uid === preview.uid);
+          if (preview.discarded) { s.res.splice(s.res.indexOf(r), 1); s.zones.discard.push(r.uid); }
+          else { r.due = preview.to; r.delayed = true; }
+          this.ev('delayRes', preview); break;
+        }
+        case 'silence':
+          if (mv.n !== undefined && mv.n !== 1) throw new RuleError('INVALID_ENEMY_MOVE');
+          s.silenceUntil = Math.max(s.silenceUntil || 0, s.turn + 1);
+          this.ev('silence', { uid: e.uid, until: s.silenceUntil }); break;
+        case 'eatName': {
+          const tokens = s.zones.discard.filter(uid => s.cards[uid].token);
+          const pool = tokens.length ? tokens : s.zones.discard;
+          const uid = pool.length ? Rng.pick(s.rng, pool) : null;
+          if (uid) this.exhaustCard(uid);
+          this.ev('eatName', { uid }); break;
+        }
+        case 'phase': {
+          if (e.tier !== 'boss' || e.hp !== 0 || e.phaseIndex) throw new RuleError('WRONG_PHASE');
+          if (!Number.isInteger(mv.hp) || mv.hp <= 0 || !Number.isInteger(mv.brk) || mv.brk <= 0 ||
+              !Array.isArray(mv.weak) || !mv.weak.length || new Set(mv.weak).size !== mv.weak.length || !mv.weak.every(a => this.ix.raw.attributes.some(x => x.id === a)) ||
+              !Array.isArray(mv.pattern) || !mv.pattern.length || mv.pattern.some(m => !m || typeof m.t !== 'string' || m.t === 'phase')) throw new RuleError('INVALID_ENEMY_MOVE');
+          e.phaseIndex = 1; e.maxHp = Math.max(1, Math.round(mv.hp * ((s.diff && s.diff.hp) || 100) / 100)); e.hp = e.maxHp;
+          e.brkMax = mv.brk; e.brk = mv.brk; e.weak = [...mv.weak]; e.pattern = clone(mv.pattern); e.pi = 0;
+          e.block = 0; e.st = { vul: 0, weak: 0, mark: 0, burn: 0, str: 0, reflect: 0 }; e.stunned = false; e.brokenUntil = 0;
+          this.setIntentsFor(e); this.ev('phase', { uid: e.uid, index: 1, hp: e.hp, brk: e.brk }); break;
+        }
         default: throw new RuleError('UNSUPPORTED_EFFECT', { enemyMove: mv.t });
       }
     }
-    setIntentsFor(e) { const pat = this.ix.enemies[e.id].pattern; e.intent = pat[e.pi % pat.length]; e.next = pat[(e.pi + 1) % pat.length]; }
+    setIntentsFor(e) { const pat = e.pattern || this.ix.enemies[e.id].pattern; e.intent = pat[e.pi % pat.length]; e.next = pat[(e.pi + 1) % pat.length]; }
 
     enemyHit(e, base) {
       const s = this.s;
@@ -1067,6 +1135,11 @@
     }
     killEnemy(e, ctx) {
       const s = this.s;
+      const phase = this.ix.enemies[e.id].phase;
+      if (phase && !e.phaseIndex) {
+        if (phase.t !== 'phase') throw new RuleError('INVALID_ENEMY_MOVE');
+        this.enemyMove(e, phase); return;
+      }
       e.alive = false; this.ev('kill', { uid: e.uid, id: e.id });
       if (ctx) ctx.killed = true;
       if (e.st.mark > 0) {
@@ -1221,7 +1294,7 @@
           if (!r) break;
           if (r.due > s.turn + 1) {
             if (this.freeSlots('next') <= 0) throw new RuleError('PULL_DESTINATION_FULL');
-            r.due -= 1; r.kind = 'next'; this.ev('pull', { uid: r.uid, due: r.due });
+            r.due -= 1; r.kind = 'next'; delete r.delayed; this.ev('pull', { uid: r.uid, due: r.due });
           } else {
             s.res = s.res.filter((x) => x !== r);
             this.ev('pull', { uid: r.uid, due: s.turn });
@@ -1430,6 +1503,7 @@
       const s = this.s;
       return {
         v: s.v, turn: s.turn, phase: s.phase, hp: s.hp, maxHp: s.maxHp, block: s.block, counter: s.counter, ap: s.ap,
+        apNext: s.apNext, apDrainNext: s.apDrainNext || 0, silenceUntil: s.silenceUntil || 0,
         debt: this.debtTotal(), drawCount: s.zones.draw.length, discard: [...s.zones.discard], exhaustCount: s.zones.exhaust.length,
         hand: s.zones.hand.map((u) => ({ ...s.cards[u] })), res: s.res.map((r) => ({ ...r })),
         enemies: s.enemies.map((e) => ({ ...e, st: { ...e.st } })), actors: s.actors.map((a) => ({ id: a.id, gauge: a.gauge })),

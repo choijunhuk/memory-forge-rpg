@@ -26,4 +26,7 @@ jobs:
       - run: node tools/gen_vectors.mjs && git diff --exit-code engine/tests/vectors/
       - run: bash tools/run_all_checks.sh
       - run: npm run test:memory-ui
+      - run: node engine/tests/fuzz_runs.mjs 100 full --late
+      - run: node engine/tests/balance_probe.mjs 350 --late --out reports/paired_balance_late.json
+      - run: npm run test:late-ui
       - run: python3 tools/check_integrated_release.py

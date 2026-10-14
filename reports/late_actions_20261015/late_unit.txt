@@ -1,0 +1,36 @@
+✔ apDrain removes AP on the next turn separately from due debt and then clears (3.543125ms)
+✔ repeated apDrain cannot make next-turn AP negative (1.411083ms)
+✔ silence increases next-turn reservation cost once and expires after that turn (1.815292ms)
+✔ silence never charges a free instance or a freeNext reservation (1.063833ms)
+✔ sealSlot expires after its protected turn and can seal the following turn again (1.159542ms)
+✔ two same-phase sealSlot enemies make the second gain block 10 (1.072792ms)
+✔ sealSlot ignores reservations due before the protected following-player turn (2.074667ms)
+✔ sealSlot gains enemy block 10 when future base slots are full (1.232084ms)
+✔ delayRes shifts the newest reservation due date while preserving its power kind (1.289959ms)
+✔ delayRes discards an overflowing reservation without refund or losing its card (1.368542ms)
+✔ delayRes with no reservation leaves RNG and card zones unchanged (1.743541ms)
+✔ delayRes discards a reservation shifted outside the two-turn board (1.121125ms)
+✔ eatName exhausts a discard token before a normal card (1.776542ms)
+✔ eatName with an empty discard pile does not advance RNG (1.085334ms)
+✔ a boss first lethal hit changes the same enemy to phase two without a kill (1.29025ms)
+✔ invalid phase metadata makes a lethal player command atomic (1.501791ms)
+✔ later hits of one card damage phase two and only final death emits kill (1.261625ms)
+✔ serialized phase-two battle resumes with the new intent and deterministic next turn (1.409125ms)
+✔ no silence surcharge exists before the first player turn (2.434917ms)
+✔ next AP preview and actual start use the same bonus, debt and drain calculation (2.794959ms)
+✔ AP forecast includes the visible drain once and excludes a stunned enemy (1.811708ms)
+✔ delay preview is pure and matches the actual discard decision (1.502459ms)
+✔ an ordinary after reservation is not marked as enemy-delayed when its column rolls forward (1.245375ms)
+✔ successful enemy delay carries an explicit marker independently of the value kind (1.090583ms)
+✔ player pull clears the enemy-delay label when it changes the reservation power kind (1.427708ms)
+✔ a malformed phase discriminator cannot leave a living zero-HP boss (1.743333ms)
+✔ counter-triggered phase change ends the old enemy multihit action (1.216ms)
+✔ candidate overlay preserves all original data and exact declared boss budgets (2.203ms)
+ℹ tests 28
+ℹ suites 0
+ℹ pass 28
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 109.963625

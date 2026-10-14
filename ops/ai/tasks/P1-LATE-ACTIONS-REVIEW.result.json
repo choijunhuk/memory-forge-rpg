@@ -1,0 +1,43 @@
+{
+  "session_id": "9700d04f-06c9-457e-b940-4af543571439",
+  "subtype": "success",
+  "is_error": false,
+  "permission_denials": [],
+  "result": "# P1-LATE-ACTIONS-REVIEW 결과 (읽기 전용 교차 검토)\n\n**판정: 엔진 쪽에 의미상 결함 1건(봉인 `sealSlot`), UI 미리보기 결함 2건, 근거 자료 공백 1건이 있습니다.** 이 4건 외에는 검토 범위에서 구체적인 차단 요소를 찾지 못했습니다. 파일은 수정하지 않았고, 수치 재조정이나 승인 제안도 하지 않습니다.\n\n**검증 방식:** 소스만 읽었습니다. Bash가 없어서 테스트, `npm run docs`·`npm run test:docs`, 밸런스 프로브는 모두 **NOT_RUN**입니다. 요약 JSON에 적힌 engine·runner 해시가 작업 지시 SHA와 일치하는지만 확인했습니다. LSP 도구가 없다는 이유만으로 승인을 보류하지는 않았습니다.\n\n## 결함\n\n### 1. [엔진] `sealSlot`이 다음 플레이어 턴이 아니라 지금 턴의 칸 상태를 보고 판단함\n- 위치: `engine/rules-core.js:603`\n- 문제: `s.sealedUntil >= s.turn || this.freeSlots('next') <= 0`로 대체 여부를 정합니다.\n  - 그런데 적이 봉인을 거는 칸은 턴 t+1의 '다음 턴' 칸(만기 t+2)입니다.\n  - 반면 `freeSlots('next')`는 곧 해결될 만기 t+1 칸과 이번 턴 임시 칸을 기준으로 계산합니다.\n  - 시간 지연 `delayRes`(`:612`)는 다음 턴 기본 칸과 `sealedUntil >= s.turn+1` 기준을 씁니다. 같은 엔진 안에서 두 행동의 기준이 서로 다릅니다.\n- 재현 A: `late_enemy_actions.test.mjs:79-86`이 그대로 재현입니다.\n  - 1턴에 '다음 턴' 예약 2장을 겁니다.\n  - 2턴의 다음 턴 칸은 비어 있는데도 엔진은 방어 +10으로 대체합니다. 이 테스트는 잘못된 동작을 정답으로 고정하고 있습니다.\n- 재현 B: 라비엔 `ravien_collateral`(실제 데이터에 있음)을 턴 t-1에 사용하면 `sealedUntil=t`가 됩니다.\n  - 턴 t 적 단계에서 인장 골렘이 봉인할 때, 턴 t+1에는 봉인이 없는데도 대체로 처리됩니다.\n- 반대 방향 문제: 만기 t+2 칸이 이미 찼는데 봉인이 들어가면 `used > capacity`가 됩니다.\n  - `checkInvariants`(`:1474-1479`)는 최대치만 검사하므로 이 상태를 막지 못합니다.\n  - 명세 §5(`design:407`) \"빈 칸이 있어야 봉인할 수 있다\"와 어긋납니다.\n- 수정 방향(이미 정한 규칙 안에서): `delayRes`처럼 판단 기준을 다음 플레이어 턴으로 맞춥니다. `:68-77`, `:79-86` 테스트는 적 단계 시점으로 다시 작성해야 합니다.\n\n### 2. [UI] '다음 턴 행동력' 미리보기에 예고된 시간 착취가 빠짐\n- 위치: `prototype/src/ui.js:543-553`\n- 문제:\n  - `apDrainNext`는 적 단계에서만 채워지고 `startTurn`에서 0으로 돌아갑니다(`rules-core.js:498,600`). 그래서 플레이어 턴 중에는 항상 0입니다.\n  - 따라서 `nextTurnAp()` 미리보기와 '시간 착취' 칩에는 예고된 `apDrain`이 반영되지 않습니다.\n- 재현: 채무 망령이 `apDrain 1`을 예고한 상태에서 부채가 있으면, 알약 표시가 실제보다 1 높게 나옵니다.\n- 영향: 커밋 6ce8e66의 목표인 \"행동 확정 전 노출\"과 어긋납니다. 엔진 계산 자체는 일치합니다. 다만 기절한 적은 착취하지 않으므로, 미리보기에서도 기절 상태를 제외해야 합니다.\n\n### 3. [UI] 시간 지연 예고에 '버려짐·행동력 환급 없음'이 미리 나오지 않음\n- 위치: `prototype/src/ui.js:488`\n- 문제: §10.6(`design:2651`)은 \"빈 칸이 없어 버리게 될 때 비용 환급 여부를 미리보기에서 보여야 한다\"고 요구합니다.\n  - 의도 표시는 항상 \"만기 +1턴\"만 보여 줍니다.\n  - 버려진다는 사실은 사후 로그(`:639`)에만 나옵니다.\n- 재현: `late_enemy_actions.test.mjs:103` 상황, 즉 '다다음 턴' 예약 2장과 '다음 턴' 예약 1장이 있을 때 프롬프터의 지연 의도가 그렇습니다.\n- 수정 방향: 엔진 `:610-614`의 칸 계산을 순수 함수로 분리해 UI와 같이 쓰면 됩니다.\n\n### 4. [근거] 요약 JSON만으로는 '실패 지표 33개'를 확인할 수 없음\n- 위치: `ops/ai/tasks/P1-LATE-BALANCE-SUMMARY.json:29-32`\n- 확인된 것: 시험 횟수(44그룹 × 10회 × 3정책 = 1320), 해시, 무명 플래너 수치(20.4 > 19.8, 67.6 > 55)는 이 파일과 `assessTargets`(`balance_probe.mjs:169-170`)로 검증됩니다.\n- 공백: `failedMetrics: 33`은 지표별 상세나 전체 보고서 경로·명령 없이 개수만 적혀 있습니다.\n- 수정 방향: `--out` 전체 보고서의 경로와 해시, 또는 `assessment.metrics` 중 실패 항목을 함께 남겨야 합니다.\n\n## 차단 요소는 아니지만 참고할 점\n- `rules-core.js:634`: `s.diff.hp`에 다른 곳(`:326`, `:646`)과 같은 null 방어가 없습니다. 현재 설정 경로에서는 항상 값이 있어서 실제로 문제가 될 가능성은 낮습니다.\n- 지연된 '다다음 턴' 예약을 앞당기면(`:1278`) `delayed: true`가 그대로 남습니다. 그래서 UI에 \"원래 다음 턴 위력\"이라는 이전 상태의 라벨이 남을 수 있습니다.\n\n## 소스로 확인한 항목 (실행 안 함)\n- **2페이즈 처리:** 첫 처치 때 처치 훅이 실행되지 않고, 초과 피해도 넘어가지 않습니다. 상태·방어·균열은 초기화되고, 이후 타격은 2페이즈에 이어서 들어갑니다. 반격으로 페이즈가 바뀌면 원래 다단 공격과 `atkdebuff`가 중단됩니다.\n- **나머지 행동:** `nextTurnAp`는 엔진과 UI가 같은 함수를 씁니다. 시간 지연은 `kind`를 유지하고 `delayed`를 명시합니다. 침묵은 중첩되지 않고 무료 비용을 우선합니다. 이름 먹기는 토큰을 먼저 고르며, 대상이 없으면 RNG를 소모하지 않습니다.\n- **프로브:** 3개 정책 모두 설정 해시와 begin 이후 상태 해시가 같아야 하고, 다르면 예외를 던집니다. 정책 RNG는 분리돼 있고, 분모는 모든 결과를 포함하며, 분위수는 nearest-rank 방식입니다. 예상하지 못한 사전 검사 오류는 실행을 중단시킵니다. 후반 구역은 2구역 하한을 그대로 쓰고 상한만 턴 +10%, 체력 손실 +5%p로 넓힙니다. 승률 기준은 random 정책에만 적용됩니다.\n- **후보 데이터:** 적 43종, 그룹 44개이고 라이브 데이터 20종은 바뀌지 않았습니다.\n\n## 막힌 점과 다음 작업\n- 막힌 점: 명령 실행 수단이 없어서 테스트 22개와 엣지 회귀, 프로브 재측정은 이번 검토에서 확인하지 못했습니다(NOT_RUN).\n- 다음 작업:\n  - 1번은 Codex 엔진 담당이 맞춰야 합니다. 테스트 2건도 함께 수정해야 합니다.\n  - 2·3번은 UI 작업이며, 엔진에서 칸 계산 헬퍼를 내보내는 일정에 맞춰 진행합니다.\n  - 4번은 근거 파일을 보강하면 됩니다.\n- 기타: 이미지 생성 작업은 없습니다. session_id는 이 세션 안에서 확인할 수 없습니다.",
+  "task_id": "P1-LATE-ACTIONS-REVIEW",
+  "base_commit": "4793fcb87334bed16d42303c15705a065adc2504",
+  "worktree": "claude-late-actions/Memory_forge",
+  "branch": "claude/late-actions-ui",
+  "cli_version": "2.1.285",
+  "process_exit": 0,
+  "billing": "Verified claude.ai Max authentication and account Usage credits OFF before inference. No API, bare, token extraction or paid fallback.",
+  "raw_output": "ops/ai/local (Git ignored)",
+  "execution_limit": "Claude had no Bash access; its own tests and measurements are NOT_RUN. Root executed integration checks separately.",
+  "resolutions": [
+    {
+      "finding": "Seal checked the current instead of following-player-turn slots",
+      "resolution": "Use base capacity for due t+2, active seal at t+1; expired seal/current due reservations do not block. Three red regressions now pass."
+    },
+    {
+      "finding": "Pending AP drain absent from preview",
+      "resolution": "nextTurnDrain is phase-aware and excludes stunned enemies; preview and actual AP regressions pass."
+    },
+    {
+      "finding": "Delay overflow no-refund warning absent before action",
+      "resolution": "Pure previewDelay shared with enemyMove and UI; browser verifies before endTurn."
+    },
+    {
+      "finding": "Summary alone did not substantiate 33 failed metrics",
+      "resolution": "Full raw scenarios/trials and assessment.metrics committed; final corrected-engine rerun has 32 misses, not the superseded 33."
+    }
+  ],
+  "additional_corrections": [
+    "Phase HP scaling follows existing diff fallback",
+    "Player pull clears delayed label when it changes power kind"
+  ],
+  "final_evidence": {
+    "report": "reports/late_actions_20261015/paired_balance.json",
+    "tests": "reports/late_actions_20261015/engine.txt",
+    "browser": "reports/late_actions_20261015/browser_late.txt"
+  }
+}

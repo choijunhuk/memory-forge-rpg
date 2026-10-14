@@ -667,7 +667,7 @@ root.MFMemoryV2=api;
       if (!setup.party || setup.party.length < 1 || setup.party.length > 3) throw new RuleError('PARTY_SIZE');
       const s = {
         schema: 'mf-battle-0.7', v: 0, turn: 0, phase: 'CREATED', rng: Rng.seed(setup.seed ?? 20261014), seq: 0,
-        hp: setup.hp, maxHp: setup.maxHp, block: 0, counter: 0, ap: 0, apNext: setup.nextApBonus || 0, breakApTurn: 0,
+        hp: setup.hp, maxHp: setup.maxHp, block: 0, counter: 0, ap: 0, apNext: setup.nextApBonus || 0, apDrainNext: 0, silenceUntil: 0, breakApTurn: 0,
         pst: { weak: 0 }, buffs: [], debts: [], debtCap: R.debtCap, restraint: { active: false, usedTurn: 0 }, bonus: { turn: 0, avail: false },
         drawPenalty: 0, sealedUntil: 0, slotsBase: { next: R.slots.next, after: R.slots.after }, slotsTemp: { next: 0, after: 0 },
         growthCount: 0, growthCap: R.growthCapPerBattle, played: 0, lastOwner: null, ownersThisTurn: [],
@@ -805,6 +805,7 @@ root.MFMemoryV2=api;
       for (const p of this.partsOf(inst)) if (p.fx.cost) cost += p.fx.cost;
       if (def.costIf && this.cond(def.costIf.cond, { inst })) cost += def.costIf.delta;
       if (mode !== 'now' && this.has('empty_clock') && !s.battleFlags.emptyClockUsed) cost -= 1;
+      if (mode !== 'now' && s.silenceUntil > 0 && s.silenceUntil >= s.turn) cost += 1;
       if (s.freeNext > 0) cost = 0;
       return Math.max(0, cost);
     }
@@ -833,6 +834,34 @@ root.MFMemoryV2=api;
     }
     slotsUsed(kind) { const due = this.s.turn + (kind === 'next' ? 1 : 2); return this.s.res.filter((r) => r.due === due).length; }
     freeSlots(kind) { return this.slotCapacity(kind) - this.slotsUsed(kind); }
+    nextPlayerSlotCapacity(due) {
+      const s = this.s; const turn = s.turn + 1; const R = this.ix.rules.slots;
+      // Temporary slots expire before the affected player turn.
+      if (due === turn + 1) return Math.max(0, Math.min(R.nextMax, s.slotsBase.next) - (s.sealedUntil >= turn ? 1 : 0));
+      return due === turn + 2 ? Math.min(R.afterMax, s.slotsBase.after) : 0;
+    }
+    previewDelay() {
+      const s = this.s; const r = s.res.slice().sort((a, b) => b.order - a.order)[0];
+      if (!r) return null;
+      const to = r.due + 1;
+      return { uid: r.uid, from: r.due, to, kind: r.kind,
+        discarded: s.res.filter(x => x !== r && x.due === to).length >= this.nextPlayerSlotCapacity(to) };
+    }
+    nextTurnDrain() {
+      const s = this.s;
+      const pending = s.phase === 'PLAYER' ? this.alive().reduce((n, e) => {
+        const pat = e.pattern || this.ix.enemies[e.id].pattern; const mv = pat[e.pi % pat.length];
+        return n + (!e.stunned && mv.t === 'apDrain' ? mv.n : 0);
+      }, 0) : 0;
+      return (s.apDrainNext || 0) + pending;
+    }
+    nextTurnAp() {
+      const s = this.s; const R = this.ix.rules;
+      const due = s.debts.filter(d => d.due <= s.turn + 1).reduce((total, d) => total + d.n, 0);
+      const ap = R.apPerTurn + s.apNext + (this.has('chrono_crown') ? 1 : 0)
+        - (s.turn === 0 && this.has('cracked_hourglass') ? 1 : 0) - due - this.nextTurnDrain();
+      return Math.max(0, Math.min(R.apMax, ap));
+    }
 
     // ───── commands (atomic + idempotent) ─────
     command(req) {
@@ -883,6 +912,7 @@ root.MFMemoryV2=api;
 
     startTurn(first = false) {
       const s = this.s; const R = this.ix.rules;
+      const ap = this.nextTurnAp();
       s.turn += 1; s.phase = 'RESOLVING';
       // v0.7.1: battle-start effects belong to turn 1; clear only at subsequent turn boundaries.
       if (!first) {
@@ -897,13 +927,11 @@ root.MFMemoryV2=api;
       for (const a of s.actors) a.gaugeTurn = 0;
       for (const c of Object.values(s.cards)) c.costMod = 0;
       // action points: base + carried bonus (+relics) - due debts
-      let ap = R.apPerTurn + s.apNext;
-      if (this.has('chrono_crown')) ap += 1;
-      if (first && this.has('cracked_hourglass')) ap -= 1;
       s.apNext = 0;
       const due = s.debts.filter((d) => d.due <= s.turn).reduce((a, d) => a + d.n, 0);
       s.debts = s.debts.filter((d) => d.due > s.turn);
-      s.ap = Math.max(0, Math.min(R.apMax, ap - due));
+      s.apDrainNext = 0;
+      s.ap = ap;
       if (due) this.ev('repay', { n: due });
       if (this.has('infinite_circuit')) { this.loseHp(this.scaleVit(2), 'relic'); if (this.checkEnd()) return; }
       // due reservations resolve in (due, order)
@@ -936,7 +964,7 @@ root.MFMemoryV2=api;
 
     setIntents() {
       for (const e of this.alive()) {
-        const pat = this.ix.enemies[e.id].pattern;
+        const pat = e.pattern || this.ix.enemies[e.id].pattern;
         if (e.stunned) { e.intent = { t: 'stun', label: '균열: 행동 불가' }; e.next = pat[(e.pi + 1) % pat.length]; }
         else { e.intent = pat[e.pi % pat.length]; e.next = pat[(e.pi + 1) % pat.length]; }
       }
@@ -954,11 +982,12 @@ root.MFMemoryV2=api;
       s.zones.discard.push(...s.zones.hand); s.zones.hand = [];
       if (this.checkEnd()) return;
       if (s.pst.weak > 0) s.pst.weak -= 1;
+      if (s.silenceUntil <= s.turn) s.silenceUntil = 0;
       // enemy phase
       for (const e of [...s.enemies]) {
         if (!e.alive) continue;
         e.block = 0; e.st.reflect = 0;
-        const pat = this.ix.enemies[e.id].pattern;
+        const pat = e.pattern || this.ix.enemies[e.id].pattern;
         if (e.stunned) { e.stunned = false; e.pi = (e.pi + 1) % pat.length; this.ev('stunSkip', { uid: e.uid }); continue; }
         const mv = pat[e.pi % pat.length];
         e.pi = (e.pi + 1) % pat.length;
@@ -989,11 +1018,11 @@ root.MFMemoryV2=api;
     enemyMove(e, mv) {
       const s = this.s;
       switch (mv.t) {
-        case 'atk': for (let h = 0; h < (mv.h || 1); h++) { this.enemyHit(e, mv.d); if (this.isOver()) return; } break;
+        case 'atk': { const phase = e.phaseIndex; for (let h = 0; h < (mv.h || 1); h++) { this.enemyHit(e, mv.d); if (this.isOver() || !e.alive || e.phaseIndex !== phase) return; } break; }
         case 'def': e.block += mv.b; if (mv.str) e.st.str += mv.str; break;
         case 'buff': e.st.str += mv.str; break;
         case 'debuff': s.pst[mv.s] = (s.pst[mv.s] || 0) + mv.n; this.ev('partyDebuff', { s: mv.s, n: mv.n }); break;
-        case 'atkdebuff': for (let h = 0; h < (mv.h || 1); h++) { this.enemyHit(e, mv.d); if (this.isOver()) return; } s.pst[mv.s] = (s.pst[mv.s] || 0) + mv.n; break;
+        case 'atkdebuff': { const phase = e.phaseIndex; for (let h = 0; h < (mv.h || 1); h++) { this.enemyHit(e, mv.d); if (this.isOver() || !e.alive || e.phaseIndex !== phase) return; } s.pst[mv.s] = (s.pst[mv.s] || 0) + mv.n; break; }
         case 'charge': this.ev('charge', { uid: e.uid }); break;
         case 'summon': for (let k = 0; k < mv.n; k++) if (this.alive().length < 5) { const m = Battle.addEnemy(s, this.ix, mv.e); this.setIntentsFor(m); } break;
         case 'heal': { const tgt = this.alive().sort((a, b) => a.hp / a.maxHp - b.hp / b.maxHp)[0]; if (tgt) { tgt.hp = Math.min(tgt.maxHp, tgt.hp + mv.n); this.ev('enemyHeal', { uid: tgt.uid, n: mv.n }); } break; }
@@ -1001,10 +1030,49 @@ root.MFMemoryV2=api;
         case 'reflect': e.st.reflect = mv.n; break;
         case 'expose': e.st.vul += mv.n; this.ev('expose', { uid: e.uid }); if (mv.then) this.enemyMove(e, mv.then); break;
         case 'blockAll': for (const x of this.alive()) x.block += mv.b; break;
+        case 'apDrain':
+          if (!Number.isInteger(mv.n) || mv.n < 0) throw new RuleError('INVALID_ENEMY_MOVE');
+          s.apDrainNext = (s.apDrainNext || 0) + mv.n;
+          this.ev('apDrain', { uid: e.uid, n: mv.n }); break;
+        case 'sealSlot': {
+          const due = s.turn + 2;
+          const fallback = s.sealedUntil >= s.turn + 1 || s.res.filter(r => r.due === due).length >= this.nextPlayerSlotCapacity(due);
+          if (fallback) e.block += 10; else s.sealedUntil = s.turn + 1;
+          this.ev('sealSlot', { uid: e.uid, until: s.sealedUntil, fallback }); break;
+        }
+        case 'delayRes': {
+          const preview = this.previewDelay();
+          if (!preview) { this.ev('delayRes', { uid: null, discarded: false }); break; }
+          const r = s.res.find(x => x.uid === preview.uid);
+          if (preview.discarded) { s.res.splice(s.res.indexOf(r), 1); s.zones.discard.push(r.uid); }
+          else { r.due = preview.to; r.delayed = true; }
+          this.ev('delayRes', preview); break;
+        }
+        case 'silence':
+          if (mv.n !== undefined && mv.n !== 1) throw new RuleError('INVALID_ENEMY_MOVE');
+          s.silenceUntil = Math.max(s.silenceUntil || 0, s.turn + 1);
+          this.ev('silence', { uid: e.uid, until: s.silenceUntil }); break;
+        case 'eatName': {
+          const tokens = s.zones.discard.filter(uid => s.cards[uid].token);
+          const pool = tokens.length ? tokens : s.zones.discard;
+          const uid = pool.length ? Rng.pick(s.rng, pool) : null;
+          if (uid) this.exhaustCard(uid);
+          this.ev('eatName', { uid }); break;
+        }
+        case 'phase': {
+          if (e.tier !== 'boss' || e.hp !== 0 || e.phaseIndex) throw new RuleError('WRONG_PHASE');
+          if (!Number.isInteger(mv.hp) || mv.hp <= 0 || !Number.isInteger(mv.brk) || mv.brk <= 0 ||
+              !Array.isArray(mv.weak) || !mv.weak.length || new Set(mv.weak).size !== mv.weak.length || !mv.weak.every(a => this.ix.raw.attributes.some(x => x.id === a)) ||
+              !Array.isArray(mv.pattern) || !mv.pattern.length || mv.pattern.some(m => !m || typeof m.t !== 'string' || m.t === 'phase')) throw new RuleError('INVALID_ENEMY_MOVE');
+          e.phaseIndex = 1; e.maxHp = Math.max(1, Math.round(mv.hp * ((s.diff && s.diff.hp) || 100) / 100)); e.hp = e.maxHp;
+          e.brkMax = mv.brk; e.brk = mv.brk; e.weak = [...mv.weak]; e.pattern = clone(mv.pattern); e.pi = 0;
+          e.block = 0; e.st = { vul: 0, weak: 0, mark: 0, burn: 0, str: 0, reflect: 0 }; e.stunned = false; e.brokenUntil = 0;
+          this.setIntentsFor(e); this.ev('phase', { uid: e.uid, index: 1, hp: e.hp, brk: e.brk }); break;
+        }
         default: throw new RuleError('UNSUPPORTED_EFFECT', { enemyMove: mv.t });
       }
     }
-    setIntentsFor(e) { const pat = this.ix.enemies[e.id].pattern; e.intent = pat[e.pi % pat.length]; e.next = pat[(e.pi + 1) % pat.length]; }
+    setIntentsFor(e) { const pat = e.pattern || this.ix.enemies[e.id].pattern; e.intent = pat[e.pi % pat.length]; e.next = pat[(e.pi + 1) % pat.length]; }
 
     enemyHit(e, base) {
       const s = this.s;
@@ -1481,6 +1549,11 @@ root.MFMemoryV2=api;
     }
     killEnemy(e, ctx) {
       const s = this.s;
+      const phase = this.ix.enemies[e.id].phase;
+      if (phase && !e.phaseIndex) {
+        if (phase.t !== 'phase') throw new RuleError('INVALID_ENEMY_MOVE');
+        this.enemyMove(e, phase); return;
+      }
       e.alive = false; this.ev('kill', { uid: e.uid, id: e.id });
       if (ctx) ctx.killed = true;
       if (e.st.mark > 0) {
@@ -1635,7 +1708,7 @@ root.MFMemoryV2=api;
           if (!r) break;
           if (r.due > s.turn + 1) {
             if (this.freeSlots('next') <= 0) throw new RuleError('PULL_DESTINATION_FULL');
-            r.due -= 1; r.kind = 'next'; this.ev('pull', { uid: r.uid, due: r.due });
+            r.due -= 1; r.kind = 'next'; delete r.delayed; this.ev('pull', { uid: r.uid, due: r.due });
           } else {
             s.res = s.res.filter((x) => x !== r);
             this.ev('pull', { uid: r.uid, due: s.turn });
@@ -1844,6 +1917,7 @@ root.MFMemoryV2=api;
       const s = this.s;
       return {
         v: s.v, turn: s.turn, phase: s.phase, hp: s.hp, maxHp: s.maxHp, block: s.block, counter: s.counter, ap: s.ap,
+        apNext: s.apNext, apDrainNext: s.apDrainNext || 0, silenceUntil: s.silenceUntil || 0,
         debt: this.debtTotal(), drawCount: s.zones.draw.length, discard: [...s.zones.discard], exhaustCount: s.zones.exhaust.length,
         hand: s.zones.hand.map((u) => ({ ...s.cards[u] })), res: s.res.map((r) => ({ ...r })),
         enemies: s.enemies.map((e) => ({ ...e, st: { ...e.st } })), actors: s.actors.map((a) => ({ id: a.id, gauge: a.gauge })),
@@ -3010,7 +3084,7 @@ root.MFMemoryV2=api;
   }
 
   // ───────── battle ─────────
-  const INTENT_TEXT = (mv, e) => {
+  const INTENT_TEXT = (mv, e, current = false) => {
     if (!mv) return { cls: 'other', ico: ICON.eye, t: '-' };
     const dm = (d) => { const s = app.run ? app.run.battle.s : null; const mul = s ? s.diff.dmg : 100; return Math.round(d * mul / 100) + ((e && e.st.str) || 0); };
     switch (mv.t) {
@@ -3027,14 +3101,27 @@ root.MFMemoryV2=api;
       case 'expose': return { cls: 'atk', ico: ICON.eye, t: `${mv.label || '약점 노출'} → ${dm(mv.then.d)}` };
       case 'blockAll': return { cls: 'def', ico: ICON.shield, t: `전원 방어 ${mv.b}` };
       case 'stun': return { cls: 'stun', ico: ICON.zz, t: '균열: 행동 불가' };
+      // late-zone actions (§10.4); numbers come from the move, rules live in the engine
+      case 'apDrain': return { cls: 'other', ico: ICON.eye, t: `시간 착취 ${mv.n} · 다음 턴 행동력 −${mv.n}` };
+      case 'sealSlot': return { cls: 'other', ico: ICON.shield, t: '칸 봉인 · 다음 턴 예약 칸 1개' };
+      case 'delayRes': {
+        const preview = current && app.run ? app.run.battle.previewDelay() : null;
+        const warning = preview && preview.discarded ? '현재 기준 버림 · 행동력 환급 없음' : '빈 칸 없으면 버림 · 행동력 환급 없음';
+        return { cls: 'other', ico: ICON.eye, t: `시간 지연 · 마지막 예약 만기 +1턴 · ${warning}` };
+      }
+      case 'silence': return { cls: 'other', ico: ICON.zz, t: '침묵 · 다음 턴 예약 비용 +1' };
+      case 'eatName': return { cls: 'other', ico: ICON.void, t: '이름 먹기 · 버린 카드 1장 소멸' };
+      case 'phase': return { cls: 'other', ico: ICON.up, t: '2페이즈' };
       default: return { cls: 'other', ico: ICON.eye, t: mv.t };
     }
   };
   function enemyCard(b, e, targetMode) {
-    const it = INTENT_TEXT(e.intent, e); const nx = e.next && !(e.intent && e.intent.t === 'stun') ? INTENT_TEXT(e.next, e) : (e.next ? INTENT_TEXT(e.next, e) : null);
+    const it = INTENT_TEXT(e.intent, e, true); const nx = e.next ? INTENT_TEXT(e.next, e) : null;
     const targetable = targetMode && e.alive && (targetMode !== 'fixed' || e.st.mark > 0);
     const st = [];
     if (e.block) st.push(`<span class="pill">${ICON.shield} 방어 ${e.block}</span>`);
+    if (e.phaseIndex) st.push(`<span class="pill warn">${e.phaseIndex + 1}페이즈</span>`);
+    else if (IX.enemies[e.id] && IX.enemies[e.id].phase) st.push('<span class="pill">1페이즈</span>');
     if (e.brokenUntil) st.push('<span class="pill brass">균열 +25%</span>');
     for (const [k, nm] of [['vul', '취약'], ['weak', '약화'], ['mark', '표식'], ['burn', '화상'], ['str', '힘'], ['reflect', '반사']]) if (e.st[k]) st.push(`<span class="pill ${k === 'mark' ? 'time' : ''}">${nm} ${e.st[k]}</span>`);
     const pop = app.lastDmg[e.uid] ? `<span class="dmg-pop">-${app.lastDmg[e.uid]}</span>` : '';
@@ -3055,7 +3142,13 @@ root.MFMemoryV2=api;
     const sealed = kind === 'next' && s.sealedUntil >= s.turn ? 1 : 0;
     const cells = [];
     for (let i = 0; i < 3; i++) {
-      if (i < list.length) { const inst = s.cards[list[i].uid]; const def = IX.cards[inst.id]; cells.push(`<button class="slot filled attr-${attrOfDef(def, inst)}" data-act="resInfo" data-uid="${inst.uid}">${esc(def.name)}${inst.plus ? '+' : ''}</button>`); }
+      if (i < list.length) {
+        const r = list[i]; const inst = s.cards[r.uid]; const def = IX.cards[inst.id];
+        // delayed reservations keep their original kind/power: label it so the later column doesn't imply the stronger after-effect
+        const delayed = !!r.delayed;
+        const note = delayed ? `지연됨 · 원래 ${r.kind === 'next' ? '다음 턴' : '다다음 턴'} 예약 위력` : '';
+        cells.push(`<button class="slot filled attr-${attrOfDef(def, inst)}" data-act="resInfo" data-uid="${inst.uid}"${delayed ? ` title="${esc(note)}" aria-label="${esc(`${def.name}${inst.plus ? '+' : ''} (${note})`)}"` : ''}>${esc(def.name)}${inst.plus ? '+' : ''}${delayed ? `<small>${esc(note)}</small>` : ''}</button>`);
+      }
       else if (i < cap) cells.push('<span class="slot">빈 칸</span>');
       else if (i < cap + sealed) cells.push('<span class="slot sealed">봉인</span>');
       else if (i < capMax) cells.push('<span class="slot none"></span>');
@@ -3069,13 +3162,19 @@ root.MFMemoryV2=api;
     const ultSel = app.sel && app.sel.ult ? app.sel.ult : null;
     const need = selCard ? b.needsTarget(selCard) : (ultSel ? 'one' : null);
     const debt = b.debtTotal();
-    const dueNext = s.debts.filter((d) => d.due === s.turn + 1).reduce((a, d) => a + d.n, 0);
-    const pips = Array.from({ length: Math.max(4, s.ap) }, (_, i) => `<span class="pip ${i < s.ap ? 'on' : ''}"></span>`).join('');
+    const R = IX.rules;
+    const drainNext = b.nextTurnDrain();
+    const apNextPreview = b.nextTurnAp();
+    const silenceNow = (s.silenceUntil || 0) === s.turn; const silenceNext = (s.silenceUntil || 0) > s.turn;
+    const pips = Array.from({ length: Math.max(R.apPerTurn, s.ap) }, (_, i) => `<span class="pip ${i < s.ap ? 'on' : ''}"></span>`).join('');
     const buffs = s.buffs.filter((x) => x.until >= s.turn).map((x) => `<span class="pill time">${esc(({ charge: '충전', seraLock: '미래 확정', healUp: '기도문', lumiRush: '한계 돌파', counterDouble: '반격 2배', overloadFree: '과부하 무료' })[x.s] || x.s)}</span>`).join('');
     const chips = [
       s.block ? `<span class="pill">${ICON.shield} 방어 <b class="num">${s.block}</b></span>` : '',
       s.counter ? `<span class="pill">반격 ${s.counter}</span>` : '',
-      debt ? `<span class="pill warn">부채 ${debt} · 다음 턴 행동력 ${Math.max(0, 4 + s.apNext - dueNext)}</span>` : (s.apNext ? `<span class="pill time">다음 턴 행동력 +${s.apNext}</span>` : ''),
+      debt ? `<span class="pill warn">부채 ${debt}</span>` : '',
+      drainNext ? `<span class="pill warn">시간 착취 −${drainNext}</span>` : '',
+      `<span class="pill ${apNextPreview < R.apPerTurn ? 'warn' : 'time'}">예상 다음 턴 행동력 ${apNextPreview}</span>`,
+      silenceNow ? '<span class="pill warn">침묵: 이번 턴 예약 비용 +1</span>' : (silenceNext ? '<span class="pill warn">침묵 예고: 다음 턴 예약 비용 +1</span>' : ''),
       s.echoActive ? `<span class="pill brass">잔향 ${s.echo}/${s.echoMax}</span>` : '',
       s.pst.weak ? `<span class="pill warn">파티 약화 ${s.pst.weak}</span>` : '',
       s.restraint.active ? '<span class="pill brass">절제 계약 중</span>' : '',
@@ -3157,6 +3256,14 @@ root.MFMemoryV2=api;
       case 'reshuffle': return '버린 카드를 섞어 뽑을 더미로';
       case 'envelope': return '기억의 봉투가 쓰러짐을 막았다';
       case 'insert': return `얼룩 ${l.n}장이 버린 더미에 섞였다`;
+      case 'apDrain': return `${nameOfUid(l.uid)}의 시간 착취: 다음 턴 행동력 −${l.n} (부채와 별도)`;
+      case 'sealSlot': return l.fallback ? `${nameOfUid(l.uid)}: 봉인할 칸이 없어 대신 방어를 올렸다` : `${nameOfUid(l.uid)}의 칸 봉인: ${l.until}턴 예약 칸 1개 봉인`;
+      case 'delayRes': return !l.uid ? '시간 지연: 예약이 없어 아무것도 지연되지 않았다' : l.discarded
+        ? `시간 지연: ${nameOfUid(l.uid)} 예약이 밀릴 칸이 없어 버린 더미로 (해결되지 않음 · 이미 낸 행동력은 돌려받지 못함)`
+        : `시간 지연: ${nameOfUid(l.uid)} 예약 만기 ${l.from}턴 → ${l.to}턴 (원래 ${l.kind === 'after' ? '다다음 턴' : '다음 턴'} 예약 위력 유지)`;
+      case 'silence': return `${l.uid ? `${nameOfUid(l.uid)}의 ` : ''}침묵: ${l.until ? `${l.until}턴 ` : '다음 턴 '}예약 비용 +1`;
+      case 'eatName': return l.uid ? `이름 먹기: ${nameOfUid(l.uid)}이(가) 이번 전투에서 소멸했다` : '이름 먹기: 버린 더미가 비어 아무것도 먹히지 않았다';
+      case 'phase': return `★ ${nameOfUid(l.uid)} ${l.index + 1}페이즈 돌입! 체력 ${l.hp} · 균열 ${l.brk} (상태·방어 초기화)`;
       case 'end': return l.phase === 'VICTORY' ? '승리!' : '패배...';
       default: return '';
     }
@@ -3651,7 +3758,10 @@ root.MFMemoryV2=api;
           app.target = d.uid; break;
         }
         const def = IX.enemies[e.id];
-        app.modal = { type: 'info', html: `<h2>${esc(e.name)}</h2><p>체력 ${e.hp}/${e.maxHp} · 균열 ${e.brk}/${e.brkMax} · 약점 ${e.weak.map((x) => ATTR[x].name).join(', ')}</p><p><b>행동 순환</b>: ${def.pattern.map((m) => esc(INTENT_TEXT(m, e).t)).join(' → ')}</p>` };
+        // e.pattern holds the active phase pattern once a boss has changed phase
+        const pat = e.pattern || def.pattern;
+        const phaseNote = def.phase ? `<p><b>${(e.phaseIndex || 0) + 1}페이즈</b>${e.phaseIndex ? '' : ' · 체력이 0이 되면 쓰러지는 대신 2페이즈로 전환'}</p>` : '';
+        app.modal = { type: 'info', html: `<h2>${esc(e.name)}</h2>${phaseNote}<p>체력 ${e.hp}/${e.maxHp} · 균열 ${e.brk}/${e.brkMax} · 약점 ${e.weak.map((x) => ATTR[x].name).join(', ')}</p><p><b>행동 순환</b>: ${pat.map((m) => esc(INTENT_TEXT(m, e).t)).join(' → ')}</p>` };
         break;
       }
       case 'cancel': app.sel = null; app.target = null; break;
@@ -3684,7 +3794,11 @@ root.MFMemoryV2=api;
       }
       case 'toggleLog': app.logOpen = !app.logOpen; break;
       case 'pile': app.modal = { type: 'pile', z: d.z }; break;
-      case 'resInfo': { const b = run.battle; const inst = b.s.cards[d.uid]; app.modal = { type: 'info', html: `<h2>예약된 카드</h2><div class="pick-grid">${cardFace(inst, { def: b.effDef(inst) })}</div>` }; break; }
+      case 'resInfo': {
+        const b = run.battle; const inst = b.s.cards[d.uid]; const r = b.s.res.find((x) => x.uid === d.uid);
+        const delayNote = r && r.delayed ? `<p class="muted">시간 지연으로 만기가 ${r.due}턴으로 밀렸어요. 위력은 ${r.kind === 'next' ? '다음 턴' : '다다음 턴'} 예약 기준 그대로예요.</p>` : '';
+        app.modal = { type: 'info', html: `<h2>예약된 카드</h2>${delayNote}<div class="pick-grid">${cardFace(inst, { def: b.effDef(inst) })}</div>` }; break;
+      }
       case 'deck': app.modal = { type: 'deck' }; break;
       case 'parts': app.modal = { type: 'parts' }; break;
       case 'usePart': app.modal = { type: 'deck', pick: { label: `「${IX.parts[d.id].name}」을 붙일 카드를 고르세요`, kind: 'part', part: d.id } }; break;

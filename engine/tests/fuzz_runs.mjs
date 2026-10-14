@@ -1,5 +1,5 @@
 // Seeded random-play fuzz: plays full runs with a random legal-move bot and checks invariants.
-// Usage: node engine/tests/fuzz_runs.mjs [runs=200] [length=short|full]
+// Usage: node engine/tests/fuzz_runs.mjs [runs=200] [length=short|full] [--late]
 import { createRequire } from 'node:module';
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -7,7 +7,9 @@ import { fileURLToPath } from 'node:url';
 const require = createRequire(import.meta.url);
 const here = dirname(fileURLToPath(import.meta.url));
 const MF = require(join(here, '..', 'rules-core.js'));
-const data = JSON.parse(readFileSync(join(here, '..', '..', 'data', 'game_data.json'), 'utf8'));
+const baseData = JSON.parse(readFileSync(join(here, '..', '..', 'data', 'game_data.json'), 'utf8'));
+const late = process.argv.includes('--late');
+const data = late ? require('../../proposals/late_enemies.cjs').withLateEnemies(baseData) : baseData;
 
 const RUNS = Number(process.argv[2] || 200);
 const LENGTH = process.argv[3] || 'short';
@@ -63,7 +65,7 @@ for (let r = 0; r < RUNS; r++) {
   // random weapon of matching type, sometimes
   for (const p of party) if (rnd() < 0.7) { const t = data.characters.find((c) => c.id === p.charId).weapon; const ws = data.weapons.filter((w) => w.type === t); const w = pick(ws); p.weaponId = w.id; p.refine = 1 + Math.floor(rnd() * 5); }
   let run;
-  try { run = MF.Run.create(data, { party, seed: 1000 + r, length: LENGTH }); } catch (e) { note(e, true); continue; }
+  try { run = MF.Run.create(data, { party, seed: 1000 + r, length: LENGTH, ...(late ? { zones: [3, 4, 5] } : {}) }); } catch (e) { note(e, true); continue; }
   stats.runs += 1;
   let steps = 0;
   try {
@@ -122,6 +124,6 @@ for (let r = 0; r < RUNS; r++) {
   } catch (e) { note(e, true); }
 }
 const top = Object.entries(stats.errors).sort((a, b) => b[1] - a[1]).slice(0, 12);
-console.log(JSON.stringify({ runs: stats.runs, clears: stats.clears, defeats: stats.defeats, battles: stats.battles, turns: stats.turns, commands: stats.commands, rejectedTop: top, unexpected: stats.unexpected.length }, null, 0));
+console.log(JSON.stringify({ mode: late ? 'candidate zones 3/4/5, not live content' : 'live zones 1/2', runs: stats.runs, clears: stats.clears, defeats: stats.defeats, battles: stats.battles, turns: stats.turns, commands: stats.commands, rejectedTop: top, unexpected: stats.unexpected.length }, null, 0));
 for (const u of stats.unexpected.slice(0, 8)) console.log('UNEXPECTED', JSON.stringify(u));
 process.exit(stats.unexpected.length ? 1 : 0);

@@ -465,7 +465,7 @@
   }
 
   // ───────── battle ─────────
-  const INTENT_TEXT = (mv, e) => {
+  const INTENT_TEXT = (mv, e, current = false) => {
     if (!mv) return { cls: 'other', ico: ICON.eye, t: '-' };
     const dm = (d) => { const s = app.run ? app.run.battle.s : null; const mul = s ? s.diff.dmg : 100; return Math.round(d * mul / 100) + ((e && e.st.str) || 0); };
     switch (mv.t) {
@@ -483,17 +483,21 @@
       case 'blockAll': return { cls: 'def', ico: ICON.shield, t: `전원 방어 ${mv.b}` };
       case 'stun': return { cls: 'stun', ico: ICON.zz, t: '균열: 행동 불가' };
       // late-zone actions (§10.4); numbers come from the move, rules live in the engine
-      case 'apDrain': return { cls: 'other', ico: ICON.hourglass, t: `시간 착취 ${mv.n} · 다음 턴 행동력 −${mv.n}` };
+      case 'apDrain': return { cls: 'other', ico: ICON.eye, t: `시간 착취 ${mv.n} · 다음 턴 행동력 −${mv.n}` };
       case 'sealSlot': return { cls: 'other', ico: ICON.shield, t: '칸 봉인 · 다음 턴 예약 칸 1개' };
-      case 'delayRes': return { cls: 'other', ico: ICON.hourglass, t: '시간 지연 · 마지막 예약 만기 +1턴' };
-      case 'silence': return { cls: 'other', ico: ICON.down, t: '침묵 · 다음 턴 예약 비용 +1' };
+      case 'delayRes': {
+        const preview = current && app.run ? app.run.battle.previewDelay() : null;
+        const warning = preview && preview.discarded ? '현재 기준 버림 · 행동력 환급 없음' : '빈 칸 없으면 버림 · 행동력 환급 없음';
+        return { cls: 'other', ico: ICON.eye, t: `시간 지연 · 마지막 예약 만기 +1턴 · ${warning}` };
+      }
+      case 'silence': return { cls: 'other', ico: ICON.zz, t: '침묵 · 다음 턴 예약 비용 +1' };
       case 'eatName': return { cls: 'other', ico: ICON.void, t: '이름 먹기 · 버린 카드 1장 소멸' };
       case 'phase': return { cls: 'other', ico: ICON.up, t: '2페이즈' };
       default: return { cls: 'other', ico: ICON.eye, t: mv.t };
     }
   };
   function enemyCard(b, e, targetMode) {
-    const it = INTENT_TEXT(e.intent, e); const nx = e.next && !(e.intent && e.intent.t === 'stun') ? INTENT_TEXT(e.next, e) : (e.next ? INTENT_TEXT(e.next, e) : null);
+    const it = INTENT_TEXT(e.intent, e, true); const nx = e.next ? INTENT_TEXT(e.next, e) : null;
     const targetable = targetMode && e.alive && (targetMode !== 'fixed' || e.st.mark > 0);
     const st = [];
     if (e.block) st.push(`<span class="pill">${ICON.shield} 방어 ${e.block}</span>`);
@@ -522,7 +526,7 @@
       if (i < list.length) {
         const r = list[i]; const inst = s.cards[r.uid]; const def = IX.cards[inst.id];
         // delayed reservations keep their original kind/power: label it so the later column doesn't imply the stronger after-effect
-        const delayed = r.kind && r.kind !== kind;
+        const delayed = !!r.delayed;
         const note = delayed ? `지연됨 · 원래 ${r.kind === 'next' ? '다음 턴' : '다다음 턴'} 예약 위력` : '';
         cells.push(`<button class="slot filled attr-${attrOfDef(def, inst)}" data-act="resInfo" data-uid="${inst.uid}"${delayed ? ` title="${esc(note)}" aria-label="${esc(`${def.name}${inst.plus ? '+' : ''} (${note})`)}"` : ''}>${esc(def.name)}${inst.plus ? '+' : ''}${delayed ? `<small>${esc(note)}</small>` : ''}</button>`);
       }
@@ -540,10 +544,8 @@
     const need = selCard ? b.needsTarget(selCard) : (ultSel ? 'one' : null);
     const debt = b.debtTotal();
     const R = IX.rules;
-    const dueNext = s.debts.filter((d) => d.due <= s.turn + 1).reduce((a, d) => a + d.n, 0);
-    const drainNext = s.apDrainNext || 0;
-    // mirrors startTurn: base + carried bonus + relic, minus due debt and enemy drain, clamped to 0..apMax
-    const apNextPreview = Math.max(0, Math.min(R.apMax, R.apPerTurn + (s.apNext || 0) + (b.has('chrono_crown') ? 1 : 0) - dueNext - drainNext));
+    const drainNext = b.nextTurnDrain();
+    const apNextPreview = b.nextTurnAp();
     const silenceNow = (s.silenceUntil || 0) === s.turn; const silenceNext = (s.silenceUntil || 0) > s.turn;
     const pips = Array.from({ length: Math.max(R.apPerTurn, s.ap) }, (_, i) => `<span class="pip ${i < s.ap ? 'on' : ''}"></span>`).join('');
     const buffs = s.buffs.filter((x) => x.until >= s.turn).map((x) => `<span class="pill time">${esc(({ charge: '충전', seraLock: '미래 확정', healUp: '기도문', lumiRush: '한계 돌파', counterDouble: '반격 2배', overloadFree: '과부하 무료' })[x.s] || x.s)}</span>`).join('');
@@ -552,7 +554,7 @@
       s.counter ? `<span class="pill">반격 ${s.counter}</span>` : '',
       debt ? `<span class="pill warn">부채 ${debt}</span>` : '',
       drainNext ? `<span class="pill warn">시간 착취 −${drainNext}</span>` : '',
-      debt || drainNext ? `<span class="pill ${apNextPreview < R.apPerTurn ? 'warn' : 'time'}">다음 턴 행동력 ${apNextPreview}</span>` : (s.apNext ? `<span class="pill time">다음 턴 행동력 +${s.apNext}</span>` : ''),
+      `<span class="pill ${apNextPreview < R.apPerTurn ? 'warn' : 'time'}">예상 다음 턴 행동력 ${apNextPreview}</span>`,
       silenceNow ? '<span class="pill warn">침묵: 이번 턴 예약 비용 +1</span>' : (silenceNext ? '<span class="pill warn">침묵 예고: 다음 턴 예약 비용 +1</span>' : ''),
       s.echoActive ? `<span class="pill brass">잔향 ${s.echo}/${s.echoMax}</span>` : '',
       s.pst.weak ? `<span class="pill warn">파티 약화 ${s.pst.weak}</span>` : '',
@@ -637,7 +639,7 @@
       case 'insert': return `얼룩 ${l.n}장이 버린 더미에 섞였다`;
       case 'apDrain': return `${nameOfUid(l.uid)}의 시간 착취: 다음 턴 행동력 −${l.n} (부채와 별도)`;
       case 'sealSlot': return l.fallback ? `${nameOfUid(l.uid)}: 봉인할 칸이 없어 대신 방어를 올렸다` : `${nameOfUid(l.uid)}의 칸 봉인: ${l.until}턴 예약 칸 1개 봉인`;
-      case 'delayRes': return l.discarded
+      case 'delayRes': return !l.uid ? '시간 지연: 예약이 없어 아무것도 지연되지 않았다' : l.discarded
         ? `시간 지연: ${nameOfUid(l.uid)} 예약이 밀릴 칸이 없어 버린 더미로 (해결되지 않음 · 이미 낸 행동력은 돌려받지 못함)`
         : `시간 지연: ${nameOfUid(l.uid)} 예약 만기 ${l.from}턴 → ${l.to}턴 (원래 ${l.kind === 'after' ? '다다음 턴' : '다음 턴'} 예약 위력 유지)`;
       case 'silence': return `${l.uid ? `${nameOfUid(l.uid)}의 ` : ''}침묵: ${l.until ? `${l.until}턴 ` : '다음 턴 '}예약 비용 +1`;
@@ -1175,8 +1177,7 @@
       case 'pile': app.modal = { type: 'pile', z: d.z }; break;
       case 'resInfo': {
         const b = run.battle; const inst = b.s.cards[d.uid]; const r = b.s.res.find((x) => x.uid === d.uid);
-        const col = r ? (r.due === b.s.turn + 1 ? 'next' : 'after') : null;
-        const delayNote = r && r.kind && col && r.kind !== col ? `<p class="muted">시간 지연으로 만기가 ${r.due}턴으로 밀렸어요. 위력은 원래 ${r.kind === 'next' ? '다음 턴' : '다다음 턴'} 예약 기준 그대로예요.</p>` : '';
+        const delayNote = r && r.delayed ? `<p class="muted">시간 지연으로 만기가 ${r.due}턴으로 밀렸어요. 위력은 ${r.kind === 'next' ? '다음 턴' : '다다음 턴'} 예약 기준 그대로예요.</p>` : '';
         app.modal = { type: 'info', html: `<h2>예약된 카드</h2>${delayNote}<div class="pick-grid">${cardFace(inst, { def: b.effDef(inst) })}</div>` }; break;
       }
       case 'deck': app.modal = { type: 'deck' }; break;

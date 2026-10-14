@@ -1,0 +1,5 @@
+PASS: node --check for 11 changed/new JS modules
+PASS: git diff --check 4793fcb
+PASS: live content/data, art briefs, design source and full PDF unchanged from branch base
+PASS: generated error-code documentation coverage (tools/gen_docs.mjs)
+No separate lint/typecheck configuration or active LSP project exists; syntax checks, invariant tests and strict docs coverage used.

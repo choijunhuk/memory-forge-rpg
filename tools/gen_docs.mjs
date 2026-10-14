@@ -45,6 +45,12 @@ function intentText(mv) {
     case 'reflect': return `${mv.label ? mv.label + ' ' : ''}반사 ${mv.n}`;
     case 'expose': return `${mv.label || '약점 노출'}: 자신 취약 ${mv.n} 후 공격 ${mv.then.d}`;
     case 'blockAll': return `${mv.label ? mv.label + ' ' : ''}모든 적 방어 ${mv.b}`;
+    case 'apDrain': return `시간 착취 ${mv.n}`;
+    case 'sealSlot': return '다음 턴 예약 칸 봉인 (불가 시 방어 +10)';
+    case 'delayRes': return '마지막 예약 만기 +1턴 (위력 유지, 칸 없음 시 버림)';
+    case 'silence': return '다음 플레이어 턴 예약 비용 +1';
+    case 'eatName': return '버린 카드 1장 소멸 (토큰 우선)';
+    case 'phase': return '체력 0에서 2페이즈 전환';
     default: return mv.t;
   }
 }
@@ -267,6 +273,7 @@ const MSG = {
   CHARACTER_SET_MISMATCH: '출발 전후의 캐릭터 목록이 일치하지 않아요.', UNSUPPORTED_TRANSFORMATION: '허용되지 않는 카드 변환이에요.',
   REASSIGNMENT_REQUIRES_SEPARATE_FLOW: '기존 기억의 공용 카드 배정은 여기서 변경할 수 없어요.', RUN_ID_REQUIRED: '탐사 식별자가 없어요.',
   RUN_MISMATCH: '다른 탐사의 저장 요청이에요.', REQUEST_CONFLICT: '같은 요청 번호에 다른 내용이 있어요.', VERSION_CONFLICT: '다른 저장이 먼저 반영됐어요. 최신 기억을 확인하세요.',
+  INVALID_ENEMY_MOVE: '적 행동 데이터가 올바르지 않아요. 전투 상태를 유지하고 오류를 확인하세요.',
 };
 const internal = ['CAPACITY_INVARIANT', 'CARD_ZONE_CONSERVATION', 'DEBT_INVARIANT', 'ENEMY_RANGE', 'GAUGE_RANGE', 'GROWTH_INVARIANT', 'STATE_RANGE', 'RNG_BOUND', 'UNKNOWN_ACTOR', 'UNKNOWN_CARD', 'UNKNOWN_CHARACTER', 'UNKNOWN_COMMAND', 'UNKNOWN_ENEMY', 'UNSUPPORTED_EFFECT', 'PARTY_SIZE'];
 const errRows = [...codes].sort().map((c) => [`\`${c}\``, internal.includes(c) ? '내부 불변식/데이터 오류(사용자에게는 "문제가 생겼어요" + 오류 보고)' : (MSG[c] || (() => { console.error('NO MESSAGE', c); process.exit(1); })())]);
