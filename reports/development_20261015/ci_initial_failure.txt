@@ -1,0 +1,14 @@
+checks	Run tools/run_all_checks.sh	﻿2026-10-14T17:53:22.1642925Z ##[group]Run tools/run_all_checks.sh
+checks	Run tools/run_all_checks.sh	2026-10-14T17:53:22.1643454Z [36;1mtools/run_all_checks.sh[0m
+checks	Run tools/run_all_checks.sh	2026-10-14T17:53:22.1686148Z shell: /usr/bin/bash -e {0}
+checks	Run tools/run_all_checks.sh	2026-10-14T17:53:22.1686501Z env:
+checks	Run tools/run_all_checks.sh	2026-10-14T17:53:22.1686961Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.16/x64
+checks	Run tools/run_all_checks.sh	2026-10-14T17:53:22.1687499Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib/pkgconfig
+checks	Run tools/run_all_checks.sh	2026-10-14T17:53:22.1687996Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+checks	Run tools/run_all_checks.sh	2026-10-14T17:53:22.1688496Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+checks	Run tools/run_all_checks.sh	2026-10-14T17:53:22.1688942Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+checks	Run tools/run_all_checks.sh	2026-10-14T17:53:22.1689388Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib
+checks	Run tools/run_all_checks.sh	2026-10-14T17:53:22.1689969Z   DOTNET_ROOT: /usr/share/dotnet
+checks	Run tools/run_all_checks.sh	2026-10-14T17:53:22.1690352Z ##[endgroup]
+checks	Run tools/run_all_checks.sh	2026-10-14T17:53:22.1762807Z /home/runner/work/_temp/30f49890-499d-427d-a9ad-345959d98b02.sh: line 1: tools/run_all_checks.sh: Permission denied
+checks	Run tools/run_all_checks.sh	2026-10-14T17:53:22.1773704Z ##[error]Process completed with exit code 126.

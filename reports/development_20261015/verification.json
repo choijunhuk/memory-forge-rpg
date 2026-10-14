@@ -113,5 +113,15 @@
     "Server memory DTO, history, ownership, idempotency and transactional concurrency",
     "Unity/Android vertical slice, art pipeline and device acceptance",
     "Keep unresolved achievements, pass 50-level allocation and weapon inheritance decisions in queue"
-  ]
+  ],
+  "ci_attempts": [
+    {
+      "run_id": 38610287262,
+      "status": "FAIL",
+      "stage": "Before test runner",
+      "reason": "ZIP-imported script had no executable bit; exit 126",
+      "fix": "Invoke identical runner with bash; no test changes"
+    }
+  ],
+  "github_ci_current": "See head checks at https://github.com/choijunhuk/memory-forge-rpg/pull/1"
 }

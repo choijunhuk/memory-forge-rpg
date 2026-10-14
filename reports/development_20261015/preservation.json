@@ -11,7 +11,7 @@
     {
       "path": ".github/workflows/ci.yml",
       "input_sha256": "6fd539b90a14444b1fe58997afd85b32bbf2f987af71ffeea741f4a645111c4b",
-      "current_sha256": "53a05d9b18d850b8a2bc544bf3bfe8278e8615142bfd71396ad0a609eb441559",
+      "current_sha256": "8cd43a30494d3a1b032f51838fda998a1bcbb6a0a0d0da3efd4ec37707ec871c",
       "status": "MODIFIED"
     },
     {
