@@ -1,0 +1,89 @@
+{
+  "engine_sha256": "b1ba35f433197072200825ffa85cac49cf3d4812c4bf02032793fef8491d63eb",
+  "checks": [
+    {
+      "name": "engine",
+      "status": "PASS",
+      "count": 168,
+      "log": "reports/balance_audit_20261015/engine_final.txt",
+      "log_sha256": "1452c8e9bb3674c09113dfb63ae86d35424a7f51d10bd08ccacde6348664c4d7"
+    },
+    {
+      "name": "proposals",
+      "status": "PASS",
+      "count": 14,
+      "log": "reports/balance_audit_20261015/proposal_final.txt",
+      "log_sha256": "9469b975bf0aaf95d2bcbc5d0b3a95b65b0b8d99b129760d607d9aef2758b573"
+    },
+    {
+      "name": "python",
+      "status": "PASS",
+      "count": 48,
+      "log": "reports/balance_audit_20261015/python_final.txt",
+      "log_sha256": "aa096b5192120600be8cb8155a5740da7c63f8c6ecd95cdca64acdb2ed0d0140"
+    },
+    {
+      "name": "docs",
+      "status": "PASS",
+      "count": 9,
+      "log": "reports/ai_environment_20261015/docs_final.txt",
+      "log_sha256": "f0a1f30a527ce7b50eeb211ea961201ce186815f08fc3961687a8e77b8b1c377"
+    },
+    {
+      "name": "handoff",
+      "status": "PASS",
+      "count": 13,
+      "log": "reports/ai_environment_20261015/handoff_final.txt",
+      "log_sha256": "af095a882b9dd7d4d2061622fa76c0428952c23241bd01c6b8cbad6c0f411f94"
+    },
+    {
+      "name": "memory_ui",
+      "status": "PASS",
+      "count": 13,
+      "log": "reports/balance_audit_20261015/browser_memory_final.txt",
+      "log_sha256": "fc14484e81505a7a927042b94f85fa6dfcd6b1306b17c73cddf7fe86d7ca6b03"
+    },
+    {
+      "name": "late_ui",
+      "status": "PASS",
+      "count": 10,
+      "log": "reports/balance_audit_20261015/browser_late_final.txt",
+      "log_sha256": "b85192e6b096669ecb1c6872582007473162ce99c9fc05775900f232fdfbeca5"
+    }
+  ],
+  "fuzz": {
+    "status": "PASS",
+    "live_short": 100,
+    "live_full": 40,
+    "candidate_full": 100,
+    "unexpected": 0
+  },
+  "html_smoke": {
+    "status": "PASS",
+    "runs": 2,
+    "clicks": 723,
+    "screens": 15
+  },
+  "balance": {
+    "status": "TARGETS_NOT_MET",
+    "paired_trials": 1320,
+    "failed_metrics": 32,
+    "expanded_trials": 5280,
+    "expanded_failed_metrics": 21,
+    "setup_preserved": true
+  },
+  "opposite_ai_review": {
+    "status": "APPROVED core nine units",
+    "receipt": "ops/ai/tasks/P1-FINAL-CROSS-REVIEW.result.json",
+    "scope": "Combat/probe/traces/canonical/runner/Unity smoke; separate ZIP guard and shared-core delta review pending"
+  },
+  "not_run": [
+    "human gameplay acceptance",
+    "C# Battle/Run command replay",
+    "Unity combat UI acceptance",
+    "Android/IL2CPP/device",
+    "server DB concurrency",
+    "live billing/deployment"
+  ],
+  "input_manifests_regenerated": false
+}

@@ -1,0 +1,763 @@
+{
+  "command": "node engine/tests/balance_probe.mjs 1760 --late --out <raw-report>",
+  "raw_archive": "expanded40_after.json.gz",
+  "raw_sha256": "d1ef62300fc24bfb857dffa190c5ca0787fa3c0440f38290f59d30ad7e72dc61",
+  "method": {
+    "requestedN": 1760,
+    "groups": 44,
+    "repsPerGroup": 40,
+    "scenarios": 1760,
+    "policies": [
+      "random",
+      "greedy",
+      "planner"
+    ],
+    "trials": 5280,
+    "scenarioSeed": 777,
+    "maxTurns": 60,
+    "actionCap": 12,
+    "reference": "power4 160, HP 81 per actor, resonance 0, basic R1 weapons, no relics/gear/upgrades, normal difficulty",
+    "denominator": "all outcomes",
+    "quantile": "nearest rank",
+    "turnsMetric": "battle state turn; may be maxTurns + 1 after the last end transition",
+    "processedPlayerTurns": "number of player-turn loops executed, bounded by maxTurns"
+  },
+  "hashes": {
+    "baseContent": "6a09e6dd2d81055738c84951ea5b5ae50c25fd8c9732c8443e81ec1498625688",
+    "content": "7e676aef384aacb0927235bc3bd969a788d0751e56468d45e15ae3ccb5e4a9df",
+    "candidate": "73011d741040271a6da513979e585e9817a71811d24d473de9dc828ff3805ccd",
+    "engine": "79bb86d533b32d3e13644a54da660a709320f0186c7c7417764d0c14856622da",
+    "runner": "44126e4bef3c89646d1d4fd63f2cbbf28948bf783d970f403f4e98f49d8e8410"
+  },
+  "assessment": {
+    "overall": "failed",
+    "failedMetrics": 21,
+    "interpretation": "zones 3-5 use zone 2 lower bounds unchanged and only upper bounds of turns +10% and HP loss +5 percentage points (docs §20.9); win threshold applies only to random",
+    "note": "Automated bot targets are informational; passing bands do not certify balance or human play.",
+    "metrics": {
+      "1/normal/random": {
+        "turns": {
+          "value": 3.7714285714285714,
+          "min": 3,
+          "max": 5,
+          "status": "pass"
+        },
+        "hpLossPct": {
+          "value": 8.689006466784246,
+          "min": 4,
+          "max": 12,
+          "status": "pass"
+        },
+        "winPct": {
+          "value": 100,
+          "min": 98,
+          "max": 100,
+          "status": "pass"
+        }
+      },
+      "1/normal/greedy": {
+        "turns": {
+          "value": 3.4,
+          "min": 3,
+          "max": 5,
+          "status": "pass"
+        },
+        "hpLossPct": {
+          "value": 4.134332745443861,
+          "min": 4,
+          "max": 12,
+          "status": "pass"
+        }
+      },
+      "1/normal/planner": {
+        "turns": {
+          "value": 3.335714285714286,
+          "min": 3,
+          "max": 5,
+          "status": "pass"
+        },
+        "hpLossPct": {
+          "value": 4.260728982951208,
+          "min": 4,
+          "max": 12,
+          "status": "pass"
+        }
+      },
+      "1/elite/random": {
+        "turns": {
+          "value": 6.391666666666667,
+          "min": 5,
+          "max": 7,
+          "status": "pass"
+        },
+        "hpLossPct": {
+          "value": 15.569272976680388,
+          "min": 12,
+          "max": 22,
+          "status": "pass"
+        },
+        "winPct": {
+          "value": 100,
+          "min": 95,
+          "max": 100,
+          "status": "pass"
+        }
+      },
+      "1/elite/greedy": {
+        "turns": {
+          "value": 5.816666666666666,
+          "min": 5,
+          "max": 7,
+          "status": "pass"
+        },
+        "hpLossPct": {
+          "value": 16.028806584362137,
+          "min": 12,
+          "max": 22,
+          "status": "pass"
+        }
+      },
+      "1/elite/planner": {
+        "turns": {
+          "value": 5.691666666666666,
+          "min": 5,
+          "max": 7,
+          "status": "pass"
+        },
+        "hpLossPct": {
+          "value": 12.530864197530867,
+          "min": 12,
+          "max": 22,
+          "status": "pass"
+        }
+      },
+      "1/boss/random": {
+        "turns": {
+          "value": 10.733333333333333,
+          "min": 9,
+          "max": 12,
+          "status": "pass"
+        },
+        "hpLossPct": {
+          "value": 28.185871056241425,
+          "min": 25,
+          "max": 40,
+          "status": "pass"
+        },
+        "winPct": {
+          "value": 98.33333333333333,
+          "min": 85,
+          "max": 100,
+          "status": "pass"
+        }
+      },
+      "1/boss/greedy": {
+        "turns": {
+          "value": 10.341666666666667,
+          "min": 9,
+          "max": 12,
+          "status": "pass"
+        },
+        "hpLossPct": {
+          "value": 28.960905349794245,
+          "min": 25,
+          "max": 40,
+          "status": "pass"
+        }
+      },
+      "1/boss/planner": {
+        "turns": {
+          "value": 10.191666666666666,
+          "min": 9,
+          "max": 12,
+          "status": "pass"
+        },
+        "hpLossPct": {
+          "value": 27.17421124828532,
+          "min": 25,
+          "max": 40,
+          "status": "pass"
+        }
+      },
+      "2/normal/random": {
+        "turns": {
+          "value": 5.13,
+          "min": 4,
+          "max": 6,
+          "status": "pass"
+        },
+        "hpLossPct": {
+          "value": 12.059670781893006,
+          "min": 8,
+          "max": 15,
+          "status": "pass"
+        },
+        "winPct": {
+          "value": 100,
+          "min": 95,
+          "max": 100,
+          "status": "pass"
+        }
+      },
+      "2/normal/greedy": {
+        "turns": {
+          "value": 4.78,
+          "min": 4,
+          "max": 6,
+          "status": "pass"
+        },
+        "hpLossPct": {
+          "value": 8.835390946502057,
+          "min": 8,
+          "max": 15,
+          "status": "pass"
+        }
+      },
+      "2/normal/planner": {
+        "turns": {
+          "value": 4.64,
+          "min": 4,
+          "max": 6,
+          "status": "pass"
+        },
+        "hpLossPct": {
+          "value": 9.884773662551439,
+          "min": 8,
+          "max": 15,
+          "status": "pass"
+        }
+      },
+      "2/elite/random": {
+        "turns": {
+          "value": 7.0875,
+          "min": 6,
+          "max": 8,
+          "status": "pass"
+        },
+        "hpLossPct": {
+          "value": 20.977366255144027,
+          "min": 18,
+          "max": 28,
+          "status": "pass"
+        },
+        "winPct": {
+          "value": 100,
+          "min": 90,
+          "max": 100,
+          "status": "pass"
+        }
+      },
+      "2/elite/greedy": {
+        "turns": {
+          "value": 6.9875,
+          "min": 6,
+          "max": 8,
+          "status": "pass"
+        },
+        "hpLossPct": {
+          "value": 20.27777777777777,
+          "min": 18,
+          "max": 28,
+          "status": "pass"
+        }
+      },
+      "2/elite/planner": {
+        "turns": {
+          "value": 6.3,
+          "min": 6,
+          "max": 8,
+          "status": "pass"
+        },
+        "hpLossPct": {
+          "value": 18.641975308641975,
+          "min": 18,
+          "max": 28,
+          "status": "pass"
+        }
+      },
+      "2/boss/random": {
+        "turns": {
+          "value": 14.9,
+          "min": 14,
+          "max": 18,
+          "status": "pass"
+        },
+        "hpLossPct": {
+          "value": 40.55555555555556,
+          "min": 30,
+          "max": 50,
+          "status": "pass"
+        },
+        "winPct": {
+          "value": 100,
+          "min": 80,
+          "max": 100,
+          "status": "pass"
+        }
+      },
+      "2/boss/greedy": {
+        "turns": {
+          "value": 16.5,
+          "min": 14,
+          "max": 18,
+          "status": "pass"
+        },
+        "hpLossPct": {
+          "value": 49.03292181069959,
+          "min": 30,
+          "max": 50,
+          "status": "pass"
+        }
+      },
+      "2/boss/planner": {
+        "turns": {
+          "value": 13.675,
+          "min": 14,
+          "max": 18,
+          "status": "below"
+        },
+        "hpLossPct": {
+          "value": 34.094650205761326,
+          "min": 30,
+          "max": 50,
+          "status": "pass"
+        }
+      },
+      "3/normal/random": {
+        "turns": {
+          "value": 5.6,
+          "min": 4,
+          "max": 6.6000000000000005,
+          "status": "pass"
+        },
+        "hpLossPct": {
+          "value": 9.561728395061733,
+          "min": 8,
+          "max": 20,
+          "status": "pass"
+        },
+        "winPct": {
+          "value": 100,
+          "min": 95,
+          "max": 100,
+          "status": "pass"
+        }
+      },
+      "3/normal/greedy": {
+        "turns": {
+          "value": 5.255,
+          "min": 4,
+          "max": 6.6000000000000005,
+          "status": "pass"
+        },
+        "hpLossPct": {
+          "value": 7.765432098765434,
+          "min": 8,
+          "max": 20,
+          "status": "below"
+        }
+      },
+      "3/normal/planner": {
+        "turns": {
+          "value": 4.95,
+          "min": 4,
+          "max": 6.6000000000000005,
+          "status": "pass"
+        },
+        "hpLossPct": {
+          "value": 7.374485596707819,
+          "min": 8,
+          "max": 20,
+          "status": "below"
+        }
+      },
+      "3/elite/random": {
+        "turns": {
+          "value": 8.4625,
+          "min": 6,
+          "max": 8.8,
+          "status": "pass"
+        },
+        "hpLossPct": {
+          "value": 27.834362139917694,
+          "min": 18,
+          "max": 33,
+          "status": "pass"
+        },
+        "winPct": {
+          "value": 100,
+          "min": 90,
+          "max": 100,
+          "status": "pass"
+        }
+      },
+      "3/elite/greedy": {
+        "turns": {
+          "value": 8.8,
+          "min": 6,
+          "max": 8.8,
+          "status": "pass"
+        },
+        "hpLossPct": {
+          "value": 25.982510288065846,
+          "min": 18,
+          "max": 33,
+          "status": "pass"
+        }
+      },
+      "3/elite/planner": {
+        "turns": {
+          "value": 8.0625,
+          "min": 6,
+          "max": 8.8,
+          "status": "pass"
+        },
+        "hpLossPct": {
+          "value": 22.654320987654312,
+          "min": 18,
+          "max": 33,
+          "status": "pass"
+        }
+      },
+      "3/boss/random": {
+        "turns": {
+          "value": 14.525,
+          "min": 14,
+          "max": 19.8,
+          "status": "pass"
+        },
+        "hpLossPct": {
+          "value": 38.7962962962963,
+          "min": 30,
+          "max": 55,
+          "status": "pass"
+        },
+        "winPct": {
+          "value": 100,
+          "min": 80,
+          "max": 100,
+          "status": "pass"
+        }
+      },
+      "3/boss/greedy": {
+        "turns": {
+          "value": 16.725,
+          "min": 14,
+          "max": 19.8,
+          "status": "pass"
+        },
+        "hpLossPct": {
+          "value": 55.123456790123456,
+          "min": 30,
+          "max": 55,
+          "status": "above"
+        }
+      },
+      "3/boss/planner": {
+        "turns": {
+          "value": 14.1,
+          "min": 14,
+          "max": 19.8,
+          "status": "pass"
+        },
+        "hpLossPct": {
+          "value": 36.29629629629629,
+          "min": 30,
+          "max": 55,
+          "status": "pass"
+        }
+      },
+      "4/normal/random": {
+        "turns": {
+          "value": 6.98,
+          "min": 4,
+          "max": 6.6000000000000005,
+          "status": "above"
+        },
+        "hpLossPct": {
+          "value": 21.716049382716047,
+          "min": 8,
+          "max": 20,
+          "status": "above"
+        },
+        "winPct": {
+          "value": 100,
+          "min": 95,
+          "max": 100,
+          "status": "pass"
+        }
+      },
+      "4/normal/greedy": {
+        "turns": {
+          "value": 6.855,
+          "min": 4,
+          "max": 6.6000000000000005,
+          "status": "above"
+        },
+        "hpLossPct": {
+          "value": 17.11728395061729,
+          "min": 8,
+          "max": 20,
+          "status": "pass"
+        }
+      },
+      "4/normal/planner": {
+        "turns": {
+          "value": 6.51,
+          "min": 4,
+          "max": 6.6000000000000005,
+          "status": "pass"
+        },
+        "hpLossPct": {
+          "value": 19.07818930041152,
+          "min": 8,
+          "max": 20,
+          "status": "pass"
+        }
+      },
+      "4/elite/random": {
+        "turns": {
+          "value": 8.7625,
+          "min": 6,
+          "max": 8.8,
+          "status": "pass"
+        },
+        "hpLossPct": {
+          "value": 33.98662551440331,
+          "min": 18,
+          "max": 33,
+          "status": "above"
+        },
+        "winPct": {
+          "value": 100,
+          "min": 90,
+          "max": 100,
+          "status": "pass"
+        }
+      },
+      "4/elite/greedy": {
+        "turns": {
+          "value": 8.95,
+          "min": 6,
+          "max": 8.8,
+          "status": "above"
+        },
+        "hpLossPct": {
+          "value": 32.170781893004104,
+          "min": 18,
+          "max": 33,
+          "status": "pass"
+        }
+      },
+      "4/elite/planner": {
+        "turns": {
+          "value": 8.5,
+          "min": 6,
+          "max": 8.8,
+          "status": "pass"
+        },
+        "hpLossPct": {
+          "value": 30.195473251028808,
+          "min": 18,
+          "max": 33,
+          "status": "pass"
+        }
+      },
+      "4/boss/random": {
+        "turns": {
+          "value": 15.375,
+          "min": 14,
+          "max": 19.8,
+          "status": "pass"
+        },
+        "hpLossPct": {
+          "value": 47.109053497942384,
+          "min": 30,
+          "max": 55,
+          "status": "pass"
+        },
+        "winPct": {
+          "value": 100,
+          "min": 80,
+          "max": 100,
+          "status": "pass"
+        }
+      },
+      "4/boss/greedy": {
+        "turns": {
+          "value": 16.175,
+          "min": 14,
+          "max": 19.8,
+          "status": "pass"
+        },
+        "hpLossPct": {
+          "value": 53.76543209876543,
+          "min": 30,
+          "max": 55,
+          "status": "pass"
+        }
+      },
+      "4/boss/planner": {
+        "turns": {
+          "value": 15.85,
+          "min": 14,
+          "max": 19.8,
+          "status": "pass"
+        },
+        "hpLossPct": {
+          "value": 48.71399176954733,
+          "min": 30,
+          "max": 55,
+          "status": "pass"
+        }
+      },
+      "5/normal/random": {
+        "turns": {
+          "value": 6.915,
+          "min": 4,
+          "max": 6.6000000000000005,
+          "status": "above"
+        },
+        "hpLossPct": {
+          "value": 30.539094650205747,
+          "min": 8,
+          "max": 20,
+          "status": "above"
+        },
+        "winPct": {
+          "value": 100,
+          "min": 95,
+          "max": 100,
+          "status": "pass"
+        }
+      },
+      "5/normal/greedy": {
+        "turns": {
+          "value": 6.955,
+          "min": 4,
+          "max": 6.6000000000000005,
+          "status": "above"
+        },
+        "hpLossPct": {
+          "value": 26.42798353909466,
+          "min": 8,
+          "max": 20,
+          "status": "above"
+        }
+      },
+      "5/normal/planner": {
+        "turns": {
+          "value": 6.44,
+          "min": 4,
+          "max": 6.6000000000000005,
+          "status": "pass"
+        },
+        "hpLossPct": {
+          "value": 23.878600823045282,
+          "min": 8,
+          "max": 20,
+          "status": "above"
+        }
+      },
+      "5/elite/random": {
+        "turns": {
+          "value": 8.475,
+          "min": 6,
+          "max": 8.8,
+          "status": "pass"
+        },
+        "hpLossPct": {
+          "value": 46.584362139917694,
+          "min": 18,
+          "max": 33,
+          "status": "above"
+        },
+        "winPct": {
+          "value": 100,
+          "min": 90,
+          "max": 100,
+          "status": "pass"
+        }
+      },
+      "5/elite/greedy": {
+        "turns": {
+          "value": 8.55,
+          "min": 6,
+          "max": 8.8,
+          "status": "pass"
+        },
+        "hpLossPct": {
+          "value": 44.93827160493829,
+          "min": 18,
+          "max": 33,
+          "status": "above"
+        }
+      },
+      "5/elite/planner": {
+        "turns": {
+          "value": 8.075,
+          "min": 6,
+          "max": 8.8,
+          "status": "pass"
+        },
+        "hpLossPct": {
+          "value": 42.07818930041152,
+          "min": 18,
+          "max": 33,
+          "status": "above"
+        }
+      },
+      "5/boss/random": {
+        "turns": {
+          "value": 19.4,
+          "min": 14,
+          "max": 19.8,
+          "status": "pass"
+        },
+        "hpLossPct": {
+          "value": 66.9238683127572,
+          "min": 30,
+          "max": 55,
+          "status": "above"
+        },
+        "winPct": {
+          "value": 87.5,
+          "min": 80,
+          "max": 100,
+          "status": "pass"
+        }
+      },
+      "5/boss/greedy": {
+        "turns": {
+          "value": 19.85,
+          "min": 14,
+          "max": 19.8,
+          "status": "above"
+        },
+        "hpLossPct": {
+          "value": 81.17283950617285,
+          "min": 30,
+          "max": 55,
+          "status": "above"
+        }
+      },
+      "5/boss/planner": {
+        "turns": {
+          "value": 19.275,
+          "min": 14,
+          "max": 19.8,
+          "status": "pass"
+        },
+        "hpLossPct": {
+          "value": 67.58230452674897,
+          "min": 30,
+          "max": 55,
+          "status": "above"
+        }
+      }
+    }
+  },
+  "same5280startsAsBeforeFix": true,
+  "changedTrials": 42,
+  "note": "Separate40-repetition sensitivity experiment, not replacement of the original10-repetition1320-trial comparison."
+}

@@ -526,7 +526,7 @@
       for (let i = 0; i < dueRes.length; i++) {
         const r = dueRes[i];
         this.resolveCard(r.uid, { reserved: r.kind, target: r.target, picks: [] });
-        if (this.isOver()) { for (const rest of dueRes.slice(i + 1)) s.zones.discard.push(rest.uid); this.finish(); return; }
+        if (this.isOver() || this.checkEnd()) { for (const rest of dueRes.slice(i + 1)) s.zones.discard.push(rest.uid); return; }
       }
       s.battleFlags.seraR6Turn = 0;
       // turn-start effects
@@ -604,11 +604,11 @@
     enemyMove(e, mv) {
       const s = this.s;
       switch (mv.t) {
-        case 'atk': { const phase = e.phaseIndex; for (let h = 0; h < (mv.h || 1); h++) { this.enemyHit(e, mv.d); if (this.isOver() || !e.alive || e.phaseIndex !== phase) return; } break; }
+        case 'atk': { const phase = e.phaseIndex; for (let h = 0; h < (mv.h || 1); h++) { this.enemyHit(e, mv.d); if (this.checkEnd() || !e.alive || e.phaseIndex !== phase) return; } break; }
         case 'def': e.block += mv.b; if (mv.str) e.st.str += mv.str; break;
         case 'buff': e.st.str += mv.str; break;
         case 'debuff': s.pst[mv.s] = (s.pst[mv.s] || 0) + mv.n; this.ev('partyDebuff', { s: mv.s, n: mv.n }); break;
-        case 'atkdebuff': { const phase = e.phaseIndex; for (let h = 0; h < (mv.h || 1); h++) { this.enemyHit(e, mv.d); if (this.isOver() || !e.alive || e.phaseIndex !== phase) return; } s.pst[mv.s] = (s.pst[mv.s] || 0) + mv.n; break; }
+        case 'atkdebuff': { const phase = e.phaseIndex; for (let h = 0; h < (mv.h || 1); h++) { this.enemyHit(e, mv.d); if (this.checkEnd() || !e.alive || e.phaseIndex !== phase) return; } s.pst[mv.s] = (s.pst[mv.s] || 0) + mv.n; break; }
         case 'charge': this.ev('charge', { uid: e.uid }); break;
         case 'summon': for (let k = 0; k < mv.n; k++) if (this.alive().length < 5) { const m = Battle.addEnemy(s, this.ix, mv.e); this.setIntentsFor(m); } break;
         case 'heal': { const tgt = this.alive().sort((a, b) => a.hp / a.maxHp - b.hp / b.maxHp)[0]; if (tgt) { tgt.hp = Math.min(tgt.maxHp, tgt.hp + mv.n); this.ev('enemyHeal', { uid: tgt.uid, n: mv.n }); } break; }
@@ -1110,6 +1110,7 @@
     }
     healParty(n, op, fromWeapon) {
       const s = this.s;
+      if (s.hp <= 0) return 0;
       let amt = (op && op.preScaled) ? n : this.scaleVit(n); // flat heals from powers/relics/weapons scale with party vitality
       const hu = this.partyWeapon('w_healUp'); if (hu && !fromWeapon) amt = Math.floor(amt * (BPS + hu.value) / BPS);
       const before = s.hp; s.hp = Math.min(s.maxHp, s.hp + amt);
@@ -1170,7 +1171,7 @@
       e.hp = Math.max(0, e.hp - (amount - blocked));
       this.ev('dmg', { uid: e.uid, n: amount, blocked, src: ctx.isUlt ? 'ult' : 'card', card: ctx.inst ? ctx.inst.id : null });
       // reflect
-      if (e.st.reflect > 0) { const r = this.scaleEnemy(e.st.reflect); const b = Math.min(s.block, r); s.block -= b; if (r - b > 0) this.loseHp(r - b, 'reflect'); }
+      if (!ctx.isUlt && e.st.reflect > 0) { const r = this.scaleEnemy(e.st.reflect); const b = Math.min(s.block, r); s.block -= b; if (r - b > 0) this.loseHp(r - b, 'reflect'); }
       // break gauge
       if (!e.brokenUntil) {
         const reduce = (e.weak.includes(ctx.attr) ? (opts.brk || 0) : 0) + (opts.shock || 0);
@@ -1220,9 +1221,9 @@
               let pierce = op.pierce || 0;
               if (ctx.inst) for (const p of this.partsOf(ctx.inst)) if (p.fx.pierce) pierce = Math.max(pierce, p.fx.pierce);
               this.hitEnemy(e, amount, { pierce, brk: this.brkFor(op, ctx, e), shock: op.shock || 0 }, ctx);
-              if (this.isOver()) break;
+              if (this.checkEnd()) break;
             }
-            if (this.alive().length === 0) break;
+            if (this.isOver() || this.alive().length === 0) break;
           }
           ctx.flatBonus = 0;
           if (ctx.inst && !s.firstAtkDone && this.ix.cards[ctx.inst.id].type === 'atk') s.firstAtkDone = true;

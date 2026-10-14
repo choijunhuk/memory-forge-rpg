@@ -1,0 +1,148 @@
+✖ post-resolution void shard victory stops turn startup before drawing (4.504084ms)
+✖ post-resolution victory discards queued reservations without using them or granting gauge (0.838833ms)
+✖ a reservation that already ended the battle emits one end event (0.370792ms)
+✖ post-resolution victory cannot become a smudge defeat on a spurious extra turn (0.438291ms)
+✖ silver needle cannot revive fatal reflect when the same hit leaves enemy HP 44 (0.733166ms)
+✖ silver needle cannot revive fatal reflect when the same hit leaves enemy HP 0 (0.264166ms)
+✔ silver needle still heals a party that survives reflect (0.915959ms)
+✔ memory envelope survival still permits silver needle healing at HP one (0.269083ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 2
+ℹ fail 6
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 95.048291
+
+✖ failing tests:
+
+test at engine/tests/post_resolution_end.test.mjs:32:1
+✖ post-resolution void shard victory stops turn startup before drawing (4.504084ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'PLAYER'
+  - 'VICTORY'
+  
+      at TestContext.<anonymous> (file:///Users/choi/Documents/Memory_forge/engine/tests/post_resolution_end.test.mjs:35:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.start (node:internal/test_runner/test:1096:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'PLAYER',
+    expected: 'VICTORY',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at engine/tests/post_resolution_end.test.mjs:45:1
+✖ post-resolution victory discards queued reservations without using them or granting gauge (0.838833ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  10 !== 0
+  
+      at TestContext.<anonymous> (file:///Users/choi/Documents/Memory_forge/engine/tests/post_resolution_end.test.mjs:55:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 10,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at engine/tests/post_resolution_end.test.mjs:67:1
+✖ a reservation that already ended the battle emits one end event (0.370792ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  2 !== 1
+  
+      at TestContext.<anonymous> (file:///Users/choi/Documents/Memory_forge/engine/tests/post_resolution_end.test.mjs:74:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 2,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at engine/tests/post_resolution_end.test.mjs:79:1
+✖ post-resolution victory cannot become a smudge defeat on a spurious extra turn (0.438291ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'DEFEAT'
+  - 'VICTORY'
+  
+      at TestContext.<anonymous> (file:///Users/choi/Documents/Memory_forge/engine/tests/post_resolution_end.test.mjs:84:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'DEFEAT',
+    expected: 'VICTORY',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at engine/tests/post_resolution_end.test.mjs:95:3
+✖ silver needle cannot revive fatal reflect when the same hit leaves enemy HP 44 (0.733166ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  'PLAYER' !== 'DEFEAT'
+  
+      at TestContext.<anonymous> (file:///Users/choi/Documents/Memory_forge/engine/tests/post_resolution_end.test.mjs:101:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'PLAYER',
+    expected: 'DEFEAT',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at engine/tests/post_resolution_end.test.mjs:95:3
+✖ silver needle cannot revive fatal reflect when the same hit leaves enemy HP 0 (0.264166ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'VICTORY'
+  - 'DEFEAT'
+  
+      at TestContext.<anonymous> (file:///Users/choi/Documents/Memory_forge/engine/tests/post_resolution_end.test.mjs:101:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'VICTORY',
+    expected: 'DEFEAT',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
