@@ -145,6 +145,165 @@ namespace MemoryForge.Core
             return response;
         }
 
+        /// <summary>Detached source definition with upgrade and resonance overlays. Does not execute a card.</summary>
+        public BattleCardDef EffectiveCard(string uid)
+        {
+            try { return EffectiveDefinition(CardInstance(uid)); }
+            catch (OverflowException) { throw new RuleException("BATTLE_NUMBER_OUT_OF_RANGE"); }
+        }
+        public List<string> AllowedModes(string uid)
+        {
+            var instance = CardInstance(uid); var definition = EffectiveCard(uid);
+            if (definition.Keywords.Contains("contract")) return new List<string> { "now" };
+            if (PartsOf(instance).Any(p => p.Fx.NoReserve == true))
+                return definition.Reservation == "n" || definition.Reservation == "y" ? new List<string> { "now" } : new List<string>();
+            switch (definition.Reservation)
+            {
+                case "y": return new List<string> { "now", "next", "after" };
+                case "o": return new List<string> { "next", "after" };
+                case "after": return new List<string> { "after" };
+                default: return new List<string> { "now" };
+            }
+        }
+        public int CostOf(string uid, string mode = "now")
+        {
+            try
+            {
+                var instance = CardInstance(uid); var definition = EffectiveDefinition(instance);
+                if (instance.Free) return 0;
+                BigInteger cost = (BigInteger)definition.Cost + instance.CostMod;
+                foreach (var part in PartsOf(instance)) if (part.Fx.Cost.HasValue) cost += part.Fx.Cost.Value;
+                if (definition.CostIf != null && Condition(definition.CostIf.Condition, instance)) cost += definition.CostIf.Delta;
+                state.BattleFlags.TryGetValue("emptyClockUsed", out var clockUsed);
+                if (mode != "now" && Has("empty_clock") && !BattleGraph.Truthy(clockUsed)) cost--;
+                if (mode != "now" && state.SilenceUntil > 0 && state.SilenceUntil >= state.Turn) cost++;
+                if (state.FreeNext > 0) cost = 0;
+                return StateNumber(BigInteger.Max(0, cost));
+            }
+            catch (OverflowException) { throw new RuleException("BATTLE_NUMBER_OUT_OF_RANGE"); }
+        }
+        public string? NeedsTarget(string uid)
+        {
+            string? need = null;
+            void Walk(IEnumerable<EffectDef> effects)
+            {
+                foreach (var effect in effects)
+                {
+                    if (effect.Target == "fixed") need = "fixed";
+                    else if (effect.Target == "one" && need != "fixed") need = "one";
+                    else if (effect.Op == "dmg" && string.IsNullOrEmpty(effect.Target) && need == null) need = "one";
+                    if (effect.Then != null) Walk(effect.Then);
+                    if (effect.Else != null) Walk(effect.Else);
+                }
+            }
+            Walk(EffectiveCard(uid).Effects); return need;
+        }
+        BattleCardState CardInstance(string uid)
+        {
+            if (string.IsNullOrEmpty(uid) || !state.Cards.TryGetValue(uid, out var card)) throw new RuleException("UNKNOWN_CARD_INSTANCE");
+            return card;
+        }
+        string? OwnerCharacter(BattleCardState card) => data.CharacterIndex.ContainsKey(card.Owner) ? card.Owner : card.Owner == "weapon" ? card.Wielder : null;
+        List<BattlePartDef> PartsOf(BattleCardState card)
+        {
+            var parts = new List<BattlePartDef>();
+            foreach (string? id in new[] { card.Circuit, card.Edge }.Concat(card.Temp))
+                if (!string.IsNullOrEmpty(id) && data.PartIndex.TryGetValue(id!, out var part)) parts.Add(part);
+            return parts;
+        }
+        BattleCardDef EffectiveDefinition(BattleCardState instance)
+        {
+            if (!data.CardIndex.TryGetValue(instance.Id, out var source)) throw new RuleException("UNKNOWN_CARD");
+            var definition = source.Copy();
+            if (instance.Plus)
+            {
+                if (definition.Plus?.Effects != null) definition.Effects = definition.Plus.Effects.Select(e => e.Copy()).ToList();
+                else MapEffects(definition.Effects, UpgradeEffect);
+            }
+            string? owner = OwnerCharacter(instance);
+            var actor = owner == null ? null : state.Actors.FirstOrDefault(a => a.Id == owner);
+            if (actor != null)
+            {
+                if (instance.Owner == owner)
+                {
+                    var modifiers = actor.CardMods.Where(m => m.Cards != null && (m.Cards.Contains(instance.Id) || m.Cards.Contains(source.Id))).ToList();
+                    MapEffects(definition.Effects, effect => { foreach (var modifier in modifiers) ApplyCardModifier(effect, modifier); });
+                }
+                foreach (var modifier in actor.CardMods)
+                    if (modifier.Prop == "uses" && modifier.Cards?.Contains(source.Id) == true)
+                        definition.Uses = StateNumber((BigInteger)(definition.Uses ?? 0) + modifier.Add!.Value);
+            }
+            return definition;
+        }
+        static void MapEffects(IEnumerable<EffectDef> effects, Action<EffectDef> map)
+        {
+            foreach (var effect in effects)
+            {
+                map(effect);
+                if (effect.Then != null) MapEffects(effect.Then, map);
+                if (effect.Else != null) MapEffects(effect.Else, map);
+            }
+        }
+        int? UpgradeValue(int? value)
+        {
+            if (!value.HasValue || value.Value <= 0) return value;
+            int numerator = data.Rules.UpgradeNumerator, denominator = data.Rules.UpgradeDenominator;
+            if (numerator <= 0 || denominator <= 0) throw new RuleException("BATTLE_DEFINITION_NOT_IMPLEMENTED");
+            return StateNumber(((BigInteger)value.Value * numerator + denominator - 1) / denominator);
+        }
+        void UpgradeEffect(EffectDef effect)
+        {
+            switch (effect.Op)
+            {
+                case "dmg": case "blk": case "heal": effect.V = UpgradeValue(effect.V); effect.Rv = UpgradeValue(effect.Rv); effect.Ra = UpgradeValue(effect.Ra); break;
+                case "counter": effect.N = UpgradeValue(effect.N); effect.Rn = UpgradeValue(effect.Rn); break;
+                case "collateral": effect.V = UpgradeValue(effect.V); break;
+            }
+            if (effect.Op == "st")
+            {
+                if (!effect.N.HasValue) throw new RuleException("BATTLE_DEFINITION_NOT_IMPLEMENTED");
+                effect.N = checked(effect.N.Value + 1);
+                if (effect.Rn.HasValue) effect.Rn = checked(effect.Rn.Value + 1);
+            }
+        }
+        static int? AddModifier(int? value, int amount) => value.HasValue ? StateNumber((BigInteger)value.Value + amount) : (int?)null;
+        static void ApplyCardModifier(EffectDef effect, ResonanceFx modifier)
+        {
+            int add = modifier.Add!.Value;
+            if (modifier.Prop == "dmg" && effect.Op == "dmg" || modifier.Prop == "heal" && effect.Op == "heal")
+            { effect.V = AddModifier(effect.V, add); effect.Rv = AddModifier(effect.Rv, add); effect.Ra = AddModifier(effect.Ra, add); }
+            if (modifier.Prop == "brk" && effect.Op == "dmg") effect.Brk = StateNumber((BigInteger)(effect.Brk ?? 1) + add);
+            if (modifier.Prop == "n" && (effect.Op == "st" || effect.Op == "counter")) { effect.N = AddModifier(effect.N, add); effect.Rn = AddModifier(effect.Rn, add); }
+            if (modifier.Prop == "draw" && effect.Op == "draw") effect.N = AddModifier(effect.N, add);
+            if (modifier.Prop == "selfdmg" && effect.Op == "selfdmg" && effect.V.HasValue) effect.V = StateNumber(BigInteger.Max(0, (BigInteger)effect.V.Value + add));
+        }
+        bool IsGrowthInstance(BattleCardState instance)
+        {
+            if (data.CardIndex[instance.Id].Growth == true) return true;
+            return instance.From != null && data.CardIndex.TryGetValue(instance.From, out var root) && root.Growth == true && root.Evolutions?.Contains(instance.Id) == true;
+        }
+        bool Condition(EffectConditionDef condition, BattleCardState? instance = null, string? reserved = null, string? lastTarget = null, bool killed = false)
+        {
+            var target = lastTarget == null ? null : state.Enemies.FirstOrDefault(e => e.Uid == lastTarget);
+            switch (condition.Condition)
+            {
+                case "marked": return target != null && target.Status.Mark > 0;
+                case "burning": return target != null && target.Status.Burn > 0;
+                case "broken": return target != null && target.BrokenUntil > 0;
+                case "debt": return state.Debts.Aggregate(BigInteger.Zero, (sum, debt) => sum + debt.N) > 0;
+                case "modded": return instance != null && PartsOf(instance).Count != 0;
+                case "reserved": return !string.IsNullOrEmpty(reserved);
+                case "intentAttack": return target?.Intent != null && (target.Intent.Type == "atk" || target.Intent.Type == "atkdebuff" || target.Intent.Type == "expose");
+                case "echo": return state.Echo >= condition.N;
+                case "hpBelow": return (BigInteger)state.Hp * 100 <= (BigInteger)state.MaxHp * condition.Pct!.Value;
+                case "targetHpBelow": return target != null && (BigInteger)target.Hp * 100 <= (BigInteger)target.MaxHp * condition.Pct!.Value;
+                case "growthInHand": return state.Zones.Hand.Count(uid => IsGrowthInstance(state.Cards[uid])) >= condition.N;
+                case "exhaustedAtLeast": return (BigInteger)state.Exhausted + state.ExhaustStart >= condition.N!.Value;
+                case "killedThis": return killed;
+                default: throw new RuleException("BATTLE_CONDITION_NOT_IMPLEMENTED");
+            }
+        }
+
         bool Has(string relic) => state.Relics.Contains(relic);
         int Below(int bound) { int value = rng.Below(bound); state.Rng = rng.State; return value; }
         void Shuffle(List<string> cards)
@@ -228,7 +387,7 @@ namespace MemoryForge.Core
             }
             if (Has("eternal_seed"))
             {
-                var eligible = state.CardOrder.Select(uid => state.Cards[uid]).Where(c => data.CardIndex[c.Id].Growth && c.Growth < 3).ToList();
+                var eligible = state.CardOrder.Select(uid => state.Cards[uid]).Where(c => data.CardIndex[c.Id].Growth == true && c.Growth < 3).ToList();
                 if (eligible.Count != 0) ApplyGrowth(eligible[Below(eligible.Count)], 1, "eternal_seed");
             }
             StartTurn(true);
@@ -282,7 +441,7 @@ namespace MemoryForge.Core
         }
         void ApplyGrowth(BattleCardState card, int amount, string source)
         {
-            if (!data.CardIndex[card.Id].Growth || amount <= 0) return;
+            if (data.CardIndex[card.Id].Growth != true || amount <= 0) return;
             int delta = Math.Min(3 - card.Growth, amount); if (delta <= 0) return;
             card.Growth += delta;
             Emit(new BattleEvent { E = "grow", Uid = card.Uid, Growth = card.Growth, Source = source });

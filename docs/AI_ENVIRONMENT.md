@@ -71,3 +71,5 @@ P1/P2나 연결 작업이 끝났다는 이유로 전체 개발을 끝내지 않�
 전투 시작 이식 후 같은 공유 Core의 [PlayMode5/5](../reports/csharp_opening_20261015/unity_playmode.json)와 [EditMode3/3](../reports/csharp_opening_20261015/unity_editmode.json)를 새로 실행했다. 5개 중3개가 실제 Battle 시작·요청 재시도·사망/봉투 생존이다. [Console 오류0/전송 경고1](../reports/csharp_opening_20261015/unity_console.json)을 구분하며 이전 macOS 연결 앱 빌드를 새 전투 게임 빌드로 재분류하지 않는다.
 
 반복 턴 구현 후 [실제 PlayMode7/7](../reports/csharp_turns_20261015/unity_playmode.json)과 [EditMode3/3](../reports/csharp_turns_20261015/unity_editmode.json)을 다시 확인했다. 적 행동 뒤2·3턴과 이미 사용한 봉투 뒤2턴 회로 사망을 같은 공유 Core로 실행했다. 새 게임UI·Android·실기기 수용은 별도다.
+
+전체 카드 질의 A0에서도 [PlayMode8/8](../reports/player_queries_20261015/unity_playmode.json)·[EditMode3/3](../reports/player_queries_20261015/unity_editmode.json)를 실제 실행했다. 새 시험은 반환 카드 정의·모드 목록을 수정한 후 원본과 진행 상태/로그/이벤트가 보존됨을 확인한다. [Console 오류0/전송 경고1](../reports/player_queries_20261015/unity_console.json)을 분리하며 실제 카드 실행·게임UI·Android 수용은 아니다.

@@ -1,0 +1,22 @@
+{
+  "reviewer": "Codex native opening_core_review",
+  "model": "gpt-6.1-sol",
+  "effort": "max",
+  "scope": "4A0Core/loaderfrozenfiles",
+  "verdict": "APPROVE",
+  "reviewed": [
+    "fullauthoredfieldprojectionandpresence",
+    "recursiveupgradethenresonance",
+    "usesoverlay",
+    "explicitplusnull/absent/emptyoverride",
+    "mode/cost/nestedtargetprecedence",
+    "deepdetachmentandquerypurity",
+    "nullableGrowthexistingreader equivalence"
+  ],
+  "notRunByReviewer": [
+    "C#oracle/regressions",
+    "Unity",
+    "Claude"
+  ],
+  "base0": "Originalsourceconflict remainsunresolved; currentJS/base5preserved"
+}

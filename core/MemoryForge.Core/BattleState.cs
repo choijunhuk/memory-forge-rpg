@@ -16,6 +16,7 @@ namespace MemoryForge.Core
             return graph;
         }
         internal static void Optional(Dictionary<string, object?> graph, string name, int? value) { if (value.HasValue) graph.Add(name, value.Value); }
+        internal static void Optional(Dictionary<string, object?> graph, string name, bool? value) { if (value.HasValue) graph.Add(name, value.Value); }
         internal static void Optional(Dictionary<string, object?> graph, string name, string? value) { if (value != null) graph.Add(name, value); }
         internal static Dictionary<string, object?> CopyDictionary(Dictionary<string, object?> source) => (Dictionary<string, object?>)Copy(source)!;
         internal static object? Copy(object? value) => Copy(value, new List<object>());

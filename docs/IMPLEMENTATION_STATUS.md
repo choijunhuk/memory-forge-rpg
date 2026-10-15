@@ -11,7 +11,7 @@
 | 작업 | 상태 | 정확한 요구/완료 조건 |
 |---|---|---|
 | P1 JS→C# 트레이스 생성기 | IN_PROGRESS | §16.2·§20.9 P1-1. `tools/gen_traces.mjs`와 회귀9개·전체 출력/재생 검증 완료. 실제700short+300full=1000개·273748명령·275748해시 재생 PASS. [전체 증거](../reports/cross_language_20261015/replay.json). 상대 검토·통합을 거쳐 C# 실제 명령 재생으로 이어감. JS oracle 성공은 C# 동치 아님. |
-| C# 전체 Battle·Run·기억 저장 | IN_PROGRESS | C#은 Rng/Gacha/Stats/ReservationBook·canonical 기반과 실제 Battle.Create/begin을 구현했다. [전투 시작267](../reports/csharp_opening_20261015/)과 [실제반복턴356사례/1740요청·29232검사](../reports/csharp_turns_20261015/), Unity PlayMode7개 및 Opus Max APPROVE. Git/CI는 해당 head별 별도 기록. 시작/종료2000해시 PASS와 구별하며 전체1000 Run 트레이스 명령 재생은0개. play/ult·예약/부채/파워/균열 생산·전체 전투/탐사/기억 저장은 미구현. netstandard2.1/C#8·정수/BigInteger·컬렉션 순서·동일 명령별 해시1000개와 기존 CoreChecks를 모두 수용해야 함. |
+| C# 전체 Battle·Run·기억 저장 | IN_PROGRESS | C#은 Rng/Gacha/Stats/ReservationBook·canonical 기반과 실제 Battle.Create/begin을 구현했다. [전투 시작267](../reports/csharp_opening_20261015/)과 [실제반복턴356사례/1740요청·29232검사](../reports/csharp_turns_20261015/), Unity PlayMode7개 및 Opus Max APPROVE. Git/CI는 해당 head별 별도 기록. 시작/종료2000해시 PASS와 구별하며 전체1000 Run 트레이스 명령 재생은0개. [전체카드정의/순수질의702사례·128244검사](../reports/player_queries_20261015/) 완료. play/ult·예약/부채/파워/균열 생산·전체 전투/탐사/기억 저장은 미구현. netstandard2.1/C#8·정수/BigInteger·컬렉션 순서·동일 명령별 해시1000개와 기존 CoreChecks를 모두 수용해야 함. |
 | 후반 본편 활성화 | BLOCKED_ACCEPTANCE | JS 여섯 행동·HTML·23종 후보 있음. 최신40시나리오/조우 확대는44조우×40×3=5280회, 목표 미달21개. C#·서사/연출·목표 미달 해소 전 `authored` 활성화/본편 완료 선언 금지. |
 | 실제 Unity 게임 수직 슬라이스 | PARTIAL(환경만) | 실제 Editor의 연결 검증 씬·프리팹·Play·EditMode3개·macOS 연결 앱 빌드는 확인. 로비→편성→지도→전투→보상→저장·서버·실기기는 미완료. |
 | 서버 앱·저장v2 접합 | NOT_IMPLEMENTED | §17 전체 및 §8.11·§17.5: 소유권·버전·고정 잠금·원장·이력·멱등·rollback·다기기 동시성. 스키마/JS 로컬 저장으로 대체 불가. |
@@ -113,9 +113,9 @@ P1/P2 완료로 개발을 끝내지 않는다. 이 표와 아래 장별 요구�
 
 | 원문 요구사항 | 현재 상태 | 코드·시험·기록 근거 | 남은 인수 조건/한계 |
 |---|---|---|---|
-| **§6.1 카드 데이터 형식** | IMPLEMENTED(JS/데이터) | [helpers][helpers]·[cardText][js]·[문서 생성][gen-docs] | 동일 데이터 C# 효과/텍스트 생성기 이식 |
-| **§6.2 강화(+)** | IMPLEMENTED(JS) | [upgradeOps][js]·[엔진 시험][engine-tests] | 강화 전용 효과/올림/무기 금지 C# 동치 |
-| **§6.3 효과 DSL 참조** | PARTIAL | [execOp/validateOps/opText][js]·[문서 생성][gen-docs] | JS DSL 구현; C# 전체 op·조건·counter 미이식 |
+| **§6.1 카드 데이터 형식** | IMPLEMENTED(JS/데이터) | [helpers][helpers]·[cardText][js]·[문서 생성][gen-docs] | [C# 전체173카드/효과 정의와 질의](../reports/player_queries_20261015/) 확인; 실제효과/텍스트 실행 이식 남음 |
+| **§6.2 강화(+)** | IMPLEMENTED(JS) | [upgradeOps][js]·[엔진 시험][engine-tests] | [C# 유효정의 강화13/10·공명순서](../reports/player_queries_20261015/) 확인; 실제 실행·Run 강화 명령 남음 |
+| **§6.3 효과 DSL 참조** | PARTIAL | [execOp/validateOps/opText][js]·[문서 생성][gen-docs] | JS DSL과 [C#39op/35필드·조건/scale 정의](../reports/player_queries_20261015/) 보존; 실제실행 A1 남음. base0는 원문§6.3/§9 충돌 미결 |
 | **§6.4 카드 수치 예산(작성 가이드)** | PARTIAL(가이드/측정) | [밸런스 측정][balance-code]·[최신 확대 결과][balance-latest] | 기존 예산/목표를 유지하며 미달 원인 검토·사람 플레이 |
 | **§6.5 카드 풀과 보상** | IMPLEMENTED(JS/데이터) | [캐릭터][characters]·[세계 데이터][world]·[엔진 시험][engine-tests] | 전체 카드의 C#·제품 보상 수용 |
 | **§6.6 부품(카드 개조)** | IMPLEMENTED(JS) | [Run/Battle][js]·[부품 데이터][world]·[저장 v2 시험][memory-tests] | 두 영구 슬롯·임시 제외·교체 비용 C#·서버 동치 |
@@ -468,3 +468,5 @@ P1/P2 완료로 개발을 끝내지 않는다. 이 표와 아래 장별 요구�
 [receipt-engine]: ../reports/receipt_keys_20261015/node_tests.txt
 
 현재 반복 턴 단위의 [JS222 로그](../reports/csharp_turns_20261015/node_tests.txt)·[C# 실제명령](../reports/csharp_turns_20261015/root_checks.txt)·[Opus 승인](../ops/ai/tasks/P1-CSHARP-TURNS-CROSS-REVIEW.result.json)을 이전 단위와 구분한다. 다음 [플레이어 행동 경계](../ops/ai/tasks/P1-CSHARP-PLAYER-ACTIONS-BOUNDARY.md)는 구현 지시서이며 완료 증거가 아니다.
+
+A0 [실제128244 질의검사](../reports/player_queries_20261015/root_checks.txt)·[JS234](../reports/player_queries_20261015/node_tests.txt)·[Opus A0승인](../ops/ai/tasks/P1-CSHARP-PLAYER-QUERIES-CROSS-REVIEW.result.json)을 기록한다. 다음 [A1 실행 작업](../ops/ai/tasks/P1-CSHARP-PLAYER-EXECUTION-IMPLEMENTATION.md)은 전체카드·모드·필살기·생산된 상태의 실제 실행이며 조회 성공과 구별한다.

@@ -30,3 +30,9 @@ Unity6가 로컬 UPM으로 동일 Core 소스를 직접 컴파일했고 실제 P
 `end`·라이브20종의12행동·다음 턴을 구현했고 [356사례/1740요청·29232검사](../reports/csharp_turns_20261015/)와 기존전체검사, Unity PlayMode7/EditMode3이 통과했다. 원문과 대조한 공식 Opus Max·별도 Sol Max는 APPROVE다. `StartTurn(first)`·적 생성/의도·RNG·원자적 후보 실행을 재사용하고 전체 그래프 비교기는 두 host검사가 공유한다.
 
 현재 지원은 `Create/begin/end`다. `play`/`ult`, 예약·부채·파워·균열을 생산하는 경로, Run/저장/복원·전체1000Run명령 재생은 남아 있다. unknown상태/태그/phase를 조용히 생략하지 않는다. 위의 과거 미지원 end 설명은 이 절로 갱신하며 게임 데이터·수치를 변경하지 않는다.
+
+## 전체 정의·순수 카드 질의
+
+`EffectiveCard(uid)`·`AllowedModes(uid)`·`CostOf(uid,mode)`·`NeedsTarget(uid)`가 실제 카드 개체를 조회한다. [A0 근거](../reports/player_queries_20261015/)는173카드·378기본모드·전체 저작 전투 정의,702개시작/8340질의·128244검사와 기존전체검사·UnityPlay8/Edit3 PASS 및 Opus Max 승인이다. 강화→공명을 사본에 적용하며 원본 정의·RNG·상태·영수증은 바뀌지 않는다. 편의 기본 mode는 now이고 실제 명령 구현에서는 mode를 명시한다.
+
+A1 play/ult·예약/부채/파워/복제·전체Run 실행은 여전히 별도 미완료다. 원본§6.3/§9의 base0 충돌은 live base5를 유지하고 기록한다. A0를 효과 실행/전체 DSL 수용으로 취급하지 않는다.

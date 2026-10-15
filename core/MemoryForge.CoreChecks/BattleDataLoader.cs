@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Text.Json;
 using MemoryForge.Core;
@@ -15,30 +16,43 @@ static class BattleDataLoader
         using var document = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(root, "data", "game_data.json")));
         var json = document.RootElement;
         var rules = json.GetProperty("rules"); var slots = rules.GetProperty("slots");
-        // Read the actual opening fields. Unused authored decimals (e.g. upgradeMult=1.3)
-        // never pass through the deliberately integer-only snapshot/transport readers.
+        // Content decimals are parsed only at their typed boundary, never by the
+        // deliberately integer-only snapshot/transport readers.
         var data = new BattleData { Rules = new BattleRules { ApPerTurn = I(rules, "apPerTurn"), ApMax = I(rules, "apMax"),
             HandDraw = I(rules, "handDraw"), HandMax = I(rules, "handMax"), DebtCap = I(rules, "debtCap"),
             GrowthCapPerBattle = I(rules, "growthCapPerBattle"), GaugeMax = I(rules, "gaugeMax"), WeakBps = I(rules, "weakBps"),
+            GaugePerCard = I(rules, "gaugePerCard"), GaugeTurnCap = I(rules, "gaugeTurnCap"), BreakApBonus = I(rules, "breakApBonus"),
+            BreakApBonusMaxPerTurn = I(rules, "breakApBonusMaxPerTurn"), VulnerableBps = I(rules, "vulnerableBps"), BrokenDamageBps = I(rules, "brokenDamageBps"),
             NextSlots = I(slots, "next"), AfterSlots = I(slots, "after"), NextSlotsMax = I(slots, "nextMax"), AfterSlotsMax = I(slots, "afterMax") } };
+        (data.Rules.UpgradeNumerator, data.Rules.UpgradeDenominator) = Ratio(rules.GetProperty("upgradeMult"));
         foreach (var ch in json.GetProperty("characters").EnumerateArray())
         {
             var p = ch.GetProperty("passive"); Fields(p, "id", "name", "params", "text");
             data.Characters.Add(new BattleCharacterDef { Id = S(ch, "id"), Name = S(ch, "name"), Attr = S(ch, "attr"),
                 Passive = new PassiveDef { Id = S(p, "id"), Name = S(p, "name"), Text = S(p, "text"),
                     Params = p.GetProperty("params").EnumerateObject().ToDictionary(x => x.Name, x => x.Value.GetInt32(), StringComparer.Ordinal) },
-                Resonance = ch.GetProperty("resonance").EnumerateArray().Select(n => Fx(n.GetProperty("fx"))).ToList() });
+                Ult = Ult(ch.GetProperty("ult")), Resonance = ch.GetProperty("resonance").EnumerateArray().Select(n => Fx(n.GetProperty("fx"))).ToList() });
         }
         foreach (var c in json.GetProperty("cards").EnumerateArray())
-            data.Cards.Add(new BattleCardDef { Id = S(c, "id"), Owner = S(c, "owner"), Rarity = S(c, "rar"), Growth = B(c, "growth") });
+            data.Cards.Add(Card(c));
         foreach (var w in json.GetProperty("weapons").EnumerateArray())
         {
             var p = w.GetProperty("passive"); Fields(p, "id", "name", "scope", "text", "values", "refineAlt");
-            data.Weapons.Add(new BattleWeaponDef { Id = S(w, "id"), Passive = new WeaponPassiveDef { Id = S(p, "id"), Name = S(p, "name"), Scope = S(p, "scope"), Text = S(p, "text"),
+            Fields(w, "id", "name", "type", "rarity", "pool", "card", "signature", "passive");
+            data.Weapons.Add(new BattleWeaponDef { Id = S(w, "id"), Name = S(w, "name"), Type = S(w, "type"), Rarity = S(w, "rarity"), Pool = S(w, "pool"), Card = S(w, "card"), Signature = ContentString(w, "signature"),
+                Passive = new WeaponPassiveDef { Id = S(p, "id"), Name = S(p, "name"), Scope = S(p, "scope"), Text = S(p, "text"),
                 Values = Ints(p.GetProperty("values")), RefineAlt = p.TryGetProperty("refineAlt", out var alt) ? Ints(alt) : null } });
         }
-        foreach (var part in json.GetProperty("parts").EnumerateArray()) data.Parts.Add(new BattlePartDef { Id = S(part, "id") });
-        foreach (var relic in json.GetProperty("relics").EnumerateArray()) data.Relics.Add(new BattleRelicDef { Id = S(relic, "id") });
+        foreach (var part in json.GetProperty("parts").EnumerateArray())
+        {
+            Fields(part, "id", "slot", "name", "rarity", "text", "fx");
+            data.Parts.Add(new BattlePartDef { Id = S(part, "id"), Slot = S(part, "slot"), Name = S(part, "name"), Rarity = S(part, "rarity"), Text = S(part, "text"), Fx = PartFx(part.GetProperty("fx")) });
+        }
+        foreach (var relic in json.GetProperty("relics").EnumerateArray())
+        {
+            Fields(relic, "id", "name", "rarity", "text");
+            data.Relics.Add(new BattleRelicDef { Id = S(relic, "id"), Name = S(relic, "name"), Rarity = S(relic, "rarity"), Text = S(relic, "text") });
+        }
         foreach (var enemy in json.GetProperty("enemies").EnumerateArray())
         {
             Fields(enemy, "id", "name", "zone", "tier", "hp", "brk", "weak", "passive", "pattern");
@@ -53,10 +67,63 @@ static class BattleDataLoader
         data.Index(); return data;
     }
 
+    static (int Numerator, int Denominator) Ratio(JsonElement json)
+    {
+        int[] bits = decimal.GetBits(json.GetDecimal());
+        BigInteger numerator = (uint)bits[0] + ((BigInteger)(uint)bits[1] << 32) + ((BigInteger)(uint)bits[2] << 64);
+        if (bits[3] < 0) numerator = -numerator;
+        BigInteger denominator = BigInteger.Pow(10, (bits[3] >> 16) & 255);
+        BigInteger gcd = BigInteger.GreatestCommonDivisor(numerator, denominator); numerator /= gcd; denominator /= gcd;
+        if (numerator <= 0 || numerator > int.MaxValue || denominator > int.MaxValue) throw new InvalidDataException("Unsupported upgrade multiplier ratio");
+        return ((int)numerator, (int)denominator);
+    }
+    static BattleUltDef Ult(JsonElement json)
+    {
+        Fields(json, "name", "eff", "text");
+        return new BattleUltDef { Name = S(json, "name"), Text = S(json, "text"), Effects = json.GetProperty("eff").EnumerateArray().Select(Effect).ToList() };
+    }
+    static BattleCardDef Card(JsonElement json)
+    {
+        Fields(json, "id", "name", "owner", "rar", "cost", "type", "res", "eff", "kw", "attr", "uses", "growth", "start", "pool", "flavor", "evo", "plus", "costIf");
+        var card = new BattleCardDef { Id = S(json, "id"), Name = S(json, "name"), Owner = S(json, "owner"), Rarity = S(json, "rar"), Cost = json.GetProperty("cost").GetInt32(),
+            Type = S(json, "type"), Reservation = S(json, "res"), Attr = S(json, "attr"), Effects = json.GetProperty("eff").EnumerateArray().Select(Effect).ToList(),
+            Keywords = Strings(json.GetProperty("kw")), Uses = NI(json, "uses"), Growth = NB(json, "growth"), Start = NB(json, "start"), Pool = NB(json, "pool"),
+            Flavor = ContentString(json, "flavor"), Evolutions = json.TryGetProperty("evo", out var evo) ? Strings(evo) : null };
+        if (json.TryGetProperty("plus", out var plus))
+        {
+            card.PlusPresent = true;
+            if (plus.ValueKind != JsonValueKind.Null)
+            {
+                Fields(plus, "eff"); card.Plus = new BattleCardPlusDef();
+                if (plus.TryGetProperty("eff", out var eff))
+                {
+                    card.Plus.EffectsPresent = true;
+                    if (eff.ValueKind != JsonValueKind.Null) card.Plus.Effects = eff.EnumerateArray().Select(Effect).ToList();
+                }
+            }
+        }
+        if (json.TryGetProperty("costIf", out var costIf))
+        {
+            card.CostIfPresent = true;
+            if (costIf.ValueKind != JsonValueKind.Null)
+            {
+                Fields(costIf, "cond", "delta"); card.CostIf = new BattleCardCostIfDef { Condition = Condition(costIf.GetProperty("cond")), Delta = costIf.GetProperty("delta").GetInt32() };
+            }
+        }
+        return card;
+    }
+    static BattlePartFx PartFx(JsonElement json)
+    {
+        Fields(json, "addBps", "allBps", "resBps", "immBps", "afterBps", "cost", "brk", "pierce", "extraBlock", "drawOnce", "gauge", "markOnHit", "burnOnHit", "weakOnHit", "echoCopy", "exhaust", "noReserve");
+        return new BattlePartFx { AddBps = NI(json, "addBps"), AllBps = NI(json, "allBps"), ResBps = NI(json, "resBps"), ImmBps = NI(json, "immBps"), AfterBps = NI(json, "afterBps"),
+            Cost = NI(json, "cost"), Brk = NI(json, "brk"), Pierce = NI(json, "pierce"), ExtraBlock = NI(json, "extraBlock"), DrawOnce = NI(json, "drawOnce"), Gauge = NI(json, "gauge"),
+            MarkOnHit = NI(json, "markOnHit"), BurnOnHit = NI(json, "burnOnHit"), WeakOnHit = NI(json, "weakOnHit"), EchoCopy = NI(json, "echoCopy"), Exhaust = NB(json, "exhaust"), NoReserve = NB(json, "noReserve") };
+    }
+
     static ResonanceFx Fx(JsonElement json)
     {
         Fields(json, "type", "id", "prop", "param", "key", "add", "delta", "n", "bps", "value", "once", "cards", "list", "eff");
-        var fx = new ResonanceFx { Type = S(json, "type"), Id = O(json, "id"), Prop = O(json, "prop"), Param = O(json, "param"), Key = O(json, "key"),
+        var fx = new ResonanceFx { Type = S(json, "type"), Id = ContentString(json, "id"), Prop = ContentString(json, "prop"), Param = ContentString(json, "param"), Key = ContentString(json, "key"),
             Add = NI(json, "add"), Delta = NI(json, "delta"), N = NI(json, "n"), Bps = NI(json, "bps"),
             Once = json.TryGetProperty("once", out var once) ? once.GetBoolean() : null,
             Cards = json.TryGetProperty("cards", out var cards) ? Strings(cards) : null,
@@ -71,20 +138,82 @@ static class BattleDataLoader
     }
     static EffectDef Effect(JsonElement json)
     {
-        Fields(json, "op", "v", "n", "hits", "brk", "turns", "tgt", "s", "part", "pick", "scale", "cond", "then", "else");
-        var effect = new EffectDef { Op = S(json, "op"), V = NI(json, "v"), N = NI(json, "n"), Hits = NI(json, "hits"), Brk = NI(json, "brk"), Turns = NI(json, "turns"),
-            Target = O(json, "tgt"), Status = O(json, "s"), Part = O(json, "part"), Pick = O(json, "pick"),
+        string op = S(json, "op"); ValidateEffectShape(json, op);
+        var effect = new EffectDef { Op = op, V = NI(json, "v"), Rv = NI(json, "rv"), Ra = NI(json, "ra"), N = NI(json, "n"), Rn = NI(json, "rn"),
+            Hits = NI(json, "hits"), Brk = NI(json, "brk"), Shock = NI(json, "shock"), Pierce = NI(json, "pierce"), Turns = NI(json, "turns"),
+            Next = NI(json, "next"), After = NI(json, "after"), Bps = NI(json, "bps"), Block = NI(json, "blk"), Keep = NI(json, "keep"), Heal = NI(json, "heal"), OverflowBlock = NI(json, "overflowBlock"), Base0 = NB(json, "base0"),
+            Target = ContentString(json, "tgt"), Status = ContentString(json, "s"), Part = ContentString(json, "part"), Pick = ContentString(json, "pick"), Who = ContentString(json, "who"), Card = ContentString(json, "card"),
+            Zone = ContentString(json, "zone"), From = ContentString(json, "from"), Filter = ContentString(json, "filter"), Id = ContentString(json, "id"),
             Then = json.TryGetProperty("then", out var then) ? then.EnumerateArray().Select(Effect).ToList() : null,
             Else = json.TryGetProperty("else", out var other) ? other.EnumerateArray().Select(Effect).ToList() : null };
-        if (json.TryGetProperty("scale", out var scale))
-        {
-            Fields(scale, "per", "k", "max"); effect.Scale = new EffectScaleDef { Per = S(scale, "per"), K = I(scale, "k"), Max = NI(scale, "max") };
-        }
-        if (json.TryGetProperty("cond", out var cond))
-        {
-            Fields(cond, "c", "pct"); effect.Condition = new EffectConditionDef { Condition = S(cond, "c"), Pct = NI(cond, "pct") };
-        }
+        if (json.TryGetProperty("scale", out var scale)) effect.Scale = Scale(scale);
+        if (json.TryGetProperty("hitsScale", out var hitsScale)) effect.HitsScale = Scale(hitsScale);
+        if (json.TryGetProperty("cond", out var cond)) effect.Condition = Condition(cond);
+        if (json.TryGetProperty("mult", out var mult)) effect.Multipliers = mult.EnumerateArray().Select(m =>
+        { Fields(m, "if", "x"); return new EffectMultiplierDef { Condition = Condition(m.GetProperty("if")), Multiplier = m.GetProperty("x").GetInt32() }; }).ToList();
         return effect;
+    }
+    static EffectScaleDef Scale(JsonElement json)
+    {
+        Fields(json, "per", "k", "max");
+        string per = S(json, "per");
+        if (!new[] { "echo", "exhausted", "debt", "growthSum", "growthCards", "counter", "missingHp10", "contracts", "tempParts", "block", "lastCount", "targetBurn" }.Contains(per, StringComparer.Ordinal))
+            throw new InvalidDataException("Unknown scale counter: " + per);
+        return new EffectScaleDef { Per = per, K = json.GetProperty("k").GetInt32(), Max = NI(json, "max") };
+    }
+    static EffectConditionDef Condition(JsonElement json)
+    {
+        string condition = S(json, "c");
+        switch (condition)
+        {
+            case "echo": case "growthInHand": case "exhaustedAtLeast": Fields(json, "c", "n"); Required(json, "n"); break;
+            case "hpBelow": case "targetHpBelow": Fields(json, "c", "pct"); Required(json, "pct"); break;
+            case "marked": case "burning": case "broken": case "debt": case "modded": case "reserved": case "intentAttack": case "killedThis": Fields(json, "c"); break;
+            default: throw new InvalidDataException("Unknown effect condition: " + condition);
+        }
+        return new EffectConditionDef { Condition = condition, Pct = NI(json, "pct"), N = NI(json, "n") };
+    }
+    static void ValidateEffectShape(JsonElement json, string op)
+    {
+        string[] fields;
+        string[] required = Array.Empty<string>();
+        switch (op)
+        {
+            case "dmg": fields = new[] { "v", "rv", "ra", "hits", "hitsScale", "tgt", "brk", "shock", "pierce", "scale", "mult" }; required = new[] { "v" }; break;
+            case "blk": fields = new[] { "v", "rv", "ra", "scale", "base0" }; required = new[] { "v" }; break;
+            case "heal": fields = new[] { "v", "rv", "ra", "scale", "overflowBlock" }; required = new[] { "v" }; break;
+            case "st": fields = new[] { "s", "n", "rn", "tgt" }; required = new[] { "s", "n" }; break;
+            case "buff": fields = new[] { "s", "n", "turns" }; required = new[] { "s", "n" }; break;
+            case "counter": fields = new[] { "n", "rn" }; required = new[] { "n" }; break;
+            case "draw": fields = new[] { "n", "rn", "scale" }; break;
+            case "discard": case "ap": case "apNext": case "growPick": case "growLowest": case "loan": case "echo": case "freeNext": fields = new[] { "n" }; required = fields; break;
+            case "gauge": fields = new[] { "n", "who" }; required = new[] { "n" }; break;
+            case "create": fields = new[] { "card", "n", "zone" }; required = new[] { "card", "n" }; break;
+            case "slot": fields = new[] { "next", "after" }; break;
+            case "collateral": case "selfdmg": fields = new[] { "v" }; required = fields; break;
+            case "cleanseOne": fields = new[] { "s" }; required = fields; break;
+            case "exhaustPick": fields = new[] { "from", "n" }; required = new[] { "n" }; break;
+            case "tune": fields = new[] { "part", "pick" }; required = new[] { "part" }; break;
+            case "costdown": fields = new[] { "n", "pick" }; required = new[] { "n" }; break;
+            case "copyPick": fields = new[] { "filter" }; break;
+            case "power": fields = new[] { "id", "bps", "blk", "keep", "heal" }; required = new[] { "id" }; break;
+            case "nextBoost": fields = new[] { "bps" }; required = fields; break;
+            case "breakBonus": case "breakBonusAll": fields = new[] { "n", "scale" }; break;
+            case "if": fields = new[] { "cond", "then", "else" }; required = new[] { "cond", "then" }; break;
+            case "pull": case "grow": case "defer": case "restraint": case "cleanse": case "exhaustHand": case "recall": case "growAll": case "clearDebt": fields = Array.Empty<string>(); break;
+            default: throw new InvalidDataException("Unknown effect op: " + op);
+        }
+        Fields(json, fields.Concat(new[] { "op" }).ToArray()); Required(json, required);
+        if (json.TryGetProperty("tgt", out var target) && !new[] { "one", "same", "all", "rand", "fixed" }.Contains(String(target), StringComparer.Ordinal))
+            throw new InvalidDataException("Unknown effect target");
+        if (json.TryGetProperty("pick", out var pick) && !new[] { "one", "all", "same", "random" }.Contains(String(pick), StringComparer.Ordinal))
+            throw new InvalidDataException("Unknown effect pick");
+        if (op == "power" && !new[] { "blueprint", "greenhouse", "bulwark", "rebirth", "oblivion", "casefile", "echochamber" }.Contains(S(json, "id"), StringComparer.Ordinal))
+            throw new InvalidDataException("Unknown power ID");
+    }
+    static void Required(JsonElement json, params string[] names)
+    {
+        foreach (string name in names) if (!json.TryGetProperty(name, out _)) throw new InvalidDataException("Missing required field: " + name);
     }
     static EnemyMoveDef Move(JsonElement json)
     {
@@ -204,6 +333,8 @@ static class BattleDataLoader
     static string? O(JsonElement json, string name) => json.TryGetProperty(name, out var value) && value.ValueKind != JsonValueKind.Null ? String(value) : null;
     static int I(JsonElement json, string name) => json.TryGetProperty(name, out var value) && value.ValueKind != JsonValueKind.Null ? value.GetInt32() : 0;
     static int? NI(JsonElement json, string name) => json.TryGetProperty(name, out var value) ? value.GetInt32() : null;
+    static bool? NB(JsonElement json, string name) => json.TryGetProperty(name, out var value) ? value.GetBoolean() : null;
+    static string? ContentString(JsonElement json, string name) => json.TryGetProperty(name, out var value) ? String(value) : null;
     static bool B(JsonElement json, string name) => json.TryGetProperty(name, out var value) && value.ValueKind != JsonValueKind.Null && value.GetBoolean();
     static List<int> Ints(JsonElement json) => json.EnumerateArray().Select(n => n.GetInt32()).ToList();
     static List<string> Strings(JsonElement json) => json.EnumerateArray().Select(s => s.GetString()!).ToList();

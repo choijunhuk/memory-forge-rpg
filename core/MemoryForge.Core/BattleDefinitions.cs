@@ -9,6 +9,8 @@ namespace MemoryForge.Core
     {
         public int ApPerTurn, ApMax, HandDraw, HandMax, DebtCap, GrowthCapPerBattle, GaugeMax;
         public int NextSlots, AfterSlots, NextSlotsMax, AfterSlotsMax, WeakBps;
+        public int GaugePerCard, GaugeTurnCap, BreakApBonus, BreakApBonusMaxPerTurn, VulnerableBps, BrokenDamageBps;
+        public int UpgradeNumerator = 13, UpgradeDenominator = 10;
     }
 
     public sealed class PassiveDef
@@ -37,41 +39,61 @@ namespace MemoryForge.Core
     public sealed class EffectConditionDef
     {
         public string Condition = "";
-        public int? Pct;
+        public int? Pct, N;
         internal EffectConditionDef Copy() => (EffectConditionDef)MemberwiseClone();
         internal Dictionary<string, object?> ToJsonGraph()
         {
             var graph = BattleGraph.Object("c", Condition);
             if (Pct.HasValue) graph.Add("pct", Pct.Value);
+            if (N.HasValue) graph.Add("n", N.Value);
             return graph;
         }
     }
 
-    // This is the authored resonance effect schema, not a general DSL interpreter.
-    // Unported commands/effect shapes are rejected by Battle rather than silently skipped.
+    public sealed class EffectMultiplierDef
+    {
+        public EffectConditionDef Condition = new EffectConditionDef();
+        public int Multiplier;
+        internal EffectMultiplierDef Copy() => new EffectMultiplierDef { Condition = Condition.Copy(), Multiplier = Multiplier };
+        internal Dictionary<string, object?> ToJsonGraph() => BattleGraph.Object("if", Condition.ToJsonGraph(), "x", Multiplier);
+    }
+
+    // Typed source definitions; carrying an op does not claim its execution is ported.
     public sealed class EffectDef
     {
         public string Op = "";
-        public int? V, N, Hits, Brk, Turns;
-        public string? Target, Status, Part, Pick;
-        public EffectScaleDef? Scale;
+        public int? V, Rv, Ra, N, Rn, Hits, Brk, Shock, Pierce, Turns, Next, After, Bps, Block, Keep, Heal, OverflowBlock;
+        public string? Target, Status, Part, Pick, Who, Card, Zone, From, Filter, Id;
+        public bool? Base0;
+        public EffectScaleDef? Scale, HitsScale;
         public EffectConditionDef? Condition;
+        public List<EffectMultiplierDef>? Multipliers;
         public List<EffectDef>? Then, Else;
         internal EffectDef Copy()
         {
             var copy = (EffectDef)MemberwiseClone();
-            copy.Scale = Scale?.Copy(); copy.Condition = Condition?.Copy();
+            copy.Scale = Scale?.Copy(); copy.HitsScale = HitsScale?.Copy(); copy.Condition = Condition?.Copy();
+            copy.Multipliers = Multipliers?.Select(m => m.Copy()).ToList();
             copy.Then = Then?.Select(e => e.Copy()).ToList(); copy.Else = Else?.Select(e => e.Copy()).ToList();
             return copy;
         }
         public Dictionary<string, object?> ToJsonGraph()
         {
             var graph = BattleGraph.Object("op", Op);
-            BattleGraph.Optional(graph, "v", V); BattleGraph.Optional(graph, "n", N);
+            BattleGraph.Optional(graph, "v", V); BattleGraph.Optional(graph, "rv", Rv); BattleGraph.Optional(graph, "ra", Ra);
+            BattleGraph.Optional(graph, "n", N); BattleGraph.Optional(graph, "rn", Rn);
             BattleGraph.Optional(graph, "hits", Hits); BattleGraph.Optional(graph, "brk", Brk); BattleGraph.Optional(graph, "turns", Turns);
+            BattleGraph.Optional(graph, "shock", Shock); BattleGraph.Optional(graph, "pierce", Pierce);
             BattleGraph.Optional(graph, "tgt", Target); BattleGraph.Optional(graph, "s", Status);
             BattleGraph.Optional(graph, "part", Part); BattleGraph.Optional(graph, "pick", Pick);
+            BattleGraph.Optional(graph, "who", Who); BattleGraph.Optional(graph, "card", Card); BattleGraph.Optional(graph, "zone", Zone);
+            BattleGraph.Optional(graph, "next", Next); BattleGraph.Optional(graph, "after", After);
+            BattleGraph.Optional(graph, "from", From); BattleGraph.Optional(graph, "filter", Filter); BattleGraph.Optional(graph, "id", Id);
+            BattleGraph.Optional(graph, "bps", Bps); BattleGraph.Optional(graph, "blk", Block); BattleGraph.Optional(graph, "keep", Keep);
+            BattleGraph.Optional(graph, "heal", Heal); BattleGraph.Optional(graph, "overflowBlock", OverflowBlock); BattleGraph.Optional(graph, "base0", Base0);
             if (Scale != null) graph.Add("scale", Scale.ToJsonGraph());
+            if (HitsScale != null) graph.Add("hitsScale", HitsScale.ToJsonGraph());
+            if (Multipliers != null) graph.Add("mult", Multipliers.Select(m => m.ToJsonGraph()).ToList());
             if (Condition != null) graph.Add("cond", Condition.ToJsonGraph());
             if (Then != null) graph.Add("then", Then.Select(e => e.ToJsonGraph()).ToList());
             if (Else != null) graph.Add("else", Else.Select(e => e.ToJsonGraph()).ToList());
@@ -116,13 +138,68 @@ namespace MemoryForge.Core
     {
         public string Id = "", Name = "", Attr = "";
         public PassiveDef Passive = new PassiveDef();
+        public BattleUltDef Ult = new BattleUltDef();
         public List<ResonanceFx> Resonance = new List<ResonanceFx>();
+        public Dictionary<string, object?> ToJsonGraph() => BattleGraph.Object("id", Id, "name", Name, "attr", Attr, "passive", Passive.ToJsonGraph(),
+            "ult", Ult.ToJsonGraph(), "resonance", Resonance.Select(f => f.ToJsonGraph()).ToList());
+    }
+
+    public sealed class BattleUltDef
+    {
+        public string Name = "", Text = "";
+        public List<EffectDef> Effects = new List<EffectDef>();
+        internal BattleUltDef Copy() => new BattleUltDef { Name = Name, Text = Text, Effects = Effects.Select(e => e.Copy()).ToList() };
+        public Dictionary<string, object?> ToJsonGraph() => BattleGraph.Object("name", Name, "eff", Effects.Select(e => e.ToJsonGraph()).ToList(), "text", Text);
+    }
+
+    public sealed class BattleCardPlusDef
+    {
+        public List<EffectDef>? Effects;
+        public bool EffectsPresent;
+        internal BattleCardPlusDef Copy() => new BattleCardPlusDef { Effects = Effects?.Select(e => e.Copy()).ToList(), EffectsPresent = EffectsPresent };
+        internal Dictionary<string, object?> ToJsonGraph()
+        {
+            var graph = BattleGraph.Object(); if (EffectsPresent || Effects != null) graph.Add("eff", Effects?.Select(e => e.ToJsonGraph()).ToList()); return graph;
+        }
+    }
+    public sealed class BattleCardCostIfDef
+    {
+        public EffectConditionDef Condition = new EffectConditionDef();
+        public int Delta;
+        internal BattleCardCostIfDef Copy() => new BattleCardCostIfDef { Condition = Condition.Copy(), Delta = Delta };
+        internal Dictionary<string, object?> ToJsonGraph() => BattleGraph.Object("cond", Condition.ToJsonGraph(), "delta", Delta);
     }
 
     public sealed class BattleCardDef
     {
-        public string Id = "", Owner = "", Rarity = "";
-        public bool Growth;
+        public string Id = "", Name = "", Owner = "", Rarity = "", Type = "", Reservation = "", Attr = "";
+        public int Cost;
+        public int? Uses;
+        public bool? Growth, Start, Pool;
+        public string? Flavor;
+        public List<string> Keywords = new List<string>();
+        public List<string>? Evolutions;
+        public List<EffectDef> Effects = new List<EffectDef>();
+        public BattleCardPlusDef? Plus;
+        public BattleCardCostIfDef? CostIf;
+        public bool PlusPresent, CostIfPresent;
+        internal BattleCardDef Copy()
+        {
+            var copy = (BattleCardDef)MemberwiseClone(); copy.Keywords = new List<string>(Keywords);
+            copy.Evolutions = Evolutions == null ? null : new List<string>(Evolutions); copy.Effects = Effects.Select(e => e.Copy()).ToList();
+            copy.Plus = Plus?.Copy(); copy.CostIf = CostIf?.Copy(); return copy;
+        }
+        public Dictionary<string, object?> ToJsonGraph()
+        {
+            var graph = BattleGraph.Object("id", Id, "name", Name, "owner", Owner, "rar", Rarity, "cost", Cost, "type", Type, "res", Reservation,
+                "eff", Effects.Select(e => e.ToJsonGraph()).ToList(), "kw", new List<string>(Keywords), "attr", Attr);
+            BattleGraph.Optional(graph, "uses", Uses); BattleGraph.Optional(graph, "growth", Growth); BattleGraph.Optional(graph, "start", Start);
+            BattleGraph.Optional(graph, "pool", Pool); BattleGraph.Optional(graph, "flavor", Flavor);
+            if (Evolutions != null) graph.Add("evo", new List<string>(Evolutions));
+            if (PlusPresent || Plus != null) graph.Add("plus", Plus?.ToJsonGraph());
+            if (CostIfPresent || CostIf != null) graph.Add("costIf", CostIf?.ToJsonGraph());
+            return graph;
+        }
     }
 
     public sealed class WeaponPassiveDef
@@ -130,16 +207,54 @@ namespace MemoryForge.Core
         public string Id = "", Name = "", Scope = "", Text = "";
         public List<int> Values = new List<int>();
         public List<int>? RefineAlt;
+        internal WeaponPassiveDef Copy() => new WeaponPassiveDef { Id = Id, Name = Name, Scope = Scope, Text = Text, Values = new List<int>(Values), RefineAlt = RefineAlt == null ? null : new List<int>(RefineAlt) };
+        public Dictionary<string, object?> ToJsonGraph()
+        {
+            var graph = BattleGraph.Object("id", Id, "name", Name, "values", new List<int>(Values), "scope", Scope, "text", Text);
+            if (RefineAlt != null) graph.Add("refineAlt", new List<int>(RefineAlt)); return graph;
+        }
     }
 
     public sealed class BattleWeaponDef
     {
-        public string Id = "";
+        public string Id = "", Name = "", Type = "", Rarity = "", Pool = "", Card = "";
+        public string? Signature;
         public WeaponPassiveDef Passive = new WeaponPassiveDef();
+        public Dictionary<string, object?> ToJsonGraph()
+        {
+            var graph = BattleGraph.Object("id", Id, "name", Name, "type", Type, "rarity", Rarity, "pool", Pool, "passive", Passive.ToJsonGraph(), "card", Card);
+            BattleGraph.Optional(graph, "signature", Signature); return graph;
+        }
     }
 
-    public sealed class BattlePartDef { public string Id = ""; }
-    public sealed class BattleRelicDef { public string Id = ""; }
+    public sealed class BattlePartFx
+    {
+        public int? AddBps, AllBps, ResBps, ImmBps, AfterBps, Cost, Brk, Pierce, ExtraBlock, DrawOnce, Gauge, MarkOnHit, BurnOnHit, WeakOnHit, EchoCopy;
+        public bool? Exhaust, NoReserve;
+        internal BattlePartFx Copy() => (BattlePartFx)MemberwiseClone();
+        public Dictionary<string, object?> ToJsonGraph()
+        {
+            var graph = BattleGraph.Object();
+            BattleGraph.Optional(graph, "addBps", AddBps); BattleGraph.Optional(graph, "allBps", AllBps); BattleGraph.Optional(graph, "resBps", ResBps);
+            BattleGraph.Optional(graph, "immBps", ImmBps); BattleGraph.Optional(graph, "afterBps", AfterBps); BattleGraph.Optional(graph, "cost", Cost);
+            BattleGraph.Optional(graph, "brk", Brk); BattleGraph.Optional(graph, "pierce", Pierce); BattleGraph.Optional(graph, "extraBlock", ExtraBlock);
+            BattleGraph.Optional(graph, "drawOnce", DrawOnce); BattleGraph.Optional(graph, "gauge", Gauge); BattleGraph.Optional(graph, "markOnHit", MarkOnHit);
+            BattleGraph.Optional(graph, "burnOnHit", BurnOnHit); BattleGraph.Optional(graph, "weakOnHit", WeakOnHit); BattleGraph.Optional(graph, "echoCopy", EchoCopy);
+            BattleGraph.Optional(graph, "exhaust", Exhaust); BattleGraph.Optional(graph, "noReserve", NoReserve); return graph;
+        }
+    }
+    public sealed class BattlePartDef
+    {
+        public string Id = "", Slot = "", Name = "", Rarity = "", Text = "";
+        public BattlePartFx Fx = new BattlePartFx();
+        internal BattlePartDef Copy() => new BattlePartDef { Id = Id, Slot = Slot, Name = Name, Rarity = Rarity, Text = Text, Fx = Fx.Copy() };
+        public Dictionary<string, object?> ToJsonGraph() => BattleGraph.Object("id", Id, "slot", Slot, "name", Name, "rarity", Rarity, "text", Text, "fx", Fx.ToJsonGraph());
+    }
+    public sealed class BattleRelicDef
+    {
+        public string Id = "", Name = "", Rarity = "", Text = "";
+        public Dictionary<string, object?> ToJsonGraph() => BattleGraph.Object("id", Id, "name", Name, "rarity", Rarity, "text", Text);
+    }
 
     public sealed class EnemyPassiveDef
     {
@@ -192,12 +307,14 @@ namespace MemoryForge.Core
         internal Dictionary<string, BattleCharacterDef> CharacterIndex = new Dictionary<string, BattleCharacterDef>(StringComparer.Ordinal);
         internal Dictionary<string, BattleCardDef> CardIndex = new Dictionary<string, BattleCardDef>(StringComparer.Ordinal);
         internal Dictionary<string, BattleWeaponDef> WeaponIndex = new Dictionary<string, BattleWeaponDef>(StringComparer.Ordinal);
+        internal Dictionary<string, BattlePartDef> PartIndex = new Dictionary<string, BattlePartDef>(StringComparer.Ordinal);
         internal Dictionary<string, BattleEnemyDef> EnemyIndex = new Dictionary<string, BattleEnemyDef>(StringComparer.Ordinal);
         public void Index()
         {
             CharacterIndex = Characters.ToDictionary(x => x.Id, StringComparer.Ordinal);
             CardIndex = Cards.ToDictionary(x => x.Id, StringComparer.Ordinal);
             WeaponIndex = Weapons.ToDictionary(x => x.Id, StringComparer.Ordinal);
+            PartIndex = Parts.ToDictionary(x => x.Id, StringComparer.Ordinal);
             EnemyIndex = Enemies.ToDictionary(x => x.Id, StringComparer.Ordinal);
         }
     }

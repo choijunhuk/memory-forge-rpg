@@ -1,0 +1,74 @@
+{
+  "status": "VERIFIED_FOR_INTEGRATION",
+  "baseCommit": "a919f2ea3d377e4fd9b5ba6a4f02ae9bce1191c2",
+  "scope": "A0 fullauthoredcombatdefinitions/purequeries only",
+  "actualCommands": [
+    "begin",
+    "end previously implemented; play/ult not enabled"
+  ],
+  "metrics": {
+    "queryAssertions": 128244,
+    "queryBeginCommands": 702,
+    "queryRows": 8340,
+    "beginReceiptProbes": 702,
+    "JS": 234,
+    "core": 202,
+    "canonical": 87,
+    "snapshots": 2000,
+    "traceFixture": 13,
+    "openingAssertions": 2221,
+    "turnAssertions": 29232,
+    "turnRequests": 1740,
+    "UnityPlayMode": 8,
+    "UnityEditMode": 3,
+    "proposals": 14,
+    "python": 48,
+    "docs": 9,
+    "handoff": 13
+  },
+  "preserved": {
+    "engineDataDesignArtPDFInputFiles": 40,
+    "manifestRegenerated": false,
+    "models": [
+      "gpt-6.1-sol",
+      "claude-opus-5-5"
+    ],
+    "includedSubscriptionsOnly": true
+  },
+  "pending": [
+    "OpusMaxindependentreviewreceipt",
+    "A1fullplayerexecution",
+    "genericbase0sourceconflict",
+    "fullRunC#commandreplay",
+    "gameUI/device/serveracceptance"
+  ],
+  "verifiedAt": "2026-10-15T00:36:39.163680+00:00",
+  "oppositeAI": {
+    "model": "claude-opus-5-5",
+    "effort": "max",
+    "verdict": "APPROVE_A0_ONLY",
+    "sessionId": "4f90a3bc-f540-472f-9f55-08a4b75d143e",
+    "reviewerExecutedTests": false,
+    "reviewerRecomputedHashes": false,
+    "rootVerifiedExactSourceHashes": true
+  },
+  "nativeSourceReview": "APPROVE",
+  "UnityConsole": {
+    "errors": 0,
+    "transportWarnings": 1
+  },
+  "limits": [
+    "A0 authoredcontent/querydomain only; not arbitrarymutateddefinitions or universalJSnumericcoercion",
+    "CostOf omittedmode defaultsnow; A1callersmustpassmodeexplicitly",
+    "A1play/ult/producedlifecycle notimplemented",
+    "genericbase0sourceconflictUNRESOLVED",
+    "wholeRunC#commands0; fullgameUI/Android/IL2CPP/device/servernotaccepted"
+  ],
+  "inputManifest": {
+    "entries": 423,
+    "changed": 27,
+    "missing": 0,
+    "regenerated": false,
+    "status": "EXPECTED_DEVELOPMENT_DIFFERENCES"
+  }
+}

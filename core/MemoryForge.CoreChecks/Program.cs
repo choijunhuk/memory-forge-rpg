@@ -117,7 +117,8 @@ static class Program
         int traceFailures = TraceHashChecks.Run(root);
         int openingFailures = BattleOpeningChecks.Run(root);
         int turnFailures = BattleTurnChecks.Run(root);
-        return failures == 0 && traceFailures == 0 && openingFailures == 0 && turnFailures == 0 ? 0 : 1;
+        int queryFailures = BattlePlayerQueryChecks.Run(root);
+        return failures == 0 && traceFailures == 0 && openingFailures == 0 && turnFailures == 0 && queryFailures == 0 ? 0 : 1;
     }
 
     static bool Throws(Action a, string code) { try { a(); return false; } catch (RuleException e) { return e.Code == code; } }

@@ -35,7 +35,9 @@ namespace MemoryForge.PlayModeTests
                 }
             });
             data.Characters.Add(new BattleCharacterDef { Id = "nia", Name = "니아", Attr = "void", Passive = new PassiveDef { Id = "nia_handiwork", Params = new Dictionary<string, int> { ["bps"] = 1500 } } });
-            data.Cards.Add(new BattleCardDef { Id = "harin_shield", Owner = "harin", Rarity = "B" });
+            data.Cards.Add(new BattleCardDef { Id = "harin_shield", Name = "경계 방패", Owner = "harin", Rarity = "B",
+                Cost = 1, Type = "skl", Reservation = "y", Attr = "frost", Start = true,
+                Effects = new List<EffectDef> { new EffectDef { Op = "blk", V = 8, Rv = 11 } } });
             data.Weapons.Add(new BattleWeaponDef { Id = "w_ledger_lock", Passive = new WeaponPassiveDef
             { Id = "w_startBlock", Scope = "wielder", Values = new List<int> { 4, 5, 6, 7, 8 } } });
             data.Enemies.Add(new BattleEnemyDef { Id = "e_shelf", Name = "무너진 서가", Tier = "normal", Hp = 46, Brk = 5,
@@ -67,6 +69,34 @@ namespace MemoryForge.PlayModeTests
             first.Events.Clear();
             Assert.That(battle.Command(request).Events.Count, Is.GreaterThan(0));
             Assert.That(CanonicalState.Hash(battle.State.ToJsonGraph()), Is.EqualTo(hash));
+        }
+
+        [Test]
+        public void PureCardQueriesReturnDetachedDefinitionsWithoutChangingTheRunningBattle()
+        {
+            Assert.That(Application.isPlaying, Is.True);
+            var battle = Fresh("bronze_cog");
+            battle.Command(new BattleRequest("begin", 0, "begin"));
+            var graph = battle.State.ToJsonGraph();
+            var stateHash = CanonicalState.Hash(graph);
+            var logHash = CanonicalState.Hash(graph["log"]);
+            var eventsHash = CanonicalState.Hash(graph["ev"]);
+            var effective = battle.EffectiveCard("c1");
+            Assert.That(effective.Cost, Is.EqualTo(1));
+            Assert.That(effective.Effects[0].V, Is.EqualTo(8));
+            Assert.That(effective.Effects[0].Rv, Is.EqualTo(11));
+            Assert.That(battle.AllowedModes("c1"), Is.EqualTo(new[] { "now", "next", "after" }));
+            Assert.That(battle.CostOf("c1"), Is.EqualTo(1));
+            Assert.That(battle.CostOf("c1", "after"), Is.EqualTo(1));
+            Assert.That(battle.NeedsTarget("c1"), Is.Null);
+            effective.Effects[0].V = 999;
+            var modes = battle.AllowedModes("c1"); modes.Clear();
+            Assert.That(battle.EffectiveCard("c1").Effects[0].V, Is.EqualTo(8));
+            Assert.That(battle.AllowedModes("c1").Count, Is.EqualTo(3));
+            graph = battle.State.ToJsonGraph();
+            Assert.That(CanonicalState.Hash(graph), Is.EqualTo(stateHash));
+            Assert.That(CanonicalState.Hash(graph["log"]), Is.EqualTo(logHash));
+            Assert.That(CanonicalState.Hash(graph["ev"]), Is.EqualTo(eventsHash));
         }
 
         [Test]
