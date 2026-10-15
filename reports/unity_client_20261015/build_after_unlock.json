@@ -1,0 +1,26 @@
+{
+  "sourceCommit": "8c6d764c767f7fed9573e832309922bc17838ecc",
+  "job_id": "build-5fa521a635",
+  "result": "succeeded",
+  "platform": "StandaloneOSX",
+  "output_path": "client/MemoryForgeUnity/Builds/MemoryForgeBattle/MemoryForgeBattle.app",
+  "started_at": "2026-10-15T16:12:13.798968Z",
+  "completed_at": "2026-10-15T16:12:42.445356Z",
+  "duration_seconds": 28.646388,
+  "total_size_mb": 254.79,
+  "errors": 0,
+  "warnings": 0,
+  "nativeLaunch": "PASS actual CUA screenshot, battle Korean labels and initial HP243/AP4; Metal/scene load in current player log",
+  "nativeCardSelection": "observed basic attack -> spanner; exact pointer-to-widget mapping not independently proven",
+  "nativeFullCommandFlow": "NOT_CONFIRMED additional coordinate inputs were inconclusive; not acceptance",
+  "nativeExit": "PASS menu Quit; no matching player process; actual Input System Shutdown; exit log includes thread-finalizer and ComputeBuffer diagnostics",
+  "editorPlayTests": "Previously passed current source26/26; 3/3 Edit tests",
+  "buildOnlySettingsDiff": "Both build-only trailing whitespace changes backed up and restored byte-for-byte to HEAD",
+  "scope": "Battle practice only; not whole Run, Android/device/server/art completion",
+  "editorFinal": "Actual final-source raycast reserve/end/reset flow passed; stopped on Battle scene; background runtime/persisted settings false",
+  "editorWarnings": [
+    "Ignoring depth surface load action as it is memoryless",
+    "Ignoring depth surface store action as it is memoryless"
+  ],
+  "performanceAcceptance": "NOT_RUN; shutdown diagnostics not attributed to game or URP without isolated investigation"
+}

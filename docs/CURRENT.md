@@ -95,3 +95,9 @@ C#전체기존전투/기억검사와 Node286/제안14/Python49를 유지했다. 
 반대 AI 교차 리뷰의 입력·미리보기 결함을 수정하고, Claude가 보완한 임시/봉인 슬롯과 적 의도/상태를 Codex가 독립 검토했다. 실제 PlayMode26/EditMode3·Node22/25각289·Python57·문서9·인계13·제안14가 통과했다. 커밋/정확한 head의 CI는 해당 기록을 별도로 확인한다. 이 화면은 실제 Core 전투 연습이고 전체 Run 진행·보상·저장·계정·최종 아트·접근성 전체·Android/실기기 완료는 아니다. 전체 C# Run 진행 명령은0이다. 검증·통합 후 로드맵 개발을 계속한다.
 
 현재 R0최종검사는 C#215677/215677·위조115·입력감사29이며 게임기록은 출처SHA/감사정보 외에 전수동일하다. CSV4개 원본 바이트를 Git에서도 보존하고, 허용한 OFL폰트만 정확한 경로/체크섬/동봉 라이선스로 출고를 허용한다. Mac 잠금으로 최종화면 추가확인과 standalone빌드 확인은 보류되며, 이미실행한26/3Editor검증과 구분한다.
+
+## 추가 확인 — 2026-10-16 / 잠금 해제 후 실제 전투 화면
+
+사용자 잠금 해제 뒤 위 보류 항목을 다시 확인했다. `8c6d764`의 push/PR CI가 모두 성공했고 Private·draft PR#2에 반영됐다. [최신 실제 화면](../reports/unity_client_20261015/battle-final-8c6d764.png)과 [uGUI 포인터 검증](../reports/unity_client_20261015/final_ui_pointer_flow.json)에서 카드·대상·예약 방식 선택은 V1/AP4 유지, 사용 확정만 V2/AP2/예약1, 턴 종료는 V3/2턴/HP219/예약0/적HP[0,18]로 확인했다. 다시 시작으로 초기값을 복원하고 Editor에 전투 씬을 열어 두었다.
+
+[macOS 새 빌드](../reports/unity_client_20261015/build_after_unlock.json)는 실제 MCP 작업 `build-5fa521a635`가 성공했고 오류0/경고0이다. 독립 앱의 Metal 시작·한글 전투 화면·카드 선택과 메뉴 종료/프로세스 종료를 확인했다. 독립 앱의 추가 좌표 입력 결과는 불명확해 전체 명령 흐름 성공으로 세지 않았다. Editor Play26/Edit3과 구분하며, 최종 Editor 조회의 memoryless-depth 경고2개와 독립 앱 종료의 ComputeBuffer/스레드 진단은 후속 성능 점검에 남긴다. 임시 검증용 background 실행값과 빌드가 바꾼 URP 공백은 원래값으로 복원했다. 전체 Run·Android/기기·서버·최종 아트는 계속 미완성이다.
