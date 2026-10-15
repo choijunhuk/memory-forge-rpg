@@ -1,0 +1,1547 @@
+TAP version 13
+# Subtest: tracing preserves battle result, input data, and prototype even on an error
+ok 1 - tracing preserves battle result, input data, and prototype even on an error
+  ---
+  duration_ms: 483.468209
+  ...
+# Subtest: independent aggregation and signed contributors reconcile all failed metrics
+ok 2 - independent aggregation and signed contributors reconcile all failed metrics
+  ---
+  duration_ms: 1385.586958
+  ...
+# Subtest: analysis rejects altered target bounds and assessment results with unchanged source hashes
+    # Subtest: weakened target bands
+    ok 1 - weakened target bands
+      ---
+      duration_ms: 50.428084
+      ...
+    # Subtest: changed lower bound
+    ok 2 - changed lower bound
+      ---
+      duration_ms: 139.970125
+      ...
+    # Subtest: changed upper bound
+    ok 3 - changed upper bound
+      ---
+      duration_ms: 94.863583
+      ...
+    # Subtest: changed metric status
+    ok 4 - changed metric status
+      ---
+      duration_ms: 62.385834
+      ...
+    # Subtest: changed failure count
+    ok 5 - changed failure count
+      ---
+      duration_ms: 305.927166
+      ...
+    # Subtest: changed overall result
+    ok 6 - changed overall result
+      ---
+      duration_ms: 41.574417
+      ...
+    1..6
+ok 3 - analysis rejects altered target bounds and assessment results with unchanged source hashes
+  ---
+  duration_ms: 832.903208
+  ...
+# Subtest: official CLI requires complete canonical probe provenance while analyze supports smaller probes
+    # Subtest: accepts complete base probe
+    ok 1 - accepts complete base probe
+      ---
+      duration_ms: 6244.913375
+      ...
+    # Subtest: accepts complete candidate probe
+    ok 2 - accepts complete candidate probe
+      ---
+      duration_ms: 14065.317125
+      ...
+    # Subtest: rejects base encounter subset
+    ok 3 - rejects base encounter subset
+      ---
+      duration_ms: 2333.446625
+      ...
+    # Subtest: rejects candidate encounter subset
+    ok 4 - rejects candidate encounter subset
+      ---
+      duration_ms: 5741.788833
+      ...
+    # Subtest: rejects mislabeled actual enemies
+    ok 5 - rejects mislabeled actual enemies
+      ---
+      duration_ms: 2279.651125
+      ...
+    # Subtest: rejects different scenario generation seed
+    ok 6 - rejects different scenario generation seed
+      ---
+      duration_ms: 2278.706583
+      ...
+    # Subtest: rejects different turn limit
+    ok 7 - rejects different turn limit
+      ---
+      duration_ms: 2338.705709
+      ...
+    # Subtest: rejects oversized requestedN
+    ok 8 - rejects oversized requestedN
+      ---
+      duration_ms: 42.360375
+      ...
+    # Subtest: rejects forged method scenarioSeed
+    ok 9 - rejects forged method scenarioSeed
+      ---
+      duration_ms: 2267.996292
+      ...
+    # Subtest: rejects forged method actionCap
+    ok 10 - rejects forged method actionCap
+      ---
+      duration_ms: 2282.26625
+      ...
+    # Subtest: rejects forged method groups
+    ok 11 - rejects forged method groups
+      ---
+      duration_ms: 2257.333667
+      ...
+    # Subtest: rejects forged method repsPerGroup
+    ok 12 - rejects forged method repsPerGroup
+      ---
+      duration_ms: 2288.04125
+      ...
+    # Subtest: rejects forged baseContent source hash
+    ok 13 - rejects forged baseContent source hash
+      ---
+      duration_ms: 2274.450708
+      ...
+    # Subtest: rejects forged candidate source hash
+    ok 14 - rejects forged candidate source hash
+      ---
+      duration_ms: 5626.292208
+      ...
+    # Subtest: rejects unknown report mode
+    ok 15 - rejects unknown report mode
+      ---
+      duration_ms: 40.545917
+      ...
+    1..15
+ok 4 - official CLI requires complete canonical probe provenance while analyze supports smaller probes
+  ---
+  duration_ms: 72064.747125
+  ...
+# Subtest: card reflection attribution uses actual HP loss and restores methods
+ok 5 - card reflection attribution uses actual HP loss and restores methods
+  ---
+  duration_ms: 5.238125
+  ...
+# Subtest: phase counts both bars and six candidate normal encounters miss the preserved HP budget
+ok 6 - phase counts both bars and six candidate normal encounters miss the preserved HP budget
+  ---
+  duration_ms: 1.1125
+  ...
+# Subtest: all policies receive the exact same independent starting setup
+ok 7 - all policies receive the exact same independent starting setup
+  ---
+  duration_ms: 53.053416
+  ...
+# Subtest: policy randomness cannot change later scenarios; repeat is deterministic
+ok 8 - policy randomness cannot change later scenarios; repeat is deterministic
+  ---
+  duration_ms: 292.071875
+  ...
+# Subtest: report counts use actual scenarios and all policy trials
+ok 9 - report counts use actual scenarios and all policy trials
+  ---
+  duration_ms: 328.996208
+  ...
+# Subtest: timeouts and defeats remain in the denominator and quantiles use all outcomes
+ok 10 - timeouts and defeats remain in the denominator and quantiles use all outcomes
+  ---
+  duration_ms: 0.573
+  ...
+# Subtest: unexpected internal precheck code aborts the fight
+ok 11 - unexpected internal precheck code aborts the fight
+  ---
+  duration_ms: 1.122375
+  ...
+# Subtest: documented balance bands preserve exact upper boundaries and gate only random wins
+ok 12 - documented balance bands preserve exact upper boundaries and gate only random wins
+  ---
+  duration_ms: 0.239917
+  ...
+# Subtest: CLI rejects malformed N and writes a readable full JSON report
+ok 13 - CLI rejects malformed N and writes a readable full JSON report
+  ---
+  duration_ms: 7319.950125
+  ...
+# Subtest: opening oracle covers every authored character/resonance, weapon/refine, relic and enemy
+ok 14 - opening oracle covers every authored character/resonance, weapon/refine, relic and enemy
+  ---
+  duration_ms: 16.683959
+  ...
+# Subtest: only the four currently authored opening DSL shapes are exercised, including every resonance tag
+ok 15 - only the four currently authored opening DSL shapes are exercised, including every resonance tag
+  ---
+  duration_ms: 0.255833
+  ...
+# Subtest: each vector retains complete real CREATED and committed snapshots, events, hashes and public view
+ok 16 - each vector retains complete real CREATED and committed snapshots, events, hashes and public view
+  ---
+  duration_ms: 1307.485959
+  ...
+# Subtest: pinned first-turn regressions independently retain Harin block26/counter2 and seed+moss growth1/block3
+ok 17 - pinned first-turn regressions independently retain Harin block26/counter2 and seed+moss growth1/block3
+  ---
+  duration_ms: 0.177042
+  ...
+# Subtest: real opening edges cover seeds, strongest weapons, tuning, growth eligibility, ownership and circuit/AP limits
+ok 18 - real opening edges cover seeds, strongest weapons, tuning, growth eligibility, ownership and circuit/AP limits
+  ---
+  duration_ms: 0.241167
+  ...
+# Subtest: begin receipts copy responses and compare request property order and diagnostic args before stale/phase checks
+ok 19 - begin receipts copy responses and compare request property order and diagnostic args before stale/phase checks
+  ---
+  duration_ms: 0.645834
+  ...
+# Subtest: an unsupported opening rejected after candidate RNG/events leaves full state and receipts unchanged; failed rid retries
+ok 20 - an unsupported opening rejected after candidate RNG/events leaves full state and receipts unchanged; failed rid retries
+  ---
+  duration_ms: 0.583958
+  ...
+# Subtest: fixture source provenance and every case are deterministic and tampering is rejected
+ok 21 - fixture source provenance and every case are deterministic and tampering is rejected
+  ---
+  duration_ms: 5015.229458
+  ...
+# Subtest: lossless fixture exports are byte deterministic and atomic on unexpected exceptions or RuleErrors
+ok 22 - lossless fixture exports are byte deterministic and atomic on unexpected exceptions or RuleErrors
+  ---
+  duration_ms: 423.221291
+  ...
+# Subtest: checked-in opening fixture matches fresh engine results without weakening full Battle/Run acceptance
+ok 23 - checked-in opening fixture matches fresh engine results without weakening full Battle/Run acceptance
+  ---
+  duration_ms: 182.896584
+  ...
+# Subtest: every authored card and all378 base legal modes really resolve without a fizzle
+ok 24 - every authored card and all378 base legal modes really resolve without a fizzle
+  ---
+  duration_ms: 7231.531416
+  ...
+# Subtest: whole fixture is complete only with exact case inventory, provenance and independently replayable requests
+ok 25 - whole fixture is complete only with exact case inventory, provenance and independently replayable requests
+  ---
+  duration_ms: 2236.521834
+  ...
+# Subtest: matrix metadata retains every plus/resonance/refine/part/relic and normal actor-derived HP
+ok 26 - matrix metadata retains every plus/resonance/refine/part/relic and normal actor-derived HP
+  ---
+  duration_ms: 1.083875
+  ...
+# Subtest: bulwark retains the authored10 and powers merge their numeric parameters additively
+ok 27 - bulwark retains the authored10 and powers merge their numeric parameters additively
+  ---
+  duration_ms: 0.251625
+  ...
+# Subtest: pull converts after into next values and debt deferral shares the reservation sequence
+ok 28 - pull converts after into next values and debt deferral shares the reservation sequence
+  ---
+  duration_ms: 0.255958
+  ...
+# Subtest: echo delivery and copyPick deliberately preserve different metadata and free lifetimes
+ok 29 - echo delivery and copyPick deliberately preserve different metadata and free lifetimes
+  ---
+  duration_ms: 0.132917
+  ...
+# Subtest: growth operations count successful card growth once while ults use the separate uncapped path
+ok 30 - growth operations count successful card growth once while ults use the separate uncapped path
+  ---
+  duration_ms: 0.247583
+  ...
+# Subtest: growth-once remains observable below cap and grown copy mechanisms deliberately diverge
+ok 31 - growth-once remains observable below cap and grown copy mechanisms deliberately diverge
+  ---
+  duration_ms: 0.104959
+  ...
+# Subtest: temporary overheat, actual use limits, definition-cost picks and ordinal UIDs stay distinct
+ok 32 - temporary overheat, actual use limits, definition-cost picks and ordinal UIDs stay distinct
+  ---
+  duration_ms: 2.782417
+  ...
+# Subtest: absolute due buckets, temporary slot reset and collateral expiry retain all reservations
+ok 33 - absolute due buckets, temporary slot reset and collateral expiry retain all reservations
+  ---
+  duration_ms: 0.5
+  ...
+# Subtest: damage and healing use independently calculated rounding boundaries and ownership
+ok 34 - damage and healing use independently calculated rounding boundaries and ownership
+  ---
+  duration_ms: 0.190042
+  ...
+# Subtest: earned gauge distinguishes the30 basic cap, weapon scaling and bypass gains
+ok 35 - earned gauge distinguishes the30 basic cap, weapon scaling and bypass gains
+  ---
+  duration_ms: 0.061583
+  ...
+# Subtest: lethal card damage preserves same-hit rewards and always performs afterResolve once
+ok 36 - lethal card damage preserves same-hit rewards and always performs afterResolve once
+  ---
+  duration_ms: 0.11675
+  ...
+# Subtest: post-resolution void shard terminal returns every other due/future card exactly once
+ok 37 - post-resolution void shard terminal returns every other due/future card exactly once
+  ---
+  duration_ms: 0.080667
+  ...
+# Subtest: exhaust re-reads the live discard zone after marked-kill notebook reshuffle
+ok 38 - exhaust re-reads the live discard zone after marked-kill notebook reshuffle
+  ---
+  duration_ms: 0.0485
+  ...
+# Subtest: malformed picks defer behind real phase/mode validation and rejected request IDs remain reusable
+ok 39 - malformed picks defer behind real phase/mode validation and rejected request IDs remain reusable
+  ---
+  duration_ms: 0.209042
+  ...
+# Subtest: hand creation and delivered copies honor the cap after normal drawing, and logs retain the newest400
+ok 40 - hand creation and delivered copies honor the cap after normal drawing, and logs retain the newest400
+  ---
+  duration_ms: 0.080167
+  ...
+# Subtest: the original base0 conflict and genuinely un-authored states stay explicit
+ok 41 - the original base0 conflict and genuinely un-authored states stay explicit
+  ---
+  duration_ms: 0.104208
+  ...
+# Subtest: each authored effect source path is lossless and its declared execution cases exist
+ok 42 - each authored effect source path is lossless and its declared execution cases exist
+  ---
+  duration_ms: 8.95875
+  ...
+# Subtest: saved gzip is the exact fresh source-pinned fixture
+ok 43 - saved gzip is the exact fresh source-pinned fixture
+  ---
+  duration_ms: 1084.654375
+  ...
+# Subtest: fresh regeneration rejects missing coverage, stale provenance, changed diagnostics and forged witnesses
+ok 44 - fresh regeneration rejects missing coverage, stale provenance, changed diagnostics and forged witnesses
+  ---
+  duration_ms: 17582.4875
+  ...
+# Subtest: atomic export is deterministic and real filesystem failures preserve existing targets
+ok 45 - atomic export is deterministic and real filesystem failures preserve existing targets
+  ---
+  duration_ms: 11083.120875
+  ...
+# Subtest: all39 authored ops,12 counters and both branches of10 authored conditions have literal committed witnesses
+ok 46 - all39 authored ops,12 counters and both branches of10 authored conditions have literal committed witnesses
+  ---
+  duration_ms: 0.743958
+  ...
+# Subtest: player query oracle covers all 173 base cards and every 378 authored legal mode pair
+ok 47 - player query oracle covers all 173 base cards and every 378 authored legal mode pair
+  ---
+  duration_ms: 2.082542
+  ...
+# Subtest: combat catalog preserves full cards, metadata, 10 ultimates, resonance FX, weapon passives and all16 parts
+ok 48 - combat catalog preserves full cards, metadata, 10 ultimates, resonance FX, weapon passives and all16 parts
+  ---
+  duration_ms: 6.515208
+  ...
+# Subtest: every character resonance, weapon refine, relic and legally reachable part setup is actually queried
+ok 49 - every character resonance, weapon refine, relic and legally reachable part setup is actually queried
+  ---
+  duration_ms: 136.986292
+  ...
+# Subtest: every query reproduces effective definitions and preserves full state, RNG, diagnostics, receipts and source definitions
+ok 50 - every query reproduces effective definitions and preserves full state, RNG, diagnostics, receipts and source definitions
+  ---
+  duration_ms: 6526.451458
+  ...
+# Subtest: auto upgrade uses ceiling13/10 before resonance modifiers and preserves explicit0/false/absent fields
+ok 51 - auto upgrade uses ceiling13/10 before resonance modifiers and preserves explicit0/false/absent fields
+  ---
+  duration_ms: 1.201458
+  ...
+# Subtest: noReserve leaves reserve-only cards without modes while pure cost queries still return disallowed mode costs
+ok 52 - noReserve leaves reserve-only cards without modes while pure cost queries still return disallowed mode costs
+  ---
+  duration_ms: 0.258708
+  ...
+# Subtest: target requirements include nested status branches and preserve fixed/all/random distinctions without selecting targets
+ok 53 - target requirements include nested status branches and preserve fixed/all/random distinctions without selecting targets
+  ---
+  duration_ms: 3.231375
+  ...
+# Subtest: begin produces real amp and curse tokens while non-produced A1 states are explicitly not manufactured
+ok 54 - begin produces real amp and curse tokens while non-produced A1 states are explicitly not manufactured
+  ---
+  duration_ms: 17.576167
+  ...
+# Subtest: base0 flag and live base5 remain present without claiming generic unresolved conformance
+ok 55 - base0 flag and live base5 remain present without claiming generic unresolved conformance
+  ---
+  duration_ms: 0.931709
+  ...
+# Subtest: source freshness, full catalog and case coverage reject omissions and query/snapshot tampering
+ok 56 - source freshness, full catalog and case coverage reject omissions and query/snapshot tampering
+  ---
+  duration_ms: 27888.287916
+  ...
+# Subtest: atomic deterministic export preserves a previous artifact on query exceptions and RuleErrors
+ok 57 - atomic deterministic export preserves a previous artifact on query exceptions and RuleErrors
+  ---
+  duration_ms: 9881.179084
+  ...
+# Subtest: checked-in A0 fixture is lossless, fresh and limited to read-only player queries
+ok 58 - checked-in A0 fixture is lossless, fresh and limited to read-only player queries
+  ---
+  duration_ms: 5006.448541
+  ...
+# Subtest: request ID "ordinary-request" stores and replays a detached response after version advance
+ok 59 - request ID "ordinary-request" stores and replays a detached response after version advance
+  ---
+  duration_ms: 10.22025
+  ...
+# Subtest: rejected request ID "ordinary-request" remains available for a corrected command
+ok 60 - rejected request ID "ordinary-request" remains available for a corrected command
+  ---
+  duration_ms: 0.618333
+  ...
+# Subtest: request ID "constructor" stores and replays a detached response after version advance
+ok 61 - request ID "constructor" stores and replays a detached response after version advance
+  ---
+  duration_ms: 0.536958
+  ...
+# Subtest: rejected request ID "constructor" remains available for a corrected command
+ok 62 - rejected request ID "constructor" remains available for a corrected command
+  ---
+  duration_ms: 0.303375
+  ...
+# Subtest: request ID "__defineGetter__" stores and replays a detached response after version advance
+ok 63 - request ID "__defineGetter__" stores and replays a detached response after version advance
+  ---
+  duration_ms: 0.785459
+  ...
+# Subtest: rejected request ID "__defineGetter__" remains available for a corrected command
+ok 64 - rejected request ID "__defineGetter__" remains available for a corrected command
+  ---
+  duration_ms: 0.726292
+  ...
+# Subtest: request ID "__defineSetter__" stores and replays a detached response after version advance
+ok 65 - request ID "__defineSetter__" stores and replays a detached response after version advance
+  ---
+  duration_ms: 2.8
+  ...
+# Subtest: rejected request ID "__defineSetter__" remains available for a corrected command
+ok 66 - rejected request ID "__defineSetter__" remains available for a corrected command
+  ---
+  duration_ms: 0.725833
+  ...
+# Subtest: request ID "hasOwnProperty" stores and replays a detached response after version advance
+ok 67 - request ID "hasOwnProperty" stores and replays a detached response after version advance
+  ---
+  duration_ms: 0.882375
+  ...
+# Subtest: rejected request ID "hasOwnProperty" remains available for a corrected command
+ok 68 - rejected request ID "hasOwnProperty" remains available for a corrected command
+  ---
+  duration_ms: 0.531916
+  ...
+# Subtest: request ID "__lookupGetter__" stores and replays a detached response after version advance
+ok 69 - request ID "__lookupGetter__" stores and replays a detached response after version advance
+  ---
+  duration_ms: 0.623541
+  ...
+# Subtest: rejected request ID "__lookupGetter__" remains available for a corrected command
+ok 70 - rejected request ID "__lookupGetter__" remains available for a corrected command
+  ---
+  duration_ms: 0.255375
+  ...
+# Subtest: request ID "__lookupSetter__" stores and replays a detached response after version advance
+ok 71 - request ID "__lookupSetter__" stores and replays a detached response after version advance
+  ---
+  duration_ms: 0.474417
+  ...
+# Subtest: rejected request ID "__lookupSetter__" remains available for a corrected command
+ok 72 - rejected request ID "__lookupSetter__" remains available for a corrected command
+  ---
+  duration_ms: 0.246875
+  ...
+# Subtest: request ID "isPrototypeOf" stores and replays a detached response after version advance
+ok 73 - request ID "isPrototypeOf" stores and replays a detached response after version advance
+  ---
+  duration_ms: 4.382791
+  ...
+# Subtest: rejected request ID "isPrototypeOf" remains available for a corrected command
+ok 74 - rejected request ID "isPrototypeOf" remains available for a corrected command
+  ---
+  duration_ms: 0.872208
+  ...
+# Subtest: request ID "propertyIsEnumerable" stores and replays a detached response after version advance
+ok 75 - request ID "propertyIsEnumerable" stores and replays a detached response after version advance
+  ---
+  duration_ms: 1.438917
+  ...
+# Subtest: rejected request ID "propertyIsEnumerable" remains available for a corrected command
+ok 76 - rejected request ID "propertyIsEnumerable" remains available for a corrected command
+  ---
+  duration_ms: 0.566917
+  ...
+# Subtest: request ID "toString" stores and replays a detached response after version advance
+ok 77 - request ID "toString" stores and replays a detached response after version advance
+  ---
+  duration_ms: 1.837792
+  ...
+# Subtest: rejected request ID "toString" remains available for a corrected command
+ok 78 - rejected request ID "toString" remains available for a corrected command
+  ---
+  duration_ms: 0.606625
+  ...
+# Subtest: request ID "valueOf" stores and replays a detached response after version advance
+ok 79 - request ID "valueOf" stores and replays a detached response after version advance
+  ---
+  duration_ms: 0.432042
+  ...
+# Subtest: rejected request ID "valueOf" remains available for a corrected command
+ok 80 - rejected request ID "valueOf" remains available for a corrected command
+  ---
+  duration_ms: 0.231792
+  ...
+# Subtest: request ID "__proto__" stores and replays a detached response after version advance
+ok 81 - request ID "__proto__" stores and replays a detached response after version advance
+  ---
+  duration_ms: 0.598667
+  ...
+# Subtest: rejected request ID "__proto__" remains available for a corrected command
+ok 82 - rejected request ID "__proto__" remains available for a corrected command
+  ---
+  duration_ms: 0.291708
+  ...
+# Subtest: request ID "toLocaleString" stores and replays a detached response after version advance
+ok 83 - request ID "toLocaleString" stores and replays a detached response after version advance
+  ---
+  duration_ms: 0.477042
+  ...
+# Subtest: rejected request ID "toLocaleString" remains available for a corrected command
+ok 84 - rejected request ID "toLocaleString" remains available for a corrected command
+  ---
+  duration_ms: 0.243625
+  ...
+# Subtest: turn oracle extends every opening setup and executes two full patterns for every live enemy
+ok 85 - turn oracle extends every opening setup and executes two full patterns for every live enemy
+  ---
+  duration_ms: 441.39825
+  ...
+# Subtest: every live encounter and every opening character, resonance, weapon and relic remains present
+ok 86 - every live encounter and every opening character, resonance, weapon and relic remains present
+  ---
+  duration_ms: 1.787291
+  ...
+# Subtest: each checkpoint is reproduced by real creation and requests with complete diagnostics, public view and independent hashes
+ok 87 - each checkpoint is reproduced by real creation and requests with complete diagnostics, public view and independent hashes
+  ---
+  duration_ms: 2910.362291
+  ...
+# Subtest: ordinary turn two clears opening block/counter without repeating start rewards or carried AP
+ok 88 - ordinary turn two clears opening block/counter without repeating start rewards or carried AP
+  ---
+  duration_ms: 0.262333
+  ...
+# Subtest: summons wait for their first action, respect alive capacity and receive blockAll in appearance order
+ok 89 - summons wait for their first action, respect alive capacity and receive blockAll in appearance order
+  ---
+  duration_ms: 0.164375
+  ...
+# Subtest: lowest HP ratio keeps stable ties and reports requested healing rather than only effective healing
+ok 90 - lowest HP ratio keeps stable ties and reports requested healing rather than only effective healing
+  ---
+  duration_ms: 0.107
+  ...
+# Subtest: a reachable large-integer JS division tie selects the first enemy even when exact rational ratios differ
+ok 91 - a reachable large-integer JS division tie selects the first enemy even when exact rational ratios differ
+  ---
+  duration_ms: 0.161334
+  ...
+# Subtest: burn bypasses seed block and raw damage does not apply reflect, card multipliers or break hooks
+ok 92 - burn bypasses seed block and raw damage does not apply reflect, card multipliers or break hooks
+  ---
+  duration_ms: 0.144917
+  ...
+# Subtest: curse insertion creates conserved tokens and actual reshuffle/draw/cleanup damages without exhausting them
+ok 93 - curse insertion creates conserved tokens and actual reshuffle/draw/cleanup damages without exhausting them
+  ---
+  duration_ms: 0.400333
+  ...
+# Subtest: strength persists, party weak expires before the next action, and expose precedes its attack then decays
+ok 94 - strength persists, party weak expires before the next action, and expose precedes its attack then decays
+  ---
+  duration_ms: 5.151875
+  ...
+# Subtest: multi-hit death, envelope, curse cleanup and next-turn circuit stop at their exact terminal boundaries
+ok 95 - multi-hit death, envelope, curse cleanup and next-turn circuit stop at their exact terminal boundaries
+  ---
+  duration_ms: 0.684167
+  ...
+# Subtest: a fatal hit keeps its own counter and marked reward, then defeat wins while later hits stop
+ok 96 - a fatal hit keeps its own counter and marked reward, then defeat wins while later hits stop
+  ---
+  duration_ms: 0.457458
+  ...
+# Subtest: long skipped-player turns retain exactly the latest 400 timestamped events
+ok 97 - long skipped-player turns retain exactly the latest 400 timestamped events
+  ---
+  duration_ms: 0.900792
+  ...
+# Subtest: receipt replays retain old responses across version advance and failures never reserve IDs
+ok 98 - receipt replays retain old responses across version advance and failures never reserve IDs
+  ---
+  duration_ms: 0.35625
+  ...
+# Subtest: prototype-named request IDs are actual own receipts and can retry after rejected commands
+ok 99 - prototype-named request IDs are actual own receipts and can retry after rejected commands
+  ---
+  duration_ms: 0.187458
+  ...
+# Subtest: fixture freshness and complete case coverage reject omitted cases, stale sources and diagnostic tampering
+ok 100 - fixture freshness and complete case coverage reject omitted cases, stale sources and diagnostic tampering
+  ---
+  duration_ms: 6998.237292
+  ...
+# Subtest: exports are byte deterministic and an unexpected engine error preserves the previous fixture
+ok 101 - exports are byte deterministic and an unexpected engine error preserves the previous fixture
+  ---
+  duration_ms: 3704.8905
+  ...
+# Subtest: the checked-in turn fixture is a lossless fresh command oracle
+ok 102 - the checked-in turn fixture is a lossless fresh command oracle
+  ---
+  duration_ms: 1477.963042
+  ...
+# Subtest: committed canonical boundary vectors retain explicit expected strings and current source provenance
+ok 103 - committed canonical boundary vectors retain explicit expected strings and current source provenance
+  ---
+  duration_ms: 15.0125
+  ...
+# Subtest: canonical JSON rejects unsupported values and unsafe numeric values without rounding
+ok 104 - canonical JSON rejects unsupported values and unsafe numeric values without rounding
+  ---
+  duration_ms: 0.451709
+  ...
+# Subtest: atk stops later hits and effects after the fatal hit
+ok 105 - atk stops later hits and effects after the fatal hit
+  ---
+  duration_ms: 11.518875
+  ...
+# Subtest: atkdebuff stops later hits and effects after the fatal hit
+ok 106 - atkdebuff stops later hits and effects after the fatal hit
+  ---
+  duration_ms: 5.206416
+  ...
+# Subtest: a surviving party still receives every hit and the attack debuff
+ok 107 - a surviving party still receives every hit and the attack debuff
+  ---
+  duration_ms: 2.990042
+  ...
+# Subtest: memory envelope survival permits the next hit before actual defeat stops the rest
+ok 108 - memory envelope survival permits the next hit before actual defeat stops the rest
+  ---
+  duration_ms: 7.26225
+  ...
+# Subtest: xoshiro128** via splitmix32 is deterministic and bounded
+ok 109 - xoshiro128** via splitmix32 is deterministic and bounded
+  ---
+  duration_ms: 2.662875
+  ...
+# Subtest: rng vectors file matches (cross-language contract)
+ok 110 - rng vectors file matches (cross-language contract)
+  ---
+  duration_ms: 4.1545
+  ...
+# Subtest: indexData is idempotent
+ok 111 - indexData is idempotent
+  ---
+  duration_ms: 0.250584
+  ...
+# Subtest: begin: 4 AP, 5 cards, enemies show current and next intent
+ok 112 - begin: 4 AP, 5 cards, enemies show current and next intent
+  ---
+  duration_ms: 1.739292
+  ...
+# Subtest: immediate damage uses printed value at reference power (power4 160)
+ok 113 - immediate damage uses printed value at reference power (power4 160)
+  ---
+  duration_ms: 1.517667
+  ...
+# Subtest: reservation slots: next 2, after 1, SLOT_FULL, resolve at next turn start with rv
+ok 114 - reservation slots: next 2, after 1, SLOT_FULL, resolve at next turn start with rv
+  ---
+  duration_ms: 2.737708
+  ...
+# Subtest: a failing command changes nothing (atomic) and precheck is pure
+ok 115 - a failing command changes nothing (atomic) and precheck is pure
+  ---
+  duration_ms: 3.939083
+  ...
+# Subtest: idempotency: same rid returns the stored response; changed payload conflicts; stale version rejected
+ok 116 - idempotency: same rid returns the stored response; changed payload conflicts; stale version rejected
+  ---
+  duration_ms: 1.520041
+  ...
+# Subtest: break: weakness hits empty the gauge → stun, +25% damage taken, +1 AP next turn
+ok 117 - break: weakness hits empty the gauge → stun, +25% damage taken, +1 AP next turn
+  ---
+  duration_ms: 2.147417
+  ...
+# Subtest: hand never exceeds the cap; card count is conserved (invariants)
+ok 118 - hand never exceeds the cap; card count is conserved (invariants)
+  ---
+  duration_ms: 1.292542
+  ...
+# Subtest: contracts: loan raises AP now and repays next turn; DEBT_CAP enforced
+ok 119 - contracts: loan raises AP now and repays next turn; DEBT_CAP enforced
+  ---
+  duration_ms: 0.476666
+  ...
+# Subtest: stats: reference values, level/weapon/gear derivation and stage parity
+ok 120 - stats: reference values, level/weapon/gear derivation and stage parity
+  ---
+  duration_ms: 0.245125
+  ...
+# Subtest: stage level scales enemy HP; accessory adds to the additive damage group
+ok 121 - stage level scales enemy HP; accessory adds to the additive damage group
+  ---
+  duration_ms: 11.018708
+  ...
+# Subtest: map: every path has at least 3 fights before the boss
+ok 122 - map: every path has at least 3 fights before the boss
+  ---
+  duration_ms: 419.71675
+  ...
+# Subtest: memory save: capacity is enforced, defeat keeps one change, saved deck rebuilds the next run
+ok 123 - memory save: capacity is enforced, defeat keeps one change, saved deck rebuilds the next run
+  ---
+  duration_ms: 1.354333
+  ...
+# Subtest: capacity grows with ascension 2 and 4 and resonance 4
+ok 124 - capacity grows with ascension 2 and 4 and resonance 4
+  ---
+  duration_ms: 0.055042
+  ...
+# Subtest: character banner: SSR by pull 80 at the latest; lost 50:50 guarantees the next featured
+ok 125 - character banner: SSR by pull 80 at the latest; lost 50:50 guarantees the next featured
+  ---
+  duration_ms: 4.352917
+  ...
+# Subtest: SR or better at least every 10 pulls on every banner
+ok 126 - SR or better at least every 10 pulls on every banner
+  ---
+  duration_ms: 109.990708
+  ...
+# Subtest: weapon banner: 70 hard pity, 75% featured, guarantee after a loss
+ok 127 - weapon banner: 70 hard pity, 75% featured, guarantee after a loss
+  ---
+  duration_ms: 88.629167
+  ...
+# Subtest: Gacha.stats mean equals the exact survival-sum and Monte Carlo agrees (±3%)
+ok 128 - Gacha.stats mean equals the exact survival-sum and Monte Carlo agrees (±3%)
+  ---
+  duration_ms: 215.812
+  ...
+# Subtest: beginner banner: 10-pulls only, 8 tickets each, SSR guaranteed within 50
+ok 129 - beginner banner: 10-pulls only, 8 tickets each, SSR guaranteed within 50
+  ---
+  duration_ms: 0.275709
+  ...
+# Subtest: pull count must be 1 or 10; standard selector after 300 pulls, once
+ok 130 - pull count must be 1 or 10; standard selector after 300 pulls, once
+  ---
+  duration_ms: 0.435167
+  ...
+# Subtest: duplicates: 2nd copy = resonance 1, capped at 6; weapons refine to R5
+ok 131 - duplicates: 2nd copy = resonance 1, capped at 6; weapons refine to R5
+  ---
+  duration_ms: 0.082042
+  ...
+# Subtest: gacha vectors (cross-language contract): same seed → same 30 results
+ok 132 - gacha vectors (cross-language contract): same seed → same 30 results
+  ---
+  duration_ms: 1.664
+  ...
+# Subtest: echo-circuit and copy tokens stay cost 0 after the turn they were created
+ok 133 - echo-circuit and copy tokens stay cost 0 after the turn they were created
+  ---
+  duration_ms: 0.779
+  ...
+# Subtest: defence and heals scale with vitality, flat player damage with power, enemy flat damage with stage %
+ok 134 - defence and heals scale with vitality, flat player damage with power, enemy flat damage with stage %
+  ---
+  duration_ms: 1.009208
+  ...
+# Subtest: shop offers two distinct relics; event options respect their stated rarity
+ok 135 - shop offers two distinct relics; event options respect their stated rarity
+  ---
+  duration_ms: 11.4545
+  ...
+# Subtest: apDrain removes AP on the next turn separately from due debt and then clears
+ok 136 - apDrain removes AP on the next turn separately from due debt and then clears
+  ---
+  duration_ms: 6.067625
+  ...
+# Subtest: repeated apDrain cannot make next-turn AP negative
+ok 137 - repeated apDrain cannot make next-turn AP negative
+  ---
+  duration_ms: 4.385208
+  ...
+# Subtest: silence increases next-turn reservation cost once and expires after that turn
+ok 138 - silence increases next-turn reservation cost once and expires after that turn
+  ---
+  duration_ms: 3.716416
+  ...
+# Subtest: silence never charges a free instance or a freeNext reservation
+ok 139 - silence never charges a free instance or a freeNext reservation
+  ---
+  duration_ms: 35.233292
+  ...
+# Subtest: sealSlot expires after its protected turn and can seal the following turn again
+ok 140 - sealSlot expires after its protected turn and can seal the following turn again
+  ---
+  duration_ms: 54.001416
+  ...
+# Subtest: two same-phase sealSlot enemies make the second gain block 10
+ok 141 - two same-phase sealSlot enemies make the second gain block 10
+  ---
+  duration_ms: 14.508292
+  ...
+# Subtest: sealSlot ignores reservations due before the protected following-player turn
+ok 142 - sealSlot ignores reservations due before the protected following-player turn
+  ---
+  duration_ms: 45.654833
+  ...
+# Subtest: sealSlot gains enemy block 10 when future base slots are full
+ok 143 - sealSlot gains enemy block 10 when future base slots are full
+  ---
+  duration_ms: 36.526125
+  ...
+# Subtest: delayRes shifts the newest reservation due date while preserving its power kind
+ok 144 - delayRes shifts the newest reservation due date while preserving its power kind
+  ---
+  duration_ms: 33.834542
+  ...
+# Subtest: delayRes discards an overflowing reservation without refund or losing its card
+ok 145 - delayRes discards an overflowing reservation without refund or losing its card
+  ---
+  duration_ms: 3.078542
+  ...
+# Subtest: delayRes with no reservation leaves RNG and card zones unchanged
+ok 146 - delayRes with no reservation leaves RNG and card zones unchanged
+  ---
+  duration_ms: 1.715833
+  ...
+# Subtest: delayRes discards a reservation shifted outside the two-turn board
+ok 147 - delayRes discards a reservation shifted outside the two-turn board
+  ---
+  duration_ms: 1.071667
+  ...
+# Subtest: eatName exhausts a discard token before a normal card
+ok 148 - eatName exhausts a discard token before a normal card
+  ---
+  duration_ms: 1.200125
+  ...
+# Subtest: eatName with an empty discard pile does not advance RNG
+ok 149 - eatName with an empty discard pile does not advance RNG
+  ---
+  duration_ms: 1.644958
+  ...
+# Subtest: a boss first lethal hit changes the same enemy to phase two without a kill
+ok 150 - a boss first lethal hit changes the same enemy to phase two without a kill
+  ---
+  duration_ms: 1.501834
+  ...
+# Subtest: invalid phase metadata makes a lethal player command atomic
+ok 151 - invalid phase metadata makes a lethal player command atomic
+  ---
+  duration_ms: 1.740625
+  ...
+# Subtest: later hits of one card damage phase two and only final death emits kill
+ok 152 - later hits of one card damage phase two and only final death emits kill
+  ---
+  duration_ms: 1.14925
+  ...
+# Subtest: serialized phase-two battle resumes with the new intent and deterministic next turn
+ok 153 - serialized phase-two battle resumes with the new intent and deterministic next turn
+  ---
+  duration_ms: 2.215792
+  ...
+# Subtest: no silence surcharge exists before the first player turn
+ok 154 - no silence surcharge exists before the first player turn
+  ---
+  duration_ms: 12.3155
+  ...
+# Subtest: next AP preview and actual start use the same bonus, debt and drain calculation
+ok 155 - next AP preview and actual start use the same bonus, debt and drain calculation
+  ---
+  duration_ms: 2.896792
+  ...
+# Subtest: AP forecast includes the visible drain once and excludes a stunned enemy
+ok 156 - AP forecast includes the visible drain once and excludes a stunned enemy
+  ---
+  duration_ms: 1.314292
+  ...
+# Subtest: delay preview is pure and matches the actual discard decision
+ok 157 - delay preview is pure and matches the actual discard decision
+  ---
+  duration_ms: 1.504625
+  ...
+# Subtest: an ordinary after reservation is not marked as enemy-delayed when its column rolls forward
+ok 158 - an ordinary after reservation is not marked as enemy-delayed when its column rolls forward
+  ---
+  duration_ms: 7.15675
+  ...
+# Subtest: successful enemy delay carries an explicit marker independently of the value kind
+ok 159 - successful enemy delay carries an explicit marker independently of the value kind
+  ---
+  duration_ms: 2.140291
+  ...
+# Subtest: player pull clears the enemy-delay label when it changes the reservation power kind
+ok 160 - player pull clears the enemy-delay label when it changes the reservation power kind
+  ---
+  duration_ms: 3.986958
+  ...
+# Subtest: a malformed phase discriminator cannot leave a living zero-HP boss
+ok 161 - a malformed phase discriminator cannot leave a living zero-HP boss
+  ---
+  duration_ms: 2.125375
+  ...
+# Subtest: counter-triggered phase change ends the old enemy multihit action
+ok 162 - counter-triggered phase change ends the old enemy multihit action
+  ---
+  duration_ms: 34.986917
+  ...
+# Subtest: candidate overlay preserves all original data and exact declared boss budgets
+ok 163 - candidate overlay preserves all original data and exact declared boss budgets
+  ---
+  duration_ms: 117.030709
+  ...
+# Subtest: all authored characters, eligible cards, evolution branches and permanent parts retain their complete denominators
+ok 164 - all authored characters, eligible cards, evolution branches and permanent parts retain their complete denominators
+  ---
+  duration_ms: 4.423417
+  ...
+# Subtest: independent literal baseline, complete-result and evolution costs catch shortcuts in the oracle and port
+ok 165 - independent literal baseline, complete-result and evolution costs catch shortcuts in the oracle and port
+  ---
+  duration_ms: 0.78025
+  ...
+# Subtest: current capacity preserves ascension and resonance, including actual JS fallback and negative slice boundaries
+ok 166 - current capacity preserves ascension and resonance, including actual JS fallback and negative slice boundaries
+  ---
+  duration_ms: 0.568834
+  ...
+# Subtest: selection order, defeat limits, no selection and absent/null/false/partial fields preserve exact JSON shapes
+ok 167 - selection order, defeat limits, no selection and absent/null/false/partial fields preserve exact JSON shapes
+  ---
+  duration_ms: 0.331167
+  ...
+# Subtest: identity, owner, evolution, assignment, selection and part rejection precedence stays explicit
+ok 168 - identity, owner, evolution, assignment, selection and part rejection precedence stays explicit
+  ---
+  duration_ms: 0.726917
+  ...
+# Subtest: URI escaping and UTF-16 cid sorting preserve non-BMP and instance order while lone-surrogate changes reject
+ok 169 - URI escaping and UTF-16 cid sorting preserve non-BMP and instance order while lone-surrogate changes reject
+  ---
+  duration_ms: 0.202125
+  ...
+# Subtest: migration preserves deterministic keys, complete quarantine and fractional invalid legacy metadata
+ok 170 - migration preserves deterministic keys, complete quarantine and fractional invalid legacy metadata
+  ---
+  duration_ms: 0.314541
+  ...
+# Subtest: migration preserves an own __proto__ quarantine entry and its complete original
+ok 171 - migration preserves an own __proto__ quarantine entry and its complete original
+  ---
+  duration_ms: 0.098625
+  ...
+# Subtest: every actual call verifies the entire input/data graph, and returned mutable memory graphs are detached
+ok 172 - every actual call verifies the entire input/data graph, and returned mutable memory graphs are detached
+  ---
+  duration_ms: 89.771417
+  ...
+# Subtest: strict fixture checks reject provenance, case coverage, result/error and input-shape tampering
+ok 173 - strict fixture checks reject provenance, case coverage, result/error and input-shape tampering
+  ---
+  duration_ms: 11913.450792
+  ...
+# Subtest: gzip export is byte deterministic, strict on damaged/ambiguous encoding and atomic on unexpected exceptions
+ok 174 - gzip export is byte deterministic, strict on damaged/ambiguous encoding and atomic on unexpected exceptions
+  ---
+  duration_ms: 15353.798834
+  ...
+# Subtest: checked-in artifact matches fresh actual JS execution without claiming Run or persistence acceptance
+ok 175 - checked-in artifact matches fresh actual JS execution without claiming Run or persistence acceptance
+  ---
+  duration_ms: 557.5535
+  ...
+# Subtest: baseline play keeps an existing evolved and upgraded memory without a reverse evolution
+ok 176 - baseline play keeps an existing evolved and upgraded memory without a reverse evolution
+  ---
+  duration_ms: 114.462
+  ...
+# Subtest: baseline play saves a new change without replacing the old evolved instance
+ok 177 - baseline play saves a new change without replacing the old evolved instance
+  ---
+  duration_ms: 33.648292
+  ...
+# Subtest: a part attached after terminal capture is included in the actual save delta
+ok 178 - a part attached after terminal capture is included in the actual save delta
+  ---
+  duration_ms: 5.650292
+  ...
+# Subtest: stable baseline cost distinguishes removing the original from removing its same-kind duplicate
+ok 179 - stable baseline cost distinguishes removing the original from removing its same-kind duplicate
+  ---
+  duration_ms: 2.540959
+  ...
+# Subtest: accepted request IDs are persisted as own receipts and replay after JSON storage
+ok 180 - accepted request IDs are persisted as own receipts and replay after JSON storage
+  ---
+  duration_ms: 17.619541
+  ...
+# Subtest: v2 opt-in preserves stable baseline keys across the next run
+ok 181 - v2 opt-in preserves stable baseline keys across the next run
+  ---
+  duration_ms: 36.554167
+  ...
+# Subtest: v2 keeps saved before snapshot when useMemory is false
+ok 182 - v2 keeps saved before snapshot when useMemory is false
+  ---
+  duration_ms: 26.304625
+  ...
+# Subtest: an actual battle defeat with no selection preserves the prior upgrade
+ok 183 - an actual battle defeat with no selection preserves the prior upgrade
+  ---
+  duration_ms: 20.363958
+  ...
+# Subtest: actual defeat rejects two selected upgrades without changing the save state
+ok 184 - actual defeat rejects two selected upgrades without changing the save state
+  ---
+  duration_ms: 26.3225
+  ...
+# Subtest: temporary battle token cards are excluded from the persistent after snapshot
+ok 185 - temporary battle token cards are excluded from the persistent after snapshot
+  ---
+  duration_ms: 0.577375
+  ...
+# Subtest: normal return accepts multiple selected changes while preserving unselected prior traits
+ok 186 - normal return accepts multiple selected changes while preserving unselected prior traits
+  ---
+  duration_ms: 11.564458
+  ...
+# Subtest: a real battle reward card appears as an add delta and persists when selected
+ok 187 - a real battle reward card appears as an add delta and persists when selected
+  ---
+  duration_ms: 14.17675
+  ...
+# Subtest: same-kind duplicate card upgrade changes only the selected stable key
+ok 188 - same-kind duplicate card upgrade changes only the selected stable key
+  ---
+  duration_ms: 4.485291
+  ...
+# Subtest: same-kind duplicate card removal keeps the other stable key
+ok 189 - same-kind duplicate card removal keeps the other stable key
+  ---
+  duration_ms: 3.942542
+  ...
+# Subtest: choosing only evolution does not import a separate upgrade
+ok 190 - choosing only evolution does not import a separate upgrade
+  ---
+  duration_ms: 9.030625
+  ...
+# Subtest: full-result capacity rejects a new S card atomically after six points were saved
+ok 191 - full-result capacity rejects a new S card atomically after six points were saved
+  ---
+  duration_ms: 5.339042
+  ...
+# Subtest: replacing a part in the same slot charges the full resulting deck
+ok 192 - replacing a part in the same slot charges the full resulting deck
+  ---
+  duration_ms: 18.021584
+  ...
+# Subtest: same request and body replay returns the recorded response after DONE
+ok 193 - same request and body replay returns the recorded response after DONE
+  ---
+  duration_ms: 16.110166
+  ...
+# Subtest: a reused request ID with changed selection conflicts without mutation
+ok 194 - a reused request ID with changed selection conflicts without mutation
+  ---
+  duration_ms: 68.070333
+  ...
+# Subtest: stale memory version rejects a new save without mutation
+ok 195 - stale memory version rejects a new save without mutation
+  ---
+  duration_ms: 14.782541
+  ...
+# Subtest: migration keeps an independent original backup and is deterministic
+ok 196 - migration keeps an independent original backup and is deterministic
+  ---
+  duration_ms: 37.146333
+  ...
+# Subtest: migration quarantines oversized legacy decks without truncating their backup
+ok 197 - migration quarantines oversized legacy decks without truncating their backup
+  ---
+  duration_ms: 0.225958
+  ...
+# Subtest: fatal reflect stops the next card hit before it kills a marked enemy for coins
+ok 198 - fatal reflect stops the next card hit before it kills a marked enemy for coins
+  ---
+  duration_ms: 4.706625
+  ...
+# Subtest: reserved fatal reflect stops later hits and returns every pending reservation once
+ok 199 - reserved fatal reflect stops later hits and returns every pending reservation once
+  ---
+  duration_ms: 1.008209
+  ...
+# Subtest: fatal reflect stops the next area target and later card block
+ok 200 - fatal reflect stops the next area target and later card block
+  ---
+  duration_ms: 0.48
+  ...
+# Subtest: surviving reflect keeps every card hit and its marked kill reward
+ok 201 - surviving reflect keeps every card hit and its marked kill reward
+  ---
+  duration_ms: 0.617417
+  ...
+# Subtest: surviving area reflect keeps the next target and later card block
+ok 202 - surviving area reflect keeps the next target and later card block
+  ---
+  duration_ms: 0.614292
+  ...
+# Subtest: memory envelope permits another scaled hit before actual defeat stops the rest
+ok 203 - memory envelope permits another scaled hit before actual defeat stops the rest
+  ---
+  duration_ms: 0.709083
+  ...
+# Subtest: the fatal reflecting hit retains its own kill and reward ordering
+ok 204 - the fatal reflecting hit retains its own kill and reward ordering
+  ---
+  duration_ms: 0.972458
+  ...
+# Subtest: post-resolution void shard victory stops turn startup before drawing
+ok 205 - post-resolution void shard victory stops turn startup before drawing
+  ---
+  duration_ms: 63.984541
+  ...
+# Subtest: post-resolution victory discards queued reservations without using them or granting gauge
+ok 206 - post-resolution victory discards queued reservations without using them or granting gauge
+  ---
+  duration_ms: 4.357917
+  ...
+# Subtest: a reservation that already ended the battle emits one end event
+ok 207 - a reservation that already ended the battle emits one end event
+  ---
+  duration_ms: 11.579041
+  ...
+# Subtest: post-resolution victory cannot become a smudge defeat on a spurious extra turn
+ok 208 - post-resolution victory cannot become a smudge defeat on a spurious extra turn
+  ---
+  duration_ms: 11.796959
+  ...
+# Subtest: silver needle cannot revive fatal reflect when the same hit leaves enemy HP 44
+ok 209 - silver needle cannot revive fatal reflect when the same hit leaves enemy HP 44
+  ---
+  duration_ms: 6.958375
+  ...
+# Subtest: silver needle cannot revive fatal reflect when the same hit leaves enemy HP 0
+ok 210 - silver needle cannot revive fatal reflect when the same hit leaves enemy HP 0
+  ---
+  duration_ms: 0.496375
+  ...
+# Subtest: silver needle still heals a party that survives reflect
+ok 211 - silver needle still heals a party that survives reflect
+  ---
+  duration_ms: 3.302042
+  ...
+# Subtest: memory envelope survival still permits silver needle healing at HP one
+ok 212 - memory envelope survival still permits silver needle healing at HP one
+  ---
+  duration_ms: 1.580916
+  ...
+# Subtest: sera ultimate damage does not trigger card-only reflect
+ok 213 - sera ultimate damage does not trigger card-only reflect
+  ---
+  duration_ms: 11.116625
+  ...
+# Subtest: lumi ultimate damage does not trigger card-only reflect
+ok 214 - lumi ultimate damage does not trigger card-only reflect
+  ---
+  duration_ms: 0.553625
+  ...
+# Subtest: immediate and reserved card hits still trigger the unchanged reflect value
+ok 215 - immediate and reserved card hits still trigger the unchanged reflect value
+  ---
+  duration_ms: 1.314834
+  ...
+# Subtest: R071-01 battle-start block 26 and counter 2 survive first-turn boundary
+ok 216 - R071-01 battle-start block 26 and counter 2 survive first-turn boundary
+  ---
+  duration_ms: 7.762083
+  ...
+# Subtest: R071-02 ordinary second-turn boundary still clears first-turn block and counter
+ok 217 - R071-02 ordinary second-turn boundary still clears first-turn block and counter
+  ---
+  duration_ms: 0.782959
+  ...
+# Subtest: R071-03 bulwark retention still applies on later turns
+ok 218 - R071-03 bulwark retention still applies on later turns
+  ---
+  duration_ms: 0.452542
+  ...
+# Subtest: R071-04 evolved family is 3 cards / 9 growth and resolves the +6 passive
+ok 219 - R071-04 evolved family is 3 cards / 9 growth and resolves the +6 passive
+  ---
+  duration_ms: 0.816625
+  ...
+# Subtest: R071-05 evolved cards meet growthInHand but are ineligible to grow again
+ok 220 - R071-05 evolved cards meet growthInHand but are ineligible to grow again
+  ---
+  duration_ms: 0.527667
+  ...
+# Subtest: R071-06 forged from metadata does not turn a non-growth card into a growth card
+ok 221 - R071-06 forged from metadata does not turn a non-growth card into a growth card
+  ---
+  duration_ms: 0.285292
+  ...
+# Subtest: R071-07 loading a mature evolved card does not emit a growth event
+ok 222 - R071-07 loading a mature evolved card does not emit a growth event
+  ---
+  duration_ms: 0.223541
+  ...
+# Subtest: R071-08 mature cocoon copied by 탈피 retains lineage and free flag
+ok 223 - R071-08 mature cocoon copied by 탈피 retains lineage and free flag
+  ---
+  duration_ms: 0.41725
+  ...
+# Subtest: R071-09 echo-delivered evolved card retains lineage / half-power / free
+ok 224 - R071-09 echo-delivered evolved card retains lineage / half-power / free
+  ---
+  duration_ms: 0.782959
+  ...
+# Subtest: R071-10 symbiotic moss fires for actual growth in growLowest + growAll
+ok 225 - R071-10 symbiotic moss fires for actual growth in growLowest + growAll
+  ---
+  duration_ms: 1.06625
+  ...
+# Subtest: R071-11 eternal_seed triggers moss and block persists on turn 1
+ok 226 - R071-11 eternal_seed triggers moss and block persists on turn 1
+  ---
+  duration_ms: 0.6445
+  ...
+# Subtest: R071-12 saturated growth has no moss reward or growth counter increment
+ok 227 - R071-12 saturated growth has no moss reward or growth counter increment
+  ---
+  duration_ms: 44.155292
+  ...
+# Subtest: R071-13 ordinary growth respects once-per-card and party cap
+ok 228 - R071-13 ordinary growth respects once-per-card and party cap
+  ---
+  duration_ms: 25.123041
+  ...
+# Subtest: R071-14 explicit uncapped growth sources do not consume ordinary reservation growth budget
+ok 229 - R071-14 explicit uncapped growth sources do not consume ordinary reservation growth budget
+  ---
+  duration_ms: 15.066917
+  ...
+# Subtest: R071-15 capped increment clamps at 3 and emits one growth event for that card
+ok 230 - R071-15 capped increment clamps at 3 and emits one growth event for that card
+  ---
+  duration_ms: 0.412917
+  ...
+# Subtest: R071-16 invalid growth snapshot is rejected
+ok 231 - R071-16 invalid growth snapshot is rejected
+  ---
+  duration_ms: 0.958416
+  ...
+# Subtest: R071-memory invalid negative selection is atomic
+ok 232 - R071-memory invalid negative selection is atomic
+  ---
+  duration_ms: 9.13175
+  ...
+# Subtest: R071-memory invalid outside selection is atomic
+ok 233 - R071-memory invalid outside selection is atomic
+  ---
+  duration_ms: 0.437291
+  ...
+# Subtest: R071-memory invalid unknown selection is atomic
+ok 234 - R071-memory invalid unknown selection is atomic
+  ---
+  duration_ms: 0.588167
+  ...
+# Subtest: R071-memory invalid string selection is atomic
+ok 235 - R071-memory invalid string selection is atomic
+  ---
+  duration_ms: 12.388208
+  ...
+# Subtest: R071-memory invalid duplicates selection is atomic
+ok 236 - R071-memory invalid duplicates selection is atomic
+  ---
+  duration_ms: 13.21875
+  ...
+# Subtest: R071-memory invalid array selection is atomic
+ok 237 - R071-memory invalid array selection is atomic
+  ---
+  duration_ms: 1.2665
+  ...
+# Subtest: R071-23 save-policy regression explicitly documents v0.7 baseline reset (not silently altered)
+ok 238 - R071-23 save-policy regression explicitly documents v0.7 baseline reset (not silently altered)
+  ---
+  duration_ms: 0.5255
+  ...
+# Subtest: R071-24 unknown enemy action fails instead of silently doing nothing
+ok 239 - R071-24 unknown enemy action fails instead of silently doing nothing
+  ---
+  duration_ms: 0.211708
+  ...
+# Subtest: all10 authored characters/resonances0..6 create real short/full legacy/v2 runs
+ok 240 - all10 authored characters/resonances0..6 create real short/full legacy/v2 runs
+  ---
+  duration_ms: 30865.227167
+  ...
+# Subtest: factory/query counts and exact authored denominators remain distinct from expedition commands
+ok 241 - factory/query counts and exact authored denominators remain distinct from expedition commands
+  ---
+  duration_ms: 1.341834
+  ...
+# Subtest: actual Create and every recorded pure query reproduce full private state without injected snapshots
+ok 242 - actual Create and every recorded pure query reproduce full private state without injected snapshots
+  ---
+  duration_ms: 1283.371584
+  ...
+# Subtest: Run stats derive from account inputs instead of trusting supplied combat values
+ok 243 - Run stats derive from account inputs instead of trusting supplied combat values
+  ---
+  duration_ms: 0.381709
+  ...
+# Subtest: stage rounding preserves zero fallback, negative half and empty difficulty shape
+ok 244 - stage rounding preserves zero fallback, negative half and empty difficulty shape
+  ---
+  duration_ms: 0.445917
+  ...
+# Subtest: capacity uses source ascensions and signed resonance slice semantics without retuning
+ok 245 - capacity uses source ascensions and signed resonance slice semantics without retuning
+  ---
+  duration_ms: 0.30175
+  ...
+# Subtest: stable keys skip both saved and current-deck collisions while legacy copies get new keys
+ok 246 - stable keys skip both saved and current-deck collisions while legacy copies get new keys
+  ---
+  duration_ms: 0.2895
+  ...
+# Subtest: base-kit play preserves original before/baseline and uses new identities for removed/evolved cards
+ok 247 - base-kit play preserves original before/baseline and uses new identities for removed/evolved cards
+  ---
+  duration_ms: 0.31475
+  ...
+# Subtest: field absence, null, explicit false/zero, own undefined and opaque fractions remain distinguishable
+ok 248 - field absence, null, explicit false/zero, own undefined and opaque fractions remain distinguishable
+  ---
+  duration_ms: 4.603333
+  ...
+# Subtest: legacy/v2 validation, native diagnostics and explicit C\# numeric-domain probes keep separate denominators
+ok 249 - legacy/v2 validation, native diagnostics and explicit C\# numeric-domain probes keep separate denominators
+  ---
+  duration_ms: 0.921708
+  ...
+# Subtest: all300 maps preserve authored node/floor/edge order, reachability and minimum battle constraints
+ok 250 - all300 maps preserve authored node/floor/edge order, reachability and minimum battle constraints
+  ---
+  duration_ms: 6.861209
+  ...
+# Subtest: literal map branches and private RNG consumption include lazy choices, elite pruning and parent repair
+ok 251 - literal map branches and private RNG consumption include lazy choices, elite pruning and parent repair
+  ---
+  duration_ms: 1.007333
+  ...
+# Subtest: source/manifest provenance remains explicit and no historical input manifest is regenerated
+ok 252 - source/manifest provenance remains explicit and no historical input manifest is regenerated
+  ---
+  duration_ms: 0.793541
+  ...
+# Subtest: saved gzip strictly decodes and checkFixture compares it exhaustively with fresh creation/query evidence
+ok 253 - saved gzip strictly decodes and checkFixture compares it exhaustively with fresh creation/query evidence
+  ---
+  duration_ms: 24075.668541
+  ...
+# Subtest: only exact numeric Node provenance may differ from this runtime; native errors and every other byte still compare exactly
+ok 254 - only exact numeric Node provenance may differ from this runtime; native errors and every other byte still compare exactly
+  ---
+  duration_ms: 43009.216042
+  ...
+# Subtest: strict gzip reader accepts other valid DEFLATE encodings and platform OS codes of the same JSON
+ok 255 - strict gzip reader accepts other valid DEFLATE encodings and platform OS codes of the same JSON
+  ---
+  duration_ms: 94.185791
+  ...
+# Subtest: strict gzip reader rejects header, payload, CRC32, ISIZE, truncation, trailing bytes and concatenated members
+ok 256 - strict gzip reader rejects header, payload, CRC32, ISIZE, truncation, trailing bytes and concatenated members
+  ---
+  duration_ms: 21.710458
+  ...
+# Subtest: strict reader rejects malformed JSON, escape-equivalent duplicate keys, UTF8/BOM and gzip tampering
+ok 257 - strict reader rejects malformed JSON, escape-equivalent duplicate keys, UTF8/BOM and gzip tampering
+  ---
+  duration_ms: 0.353583
+  ...
+# Subtest: case/source/count/shape corruption is rejected and freshly forged complete state/query hashes cannot pass
+ok 258 - case/source/count/shape corruption is rejected and freshly forged complete state/query hashes cannot pass
+  ---
+  duration_ms: 66152.115125
+  ...
+# Subtest: atomic deterministic export preserves old targets and removes temporary files on real filesystem failures
+ok 259 - atomic deterministic export preserves old targets and removes temporary files on real filesystem failures
+  ---
+  duration_ms: 77269.877666
+  ...
+# Subtest: immutable witnesses: frozen original data, three real full runs, self-consistent recorded outcomes
+ok 260 - immutable witnesses: frozen original data, three real full runs, self-consistent recorded outcomes
+  ---
+  duration_ms: 2.255458
+  ...
+# Subtest: seed1036: ev_rift AP+2 reaches only the next battle first turn and afterBattle no longer refunds it
+ok 261 - seed1036: ev_rift AP+2 reaches only the next battle first turn and afterBattle no longer refunds it
+  ---
+  duration_ms: 366.485916
+  ...
+# Subtest: seed1020: a shop sells its single card removal once; a second public removal is NOT_FOR_SALE with no mutation
+ok 262 - seed1020: a shop sells its single card removal once; a second public removal is NOT_FOR_SALE with no mutation
+  ---
+  duration_ms: 334.466625
+  ...
+# Subtest: seed1000: a resolved ev_archive rejects reselection with BAD_CHOICE before effects or RNG; phase order kept
+ok 263 - seed1000: a resolved ev_archive rejects reselection with BAD_CHOICE before effects or RNG; phase order kept
+  ---
+  duration_ms: 173.343333
+  ...
+# Subtest: seed1000: a key-array first ev_archive choice removes exactly the chosen cards, once
+ok 264 - seed1000: a key-array first ev_archive choice removes exactly the chosen cards, once
+  ---
+  duration_ms: 83.407375
+  ...
+# Subtest: every witnessed event resolves once; rejected reselections leave all later recorded commands reproducible
+ok 265 - every witnessed event resolves once; rejected reselections leave all later recorded commands reproducible
+  ---
+  duration_ms: 547.974541
+  ...
+# Subtest: continuation witnesses: separate real full runs recorded on engine 3ad, self-consistent outcomes
+ok 266 - continuation witnesses: separate real full runs recorded on engine 3ad, self-consistent outcomes
+  ---
+  duration_ms: 0.308958
+  ...
+# Subtest: seed1102: a battle that ends inside begin finishes the run once through the defeat save, after the node entry
+ok 267 - seed1102: a battle that ends inside begin finishes the run once through the defeat save, after the node entry
+  ---
+  duration_ms: 83.694375
+  ...
+# Subtest: seed1000 continuation: repeats of a done ev_archive change nothing, and the next ev_promise still commits once
+ok 268 - seed1000 continuation: repeats of a done ev_archive change nothing, and the next ev_promise still commits once
+  ---
+  duration_ms: 118.610542
+  ...
+# Subtest: seed2654 packet: each newly earned ev_rift +2 reaches only its next battle; the battles between keep the base AP
+ok 269 - seed2654 packet: each newly earned ev_rift +2 reaches only its next battle; the battles between keep the base AP
+  ---
+  duration_ms: 2931.703625
+  ...
+# Subtest: seed1102 generated legacy trace: the opening defeat finishes through its save to DONE
+ok 270 - seed1102 generated legacy trace: the opening defeat finishes through its save to DONE
+  ---
+  duration_ms: 418.631
+  ...
+# Subtest: seed1102 generated v2 trace: the opening defeat finishes through its save to DONE
+ok 271 - seed1102 generated v2 trace: the opening defeat finishes through its save to DONE
+  ---
+  duration_ms: 450.451417
+  ...
+# Subtest: seed1102: a fixed boss that throws inside startBattle writes no entry log, as in the original order
+ok 272 - seed1102: a fixed boss that throws inside startBattle writes no entry log, as in the original order
+  ---
+  duration_ms: 23.142
+  ...
+# Subtest: five fixed gen_traces inputs replay from a fresh Create through actual commands to DONE with complete states, returns and pure queries
+ok 273 - five fixed gen_traces inputs replay from a fresh Create through actual commands to DONE with complete states, returns and pure queries
+  ---
+  duration_ms: 2984.293333
+  ...
+# Subtest: a newly earned AP bonus reaches only the next battle first turn, and begin-defeat closes through the normal finalizer
+ok 274 - a newly earned AP bonus reaches only the next battle first turn, and begin-defeat closes through the normal finalizer
+  ---
+  duration_ms: 1.347834
+  ...
+# Subtest: strict checks reject stale provenance, case identity, omission, forged outcomes, hashes, returns, coverage and query data
+ok 275 - strict checks reject stale provenance, case identity, omission, forged outcomes, hashes, returns, coverage and query data
+  ---
+  duration_ms: 12918.684042
+  ...
+# Subtest: gzip export is deterministic, rejects damaged containers, accepts other valid DEFLATE encodings and preserves output on unexpected execution
+ok 276 - gzip export is deterministic, rejects damaged containers, accepts other valid DEFLATE encodings and preserves output on unexpected execution
+  ---
+  duration_ms: 8720.310792
+  ...
+# Subtest: checked-in artifact matches fresh actual JS execution and claims only the JS oracle scope
+ok 277 - checked-in artifact matches fresh actual JS execution and claims only the JS oracle scope
+  ---
+  duration_ms: 5230.048666
+  ...
+# Subtest: trace canonical JSON sorts even numeric keys, excludes diagnostics, and never changes RNG or array order
+ok 278 - trace canonical JSON sorts even numeric keys, excludes diagnostics, and never changes RNG or array order
+  ---
+  duration_ms: 2.265083
+  ...
+# Subtest: independent hash preserves pinned ordinal numeric keys through nested objects and arrays without mutation
+ok 279 - independent hash preserves pinned ordinal numeric keys through nested objects and arrays without mutation
+  ---
+  duration_ms: 0.424834
+  ...
+# Subtest: default plan contains all 1000 distinct seeds with 700 short and 300 full scenarios
+ok 280 - default plan contains all 1000 distinct seeds with 700 short and 300 full scenarios
+  ---
+  duration_ms: 31.146041
+  ...
+# Subtest: real short/full Run commands replay every committed and rejected state hash deterministically
+ok 281 - real short/full Run commands replay every committed and rejected state hash deterministically
+  ---
+  duration_ms: 3843.142708
+  ...
+# Subtest: seed 1135 skips a real reserve-only card disabled by c_quick and completes the run
+ok 282 - seed 1135 skips a real reserve-only card disabled by c_quick and completes the run
+  ---
+  duration_ms: 626.422084
+  ...
+# Subtest: replay refuses tampered command envelopes, hashes, setup, snapshots, or source provenance
+ok 283 - replay refuses tampered command envelopes, hashes, setup, snapshots, or source provenance
+  ---
+  duration_ms: 211.001791
+  ...
+# Subtest: opt-in v2 runs use the existing migration and real terminal memory commit without forced state edits
+ok 284 - opt-in v2 runs use the existing migration and real terminal memory commit without forced state edits
+  ---
+  duration_ms: 171.275042
+  ...
+# Subtest: unexpected exceptions abort generation and preserve the previous output instead of becoming rejections
+ok 285 - unexpected exceptions abort generation and preserve the previous output instead of becoming rejections
+  ---
+  duration_ms: 66.536541
+  ...
+# Subtest: portable JSON and gzip JSONL exports retain provenance and completed replayable scenarios
+ok 286 - portable JSON and gzip JSONL exports retain provenance and completed replayable scenarios
+  ---
+  duration_ms: 324.483375
+  ...
+1..286
+# tests 307
+# suites 0
+# pass 307
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 243642.776916

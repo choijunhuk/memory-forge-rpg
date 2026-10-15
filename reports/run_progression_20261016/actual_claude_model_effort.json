@@ -1,0 +1,26 @@
+[
+  {
+    "task": "P1-R1A-RUN-ORACLE",
+    "sessionId": "a58cdfe3-1e1e-4c01-8ac4-03872716db93",
+    "scope": "Only this request segment, bounded by actual user task prompts in the resumed session",
+    "actualModels": {
+      "claude-opus-5-5": 97
+    },
+    "actualPerTurnEffort": {
+      "xhigh": 97
+    },
+    "rawReasoningCopied": false
+  },
+  {
+    "task": "P1-R1A-ORACLE-SEMANTIC-FIX",
+    "sessionId": "a58cdfe3-1e1e-4c01-8ac4-03872716db93",
+    "scope": "Only this request segment, bounded by actual user task prompts in the resumed session",
+    "actualModels": {
+      "claude-opus-5-5": 12
+    },
+    "actualPerTurnEffort": {
+      "high": 12
+    },
+    "rawReasoningCopied": false
+  }
+]
