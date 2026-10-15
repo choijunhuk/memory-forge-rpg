@@ -69,7 +69,7 @@ static class BattleOpeningChecks
         catch (Exception error) { Check(false, "fixture/adapter: " + error); }
         Console.WriteLine($"BattleOpeningChecks: {checks - failures}/{checks} passed; {commands} actual C# begin commands (267 expected)");
         Console.WriteLine("BattleOpeningScope: fresh Battle.Create + begin; integer JSON args with JS receipt ordering; int32 state outputs except widened actor levels; fractional/oversized numbers explicitly unsupported");
-        Console.WriteLine("OpeningVectorScope: begin only; end/later-turn commands are covered separately, while play/ult/Run/restoration remain unported");
+        Console.WriteLine("OpeningVectorScope: begin only; end/later-turn and player commands are covered separately; full Run/restoration remains unported");
         return failures;
     }
 
@@ -159,13 +159,13 @@ static class BattleOpeningChecks
         var battle = Fresh(); string before = Full(battle.State.ToJsonGraph());
         foreach (string kind in new[] { "play", "ult" })
         {
-            Check(Throws(() => battle.Command(new BattleRequest("failed", 0, kind)), "BATTLE_COMMAND_NOT_IMPLEMENTED"), "explicit unsupported " + kind);
-            Check(Full(battle.State.ToJsonGraph()) == before, "unsupported " + kind + " preserves all state");
+            Check(Throws(() => battle.Command(new BattleRequest("failed", 0, kind)), "WRONG_PHASE"), kind + " before begin rejects phase first");
+            Check(Full(battle.State.ToJsonGraph()) == before, "rejected " + kind + " preserves all state");
         }
         Check(Throws(() => battle.Command(new BattleRequest("failed-end", 0, "end")), "WRONG_PHASE"), "end before begin rejected");
         Check(Full(battle.State.ToJsonGraph()) == before, "end before begin preserves complete state");
         Check(Throws(() => battle.Command(new BattleRequest("failed", 0, "unknown")), "UNKNOWN_COMMAND"), "unknown command rejected");
-        Check(Throws(() => battle.Command(new BattleRequest("failed", 1, "play")), "STALE_VERSION"), "stale version precedes unsupported command");
+        Check(Throws(() => battle.Command(new BattleRequest("failed", 1, "play")), "STALE_VERSION"), "stale version precedes player-command validation");
         var req = new BattleRequest("failed", 0, "begin");
         var response = battle.Command(req); string expectedResponse = Full(response.ToJsonGraph());
         Check(response.V == 1, "rejected rid reusable with corrected request");
@@ -174,10 +174,10 @@ static class BattleOpeningChecks
         Check(Full(battle.Command(req).ToJsonGraph()) == expectedResponse && Full(battle.State.ToJsonGraph()) == before, "receipt and live events detached from returned response");
         var retry = battle.Command(req); retry.Events.Clear();
         Check(Full(battle.Command(req).ToJsonGraph()) == expectedResponse, "every retry returns a fresh copied receipt");
-        Check(Throws(() => battle.Command(new BattleRequest("failed", 999, "play")), "IDEMPOTENCY_CONFLICT"), "receipt conflict precedes stale and unsupported checks");
+        Check(Throws(() => battle.Command(new BattleRequest("failed", 999, "play")), "IDEMPOTENCY_CONFLICT"), "receipt conflict precedes stale and player-command checks");
         Check(Throws(() => battle.Command(new BattleRequest("new", 0, "begin")), "STALE_VERSION"), "new rid with old version rejected");
         Check(Throws(() => battle.Command(new BattleRequest("new", 1, "begin")), "WRONG_PHASE"), "second begin rejected without a receipt");
-        foreach (string kind in new[] { "play", "ult" }) Check(Throws(() => battle.Command(new BattleRequest("new", 1, kind)), "BATTLE_COMMAND_NOT_IMPLEMENTED"), "later " + kind + " still explicit unsupported");
+        foreach (string kind in new[] { "play", "ult" }) Check(Throws(() => battle.Command(new BattleRequest("new", 1, kind)), kind == "play" ? "NOT_IN_HAND" : "UNKNOWN_ACTOR"), "missing " + kind + " argument rejects without consuming rid");
         Check(Full(battle.State.ToJsonGraph()) == before, "all rejection priorities preserve RNG/v/log/ev");
         var detached = battle.State; detached.Phase = "CREATED"; detached.Rng[0] = 0; detached.Actors[0].Passive.Params.Clear(); detached.Cards["c1"].Temp.Add("tampered"); detached.Events.Clear();
         Check(Full(battle.State.ToJsonGraph()) == before && Throws(() => battle.Command(new BattleRequest(null, 1, "begin")), "WRONG_PHASE"), "snapshot mutation cannot restore or corrupt the live battle");
@@ -254,7 +254,7 @@ static class BattleOpeningChecks
         var opening = harin.Resonance[3].List!.Single(f => f.Type == "battleStart").Effects!;
         opening.Add(new EffectDef { Op = "unported" });
         battle = Battle.Create(data, setup); before = Full(battle.State.ToJsonGraph());
-        Check(Throws(() => battle.Command(new BattleRequest("unsupported-effect", 0, "begin")), "BATTLE_EFFECT_NOT_IMPLEMENTED"), "unsupported opening effect explicitly rejected after RNG/events");
+        Check(Throws(() => battle.Command(new BattleRequest("unsupported-effect", 0, "begin")), "UNSUPPORTED_EFFECT"), "unknown opening effect explicitly rejected after RNG/events");
         Check(Full(battle.State.ToJsonGraph()) == before, "unsupported effect rolls back complete state and RNG"); opening.RemoveAt(opening.Count - 1);
 
         setup = Setup("three-opening-actors"); setup.Party[0].WeaponId = "w_ledger_lock"; setup.Party[0].Refine = 5;

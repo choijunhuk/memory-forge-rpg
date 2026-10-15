@@ -1,0 +1,29 @@
+{
+  "status": "IN_PROGRESS_OPPOSITE_REVIEW_PENDING",
+  "metrics": {
+    "cases": 992,
+    "requests": 3870,
+    "committed": 3837,
+    "replayed": 1,
+    "rejected": 32,
+    "pureChecks": 1430,
+    "receiptProbes": 5645,
+    "assertions": 87991,
+    "Node": 257,
+    "proposals": 14,
+    "python": 48,
+    "docs": 9,
+    "handoff": 13,
+    "UnityPlayMode": 12,
+    "UnityEditMode": 3
+  },
+  "coreDefectsFixed": [
+    "P1 stale discard after kill reshuffle",
+    "P2 eager picks guard precedence"
+  ],
+  "harnessDefectFixed": "Missing required fuzzPolicy source pin; first run refused before0actions; no validator weakened",
+  "officialOpusMaxJob": "ACTIVE; result not assumed",
+  "base0": "Generic original-source conflict unresolved; current live base5 preserved",
+  "wholeRunCSharpCommands": 0,
+  "sourceEngineDataUnchanged": true
+}

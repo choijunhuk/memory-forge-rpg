@@ -68,7 +68,7 @@ static class BattlePlayerQueryChecks
         catch (Exception error) { Check(false, "fixture/execution: " + error); }
         Console.WriteLine($"BattlePlayerQueryChecks: {checks - failures}/{checks} passed; {commands} actual begin commands, {queryRows} oracle query rows, {receiptProbes} begin receipt probes");
         Console.WriteLine("BattlePlayerQueryScope: A0 authored definitions and pure effective-card/mode/cost/target queries on actual Create/begin instances");
-        Console.WriteLine("BattlePlayerExecution: NOT_IMPLEMENTED (play/ult, dynamic prechecks and producing command paths remain A1; base0 generic conformance UNRESOLVED)");
+        Console.WriteLine("A0QueryExclusion: play/ult and producing command paths are checked separately; base0 generic conformance UNRESOLVED");
         return failures;
     }
 
@@ -366,7 +366,7 @@ static class BattlePlayerQueryChecks
         var part = data.Parts.Single(p => p.Id == "c_lite"); int? cost = part.Fx.Cost; part.Fx.Cost = int.MaxValue; originalState = Full(battle.State.ToJsonGraph()); faultyDefinitions = Full(Catalog(data));
         Check(Throws(() => battle.CostOf("c1"), "BATTLE_NUMBER_OUT_OF_RANGE") && Full(battle.State.ToJsonGraph()) == originalState && Full(Catalog(data)) == faultyDefinitions, "checked cost overflow preserves all state/definitions");
         part.Fx.Cost = cost; Check(battle.CostOf("c1") == 0, "corrected cost query succeeds without a consuming side effect");
-        foreach (string kind in new[] { "play", "ult" }) Check(Throws(() => battle.Command(new BattleRequest("a0-unsupported", 1, kind)), "BATTLE_COMMAND_NOT_IMPLEMENTED") && Full(battle.State.ToJsonGraph()) == originalState, "A0 keeps explicit unsupported " + kind);
+        foreach (string kind in new[] { "play", "ult" }) Check(Throws(() => battle.Command(new BattleRequest("a0-invalid-player", 1, kind)), kind == "play" ? "NOT_IN_HAND" : "UNKNOWN_ACTOR") && Full(battle.State.ToJsonGraph()) == originalState, "missing " + kind + " argument leaves pure-query state unchanged");
 
         string temporary = Path.Combine(Path.GetTempPath(), "mf-player-query-loader-" + Guid.NewGuid().ToString("N"));
         try

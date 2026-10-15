@@ -1,0 +1,17 @@
+{
+  "at": "2026-10-15T05:41:43.625878+00:00",
+  "status": "EDITOR_BRIDGE_DISCONNECTED_AFTER_VERIFIED_TESTS",
+  "editor_process_running": true,
+  "local_mcp_server_process_running": true,
+  "mcp_instances_at_check": 0,
+  "console_visible_via_native_ui": {
+    "errors": 0,
+    "warnings": 1,
+    "warning": "Cannot verify connection: Bridge is not running"
+  },
+  "playmode_verified_before_disconnect": 12,
+  "editmode_verified_before_disconnect": 3,
+  "no_game_source_changed_since_opus_and_play_tests": true,
+  "current_mcp_connection_not_claimed": true,
+  "followup": "Reconnect Editor bridge before next Unity unit; existing test/build receipts retained"
+}

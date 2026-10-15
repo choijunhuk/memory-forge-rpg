@@ -17,6 +17,8 @@ Codex 핵심 전투·예약·카드/부품·기억 저장·경제·인증·서�
 
 ## 공식 Claude CLI 작업 경로
 
+최신 사용자 제공 잔여량과 초기화 시점에 따라 [§11의 Claude 구현 우선 배분](AI_WORKFLOW.md)을 적용한다. 새 구현·원인 분석·테스트 작성은 Opus CLI, Codex는 독립 리뷰·통합·Unity 최종 확인·이미지 담당이다. [runtime-policy.json](../ops/ai/runtime-policy.json)의 `work_routing`은 작업 배정 계약이며 제공자의 고정 토큰 비율 강제 설정이 아니다. 기존 High/Max와 반대 AI 리뷰·구독 전용 경계를 유지한다.
+
 [run_claude.py](../tools/ai/run_claude.py)는 별도 branch/worktree의 범위가 정해진 작업을 실행한다. 실제 계정 인증 파일·토큰·계정 식별자·과금 화면 원문은 문서나 Git에 싣지 않는다.
 
 1. 신선한 계정 UI 확인 기록에서 claude.ai 구독, Usage credits OFF, 자동 충전 OFF를 검사한다. 현재 구현은 24시간 이내 확인과 화면 이메일/CLI 계정의 로컬 SHA-256 일치를 요구한다. 식별자·지문은 로컬에만 두며 결과에는 일치 여부만 남긴다. 이것을 서버 청구 강제 차단 장치라고 부르지 않는다.
@@ -73,3 +75,5 @@ P1/P2나 연결 작업이 끝났다는 이유로 전체 개발을 끝내지 않�
 반복 턴 구현 후 [실제 PlayMode7/7](../reports/csharp_turns_20261015/unity_playmode.json)과 [EditMode3/3](../reports/csharp_turns_20261015/unity_editmode.json)을 다시 확인했다. 적 행동 뒤2·3턴과 이미 사용한 봉투 뒤2턴 회로 사망을 같은 공유 Core로 실행했다. 새 게임UI·Android·실기기 수용은 별도다.
 
 전체 카드 질의 A0에서도 [PlayMode8/8](../reports/player_queries_20261015/unity_playmode.json)·[EditMode3/3](../reports/player_queries_20261015/unity_editmode.json)를 실제 실행했다. 새 시험은 반환 카드 정의·모드 목록을 수정한 후 원본과 진행 상태/로그/이벤트가 보존됨을 확인한다. [Console 오류0/전송 경고1](../reports/player_queries_20261015/unity_console.json)을 분리하며 실제 카드 실행·게임UI·Android 수용은 아니다.
+
+A1의 [PlayMode12/EditMode3](../reports/player_actions_20261015/verification.json)는 실제 카드/필살기·예약/불굴·소멸 재섞기를 같은 공유 Core로 실행한다. [새 macOS빌드](../reports/player_actions_20261015/unity_build.json)는0오류/0경고이며 [Metal 기술씬 시작](../reports/player_actions_20261015/unity_standalone_startup.json) 후 해당 프로세스만 강제종료했다. 최초NullGPU timeout은 미수용, 정상종료/전체게임UI/Android 수용은 미검증이다. 공식 [Opus Max 승인](../reports/player_actions_20261015/opposite_ai_acceptance.json)과 실제effort108개·16소스 해시를 확인했으며 reviewer실행과 Root실행은 구분한다. M0/R0의 독립 개발은 계속되며 현재 세션 종료 후 자동 지속을 약속하지 않는다.

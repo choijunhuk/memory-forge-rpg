@@ -87,6 +87,7 @@ namespace MemoryForge.Core
         public string Uid = "", Id = "", Owner = "";
         public string? Wielder, Circuit, Edge, Assigned, From;
         public bool Plus, Grown, Token, Free;
+        public bool? EchoCopy;
         public int Growth, Used, CostMod;
         public List<string> Temp = new List<string>();
         internal string? Key { get; set; }
@@ -100,6 +101,7 @@ namespace MemoryForge.Core
                 "mods", BattleGraph.Object("c", Circuit, "e", Edge), "temp", new List<string>(Temp), "growth", Growth,
                 "grown", Grown, "used", Used, "costMod", CostMod, "token", Token, "free", Free, "assigned", Assigned, "from", From);
             if (Key != null) graph.Add("key", Key);
+            BattleGraph.Optional(graph, "echoCopy", EchoCopy);
             return graph;
         }
     }
@@ -152,15 +154,57 @@ namespace MemoryForge.Core
     }
     public sealed class BattleDebt
     {
+        public string Id = "";
+        public bool Deferred;
         public int N, Due;
         internal BattleDebt Copy() => (BattleDebt)MemberwiseClone();
-        internal Dictionary<string, object?> ToJsonGraph() => BattleGraph.Object("n", N, "due", Due);
+        internal Dictionary<string, object?> ToJsonGraph() => BattleGraph.Object("id", Id, "n", N, "due", Due, "deferred", Deferred);
+    }
+    public sealed class BattleReservationState
+    {
+        public string Uid = "", Kind = "next";
+        public string? Target;
+        public int Due, Order;
+        public bool? Delayed;
+        internal BattleReservationState Copy() => (BattleReservationState)MemberwiseClone();
+        public Dictionary<string, object?> ToJsonGraph()
+        {
+            var graph = BattleGraph.Object("uid", Uid, "due", Due, "order", Order, "target", Target, "kind", Kind);
+            BattleGraph.Optional(graph, "delayed", Delayed); return graph;
+        }
+    }
+    public sealed class BattlePowerState
+    {
+        public string Id = "";
+        public int? Bps, Block, Keep, Heal;
+        internal BattlePowerState Copy() => (BattlePowerState)MemberwiseClone();
+        public Dictionary<string, object?> ToJsonGraph()
+        {
+            var graph = BattleGraph.Object("id", Id); BattleGraph.Optional(graph, "bps", Bps); BattleGraph.Optional(graph, "blk", Block);
+            BattleGraph.Optional(graph, "keep", Keep); BattleGraph.Optional(graph, "heal", Heal); return graph;
+        }
+    }
+    public sealed class BattlePendingCopy
+    {
+        public string Id = "";
+        public string? Wielder, From;
+        public int Due;
+        internal BattlePendingCopy Copy() => (BattlePendingCopy)MemberwiseClone();
+        public Dictionary<string, object?> ToJsonGraph() => BattleGraph.Object("id", Id, "wielder", Wielder, "from", From, "due", Due);
+    }
+    public sealed class BattleBoostState
+    {
+        public int Bps;
+        public string? From;
+        internal BattleBoostState Copy() => (BattleBoostState)MemberwiseClone();
+        internal Dictionary<string, object?> ToJsonGraph() => BattleGraph.Object("bps", Bps, "from", From);
     }
     public sealed class BattleEvent
     {
         public string E = "";
-        public int? T, N, Growth, Turn, Ap, Damage, Blocked;
-        public string? Uid, Source, Status, Part, Phase, Id, Card;
+        public int? T, N, Growth, Turn, Ap, Damage, Blocked, Cost, Due;
+        public string? Uid, Source, Status, Part, Phase, Id, Card, Mode, Target, Kind, Reserved, Actor;
+        public bool? Fizzled;
         internal BattleEvent Copy() => (BattleEvent)MemberwiseClone();
         public Dictionary<string, object?> ToJsonGraph()
         {
@@ -170,7 +214,13 @@ namespace MemoryForge.Core
             BattleGraph.Optional(graph, "uid", Uid); BattleGraph.Optional(graph, "src", Source); BattleGraph.Optional(graph, "s", Status);
             BattleGraph.Optional(graph, "part", Part); BattleGraph.Optional(graph, "phase", Phase);
             BattleGraph.Optional(graph, "d", Damage); BattleGraph.Optional(graph, "blocked", Blocked);
-            BattleGraph.Optional(graph, "id", Id); BattleGraph.Optional(graph, "card", Card); return graph;
+            BattleGraph.Optional(graph, "id", Id); BattleGraph.Optional(graph, "card", Card);
+            if (E == "dmg" && (Source == "card" || Source == "ult") && Card == null) graph.Add("card", null);
+            BattleGraph.Optional(graph, "mode", Mode); BattleGraph.Optional(graph, "cost", Cost); BattleGraph.Optional(graph, "due", Due);
+            BattleGraph.Optional(graph, "kind", Kind); BattleGraph.Optional(graph, "actor", Actor); BattleGraph.Optional(graph, "fizzled", Fizzled);
+            if (E == "play") graph.Add("target", Target); else BattleGraph.Optional(graph, "target", Target);
+            if (E == "resolved") graph.Add("reserved", Reserved); else BattleGraph.Optional(graph, "reserved", Reserved);
+            return graph;
         }
     }
     public sealed class BattleResult
@@ -196,14 +246,15 @@ namespace MemoryForge.Core
         public List<string> OwnersThisTurn = new List<string>();
         public int Echo, EchoMax = 3, EchoStart, Contracts, Exhausted, ExhaustStart, TempParts, FreeNext;
         public bool EchoActive, FirstAttackDone, OverloadFreeUsed;
-        public Dictionary<string, object?>? NextBoost;
+        public BattleBoostState? NextBoost;
         public List<BattleActorState> Actors = new List<BattleActorState>();
         public List<BattleEnemyState> Enemies = new List<BattleEnemyState>();
         public Dictionary<string, BattleCardState> Cards = new Dictionary<string, BattleCardState>(StringComparer.Ordinal);
         internal List<string> CardOrder = new List<string>();
         public BattleZones Zones = new BattleZones();
-        // These remain empty under Create/begin/end; no restored-state execution is exposed.
-        public List<Dictionary<string, object?>> Reservations = new List<Dictionary<string, object?>>(), Powers = new List<Dictionary<string, object?>>();
+        public List<BattleReservationState> Reservations = new List<BattleReservationState>();
+        public List<BattlePowerState> Powers = new List<BattlePowerState>();
+        public List<BattlePendingCopy>? PendingCopies;
         public int ReservationSeq, HandMax, KilledMarked, DifficultyHp = 100, DifficultyDamage = 100;
         public List<string> Relics = new List<string>();
         public Dictionary<string, object?> TurnFlags = new Dictionary<string, object?>(StringComparer.Ordinal),
@@ -216,29 +267,35 @@ namespace MemoryForge.Core
             var copy = (BattleState)MemberwiseClone();
             copy.Rng = (uint[])Rng.Clone(); copy.Buffs = Buffs.Select(b => b.Copy()).ToList(); copy.Debts = Debts.Select(d => d.Copy()).ToList();
             copy.SlotsBase = SlotsBase.Copy(); copy.SlotsTemp = SlotsTemp.Copy(); copy.OwnersThisTurn = new List<string>(OwnersThisTurn);
-            copy.NextBoost = NextBoost == null ? null : BattleGraph.CopyDictionary(NextBoost);
+            copy.NextBoost = NextBoost?.Copy();
             copy.Actors = Actors.Select(a => a.Copy()).ToList(); copy.Enemies = Enemies.Select(e => e.Copy()).ToList();
             copy.Cards = Cards.ToDictionary(p => p.Key, p => p.Value.Copy(), StringComparer.Ordinal); copy.CardOrder = new List<string>(CardOrder);
-            copy.Zones = Zones.Copy(); copy.Reservations = Reservations.Select(BattleGraph.CopyDictionary).ToList(); copy.Powers = Powers.Select(BattleGraph.CopyDictionary).ToList();
+            copy.Zones = Zones.Copy(); copy.Reservations = Reservations.Select(r => r.Copy()).ToList(); copy.Powers = Powers.Select(p => p.Copy()).ToList();
+            copy.PendingCopies = PendingCopies?.Select(p => p.Copy()).ToList();
             copy.Relics = new List<string>(Relics); copy.TurnFlags = BattleGraph.CopyDictionary(TurnFlags);
             copy.BattleFlags = BattleGraph.CopyDictionary(BattleFlags); copy.RunFlags = BattleGraph.CopyDictionary(RunFlags);
             copy.Log = Log.Select(e => e.Copy()).ToList(); copy.Events = Events.Select(e => e.Copy()).ToList(); copy.Result = Result?.Copy();
             return copy;
         }
 
-        public Dictionary<string, object?> ToJsonGraph() => BattleGraph.Object(
+        public Dictionary<string, object?> ToJsonGraph()
+        {
+            var graph = BattleGraph.Object(
             "schema", Schema, "v", V, "turn", Turn, "phase", Phase, "rng", (uint[])Rng.Clone(), "seq", Seq,
             "hp", Hp, "maxHp", MaxHp, "block", Block, "counter", Counter, "ap", Ap, "apNext", ApNext, "apDrainNext", ApDrainNext, "silenceUntil", SilenceUntil, "breakApTurn", BreakApTurn,
             "pst", BattleGraph.Object("weak", Weak), "buffs", Buffs.Select(b => b.ToJsonGraph()).ToList(), "debts", Debts.Select(d => d.ToJsonGraph()).ToList(), "debtCap", DebtCap,
             "restraint", BattleGraph.Object("active", RestraintActive, "usedTurn", RestraintUsedTurn), "bonus", BattleGraph.Object("turn", BonusTurn, "avail", BonusAvailable),
             "drawPenalty", DrawPenalty, "sealedUntil", SealedUntil, "slotsBase", SlotsBase.ToJsonGraph(), "slotsTemp", SlotsTemp.ToJsonGraph(), "growthCount", GrowthCount, "growthCap", GrowthCap,
             "played", Played, "lastOwner", LastOwner, "ownersThisTurn", new List<string>(OwnersThisTurn), "echo", Echo, "echoMax", EchoMax, "echoActive", EchoActive, "echoStart", EchoStart,
-            "contracts", Contracts, "exhausted", Exhausted, "exhaustStart", ExhaustStart, "tempParts", TempParts, "freeNext", FreeNext, "nextBoost", NextBoost == null ? null : BattleGraph.CopyDictionary(NextBoost),
+            "contracts", Contracts, "exhausted", Exhausted, "exhaustStart", ExhaustStart, "tempParts", TempParts, "freeNext", FreeNext, "nextBoost", NextBoost?.ToJsonGraph(),
             "firstAtkDone", FirstAttackDone, "overloadFreeUsed", OverloadFreeUsed, "actors", Actors.Select(a => a.ToJsonGraph()).ToList(), "enemies", Enemies.Select(e => e.ToJsonGraph()).ToList(),
-            "cards", CardOrder.ToDictionary(uid => uid, uid => (object?)Cards[uid].ToJsonGraph(), StringComparer.Ordinal), "zones", Zones.ToJsonGraph(), "res", Reservations.Select(BattleGraph.CopyDictionary).ToList(),
-            "resSeq", ReservationSeq, "relics", new List<string>(Relics), "powers", Powers.Select(BattleGraph.CopyDictionary).ToList(), "turnFlags", BattleGraph.CopyDictionary(TurnFlags),
+            "cards", CardOrder.ToDictionary(uid => uid, uid => (object?)Cards[uid].ToJsonGraph(), StringComparer.Ordinal), "zones", Zones.ToJsonGraph(), "res", Reservations.Select(r => r.ToJsonGraph()).ToList(),
+            "resSeq", ReservationSeq, "relics", new List<string>(Relics), "powers", Powers.Select(p => p.ToJsonGraph()).ToList(), "turnFlags", BattleGraph.CopyDictionary(TurnFlags),
             "battleFlags", BattleGraph.CopyDictionary(BattleFlags), "runFlags", BattleGraph.CopyDictionary(RunFlags), "handMax", HandMax, "log", Log.Select(e => e.ToJsonGraph()).ToList(),
             "ev", Events.Select(e => e.ToJsonGraph()).ToList(), "result", Result?.ToJsonGraph(), "killedMarked", KilledMarked, "diff", BattleGraph.Object("hp", DifficultyHp, "dmg", DifficultyDamage));
+            if (PendingCopies != null) graph.Add("pendingCopies", PendingCopies.Select(p => p.ToJsonGraph()).ToList());
+            return graph;
+        }
     }
 
     /// <summary>Ordered JSON transport values, independent of state canonicalization. Numbers are JS-safe integers; fractional request args are explicitly unsupported.</summary>
@@ -272,6 +329,9 @@ namespace MemoryForge.Core
         public static BattleArgument Array(IEnumerable<BattleArgument> values) => new BattleArgument(values);
         public static BattleArgument Object(IEnumerable<KeyValuePair<string, BattleArgument>> values) => new BattleArgument(values);
         internal bool Truthy => array != null || properties != null || BattleGraph.Truthy(scalar);
+        internal BattleArgument? Member(string name) => properties?.FirstOrDefault(p => p.Key == name).Value;
+        internal string? TextValue => scalar as string;
+        internal IReadOnlyList<BattleArgument>? ListValue => array;
         internal void Append(StringBuilder text)
         {
             if (properties != null)

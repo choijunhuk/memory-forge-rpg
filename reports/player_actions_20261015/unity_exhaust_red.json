@@ -1,0 +1,59 @@
+{
+  "success": true,
+  "message": "Test job status retrieved.",
+  "error": null,
+  "data": {
+    "job_id": "a797f19560d144e3ac7c7e699c3243c4",
+    "status": "failed",
+    "mode": "PlayMode",
+    "started_unix_ms": 1792025941049,
+    "finished_unix_ms": 1792025947691,
+    "last_update_unix_ms": 1792025947691,
+    "progress": {
+      "completed": 1,
+      "total": 1,
+      "current_test_full_name": null,
+      "current_test_started_unix_ms": null,
+      "last_finished_test_full_name": "MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.ExhaustKillReshuffleUsesTheCurrentDiscardPile",
+      "last_finished_unix_ms": 1792025947679,
+      "stuck_suspected": false,
+      "editor_is_focused": false,
+      "run_in_background": false,
+      "focus_nudge_attempts": null,
+      "focus_nudge_limit": null,
+      "focus_nudge_status": null,
+      "blocked_reason": null,
+      "failures_so_far": [
+        {
+          "full_name": "MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.ExhaustKillReshuffleUsesTheCurrentDiscardPile",
+          "message": "  Expected string length 6 but was 7. Strings differ at index 0.\n  Expected: \"PLAYER\"\n  But was:  \"VICTORY\"\n  -----------^\n"
+        }
+      ],
+      "failures_capped": false
+    },
+    "error": null,
+    "result": {
+      "mode": "PlayMode",
+      "summary": {
+        "total": 1,
+        "passed": 0,
+        "failed": 1,
+        "skipped": 0,
+        "durationSeconds": 0.0488526,
+        "resultState": "Failed(Child)"
+      },
+      "results": [
+        {
+          "name": "ExhaustKillReshuffleUsesTheCurrentDiscardPile",
+          "fullName": "MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.ExhaustKillReshuffleUsesTheCurrentDiscardPile",
+          "state": "Failed",
+          "durationSeconds": 0.0332686,
+          "message": "  Expected string length 6 but was 7. Strings differ at index 0.\n  Expected: \"PLAYER\"\n  But was:  \"VICTORY\"\n  -----------^\n",
+          "stackTrace": "at MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.ExhaustKillReshuffleUsesTheCurrentDiscardPile () [0x007b7] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Tests/PlayMode/BattleOpeningPlayModeTests.cs:117\n",
+          "output": ""
+        }
+      ]
+    }
+  },
+  "hint": null
+}

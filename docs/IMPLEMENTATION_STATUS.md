@@ -11,11 +11,11 @@
 | 작업 | 상태 | 정확한 요구/완료 조건 |
 |---|---|---|
 | P1 JS→C# 트레이스 생성기 | IN_PROGRESS | §16.2·§20.9 P1-1. `tools/gen_traces.mjs`와 회귀9개·전체 출력/재생 검증 완료. 실제700short+300full=1000개·273748명령·275748해시 재생 PASS. [전체 증거](../reports/cross_language_20261015/replay.json). 상대 검토·통합을 거쳐 C# 실제 명령 재생으로 이어감. JS oracle 성공은 C# 동치 아님. |
-| C# 전체 Battle·Run·기억 저장 | IN_PROGRESS | C#은 Rng/Gacha/Stats/ReservationBook·canonical 기반과 실제 Battle.Create/begin을 구현했다. [전투 시작267](../reports/csharp_opening_20261015/)과 [실제반복턴356사례/1740요청·29232검사](../reports/csharp_turns_20261015/), Unity PlayMode7개 및 Opus Max APPROVE. Git/CI는 해당 head별 별도 기록. 시작/종료2000해시 PASS와 구별하며 전체1000 Run 트레이스 명령 재생은0개. [전체카드정의/순수질의702사례·128244검사](../reports/player_queries_20261015/) 완료. play/ult·예약/부채/파워/균열 생산·전체 전투/탐사/기억 저장은 미구현. netstandard2.1/C#8·정수/BigInteger·컬렉션 순서·동일 명령별 해시1000개와 기존 CoreChecks를 모두 수용해야 함. |
+| C# 전체 Battle·Run·기억 저장 | IN_PROGRESS | C#은 Rng/Gacha/Stats/ReservationBook·canonical 기반과 실제 Battle.Create/begin을 구현했다. [전투 시작267](../reports/csharp_opening_20261015/)과 [실제반복턴356사례/1740요청·29232검사](../reports/csharp_turns_20261015/), Unity PlayMode7개 및 Opus Max APPROVE. Git/CI는 해당 head별 별도 기록. 시작/종료2000해시 PASS와 구별하며 전체1000 Run 트레이스 명령 재생은0개. [전체카드정의/순수질의702사례·128244검사](../reports/player_queries_20261015/)와 [실제play/ult·생산 수명주기992사례/3870요청·87991검사](../reports/player_actions_20261015/) 완료·Sol/Opus Max 소스 승인. UnityPlay12/Edit3, 기술씬macOS빌드/Metal시작은 별도 근거다. 전체Run/기억저장/복원·후반후보·게임UI/기기/서버는 미구현 또는 별도 미수용. netstandard2.1/C#8·정수/BigInteger·컬렉션 순서·동일 명령별 해시1000개와 기존 CoreChecks를 모두 수용해야 함. |
 | 후반 본편 활성화 | BLOCKED_ACCEPTANCE | JS 여섯 행동·HTML·23종 후보 있음. 최신40시나리오/조우 확대는44조우×40×3=5280회, 목표 미달21개. C#·서사/연출·목표 미달 해소 전 `authored` 활성화/본편 완료 선언 금지. |
-| 실제 Unity 게임 수직 슬라이스 | PARTIAL(환경만) | 실제 Editor의 연결 검증 씬·프리팹·Play·EditMode3개·macOS 연결 앱 빌드는 확인. 로비→편성→지도→전투→보상→저장·서버·실기기는 미완료. |
+| 실제 Unity 게임 수직 슬라이스 | PARTIAL(환경/공유Core) | 실제 Editor의 연결 검증 씬·프리팹·Play·EditMode3개·macOS 연결 앱 빌드는 확인. 로비→편성→지도→전투→보상→저장·서버·실기기는 미완료. |
 | 서버 앱·저장v2 접합 | NOT_IMPLEMENTED | §17 전체 및 §8.11·§17.5: 소유권·버전·고정 잠금·원장·이력·멱등·rollback·다기기 동시성. 스키마/JS 로컬 저장으로 대체 불가. |
-| 반대 AI 최종 검토 | IN_PROGRESS | 실제Opus Max검토·결함수정·재시험·범위재검토 완료. 다음C#opening단위는 별도검토/통합. 두 차례 미해결은 해당 쟁점만 보류. |
+| 반대 AI 최종 검토 | IN_PROGRESS | 실제Opus Max검토·결함수정·재시험·범위재검토 완료. C#opening/turn/query/player단위까지 상대검토를 회수했으며 다음M0/R0도 별도검토/통합. 두 차례 미해결은 해당 쟁점만 보류. |
 
 P1/P2 완료로 개발을 끝내지 않는다. 이 표와 아래 장별 요구에서 의존성이 풀린 다음 작업을 고른다. 정책·권한·환경·구독 한도는 해당 항목만 보류하고 현재 세션의 독립 작업을 이어간다. 세션 밖 자동 개발은 약속하지 않는다.
 

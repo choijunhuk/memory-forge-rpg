@@ -106,7 +106,7 @@ static class BattleTurnChecks
         catch (Exception error) { Check(false, "fixture/execution: " + error); }
         Console.WriteLine($"BattleTurnChecks: {checks - failures}/{checks} passed; {commands} oracle requests, {committed} committed, {replayed} replayed, {rejected} rejected; {receiptProbes} additional black-box receipt probes");
         Console.WriteLine("BattleTurnScope: real fresh Create + begin/end, all 267 openings, 20 live two-cycle duels, 21 authored encounters and targeted boundaries");
-        Console.WriteLine("BattleRunCommandReplay: NOT_IMPLEMENTED (play/ult, Run/restoration, producing powers including bulwark, Unity/device/server acceptance remain separate)");
+        Console.WriteLine("BattleRunCommandReplay: NOT_IMPLEMENTED (full Run/restoration remains separate from Battle command checks and Unity/device/server acceptance)");
         return failures;
     }
 
@@ -403,10 +403,10 @@ static class BattleTurnChecks
         response.Phase = "tampered"; response.Events[0].E = "tampered"; response.Events.Clear();
         var replay = battle.Command(end); replay.Events[0].N = 999; replay.Events.Clear();
         Check(Full(battle.Command(end).ToJsonGraph()) == expected && Full(battle.State.ToJsonGraph()) == before, "every returned end receipt/event array detached");
-        var snapshot = battle.State; snapshot.Reservations.Add(new Dictionary<string, object?>()); snapshot.Powers.Add(new Dictionary<string, object?>()); snapshot.Debts.Add(new BattleDebt { N = 1, Due = 1 }); snapshot.Rng[0] = 0; snapshot.Log.Clear();
-        Check(Full(battle.State.ToJsonGraph()) == before && battle.Command(new BattleRequest("detached-next", 2, "end")).V == 3, "unported fields in detached snapshots cannot inject state or bypass real end");
+        var snapshot = battle.State; snapshot.Reservations.Add(new BattleReservationState()); snapshot.Powers.Add(new BattlePowerState()); snapshot.Debts.Add(new BattleDebt { N = 1, Due = 1 }); snapshot.Rng[0] = 0; snapshot.Log.Clear();
+        Check(Full(battle.State.ToJsonGraph()) == before && battle.Command(new BattleRequest("detached-next", 2, "end")).V == 3, "detached reservation/power/debt snapshots cannot inject state or bypass real end");
         before = Full(battle.State.ToJsonGraph());
-        foreach (string kind in new[] { "play", "ult" }) Check(Throws(() => battle.Command(new BattleRequest("unsupported", 3, kind)), "BATTLE_COMMAND_NOT_IMPLEMENTED") && Full(battle.State.ToJsonGraph()) == before, "explicit unsupported " + kind + " remains atomic after repeated end");
+        foreach (string kind in new[] { "play", "ult" }) Check(Throws(() => battle.Command(new BattleRequest("invalid-player", 3, kind)), kind == "play" ? "NOT_IN_HAND" : "UNKNOWN_ACTOR") && Full(battle.State.ToJsonGraph()) == before, "missing " + kind + " argument remains atomic after repeated end");
         SameJson(Full(beginResponse.ToJsonGraph()), battle.Command(begin).ToJsonGraph(), "old begin receipt remains stable after later end commands");
 
         // Faults affect local test definitions only; every positive vector uses unchanged source content.

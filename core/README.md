@@ -29,10 +29,16 @@ Unity6가 로컬 UPM으로 동일 Core 소스를 직접 컴파일했고 실제 P
 
 `end`·라이브20종의12행동·다음 턴을 구현했고 [356사례/1740요청·29232검사](../reports/csharp_turns_20261015/)와 기존전체검사, Unity PlayMode7/EditMode3이 통과했다. 원문과 대조한 공식 Opus Max·별도 Sol Max는 APPROVE다. `StartTurn(first)`·적 생성/의도·RNG·원자적 후보 실행을 재사용하고 전체 그래프 비교기는 두 host검사가 공유한다.
 
-현재 지원은 `Create/begin/end`다. `play`/`ult`, 예약·부채·파워·균열을 생산하는 경로, Run/저장/복원·전체1000Run명령 재생은 남아 있다. unknown상태/태그/phase를 조용히 생략하지 않는다. 위의 과거 미지원 end 설명은 이 절로 갱신하며 게임 데이터·수치를 변경하지 않는다.
+이 반복턴 단위 검증 당시 지원은 `Create/begin/end`였다. `play`/`ult`, 예약·부채·파워·균열을 생산하는 경로, Run/저장/복원·전체1000Run명령 재생은 남아 있다. unknown상태/태그/phase를 조용히 생략하지 않는다. 위의 과거 미지원 end 설명은 이 절로 갱신하며 게임 데이터·수치를 변경하지 않는다.
 
 ## 전체 정의·순수 카드 질의
 
 `EffectiveCard(uid)`·`AllowedModes(uid)`·`CostOf(uid,mode)`·`NeedsTarget(uid)`가 실제 카드 개체를 조회한다. [A0 근거](../reports/player_queries_20261015/)는173카드·378기본모드·전체 저작 전투 정의,702개시작/8340질의·128244검사와 기존전체검사·UnityPlay8/Edit3 PASS 및 Opus Max 승인이다. 강화→공명을 사본에 적용하며 원본 정의·RNG·상태·영수증은 바뀌지 않는다. 편의 기본 mode는 now이고 실제 명령 구현에서는 mode를 명시한다.
 
-A1 play/ult·예약/부채/파워/복제·전체Run 실행은 여전히 별도 미완료다. 원본§6.3/§9의 base0 충돌은 live base5를 유지하고 기록한다. A0를 효과 실행/전체 DSL 수용으로 취급하지 않는다.
+이 A0 단위에는 A1 play/ult·예약/부채/파워/복제·전체Run 실행을 포함하지 않았다. 원본§6.3/§9의 base0 충돌은 live base5를 유지하고 기록한다. A0를 효과 실행/전체 DSL 수용으로 취급하지 않는다.
+
+## 실제 카드·필살기와 생산 수명주기 A1
+
+현재 저작 Battle의 `Create/begin/end/play/ult`,173카드·378기본모드·39효과·10필살기와 예약/부채/파워/성장/복제/소멸/균열을 실제 실행한다. [992사례/3870명령·87991검사](../reports/player_actions_20261015/)와 기존전체검사·Node257·UnityPlay12/Edit3 및 독립 Sol/공식 Opus Max 승인을 확인했다. 기존 시작 전용 효과 처리는 공유 실행기로 합치고267기존 시작을 유지하며 BattleState만 예약/공유resSeq를 소유한다. 소멸 중 더미 교체와 raw picks 소비시점 두 결함을 실제 회귀로 고쳤다.
+
+이 절이 위 시점별 미지원 play/ult 설명을 갱신한다. 전체Run/기억저장/복원·제안 후반행동·양수silence·전체Unity게임UI/Android/기기/서버는 별도이며 전체1000Run C#명령은0이다. 정수표현/원자적 오류 범위와 base0 원본충돌은 그대로다. 새macOS기술씬 빌드와 Metal시작은 전체게임·정상종료 수용으로 확대하지 않는다. 다음M0/R0를 별도 worktree에서 이어간다.

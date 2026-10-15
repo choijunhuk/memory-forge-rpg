@@ -6,7 +6,7 @@ using System.Numerics;
 
 namespace MemoryForge.Core
 {
-    public sealed class Battle
+    public sealed partial class Battle
     {
         readonly BattleData data;
         BattleState state;
@@ -74,14 +74,14 @@ namespace MemoryForge.Core
                 Hp = hp, MaxHp = hp, Brk = definition.Brk, BrkMax = definition.Brk, Weak = new List<string>(definition.Weak), Passive = definition.Passive?.Copy() };
             s.Enemies.Add(enemy); return enemy;
         }
-        static string MakeCard(BattleState s, BattleData data, BattleCardSpec spec, bool token = false)
+        static string MakeCard(BattleState s, BattleData data, BattleCardSpec spec, bool token = false, bool free = false)
         {
             if (!data.CardIndex.TryGetValue(spec.Id, out var def)) throw new RuleException("UNKNOWN_CARD");
             s.Seq = StateNumber((BigInteger)s.Seq + 1);
             string uid = "c" + s.Seq;
             s.Cards.Add(uid, new BattleCardState { Uid = uid, Id = spec.Id, Owner = def.Owner, Wielder = OrNull(spec.Wielder),
                 Plus = spec.Plus, Circuit = OrNull(spec.Circuit), Edge = OrNull(spec.Edge), Growth = spec.Growth,
-                Token = token, Assigned = OrNull(spec.Assigned), From = OrNull(spec.From) });
+                Token = token, Free = free, Assigned = OrNull(spec.Assigned), From = OrNull(spec.From) });
             s.CardOrder.Add(uid); return uid;
         }
 
@@ -132,7 +132,8 @@ namespace MemoryForge.Core
                 {
                     case "begin": candidate.Begin(); break;
                     case "end": candidate.EndTurn(); break;
-                    case "play": case "ult": throw new RuleException("BATTLE_COMMAND_NOT_IMPLEMENTED");
+                    case "play": candidate.PlayArguments(request.Args); break;
+                    case "ult": candidate.UltArguments(request.Args); break;
                     default: throw new RuleException("UNKNOWN_COMMAND");
                 }
                 candidate.state.V = checked(candidate.state.V + 1);
@@ -383,7 +384,7 @@ namespace MemoryForge.Core
             foreach (var actor in state.Actors)
             {
                 var block = WeaponPassive(actor.Id, "w_startBlock"); if (block.HasValue) GainBlockRaw(block.Value.Value, "weapon");
-                foreach (var effect in actor.BattleStart.Where(e => e.Op != "tune")) ExecuteOpening(effect, actor);
+                foreach (var effect in actor.BattleStart.Where(e => e.Op != "tune")) ExecuteOp(effect, new EffectContext { Actor = actor, Attr = actor.Attr });
             }
             if (Has("eternal_seed"))
             {
@@ -393,105 +394,50 @@ namespace MemoryForge.Core
             StartTurn(true);
         }
 
-        static void RequireShape(EffectDef effect, params string[] keys)
-        {
-            var graph = effect.ToJsonGraph();
-            if (graph.Count != keys.Length || keys.Any(key => !graph.ContainsKey(key))) throw new RuleException("BATTLE_EFFECT_NOT_IMPLEMENTED");
-        }
-        void ExecuteOpening(EffectDef effect, BattleActorState actor)
-        {
-            switch (effect.Op)
-            {
-                case "blk":
-                    RequireShape(effect, "op", "v");
-                    int block = effect.V!.Value <= 0 ? 0 : checked((int)((BigInteger)effect.V.Value * actor.Vit * BigInteger.Max(0, 10000 + (BigInteger)actor.GearBps) / (81 * (BigInteger)10000)));
-                    GainBlockRaw(block, "card");
-                    var harin = PassiveOf("harin_stance");
-                    if (harin != null && actor.Id == "harin" && block > 0) state.Counter += harin.Params["n"];
-                    break;
-                case "heal":
-                    RequireShape(effect, "op", "v");
-                    int heal = checked((int)((BigInteger)Math.Max(0, effect.V!.Value) * actor.Vit / 81));
-                    HealParty(heal);
-                    break;
-                case "st":
-                    RequireShape(effect, "op", "s", "n", "tgt");
-                    if (effect.Target != "rand" || effect.Status != "mark") throw new RuleException("BATTLE_EFFECT_NOT_IMPLEMENTED");
-                    var enemy = RandomEnemy(); if (enemy != null) AddStatus(enemy, effect.Status, effect.N!.Value);
-                    break;
-                case "tune":
-                    RequireShape(effect, "op", "part", "pick");
-                    if (effect.Part != "amp" || effect.Pick != "random") throw new RuleException("BATTLE_EFFECT_NOT_IMPLEMENTED");
-                    TuneRandom(effect.Part); break;
-                default: throw new RuleException("BATTLE_EFFECT_NOT_IMPLEMENTED");
-            }
-        }
-        void HealParty(int amount)
-        {
-            if (state.Hp <= 0) return;
-            var weapon = PartyWeapon("w_healUp");
-            if (weapon.HasValue) amount = checked((int)Floor((BigInteger)amount * (10000 + (BigInteger)weapon.Value.Value), 10000));
-            int before = state.Hp;
-            state.Hp = (int)BigInteger.Min(state.MaxHp, (BigInteger)state.Hp + amount);
-            int overflow = amount - (state.Hp - before);
-            var aila = PassiveOf("aila_warmth");
-            int pct = aila == null ? 0 : aila.Params["pct"];
-            if (overflow > 0 && pct > 0) GainBlockRaw(checked((int)Floor((BigInteger)overflow * pct, 100)), "warmth");
-            Emit(new BattleEvent { E = "heal", N = state.Hp - before });
-        }
-        void ApplyGrowth(BattleCardState card, int amount, string source)
-        {
-            if (data.CardIndex[card.Id].Growth != true || amount <= 0) return;
-            int delta = Math.Min(3 - card.Growth, amount); if (delta <= 0) return;
-            card.Growth += delta;
-            Emit(new BattleEvent { E = "grow", Uid = card.Uid, Growth = card.Growth, Source = source });
-            if (Has("symbiotic_moss")) GainBlockRaw(3, "moss");
-        }
-
         void StartTurn(bool first)
         {
             var s = state; var rules = data.Rules;
             RequireSupportedTurnState();
-            if (first ? s.Turn != 0 : s.Turn < 1) throw new RuleException("BATTLE_STATE_NOT_IMPLEMENTED");
-            int ap = (int)Math.Max(0, Math.Min(rules.ApMax, (long)rules.ApPerTurn + s.ApNext + (Has("chrono_crown") ? 1 : 0) - (s.Turn == 0 && Has("cracked_hourglass") ? 1 : 0) - s.ApDrainNext));
+            int due = StateNumber(s.Debts.Where(d => d.Due <= (long)s.Turn + 1).Aggregate(BigInteger.Zero, (total, d) => total + d.N));
+            int ap = StateNumber(BigInteger.Max(0, BigInteger.Min(rules.ApMax, (BigInteger)rules.ApPerTurn + s.ApNext + (Has("chrono_crown") ? 1 : 0) - (s.Turn == 0 && Has("cracked_hourglass") ? 1 : 0) - due)));
             s.Turn = checked(s.Turn + 1); s.Phase = "RESOLVING";
-            if (!first) { s.Block = Math.Min(s.Block, 0); s.Counter = 0; }
+            if (!first) { s.Block = Math.Min(s.Block, s.Powers.Where(p => p.Id == "bulwark").Select(p => p.Keep ?? 0).DefaultIfEmpty(0).Max()); s.Counter = 0; }
             s.Buffs = s.Buffs.Where(b => b.Until >= s.Turn).ToList();
             s.Played = 0; s.LastOwner = null; s.OwnersThisTurn.Clear(); s.Contracts = 0; s.FreeNext = 0; s.NextBoost = null;
             s.Echo = s.EchoActive ? Math.Min(s.EchoMax, s.EchoStart) : 0;
             s.SlotsTemp = new BattleSlots(); s.TurnFlags.Clear(); s.BreakApTurn = 0;
             foreach (var actor in s.Actors) actor.GaugeTurn = 0;
             foreach (string uid in s.CardOrder) s.Cards[uid].CostMod = 0;
-            s.ApNext = 0; s.ApDrainNext = 0; s.Ap = ap;
+            s.ApNext = 0; s.Debts = s.Debts.Where(d => d.Due > s.Turn).ToList(); s.ApDrainNext = 0; s.Ap = ap;
+            if (due != 0) Emit(new BattleEvent { E = "repay", N = due });
             if (Has("infinite_circuit")) { LoseHp(ScaleVitality(2), "relic"); if (CheckEnd()) return; }
-            s.BattleFlags["seraR6Turn"] = 0;
-            int count = checked(rules.HandDraw - s.DrawPenalty); s.DrawPenalty = 0;
-            if (first)
+            var dueReservations = s.Reservations.Where(r => r.Due <= s.Turn).OrderBy(r => r.Due).ThenBy(r => r.Order).ToList();
+            s.Reservations = s.Reservations.Where(r => r.Due > s.Turn).ToList();
+            for (int i = 0; i < dueReservations.Count; i++)
             {
-                if (Has("quick_hands")) count = checked(count + 2);
-                var draw = PartyWeapon("w_startDraw"); if (draw.HasValue) count = checked(count + draw.Value.Value);
+                var r = dueReservations[i]; ResolveCard(r.Uid, r.Kind, r.Target, new List<string>());
+                if (IsOver() || CheckEnd()) { foreach (var rest in dueReservations.Skip(i + 1)) s.Zones.Discard.Add(rest.Uid); return; }
             }
-            Draw(Math.Max(0, count));
+            s.BattleFlags["seraR6Turn"] = 0;
+            foreach (var power in s.Powers) if (power.Id == "rebirth") HealParty(power.Heal ?? 0);
+            int count = checked(rules.HandDraw - s.DrawPenalty); s.DrawPenalty = 0;
+            if (first) { if (Has("quick_hands")) count = checked(count + 2); var draw = PartyWeapon("w_startDraw"); if (draw.HasValue) count = checked(count + draw.Value.Value); }
+            Draw(Math.Max(0, count)); DeliverCopies();
             if (first)
             {
                 if (Has("memory_anvil")) for (int i = 0; i < 2; i++) TuneRandom("amp");
-                foreach (var actor in s.Actors) foreach (var effect in actor.BattleStart.Where(e => e.Op == "tune")) ExecuteOpening(effect, actor);
+                foreach (var actor in s.Actors) foreach (var effect in actor.BattleStart.Where(e => e.Op == "tune")) ExecuteOp(effect, new EffectContext { Actor = actor, Attr = actor.Attr });
             }
             foreach (var enemy in s.Enemies.Where(e => e.Alive)) SetIntents(enemy);
             s.Phase = "PLAYER"; Emit(new BattleEvent { E = "turn", Turn = s.Turn, Ap = s.Ap });
         }
-
         void RequireSupportedTurnState()
         {
-            var s = state;
-            // Create/begin/end have no producers for these systems. Guard them rather
-            // than silently executing a partial power/reservation/late-action engine.
-            if (s.Reservations.Count != 0 || s.Debts.Count != 0 || s.Powers.Count != 0 || s.Buffs.Count != 0 ||
-                s.RestraintActive || s.BonusAvailable || s.NextBoost != null || s.FreeNext != 0 ||
-                s.SlotsTemp.Next != 0 || s.SlotsTemp.After != 0 || s.SealedUntil != 0 || s.ApDrainNext != 0 || s.SilenceUntil != 0 ||
-                s.Enemies.Any(e => e.Stunned || e.BrokenUntil != 0 || e.Brk != e.BrkMax || e.PatternIndex < 0))
+            if (state.ApDrainNext != 0 || state.SilenceUntil != 0) throw new RuleException("BATTLE_STATE_NOT_IMPLEMENTED");
+            if (state.Powers.Any(p => !new[] { "blueprint", "greenhouse", "bulwark", "rebirth", "oblivion", "casefile", "echochamber" }.Contains(p.Id)) ||
+                state.Buffs.Any(b => !new[] { "charge", "seraLock", "healUp", "lumiRush", "counterDouble", "overloadFree" }.Contains(b.Status)))
                 throw new RuleException("BATTLE_STATE_NOT_IMPLEMENTED");
-            if (s.Enemies.Any(e => e.Passive != null && e.Passive.Id != "seedHeal")) throw new RuleException("BATTLE_ENEMY_PASSIVE_NOT_IMPLEMENTED");
+            if (state.Enemies.Any(e => e.Passive != null && e.Passive.Id != "seedHeal")) throw new RuleException("BATTLE_ENEMY_PASSIVE_NOT_IMPLEMENTED");
         }
         List<EnemyMoveDef> EnemyPattern(BattleEnemyState enemy)
         {
@@ -502,7 +448,7 @@ namespace MemoryForge.Core
         void SetIntents(BattleEnemyState enemy)
         {
             var pattern = EnemyPattern(enemy);
-            enemy.Intent = pattern[enemy.PatternIndex % pattern.Count].Copy();
+            enemy.Intent = enemy.Stunned ? new EnemyMoveDef { Type = "stun", Label = "균열: 행동 불가" } : pattern[enemy.PatternIndex % pattern.Count].Copy();
             enemy.Next = pattern[(enemy.PatternIndex + 1) % pattern.Count].Copy();
         }
 
@@ -528,6 +474,7 @@ namespace MemoryForge.Core
                 if (!enemy.Alive) continue;
                 enemy.Block = 0; enemy.Status.Reflect = 0;
                 var pattern = EnemyPattern(enemy);
+                if (enemy.Stunned) { enemy.Stunned = false; enemy.PatternIndex = checked(enemy.PatternIndex + 1) % pattern.Count; Emit(new BattleEvent { E = "stunSkip", Uid = enemy.Uid }); continue; }
                 var move = pattern[enemy.PatternIndex % pattern.Count];
                 enemy.PatternIndex = checked(enemy.PatternIndex + 1) % pattern.Count;
                 EnemyMove(enemy, move);
@@ -560,6 +507,7 @@ namespace MemoryForge.Core
                 if (enemy.Status.Vul > 0) enemy.Status.Vul--;
                 if (enemy.Status.Weak > 0) enemy.Status.Weak--;
                 if (enemy.Status.Mark > 0) enemy.Status.Mark--;
+                if (enemy.BrokenUntil != 0 && enemy.BrokenUntil <= s.Turn) { enemy.BrokenUntil = 0; enemy.Brk = enemy.BrkMax; Emit(new BattleEvent { E = "recover", Uid = enemy.Uid }); }
             }
             if (CheckEnd()) return;
             StartTurn(false);
@@ -645,12 +593,14 @@ namespace MemoryForge.Core
         }
         static BigInteger RoundedHealthRatio(int hp, int maxHp)
         {
-            if (hp < 0 || maxHp <= 0 || hp > maxHp) throw new RuleException("STATE_RANGE");
+            if (hp < 0 || maxHp <= 0) throw new RuleException("STATE_RANGE");
             if (hp == 0) return BigInteger.Zero;
             // Match JS binary64 division with integer round-to-nearest/even. Positive
             // Int32 HP ratios are >=2^-31, so a 2^83 grid represents every quotient.
             int shift = 52; BigInteger normalized = hp;
             while (normalized < maxHp) { normalized <<= 1; shift++; }
+            BigInteger upper = (BigInteger)maxHp * 2;
+            while (normalized >= upper) { upper <<= 1; shift--; }
             BigInteger mantissa = BigInteger.DivRem((BigInteger)hp << shift, maxHp, out var remainder);
             if (2 * remainder > maxHp || 2 * remainder == maxHp && !mantissa.IsEven) mantissa++;
             return mantissa << (83 - shift);
@@ -664,7 +614,7 @@ namespace MemoryForge.Core
             int loss = checked(d - blocked);
             Emit(new BattleEvent { E = "hit", Uid = enemy.Uid, Damage = d, Blocked = blocked });
             if (loss > 0) LoseHp(loss, "enemy");
-            if (state.Counter > 0 && enemy.Alive) DamageEnemyRaw(enemy, state.Counter, "counter");
+            if (state.Counter > 0 && enemy.Alive) DamageEnemyRaw(enemy, StateNumber((BigInteger)state.Counter * (Buff("counterDouble") != null ? 2 : 1)), "counter");
         }
         void DamageEnemyRaw(BattleEnemyState enemy, int amount, string source)
         {
@@ -676,13 +626,17 @@ namespace MemoryForge.Core
             Emit(new BattleEvent { E = "dmg", Uid = enemy.Uid, N = amount, Blocked = blocked, Source = source });
             if (enemy.Hp == 0) KillEnemy(enemy);
         }
-        void KillEnemy(BattleEnemyState enemy)
+        void KillEnemy(BattleEnemyState enemy, EffectContext? context = null)
         {
             enemy.Alive = false; Emit(new BattleEvent { E = "kill", Uid = enemy.Uid, Id = enemy.Id });
+            if (context != null) context.Killed = true;
             if (enemy.Status.Mark <= 0) return;
             state.KilledMarked = checked(state.KilledMarked + 1);
-            if (state.Phase == "PLAYER" && PassiveOf("kaya_deduction") != null)
-                throw new RuleException("BATTLE_EFFECT_NOT_IMPLEMENTED"); // PLAYER kills require the unported play/ultimate hooks.
+            if (state.Phase == "PLAYER" && PassiveOf("kaya_deduction") != null && !Flag(state.TurnFlags, "deduction"))
+            {
+                state.TurnFlags["deduction"] = true; state.Ap = StateNumber(BigInteger.Min(data.Rules.ApMax, (BigInteger)state.Ap + 1)); Draw(1);
+                if (HasHook("kaya", "kaya_r2")) { var target = RandomEnemy(); if (target != null) AddStatus(target, "burn", 3); }
+            }
             if (Has("detective_notebook")) { Draw(1); AddNotebookCoins(); }
         }
         void AddNotebookCoins()
@@ -722,8 +676,7 @@ namespace MemoryForge.Core
             var eligible = state.Zones.Hand.Where(uid => !state.Cards[uid].Temp.Contains(part) && data.CardIndex[state.Cards[uid].Id].Rarity != "C").ToList();
             if (eligible.Count == 0) return;
             string uid = eligible[Below(eligible.Count)];
-            state.Cards[uid].Temp.Add(part); state.TempParts++;
-            Emit(new BattleEvent { E = "tune", Uid = uid, Part = part });
+            AttachTemp(uid, part);
         }
         void LoseHp(int n, string source)
         {
@@ -741,7 +694,7 @@ namespace MemoryForge.Core
             if (state.Hp <= 0) state.Phase = "DEFEAT";
             else if (!state.Enemies.Any(e => e.Alive)) state.Phase = "VICTORY";
             else return false;
-            foreach (var reservation in state.Reservations) state.Zones.Discard.Add((string)reservation["uid"]!);
+            foreach (var reservation in state.Reservations) state.Zones.Discard.Add(reservation.Uid);
             state.Reservations.Clear(); state.Debts.Clear(); state.RestraintActive = false; state.BonusAvailable = false;
             state.Result = state.Result ?? new BattleResult { Phase = state.Phase, Turn = state.Turn, Hp = state.Hp };
             Emit(new BattleEvent { E = "end", Phase = state.Phase }); return true;
@@ -753,11 +706,11 @@ namespace MemoryForge.Core
             if (s.Hp < 0 || s.Hp > s.MaxHp || s.Ap < 0 || s.Ap > rules.ApMax || s.Zones.Hand.Count > s.HandMax) throw new RuleException("STATE_RANGE");
             if (s.Debts.Sum(d => (long)d.N) > s.DebtCap) throw new RuleException("DEBT_INVARIANT");
             if (s.GrowthCount < 0 || s.GrowthCount > s.GrowthCap || s.Cards.Values.Any(c => c.Growth < 0 || c.Growth > 3)) throw new RuleException("GROWTH_INVARIANT");
-            var seen = s.Zones.Draw.Concat(s.Zones.Hand).Concat(s.Zones.Discard).Concat(s.Zones.Exhaust).Concat(s.Reservations.Select(r => (string)r["uid"]!)).ToList();
+            var seen = s.Zones.Draw.Concat(s.Zones.Hand).Concat(s.Zones.Discard).Concat(s.Zones.Exhaust).Concat(s.Reservations.Select(r => r.Uid)).ToList();
             if (seen.Count != s.Cards.Count || seen.Distinct(StringComparer.Ordinal).Count() != seen.Count || s.CardOrder.Any(uid => !seen.Contains(uid))) throw new RuleException("CARD_ZONE_CONSERVATION");
             if (s.Actors.Any(a => a.Gauge < 0 || a.Gauge > rules.GaugeMax)) throw new RuleException("GAUGE_RANGE");
             if (s.Enemies.Any(e => e.Hp < 0 || e.Block < 0 || e.Brk < 0)) throw new RuleException("ENEMY_RANGE");
-            if (s.Reservations.Count(r => Convert.ToInt32(r["due"]) == s.Turn + 1) > rules.NextSlotsMax || s.Reservations.Count(r => Convert.ToInt32(r["due"]) == s.Turn + 2) > rules.AfterSlotsMax) throw new RuleException("CAPACITY_INVARIANT");
+            if (s.Reservations.Count(r => r.Due == s.Turn + 1) > rules.NextSlotsMax || s.Reservations.Count(r => r.Due == s.Turn + 2) > rules.AfterSlotsMax) throw new RuleException("CAPACITY_INVARIANT");
         }
 
         public Dictionary<string, object?> PublicView()
@@ -766,7 +719,7 @@ namespace MemoryForge.Core
             return BattleGraph.Object("v", s.V, "turn", s.Turn, "phase", s.Phase, "hp", s.Hp, "maxHp", s.MaxHp, "block", s.Block, "counter", s.Counter, "ap", s.Ap,
                 "apNext", s.ApNext, "apDrainNext", s.ApDrainNext, "silenceUntil", s.SilenceUntil, "debt", s.Debts.Sum(d => d.N), "drawCount", s.Zones.Draw.Count,
                 "discard", new List<string>(s.Zones.Discard), "exhaustCount", s.Zones.Exhaust.Count,
-                "hand", s.Zones.Hand.Select(uid => s.Cards[uid].ToJsonGraph()).ToList(), "res", s.Reservations.Select(BattleGraph.CopyDictionary).ToList(),
+                "hand", s.Zones.Hand.Select(uid => s.Cards[uid].ToJsonGraph()).ToList(), "res", s.Reservations.Select(r => r.ToJsonGraph()).ToList(),
                 "enemies", s.Enemies.Select(e => e.ToJsonGraph()).ToList(), "actors", s.Actors.Select(a => BattleGraph.Object("id", a.Id, "gauge", a.Gauge)).ToList());
         }
     }

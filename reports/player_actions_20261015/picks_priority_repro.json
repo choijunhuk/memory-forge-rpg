@@ -1,0 +1,4941 @@
+{
+  "scope": "Actual source requests, malformed picks are consumed only when source does; failed request IDs are reused successfully",
+  "engineSha256": "1de10fff56242ebfe711d0f8165adf69fd418c423b810c340a9ba0c2400fab0c",
+  "cases": [
+    {
+      "id": "created-play",
+      "setup": {
+        "party": [
+          {
+            "charId": "harin",
+            "gauge": 0
+          }
+        ],
+        "deck": [
+          {
+            "id": "harin_shield"
+          }
+        ],
+        "enemies": [
+          "e_shelf"
+        ],
+        "hp": 81,
+        "maxHp": 81,
+        "seed": 1
+      },
+      "steps": [
+        {
+          "request": {
+            "rid": "created-play-check",
+            "v": 0,
+            "kind": "play",
+            "args": {
+              "uid": "c1",
+              "picks": true
+            }
+          },
+          "response": null,
+          "errorCode": "WRONG_PHASE",
+          "state": {
+            "schema": "mf-battle-0.7",
+            "v": 0,
+            "turn": 0,
+            "phase": "CREATED",
+            "rng": [
+              1580013426,
+              350525680,
+              3524174333,
+              3011703609
+            ],
+            "seq": 2,
+            "hp": 81,
+            "maxHp": 81,
+            "block": 0,
+            "counter": 0,
+            "ap": 0,
+            "apNext": 0,
+            "apDrainNext": 0,
+            "silenceUntil": 0,
+            "breakApTurn": 0,
+            "pst": {
+              "weak": 0
+            },
+            "buffs": [],
+            "debts": [],
+            "debtCap": 4,
+            "restraint": {
+              "active": false,
+              "usedTurn": 0
+            },
+            "bonus": {
+              "turn": 0,
+              "avail": false
+            },
+            "drawPenalty": 0,
+            "sealedUntil": 0,
+            "slotsBase": {
+              "next": 2,
+              "after": 1
+            },
+            "slotsTemp": {
+              "next": 0,
+              "after": 0
+            },
+            "growthCount": 0,
+            "growthCap": 3,
+            "played": 0,
+            "lastOwner": null,
+            "ownersThisTurn": [],
+            "echo": 0,
+            "echoMax": 3,
+            "echoActive": false,
+            "echoStart": 0,
+            "contracts": 0,
+            "exhausted": 0,
+            "exhaustStart": 0,
+            "tempParts": 0,
+            "freeNext": 0,
+            "nextBoost": null,
+            "firstAtkDone": false,
+            "overloadFreeUsed": false,
+            "actors": [
+              {
+                "id": "harin",
+                "name": "하린",
+                "attr": "frost",
+                "gauge": 0,
+                "gaugeTurn": 0,
+                "res": 0,
+                "power4": 160,
+                "vit": 81,
+                "gearBps": 0,
+                "skillLv": 1,
+                "ultLv": 1,
+                "passive": {
+                  "id": "harin_stance",
+                  "name": "반격 자세",
+                  "params": {
+                    "n": 1
+                  },
+                  "text": "하린의 카드로 방어를 얻을 때마다 반격 1(적의 공격 1회마다 그 적에게 피해)."
+                },
+                "weapon": null,
+                "cardMods": [],
+                "battleStart": [],
+                "ultExtra": [],
+                "ultReplace": null,
+                "hooks": [],
+                "capacity": 0
+              }
+            ],
+            "enemies": [
+              {
+                "uid": "e2",
+                "id": "e_shelf",
+                "name": "무너진 서가",
+                "tier": "normal",
+                "hp": 46,
+                "maxHp": 46,
+                "block": 0,
+                "brkMax": 5,
+                "brk": 5,
+                "weak": [
+                  "flame",
+                  "void"
+                ],
+                "st": {
+                  "vul": 0,
+                  "weak": 0,
+                  "mark": 0,
+                  "burn": 0,
+                  "str": 0,
+                  "reflect": 0
+                },
+                "brokenUntil": 0,
+                "stunned": false,
+                "pi": 0,
+                "intent": null,
+                "next": null,
+                "alive": true,
+                "passive": null
+              }
+            ],
+            "cards": {
+              "c1": {
+                "uid": "c1",
+                "id": "harin_shield",
+                "owner": "harin",
+                "wielder": null,
+                "plus": false,
+                "mods": {
+                  "c": null,
+                  "e": null
+                },
+                "temp": [],
+                "growth": 0,
+                "grown": false,
+                "used": 0,
+                "costMod": 0,
+                "token": false,
+                "free": false,
+                "assigned": null,
+                "from": null
+              }
+            },
+            "zones": {
+              "draw": [
+                "c1"
+              ],
+              "hand": [],
+              "discard": [],
+              "exhaust": []
+            },
+            "res": [],
+            "resSeq": 0,
+            "relics": [],
+            "powers": [],
+            "turnFlags": {},
+            "battleFlags": {},
+            "runFlags": {},
+            "handMax": 10,
+            "log": [],
+            "ev": [],
+            "result": null,
+            "killedMarked": 0,
+            "diff": {
+              "hp": 100,
+              "dmg": 100
+            }
+          }
+        },
+        {
+          "request": {
+            "rid": "created-play-check",
+            "v": 0,
+            "kind": "begin",
+            "args": {}
+          },
+          "response": {
+            "v": 1,
+            "phase": "PLAYER",
+            "ev": [
+              {
+                "e": "turn",
+                "turn": 1,
+                "ap": 4
+              }
+            ]
+          },
+          "errorCode": null,
+          "state": {
+            "schema": "mf-battle-0.7",
+            "v": 1,
+            "turn": 1,
+            "phase": "PLAYER",
+            "rng": [
+              1580013426,
+              350525680,
+              3524174333,
+              3011703609
+            ],
+            "seq": 2,
+            "hp": 81,
+            "maxHp": 81,
+            "block": 0,
+            "counter": 0,
+            "ap": 4,
+            "apNext": 0,
+            "apDrainNext": 0,
+            "silenceUntil": 0,
+            "breakApTurn": 0,
+            "pst": {
+              "weak": 0
+            },
+            "buffs": [],
+            "debts": [],
+            "debtCap": 4,
+            "restraint": {
+              "active": false,
+              "usedTurn": 0
+            },
+            "bonus": {
+              "turn": 0,
+              "avail": false
+            },
+            "drawPenalty": 0,
+            "sealedUntil": 0,
+            "slotsBase": {
+              "next": 2,
+              "after": 1
+            },
+            "slotsTemp": {
+              "next": 0,
+              "after": 0
+            },
+            "growthCount": 0,
+            "growthCap": 3,
+            "played": 0,
+            "lastOwner": null,
+            "ownersThisTurn": [],
+            "echo": 0,
+            "echoMax": 3,
+            "echoActive": false,
+            "echoStart": 0,
+            "contracts": 0,
+            "exhausted": 0,
+            "exhaustStart": 0,
+            "tempParts": 0,
+            "freeNext": 0,
+            "nextBoost": null,
+            "firstAtkDone": false,
+            "overloadFreeUsed": false,
+            "actors": [
+              {
+                "id": "harin",
+                "name": "하린",
+                "attr": "frost",
+                "gauge": 0,
+                "gaugeTurn": 0,
+                "res": 0,
+                "power4": 160,
+                "vit": 81,
+                "gearBps": 0,
+                "skillLv": 1,
+                "ultLv": 1,
+                "passive": {
+                  "id": "harin_stance",
+                  "name": "반격 자세",
+                  "params": {
+                    "n": 1
+                  },
+                  "text": "하린의 카드로 방어를 얻을 때마다 반격 1(적의 공격 1회마다 그 적에게 피해)."
+                },
+                "weapon": null,
+                "cardMods": [],
+                "battleStart": [],
+                "ultExtra": [],
+                "ultReplace": null,
+                "hooks": [],
+                "capacity": 0
+              }
+            ],
+            "enemies": [
+              {
+                "uid": "e2",
+                "id": "e_shelf",
+                "name": "무너진 서가",
+                "tier": "normal",
+                "hp": 46,
+                "maxHp": 46,
+                "block": 0,
+                "brkMax": 5,
+                "brk": 5,
+                "weak": [
+                  "flame",
+                  "void"
+                ],
+                "st": {
+                  "vul": 0,
+                  "weak": 0,
+                  "mark": 0,
+                  "burn": 0,
+                  "str": 0,
+                  "reflect": 0
+                },
+                "brokenUntil": 0,
+                "stunned": false,
+                "pi": 0,
+                "intent": {
+                  "t": "def",
+                  "b": 10
+                },
+                "next": {
+                  "t": "atk",
+                  "d": 25
+                },
+                "alive": true,
+                "passive": null
+              }
+            ],
+            "cards": {
+              "c1": {
+                "uid": "c1",
+                "id": "harin_shield",
+                "owner": "harin",
+                "wielder": null,
+                "plus": false,
+                "mods": {
+                  "c": null,
+                  "e": null
+                },
+                "temp": [],
+                "growth": 0,
+                "grown": false,
+                "used": 0,
+                "costMod": 0,
+                "token": false,
+                "free": false,
+                "assigned": null,
+                "from": null
+              }
+            },
+            "zones": {
+              "draw": [],
+              "hand": [
+                "c1"
+              ],
+              "discard": [],
+              "exhaust": []
+            },
+            "res": [],
+            "resSeq": 0,
+            "relics": [],
+            "powers": [],
+            "turnFlags": {},
+            "battleFlags": {
+              "seraR6Turn": 0
+            },
+            "runFlags": {},
+            "handMax": 10,
+            "log": [
+              {
+                "t": 1,
+                "e": "turn",
+                "turn": 1,
+                "ap": 4
+              }
+            ],
+            "ev": [
+              {
+                "e": "turn",
+                "turn": 1,
+                "ap": 4
+              }
+            ],
+            "result": null,
+            "killedMarked": 0,
+            "diff": {
+              "hp": 100,
+              "dmg": 100
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "created-ult",
+      "setup": {
+        "party": [
+          {
+            "charId": "harin",
+            "gauge": 100
+          }
+        ],
+        "deck": [
+          {
+            "id": "harin_shield"
+          }
+        ],
+        "enemies": [
+          "e_shelf"
+        ],
+        "hp": 81,
+        "maxHp": 81,
+        "seed": 1
+      },
+      "steps": [
+        {
+          "request": {
+            "rid": "created-ult-check",
+            "v": 0,
+            "kind": "ult",
+            "args": {
+              "actor": "harin",
+              "picks": true
+            }
+          },
+          "response": null,
+          "errorCode": "WRONG_PHASE",
+          "state": {
+            "schema": "mf-battle-0.7",
+            "v": 0,
+            "turn": 0,
+            "phase": "CREATED",
+            "rng": [
+              1580013426,
+              350525680,
+              3524174333,
+              3011703609
+            ],
+            "seq": 2,
+            "hp": 81,
+            "maxHp": 81,
+            "block": 0,
+            "counter": 0,
+            "ap": 0,
+            "apNext": 0,
+            "apDrainNext": 0,
+            "silenceUntil": 0,
+            "breakApTurn": 0,
+            "pst": {
+              "weak": 0
+            },
+            "buffs": [],
+            "debts": [],
+            "debtCap": 4,
+            "restraint": {
+              "active": false,
+              "usedTurn": 0
+            },
+            "bonus": {
+              "turn": 0,
+              "avail": false
+            },
+            "drawPenalty": 0,
+            "sealedUntil": 0,
+            "slotsBase": {
+              "next": 2,
+              "after": 1
+            },
+            "slotsTemp": {
+              "next": 0,
+              "after": 0
+            },
+            "growthCount": 0,
+            "growthCap": 3,
+            "played": 0,
+            "lastOwner": null,
+            "ownersThisTurn": [],
+            "echo": 0,
+            "echoMax": 3,
+            "echoActive": false,
+            "echoStart": 0,
+            "contracts": 0,
+            "exhausted": 0,
+            "exhaustStart": 0,
+            "tempParts": 0,
+            "freeNext": 0,
+            "nextBoost": null,
+            "firstAtkDone": false,
+            "overloadFreeUsed": false,
+            "actors": [
+              {
+                "id": "harin",
+                "name": "하린",
+                "attr": "frost",
+                "gauge": 100,
+                "gaugeTurn": 0,
+                "res": 0,
+                "power4": 160,
+                "vit": 81,
+                "gearBps": 0,
+                "skillLv": 1,
+                "ultLv": 1,
+                "passive": {
+                  "id": "harin_stance",
+                  "name": "반격 자세",
+                  "params": {
+                    "n": 1
+                  },
+                  "text": "하린의 카드로 방어를 얻을 때마다 반격 1(적의 공격 1회마다 그 적에게 피해)."
+                },
+                "weapon": null,
+                "cardMods": [],
+                "battleStart": [],
+                "ultExtra": [],
+                "ultReplace": null,
+                "hooks": [],
+                "capacity": 0
+              }
+            ],
+            "enemies": [
+              {
+                "uid": "e2",
+                "id": "e_shelf",
+                "name": "무너진 서가",
+                "tier": "normal",
+                "hp": 46,
+                "maxHp": 46,
+                "block": 0,
+                "brkMax": 5,
+                "brk": 5,
+                "weak": [
+                  "flame",
+                  "void"
+                ],
+                "st": {
+                  "vul": 0,
+                  "weak": 0,
+                  "mark": 0,
+                  "burn": 0,
+                  "str": 0,
+                  "reflect": 0
+                },
+                "brokenUntil": 0,
+                "stunned": false,
+                "pi": 0,
+                "intent": null,
+                "next": null,
+                "alive": true,
+                "passive": null
+              }
+            ],
+            "cards": {
+              "c1": {
+                "uid": "c1",
+                "id": "harin_shield",
+                "owner": "harin",
+                "wielder": null,
+                "plus": false,
+                "mods": {
+                  "c": null,
+                  "e": null
+                },
+                "temp": [],
+                "growth": 0,
+                "grown": false,
+                "used": 0,
+                "costMod": 0,
+                "token": false,
+                "free": false,
+                "assigned": null,
+                "from": null
+              }
+            },
+            "zones": {
+              "draw": [
+                "c1"
+              ],
+              "hand": [],
+              "discard": [],
+              "exhaust": []
+            },
+            "res": [],
+            "resSeq": 0,
+            "relics": [],
+            "powers": [],
+            "turnFlags": {},
+            "battleFlags": {},
+            "runFlags": {},
+            "handMax": 10,
+            "log": [],
+            "ev": [],
+            "result": null,
+            "killedMarked": 0,
+            "diff": {
+              "hp": 100,
+              "dmg": 100
+            }
+          }
+        },
+        {
+          "request": {
+            "rid": "created-ult-check",
+            "v": 0,
+            "kind": "begin",
+            "args": {}
+          },
+          "response": {
+            "v": 1,
+            "phase": "PLAYER",
+            "ev": [
+              {
+                "e": "turn",
+                "turn": 1,
+                "ap": 4
+              }
+            ]
+          },
+          "errorCode": null,
+          "state": {
+            "schema": "mf-battle-0.7",
+            "v": 1,
+            "turn": 1,
+            "phase": "PLAYER",
+            "rng": [
+              1580013426,
+              350525680,
+              3524174333,
+              3011703609
+            ],
+            "seq": 2,
+            "hp": 81,
+            "maxHp": 81,
+            "block": 0,
+            "counter": 0,
+            "ap": 4,
+            "apNext": 0,
+            "apDrainNext": 0,
+            "silenceUntil": 0,
+            "breakApTurn": 0,
+            "pst": {
+              "weak": 0
+            },
+            "buffs": [],
+            "debts": [],
+            "debtCap": 4,
+            "restraint": {
+              "active": false,
+              "usedTurn": 0
+            },
+            "bonus": {
+              "turn": 0,
+              "avail": false
+            },
+            "drawPenalty": 0,
+            "sealedUntil": 0,
+            "slotsBase": {
+              "next": 2,
+              "after": 1
+            },
+            "slotsTemp": {
+              "next": 0,
+              "after": 0
+            },
+            "growthCount": 0,
+            "growthCap": 3,
+            "played": 0,
+            "lastOwner": null,
+            "ownersThisTurn": [],
+            "echo": 0,
+            "echoMax": 3,
+            "echoActive": false,
+            "echoStart": 0,
+            "contracts": 0,
+            "exhausted": 0,
+            "exhaustStart": 0,
+            "tempParts": 0,
+            "freeNext": 0,
+            "nextBoost": null,
+            "firstAtkDone": false,
+            "overloadFreeUsed": false,
+            "actors": [
+              {
+                "id": "harin",
+                "name": "하린",
+                "attr": "frost",
+                "gauge": 100,
+                "gaugeTurn": 0,
+                "res": 0,
+                "power4": 160,
+                "vit": 81,
+                "gearBps": 0,
+                "skillLv": 1,
+                "ultLv": 1,
+                "passive": {
+                  "id": "harin_stance",
+                  "name": "반격 자세",
+                  "params": {
+                    "n": 1
+                  },
+                  "text": "하린의 카드로 방어를 얻을 때마다 반격 1(적의 공격 1회마다 그 적에게 피해)."
+                },
+                "weapon": null,
+                "cardMods": [],
+                "battleStart": [],
+                "ultExtra": [],
+                "ultReplace": null,
+                "hooks": [],
+                "capacity": 0
+              }
+            ],
+            "enemies": [
+              {
+                "uid": "e2",
+                "id": "e_shelf",
+                "name": "무너진 서가",
+                "tier": "normal",
+                "hp": 46,
+                "maxHp": 46,
+                "block": 0,
+                "brkMax": 5,
+                "brk": 5,
+                "weak": [
+                  "flame",
+                  "void"
+                ],
+                "st": {
+                  "vul": 0,
+                  "weak": 0,
+                  "mark": 0,
+                  "burn": 0,
+                  "str": 0,
+                  "reflect": 0
+                },
+                "brokenUntil": 0,
+                "stunned": false,
+                "pi": 0,
+                "intent": {
+                  "t": "def",
+                  "b": 10
+                },
+                "next": {
+                  "t": "atk",
+                  "d": 25
+                },
+                "alive": true,
+                "passive": null
+              }
+            ],
+            "cards": {
+              "c1": {
+                "uid": "c1",
+                "id": "harin_shield",
+                "owner": "harin",
+                "wielder": null,
+                "plus": false,
+                "mods": {
+                  "c": null,
+                  "e": null
+                },
+                "temp": [],
+                "growth": 0,
+                "grown": false,
+                "used": 0,
+                "costMod": 0,
+                "token": false,
+                "free": false,
+                "assigned": null,
+                "from": null
+              }
+            },
+            "zones": {
+              "draw": [],
+              "hand": [
+                "c1"
+              ],
+              "discard": [],
+              "exhaust": []
+            },
+            "res": [],
+            "resSeq": 0,
+            "relics": [],
+            "powers": [],
+            "turnFlags": {},
+            "battleFlags": {
+              "seraR6Turn": 0
+            },
+            "runFlags": {},
+            "handMax": 10,
+            "log": [
+              {
+                "t": 1,
+                "e": "turn",
+                "turn": 1,
+                "ap": 4
+              }
+            ],
+            "ev": [
+              {
+                "e": "turn",
+                "turn": 1,
+                "ap": 4
+              }
+            ],
+            "result": null,
+            "killedMarked": 0,
+            "diff": {
+              "hp": 100,
+              "dmg": 100
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "invalid-mode",
+      "setup": {
+        "party": [
+          {
+            "charId": "harin",
+            "gauge": 0
+          }
+        ],
+        "deck": [
+          {
+            "id": "harin_shield"
+          }
+        ],
+        "enemies": [
+          "e_shelf"
+        ],
+        "hp": 81,
+        "maxHp": 81,
+        "seed": 1
+      },
+      "steps": [
+        {
+          "request": {
+            "rid": "invalid-mode-begin",
+            "v": 0,
+            "kind": "begin",
+            "args": {}
+          },
+          "response": {
+            "v": 1,
+            "phase": "PLAYER",
+            "ev": [
+              {
+                "e": "turn",
+                "turn": 1,
+                "ap": 4
+              }
+            ]
+          },
+          "errorCode": null,
+          "state": {
+            "schema": "mf-battle-0.7",
+            "v": 1,
+            "turn": 1,
+            "phase": "PLAYER",
+            "rng": [
+              1580013426,
+              350525680,
+              3524174333,
+              3011703609
+            ],
+            "seq": 2,
+            "hp": 81,
+            "maxHp": 81,
+            "block": 0,
+            "counter": 0,
+            "ap": 4,
+            "apNext": 0,
+            "apDrainNext": 0,
+            "silenceUntil": 0,
+            "breakApTurn": 0,
+            "pst": {
+              "weak": 0
+            },
+            "buffs": [],
+            "debts": [],
+            "debtCap": 4,
+            "restraint": {
+              "active": false,
+              "usedTurn": 0
+            },
+            "bonus": {
+              "turn": 0,
+              "avail": false
+            },
+            "drawPenalty": 0,
+            "sealedUntil": 0,
+            "slotsBase": {
+              "next": 2,
+              "after": 1
+            },
+            "slotsTemp": {
+              "next": 0,
+              "after": 0
+            },
+            "growthCount": 0,
+            "growthCap": 3,
+            "played": 0,
+            "lastOwner": null,
+            "ownersThisTurn": [],
+            "echo": 0,
+            "echoMax": 3,
+            "echoActive": false,
+            "echoStart": 0,
+            "contracts": 0,
+            "exhausted": 0,
+            "exhaustStart": 0,
+            "tempParts": 0,
+            "freeNext": 0,
+            "nextBoost": null,
+            "firstAtkDone": false,
+            "overloadFreeUsed": false,
+            "actors": [
+              {
+                "id": "harin",
+                "name": "하린",
+                "attr": "frost",
+                "gauge": 0,
+                "gaugeTurn": 0,
+                "res": 0,
+                "power4": 160,
+                "vit": 81,
+                "gearBps": 0,
+                "skillLv": 1,
+                "ultLv": 1,
+                "passive": {
+                  "id": "harin_stance",
+                  "name": "반격 자세",
+                  "params": {
+                    "n": 1
+                  },
+                  "text": "하린의 카드로 방어를 얻을 때마다 반격 1(적의 공격 1회마다 그 적에게 피해)."
+                },
+                "weapon": null,
+                "cardMods": [],
+                "battleStart": [],
+                "ultExtra": [],
+                "ultReplace": null,
+                "hooks": [],
+                "capacity": 0
+              }
+            ],
+            "enemies": [
+              {
+                "uid": "e2",
+                "id": "e_shelf",
+                "name": "무너진 서가",
+                "tier": "normal",
+                "hp": 46,
+                "maxHp": 46,
+                "block": 0,
+                "brkMax": 5,
+                "brk": 5,
+                "weak": [
+                  "flame",
+                  "void"
+                ],
+                "st": {
+                  "vul": 0,
+                  "weak": 0,
+                  "mark": 0,
+                  "burn": 0,
+                  "str": 0,
+                  "reflect": 0
+                },
+                "brokenUntil": 0,
+                "stunned": false,
+                "pi": 0,
+                "intent": {
+                  "t": "def",
+                  "b": 10
+                },
+                "next": {
+                  "t": "atk",
+                  "d": 25
+                },
+                "alive": true,
+                "passive": null
+              }
+            ],
+            "cards": {
+              "c1": {
+                "uid": "c1",
+                "id": "harin_shield",
+                "owner": "harin",
+                "wielder": null,
+                "plus": false,
+                "mods": {
+                  "c": null,
+                  "e": null
+                },
+                "temp": [],
+                "growth": 0,
+                "grown": false,
+                "used": 0,
+                "costMod": 0,
+                "token": false,
+                "free": false,
+                "assigned": null,
+                "from": null
+              }
+            },
+            "zones": {
+              "draw": [],
+              "hand": [
+                "c1"
+              ],
+              "discard": [],
+              "exhaust": []
+            },
+            "res": [],
+            "resSeq": 0,
+            "relics": [],
+            "powers": [],
+            "turnFlags": {},
+            "battleFlags": {
+              "seraR6Turn": 0
+            },
+            "runFlags": {},
+            "handMax": 10,
+            "log": [
+              {
+                "t": 1,
+                "e": "turn",
+                "turn": 1,
+                "ap": 4
+              }
+            ],
+            "ev": [
+              {
+                "e": "turn",
+                "turn": 1,
+                "ap": 4
+              }
+            ],
+            "result": null,
+            "killedMarked": 0,
+            "diff": {
+              "hp": 100,
+              "dmg": 100
+            }
+          }
+        },
+        {
+          "request": {
+            "rid": "invalid-mode-check",
+            "v": 1,
+            "kind": "play",
+            "args": {
+              "uid": "c1",
+              "mode": "bad",
+              "picks": true
+            }
+          },
+          "response": null,
+          "errorCode": "INVALID_MODE",
+          "state": {
+            "schema": "mf-battle-0.7",
+            "v": 1,
+            "turn": 1,
+            "phase": "PLAYER",
+            "rng": [
+              1580013426,
+              350525680,
+              3524174333,
+              3011703609
+            ],
+            "seq": 2,
+            "hp": 81,
+            "maxHp": 81,
+            "block": 0,
+            "counter": 0,
+            "ap": 4,
+            "apNext": 0,
+            "apDrainNext": 0,
+            "silenceUntil": 0,
+            "breakApTurn": 0,
+            "pst": {
+              "weak": 0
+            },
+            "buffs": [],
+            "debts": [],
+            "debtCap": 4,
+            "restraint": {
+              "active": false,
+              "usedTurn": 0
+            },
+            "bonus": {
+              "turn": 0,
+              "avail": false
+            },
+            "drawPenalty": 0,
+            "sealedUntil": 0,
+            "slotsBase": {
+              "next": 2,
+              "after": 1
+            },
+            "slotsTemp": {
+              "next": 0,
+              "after": 0
+            },
+            "growthCount": 0,
+            "growthCap": 3,
+            "played": 0,
+            "lastOwner": null,
+            "ownersThisTurn": [],
+            "echo": 0,
+            "echoMax": 3,
+            "echoActive": false,
+            "echoStart": 0,
+            "contracts": 0,
+            "exhausted": 0,
+            "exhaustStart": 0,
+            "tempParts": 0,
+            "freeNext": 0,
+            "nextBoost": null,
+            "firstAtkDone": false,
+            "overloadFreeUsed": false,
+            "actors": [
+              {
+                "id": "harin",
+                "name": "하린",
+                "attr": "frost",
+                "gauge": 0,
+                "gaugeTurn": 0,
+                "res": 0,
+                "power4": 160,
+                "vit": 81,
+                "gearBps": 0,
+                "skillLv": 1,
+                "ultLv": 1,
+                "passive": {
+                  "id": "harin_stance",
+                  "name": "반격 자세",
+                  "params": {
+                    "n": 1
+                  },
+                  "text": "하린의 카드로 방어를 얻을 때마다 반격 1(적의 공격 1회마다 그 적에게 피해)."
+                },
+                "weapon": null,
+                "cardMods": [],
+                "battleStart": [],
+                "ultExtra": [],
+                "ultReplace": null,
+                "hooks": [],
+                "capacity": 0
+              }
+            ],
+            "enemies": [
+              {
+                "uid": "e2",
+                "id": "e_shelf",
+                "name": "무너진 서가",
+                "tier": "normal",
+                "hp": 46,
+                "maxHp": 46,
+                "block": 0,
+                "brkMax": 5,
+                "brk": 5,
+                "weak": [
+                  "flame",
+                  "void"
+                ],
+                "st": {
+                  "vul": 0,
+                  "weak": 0,
+                  "mark": 0,
+                  "burn": 0,
+                  "str": 0,
+                  "reflect": 0
+                },
+                "brokenUntil": 0,
+                "stunned": false,
+                "pi": 0,
+                "intent": {
+                  "t": "def",
+                  "b": 10
+                },
+                "next": {
+                  "t": "atk",
+                  "d": 25
+                },
+                "alive": true,
+                "passive": null
+              }
+            ],
+            "cards": {
+              "c1": {
+                "uid": "c1",
+                "id": "harin_shield",
+                "owner": "harin",
+                "wielder": null,
+                "plus": false,
+                "mods": {
+                  "c": null,
+                  "e": null
+                },
+                "temp": [],
+                "growth": 0,
+                "grown": false,
+                "used": 0,
+                "costMod": 0,
+                "token": false,
+                "free": false,
+                "assigned": null,
+                "from": null
+              }
+            },
+            "zones": {
+              "draw": [],
+              "hand": [
+                "c1"
+              ],
+              "discard": [],
+              "exhaust": []
+            },
+            "res": [],
+            "resSeq": 0,
+            "relics": [],
+            "powers": [],
+            "turnFlags": {},
+            "battleFlags": {
+              "seraR6Turn": 0
+            },
+            "runFlags": {},
+            "handMax": 10,
+            "log": [
+              {
+                "t": 1,
+                "e": "turn",
+                "turn": 1,
+                "ap": 4
+              }
+            ],
+            "ev": [
+              {
+                "e": "turn",
+                "turn": 1,
+                "ap": 4
+              }
+            ],
+            "result": null,
+            "killedMarked": 0,
+            "diff": {
+              "hp": 100,
+              "dmg": 100
+            }
+          }
+        },
+        {
+          "request": {
+            "rid": "invalid-mode-check",
+            "v": 1,
+            "kind": "play",
+            "args": {
+              "uid": "c1",
+              "mode": "now",
+              "picks": []
+            }
+          },
+          "response": {
+            "v": 2,
+            "phase": "PLAYER",
+            "ev": [
+              {
+                "e": "play",
+                "uid": "c1",
+                "id": "harin_shield",
+                "mode": "now",
+                "cost": 1,
+                "target": null
+              },
+              {
+                "e": "block",
+                "n": 8,
+                "src": "card"
+              },
+              {
+                "e": "resolved",
+                "uid": "c1",
+                "id": "harin_shield",
+                "reserved": null,
+                "fizzled": false
+              }
+            ]
+          },
+          "errorCode": null,
+          "state": {
+            "schema": "mf-battle-0.7",
+            "v": 2,
+            "turn": 1,
+            "phase": "PLAYER",
+            "rng": [
+              1580013426,
+              350525680,
+              3524174333,
+              3011703609
+            ],
+            "seq": 2,
+            "hp": 81,
+            "maxHp": 81,
+            "block": 8,
+            "counter": 1,
+            "ap": 3,
+            "apNext": 0,
+            "apDrainNext": 0,
+            "silenceUntil": 0,
+            "breakApTurn": 0,
+            "pst": {
+              "weak": 0
+            },
+            "buffs": [],
+            "debts": [],
+            "debtCap": 4,
+            "restraint": {
+              "active": false,
+              "usedTurn": 0
+            },
+            "bonus": {
+              "turn": 0,
+              "avail": false
+            },
+            "drawPenalty": 0,
+            "sealedUntil": 0,
+            "slotsBase": {
+              "next": 2,
+              "after": 1
+            },
+            "slotsTemp": {
+              "next": 0,
+              "after": 0
+            },
+            "growthCount": 0,
+            "growthCap": 3,
+            "played": 1,
+            "lastOwner": "harin",
+            "ownersThisTurn": [
+              "harin"
+            ],
+            "echo": 0,
+            "echoMax": 3,
+            "echoActive": false,
+            "echoStart": 0,
+            "contracts": 0,
+            "exhausted": 0,
+            "exhaustStart": 0,
+            "tempParts": 0,
+            "freeNext": 0,
+            "nextBoost": null,
+            "firstAtkDone": false,
+            "overloadFreeUsed": false,
+            "actors": [
+              {
+                "id": "harin",
+                "name": "하린",
+                "attr": "frost",
+                "gauge": 10,
+                "gaugeTurn": 10,
+                "res": 0,
+                "power4": 160,
+                "vit": 81,
+                "gearBps": 0,
+                "skillLv": 1,
+                "ultLv": 1,
+                "passive": {
+                  "id": "harin_stance",
+                  "name": "반격 자세",
+                  "params": {
+                    "n": 1
+                  },
+                  "text": "하린의 카드로 방어를 얻을 때마다 반격 1(적의 공격 1회마다 그 적에게 피해)."
+                },
+                "weapon": null,
+                "cardMods": [],
+                "battleStart": [],
+                "ultExtra": [],
+                "ultReplace": null,
+                "hooks": [],
+                "capacity": 0
+              }
+            ],
+            "enemies": [
+              {
+                "uid": "e2",
+                "id": "e_shelf",
+                "name": "무너진 서가",
+                "tier": "normal",
+                "hp": 46,
+                "maxHp": 46,
+                "block": 0,
+                "brkMax": 5,
+                "brk": 5,
+                "weak": [
+                  "flame",
+                  "void"
+                ],
+                "st": {
+                  "vul": 0,
+                  "weak": 0,
+                  "mark": 0,
+                  "burn": 0,
+                  "str": 0,
+                  "reflect": 0
+                },
+                "brokenUntil": 0,
+                "stunned": false,
+                "pi": 0,
+                "intent": {
+                  "t": "def",
+                  "b": 10
+                },
+                "next": {
+                  "t": "atk",
+                  "d": 25
+                },
+                "alive": true,
+                "passive": null
+              }
+            ],
+            "cards": {
+              "c1": {
+                "uid": "c1",
+                "id": "harin_shield",
+                "owner": "harin",
+                "wielder": null,
+                "plus": false,
+                "mods": {
+                  "c": null,
+                  "e": null
+                },
+                "temp": [],
+                "growth": 0,
+                "grown": false,
+                "used": 1,
+                "costMod": 0,
+                "token": false,
+                "free": false,
+                "assigned": null,
+                "from": null
+              }
+            },
+            "zones": {
+              "draw": [],
+              "hand": [],
+              "discard": [
+                "c1"
+              ],
+              "exhaust": []
+            },
+            "res": [],
+            "resSeq": 0,
+            "relics": [],
+            "powers": [],
+            "turnFlags": {},
+            "battleFlags": {
+              "seraR6Turn": 0
+            },
+            "runFlags": {},
+            "handMax": 10,
+            "log": [
+              {
+                "t": 1,
+                "e": "turn",
+                "turn": 1,
+                "ap": 4
+              },
+              {
+                "t": 1,
+                "e": "play",
+                "uid": "c1",
+                "id": "harin_shield",
+                "mode": "now",
+                "cost": 1,
+                "target": null
+              },
+              {
+                "t": 1,
+                "e": "block",
+                "n": 8,
+                "src": "card"
+              },
+              {
+                "t": 1,
+                "e": "resolved",
+                "uid": "c1",
+                "id": "harin_shield",
+                "reserved": null,
+                "fizzled": false
+              }
+            ],
+            "ev": [
+              {
+                "e": "play",
+                "uid": "c1",
+                "id": "harin_shield",
+                "mode": "now",
+                "cost": 1,
+                "target": null
+              },
+              {
+                "e": "block",
+                "n": 8,
+                "src": "card"
+              },
+              {
+                "e": "resolved",
+                "uid": "c1",
+                "id": "harin_shield",
+                "reserved": null,
+                "fizzled": false
+              }
+            ],
+            "result": null,
+            "killedMarked": 0,
+            "diff": {
+              "hp": 100,
+              "dmg": 100
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "missing-card",
+      "setup": {
+        "party": [
+          {
+            "charId": "harin",
+            "gauge": 0
+          }
+        ],
+        "deck": [
+          {
+            "id": "harin_shield"
+          }
+        ],
+        "enemies": [
+          "e_shelf"
+        ],
+        "hp": 81,
+        "maxHp": 81,
+        "seed": 1
+      },
+      "steps": [
+        {
+          "request": {
+            "rid": "missing-card-begin",
+            "v": 0,
+            "kind": "begin",
+            "args": {}
+          },
+          "response": {
+            "v": 1,
+            "phase": "PLAYER",
+            "ev": [
+              {
+                "e": "turn",
+                "turn": 1,
+                "ap": 4
+              }
+            ]
+          },
+          "errorCode": null,
+          "state": {
+            "schema": "mf-battle-0.7",
+            "v": 1,
+            "turn": 1,
+            "phase": "PLAYER",
+            "rng": [
+              1580013426,
+              350525680,
+              3524174333,
+              3011703609
+            ],
+            "seq": 2,
+            "hp": 81,
+            "maxHp": 81,
+            "block": 0,
+            "counter": 0,
+            "ap": 4,
+            "apNext": 0,
+            "apDrainNext": 0,
+            "silenceUntil": 0,
+            "breakApTurn": 0,
+            "pst": {
+              "weak": 0
+            },
+            "buffs": [],
+            "debts": [],
+            "debtCap": 4,
+            "restraint": {
+              "active": false,
+              "usedTurn": 0
+            },
+            "bonus": {
+              "turn": 0,
+              "avail": false
+            },
+            "drawPenalty": 0,
+            "sealedUntil": 0,
+            "slotsBase": {
+              "next": 2,
+              "after": 1
+            },
+            "slotsTemp": {
+              "next": 0,
+              "after": 0
+            },
+            "growthCount": 0,
+            "growthCap": 3,
+            "played": 0,
+            "lastOwner": null,
+            "ownersThisTurn": [],
+            "echo": 0,
+            "echoMax": 3,
+            "echoActive": false,
+            "echoStart": 0,
+            "contracts": 0,
+            "exhausted": 0,
+            "exhaustStart": 0,
+            "tempParts": 0,
+            "freeNext": 0,
+            "nextBoost": null,
+            "firstAtkDone": false,
+            "overloadFreeUsed": false,
+            "actors": [
+              {
+                "id": "harin",
+                "name": "하린",
+                "attr": "frost",
+                "gauge": 0,
+                "gaugeTurn": 0,
+                "res": 0,
+                "power4": 160,
+                "vit": 81,
+                "gearBps": 0,
+                "skillLv": 1,
+                "ultLv": 1,
+                "passive": {
+                  "id": "harin_stance",
+                  "name": "반격 자세",
+                  "params": {
+                    "n": 1
+                  },
+                  "text": "하린의 카드로 방어를 얻을 때마다 반격 1(적의 공격 1회마다 그 적에게 피해)."
+                },
+                "weapon": null,
+                "cardMods": [],
+                "battleStart": [],
+                "ultExtra": [],
+                "ultReplace": null,
+                "hooks": [],
+                "capacity": 0
+              }
+            ],
+            "enemies": [
+              {
+                "uid": "e2",
+                "id": "e_shelf",
+                "name": "무너진 서가",
+                "tier": "normal",
+                "hp": 46,
+                "maxHp": 46,
+                "block": 0,
+                "brkMax": 5,
+                "brk": 5,
+                "weak": [
+                  "flame",
+                  "void"
+                ],
+                "st": {
+                  "vul": 0,
+                  "weak": 0,
+                  "mark": 0,
+                  "burn": 0,
+                  "str": 0,
+                  "reflect": 0
+                },
+                "brokenUntil": 0,
+                "stunned": false,
+                "pi": 0,
+                "intent": {
+                  "t": "def",
+                  "b": 10
+                },
+                "next": {
+                  "t": "atk",
+                  "d": 25
+                },
+                "alive": true,
+                "passive": null
+              }
+            ],
+            "cards": {
+              "c1": {
+                "uid": "c1",
+                "id": "harin_shield",
+                "owner": "harin",
+                "wielder": null,
+                "plus": false,
+                "mods": {
+                  "c": null,
+                  "e": null
+                },
+                "temp": [],
+                "growth": 0,
+                "grown": false,
+                "used": 0,
+                "costMod": 0,
+                "token": false,
+                "free": false,
+                "assigned": null,
+                "from": null
+              }
+            },
+            "zones": {
+              "draw": [],
+              "hand": [
+                "c1"
+              ],
+              "discard": [],
+              "exhaust": []
+            },
+            "res": [],
+            "resSeq": 0,
+            "relics": [],
+            "powers": [],
+            "turnFlags": {},
+            "battleFlags": {
+              "seraR6Turn": 0
+            },
+            "runFlags": {},
+            "handMax": 10,
+            "log": [
+              {
+                "t": 1,
+                "e": "turn",
+                "turn": 1,
+                "ap": 4
+              }
+            ],
+            "ev": [
+              {
+                "e": "turn",
+                "turn": 1,
+                "ap": 4
+              }
+            ],
+            "result": null,
+            "killedMarked": 0,
+            "diff": {
+              "hp": 100,
+              "dmg": 100
+            }
+          }
+        },
+        {
+          "request": {
+            "rid": "missing-card-check",
+            "v": 1,
+            "kind": "play",
+            "args": {
+              "uid": "absent",
+              "picks": true
+            }
+          },
+          "response": null,
+          "errorCode": "NOT_IN_HAND",
+          "state": {
+            "schema": "mf-battle-0.7",
+            "v": 1,
+            "turn": 1,
+            "phase": "PLAYER",
+            "rng": [
+              1580013426,
+              350525680,
+              3524174333,
+              3011703609
+            ],
+            "seq": 2,
+            "hp": 81,
+            "maxHp": 81,
+            "block": 0,
+            "counter": 0,
+            "ap": 4,
+            "apNext": 0,
+            "apDrainNext": 0,
+            "silenceUntil": 0,
+            "breakApTurn": 0,
+            "pst": {
+              "weak": 0
+            },
+            "buffs": [],
+            "debts": [],
+            "debtCap": 4,
+            "restraint": {
+              "active": false,
+              "usedTurn": 0
+            },
+            "bonus": {
+              "turn": 0,
+              "avail": false
+            },
+            "drawPenalty": 0,
+            "sealedUntil": 0,
+            "slotsBase": {
+              "next": 2,
+              "after": 1
+            },
+            "slotsTemp": {
+              "next": 0,
+              "after": 0
+            },
+            "growthCount": 0,
+            "growthCap": 3,
+            "played": 0,
+            "lastOwner": null,
+            "ownersThisTurn": [],
+            "echo": 0,
+            "echoMax": 3,
+            "echoActive": false,
+            "echoStart": 0,
+            "contracts": 0,
+            "exhausted": 0,
+            "exhaustStart": 0,
+            "tempParts": 0,
+            "freeNext": 0,
+            "nextBoost": null,
+            "firstAtkDone": false,
+            "overloadFreeUsed": false,
+            "actors": [
+              {
+                "id": "harin",
+                "name": "하린",
+                "attr": "frost",
+                "gauge": 0,
+                "gaugeTurn": 0,
+                "res": 0,
+                "power4": 160,
+                "vit": 81,
+                "gearBps": 0,
+                "skillLv": 1,
+                "ultLv": 1,
+                "passive": {
+                  "id": "harin_stance",
+                  "name": "반격 자세",
+                  "params": {
+                    "n": 1
+                  },
+                  "text": "하린의 카드로 방어를 얻을 때마다 반격 1(적의 공격 1회마다 그 적에게 피해)."
+                },
+                "weapon": null,
+                "cardMods": [],
+                "battleStart": [],
+                "ultExtra": [],
+                "ultReplace": null,
+                "hooks": [],
+                "capacity": 0
+              }
+            ],
+            "enemies": [
+              {
+                "uid": "e2",
+                "id": "e_shelf",
+                "name": "무너진 서가",
+                "tier": "normal",
+                "hp": 46,
+                "maxHp": 46,
+                "block": 0,
+                "brkMax": 5,
+                "brk": 5,
+                "weak": [
+                  "flame",
+                  "void"
+                ],
+                "st": {
+                  "vul": 0,
+                  "weak": 0,
+                  "mark": 0,
+                  "burn": 0,
+                  "str": 0,
+                  "reflect": 0
+                },
+                "brokenUntil": 0,
+                "stunned": false,
+                "pi": 0,
+                "intent": {
+                  "t": "def",
+                  "b": 10
+                },
+                "next": {
+                  "t": "atk",
+                  "d": 25
+                },
+                "alive": true,
+                "passive": null
+              }
+            ],
+            "cards": {
+              "c1": {
+                "uid": "c1",
+                "id": "harin_shield",
+                "owner": "harin",
+                "wielder": null,
+                "plus": false,
+                "mods": {
+                  "c": null,
+                  "e": null
+                },
+                "temp": [],
+                "growth": 0,
+                "grown": false,
+                "used": 0,
+                "costMod": 0,
+                "token": false,
+                "free": false,
+                "assigned": null,
+                "from": null
+              }
+            },
+            "zones": {
+              "draw": [],
+              "hand": [
+                "c1"
+              ],
+              "discard": [],
+              "exhaust": []
+            },
+            "res": [],
+            "resSeq": 0,
+            "relics": [],
+            "powers": [],
+            "turnFlags": {},
+            "battleFlags": {
+              "seraR6Turn": 0
+            },
+            "runFlags": {},
+            "handMax": 10,
+            "log": [
+              {
+                "t": 1,
+                "e": "turn",
+                "turn": 1,
+                "ap": 4
+              }
+            ],
+            "ev": [
+              {
+                "e": "turn",
+                "turn": 1,
+                "ap": 4
+              }
+            ],
+            "result": null,
+            "killedMarked": 0,
+            "diff": {
+              "hp": 100,
+              "dmg": 100
+            }
+          }
+        },
+        {
+          "request": {
+            "rid": "missing-card-check",
+            "v": 1,
+            "kind": "play",
+            "args": {
+              "uid": "c1",
+              "mode": "now",
+              "picks": []
+            }
+          },
+          "response": {
+            "v": 2,
+            "phase": "PLAYER",
+            "ev": [
+              {
+                "e": "play",
+                "uid": "c1",
+                "id": "harin_shield",
+                "mode": "now",
+                "cost": 1,
+                "target": null
+              },
+              {
+                "e": "block",
+                "n": 8,
+                "src": "card"
+              },
+              {
+                "e": "resolved",
+                "uid": "c1",
+                "id": "harin_shield",
+                "reserved": null,
+                "fizzled": false
+              }
+            ]
+          },
+          "errorCode": null,
+          "state": {
+            "schema": "mf-battle-0.7",
+            "v": 2,
+            "turn": 1,
+            "phase": "PLAYER",
+            "rng": [
+              1580013426,
+              350525680,
+              3524174333,
+              3011703609
+            ],
+            "seq": 2,
+            "hp": 81,
+            "maxHp": 81,
+            "block": 8,
+            "counter": 1,
+            "ap": 3,
+            "apNext": 0,
+            "apDrainNext": 0,
+            "silenceUntil": 0,
+            "breakApTurn": 0,
+            "pst": {
+              "weak": 0
+            },
+            "buffs": [],
+            "debts": [],
+            "debtCap": 4,
+            "restraint": {
+              "active": false,
+              "usedTurn": 0
+            },
+            "bonus": {
+              "turn": 0,
+              "avail": false
+            },
+            "drawPenalty": 0,
+            "sealedUntil": 0,
+            "slotsBase": {
+              "next": 2,
+              "after": 1
+            },
+            "slotsTemp": {
+              "next": 0,
+              "after": 0
+            },
+            "growthCount": 0,
+            "growthCap": 3,
+            "played": 1,
+            "lastOwner": "harin",
+            "ownersThisTurn": [
+              "harin"
+            ],
+            "echo": 0,
+            "echoMax": 3,
+            "echoActive": false,
+            "echoStart": 0,
+            "contracts": 0,
+            "exhausted": 0,
+            "exhaustStart": 0,
+            "tempParts": 0,
+            "freeNext": 0,
+            "nextBoost": null,
+            "firstAtkDone": false,
+            "overloadFreeUsed": false,
+            "actors": [
+              {
+                "id": "harin",
+                "name": "하린",
+                "attr": "frost",
+                "gauge": 10,
+                "gaugeTurn": 10,
+                "res": 0,
+                "power4": 160,
+                "vit": 81,
+                "gearBps": 0,
+                "skillLv": 1,
+                "ultLv": 1,
+                "passive": {
+                  "id": "harin_stance",
+                  "name": "반격 자세",
+                  "params": {
+                    "n": 1
+                  },
+                  "text": "하린의 카드로 방어를 얻을 때마다 반격 1(적의 공격 1회마다 그 적에게 피해)."
+                },
+                "weapon": null,
+                "cardMods": [],
+                "battleStart": [],
+                "ultExtra": [],
+                "ultReplace": null,
+                "hooks": [],
+                "capacity": 0
+              }
+            ],
+            "enemies": [
+              {
+                "uid": "e2",
+                "id": "e_shelf",
+                "name": "무너진 서가",
+                "tier": "normal",
+                "hp": 46,
+                "maxHp": 46,
+                "block": 0,
+                "brkMax": 5,
+                "brk": 5,
+                "weak": [
+                  "flame",
+                  "void"
+                ],
+                "st": {
+                  "vul": 0,
+                  "weak": 0,
+                  "mark": 0,
+                  "burn": 0,
+                  "str": 0,
+                  "reflect": 0
+                },
+                "brokenUntil": 0,
+                "stunned": false,
+                "pi": 0,
+                "intent": {
+                  "t": "def",
+                  "b": 10
+                },
+                "next": {
+                  "t": "atk",
+                  "d": 25
+                },
+                "alive": true,
+                "passive": null
+              }
+            ],
+            "cards": {
+              "c1": {
+                "uid": "c1",
+                "id": "harin_shield",
+                "owner": "harin",
+                "wielder": null,
+                "plus": false,
+                "mods": {
+                  "c": null,
+                  "e": null
+                },
+                "temp": [],
+                "growth": 0,
+                "grown": false,
+                "used": 1,
+                "costMod": 0,
+                "token": false,
+                "free": false,
+                "assigned": null,
+                "from": null
+              }
+            },
+            "zones": {
+              "draw": [],
+              "hand": [],
+              "discard": [
+                "c1"
+              ],
+              "exhaust": []
+            },
+            "res": [],
+            "resSeq": 0,
+            "relics": [],
+            "powers": [],
+            "turnFlags": {},
+            "battleFlags": {
+              "seraR6Turn": 0
+            },
+            "runFlags": {},
+            "handMax": 10,
+            "log": [
+              {
+                "t": 1,
+                "e": "turn",
+                "turn": 1,
+                "ap": 4
+              },
+              {
+                "t": 1,
+                "e": "play",
+                "uid": "c1",
+                "id": "harin_shield",
+                "mode": "now",
+                "cost": 1,
+                "target": null
+              },
+              {
+                "t": 1,
+                "e": "block",
+                "n": 8,
+                "src": "card"
+              },
+              {
+                "t": 1,
+                "e": "resolved",
+                "uid": "c1",
+                "id": "harin_shield",
+                "reserved": null,
+                "fizzled": false
+              }
+            ],
+            "ev": [
+              {
+                "e": "play",
+                "uid": "c1",
+                "id": "harin_shield",
+                "mode": "now",
+                "cost": 1,
+                "target": null
+              },
+              {
+                "e": "block",
+                "n": 8,
+                "src": "card"
+              },
+              {
+                "e": "resolved",
+                "uid": "c1",
+                "id": "harin_shield",
+                "reserved": null,
+                "fizzled": false
+              }
+            ],
+            "result": null,
+            "killedMarked": 0,
+            "diff": {
+              "hp": 100,
+              "dmg": 100
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "unknown-actor",
+      "setup": {
+        "party": [
+          {
+            "charId": "harin",
+            "gauge": 100
+          }
+        ],
+        "deck": [
+          {
+            "id": "harin_shield"
+          }
+        ],
+        "enemies": [
+          "e_shelf"
+        ],
+        "hp": 81,
+        "maxHp": 81,
+        "seed": 1
+      },
+      "steps": [
+        {
+          "request": {
+            "rid": "unknown-actor-begin",
+            "v": 0,
+            "kind": "begin",
+            "args": {}
+          },
+          "response": {
+            "v": 1,
+            "phase": "PLAYER",
+            "ev": [
+              {
+                "e": "turn",
+                "turn": 1,
+                "ap": 4
+              }
+            ]
+          },
+          "errorCode": null,
+          "state": {
+            "schema": "mf-battle-0.7",
+            "v": 1,
+            "turn": 1,
+            "phase": "PLAYER",
+            "rng": [
+              1580013426,
+              350525680,
+              3524174333,
+              3011703609
+            ],
+            "seq": 2,
+            "hp": 81,
+            "maxHp": 81,
+            "block": 0,
+            "counter": 0,
+            "ap": 4,
+            "apNext": 0,
+            "apDrainNext": 0,
+            "silenceUntil": 0,
+            "breakApTurn": 0,
+            "pst": {
+              "weak": 0
+            },
+            "buffs": [],
+            "debts": [],
+            "debtCap": 4,
+            "restraint": {
+              "active": false,
+              "usedTurn": 0
+            },
+            "bonus": {
+              "turn": 0,
+              "avail": false
+            },
+            "drawPenalty": 0,
+            "sealedUntil": 0,
+            "slotsBase": {
+              "next": 2,
+              "after": 1
+            },
+            "slotsTemp": {
+              "next": 0,
+              "after": 0
+            },
+            "growthCount": 0,
+            "growthCap": 3,
+            "played": 0,
+            "lastOwner": null,
+            "ownersThisTurn": [],
+            "echo": 0,
+            "echoMax": 3,
+            "echoActive": false,
+            "echoStart": 0,
+            "contracts": 0,
+            "exhausted": 0,
+            "exhaustStart": 0,
+            "tempParts": 0,
+            "freeNext": 0,
+            "nextBoost": null,
+            "firstAtkDone": false,
+            "overloadFreeUsed": false,
+            "actors": [
+              {
+                "id": "harin",
+                "name": "하린",
+                "attr": "frost",
+                "gauge": 100,
+                "gaugeTurn": 0,
+                "res": 0,
+                "power4": 160,
+                "vit": 81,
+                "gearBps": 0,
+                "skillLv": 1,
+                "ultLv": 1,
+                "passive": {
+                  "id": "harin_stance",
+                  "name": "반격 자세",
+                  "params": {
+                    "n": 1
+                  },
+                  "text": "하린의 카드로 방어를 얻을 때마다 반격 1(적의 공격 1회마다 그 적에게 피해)."
+                },
+                "weapon": null,
+                "cardMods": [],
+                "battleStart": [],
+                "ultExtra": [],
+                "ultReplace": null,
+                "hooks": [],
+                "capacity": 0
+              }
+            ],
+            "enemies": [
+              {
+                "uid": "e2",
+                "id": "e_shelf",
+                "name": "무너진 서가",
+                "tier": "normal",
+                "hp": 46,
+                "maxHp": 46,
+                "block": 0,
+                "brkMax": 5,
+                "brk": 5,
+                "weak": [
+                  "flame",
+                  "void"
+                ],
+                "st": {
+                  "vul": 0,
+                  "weak": 0,
+                  "mark": 0,
+                  "burn": 0,
+                  "str": 0,
+                  "reflect": 0
+                },
+                "brokenUntil": 0,
+                "stunned": false,
+                "pi": 0,
+                "intent": {
+                  "t": "def",
+                  "b": 10
+                },
+                "next": {
+                  "t": "atk",
+                  "d": 25
+                },
+                "alive": true,
+                "passive": null
+              }
+            ],
+            "cards": {
+              "c1": {
+                "uid": "c1",
+                "id": "harin_shield",
+                "owner": "harin",
+                "wielder": null,
+                "plus": false,
+                "mods": {
+                  "c": null,
+                  "e": null
+                },
+                "temp": [],
+                "growth": 0,
+                "grown": false,
+                "used": 0,
+                "costMod": 0,
+                "token": false,
+                "free": false,
+                "assigned": null,
+                "from": null
+              }
+            },
+            "zones": {
+              "draw": [],
+              "hand": [
+                "c1"
+              ],
+              "discard": [],
+              "exhaust": []
+            },
+            "res": [],
+            "resSeq": 0,
+            "relics": [],
+            "powers": [],
+            "turnFlags": {},
+            "battleFlags": {
+              "seraR6Turn": 0
+            },
+            "runFlags": {},
+            "handMax": 10,
+            "log": [
+              {
+                "t": 1,
+                "e": "turn",
+                "turn": 1,
+                "ap": 4
+              }
+            ],
+            "ev": [
+              {
+                "e": "turn",
+                "turn": 1,
+                "ap": 4
+              }
+            ],
+            "result": null,
+            "killedMarked": 0,
+            "diff": {
+              "hp": 100,
+              "dmg": 100
+            }
+          }
+        },
+        {
+          "request": {
+            "rid": "unknown-actor-check",
+            "v": 1,
+            "kind": "ult",
+            "args": {
+              "actor": "absent",
+              "picks": true
+            }
+          },
+          "response": null,
+          "errorCode": "UNKNOWN_ACTOR",
+          "state": {
+            "schema": "mf-battle-0.7",
+            "v": 1,
+            "turn": 1,
+            "phase": "PLAYER",
+            "rng": [
+              1580013426,
+              350525680,
+              3524174333,
+              3011703609
+            ],
+            "seq": 2,
+            "hp": 81,
+            "maxHp": 81,
+            "block": 0,
+            "counter": 0,
+            "ap": 4,
+            "apNext": 0,
+            "apDrainNext": 0,
+            "silenceUntil": 0,
+            "breakApTurn": 0,
+            "pst": {
+              "weak": 0
+            },
+            "buffs": [],
+            "debts": [],
+            "debtCap": 4,
+            "restraint": {
+              "active": false,
+              "usedTurn": 0
+            },
+            "bonus": {
+              "turn": 0,
+              "avail": false
+            },
+            "drawPenalty": 0,
+            "sealedUntil": 0,
+            "slotsBase": {
+              "next": 2,
+              "after": 1
+            },
+            "slotsTemp": {
+              "next": 0,
+              "after": 0
+            },
+            "growthCount": 0,
+            "growthCap": 3,
+            "played": 0,
+            "lastOwner": null,
+            "ownersThisTurn": [],
+            "echo": 0,
+            "echoMax": 3,
+            "echoActive": false,
+            "echoStart": 0,
+            "contracts": 0,
+            "exhausted": 0,
+            "exhaustStart": 0,
+            "tempParts": 0,
+            "freeNext": 0,
+            "nextBoost": null,
+            "firstAtkDone": false,
+            "overloadFreeUsed": false,
+            "actors": [
+              {
+                "id": "harin",
+                "name": "하린",
+                "attr": "frost",
+                "gauge": 100,
+                "gaugeTurn": 0,
+                "res": 0,
+                "power4": 160,
+                "vit": 81,
+                "gearBps": 0,
+                "skillLv": 1,
+                "ultLv": 1,
+                "passive": {
+                  "id": "harin_stance",
+                  "name": "반격 자세",
+                  "params": {
+                    "n": 1
+                  },
+                  "text": "하린의 카드로 방어를 얻을 때마다 반격 1(적의 공격 1회마다 그 적에게 피해)."
+                },
+                "weapon": null,
+                "cardMods": [],
+                "battleStart": [],
+                "ultExtra": [],
+                "ultReplace": null,
+                "hooks": [],
+                "capacity": 0
+              }
+            ],
+            "enemies": [
+              {
+                "uid": "e2",
+                "id": "e_shelf",
+                "name": "무너진 서가",
+                "tier": "normal",
+                "hp": 46,
+                "maxHp": 46,
+                "block": 0,
+                "brkMax": 5,
+                "brk": 5,
+                "weak": [
+                  "flame",
+                  "void"
+                ],
+                "st": {
+                  "vul": 0,
+                  "weak": 0,
+                  "mark": 0,
+                  "burn": 0,
+                  "str": 0,
+                  "reflect": 0
+                },
+                "brokenUntil": 0,
+                "stunned": false,
+                "pi": 0,
+                "intent": {
+                  "t": "def",
+                  "b": 10
+                },
+                "next": {
+                  "t": "atk",
+                  "d": 25
+                },
+                "alive": true,
+                "passive": null
+              }
+            ],
+            "cards": {
+              "c1": {
+                "uid": "c1",
+                "id": "harin_shield",
+                "owner": "harin",
+                "wielder": null,
+                "plus": false,
+                "mods": {
+                  "c": null,
+                  "e": null
+                },
+                "temp": [],
+                "growth": 0,
+                "grown": false,
+                "used": 0,
+                "costMod": 0,
+                "token": false,
+                "free": false,
+                "assigned": null,
+                "from": null
+              }
+            },
+            "zones": {
+              "draw": [],
+              "hand": [
+                "c1"
+              ],
+              "discard": [],
+              "exhaust": []
+            },
+            "res": [],
+            "resSeq": 0,
+            "relics": [],
+            "powers": [],
+            "turnFlags": {},
+            "battleFlags": {
+              "seraR6Turn": 0
+            },
+            "runFlags": {},
+            "handMax": 10,
+            "log": [
+              {
+                "t": 1,
+                "e": "turn",
+                "turn": 1,
+                "ap": 4
+              }
+            ],
+            "ev": [
+              {
+                "e": "turn",
+                "turn": 1,
+                "ap": 4
+              }
+            ],
+            "result": null,
+            "killedMarked": 0,
+            "diff": {
+              "hp": 100,
+              "dmg": 100
+            }
+          }
+        },
+        {
+          "request": {
+            "rid": "unknown-actor-check",
+            "v": 1,
+            "kind": "play",
+            "args": {
+              "uid": "c1",
+              "mode": "now",
+              "picks": []
+            }
+          },
+          "response": {
+            "v": 2,
+            "phase": "PLAYER",
+            "ev": [
+              {
+                "e": "play",
+                "uid": "c1",
+                "id": "harin_shield",
+                "mode": "now",
+                "cost": 1,
+                "target": null
+              },
+              {
+                "e": "block",
+                "n": 8,
+                "src": "card"
+              },
+              {
+                "e": "resolved",
+                "uid": "c1",
+                "id": "harin_shield",
+                "reserved": null,
+                "fizzled": false
+              }
+            ]
+          },
+          "errorCode": null,
+          "state": {
+            "schema": "mf-battle-0.7",
+            "v": 2,
+            "turn": 1,
+            "phase": "PLAYER",
+            "rng": [
+              1580013426,
+              350525680,
+              3524174333,
+              3011703609
+            ],
+            "seq": 2,
+            "hp": 81,
+            "maxHp": 81,
+            "block": 8,
+            "counter": 1,
+            "ap": 3,
+            "apNext": 0,
+            "apDrainNext": 0,
+            "silenceUntil": 0,
+            "breakApTurn": 0,
+            "pst": {
+              "weak": 0
+            },
+            "buffs": [],
+            "debts": [],
+            "debtCap": 4,
+            "restraint": {
+              "active": false,
+              "usedTurn": 0
+            },
+            "bonus": {
+              "turn": 0,
+              "avail": false
+            },
+            "drawPenalty": 0,
+            "sealedUntil": 0,
+            "slotsBase": {
+              "next": 2,
+              "after": 1
+            },
+            "slotsTemp": {
+              "next": 0,
+              "after": 0
+            },
+            "growthCount": 0,
+            "growthCap": 3,
+            "played": 1,
+            "lastOwner": "harin",
+            "ownersThisTurn": [
+              "harin"
+            ],
+            "echo": 0,
+            "echoMax": 3,
+            "echoActive": false,
+            "echoStart": 0,
+            "contracts": 0,
+            "exhausted": 0,
+            "exhaustStart": 0,
+            "tempParts": 0,
+            "freeNext": 0,
+            "nextBoost": null,
+            "firstAtkDone": false,
+            "overloadFreeUsed": false,
+            "actors": [
+              {
+                "id": "harin",
+                "name": "하린",
+                "attr": "frost",
+                "gauge": 100,
+                "gaugeTurn": 10,
+                "res": 0,
+                "power4": 160,
+                "vit": 81,
+                "gearBps": 0,
+                "skillLv": 1,
+                "ultLv": 1,
+                "passive": {
+                  "id": "harin_stance",
+                  "name": "반격 자세",
+                  "params": {
+                    "n": 1
+                  },
+                  "text": "하린의 카드로 방어를 얻을 때마다 반격 1(적의 공격 1회마다 그 적에게 피해)."
+                },
+                "weapon": null,
+                "cardMods": [],
+                "battleStart": [],
+                "ultExtra": [],
+                "ultReplace": null,
+                "hooks": [],
+                "capacity": 0
+              }
+            ],
+            "enemies": [
+              {
+                "uid": "e2",
+                "id": "e_shelf",
+                "name": "무너진 서가",
+                "tier": "normal",
+                "hp": 46,
+                "maxHp": 46,
+                "block": 0,
+                "brkMax": 5,
+                "brk": 5,
+                "weak": [
+                  "flame",
+                  "void"
+                ],
+                "st": {
+                  "vul": 0,
+                  "weak": 0,
+                  "mark": 0,
+                  "burn": 0,
+                  "str": 0,
+                  "reflect": 0
+                },
+                "brokenUntil": 0,
+                "stunned": false,
+                "pi": 0,
+                "intent": {
+                  "t": "def",
+                  "b": 10
+                },
+                "next": {
+                  "t": "atk",
+                  "d": 25
+                },
+                "alive": true,
+                "passive": null
+              }
+            ],
+            "cards": {
+              "c1": {
+                "uid": "c1",
+                "id": "harin_shield",
+                "owner": "harin",
+                "wielder": null,
+                "plus": false,
+                "mods": {
+                  "c": null,
+                  "e": null
+                },
+                "temp": [],
+                "growth": 0,
+                "grown": false,
+                "used": 1,
+                "costMod": 0,
+                "token": false,
+                "free": false,
+                "assigned": null,
+                "from": null
+              }
+            },
+            "zones": {
+              "draw": [],
+              "hand": [],
+              "discard": [
+                "c1"
+              ],
+              "exhaust": []
+            },
+            "res": [],
+            "resSeq": 0,
+            "relics": [],
+            "powers": [],
+            "turnFlags": {},
+            "battleFlags": {
+              "seraR6Turn": 0
+            },
+            "runFlags": {},
+            "handMax": 10,
+            "log": [
+              {
+                "t": 1,
+                "e": "turn",
+                "turn": 1,
+                "ap": 4
+              },
+              {
+                "t": 1,
+                "e": "play",
+                "uid": "c1",
+                "id": "harin_shield",
+                "mode": "now",
+                "cost": 1,
+                "target": null
+              },
+              {
+                "t": 1,
+                "e": "block",
+                "n": 8,
+                "src": "card"
+              },
+              {
+                "t": 1,
+                "e": "resolved",
+                "uid": "c1",
+                "id": "harin_shield",
+                "reserved": null,
+                "fizzled": false
+              }
+            ],
+            "ev": [
+              {
+                "e": "play",
+                "uid": "c1",
+                "id": "harin_shield",
+                "mode": "now",
+                "cost": 1,
+                "target": null
+              },
+              {
+                "e": "block",
+                "n": 8,
+                "src": "card"
+              },
+              {
+                "e": "resolved",
+                "uid": "c1",
+                "id": "harin_shield",
+                "reserved": null,
+                "fizzled": false
+              }
+            ],
+            "result": null,
+            "killedMarked": 0,
+            "diff": {
+              "hp": 100,
+              "dmg": 100
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "not-ready",
+      "setup": {
+        "party": [
+          {
+            "charId": "harin",
+            "gauge": 0
+          }
+        ],
+        "deck": [
+          {
+            "id": "harin_shield"
+          }
+        ],
+        "enemies": [
+          "e_shelf"
+        ],
+        "hp": 81,
+        "maxHp": 81,
+        "seed": 1
+      },
+      "steps": [
+        {
+          "request": {
+            "rid": "not-ready-begin",
+            "v": 0,
+            "kind": "begin",
+            "args": {}
+          },
+          "response": {
+            "v": 1,
+            "phase": "PLAYER",
+            "ev": [
+              {
+                "e": "turn",
+                "turn": 1,
+                "ap": 4
+              }
+            ]
+          },
+          "errorCode": null,
+          "state": {
+            "schema": "mf-battle-0.7",
+            "v": 1,
+            "turn": 1,
+            "phase": "PLAYER",
+            "rng": [
+              1580013426,
+              350525680,
+              3524174333,
+              3011703609
+            ],
+            "seq": 2,
+            "hp": 81,
+            "maxHp": 81,
+            "block": 0,
+            "counter": 0,
+            "ap": 4,
+            "apNext": 0,
+            "apDrainNext": 0,
+            "silenceUntil": 0,
+            "breakApTurn": 0,
+            "pst": {
+              "weak": 0
+            },
+            "buffs": [],
+            "debts": [],
+            "debtCap": 4,
+            "restraint": {
+              "active": false,
+              "usedTurn": 0
+            },
+            "bonus": {
+              "turn": 0,
+              "avail": false
+            },
+            "drawPenalty": 0,
+            "sealedUntil": 0,
+            "slotsBase": {
+              "next": 2,
+              "after": 1
+            },
+            "slotsTemp": {
+              "next": 0,
+              "after": 0
+            },
+            "growthCount": 0,
+            "growthCap": 3,
+            "played": 0,
+            "lastOwner": null,
+            "ownersThisTurn": [],
+            "echo": 0,
+            "echoMax": 3,
+            "echoActive": false,
+            "echoStart": 0,
+            "contracts": 0,
+            "exhausted": 0,
+            "exhaustStart": 0,
+            "tempParts": 0,
+            "freeNext": 0,
+            "nextBoost": null,
+            "firstAtkDone": false,
+            "overloadFreeUsed": false,
+            "actors": [
+              {
+                "id": "harin",
+                "name": "하린",
+                "attr": "frost",
+                "gauge": 0,
+                "gaugeTurn": 0,
+                "res": 0,
+                "power4": 160,
+                "vit": 81,
+                "gearBps": 0,
+                "skillLv": 1,
+                "ultLv": 1,
+                "passive": {
+                  "id": "harin_stance",
+                  "name": "반격 자세",
+                  "params": {
+                    "n": 1
+                  },
+                  "text": "하린의 카드로 방어를 얻을 때마다 반격 1(적의 공격 1회마다 그 적에게 피해)."
+                },
+                "weapon": null,
+                "cardMods": [],
+                "battleStart": [],
+                "ultExtra": [],
+                "ultReplace": null,
+                "hooks": [],
+                "capacity": 0
+              }
+            ],
+            "enemies": [
+              {
+                "uid": "e2",
+                "id": "e_shelf",
+                "name": "무너진 서가",
+                "tier": "normal",
+                "hp": 46,
+                "maxHp": 46,
+                "block": 0,
+                "brkMax": 5,
+                "brk": 5,
+                "weak": [
+                  "flame",
+                  "void"
+                ],
+                "st": {
+                  "vul": 0,
+                  "weak": 0,
+                  "mark": 0,
+                  "burn": 0,
+                  "str": 0,
+                  "reflect": 0
+                },
+                "brokenUntil": 0,
+                "stunned": false,
+                "pi": 0,
+                "intent": {
+                  "t": "def",
+                  "b": 10
+                },
+                "next": {
+                  "t": "atk",
+                  "d": 25
+                },
+                "alive": true,
+                "passive": null
+              }
+            ],
+            "cards": {
+              "c1": {
+                "uid": "c1",
+                "id": "harin_shield",
+                "owner": "harin",
+                "wielder": null,
+                "plus": false,
+                "mods": {
+                  "c": null,
+                  "e": null
+                },
+                "temp": [],
+                "growth": 0,
+                "grown": false,
+                "used": 0,
+                "costMod": 0,
+                "token": false,
+                "free": false,
+                "assigned": null,
+                "from": null
+              }
+            },
+            "zones": {
+              "draw": [],
+              "hand": [
+                "c1"
+              ],
+              "discard": [],
+              "exhaust": []
+            },
+            "res": [],
+            "resSeq": 0,
+            "relics": [],
+            "powers": [],
+            "turnFlags": {},
+            "battleFlags": {
+              "seraR6Turn": 0
+            },
+            "runFlags": {},
+            "handMax": 10,
+            "log": [
+              {
+                "t": 1,
+                "e": "turn",
+                "turn": 1,
+                "ap": 4
+              }
+            ],
+            "ev": [
+              {
+                "e": "turn",
+                "turn": 1,
+                "ap": 4
+              }
+            ],
+            "result": null,
+            "killedMarked": 0,
+            "diff": {
+              "hp": 100,
+              "dmg": 100
+            }
+          }
+        },
+        {
+          "request": {
+            "rid": "not-ready-check",
+            "v": 1,
+            "kind": "ult",
+            "args": {
+              "actor": "harin",
+              "picks": true
+            }
+          },
+          "response": null,
+          "errorCode": "ULT_NOT_READY",
+          "state": {
+            "schema": "mf-battle-0.7",
+            "v": 1,
+            "turn": 1,
+            "phase": "PLAYER",
+            "rng": [
+              1580013426,
+              350525680,
+              3524174333,
+              3011703609
+            ],
+            "seq": 2,
+            "hp": 81,
+            "maxHp": 81,
+            "block": 0,
+            "counter": 0,
+            "ap": 4,
+            "apNext": 0,
+            "apDrainNext": 0,
+            "silenceUntil": 0,
+            "breakApTurn": 0,
+            "pst": {
+              "weak": 0
+            },
+            "buffs": [],
+            "debts": [],
+            "debtCap": 4,
+            "restraint": {
+              "active": false,
+              "usedTurn": 0
+            },
+            "bonus": {
+              "turn": 0,
+              "avail": false
+            },
+            "drawPenalty": 0,
+            "sealedUntil": 0,
+            "slotsBase": {
+              "next": 2,
+              "after": 1
+            },
+            "slotsTemp": {
+              "next": 0,
+              "after": 0
+            },
+            "growthCount": 0,
+            "growthCap": 3,
+            "played": 0,
+            "lastOwner": null,
+            "ownersThisTurn": [],
+            "echo": 0,
+            "echoMax": 3,
+            "echoActive": false,
+            "echoStart": 0,
+            "contracts": 0,
+            "exhausted": 0,
+            "exhaustStart": 0,
+            "tempParts": 0,
+            "freeNext": 0,
+            "nextBoost": null,
+            "firstAtkDone": false,
+            "overloadFreeUsed": false,
+            "actors": [
+              {
+                "id": "harin",
+                "name": "하린",
+                "attr": "frost",
+                "gauge": 0,
+                "gaugeTurn": 0,
+                "res": 0,
+                "power4": 160,
+                "vit": 81,
+                "gearBps": 0,
+                "skillLv": 1,
+                "ultLv": 1,
+                "passive": {
+                  "id": "harin_stance",
+                  "name": "반격 자세",
+                  "params": {
+                    "n": 1
+                  },
+                  "text": "하린의 카드로 방어를 얻을 때마다 반격 1(적의 공격 1회마다 그 적에게 피해)."
+                },
+                "weapon": null,
+                "cardMods": [],
+                "battleStart": [],
+                "ultExtra": [],
+                "ultReplace": null,
+                "hooks": [],
+                "capacity": 0
+              }
+            ],
+            "enemies": [
+              {
+                "uid": "e2",
+                "id": "e_shelf",
+                "name": "무너진 서가",
+                "tier": "normal",
+                "hp": 46,
+                "maxHp": 46,
+                "block": 0,
+                "brkMax": 5,
+                "brk": 5,
+                "weak": [
+                  "flame",
+                  "void"
+                ],
+                "st": {
+                  "vul": 0,
+                  "weak": 0,
+                  "mark": 0,
+                  "burn": 0,
+                  "str": 0,
+                  "reflect": 0
+                },
+                "brokenUntil": 0,
+                "stunned": false,
+                "pi": 0,
+                "intent": {
+                  "t": "def",
+                  "b": 10
+                },
+                "next": {
+                  "t": "atk",
+                  "d": 25
+                },
+                "alive": true,
+                "passive": null
+              }
+            ],
+            "cards": {
+              "c1": {
+                "uid": "c1",
+                "id": "harin_shield",
+                "owner": "harin",
+                "wielder": null,
+                "plus": false,
+                "mods": {
+                  "c": null,
+                  "e": null
+                },
+                "temp": [],
+                "growth": 0,
+                "grown": false,
+                "used": 0,
+                "costMod": 0,
+                "token": false,
+                "free": false,
+                "assigned": null,
+                "from": null
+              }
+            },
+            "zones": {
+              "draw": [],
+              "hand": [
+                "c1"
+              ],
+              "discard": [],
+              "exhaust": []
+            },
+            "res": [],
+            "resSeq": 0,
+            "relics": [],
+            "powers": [],
+            "turnFlags": {},
+            "battleFlags": {
+              "seraR6Turn": 0
+            },
+            "runFlags": {},
+            "handMax": 10,
+            "log": [
+              {
+                "t": 1,
+                "e": "turn",
+                "turn": 1,
+                "ap": 4
+              }
+            ],
+            "ev": [
+              {
+                "e": "turn",
+                "turn": 1,
+                "ap": 4
+              }
+            ],
+            "result": null,
+            "killedMarked": 0,
+            "diff": {
+              "hp": 100,
+              "dmg": 100
+            }
+          }
+        },
+        {
+          "request": {
+            "rid": "not-ready-check",
+            "v": 1,
+            "kind": "play",
+            "args": {
+              "uid": "c1",
+              "mode": "now",
+              "picks": []
+            }
+          },
+          "response": {
+            "v": 2,
+            "phase": "PLAYER",
+            "ev": [
+              {
+                "e": "play",
+                "uid": "c1",
+                "id": "harin_shield",
+                "mode": "now",
+                "cost": 1,
+                "target": null
+              },
+              {
+                "e": "block",
+                "n": 8,
+                "src": "card"
+              },
+              {
+                "e": "resolved",
+                "uid": "c1",
+                "id": "harin_shield",
+                "reserved": null,
+                "fizzled": false
+              }
+            ]
+          },
+          "errorCode": null,
+          "state": {
+            "schema": "mf-battle-0.7",
+            "v": 2,
+            "turn": 1,
+            "phase": "PLAYER",
+            "rng": [
+              1580013426,
+              350525680,
+              3524174333,
+              3011703609
+            ],
+            "seq": 2,
+            "hp": 81,
+            "maxHp": 81,
+            "block": 8,
+            "counter": 1,
+            "ap": 3,
+            "apNext": 0,
+            "apDrainNext": 0,
+            "silenceUntil": 0,
+            "breakApTurn": 0,
+            "pst": {
+              "weak": 0
+            },
+            "buffs": [],
+            "debts": [],
+            "debtCap": 4,
+            "restraint": {
+              "active": false,
+              "usedTurn": 0
+            },
+            "bonus": {
+              "turn": 0,
+              "avail": false
+            },
+            "drawPenalty": 0,
+            "sealedUntil": 0,
+            "slotsBase": {
+              "next": 2,
+              "after": 1
+            },
+            "slotsTemp": {
+              "next": 0,
+              "after": 0
+            },
+            "growthCount": 0,
+            "growthCap": 3,
+            "played": 1,
+            "lastOwner": "harin",
+            "ownersThisTurn": [
+              "harin"
+            ],
+            "echo": 0,
+            "echoMax": 3,
+            "echoActive": false,
+            "echoStart": 0,
+            "contracts": 0,
+            "exhausted": 0,
+            "exhaustStart": 0,
+            "tempParts": 0,
+            "freeNext": 0,
+            "nextBoost": null,
+            "firstAtkDone": false,
+            "overloadFreeUsed": false,
+            "actors": [
+              {
+                "id": "harin",
+                "name": "하린",
+                "attr": "frost",
+                "gauge": 10,
+                "gaugeTurn": 10,
+                "res": 0,
+                "power4": 160,
+                "vit": 81,
+                "gearBps": 0,
+                "skillLv": 1,
+                "ultLv": 1,
+                "passive": {
+                  "id": "harin_stance",
+                  "name": "반격 자세",
+                  "params": {
+                    "n": 1
+                  },
+                  "text": "하린의 카드로 방어를 얻을 때마다 반격 1(적의 공격 1회마다 그 적에게 피해)."
+                },
+                "weapon": null,
+                "cardMods": [],
+                "battleStart": [],
+                "ultExtra": [],
+                "ultReplace": null,
+                "hooks": [],
+                "capacity": 0
+              }
+            ],
+            "enemies": [
+              {
+                "uid": "e2",
+                "id": "e_shelf",
+                "name": "무너진 서가",
+                "tier": "normal",
+                "hp": 46,
+                "maxHp": 46,
+                "block": 0,
+                "brkMax": 5,
+                "brk": 5,
+                "weak": [
+                  "flame",
+                  "void"
+                ],
+                "st": {
+                  "vul": 0,
+                  "weak": 0,
+                  "mark": 0,
+                  "burn": 0,
+                  "str": 0,
+                  "reflect": 0
+                },
+                "brokenUntil": 0,
+                "stunned": false,
+                "pi": 0,
+                "intent": {
+                  "t": "def",
+                  "b": 10
+                },
+                "next": {
+                  "t": "atk",
+                  "d": 25
+                },
+                "alive": true,
+                "passive": null
+              }
+            ],
+            "cards": {
+              "c1": {
+                "uid": "c1",
+                "id": "harin_shield",
+                "owner": "harin",
+                "wielder": null,
+                "plus": false,
+                "mods": {
+                  "c": null,
+                  "e": null
+                },
+                "temp": [],
+                "growth": 0,
+                "grown": false,
+                "used": 1,
+                "costMod": 0,
+                "token": false,
+                "free": false,
+                "assigned": null,
+                "from": null
+              }
+            },
+            "zones": {
+              "draw": [],
+              "hand": [],
+              "discard": [
+                "c1"
+              ],
+              "exhaust": []
+            },
+            "res": [],
+            "resSeq": 0,
+            "relics": [],
+            "powers": [],
+            "turnFlags": {},
+            "battleFlags": {
+              "seraR6Turn": 0
+            },
+            "runFlags": {},
+            "handMax": 10,
+            "log": [
+              {
+                "t": 1,
+                "e": "turn",
+                "turn": 1,
+                "ap": 4
+              },
+              {
+                "t": 1,
+                "e": "play",
+                "uid": "c1",
+                "id": "harin_shield",
+                "mode": "now",
+                "cost": 1,
+                "target": null
+              },
+              {
+                "t": 1,
+                "e": "block",
+                "n": 8,
+                "src": "card"
+              },
+              {
+                "t": 1,
+                "e": "resolved",
+                "uid": "c1",
+                "id": "harin_shield",
+                "reserved": null,
+                "fizzled": false
+              }
+            ],
+            "ev": [
+              {
+                "e": "play",
+                "uid": "c1",
+                "id": "harin_shield",
+                "mode": "now",
+                "cost": 1,
+                "target": null
+              },
+              {
+                "e": "block",
+                "n": 8,
+                "src": "card"
+              },
+              {
+                "e": "resolved",
+                "uid": "c1",
+                "id": "harin_shield",
+                "reserved": null,
+                "fizzled": false
+              }
+            ],
+            "result": null,
+            "killedMarked": 0,
+            "diff": {
+              "hp": 100,
+              "dmg": 100
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "reserved-unused-picks",
+      "setup": {
+        "party": [
+          {
+            "charId": "harin",
+            "gauge": 0
+          }
+        ],
+        "deck": [
+          {
+            "id": "harin_shield"
+          }
+        ],
+        "enemies": [
+          "e_shelf"
+        ],
+        "hp": 81,
+        "maxHp": 81,
+        "seed": 1
+      },
+      "steps": [
+        {
+          "request": {
+            "rid": "reserved-unused-picks-begin",
+            "v": 0,
+            "kind": "begin",
+            "args": {}
+          },
+          "response": {
+            "v": 1,
+            "phase": "PLAYER",
+            "ev": [
+              {
+                "e": "turn",
+                "turn": 1,
+                "ap": 4
+              }
+            ]
+          },
+          "errorCode": null,
+          "state": {
+            "schema": "mf-battle-0.7",
+            "v": 1,
+            "turn": 1,
+            "phase": "PLAYER",
+            "rng": [
+              1580013426,
+              350525680,
+              3524174333,
+              3011703609
+            ],
+            "seq": 2,
+            "hp": 81,
+            "maxHp": 81,
+            "block": 0,
+            "counter": 0,
+            "ap": 4,
+            "apNext": 0,
+            "apDrainNext": 0,
+            "silenceUntil": 0,
+            "breakApTurn": 0,
+            "pst": {
+              "weak": 0
+            },
+            "buffs": [],
+            "debts": [],
+            "debtCap": 4,
+            "restraint": {
+              "active": false,
+              "usedTurn": 0
+            },
+            "bonus": {
+              "turn": 0,
+              "avail": false
+            },
+            "drawPenalty": 0,
+            "sealedUntil": 0,
+            "slotsBase": {
+              "next": 2,
+              "after": 1
+            },
+            "slotsTemp": {
+              "next": 0,
+              "after": 0
+            },
+            "growthCount": 0,
+            "growthCap": 3,
+            "played": 0,
+            "lastOwner": null,
+            "ownersThisTurn": [],
+            "echo": 0,
+            "echoMax": 3,
+            "echoActive": false,
+            "echoStart": 0,
+            "contracts": 0,
+            "exhausted": 0,
+            "exhaustStart": 0,
+            "tempParts": 0,
+            "freeNext": 0,
+            "nextBoost": null,
+            "firstAtkDone": false,
+            "overloadFreeUsed": false,
+            "actors": [
+              {
+                "id": "harin",
+                "name": "하린",
+                "attr": "frost",
+                "gauge": 0,
+                "gaugeTurn": 0,
+                "res": 0,
+                "power4": 160,
+                "vit": 81,
+                "gearBps": 0,
+                "skillLv": 1,
+                "ultLv": 1,
+                "passive": {
+                  "id": "harin_stance",
+                  "name": "반격 자세",
+                  "params": {
+                    "n": 1
+                  },
+                  "text": "하린의 카드로 방어를 얻을 때마다 반격 1(적의 공격 1회마다 그 적에게 피해)."
+                },
+                "weapon": null,
+                "cardMods": [],
+                "battleStart": [],
+                "ultExtra": [],
+                "ultReplace": null,
+                "hooks": [],
+                "capacity": 0
+              }
+            ],
+            "enemies": [
+              {
+                "uid": "e2",
+                "id": "e_shelf",
+                "name": "무너진 서가",
+                "tier": "normal",
+                "hp": 46,
+                "maxHp": 46,
+                "block": 0,
+                "brkMax": 5,
+                "brk": 5,
+                "weak": [
+                  "flame",
+                  "void"
+                ],
+                "st": {
+                  "vul": 0,
+                  "weak": 0,
+                  "mark": 0,
+                  "burn": 0,
+                  "str": 0,
+                  "reflect": 0
+                },
+                "brokenUntil": 0,
+                "stunned": false,
+                "pi": 0,
+                "intent": {
+                  "t": "def",
+                  "b": 10
+                },
+                "next": {
+                  "t": "atk",
+                  "d": 25
+                },
+                "alive": true,
+                "passive": null
+              }
+            ],
+            "cards": {
+              "c1": {
+                "uid": "c1",
+                "id": "harin_shield",
+                "owner": "harin",
+                "wielder": null,
+                "plus": false,
+                "mods": {
+                  "c": null,
+                  "e": null
+                },
+                "temp": [],
+                "growth": 0,
+                "grown": false,
+                "used": 0,
+                "costMod": 0,
+                "token": false,
+                "free": false,
+                "assigned": null,
+                "from": null
+              }
+            },
+            "zones": {
+              "draw": [],
+              "hand": [
+                "c1"
+              ],
+              "discard": [],
+              "exhaust": []
+            },
+            "res": [],
+            "resSeq": 0,
+            "relics": [],
+            "powers": [],
+            "turnFlags": {},
+            "battleFlags": {
+              "seraR6Turn": 0
+            },
+            "runFlags": {},
+            "handMax": 10,
+            "log": [
+              {
+                "t": 1,
+                "e": "turn",
+                "turn": 1,
+                "ap": 4
+              }
+            ],
+            "ev": [
+              {
+                "e": "turn",
+                "turn": 1,
+                "ap": 4
+              }
+            ],
+            "result": null,
+            "killedMarked": 0,
+            "diff": {
+              "hp": 100,
+              "dmg": 100
+            }
+          }
+        },
+        {
+          "request": {
+            "rid": "reserved-unused-picks-check",
+            "v": 1,
+            "kind": "play",
+            "args": {
+              "uid": "c1",
+              "mode": "next",
+              "picks": true
+            }
+          },
+          "response": {
+            "v": 2,
+            "phase": "PLAYER",
+            "ev": [
+              {
+                "e": "play",
+                "uid": "c1",
+                "id": "harin_shield",
+                "mode": "next",
+                "cost": 1,
+                "target": null
+              },
+              {
+                "e": "reserve",
+                "uid": "c1",
+                "due": 2,
+                "kind": "next"
+              }
+            ]
+          },
+          "errorCode": null,
+          "state": {
+            "schema": "mf-battle-0.7",
+            "v": 2,
+            "turn": 1,
+            "phase": "PLAYER",
+            "rng": [
+              1580013426,
+              350525680,
+              3524174333,
+              3011703609
+            ],
+            "seq": 2,
+            "hp": 81,
+            "maxHp": 81,
+            "block": 0,
+            "counter": 0,
+            "ap": 3,
+            "apNext": 0,
+            "apDrainNext": 0,
+            "silenceUntil": 0,
+            "breakApTurn": 0,
+            "pst": {
+              "weak": 0
+            },
+            "buffs": [],
+            "debts": [],
+            "debtCap": 4,
+            "restraint": {
+              "active": false,
+              "usedTurn": 0
+            },
+            "bonus": {
+              "turn": 0,
+              "avail": false
+            },
+            "drawPenalty": 0,
+            "sealedUntil": 0,
+            "slotsBase": {
+              "next": 2,
+              "after": 1
+            },
+            "slotsTemp": {
+              "next": 0,
+              "after": 0
+            },
+            "growthCount": 0,
+            "growthCap": 3,
+            "played": 1,
+            "lastOwner": "harin",
+            "ownersThisTurn": [
+              "harin"
+            ],
+            "echo": 0,
+            "echoMax": 3,
+            "echoActive": false,
+            "echoStart": 0,
+            "contracts": 0,
+            "exhausted": 0,
+            "exhaustStart": 0,
+            "tempParts": 0,
+            "freeNext": 0,
+            "nextBoost": null,
+            "firstAtkDone": false,
+            "overloadFreeUsed": false,
+            "actors": [
+              {
+                "id": "harin",
+                "name": "하린",
+                "attr": "frost",
+                "gauge": 0,
+                "gaugeTurn": 0,
+                "res": 0,
+                "power4": 160,
+                "vit": 81,
+                "gearBps": 0,
+                "skillLv": 1,
+                "ultLv": 1,
+                "passive": {
+                  "id": "harin_stance",
+                  "name": "반격 자세",
+                  "params": {
+                    "n": 1
+                  },
+                  "text": "하린의 카드로 방어를 얻을 때마다 반격 1(적의 공격 1회마다 그 적에게 피해)."
+                },
+                "weapon": null,
+                "cardMods": [],
+                "battleStart": [],
+                "ultExtra": [],
+                "ultReplace": null,
+                "hooks": [],
+                "capacity": 0
+              }
+            ],
+            "enemies": [
+              {
+                "uid": "e2",
+                "id": "e_shelf",
+                "name": "무너진 서가",
+                "tier": "normal",
+                "hp": 46,
+                "maxHp": 46,
+                "block": 0,
+                "brkMax": 5,
+                "brk": 5,
+                "weak": [
+                  "flame",
+                  "void"
+                ],
+                "st": {
+                  "vul": 0,
+                  "weak": 0,
+                  "mark": 0,
+                  "burn": 0,
+                  "str": 0,
+                  "reflect": 0
+                },
+                "brokenUntil": 0,
+                "stunned": false,
+                "pi": 0,
+                "intent": {
+                  "t": "def",
+                  "b": 10
+                },
+                "next": {
+                  "t": "atk",
+                  "d": 25
+                },
+                "alive": true,
+                "passive": null
+              }
+            ],
+            "cards": {
+              "c1": {
+                "uid": "c1",
+                "id": "harin_shield",
+                "owner": "harin",
+                "wielder": null,
+                "plus": false,
+                "mods": {
+                  "c": null,
+                  "e": null
+                },
+                "temp": [],
+                "growth": 0,
+                "grown": false,
+                "used": 0,
+                "costMod": 0,
+                "token": false,
+                "free": false,
+                "assigned": null,
+                "from": null
+              }
+            },
+            "zones": {
+              "draw": [],
+              "hand": [],
+              "discard": [],
+              "exhaust": []
+            },
+            "res": [
+              {
+                "uid": "c1",
+                "due": 2,
+                "order": 1,
+                "target": null,
+                "kind": "next"
+              }
+            ],
+            "resSeq": 1,
+            "relics": [],
+            "powers": [],
+            "turnFlags": {},
+            "battleFlags": {
+              "seraR6Turn": 0
+            },
+            "runFlags": {},
+            "handMax": 10,
+            "log": [
+              {
+                "t": 1,
+                "e": "turn",
+                "turn": 1,
+                "ap": 4
+              },
+              {
+                "t": 1,
+                "e": "play",
+                "uid": "c1",
+                "id": "harin_shield",
+                "mode": "next",
+                "cost": 1,
+                "target": null
+              },
+              {
+                "t": 1,
+                "e": "reserve",
+                "uid": "c1",
+                "due": 2,
+                "kind": "next"
+              }
+            ],
+            "ev": [
+              {
+                "e": "play",
+                "uid": "c1",
+                "id": "harin_shield",
+                "mode": "next",
+                "cost": 1,
+                "target": null
+              },
+              {
+                "e": "reserve",
+                "uid": "c1",
+                "due": 2,
+                "kind": "next"
+              }
+            ],
+            "result": null,
+            "killedMarked": 0,
+            "diff": {
+              "hp": 100,
+              "dmg": 100
+            }
+          }
+        },
+        {
+          "request": {
+            "rid": "reserved-unused-picks-end",
+            "v": 2,
+            "kind": "end",
+            "args": {}
+          },
+          "response": {
+            "v": 3,
+            "phase": "PLAYER",
+            "ev": [
+              {
+                "e": "block",
+                "n": 11,
+                "src": "card"
+              },
+              {
+                "e": "resolved",
+                "uid": "c1",
+                "id": "harin_shield",
+                "reserved": "next",
+                "fizzled": false
+              },
+              {
+                "e": "reshuffle"
+              },
+              {
+                "e": "turn",
+                "turn": 2,
+                "ap": 4
+              }
+            ]
+          },
+          "errorCode": null,
+          "state": {
+            "schema": "mf-battle-0.7",
+            "v": 3,
+            "turn": 2,
+            "phase": "PLAYER",
+            "rng": [
+              1580013426,
+              350525680,
+              3524174333,
+              3011703609
+            ],
+            "seq": 2,
+            "hp": 81,
+            "maxHp": 81,
+            "block": 11,
+            "counter": 1,
+            "ap": 4,
+            "apNext": 0,
+            "apDrainNext": 0,
+            "silenceUntil": 0,
+            "breakApTurn": 0,
+            "pst": {
+              "weak": 0
+            },
+            "buffs": [],
+            "debts": [],
+            "debtCap": 4,
+            "restraint": {
+              "active": false,
+              "usedTurn": 0
+            },
+            "bonus": {
+              "turn": 0,
+              "avail": false
+            },
+            "drawPenalty": 0,
+            "sealedUntil": 0,
+            "slotsBase": {
+              "next": 2,
+              "after": 1
+            },
+            "slotsTemp": {
+              "next": 0,
+              "after": 0
+            },
+            "growthCount": 0,
+            "growthCap": 3,
+            "played": 0,
+            "lastOwner": null,
+            "ownersThisTurn": [],
+            "echo": 0,
+            "echoMax": 3,
+            "echoActive": false,
+            "echoStart": 0,
+            "contracts": 0,
+            "exhausted": 0,
+            "exhaustStart": 0,
+            "tempParts": 0,
+            "freeNext": 0,
+            "nextBoost": null,
+            "firstAtkDone": false,
+            "overloadFreeUsed": false,
+            "actors": [
+              {
+                "id": "harin",
+                "name": "하린",
+                "attr": "frost",
+                "gauge": 10,
+                "gaugeTurn": 10,
+                "res": 0,
+                "power4": 160,
+                "vit": 81,
+                "gearBps": 0,
+                "skillLv": 1,
+                "ultLv": 1,
+                "passive": {
+                  "id": "harin_stance",
+                  "name": "반격 자세",
+                  "params": {
+                    "n": 1
+                  },
+                  "text": "하린의 카드로 방어를 얻을 때마다 반격 1(적의 공격 1회마다 그 적에게 피해)."
+                },
+                "weapon": null,
+                "cardMods": [],
+                "battleStart": [],
+                "ultExtra": [],
+                "ultReplace": null,
+                "hooks": [],
+                "capacity": 0
+              }
+            ],
+            "enemies": [
+              {
+                "uid": "e2",
+                "id": "e_shelf",
+                "name": "무너진 서가",
+                "tier": "normal",
+                "hp": 46,
+                "maxHp": 46,
+                "block": 10,
+                "brkMax": 5,
+                "brk": 5,
+                "weak": [
+                  "flame",
+                  "void"
+                ],
+                "st": {
+                  "vul": 0,
+                  "weak": 0,
+                  "mark": 0,
+                  "burn": 0,
+                  "str": 0,
+                  "reflect": 0
+                },
+                "brokenUntil": 0,
+                "stunned": false,
+                "pi": 1,
+                "intent": {
+                  "t": "atk",
+                  "d": 25
+                },
+                "next": {
+                  "t": "blockAll",
+                  "b": 6
+                },
+                "alive": true,
+                "passive": null
+              }
+            ],
+            "cards": {
+              "c1": {
+                "uid": "c1",
+                "id": "harin_shield",
+                "owner": "harin",
+                "wielder": null,
+                "plus": false,
+                "mods": {
+                  "c": null,
+                  "e": null
+                },
+                "temp": [],
+                "growth": 0,
+                "grown": false,
+                "used": 1,
+                "costMod": 0,
+                "token": false,
+                "free": false,
+                "assigned": null,
+                "from": null
+              }
+            },
+            "zones": {
+              "draw": [],
+              "hand": [
+                "c1"
+              ],
+              "discard": [],
+              "exhaust": []
+            },
+            "res": [],
+            "resSeq": 1,
+            "relics": [],
+            "powers": [],
+            "turnFlags": {},
+            "battleFlags": {
+              "seraR6Turn": 0
+            },
+            "runFlags": {},
+            "handMax": 10,
+            "log": [
+              {
+                "t": 1,
+                "e": "turn",
+                "turn": 1,
+                "ap": 4
+              },
+              {
+                "t": 1,
+                "e": "play",
+                "uid": "c1",
+                "id": "harin_shield",
+                "mode": "next",
+                "cost": 1,
+                "target": null
+              },
+              {
+                "t": 1,
+                "e": "reserve",
+                "uid": "c1",
+                "due": 2,
+                "kind": "next"
+              },
+              {
+                "t": 2,
+                "e": "block",
+                "n": 11,
+                "src": "card"
+              },
+              {
+                "t": 2,
+                "e": "resolved",
+                "uid": "c1",
+                "id": "harin_shield",
+                "reserved": "next",
+                "fizzled": false
+              },
+              {
+                "t": 2,
+                "e": "reshuffle"
+              },
+              {
+                "t": 2,
+                "e": "turn",
+                "turn": 2,
+                "ap": 4
+              }
+            ],
+            "ev": [
+              {
+                "e": "block",
+                "n": 11,
+                "src": "card"
+              },
+              {
+                "e": "resolved",
+                "uid": "c1",
+                "id": "harin_shield",
+                "reserved": "next",
+                "fizzled": false
+              },
+              {
+                "e": "reshuffle"
+              },
+              {
+                "e": "turn",
+                "turn": 2,
+                "ap": 4
+              }
+            ],
+            "result": null,
+            "killedMarked": 0,
+            "diff": {
+              "hp": 100,
+              "dmg": 100
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "ult-unused-picks",
+      "setup": {
+        "party": [
+          {
+            "charId": "harin",
+            "gauge": 100
+          }
+        ],
+        "deck": [
+          {
+            "id": "harin_shield"
+          }
+        ],
+        "enemies": [
+          "e_shelf"
+        ],
+        "hp": 81,
+        "maxHp": 81,
+        "seed": 1
+      },
+      "steps": [
+        {
+          "request": {
+            "rid": "ult-unused-picks-begin",
+            "v": 0,
+            "kind": "begin",
+            "args": {}
+          },
+          "response": {
+            "v": 1,
+            "phase": "PLAYER",
+            "ev": [
+              {
+                "e": "turn",
+                "turn": 1,
+                "ap": 4
+              }
+            ]
+          },
+          "errorCode": null,
+          "state": {
+            "schema": "mf-battle-0.7",
+            "v": 1,
+            "turn": 1,
+            "phase": "PLAYER",
+            "rng": [
+              1580013426,
+              350525680,
+              3524174333,
+              3011703609
+            ],
+            "seq": 2,
+            "hp": 81,
+            "maxHp": 81,
+            "block": 0,
+            "counter": 0,
+            "ap": 4,
+            "apNext": 0,
+            "apDrainNext": 0,
+            "silenceUntil": 0,
+            "breakApTurn": 0,
+            "pst": {
+              "weak": 0
+            },
+            "buffs": [],
+            "debts": [],
+            "debtCap": 4,
+            "restraint": {
+              "active": false,
+              "usedTurn": 0
+            },
+            "bonus": {
+              "turn": 0,
+              "avail": false
+            },
+            "drawPenalty": 0,
+            "sealedUntil": 0,
+            "slotsBase": {
+              "next": 2,
+              "after": 1
+            },
+            "slotsTemp": {
+              "next": 0,
+              "after": 0
+            },
+            "growthCount": 0,
+            "growthCap": 3,
+            "played": 0,
+            "lastOwner": null,
+            "ownersThisTurn": [],
+            "echo": 0,
+            "echoMax": 3,
+            "echoActive": false,
+            "echoStart": 0,
+            "contracts": 0,
+            "exhausted": 0,
+            "exhaustStart": 0,
+            "tempParts": 0,
+            "freeNext": 0,
+            "nextBoost": null,
+            "firstAtkDone": false,
+            "overloadFreeUsed": false,
+            "actors": [
+              {
+                "id": "harin",
+                "name": "하린",
+                "attr": "frost",
+                "gauge": 100,
+                "gaugeTurn": 0,
+                "res": 0,
+                "power4": 160,
+                "vit": 81,
+                "gearBps": 0,
+                "skillLv": 1,
+                "ultLv": 1,
+                "passive": {
+                  "id": "harin_stance",
+                  "name": "반격 자세",
+                  "params": {
+                    "n": 1
+                  },
+                  "text": "하린의 카드로 방어를 얻을 때마다 반격 1(적의 공격 1회마다 그 적에게 피해)."
+                },
+                "weapon": null,
+                "cardMods": [],
+                "battleStart": [],
+                "ultExtra": [],
+                "ultReplace": null,
+                "hooks": [],
+                "capacity": 0
+              }
+            ],
+            "enemies": [
+              {
+                "uid": "e2",
+                "id": "e_shelf",
+                "name": "무너진 서가",
+                "tier": "normal",
+                "hp": 46,
+                "maxHp": 46,
+                "block": 0,
+                "brkMax": 5,
+                "brk": 5,
+                "weak": [
+                  "flame",
+                  "void"
+                ],
+                "st": {
+                  "vul": 0,
+                  "weak": 0,
+                  "mark": 0,
+                  "burn": 0,
+                  "str": 0,
+                  "reflect": 0
+                },
+                "brokenUntil": 0,
+                "stunned": false,
+                "pi": 0,
+                "intent": {
+                  "t": "def",
+                  "b": 10
+                },
+                "next": {
+                  "t": "atk",
+                  "d": 25
+                },
+                "alive": true,
+                "passive": null
+              }
+            ],
+            "cards": {
+              "c1": {
+                "uid": "c1",
+                "id": "harin_shield",
+                "owner": "harin",
+                "wielder": null,
+                "plus": false,
+                "mods": {
+                  "c": null,
+                  "e": null
+                },
+                "temp": [],
+                "growth": 0,
+                "grown": false,
+                "used": 0,
+                "costMod": 0,
+                "token": false,
+                "free": false,
+                "assigned": null,
+                "from": null
+              }
+            },
+            "zones": {
+              "draw": [],
+              "hand": [
+                "c1"
+              ],
+              "discard": [],
+              "exhaust": []
+            },
+            "res": [],
+            "resSeq": 0,
+            "relics": [],
+            "powers": [],
+            "turnFlags": {},
+            "battleFlags": {
+              "seraR6Turn": 0
+            },
+            "runFlags": {},
+            "handMax": 10,
+            "log": [
+              {
+                "t": 1,
+                "e": "turn",
+                "turn": 1,
+                "ap": 4
+              }
+            ],
+            "ev": [
+              {
+                "e": "turn",
+                "turn": 1,
+                "ap": 4
+              }
+            ],
+            "result": null,
+            "killedMarked": 0,
+            "diff": {
+              "hp": 100,
+              "dmg": 100
+            }
+          }
+        },
+        {
+          "request": {
+            "rid": "ult-unused-picks-check",
+            "v": 1,
+            "kind": "ult",
+            "args": {
+              "actor": "harin",
+              "picks": true
+            }
+          },
+          "response": {
+            "v": 2,
+            "phase": "PLAYER",
+            "ev": [
+              {
+                "e": "ult",
+                "actor": "harin"
+              },
+              {
+                "e": "block",
+                "n": 30,
+                "src": "card"
+              }
+            ]
+          },
+          "errorCode": null,
+          "state": {
+            "schema": "mf-battle-0.7",
+            "v": 2,
+            "turn": 1,
+            "phase": "PLAYER",
+            "rng": [
+              1580013426,
+              350525680,
+              3524174333,
+              3011703609
+            ],
+            "seq": 2,
+            "hp": 81,
+            "maxHp": 81,
+            "block": 30,
+            "counter": 7,
+            "ap": 4,
+            "apNext": 0,
+            "apDrainNext": 0,
+            "silenceUntil": 0,
+            "breakApTurn": 0,
+            "pst": {
+              "weak": 0
+            },
+            "buffs": [],
+            "debts": [],
+            "debtCap": 4,
+            "restraint": {
+              "active": false,
+              "usedTurn": 0
+            },
+            "bonus": {
+              "turn": 0,
+              "avail": false
+            },
+            "drawPenalty": 0,
+            "sealedUntil": 0,
+            "slotsBase": {
+              "next": 2,
+              "after": 1
+            },
+            "slotsTemp": {
+              "next": 0,
+              "after": 0
+            },
+            "growthCount": 0,
+            "growthCap": 3,
+            "played": 0,
+            "lastOwner": null,
+            "ownersThisTurn": [],
+            "echo": 0,
+            "echoMax": 3,
+            "echoActive": false,
+            "echoStart": 0,
+            "contracts": 0,
+            "exhausted": 0,
+            "exhaustStart": 0,
+            "tempParts": 0,
+            "freeNext": 0,
+            "nextBoost": null,
+            "firstAtkDone": false,
+            "overloadFreeUsed": false,
+            "actors": [
+              {
+                "id": "harin",
+                "name": "하린",
+                "attr": "frost",
+                "gauge": 0,
+                "gaugeTurn": 0,
+                "res": 0,
+                "power4": 160,
+                "vit": 81,
+                "gearBps": 0,
+                "skillLv": 1,
+                "ultLv": 1,
+                "passive": {
+                  "id": "harin_stance",
+                  "name": "반격 자세",
+                  "params": {
+                    "n": 1
+                  },
+                  "text": "하린의 카드로 방어를 얻을 때마다 반격 1(적의 공격 1회마다 그 적에게 피해)."
+                },
+                "weapon": null,
+                "cardMods": [],
+                "battleStart": [],
+                "ultExtra": [],
+                "ultReplace": null,
+                "hooks": [],
+                "capacity": 0
+              }
+            ],
+            "enemies": [
+              {
+                "uid": "e2",
+                "id": "e_shelf",
+                "name": "무너진 서가",
+                "tier": "normal",
+                "hp": 46,
+                "maxHp": 46,
+                "block": 0,
+                "brkMax": 5,
+                "brk": 5,
+                "weak": [
+                  "flame",
+                  "void"
+                ],
+                "st": {
+                  "vul": 0,
+                  "weak": 0,
+                  "mark": 0,
+                  "burn": 0,
+                  "str": 0,
+                  "reflect": 0
+                },
+                "brokenUntil": 0,
+                "stunned": false,
+                "pi": 0,
+                "intent": {
+                  "t": "def",
+                  "b": 10
+                },
+                "next": {
+                  "t": "atk",
+                  "d": 25
+                },
+                "alive": true,
+                "passive": null
+              }
+            ],
+            "cards": {
+              "c1": {
+                "uid": "c1",
+                "id": "harin_shield",
+                "owner": "harin",
+                "wielder": null,
+                "plus": false,
+                "mods": {
+                  "c": null,
+                  "e": null
+                },
+                "temp": [],
+                "growth": 0,
+                "grown": false,
+                "used": 0,
+                "costMod": 0,
+                "token": false,
+                "free": false,
+                "assigned": null,
+                "from": null
+              }
+            },
+            "zones": {
+              "draw": [],
+              "hand": [
+                "c1"
+              ],
+              "discard": [],
+              "exhaust": []
+            },
+            "res": [],
+            "resSeq": 0,
+            "relics": [],
+            "powers": [],
+            "turnFlags": {},
+            "battleFlags": {
+              "seraR6Turn": 0
+            },
+            "runFlags": {},
+            "handMax": 10,
+            "log": [
+              {
+                "t": 1,
+                "e": "turn",
+                "turn": 1,
+                "ap": 4
+              },
+              {
+                "t": 1,
+                "e": "ult",
+                "actor": "harin"
+              },
+              {
+                "t": 1,
+                "e": "block",
+                "n": 30,
+                "src": "card"
+              }
+            ],
+            "ev": [
+              {
+                "e": "ult",
+                "actor": "harin"
+              },
+              {
+                "e": "block",
+                "n": 30,
+                "src": "card"
+              }
+            ],
+            "result": null,
+            "killedMarked": 0,
+            "diff": {
+              "hp": 100,
+              "dmg": 100
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

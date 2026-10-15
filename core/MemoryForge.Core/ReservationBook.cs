@@ -47,14 +47,17 @@ namespace MemoryForge.Core
         }
 
         public int Capacity(string kind, int turn)
+            => CalculateCapacity(kind, NextBase, AfterBase, TempNext, TempAfter, SealedUntil, turn, NextMax, AfterMax);
+
+        internal static int CalculateCapacity(string kind, int nextBase, int afterBase, int tempNext, int tempAfter, int sealedUntil, int turn, int nextMax, int afterMax)
         {
             if (kind == "next")
             {
-                int cap = Math.Min(NextMax, NextBase + TempNext);
-                if (SealedUntil >= turn) cap -= 1;
+                int cap = (int)Math.Min(nextMax, (long)nextBase + tempNext);
+                if (sealedUntil >= turn) cap -= 1;
                 return Math.Max(0, cap);
             }
-            if (kind == "after") return Math.Min(AfterMax, AfterBase + TempAfter);
+            if (kind == "after") return (int)Math.Min(afterMax, (long)afterBase + tempAfter);
             throw new RuleException("INVALID_MODE");
         }
 

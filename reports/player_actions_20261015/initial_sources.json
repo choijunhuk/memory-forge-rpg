@@ -1,0 +1,38 @@
+{
+  "scope": "Initial A1 implementation copied for verification only; not independently approved/integrated",
+  "files": [
+    {
+      "path": "core/MemoryForge.Core/Battle.cs",
+      "sha256": "4fdd520997b1965796ae6218f8c280d550109d8ce7ebacf1f39756b16fd5cd2e"
+    },
+    {
+      "path": "core/MemoryForge.Core/BattleState.cs",
+      "sha256": "bdc58054e3edcccf5fcc5f6ad6f43adb8548ad32c6d97491f50920627ec033c0"
+    },
+    {
+      "path": "core/MemoryForge.Core/Battle.PlayerActions.cs",
+      "sha256": "7bf70486393c40ed15bbb525e3f47fc5d04cdc10837ab3f3a92bb38a30a20f85"
+    },
+    {
+      "path": "core/MemoryForge.Core/Battle.Effects.cs",
+      "sha256": "65808d9af5c149ec6938d86624ac40e18a65644d249cae7f379d3a3f137502e8"
+    },
+    {
+      "path": "core/MemoryForge.Core/ReservationBook.cs",
+      "sha256": "49ca7cec199e4951ac7ecc9075f8238a64977c7e9131e9784c764530f0a4e23e"
+    },
+    {
+      "path": "core/MemoryForge.CoreChecks/BattleOpeningChecks.cs",
+      "sha256": "d4944a625f4081b86765fc4bb5bfd9236ff93505f2b37c96d6d7907e816fcefd"
+    },
+    {
+      "path": "core/MemoryForge.CoreChecks/BattleTurnChecks.cs",
+      "sha256": "483de9251ca69f12484cb7017147ce8ef438854a84f5cb17d32ddd1d0d7312dc"
+    },
+    {
+      "path": "core/MemoryForge.CoreChecks/BattlePlayerQueryChecks.cs",
+      "sha256": "6fd4b822734610172d6a339eb4c1dbf24ab9e1d7c8477161c051af784aadd109"
+    }
+  ],
+  "hostActionsFixtureIncluded": false
+}

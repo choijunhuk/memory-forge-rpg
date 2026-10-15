@@ -1,0 +1,10 @@
+{
+  "stage": "Before A1 Core integration; new PlayMode tests on committed A0 runtime",
+  "baseCommit": "3d33c4cb2e0c7cee14ced2c67c33b8fb55cef267",
+  "sha256": {
+    "core/MemoryForge.Core/Battle.cs": "658b27f8ee8342d4b788af1e23456be9523c06d6356817191382c4e1e2f8cdd0",
+    "core/MemoryForge.Core/BattleDefinitions.cs": "ce408b70946fe39112ea4ef7f9e14529d09330619deb896c8bfbc54cc3d75f36",
+    "core/MemoryForge.Core/BattleState.cs": "7ce6a7c58a5a82669cd1295d709262d68979b163685953ff8e9436ea2f5e3c70",
+    "client/MemoryForgeUnity/Assets/Tests/PlayMode/BattleOpeningPlayModeTests.cs": "09f5260b4027f7e382761c7b703e74c63b6792266d903c46822ac0a44bd897bc"
+  }
+}

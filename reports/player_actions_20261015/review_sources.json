@@ -1,0 +1,70 @@
+{
+  "scope": "Exact Root source copied for independent Opus review; actual Root checks and Unity evidence are separate",
+  "baseCommit": "3d33c4cb2e0c7cee14ced2c67c33b8fb55cef267",
+  "files": [
+    {
+      "path": "core/MemoryForge.Core/Battle.cs",
+      "sha256": "4fdd520997b1965796ae6218f8c280d550109d8ce7ebacf1f39756b16fd5cd2e"
+    },
+    {
+      "path": "core/MemoryForge.Core/Battle.PlayerActions.cs",
+      "sha256": "28e8bbdd8e149bc2eed1924ea3c1a8cc8403a2317c235dfaf3e0769acd688e41"
+    },
+    {
+      "path": "core/MemoryForge.Core/Battle.Effects.cs",
+      "sha256": "b2a59ace543623b62de2020466ec56c4db8cb4e85954de23d19649ddfc9373bb"
+    },
+    {
+      "path": "core/MemoryForge.Core/BattleState.cs",
+      "sha256": "bdc58054e3edcccf5fcc5f6ad6f43adb8548ad32c6d97491f50920627ec033c0"
+    },
+    {
+      "path": "core/MemoryForge.Core/ReservationBook.cs",
+      "sha256": "49ca7cec199e4951ac7ecc9075f8238a64977c7e9131e9784c764530f0a4e23e"
+    },
+    {
+      "path": "core/MemoryForge.Core/BattleDefinitions.cs",
+      "sha256": "ce408b70946fe39112ea4ef7f9e14529d09330619deb896c8bfbc54cc3d75f36"
+    },
+    {
+      "path": "core/MemoryForge.CoreChecks/BattleDataLoader.cs",
+      "sha256": "a9dfa1de5e10712f526c0775083ed49295a495b039975ddc6d812e82b5eb00ec"
+    },
+    {
+      "path": "core/MemoryForge.CoreChecks/BattlePlayerActionChecks.cs",
+      "sha256": "379e5e9ae71ce079629f2c536a2aa569f60f5ec7ae9cfef61868ee1054299a18"
+    },
+    {
+      "path": "core/MemoryForge.CoreChecks/BattleOpeningChecks.cs",
+      "sha256": "d4944a625f4081b86765fc4bb5bfd9236ff93505f2b37c96d6d7907e816fcefd"
+    },
+    {
+      "path": "core/MemoryForge.CoreChecks/BattleTurnChecks.cs",
+      "sha256": "483de9251ca69f12484cb7017147ce8ef438854a84f5cb17d32ddd1d0d7312dc"
+    },
+    {
+      "path": "core/MemoryForge.CoreChecks/BattlePlayerQueryChecks.cs",
+      "sha256": "f458eb9063c24933ee0c0c2d574f4404aef3ab2e699e4e3efdcdfa4715604068"
+    },
+    {
+      "path": "core/MemoryForge.CoreChecks/Program.cs",
+      "sha256": "716f85b751c9a309fec5d83cd35b1e46b270b820d9feb7d7a7deacbb58872c1c"
+    },
+    {
+      "path": "tools/gen_battle_player_action_vectors.mjs",
+      "sha256": "5fc73118a3ff6e2ef083d30b6e53472a2ab9ad8fa8fe9067c2e0e5d0d3f47d42"
+    },
+    {
+      "path": "engine/tests/battle_player_action_vectors.test.mjs",
+      "sha256": "a58f9a908b6c818a007dbaf1cc9e40201c3adca39c5ef7c4ee185c9fe33ce9bf"
+    },
+    {
+      "path": "engine/tests/vectors/battle_player_action_vectors.json.gz",
+      "sha256": "e0a805f66926c4cfcfdf13c0040ea13bb73aed95c834e346a2df83bb3709db1f"
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/Tests/PlayMode/BattleOpeningPlayModeTests.cs",
+      "sha256": "53040b8b4197056cfbd830fe069172d38407f0d3b32d5142eb338ae1d1edb8b8"
+    }
+  ]
+}

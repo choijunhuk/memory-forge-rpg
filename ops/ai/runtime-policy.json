@@ -1,5 +1,5 @@
 {
-  "version": "2026-10-15-quality-continuous",
+  "version": "2026-10-15-claude-primary",
   "models": {
     "codex": "gpt-6.1-sol",
     "claude": "claude-opus-5-5"
@@ -15,6 +15,14 @@
     "autonomous_escalation": true
   },
   "fallbacks": [],
+  "work_routing": {
+    "preferred_implementation_analysis_tests": "Claude Opus via official subscription CLI",
+    "codex_responsibilities": ["scoped dispatch", "independent review of Claude changes", "integration", "Unity final verification", "image generation and content edits"],
+    "native_codex_agents": "finish already-started bounded tasks; prefer Claude for new implementation and analysis",
+    "allocation_basis": "latest user-reported included allowance and reset window; no fixed token percentage enforcement",
+    "quality_and_cross_review_unchanged": true,
+    "enforcement": "task dispatch; not a provider quota-transfer setting"
+  },
   "billing": "existing_subscription_included_allowance_only",
   "api_auth_allowed": false,
   "extra_usage_allowed": false,
