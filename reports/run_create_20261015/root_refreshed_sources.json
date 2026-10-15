@@ -1,0 +1,17 @@
+{
+  "files": [
+    {
+      "path": "engine/tests/vectors/run_create_vectors.json.gz",
+      "sha256": "5459a37c0c6f26701c013844cc57f17d86d14ef591f69d22579396d166750ef2"
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/Tests/PlayMode/RunCreatePlayModeTests.cs",
+      "sha256": "95b2d5edfd4532f49a4e076053f2b33f2d98f7cef891367f6fc4285cb850002b"
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/Tests/PlayMode/MemoryRulesPlayModeTests.cs",
+      "sha256": "48eff688027bc43a75175f575c55d47d89487e1ed1d821771bf7cb71cb8dafdc"
+    }
+  ],
+  "pending": "actual current Root full suites and real Unity18Play/3Edit"
+}

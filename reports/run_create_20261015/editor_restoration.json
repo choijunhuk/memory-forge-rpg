@@ -1,0 +1,21 @@
+{
+  "records": [
+    {
+      "path": "client/MemoryForgeUnity/ProjectSettings/EditorSettings.asset",
+      "actualEditorAPI_None_and_SaveAssets": true,
+      "allFieldsIdenticalToHead": true,
+      "before_sha": "e3f3f549737729661a6ec16abc819a78d088ea98efa0b279f15956a675e5f925",
+      "after_sha": "691af7b61d75e5dce6b6e923c8f83c6e32d73959bdfa5fa42ff51b6dba97561a",
+      "rawBackup": "ops/ai/local/r0-settings-before-format/EditorSettings.asset"
+    },
+    {
+      "path": "client/MemoryForgeUnity/ProjectSettings/ProjectSettings.asset",
+      "actualEditorAPI_None_and_SaveAssets": true,
+      "allFieldsIdenticalToHead": true,
+      "before_sha": "589d38efc141ffc12a32558f0fe2d99e8f499687699ac50b9277c7511e674f76",
+      "after_sha": "21b8b9135d5f4c87ae2b49a14309719557cdd7f1977badd5d5f0bd07c12f6a83",
+      "rawBackup": "ops/ai/local/r0-settings-before-format/ProjectSettings.asset"
+    }
+  ],
+  "getterEnabledFalseQuirkNotOverstated": true
+}

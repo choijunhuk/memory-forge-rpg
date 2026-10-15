@@ -1,0 +1,25 @@
+✔ all10 authored characters/resonances0..6 create real short/full legacy/v2 runs (14045.612916ms)
+✔ factory/query counts and exact authored denominators remain distinct from expedition commands (0.9695ms)
+✔ actual Create and every recorded pure query reproduce full private state without injected snapshots (839.473416ms)
+✔ Run stats derive from account inputs instead of trusting supplied combat values (0.337584ms)
+✔ stage rounding preserves zero fallback, negative half and empty difficulty shape (0.309083ms)
+✔ capacity uses source ascensions and signed resonance slice semantics without retuning (0.31675ms)
+✔ stable keys skip both saved and current-deck collisions while legacy copies get new keys (0.276375ms)
+✔ base-kit play preserves original before/baseline and uses new identities for removed/evolved cards (0.330959ms)
+✔ field absence, null, explicit false/zero, own undefined and opaque fractions remain distinguishable (3.3875ms)
+✔ legacy/v2 validation, native diagnostics and explicit C# numeric-domain probes keep separate denominators (0.558958ms)
+✔ all300 maps preserve authored node/floor/edge order, reachability and minimum battle constraints (5.275042ms)
+✔ literal map branches and private RNG consumption include lazy choices, elite pruning and parent repair (0.681958ms)
+✔ source/manifest provenance remains explicit and no historical input manifest is regenerated (0.685125ms)
+✔ saved gzip strictly decodes into the exact fresh creation/query fixture (18938.116166ms)
+✔ strict reader rejects malformed JSON, escape-equivalent duplicate keys, UTF8/BOM and gzip tampering (2.057291ms)
+✔ case/source/count/shape corruption is rejected and freshly forged complete state/query hashes cannot pass (45726.659166ms)
+✔ atomic deterministic export preserves old targets and removes temporary files on real filesystem failures (62147.174542ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 141964.37

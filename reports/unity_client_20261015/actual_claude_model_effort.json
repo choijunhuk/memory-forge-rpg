@@ -1,0 +1,2497 @@
+{
+  "scope": "Actual inference metadata only; no content/reasoning/credentials copied",
+  "jobs": [
+    {
+      "task": "P1-CSHARP-RUN-CREATE-CLAUDE-PORTABILITY",
+      "sessionId": "f2355bd6-f0f3-4132-b6ac-bc8535512c08",
+      "processExit": 0,
+      "requestedEffort": "xhigh",
+      "actualModelKeys": [
+        "claude-opus-5-5"
+      ],
+      "billingAccountMatched": true,
+      "realInferenceRecords": 66,
+      "zeroUsageSyntheticBookkeepingExcluded": 0,
+      "records": [
+        {
+          "at": "2026-10-15T09:26:18.195Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:26:19.958Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:26:19.963Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:31:39.245Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:31:39.849Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:31:39.859Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:31:41.670Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:31:41.674Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:31:46.089Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:31:46.090Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:31:46.092Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:31:51.175Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:31:51.177Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:31:55.430Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:31:56.060Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:32:00.073Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:32:00.075Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:32:00.753Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:32:01.560Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:32:05.832Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:32:05.832Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:32:22.284Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:32:22.742Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:32:27.154Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:32:27.155Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:32:29.504Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:34:47.855Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:34:47.858Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:34:51.346Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:34:51.348Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:34:52.356Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:34:55.464Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:34:59.109Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:34:59.933Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:35:01.983Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:35:05.766Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:35:09.035Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:35:10.893Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:35:21.543Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:36:42.854Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:36:44.277Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:36:47.177Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:36:49.500Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:37:10.587Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:38:22.083Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:38:22.087Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:38:25.737Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:38:26.407Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:38:32.191Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:38:32.192Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:38:40.775Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:38:41.600Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:38:42.317Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:39:11.083Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:39:11.086Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:39:13.179Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:39:38.433Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:39:38.435Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:39:39.356Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:39:43.448Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:39:44.323Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:40:42.851Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:40:42.854Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:40:46.157Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:41:14.869Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T09:41:37.109Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        }
+      ]
+    },
+    {
+      "task": "P1-R0-PORTABLE-READER-FINAL",
+      "sessionId": "f2355bd6-f0f3-4132-b6ac-bc8535512c08",
+      "processExit": 0,
+      "requestedEffort": "xhigh",
+      "actualModelKeys": [
+        "claude-opus-5-5"
+      ],
+      "billingAccountMatched": true,
+      "realInferenceRecords": 83,
+      "zeroUsageSyntheticBookkeepingExcluded": 0,
+      "records": [
+        {
+          "at": "2026-10-15T14:39:53.897Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:39:54.961Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:39:56.357Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:39:57.791Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:39:58.846Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:39:58.855Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:40:01.624Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:40:01.755Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:40:10.249Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:40:10.252Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:40:10.254Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:40:12.934Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:40:18.982Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:40:19.602Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:41:08.199Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:41:08.204Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:41:09.264Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:41:12.000Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:42:20.755Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:42:20.756Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:42:22.050Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:42:31.806Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:42:35.635Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:42:35.637Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:42:37.665Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:42:40.352Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:42:49.697Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:42:49.698Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:42:52.746Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:42:56.913Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:42:57.288Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:43:07.732Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:43:12.340Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:43:16.365Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:43:16.956Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:43:24.073Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:43:24.079Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:43:28.942Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:43:28.943Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:43:30.217Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:43:36.556Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:43:37.817Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:43:38.470Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:43:45.956Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:43:45.957Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:43:46.872Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:45:09.790Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:45:09.794Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:45:15.957Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:45:21.691Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:45:29.576Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:45:30.152Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:45:30.662Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:45:34.273Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:45:34.274Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:45:35.101Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:45:35.385Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:45:41.723Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:45:41.725Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:45:57.446Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:46:19.854Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:46:20.165Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:47:03.481Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:47:03.886Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:47:15.818Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:47:15.820Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:47:15.823Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:47:18.146Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:47:22.315Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:47:22.470Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:47:26.659Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:47:28.100Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:47:28.104Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:47:46.976Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:47:46.981Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:47:47.497Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:47:49.420Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:48:15.233Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:48:22.043Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:48:22.047Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:48:22.555Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:48:41.575Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:48:55.931Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        }
+      ]
+    },
+    {
+      "task": "P1-UNITY-COMBAT-CONTENT-EXPORT",
+      "sessionId": "9a03463c-7b87-4745-9421-fd26022b41b5",
+      "processExit": 0,
+      "requestedEffort": "high",
+      "actualModelKeys": [
+        "claude-opus-5-5"
+      ],
+      "billingAccountMatched": true,
+      "realInferenceRecords": 50,
+      "zeroUsageSyntheticBookkeepingExcluded": 0,
+      "records": [
+        {
+          "at": "2026-10-15T14:09:52.983Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T14:09:53.642Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T14:09:54.138Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T14:09:54.539Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T14:09:54.827Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T14:09:57.808Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T14:09:58.313Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T14:09:58.739Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T14:09:59.334Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T14:10:01.033Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T14:10:01.627Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T14:10:02.231Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T14:10:02.818Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T14:10:05.861Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T14:10:06.362Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T14:10:07.484Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T14:10:09.825Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T14:10:10.456Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T14:10:11.108Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T14:10:14.085Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T14:10:15.391Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T14:10:15.915Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T14:10:20.135Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T14:10:21.386Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T14:10:21.812Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T14:10:26.692Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T14:10:27.256Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T14:10:27.822Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T14:11:01.778Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T14:11:01.782Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T14:11:02.920Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T14:11:03.928Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T14:11:06.250Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T14:11:33.574Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T14:11:33.920Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T14:11:35.191Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T14:11:37.201Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T14:12:22.230Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T14:12:23.198Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T14:14:03.828Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T14:14:03.832Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T14:14:07.061Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T14:14:08.547Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T14:14:49.412Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T14:15:03.222Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T14:15:04.377Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T14:15:05.736Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T14:15:34.329Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T14:16:00.277Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T14:16:16.970Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        }
+      ]
+    },
+    {
+      "task": "P1-UNITY-BATTLE-VIEW-REVIEW",
+      "sessionId": "9a03463c-7b87-4745-9421-fd26022b41b5",
+      "processExit": 0,
+      "requestedEffort": "xhigh",
+      "actualModelKeys": [
+        "claude-opus-5-5"
+      ],
+      "billingAccountMatched": true,
+      "realInferenceRecords": 80,
+      "zeroUsageSyntheticBookkeepingExcluded": 0,
+      "records": [
+        {
+          "at": "2026-10-15T14:27:00.072Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:27:01.123Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:27:01.286Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:27:03.627Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:27:04.148Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:27:04.928Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:27:05.501Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:27:11.493Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:27:12.061Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:28:19.521Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:28:21.071Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:28:21.760Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:28:25.414Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:28:25.880Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:28:30.310Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:28:30.312Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:28:31.119Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:28:33.789Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:28:36.140Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:28:37.155Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:28:42.120Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:28:43.471Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:28:44.251Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:28:50.249Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:28:51.510Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:28:53.803Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:28:58.277Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:28:59.088Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:29:02.056Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:29:02.056Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:29:03.257Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:29:04.221Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:30:52.093Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:30:52.665Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:30:53.477Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:30:56.220Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:30:56.757Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:30:57.606Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:30:58.874Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:31:01.837Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:31:14.168Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:31:15.158Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:31:16.130Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:31:17.136Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:31:46.751Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:31:48.134Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:31:58.375Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:31:59.580Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:32:05.095Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:34:00.635Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:34:01.473Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:34:02.928Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:34:05.600Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:34:06.257Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:34:09.475Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:34:10.511Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:34:13.919Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:34:13.920Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:34:15.028Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:36:34.870Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:36:36.348Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:39:24.858Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:39:25.855Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:39:37.153Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:39:37.154Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:40:41.772Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:40:57.228Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:40:57.230Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:42:08.538Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:42:37.084Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:42:37.088Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:42:39.237Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:42:41.434Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:42:43.443Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:42:45.469Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:42:48.754Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:42:55.357Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:43:00.438Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:43:12.881Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T14:43:27.069Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        }
+      ]
+    },
+    {
+      "task": "P1-UNITY-BATTLE-VIEW-RECHECK",
+      "sessionId": "9a03463c-7b87-4745-9421-fd26022b41b5",
+      "processExit": 0,
+      "requestedEffort": "xhigh",
+      "actualModelKeys": [
+        "claude-opus-5-5"
+      ],
+      "billingAccountMatched": true,
+      "realInferenceRecords": 51,
+      "zeroUsageSyntheticBookkeepingExcluded": 0,
+      "records": [
+        {
+          "at": "2026-10-15T15:07:31.642Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:07:31.644Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:07:32.765Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:07:32.944Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:07:36.246Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:07:36.247Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:07:37.294Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:07:37.937Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:07:38.306Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:07:40.944Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:07:41.426Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:08:52.685Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:08:53.966Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:08:55.234Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:08:59.038Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:08:59.601Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:09:02.836Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:09:02.837Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:09:04.839Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:09:11.666Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:09:12.522Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:09:15.698Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:09:16.783Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:09:17.562Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:09:18.762Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:09:19.623Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:09:24.697Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:09:26.088Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:09:28.986Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:10:01.087Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:10:02.388Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:10:05.445Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:10:06.699Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:10:23.160Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:10:25.104Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:10:55.110Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:10:55.111Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:10:56.378Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:10:59.189Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:11:01.554Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:11:55.115Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:11:55.117Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:11:55.990Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:11:56.993Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:11:57.874Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:12:20.965Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:12:21.887Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:12:29.233Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:12:29.234Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:13:11.787Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        },
+        {
+          "at": "2026-10-15T15:13:26.762Z",
+          "model": "claude-opus-5-5",
+          "effort": "xhigh",
+          "perTurnEffort": "xhigh"
+        }
+      ]
+    },
+    {
+      "task": "P1-UNITY-BATTLE-PRESENTATION-FIX",
+      "sessionId": "9a03463c-7b87-4745-9421-fd26022b41b5",
+      "processExit": 0,
+      "requestedEffort": "high",
+      "actualModelKeys": [
+        "claude-opus-5-5"
+      ],
+      "billingAccountMatched": true,
+      "realInferenceRecords": 31,
+      "zeroUsageSyntheticBookkeepingExcluded": 0,
+      "records": [
+        {
+          "at": "2026-10-15T15:18:33.179Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:18:33.855Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:18:35.124Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:18:37.618Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:18:38.953Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:19:42.693Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:19:43.682Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:19:45.090Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:21:23.223Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:21:23.225Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:21:25.780Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:21:31.179Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:21:36.883Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:21:38.573Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:21:39.695Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:21:43.231Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:22:02.465Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:22:06.571Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:22:09.347Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:22:12.641Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:22:12.642Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:22:16.155Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:23:03.640Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:23:29.346Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:23:43.711Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:23:45.116Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:23:49.241Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:23:49.241Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:23:49.831Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:24:27.085Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:24:45.187Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        }
+      ]
+    },
+    {
+      "task": "P1-LICENSED-UNITY-FONT-GUARD",
+      "sessionId": "7a49789d-3c03-4210-b36d-45e31e76fbe8",
+      "processExit": 0,
+      "requestedEffort": "high",
+      "actualModelKeys": [
+        "claude-opus-5-5"
+      ],
+      "billingAccountMatched": true,
+      "realInferenceRecords": 38,
+      "zeroUsageSyntheticBookkeepingExcluded": 0,
+      "records": [
+        {
+          "at": "2026-10-15T15:34:47.572Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:34:48.809Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:34:50.020Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:34:50.026Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:34:53.268Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:34:54.082Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:34:54.085Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:34:54.729Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:34:54.731Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:34:58.989Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:34:59.849Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:34:59.854Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:35:17.146Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:35:17.148Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:35:44.514Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:35:44.519Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:35:48.182Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:35:48.185Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:35:48.929Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:35:49.305Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:36:31.044Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:36:31.045Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:36:39.619Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:36:42.455Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:36:46.082Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:36:46.791Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:36:50.017Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:37:12.064Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:37:12.066Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:37:15.630Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:37:20.513Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:37:24.328Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:37:38.447Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:37:47.167Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:37:47.168Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:38:02.396Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:38:12.110Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        },
+        {
+          "at": "2026-10-15T15:38:16.269Z",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "perTurnEffort": "high"
+        }
+      ]
+    }
+  ]
+}

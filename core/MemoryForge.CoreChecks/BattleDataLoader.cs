@@ -323,7 +323,7 @@ static class BattleDataLoader
         }
         return result.ToString();
     }
-    static void Fields(JsonElement json, params string[] names)
+    internal static void Fields(JsonElement json, params string[] names)
     {
         var allowed = new HashSet<string>(names, StringComparer.Ordinal); var seen = new HashSet<string>(StringComparer.Ordinal);
         foreach (var field in json.EnumerateObject())

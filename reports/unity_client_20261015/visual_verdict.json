@@ -1,0 +1,20 @@
+{
+  "score": 91,
+  "verdict": "pass",
+  "category_match": true,
+  "differences": [
+    "First practice view has no final character/enemy art; whole Run and advanced accessibility are still separate roadmap items."
+  ],
+  "suggestions": [
+    "Continue actual input/Core regression and opposite-author review."
+  ],
+  "reasoning": "Actual post-fix Unity capture shows title, HP/AP, all actor/enemy names, costs, two intents and hand without critical missing labels. Frame follows original14.3 dark landscape wireframe; this is spec-based prototype acceptance, not pixel-reference or finished-art approval.",
+  "threshold": 90,
+  "threshold_passed": true,
+  "next_actions": [
+    "Actual reservation/end-turn input verification",
+    "Independent Opus source review and PlayMode tests"
+  ],
+  "screenshot": "reports/unity_client_20261015/battle-start.png",
+  "reference": "docs/source_v0.8.1/14_chapter.md:29"
+}

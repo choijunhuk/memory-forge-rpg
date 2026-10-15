@@ -1,0 +1,22 @@
+{
+  "scope": "Four unchanged Codex-authored R0 Core/loader files only; opposite Opus review; checker author must not self-approve checker",
+  "files": [
+    {
+      "path": "core/MemoryForge.Core/RunDefinitions.cs",
+      "sha256": "060e6375bb9f80bc54451f2a9360409ee4732e7ae926cb7d3d7730e278c9e590"
+    },
+    {
+      "path": "core/MemoryForge.Core/RunState.cs",
+      "sha256": "ab24161c296800f52b4758ccb66718ef9651cbe46ff46b1ee635246b72550fe4"
+    },
+    {
+      "path": "core/MemoryForge.Core/Run.cs",
+      "sha256": "c36da9076265ed0327cf8a4a3890349c6c4fa9abd7f26ed5a91151b07598dc4c"
+    },
+    {
+      "path": "core/MemoryForge.CoreChecks/RunDataLoader.cs",
+      "sha256": "07a5a2ac7f505d77d7be3cbc9548aea1c83c5979b3b474e2905926341724c8b6"
+    }
+  ],
+  "at": "2026-10-15T08:45:22.239098+00:00"
+}

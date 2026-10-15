@@ -83,3 +83,9 @@ A1의 [PlayMode12/EditMode3](../reports/player_actions_20261015/verification.jso
 이전 High/Max 지원 기록을 두 수준만 허용한다는 뜻으로 사용하지 않는다. 로컬 `gpt-6.1-sol` 모델 카탈로그는 `xhigh`를 포함하고, [공식 Claude 지원표](https://code.claude.com/docs/en/model-config#adjust-effort-level)도 Opus5.5의 xhigh를 명시한다. 설치 CLI2.1.285의 기존 범위 실행기에 xhigh 인자/환경/결과 경로를 추가했다. 현재 Codex 턴의 Max 기록은 과거/현재 실행 증거이며 설정 문서만으로 xhigh로 변경됐다고 주장하지 않는다. 이후 실제 호출마다 요청값과 적용 세션 메타데이터를 확인한다. 운영 선택은 [§12](AI_WORKFLOW.md)를 따른다.
 
 M0에서도 실제Play16/Edit3을 확인했다([근거](../reports/memory_rules_20261015/)). Claude High의 두 기억시험을 Codex가 독립검토·실행했고, Opus xhigh가 찾은 배열이관P2를 Claude xhigh가 수정한 뒤 Codex가 재검토·전체실행했다. xhigh는 실제세션 effort/perTurnEffort로 확인했다. Root .NET5451/5451·1072호출과 전체Run명령0을 구분하며 Editor설정을 실제API/SaveAssets로 원래값에 복원했다. Console오류0/전송경고1을 기록하고 전체게임빌드/Android/실기기수용으로 확대하지 않는다.
+
+R0는 [실제18Play/3Edit](../reports/run_create_20261015/unity_playmode18.json)에서 같은 공유Core 생성/지도/조회/기억키를 실행했다. 처음새시험이없던16개결과를 별도보존하고 명시ImportAsset/Refresh/compilation/반사타입등록 후18개를 확인했다. Console0오류/0경고, 원래Editor설정복원, Root215645/215645 및 Node286을 기록한다. 새macOS/Android/실기기/전체게임UI수용은 아니다.
+
+## 실제 표시된 전투 연습 / 추가 검증
+
+[MemoryForgeBattle 실행안내](../client/MemoryForgeUnity/README.md)에 따라 실제C#Core의 카드·예약·턴·의도/상태를 표시했다. [현재26Play](../reports/unity_client_20261015/playmode26_pass.json)·[3Edit](../reports/unity_client_20261015/editmode3_pass.json)는 초기중단/23개통과기록과 구분한다. Claude High콘텐츠/표시수정과 xhigh교차검토를 Codex가 호출·회수·검증했으며, Core값/원문/기존자산은 보존했다. OFL폰트의 허용은 한 경로/정확한바이너리/라이선스체크섬에만 한정하고 계정파일차단은 유지했다. 현재Mac잠금으로 최종시각재확인/새standalone빌드확인만보류하며 기존기술씬빌드로 대신하지 않는다.

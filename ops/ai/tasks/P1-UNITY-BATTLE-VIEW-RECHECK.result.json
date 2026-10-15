@@ -1,0 +1,28 @@
+{
+  "task_id": "P1-UNITY-BATTLE-VIEW-RECHECK",
+  "run_id": "P1-UNITY-BATTLE-VIEW-RECHECK-20261015T150726862895Z",
+  "status": "RECEIVED_UNVERIFIED",
+  "requestedEffort": "xhigh",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "changes_verified": false,
+  "raw_output": "ops/ai/local/P1-UNITY-BATTLE-VIEW-RECHECK-20261015T150726862895Z*",
+  "billing_verified_at": "2026-10-14T21:44:57.439760+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "codex/csharp-battle-opening",
+  "base_commit": "2ffc29ecdbdeee5027258ad6f73302b98820fc35",
+  "worktree": "/Users/choi/.codex/worktrees/csharp-battle-opening/Memory_forge",
+  "allowed_files": [
+    "ops/ai/tasks/P1-UNITY-BATTLE-VIEW-RECHECK.md"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "9a03463c-7b87-4745-9421-fd26022b41b5",
+  "subtype": "success",
+  "is_error": false,
+  "result": "판정은 **아직 APPROVE가 아닙니다**. 지난번에 지적한 H1(오버레이 클릭 관통)·M1(예외 처리)·M5(숨은 드로우·난수)·M6(입력 단계 분리)와 L1·L2·L3은 수정이 확인됐습니다. 다만 보류했던 M3·M4가 지금 프리셋 전투에서 실제로 발생해서, 작은 표시 수정 2건이 남았습니다. 이 두 건과 각각의 회귀 시험이 들어오면 연습 화면 범위로 승인하겠습니다. 저는 소스만 읽었고 컴파일·Play·클릭은 하지 않았습니다(NOT_RUN).\n\n**B1 — 예약한 카드가 화면에서 사라짐 (M3)**\n- **발생 조건:** 세라 필살기는 이번 턴 '다음 턴' 예약 칸을 하나 늘립니다(`game_data.json:236–238`). 그 턴에 '다음 턴' 예약을 3장 하면, 시간표(`MemoryForgeBattleClient.cs:216–220`)는 기본 칸만 그리기 때문에 세 번째 카드가 보이지 않습니다. 손패에서 빠지고 행동력도 쓰였는데 어디에도 표시되지 않습니다. 정예·보스처럼 긴 연습 전투에서 실제 플레이로 도달합니다.\n- **최소 수정:** `Timeline()` 안에서 임시 칸과 봉인 칸까지 반영해 칸 수를 계산하고, 그룹마다 `max(용량, 실제 예약 수)`만큼 칸을 그립니다. 최대 5칸 × 220이라 지금 패널 폭에 들어갑니다.\n\n**B2 — 적 공격 수치가 실제와 다르고 상태가 안 보임 (M4)**\n- **발생 조건:**\n  - 기본 조우의 기억 나방은 3턴에 힘 +1을 얻습니다. 4턴부터 화면에는 12와 7×2가 나오지만 실제 피해는 13과 8×2입니다(`Battle.cs:610`).\n  - 프리셋 시작 카드 `구조 분석`(취약), `도발`(약화), `정조준`(버프)을 써도 상태 표시가 전혀 없어 효과가 없는 것처럼 보입니다.\n  - 보스 '약점 노출' 의도는 뒤따르는 공격 피해를 숨깁니다.\n  - HTML 참조는 이 모두를 이미 표시합니다(`prototype/src/ui.js:470/482/507/560`).\n- **최소 수정 (화면 코드만, Core 변경 없음):** HTML 참조와 같은 방식으로, 의도 수치를 `round(d×난이도/100)+힘`으로 보여 주고 적 상태칩과 파티 약화를 추가합니다.\n\n**시험 6개**\n- 제가 쓴 기존 4개는 그대로이고, 새 입력 흐름에서도 유효합니다. 시험 3이 고르는 프리셋 카드와 패시브는 모두 결정적이라 정확한 예측 단언이 성립합니다. 주석의 행 번호 두 곳만 바뀌었습니다.\n- Root가 추가한 시험 5(선택 단계 무소비·기록 오버레이)와 시험 6(드로우 예측)은 타당합니다. 차단은 아니지만 보강을 권합니다.\n  - 시험 5는 오버레이를 열기 **전에** 같은 좌표가 실제로 확정 버튼에 닿는지 대조 확인이 없습니다. 그래서 좌표가 틀려도 통과할 수 있습니다.\n  - 시험 5는 적이 2체일 때 대상이 자동 선택되지 않는다는 점을 확인하지 않습니다.\n  - 시험 6은 정적 판정 경로만 검증합니다. RNG·뽑을 더미 순서로 결과를 가리는 경로는 프리셋에서 도달할 카드가 없어 다루지 않습니다.\n- 시험 기준을 낮추거나 데이터를 바꾼 흔적은 없습니다.\n\nM2·M7·Edit 모드 수명주기(R1)·L4–L12·접근성·아트·Run 범위는 계속 보류로 남겨 두었고, 차단 사유가 아닙니다. session_id는 제 쪽에서 확인할 수 없습니다.\n\nFiles:\n- ops/ai/tasks/P1-UNITY-BATTLE-VIEW-RECHECK.md",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ]
+}

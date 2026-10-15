@@ -1,0 +1,19 @@
+{
+  "ciNodeMajor": 22,
+  "localNode": "25.9.0",
+  "validationNode": "22.14.0",
+  "actualNativeGzipRecompression": {
+    "node25Zlib": "1.2.12",
+    "node22Zlib": "1.3.0.1-motley-82a5fec",
+    "sourceGzipBytes": 5531027,
+    "node22RecompressedBytes": 5458172,
+    "firstCompressedDifference": 12,
+    "sameDecompressedBytes": 89893535
+  },
+  "firstNode22TestExit": 1,
+  "isolatedStrictCheckExit": 134,
+  "failure": "Strict recompression assertion expands a multi-megabyte Buffer difference until the V8 heap limit; valid streams from different zlib versions need structural/CRC/size validation, not identical compression choices",
+  "runtimeProvenanceStillNeedsFix": true,
+  "csvOriginalBytesVerified": "csv_original_bytes.json",
+  "inputManifestsRegenerated": false
+}

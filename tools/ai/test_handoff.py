@@ -2,7 +2,7 @@
 """Package tests; no model calls, credentials, cloud access, or payments."""
 import unittest,json,re,hashlib
 from pathlib import Path
-from delivery_files import handoff_files, private_path
+from delivery_files import font_errors, handoff_files, private_path
 ROOT=Path(__file__).resolve().parents[2]
 class HandoffTests(unittest.TestCase):
  def test_root_files(self):
@@ -54,8 +54,9 @@ class HandoffTests(unittest.TestCase):
  def test_full_pdf_build_entrypoint(self):
   d=json.loads((ROOT/'package.json').read_text())
   self.assertIn('build_delivery_pdf.py',d['scripts']['docs']);self.assertIn('build_integrated_design.py',d['scripts']['docs:game'])
- def test_no_font_binaries_or_credentials_shipped(self):
-  for p in handoff_files(ROOT):
-   self.assertNotIn(p.suffix.lower(),{'.ttf','.otf','.ttc','.woff','.woff2'})
+ def test_only_approved_licensed_font_and_no_credentials_shipped(self):
+  payload=list(handoff_files(ROOT))
+  self.assertEqual(font_errors(ROOT,payload),[])
+  for p in payload:
    self.assertFalse(private_path(p.relative_to(ROOT)),str(p.relative_to(ROOT)))
 if __name__=='__main__':unittest.main(verbosity=2)

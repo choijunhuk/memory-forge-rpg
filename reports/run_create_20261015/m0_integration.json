@@ -1,0 +1,22 @@
+{
+  "status": "COMMITTED_PUSHED_PR2_BOTH_EXACT_HEAD_CI_SUCCESS",
+  "head": "776380fc2ae1d0df2decb92c582445a5e594edc0",
+  "pr": "https://github.com/choijunhuk/memory-forge-rpg/pull/2",
+  "runs": [
+    {
+      "conclusion": "success",
+      "databaseId": 38703059054,
+      "event": "pull_request",
+      "headSha": "776380fc2ae1d0df2decb92c582445a5e594edc0",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 38703051640,
+      "event": "push",
+      "headSha": "776380fc2ae1d0df2decb92c582445a5e594edc0",
+      "status": "completed"
+    }
+  ],
+  "at": "2026-10-15T08:14:36.742111+00:00"
+}

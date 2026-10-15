@@ -10,7 +10,7 @@ namespace MemoryForge.PlayModeTests
     {
         // Authored Sera starters, com_guard, sera_phase, c_echo and current memory costs from data/game_data.json.
         // Only fields MemoryV2 reads are typed; this checks Unity runtime execution, not all-content import or Run replay.
-        static MemoryRulesData SeraRules()
+        internal static MemoryRulesData SeraRules()
         {
             var data = new MemoryRulesData { CapacityBase = 6, Costs = new MemoryCostConfig { AddB = 1, AddA = 2, AddS = 3, AddCommon = 1,
                 Upgrade = 1, PartCommon = 1, PartRare = 2, Evolution = 2, Remove = 1 } };

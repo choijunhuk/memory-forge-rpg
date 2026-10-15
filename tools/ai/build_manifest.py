@@ -2,12 +2,15 @@
 """Build current release hashes AFTER verification; not an input-repair command."""
 from pathlib import Path
 import hashlib,json
-from delivery_files import delivery_files, handoff_files, private_path
+from delivery_files import delivery_files, font_errors, handoff_files, private_path
 ROOT=Path(__file__).resolve().parents[2]
 SKIP={'MANIFEST_AIO.json','MANIFEST.sha256'}
 def files():
- for p in handoff_files(ROOT):
+ payload=list(handoff_files(ROOT))
+ for p in payload:
   if private_path(p.relative_to(ROOT)):raise ValueError(f'Local account files cannot be delivered: {p.relative_to(ROOT).as_posix()}')
+ errors=font_errors(ROOT,payload)
+ if errors:raise ValueError('Font files cannot be delivered: '+'; '.join(errors))
  for p in delivery_files(ROOT):
   rel=p.relative_to(ROOT)
   if rel.as_posix() in SKIP:continue

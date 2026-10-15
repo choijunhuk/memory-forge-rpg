@@ -5,3 +5,10 @@ data/game_data.json linguist-generated=true
 docs/design/gen/*.md linguist-generated=true
 engine/tests/vectors/*.json linguist-generated=true
 prototype/index.html linguist-generated=true
+# Preserve the original input-manifest bytes across checkouts.
+docs/archive/v0.6_materials/pass_rewards.csv -text whitespace=cr-at-eol
+reports/audit_v081/preservation_by_chapter.csv -text whitespace=cr-at-eol
+reports/daily_income_42d.csv -text whitespace=cr-at-eol
+reports/upstream_v070/daily_income_42d.csv -text whitespace=cr-at-eol
+# Keep the upstream OFL license text, including its original line-end spaces.
+client/MemoryForgeUnity/Assets/Resources/Fonts/IBMPlexSansKR-OFL.txt whitespace=-blank-at-eol

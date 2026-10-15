@@ -120,7 +120,8 @@ static class Program
         int queryFailures = BattlePlayerQueryChecks.Run(root);
         int playerFailures = BattlePlayerActionChecks.Run(root);
         int memoryFailures = MemoryV2Checks.Run(root);
-        return failures == 0 && traceFailures == 0 && openingFailures == 0 && turnFailures == 0 && queryFailures == 0 && playerFailures == 0 && memoryFailures == 0 ? 0 : 1;
+        int runCreateFailures = RunCreateChecks.Run(root);
+        return failures == 0 && traceFailures == 0 && openingFailures == 0 && turnFailures == 0 && queryFailures == 0 && playerFailures == 0 && memoryFailures == 0 && runCreateFailures == 0 ? 0 : 1;
     }
 
     static bool Throws(Action a, string code) { try { a(); return false; } catch (RuleException e) { return e.Code == code; } }
@@ -148,7 +149,7 @@ static class Program
         return cfg;
     }
 
-    static StatsConfig LoadStats(JsonElement p)
+    internal static StatsConfig LoadStats(JsonElement p)
     {
         var s = p.GetProperty("stats"); var lv = p.GetProperty("levelling");
         var wp = s.GetProperty("weaponPower");

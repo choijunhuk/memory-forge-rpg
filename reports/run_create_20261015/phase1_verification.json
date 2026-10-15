@@ -1,0 +1,18 @@
+{
+  "status": "PHASE1_EXECUTION_VERIFIED_PHASE2_IN_PROGRESS",
+  "assertions": 211297,
+  "supportedFactories": 2121,
+  "created": 2023,
+  "rejected": 98,
+  "pureQueries": 45130,
+  "recreations": 2023,
+  "typedDomain": 5,
+  "JSOnlyNative": 5,
+  "RunCommands": 0,
+  "hostPhase1CodeSHA": "cdb5764de7b1b9e6af1d41c95b863c09aa3befc3562eeb5c9317089fa23a17c1",
+  "freshNode": 17,
+  "oldAndNewCorpusEquality": "memory_refresh_comparison.json",
+  "oppositeCoreSourceReview": "pending phase2 official Opus",
+  "rootIntegration": "NOT_YET",
+  "at": "2026-10-15T08:14:35.726677+00:00"
+}

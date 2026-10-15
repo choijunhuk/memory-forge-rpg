@@ -1,0 +1,110 @@
+TAP version 13
+# Subtest: all10 authored characters/resonances0..6 create real short/full legacy/v2 runs
+ok 1 - all10 authored characters/resonances0..6 create real short/full legacy/v2 runs
+  ---
+  duration_ms: 18541.167041
+  ...
+# Subtest: factory/query counts and exact authored denominators remain distinct from expedition commands
+ok 2 - factory/query counts and exact authored denominators remain distinct from expedition commands
+  ---
+  duration_ms: 1.129
+  ...
+# Subtest: actual Create and every recorded pure query reproduce full private state without injected snapshots
+ok 3 - actual Create and every recorded pure query reproduce full private state without injected snapshots
+  ---
+  duration_ms: 1089.588625
+  ...
+# Subtest: Run stats derive from account inputs instead of trusting supplied combat values
+ok 4 - Run stats derive from account inputs instead of trusting supplied combat values
+  ---
+  duration_ms: 0.4055
+  ...
+# Subtest: stage rounding preserves zero fallback, negative half and empty difficulty shape
+ok 5 - stage rounding preserves zero fallback, negative half and empty difficulty shape
+  ---
+  duration_ms: 0.993417
+  ...
+# Subtest: capacity uses source ascensions and signed resonance slice semantics without retuning
+ok 6 - capacity uses source ascensions and signed resonance slice semantics without retuning
+  ---
+  duration_ms: 0.305042
+  ...
+# Subtest: stable keys skip both saved and current-deck collisions while legacy copies get new keys
+ok 7 - stable keys skip both saved and current-deck collisions while legacy copies get new keys
+  ---
+  duration_ms: 0.266958
+  ...
+# Subtest: base-kit play preserves original before/baseline and uses new identities for removed/evolved cards
+ok 8 - base-kit play preserves original before/baseline and uses new identities for removed/evolved cards
+  ---
+  duration_ms: 0.356917
+  ...
+# Subtest: field absence, null, explicit false/zero, own undefined and opaque fractions remain distinguishable
+ok 9 - field absence, null, explicit false/zero, own undefined and opaque fractions remain distinguishable
+  ---
+  duration_ms: 3.263417
+  ...
+# Subtest: legacy/v2 validation, native diagnostics and explicit C\# numeric-domain probes keep separate denominators
+ok 10 - legacy/v2 validation, native diagnostics and explicit C\# numeric-domain probes keep separate denominators
+  ---
+  duration_ms: 0.696667
+  ...
+# Subtest: all300 maps preserve authored node/floor/edge order, reachability and minimum battle constraints
+ok 11 - all300 maps preserve authored node/floor/edge order, reachability and minimum battle constraints
+  ---
+  duration_ms: 5.920084
+  ...
+# Subtest: literal map branches and private RNG consumption include lazy choices, elite pruning and parent repair
+ok 12 - literal map branches and private RNG consumption include lazy choices, elite pruning and parent repair
+  ---
+  duration_ms: 1.168708
+  ...
+# Subtest: source/manifest provenance remains explicit and no historical input manifest is regenerated
+ok 13 - source/manifest provenance remains explicit and no historical input manifest is regenerated
+  ---
+  duration_ms: 1.062166
+  ...
+# Subtest: saved gzip strictly decodes and checkFixture compares it exhaustively with fresh creation/query evidence
+ok 14 - saved gzip strictly decodes and checkFixture compares it exhaustively with fresh creation/query evidence
+  ---
+  duration_ms: 23377.418292
+  ...
+# Subtest: only exact numeric Node provenance may differ from this runtime; native errors and every other byte still compare exactly
+ok 15 - only exact numeric Node provenance may differ from this runtime; native errors and every other byte still compare exactly
+  ---
+  duration_ms: 43810.845708
+  ...
+# Subtest: strict gzip reader accepts other valid DEFLATE encodings and platform OS codes of the same JSON
+ok 16 - strict gzip reader accepts other valid DEFLATE encodings and platform OS codes of the same JSON
+  ---
+  duration_ms: 96.299208
+  ...
+# Subtest: strict gzip reader rejects header, payload, CRC32, ISIZE, truncation, trailing bytes and concatenated members
+ok 17 - strict gzip reader rejects header, payload, CRC32, ISIZE, truncation, trailing bytes and concatenated members
+  ---
+  duration_ms: 24.5535
+  ...
+# Subtest: strict reader rejects malformed JSON, escape-equivalent duplicate keys, UTF8/BOM and gzip tampering
+ok 18 - strict reader rejects malformed JSON, escape-equivalent duplicate keys, UTF8/BOM and gzip tampering
+  ---
+  duration_ms: 0.357917
+  ...
+# Subtest: case/source/count/shape corruption is rejected and freshly forged complete state/query hashes cannot pass
+ok 19 - case/source/count/shape corruption is rejected and freshly forged complete state/query hashes cannot pass
+  ---
+  duration_ms: 71226.427084
+  ...
+# Subtest: atomic deterministic export preserves old targets and removes temporary files on real filesystem failures
+ok 20 - atomic deterministic export preserves old targets and removes temporary files on real filesystem failures
+  ---
+  duration_ms: 85423.936875
+  ...
+1..20
+# tests 20
+# suites 0
+# pass 20
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 243973.011125

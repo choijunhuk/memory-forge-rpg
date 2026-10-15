@@ -1,0 +1,29 @@
+{
+  "task_id": "P1-CSHARP-RUN-CREATE-CLAUDE-UNITY-TESTS",
+  "run_id": "P1-CSHARP-RUN-CREATE-CLAUDE-UNITY-TESTS-20261015T085504055466Z",
+  "status": "RECEIVED_UNVERIFIED",
+  "requestedEffort": "high",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "changes_verified": false,
+  "raw_output": "ops/ai/local/P1-CSHARP-RUN-CREATE-CLAUDE-UNITY-TESTS-20261015T085504055466Z*",
+  "billing_verified_at": "2026-10-14T21:44:57.439760+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "codex/csharp-battle-opening",
+  "base_commit": "2ffc29ecdbdeee5027258ad6f73302b98820fc35",
+  "worktree": "/Users/choi/.codex/worktrees/csharp-battle-opening/Memory_forge",
+  "allowed_files": [
+    "client/MemoryForgeUnity/Assets/Tests/PlayMode/MemoryRulesPlayModeTests.cs",
+    "client/MemoryForgeUnity/Assets/Tests/PlayMode/RunCreatePlayModeTests.cs"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "0fa41ef3-c168-42ca-8f1e-7ebe78db607b",
+  "subtype": "success",
+  "is_error": false,
+  "result": "Both test files are written and nothing has been compiled or run in Unity (NOT_RUN).\n\n**Files changed**\n- `client/MemoryForgeUnity/Assets/Tests/PlayMode/MemoryRulesPlayModeTests.cs`: the only change is `SeraRules()` going from `static` to `internal static`.\n- `client/MemoryForgeUnity/Assets/Tests/PlayMode/RunCreatePlayModeTests.cs`: new file, labelled in its header as a selected authored subset. It is not full-content import, game UI or Run command acceptance, and nothing is injected into Run state.\n\n**Test data.** The tests reuse `SeraRules()` and add the source `w_basic_ranged` weapon, its `wc_basic_ranged` card and the zone1 encounter record. Stats use the default `StatsConfig`, and Sera's metadata is Id `sera` with weapon type `ranged`. Every expected value is copied from `unity_reference_actual_js.json`, and results are compared through `CanonicalState.Serialize`. No JSON parser, Host loader or reflection is used.\n\n**Test 1: `LegacySeraLevel20CreatesSourceDeckMapAndDetachedQueries`**\n- **Party and resources:** power4 96, HP 80, gearBps 0, skill/ult level 1, and no weapon ID (the default weapon adds no stat power). HP, max HP and hpRef are all 80, coins 60, seqCard 6, schema `mf-run-0.7`, phase MAP, position null, no memory policy.\n- **Deck:** six cards with exact keys k1–k6, including the common card assigned to Sera and the weapon card.\n- **Map and choices:** the seed-0 RNG checkpoint and the exact 7-floor map, boss included; the first three choices.\n- **Determinism:** creating again from the same setup gives an identical full state.\n- **Detachment:** it clears returned choices, edits returned nodes, renames the boss, and mutates the snapshot's map, RNG, party, stats and deck. The live state and later queries stay unchanged.\n- **Missing nodes:** `NodeById(\"missing\")` and `NodeById(\"\")` return null.\n- **Setup:** the caller's party setup stays unchanged.\n\n**Test 2: `V2BasePlaySkipsOccupiedSavedIdentityAndKeepsInputsDetached`**\n- **Run identity:** schema, memory policy v2, run ID `unity`, memoryVersion 4, HP 81, seqCard 3.\n- **Memory snapshots:**\n  - memoryBefore keeps the saved key `run:unity:1`.\n  - The baseline keeps `base:sera:0`.\n  - The base-play copy and the played card use `run:unity:2`, skipping the occupied saved key.\n  - The weapon gets `run:unity:3`.\n- **Deck and map:** the exact deck, RNG, map and first choices.\n- **Inputs:** the whole input memory is unchanged after creation, and later mutation of the input or a snapshot doesn't reach the live run.\n- **Rejected departures:** a duplicate stable key gives `IDENTITY_REQUIRED`, memoryVersion −1 gives `INVALID_SNAPSHOT`, and an empty run ID gives `RUN_ID_REQUIRED`. Each leaves its input memory unchanged.\n\n**Not covered:** Unity compilation and the PlayMode run are for you to do in the single Unity Editor. Not tested here: full content import, encounter or event selection (that's R1), Run commands, and save/restore.",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ]
+}

@@ -11,7 +11,7 @@
 | 작업 | 상태 | 정확한 요구/완료 조건 |
 |---|---|---|
 | P1 JS→C# 트레이스 생성기 | IN_PROGRESS | §16.2·§20.9 P1-1. `tools/gen_traces.mjs`와 회귀9개·전체 출력/재생 검증 완료. 실제700short+300full=1000개·273748명령·275748해시 재생 PASS. [전체 증거](../reports/cross_language_20261015/replay.json). 상대 검토·통합을 거쳐 C# 실제 명령 재생으로 이어감. JS oracle 성공은 C# 동치 아님. |
-| C# 전체 Battle·Run·기억 저장 | IN_PROGRESS | C#은 Rng/Gacha/Stats/ReservationBook·canonical 기반과 실제 Battle.Create/begin을 구현했다. [전투 시작267](../reports/csharp_opening_20261015/)과 [실제반복턴356사례/1740요청·29232검사](../reports/csharp_turns_20261015/), Unity PlayMode7개 및 Opus Max APPROVE. Git/CI는 해당 head별 별도 기록. 시작/종료2000해시 PASS와 구별하며 전체1000 Run 트레이스 명령 재생은0개. [전체카드정의/순수질의702사례·128244검사](../reports/player_queries_20261015/)와 [실제play/ult·생산 수명주기992사례/3870요청·87991검사](../reports/player_actions_20261015/) 완료·Sol/Opus Max 소스 승인. UnityPlay12/Edit3, 기술씬macOS빌드/Metal시작은 별도 근거다. [순수기억 M0 1072호출/5451검사·UnityPlay16/Edit3](../reports/memory_rules_20261015/)와 양방향 검토·이관회귀수정 완료. 전체Run/기억저장/복원·후반후보·게임UI/기기/서버는 미구현 또는 별도 미수용. netstandard2.1/C#8·정수/BigInteger·컬렉션 순서·동일 명령별 해시1000개와 기존 CoreChecks를 모두 수용해야 함. |
+| C# 전체 Battle·Run·기억 저장 | IN_PROGRESS | C#은 Rng/Gacha/Stats/ReservationBook·canonical 기반과 실제 Battle.Create/begin을 구현했다. [전투 시작267](../reports/csharp_opening_20261015/)과 [실제반복턴356사례/1740요청·29232검사](../reports/csharp_turns_20261015/), Unity PlayMode7개 및 Opus Max APPROVE. Git/CI는 해당 head별 별도 기록. 시작/종료2000해시 PASS와 구별하며 전체1000 Run 트레이스 명령 재생은0개. [전체카드정의/순수질의702사례·128244검사](../reports/player_queries_20261015/)와 [실제play/ult·생산 수명주기992사례/3870요청·87991검사](../reports/player_actions_20261015/) 완료·Sol/Opus Max 소스 승인. UnityPlay12/Edit3, 기술씬macOS빌드/Metal시작은 별도 근거다. [순수기억 M0 1072호출/5451검사·UnityPlay16/Edit3](../reports/memory_rules_20261015/)와 양방향 검토·이관회귀수정 완료. [실제R0생성/지도/조회215645검사·UnityPlay18/Edit3](../reports/run_create_20261015/) 검증·상대소스승인 완료. 전체Run/기억저장/복원·후반후보·게임UI/기기/서버는 미구현 또는 별도 미수용. netstandard2.1/C#8·정수/BigInteger·컬렉션 순서·동일 명령별 해시1000개와 기존 CoreChecks를 모두 수용해야 함. |
 | 후반 본편 활성화 | BLOCKED_ACCEPTANCE | JS 여섯 행동·HTML·23종 후보 있음. 최신40시나리오/조우 확대는44조우×40×3=5280회, 목표 미달21개. C#·서사/연출·목표 미달 해소 전 `authored` 활성화/본편 완료 선언 금지. |
 | 실제 Unity 게임 수직 슬라이스 | PARTIAL(환경/공유Core) | 실제 Editor의 연결 검증 씬·프리팹·Play·EditMode3개·macOS 연결 앱 빌드는 확인. 로비→편성→지도→전투→보상→저장·서버·실기기는 미완료. |
 | 서버 앱·저장v2 접합 | NOT_IMPLEMENTED | §17 전체 및 §8.11·§17.5: 소유권·버전·고정 잠금·원장·이력·멱등·rollback·다기기 동시성. 스키마/JS 로컬 저장으로 대체 불가. |
@@ -250,11 +250,11 @@ P1/P2 완료로 개발을 끝내지 않는다. 이 표와 아래 장별 요구�
 |---|---|---|---|
 | **§14.1 정보 구조** | PARTIAL(HTML) | [UI][ui]·[스모크][smoke] | 참조 탐사/모집/도감/기억/설정 외 전체 메뉴·Unity 연결 |
 | **§14.2 공통 규칙** | PARTIAL(HTML) | [UI][ui]·[P0 브라우저][p0-browser] | 실기기48dp·안전영역·라이선스·Unity 접근성 검증 |
-| **§14.3 전투 화면 (가로 16:9)** | PARTIAL(HTML) | [UI][ui]·[후반 UI 시험][late-ui] | Unity 전투 화면·이벤트 연출·예약 해소·입력 잠금 |
+| **§14.3 전투 화면 (가로 16:9)** | PARTIAL(HTML/Unity전투연습) | [UI][ui]·[실제Unity26시험](../reports/unity_client_20261015/playmode26_pass.json) | 실제카드/대상/예약/확정/예측/상태·의도 연결. 전체탐사UI·최종아트·연출·모바일수용 남음 |
 | **§14.4 화면별 명세** | PARTIAL(HTML) | [UI][ui]·[스모크][smoke] | 성장/인연/도전/우편/상점/계정삭제 등 미구현 화면과 서버 |
 | **§14.5 온보딩 순서** | NOT_IMPLEMENTED | [원문14장](source_v0.8.1/14_chapter.md) | 단계별 실제 튜토리얼·강제 첫 저장 안내·지급/해금 |
 | **§14.6 접근성·현지화** | PARTIAL | [UI][ui]·[브라우저 시험][memory-ui] | 전체 키 기반 번역·영/일 길이·Unity 색약/아이콘 수용 |
-| **§14.7 정보 밀도와 안전한 입력** | PARTIAL(HTML) | [후반 UI 시험][late-ui]·[P0 브라우저][p0-browser] | 최악 정보량·실기기 입력/가림·실서버 재시도·순수 미리보기 |
+| **§14.7 정보 밀도와 안전한 입력** | PARTIAL(HTML/Unity전투연습) | [Unity입력·예측시험](../reports/unity_client_20261015/playmode26_pass.json)·[P0 브라우저][p0-browser] | 확정전무소비/팝업차단/순수·숨은결과차단예측 확인. 최악밀도/48dp/130%/실기기·서버 남음 |
 | **§14.8 작은 화면의 기존 관찰과 추가 인수 시험** | PARTIAL(브라우저) | [화면 증거][late-screens]·[브라우저 시험][memory-ui] | 640×360·노치·글자130%·터치·헤더 겹침 실기기 별도 |
 
 ## 장 15 — 15. 아트·연출·사운드
@@ -280,7 +280,7 @@ P1/P2 완료로 개발을 끝내지 않는다. 이 표와 아래 장별 요구�
 | **§16.1 구성** | PARTIAL | [콘텐츠 빌드][content-build]·[JS][js]·[기존 C#][core] | 공유 전체 C# DLL·권위 서버·콘텐츠 해시 배포 연결 |
 | **§16.2 규칙 코어 이식 (JS → C#)** | IN_PROGRESS | [트레이스 생성기][traces]·[트레이스 시험][trace-tests]·[기존 C#][core] | JS oracle1000개 재생·C#2000스냅샷/정렬JSON 검사와 [실제begin267사례](../reports/csharp_opening_20261015/) 완료; [실제end/적행동1740요청](../reports/csharp_turns_20261015/) 확인; 전체 Battle/Run/저장 명령 재생 동치는 미구현 |
 | **§16.3 결정론과 숨겨진 정보** | PARTIAL | [publicView][js]·[API 계약][api] | 서버 비공개 RNG/뽑을더미·모집 CSPRNG·문의 재생 구현 |
-| **§16.4 Unity 클라이언트** | PARTIAL(연결 검증) | [Unity 프로젝트][unity]·[실행 증거][env] | 게임 전체 가로 UI·서버·Addressables/리그·Android IL2CPP·성능 수용 |
+| **§16.4 Unity 클라이언트** | PARTIAL(연결/실제전투연습) | [Unity 프로젝트][unity]·[실행 증거][env] | 게임 전체 가로 UI·서버·Addressables/리그·Android IL2CPP·성능 수용 |
 | **§16.5 서버** | NOT_IMPLEMENTED(서버 앱) | [스키마][schema]·[API 계약][api] | 인증/세션·무결성·명령·원장·속도제한 실제 ASP.NET 앱 |
 | **§16.6 텔레메트리(이벤트 사전)** | NOT_IMPLEMENTED(전송/운영) | [이벤트 사전](source_v0.8.1/16_chapter.md)·[JS 이벤트][js] | 서버/클라이언트 계측·보관·개인정보 계약; MCP telemetry OFF와 별개 |
 | **§16.7 버전 세 종류를 구분한다** | IMPLEMENTED(버전 구분) | [현재 상태][current]·[목표 정책][policy-data] | 문서0.8.1/데이터0.7.0/JS 수정·목표 활성 상태 계속 구분 |
@@ -470,3 +470,5 @@ P1/P2 완료로 개발을 끝내지 않는다. 이 표와 아래 장별 요구�
 현재 반복 턴 단위의 [JS222 로그](../reports/csharp_turns_20261015/node_tests.txt)·[C# 실제명령](../reports/csharp_turns_20261015/root_checks.txt)·[Opus 승인](../ops/ai/tasks/P1-CSHARP-TURNS-CROSS-REVIEW.result.json)을 이전 단위와 구분한다. 다음 [플레이어 행동 경계](../ops/ai/tasks/P1-CSHARP-PLAYER-ACTIONS-BOUNDARY.md)는 구현 지시서이며 완료 증거가 아니다.
 
 A0 [실제128244 질의검사](../reports/player_queries_20261015/root_checks.txt)·[JS234](../reports/player_queries_20261015/node_tests.txt)·[Opus A0승인](../ops/ai/tasks/P1-CSHARP-PLAYER-QUERIES-CROSS-REVIEW.result.json)을 기록한다. 다음 [A1 실행 작업](../ops/ai/tasks/P1-CSHARP-PLAYER-EXECUTION-IMPLEMENTATION.md)은 전체카드·모드·필살기·생산된 상태의 실제 실행이며 조회 성공과 구별한다.
+
+현재 추가증거: [R0최종215677/115위조](../reports/run_create_20261015/final_reader_green.txt), [실제Unity26Play/3Edit와 상호리뷰수정](../reports/unity_client_20261015/root_acceptance.md). 전체C#Run진행명령은0이며 단위검증을 전체게임/기기 수용으로 확대하지 않는다.

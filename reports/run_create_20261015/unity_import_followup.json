@@ -1,0 +1,15 @@
+{
+  "status": "EXPLICITLY_IMPORTED_AND_TYPE_REGISTERED",
+  "newType": "MemoryForge.PlayModeTests.RunCreatePlayModeTests",
+  "reflectionConfirmed": true,
+  "actualEditorAssemblies": [
+    "MemoryForge.Core",
+    "MemoryForge.EditorTests",
+    "MemoryForge.PlayModeTests"
+  ],
+  "console_errors": 0,
+  "console_warnings": 0,
+  "initialPlayJob": "2664417e17e34623afbae436e5517ca9 only16oldtests; NOTcountedAsR0acceptance",
+  "action": "actual AssetDatabase.ImportAsset ForceSynchronousImport/Refresh + RequestScriptCompilation, then reflection, then new complete Play request",
+  "at": "2026-10-15T09:05:52.136660+00:00"
+}

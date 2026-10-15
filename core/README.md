@@ -48,3 +48,9 @@ Unity6가 로컬 UPM으로 동일 Core 소스를 직접 컴파일했고 실제 P
 `MemoryV2`의 Inspect/Baseline/ListChanges/Cost/ApplyChanges/Apply/Recover/Migrate/CapacityOf가 현재 JS 규칙을 실행한다. Core는 JSON 라이브러리 없이 typed 모델과 분리된 JSON 그래프를 쓰며 Host가 기존 데이터/UTF16/유한 메타데이터를 연결한다. [1072호출·5451검사](../reports/memory_rules_20261015/)·29개 native 회귀·실제UnityPlay16/Edit3·양방향 검토를 확인했다. 전체저장결과비용과 키/이관원본을 보존하며 가격·용량을 바꾸지 않았다. JS own격리키, 정수키검사순서·빈pool지연평가·배열이관오류순서를 실제회귀로 고쳤다.
 
 M0는 순수 규칙이며 전체Run/원시바이트백업/실계정저장·이관/복원·서버가 아니다. 정해진 string ID/JSON수치 경계와 기존저작데이터를 수용하며 문서화된 비정상 강제변환·미래데이터까지 동치로 확대하지 않는다. R0생성/지도와 실제명령은 후속검증이다.
+
+## 실제 탐사 생성 R0
+
+`Run.Create`가 현재 legacy/v2의 Stats파생·안정키·출발기억·덱·기본무기·지도/개별난수를 실제 생성하고 `State`/`Available`/`NodeById`가 깊은 사본으로 순수 조회한다. [C#215645검사/2121생성·45130조회](../reports/run_create_20261015/)와 위조90/identity12/typed73, Node286, 실제UnityPlay18/Edit3 및 양방향 검토를 통과했다. 2131JS분모 중5JS고유·5typed진단은 parity와 구분한다.
+
+R0는 fresh생성/조회이며 전체Run진행/전투접합/보상/기억commit/저장복원·계정/서버가 아니다. 객체키는 canonical의미로, 배열은 순서까지 검증하고 own-undefined를 null로 바꾸지 않는다. boss위치available/미래무기타입/타입경계/공유data인덱스의 후속조건은 기록하고 R1도달경로에서 다룬다.
