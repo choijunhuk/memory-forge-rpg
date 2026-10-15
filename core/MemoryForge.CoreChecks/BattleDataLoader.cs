@@ -291,7 +291,7 @@ static class BattleDataLoader
             default: throw new InvalidDataException("Unsupported snapshot token");
         }
     }
-    static string Name(JsonProperty property)
+    internal static string Name(JsonProperty property)
     {
         try { return property.Name; }
         catch (InvalidOperationException)

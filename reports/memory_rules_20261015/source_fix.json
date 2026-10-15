@@ -1,0 +1,9 @@
+{
+  "scope": "Single own-property correction only in isolated M0 worktree; Root/A1 original remains frozen",
+  "path": "proposals/memory_v2.cjs",
+  "before": "825b671e4ac399b06f26517ea461c645734e1afa76cb4fc16503a648c735c508",
+  "after": "6ee5aa939e3169d034c99418ceebdc864473fe5cc9b4464fccf7e80dcbec308d",
+  "rootA1Unchanged": true,
+  "realAccountStoreTouched": false,
+  "rulesAndNumbersChanged": false
+}

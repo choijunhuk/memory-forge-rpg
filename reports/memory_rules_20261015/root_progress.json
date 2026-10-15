@@ -1,0 +1,17 @@
+{
+  "status": "VERIFIED_LOCAL_PENDING_COMMIT_CI",
+  "at": "2026-10-15T07:35:13.125825+00:00",
+  "memoryAssertions": 5451,
+  "memoryCalls": 1072,
+  "nativeRegressions": 29,
+  "UnityPlay": 16,
+  "UnityEdit": 3,
+  "Node": 269,
+  "Python": 49,
+  "docs": 9,
+  "handoff": 13,
+  "browserMemory": 13,
+  "browserLate": 10,
+  "RunCommands": 0,
+  "oppositeAI": "initial xhigh finding fixed by Claude; Codex independent patch and runtime approval"
+}

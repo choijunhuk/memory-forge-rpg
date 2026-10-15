@@ -1,0 +1,93 @@
+{
+  "status": "ACTUAL_JS_CONFIRMED",
+  "cases": [
+    {
+      "id": "upgrade-before-array",
+      "input": {
+        "sera": [
+          {
+            "id": "sera_round",
+            "plus": 1
+          },
+          []
+        ]
+      },
+      "capacity": {
+        "sera": 6
+      },
+      "expectedCode": "INVALID_UPGRADE",
+      "actual": {
+        "schema": "mf-memory-v2",
+        "version": 0,
+        "memory": {},
+        "quarantine": {
+          "sera": {
+            "code": "INVALID_UPGRADE",
+            "original": [
+              {
+                "id": "sera_round",
+                "plus": 1
+              },
+              []
+            ]
+          }
+        },
+        "legacyBackup": {
+          "sera": [
+            {
+              "id": "sera_round",
+              "plus": 1
+            },
+            []
+          ]
+        },
+        "history": [],
+        "receipts": {}
+      }
+    },
+    {
+      "id": "identity-before-array",
+      "input": {
+        "sera": [
+          {
+            "key": "legacy:sera:1",
+            "id": "sera_round"
+          },
+          []
+        ]
+      },
+      "capacity": {
+        "sera": 6
+      },
+      "expectedCode": "IDENTITY_REQUIRED",
+      "actual": {
+        "schema": "mf-memory-v2",
+        "version": 0,
+        "memory": {},
+        "quarantine": {
+          "sera": {
+            "code": "IDENTITY_REQUIRED",
+            "original": [
+              {
+                "key": "legacy:sera:1",
+                "id": "sera_round"
+              },
+              []
+            ]
+          }
+        },
+        "legacyBackup": {
+          "sera": [
+            {
+              "key": "legacy:sera:1",
+              "id": "sera_round"
+            },
+            []
+          ]
+        },
+        "history": [],
+        "receipts": {}
+      }
+    }
+  ]
+}

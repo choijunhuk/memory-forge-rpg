@@ -110,7 +110,7 @@ function migrate(data,legacy,capacities){
    if(rows.some(c=>seen.has(c.key)))fail('IDENTITY_REQUIRED');
    if(!Number.isInteger(capacities[cid])||cost(data,cid,rows,baseline(data,cid))>capacities[cid])fail('OVER_CAPACITY');
    state.memory[cid]=rows;rows.forEach(c=>seen.add(c.key));
-  }catch(e){state.quarantine[cid]={code:e.code||'INVALID_SNAPSHOT',original:clone(legacy[cid])};}
+  }catch(e){Object.defineProperty(state.quarantine,cid,{value:{code:e.code||'INVALID_SNAPSHOT',original:clone(legacy[cid])},enumerable:true,writable:true,configurable:true});}
  }
  return state;
 }

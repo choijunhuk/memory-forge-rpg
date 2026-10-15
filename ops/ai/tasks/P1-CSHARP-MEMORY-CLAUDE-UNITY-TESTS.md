@@ -1,0 +1,9 @@
+# M0 Unity tests ONLY — write code now, High
+
+This is a scoped continuation of the M0 session. The prior combined authoring/review job was deliberately interrupted before any edit. All17 frozen M0 sources remain unchanged; existing Unity asmdefs/Core package and SharedCorePlayModeTests are now copied from actual Root for reference. Do not repeat broad discovery or final review. Final critical M0 source review will be a SEPARATE Max call.
+
+Your only task: replace the one-line placeholder in `client/MemoryForgeUnity/Assets/Tests/PlayMode/MemoryRulesPlayModeTests.cs` with TWO small complete NUnit PlayMode tests of the actual shared MemoryV2 Core. Use Edit now after the minimum API check. High is appropriate for this bounded test authoring; do not change any model/config/source. Only official Opus included subscription; no API/agents/Bash/MCP/extra credits. You are not alone; no other file is writable.
+
+1. With a tiny explicitly labeled selected authored Sera starter/current cost fixture, assert Application.isPlaying; baseline identity, one real upgrade/full-cost or diff/apply/recovery path, and detached graph/input immutability. 2. Migrate a legacy object with an own unknown __proto__ key and assert complete original quarantine/backup preservation and the source-defined error code. Read actual public API signatures in MemoryV2.cs/current source fixture data if needed; do not invent fields or add JSON parsers/dependencies/Host references/restore APIs. Exact source values, not invented balance. These tests do not claim full-content import or Run/server/account migration.
+
+Write the complete compilable file FIRST, keeping it small. After writing, report only the authored tests and NOT_RUN execution gap; do NOT perform the broad source review or explore more systems in this turn. Codex independently reviews your tests and runs the real Editor. Critical source review Max remains pending and will block integration until approved.

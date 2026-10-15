@@ -42,3 +42,9 @@ Unity6가 로컬 UPM으로 동일 Core 소스를 직접 컴파일했고 실제 P
 현재 저작 Battle의 `Create/begin/end/play/ult`,173카드·378기본모드·39효과·10필살기와 예약/부채/파워/성장/복제/소멸/균열을 실제 실행한다. [992사례/3870명령·87991검사](../reports/player_actions_20261015/)와 기존전체검사·Node257·UnityPlay12/Edit3 및 독립 Sol/공식 Opus Max 승인을 확인했다. 기존 시작 전용 효과 처리는 공유 실행기로 합치고267기존 시작을 유지하며 BattleState만 예약/공유resSeq를 소유한다. 소멸 중 더미 교체와 raw picks 소비시점 두 결함을 실제 회귀로 고쳤다.
 
 이 절이 위 시점별 미지원 play/ult 설명을 갱신한다. 전체Run/기억저장/복원·제안 후반행동·양수silence·전체Unity게임UI/Android/기기/서버는 별도이며 전체1000Run C#명령은0이다. 정수표현/원자적 오류 범위와 base0 원본충돌은 그대로다. 새macOS기술씬 빌드와 Metal시작은 전체게임·정상종료 수용으로 확대하지 않는다. 다음M0/R0를 별도 worktree에서 이어간다.
+
+## 순수 기억 규칙 M0
+
+`MemoryV2`의 Inspect/Baseline/ListChanges/Cost/ApplyChanges/Apply/Recover/Migrate/CapacityOf가 현재 JS 규칙을 실행한다. Core는 JSON 라이브러리 없이 typed 모델과 분리된 JSON 그래프를 쓰며 Host가 기존 데이터/UTF16/유한 메타데이터를 연결한다. [1072호출·5451검사](../reports/memory_rules_20261015/)·29개 native 회귀·실제UnityPlay16/Edit3·양방향 검토를 확인했다. 전체저장결과비용과 키/이관원본을 보존하며 가격·용량을 바꾸지 않았다. JS own격리키, 정수키검사순서·빈pool지연평가·배열이관오류순서를 실제회귀로 고쳤다.
+
+M0는 순수 규칙이며 전체Run/원시바이트백업/실계정저장·이관/복원·서버가 아니다. 정해진 string ID/JSON수치 경계와 기존저작데이터를 수용하며 문서화된 비정상 강제변환·미래데이터까지 동치로 확대하지 않는다. R0생성/지도와 실제명령은 후속검증이다.

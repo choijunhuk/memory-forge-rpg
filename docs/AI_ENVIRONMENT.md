@@ -81,3 +81,5 @@ A1의 [PlayMode12/EditMode3](../reports/player_actions_20261015/verification.jso
 ## Extra High 지원과 자율 선택 보완
 
 이전 High/Max 지원 기록을 두 수준만 허용한다는 뜻으로 사용하지 않는다. 로컬 `gpt-6.1-sol` 모델 카탈로그는 `xhigh`를 포함하고, [공식 Claude 지원표](https://code.claude.com/docs/en/model-config#adjust-effort-level)도 Opus5.5의 xhigh를 명시한다. 설치 CLI2.1.285의 기존 범위 실행기에 xhigh 인자/환경/결과 경로를 추가했다. 현재 Codex 턴의 Max 기록은 과거/현재 실행 증거이며 설정 문서만으로 xhigh로 변경됐다고 주장하지 않는다. 이후 실제 호출마다 요청값과 적용 세션 메타데이터를 확인한다. 운영 선택은 [§12](AI_WORKFLOW.md)를 따른다.
+
+M0에서도 실제Play16/Edit3을 확인했다([근거](../reports/memory_rules_20261015/)). Claude High의 두 기억시험을 Codex가 독립검토·실행했고, Opus xhigh가 찾은 배열이관P2를 Claude xhigh가 수정한 뒤 Codex가 재검토·전체실행했다. xhigh는 실제세션 effort/perTurnEffort로 확인했다. Root .NET5451/5451·1072호출과 전체Run명령0을 구분하며 Editor설정을 실제API/SaveAssets로 원래값에 복원했다. Console오류0/전송경고1을 기록하고 전체게임빌드/Android/실기기수용으로 확대하지 않는다.

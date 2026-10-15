@@ -1,0 +1,29 @@
+{
+  "task_id": "P1-CSHARP-MEMORY-CLAUDE-REVIEW-UNITY",
+  "run_id": "P1-CSHARP-MEMORY-CLAUDE-REVIEW-UNITY-20261015T061121367574Z",
+  "status": "FAILED",
+  "requestedEffort": "max",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "changes_verified": false,
+  "raw_output": "ops/ai/local/P1-CSHARP-MEMORY-CLAUDE-REVIEW-UNITY-20261015T061121367574Z*",
+  "billing_verified_at": "2026-10-14T21:44:57.439760+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "claude/balance-audit",
+  "base_commit": "9be537f4c5ef59e890322cb2d1de914fb49bfed6",
+  "worktree": "/Users/choi/.codex/worktrees/claude-balance-audit/Memory_forge",
+  "allowed_files": [
+    "client/MemoryForgeUnity/Assets/Tests/PlayMode/MemoryRulesPlayModeTests.cs"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "0189a4bb-b798-494e-8878-ab0db85b2912",
+  "subtype": "error_during_execution",
+  "is_error": true,
+  "result": null,
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ],
+  "blocking_reason": "Claude job failed; inspect the local checkpoint before continuing"
+}

@@ -1,0 +1,46 @@
+{
+  "at": "2026-10-15T07:17:46.866048+00:00",
+  "scope": "M0 final current authored pure-memory behavior and actual narrow Unity subset; FullRun commands0",
+  "files": [
+    {
+      "path": "core/MemoryForge.Core/MemoryV2.cs",
+      "sha256": "4408717c1d0ee3167a7b8f108c40c86be5de48a6385c292b39c251a6b3e03f23"
+    },
+    {
+      "path": "core/MemoryForge.CoreChecks/MemoryV2DataLoader.cs",
+      "sha256": "8dbd4094b5232ab2c2fc2ce6629a07f15989ec77a636a7a34e85954f9d896740"
+    },
+    {
+      "path": "core/MemoryForge.CoreChecks/MemoryV2Checks.cs",
+      "sha256": "3dedc8f1bb9cbddd966d1aecbcd178aac5e6401c00329b8fc56bc1c801af4b23"
+    },
+    {
+      "path": "core/MemoryForge.CoreChecks/BattleDataLoader.cs",
+      "sha256": "16a7c2786033256bc745ff9488748cf86f25dd34baa533240887f47ce05c95d7"
+    },
+    {
+      "path": "core/MemoryForge.CoreChecks/Program.cs",
+      "sha256": "38b905a21dbe675ec37a555d7f4d2dbb44cf77b62b3e6ce10fd1df7f9dc7563c"
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/Tests/PlayMode/MemoryRulesPlayModeTests.cs",
+      "sha256": "bc18b669865d7f91433c1317ce8ec5b433d4cfe598d1538e980a04eaad3f320b"
+    },
+    {
+      "path": "proposals/memory_v2.cjs",
+      "sha256": "6ee5aa939e3169d034c99418ceebdc864473fe5cc9b4464fccf7e80dcbec308d"
+    },
+    {
+      "path": "tools/gen_memory_rule_vectors.mjs",
+      "sha256": "8254442ce9ba43a7de995d3a72accc8e43abae7ec14117975f82a61805045178"
+    },
+    {
+      "path": "engine/tests/memory_rule_vectors.test.mjs",
+      "sha256": "34402ac2e0d7ff84bd771cfac75a513f9526319692451e90742201731ac62165"
+    },
+    {
+      "path": "engine/tests/vectors/memory_rule_vectors.json.gz",
+      "sha256": "b50d572e1d9e737d267ac467a8a43901459b577804688d9ddd1de1f28dda2428"
+    }
+  ]
+}

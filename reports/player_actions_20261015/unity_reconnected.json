@@ -1,0 +1,10 @@
+{
+  "status": "RECONNECTED",
+  "at": "2026-10-15T05:45:25.518101+00:00",
+  "instance": "MemoryForgeUnity@4034a4e2fe236d6e",
+  "method": "SIGTERM of owned Editor, restart, native existing HTTP Local Connect button, then actual MCP instance select/scene load/Console read",
+  "same_saved_scene": "Assets/Scenes/MemoryForgeMcpSmoke.unity",
+  "console_errors": 0,
+  "console_warnings": 0,
+  "no_new_test_claim": true
+}
