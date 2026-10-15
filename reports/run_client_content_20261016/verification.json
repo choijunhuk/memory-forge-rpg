@@ -1,0 +1,26 @@
+{
+  "status": "VERIFIED_ORIGINAL_RUN_CONTENT_BRIDGE",
+  "actualUnityPlay": 73,
+  "actualUnityEdit": 3,
+  "sourceEvents": 8,
+  "sourceCostFields": 9,
+  "sourceStatProperties": 26,
+  "sourceCapacity": 6,
+  "sourceAscensionRules": 2,
+  "oldBattleBytesIdentical": true,
+  "acceptedHeadCoreCompatibility": {
+    "head": "bf9cb42c247c0cb0497ded0558f4af9d91bdbc55",
+    "buildErrors": 0,
+    "buildWarnings": 0,
+    "runChecks": 20865,
+    "actualSupportedCommands": 272504,
+    "forgeReturnProbes": 567,
+    "bothExportedAssetsIdentical": true
+  },
+  "actualStandaloneOrDevice": false,
+  "accountOrDiskSave": false,
+  "newExplorationUi": false,
+  "newDependencies": false,
+  "valuesChanged": false,
+  "inputManifestsRegenerated": false
+}

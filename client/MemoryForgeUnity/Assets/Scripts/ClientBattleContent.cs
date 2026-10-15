@@ -75,7 +75,7 @@ namespace MemoryForge.Client
         }
 
         // Newtonsoft keeps the last duplicate silently; reject them so no authored value is dropped.
-        static void RejectDuplicateMembers(string json)
+        internal static void RejectDuplicateMembers(string json)
         {
             var scopes = new Stack<HashSet<string>?>();
             using (var reader = new JsonTextReader(new StringReader(json)) { DateParseHandling = DateParseHandling.None, MaxDepth = MaxDepth })

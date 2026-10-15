@@ -12,7 +12,7 @@ static class RunDataLoader
     {
         using var document = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(root, "data", "game_data.json")));
         var json = document.RootElement;
-        var data = new RunData { Memory = MemoryV2DataLoader.Load(root), Stats = Program.LoadStats(json.GetProperty("progression")) };
+        var data = new RunData { Memory = MemoryV2DataLoader.Load(root), Stats = StatsDataLoader.Load(json.GetProperty("progression")) };
         foreach (var character in json.GetProperty("characters").EnumerateArray())
             data.Characters.Add(new RunCharacterMetadata { Id = Text(character.GetProperty("id")), WeaponType = Text(character.GetProperty("weapon")) });
         foreach (var zone in json.GetProperty("encounters").EnumerateObject())

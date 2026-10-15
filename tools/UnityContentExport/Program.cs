@@ -1,5 +1,6 @@
 // §14.1–14.3/§16.2 Unity battle-practice content bridge. Reads unchanged data/game_data.json through the
 // reviewed BattleDataLoader and writes the typed definitions verbatim; it never authors or retunes content.
+// §7.5–7.7/§8.9–8.14/§20.9: the same run also writes the sibling run-content.json from the reviewed RunDataLoader.
 // Usage: dotnet run --project tools/UnityContentExport -- <repoRoot> <outputPath>
 using System;
 using System.Collections;
@@ -34,10 +35,25 @@ sealed class ExportEnvelope
     public Dictionary<string, EncounterSet> Encounters = new Dictionary<string, EncounterSet>(StringComparer.Ordinal);
 }
 
+// Unity contract MemoryForge.Client.ClientRunContent. Battle, startingCommon, characters and encounters are not repeated:
+// Unity combines this sidecar with battle-content.json only after DataVersion and SourceSha256 match.
+sealed class RunExportEnvelope
+{
+    public string Schema = "", DataVersion = "", SourceSha256 = "";
+    public int SourceEventCount;
+    public StatsConfig Stats = new StatsConfig();
+    public MemoryCostConfig Costs = new MemoryCostConfig();
+    public int CapacityBase;
+    public List<MemoryAscensionCapacity> AscensionCapacity = new List<MemoryAscensionCapacity>();
+    public List<RunEventDefinition> Events = new List<RunEventDefinition>();
+}
+
 static class Program
 {
     const string Schema = "mf-unity-battle-content-v1";
-    const string Usage = "usage: dotnet run --project tools/UnityContentExport -- <repoRoot> <outputPath>";
+    const string RunSchema = "mf-unity-run-content-v1";
+    const string RunFileName = "run-content.json";
+    const string Usage = "usage: dotnet run --project tools/UnityContentExport -- <repoRoot> <outputPath>  (also writes " + RunFileName + " beside outputPath)";
 
     // Public fields only: BattleData's internal indexes are never written, and unknown members fail the round trip.
     static readonly JsonSerializerOptions Options = new JsonSerializerOptions
@@ -72,10 +88,14 @@ static class Program
         if (string.Equals(output, source, StringComparison.OrdinalIgnoreCase)) throw new ArgumentException("outputPath must not be the source data file");
         string directory = Path.GetDirectoryName(output) ?? "";
         if (directory.Length == 0 || !Directory.Exists(directory)) throw new DirectoryNotFoundException("output directory does not exist: " + Bounded(directory));
+        string runOutput = Path.Combine(directory, RunFileName);
+        if (string.Equals(output, runOutput, StringComparison.OrdinalIgnoreCase)) throw new ArgumentException("outputPath must not be the " + RunFileName + " sidecar");
+        if (Directory.Exists(runOutput)) throw new ArgumentException("sidecar path is a directory: " + Bounded(runOutput));
 
         byte[] sourceBytes = File.ReadAllBytes(source);
         string sha = Sha256(sourceBytes);
         BattleData battle = BattleDataLoader.Load(root);
+        RunData run = RunDataLoader.Load(root);
         if (Sha256(File.ReadAllBytes(source)) != sha) throw new IOException("source data changed while loading");
 
         var (envelope, weaponTypeRegistry) = Build(sourceBytes, sha, battle);
@@ -90,13 +110,89 @@ static class Program
         if (!bytes.AsSpan().SequenceEqual(JsonSerializer.SerializeToUtf8Bytes(reloaded, Options)))
             throw new InvalidDataException("re-serialized content differs from the first export");
 
+        var runEnvelope = BuildRun(sourceBytes, sha, run);
+        ValidateRun(runEnvelope, envelope);
+        SameAsBattleContent(run, envelope);
+        byte[] runBytes = JsonSerializer.SerializeToUtf8Bytes(runEnvelope, Options);
+        var runReloaded = JsonSerializer.Deserialize<RunExportEnvelope>(new ReadOnlySpan<byte>(runBytes), Options)
+            ?? throw new InvalidDataException("exported run JSON deserialized to null");
+        ValidateRun(runReloaded, envelope);
+        Same(runEnvelope, runReloaded, "$run");
+        if (!runBytes.AsSpan().SequenceEqual(JsonSerializer.SerializeToUtf8Bytes(runReloaded, Options)))
+            throw new InvalidDataException("re-serialized run content differs from the first export");
+
         if (Sha256(File.ReadAllBytes(source)) != sha) throw new IOException("source data changed during export");
+        // Two atomic file replacements, not one cross-file transaction. If the second fails, Unity rejects the stale
+        // or missing sidecar through its DataVersion/SourceSha256 match instead of mixing sources.
         WriteAtomically(directory, output, bytes);
+        WriteAtomically(directory, runOutput, runBytes);
 
         var c = envelope.SourceCounts;
         Console.WriteLine(Schema + " data=" + envelope.DataVersion + " sourceSha256=" + sha + " characters=" + c.Characters + " cards=" + c.Cards
             + " weapons=" + c.Weapons + " parts=" + c.Parts + " relics=" + c.Relics + " enemies=" + c.Enemies + " zones=" + c.Zones
             + " startingCommon=" + envelope.StartingCommon.Count + " bytes=" + bytes.Length);
+        Console.WriteLine(RunSchema + " data=" + runEnvelope.DataVersion + " sourceSha256=" + sha + " events=" + runEnvelope.Events.Count
+            + " capacityBase=" + runEnvelope.CapacityBase + " ascensionRules=" + runEnvelope.AscensionCapacity.Count + " bytes=" + runBytes.Length);
+    }
+
+    static RunExportEnvelope BuildRun(byte[] sourceBytes, string sha, RunData run)
+    {
+        using var document = JsonDocument.Parse(sourceBytes);
+        var json = document.RootElement;
+        // StatsDataLoader never reads levelling.weaponXpRatio, so StatsConfig keeps its initializer; publish it only while it equals the source.
+        decimal ratio = json.GetProperty("progression").GetProperty("levelling").GetProperty("weaponXpRatio").GetDecimal();
+        if (run.Stats.WeaponXpRatioDen <= 0 || ratio * run.Stats.WeaponXpRatioDen != run.Stats.WeaponXpRatioNum)
+            throw new InvalidDataException("StatsConfig.WeaponXpRatioNum/Den differs from progression.levelling.weaponXpRatio");
+        // The event count comes from the raw source array, independently of RunDataLoader, so a dropped event fails.
+        return new RunExportEnvelope { Schema = RunSchema, DataVersion = Text(json.GetProperty("meta").GetProperty("version")), SourceSha256 = sha,
+            SourceEventCount = json.GetProperty("events").GetArrayLength(), Stats = run.Stats, Costs = run.Memory.Costs, CapacityBase = run.Memory.CapacityBase,
+            AscensionCapacity = run.Memory.AscensionCapacity, Events = run.Events };
+    }
+
+    // Mirrors ClientRunContent.Validate so a sidecar that passes here also loads in Unity. Ranges guard integrity only;
+    // authored zero costs stay valid and no economic rule is added.
+    static void ValidateRun(RunExportEnvelope r, ExportEnvelope content)
+    {
+        if (r.Schema != RunSchema) throw new InvalidDataException("unexpected run schema");
+        if (r.DataVersion != content.DataVersion || r.SourceSha256 != content.SourceSha256) throw new InvalidDataException("run content source differs from battle content");
+        var stats = r.Stats;
+        foreach (PropertyInfo property in typeof(StatsConfig).GetProperties(BindingFlags.Public | BindingFlags.Instance))
+            if (property.PropertyType == typeof(int) && (int)property.GetValue(stats)! < 0) throw new InvalidDataException("Stats." + property.Name + " is negative");
+        if (stats.LevelCap <= 0 || stats.SkillMax <= 0 || stats.CharPowerDen <= 0 || stats.XpSqDiv <= 0 || stats.WeaponXpRatioDen <= 0)
+            throw new InvalidDataException("Stats cap or denominator is not positive");
+        if (!content.Battle.Weapons.Any(w => w.Rarity == stats.StageRefWeapon)) throw new InvalidDataException("Stats.StageRefWeapon is not a weapon rarity: " + Short(stats.StageRefWeapon));
+        var cost = r.Costs;
+        if (new[] { cost.AddB, cost.AddA, cost.AddS, cost.AddCommon, cost.Upgrade, cost.PartCommon, cost.PartRare, cost.Evolution, cost.Remove }.Any(x => x < 0))
+            throw new InvalidDataException("memory cost is negative");
+        if (r.CapacityBase < 0 || r.AscensionCapacity.Any(x => x.Asc < 0 || x.Add < 0)) throw new InvalidDataException("memory capacity is negative");
+        if (r.SourceEventCount <= 0 || r.Events.Count != r.SourceEventCount)
+            throw new InvalidDataException("Events has " + r.Events.Count + " definitions but the source has " + r.SourceEventCount);
+        var ids = new HashSet<string>(StringComparer.Ordinal);
+        foreach (var item in r.Events)
+        {
+            if (string.IsNullOrEmpty(item.Id) || !ids.Add(item.Id)) throw new InvalidDataException("empty or duplicate event id: " + Short(item.Id));
+            if (string.IsNullOrEmpty(item.Name) || string.IsNullOrEmpty(item.Text) || item.Choices.Count == 0) throw new InvalidDataException("event definition is incomplete: " + Short(item.Id));
+            foreach (var choice in item.Choices)
+            {
+                if (string.IsNullOrEmpty(choice.Label) || string.IsNullOrEmpty(choice.Text)) throw new InvalidDataException("event choice text is empty: " + Short(item.Id));
+                if (choice.RequiredCoins < 0) throw new InvalidDataException("event choice need.coins is negative: " + Short(item.Id));
+                var fx = choice.Effects;
+                if (fx.Curse != null && !content.Battle.Cards.Any(x => x.Id == fx.Curse && x.Owner == "curse")) throw new InvalidDataException("event curse does not resolve: " + Short(fx.Curse));
+                if (fx.Card != null && !content.Battle.Cards.Any(x => x.Rarity == fx.Card)) throw new InvalidDataException("event card rarity does not resolve: " + Short(fx.Card));
+                if (fx.Relic != null && fx.Relic.Length == 0) throw new InvalidDataException("event relic is empty: " + Short(item.Id));
+            }
+        }
+    }
+
+    // Unity rebuilds these RunData parts from battle-content.json; prove they equal the host RunDataLoader output.
+    static void SameAsBattleContent(RunData run, ExportEnvelope content)
+    {
+        static List<List<string>> Rows(string[][] rows) => rows.Select(row => row.ToList()).ToList();
+        Same(content.Battle, run.Memory.Battle, "$hostRun.Memory.Battle");
+        Same(content.StartingCommon, run.Memory.StartingCommon, "$hostRun.Memory.StartingCommon");
+        Same(content.Battle.Characters.Select(x => new RunCharacterMetadata { Id = x.Id, WeaponType = content.CharacterWeaponTypes[x.Id] }).ToList(), run.Characters, "$hostRun.Characters");
+        Same(content.Encounters.Select(z => new RunEncounterDefinition { Zone = z.Key, Normal = Rows(z.Value.Normal), Elite = Rows(z.Value.Elite), Boss = Rows(z.Value.Boss) }).ToList(),
+            run.Encounters, "$hostRun.Encounters");
     }
 
     static (ExportEnvelope, HashSet<string>) Build(byte[] sourceBytes, string sha, BattleData battle)
@@ -201,7 +297,14 @@ static class Program
             for (int i = 0; i < list.Count; i++) Same(list[i], other[i], path + "[" + i + "]");
             return;
         }
-        if (type.GetProperties(BindingFlags.Public | BindingFlags.Instance).Length != 0) throw new InvalidDataException("unexpected public property on " + type.Name);
+        PropertyInfo[] properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+        // StatsConfig is the one exported type made of auto-properties; a public property anywhere else still fails closed.
+        if (properties.Length != 0 && type != typeof(StatsConfig)) throw new InvalidDataException("unexpected public property on " + type.Name);
+        foreach (PropertyInfo property in properties)
+        {
+            if (!property.CanRead || !property.CanWrite || property.GetIndexParameters().Length != 0) throw new InvalidDataException("unsupported property " + type.Name + "." + property.Name);
+            Same(property.GetValue(a), property.GetValue(b), path + "." + property.Name);
+        }
         foreach (FieldInfo field in type.GetFields(BindingFlags.Public | BindingFlags.Instance)) Same(field.GetValue(a), field.GetValue(b), path + "." + field.Name);
     }
     static InvalidDataException Mismatch(string path) => new InvalidDataException("round trip changed " + Bounded(path));

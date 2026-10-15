@@ -476,3 +476,5 @@ A0 [실제128244 질의검사](../reports/player_queries_20261015/root_checks.tx
 R1a 최신 증거: [실제Run8519/8519·1000지원구간112822명령](../reports/run_progression_core_20261016/root_checks.txt), [실제Unity27Play/3Edit·양방향검토](../reports/run_progression_core_20261016/root_acceptance.md). 탐사 진입·실제전투·성장·보상·다음지도/기록보관소는 연결했고 완주0/저장·복원은 미완료다. R1b휴식·공방·상점·이벤트를 실제구현 중이며 작성 중인 코드를 완료로 세지 않는다. 앞선0명령 기록은 당시 단위의 이력이다.
 
 R1b 최신 증거: [노드서비스20865검사·1000지원구간272504실제명령](../reports/run_services_core_20261016/root_checks.txt), [567반환사본검사/실제유출변형RED·Unity29Play/3Edit](../reports/run_services_core_20261016/root_acceptance.md). §7휴식/공방/상점/이벤트와§8배정은C#연결했다. 탐사완주0/저장·복원/전체클라이언트는아직미완료이며, 실제메모리저장과원본Run클라이언트콘텐츠를후속구현중이다.
+
+Unity 원본Run데이터: [모든8이벤트/9비용/26통계·용량과실제73Play/3Edit](../reports/run_client_content_20261016/root_acceptance.md) 연결검증. 기존Battle파일은 동일하다. 전체탐사UI/저장포트/계정·서버·기기는 이데이터연결완료와 구분하며 후속개발중이다.

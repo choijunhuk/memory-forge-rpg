@@ -21,3 +21,5 @@ dotnet run --project tools/UnityContentExport --artifacts-path ops/ai/local/clie
 ```
 
 본문 글꼴은 원문 §14.2의 IBM Plex Sans KR이며 `Assets/Resources/Fonts/IBMPlexSansKR-OFL.txt`를 동봉한다. 원문 색상·수치·전체 데이터·기존 설계는 유지한다. 실제 화면·입력 증거와 검증 상태는 `reports/unity_client_20261015/`를 따른다. 자동 시험, Editor 조작, standalone과 Android 수용을 서로 대신하지 않는다.
+
+Original Run definitions are now loaded by `ClientRunContent.Load()` from the same-source `run-content.json` sidecar: all8events, memorycosts/capacities/ascension and fullstats. The existing export command also writes this sidecar next to battle-content.json; its sourceSHA/version must match. Missing or malformed fields fail instead of filling defaults. Actual73Play/3Edit evidence is in reports/run_client_content_20261016. This data bridge does not implement explorationUI, durable save/account/server/device acceptance.
