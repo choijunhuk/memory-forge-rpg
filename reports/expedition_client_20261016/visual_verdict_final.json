@@ -1,0 +1,18 @@
+{
+  "score": 93,
+  "verdict": "pass",
+  "category_match": true,
+  "differences": [],
+  "suggestions": [
+    "Final art, text scaling and device acceptance remain pending."
+  ],
+  "reasoning": "알림 만료 수정 뒤 실제 Play 화면에서 지도·상태·경로와 버튼이 겹침 없이 보인다. 현재1180x665뷰에서 전체정보가 수용되며 최종아트/130%글자/실기기검증으로 확대하지 않는다.",
+  "threshold": 90,
+  "threshold_pass": true,
+  "generated_screenshot": "reports/expedition_client_20261016/map_final_87.png",
+  "reference_screenshot": "reports/expedition_client_20261016/map_card_info_ready.png",
+  "next_actions": [
+    "탐사 전투 미리보기 연결",
+    "네이티브 실제 마우스 입력 확인"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "source": "Unity automatic Player-prev.log after the controlled player quit/read/relaunch",
+  "rawLogSha256": "daf114b4de5851889aacad83430b24411a7760f688f0e8a6cd7fe5b3f11cbf2d",
+  "filteredLines": 49,
+  "clickFrames": [
+    2193,
+    2218
+  ],
+  "dragFrames": [
+    5015,
+    5015
+  ],
+  "rawOsAndPlayerHeaderCommitted": false
+}

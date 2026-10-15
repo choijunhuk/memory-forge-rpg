@@ -1,0 +1,15 @@
+{
+  "result": "Succeeded",
+  "errors": 0,
+  "warnings": 0,
+  "bytes": 267430850,
+  "seconds": 14.6281623,
+  "scenePaths": [
+    "Assets/Scenes/MemoryForgeExpedition.unity",
+    "Assets/Scenes/MemoryForgeBattle.unity",
+    "Assets/Scenes/SampleScene.unity"
+  ],
+  "diagnosticProbeIncluded": false,
+  "removedOwnPendingCallback": 1,
+  "outputPath": "/Users/choi/Documents/Memory_forge/ops/ai/local/builds/MemoryForgeExpedition-Final-20261016.app"
+}

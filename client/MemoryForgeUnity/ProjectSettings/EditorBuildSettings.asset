@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/MemoryForgeExpedition.unity
+    guid: ef192f5c231004a7e908bfc69d6f8cca
+  - enabled: 1
     path: Assets/Scenes/MemoryForgeBattle.unity
     guid: e174e7014430b4b28a6d66f1c7ee77d5
   - enabled: 1
