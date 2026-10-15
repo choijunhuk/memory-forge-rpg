@@ -110,7 +110,7 @@ static class RunCreateChecks
         Console.WriteLine($"RunCreateChecks: {checks - failures}/{checks} passed; supported factories {factories}/2121 ({created} created, {rejected} exact rejections; 2023/98 expected), supported pure queries {queries}/45130, deterministic recreation rows {recreations}");
         Console.WriteLine($"RunCreateBoundary: typed-domain {typedRejections}/5 {TypedCode} rejections (JS-created evidence, {jsOnlyQueries} JS-only queries, not parity); JS-native source-only diagnostics {sourceOnly}/5 ({adapterRejections} host-adapter rejections), never counted as C# parity");
         Console.WriteLine($"RunCreateGuards: {probes} corruption/forgery probes, {identityProbes} reflection identity cases, {boundaryProbes} direct typed boundary probes; manifest audit {manifestSummary}");
-        Console.WriteLine("RunCreateScope: fresh Run.Create + Available/NodeById only; Run commands 0; saving/restoration/server/Unity PENDING");
+        Console.WriteLine("RunCreateScope: fresh Run.Create + Available/NodeById only; Run commands 0 in this suite; complete progression/terminal memory commit is reported by RunProgressionChecks; unfinished restoration/server/device acceptance separate");
         Console.WriteLine("RunCreateFollowUp: R1 must pin available() at a boss position (JS undefined vs C# []) and future unknown weapon types (JS defaultWeapon undefined vs C# TypeError); both are unreachable in current fresh creation");
         return failures;
     }

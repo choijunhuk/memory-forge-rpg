@@ -1,0 +1,7 @@
+# Current requirement facts and diagnostic scope
+
+The22current ledger rows now cite accepted source9986288/UIbcf28e4 evidence instead of historical0/prefix-only implementation counts. Original requirement headings, all historical reports/design/data/policies and remaining server/account/restoration/device gates are retained. Both required opposite-review scope clarifications and optional legacy/per-event/NOT_COVERED precision are applied; final review APPROVE is in recheck.md.
+
+Four checker changes are diagnostic string literals only, proven by label_scope_selfcheck.json. Actual check counts/control flow and corpus bytes are identical. The delivery script changes only two not_done descriptions; all9remaining categories remain. The optional last wording refinement names terminal memory commit instead of unqualified saving. Historical source outputs remain historical and are not rewritten.
+
+Fresh .NETbuild0errors/0warnings; bash-n; docs9/handoff13PASS. No new game logic exists in this unit, so no redundant full game suite rerun was added. The exact accepted UI head's push/PR CI bothPASS in accepted_ui_head_ci.json. Forecast Core remains an unverified separate ongoing task and is not counted as implemented. Native physical input stillNOT_CONFIRMED.

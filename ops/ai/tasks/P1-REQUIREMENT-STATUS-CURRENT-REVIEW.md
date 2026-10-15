@@ -1,0 +1,9 @@
+# Check the current requirement ledger against already accepted evidence
+
+Official Opus5.5 High, included subscription only. No API/credits/extra/fallback/Bash/MCP/agents/images. Separate A worktree, code/docs/receipts readonly. You are not alone; do not revert other work. Own only reports/requirements_status_20261016/review.md.
+
+Root updated22CURRENT status rows in docs/IMPLEMENTATION_STATUS.md plus the date/IMPLEMENTED scope definition. Previously the top summary still said full C# Run replay0/complete port unimplemented despite accepted Core9986288 and UIbcf28e4 actual evidence. Original requirement headings/23chapters/10sheets/50prompts and all historical appended status reports are preserved. No game policy, quantities or acceptance gates changed. Only current factual progress is repaired; full game/physical device/server claims are NOT made.
+
+Inspect current_rows.diff and the new ledger, against copied accepted root_acceptance/final_core_checks/actual_interaction and original source chapter7/8/14/16 if necessary. The review copy intentionally contains only the needed receipts; missing unrelated files in this old A worktree is not evidence Root lacks a tracked dependency. Check: legacy1000complete/273504attempts,5fullsourcecases2684/1074,Run21902,85publicmemory operations/873,UI87/3 are not substituted for unfinishedRun restoration/DB/account/native physical-input/all183requirements. Keep §8.13capacity transition and server/economy/whole-game gates pending. No whole-project re-review or planning, only factual consistency/overclaim on these22rows. Do not mark complete based on the row count.
+
+Return APPROVE or exact row+contradicting evidence+smallest correction. Execution NOT_RUN by reviewer. Do not edit the ledger. Root runs docs9/handoff13 and integrates in a later commit. New forecast Core is IN_PROGRESS in independent B and is not counted as implemented in this ledger.

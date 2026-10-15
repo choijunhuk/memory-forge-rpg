@@ -106,7 +106,7 @@ static class BattleTurnChecks
         catch (Exception error) { Check(false, "fixture/execution: " + error); }
         Console.WriteLine($"BattleTurnChecks: {checks - failures}/{checks} passed; {commands} oracle requests, {committed} committed, {replayed} replayed, {rejected} rejected; {receiptProbes} additional black-box receipt probes");
         Console.WriteLine("BattleTurnScope: real fresh Create + begin/end, all 267 openings, 20 live two-cycle duels, 21 authored encounters and targeted boundaries");
-        Console.WriteLine("BattleRunCommandReplay: NOT_IMPLEMENTED (full Run/restoration remains separate from Battle command checks and Unity/device/server acceptance)");
+        Console.WriteLine("BattleRunCommandReplay: NOT_RUN_IN_THIS_SUITE (battle-turn commands only; complete Run replay is reported by RunProgressionChecks; unfinished restoration/device/server acceptance remain separate)");
         return failures;
     }
 

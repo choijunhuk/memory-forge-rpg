@@ -141,7 +141,7 @@ static class BattlePlayerActionChecks
         catch (Exception error) { Check(false, "fixture/execution: " + error); }
         Console.WriteLine($"BattlePlayerActionChecks: {checks - failures}/{checks} passed; {commands} oracle requests, {committed} committed, {replayed} replayed, {rejected} rejected; {checkProbes} pure Check probes and {receiptProbes} receipt probes");
         Console.WriteLine("BattlePlayerActionScope: real fresh Create/begin/play/ult/end; full authored card/mode/effect closure is separately validated by mandatory observable witnesses");
-        Console.WriteLine("BattleRunCommandReplay: NOT_IMPLEMENTED (actual Run/memory replay and server/device acceptance remain separate; generic base0 conformance UNRESOLVED)");
+        Console.WriteLine("BattleRunCommandReplay: NOT_RUN_IN_THIS_SUITE (player-action commands only; complete Run/memory replay is reported by RunProgressionChecks; server/device acceptance separate; generic base0 conformance UNRESOLVED)");
         return failures;
     }
 

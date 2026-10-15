@@ -1,8 +1,8 @@
-# 요구사항별 구현·검증 장부 — 2026-10-15
+# 요구사항별 구현·검증 장부 — 2026-10-16
 
 이 장부는 원본 [0~23장 전체](source_v0.8.1/)의 위치·게임 내 역할·현재 구현·남은 인수 조건을 연결한다. 원본 본문·표·10명 전체 시트·173개 카드·50개 프롬프트를 축약하거나 대체하지 않는다. 표의 절 제목은 원문 그대로이며 해당 파일 안의 같은 절 전체가 요구사항이다. 숫자·가격·확률·나이·보상·정책 변경 권한을 이 장부에서 만들지 않는다.
 
-`IMPLEMENTED`는 명시한 JS/HTML/데이터/문서 범위의 구현을 뜻한다. `PARTIAL`은 일부 코드·데이터·계약만 있음, `NOT_IMPLEMENTED`는 해당 제품/진행기/서버가 없음, `DECISION_PENDING`은 정책 결정이 남음, `IN_PROGRESS`는 현재 작업 중이다. 코드 존재·시험 PASS·독립 검토·통합·Unity Play·빌드·실기기 수용을 같은 완료로 처리하지 않는다. 날짜가 다른 보고서는 각 실행의 증거이며 이번 장부 작성 중 재실행한 시험으로 세지 않는다.
+`IMPLEMENTED`는 명시한 JS/HTML/C# Core/Unity연습/데이터/문서 범위의 구현을 뜻한다. `PARTIAL`은 일부 코드·데이터·계약만 있음, `NOT_IMPLEMENTED`는 해당 제품/진행기/서버가 없음, `DECISION_PENDING`은 정책 결정이 남음, `IN_PROGRESS`는 현재 작업 중이다. 코드 존재·시험 PASS·독립 검토·통합·Unity Play·빌드·실기기 수용을 같은 완료로 처리하지 않는다. 날짜가 다른 보고서는 각 실행의 증거이며 이번 장부 작성 중 재실행한 시험으로 세지 않는다.
 
 현재 공통 검토 상태: P0와 후반 행동의 기존 Claude 작업 결과는 보존돼 있다. 새 실행기·전투 수정·트레이스/직렬화 기반·공유Core연결의 반대AI최종검토를 실제회수했고 결함수정 후통합가능으로확인했다. 각 코드 행의 `IMPLEMENTED`는 이 새 최종 검토까지 승인됐다는 뜻이 아니다. 실제 런타임·모델·과금·Unity 근거는 [AI_ENVIRONMENT.md](AI_ENVIRONMENT.md)를 따른다.
 
@@ -10,12 +10,12 @@
 
 | 작업 | 상태 | 정확한 요구/완료 조건 |
 |---|---|---|
-| P1 JS→C# 트레이스 생성기 | IN_PROGRESS | §16.2·§20.9 P1-1. `tools/gen_traces.mjs`와 회귀9개·전체 출력/재생 검증 완료. 실제700short+300full=1000개·273748명령·275748해시 재생 PASS. [전체 증거](../reports/cross_language_20261015/replay.json). 상대 검토·통합을 거쳐 C# 실제 명령 재생으로 이어감. JS oracle 성공은 C# 동치 아님. |
-| C# 전체 Battle·Run·기억 저장 | IN_PROGRESS | C#은 Rng/Gacha/Stats/ReservationBook·canonical 기반과 실제 Battle.Create/begin을 구현했다. [전투 시작267](../reports/csharp_opening_20261015/)과 [실제반복턴356사례/1740요청·29232검사](../reports/csharp_turns_20261015/), Unity PlayMode7개 및 Opus Max APPROVE. Git/CI는 해당 head별 별도 기록. 시작/종료2000해시 PASS와 구별하며 이전 단위의 전체1000 Run 트레이스 명령 재생은0개였으며, 현재 R1a는1000개 지원구간112822명령을 실행했다(완주0). [전체카드정의/순수질의702사례·128244검사](../reports/player_queries_20261015/)와 [실제play/ult·생산 수명주기992사례/3870요청·87991검사](../reports/player_actions_20261015/) 완료·Sol/Opus Max 소스 승인. UnityPlay12/Edit3, 기술씬macOS빌드/Metal시작은 별도 근거다. [순수기억 M0 1072호출/5451검사·UnityPlay16/Edit3](../reports/memory_rules_20261015/)와 양방향 검토·이관회귀수정 완료. [실제R0생성/지도/조회215645검사·UnityPlay18/Edit3](../reports/run_create_20261015/) 검증·상대소스승인 완료. 전체Run/기억저장/복원·후반후보·게임UI/기기/서버는 미구현 또는 별도 미수용. netstandard2.1/C#8·정수/BigInteger·컬렉션 순서·동일 명령별 해시1000개와 기존 CoreChecks를 모두 수용해야 함. |
+| P1 JS→C# 트레이스 생성기 | IMPLEMENTED/VERIFIED(코퍼스) | §16.2·§20.9. 현행 legacy JS1000탐사와 [실제 C#273504명령/1000완주](../reports/run_memory_core_20261016/root_acceptance.md)를 대조했다. 정답상태 주입 없이 생성·명령·최종상태를 검증하며 지원 숫자/진단 범위와 중도Run복원은 구별한다. |
+| C# 전체 Battle·Run·기억 저장 | IMPLEMENTED(현행 참조)/PARTIAL(전체 수용) | 실제 Battle/Create/begin/end/play/ult·노드서비스·legacy/v2기억변화/미리보기/확정·새출발을 연결했다. [Run21902검사·5전체사례2684명령/1074질의·1000legacy273504명령/1000완주](../reports/run_memory_core_20261016/root_acceptance.md), [행동87991검사](../reports/player_actions_20261015/), [순수기억5451검사](../reports/memory_rules_20261015/)와 반대 작성자 검토가 있다. typed숫자/JS-native진단 범위, generic base0미결, 중도Run복원·계정/서버·후반후보·기기·전체게임 수용은 남음. 과거0명령/완주0은 아래 이력과 해당 단위 보고서에 보존한다. |
 | 후반 본편 활성화 | BLOCKED_ACCEPTANCE | JS 여섯 행동·HTML·23종 후보 있음. 최신40시나리오/조우 확대는44조우×40×3=5280회, 목표 미달21개. C#·서사/연출·목표 미달 해소 전 `authored` 활성화/본편 완료 선언 금지. |
-| 실제 Unity 게임 수직 슬라이스 | PARTIAL(환경/공유Core) | 실제 Editor의 연결 검증 씬·프리팹·Play·EditMode3개·macOS 연결 앱 빌드는 확인. 실제 전투 연습 UI26Play 검증과 C#Run연결27Play 검증은 완료. 로비→편성→지도→전투→보상→저장 전체 UI·서버·실기기는 미완료. |
+| 실제 Unity 게임 수직 슬라이스 | PARTIAL(실제탐사연습) | [실제 지도→전투→보상/서비스→기억선택→새출발](../reports/expedition_client_20261016/root_acceptance.md), 87Play/3Edit·새macOS빌드/지도시작을 확인했다. 실제 계정/영속저장·로비/편성·최종아트/연출·원정피해예측·네이티브 물리입력/실기기는 남음. 기존 전투/샘플/MCP 씬은 유지한다. |
 | 서버 앱·저장v2 접합 | NOT_IMPLEMENTED | §17 전체 및 §8.11·§17.5: 소유권·버전·고정 잠금·원장·이력·멱등·rollback·다기기 동시성. 스키마/JS 로컬 저장으로 대체 불가. |
-| 반대 AI 최종 검토 | IN_PROGRESS | 실제Opus Max검토·결함수정·재시험·범위재검토 완료. C#opening/turn/query/player단위까지 상대검토를 회수했으며 다음M0/R0도 별도검토/통합. 두 차례 미해결은 해당 쟁점만 보류. |
+| 반대 AI 최종 검토 | 단위별회수/후속IN_PROGRESS | 전투·M0/R0·노드서비스·기억완주·Unity원정·알림보완의 반대 작성자 검토/결함수정/재검증을 회수했다. [현재 근거](../reports/expedition_client_20261016/root_acceptance.md). 새로운 전투미리보기는 구현/검토중이며 전체게임 최종검토가 아니다. 두 차례 미해결은 해당 쟁점만 보류한다. |
 
 P1/P2 완료로 개발을 끝내지 않는다. 이 표와 아래 장별 요구에서 의존성이 풀린 다음 작업을 고른다. 정책·권한·환경·구독 한도는 해당 항목만 보류하고 현재 세션의 독립 작업을 이어간다. 세션 밖 자동 개발은 약속하지 않는다.
 
@@ -128,14 +128,14 @@ P1/P2 완료로 개발을 끝내지 않는다. 이 표와 아래 장별 요구�
 
 | 원문 요구사항 | 현재 상태 | 코드·시험·기록 근거 | 남은 인수 조건/한계 |
 |---|---|---|---|
-| **§7.1 탐사 생성** | IMPLEMENTED(JS) | [Run.create][js]·[엔진 시험][engine-tests] | 서버가 보유권·장비·시드 결정; C# Run 이식 |
-| **§7.2 지도 생성(구역마다)** | IMPLEMENTED(JS) | [Run][js]·[지도 300시드 시험][engine-tests] | C# 지도 생성·경로 동치 |
-| **§7.3 노드** | IMPLEMENTED(JS/HTML) | [Run][js]·[UI][ui]·[스모크][smoke] | 각 노드의 C#·Unity 실제 입력 수용 |
-| **§7.4 전투 보상** | IMPLEMENTED(JS) | [Run][js]·[엔진 시험][engine-tests] | 보상 제시 공정성·진화 선택 C# 동치 |
-| **§7.5 구역 사이(기록소)** | IMPLEMENTED(JS/HTML) | [Run][js]·[UI][ui]·[스모크][smoke] | 귀환/계속·회복·패배 C#·Unity 동치 |
-| **§7.6 종료와 결과** | IMPLEMENTED(JS) | [Run][js]·[저장 v2 시험][memory-tests] | 서버 포기·종료 표식·한번 저장 수용 |
-| **§7.7 사건** | IMPLEMENTED(JS/데이터) | [8개 사건][world]·[Run][js]·[스모크][smoke] | 플레이어 카드 선택·비용·무기 제외 C#·Unity 수용 |
-| **§7.8 유물** | IMPLEMENTED(JS/데이터) | [32개 유물][world]·[성장 회귀][review-tests] | 전체 훅·상한·소유 효과 C# 이식 |
+| **§7.1 탐사 생성** | IMPLEMENTED(JS/C#) | [Run.create][js]·[생성215677검사](../reports/run_create_20261015/)·[전체재생](../reports/run_memory_core_20261016/root_acceptance.md) | 서버 보유권·장비·시드 권위/실기기 수용은 별도 |
+| **§7.2 지도 생성(구역마다)** | IMPLEMENTED(JS/C#) | [Run][js]·[실제생성/지도조회](../reports/run_create_20261015/)·[1000명령재생](../reports/run_memory_core_20261016/root_acceptance.md) | 실제Unity표시/Editor포인터 도달입력 있음([원정](../reports/expedition_client_20261016/root_acceptance.md)); 네이티브 물리입력·모든 모바일/최악화면 수용은 별도 |
+| **§7.3 노드** | IMPLEMENTED(JS/C#)/PARTIAL(Unity연습) | [노드서비스](../reports/run_services_core_20261016/)·[원정87Play](../reports/expedition_client_20261016/root_acceptance.md) | 서버 권위·모든 노드의 물리입력/실기기 수용 |
+| **§7.4 전투 보상** | IMPLEMENTED(JS/C#)/PARTIAL(Unity연습) | [전체Run대조](../reports/run_memory_core_20261016/root_acceptance.md)·[실제보상/설명](../reports/expedition_client_20261016/root_acceptance.md) | 서버 공정성·모바일 진화/보상 수용 |
+| **§7.5 구역 사이(기록소)** | IMPLEMENTED(JS/C#)/PARTIAL(Unity연습) | [275기록보관소/1000완주](../reports/run_memory_core_20261016/root_acceptance.md)·[원정화면](../reports/expedition_client_20261016/root_acceptance.md) | 서버/통신실패·모든 물리입력/기기 수용 |
+| **§7.6 종료와 결과** | IMPLEMENTED(JS/C#)/PARTIAL(클라이언트) | [실제종료/저장/새출발](../reports/run_memory_core_20261016/root_acceptance.md)·[원정결과화면](../reports/expedition_client_20261016/root_acceptance.md) | 서버 포기·종료 표식·계정당 한번 저장 수용 |
+| **§7.7 사건** | IMPLEMENTED(JS/C#)/PARTIAL(Unity연습) | [8사건전체임포트](../reports/run_client_content_20261016/)·[실제540사건명령](../reports/run_memory_core_20261016/root_acceptance.md) | 개별 사건선택 커버리지·모든 선택의 실제화면·물리입력/서버 수용 |
+| **§7.8 유물** | IMPLEMENTED(JS/C# 참조) | [32개 유물][world]·[전투87991검사](../reports/player_actions_20261015/)·[Run실제재생](../reports/run_memory_core_20261016/root_acceptance.md) | 32유물 개별훅 커버리지·후반후보·최종표현·서버/기기 수용 |
 | **§7.9 난이도와 배율** | PARTIAL | [Stats/Run][js]·[성장 데이터][progression]·[측정][balance-code] | 난도/레벨 배율은 참조 구현; 미완성 콘텐츠·사람 난도 수용 |
 | **§7.10 패배와 이전 자산의 관계** | PARTIAL | [체크포인트 UI][ui]·[저장 브라우저 시험][memory-ui] | 브라우저 유지 경로 있음; 서버/Unity 앱 복귀·통신 실패 수용 |
 
@@ -147,16 +147,16 @@ P1/P2 완료로 개발을 끝내지 않는다. 이 표와 아래 장별 요구�
 |---|---|---|---|
 | **§8.1 개념** | IMPLEMENTED(JS/HTML) | [Run][js]·[저장 v2 시험][memory-tests] | 저장 덱을 주간/균열/성장 콘텐츠에 연결 |
 | **§8.2 용량** | IMPLEMENTED(현행 수치) | [Stats][js]·[성장 데이터][progression] | 현행 공명 포함 용량 유지; 무료 경로는 §8.13 별도 |
-| **§8.3 변경과 비용 (`data.rules.memoryCost`)** | IMPLEMENTED(JS) | [MemoryV2][memory-module]·[저장 v2 시험][memory-tests] | 기존 비용표 유지·C#/서버 최종 비용 재검증 |
-| **§8.4 변경 목록 계산 (`Run.memoryChanges`)** | IMPLEMENTED(legacy 참조) | [Run.memoryChanges][js]·[legacy 회귀][review-tests] | legacy 인덱스 경로를 v2 stable ID와 혼동하지 않음 |
-| **§8.5 저장 규칙 (`Run.commitMemory`)** | PARTIAL | [Run.commitMemory][js]·[저장 v2 시험][memory-tests] | legacy 회귀 보존; 서버 트랜잭션/이력 미구현 |
-| **§8.6 저장 화면 UX** | PARTIAL(HTML) | [UI][ui]·[저장 브라우저 시험][memory-ui] | v2 화면 연결; Unity 저장 화면 수용 별도 |
+| **§8.3 변경과 비용 (`data.rules.memoryCost`)** | IMPLEMENTED(JS/C#) | [MemoryV2][memory-module]·[9비용원본임포트](../reports/run_client_content_20261016/)·[실제저장대조](../reports/run_memory_core_20261016/root_acceptance.md) | 기존 비용표 유지·서버 최종 전체 비용 검증 |
+| **§8.4 변경 목록 계산 (`Run.memoryChanges`)** | IMPLEMENTED(JS/C# legacy/v2) | [실제85공개연산/873검사](../reports/run_memory_queries_20261016/host_author_report.md)·[완주검증](../reports/run_memory_core_20261016/root_acceptance.md) | legacy 인덱스와 v2 stable ID·서버 검증을 구별; 3용량초과 원문프로브는 NOT_COVERED |
+| **§8.5 저장 규칙 (`Run.commitMemory`)** | PARTIAL(JS/C#·Unity세션) | [실제저장/영수증/새출발](../reports/run_memory_core_20261016/root_acceptance.md)·[원정저장](../reports/expedition_client_20261016/root_acceptance.md) | 서버 트랜잭션/이력·계정 영속화 미구현; Unity연습은 세션만 유지 |
+| **§8.6 저장 화면 UX** | PARTIAL(HTML/Unity연습) | [저장브라우저][memory-ui]·[실제선택/미리보기/확정/새출발](../reports/expedition_client_20261016/root_acceptance.md) | 통신 실패/계정·앱종료복원·모바일 수용 |
 | **§8.7 설계 의도와 경계** | PARTIAL | [MemoryV2][memory-module]·[Run][js] | 영구 덱 보존/신규 변화만 제한은 v2; 무료 용량은 미전환 |
 | **§8.8 현재 구현과 목표 정책** | IMPLEMENTED(JS/HTML) | [P0 증거][p0]·[Run][js]·[UI][ui] | 원문 당시 미연결 기록 보존; 서버·C#까지 완료 의미 아님 |
-| **§8.9 카드 개체와 네 가지 스냅샷** | IMPLEMENTED(JS) | [MemoryV2][memory-module]·[개체/이관 시험][memory-edges] | 서버 출발 스냅샷·소유권·C# 동치 |
+| **§8.9 카드 개체와 네 가지 스냅샷** | IMPLEMENTED(JS/C# 참조) | [MemoryV2][memory-module]·[실제전체상태/개체대조](../reports/run_memory_core_20261016/root_acceptance.md) | 서버 출발 스냅샷·소유권·중도Run복원은 별도 |
 | **§8.10 변경 목록과 비용** | IMPLEMENTED(JS) | [MemoryV2][memory-module]·[저장 v2 시험][memory-tests] | 완성 result 전체 비용·슬롯 교체·중복 개체 서버 재검증 |
 | **§8.11 명령과 원자성** | PARTIAL(로컬 어댑터) | [commitMemoryV2][js]·[저장 v2 시험][memory-tests] | 계정/탐사/덱 잠금·DB 원자성·다기기 CAS·서버 영수증 |
-| **§8.12 저장 화면** | IMPLEMENTED(HTML) | [UI][ui]·[저장 브라우저 시험][memory-ui] | Unity 전후 미리보기·통신 재시도·앱 복귀 수용 |
+| **§8.12 저장 화면** | IMPLEMENTED(HTML)/PARTIAL(Unity연습) | [저장브라우저][memory-ui]·[실제Unity기억선택](../reports/expedition_client_20261016/root_acceptance.md) | 통신 재시도·계정저장·앱복귀/모바일 수용 |
 | **§8.13 용량 성장의 통합 목표** | NOT_IMPLEMENTED | [현행 Stats][js]·[목표 정책][policy-data] | 무료6+1+2 전환·공명 전투 효과 보존·이관·벡터 동시 변경 |
 | **§8.14 이관과 인수 조건** | PARTIAL | [P0 증거][p0]·[개체/이관 시험][memory-edges] | M1~M5 JS/HTML 근거 있음; M6 서버·M7 C# 미완료 |
 | **§8.15 외부 저장 패치를 채택하지 않은 이유** | IMPLEMENTED(거절 기록) | [외부 패치 재현][reproduce-memory]·[원문 8장](source_v0.8.1/08_chapter.md) | 거절 패치 재도입 금지; 신규 v2와 혼동하지 않음 |
@@ -250,11 +250,11 @@ P1/P2 완료로 개발을 끝내지 않는다. 이 표와 아래 장별 요구�
 |---|---|---|---|
 | **§14.1 정보 구조** | PARTIAL(HTML) | [UI][ui]·[스모크][smoke] | 참조 탐사/모집/도감/기억/설정 외 전체 메뉴·Unity 연결 |
 | **§14.2 공통 규칙** | PARTIAL(HTML) | [UI][ui]·[P0 브라우저][p0-browser] | 실기기48dp·안전영역·라이선스·Unity 접근성 검증 |
-| **§14.3 전투 화면 (가로 16:9)** | PARTIAL(HTML/Unity전투연습) | [UI][ui]·[실제Unity26시험](../reports/unity_client_20261015/playmode26_pass.json) | 실제카드/대상/예약/확정/예측/상태·의도 연결. 전체탐사UI·최종아트·연출·모바일수용 남음 |
+| **§14.3 전투 화면 (가로 16:9)** | PARTIAL(HTML/Unity전투·원정연습) | [실제87Play/Editor포인터/원정화면](../reports/expedition_client_20261016/root_acceptance.md)·[기존전투예측](../reports/unity_client_20261015/root_acceptance.md) | 카드/대상/예약/확정/상태/의도·원정흐름 있음. 원정피해예측은 개발중; 최종아트·연출·네이티브물리입력·모바일수용 남음 |
 | **§14.4 화면별 명세** | PARTIAL(HTML) | [UI][ui]·[스모크][smoke] | 성장/인연/도전/우편/상점/계정삭제 등 미구현 화면과 서버 |
 | **§14.5 온보딩 순서** | NOT_IMPLEMENTED | [원문14장](source_v0.8.1/14_chapter.md) | 단계별 실제 튜토리얼·강제 첫 저장 안내·지급/해금 |
 | **§14.6 접근성·현지화** | PARTIAL | [UI][ui]·[브라우저 시험][memory-ui] | 전체 키 기반 번역·영/일 길이·Unity 색약/아이콘 수용 |
-| **§14.7 정보 밀도와 안전한 입력** | PARTIAL(HTML/Unity전투연습) | [Unity입력·예측시험](../reports/unity_client_20261015/playmode26_pass.json)·[P0 브라우저][p0-browser] | 확정전무소비/팝업차단/순수·숨은결과차단예측 확인. 최악밀도/48dp/130%/실기기·서버 남음 |
+| **§14.7 정보 밀도와 안전한 입력** | PARTIAL(HTML/Unity연습) | [87Play·상세/알림입력보존](../reports/expedition_client_20261016/root_acceptance.md)·[기존숨은결과차단](../reports/unity_client_20261015/root_acceptance.md) | 선택/상세 무소비·팝업차단·2.6s유지 검증. 최악밀도/48dp/130%/물리입력/기기·서버 남음 |
 | **§14.8 작은 화면의 기존 관찰과 추가 인수 시험** | PARTIAL(브라우저) | [화면 증거][late-screens]·[브라우저 시험][memory-ui] | 640×360·노치·글자130%·터치·헤더 겹침 실기기 별도 |
 
 ## 장 15 — 15. 아트·연출·사운드
@@ -278,9 +278,9 @@ P1/P2 완료로 개발을 끝내지 않는다. 이 표와 아래 장별 요구�
 | 원문 요구사항 | 현재 상태 | 코드·시험·기록 근거 | 남은 인수 조건/한계 |
 |---|---|---|---|
 | **§16.1 구성** | PARTIAL | [콘텐츠 빌드][content-build]·[JS][js]·[기존 C#][core] | 공유 전체 C# DLL·권위 서버·콘텐츠 해시 배포 연결 |
-| **§16.2 규칙 코어 이식 (JS → C#)** | IN_PROGRESS | [트레이스 생성기][traces]·[트레이스 시험][trace-tests]·[기존 C#][core] | JS oracle1000개 재생·C#2000스냅샷/정렬JSON 검사와 [실제begin267사례](../reports/csharp_opening_20261015/) 완료; [실제end/적행동1740요청](../reports/csharp_turns_20261015/) 확인; 전체 Battle/Run/저장 명령 재생 동치는 미구현 |
+| **§16.2 규칙 코어 이식 (JS → C#)** | PARTIAL(현행명령 동치검증) | [실제전투/노드/저장21902검사·1000완주/273504명령](../reports/run_memory_core_20261016/root_acceptance.md)·[행동87991검사](../reports/player_actions_20261015/) | 실제공개명령으로 전체Run재생. typed숫자/JS-native진단 경계·generic base0미결·중도Run복원·서버/기기·후반후보는 남음 |
 | **§16.3 결정론과 숨겨진 정보** | PARTIAL | [publicView][js]·[API 계약][api] | 서버 비공개 RNG/뽑을더미·모집 CSPRNG·문의 재생 구현 |
-| **§16.4 Unity 클라이언트** | PARTIAL(연결/실제전투연습) | [Unity 프로젝트][unity]·[실행 증거][env] | 게임 전체 가로 UI·서버·Addressables/리그·Android IL2CPP·성능 수용 |
+| **§16.4 Unity 클라이언트** | PARTIAL(실제전투·원정연습) | [Unity프로젝트][unity]·[87Play/3Edit·실제화면/최종macOS빌드](../reports/expedition_client_20261016/root_acceptance.md) | 네이티브 물리입력(NOT_CONFIRMED)·게임전체편성/로비·영속계정/서버·Addressables/리그·Android IL2CPP·성능 수용 |
 | **§16.5 서버** | NOT_IMPLEMENTED(서버 앱) | [스키마][schema]·[API 계약][api] | 인증/세션·무결성·명령·원장·속도제한 실제 ASP.NET 앱 |
 | **§16.6 텔레메트리(이벤트 사전)** | NOT_IMPLEMENTED(전송/운영) | [이벤트 사전](source_v0.8.1/16_chapter.md)·[JS 이벤트][js] | 서버/클라이언트 계측·보관·개인정보 계약; MCP telemetry OFF와 별개 |
 | **§16.7 버전 세 종류를 구분한다** | IMPLEMENTED(버전 구분) | [현재 상태][current]·[목표 정책][policy-data] | 문서0.8.1/데이터0.7.0/JS 수정·목표 활성 상태 계속 구분 |

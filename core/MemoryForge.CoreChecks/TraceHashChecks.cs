@@ -49,7 +49,7 @@ static class TraceHashChecks
             CheckFixtureRejections(root, manifestLine, firstScenarioLine);
         CheckGzipRejections();
         Console.WriteLine($"TraceFixtureValidationChecks: {checks - previousChecks - (failures - previousFailures)}/{checks - previousChecks} passed");
-        Console.WriteLine("BattleRunCommandReplay: NOT_IMPLEMENTED (0 complete C# Run replays; RunProgressionChecks separately reports actual supported-command prefix counts; opening commands are checked separately)");
+        Console.WriteLine("BattleRunCommandReplay: NOT_RUN_IN_THIS_SUITE (snapshot/corpus validation only; actual complete command replay is reported by RunProgressionChecks)");
         return failures;
     }
 
