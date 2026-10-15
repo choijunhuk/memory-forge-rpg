@@ -124,7 +124,7 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('task', type=Path)
     parser.add_argument('--worktree', required=True, type=Path)
-    parser.add_argument('--effort', choices=('high', 'max'), default='high')
+    parser.add_argument('--effort', choices=('high', 'xhigh', 'max'), default='high')
     parser.add_argument('--billing-evidence', type=Path,
                         default=ROOT / 'ops/ai/local/runtime-billing-evidence.json')
     parser.add_argument('--resume', type=UUID)

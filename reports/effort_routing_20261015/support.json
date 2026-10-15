@@ -1,0 +1,26 @@
+{
+  "at": "2026-10-15T06:34:02.498967+00:00",
+  "codex": {
+    "model": "gpt-6.1-sol",
+    "supported_efforts": [
+      "low",
+      "medium",
+      "high",
+      "xhigh",
+      "max",
+      "ultra"
+    ],
+    "source": "local model catalogue; not a claim of current-turn effort switch"
+  },
+  "claude": {
+    "model": "claude-opus-5-5",
+    "cli_version": "2.1.285",
+    "support_source": "https://code.claude.com/docs/en/model-config#adjust-effort-level",
+    "xhigh_session": "Actual scoped Opus5.5 CLI records show effort=xhigh and perTurnEffort=xhigh"
+  },
+  "runner_change": "allow xhigh with unchanged explicit CLI/env/receipt and billing/model/scope gates",
+  "default_effort": "high",
+  "selection": "autonomous",
+  "quality_not_cost_downgrade": true,
+  "actual_metadata": "actual_xhigh_metadata.json"
+}

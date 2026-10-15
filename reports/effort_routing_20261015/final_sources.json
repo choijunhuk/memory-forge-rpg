@@ -1,0 +1,17 @@
+{
+  "files": [
+    {
+      "path": "tools/ai/run_claude.py",
+      "sha256": "26c94edd83820d4321e7a3b47961f70fabbfdcb5ce86e127d74170c1b2e4a065"
+    },
+    {
+      "path": "tests/test_ai_runner.py",
+      "sha256": "8ff1cbfc95d9acbb7e03aadf6ebb2f16083a64ad30efa9907febaf530d2b9784"
+    },
+    {
+      "path": "ops/ai/runtime-policy.json",
+      "sha256": "97bd836ecca18750354069bcbc54cfbf35b72fe43104af9d1f0da41061136538"
+    }
+  ],
+  "only_after_review_change": "clarify nonblocking max-only preference wording in runtime-policy; no execution control changed"
+}

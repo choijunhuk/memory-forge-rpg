@@ -1,4 +1,4 @@
-# Memory Forge: explicit model, quality-first default; use max for core work.
+# Memory Forge: quality-first default; select high/xhigh/max per task risk.
 model = "gpt-6.1-sol"
 model_reasoning_effort = "high"
 forced_login_method = "chatgpt"

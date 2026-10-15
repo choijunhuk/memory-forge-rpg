@@ -188,6 +188,16 @@ class ClaudeRunner(unittest.TestCase):
                 self.assertEqual(self.run_job(), 1)
                 self.assertEqual(self.result['status'], 'FAILED')
 
+    def test_xhigh_reaches_the_scoped_opus_session_and_receipt(self):
+        self.assertEqual(self.run_job('--effort', 'xhigh'), 0)
+        command, kwargs = self.inferences[0]
+        self.assertEqual(command[command.index('--effort') + 1], 'xhigh')
+        self.assertEqual(kwargs['env']['CLAUDE_CODE_EFFORT_LEVEL'], 'xhigh')
+        self.assertEqual(self.result['requestedEffort'], 'xhigh')
+        self.assertEqual(self.result['model_usage_keys'], [RUNNER.MODEL])
+        self.assertEqual(self.result['status'], 'RECEIVED_UNVERIFIED')
+        self.assertFalse(self.result['changes_verified'])
+
     def test_edit_scope_uses_exact_permissions(self):
         (self.worktree / 'view.py').write_text('original', encoding='utf-8')
         self.assertEqual(self.run_job('--allow-edit', 'view.py'), 0)

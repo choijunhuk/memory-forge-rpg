@@ -1,0 +1,59 @@
+test_xhigh_reaches_the_scoped_opus_session_and_receipt (test_ai_runner.ClaudeRunner.test_xhigh_reaches_the_scoped_opus_session_and_receipt) ... usage: python3 -m unittest [-h] --worktree WORKTREE [--effort {high,max}]
+                           [--billing-evidence BILLING_EVIDENCE]
+                           [--resume RESUME] [--allow-edit RELATIVE_FILE]
+                           task
+python3 -m unittest: error: argument --effort: invalid choice: 'xhigh' (choose from 'high', 'max')
+ERROR
+
+======================================================================
+ERROR: test_xhigh_reaches_the_scoped_opus_session_and_receipt (test_ai_runner.ClaudeRunner.test_xhigh_reaches_the_scoped_opus_session_and_receipt)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/argparse.py", line 2047, in _parse_known_args2
+    namespace, args = self._parse_known_args(args, namespace, intermixed)
+                      ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/argparse.py", line 2298, in _parse_known_args
+    start_index = consume_optional(start_index)
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/argparse.py", line 2222, in consume_optional
+    take_action(action, args, option_string)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/argparse.py", line 2108, in take_action
+    argument_values = self._get_values(action, argument_strings)
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/argparse.py", line 2625, in _get_values
+    self._check_value(action, value)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/argparse.py", line 2696, in _check_value
+    raise ArgumentError(action, msg % args)
+argparse.ArgumentError: argument --effort: invalid choice: 'xhigh' (choose from 'high', 'max')
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/choi/Documents/Memory_forge/tests/test_ai_runner.py", line 192, in test_xhigh_reaches_the_scoped_opus_session_and_receipt
+    self.assertEqual(self.run_job('--effort', 'xhigh'), 0)
+                     ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/choi/Documents/Memory_forge/tests/test_ai_runner.py", line 93, in run_job
+    code = RUNNER.main([str(self.task), '--worktree', str(self.worktree), *options])
+  File "/Users/choi/Documents/Memory_forge/tools/ai/run_claude.py", line 132, in main
+    args = parser.parse_args(argv)
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/argparse.py", line 2008, in parse_args
+    args, argv = self.parse_known_args(args, namespace)
+                 ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/argparse.py", line 2018, in parse_known_args
+    return self._parse_known_args2(args, namespace, intermixed=False)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/argparse.py", line 2049, in _parse_known_args2
+    self.error(str(err))
+    ~~~~~~~~~~^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/argparse.py", line 2785, in error
+    self.exit(2, _('%(prog)s: error: %(message)s\n') % args)
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/argparse.py", line 2772, in exit
+    _sys.exit(status)
+    ~~~~~~~~~^^^^^^^^
+SystemExit: 2
+
+----------------------------------------------------------------------
+Ran 1 test in 0.038s
+
+FAILED (errors=1)

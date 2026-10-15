@@ -77,3 +77,7 @@ P1/P2나 연결 작업이 끝났다는 이유로 전체 개발을 끝내지 않�
 전체 카드 질의 A0에서도 [PlayMode8/8](../reports/player_queries_20261015/unity_playmode.json)·[EditMode3/3](../reports/player_queries_20261015/unity_editmode.json)를 실제 실행했다. 새 시험은 반환 카드 정의·모드 목록을 수정한 후 원본과 진행 상태/로그/이벤트가 보존됨을 확인한다. [Console 오류0/전송 경고1](../reports/player_queries_20261015/unity_console.json)을 분리하며 실제 카드 실행·게임UI·Android 수용은 아니다.
 
 A1의 [PlayMode12/EditMode3](../reports/player_actions_20261015/verification.json)는 실제 카드/필살기·예약/불굴·소멸 재섞기를 같은 공유 Core로 실행한다. [새 macOS빌드](../reports/player_actions_20261015/unity_build.json)는0오류/0경고이며 [Metal 기술씬 시작](../reports/player_actions_20261015/unity_standalone_startup.json) 후 해당 프로세스만 강제종료했다. 최초NullGPU timeout은 미수용, 정상종료/전체게임UI/Android 수용은 미검증이다. 공식 [Opus Max 승인](../reports/player_actions_20261015/opposite_ai_acceptance.json)과 실제effort108개·16소스 해시를 확인했으며 reviewer실행과 Root실행은 구분한다. M0/R0의 독립 개발은 계속되며 현재 세션 종료 후 자동 지속을 약속하지 않는다.
+
+## Extra High 지원과 자율 선택 보완
+
+이전 High/Max 지원 기록을 두 수준만 허용한다는 뜻으로 사용하지 않는다. 로컬 `gpt-6.1-sol` 모델 카탈로그는 `xhigh`를 포함하고, [공식 Claude 지원표](https://code.claude.com/docs/en/model-config#adjust-effort-level)도 Opus5.5의 xhigh를 명시한다. 설치 CLI2.1.285의 기존 범위 실행기에 xhigh 인자/환경/결과 경로를 추가했다. 현재 Codex 턴의 Max 기록은 과거/현재 실행 증거이며 설정 문서만으로 xhigh로 변경됐다고 주장하지 않는다. 이후 실제 호출마다 요청값과 적용 세션 메타데이터를 확인한다. 운영 선택은 [§12](AI_WORKFLOW.md)를 따른다.

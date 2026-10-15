@@ -1,5 +1,5 @@
 {
-  "version": "2026-10-15-claude-primary",
+  "version": "2026-10-15-claude-primary-autonomous-effort",
   "models": {
     "codex": "gpt-6.1-sol",
     "claude": "claude-opus-5-5"
@@ -8,16 +8,28 @@
     "default": "high",
     "allowed": [
       "high",
+      "xhigh",
       "max"
     ],
-    "core_and_final_review": "max",
-    "claude_planning_story_characters_final_review": "max",
-    "autonomous_escalation": true
+    "core_and_final_review": "xhigh or max by risk; max actively for the hardest problems and critical final verification",
+    "claude_planning_story_characters_final_review": "autonomous xhigh or max by task risk; max actively for hardest planning and critical final review",
+    "autonomous_escalation": true,
+    "selection": "autonomous by task complexity/risk and observed results; do not restrict to two levels or fix all core work to max",
+    "support_evidence": {
+      "codex": "local gpt-6.1-sol supported_reasoning_levels includes xhigh",
+      "claude": "official Opus5.5 support table + real session metadata required for applied level"
+    }
   },
   "fallbacks": [],
   "work_routing": {
     "preferred_implementation_analysis_tests": "Claude Opus via official subscription CLI",
-    "codex_responsibilities": ["scoped dispatch", "independent review of Claude changes", "integration", "Unity final verification", "image generation and content edits"],
+    "codex_responsibilities": [
+      "scoped dispatch",
+      "independent review of Claude changes",
+      "integration",
+      "Unity final verification",
+      "image generation and content edits"
+    ],
     "native_codex_agents": "finish already-started bounded tasks; prefer Claude for new implementation and analysis",
     "allocation_basis": "latest user-reported included allowance and reset window; no fixed token percentage enforcement",
     "quality_and_cross_review_unchanged": true,

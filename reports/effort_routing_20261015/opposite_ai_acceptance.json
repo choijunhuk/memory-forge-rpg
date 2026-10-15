@@ -1,0 +1,13 @@
+{
+  "verdict": "APPROVE_XHIGH_ROUTING",
+  "model": "claude-opus-5-5",
+  "requestedEffort": "xhigh",
+  "sessionId": "0189a4bb-b798-494e-8878-ab0db85b2912",
+  "billingAccountMatched": true,
+  "actualEffortProof": "actual_xhigh_metadata.json",
+  "reviewerExecutedTests": false,
+  "reviewerRecomputedHashes": false,
+  "nonblockingWordingNote": "Fixed obsolete max-only planning/review preference text to match autonomous selection",
+  "scope": "Runner effort choices, regression and autonomy instructions only; M0 source CHANGES_REQUESTED is separate",
+  "at": "2026-10-15T06:58:30.095485+00:00"
+}
