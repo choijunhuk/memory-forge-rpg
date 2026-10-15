@@ -1,0 +1,29 @@
+FAIL RunProgression legacy legacy-1001-short#145 run:forgeOffer returned forge offers caller mutation reached the live pending or Run
+FAIL RunProgression legacy legacy-1004-short#92 run:forgeOffer returned forge offers caller mutation reached the live pending or Run
+FAIL RunProgression legacy legacy-1005-short#228 run:forgeOffer returned forge offers caller mutation reached the live pending or Run
+FAIL RunProgression legacy legacy-1008-short#211 run:forgeOffer returned forge offers caller mutation reached the live pending or Run
+FAIL RunProgression legacy legacy-1010-short#163 run:forgeOffer returned forge offers caller mutation reached the live pending or Run
+FAIL RunProgression legacy legacy-1011-short#100 run:forgeOffer returned forge offers caller mutation reached the live pending or Run
+FAIL RunProgression legacy legacy-1014-short#141 run:forgeOffer returned forge offers caller mutation reached the live pending or Run
+FAIL RunProgression legacy legacy-1015-short#175 run:forgeOffer returned forge offers caller mutation reached the live pending or Run
+FAIL RunProgression legacy legacy-1018-short#91 run:forgeOffer returned forge offers caller mutation reached the live pending or Run
+FAIL RunProgression legacy legacy-1019-short#179 run:forgeOffer returned forge offers caller mutation reached the live pending or Run
+FAIL RunProgression legacy legacy-1020-short#135 run:forgeOffer returned forge offers caller mutation reached the live pending or Run
+FAIL RunProgression legacy legacy-1021-short#78 run:forgeOffer returned forge offers caller mutation reached the live pending or Run
+FAIL RunProgression legacy legacy-1022-short#111 run:forgeOffer returned forge offers caller mutation reached the live pending or Run
+FAIL RunProgression legacy legacy-1028-short#129 run:forgeOffer returned forge offers caller mutation reached the live pending or Run
+FAIL RunProgression legacy legacy-1029-short#195 run:forgeOffer returned forge offers caller mutation reached the live pending or Run
+FAIL RunProgression legacy legacy-1030-short#241 run:forgeOffer returned forge offers caller mutation reached the live pending or Run
+FAIL RunProgression legacy legacy-1032-short#84 run:forgeOffer returned forge offers caller mutation reached the live pending or Run
+FAIL RunProgression legacy legacy-1039-short#160 run:forgeOffer returned forge offers caller mutation reached the live pending or Run
+FAIL RunProgression legacy legacy-1040-short#94 run:forgeOffer returned forge offers caller mutation reached the live pending or Run
+FAIL RunProgression legacy legacy-1041-short#139 run:forgeOffer returned forge offers caller mutation reached the live pending or Run
+FAIL RunProgression actual C# Create + public commands incl. R1b node services matched every supported attempt of all 1000 legacy prefixes (outcome, RuleError code, canonical context hash)
+FAIL RunProgression every committed legacy forgeOffer return equals the hash-checked live pending.offers and stays a detached copy (0/567 probes)
+RunProgressionChecks: 20380/20865 passed
+RunProgressionFixture: strict one-member gzip/fatal UTF-8/unique keys; exact schema/status JS_ORACLE_ONLY/scope/7 allowlisted source pins/contract/denominators; 5 fixed cases; all 2684 records integrity-checked (1380 points hashed; coverage recomputed); source prefixes 2679 attempts (2474 battle), 1064 queries; JS-only suffix 5 — oracle structure only, not C# execution
+RunProgressionCore: R1b actual C# matched 2679/2679 supported prefix attempts (R1a commands + rest/forge/buy/eventChoose node services) from fresh Create (2679 attempted; committed 1365/1365, rejected 1314/1314; battle attempts 2474/2474, battle commits 1162/1162; applyFoundPart 8, archive 4, end 196, enter 59, eventChoose 6, evolve 4, forgeRemove 4, play 2252, proceed 56, rest 5, skipCard 5, takeCard 36, takePart 10, takeRelic 8, ult 26), 1064/1064 pure queries, 2684 full-state comparisons, 1573 detached return/snapshot mutation probes (61 at pending dictionaries in ARCHIVE/DEFEAT/EVENT/FORGE/REST/REWARD/VICTORY)
+RunProgressionStops: seed1000-short-legacy 147/147 (119 battle) before commitMemory; seed1000-full-legacy 245/245 (209 battle) before commitMemory; seed1102-full-legacy 221/221 (178 battle) before commitMemory; seed1102-full-v2 221/221 (178 battle) before commitMemory; seed2654-full-legacy 1845/1845 (1790 battle) before commitMemory
+RunProgressionScope: R1b node-service prefixes, not whole Runs: JS-only suffix 5 commitMemory attempts NOT executed in C# (commitMemory not in Core); reload Create NOT executed (its memory input is the JS commitMemory product); Assign 0 attempts (not in the gen_traces vocabulary); RuleError name/message/detail unclaimed (code only); full C# runs 0
+RunProgressionGuards: 22 fixture corruption/forgery probes
+RunTracePrefixReplay: legacy scenarios 1000/1000; actual C# matched supported attempts 208197/272504 (139581 committed, 68616 rejected) in 517/1000 complete prefixes (applyFoundPart 930, archive 158, buy 1136, end 18193, enter 7785, eventChoose 499, evolve 394, forgeOffer 483, forgeRemove 281, play 161928, proceed 7213, rest 516, skipCard 1357, takeCard 4212, takePart 1077, takeRelic 1005, ult 1030); battles started 5658, finished 5658; archives 158; forgeOffer return value/ownership probes 0/567; stoppedAt {commitMemory 1000}; full completions 0; 463 further mismatch details suppressed

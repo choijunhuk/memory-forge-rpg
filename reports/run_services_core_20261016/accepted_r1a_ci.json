@@ -1,0 +1,15 @@
+{
+  "head": "8c872f527a32276303538b3119bf6c18192e9332",
+  "push": {
+    "id": 38795398820,
+    "conclusion": "success"
+  },
+  "pullRequest": {
+    "id": 38795405400,
+    "conclusion": "success"
+  },
+  "visibility": "PRIVATE",
+  "pr": 2,
+  "draft": true,
+  "checkedAt": "2026-10-15T19:52:21Z"
+}

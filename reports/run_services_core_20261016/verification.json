@@ -1,0 +1,56 @@
+{
+  "status": "VERIFIED_NODE_SERVICES_PARTIAL_RUN",
+  "fullStateOracle": {
+    "checks": 20865,
+    "attempts": 2679,
+    "committed": 1365,
+    "rejected": 1314,
+    "battleAttempts": 2474,
+    "battleCommitted": 1162,
+    "queries": 1064,
+    "fullStateComparisons": 2684,
+    "detachedProbes": 1573,
+    "pendingProbes": 61,
+    "corruptionForgeryProbes": 22,
+    "remainingJsOnlyCommands": 5
+  },
+  "legacy": {
+    "scenarios": 1000,
+    "matchedAttempts": 272504,
+    "committed": 181528,
+    "rejected": 90976,
+    "battles": 6657,
+    "archives": 275,
+    "forgeReturnOwnershipProbes": 567,
+    "stop": "commitMemory",
+    "fullRunCompletions": 0
+  },
+  "unity": {
+    "play": 29,
+    "edit": 3,
+    "consoleErrors": 0,
+    "consoleWarnings": 0,
+    "actualAssignCalls": 10,
+    "actualFirstBattleCycleCommands": 17,
+    "allSevenMethodsPositivelyLoaded": true,
+    "newExplorationUi": false,
+    "fullMemoryCostsImported": false
+  },
+  "build": {
+    "warnings": 0,
+    "errors": 0,
+    "initialNullableErrorsFixed": 11
+  },
+  "oppositeReview": "APPROVE official Opus High for Codex patch/test; Codex independently reviewed Claude Core/host",
+  "liveReferenceMutant": "Actual isolated negative control detected; original Root sources never changed",
+  "node307SourceUnchangedEvidence": "../run_progression_core_20261016/node307.txt",
+  "fullJsRerunForThisCSharpOnlyUnit": false,
+  "valuesRetuned": false,
+  "manifestsRegenerated": false,
+  "remaining": [
+    "actual memory query/commit and fullRunreload",
+    "fulloriginalRuncontentimport",
+    "explorationUI/save/server/device/finalart",
+    "32balance misses"
+  ]
+}

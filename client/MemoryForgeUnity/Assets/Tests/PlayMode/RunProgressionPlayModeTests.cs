@@ -87,5 +87,32 @@ namespace MemoryForge.PlayModeTests
             Assert.That(run.State.Deck.Select(c => c.Key), Is.EqualTo(((JArray)source["final"]!["keys"]!).Select(x => (string)x!).ToArray()));
             Assert.That(setup.Party.All(p => p.Power4 == null && p.Hp == null), Is.True, "actual Create must not mutate caller stats");
         }
+
+        // R1b: both policies use actual Create. The reference records successful legacy reassignment and v2 saved-key refusals.
+        const string AssignmentReference = @"[{""policy"":""legacy"",""initial"":""56a6ba8623a1cb296f5a8c83f5c855464a04aea56aaeec9838b1455d272a1973"",""commonKey"":""k5"",""ownKey"":""k1"",""steps"":[{""args"":[""k5"",""harin""],""error"":null,""hash"":""fb033004a615194a07a8cfdb36c4e3afaefff09af082776602aea141d66720c3""},{""args"":[""k5"",""sera""],""error"":null,""hash"":""56a6ba8623a1cb296f5a8c83f5c855464a04aea56aaeec9838b1455d272a1973""},{""args"":[""k1"",""harin""],""error"":""BAD_ASSIGN"",""hash"":""56a6ba8623a1cb296f5a8c83f5c855464a04aea56aaeec9838b1455d272a1973""},{""args"":[""k5"",""unknown""],""error"":""BAD_ASSIGN"",""hash"":""56a6ba8623a1cb296f5a8c83f5c855464a04aea56aaeec9838b1455d272a1973""},{""args"":[""missing"",""harin""],""error"":""BAD_ASSIGN"",""hash"":""56a6ba8623a1cb296f5a8c83f5c855464a04aea56aaeec9838b1455d272a1973""}]},{""policy"":""v2"",""initial"":""11a43e7465dc0089d3b8fdfded7acc4b12c84ef0cd77d38a3df66acc075c7cc3"",""commonKey"":""base:sera:4"",""ownKey"":""base:sera:0"",""steps"":[{""args"":[""base:sera:4"",""harin""],""error"":""REASSIGNMENT_REQUIRES_SEPARATE_FLOW"",""hash"":""11a43e7465dc0089d3b8fdfded7acc4b12c84ef0cd77d38a3df66acc075c7cc3""},{""args"":[""base:sera:4"",""sera""],""error"":""REASSIGNMENT_REQUIRES_SEPARATE_FLOW"",""hash"":""11a43e7465dc0089d3b8fdfded7acc4b12c84ef0cd77d38a3df66acc075c7cc3""},{""args"":[""base:sera:0"",""harin""],""error"":""BAD_ASSIGN"",""hash"":""11a43e7465dc0089d3b8fdfded7acc4b12c84ef0cd77d38a3df66acc075c7cc3""},{""args"":[""base:sera:4"",""unknown""],""error"":""BAD_ASSIGN"",""hash"":""11a43e7465dc0089d3b8fdfded7acc4b12c84ef0cd77d38a3df66acc075c7cc3""},{""args"":[""missing"",""harin""],""error"":""BAD_ASSIGN"",""hash"":""11a43e7465dc0089d3b8fdfded7acc4b12c84ef0cd77d38a3df66acc075c7cc3""}]}]";
+        [TestCase("legacy")]
+        [TestCase("v2")]
+        public void ActualCommonAssignmentMatchesOriginalJs(string policy)
+        {
+            Assert.That(Application.isPlaying, Is.True);
+            var source = ((JArray)JToken.Parse(AssignmentReference)).First(x => (string)x["policy"]! == policy);
+            var setup = new RunSetup { Seed = 1234, Length = "short", MemoryPolicy = policy, Memory = new Dictionary<string, object?>(),
+                Zones = new List<int> { 1 }, Difficulty = new RunDifficulty { Hp = 100, Damage = 100 } };
+            if (policy == "v2") { setup.RunId = "unity-assignment"; setup.MemoryVersion = 0L; }
+            foreach (string id in new[] { "sera", "harin", "nia" }) setup.Party.Add(new RunPartyEntry { CharId = id, Res = 0 });
+            var run = CoreRun.Create(Content(), setup);
+            Assert.That(Hash(run), Is.EqualTo((string)source["initial"]!));
+            int attempts = 0;
+            foreach (var step in (JArray)source["steps"]!)
+            {
+                string? error = null;
+                try { run.Assign((string)step["args"]![0]!, (string)step["args"]![1]!); }
+                catch (RuleException failure) { error = failure.Code; }
+                Assert.That(error, Is.EqualTo((string?)step["error"]), policy + " assignment #" + attempts);
+                Assert.That(Hash(run), Is.EqualTo((string)step["hash"]!), policy + " complete state after assignment #" + attempts);
+                attempts++;
+            }
+            Assert.That(attempts, Is.EqualTo(5));
+        }
     }
 }

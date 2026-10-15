@@ -1,6 +1,7 @@
-// R1a §7/8/16.2/20.9 P1-1: actual C# Run.Create plus the supported public Run/battle commands against the five-case JS full-state
-// oracle and the supported prefixes of the 1000 legacy traces. Expected states are comparison data only: nothing is injected into Run,
-// the v2 store is the real M0 migration, and every case stops before its first command the Core does not implement. Full C# runs remain 0.
+// R1b §7.5-7.7/8/16.2/20.9 P1-1: actual C# Run.Create plus the supported public Run/battle commands, now including the node services
+// rest/forgeOffer/forgeApply/forgeRemove/buy/eventChoose, against the five-case JS full-state oracle and the supported prefixes of the 1000
+// legacy traces. Expected states are comparison data only: nothing is injected into Run, the v2 store is the real M0 migration, and every
+// case stops before commitMemory, the one recorded command the Core does not implement. Full C# runs remain 0.
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,10 +18,11 @@ static class RunProgressionChecks
 {
     const string Schema = "mf-run-progression-v1", Status = "JS_ORACLE_ONLY", TraceSchema = "mf-run-traces-v1";
     const string Scope = "Actual Run.create and the recorded public Run/battle commands of five fixed gen_traces scenarios: complete JS states, returns, errors and pure queries. C# Run command replay 0; restoration, abandonment, persistence, server, Unity and device acceptance PENDING";
-    // Independent literals from the unchanged sources: attempts before each case's first unimplemented Run command, battle attempts among them
-    // (210 of them commit), and the recorded pure queries inside those prefixes including each Create boundary.
-    const int PrefixAttempts = 354, PrefixBattle = 306, PrefixBattleCommitted = 210, PrefixQueries = 223;
-    const long LegacyAttempts = 112822;
+    // Independent literals from the unchanged sources: attempts before each case's commitMemory, battle attempts and battle commits among them,
+    // committed/rejected attempts, the recorded pure queries inside those prefixes including each Create boundary, and the JS-only suffix.
+    const int PrefixAttempts = 2679, PrefixBattle = 2474, PrefixBattleCommitted = 1162, PrefixQueries = 1064, PrefixCommitted = 1365, PrefixRejected = 1314, Suffix = 5;
+    // Committed legacy forgeOffer attempts: each return gets one value/ownership probe (the five full-state cases never call forgeOffer).
+    const long LegacyAttempts = 272504, LegacyOfferReturns = 567;
     // Exact allowlist in source order, compared before any file is hashed: a fixture can never steer the host to read another path.
     static readonly (string Key, string Path)[] Sources = { ("data", "data/game_data.json"), ("engine", "engine/rules-core.js"), ("memory", "proposals/memory_v2.cjs"),
         ("canonical", "tools/gen_traces.mjs"), ("fuzzPolicy", "engine/tests/fuzz_runs.mjs"), ("runCreateDecoder", "tools/gen_run_create_vectors.mjs"), ("generator", "tools/gen_run_progression_vectors.mjs") };
@@ -35,21 +37,25 @@ static class RunProgressionChecks
         "separate", "The existing 1000-trace hash corpus and the R0 factory/query matrix are separate evidence; this fixture does not claim full C# replay");
     static readonly Dictionary<string, object?> Denominators = O("cases", 5L, "seeds", L(1000L, 1102L, 2654L), "policies", O("legacy", 4L, "v2", 1L), "lengths", O("short", 1L, "full", 4L));
     static readonly Dictionary<string, object?> Totals = O("cases", 5L, "attempted", 2684L, "committed", 1370L, "rejected", 1314L, "queries", 1074L, "csharpCommandReplay", 0L);
-    static readonly (string Id, long Seed, string Length, string Policy, string Role, int Prefix, int Battle, string Stop)[] Plan =
+    // Per case before Stop: attempts, battle attempts, battle commits, pure queries (Create included), committed and rejected attempts.
+    static readonly (string Id, long Seed, string Length, string Policy, string Role, int Prefix, int Battle, int BattleCommitted, int Queries, int Committed, int Rejected, string Stop)[] Plan =
     {
-        ("seed1000-short-legacy", 1000, "short", "legacy", "ordinary-exploration", 96, 85, "eventChoose"),
-        ("seed1000-full-legacy", 1000, "full", "legacy", "ordinary-exploration", 96, 85, "eventChoose"),
-        ("seed1102-full-legacy", 1102, "full", "legacy", "begin-defeat", 42, 31, "forgeRemove"),
-        ("seed1102-full-v2", 1102, "full", "v2", "begin-defeat", 42, 31, "forgeRemove"),
-        ("seed2654-full-legacy", 2654, "full", "legacy", "earned-ap-bonus", 78, 74, "eventChoose"),
+        ("seed1000-short-legacy", 1000, "short", "legacy", "ordinary-exploration", 147, 119, 87, 109, 115, 32, "commitMemory"),
+        ("seed1000-full-legacy", 1000, "full", "legacy", "ordinary-exploration", 245, 209, 136, 152, 172, 73, "commitMemory"),
+        ("seed1102-full-legacy", 1102, "full", "legacy", "begin-defeat", 221, 178, 130, 169, 173, 48, "commitMemory"),
+        ("seed1102-full-v2", 1102, "full", "v2", "begin-defeat", 221, 178, 130, 169, 173, 48, "commitMemory"),
+        ("seed2654-full-legacy", 2654, "full", "legacy", "earned-ap-bonus", 1845, 1790, 679, 465, 732, 1113, "commitMemory"),
     };
-    // R1a Core surface; the rest of the gen_traces Run vocabulary stops a case before it is attempted.
-    static readonly HashSet<string> Implemented = new(StringComparer.Ordinal) { "enter", "evolve", "takeCard", "skipCard", "takeRelic", "takePart", "applyFoundPart", "proceed", "archive" };
-    static readonly HashSet<string> Pending = new(StringComparer.Ordinal) { "rest", "forgeOffer", "forgeApply", "forgeRemove", "buy", "eventChoose", "commitMemory" };
+    // R1a commands plus the R1b node services; commitMemory alone still stops a case before it is attempted. Assign is not in the
+    // gen_traces vocabulary, so this corpus neither calls nor counts it.
+    static readonly HashSet<string> Services = new(StringComparer.Ordinal) { "rest", "forgeOffer", "forgeApply", "forgeRemove", "buy", "eventChoose" };
+    static readonly HashSet<string> Implemented = new(new[] { "enter", "evolve", "takeCard", "skipCard", "takeRelic", "takePart", "applyFoundPart", "proceed", "archive" }.Concat(Services), StringComparer.Ordinal);
+    static readonly HashSet<string> Pending = new(StringComparer.Ordinal) { "commitMemory" };
     static readonly Dictionary<string, long> LegacyMethods = new(StringComparer.Ordinal)
     {
-        ["enter"] = 4758, ["play"] = 88760, ["end"] = 9873, ["takeCard"] = 2826, ["proceed"] = 3759, ["takePart"] = 842,
-        ["skipCard"] = 930, ["applyFoundPart"] = 601, ["ult"] = 102, ["takeRelic"] = 237, ["evolve"] = 133, ["archive"] = 1
+        ["enter"] = 9149, ["play"] = 213175, ["end"] = 24087, ["takeCard"] = 4905, ["proceed"] = 8971, ["takePart"] = 1166, ["eventChoose"] = 540,
+        ["skipCard"] = 1574, ["applyFoundPart"] = 1093, ["forgeRemove"] = 357, ["takeRelic"] = 1545, ["ult"] = 1961, ["forgeOffer"] = 567,
+        ["forgeApply"] = 567, ["rest"] = 598, ["buy"] = 1413, ["evolve"] = 561, ["archive"] = 275
     };
     static readonly string[] TopFields = { "schema", "status", "scope", "dataVersion", "sources", "contract", "denominators", "coverage", "cases" };
     static readonly string[] CaseFields = { "id", "seed", "length", "memoryPolicy", "role", "trace", "created", "steps", "reload" };
@@ -71,7 +77,8 @@ static class RunProgressionChecks
     {
         public string Id = "", Policy = "", Stop = "";
         public JsonElement Row;
-        public int Prefix, Battle, PrefixQueries;
+        // Prefix-only tallies: attempts before Stop, battle attempts/commits, queries, committed and rejected attempts.
+        public int Prefix, Battle, BattleCommitted, PrefixQueries, Committed, Rejected;
         // Steps[i] and the point step i resolves to: its own committed after point, or the unchanged point a rejection references.
         public readonly List<JsonElement> Steps = new(), Points = new();
     }
@@ -108,8 +115,10 @@ static class RunProgressionChecks
 
     static int checks, failures, probes, probeFailures, hashedPoints, attempted, matched, matchedCommitted, matchedRejected, matchedBattle, matchedBattleCommitted,
         askedQueries, stateComparisons, detachedProbes, pendingProbes, prefixQueries, suffix, legacyMismatches;
-    static long legacyScenarios, legacyMatched, legacyPrefixes, battlesStarted, battlesFinished, archives;
-    static readonly Dictionary<string, long> legacyDenominators = new(StringComparer.Ordinal), legacyExecuted = new(StringComparer.Ordinal), legacyStops = new(StringComparer.Ordinal);
+    static long legacyScenarios, legacyMatched, legacyCommitted, legacyRejected, legacyPrefixes, battlesStarted, battlesFinished, archives, legacyOfferProbes;
+    static readonly Dictionary<string, long> legacyDenominators = new(StringComparer.Ordinal), legacyExecuted = new(StringComparer.Ordinal), legacyStops = new(StringComparer.Ordinal),
+        oracleExecuted = new(StringComparer.Ordinal);
+    static readonly SortedSet<string> pendingPhases = new(StringComparer.Ordinal);
     static readonly List<string> stops = new();
     static List<string>? seed1000;
     static string fixtureSummary = "NOT_COMPUTED";
@@ -130,8 +139,8 @@ static class RunProgressionChecks
     {
         checks = failures = probes = probeFailures = hashedPoints = attempted = matched = matchedCommitted = matchedRejected = matchedBattle = matchedBattleCommitted = 0;
         askedQueries = stateComparisons = detachedProbes = pendingProbes = prefixQueries = suffix = legacyMismatches = 0;
-        legacyScenarios = legacyMatched = legacyPrefixes = battlesStarted = battlesFinished = archives = 0;
-        legacyDenominators.Clear(); legacyExecuted.Clear(); legacyStops.Clear(); stops.Clear(); seed1000 = null; probing = false; fixtureSummary = "NOT_COMPUTED";
+        legacyScenarios = legacyMatched = legacyCommitted = legacyRejected = legacyPrefixes = battlesStarted = battlesFinished = archives = legacyOfferProbes = 0;
+        legacyDenominators.Clear(); legacyExecuted.Clear(); legacyStops.Clear(); oracleExecuted.Clear(); pendingPhases.Clear(); stops.Clear(); seed1000 = null; probing = false; fixtureSummary = "NOT_COMPUTED";
         RunData data; string definitions;
         try { data = RunDataLoader.Load(root); definitions = RunCreateChecks.DataPrint(data); }
         catch (Exception error) { Check(false, "source definitions: " + error); return Report(); }
@@ -144,13 +153,15 @@ static class RunProgressionChecks
     {
         Console.WriteLine($"RunProgressionChecks: {checks - failures}/{checks} passed");
         Console.WriteLine("RunProgressionFixture: " + fixtureSummary);
-        Console.WriteLine($"RunProgressionCore: actual C# matched {matched}/{PrefixAttempts} supported prefix attempts from fresh Create ({attempted} attempted; {matchedCommitted} committed, {matchedRejected} rejected; battle attempts {matchedBattle}/{PrefixBattle}, battle commits {matchedBattleCommitted}/{PrefixBattleCommitted}), "
-            + $"{askedQueries}/{PrefixQueries} pure queries, {stateComparisons} full-state comparisons, {detachedProbes} detached return/snapshot mutation probes ({pendingProbes} at a pending dictionary)");
+        Console.WriteLine($"RunProgressionCore: R1b actual C# matched {matched}/{PrefixAttempts} supported prefix attempts (R1a commands + rest/forge/buy/eventChoose node services) from fresh Create ({attempted} attempted; "
+            + $"committed {matchedCommitted}/{PrefixCommitted}, rejected {matchedRejected}/{PrefixRejected}; battle attempts {matchedBattle}/{PrefixBattle}, battle commits {matchedBattleCommitted}/{PrefixBattleCommitted}; {Join(oracleExecuted)}), "
+            + $"{askedQueries}/{PrefixQueries} pure queries, {stateComparisons} full-state comparisons, {detachedProbes} detached return/snapshot mutation probes ({pendingProbes} at pending dictionaries in {(pendingPhases.Count == 0 ? "none" : string.Join("/", pendingPhases))})");
         Console.WriteLine("RunProgressionStops: " + (stops.Count == 0 ? "none executed" : string.Join("; ", stops)));
-        Console.WriteLine($"RunProgressionScope: JS-only suffix {suffix} attempts NOT executed in C# (rest/forge/buy/eventChoose/commitMemory not in Core); reload Create NOT executed (its memory input is the JS commitMemory product); full C# runs 0");
+        Console.WriteLine($"RunProgressionScope: R1b node-service prefixes, not whole Runs: JS-only suffix {suffix} commitMemory attempts NOT executed in C# (commitMemory not in Core); reload Create NOT executed (its memory input is the JS commitMemory product); "
+            + "Assign 0 attempts (not in the gen_traces vocabulary); RuleError name/message/detail unclaimed (code only); full C# runs 0");
         Console.WriteLine($"RunProgressionGuards: {probes} fixture corruption/forgery probes");
-        Console.WriteLine($"RunTracePrefixReplay: legacy scenarios {legacyScenarios}/1000; actual C# matched supported attempts {legacyMatched}/{LegacyAttempts} in {legacyPrefixes}/1000 complete prefixes ({Join(legacyExecuted)}); "
-            + $"battles started {battlesStarted}, finished {battlesFinished}; archives {archives}; stoppedAt {{{Join(legacyStops)}}}; full completions 0" + (legacyMismatches > 20 ? $"; {legacyMismatches - 20} further mismatch details suppressed" : ""));
+        Console.WriteLine($"RunTracePrefixReplay: legacy scenarios {legacyScenarios}/1000; actual C# matched supported attempts {legacyMatched}/{LegacyAttempts} ({legacyCommitted} committed, {legacyRejected} rejected) in {legacyPrefixes}/1000 complete prefixes ({Join(legacyExecuted)}); "
+            + $"battles started {battlesStarted}, finished {battlesFinished}; archives {archives}; forgeOffer return value/ownership probes {legacyOfferProbes}/{LegacyOfferReturns}; stoppedAt {{{Join(legacyStops)}}}; full completions 0" + (legacyMismatches > 20 ? $"; {legacyMismatches - 20} further mismatch details suppressed" : ""));
         return failures;
     }
 
@@ -196,7 +207,10 @@ static class RunProgressionChecks
             "all five traces share one generator policy apart from the derived seed");
         seed1000 = Envelopes(cases[0]);
         int prefix = cases.Sum(c => c.Prefix), battle = cases.Sum(c => c.Battle); suffix = cases.Sum(c => c.Steps.Count - c.Prefix); prefixQueries = cases.Sum(c => c.PrefixQueries);
-        Check(prefix == PrefixAttempts && battle == PrefixBattle && prefixQueries == PrefixQueries, "source prefixes total 354 attempts (306 battle) and 223 queries before each first unimplemented Run command");
+        Check(prefix == PrefixAttempts && battle == PrefixBattle && cases.Sum(c => c.BattleCommitted) == PrefixBattleCommitted && prefixQueries == PrefixQueries
+            && cases.Sum(c => c.Committed) == PrefixCommitted && cases.Sum(c => c.Rejected) == PrefixRejected,
+            "source prefixes total 2679 attempts (2474 battle, 1162 battle commits; 1365 committed, 1314 rejected) and 1064 queries before each commitMemory");
+        Check(suffix == Suffix && cases.All(c => c.Steps.Count == c.Prefix + 1), "each case's JS-only suffix is exactly its final commitMemory (5 attempts)");
         fixtureSummary = $"strict one-member gzip/fatal UTF-8/unique keys; exact schema/status {Status}/scope/7 allowlisted source pins/contract/denominators; 5 fixed cases; all {I(cases.Sum(c => c.Steps.Count))} records integrity-checked "
             + $"({I(hashedPoints)} points hashed; coverage recomputed); source prefixes {I(prefix)} attempts ({I(battle)} battle), {I(prefixQueries)} queries; JS-only suffix {I(suffix)} — oracle structure only, not C# execution";
         foreach (var c in cases)
@@ -204,8 +218,9 @@ static class RunProgressionChecks
             try { Execute(c, data, definitions); }
             catch (Exception error) { Check(false, c.Id + " C# execution: " + (error is InvalidDataException ? error.Message : error.ToString())); }
         }
-        Check(attempted == PrefixAttempts && matched == PrefixAttempts && matchedBattle == PrefixBattle && matchedBattleCommitted == PrefixBattleCommitted,
-            "actual C# commands from fresh Create matched all 354 supported prefix attempts (306 battle attempts, 210 battle commits)");
+        Check(attempted == PrefixAttempts && matched == PrefixAttempts && matchedBattle == PrefixBattle && matchedBattleCommitted == PrefixBattleCommitted
+            && matchedCommitted == PrefixCommitted && matchedRejected == PrefixRejected,
+            "actual C# commands incl. R1b node services from fresh Create matched all 2679 supported prefix attempts (1365 committed, 1314 rejected; 2474 battle attempts, 1162 battle commits)");
         Check(askedQueries == PrefixQueries, "every recorded pure query inside the supported prefixes was asked of the C# Run (" + I(askedQueries) + "/" + I(PrefixQueries) + ")");
         Section("progression fixture corruption", () => FixtureProbes(fixture, root, version, cases, data, definitions));
     }
@@ -265,6 +280,8 @@ static class RunProgressionChecks
             if (inPrefix && scope == "run" && !Implemented.Contains(kind)) { c.Prefix = i; c.Stop = kind; inPrefix = false; }
             if (inPrefix && scope == "battle") c.Battle++;
             if (scope == "battle") battleCommands++;
+            if (inPrefix && outcome == "committed") { c.Committed++; if (scope == "battle") c.BattleCommitted++; }
+            else if (inPrefix) c.Rejected++;
             int asked;
             if (outcome == "committed")
             {
@@ -295,9 +312,10 @@ static class RunProgressionChecks
             if (inPrefix) c.PrefixQueries += asked;
             c.Steps.Add(step); c.Points.Add(point);
         }
-        Require(c.Stop.Length != 0 && Pending.Contains(c.Stop), id + " reaches no unimplemented Run command; the R1a host would claim a full C# run");
-        Check(c.Prefix == plan.Prefix && c.Battle == plan.Battle && c.Stop == plan.Stop, id + " source prefix " + I(c.Prefix) + " attempts (" + I(c.Battle) + " battle) before " + c.Stop
-            + " equals the independent literal " + I(plan.Prefix) + " (" + I(plan.Battle) + ") before " + plan.Stop);
+        Require(c.Stop.Length != 0 && Pending.Contains(c.Stop), id + " reaches no unimplemented Run command; the R1b host would claim a full C# run");
+        Check(c.Prefix == plan.Prefix && c.Battle == plan.Battle && c.BattleCommitted == plan.BattleCommitted && c.PrefixQueries == plan.Queries && c.Committed == plan.Committed && c.Rejected == plan.Rejected && c.Stop == plan.Stop,
+            id + " source prefix " + I(c.Prefix) + " attempts (" + I(c.Battle) + " battle/" + I(c.BattleCommitted) + " battle commits; " + I(c.Committed) + " committed/" + I(c.Rejected) + " rejected; " + I(c.PrefixQueries) + " queries) before " + c.Stop
+            + " equals the independent literal " + I(plan.Prefix) + " (" + I(plan.Battle) + "/" + I(plan.BattleCommitted) + "; " + I(plan.Committed) + "/" + I(plan.Rejected) + "; " + I(plan.Queries) + ") before " + plan.Stop);
         Require(HashText(point.GetProperty("stateHash")) == HashText(trace.GetProperty("finalStateHash")) && run.GetValueOrDefault("phase") as string == "DONE", id + " final point is not the trace final DONE state");
         var summary = trace.GetProperty("summary"); Fields(summary, SummaryFields, id + " trace summary");
         var final = AsObject(run.GetValueOrDefault("result"), id + " final result");
@@ -434,7 +452,8 @@ static class RunProgressionChecks
     }
 
     // Actual C#: fresh Create from the recorded setup, real M0 store, then the agreed public commands until the first unimplemented one.
-    static void Execute(Case c, RunData data, string definitions)
+    // Returns the number of attempts matched before the first divergence (the forgery probes assert where it stops).
+    static int Execute(Case c, RunData data, string definitions)
     {
         var setupJson = c.Row.GetProperty("trace").GetProperty("setup"); var created = c.Row.GetProperty("created");
         var setup = RunDataLoader.Setup(setupJson); string setupBefore = RunCreateChecks.SetupPrint(setup);
@@ -451,7 +470,8 @@ static class RunProgressionChecks
         int failed = Failed(), executed = 0; string stopped = "before " + c.Stop;
         Compare(created, graph, c.Id + " created");
         Ask(created.GetProperty("queries"), run, store, live, c.Id + " created");
-        bool battleProbe = false, pendingProbe = false;
+        // The first active battle, and each pending dictionary at its first (phase, command) pair, e.g. FORGE after forgeOffer or SHOP after buy.
+        bool battleProbe = false; var pendingProbed = new HashSet<string>(StringComparer.Ordinal);
         if (Failed() != failed) stopped = "created mismatch";
         else for (int i = 0; i < c.Prefix; i++)
         {
@@ -475,9 +495,13 @@ static class RunProgressionChecks
             Compare(c.Points[i], graph, where);
             Ask(step.GetProperty("queries"), run, store, live, where);
             if (Failed() == failed && !battleProbe && after.Battle != null) { battleProbe = true; Detachment(run, store, live, where + " active battle"); }
-            if (Failed() == failed && !pendingProbe && after.Pending is IDictionary<string, object?>) { pendingProbe = true; Count(ref pendingProbes); Detachment(run, store, live, where + " pending " + after.Phase); }
+            if (Failed() == failed && after.Pending is IDictionary<string, object?> && pendingProbed.Add(after.Phase + " after " + kind))
+            {
+                Count(ref pendingProbes); if (!probing) pendingPhases.Add(after.Phase);
+                Detachment(run, store, live, where + " pending " + after.Phase);
+            }
             if (Failed() != failed) { stopped = "mismatch at #" + I(i); break; }
-            executed++; Count(ref matched);
+            executed++; Count(ref matched); if (!probing) Bump(oracleExecuted, kind);
             if (scope == "battle") { Count(ref matchedBattle); if (code == null) Count(ref matchedBattleCommitted); }
             if (code == null) Count(ref matchedCommitted); else Count(ref matchedRejected);
             state = after;
@@ -486,11 +510,14 @@ static class RunProgressionChecks
         Check(battleProbe || executed != c.Prefix, c.Id + " detached State/public-view probes ran on an active battle");
         Check(RunCreateChecks.SetupPrint(setup) == setupBefore && RunCreateChecks.DataPrint(data) == definitions, c.Id + " Create/commands/queries preserve the caller setup and source definitions");
         if (!probing) stops.Add(c.Id + " " + I(executed) + "/" + I(c.Prefix) + " (" + I(c.Battle) + " battle) " + stopped);
+        return executed;
     }
 
     static Func<object> RunCall(ExpeditionRun run, string kind, List<object?> args)
     {
         string Arg(int index, int count) => args.Count == count && args[index] is string text ? text : throw new InvalidDataException(kind + " expects " + I(count) + " string argument(s)");
+        // A recorded trailing deck key: absent (JS undefined, passed as null) or exactly one more string argument.
+        string? Key(int index) => args.Count == index ? null : Arg(index, index + 1);
         void None() { if (args.Count != 0) throw new InvalidDataException(kind + " expects no arguments"); }
         switch (kind)
         {
@@ -503,7 +530,23 @@ static class RunProgressionChecks
             case "applyFoundPart": { string part = Arg(0, 2), key = Arg(1, 2); return () => { run.ApplyFoundPart(part, key); return Undefined; }; }
             case "proceed": None(); return () => { run.Proceed(); return Undefined; };
             case "archive": { string choice = Arg(0, 1); return () => { run.Archive(choice); return Undefined; }; }
-            default: throw new InvalidDataException("R1a host never calls unimplemented Run command " + kind);
+            // R1b node services in the gen_traces shapes only: rest(choice[, key]), buy(shelf, id) or buy(kind, null, key), eventChoose(index[, key]).
+            case "rest": { string? card = Key(1); string choice = Arg(0, args.Count); return () => { run.Rest(choice, card); return Undefined; }; }
+            case "forgeOffer": { string card = Arg(0, 1); return () => run.ForgeOffer(card); }
+            case "forgeApply": { string part = Arg(0, 1); return () => { run.ForgeApply(part); return Undefined; }; }
+            case "forgeRemove": { string card = Arg(0, 1); return () => { run.ForgeRemove(card); return Undefined; }; }
+            case "buy":
+                {
+                    if (args.Count == 3 && args[1] == null) { string removal = Arg(0, 3), card = Arg(2, 3); return () => { run.Buy(removal, null, card); return Undefined; }; }
+                    string shelf = Arg(0, 2), item = Arg(1, 2); return () => { run.Buy(shelf, item); return Undefined; };
+                }
+            case "eventChoose":
+                {
+                    string? card = Key(1);
+                    int choice = args[0] is long index && index >= int.MinValue && index <= int.MaxValue ? (int)index : throw new InvalidDataException("eventChoose expects an integer choice index");
+                    return () => { run.EventChoose(choice, card); return Undefined; };
+                }
+            default: throw new InvalidDataException("R1b host never calls unimplemented Run command " + kind);
         }
     }
     // The recorded rid/v must equal the live C# battle before the call (JS dispatch asserts the same); args use the existing transport parser.
@@ -530,6 +573,19 @@ static class RunProgressionChecks
     static void Return(JsonElement result, object returned, ExpeditionRun run, object? store, string live, string label)
     {
         string kind = Text(result, "kind");
+        // forgeOffer: JS returns the live pending.offers; the C# return is compared by value and must be a detached copy.
+        if (returned is IDictionary<string, object?> offers)
+        {
+            Check(kind == "json", label + " forge offers are recorded as a JSON return");
+            if (kind != "json") return;
+            string? offerDiff = MemoryV2DataLoader.Difference(Graph(result.GetProperty("value")), offers);
+            Check(offerDiff == null, label + " complete returned forge offers {key, parts}" + (offerDiff == null ? "" : ": " + offerDiff));
+            foreach (object? path in AsList(Graph(result.GetProperty("undefinedPaths")), label)) Check(Omitted(offers, path), label + " offers own-undefined " + CanonicalState.Serialize(path) + " stays absent, never null");
+            string original = Full(offers); Scribble(offers); Count(ref detachedProbes);
+            Check(Full(offers) != original, label + " positive control: caller mutation changes the returned forge offers");
+            Check(Full(Context(run.State, store)) == live, label + " mutating the returned forge offers cannot reach the live pending or Run");
+            return;
+        }
         if (returned is not BattleResponse response) { Check(ReferenceEquals(returned, Undefined) && kind == "undefined", label + " void Run method returns JS undefined (never null/JSON)"); return; }
         Check(kind == "json", label + " battle response is recorded as a JSON return");
         if (kind != "json") return;
@@ -646,21 +702,28 @@ static class RunProgressionChecks
         CaseProbe("battle envelope version drift", copy => { var command = AsObject(Step(copy, battleAt)["command"], "command"); long v = (long)command["v"]! + 1; command["v"] = v; command["rid"] = "r" + I(v) + "-" + command["kind"]; });
 
         // Self-consistent forgery: one committed state inside the supported prefix changes and every hash/reference naming it is recomputed,
-        // so structure accepts it and only actual C# execution can reject it.
-        var forged = AsObject(Graph(row), "forged case");
-        var point = AsObject(Step(forged, committedAt)["after"], "after"); var state = AsObject(point["state"], "state"); var forgedRun = AsObject(state["run"], "run");
-        forgedRun["coins"] = (long)forgedRun["coins"]! + 1;
-        string stateHash = CanonicalState.Hash(state), jsonHash = Sha(Ordered(state)); point["stateHash"] = stateHash; point["jsonHash"] = jsonHash;
-        foreach (object? item in AsList(forged["steps"], "steps").Skip(committedAt + 1))
-            foreach (string field in new[] { "before", "after" })
-                if (Get(item, field) is Dictionary<string, object?> reference && reference.Count == RefFields.Length && Get(reference, "ref") is long at && at == committedAt) { reference["stateHash"] = stateHash; reference["jsonHash"] = jsonHash; }
-        using (var document = JsonDocument.Parse(Ordered(forged)))
+        // so structure accepts it and only actual C# execution can reject it, after matching every earlier attempt and exactly at the forged one.
+        void Forgery(int forgedAt, string label)
         {
-            var element = document.RootElement; Case? parsed = null;
-            Control("self-consistent forged committed state passes structural validation", () => parsed = ValidateCase(element, smallest, new Coverage()));
-            if (parsed is Case forgedCase) Probe("self-consistent forged committed state is rejected by actual C# replay", () => Execute(forgedCase, data, definitions));
-            else Check(false, "self-consistent forgery could not be parsed for the C# replay probe");
+            var forged = AsObject(Graph(row), "forged case");
+            var point = AsObject(Step(forged, forgedAt)["after"], "after"); var state = AsObject(point["state"], "state"); var forgedRun = AsObject(state["run"], "run");
+            forgedRun["coins"] = (long)forgedRun["coins"]! + 1;
+            string stateHash = CanonicalState.Hash(state), jsonHash = Sha(Ordered(state)); point["stateHash"] = stateHash; point["jsonHash"] = jsonHash;
+            foreach (object? item in AsList(forged["steps"], "steps").Skip(forgedAt + 1))
+                foreach (string field in new[] { "before", "after" })
+                    if (Get(item, field) is Dictionary<string, object?> reference && reference.Count == RefFields.Length && Get(reference, "ref") is long at && at == forgedAt) { reference["stateHash"] = stateHash; reference["jsonHash"] = jsonHash; }
+            using var document = JsonDocument.Parse(Ordered(forged));
+            var element = document.RootElement; Case? parsed = null; int reached = -1;
+            Control("self-consistent forged " + label + " passes structural validation", () => parsed = ValidateCase(element, smallest, new Coverage()));
+            if (parsed is not Case forgedCase) { Check(false, "self-consistent forged " + label + " could not be parsed for the C# replay probe"); return; }
+            Probe("self-consistent forged " + label + " is rejected by actual C# replay", () => reached = Execute(forgedCase, data, definitions));
+            Check(reached == forgedAt, "actual C# replay matched all " + I(forgedAt) + " attempts before the forged " + label + " and diverged exactly there (reached " + I(reached) + ")");
         }
+        Forgery(committedAt, "committed state");
+        // The same forgery after the first committed R1b node service: the replay must execute that service and compare its complete state.
+        int serviceAt = target.Steps.FindIndex(s => Text(s, "outcome") == "committed" && Text(s.GetProperty("command"), "scope") == "run" && Services.Contains(Text(s.GetProperty("command"), "kind")));
+        Require(serviceAt > committedAt && serviceAt < target.Prefix, target.Id + " has no committed node service inside its supported prefix to forge");
+        Forgery(serviceAt, "state after node service " + Text(target.Steps[serviceAt].GetProperty("command"), "kind") + " #" + I(serviceAt));
     }
 
     // JSON.stringify text of a parsed graph in its source member order (CanonicalState string escaping), so an untampered round trip keeps every jsonHash.
@@ -692,10 +755,12 @@ static class RunProgressionChecks
         Check(stats.Scenarios == 1000 && stats.Short == 700 && stats.Full == 300 && stats.Hashes == 2000 && legacyScenarios == 1000,
             "legacy corpus: strict one-member gzip JSONL, five current source pins, 1000 sequential scenarios (700 short, 300 full) with verified snapshot hashes");
         Check(Same(legacyDenominators, LegacyMethods) && legacyDenominators.Values.Sum() == LegacyAttempts,
-            "source prefix denominators before each trace's first unimplemented Run command: 112822 attempts with the literal per-method counts (" + Join(legacyDenominators) + ")");
+            "source prefix denominators before each trace's commitMemory: 272504 attempts with the literal per-method counts (" + Join(legacyDenominators) + ")");
         Check(legacyMatched == LegacyAttempts && Same(legacyExecuted, LegacyMethods) && legacyPrefixes == 1000,
-            "actual C# Create + public commands matched every supported attempt of all 1000 legacy prefixes (outcome, RuleError code, canonical context hash)");
-        Check(legacyStops.Values.Sum() == 1000 && legacyStops.Keys.All(Pending.Contains), "every legacy trace stops at an unimplemented Run command; full C# completions 0");
+            "actual C# Create + public commands incl. R1b node services matched every supported attempt of all 1000 legacy prefixes (outcome, RuleError code, canonical context hash)");
+        Check(legacyOfferProbes == LegacyOfferReturns, "every committed legacy forgeOffer return equals the hash-checked live pending.offers and stays a detached copy ("
+            + I(legacyOfferProbes) + "/" + I(LegacyOfferReturns) + " probes)");
+        Check(legacyStops.Count == 1 && legacyStops.GetValueOrDefault("commitMemory") == 1000, "every legacy trace stops at commitMemory, its only unimplemented Run command; full C# completions 0");
         Check(RunCreateChecks.DataPrint(data) == definitions, "legacy prefix replay preserves source definitions");
     }
 
@@ -725,12 +790,12 @@ static class RunProgressionChecks
                 var step = AsObject(commands[i], id + " step"); var command = AsObject(step.GetValueOrDefault("command"), id + " command");
                 string scope = command.GetValueOrDefault("scope") as string ?? "", kind = command.GetValueOrDefault("kind") as string ?? "", where = id + "#" + I(i) + " " + scope + ":" + kind;
                 var args = scope == "battle" ? null : AsList(command.GetValueOrDefault("args"), where + " args");
-                string? code = null;
+                string? code = null; object? returned = null;
                 try
                 {
                     var call = args == null ? BattleCall(run, state, kind, command.GetValueOrDefault("rid") as string ?? "", command.GetValueOrDefault("v") as long? ?? -1, Full(command.GetValueOrDefault("args")))
                         : RunCall(run, kind, args);
-                    try { call(); } catch (RuleException error) { code = error.Code; }
+                    try { returned = call(); } catch (RuleException error) { code = error.Code; }
                 }
                 catch (Exception error) when (error is not InvalidDataException) { LegacyMismatch(where + " " + Describe(error)); return; }
                 var after = run.State; string hash = CanonicalState.Hash(Context(after, null)), outcome = code == null ? "committed" : "rejected";
@@ -739,7 +804,20 @@ static class RunProgressionChecks
                 {
                     LegacyMismatch(where + " C# " + outcome + (code == null ? "" : " " + code) + " " + Short(hash) + " vs JS " + expectedOutcome + (expectedCode == null ? "" : " " + expectedCode) + " " + Short(expectedHash)); return;
                 }
-                legacyMatched++; Bump(legacyExecuted, kind);
+                legacyMatched++; Bump(legacyExecuted, kind); if (code == null) legacyCommitted++; else legacyRejected++;
+                // The trace records no return, so a committed forgeOffer return is compared with after.pending.offers, which the JS whole-state
+                // hash above already fixes; then a caller mutation must change the copy and leave the complete live Run (incl. log) unchanged.
+                if (code == null && kind == "forgeOffer")
+                {
+                    string live = Full(Context(after, null)), probe = where + " returned forge offers";
+                    if (returned is not IDictionary<string, object?> offers) { LegacyMismatch(probe + " are not a dictionary"); return; }
+                    string? offerDiff = MemoryV2DataLoader.Difference(Get(after.Pending, "offers"), offers);
+                    if (offerDiff != null) { LegacyMismatch(probe + " differ from the hash-checked pending.offers: " + offerDiff); return; }
+                    string original = Full(offers); Scribble(offers);
+                    if (Full(offers) == original) { LegacyMismatch(probe + " positive control: caller mutation left the returned copy unchanged"); return; }
+                    if (Full(Context(run.State, null)) != live) { LegacyMismatch(probe + " caller mutation reached the live pending or Run"); return; }
+                    legacyOfferProbes++;
+                }
                 bool started = code == null && kind == "enter" && args != null && args.Count == 1 && NodeType(state, args[0] as string) is "battle" or "elite" or "boss";
                 if (started) battlesStarted++;
                 if (code == null && after.Battle == null && (state.Battle != null || started)) battlesFinished++;

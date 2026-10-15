@@ -474,3 +474,5 @@ A0 [실제128244 질의검사](../reports/player_queries_20261015/root_checks.tx
 현재 추가증거: [R0최종215677/115위조](../reports/run_create_20261015/final_reader_green.txt), [실제Unity26Play/3Edit와 상호리뷰수정](../reports/unity_client_20261015/root_acceptance.md). 전체C#Run진행명령은0이며 단위검증을 전체게임/기기 수용으로 확대하지 않는다.
 
 R1a 최신 증거: [실제Run8519/8519·1000지원구간112822명령](../reports/run_progression_core_20261016/root_checks.txt), [실제Unity27Play/3Edit·양방향검토](../reports/run_progression_core_20261016/root_acceptance.md). 탐사 진입·실제전투·성장·보상·다음지도/기록보관소는 연결했고 완주0/저장·복원은 미완료다. R1b휴식·공방·상점·이벤트를 실제구현 중이며 작성 중인 코드를 완료로 세지 않는다. 앞선0명령 기록은 당시 단위의 이력이다.
+
+R1b 최신 증거: [노드서비스20865검사·1000지원구간272504실제명령](../reports/run_services_core_20261016/root_checks.txt), [567반환사본검사/실제유출변형RED·Unity29Play/3Edit](../reports/run_services_core_20261016/root_acceptance.md). §7휴식/공방/상점/이벤트와§8배정은C#연결했다. 탐사완주0/저장·복원/전체클라이언트는아직미완료이며, 실제메모리저장과원본Run클라이언트콘텐츠를후속구현중이다.

@@ -1,7 +1,7 @@
 // R1a §7.1-7.7/§8.5/§16.2: real enter → Battle begin/commands → afterBattle → proceed/archive with terminal v2 capture.
 // Source: engine/rules-core.js Run enter/startBattle/encounterFor/battleCmd/afterBattle/proceed/archive/makeShop/captureMemory.
 // Commands mutate the live state in source order like the JS reference (an invalid authored setup can leave pos/floor/RNG
-// changed); this is not a transactional Run. Rest/forge/buy/eventChoose, assign and commitMemory are later R1 units.
+// changed); this is not a transactional Run. Node services/assign are in Run.Services; memory commit is a later R1 unit.
 using System;
 using System.Collections;
 using System.Collections.Generic;

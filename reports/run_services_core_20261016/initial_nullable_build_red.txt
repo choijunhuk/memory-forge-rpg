@@ -1,0 +1,29 @@
+/Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Services.cs(156,60): error CS8629: Nullable 값 형식이 null일 수 있습니다. [/Users/choi/Documents/Memory_forge/core/MemoryForge.Core/MemoryForge.Core.csproj]
+/Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Services.cs(157,50): error CS8629: Nullable 값 형식이 null일 수 있습니다. [/Users/choi/Documents/Memory_forge/core/MemoryForge.Core/MemoryForge.Core.csproj]
+/Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Services.cs(158,81): error CS8629: Nullable 값 형식이 null일 수 있습니다. [/Users/choi/Documents/Memory_forge/core/MemoryForge.Core/MemoryForge.Core.csproj]
+/Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Services.cs(159,80): error CS8629: Nullable 값 형식이 null일 수 있습니다. [/Users/choi/Documents/Memory_forge/core/MemoryForge.Core/MemoryForge.Core.csproj]
+/Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Services.cs(160,88): error CS8629: Nullable 값 형식이 null일 수 있습니다. [/Users/choi/Documents/Memory_forge/core/MemoryForge.Core/MemoryForge.Core.csproj]
+/Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Services.cs(161,73): error CS8629: Nullable 값 형식이 null일 수 있습니다. [/Users/choi/Documents/Memory_forge/core/MemoryForge.Core/MemoryForge.Core.csproj]
+/Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Services.cs(165,102): error CS8629: Nullable 값 형식이 null일 수 있습니다. [/Users/choi/Documents/Memory_forge/core/MemoryForge.Core/MemoryForge.Core.csproj]
+/Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Services.cs(167,137): error CS8629: Nullable 값 형식이 null일 수 있습니다. [/Users/choi/Documents/Memory_forge/core/MemoryForge.Core/MemoryForge.Core.csproj]
+/Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Services.cs(189,76): error CS8629: Nullable 값 형식이 null일 수 있습니다. [/Users/choi/Documents/Memory_forge/core/MemoryForge.Core/MemoryForge.Core.csproj]
+/Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Services.cs(193,91): error CS8629: Nullable 값 형식이 null일 수 있습니다. [/Users/choi/Documents/Memory_forge/core/MemoryForge.Core/MemoryForge.Core.csproj]
+/Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Services.cs(219,37): error CS8629: Nullable 값 형식이 null일 수 있습니다. [/Users/choi/Documents/Memory_forge/core/MemoryForge.Core/MemoryForge.Core.csproj]
+
+빌드하지 못했습니다.
+
+/Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Services.cs(156,60): error CS8629: Nullable 값 형식이 null일 수 있습니다. [/Users/choi/Documents/Memory_forge/core/MemoryForge.Core/MemoryForge.Core.csproj]
+/Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Services.cs(157,50): error CS8629: Nullable 값 형식이 null일 수 있습니다. [/Users/choi/Documents/Memory_forge/core/MemoryForge.Core/MemoryForge.Core.csproj]
+/Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Services.cs(158,81): error CS8629: Nullable 값 형식이 null일 수 있습니다. [/Users/choi/Documents/Memory_forge/core/MemoryForge.Core/MemoryForge.Core.csproj]
+/Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Services.cs(159,80): error CS8629: Nullable 값 형식이 null일 수 있습니다. [/Users/choi/Documents/Memory_forge/core/MemoryForge.Core/MemoryForge.Core.csproj]
+/Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Services.cs(160,88): error CS8629: Nullable 값 형식이 null일 수 있습니다. [/Users/choi/Documents/Memory_forge/core/MemoryForge.Core/MemoryForge.Core.csproj]
+/Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Services.cs(161,73): error CS8629: Nullable 값 형식이 null일 수 있습니다. [/Users/choi/Documents/Memory_forge/core/MemoryForge.Core/MemoryForge.Core.csproj]
+/Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Services.cs(165,102): error CS8629: Nullable 값 형식이 null일 수 있습니다. [/Users/choi/Documents/Memory_forge/core/MemoryForge.Core/MemoryForge.Core.csproj]
+/Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Services.cs(167,137): error CS8629: Nullable 값 형식이 null일 수 있습니다. [/Users/choi/Documents/Memory_forge/core/MemoryForge.Core/MemoryForge.Core.csproj]
+/Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Services.cs(189,76): error CS8629: Nullable 값 형식이 null일 수 있습니다. [/Users/choi/Documents/Memory_forge/core/MemoryForge.Core/MemoryForge.Core.csproj]
+/Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Services.cs(193,91): error CS8629: Nullable 값 형식이 null일 수 있습니다. [/Users/choi/Documents/Memory_forge/core/MemoryForge.Core/MemoryForge.Core.csproj]
+/Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Services.cs(219,37): error CS8629: Nullable 값 형식이 null일 수 있습니다. [/Users/choi/Documents/Memory_forge/core/MemoryForge.Core/MemoryForge.Core.csproj]
+    경고 0개
+    오류 11개
+
+경과 시간: 00:00:01.23

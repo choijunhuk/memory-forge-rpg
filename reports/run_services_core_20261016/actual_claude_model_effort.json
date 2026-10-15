@@ -1,0 +1,54 @@
+[
+  {
+    "task": "P1-R1B-NODE-SERVICES",
+    "sessionId": "935aa227-6ba2-41b9-8374-a56f07bfe1bc",
+    "promptTimestamp": "2026-10-15T19:32:00.464Z",
+    "actualModels": {
+      "claude-opus-5-5": 52
+    },
+    "actualPerTurnEffort": {
+      "xhigh": 52
+    },
+    "scope": "Only the actual task request segment in the session",
+    "rawReasoningCopied": false
+  },
+  {
+    "task": "P1-R1B-HOST-EXTENSION",
+    "sessionId": "05c8e1dd-a497-4ff0-8182-443fea916190",
+    "promptTimestamp": "2026-10-15T19:32:00.464Z",
+    "actualModels": {
+      "claude-opus-5-5": 86
+    },
+    "actualPerTurnEffort": {
+      "xhigh": 86
+    },
+    "scope": "Only the actual task request segment in the session",
+    "rawReasoningCopied": false
+  },
+  {
+    "task": "P1-R1B-UNITY-PATCH-REVIEW",
+    "sessionId": "31485873-d5b7-4053-b074-c1aa272c8a0a",
+    "promptTimestamp": "2026-10-15T19:44:45.602Z",
+    "actualModels": {
+      "claude-opus-5-5": 26
+    },
+    "actualPerTurnEffort": {
+      "high": 26
+    },
+    "scope": "Only the actual task request segment in the session",
+    "rawReasoningCopied": false
+  },
+  {
+    "task": "P1-R1B-FORGE-RETURN-PROBE",
+    "sessionId": "31485873-d5b7-4053-b074-c1aa272c8a0a",
+    "promptTimestamp": "2026-10-15T19:49:07.120Z",
+    "actualModels": {
+      "claude-opus-5-5": 24
+    },
+    "actualPerTurnEffort": {
+      "high": 24
+    },
+    "scope": "Only the actual task request segment in the session",
+    "rawReasoningCopied": false
+  }
+]

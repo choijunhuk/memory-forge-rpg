@@ -1,0 +1,10 @@
+{
+  "baseline": "reports/run_progression_core_20261016/preservation47.json",
+  "all47Unchanged": true,
+  "frozenAuthoredInputs": 42,
+  "alreadyApprovedEngineAndGoldens": 5,
+  "newDependencies": false,
+  "valuesRetuned": false,
+  "inputManifestsRegenerated": false,
+  "unitySettingsBothByteIdenticalToHead": true
+}
