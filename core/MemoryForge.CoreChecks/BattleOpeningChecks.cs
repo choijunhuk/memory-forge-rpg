@@ -69,7 +69,7 @@ static class BattleOpeningChecks
         catch (Exception error) { Check(false, "fixture/adapter: " + error); }
         Console.WriteLine($"BattleOpeningChecks: {checks - failures}/{checks} passed; {commands} actual C# begin commands (267 expected)");
         Console.WriteLine("BattleOpeningScope: fresh Battle.Create + begin; integer JSON args with JS receipt ordering; int32 state outputs except widened actor levels; fractional/oversized numbers explicitly unsupported");
-        Console.WriteLine("BattleRunCommandReplay: NOT_IMPLEMENTED (play/ult/end, later turns, Run and restoration are not ported)");
+        Console.WriteLine("OpeningVectorScope: begin only; end/later-turn commands are covered separately, while play/ult/Run/restoration remain unported");
         return failures;
     }
 
@@ -157,11 +157,13 @@ static class BattleOpeningChecks
         { bad = Setup(); bad.Deck[0].Growth = growth; Check(Throws(() => Battle.Create(data, bad), "GROWTH_INVARIANT"), "invalid card growth " + growth); }
 
         var battle = Fresh(); string before = Full(battle.State.ToJsonGraph());
-        foreach (string kind in new[] { "play", "ult", "end" })
+        foreach (string kind in new[] { "play", "ult" })
         {
             Check(Throws(() => battle.Command(new BattleRequest("failed", 0, kind)), "BATTLE_COMMAND_NOT_IMPLEMENTED"), "explicit unsupported " + kind);
             Check(Full(battle.State.ToJsonGraph()) == before, "unsupported " + kind + " preserves all state");
         }
+        Check(Throws(() => battle.Command(new BattleRequest("failed-end", 0, "end")), "WRONG_PHASE"), "end before begin rejected");
+        Check(Full(battle.State.ToJsonGraph()) == before, "end before begin preserves complete state");
         Check(Throws(() => battle.Command(new BattleRequest("failed", 0, "unknown")), "UNKNOWN_COMMAND"), "unknown command rejected");
         Check(Throws(() => battle.Command(new BattleRequest("failed", 1, "play")), "STALE_VERSION"), "stale version precedes unsupported command");
         var req = new BattleRequest("failed", 0, "begin");
@@ -175,7 +177,7 @@ static class BattleOpeningChecks
         Check(Throws(() => battle.Command(new BattleRequest("failed", 999, "play")), "IDEMPOTENCY_CONFLICT"), "receipt conflict precedes stale and unsupported checks");
         Check(Throws(() => battle.Command(new BattleRequest("new", 0, "begin")), "STALE_VERSION"), "new rid with old version rejected");
         Check(Throws(() => battle.Command(new BattleRequest("new", 1, "begin")), "WRONG_PHASE"), "second begin rejected without a receipt");
-        foreach (string kind in new[] { "play", "ult", "end" }) Check(Throws(() => battle.Command(new BattleRequest("new", 1, kind)), "BATTLE_COMMAND_NOT_IMPLEMENTED"), "later " + kind + " still explicit unsupported");
+        foreach (string kind in new[] { "play", "ult" }) Check(Throws(() => battle.Command(new BattleRequest("new", 1, kind)), "BATTLE_COMMAND_NOT_IMPLEMENTED"), "later " + kind + " still explicit unsupported");
         Check(Full(battle.State.ToJsonGraph()) == before, "all rejection priorities preserve RNG/v/log/ev");
         var detached = battle.State; detached.Phase = "CREATED"; detached.Rng[0] = 0; detached.Actors[0].Passive.Params.Clear(); detached.Cards["c1"].Temp.Add("tampered"); detached.Events.Clear();
         Check(Full(battle.State.ToJsonGraph()) == before && Throws(() => battle.Command(new BattleRequest(null, 1, "begin")), "WRONG_PHASE"), "snapshot mutation cannot restore or corrupt the live battle");
@@ -271,6 +273,11 @@ static class BattleOpeningChecks
         Check(Throws(() => battle.Command(new BattleRequest("invariant", 0, "begin")), "STATE_RANGE") && Full(battle.State.ToJsonGraph()) == before, "post-execution invariant rejection rolls back all state");
         data.Rules.ApMax = apMax;
         Check(battle.Command(new BattleRequest("invariant", 0, "begin")).V == 1, "invariant failure creates no receipt; same-rid retry succeeds");
+        battle = Fresh(); battle.Command(new BattleRequest("opening", 0, "begin"));
+        var passed = battle.Command(new BattleRequest("pass", 1, "end"));
+        Check(passed.V == 2 && battle.State.Turn == 2 && battle.State.Phase == "PLAYER", "real end proceeds to the second player turn");
+        Check(battle.State.Block == 0 && battle.State.Counter == 0, "opening-only ordinary block and counter clear on second turn");
+
     }
 
     static bool Throws(Action action, string code)
@@ -280,33 +287,8 @@ static class BattleOpeningChecks
     }
     static void Same(JsonElement expected, object? actual, string label)
     {
-        string? difference = Difference(BattleDataLoader.Graph(expected), actual, "$", 0);
+        string? difference = JsonGraphComparison.Difference(BattleDataLoader.Graph(expected), actual, "$", 0);
         Check(difference == null, label + (difference == null ? "" : ": " + difference));
-    }
-    static string? Difference(object? expected, object? actual, string path, int depth)
-    {
-        if (depth > 256) return path + " too deep";
-        if (expected == null || actual == null) return expected == actual ? null : path + " null/absence mismatch";
-        if (expected is Dictionary<string, object?> obj)
-        {
-            if (actual is not Dictionary<string, object?> got) return path + " object type mismatch";
-            if (obj.Count != got.Count) return path + " key count " + got.Count + " expected " + obj.Count;
-            foreach (var pair in obj)
-            {
-                if (!got.TryGetValue(pair.Key, out var value)) return path + " missing key " + pair.Key;
-                string? diff = Difference(pair.Value, value, path + "." + pair.Key, depth + 1); if (diff != null) return diff;
-            }
-            return null;
-        }
-        if (expected is IList array)
-        {
-            if (actual is not IList got || array.Count != got.Count) return path + " array length/type mismatch";
-            for (int i = 0; i < array.Count; i++) { string? diff = Difference(array[i], got[i], path + "[" + i + "]", depth + 1); if (diff != null) return diff; }
-            return null;
-        }
-        if (expected is long number && (actual is int || actual is long || actual is uint))
-            return number == Convert.ToInt64(actual, CultureInfo.InvariantCulture) ? null : path + " number " + actual + " expected " + number;
-        return expected.Equals(actual) ? null : path + " value " + actual + " expected " + expected;
     }
     static string Full(object? graph) => JsonSerializer.Serialize(graph);
     static string FileHash(string path) => Convert.ToHexStringLower(SHA256.HashData(File.ReadAllBytes(path)));

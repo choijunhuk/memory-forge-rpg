@@ -158,8 +158,8 @@ namespace MemoryForge.Core
     public sealed class BattleEvent
     {
         public string E = "";
-        public int? T, N, Growth, Turn, Ap;
-        public string? Uid, Source, Status, Part, Phase;
+        public int? T, N, Growth, Turn, Ap, Damage, Blocked;
+        public string? Uid, Source, Status, Part, Phase, Id, Card;
         internal BattleEvent Copy() => (BattleEvent)MemberwiseClone();
         public Dictionary<string, object?> ToJsonGraph()
         {
@@ -167,7 +167,9 @@ namespace MemoryForge.Core
             BattleGraph.Optional(graph, "t", T); BattleGraph.Optional(graph, "n", N); BattleGraph.Optional(graph, "growth", Growth);
             BattleGraph.Optional(graph, "turn", Turn); BattleGraph.Optional(graph, "ap", Ap);
             BattleGraph.Optional(graph, "uid", Uid); BattleGraph.Optional(graph, "src", Source); BattleGraph.Optional(graph, "s", Status);
-            BattleGraph.Optional(graph, "part", Part); BattleGraph.Optional(graph, "phase", Phase); return graph;
+            BattleGraph.Optional(graph, "part", Part); BattleGraph.Optional(graph, "phase", Phase);
+            BattleGraph.Optional(graph, "d", Damage); BattleGraph.Optional(graph, "blocked", Blocked);
+            BattleGraph.Optional(graph, "id", Id); BattleGraph.Optional(graph, "card", Card); return graph;
         }
     }
     public sealed class BattleResult
@@ -199,7 +201,7 @@ namespace MemoryForge.Core
         public Dictionary<string, BattleCardState> Cards = new Dictionary<string, BattleCardState>(StringComparer.Ordinal);
         internal List<string> CardOrder = new List<string>();
         public BattleZones Zones = new BattleZones();
-        // These remain empty in the fresh-opening API; no restored-state execution is exposed.
+        // These remain empty under Create/begin/end; no restored-state execution is exposed.
         public List<Dictionary<string, object?>> Reservations = new List<Dictionary<string, object?>>(), Powers = new List<Dictionary<string, object?>>();
         public int ReservationSeq, HandMax, KilledMarked, DifficultyHp = 100, DifficultyDamage = 100;
         public List<string> Relics = new List<string>();

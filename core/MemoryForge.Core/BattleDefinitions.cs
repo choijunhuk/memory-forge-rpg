@@ -1,4 +1,4 @@
-// §5/6/16.2: typed inputs for fresh Battle creation and the authored opening slice.
+// §5/6/16.2: typed inputs for fresh Battle creation, opening and skipped-player turns.
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ namespace MemoryForge.Core
     public sealed class BattleRules
     {
         public int ApPerTurn, ApMax, HandDraw, HandMax, DebtCap, GrowthCapPerBattle, GaugeMax;
-        public int NextSlots, AfterSlots, NextSlotsMax, AfterSlotsMax;
+        public int NextSlots, AfterSlots, NextSlotsMax, AfterSlotsMax, WeakBps;
     }
 
     public sealed class PassiveDef

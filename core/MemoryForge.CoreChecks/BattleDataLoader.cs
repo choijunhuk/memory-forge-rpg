@@ -19,7 +19,7 @@ static class BattleDataLoader
         // never pass through the deliberately integer-only snapshot/transport readers.
         var data = new BattleData { Rules = new BattleRules { ApPerTurn = I(rules, "apPerTurn"), ApMax = I(rules, "apMax"),
             HandDraw = I(rules, "handDraw"), HandMax = I(rules, "handMax"), DebtCap = I(rules, "debtCap"),
-            GrowthCapPerBattle = I(rules, "growthCapPerBattle"), GaugeMax = I(rules, "gaugeMax"),
+            GrowthCapPerBattle = I(rules, "growthCapPerBattle"), GaugeMax = I(rules, "gaugeMax"), WeakBps = I(rules, "weakBps"),
             NextSlots = I(slots, "next"), AfterSlots = I(slots, "after"), NextSlotsMax = I(slots, "nextMax"), AfterSlotsMax = I(slots, "afterMax") } };
         foreach (var ch in json.GetProperty("characters").EnumerateArray())
         {
@@ -41,6 +41,7 @@ static class BattleDataLoader
         foreach (var relic in json.GetProperty("relics").EnumerateArray()) data.Relics.Add(new BattleRelicDef { Id = S(relic, "id") });
         foreach (var enemy in json.GetProperty("enemies").EnumerateArray())
         {
+            Fields(enemy, "id", "name", "zone", "tier", "hp", "brk", "weak", "passive", "pattern");
             EnemyPassiveDef? passive = null;
             if (enemy.TryGetProperty("passive", out var p) && p.ValueKind != JsonValueKind.Null)
             {

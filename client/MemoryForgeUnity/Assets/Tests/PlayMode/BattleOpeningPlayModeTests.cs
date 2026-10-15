@@ -15,7 +15,7 @@ namespace MemoryForge.PlayModeTests
             var data = new BattleData
             {
                 Rules = new BattleRules { ApPerTurn = 4, ApMax = 9, HandDraw = 5, HandMax = 10,
-                    DebtCap = 4, GrowthCapPerBattle = 3, GaugeMax = 100,
+                    DebtCap = 4, GrowthCapPerBattle = 3, GaugeMax = 100, WeakBps = 2500,
                     NextSlots = 2, AfterSlots = 1, NextSlotsMax = 3, AfterSlotsMax = 2 }
             };
             data.Characters.Add(new BattleCharacterDef
@@ -67,6 +67,42 @@ namespace MemoryForge.PlayModeTests
             first.Events.Clear();
             Assert.That(battle.Command(request).Events.Count, Is.GreaterThan(0));
             Assert.That(CanonicalState.Hash(battle.State.ToJsonGraph()), Is.EqualTo(hash));
+        }
+
+        [Test]
+        public void EnemyPhaseAndNextPlayerTurnReuseTheAuthoredOpening()
+        {
+            Assert.That(Application.isPlaying, Is.True);
+            var battle = Fresh("bronze_cog");
+            battle.Command(new BattleRequest("begin", 0, "begin"));
+            battle.Command(new BattleRequest("end-one", 1, "end"));
+            Assert.That(battle.State.Turn, Is.EqualTo(2));
+            Assert.That(battle.State.Phase, Is.EqualTo("PLAYER"));
+            Assert.That(battle.State.Block, Is.Zero);
+            Assert.That(battle.State.Counter, Is.Zero);
+            Assert.That(battle.State.Enemies[0].Block, Is.EqualTo(10));
+            Assert.That(battle.State.Enemies[0].Intent.Type, Is.EqualTo("atk"));
+            battle.Command(new BattleRequest("end-two", 2, "end"));
+            Assert.That(battle.State.Turn, Is.EqualTo(3));
+            Assert.That(battle.State.Hp, Is.EqualTo(175));
+            Assert.That(battle.State.Enemies[0].Hp, Is.EqualTo(46));
+            Assert.That(battle.State.Log.Count(e => e.E == "block"), Is.EqualTo(3));
+        }
+
+        [Test]
+        public void UsedEnvelopeDoesNotHideAFatalSecondTurnCircuitCost()
+        {
+            Assert.That(Application.isPlaying, Is.True);
+            var battle = Fresh("infinite_circuit", "memory_envelope");
+            battle.Command(new BattleRequest("begin", 0, "begin"));
+            Assert.That(battle.State.Hp, Is.EqualTo(1));
+            battle.Command(new BattleRequest("end", 1, "end"));
+            Assert.That(battle.State.Turn, Is.EqualTo(2));
+            Assert.That(battle.State.Phase, Is.EqualTo("DEFEAT"));
+            Assert.That(battle.State.Hp, Is.Zero);
+            Assert.That(battle.State.Zones.Hand, Is.Empty);
+            Assert.That(battle.State.Events.Count(e => e.E == "end"), Is.EqualTo(1));
+            Assert.That(battle.State.Events.Any(e => e.E == "turn"), Is.False);
         }
 
         [TestCase(false)]

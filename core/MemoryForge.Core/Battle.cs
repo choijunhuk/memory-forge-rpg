@@ -1,4 +1,4 @@
-// §5.3/5.9/5.15-18: real CREATED -> first player turn. Later Battle/Run commands remain unported.
+// §5.3/5.7-9/5.13-18: real Create/begin/end with skipped player turns. Play/ult/Run remain unported.
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,10 +18,10 @@ namespace MemoryForge.Core
             internal BattleResponse Response = new BattleResponse();
         }
         Battle(BattleData data, BattleState state) { this.data = data; this.state = state; rng = new Rng(state.Rng); }
-        /// <summary>Detached snapshot. Restoration/later-turn execution is deliberately not an API of this opening slice.</summary>
+        /// <summary>Detached snapshot. Execution is only through Create/begin/end; restoration is not exposed.</summary>
         public BattleState State => state.Copy();
 
-        /// <summary>Opening state numbers use Int32, except skill/ultimate levels. Out-of-range results reject explicitly.</summary>
+        /// <summary>Combat state numbers use Int32, except skill/ultimate levels. Out-of-range results reject explicitly.</summary>
         public static Battle Create(BattleData data, BattleSetup setup)
         {
             if (setup.Party.Count < 1 || setup.Party.Count > 3) throw new RuleException("PARTY_SIZE");
@@ -58,23 +58,27 @@ namespace MemoryForge.Core
             if (s.Relics.Contains("infinite_circuit")) s.SlotsBase.Next = Math.Min(rules.NextSlotsMax, s.SlotsBase.Next + 1);
             foreach (var spec in setup.Deck) s.Zones.Draw.Add(MakeCard(s, data, spec));
             if (s.Relics.Contains("eye_of_rift")) s.Zones.Draw.Add(MakeCard(s, data, new BattleCardSpec { Id = "smudge" }, true));
-            foreach (string id in setup.Enemies)
-            {
-                if (!data.EnemyIndex.TryGetValue(id, out var enemy)) throw new RuleException("UNKNOWN_ENEMY");
-                int hp = StateNumber(BigInteger.Max(1, Round((BigInteger)enemy.Hp * s.DifficultyHp, 100)));
-                s.Seq++;
-                s.Enemies.Add(new BattleEnemyState { Uid = "e" + s.Seq, Id = id, Name = enemy.Name, Tier = enemy.Tier,
-                    Hp = hp, MaxHp = hp, Brk = enemy.Brk, BrkMax = enemy.Brk, Weak = new List<string>(enemy.Weak), Passive = enemy.Passive?.Copy() });
-            }
+            foreach (string id in setup.Enemies) AddEnemy(s, data, id);
             var battle = new Battle(data, s); battle.CheckInvariants(); return battle;
         }
 
         static int Or(int value, int fallback) => value == 0 ? fallback : value;
         static string? OrNull(string? value) => string.IsNullOrEmpty(value) ? null : value;
+        static BattleEnemyState AddEnemy(BattleState s, BattleData data, string id)
+        {
+            if (!data.EnemyIndex.TryGetValue(id, out var definition)) throw new RuleException("UNKNOWN_ENEMY");
+            if (definition.Passive != null && definition.Passive.Id != "seedHeal") throw new RuleException("BATTLE_ENEMY_PASSIVE_NOT_IMPLEMENTED");
+            int hp = StateNumber(BigInteger.Max(1, Round((BigInteger)definition.Hp * s.DifficultyHp, 100)));
+            s.Seq = StateNumber((BigInteger)s.Seq + 1);
+            var enemy = new BattleEnemyState { Uid = "e" + s.Seq, Id = id, Name = definition.Name, Tier = definition.Tier,
+                Hp = hp, MaxHp = hp, Brk = definition.Brk, BrkMax = definition.Brk, Weak = new List<string>(definition.Weak), Passive = definition.Passive?.Copy() };
+            s.Enemies.Add(enemy); return enemy;
+        }
         static string MakeCard(BattleState s, BattleData data, BattleCardSpec spec, bool token = false)
         {
             if (!data.CardIndex.TryGetValue(spec.Id, out var def)) throw new RuleException("UNKNOWN_CARD");
-            string uid = "c" + (++s.Seq);
+            s.Seq = StateNumber((BigInteger)s.Seq + 1);
+            string uid = "c" + s.Seq;
             s.Cards.Add(uid, new BattleCardState { Uid = uid, Id = spec.Id, Owner = def.Owner, Wielder = OrNull(spec.Wielder),
                 Plus = spec.Plus, Circuit = OrNull(spec.Circuit), Edge = OrNull(spec.Edge), Growth = spec.Growth,
                 Token = token, Assigned = OrNull(spec.Assigned), From = OrNull(spec.From) });
@@ -127,7 +131,8 @@ namespace MemoryForge.Core
                 switch (request.Kind)
                 {
                     case "begin": candidate.Begin(); break;
-                    case "play": case "ult": case "end": throw new RuleException("BATTLE_COMMAND_NOT_IMPLEMENTED");
+                    case "end": candidate.EndTurn(); break;
+                    case "play": case "ult": throw new RuleException("BATTLE_COMMAND_NOT_IMPLEMENTED");
                     default: throw new RuleException("UNKNOWN_COMMAND");
                 }
                 candidate.state.V = checked(candidate.state.V + 1);
@@ -170,6 +175,7 @@ namespace MemoryForge.Core
         }
         PassiveDef? PassiveOf(string id) => state.Actors.FirstOrDefault(a => a.Passive.Id == id)?.Passive;
         int PartyVitality() => StateNumber(Round(state.Actors.Aggregate(BigInteger.Zero, (total, a) => total + Or(a.Vit, 81)), Math.Max(1, state.Actors.Count)));
+        int PartyPower() => StateNumber(Round(state.Actors.Aggregate(BigInteger.Zero, (total, a) => total + a.Power4), Math.Max(1, state.Actors.Count)));
         static BigInteger Floor(BigInteger numerator, BigInteger denominator)
         {
             var quotient = BigInteger.DivRem(numerator, denominator, out var remainder);
@@ -182,6 +188,8 @@ namespace MemoryForge.Core
             return (int)value;
         }
         int ScaleVitality(int n) => checked((int)Floor((BigInteger)n * PartyVitality(), 81));
+        int ScaleAttack(int n) => StateNumber(Floor((BigInteger)n * PartyPower(), 160));
+        int ScaleEnemy(int n) => StateNumber(Round((BigInteger)n * Or(state.DifficultyDamage, 100), 100));
         void GainBlockRaw(int n, string source)
         {
             if (source != "card" && source != "warmth") n = ScaleVitality(n);
@@ -208,7 +216,8 @@ namespace MemoryForge.Core
         void Begin()
         {
             if (state.Phase != "CREATED") throw new RuleException("WRONG_PHASE");
-            if (state.Turn != 0 || state.Reservations.Count != 0 || state.Powers.Count != 0) throw new RuleException("BATTLE_STATE_NOT_IMPLEMENTED");
+            if (state.Turn != 0) throw new RuleException("BATTLE_STATE_NOT_IMPLEMENTED");
+            RequireSupportedTurnState();
             Shuffle(state.Zones.Draw);
             if (Has("bronze_cog")) GainBlockRaw(8, "relic");
             if (Has("pocket_brazier")) { var enemy = RandomEnemy(); if (enemy != null) AddStatus(enemy, "burn", 4); }
@@ -222,7 +231,7 @@ namespace MemoryForge.Core
                 var eligible = state.CardOrder.Select(uid => state.Cards[uid]).Where(c => data.CardIndex[c.Id].Growth && c.Growth < 3).ToList();
                 if (eligible.Count != 0) ApplyGrowth(eligible[Below(eligible.Count)], 1, "eternal_seed");
             }
-            StartFirstTurn();
+            StartTurn(true);
         }
 
         static void RequireShape(EffectDef effect, params string[] keys)
@@ -280,12 +289,14 @@ namespace MemoryForge.Core
             if (Has("symbiotic_moss")) GainBlockRaw(3, "moss");
         }
 
-        void StartFirstTurn()
+        void StartTurn(bool first)
         {
             var s = state; var rules = data.Rules;
-            if (s.Turn != 0 || s.Debts.Count != 0 || s.Reservations.Count != 0 || s.Powers.Count != 0) throw new RuleException("BATTLE_STATE_NOT_IMPLEMENTED");
-            int ap = (int)Math.Max(0, Math.Min(rules.ApMax, (long)rules.ApPerTurn + s.ApNext + (Has("chrono_crown") ? 1 : 0) - (Has("cracked_hourglass") ? 1 : 0) - s.ApDrainNext));
-            s.Turn++; s.Phase = "RESOLVING";
+            RequireSupportedTurnState();
+            if (first ? s.Turn != 0 : s.Turn < 1) throw new RuleException("BATTLE_STATE_NOT_IMPLEMENTED");
+            int ap = (int)Math.Max(0, Math.Min(rules.ApMax, (long)rules.ApPerTurn + s.ApNext + (Has("chrono_crown") ? 1 : 0) - (s.Turn == 0 && Has("cracked_hourglass") ? 1 : 0) - s.ApDrainNext));
+            s.Turn = checked(s.Turn + 1); s.Phase = "RESOLVING";
+            if (!first) { s.Block = Math.Min(s.Block, 0); s.Counter = 0; }
             s.Buffs = s.Buffs.Where(b => b.Until >= s.Turn).ToList();
             s.Played = 0; s.LastOwner = null; s.OwnersThisTurn.Clear(); s.Contracts = 0; s.FreeNext = 0; s.NextBoost = null;
             s.Echo = s.EchoActive ? Math.Min(s.EchoMax, s.EchoStart) : 0;
@@ -295,21 +306,242 @@ namespace MemoryForge.Core
             s.ApNext = 0; s.ApDrainNext = 0; s.Ap = ap;
             if (Has("infinite_circuit")) { LoseHp(ScaleVitality(2), "relic"); if (CheckEnd()) return; }
             s.BattleFlags["seraR6Turn"] = 0;
-            int count = rules.HandDraw - s.DrawPenalty; s.DrawPenalty = 0;
-            if (Has("quick_hands")) count += 2;
-            var draw = PartyWeapon("w_startDraw"); if (draw.HasValue) count += draw.Value.Value;
-            Draw(Math.Max(0, count));
-            if (Has("memory_anvil")) for (int i = 0; i < 2; i++) TuneRandom("amp");
-            foreach (var actor in s.Actors) foreach (var effect in actor.BattleStart.Where(e => e.Op == "tune")) ExecuteOpening(effect, actor);
-            foreach (var enemy in s.Enemies.Where(e => e.Alive))
+            int count = checked(rules.HandDraw - s.DrawPenalty); s.DrawPenalty = 0;
+            if (first)
             {
-                var pattern = data.EnemyIndex[enemy.Id].Pattern;
-                if (pattern.Count == 0) throw new RuleException("BATTLE_PATTERN_NOT_IMPLEMENTED");
-                enemy.Intent = enemy.Stunned ? new EnemyMoveDef { Type = "stun", Label = "균열: 행동 불가" } : pattern[enemy.PatternIndex % pattern.Count].Copy();
-                enemy.Next = pattern[(enemy.PatternIndex + 1) % pattern.Count].Copy();
+                if (Has("quick_hands")) count = checked(count + 2);
+                var draw = PartyWeapon("w_startDraw"); if (draw.HasValue) count = checked(count + draw.Value.Value);
             }
+            Draw(Math.Max(0, count));
+            if (first)
+            {
+                if (Has("memory_anvil")) for (int i = 0; i < 2; i++) TuneRandom("amp");
+                foreach (var actor in s.Actors) foreach (var effect in actor.BattleStart.Where(e => e.Op == "tune")) ExecuteOpening(effect, actor);
+            }
+            foreach (var enemy in s.Enemies.Where(e => e.Alive)) SetIntents(enemy);
             s.Phase = "PLAYER"; Emit(new BattleEvent { E = "turn", Turn = s.Turn, Ap = s.Ap });
         }
+
+        void RequireSupportedTurnState()
+        {
+            var s = state;
+            // Create/begin/end have no producers for these systems. Guard them rather
+            // than silently executing a partial power/reservation/late-action engine.
+            if (s.Reservations.Count != 0 || s.Debts.Count != 0 || s.Powers.Count != 0 || s.Buffs.Count != 0 ||
+                s.RestraintActive || s.BonusAvailable || s.NextBoost != null || s.FreeNext != 0 ||
+                s.SlotsTemp.Next != 0 || s.SlotsTemp.After != 0 || s.SealedUntil != 0 || s.ApDrainNext != 0 || s.SilenceUntil != 0 ||
+                s.Enemies.Any(e => e.Stunned || e.BrokenUntil != 0 || e.Brk != e.BrkMax || e.PatternIndex < 0))
+                throw new RuleException("BATTLE_STATE_NOT_IMPLEMENTED");
+            if (s.Enemies.Any(e => e.Passive != null && e.Passive.Id != "seedHeal")) throw new RuleException("BATTLE_ENEMY_PASSIVE_NOT_IMPLEMENTED");
+        }
+        List<EnemyMoveDef> EnemyPattern(BattleEnemyState enemy)
+        {
+            var pattern = data.EnemyIndex[enemy.Id].Pattern;
+            if (pattern.Count == 0) throw new RuleException("BATTLE_PATTERN_NOT_IMPLEMENTED");
+            return pattern;
+        }
+        void SetIntents(BattleEnemyState enemy)
+        {
+            var pattern = EnemyPattern(enemy);
+            enemy.Intent = pattern[enemy.PatternIndex % pattern.Count].Copy();
+            enemy.Next = pattern[(enemy.PatternIndex + 1) % pattern.Count].Copy();
+        }
+
+        void EndTurn()
+        {
+            var s = state;
+            if (s.Phase != "PLAYER") throw new RuleException("WRONG_PHASE");
+            RequireSupportedTurnState();
+            s.Phase = "RESOLVING";
+            if (s.RestraintActive && s.Played <= 3)
+            {
+                s.BonusTurn = checked(s.Turn + 1); s.BonusAvailable = true; Emit(new BattleEvent { E = "restraintKept" });
+            }
+            else if (s.BonusTurn <= s.Turn) s.BonusAvailable = false;
+            s.RestraintActive = false;
+            foreach (string uid in s.Zones.Hand.ToList()) if (s.Cards[uid].Id == "smudge") LoseHp(ScaleEnemy(2), "smudge");
+            s.Zones.Discard.AddRange(s.Zones.Hand); s.Zones.Hand.Clear();
+            if (CheckEnd()) return;
+            if (s.Weak > 0) s.Weak--;
+            if (s.SilenceUntil <= s.Turn) s.SilenceUntil = 0;
+            foreach (var enemy in s.Enemies.ToList())
+            {
+                if (!enemy.Alive) continue;
+                enemy.Block = 0; enemy.Status.Reflect = 0;
+                var pattern = EnemyPattern(enemy);
+                var move = pattern[enemy.PatternIndex % pattern.Count];
+                enemy.PatternIndex = checked(enemy.PatternIndex + 1) % pattern.Count;
+                EnemyMove(enemy, move);
+                if (CheckEnd()) return;
+            }
+            foreach (var enemy in s.Enemies)
+            {
+                if (!enemy.Alive) continue;
+                if (enemy.Status.Burn > 0)
+                {
+                    DamageEnemyRaw(enemy, enemy.Status.Burn, "burn");
+                    enemy.Status.Burn = Math.Max(0, enemy.Status.Burn - 1);
+                }
+            }
+            foreach (var enemy in s.Enemies)
+            {
+                if (!enemy.Alive || enemy.Passive == null) continue;
+                if (enemy.Passive.Id != "seedHeal") throw new RuleException("BATTLE_ENEMY_PASSIVE_NOT_IMPLEMENTED");
+                int seeds = s.Enemies.Count(e => e.Alive && e.Id == "e_seed");
+                if (seeds != 0)
+                {
+                    int heal = StateNumber((BigInteger)enemy.Passive.N * seeds);
+                    enemy.Hp = StateNumber(BigInteger.Min(enemy.MaxHp, (BigInteger)enemy.Hp + heal));
+                    Emit(new BattleEvent { E = "enemyHeal", Uid = enemy.Uid, N = heal });
+                }
+            }
+            foreach (var enemy in s.Enemies)
+            {
+                if (!enemy.Alive) continue;
+                if (enemy.Status.Vul > 0) enemy.Status.Vul--;
+                if (enemy.Status.Weak > 0) enemy.Status.Weak--;
+                if (enemy.Status.Mark > 0) enemy.Status.Mark--;
+            }
+            if (CheckEnd()) return;
+            StartTurn(false);
+        }
+
+        static void RequireMoveShape(EnemyMoveDef move, string[] required, params string[] optional)
+        {
+            var graph = move.ToJsonGraph();
+            var allowed = new HashSet<string>(required.Concat(optional), StringComparer.Ordinal) { "t", "label" };
+            if (required.Any(key => !graph.ContainsKey(key)) || graph.Keys.Any(key => !allowed.Contains(key)))
+                throw new RuleException("BATTLE_ENEMY_MOVE_NOT_IMPLEMENTED");
+        }
+        void EnemyMove(BattleEnemyState enemy, EnemyMoveDef move)
+        {
+            switch (move.Type)
+            {
+                case "atk": case "atkdebuff":
+                    if (move.Type == "atk") RequireMoveShape(move, new[] { "d" }, "h");
+                    else
+                    {
+                        RequireMoveShape(move, new[] { "d", "s", "n" }, "h");
+                        if (move.Status != "weak") throw new RuleException("BATTLE_ENEMY_MOVE_NOT_IMPLEMENTED");
+                    }
+                    for (int h = 0; h < Or(move.Hits ?? 1, 1); h++)
+                    {
+                        EnemyHit(enemy, move.Damage!.Value);
+                        if (CheckEnd() || !enemy.Alive) return;
+                    }
+                    if (move.Type == "atkdebuff") state.Weak = checked(state.Weak + move.N!.Value);
+                    break;
+                case "def":
+                    RequireMoveShape(move, new[] { "b" }, "str");
+                    enemy.Block = checked(enemy.Block + move.Block!.Value);
+                    if (move.Strength.HasValue) enemy.Status.Strength = checked(enemy.Status.Strength + move.Strength.Value);
+                    break;
+                case "buff":
+                    RequireMoveShape(move, new[] { "str" }); enemy.Status.Strength = checked(enemy.Status.Strength + move.Strength!.Value); break;
+                case "debuff":
+                    RequireMoveShape(move, new[] { "s", "n" });
+                    if (move.Status != "weak") throw new RuleException("BATTLE_ENEMY_MOVE_NOT_IMPLEMENTED");
+                    state.Weak = checked(state.Weak + move.N!.Value);
+                    Emit(new BattleEvent { E = "partyDebuff", Status = move.Status, N = move.N.Value }); break;
+                case "charge":
+                    RequireMoveShape(move, new string[0]); Emit(new BattleEvent { E = "charge", Uid = enemy.Uid }); break;
+                case "summon":
+                    RequireMoveShape(move, new[] { "n", "e" });
+                    for (int k = 0; k < move.N!.Value; k++) if (state.Enemies.Count(e => e.Alive) < 5) SetIntents(AddEnemy(state, data, move.Enemy!));
+                    break;
+                case "heal":
+                    RequireMoveShape(move, new[] { "n" }, "who");
+                    if (move.Who != null && move.Who != "lowest") throw new RuleException("BATTLE_ENEMY_MOVE_NOT_IMPLEMENTED");
+                    var target = LowestHealthEnemy();
+                    if (target != null)
+                    {
+                        target.Hp = StateNumber(BigInteger.Min(target.MaxHp, (BigInteger)target.Hp + move.N!.Value));
+                        Emit(new BattleEvent { E = "enemyHeal", Uid = target.Uid, N = move.N.Value });
+                    }
+                    break;
+                case "insert":
+                    RequireMoveShape(move, new[] { "n", "card" });
+                    for (int k = 0; k < move.N!.Value; k++) state.Zones.Discard.Add(MakeCard(state, data, new BattleCardSpec { Id = move.Card! }, true));
+                    Emit(new BattleEvent { E = "insert", Card = move.Card, N = move.N.Value }); break;
+                case "reflect":
+                    RequireMoveShape(move, new[] { "n" }); enemy.Status.Reflect = move.N!.Value; break;
+                case "expose":
+                    RequireMoveShape(move, new[] { "n" }, "then"); enemy.Status.Vul = checked(enemy.Status.Vul + move.N!.Value);
+                    Emit(new BattleEvent { E = "expose", Uid = enemy.Uid }); if (move.Then != null) EnemyMove(enemy, move.Then); break;
+                case "blockAll":
+                    RequireMoveShape(move, new[] { "b" }); foreach (var alive in state.Enemies.Where(e => e.Alive)) alive.Block = checked(alive.Block + move.Block!.Value); break;
+                default: throw new RuleException("BATTLE_ENEMY_MOVE_NOT_IMPLEMENTED");
+            }
+        }
+
+        BattleEnemyState? LowestHealthEnemy()
+        {
+            BattleEnemyState? target = null; BigInteger lowest = 0;
+            foreach (var enemy in state.Enemies.Where(e => e.Alive))
+            {
+                BigInteger ratio = RoundedHealthRatio(enemy.Hp, enemy.MaxHp);
+                if (target == null || ratio < lowest) { target = enemy; lowest = ratio; }
+            }
+            return target;
+        }
+        static BigInteger RoundedHealthRatio(int hp, int maxHp)
+        {
+            if (hp < 0 || maxHp <= 0 || hp > maxHp) throw new RuleException("STATE_RANGE");
+            if (hp == 0) return BigInteger.Zero;
+            // Match JS binary64 division with integer round-to-nearest/even. Positive
+            // Int32 HP ratios are >=2^-31, so a 2^83 grid represents every quotient.
+            int shift = 52; BigInteger normalized = hp;
+            while (normalized < maxHp) { normalized <<= 1; shift++; }
+            BigInteger mantissa = BigInteger.DivRem((BigInteger)hp << shift, maxHp, out var remainder);
+            if (2 * remainder > maxHp || 2 * remainder == maxHp && !mantissa.IsEven) mantissa++;
+            return mantissa << (83 - shift);
+        }
+        void EnemyHit(BattleEnemyState enemy, int baseDamage)
+        {
+            BigInteger damage = Round((BigInteger)baseDamage * Or(state.DifficultyDamage, 100), 100) + enemy.Status.Strength;
+            if (enemy.Status.Weak > 0) damage = Floor(damage * (10000 - (BigInteger)data.Rules.WeakBps), 10000);
+            int d = StateNumber(damage), blocked = Math.Min(state.Block, d);
+            state.Block = checked(state.Block - blocked);
+            int loss = checked(d - blocked);
+            Emit(new BattleEvent { E = "hit", Uid = enemy.Uid, Damage = d, Blocked = blocked });
+            if (loss > 0) LoseHp(loss, "enemy");
+            if (state.Counter > 0 && enemy.Alive) DamageEnemyRaw(enemy, state.Counter, "counter");
+        }
+        void DamageEnemyRaw(BattleEnemyState enemy, int amount, string source)
+        {
+            amount = ScaleAttack(amount);
+            if (!enemy.Alive || amount <= 0) return;
+            int blocked = source == "burn" ? 0 : Math.Min(enemy.Block, amount);
+            enemy.Block = checked(enemy.Block - blocked);
+            enemy.Hp = StateNumber(BigInteger.Max(0, (BigInteger)enemy.Hp - ((BigInteger)amount - blocked)));
+            Emit(new BattleEvent { E = "dmg", Uid = enemy.Uid, N = amount, Blocked = blocked, Source = source });
+            if (enemy.Hp == 0) KillEnemy(enemy);
+        }
+        void KillEnemy(BattleEnemyState enemy)
+        {
+            enemy.Alive = false; Emit(new BattleEvent { E = "kill", Uid = enemy.Uid, Id = enemy.Id });
+            if (enemy.Status.Mark <= 0) return;
+            state.KilledMarked = checked(state.KilledMarked + 1);
+            if (state.Phase == "PLAYER" && PassiveOf("kaya_deduction") != null)
+                throw new RuleException("BATTLE_EFFECT_NOT_IMPLEMENTED"); // PLAYER kills require the unported play/ultimate hooks.
+            if (Has("detective_notebook")) { Draw(1); AddNotebookCoins(); }
+        }
+        void AddNotebookCoins()
+        {
+            state.RunFlags.TryGetValue("coinsBonus", out var value);
+            if (!BattleGraph.Truthy(value)) value = 0;
+            if (value is string text) { state.RunFlags["coinsBonus"] = text + "10"; return; }
+            long coins;
+            if (value is int i) coins = i;
+            else if (value is uint u) coins = u;
+            else if (value is long n) coins = n;
+            else if (value is bool b) coins = b ? 1 : 0;
+            else throw new RuleException("BATTLE_STATE_NOT_IMPLEMENTED");
+            coins = checked(coins + 10);
+            if (coins < -CanonicalState.MaxSafeInteger || coins > CanonicalState.MaxSafeInteger) throw new RuleException("BATTLE_NUMBER_OUT_OF_RANGE");
+            state.RunFlags["coinsBonus"] = coins;
+        }
+
         void Draw(int count)
         {
             var zones = state.Zones;
