@@ -61,6 +61,8 @@ namespace MemoryForge.Core
         // R1a: source startBattle adds battleType; v2 captureMemory adds memoryAfter. Both stay absent until then.
         public string? BattleType;
         public MemorySnapshot? MemoryAfter;
+        // R1c: source commitMemory adds savedMemory (the committed memory graph) on success only; absent before.
+        public object? SavedMemory;
 
         internal RunState Copy()
         {
@@ -70,7 +72,8 @@ namespace MemoryForge.Core
             copy.Relics = new List<string>(Relics); copy.PartsFound = new List<string>(PartsFound); copy.Log = new List<string>(Log);
             copy.Pending = MemoryJson.Copy(Pending); copy.Result = MemoryJson.Copy(Result); copy.Battle = Battle?.Copy(); copy.Statistics = Statistics.Copy();
             copy.RunFlags = RunValues.Fields(RunFlags); copy.Offered = new Dictionary<string, int>(Offered, StringComparer.Ordinal); copy.StartMemory = MemoryJson.Copy(StartMemory);
-            copy.MemoryBaseline = MemoryBaseline?.Copy(); copy.MemoryBefore = MemoryBefore?.Copy(); copy.PlayBefore = PlayBefore?.Copy(); copy.MemoryAfter = MemoryAfter?.Copy(); return copy;
+            copy.MemoryBaseline = MemoryBaseline?.Copy(); copy.MemoryBefore = MemoryBefore?.Copy(); copy.PlayBefore = PlayBefore?.Copy(); copy.MemoryAfter = MemoryAfter?.Copy();
+            copy.SavedMemory = MemoryJson.Copy(SavedMemory); return copy;
         }
         public Dictionary<string, object?> ToJsonGraph()
         {
@@ -89,7 +92,8 @@ namespace MemoryForge.Core
             if (MemoryBefore != null) graph.Add("memoryBefore", MemoryBefore.ToJsonGraph());
             if (PlayBefore != null) graph.Add("playBefore", PlayBefore.ToJsonGraph());
             if (BattleType != null) graph.Add("battleType", BattleType);
-            if (MemoryAfter != null) graph.Add("memoryAfter", MemoryAfter.ToJsonGraph()); return graph;
+            if (MemoryAfter != null) graph.Add("memoryAfter", MemoryAfter.ToJsonGraph());
+            if (SavedMemory != null) graph.Add("savedMemory", MemoryJson.Copy(SavedMemory)); return graph;
         }
     }
 }

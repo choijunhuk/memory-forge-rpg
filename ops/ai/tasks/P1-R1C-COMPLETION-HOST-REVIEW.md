@@ -1,0 +1,16 @@
+# Independent opposite-author review of Codex actual completion/reload host
+
+Official Opus5.5 xhigh, included subscription only/noAPI/credits/extra/fallback. No Bash/MCP/subagents/recursiveCLI. You are not alone. Own ONLY reports/run_memory_core_20261016/host_opposite_review.md. Core, host, fixtures, diff and otherreports READ ONLY. Root soleEditorwriter.
+
+You completed391line Run.Memory.cs and SavedMemory links, now independently read by Root against original source. Actual currentRoot C#8/netstandard2.1 build0warnings0errors. Full test run is currentlyRUNNING, no PASSyet. Root wrote the completion adapter by extending your B colleague's approved R1b913line host; actual currenthost963lines + diff(from acceptedbf9cb42) copied to yourworktree, diffreports/run_memory_core_20261016/host_review_diff.txt. Review Codex changes, not your own implementation, for evidence integrity and correctness.
+
+Original §8/16.2/20.9 completion requirements: all5JSfullstatecases2684attempts1370commit1314reject/2474battle1162battlecommit/1074queries, actualCoreterminalcommit/store/returns/state/log/RNG, then5freshCreate RESTARTS from ACTUAL C#SavedMemory (not unfinishedRunrestore). Existing1000legacy traces273504attempts incl1000commit,182528commit90976reject/6657battles275archives; allactualcommandsandcanonicalfinalsnapshots,1000returned-saveownershipprobes. FullRuncompletioncounts mustderiveactualexecution, nothardcodePASS. Alloldstrictschema/sourcepath/hash/undefined/ref/coverage/corruption22/567forgeownershipcontrols retained. Schema status and contract csharpReplay0 stayunchanged JSgeneratorprovenance; actualruntimecounts separate. No test weakens expectedvalues tofixCore mismatch.
+
+Check particular boundaries:
+- Execute passes actualM0empty-accountstore forv2Commit; copies the actualreturned.nextStore graph into host-ownedstore before mutatingreturnedgraph asdetachmentprobe (otherwise host'sownstorealias would createfalseCorefailure). No expectedPoint becomesactualstate orstore.
+- CommitMemory genericdictionary returns comparedfullvalues/undefinedomissions,callergraphmutationleavesactualRun/store unchanged. LegacySourceReturnSavedMemorycloneScope documented.
+- ReloadActual derives originalinput+actualSavedMemory, seed+99, v2runId+'-reload'/actualstoreversion; onlyCOMPARESexpectedJSreloadsetup/state. Does not use JSsavedMemory toconstructliveCore. No1000JSreloadclaim: only5casefixturehasreload.
+- Legacy.finalState snapshots areCANONICAL(log/evomitted). InitialRootdraftcomparedfullactualgraph wrongly; Rootidentifiedactualrawrecords beforeverdictand corrected ONLYthisaddedfinalcomparison to CanonicalState.Serialize/parse beforedeepcompare. Existingpercommandhashchecks unchanged;5fullcasegraphs stillincludeLog/Ev. Initialbinarytest mayshowthishost-drafterror,notCoredefect; freshrebuildtofollow.
+- Prefix/stoppinglogicnowrequiresallcommands; unknownmethodalwaysfailure; actualDONE/savedMemoryandownership/lastfullstatemustpassbeforecompletecounts.
+
+ReturnAPPROVE or concrete severity/path/line/reproduction/fix. Noexecutiontoolsavailable, markNOT_RUN. Flag unsupportedclaims, missedcontrol/falsepositive/badstoreboundaries ratherthanstyle. Current reviewdoesnotreplacefutureRun-memorynegative/replaymatrix/Unityfullcostcontentvalidation. Read relevantcode/source, boundedreviewpromptly, no codeedits or wholeprojectrewriting.

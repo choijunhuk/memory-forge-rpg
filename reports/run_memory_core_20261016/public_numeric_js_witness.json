@@ -1,0 +1,7 @@
+{
+  "scope": "Controlled public caller receipt input; no private Run state injected, no account/disk operation",
+  "bits": "44b52d02c7e14af5",
+  "body": "{\"runId\":\"numeric-public-witness\",\"expectedMemoryVersion\":9.999999999999997e+22,\"selectedChangeIds\":[]}",
+  "expectedCode": null,
+  "expectedPhase": "DONE"
+}

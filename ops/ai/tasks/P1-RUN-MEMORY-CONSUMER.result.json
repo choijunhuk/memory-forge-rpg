@@ -1,0 +1,25 @@
+{
+  "task_id": "P1-RUN-MEMORY-CONSUMER",
+  "run_id": "P1-RUN-MEMORY-CONSUMER-20261015T210639524286Z",
+  "status": "TIMED_OUT",
+  "requestedEffort": "xhigh",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": null,
+  "changes_verified": false,
+  "raw_output": "ops/ai/local/P1-RUN-MEMORY-CONSUMER-20261015T210639524286Z*",
+  "billing_verified_at": "2026-10-14T21:44:57.439760+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "codex/csharp-memory-v2",
+  "base_commit": "3d33c4cb2e0c7cee14ced2c67c33b8fb55cef267",
+  "worktree": "/Users/choi/.codex/worktrees/csharp-memory-v2/Memory_forge",
+  "allowed_files": [
+    "core/MemoryForge.CoreChecks/RunProgressionChecks.Memory.cs",
+    "core/MemoryForge.CoreChecks/RunProgressionChecks.cs",
+    "reports/run_memory_core_20261016/numeric_tests_recheck.md",
+    "reports/run_memory_queries_20261016/host_author_report.md"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "blocking_reason": "CLI timeout; local checkpoint saved; no retry"
+}

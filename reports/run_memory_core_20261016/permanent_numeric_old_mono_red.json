@@ -1,0 +1,72 @@
+{
+  "success": true,
+  "message": "Test job status retrieved.",
+  "error": null,
+  "data": {
+    "job_id": "f716f1ab2ae04a7583136e98ae3c369b",
+    "status": "failed",
+    "mode": "PlayMode",
+    "started_unix_ms": 1792097445314,
+    "finished_unix_ms": 1792097451698,
+    "last_update_unix_ms": 1792097451698,
+    "progress": {
+      "completed": 2,
+      "total": 2,
+      "current_test_full_name": null,
+      "current_test_started_unix_ms": null,
+      "last_finished_test_full_name": "MemoryForge.PlayModeTests.RunJsonNumberPlayModeTests.MatchingOriginalJsReceiptWithALargeIntegerVersionReplaysBeforePhaseCheck",
+      "last_finished_unix_ms": 1792097451685,
+      "stuck_suspected": false,
+      "editor_is_focused": true,
+      "run_in_background": false,
+      "focus_nudge_attempts": null,
+      "focus_nudge_limit": null,
+      "focus_nudge_status": null,
+      "blocked_reason": null,
+      "failures_so_far": [
+        {
+          "full_name": "MemoryForge.PlayModeTests.RunJsonNumberPlayModeTests.ActualMonoJsonNumbersMatchAllOriginalJsExactBits",
+          "message": "  actual Unity Mono, binary64 44b52d02c7e14af5\n  String lengths are both 21. Strings differ at index 16.\n  Expected: \"9.999999999999997e+22\"\n  But was:  \"9.999999999999998e+22\"\n  ---------------------------^\n"
+        },
+        {
+          "full_name": "MemoryForge.PlayModeTests.RunJsonNumberPlayModeTests.MatchingOriginalJsReceiptWithALargeIntegerVersionReplaysBeforePhaseCheck",
+          "message": "MemoryForge.Core.RuleException : REQUEST_CONFLICT"
+        }
+      ],
+      "failures_capped": false
+    },
+    "error": null,
+    "result": {
+      "mode": "PlayMode",
+      "summary": {
+        "total": 2,
+        "passed": 0,
+        "failed": 2,
+        "skipped": 0,
+        "durationSeconds": 0.1109454,
+        "resultState": "Failed(Child)"
+      },
+      "results": [
+        {
+          "name": "ActualMonoJsonNumbersMatchAllOriginalJsExactBits",
+          "fullName": "MemoryForge.PlayModeTests.RunJsonNumberPlayModeTests.ActualMonoJsonNumbersMatchAllOriginalJsExactBits",
+          "state": "Failed",
+          "durationSeconds": 0.044032,
+          "message": "  actual Unity Mono, binary64 44b52d02c7e14af5\n  String lengths are both 21. Strings differ at index 16.\n  Expected: \"9.999999999999997e+22\"\n  But was:  \"9.999999999999998e+22\"\n  ---------------------------^\n",
+          "stackTrace": "at MemoryForge.PlayModeTests.RunJsonNumberPlayModeTests.ActualMonoJsonNumbersMatchAllOriginalJsExactBits () [0x0010c] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Tests/PlayMode/RunJsonNumberPlayModeTests.cs:39\n",
+          "output": ""
+        },
+        {
+          "name": "MatchingOriginalJsReceiptWithALargeIntegerVersionReplaysBeforePhaseCheck",
+          "fullName": "MemoryForge.PlayModeTests.RunJsonNumberPlayModeTests.MatchingOriginalJsReceiptWithALargeIntegerVersionReplaysBeforePhaseCheck",
+          "state": "Failed:Error",
+          "durationSeconds": 0.0443236,
+          "message": "MemoryForge.Core.RuleException : REQUEST_CONFLICT",
+          "stackTrace": "  at MemoryForge.Core.Run.CommitMemoryV2 (System.Object input, System.Object store) [0x00627] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Memory.cs:293 \n  at MemoryForge.Core.Run+<>c__DisplayClass20_0.<CommitMemory>b__0 () [0x00000] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Memory.cs:36 \n  at MemoryForge.Core.Run.Guarded[T] (System.Func`1[TResult] command) [0x00000] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Progression.cs:284 \n  at MemoryForge.Core.Run.CommitMemory (System.Object selection, System.Object currentMemory) [0x0001a] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Memory.cs:35 \n  at MemoryForge.PlayModeTests.RunJsonNumberPlayModeTests.MatchingOriginalJsReceiptWithALargeIntegerVersionReplaysBeforePhaseCheck () [0x001ad] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Tests/PlayMode/RunJsonNumberPlayModeTests.cs:59 \n  at (wrapper managed-to-native) System.Reflection.RuntimeMethodInfo.InternalInvoke(System.Reflection.RuntimeMethodInfo,object,object[],System.Exception&)\n  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x0006a] in <27bd554a9f0e46179afd19da1336e638>:0 ",
+          "output": ""
+        }
+      ]
+    }
+  },
+  "hint": null
+}

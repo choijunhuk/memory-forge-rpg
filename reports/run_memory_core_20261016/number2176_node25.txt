@@ -1,0 +1,12 @@
+✔ actual JS numeric strings pin the reproduced Unity receipt failure and IEEE edges (5.138208ms)
+✔ strict numeric export regenerates every exact-bit input and expected string (20.311083ms)
+✔ actual JS public numeric receipt replay keeps exact strings and rejects both nearby conflicts (4.084208ms)
+✔ numeric evidence rejects substituted sources, a changed value and omitted coverage (4.941084ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 166.149292
