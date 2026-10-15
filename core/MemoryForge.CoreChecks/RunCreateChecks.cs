@@ -1215,14 +1215,14 @@ static class RunCreateChecks
         try { return CanonicalState.Hash(graph); }
         catch (ArgumentException) { return null; }
     }
-    static string SetupPrint(RunSetup setup) => Full(new Dictionary<string, object?>(StringComparer.Ordinal)
+    internal static string SetupPrint(RunSetup setup) => Full(new Dictionary<string, object?>(StringComparer.Ordinal)
     {
         ["party"] = setup.Party.Select(p => (object?)p.ToJsonGraph()).ToList(), ["memory"] = setup.Memory, ["bosses"] = setup.Bosses, ["runId"] = setup.RunId,
         ["memoryVersion"] = setup.MemoryVersion, ["relics"] = setup.Relics, ["seed"] = setup.Seed, ["length"] = setup.Length, ["memoryPolicy"] = setup.MemoryPolicy,
         ["zones"] = setup.Zones, ["stageLevel"] = setup.StageLevel, ["difficulty"] = setup.Difficulty?.ToJsonGraph(), ["useMemory"] = setup.UseMemory
     });
     // Enemies have no public graph and are unused by R0 creation; every definition Run.Create reads is included.
-    static string DataPrint(RunData data) => Full(new Dictionary<string, object?>(StringComparer.Ordinal)
+    internal static string DataPrint(RunData data) => Full(new Dictionary<string, object?>(StringComparer.Ordinal)
     {
         ["memory"] = MemoryV2DataLoader.Catalog(data.Memory), ["weapons"] = data.Memory.Battle.Weapons.Select(w => (object?)w.ToJsonGraph()).ToList(),
         ["relics"] = data.Memory.Battle.Relics.Select(r => (object?)r.ToJsonGraph()).ToList(), ["rules"] = JsonSerializer.Serialize(data.Memory.Battle.Rules, PublicFields),
@@ -1234,21 +1234,26 @@ static class RunCreateChecks
     // Exporter contract: one RFC 1952 member, fixed CM8/FLG0/MTIME0/XFL2 header (only the OS byte may vary), exactly one raw DEFLATE
     // stream ending at the 8-byte CRC32/ISIZE footer. GZipStream alone concatenates members, so gzip("")+gzip(json) matched its last ISIZE.
     static readonly byte[] GzipHeader = { 0x1f, 0x8b, 8, 0, 0, 0, 0, 0, 2 };
-    static JsonDocument Decode(byte[] compressed)
+    internal static JsonDocument Decode(byte[] compressed) => JsonDocument.Parse(Gunzip(compressed, GzipHeader), new JsonDocumentOptions { MaxDepth = 256 });
+    // Shared strict byte reader (gzipSync fixtures here and in RunProgressionChecks, the legacy JSONL corpus in TraceHashChecks): the header starts
+    // with the caller's exporter prefix (always FLG0, so the DEFLATE stream starts at byte 10), one DEFLATE stream ends exactly at the footer,
+    // native CRC32 plus explicit ISIZE, no BOM and fatal UTF-8. Callers parse the returned bytes with their own JSON rules.
+    internal static ReadOnlyMemory<byte> Gunzip(byte[] compressed, ReadOnlySpan<byte> header)
     {
-        Require(compressed.Length >= 20 && compressed.AsSpan(0, 9).SequenceEqual(GzipHeader), "Malformed run-create gzip header (CM8, FLG0, MTIME0, XFL2; only OS may vary)");
+        Require(header.Length >= 4 && header[3] == 0 && compressed.Length >= 20 && compressed.AsSpan(0, header.Length).SequenceEqual(header),
+            "Malformed gzip header: exporter prefix " + Convert.ToHexString(header) + " required (FLG0; only unpinned bytes such as OS may vary)");
         int footer = compressed.Length - 8; var boundary = new DeflateBoundary(compressed, 10, footer); var sink = new byte[1 << 16];
         using (var deflate = new DeflateStream(boundary, CompressionMode.Decompress)) while (deflate.Read(sink, 0, sink.Length) != 0) { }
-        Require(boundary.Next == footer, "Run-create gzip must hold exactly one DEFLATE stream followed by exactly the 8-byte CRC32/ISIZE footer (truncated, trailing or concatenated member)");
+        Require(boundary.Next == footer, "Gzip must hold exactly one DEFLATE stream followed by exactly the 8-byte CRC32/ISIZE footer (truncated, trailing or concatenated member)");
         // Exactly one member is proven above, so native GZipStream now validates that member's CRC32/ISIZE only.
-        using var output = new MemoryStream();
+        var output = new MemoryStream();
         using (var input = new MemoryStream(compressed, false))
         using (var gzip = new GZipStream(input, CompressionMode.Decompress)) gzip.CopyTo(output);
-        Require(unchecked((uint)output.Length) == BinaryPrimitives.ReadUInt32LittleEndian(compressed.AsSpan(compressed.Length - 4)), "Truncated or corrupt run-create gzip footer");
+        Require(unchecked((uint)output.Length) == BinaryPrimitives.ReadUInt32LittleEndian(compressed.AsSpan(compressed.Length - 4)), "Truncated or corrupt gzip footer");
         var json = new ReadOnlyMemory<byte>(output.GetBuffer(), 0, checked((int)output.Length));
-        Require(!(json.Length >= 3 && json.Span[0] == 0xef && json.Span[1] == 0xbb && json.Span[2] == 0xbf), "JSON BOM is outside the run-create fixture contract");
+        Require(!(json.Length >= 3 && json.Span[0] == 0xef && json.Span[1] == 0xbb && json.Span[2] == 0xbf), "JSON BOM is outside the exporter contract");
         Utf8.GetCharCount(json.Span);
-        return JsonDocument.Parse(json, new JsonDocumentOptions { MaxDepth = 256 });
+        return json;
     }
     // Non-seekable source for native DeflateStream: large reads up to the last claimed DEFLATE byte, then one byte per read for that byte
     // and everything after it. DeflateStream reads only while its inflater needs input, so Next equals the footer offset only when the
@@ -1275,7 +1280,7 @@ static class RunCreateChecks
         public override void SetLength(long value) => throw new NotSupportedException();
         public override void Write(byte[] buffer, int offset, int count) => throw new NotSupportedException();
     }
-    static void UniqueKeys(JsonElement root)
+    internal static void UniqueKeys(JsonElement root)
     {
         var pending = new Stack<JsonElement>(); pending.Push(root);
         while (pending.Count != 0)
@@ -1288,7 +1293,7 @@ static class RunCreateChecks
                 foreach (var property in node.EnumerateObject())
                 {
                     string name = BattleDataLoader.Name(property);
-                    Require(names.Add(name), "Duplicate decoded run-create JSON key " + name); pending.Push(property.Value);
+                    Require(names.Add(name), "Duplicate decoded JSON key " + name); pending.Push(property.Value);
                 }
             }
         }

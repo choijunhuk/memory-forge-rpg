@@ -121,7 +121,9 @@ static class Program
         int playerFailures = BattlePlayerActionChecks.Run(root);
         int memoryFailures = MemoryV2Checks.Run(root);
         int runCreateFailures = RunCreateChecks.Run(root);
-        return failures == 0 && traceFailures == 0 && openingFailures == 0 && turnFailures == 0 && queryFailures == 0 && playerFailures == 0 && memoryFailures == 0 && runCreateFailures == 0 ? 0 : 1;
+        int progressionFailures = RunProgressionChecks.Run(root);
+        return failures == 0 && traceFailures == 0 && openingFailures == 0 && turnFailures == 0 && queryFailures == 0 && playerFailures == 0 && memoryFailures == 0 && runCreateFailures == 0
+            && progressionFailures == 0 ? 0 : 1;
     }
 
     static bool Throws(Action a, string code) { try { a(); return false; } catch (RuleException e) { return e.Code == code; } }

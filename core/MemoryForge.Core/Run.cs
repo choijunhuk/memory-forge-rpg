@@ -1,4 +1,5 @@
-// R0: actual expedition creation/map/query execution. Node actions, rewards and saving are R1.
+// R0: actual expedition creation/map/query execution. R1a enter/battle/reward/proceed/archive is in Run.Progression.cs and
+// Run.Rewards.cs; node services (rest/forge/shop/event choices), assign and memory commit are later R1 units.
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,10 +9,13 @@ using System.Numerics;
 
 namespace MemoryForge.Core
 {
-    public sealed class Run
+    public sealed partial class Run
     {
+        readonly RunData data;
         readonly RunState state;
-        Run(RunState state) { this.state = state; }
+        // Live source `this.battle`; its state is aliased only by the private RunState.Battle, never exposed mutably.
+        Battle? battle;
+        Run(RunData data, RunState state) { this.data = data; this.state = state; }
         public RunState State => state.Copy();
 
         public static Run Create(RunData data, RunSetup setup)
@@ -98,7 +102,7 @@ namespace MemoryForge.Core
             foreach (int zone in s.Zones) if (!data.EncounterIndex.ContainsKey(zone.ToString(CultureInfo.InvariantCulture))) throw new RuleException("ZONE_NOT_AUTHORED");
             s.Zone = s.Zones.Count == 0 ? (int?)null : s.Zones[0]; s.Map = GenMap(s, s.Zone);
             if (s.MemoryPolicy == "v2" && setup.UseMemory == false) s.PlayBefore = DeckMemorySnapshot(data, s);
-            return new Run(s);
+            return new Run(data, s);
         }
         static int Fallback(int? value, int fallback) => !value.HasValue || value.Value == 0 ? fallback : value.Value;
         static int Number(BigInteger value)

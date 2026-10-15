@@ -6,6 +6,7 @@ using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
@@ -48,7 +49,7 @@ static class TraceHashChecks
             CheckFixtureRejections(root, manifestLine, firstScenarioLine);
         CheckGzipRejections();
         Console.WriteLine($"TraceFixtureValidationChecks: {checks - previousChecks - (failures - previousFailures)}/{checks - previousChecks} passed");
-        Console.WriteLine("BattleRunCommandReplay: NOT_IMPLEMENTED (0 full Run replay commands executed in C#; opening commands are checked separately)");
+        Console.WriteLine("BattleRunCommandReplay: NOT_IMPLEMENTED (0 complete C# Run replays; RunProgressionChecks separately reports actual supported-command prefix counts; opening commands are checked separately)");
         return failures;
     }
 
@@ -117,12 +118,13 @@ static class TraceHashChecks
         Rejects(() => ParseJson("9007199254740992"), "safe integer", "reject unsafe JSON integer input");
     }
 
-    sealed class SnapshotStats
+    internal sealed class SnapshotStats
     {
         public int Scenarios, Hashes, Short, Full, SourceFiles, Commands;
     }
 
-    static void ReadSnapshots(TextReader reader, string root, SnapshotStats stats, out string? manifestLine, out string? firstScenarioLine)
+    // scenario receives each trace only after its row passed every check below (RunProgressionChecks executes supported prefixes from it).
+    internal static void ReadSnapshots(TextReader reader, string root, SnapshotStats stats, out string? manifestLine, out string? firstScenarioLine, Action<Dictionary<string, object?>>? scenario = null)
     {
         manifestLine = reader.ReadLine(); firstScenarioLine = null;
         Require(manifestLine != null, "Missing trace manifest");
@@ -217,6 +219,7 @@ static class TraceHashChecks
             stats.Commands += commands.Count;
             stats.Scenarios++;
             if (length == "short") stats.Short++; else stats.Full++;
+            scenario?.Invoke(trace);
         }
         Require(stats.Scenarios == Scenarios && stats.Short == ShortScenarios && stats.Full == FullScenarios, "Missing/truncated trace scenarios");
     }
@@ -255,20 +258,23 @@ static class TraceHashChecks
         Rejects(() => Read(manifest + "\n" + CanonicalState.Serialize(truncatedCommands) + "\n"), "command summary", "truncated command list");
     }
 
-    static void ReadGzip(string path, Action<TextReader> consume)
+    // gen_traces exporter: Node createGzip at its default level. ID/CM8/FLG0 are structural for the shared one-member boundary
+    // (the DEFLATE stream starts at byte 10); MTIME/XFL/OS are not pinned for this corpus.
+    static readonly byte[] GzipPrefix = { 0x1f, 0x8b, 8, 0 };
+
+    internal static void ReadGzip(string path, Action<TextReader> consume)
     {
-        using var file = File.OpenRead(path);
-        Require(file.Length >= 18, "Truncated gzip file");
-        Span<byte> footer = stackalloc byte[8];
-        file.Seek(-8, SeekOrigin.End); file.ReadExactly(footer); file.Position = 0;
-        uint expectedCrc = BinaryPrimitives.ReadUInt32LittleEndian(footer), expectedSize = BinaryPrimitives.ReadUInt32LittleEndian(footer[4..]);
-        using var gzip = new GZipStream(file, CompressionMode.Decompress, true);
-        using var counted = new CrcReadStream(gzip);
+        // Shared strict decoder: exactly one member whose single DEFLATE stream ends at the footer. Native GZipStream alone decodes
+        // gzip(empty)+gzip(JSONL), whose aggregate CRC/ISIZE equal the last footer, so a footer comparison alone cannot reject it.
+        byte[] compressed = File.ReadAllBytes(path);
+        if (!MemoryMarshal.TryGetArray(RunCreateChecks.Gunzip(compressed, GzipPrefix), out ArraySegment<byte> json) || json.Array is not byte[] buffer)
+            throw new InvalidDataException("Decoded gzip buffer unavailable");
+        uint expectedCrc = BinaryPrimitives.ReadUInt32LittleEndian(compressed.AsSpan(compressed.Length - 8)), expectedSize = BinaryPrimitives.ReadUInt32LittleEndian(compressed.AsSpan(compressed.Length - 4));
+        using var counted = new CrcReadStream(new MemoryStream(buffer, json.Offset, json.Count, false));
         using var reader = new StreamReader(counted, Utf8, false, 65536, true);
         consume(reader);
         Require(reader.Peek() == -1, "Unread gzip content");
-        // The JS exporter writes exactly one gzip member; check the footer even when
-        // GZipStream tolerates a stream that ends before its trailer arrives.
+        // The JS exporter writes exactly one gzip member; the bytes actually consumed must still match that single footer.
         Require(counted.Crc == expectedCrc && unchecked((uint)counted.Bytes) == expectedSize, "Truncated or corrupt gzip footer");
     }
 
@@ -291,6 +297,36 @@ static class TraceHashChecks
             original[^8] ^= 1;
             File.WriteAllBytes(path, original);
             Rejects(() => ReadGzip(path, reader => reader.ReadToEnd()), "", "corrupt gzip CRC");
+            original[^8] ^= 1;
+            // Concatenation: native GZipStream decodes every member, and gzip(empty)+gzip(JSONL) has the aggregate CRC/ISIZE of its last footer.
+            // The RFC 1952 empty member is a literal (.NET writes no member for empty input); the two controls prove both premises natively.
+            byte[] empty = { 0x1f, 0x8b, 8, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            using (var member = new GZipStream(new MemoryStream(empty, false), CompressionMode.Decompress))
+                Check(member.Read(new byte[1]) == 0, "empty gzip member literal is a valid native member");
+            using (var native = new StreamReader(new GZipStream(new MemoryStream(empty.Concat(original).ToArray(), false), CompressionMode.Decompress), Utf8))
+                Check(native.ReadToEnd() == "{\"ok\":true}\n", "native GZipStream decodes gzip(empty)+gzip(JSONL) to exactly the JSONL");
+            File.WriteAllBytes(path, original); text = null;
+            ReadGzip(path, reader => text = reader.ReadToEnd());
+            Check(text == "{\"ok\":true}\n", "restored valid one-member gzip JSONL accepted");
+            foreach (var (label, bytes, reason) in new (string, byte[], string)[]
+            {
+                ("empty gzip member before JSONL", empty.Concat(original).ToArray(), "gzip"),
+                ("two empty gzip members before JSONL", empty.Concat(empty).Concat(original).ToArray(), "gzip"),
+                ("empty gzip member after JSONL", original.Concat(empty).ToArray(), "gzip"),
+                ("concatenated JSONL gzip members", original.Concat(original).ToArray(), "gzip"),
+                // Non-member trailing bytes: the reason text is not pinned, because how a native reader treats them is not the contract.
+                ("trailing bytes after gzip member", original.Concat(new byte[] { 0, 1, 2, 3 }).ToArray(), ""),
+                ("single trailing zero byte", original.Concat(new byte[1]).ToArray(), ""),
+                ("eight trailing zero bytes", original.Concat(new byte[8]).ToArray(), ""),
+            })
+            {
+                File.WriteAllBytes(path, bytes);
+                Rejects(() => ReadGzip(path, reader => reader.ReadToEnd()), reason, label);
+            }
+            using (var file = File.Create(path))
+            using (var gzip = new GZipStream(file, CompressionLevel.Fastest))
+                gzip.Write(Utf8.GetBytes("{\"ok\":true}\n{\"extra\":true}\n"));
+            Rejects(() => ReadGzip(path, reader => reader.ReadLine()), "unread", "unread gzip JSONL content");
         }
         finally { Directory.Delete(directory, true); }
     }

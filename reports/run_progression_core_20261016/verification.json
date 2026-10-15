@@ -1,0 +1,73 @@
+{
+  "status": "VERIFIED_ACTUAL_PARTIAL_CSHARP_RUN",
+  "fullStateOracle": {
+    "checks": 8519,
+    "cases": 5,
+    "supportedAttempts": 354,
+    "committed": 258,
+    "rejected": 96,
+    "battleAttempts": 306,
+    "battleCommitted": 210,
+    "pureQueries": 223,
+    "fullStateComparisons": 359,
+    "detachedMutationProbes": 285,
+    "forgeryProbes": 21,
+    "unsupportedSuffixAttempts": 2330
+  },
+  "legacyTraces": {
+    "scenarios": 1000,
+    "actualSupportedAttempts": 112822,
+    "completeSupportedPrefixes": 1000,
+    "battlesStarted": 3758,
+    "battlesFinished": 3758,
+    "archives": 1,
+    "fullRunCompletions": 0
+  },
+  "build": {
+    "warnings": 0,
+    "errors": 0,
+    "forcedNonIncremental": true
+  },
+  "unity": {
+    "version": "6000.0.46f1",
+    "playPassed": 27,
+    "editPassed": 3,
+    "consoleErrors": 0,
+    "consoleWarnings": 0,
+    "positiveNewAssemblyLoadControl": true,
+    "selectedRunCycle": {
+      "commands": 17,
+      "battleCommands": 13,
+      "hp": 233,
+      "coins": 86,
+      "deck": 19,
+      "endPhase": "MAP"
+    },
+    "entireRunUi": false
+  },
+  "strictReader": {
+    "oldActualEmptyPrefixAccepted": true,
+    "oldTestOnly": "22/24 RED",
+    "fixedAfterForcedBuild": "24/24 GREEN",
+    "retainedR0ForgeryProbes": 115
+  },
+  "node25": 307,
+  "proposals": 14,
+  "python": 57,
+  "docs": 9,
+  "handoff": 13,
+  "handoffEnvironment": "Existing project Python venv; system Python lacked PDF modules, no dependency added",
+  "review": "Claude Core/host independently reviewed by Codex; Codex Unity test approved by actual official Opus High",
+  "sourceEngineSha": "dae99192bfa137762c1c863efda8207b3851e3a6e7ecf2ff029bed3585a33ab4",
+  "valuesRetuned": false,
+  "inputManifestsRegenerated": false,
+  "remaining": [
+    "node service implementation R1b in isolated worktrees",
+    "actual legacy/v2 commitMemory and reload",
+    "full exploration UI and persistence",
+    "JS native diagnostic name/message/detail parity",
+    "server/device/final art",
+    "32 fixed-condition balance misses"
+  ],
+  "gitCi": "Recorded per exact head independently; validation numbers do not imply a new CI run succeeded"
+}

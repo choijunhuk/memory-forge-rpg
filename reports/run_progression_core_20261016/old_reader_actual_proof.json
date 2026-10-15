@@ -1,0 +1,12 @@
+{
+  "singleMemberAccepted": true,
+  "nonemptyConcatenationAccepted": false,
+  "emptyPrefixConcatenationAccepted": true,
+  "emptyMemberBytes": 20,
+  "totalConcatenatedBytes": 43,
+  "identicalDecodedText": true,
+  "reader": "Actual pre-change TraceHashChecks.ReadGzip via reflection; no product/source changes",
+  "sourceTraceHashChecksSha": "5aeed3fc819f11d30ddd00c43dbd4a6d9abe964de5d04aa1f35c5fbfeaa8857d",
+  "assemblySha": "4c438ffab30629ca1923b0ef7ed26730faed3451d905672ff0cac54514e185a4",
+  "scope": "Actual pre-refactor private reader invocation; correct single-member and nonempty-concatenation controls; no source/product mutation"
+}
