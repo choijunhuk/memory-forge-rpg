@@ -1,0 +1,37 @@
+{
+  "task_id": "P1-RUN-OPENING-TERMINAL-FIX",
+  "run_id": "P1-RUN-OPENING-TERMINAL-FIX-20261015T165325952334Z",
+  "status": "RECEIVED_UNVERIFIED",
+  "requestedEffort": "xhigh",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "changes_verified": true,
+  "raw_output": "ops/ai/local/P1-RUN-OPENING-TERMINAL-FIX-20261015T165325952334Z*",
+  "billing_verified_at": "2026-10-14T21:44:57.439760+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "codex/csharp-battle-opening",
+  "base_commit": "2ffc29ecdbdeee5027258ad6f73302b98820fc35",
+  "worktree": "/Users/choi/.codex/worktrees/csharp-battle-opening/Memory_forge",
+  "allowed_files": [
+    "engine/rules-core.js",
+    "engine/tests/run_node_contracts.test.mjs"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "1235293e-927a-4b52-9ad2-7a0b7514ec61",
+  "subtype": "success",
+  "is_error": false,
+  "result": "I've made the fix and written the tests, but nothing has been run (NOT_RUN): this CLI can't execute commands. I only edited the two allowed files, and no values, data or assets changed.\n\n## What changed\n**`engine/rules-core.js`**\n- `startBattle` (`:1672`): after `begin`, if the battle is already over it now calls the existing `afterBattle` once, exactly as `battleCmd` does. That one path covers both DEFEAT and VICTORY.\n  - On defeat it uses no RNG, adds no reward, coins or stats, and doesn't refund the one-time AP bonus.\n  - `begin` is not run again, and nothing is added for restoring old saves or for tests.\n- `enter` (`:1641`): the node-entry log line is now written before the node's own effects, so the log reads entry then `패배`. For every battle that doesn't end during `begin`, the final state and log are the same as before, because nothing inside the switch writes to the run log. One small difference: if setting up a node throws a data-integrity error (it already leaves `pos`/`floor`/RNG changed), one extra log line would also remain.\n- The three earlier fixes are untouched.\n\n**`engine/tests/run_node_contracts.test.mjs`**: the six existing tests are unchanged. `replay` gets a `from` option, there is a new `enteredNode` check, and three tests are new:\n1. **Witness check:** the continuation runs are separate, recorded on engine 3ad, the right seeds and lengths (119 and 221 commands), and each recorded outcome is consistent.\n2. **seed1102 opening defeat:** replays from a real Create through all 221 commands, and the last enter completes. During the replay every earlier entry is the last log line and every earlier battle reaches the player phase.\n   - A recording-only wrapper on that one `run` object keeps the live battle when the finalizer runs, then calls the unchanged original. It checks: finalizer called once, `begin` ran once, exactly one HP loss of 2 before any draw, entry logged before finalizing, and no run RNG used after the defeat.\n   - The whole run state is compared with the state before the last enter plus only the expected changes.\n   - Later wrong-phase commands are refused with no change. The legacy defeat save refuses keeping two changes, then keeping one completes with phase DONE.\n3. **seed1000 next event:** after each event resolves, every repeat choice is refused with the full run unchanged (RNG and log included). The next `ev_promise` still commits, and the final state matches a plain replay byte for byte.\n\n## For you to check\n- **Wrong source label in the witness:** `observations.source` says `ember_ring`, but that relic only adds damage against burning enemies. The real HP loss comes from `infinite_circuit` (taken as the zone-1 boss relic in the replay), which costs 2 HP at turn start before the draw. The test ignores `source` and checks that relic plus `src:'relic'`. I suggest relabelling the witness.\n- **`memoryAfter` isn't covered:** this witness uses the legacy memory policy, and `memoryAfter` is only recorded under v2. The test checks it is absent and that the legacy save completes. Covering \"`memoryAfter` equals the snapshot\" needs a real v2 run that dies during `begin`; I didn't create one.\n- **Not witnessed:** a VICTORY during `begin`, and the second earned `ev_rift` bonus. Old saved runs already stuck in BATTLE are not repaired, since you asked for no restore hooks.\n\n## How to verify\n1. **RED:** copy only the test file onto the unchanged 3ad engine and run `node --test engine/tests/run_node_contracts.test.mjs`. Expected: 8 pass, 1 fail — the seed1102 test, with \"a battle that ended inside begin left the run in BATTLE\". The two other new tests should pass on 3ad too, since they add coverage rather than catch a defect.\n2. **GREEN:** with the new engine, expect 9/9.\n3. Run `npm test` and `tools/gen_traces.mjs` for seed1102/full; that seed should now finish without the \"stuck outside player phase\" error. Then regenerate all corpora and compare: only records containing a battle that ends during `begin` should differ.\n4. `prototype/index.html` has its own copy of the engine, so run `npm run build:proto` if it needs to match. The C# `Run.cs` will need the same change in R1.\n\nThe session id should be taken from your CLI session record.",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ],
+  "root_verification": "reports/run_node_contracts_20261016/verification.json",
+  "integration_status": "verified; Git integration tracked separately in repository history",
+  "integration_decision": {
+    "accepted": "independent tests and source analysis",
+    "authorEngineProposal": "not copied; early log move replaced by narrower Root enter guard",
+    "replacementReview": "P1-RUN-FINAL-COVERAGE-AND-REVIEW APPROVE",
+    "originalProposalPreserved": true
+  }
+}

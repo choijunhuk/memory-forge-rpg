@@ -1,0 +1,465 @@
+{
+  "oldEngine": "1de10fff56242ebfe711d0f8165adf69fd418c423b810c340a9ba0c2400fab0c",
+  "newEngine": "dae99192bfa137762c1c863efda8207b3851e3a6e7ecf2ff029bed3585a33ab4",
+  "isolatedCorpora": [
+    {
+      "name": "battle_opening_vectors",
+      "everyGameRecordUnchanged": true,
+      "sha256": "25cc035c29967710454da43ed7c8677b2ceb4ce172cc03ede19eb75a8e3b5602"
+    },
+    {
+      "name": "battle_turn_vectors",
+      "everyGameRecordUnchanged": true,
+      "sha256": "748f3d51dacbdbd84169ceeb7881f2ed0b495298e9614045a1330cc8b8dc25dc"
+    },
+    {
+      "name": "battle_player_query_vectors",
+      "everyGameRecordUnchanged": true,
+      "sha256": "478cc50ae1902b1b5b6d26e65d1418c6ef92341c18e4b8fa90b0a81f78ff3018"
+    },
+    {
+      "name": "battle_player_action_vectors",
+      "everyGameRecordUnchanged": true,
+      "sha256": "121e072d9a3e1b955b7ea9207d68bcedbc4a4d82d1c4e591a62323a514e59505"
+    },
+    {
+      "name": "memory_rule_vectors",
+      "everyGameRecordUnchanged": true,
+      "sha256": "8abc64760f0a612628f1e968ad8d85d48f045912299678b65f13c3cfa2e3cccd"
+    },
+    {
+      "name": "run_create_vectors",
+      "everyGameRecordUnchanged": true,
+      "sha256": "76e59ebe4cc00ba33ad32877219d4972d5bb9f339b3b4561732333e69c412da4"
+    }
+  ],
+  "traces": {
+    "scenarios": 1000,
+    "unchanged": 979,
+    "changed": [
+      {
+        "seed": 1038,
+        "length": "short",
+        "first": {
+          "at": 107,
+          "consumed": 2,
+          "oldFirstAp": 6,
+          "newFirstAp": 6
+        },
+        "oldCommands": 190,
+        "newCommands": 188,
+        "oldResult": {
+          "floor": 7,
+          "outcome": "clear"
+        },
+        "newResult": {
+          "floor": 7,
+          "outcome": "clear"
+        }
+      },
+      {
+        "seed": 1072,
+        "length": "short",
+        "first": {
+          "at": 122,
+          "consumed": 2,
+          "oldFirstAp": 6,
+          "newFirstAp": 6
+        },
+        "oldCommands": 165,
+        "newCommands": 165,
+        "oldResult": {
+          "floor": 7,
+          "outcome": "clear"
+        },
+        "newResult": {
+          "floor": 7,
+          "outcome": "clear"
+        }
+      },
+      {
+        "seed": 1119,
+        "length": "short",
+        "first": {
+          "at": 70,
+          "consumed": 2,
+          "oldFirstAp": 6,
+          "newFirstAp": 6
+        },
+        "oldCommands": 277,
+        "newCommands": 234,
+        "oldResult": {
+          "floor": 7,
+          "outcome": "clear"
+        },
+        "newResult": {
+          "floor": 7,
+          "outcome": "clear"
+        }
+      },
+      {
+        "seed": 1126,
+        "length": "short",
+        "first": {
+          "at": 130,
+          "consumed": 2,
+          "oldFirstAp": 6,
+          "newFirstAp": 6
+        },
+        "oldCommands": 702,
+        "newCommands": 702,
+        "oldResult": {
+          "floor": 7,
+          "outcome": "clear"
+        },
+        "newResult": {
+          "floor": 7,
+          "outcome": "clear"
+        }
+      },
+      {
+        "seed": 1295,
+        "length": "short",
+        "first": {
+          "at": 20,
+          "consumed": 2,
+          "oldFirstAp": 6,
+          "newFirstAp": 6
+        },
+        "oldCommands": 204,
+        "newCommands": 197,
+        "oldResult": {
+          "floor": 7,
+          "outcome": "clear"
+        },
+        "newResult": {
+          "floor": 7,
+          "outcome": "clear"
+        }
+      },
+      {
+        "seed": 1298,
+        "length": "short",
+        "first": {
+          "at": 80,
+          "consumed": 2,
+          "oldFirstAp": 6,
+          "newFirstAp": 6
+        },
+        "oldCommands": 128,
+        "newCommands": 128,
+        "oldResult": {
+          "floor": 7,
+          "outcome": "clear"
+        },
+        "newResult": {
+          "floor": 7,
+          "outcome": "clear"
+        }
+      },
+      {
+        "seed": 1300,
+        "length": "short",
+        "first": {
+          "at": 81,
+          "consumed": 2,
+          "oldFirstAp": 6,
+          "newFirstAp": 6
+        },
+        "oldCommands": 185,
+        "newCommands": 237,
+        "oldResult": {
+          "floor": 7,
+          "outcome": "clear"
+        },
+        "newResult": {
+          "floor": 7,
+          "outcome": "clear"
+        }
+      },
+      {
+        "seed": 1307,
+        "length": "short",
+        "first": {
+          "at": 42,
+          "consumed": 2,
+          "oldFirstAp": 6,
+          "newFirstAp": 6
+        },
+        "oldCommands": 209,
+        "newCommands": 185,
+        "oldResult": {
+          "floor": 7,
+          "outcome": "clear"
+        },
+        "newResult": {
+          "floor": 7,
+          "outcome": "clear"
+        }
+      },
+      {
+        "seed": 1312,
+        "length": "short",
+        "first": {
+          "at": 102,
+          "consumed": 2,
+          "oldFirstAp": 6,
+          "newFirstAp": 6
+        },
+        "oldCommands": 127,
+        "newCommands": 127,
+        "oldResult": {
+          "floor": 7,
+          "outcome": "defeat"
+        },
+        "newResult": {
+          "floor": 7,
+          "outcome": "defeat"
+        }
+      },
+      {
+        "seed": 1320,
+        "length": "short",
+        "first": {
+          "at": 17,
+          "consumed": 2,
+          "oldFirstAp": 6,
+          "newFirstAp": 6
+        },
+        "oldCommands": 184,
+        "newCommands": 117,
+        "oldResult": {
+          "floor": 7,
+          "outcome": "clear"
+        },
+        "newResult": {
+          "floor": 7,
+          "outcome": "clear"
+        }
+      },
+      {
+        "seed": 1374,
+        "length": "short",
+        "first": {
+          "at": 158,
+          "consumed": 2,
+          "oldFirstAp": 6,
+          "newFirstAp": 6
+        },
+        "oldCommands": 230,
+        "newCommands": 230,
+        "oldResult": {
+          "floor": 7,
+          "outcome": "clear"
+        },
+        "newResult": {
+          "floor": 7,
+          "outcome": "clear"
+        }
+      },
+      {
+        "seed": 1423,
+        "length": "short",
+        "first": {
+          "at": 141,
+          "consumed": 2,
+          "oldFirstAp": 6,
+          "newFirstAp": 6
+        },
+        "oldCommands": 297,
+        "newCommands": 297,
+        "oldResult": {
+          "floor": 7,
+          "outcome": "clear"
+        },
+        "newResult": {
+          "floor": 7,
+          "outcome": "clear"
+        }
+      },
+      {
+        "seed": 1426,
+        "length": "short",
+        "first": {
+          "at": 26,
+          "consumed": 2,
+          "oldFirstAp": 6,
+          "newFirstAp": 6
+        },
+        "oldCommands": 266,
+        "newCommands": 227,
+        "oldResult": {
+          "floor": 7,
+          "outcome": "defeat"
+        },
+        "newResult": {
+          "floor": 7,
+          "outcome": "clear"
+        }
+      },
+      {
+        "seed": 1442,
+        "length": "short",
+        "first": {
+          "at": 129,
+          "consumed": 2,
+          "oldFirstAp": 6,
+          "newFirstAp": 6
+        },
+        "oldCommands": 170,
+        "newCommands": 170,
+        "oldResult": {
+          "floor": 7,
+          "outcome": "clear"
+        },
+        "newResult": {
+          "floor": 7,
+          "outcome": "clear"
+        }
+      },
+      {
+        "seed": 1459,
+        "length": "short",
+        "first": {
+          "at": 112,
+          "consumed": 2,
+          "oldFirstAp": 6,
+          "newFirstAp": 6
+        },
+        "oldCommands": 221,
+        "newCommands": 221,
+        "oldResult": {
+          "floor": 7,
+          "outcome": "clear"
+        },
+        "newResult": {
+          "floor": 7,
+          "outcome": "clear"
+        }
+      },
+      {
+        "seed": 1713,
+        "length": "full",
+        "first": {
+          "at": 93,
+          "consumed": 2,
+          "oldFirstAp": 6,
+          "newFirstAp": 6
+        },
+        "oldCommands": 293,
+        "newCommands": 181,
+        "oldResult": {
+          "floor": 1,
+          "outcome": "defeat"
+        },
+        "newResult": {
+          "floor": 7,
+          "outcome": "defeat"
+        }
+      },
+      {
+        "seed": 1774,
+        "length": "full",
+        "first": {
+          "at": 227,
+          "consumed": 2,
+          "oldFirstAp": 6,
+          "newFirstAp": 6
+        },
+        "oldCommands": 872,
+        "newCommands": 857,
+        "oldResult": {
+          "floor": 7,
+          "outcome": "clear"
+        },
+        "newResult": {
+          "floor": 7,
+          "outcome": "clear"
+        }
+      },
+      {
+        "seed": 1923,
+        "length": "full",
+        "first": {
+          "at": 327,
+          "consumed": 2,
+          "oldFirstAp": 6,
+          "newFirstAp": 6
+        },
+        "oldCommands": 381,
+        "newCommands": 381,
+        "oldResult": {
+          "floor": 7,
+          "outcome": "clear"
+        },
+        "newResult": {
+          "floor": 7,
+          "outcome": "clear"
+        }
+      },
+      {
+        "seed": 1936,
+        "length": "full",
+        "first": {
+          "at": 318,
+          "consumed": 2,
+          "oldFirstAp": 6,
+          "newFirstAp": 6
+        },
+        "oldCommands": 474,
+        "newCommands": 430,
+        "oldResult": {
+          "floor": 7,
+          "outcome": "clear"
+        },
+        "newResult": {
+          "floor": 7,
+          "outcome": "clear"
+        }
+      },
+      {
+        "seed": 1939,
+        "length": "full",
+        "first": {
+          "at": 276,
+          "consumed": 2,
+          "oldFirstAp": 6,
+          "newFirstAp": 6
+        },
+        "oldCommands": 459,
+        "newCommands": 470,
+        "oldResult": {
+          "floor": 7,
+          "outcome": "clear"
+        },
+        "newResult": {
+          "floor": 7,
+          "outcome": "clear"
+        }
+      },
+      {
+        "seed": 1946,
+        "length": "full",
+        "first": {
+          "at": 204,
+          "consumed": 2,
+          "oldFirstAp": 7,
+          "newFirstAp": 7
+        },
+        "oldCommands": 349,
+        "newCommands": 395,
+        "oldResult": {
+          "floor": 7,
+          "outcome": "clear"
+        },
+        "newResult": {
+          "floor": 7,
+          "outcome": "defeat"
+        }
+      }
+    ],
+    "oldCommands": 273748,
+    "newCommands": 273504
+  },
+  "scope": "Actual JS full Run replay; C# Run commands remain0"
+}

@@ -1,0 +1,41 @@
+{
+  "status": "VERIFIED_CURRENT_JS_SOURCE",
+  "sourceEngine": "dae99192bfa137762c1c863efda8207b3851e3a6e7ecf2ff029bed3585a33ab4",
+  "node22": {
+    "passed": 302,
+    "total": 302
+  },
+  "node25": {
+    "passed": 302,
+    "total": 302
+  },
+  "targeted": {
+    "passed": 13,
+    "total": 13
+  },
+  "python": 57,
+  "proposals": 14,
+  "docs": 9,
+  "handoff": 13,
+  "browserMemory": 13,
+  "browserLate": 10,
+  "actualBrowserRuns": 4,
+  "fuzz": {
+    "short": 100,
+    "full": 40
+  },
+  "csharpR0Checks": 215677,
+  "fullCSharpRunCommands": 0,
+  "unityScope": "Unchanged shared-Core practice26Play/3Edit from previous source unit; no C#Run/device acceptance",
+  "oppositeReview": "APPROVE no blockers; exact final Root guard independently checked by Opusxhigh",
+  "balanceFailedMetrics": 32,
+  "valuesRetuned": false,
+  "inputManifestsRegenerated": false,
+  "remaining": [
+    "old stuck-save recovery",
+    "raw snapshot trust policy",
+    "begin victory real witness",
+    "invalid authored setup atomicity",
+    "full C#Run/server/device/art"
+  ]
+}

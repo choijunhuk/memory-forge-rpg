@@ -1,0 +1,1 @@
+{"scenarios":1,"short":0,"full":1,"commands":222,"rejected":48,"output":"/Users/choi/Documents/Memory_forge/ops/ai/local/run-opening-1102-v2.jsonl.gz"}

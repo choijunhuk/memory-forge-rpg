@@ -1,5 +1,7 @@
 # P1-CSHARP-RUN-PROGRESSION-BOUNDARY — R1 실제 탐사 진행 경계
 
+> 2026-10-16 Root 소스 갱신: 아래는 작성 시점의 정적 분석 이력이다. Q1 AP 재환급·Q2 무료 두 번째 제거·Q3 완료 이벤트 반복과 시작 즉시 패배의 탐사 미종료는 실제 원문/공개 명령으로 입증해 JS에서 수정했다. 이 결함을 그대로 C#에 이식하지 않는다. 정확한 현재 엔진은 dae99192bfa137762c1c863efda8207b3851e3a6e7ecf2ff029bed3585a33ab4이며 `enter`의 원래 로그 뒤 이미 끝난 전투만 기존 finalizer로 넘긴다. 검증·독립 리뷰·양쪽 저장 수용은 reports/run_node_contracts_20261016을 따른다. Q4/Q5와 복원 정책은 임의로 변경하지 않았다. 현재 R0 데이터는 RunData.Memory.Battle에 전체 BattleData를 이미 보유하므로 새 JSON/데이터 계층 없이 재사용한다. 전체 C# Run 진행 명령은 여전히0이다.
+
 - 상태: **소스 분석·인계만**. 구현·빌드·시험·해시·MCP 실행 없음. 아래 C# 이름은 **신규 제안**이며 존재하거나 승인된 API가 아니다.
 - 작업: `P1-CSHARP-RUN-PROGRESSION-CLAUDE-ANALYSIS`, 공식 Claude Code Opus 5.5, 요청 effort xhigh. 실제 세션·모델·effort 증거는 부모 Codex가 보관한 CLI 메타데이터를 따른다. 편집 범위는 이 파일 1개다.
 - 기준: worktree `/Users/choi/.codex/worktrees/csharp-battle-opening/Memory_forge`, 브랜치 `codex/csharp-battle-opening`, HEAD `2ffc29e` + 미커밋 R0/M0/Battle 작업 트리. 줄 번호는 2026-10-15 이 작업 트리 기준이다. `rules-core.js` Run 구간(1518-2081)은 이전 문서 `P1-CSHARP-RUN-MEMORY-BOUNDARY.md`(3d33c4c)와 줄이 같다.

@@ -1,0 +1,14 @@
+[
+  {
+    "path": "reports/run_node_contracts_20261016/red-opening.txt",
+    "beforeSha": "ab77a71360063f5affd7952419ac505a7f2341d6c48d4b0d63e9f00166f30ca5",
+    "afterSha": "447ea25f537a2862104d33364871431799111b6b69129997cff22dfa3872ea18",
+    "change": "Whitespace-only blank diagnostic lines normalized; original complete raw logs preserved under ops/ai/local"
+  },
+  {
+    "path": "reports/run_node_contracts_20261016/red-original.txt",
+    "beforeSha": "acfc307a2706e65dc766d5341d83a5f4a024636be85002c74d248d54c5eeef32",
+    "afterSha": "dbc062f2f93fca215e91ed9f0968a925952cdb5ecccde3907867b59f0ce961fe",
+    "change": "Whitespace-only blank diagnostic lines normalized; original complete raw logs preserved under ops/ai/local"
+  }
+]

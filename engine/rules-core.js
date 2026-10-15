@@ -1647,6 +1647,7 @@
         default: break;
       }
       this.log(`${NODE_NAME[n.type]} 진입`);
+      if (this.battle && this.battle.isOver()) this.afterBattle(); // begin may end the battle before any player command
     }
     has(r) { return this.s.relics.includes(r); }
 
@@ -1661,9 +1662,9 @@
       const s = this.s;
       const deck = s.deck.map((c) => ({ id: c.id, plus: c.plus, mods: c.mods, growth: c.growth || 0, wielder: c.wielder, assigned: c.assigned, from: c.from, key: c.key }));
       const seed = Rng.next(s.rng);
-      const b = Battle.create(this.data, { party: s.party, deck, relics: s.relics, hp: s.hp, maxHp: s.maxHp, seed, runFlags: s.runFlags, difficulty: s.difficulty,
+      const b = Battle.create(this.data, { party: s.party, deck, relics: s.relics, hp: s.hp, maxHp: s.maxHp, seed, runFlags: { ...s.runFlags, nextApBonus: 0 }, difficulty: s.difficulty,
         enemies: this.encounterFor(type), nextApBonus: s.runFlags.nextApBonus || 0 });
-      s.runFlags.nextApBonus = 0;
+      s.runFlags.nextApBonus = 0; // one-shot: only this battle's first turn; its runFlags copy carries 0 so afterBattle cannot refund it
       // map battle instances back to deck keys for growth/evolution persistence
       const uids = Object.keys(b.s.cards);
       deck.forEach((d, i) => { b.s.cards[uids[i]].key = d.key; });
@@ -1865,7 +1866,7 @@
       const s = this.s; const p = s.pending;
       if (s.phase !== 'SHOP') throw new RuleError('WRONG_PHASE');
       if (kind === 'remove') {
-        if (s.coins < p.removeCost) throw new RuleError('COINS_LOW');
+        if (p.removeCost === null) throw new RuleError('NOT_FOR_SALE'); if (s.coins < p.removeCost) throw new RuleError('COINS_LOW'); // one removal per shop
         const i = s.deck.findIndex((c) => c.key === key); if (i < 0 || s.deck[i].weapon) throw new RuleError('BAD_CARD');
         s.coins -= p.removeCost; s.deck.splice(i, 1); s.runFlags.removals = (s.runFlags.removals || 0) + 1; p.removeCost = null; return;
       }
@@ -1881,7 +1882,7 @@
     eventChoose(idx, key) {
       const s = this.s; const p = s.pending;
       if (s.phase !== 'EVENT') throw new RuleError('WRONG_PHASE');
-      const ev = this.ix.events[p.id]; const ch = ev.choices[idx]; if (!ch) throw new RuleError('BAD_CHOICE');
+      const ev = this.ix.events[p.id]; const ch = ev.choices[idx]; if (!ch || p.done) throw new RuleError('BAD_CHOICE'); // an event resolves once
       const fx = ch.fx;
       if (ch.need && ch.need.coins && s.coins < ch.need.coins) throw new RuleError('COINS_LOW');
       const hpk = (v) => Math.round(v * (s.hpRef || 81 * s.party.length) / (81 * s.party.length)); // flat event HP numbers scale with party HP

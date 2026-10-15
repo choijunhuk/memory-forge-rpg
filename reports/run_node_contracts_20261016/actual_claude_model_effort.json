@@ -1,0 +1,59 @@
+[
+  {
+    "task": "P1-RUN-NODE-CONTRACT-FIX",
+    "sessionId": "812b0eb7-f608-48f1-86a9-8a3e0af812e4",
+    "officialCli": "2.1.285 (Claude Code)",
+    "returnedModelUsageKeys": [
+      "claude-opus-5-5"
+    ],
+    "requestedEffort": "max",
+    "actualModelRecords": {
+      "claude-opus-5-5": 125
+    },
+    "actualPerTurnEffortRecords": {
+      "max": 125
+    },
+    "subscriptionAuthAndAccountMatched": true,
+    "billingAttestationAt": "2026-10-14T21:44:57.439760+00:00",
+    "processExit": 0,
+    "rawReasoningCopied": false
+  },
+  {
+    "task": "P1-RUN-OPENING-TERMINAL-FIX",
+    "sessionId": "1235293e-927a-4b52-9ad2-7a0b7514ec61",
+    "officialCli": "2.1.285 (Claude Code)",
+    "returnedModelUsageKeys": [
+      "claude-opus-5-5"
+    ],
+    "requestedEffort": "xhigh",
+    "actualModelRecords": {
+      "claude-opus-5-5": 95
+    },
+    "actualPerTurnEffortRecords": {
+      "xhigh": 95
+    },
+    "subscriptionAuthAndAccountMatched": true,
+    "billingAttestationAt": "2026-10-14T21:44:57.439760+00:00",
+    "processExit": 0,
+    "rawReasoningCopied": false
+  },
+  {
+    "task": "P1-RUN-FINAL-COVERAGE-AND-REVIEW",
+    "sessionId": "62e5d43b-f9e9-48de-800c-fd5c9c14118c",
+    "officialCli": "2.1.285 (Claude Code)",
+    "returnedModelUsageKeys": [
+      "claude-opus-5-5"
+    ],
+    "requestedEffort": "xhigh",
+    "actualModelRecords": {
+      "claude-opus-5-5": 91
+    },
+    "actualPerTurnEffortRecords": {
+      "xhigh": 91
+    },
+    "subscriptionAuthAndAccountMatched": true,
+    "billingAttestationAt": "2026-10-14T21:44:57.439760+00:00",
+    "processExit": 0,
+    "rawReasoningCopied": false
+  }
+]
