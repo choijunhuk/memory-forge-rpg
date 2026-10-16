@@ -1,0 +1,8 @@
+{
+  "entries": 423,
+  "changedHistoricalPaths": 29,
+  "inputAuditMatchesOriginalExpected": true,
+  "manifestsRegenerated": false,
+  "fixtureExpectedChanged": false,
+  "scope": "Input audit and original RunCreate fixture independently checked after restoring only the original script"
+}

@@ -34,7 +34,7 @@ step document_contract_tests python3 tools/audit/test_document_contract.py
   first=1; for k in build_data gen_vectors engine_tests review_memory review_economy fuzz_short fuzz_full balance_probe csharp_checks economy_verify python_tests schema_check openapi_check build_prototype ui_smoke gen_docs doc_build_run document_contract_tests; do
     [ $first = 1 ] || echo ","; first=0; printf '    "%s": "%s"' "$k" "${RESULT[$k]:-not-run}"; done
   echo ""; echo "  },"
-  echo "  \"not_done\": [\"Complete Unity client/lobby/art/device acceptance\", \"server application code\", \"Unfinished-run restoration and remaining full-design C# acceptance\", \"zones 3-5 content\", \"art/audio\", \"Android device tests\", \"human playtests\", \"load tests\", \"real payments\"]"
+  echo "  \"not_done\": [\"Unity client\", \"server application code\", \"C# battle/run port\", \"zones 3-5 content\", \"art/audio\", \"Android device tests\", \"human playtests\", \"load tests\", \"real payments\"]"
   echo "}"
 } > reports/delivery_status.json
 cat reports/delivery_status.json
