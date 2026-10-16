@@ -1,0 +1,100 @@
+[
+  {
+    "step": "hand",
+    "receipt": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"button\":\"Hand:c15\",\"frame\":185203,\"pickerOpen\":false,\"selectedCard\":\"c15\",\"mode\":null,\"target\":\"e19\",\"version\":1,\"ap\":4,\"completeJsonGraphUnchanged\":true,\"options\":[]},\"compiler\":\"codedom\"}}"
+        }
+      ],
+      "structuredContent": {
+        "success": true,
+        "message": "Code executed successfully.",
+        "data": {
+          "result": {
+            "button": "Hand:c15",
+            "frame": 185203,
+            "pickerOpen": false,
+            "selectedCard": "c15",
+            "mode": null,
+            "target": "e19",
+            "version": 1,
+            "ap": 4,
+            "completeJsonGraphUnchanged": true,
+            "options": []
+          },
+          "compiler": "codedom"
+        }
+      },
+      "isError": false
+    }
+  },
+  {
+    "step": "mode",
+    "receipt": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"button\":\"Mode:now\",\"frame\":185336,\"pickerOpen\":false,\"selectedCard\":\"c15\",\"mode\":\"now\",\"target\":\"e19\",\"version\":1,\"ap\":4,\"completeJsonGraphUnchanged\":true,\"options\":[]},\"compiler\":\"codedom\"}}"
+        }
+      ],
+      "structuredContent": {
+        "success": true,
+        "message": "Code executed successfully.",
+        "data": {
+          "result": {
+            "button": "Mode:now",
+            "frame": 185336,
+            "pickerOpen": false,
+            "selectedCard": "c15",
+            "mode": "now",
+            "target": "e19",
+            "version": 1,
+            "ap": 4,
+            "completeJsonGraphUnchanged": true,
+            "options": []
+          },
+          "compiler": "codedom"
+        }
+      },
+      "isError": false
+    }
+  },
+  {
+    "step": "confirm",
+    "receipt": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"button\":\"ConfirmCard\",\"frame\":185456,\"pickerOpen\":true,\"selectedCard\":\"c15\",\"mode\":\"now\",\"target\":\"e19\",\"version\":1,\"ap\":4,\"completeJsonGraphUnchanged\":true,\"options\":[\"c7\",\"c1\",\"c13\",\"c2\"]},\"compiler\":\"codedom\"}}"
+        }
+      ],
+      "structuredContent": {
+        "success": true,
+        "message": "Code executed successfully.",
+        "data": {
+          "result": {
+            "button": "ConfirmCard",
+            "frame": 185456,
+            "pickerOpen": true,
+            "selectedCard": "c15",
+            "mode": "now",
+            "target": "e19",
+            "version": 1,
+            "ap": 4,
+            "completeJsonGraphUnchanged": true,
+            "options": [
+              "c7",
+              "c1",
+              "c13",
+              "c2"
+            ]
+          },
+          "compiler": "codedom"
+        }
+      },
+      "isError": false
+    }
+  }
+]

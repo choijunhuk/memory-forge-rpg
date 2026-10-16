@@ -1,0 +1,28 @@
+{
+  "observed_at": "2026-10-16T04:34:25.304297+00:00",
+  "source_head": "fcdc3e3bb29d56f1577ef32849695c0ac0c848bb",
+  "app_path": "/Users/choi/Documents/Memory_forge/ops/ai/local/builds/MemoryForgeExpedition-Recovery-20261016.app",
+  "binary_sha256": "44bd129574852aebec314e57eb3311b41590c316f6006d31a719ba82eb2eb3b6",
+  "managed_client_sha256": "3a06a20b4677294a2026e0571c00650b0ff2b1727bbe6eff02c993657e903cac",
+  "compiled_metadata": {
+    "get_RecoveryRequired": true,
+    "DiscardFailedPractice": true,
+    "SameToken": true
+  },
+  "method": "CUA exact app path launch after normal Cmd-Q of fresh prior S1 player; process path verified",
+  "pid_at_observation": 70872,
+  "visible_map": {
+    "party": "sera/harin/nia reference",
+    "hp": "243/243",
+    "coins": 60,
+    "deck": 18
+  },
+  "status": "BUILD_AND_NATIVE_KOREAN_MAP_PASS",
+  "native_automated_input": "single bright battle click and short pointer movement produced no transition; cause not assigned",
+  "not_checked": [
+    "new physical mouse battle transition",
+    "native forced-error recovery flow",
+    "Android/IL2CPP/device/server"
+  ],
+  "previous_user_mouse_acceptance": "Earlier Final build only, never promoted to this build"
+}

@@ -88,5 +88,17 @@
     "positive_output_messages": 7,
     "actual_model": "claude-opus-5-5",
     "actual_per_turn_effort": "high"
+  },
+  "P1-CARD-FLOW-PICKER-GUARD": {
+    "session_id": "d2bda3e6-a0ab-4f84-82e6-c15d5d12127f",
+    "positive_output_messages": 154,
+    "actual_model": "claude-opus-5-5",
+    "actual_per_turn_effort": "xhigh"
+  },
+  "P1-CARD-FLOW-PICKER-FINISH": {
+    "session_id": "d2bda3e6-a0ab-4f84-82e6-c15d5d12127f",
+    "positive_output_messages": 15,
+    "actual_model": "claude-opus-5-5",
+    "actual_per_turn_effort": "high"
   }
 }

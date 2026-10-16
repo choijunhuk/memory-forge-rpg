@@ -26,6 +26,9 @@ namespace MemoryForge.Client
     // P1-CARD-FLOW-FAIL-CLOSED §14.7/§16.4: a Run command that fails with anything but an ordinary, unchanged input rejection may have
     // left the Run partly changed (Run commands are not transactional), so the practice is quarantined: only a recovery screen and its
     // single action remain, which discards the failed practice Run unsaved and departs again from the last valid session store.
+    // P1-CARD-FLOW-PICKER-GUARD §14.3/§14.7: the card-pick sheet is a local unsent intent of one play, tied to the state it was opened in.
+    // It offers exactly PickCandidates and accepts nothing else; once that state is gone it can no longer send and closes. While it is
+    // open every other command and selection is refused. Nothing is spent until its final pick or auto sends the one play.
     [ExecuteAlways]
     public sealed class MemoryForgeExpeditionClient : MonoBehaviour
     {
@@ -42,6 +45,21 @@ namespace MemoryForge.Client
         public string? SelectedMode => selectedMode;
         public string? Target => target;
         public bool PickerOpen => picker != null;
+        /// <summary>The open pick sheet's picks so far, in order (a copy); empty without a sheet.</summary>
+        public IReadOnlyList<string> PickerPicks => picker?.Picks.ToArray() ?? Array.Empty<string>();
+        /// <summary>The cards the open pick sheet offers now: exactly the list it draws and the only cards PickCard accepts. Empty
+        /// without a sheet, or once the state the sheet was opened in is gone.</summary>
+        public IReadOnlyList<string> PickerOptions
+        {
+            get
+            {
+                var live = run; var pick = picker;
+                if (recovery != null || live == null || pick == null) return Array.Empty<string>();
+                var s = live.State;
+                if (!Fresh(pick, s)) return Array.Empty<string>();
+                return PickOptions(s.Battle!, pick);
+            }
+        }
         public bool ShowingResult => run != null && Finished(run.State);
         public IReadOnlyList<string> SelectedChangeIds => selectedChanges.AsReadOnly();
         public string? LastRequestId { get; private set; }
@@ -72,6 +90,10 @@ namespace MemoryForge.Client
             public List<(string Label, string From, int Count, bool GrowthOnly)> Requests = new List<(string, string, int, bool)>();
             public int Index, Left;
             public readonly List<string> Picks = new List<string>();
+            // The state the sheet was opened in (see Fresh): its Run, battle node, battle version and target.
+            public CoreRun? Run;
+            public string? Node, Target;
+            public int Version;
         }
         // A read-only snapshot for the detail overlay; opening or closing it never reaches the Run.
         sealed class CardInfo
@@ -116,6 +138,9 @@ namespace MemoryForge.Client
         const int BattleLogLimit = 40;            // §14.3 기록: the recent 40 lines
         string? recovery; // the failure that quarantined the practice (a Core code or exception type); null while healthy
         const string RecoveryCode = "RECOVERY_REQUIRED";
+        // Pick sheet refusals: another command or selection while a sheet is open, a card outside its drawn list, and any pick or auto
+        // once the state the sheet was opened in is gone. These are local client codes; Core never sees the refused input.
+        const string PickSheetOpen = "PICKER_OPEN", PickInvalid = "PICK_INVALID", PickStale = "PICK_STALE";
         // Ordinary input rejections: Core refuses the request as asked (wrong phase, unreachable node, missing card/target/AP, unpaid
         // price, invalid memory selection…) after checks that precede any change. Only these, and only when the Run and the session
         // store compare unchanged, stay a normal toast. Engine/definition gaps, invariants, number ranges, unknown ids, malformed
@@ -149,14 +174,14 @@ namespace MemoryForge.Client
         }
         void OnApplicationPause(bool paused) { if (!paused) ResumeView(); }
         void OnApplicationFocus(bool focused) { if (focused) ResumeView(); }
-        // Resume: a pick sheet whose card or player phase is gone is dropped, and the view is redrawn from the actual Run only when that
+        // Resume: a pick sheet whose opening state is gone (Fresh) is dropped, and the view is redrawn from the actual Run only when that
         // happened or the view is missing. No Run command, restart or server fetch; an open summary stays (it is not stale).
         void ResumeView()
         {
             if (!Application.isPlaying || !isActiveAndEnabled || run == null || data == null || font == null) return;
             if (recovery != null) { if (canvasRoot == null) Render(); return; } // the failed Run is not read; the quarantine stays
             var s = run.State; bool stale = false;
-            if (picker != null && (s.Phase != "BATTLE" || s.Battle == null || s.Battle.Phase != "PLAYER" || !s.Battle.Zones.Hand.Contains(picker.Uid))) { picker = null; stale = true; }
+            if (picker != null && !Fresh(picker, s)) { picker = null; stale = true; }
             if (stale || canvasRoot == null) Render();
         }
         // §14.2 2.6 s toast: expiring it rewrites only its own label to the screen's fallback text and color. Rebuilding the view here
@@ -238,7 +263,7 @@ namespace MemoryForge.Client
             }
             Render(); return ok;
         }
-        public void SelectCard(string uid) { if (Blocked()) return; selectedCard = uid; selectedMode = null; picker = null; ClearIntentNotice(); Render(); }
+        public void SelectCard(string uid) { if (Blocked()) return; selectedCard = uid; selectedMode = null; ClearIntentNotice(); Render(); }
         public void SelectMode(string mode) { if (Blocked()) return; selectedMode = mode; ClearIntentNotice(); Render(); }
         public void SelectEnemy(string uid) { if (Blocked()) return; target = uid; ClearIntentNotice(); Render(); }
         // A new card/mode/target intent retires the previous command's toast (or error) at once, so the action line shows this request's
@@ -252,7 +277,12 @@ namespace MemoryForge.Client
             try { requests = ChoiceRequests(run.BattleEffectiveCard(selectedCard), selectedMode, data?.Memory.Battle); }
             catch (RuleException error) { Reject(error.Code); return false; }
             if (requests.Count == 0) return PlayCard(selectedCard, selectedMode);
-            picker = new BattlePick { Uid = selectedCard, Mode = selectedMode, Requests = requests, Left = requests[0].Count };
+            // The sheet keeps the state it is opened in; a card that is not a live hand card of the player phase opens nothing.
+            var s = run.State;
+            var pick = new BattlePick { Uid = selectedCard, Mode = selectedMode, Requests = requests, Left = requests[0].Count,
+                Run = run, Node = s.Position, Version = s.Battle?.V ?? -1, Target = target };
+            if (!Fresh(pick, s)) { Reject(run.BattleCheck(selectedCard, selectedMode, target) ?? "NOT_IN_HAND"); return false; }
+            picker = pick;
             Render(); return false;
         }
         public bool PlayCard(string uid, string mode = "now", IReadOnlyList<string>? picks = null)
@@ -265,18 +295,42 @@ namespace MemoryForge.Client
         }
         public bool EndTurn() => SendBattle("end", null, "적의 행동과 예약 해결을 마쳤어요.");
         public bool UseUltimate(string actor) => SendBattle("ult", BattleArgument.Object(new[] { Pair("actor", actor), Pair("target", target) }), "필살기를 사용했어요.");
+        // The sheet's own pick, auto and cancel are its explicit owners: they pass the recovery/summary gate (Barred) only, never the
+        // sheet lock of Blocked.
+        /// <summary>Adds one card of the open sheet's current list (exactly the cards it draws); the last pick plays at once. Any other
+        /// card is refused without adding or sending; any pick once the sheet's opening state is gone closes the sheet unsent.</summary>
         public bool PickCard(string uid)
         {
-            if (Blocked() || picker == null) return false;
-            picker.Picks.Add(uid); picker.Left--;
-            if (picker.Left <= 0 && ++picker.Index < picker.Requests.Count) picker.Left = picker.Requests[picker.Index].Count;
-            if (picker.Index >= picker.Requests.Count) return SendPicks();
+            if (Barred() || run == null || picker == null) return false;
+            var pick = picker; var s = run.State;
+            if (!Fresh(pick, s)) return RetirePicker();
+            if (!PickOptions(s.Battle!, pick).Contains(uid)) { LastError = PickInvalid; return false; }
+            pick.Picks.Add(uid); pick.Left--;
+            if (pick.Left <= 0 && ++pick.Index < pick.Requests.Count) pick.Left = pick.Requests[pick.Index].Count;
+            if (pick.Index >= pick.Requests.Count) return SendPicks(pick);
             Render(); return true;
         }
-        /// <summary>Plays with the picks made so far; Core chooses any remaining ones, as the button says.</summary>
-        public bool AutoPick() => !Blocked() && picker != null && SendPicks();
-        public void CancelPick() { if (Blocked()) return; picker = null; Render(); }
-        bool SendPicks() { var pick = picker!; picker = null; return PlayCard(pick.Uid, pick.Mode, pick.Picks); }
+        /// <summary>Plays with the picks made so far; Core chooses any remaining ones by its own rule, as the button says. Once the
+        /// sheet's opening state is gone it closes the sheet unsent instead.</summary>
+        public bool AutoPick() => !Barred() && picker != null && SendPicks(picker);
+        /// <summary>Closes the open sheet without sending anything; the selected card, mode and target stay as the ordinary selection.</summary>
+        public void CancelPick()
+        {
+            if (Barred()) return;
+            picker = null;
+            if (LastError == PickSheetOpen || LastError == PickInvalid) LastError = null; // refusals of the closed sheet
+            Render();
+        }
+        // The sheet's one play, checked against its opening state right before sending. The sheet closes first, so the ordinary gate
+        // (which refuses everything else while a sheet is open) lets exactly this request through, whatever Core then answers.
+        bool SendPicks(BattlePick pick)
+        {
+            if (run == null || !Fresh(pick, run.State)) return RetirePicker();
+            picker = null;
+            return PlayCard(pick.Uid, pick.Mode, pick.Picks);
+        }
+        // A sheet whose opening state is gone closes with a notice. It spent nothing, so nothing is sent, refunded or retargeted.
+        bool RetirePicker() { picker = null; Reject(PickStale); return false; }
         bool SendBattle(string kind, BattleArgument? args, string success)
         {
             if (Blocked()) return false;
@@ -289,7 +343,7 @@ namespace MemoryForge.Client
             bool ok = Do(() => response = live.BattleCommand(kind, args), success, false);
             if (ok && response != null)
             {
-                picker = null; // a pick sheet prepared before this command must not outlive it
+                picker = null; // defensive: the gate refuses battle commands under a sheet, and the sheet's own play closed it first
                 if (kind == "play") selectedMode = null;
                 var s = live.State;
                 if (s.Phase == "REWARD") notice = "전투에서 이겼어요. 보상을 고르세요.";
@@ -484,7 +538,7 @@ namespace MemoryForge.Client
 
         bool Do(Action command, string? success, bool render = true)
         {
-            // Every Run command passes here: none reaches the Run under the turn barrier or in recovery.
+            // Every Run command passes here: none reaches the Run under the turn barrier, in recovery or beneath an open pick sheet.
             if (run == null || Blocked()) return false;
             var live = run;
             // Detached copies of the Run and the session store, compared only if the command fails; a copy that cannot be made fails closed.
@@ -596,7 +650,16 @@ namespace MemoryForge.Client
         // The turn barrier: while the summary is open every public command and selection is refused before it reaches the Run. Only
         // the summary's own skip/continue and display-only reads stay available. A refusal changes no view state, so nothing is redrawn.
         // In recovery the same gate refuses everything; only DiscardFailedPractice remains.
+        // An open pick sheet is one prepared, unsent play, so every other command and selection is refused as well, after recovery and
+        // the summary (their codes come first). Only the sheet's own pick, auto and cancel pass, through Barred alone; its final send
+        // closes the sheet before playing, so this gate never refuses that one play.
         bool Blocked()
+        {
+            if (Barred()) return true;
+            if (picker == null) return false;
+            LastError = PickSheetOpen; return true;
+        }
+        bool Barred()
         {
             if (recovery != null) { LastError = RecoveryCode; return true; }
             if (turnSummary == null) return false;
@@ -718,6 +781,23 @@ namespace MemoryForge.Client
             }
             return requests;
         }
+        /// <summary>The cards a pick sheet offers for one request, in zone order (prototype/src/ui.js pickerOptions): the hand without the
+        /// playing card, the discard pile or the time reservations; only growth-card definitions when the request says so; none already
+        /// picked. PickSheet draws exactly this list and PickCard accepts nothing else. Core still validates and resolves the picks.</summary>
+        public static List<string> PickCandidates(BattleState b, string source, (string Label, string From, int Count, bool GrowthOnly) request,
+            IEnumerable<string> picked, IReadOnlyDictionary<string, BattleCardDef> definitions)
+        {
+            IEnumerable<string> options = request.From == "hand" ? b.Zones.Hand.Where(u => u != source) : request.From == "discard" ? b.Zones.Discard : b.Reservations.Select(r => r.Uid);
+            if (request.GrowthOnly) options = options.Where(u => b.Cards.TryGetValue(u, out var c) && definitions.TryGetValue(c.Id, out var d) && d.Growth == true);
+            var used = new HashSet<string>(picked, StringComparer.Ordinal);
+            return options.Where(u => !used.Contains(u)).ToList();
+        }
+        List<string> PickOptions(BattleState b, BattlePick pick) => PickCandidates(b, pick.Uid, pick.Requests[pick.Index], pick.Picks, cardDefs);
+        // The sheet's opening state still holds: the same Run and battle node, the battle version and target it was opened at, the
+        // player phase and its card in hand. Any committed change moves the battle version, so picks made against an older state never
+        // send; the target is compared, never replaced.
+        bool Fresh(BattlePick pick, RunState s) => ReferenceEquals(run, pick.Run) && s.Phase == "BATTLE" && s.Battle != null && s.Battle.Phase == "PLAYER"
+            && s.Position == pick.Node && s.Battle.V == pick.Version && target == pick.Target && s.Battle.Zones.Hand.Contains(pick.Uid);
 
         // ───────── view ─────────
         void Render()
@@ -755,7 +835,7 @@ namespace MemoryForge.Client
                             else if (s.Phase == "ARCHIVE") ArchiveView(s);
                             break;
                     }
-                if (picker != null && s.Phase == "BATTLE" && s.Battle != null) PickSheet(s.Battle); else picker = null;
+                if (picker != null && Fresh(picker, s)) PickSheet(s.Battle!); else picker = null; // a stale sheet is never drawn
                 if (sheet == Sheet.Deck) DeckSheet(s);
                 if (sheet == Sheet.Log) LogSheet(s);
                 if (sheet == Sheet.Abandon) AbandonSheet();
@@ -937,9 +1017,7 @@ namespace MemoryForge.Client
             Label(p, request.Label + " 고르기 (" + (pick.Picks.Count + 1) + "/" + pick.Requests.Sum(r => r.Count) + ")", 24, 18, 952, 44, 30, Ink, FontStyle.Bold);
             Label(p, last ? "마지막 선택이에요. 카드를 누르면 바로 사용해요. 각 카드 아래 줄은 그 카드를 골랐을 때의 예상이에요."
                 : "고른 순서대로 적용돼요. 사용을 확정하기 전에는 행동력과 카드를 쓰지 않아요.", 24, 64, 952, 28, 20, Muted);
-            IEnumerable<string> options = request.From == "hand" ? b.Zones.Hand.Where(u => u != pick.Uid) : request.From == "discard" ? b.Zones.Discard : b.Reservations.Select(r => r.Uid);
-            if (request.GrowthOnly) options = options.Where(u => b.Cards.TryGetValue(u, out var c) && cardDefs.TryGetValue(c.Id, out var d) && d.Growth == true);
-            var list = options.Where(u => !pick.Picks.Contains(u)).ToList();
+            var list = PickOptions(b, pick); // the same list PickCard accepts
             var content = Scroll(p, "PickList", 24, 104, 952, 336, 952, ((list.Count + 2) / 3) * 64, Panel);
             for (int i = 0; i < list.Count; i++)
             {
@@ -1469,6 +1547,9 @@ namespace MemoryForge.Client
             ["RUN_IN_PROGRESS"] = "진행 중인 탐사를 끝내거나 포기한 뒤에 출발할 수 있어요.",
             [TurnSummaryOpen] = "턴 결과를 확인하는 중이에요. '계속'을 누르면 다음 행동을 할 수 있어요.",
             [RecoveryCode] = "연습 탐사를 멈췄어요. 이 탐사를 버리고 새로 출발해 주세요.",
+            [PickSheetOpen] = "카드를 고르는 중이에요. 고르기를 마치거나 취소한 뒤에 다른 행동을 할 수 있어요.",
+            [PickInvalid] = "지금 목록에 있는 카드만 고를 수 있어요.",
+            [PickStale] = "고르기를 연 뒤 전투가 바뀌어 고르기를 닫았어요. 아무것도 쓰지 않았어요. 다시 골라 주세요.",
             ["INTERNAL"] = "문제가 생겼어요. 다시 시도해 주세요."
         };
         string ErrorText(string code)

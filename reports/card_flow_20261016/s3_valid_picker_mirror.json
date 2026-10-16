@@ -1,0 +1,29 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"endAccepted\":false,\"endError\":\"PICKER_OPEN\",\"blockedFullStatePure\":true,\"validCandidate\":\"c7\",\"validAccepted\":true,\"pickerClosed\":true,\"version\":2,\"fullMirrorEqual\":true,\"repeatedPickAccepted\":false,\"repeatedPickPure\":true,\"expectedStateInjected\":false},\"compiler\":\"codedom\"}}"
+    }
+  ],
+  "structuredContent": {
+    "success": true,
+    "message": "Code executed successfully.",
+    "data": {
+      "result": {
+        "endAccepted": false,
+        "endError": "PICKER_OPEN",
+        "blockedFullStatePure": true,
+        "validCandidate": "c7",
+        "validAccepted": true,
+        "pickerClosed": true,
+        "version": 2,
+        "fullMirrorEqual": true,
+        "repeatedPickAccepted": false,
+        "repeatedPickPure": true,
+        "expectedStateInjected": false
+      },
+      "compiler": "codedom"
+    }
+  },
+  "isError": false
+}

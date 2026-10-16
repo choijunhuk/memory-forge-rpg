@@ -1,0 +1,124 @@
+{
+  "_meta": {
+    "fastmcp": {
+      "wrap_result": true
+    }
+  },
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Test job status retrieved.\",\"error\":null,\"data\":{\"job_id\":\"8e4f87e0eda84657843fb2cc02573979\",\"status\":\"succeeded\",\"mode\":\"PlayMode\",\"started_unix_ms\":1792126124534,\"finished_unix_ms\":1792126131475,\"last_update_unix_ms\":1792126131475,\"progress\":{\"completed\":7,\"total\":7,\"current_test_full_name\":null,\"current_test_started_unix_ms\":null,\"last_finished_test_full_name\":\"MemoryForge.Client.Tests.ExpeditionPickerGuardPlayModeTests.TheSheetAcceptsOnlyItsSharedCandidatesAndItsFinalPickIsExactlyOneActualPlay\",\"last_finished_unix_ms\":1792126131459,\"stuck_suspected\":false,\"editor_is_focused\":false,\"run_in_background\":false,\"focus_nudge_attempts\":null,\"focus_nudge_limit\":null,\"focus_nudge_status\":null,\"blocked_reason\":null,\"failures_so_far\":[],\"failures_capped\":false},\"error\":null,\"result\":{\"mode\":\"PlayMode\",\"summary\":{\"total\":7,\"passed\":7,\"failed\":0,\"skipped\":0,\"durationSeconds\":1.1507015,\"resultState\":\"Passed\"},\"results\":[{\"name\":\"ACardWithoutPicksPlaysAtOnceAndNoSheetLockEngages\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionPickerGuardPlayModeTests.ACardWithoutPicksPlaysAtOnceAndNoSheetLockEngages\",\"state\":\"Passed\",\"durationSeconds\":0.2902337,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"AStaleSheetsStillDrawnCandidateCannotSendAndTheSheetCloses\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionPickerGuardPlayModeTests.AStaleSheetsStillDrawnCandidateCannotSendAndTheSheetCloses\",\"state\":\"Passed\",\"durationSeconds\":0.1274019,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"CancelRestoresTheSelectionAutoSendsCoresOwnChoiceOnceAndRecoveryStaysFirst\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionPickerGuardPlayModeTests.CancelRestoresTheSelectionAutoSendsCoresOwnChoiceOnceAndRecoveryStaysFirst\",\"state\":\"Passed\",\"durationSeconds\":0.1629639,\"message\":null,\"stackTrace\":null,\"output\":\"[MemoryForge] Practice expedition quarantined after a failed local Run calculation (InvalidOperationException); the Run may be partly changed, so it will be discarded unsaved. Session memory version 0 is kept.\\nSystem.InvalidOperationException: test fault\\n  at MemoryForge.Client.Tests.ExpeditionPickerGuardPlayModeTests+<>c.<CancelRestoresTheSelectionAutoSendsCoresOwnChoiceOnceAndRecoveryStaysFirst>b__17_3 () [0x00000] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionPickerGuardPlayModeTests.cs:372 \\n  at MemoryForge.Client.MemoryForgeExpeditionClient.Do (System.Action command, System.String success, System.Boolean render) [0x00046] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:548 \\n\"},{\"name\":\"ResumeDropsASheetWhoseStateChangedBeneathItWithoutSending\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionPickerGuardPlayModeTests.ResumeDropsASheetWhoseStateChangedBeneathItWithoutSending\",\"state\":\"Passed\",\"durationSeconds\":0.0941427,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"ResumeKeepsACurrentSheetAndAutoNeverSendsAStaleOne\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionPickerGuardPlayModeTests.ResumeKeepsACurrentSheetAndAutoNeverSendsAStaleOne\",\"state\":\"Passed\",\"durationSeconds\":0.1086797,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"TheSharedCandidateHelperFiltersSourceZoneRepeatsAndGrowthOnCoreBattleStates\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionPickerGuardPlayModeTests.TheSharedCandidateHelperFiltersSourceZoneRepeatsAndGrowthOnCoreBattleStates\",\"state\":\"Passed\",\"durationSeconds\":0.0191982,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"TheSheetAcceptsOnlyItsSharedCandidatesAndItsFinalPickIsExactlyOneActualPlay\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionPickerGuardPlayModeTests.TheSheetAcceptsOnlyItsSharedCandidatesAndItsFinalPickIsExactlyOneActualPlay\",\"state\":\"Passed\",\"durationSeconds\":0.3266584,\"message\":null,\"stackTrace\":null,\"output\":\"\"}]}},\"hint\":null}"
+    }
+  ],
+  "structuredContent": {
+    "result": {
+      "success": true,
+      "message": "Test job status retrieved.",
+      "error": null,
+      "data": {
+        "job_id": "8e4f87e0eda84657843fb2cc02573979",
+        "status": "succeeded",
+        "mode": "PlayMode",
+        "started_unix_ms": 1792126124534,
+        "finished_unix_ms": 1792126131475,
+        "last_update_unix_ms": 1792126131475,
+        "progress": {
+          "completed": 7,
+          "total": 7,
+          "current_test_full_name": null,
+          "current_test_started_unix_ms": null,
+          "last_finished_test_full_name": "MemoryForge.Client.Tests.ExpeditionPickerGuardPlayModeTests.TheSheetAcceptsOnlyItsSharedCandidatesAndItsFinalPickIsExactlyOneActualPlay",
+          "last_finished_unix_ms": 1792126131459,
+          "stuck_suspected": false,
+          "editor_is_focused": false,
+          "run_in_background": false,
+          "focus_nudge_attempts": null,
+          "focus_nudge_limit": null,
+          "focus_nudge_status": null,
+          "blocked_reason": null,
+          "failures_so_far": [],
+          "failures_capped": false
+        },
+        "error": null,
+        "result": {
+          "mode": "PlayMode",
+          "summary": {
+            "total": 7,
+            "passed": 7,
+            "failed": 0,
+            "skipped": 0,
+            "durationSeconds": 1.1507015,
+            "resultState": "Passed"
+          },
+          "results": [
+            {
+              "name": "ACardWithoutPicksPlaysAtOnceAndNoSheetLockEngages",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionPickerGuardPlayModeTests.ACardWithoutPicksPlaysAtOnceAndNoSheetLockEngages",
+              "state": "Passed",
+              "durationSeconds": 0.2902337,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "AStaleSheetsStillDrawnCandidateCannotSendAndTheSheetCloses",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionPickerGuardPlayModeTests.AStaleSheetsStillDrawnCandidateCannotSendAndTheSheetCloses",
+              "state": "Passed",
+              "durationSeconds": 0.1274019,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "CancelRestoresTheSelectionAutoSendsCoresOwnChoiceOnceAndRecoveryStaysFirst",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionPickerGuardPlayModeTests.CancelRestoresTheSelectionAutoSendsCoresOwnChoiceOnceAndRecoveryStaysFirst",
+              "state": "Passed",
+              "durationSeconds": 0.1629639,
+              "message": null,
+              "stackTrace": null,
+              "output": "[MemoryForge] Practice expedition quarantined after a failed local Run calculation (InvalidOperationException); the Run may be partly changed, so it will be discarded unsaved. Session memory version 0 is kept.\nSystem.InvalidOperationException: test fault\n  at MemoryForge.Client.Tests.ExpeditionPickerGuardPlayModeTests+<>c.<CancelRestoresTheSelectionAutoSendsCoresOwnChoiceOnceAndRecoveryStaysFirst>b__17_3 () [0x00000] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionPickerGuardPlayModeTests.cs:372 \n  at MemoryForge.Client.MemoryForgeExpeditionClient.Do (System.Action command, System.String success, System.Boolean render) [0x00046] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:548 \n"
+            },
+            {
+              "name": "ResumeDropsASheetWhoseStateChangedBeneathItWithoutSending",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionPickerGuardPlayModeTests.ResumeDropsASheetWhoseStateChangedBeneathItWithoutSending",
+              "state": "Passed",
+              "durationSeconds": 0.0941427,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "ResumeKeepsACurrentSheetAndAutoNeverSendsAStaleOne",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionPickerGuardPlayModeTests.ResumeKeepsACurrentSheetAndAutoNeverSendsAStaleOne",
+              "state": "Passed",
+              "durationSeconds": 0.1086797,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "TheSharedCandidateHelperFiltersSourceZoneRepeatsAndGrowthOnCoreBattleStates",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionPickerGuardPlayModeTests.TheSharedCandidateHelperFiltersSourceZoneRepeatsAndGrowthOnCoreBattleStates",
+              "state": "Passed",
+              "durationSeconds": 0.0191982,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "TheSheetAcceptsOnlyItsSharedCandidatesAndItsFinalPickIsExactlyOneActualPlay",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionPickerGuardPlayModeTests.TheSheetAcceptsOnlyItsSharedCandidatesAndItsFinalPickIsExactlyOneActualPlay",
+              "state": "Passed",
+              "durationSeconds": 0.3266584,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            }
+          ]
+        }
+      },
+      "hint": null
+    }
+  },
+  "isError": false
+}

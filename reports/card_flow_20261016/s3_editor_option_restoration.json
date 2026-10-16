@@ -1,0 +1,22 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"enabled\":false,\"options\":0,\"pending\":false,\"playing\":false},\"compiler\":\"codedom\"}}"
+    }
+  ],
+  "structuredContent": {
+    "success": true,
+    "message": "Code executed successfully.",
+    "data": {
+      "result": {
+        "enabled": false,
+        "options": 0,
+        "pending": false,
+        "playing": false
+      },
+      "compiler": "codedom"
+    }
+  },
+  "isError": false
+}

@@ -92,9 +92,9 @@ P1/P2 완료로 개발을 끝내지 않는다. 이 표와 아래 장별 요구�
 | **§5.2 전투 구성** | IMPLEMENTED(JS) | [Battle.create][js]·[엔진 시험][engine-tests] | [C# Create/begin267사례](../reports/csharp_opening_20261015/) 완료; 전체 전투 동치는 별도 |
 | **§5.3 턴 진행 순서** | IMPLEMENTED(JS) | [startTurn/endTurn][js]·[첫 턴 회귀][review-tests] | [C# begin/end·반복턴](../reports/csharp_turns_20261015/) 확인; 예약/파워 등 실제 생산 경계 남음 |
 | **§5.4 카드 사용** | IMPLEMENTED(JS) | [check/precheck/resolveCard][js]·[엔진 시험][engine-tests] | C# 실패 무변경·해결 중 종료 동치 |
-| **§5.5 시간 예약** | PARTIAL(JS/C# 유틸) | [Battle][js]·[ReservationBook][reservation]·[후반 시험][late-tests] | C# 전체 Battle의 절대 만기·최신 지연/봉인 동치 |
+| **§5.5 시간 예약** | IMPLEMENTED(JS/C#참조)/PARTIAL(제품수용) | [실제카드/예약생산](../reports/player_actions_20261015/)·[후반지연/봉인81사례](../reports/csharp_late_actions_20261016/root_acceptance.md)·[현재상태예약예측v2](../reports/battle_preview_20261016/reserved_root_acceptance.md) | 다음/다다음절대만기·파워유지/초과소멸을검증. 후반활성화·서버권위·최종연출/기기는별도 |
 | **§5.6 균열과 속성** | IMPLEMENTED(JS) | [Battle][js]·[엔진 시험][engine-tests] | 균열 해제·행동 취소·AP 보너스 C# 동치 |
-| **§5.7 적 의도와 행동** | IMPLEMENTED(JS) | [enemyMove][js]·[후반 시험][late-tests] | [C# 라이브20종 전체 패턴 두 바퀴](../reports/csharp_turns_20261015/) 확인; 후보후반·실제카드효과·서버 공개 의도 남음 |
+| **§5.7 적 의도와 행동** | IMPLEMENTED(JS/C#참조)/PARTIAL(후반수용) | [라이브20종전체패턴](../reports/csharp_turns_20261015/)·[후반6행동81사례473요청/실제Mono](../reports/csharp_late_actions_20261016/root_acceptance.md) | 후보23종은비활성. 목표밸런스·후보자동내보내기/실제전용연출·서버공개상태는남음 |
 | **§5.8 상태와 키워드** | IMPLEMENTED(JS) | [Battle][js]·[콘텐츠][world]·[엔진 시험][engine-tests] | 모든 상태/키워드의 C# 동치 |
 | **§5.9 방어·반격·체력** | IMPLEMENTED(JS) | [Battle][js]·[치명 다단 시험][lethal-tests] | 반격·반사·치명 피해 경계 독립 최종 검토 및 C# 동치 |
 | **§5.10 필살기 게이지** | IMPLEMENTED(JS) | [Battle][js]·[반사 필살기 시험][ult-tests] | 카드/효과 게이지 상한·필살기 종료 경계 C# 동치 |
@@ -250,11 +250,11 @@ P1/P2 완료로 개발을 끝내지 않는다. 이 표와 아래 장별 요구�
 |---|---|---|---|
 | **§14.1 정보 구조** | PARTIAL(HTML) | [UI][ui]·[스모크][smoke] | 참조 탐사/모집/도감/기억/설정 외 전체 메뉴·Unity 연결 |
 | **§14.2 공통 규칙** | PARTIAL(HTML) | [UI][ui]·[P0 브라우저][p0-browser] | 실기기48dp·안전영역·라이선스·Unity 접근성 검증 |
-| **§14.3 전투 화면 (가로 16:9)** | PARTIAL(HTML/Unity전투·원정연습) | [실제92Play/Editor포인터/예측화면](../reports/battle_preview_20261016/ui_root_acceptance.md)·[기존전투예측](../reports/unity_client_20261015/root_acceptance.md) | 카드/대상/예약/확정/상태/의도·원정흐름 있음. 즉시체력/방어 및 예약만기 예측92Play연결. 원문 예약피해/균열·적방어포함피해와 최종아트·연출·네이티브물리입력·모바일수용 남음 |
+| **§14.3 전투 화면 (가로 16:9)** | PARTIAL(HTML/Unity전투·원정연습) | [원문예약예측v2](../reports/battle_preview_20261016/reserved_root_acceptance.md)·[턴잠금/40사건기록112Play](../reports/card_flow_20261016/root_acceptance.md)·[오류복구119Play](../reports/card_flow_20261016/s2_root_acceptance.md) | 실제카드/대상/예약/피해·균열예측·턴요약/skip/continue연결. 선택창검증·미전송준비/배속·최종아트/연출·최악화면/기기는후속 |
 | **§14.4 화면별 명세** | PARTIAL(HTML) | [UI][ui]·[스모크][smoke] | 성장/인연/도전/우편/상점/계정삭제 등 미구현 화면과 서버 |
 | **§14.5 온보딩 순서** | NOT_IMPLEMENTED | [원문14장](source_v0.8.1/14_chapter.md) | 단계별 실제 튜토리얼·강제 첫 저장 안내·지급/해금 |
 | **§14.6 접근성·현지화** | PARTIAL | [UI][ui]·[브라우저 시험][memory-ui] | 전체 키 기반 번역·영/일 길이·Unity 색약/아이콘 수용 |
-| **§14.7 정보 밀도와 안전한 입력** | PARTIAL(HTML/Unity연습) | [87Play·상세/알림입력보존](../reports/expedition_client_20261016/root_acceptance.md)·[기존숨은결과차단](../reports/unity_client_20261015/root_acceptance.md) | 선택/상세 무소비·팝업차단·2.6s유지 검증. 최악밀도/48dp/130%/물리입력/기기·서버 남음 |
+| **§14.7 정보 밀도와 안전한 입력** | PARTIAL(HTML/Unity연습) | [상세/알림입력보존](../reports/expedition_client_20261016/root_acceptance.md)·[119Play/오류후잠금/전체세션보존](../reports/card_flow_20261016/s2_root_acceptance.md) | 선택/상세무소비·턴배리어·복귀·실패Run차단확인. 낡은선택검사·최악밀도/48dp/130%/기기·서버는후속 |
 | **§14.8 작은 화면의 기존 관찰과 추가 인수 시험** | PARTIAL(브라우저) | [화면 증거][late-screens]·[브라우저 시험][memory-ui] | 640×360·노치·글자130%·터치·헤더 겹침 실기기 별도 |
 
 ## 장 15 — 15. 아트·연출·사운드
@@ -280,7 +280,7 @@ P1/P2 완료로 개발을 끝내지 않는다. 이 표와 아래 장별 요구�
 | **§16.1 구성** | PARTIAL | [콘텐츠 빌드][content-build]·[JS][js]·[기존 C#][core] | 공유 전체 C# DLL·권위 서버·콘텐츠 해시 배포 연결 |
 | **§16.2 규칙 코어 이식 (JS → C#)** | PARTIAL(현행명령 동치검증) | [실제전투/노드/저장21902검사·1000완주/273504명령](../reports/run_memory_core_20261016/root_acceptance.md)·[행동87991검사](../reports/player_actions_20261015/) | 실제공개명령으로 전체Run재생. typed숫자/JS-native진단 경계·generic base0미결·중도Run복원·서버/기기·후반후보는 남음 |
 | **§16.3 결정론과 숨겨진 정보** | PARTIAL | [publicView][js]·[API 계약][api] | 서버 비공개 RNG/뽑을더미·모집 CSPRNG·문의 재생 구현 |
-| **§16.4 Unity 클라이언트** | PARTIAL(실제전투·원정연습) | [Unity프로젝트][unity]·[87Play/3Edit·실제화면/최종macOS빌드](../reports/expedition_client_20261016/root_acceptance.md) | 네이티브 물리입력(NOT_CONFIRMED)·게임전체편성/로비·영속계정/서버·Addressables/리그·Android IL2CPP·성능 수용 |
+| **§16.4 Unity 클라이언트** | PARTIAL(실제전투·원정연습) | [S1새macOS지도시작/112Play](../reports/card_flow_20261016/root_acceptance.md)·[S2실제119Play/3Edit](../reports/card_flow_20261016/s2_root_acceptance.md)·[앞선Final물리마우스사용자보고](../reports/expedition_client_20261016/native_user_mouse_acceptance.json) | S2새native입력·전체편성/로비·계정/디스크/서버복구·Addressables/리그·AndroidIL2CPP/성능/기기는별도 |
 | **§16.5 서버** | NOT_IMPLEMENTED(서버 앱) | [스키마][schema]·[API 계약][api] | 인증/세션·무결성·명령·원장·속도제한 실제 ASP.NET 앱 |
 | **§16.6 텔레메트리(이벤트 사전)** | NOT_IMPLEMENTED(전송/운영) | [이벤트 사전](source_v0.8.1/16_chapter.md)·[JS 이벤트][js] | 서버/클라이언트 계측·보관·개인정보 계약; MCP telemetry OFF와 별개 |
 | **§16.7 버전 세 종류를 구분한다** | IMPLEMENTED(버전 구분) | [현재 상태][current]·[목표 정책][policy-data] | 문서0.8.1/데이터0.7.0/JS 수정·목표 활성 상태 계속 구분 |

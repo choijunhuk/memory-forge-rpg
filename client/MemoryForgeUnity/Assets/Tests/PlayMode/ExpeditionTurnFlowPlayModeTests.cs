@@ -440,7 +440,11 @@ namespace MemoryForge.Client.Tests
             Assert.That(s.Client.Snapshot!.Battle!.Reservations.Select(r => r.Uid), Is.EqualTo(live.Reservations.Select(r => r.Uid)), "closing the summary adds or removes no reservation");
         }
 
-        // A pick sheet prepared before an actual end is retired by that committed command, so no stale choice lies beneath the summary.
+        // No stale pick sheet lies beneath an actual end's summary. P1-CARD-FLOW-PICKER-GUARD: an open sheet is one unsent play, so the end
+        // that used to retire it is now refused beneath it (the sheet stays, nothing is spent, a real tap at the end point meets the sheet).
+        // The available path is the explicit cancel: the actual end then commits with no sheet beneath its summary, none comes back after
+        // continue, and the cancelled sheet's old buttons and picks reach nothing. A sheet whose state changes beneath it is retired
+        // unsent in ExpeditionPickerGuardPlayModeTests.
         [UnityTest]
         public IEnumerator APickSheetPreparedBeforeAnEndDoesNotSurviveBeneathTheSummary()
         {
@@ -467,13 +471,50 @@ namespace MemoryForge.Client.Tests
             Assert.That(s.Client.ConfirmCard(), Is.False);
             Assert.That(s.Client.PickerOpen, Is.True, "the pick sheet is prepared; nothing is spent");
             Assert.That(Fingerprint(s.Client.Snapshot!), Is.EqualTo(before));
+            yield return null; Canvas.ForceUpdateCanvases();
+            var drawn = ActiveView(s.Host).GetComponentsInChildren<Button>().FirstOrDefault(x => x.name.StartsWith("Pick:", StringComparison.Ordinal));
+            Assert.That(drawn, Is.Not.Null, "the prepared sheet draws a candidate");
+            var oldPick = drawn!; var oldAuto = ButtonNamed(s.Host, "PickAuto");
+            string candidate = oldPick.name.Substring("Pick:".Length);
+
+            // The end beneath the open sheet is refused before the Run; the sheet stays and covers the end button.
+            Assert.That(s.Client.EndTurn(), Is.False, "an end is refused while the sheet holds an unsent play");
+            Assert.That(s.Client.LastError, Is.EqualTo("PICKER_OPEN"));
+            Assert.That((s.Client.PickerOpen, s.Client.HasTurnSummary), Is.EqualTo((true, false)));
+            AssertSame(s, "the refused end reached nothing");
+            var end = ButtonNamed(s.Host, "EndTurn"); Vector2 point = Center(end);
+            var top = TopHit(point).GetComponentInParent<Button>();
+            Assert.That(top, Is.Not.SameAs(end), "the sheet covers the end button");
+            if (top == null) TapAt(point);
+            Assert.That(s.Client.PickerOpen, Is.True);
+            AssertSame(s, "a tap at the end point reached nothing");
+
+            // The available path: explicit cancel keeps the ordinary selection, then the actual end commits.
+            s.Client.CancelPick();
+            Assert.That((s.Client.PickerOpen, s.Client.LastError), Is.EqualTo((false, (string?)null)));
+            Assert.That(new[] { s.Client.SelectedCard, s.Client.SelectedMode, s.Client.Target }, Is.EqualTo(new[] { card, "now", enemy }), "cancel keeps the ordinary selection");
+            AssertSame(s, "cancel spends nothing");
             Assert.That(Both(s, s.Client.EndTurn, BattleCore(s, "end", null)), Is.True);
-            Assert.That(s.Client.PickerOpen, Is.False, "the committed end retires the pick sheet prepared before it");
+            Assert.That(s.Client.PickerOpen, Is.False, "no pick sheet survives into the committed end");
             Assert.That(s.Client.HasTurnSummary, Is.True);
             yield return null; Canvas.ForceUpdateCanvases();
             Assert.That(ActiveView(s.Host).GetComponentsInChildren<Image>().Any(i => i.name == "BattlePicks"), Is.False, "no pick sheet beneath the summary");
+
+            // The cancelled sheet's buttons and picks reach nothing, under the summary and after continue.
+            oldPick.onClick.Invoke(); oldAuto.onClick.Invoke();
+            Assert.That(s.Client.PickCard(candidate), Is.False);
+            Assert.That(s.Client.LastError, Is.EqualTo(Barrier));
+            Assert.That(s.Client.AutoPick(), Is.False);
+            Assert.That(s.Client.LastError, Is.EqualTo(Barrier));
+            AssertSame(s, "old pick input under the summary reached nothing");
             Dismiss(s.Client);
             Assert.That(s.Client.PickerOpen, Is.False);
+            oldPick.onClick.Invoke(); oldAuto.onClick.Invoke();
+            Assert.That(s.Client.PickCard(candidate) || s.Client.AutoPick(), Is.False);
+            Assert.That(s.Client.PickerOpen, Is.False);
+            AssertSame(s, "the cancelled sheet's picks never reach the Run");
+            yield return null; Canvas.ForceUpdateCanvases();
+            Assert.That(ActiveView(s.Host).GetComponentsInChildren<Image>().Any(i => i.name == "BattlePicks"), Is.False, "the sheet does not come back after continue");
         }
 
         // The log sheet's battle part is the recent 40 event rows of the digest (no summary decoration), kept after the battle has left the
