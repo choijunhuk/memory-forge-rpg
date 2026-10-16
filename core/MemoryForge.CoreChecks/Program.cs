@@ -124,8 +124,9 @@ static class Program
         int progressionFailures = RunProgressionChecks.Run(root);
         int numberFailures = RunJsonNumberChecks.Run(root);
         int textFailures = CardTextChecks.Run(root);
+        int previewFailures = BattlePreviewChecks.Run(root);
         return failures == 0 && traceFailures == 0 && openingFailures == 0 && turnFailures == 0 && queryFailures == 0 && playerFailures == 0 && memoryFailures == 0 && runCreateFailures == 0
-            && progressionFailures == 0 && numberFailures == 0 && textFailures == 0 ? 0 : 1;
+            && progressionFailures == 0 && numberFailures == 0 && textFailures == 0 && previewFailures == 0 ? 0 : 1;
     }
 
     static bool Throws(Action a, string code) { try { a(); return false; } catch (RuleException e) { return e.Code == code; } }

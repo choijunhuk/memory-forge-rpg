@@ -1,0 +1,329 @@
+// P1-EXPEDITION-BATTLE-FORECAST §14.3/§6/§16.2: independent JS oracle for the C# Battle.Forecast / Run.BattleForecast play forecast.
+// Only the original public JS API supplies expectations: check() gives the precheck code; otherwise a fresh Battle.create (or Run.create,
+// enter and battleCmd) replay of the recorded setup and real requests plays the request once and its before/after states are read.
+// The C# method is never consulted. Each C# case starts from the same setup and replays the same real commands; no state is restored.
+import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
+import { createRequire } from 'node:module';
+import { mkdtempSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
+import { dirname, join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { isDeepStrictEqual } from 'node:util';
+import { gzipSync } from 'node:zlib';
+import { stateHash } from './gen_traces.mjs';
+import { decodeVectors } from './gen_run_create_vectors.mjs';
+
+const root = fileURLToPath(new URL('..', import.meta.url));
+const require = createRequire(import.meta.url);
+const MF = require('../engine/rules-core.js');
+const data = JSON.parse(readFileSync(join(root, 'data/game_data.json'), 'utf8'));
+const originalData = JSON.stringify(data);
+const clone = value => JSON.parse(JSON.stringify(value));
+const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
+const schema = 'mf-battle-preview-v1';
+const scope = 'Fresh Battle.create/command and Run.create/enter/battleCmd replays; each play forecast is the original JS check() code or one independent fresh-candidate play; C# Battle.Forecast/Run.BattleForecast comparison only. Unity view, device and server acceptance PENDING';
+export const fixturePath = join(root, 'engine/tests/vectors/battle_preview_vectors.json.gz');
+const fields = ['error', 'mode', 'cost', 'due', 'hidden', 'enemyHpLoss', 'blockDelta', 'hpDelta', 'defeat'];
+const contract = {
+  request: 'A forecast reads the play request {uid, mode, target, picks} at the current state and never changes it',
+  error: 'check() code, else the RuleError code of the real play (Run: battleCmd NO_BATTLE outside battle); every other field keeps its default',
+  reservation: 'next/after: cost from the play event and due from the reserve event only; no outcome numbers and hidden false',
+  hidden: 'now: tgt rand, pick random or draw anywhere in the effective if/then/else, or the real play changed the RNG or the draw pile; numbers stay zero. hiddenBy lists definition/rng/draw as oracle metadata only',
+  outcome: 'otherwise from the real play: enemyHpLoss sums max(0, hp before - hp after) per enemy; blockDelta and hpDelta are signed party changes; defeat is phase DEFEAT',
+  replay: 'Battle cases: fresh Battle.create(setup) and the recorded requests. Run case: fresh Run.create(setup), enter, then Run.battleCmd. Recorded states are comparison data only',
+};
+const reachability = {
+  notCovered: { definitionPickRandom: 'No authored card effect has pick "random" (only the Nia resonance battleStart tune, never a card play); the rule branch is kept for parity with the accepted practice view' },
+  csharpOnly: { lateCommandRejection: 'Every authored play that passes check() commits; the C# consumer probes a local-definition fault instead' },
+};
+const runSetup = { party: [{ charId: 'sera' }, { charId: 'harin' }, { charId: 'nia' }], seed: 4242, length: 'short', memoryPolicy: 'v2', memory: {},
+  relics: [], difficulty: { hp: 100, dmg: 100 }, zones: [1], runId: 'preview-run', memoryVersion: 0, useMemory: true };
+
+function sources() {
+  return Object.fromEntries(Object.entries({ data: 'data/game_data.json', engine: 'engine/rules-core.js', memory: 'proposals/memory_v2.cjs',
+    canonical: 'tools/gen_traces.mjs', runCreateDecoder: 'tools/gen_run_create_vectors.mjs', generator: 'tools/gen_battle_preview_vectors.mjs',
+  }).map(([key, path]) => [key, { path, sha256: sha256(readFileSync(join(root, path))) }]));
+}
+const loadedSources = sources();
+
+const blank = (mode, error) => ({ error, mode, cost: 0, due: null, hidden: false, enemyHpLoss: 0, blockDelta: 0, hpDelta: 0, defeat: false });
+// Unity MemoryForgeBattleClient.HiddenOutcome, the accepted practice-view rule, read from the original effective definition.
+const hiddenOps = ops => (ops || []).some(op => op.tgt === 'rand' || op.pick === 'random' || op.op === 'draw' || hiddenOps(op.then) || hiddenOps(op.else));
+const q = (label, uid, mode = 'now', target = null, picks = []) => ({ label, uid, mode, target, picks });
+const playArgs = query => ({ uid: query.uid, mode: query.mode, target: query.target, picks: [...query.picks] });
+const ruleCode = action => {
+  try { action(); } catch (error) { if (error instanceof MF.RuleError) return error.code; throw error; }
+  return null;
+};
+const enemy = (battle, id) => battle.s.enemies.find(e => e.id === id).uid;
+const inHand = (battle, owners) => {
+  const uid = battle.s.zones.hand.find(card => owners.includes(battle.s.cards[card].owner));
+  assert.ok(uid, `No ${owners.join('/')} card in hand`);
+  return uid;
+};
+const point = battle => { const state = clone(battle.s); return { state, stateHash: stateHash(state) }; };
+const lost = (before, after) => before.enemies.reduce((sum, e) => sum + Math.max(0, e.hp - (after.enemies.find(x => x.uid === e.uid)?.hp ?? 0)), 0);
+
+// live: the battle at the forecast point (pure check/effDef only). fresh(): an independent public replay {battle, play(args)} of that point.
+function expectForecast(live, fresh, query) {
+  const state = clone(live.s), receipts = clone(live.receipts);
+  const pure = () => assert.ok(isDeepStrictEqual(live.s, state) && isDeepStrictEqual(live.receipts, receipts), 'JS precheck/definition query changed the live battle');
+  const code = live.check(query.uid, query.mode, query.target, clone(query.picks)); pure();
+  if (code !== null) return { expected: blank(query.mode, code), hiddenBy: [] };
+  const definition = hiddenOps(live.effDef(live.s.cards[query.uid]).eff); pure();
+  const candidate = fresh();
+  assert.ok(isDeepStrictEqual(candidate.battle.s, live.s), 'Independent candidate replay differs from the live battle');
+  const before = clone(candidate.battle.s);
+  let response;
+  try { response = clone(candidate.play(playArgs(query))); }
+  catch (error) { if (error instanceof MF.RuleError) return { expected: blank(query.mode, error.code), hiddenBy: [] }; throw error; }
+  const after = candidate.battle.s, expected = blank(query.mode, null);
+  expected.cost = response.ev.find(e => e.e === 'play').cost;
+  if (query.mode !== 'now') {
+    expected.due = response.ev.find(e => e.e === 'reserve' && e.uid === query.uid).due;
+    return { expected, hiddenBy: [] };
+  }
+  const hiddenBy = [...(definition ? ['definition'] : []), ...(isDeepStrictEqual(before.rng, after.rng) ? [] : ['rng']),
+    ...(isDeepStrictEqual(before.zones.draw, after.zones.draw) ? [] : ['draw'])];
+  if (hiddenBy.length) { expected.hidden = true; return { expected, hiddenBy }; }
+  expected.enemyHpLoss = lost(before, after);
+  expected.blockDelta = after.block - before.block;
+  expected.hpDelta = after.hp - before.hp;
+  expected.defeat = after.phase === 'DEFEAT';
+  return { expected, hiddenBy };
+}
+// Determinism sanity: when a step's real play is one of its forecast requests, the live result must equal that forecast.
+function assertRealPlay(forecasts, request, before, after, response, label) {
+  const twin = forecasts.find(f => isDeepStrictEqual(f.args, request.args));
+  if (request.kind !== 'play' || !twin || twin.expected.error !== null) return;
+  assert.equal(response.ev.find(e => e.e === 'play').cost, twin.expected.cost, `${label}: real play cost differs from its forecast`);
+  if (twin.expected.mode !== 'now') { assert.equal(response.ev.find(e => e.e === 'reserve').due, twin.expected.due, `${label}: real due differs`); return; }
+  if (twin.expected.hidden) return;
+  assert.deepEqual([lost(before, after), after.block - before.block, after.hp - before.hp, after.phase === 'DEFEAT'],
+    [twin.expected.enemyHpLoss, twin.expected.blockDelta, twin.expected.hpDelta, twin.expected.defeat], `${label}: real outcome differs from its forecast`);
+}
+
+function freshBattle(setup, requests) {
+  const battle = MF.Battle.create(data, clone(setup));
+  for (const request of requests) battle.command(clone(request));
+  return { battle, play: args => battle.command({ rid: null, v: battle.s.v, kind: 'play', args }) };
+}
+// plan: [{forecasts?: battle => [q(...)], request?: battle => {kind, args}}], evaluated in order on the live battle.
+function battleCase(id, role, setup, plan) {
+  const live = MF.Battle.create(data, clone(setup)), requests = [], steps = [];
+  const created = point(live);
+  plan.forEach((step, index) => {
+    const forecasts = (step.forecasts ? step.forecasts(live) : []).map(query => {
+      const { expected, hiddenBy } = expectForecast(live, () => freshBattle(setup, requests), query);
+      return { label: query.label, args: playArgs(query), expected, hiddenBy };
+    });
+    const row = { forecasts, request: null };
+    if (step.request) {
+      const { kind, args } = step.request(live);
+      const request = { rid: `${id}-s${index}-${kind}`, v: live.s.v, kind, args: clone(args) };
+      const before = clone(live.s), response = clone(live.command(clone(request)));
+      assert.equal(response.v, request.v + 1, `${id} step ${index}: the real ${kind} did not commit`);
+      assertRealPlay(forecasts, request, before, live.s, response, `${id} step ${index}`);
+      requests.push(request);
+      Object.assign(row, { request, response, after: point(live) });
+    }
+    steps.push(row);
+  });
+  return { id, group: 'battle', role, setup: clone(setup), created, steps };
+}
+
+function applyRun(run, request) {
+  if (request.scope === 'run') { run.enter(request.args.node); return null; }
+  return run.battleCmd(request.kind, clone(request.args));
+}
+function runPoint(run) {
+  const battle = run.s.battle ? clone(run.s.battle) : null;
+  return { phase: run.s.phase, battle, battleHash: battle ? stateHash(battle) : null };
+}
+// Actual expedition: forecasts before entering, on the Run's own battle (fixed probes, then one forecast before every policy play) and after it ends.
+function runCase() {
+  const id = 'run-expedition', setup = clone(runSetup), history = [], steps = [];
+  const live = MF.Run.create(data, clone(setup));
+  const freshRun = () => { const run = MF.Run.create(data, clone(setup)); for (const request of history) applyRun(run, request); return run; };
+  const created = runPoint(live);
+  const outside = query => {
+    assert.equal(live.battle, null, `${id}: outside-battle forecast point has a live battle`);
+    const code = ruleCode(() => freshRun().battleCmd('play', playArgs(query)));
+    assert.equal(code, 'NO_BATTLE', `${id}: the JS Run must reject a battle command outside battle with NO_BATTLE`);
+    return { label: query.label, args: playArgs(query), expected: blank(query.mode, code), hiddenBy: [] };
+  };
+  const inside = query => {
+    const fresh = () => { const run = freshRun(), battle = run.battle; return { battle, play: args => run.battleCmd('play', args) }; };
+    const { expected, hiddenBy } = expectForecast(live.battle, fresh, query);
+    return { label: query.label, args: playArgs(query), expected, hiddenBy };
+  };
+  const record = (forecasts, request) => {
+    const battle = live.battle, before = battle ? clone(battle.s) : null;
+    const response = applyRun(live, request);
+    if (battle) assertRealPlay(forecasts, request, before, battle.s, response, `${id} step ${steps.length}`);
+    history.push(clone(request));
+    steps.push({ forecasts, request: clone(request), response: response === null ? null : clone(response), after: runPoint(live) });
+  };
+  assert.equal(created.phase, 'MAP', `${id}: a new Run must start on the map`);
+  record([outside(q('map now', 'c1')), outside(q('map after with picks', 'c1', 'after', 'e1', ['c2']))],
+    { scope: 'run', kind: 'enter', args: { node: live.available()[0] } });
+  assert.ok(live.battle && live.battle.s.phase === 'PLAYER', `${id}: the first node did not open a player turn`);
+  for (let index = 0, plays = 0; live.battle; index++) {
+    assert.ok(index < 400, `${id}: the policy battle did not finish`);
+    const battle = live.battle, target = battle.alive()[0]?.uid ?? null, queries = [];
+    if (index === 0) {
+      const first = battle.s.zones.hand[0];
+      queries.push(q('run first hand now', first, 'now', target), q('run first hand next', first, 'next', target), q('run unknown uid', 'c999', 'now', target));
+    }
+    const uid = battle.s.zones.hand.find(card => battle.check(card, 'now', target, []) === null);
+    if (uid) queries.push(q(`run policy play ${plays++}`, uid, 'now', target));
+    record(queries.map(inside), uid ? { scope: 'battle', kind: 'play', args: { uid, mode: 'now', target, picks: [] } } : { scope: 'battle', kind: 'end', args: {} });
+  }
+  assert.ok(['REWARD', 'DEFEAT'].includes(live.s.phase), `${id}: the battle ended outside REWARD/DEFEAT`);
+  steps.push({ forecasts: [outside(q('after battle', 'c1'))], request: null });
+  return { id, group: 'run', role: 'Run-owned private battle: NO_BATTLE outside battle, live forecasts without Run mutation, the next real Run command executing once',
+    setup, created, steps };
+}
+
+const begin = () => ({ kind: 'begin', args: {} });
+const end = () => ({ kind: 'end', args: {} });
+const play = (uid, mode = 'now', target = null, picks = []) => ({ kind: 'play', args: playArgs(q('', uid, mode, target, picks)) });
+
+export function generateCases() {
+  assert.deepEqual(sources(), loadedSources, 'Preview sources changed after module load; rerun exporter');
+  assert.equal(JSON.stringify(data), originalData, 'Original preview source data changed');
+  const cases = [
+    battleCase('damage-block-targets', 'Exact card damage and block, enemy block absorbing damage, two-enemy targeting and invalid requests',
+      { party: [{ charId: 'sera' }, { charId: 'harin' }], deck: [{ id: 'sera_round' }, { id: 'sera_cover' }, { id: 'harin_shield' }, { id: 'harin_bash' }],
+        hp: 162, maxHp: 162, seed: 11, enemies: ['e_cog', 'e_moth'], relics: [] }, [
+        { forecasts: b => [q('created phase', 'c1', 'now', enemy(b, 'e_cog'))], request: begin },
+        { forecasts: b => [q('turn1 missing target', 'c1'), q('turn1 sera_round cog', 'c1', 'now', enemy(b, 'e_cog')), q('turn1 harin_shield', 'c3'),
+          q('turn1 invalid mode', 'c1', 'later', enemy(b, 'e_cog')), q('turn1 unknown uid', 'c99', 'now', enemy(b, 'e_cog')),
+          q('turn1 sera_round next', 'c1', 'next', enemy(b, 'e_cog'))], request: end },
+        { forecasts: b => [q('turn2 sera_round cog block6', 'c1', 'now', enemy(b, 'e_cog')), q('turn2 sera_cover cog block6', 'c2', 'now', enemy(b, 'e_cog')),
+          q('turn2 harin_bash moth', 'c4', 'now', enemy(b, 'e_moth'))], request: b => play('c1', 'now', enemy(b, 'e_cog')) },
+        { forecasts: b => [q('turn2 played card', 'c1', 'now', enemy(b, 'e_cog')), q('turn2 sera_cover cog after hit', 'c2', 'now', enemy(b, 'e_cog'))] },
+      ]),
+    battleCase('heal-reservation-slots', 'Healing, reserve-only and after-only modes, empty_clock reservation cost and due turns, after-slot capacity',
+      { party: [{ charId: 'aila' }, { charId: 'sera' }], deck: [{ id: 'aila_bell' }, { id: 'sera_timed' }, { id: 'sera_last' }, { id: 'sera_round' }],
+        hp: 150, maxHp: 162, seed: 12, enemies: ['e_page'], relics: ['empty_clock'] }, [
+        { request: begin },
+        { forecasts: b => [q('heal', 'c1'), q('reserve-only now', 'c2', 'now', enemy(b, 'e_page')), q('first reservation next', 'c2', 'next', enemy(b, 'e_page')),
+          q('first reservation after', 'c2', 'after', enemy(b, 'e_page')), q('after-only next', 'c3', 'next', enemy(b, 'e_page')),
+          q('after-only after', 'c3', 'after', enemy(b, 'e_page')), q('discounted zero cost after', 'c4', 'after', enemy(b, 'e_page'))],
+          request: b => play('c2', 'after', enemy(b, 'e_page')) },
+        { forecasts: b => [q('after slot full', 'c3', 'after', enemy(b, 'e_page')), q('clock used next', 'c4', 'next', enemy(b, 'e_page')),
+          q('page damage', 'c4', 'now', enemy(b, 'e_page')), q('heal again', 'c1')] },
+      ]),
+    battleCase('reflect-defeat', 'A reflected hit ends the battle in defeat and stops later hits; the terminal phase rejects further plays',
+      { party: [{ charId: 'sera' }], deck: [{ id: 'sera_double' }, { id: 'sera_round' }], hp: 3, maxHp: 81, seed: 13, enemies: ['e_mirrorclerk'], relics: [] }, [
+        { request: begin },
+        { forecasts: () => [q('turn1 no reflect yet', 'c1')], request: end },
+        { forecasts: () => [q('reflect lethal multi-hit', 'c1'), q('reflect lethal single hit', 'c2'), q('reflect reservation', 'c1', 'next')], request: () => play('c1') },
+        { forecasts: () => [q('after defeat', 'c2')] },
+      ]),
+    battleCase('overload-self-damage', 'Self-damage with the low-HP Lumi damage passive and the overload-would-kill rejection',
+      { party: [{ charId: 'lumi' }], deck: [{ id: 'lumi_thunderstep' }, { id: 'lumi_overdrive' }, { id: 'lumi_jab' }], hp: 5, maxHp: 81, seed: 14, enemies: ['e_keeper'], relics: [] }, [
+        { request: begin },
+        { forecasts: () => [q('selfdmg critical damage', 'c1'), q('overload would kill', 'c2'), q('critical jab', 'c3')], request: () => play('c1') },
+        { forecasts: () => [q('hp1 critical jab', 'c3'), q('hp1 overload would kill', 'c2')] },
+      ]),
+    battleCase('hidden-definition', 'Draw, random-target and nested if/then draw definitions hide numbers while a plain attack stays visible; AP shortage',
+      { party: [{ charId: 'sion' }, { charId: 'lumi' }, { charId: 'rien' }], deck: [{ id: 'sion_erase' }, { id: 'lumi_storm' }, { id: 'rien_rest' }, { id: 'sion_cut' }],
+        hp: 243, maxHp: 243, seed: 15, enemies: ['e_cog', 'e_page'], relics: [] }, [
+        { request: begin },
+        { forecasts: b => [q('draw definition', 'c1'), q('random target definition', 'c2'), q('nested draw definition', 'c3'),
+          q('visible control', 'c4', 'now', enemy(b, 'e_page')), q('nested draw reserved', 'c3', 'next')], request: b => play('c4', 'now', enemy(b, 'e_page')) },
+        { forecasts: () => [q('nested draw definition after owner change', 'c3')], request: () => play('c3') },
+        { forecasts: () => [q('ap low', 'c2')] },
+      ]),
+    battleCase('hidden-hook-draw', 'unfinished_score draws for the third owner: a draw-pile change without RNG hides a non-random card; an earlier owner stays visible',
+      { party: [{ charId: 'sera' }, { charId: 'harin' }, { charId: 'nia' }],
+        deck: [{ id: 'sera_round' }, { id: 'sera_cover' }, { id: 'harin_shield' }, { id: 'harin_bash' }, { id: 'nia_wrench' }, { id: 'nia_barrier' }],
+        hp: 243, maxHp: 243, seed: 16, enemies: ['e_scribe'], relics: ['unfinished_score'] }, [
+        { request: begin },
+        { request: b => play(inHand(b, ['sera']), 'now', enemy(b, 'e_scribe')) },
+        { request: b => play(inHand(b, ['harin']), 'now', enemy(b, 'e_scribe')) },
+        { forecasts: b => [q('third owner hook draw', inHand(b, ['nia']), 'now', enemy(b, 'e_scribe')),
+          q('earlier owner control', inHand(b, ['sera', 'harin']), 'now', enemy(b, 'e_scribe')), q('third owner reserve', inHand(b, ['nia']), 'next', enemy(b, 'e_scribe'))],
+          request: b => play(inHand(b, ['nia']), 'now', enemy(b, 'e_scribe')) },
+      ]),
+    battleCase('hidden-hook-rng', 'void_shard random damage on exhaust: an RNG change without a draw hides a visible block card',
+      { party: [{ charId: 'yuri' }, { charId: 'harin' }], deck: [{ id: 'yuri_worldtree' }, { id: 'harin_shield' }, { id: 'harin_bash' }],
+        hp: 162, maxHp: 162, seed: 17, enemies: ['e_cog', 'e_page'], relics: ['void_shard'] }, [
+        { request: begin },
+        { forecasts: () => [q('exhaust hook random damage', 'c1'), q('harin_shield control', 'c2')], request: () => play('c1') },
+        { forecasts: b => [q('after hook harin_shield', 'c2'), q('after hook harin_bash page', 'c3', 'now', enemy(b, 'e_page'))] },
+      ]),
+    battleCase('picks-pull', 'Caller picks choose whether sera_pull resolves a next-turn reservation now (visible damage) or moves one (no outcome)',
+      { party: [{ charId: 'sera' }], deck: [{ id: 'sera_round' }, { id: 'sera_timed' }, { id: 'sera_pull' }], hp: 81, maxHp: 81, seed: 18, enemies: ['e_cog'], relics: [] }, [
+        { request: begin },
+        { request: b => play('c1', 'next', enemy(b, 'e_cog')) },
+        { request: b => play('c2', 'after', enemy(b, 'e_cog')) },
+        { forecasts: () => [q('pull default', 'c3'), q('pull next reservation', 'c3', 'now', null, ['c1']), q('pull after reservation', 'c3', 'now', null, ['c2']),
+          q('pull invalid pick', 'c3', 'now', null, ['c99'])], request: () => play('c3', 'now', null, ['c1']) },
+      ]),
+    runCase(),
+  ];
+  assert.equal(JSON.stringify(data), originalData, 'The preview oracle changed original source data');
+  assert.equal(new Set(cases.map(c => c.id)).size, cases.length, 'Duplicate preview case id');
+  for (const row of cases) {
+    const labels = row.steps.flatMap(step => step.forecasts.map(f => f.label));
+    assert.equal(new Set(labels).size, labels.length, `${row.id}: duplicate preview forecast label`);
+  }
+  const records = cases.flatMap(row => row.steps.flatMap(step => step.forecasts));
+  const errors = [...new Set(records.map(r => r.expected.error).filter(code => code !== null))].sort();
+  const hidden = [...new Set(records.filter(r => r.expected.hidden).map(r => r.hiddenBy.join('+')))].sort();
+  assert.deepEqual(errors, ['AP_LOW', 'BAD_TARGET', 'INVALID_MODE', 'NOT_IN_HAND', 'NOT_RESERVABLE', 'NO_BATTLE', 'OVERLOAD_WOULD_KILL', 'RESERVE_ONLY', 'SLOT_FULL', 'WRONG_PHASE'],
+    'Preview error-code coverage changed');
+  for (const reason of ['definition', 'rng', 'draw']) assert.ok(hidden.includes(reason), `Preview lacks a forecast hidden only by ${reason}`);
+  assert.ok(records.some(r => r.expected.defeat) && records.some(r => r.expected.hpDelta > 0) && records.some(r => r.expected.hpDelta < 0)
+    && records.some(r => r.expected.blockDelta > 0) && records.some(r => r.expected.enemyHpLoss > 0), 'Preview lacks a visible outcome kind');
+  for (const mode of ['next', 'after']) assert.ok(records.some(r => r.expected.error === null && r.expected.mode === mode), `Preview lacks ${mode} timing`);
+  assert.ok(!data.cards.some(card => JSON.stringify([card.eff, card.plus ?? null]).includes('"pick":"random"')), 'An authored pick:"random" card now exists; cover it');
+  const battles = cases.filter(row => row.group === 'battle'), run = cases.find(row => row.group === 'run');
+  const forecastCount = list => list.reduce((n, row) => n + row.steps.reduce((m, step) => m + step.forecasts.length, 0), 0);
+  const commandCount = list => list.reduce((n, row) => n + row.steps.filter(step => step.request).length, 0);
+  const runPolicyForecasts = run.steps.flatMap(step => step.forecasts).filter(f => f.label.startsWith('run policy play ')).length;
+  const counts = { cases: cases.length, battleForecasts: forecastCount(battles), battleCommands: commandCount(battles),
+    runFixedForecasts: forecastCount([run]) - runPolicyForecasts, runPolicyForecasts, runCommands: commandCount([run]),
+    forecasts: forecastCount(cases), commands: commandCount(cases) };
+  assert.deepEqual([counts.cases, counts.battleForecasts, counts.battleCommands, counts.runFixedForecasts], [9, 51, 23, 6], 'Preview fixed denominators changed');
+  assert.ok(counts.runPolicyForecasts >= 1 && counts.runCommands > counts.runPolicyForecasts, 'Run policy did not play and finish its battle');
+  assert.deepEqual(sources(), loadedSources, 'Preview sources changed during generation; rerun exporter');
+  return { schema, scope, status: 'JS_ORACLE', dataVersion: data.meta.version, sources: clone(loadedSources), fields: [...fields], contract: clone(contract),
+    reachability: clone(reachability), coverage: { errors, hidden }, counts, cases };
+}
+
+export function checkFixture(fixture) {
+  assert.equal(fixture.schema, schema, 'Wrong preview fixture schema');
+  assert.ok(Array.isArray(fixture.cases), 'Preview fixture requires cases');
+  assert.equal(new Set(fixture.cases.map(c => c.id)).size, fixture.cases.length, 'Duplicate preview case id');
+  assert.deepEqual(fixture.sources, loadedSources, 'Preview source provenance is stale');
+  const expected = generateCases();
+  assert.deepEqual(fixture.counts, expected.counts, 'Preview case/forecast/command counts differ');
+  assert.ok(isDeepStrictEqual(fixture, expected), 'Preview fixture forecasts, states, requests or cases differ');
+  return fixture.counts;
+}
+
+export function exportVectors(output = fixturePath) {
+  const fixture = generateCases(), text = JSON.stringify(fixture), json = Buffer.from(`${text}\n`);
+  const bytes = output.endsWith('.gz') ? gzipSync(json, { level: 9 }) : json;
+  assert.equal(JSON.stringify(decodeVectors(bytes)), text, 'Exported preview fixture fails the strict reader; previous output preserved');
+  const temporary = mkdtempSync(join(dirname(output), '.battle-preview-'));
+  try {
+    const path = join(temporary, 'fixture');
+    writeFileSync(path, bytes);
+    assert.deepEqual(sources(), fixture.sources, 'Preview sources changed before export; previous fixture preserved');
+    renameSync(path, output);
+  } finally { rmSync(temporary, { recursive: true, force: true }); }
+  return { ...fixture.counts, bytes: bytes.length, uncompressedBytes: json.length, sha256: sha256(bytes), sources: fixture.sources };
+}
+
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  const args = process.argv.slice(2);
+  if (args.length > 1 || (args.length && !['--check', '--help'].includes(args[0]))) throw new Error('Usage: node tools/gen_battle_preview_vectors.mjs [--check|--help]');
+  if (args[0] === '--help') console.log('Export the source-pinned battle play forecast oracle (fresh public JS replays of bounded authored battles and one actual expedition), or --check the lossless gzip fixture.');
+  else if (args[0] === '--check') console.log(JSON.stringify({ checked: fixturePath, ...checkFixture(decodeVectors(readFileSync(fixturePath))) }));
+  else console.log(JSON.stringify({ output: fixturePath, ...exportVectors() }, null, 2));
+}

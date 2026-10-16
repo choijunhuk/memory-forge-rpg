@@ -1,0 +1,14 @@
+✔ original-JS regeneration keeps the fixed bounded cases and exactly 70 forecasts / 40 real commands (42.81775ms)
+✔ independent original-source literals: damage, block, heal, self-damage, reflect defeat, reservations, picks and hidden reasons (0.333958ms)
+✔ every forecast re-derives from independent public replays and every real command reproduces its recorded state (28.698666ms)
+✔ source pins, strict freshness and tampered fixtures are rejected (321.38475ms)
+✔ strict shared decoder: exact export round trip, corrupted containers and empty gzip prefix/suffix members rejected, previous output preserved (166.061458ms)
+✔ checked-in fixture decodes strictly and equals fresh original-JS regeneration (44.954833ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 787.520875

@@ -26,6 +26,11 @@ namespace MemoryForge.Core
         public string? BattleCheck(string uid, string mode = "now", string? target = null, IReadOnlyList<string>? picks = null)
             => battle == null ? "NO_BATTLE" : battle.Check(uid, mode, target, picks == null ? null : new List<string>(picks));
 
+        /// <summary>Battle.Forecast of a card play request on the live battle: a fresh detached result; the Run, its battle, RNG, log,
+        /// memory, versions and receipts stay unchanged. Like BattleCheck, outside battle it returns Error "NO_BATTLE" instead of throwing.</summary>
+        public BattlePlayForecast BattleForecast(string uid, string mode = "now", string? target = null, IReadOnlyList<string>? picks = null)
+            => battle == null ? new BattlePlayForecast { Mode = mode, Error = "NO_BATTLE" } : battle.Forecast(uid, mode, target, picks);
+
         Battle LiveBattle() => battle ?? throw new RuleException("NO_BATTLE");
     }
 }

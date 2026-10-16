@@ -184,10 +184,10 @@ namespace MemoryForge.Client.Tests
             Assert.That(button != null && button.interactable, Is.True, "the held button is the same live, interactable button");
             Assert.That(EventSystem.current, Is.SameAs(events), "the same EventSystem keeps the press");
             Assert.That(noticeLabel != null && noticeLabel.isActiveAndEnabled, Is.True, "the toast's own label is reused");
-            Assert.That(noticeLabel.text, Is.EqualTo(fallback), "the map's existing fallback hint replaces the toast");
+            Assert.That(noticeLabel!.text, Is.EqualTo(fallback), "the map's existing fallback hint replaces the toast");
             Assert.That(noticeLabel.color, Is.EqualTo(Hex("98a5c0")), "with the fallback hint's own muted color");
-            AssertReadable(view, t => t == fallback, "map fallback hint");
-            Assert.That(view.GetComponentsInChildren<Text>().Any(t => t.text == departed), Is.False, "the expired toast is gone");
+            AssertReadable(view!, t => t == fallback, "map fallback hint");
+            Assert.That(view!.GetComponentsInChildren<Text>().Any(t => t.text == departed), Is.False, "the expired toast is gone");
             Assert.That(Fingerprint(client.Snapshot!), Is.EqualTo(before), "expiry changes no Run state, log, events or RNG");
             Assert.That(Fingerprint(mirror.State), Is.EqualTo(before));
 
