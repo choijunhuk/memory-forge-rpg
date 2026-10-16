@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using MemoryForge.Core;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -22,6 +23,9 @@ namespace MemoryForge.Client
     // P1-CARD-FLOW-TURN-BARRIER §14.3/§14.7/§16.4: after an actual end the committed events are shown as a blocking text summary
     // (BattleTurnDigest of public projections) over the already committed view. While it is open every public command and selection
     // is refused before it reaches the Run; its timer, skip and continue only change text. It is local practice, not a server reply.
+    // P1-CARD-FLOW-FAIL-CLOSED §14.7/§16.4: a Run command that fails with anything but an ordinary, unchanged input rejection may have
+    // left the Run partly changed (Run commands are not transactional), so the practice is quarantined: only a recovery screen and its
+    // single action remain, which discards the failed practice Run unsaved and departs again from the last valid session store.
     [ExecuteAlways]
     public sealed class MemoryForgeExpeditionClient : MonoBehaviour
     {
@@ -56,6 +60,9 @@ namespace MemoryForge.Client
         public IReadOnlyList<BattleDigestEntry> TurnSummaryRows => turnSummary ?? Array.Empty<BattleDigestEntry>();
         /// <summary>A copy of the recent battle event rows (at most 40) the log sheet shows; kept after a battle until the next departure.</summary>
         public IReadOnlyList<string> BattleLog => battleLog.ToArray();
+        /// <summary>True after a failed Run calculation quarantined the practice: every command and selection is refused and only
+        /// DiscardFailedPractice remains. It survives disable/enable and focus/pause.</summary>
+        public bool RecoveryRequired => recovery != null;
 
         enum Sheet { None, Deck, Log, Abandon, Assign, DeckPick }
         enum Purpose { Upgrade, ForgeOffer, ForgeRemove, ShopRemove, EventCards, FoundPart }
@@ -107,6 +114,22 @@ namespace MemoryForge.Client
         const string TurnSummaryOpen = "TURN_SUMMARY_OPEN";
         const float ReservedRevealSeconds = 0.3f; // §14.3 예약 해결: 0.3 s per card, skippable
         const int BattleLogLimit = 40;            // §14.3 기록: the recent 40 lines
+        string? recovery; // the failure that quarantined the practice (a Core code or exception type); null while healthy
+        const string RecoveryCode = "RECOVERY_REQUIRED";
+        // Ordinary input rejections: Core refuses the request as asked (wrong phase, unreachable node, missing card/target/AP, unpaid
+        // price, invalid memory selection…) after checks that precede any change. Only these, and only when the Run and the session
+        // store compare unchanged, stay a normal toast. Engine/definition gaps, invariants, number ranges, unknown ids, malformed
+        // arguments, snapshots, versions and request conflicts are absent on purpose: the practice can no longer be trusted, so they
+        // quarantine even when nothing changed. INVALID_PART is absent because the same code also reports a damaged memory store.
+        static readonly HashSet<string> ExpectedRejections = new HashSet<string>(StringComparer.Ordinal)
+        {
+            "NODE_UNREACHABLE", "NO_BATTLE", "WRONG_PHASE", "INVALID_MODE", "NOT_IN_HAND", "RESERVE_ONLY", "NOT_RESERVABLE", "AP_LOW", "BAD_TARGET",
+            "FIXED_MARK_REQUIRED", "SLOT_FULL", "DEBT_CAP", "LOAN_OVERFLOW", "NOT_DEFERRABLE", "RESTRAINT_UNAVAILABLE", "NO_EMPTY_SLOT",
+            "RESERVATION_REQUIRED", "PULL_DESTINATION_FULL", "OVERLOAD_WOULD_KILL", "UNKNOWN_ACTOR", "ULT_NOT_READY",
+            "BAD_REWARD", "BAD_EVOLUTION", "NO_PART", "BAD_CARD", "BAD_PART", "BAD_UPGRADE", "BAD_CHOICE", "CANNOT_HEAL", "NOT_FOR_SALE",
+            "COINS_LOW", "WOULD_KILL", "BAD_ASSIGN", "REASSIGNMENT_REQUIRES_SEPARATE_FLOW",
+            "INVALID_SELECTION", "DEFEAT_KEEP_ONE", "OVER_CAPACITY"
+        };
         static readonly Color Background = Hex("0d1322"), Panel = Hex("141c31"), Line = Hex("2f3d63"), Ink = Hex("e9eef8"),
             Muted = Hex("98a5c0"), Brass = Hex("e2b45f"), Memory = Hex("62d6c6"), Danger = Hex("ff6f6f");
         const string PracticeNote = "연습용 탐사 · 진행과 기억은 이 세션에만 있어요. 앱을 닫으면 사라져요.";
@@ -131,6 +154,7 @@ namespace MemoryForge.Client
         void ResumeView()
         {
             if (!Application.isPlaying || !isActiveAndEnabled || run == null || data == null || font == null) return;
+            if (recovery != null) { if (canvasRoot == null) Render(); return; } // the failed Run is not read; the quarantine stays
             var s = run.State; bool stale = false;
             if (picker != null && (s.Phase != "BATTLE" || s.Battle == null || s.Battle.Phase != "PLAYER" || !s.Battle.Zones.Hand.Contains(picker.Uid))) { picker = null; stale = true; }
             if (stale || canvasRoot == null) Render();
@@ -312,7 +336,7 @@ namespace MemoryForge.Client
 
         // ───────── v2 memory: selection is local, preview and commit are the Run's ─────────
         /// <summary>The Run's pure MemoryChanges graph (a fresh copy), or null without a Run.</summary>
-        public Dictionary<string, object?>? MemoryChanges() => run?.MemoryChanges();
+        public Dictionary<string, object?>? MemoryChanges() => recovery != null ? null : run?.MemoryChanges();
         /// <summary>Toggles one actual change ID of this Run's terminal change list; nothing is spent or committed.</summary>
         public bool ToggleChange(string changeId)
         {
@@ -324,7 +348,7 @@ namespace MemoryForge.Client
             LastError = null; notice = ""; Render(); return true;
         }
         /// <summary>The Run's PreviewMemory of the current selection in change-list order ({memory, used, error, capacities}).</summary>
-        public Dictionary<string, object?>? PreviewSelection() => run == null || !SaveOpen(run.State) ? null : SafePreview(Flatten(run.MemoryChanges(), run.State));
+        public Dictionary<string, object?>? PreviewSelection() => recovery != null || run == null || !SaveOpen(run.State) ? null : SafePreview(Flatten(run.MemoryChanges(), run.State));
         /// <summary>Commits the selection with a fresh requestId and the Run's own runId/expected version against the session store.
         /// Core validates everything; on success the returned store becomes the session store for the next departure.</summary>
         public bool CommitMemory()
@@ -359,6 +383,7 @@ namespace MemoryForge.Client
         /// carries the card's upgrade and resonance overlays. Costs are Core's CostOf in the current state.</summary>
         public bool ShowHandCardInfo(string? uid = null)
         {
+            if (recovery != null) return false; // card details read the Run; the failed one is not read
             var live = run; string? chosen = uid ?? selectedCard;
             var b = live?.State.Battle;
             if (live == null || chosen == null || b == null || !b.Zones.Hand.Contains(chosen)) return false;
@@ -385,7 +410,7 @@ namespace MemoryForge.Client
         /// <summary>Full text of an offered card (reward, evolution or shop) from its source definition. Opening it takes or buys nothing.</summary>
         public bool ShowCardInfo(string cardId)
         {
-            if (run == null || !cardDefs.TryGetValue(cardId, out var def)) return false;
+            if (recovery != null || run == null || !cardDefs.TryGetValue(cardId, out var def)) return false;
             return ShowInfo(new CardInfo
             {
                 Title = def.Name, Basis = "원본 카드 정의 · 덱에 넣은 뒤 강화나 부품이 붙으면 전투 중 카드 설명에 반영돼요",
@@ -395,6 +420,7 @@ namespace MemoryForge.Client
         /// <summary>Full text of an expedition deck card. Outside battle this is the source definition; an upgrade (+) is named, not computed.</summary>
         public bool ShowDeckCardInfo(string key)
         {
+            if (recovery != null) return false;
             var card = run?.State.Deck.FirstOrDefault(c => c.Key == key);
             if (card == null || card.Id == null || !cardDefs.TryGetValue(card.Id, out var def)) return false;
             var graph = card.ToJsonGraph(); bool plus = Truthy(Get(graph, "plus"));
@@ -417,7 +443,7 @@ namespace MemoryForge.Client
         // ───────── play forecast (labels of Core's pure Run.BattleForecast; reading it never reaches the Run) ─────────
         /// <summary>Core's forecast of the exact play request PlayCard would send: this card and mode, the current target and these
         /// picks (null/empty: Core's automatic choice). Null without a Run.</summary>
-        public BattlePlayForecast? PlayForecast(string uid, string mode, IReadOnlyList<string>? picks = null) => run?.BattleForecast(uid, mode, target, picks);
+        public BattlePlayForecast? PlayForecast(string uid, string mode, IReadOnlyList<string>? picks = null) => recovery != null ? null : run?.BattleForecast(uid, mode, target, picks);
         /// <summary>The action line for a forecast: its basis ("예상", or Core's automatic card choice when a pick card's picks stay
         /// unmade), the mode and ForecastText.</summary>
         public string ForecastLine(BattlePlayForecast f, bool autoPicks) => (autoPicks ? "자동 선택 기준 예상" : "예상") + " · " + ModeName(f.Mode) + " · " + ForecastText(f);
@@ -458,10 +484,20 @@ namespace MemoryForge.Client
 
         bool Do(Action command, string? success, bool render = true)
         {
-            if (run == null || Blocked()) return false; // every Run command passes here: none reaches the Run under the turn barrier
+            // Every Run command passes here: none reaches the Run under the turn barrier or in recovery.
+            if (run == null || Blocked()) return false;
+            var live = run;
+            // Detached copies of the Run and the session store, compared only if the command fails; a copy that cannot be made fails closed.
+            RunState before; object? kept;
+            try { before = live.State; kept = Copy(store); }
+            catch (Exception error) { Quarantine("SNAPSHOT_FAILED", error, null, render); return false; }
             try { command(); }
-            catch (RuleException error) { Reject(error.Code, render); return false; }
-            catch (MemoryBoundaryException error) { Debug.LogException(error); Reject("INTERNAL", render); return false; }
+            catch (Exception error)
+            {
+                string? code = (error as RuleException)?.Code;
+                if (code != null && ExpectedRejections.Contains(code) && Unchanged(live, before, kept)) { Reject(code, render); return false; }
+                Quarantine(code ?? error.GetType().Name, error, kept, render); return false;
+            }
             cardInfo = null; // the detail described the state before this command
             LastError = null; notice = success ?? ""; noticeUntil = success == null ? 0 : Time.realtimeSinceStartup + 2.6f;
             if (render) Render();
@@ -473,11 +509,96 @@ namespace MemoryForge.Client
             if (render) Render();
         }
 
+        // ───────── fail-closed recovery (§14.7/§16.4: local practice quarantine, not a server resync or a transaction) ─────────
+        // The Run and the store are compared as JSON trees: JToken keeps legal opaque fractional metadata exactly, which
+        // CanonicalState.Hash rejects. A comparison that cannot be made counts as changed.
+        bool Unchanged(CoreRun live, RunState before, object? kept)
+        {
+            try { return SameRun(before, live.State) && SameGraph(kept, store); }
+            catch (Exception) { return false; }
+        }
+        static bool SameRun(RunState a, RunState b) => SameGraph(a.ToJsonGraph(), b.ToJsonGraph());
+        static bool SameGraph(object? a, object? b) => SameToken(a == null ? JValue.CreateNull() : JToken.FromObject(a), b == null ? JValue.CreateNull() : JToken.FromObject(b));
+        // Objects by member name (order-free), arrays in order, and a Float by its boxed value's own Equals: Json.NET's DeepEquals
+        // treats nearby doubles as equal (0.1 vs the next double), so it cannot decide "unchanged". No tolerance, rounding or coercion;
+        // a type difference counts as changed. Other primitives keep Json.NET's normal comparison (int and long of one value are equal).
+        static bool SameToken(JToken a, JToken b)
+        {
+            if (a.Type != b.Type) return false;
+            switch (a)
+            {
+                case JObject x:
+                    {
+                        var y = (JObject)b;
+                        if (x.Count != y.Count) return false;
+                        foreach (var member in x.Properties())
+                        {
+                            var other = y.Property(member.Name);
+                            if (other == null || !SameToken(member.Value, other.Value)) return false;
+                        }
+                        return true;
+                    }
+                case JArray x:
+                    {
+                        var y = (JArray)b;
+                        if (x.Count != y.Count) return false;
+                        for (int i = 0; i < x.Count; i++) if (!SameToken(x[i], y[i])) return false;
+                        return true;
+                    }
+                case JValue x when x.Type == JTokenType.Float: return Equals(x.Value, ((JValue)b).Value);
+                default: return JToken.DeepEquals(a, b);
+            }
+        }
+        // Stops the practice after a failed calculation: the session store goes back to its copy from before the command, cosmetic
+        // intent (pick sheet, selection, sheets, card detail, turn summary) is dropped and one diagnostic is logged. No retry, refund,
+        // auto-advance, auto-save or server fetch; the recovery screen's action is the only way on.
+        void Quarantine(string reason, Exception error, object? kept, bool render)
+        {
+            recovery = reason;
+            if (kept is Dictionary<string, object?> valid) store = valid;
+            picker = null; cardInfo = null; sheet = Sheet.None; deckPicks.Clear(); selectedChanges.Clear();
+            selectedCard = null; selectedMode = null; target = null; CloseTurnSummary();
+            LastError = reason; notice = ""; noticeUntil = 0;
+            Debug.LogError("[MemoryForge] Practice expedition quarantined after a failed local Run calculation (" + reason + "); "
+                + "the Run may be partly changed, so it will be discarded unsaved. Session memory version " + SessionMemoryVersion + " is kept.\n" + error);
+            if (render) Render();
+        }
+        /// <summary>The recovery screen's single action: drops the failed local practice Run without saving it (no Core abandon, memory
+        /// commit or close; nothing of it is shown or kept) and departs again from the last valid session store, whose memory, version
+        /// and receipts stay, as does the departure numbering. If that departure is refused or throws, the failed Run, the quarantine,
+        /// the store and the numbering are all restored and nothing escapes; only a successful departure leaves recovery.</summary>
+        public bool DiscardFailedPractice()
+        {
+            if (recovery == null) return false;
+            // Without the loaded content or the last valid store, Depart would fall back to StartPractice and erase the session memory.
+            if (data == null || store == null)
+            {
+                LastError = RecoveryCode; notice = "기억 저장소를 확인할 수 없어 새로 출발하지 않았어요. 저장된 기억은 지우지 않았어요."; noticeUntil = 0;
+                Render(); return false;
+            }
+            var failed = run; string reason = recovery; string? closed = closedKind; var kept = store; int counted = departures;
+            run = null; recovery = null; closedKind = null; LastError = null; notice = ""; noticeUntil = 0;
+            Exception? fault = null; bool ok;
+            try { ok = Depart(); }
+            catch (Exception error) { ok = false; fault = error; }
+            if (ok && run != null) return true;
+            run = failed; recovery = reason; closedKind = closed; store = kept; departures = counted;
+            if (fault != null)
+            {
+                LastError = fault.GetType().Name; notice = "새 탐사를 시작하지 못했어요. 이 탐사는 계속 멈춰 있고 저장된 기억은 그대로예요."; noticeUntil = 0;
+                Debug.LogError("[MemoryForge] Practice recovery could not start a new departure (" + fault.GetType().Name + "); the quarantine and session memory version "
+                    + SessionMemoryVersion + " are kept.\n" + fault);
+            }
+            Render(); return false;
+        }
+
         // ───────── turn summary and battle log (§14.3/§16.4: text of Core's committed events; display only) ─────────
         // The turn barrier: while the summary is open every public command and selection is refused before it reaches the Run. Only
         // the summary's own skip/continue and display-only reads stay available. A refusal changes no view state, so nothing is redrawn.
+        // In recovery the same gate refuses everything; only DiscardFailedPractice remains.
         bool Blocked()
         {
+            if (recovery != null) { LastError = RecoveryCode; return true; }
             if (turnSummary == null) return false;
             LastError = TurnSummaryOpen; return true;
         }
@@ -612,36 +733,52 @@ namespace MemoryForge.Client
             canvasRoot = canvasObject.GetComponent<RectTransform>();
             frame = Box(canvasRoot, "ExpeditionFrame", 0, 0, 1600, 900, Background);
             frame.anchorMin = frame.anchorMax = new Vector2(0.5f, 0.5f); frame.pivot = new Vector2(0.5f, 0.5f); frame.anchoredPosition = Vector2.zero;
-            var s = run.State;
-            Header(s);
-            if (Finished(s)) ResultView(s);
+            if (recovery != null) RecoveryView(); // before the header and every normal view: the failed Run may not be renderable
             else
-                switch (s.Phase)
-                {
-                    case "BATTLE": BattleView(s); break;
-                    case "VICTORY": case "DEFEAT": SaveView(s); break;
-                    default:
-                        RunStatus(s);
-                        if (s.Phase == "MAP") MapView(s);
-                        else if (s.Phase == "REWARD") RewardView(s);
-                        else if (s.Phase == "REST") RestView(s);
-                        else if (s.Phase == "FORGE") ForgeView(s);
-                        else if (s.Phase == "SHOP") ShopView(s);
-                        else if (s.Phase == "EVENT") EventView(s);
-                        else if (s.Phase == "ARCHIVE") ArchiveView(s);
-                        break;
-                }
-            if (picker != null && s.Phase == "BATTLE" && s.Battle != null) PickSheet(s.Battle); else picker = null;
-            if (sheet == Sheet.Deck) DeckSheet(s);
-            if (sheet == Sheet.Log) LogSheet(s);
-            if (sheet == Sheet.Abandon) AbandonSheet();
-            if (sheet == Sheet.Assign && SaveOpen(s)) AssignSheet(s);
-            if (sheet == Sheet.DeckPick && !Finished(s)) DeckPickSheet(s);
-            if (cardInfo != null) CardInfoSheet(cardInfo); // above the other sheets: it can be opened from the deck and deck-pick sheets
-            if (turnSummary != null) TurnSummarySheet(); // topmost: the turn barrier covers every other control
+            {
+                var s = run.State;
+                Header(s);
+                if (Finished(s)) ResultView(s);
+                else
+                    switch (s.Phase)
+                    {
+                        case "BATTLE": BattleView(s); break;
+                        case "VICTORY": case "DEFEAT": SaveView(s); break;
+                        default:
+                            RunStatus(s);
+                            if (s.Phase == "MAP") MapView(s);
+                            else if (s.Phase == "REWARD") RewardView(s);
+                            else if (s.Phase == "REST") RestView(s);
+                            else if (s.Phase == "FORGE") ForgeView(s);
+                            else if (s.Phase == "SHOP") ShopView(s);
+                            else if (s.Phase == "EVENT") EventView(s);
+                            else if (s.Phase == "ARCHIVE") ArchiveView(s);
+                            break;
+                    }
+                if (picker != null && s.Phase == "BATTLE" && s.Battle != null) PickSheet(s.Battle); else picker = null;
+                if (sheet == Sheet.Deck) DeckSheet(s);
+                if (sheet == Sheet.Log) LogSheet(s);
+                if (sheet == Sheet.Abandon) AbandonSheet();
+                if (sheet == Sheet.Assign && SaveOpen(s)) AssignSheet(s);
+                if (sheet == Sheet.DeckPick && !Finished(s)) DeckPickSheet(s);
+                if (cardInfo != null) CardInfoSheet(cardInfo); // above the other sheets: it can be opened from the deck and deck-pick sheets
+                if (turnSummary != null) TurnSummarySheet(); // topmost: the turn barrier covers every other control
+            }
             if (Application.isPlaying && EventSystem.current == null)
             { var events = new GameObject("ExpeditionInput", typeof(EventSystem), typeof(StandaloneInputModule)); events.transform.SetParent(canvasObject.transform, false); }
             Canvas.ForceUpdateCanvases(); FitView();
+        }
+
+        // The recovery screen reads nothing from the failed Run: only the session store's version, and one explicit action.
+        void RecoveryView()
+        {
+            var panel = Box(frame!, "Recovery", 200, 160, 1200, 560, Panel);
+            Label(panel, "이 연습 탐사를 계속할 수 없어요", 40, 36, 1120, 56, 34, Danger, FontStyle.Bold);
+            Label(panel, "계산 중 문제가 생겨 탐사를 멈췄어요. 이 탐사의 진행과 보상은 저장하지 않고 버려요.", 40, 120, 1120, 40, 22, Ink);
+            Label(panel, store == null ? "저장된 기억을 확인할 수 없어 새로 출발할 수 없어요." : "마지막으로 저장한 기억 덱(기억 버전 " + SessionMemoryVersion + ")은 그대로이고, 새 탐사는 그 덱으로 시작해요.", 40, 170, 1120, 40, 22, Ink);
+            Label(panel, "연습 기억은 이 앱 세션에만 있어요. 앱을 닫으면 사라져요.", 40, 220, 1120, 34, 19, Muted);
+            if (notice.Length != 0) Label(panel, notice, 40, 290, 1120, 60, 20, Danger); // a failed new departure keeps the quarantine
+            Button(panel, "RecoveryDiscard", "이 탐사를 버리고 새로 출발", 40, 440, 560, 80, () => DiscardFailedPractice(), Brass, 26);
         }
 
         void Header(RunState s)
@@ -1331,6 +1468,7 @@ namespace MemoryForge.Client
             ["REASSIGNMENT_REQUIRES_SEPARATE_FLOW"] = "출발 전 기억에 있던 공용 카드의 배정은 여기서 바꿀 수 없어요.",
             ["RUN_IN_PROGRESS"] = "진행 중인 탐사를 끝내거나 포기한 뒤에 출발할 수 있어요.",
             [TurnSummaryOpen] = "턴 결과를 확인하는 중이에요. '계속'을 누르면 다음 행동을 할 수 있어요.",
+            [RecoveryCode] = "연습 탐사를 멈췄어요. 이 탐사를 버리고 새로 출발해 주세요.",
             ["INTERNAL"] = "문제가 생겼어요. 다시 시도해 주세요."
         };
         string ErrorText(string code)

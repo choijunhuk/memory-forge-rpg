@@ -64,5 +64,29 @@
     "positive_output_messages": 91,
     "actual_model": "claude-opus-5-5",
     "actual_per_turn_effort": "xhigh"
+  },
+  "P1-CARD-FLOW-FAIL-CLOSED": {
+    "session_id": "d2bda3e6-a0ab-4f84-82e6-c15d5d12127f",
+    "positive_output_messages": 105,
+    "actual_model": "claude-opus-5-5",
+    "actual_per_turn_effort": "xhigh"
+  },
+  "P1-CARD-FLOW-FAILURE-RESTART-FIX": {
+    "session_id": "d2bda3e6-a0ab-4f84-82e6-c15d5d12127f",
+    "positive_output_messages": 19,
+    "actual_model": "claude-opus-5-5",
+    "actual_per_turn_effort": "high"
+  },
+  "P1-CARD-FLOW-EXACT-COMPARISON-FIX": {
+    "session_id": "d2bda3e6-a0ab-4f84-82e6-c15d5d12127f",
+    "positive_output_messages": 14,
+    "actual_model": "claude-opus-5-5",
+    "actual_per_turn_effort": "high"
+  },
+  "P1-CARD-FLOW-UNKNOWN-STORE-REVIEW": {
+    "session_id": "d2bda3e6-a0ab-4f84-82e6-c15d5d12127f",
+    "positive_output_messages": 7,
+    "actual_model": "claude-opus-5-5",
+    "actual_per_turn_effort": "high"
   }
 }

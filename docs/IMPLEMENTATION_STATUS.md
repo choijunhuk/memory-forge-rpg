@@ -488,3 +488,5 @@ Unity 탐사 화면: [실제 지도·전투·보상/서비스·기억선택과 �
 원문 대조에서 예약 피해·균열과 적방어를 포함한 피해 예측 누락을 확인했다. 원본 HTML `preview`의 현재상태 복사본/예약종류별 실제resolver 경로를 C#에 연결하는 다음 작업을 OpusMax에 배정했다. 현재92Play 통과가 이 누락까지 구현했다는 뜻은 아니다. 원문·수치·검사 기준을 줄이지 않는다.
 
 최신 카드흐름/예측/후반Core: [참고자료 채택표](../reports/card_flow_20261016/adoption_status.md)·[112Play/3Edit/새macOS시작](../reports/card_flow_20261016/root_acceptance.md)·[원문예약예측v2](../reports/battle_preview_20261016/reserved_root_acceptance.md)·[후반81사례473요청 실제Mono](../reports/csharp_late_actions_20261016/root_acceptance.md). §5.5/5.7/10.4의C#행동은 시험후보로검증했으며 활성화/목표밸런스는미완료다. §14.3/14.7/16.4의턴잠금/40사건/로컬복귀는구현했고 오류후차단·미전송준비·배속전체/서버복구는후속이다. 위 과거단계의미구현기록은그시점이력으로보존한다.
+
+§14.7/16.4오류복구 최신: [S2실제119Play/3Edit와독립RED→GREEN](../reports/card_flow_20261016/s2_root_acceptance.md). 실패Run부분이득으로진행하지않으며 전체세션기억/이력/영수증을보존한다. 앱세션연습범위이고 서버/계정/영속저장복구는미구현이다. 선택창중복/낡은입력과연출중미전송준비는후속작업이다.

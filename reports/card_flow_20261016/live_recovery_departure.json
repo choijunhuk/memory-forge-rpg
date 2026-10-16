@@ -1,0 +1,28 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"actualPlay\":true,\"input\":\"actual Unity EventSystem ray + pointerClick\",\"topHit\":\"RecoveryDiscard\",\"recoveryRequired\":false,\"runId\":\"practice-2-1235\",\"phase\":\"MAP\",\"fullCreateMatches\":true,\"entireSessionStoreUnchanged\":true,\"memoryVersion\":0,\"expectedStateInjected\":false},\"compiler\":\"codedom\"}}"
+    }
+  ],
+  "structuredContent": {
+    "success": true,
+    "message": "Code executed successfully.",
+    "data": {
+      "result": {
+        "actualPlay": true,
+        "input": "actual Unity EventSystem ray + pointerClick",
+        "topHit": "RecoveryDiscard",
+        "recoveryRequired": false,
+        "runId": "practice-2-1235",
+        "phase": "MAP",
+        "fullCreateMatches": true,
+        "entireSessionStoreUnchanged": true,
+        "memoryVersion": 0,
+        "expectedStateInjected": false
+      },
+      "compiler": "codedom"
+    }
+  },
+  "isError": false
+}

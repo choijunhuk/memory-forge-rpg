@@ -1,0 +1,31 @@
+{
+  "task_id": "P1-CARD-FLOW-FAILURE-RESTART-FIX",
+  "run_id": "P1-CARD-FLOW-FAILURE-RESTART-FIX-20261016T040756609485Z",
+  "status": "VERIFIED",
+  "requestedEffort": "high",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "changes_verified": true,
+  "raw_output": "ops/ai/local/P1-CARD-FLOW-FAILURE-RESTART-FIX-20261016T040756609485Z*",
+  "billing_verified_at": "2026-10-15T21:22:01.277612+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "claude/balance-audit",
+  "base_commit": "9be537f4c5ef59e890322cb2d1de914fb49bfed6",
+  "worktree": "/Users/choi/.codex/worktrees/claude-balance-audit/Memory_forge",
+  "allowed_files": [
+    "client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs",
+    "client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionFailurePlayModeTests.cs",
+    "reports/card_flow_20261016/failure_fix_report.md"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "d2bda3e6-a0ab-4f84-82e6-c15d5d12127f",
+  "subtype": "success",
+  "is_error": false,
+  "result": "I've fixed the recovery-retry bug where a throwing restart escaped and erased the quarantine, but nothing has been compiled or run (NOT_RUN). The fix rests on reading the source against your receipt (`s2_restart_failure_red.json`): quarantined before, `NullReferenceException` on restart, quarantine gone and no Run afterwards.\n\n**Cause:** `DiscardFailedPractice` cleared `run` and the quarantine before calling `Depart`. A non-rule exception from `Run.Create` then escaped, leaving no Run and no quarantine, so `OnEnable` → `StartPractice` could reset the session memory. `Depart` also falls back to `StartPractice` when `data` or `store` is missing, which can erase memory the same way. My earlier report's claim that a failed restart keeps the quarantine only held for Core rule rejections, not for exceptions like this one.\n\n**Fix (only in `DiscardFailedPractice`):**\n- If `data` or `store` is missing, it doesn't try to depart. It keeps the quarantine, shows a notice and never reaches the `StartPractice` fallback.\n- Before retrying, it remembers the failed Run, the quarantine reason, `closedKind`, the store reference and the departure counter, then calls `Depart` inside try/catch.\n- Any outcome other than a real new Run (rule rejection or exception) puts all of that back and redraws the read-only recovery screen. Nothing escapes.\n- A thrown retry logs one diagnostic per attempt and shows \"새 탐사를 시작하지 못했어요…\". Ordinary blocked commands still log nothing.\n- Only a successful retry advances the departure number, by exactly one. Nothing is saved, and no Core abandon/close is called.\n\n**Tests (`ExpeditionFailurePlayModeTests.cs`, now 6):**\n- **`EarnSave`:** if the fixed-seed driver doesn't reach the defeat, the test now fails instead of reporting Inconclusive.\n- **`BAD_TARGET` is now mandatory:** the test asserts the setup instead of skipping it. That means several living enemies, no target selected, a mirror Run identical to the view's Run, and a legal card that needs one target.\n- **New test `FailedRecoveryRetriesKeepTheQuarantineAndTheEarnedSaveUntilARepairedRetryDepartsOnce`:**\n  1. It earns a real version-1 save, then quarantines through the real partial `Enter`.\n  2. It sets `data.Memory` to null in the test's own content so the real `Run.Create` throws. It retries once by real click and once by direct call. Each time nothing escapes, and the failed Run, quarantine, store/version and departure count are unchanged.\n  3. It checks the screen still has only the recovery button, every command is refused without a log, and the state holds across disable/enable and resume.\n  4. With `data` or `store` set to null by reflection, the retry is refused and nothing is reset.\n  5. After the content is repaired, one real click gives `practice-3`, exactly equal to a fresh `Create` from the kept store at version 1.\n- No expected Run or store output is injected, and there is no test hook in shipping code; reflection is used only on the test side.\n\n**Remaining risk:**\n- If `Render` inside a retried `Depart` throws, the new Run is discarded and the retry counts as failed. That leans fail-closed by choice.\n- The defeat reach in the earned-save tests hasn't been confirmed by a run; if it fails it will now show as FAIL rather than Inconclusive.\n\n**Next:** run the 6 failure tests, then the existing expedition and digest suites and full PlayMode/EditMode. Check the Console shows only the expected quarantine and restart diagnostics.\n\nFiles changed:\n- `client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs`\n- `client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionFailurePlayModeTests.cs`\n- `reports/card_flow_20261016/failure_fix_report.md`",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ],
+  "root_verification": "reports/card_flow_20261016/s2_root_acceptance.md"
+}
