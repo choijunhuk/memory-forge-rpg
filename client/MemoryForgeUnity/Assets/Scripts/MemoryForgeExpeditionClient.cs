@@ -16,7 +16,8 @@ namespace MemoryForge.Client
     // rule of its own (it labels what Core returns) and never injects or restores Run state. The v2 memory store is session-local
     // practice data held by this component only — no PlayerPrefs, file, account, server or real-asset write — so closing the app
     // discards it, and the screens say so. Full card text is Core's BattleText.Card of the battle's effective definition (hand) or of
-    // the source definition (reward, shop, deck); the battle practice's damage forecast is not in this slice yet.
+    // the source definition (reward, shop, deck). The play forecast on the action line and the pick sheet labels Core's pure
+    // Run.BattleForecast of the exact request a button would send; reading it never reaches the Run.
     [ExecuteAlways]
     public sealed class MemoryForgeExpeditionClient : MonoBehaviour
     {
@@ -163,9 +164,12 @@ namespace MemoryForge.Client
 
         // ───────── commands (each button calls exactly one of these) ─────────
         public bool EnterNode(string nodeId) => Do(() => run!.Enter(nodeId), null);
-        public void SelectCard(string uid) { selectedCard = uid; selectedMode = null; picker = null; Render(); }
-        public void SelectMode(string mode) { selectedMode = mode; Render(); }
-        public void SelectEnemy(string uid) { target = uid; Render(); }
+        public void SelectCard(string uid) { selectedCard = uid; selectedMode = null; picker = null; ClearIntentNotice(); Render(); }
+        public void SelectMode(string mode) { selectedMode = mode; ClearIntentNotice(); Render(); }
+        public void SelectEnemy(string uid) { target = uid; ClearIntentNotice(); Render(); }
+        // A new card/mode/target intent retires the previous command's toast (or error) at once, so the action line shows this request's
+        // forecast before any confirm. Only view text changes; the Run is untouched.
+        void ClearIntentNotice() { noticeUntil = 0; LastError = null; notice = ""; }
         /// <summary>Plays the selected card, or first opens the pick overlay when the card lets the player choose cards (spends nothing).</summary>
         public bool ConfirmCard()
         {
@@ -301,7 +305,7 @@ namespace MemoryForge.Client
             if (parts.Count != 0) notes.Add("붙은 부품\n" + string.Join("\n", parts.Select(PartLine)));
             if (instance != null && def.Uses.GetValueOrDefault() != 0) notes.Add("이번 전투 사용 " + instance.Used + " / " + def.Uses);
             if (instance != null && def.Growth == true) notes.Add("성장 " + instance.Growth);
-            notes.Add("적힌 수치는 카드 정의의 값이에요. 약점·상태·유물에 따른 실제 피해 예측은 아직 이 화면에 없어요.");
+            notes.Add("적힌 수치는 카드 정의의 값이에요. 약점·상태·유물까지 반영한 예상은 방식을 고르면 행동 안내 줄에 보여요. 드로우·무작위 결과와 예약 카드의 나중 위력은 미리 보여 주지 않아요.");
             return ShowInfo(new CardInfo
             {
                 Title = def.Name + (instance != null && instance.Plus ? "+" : ""),
@@ -342,6 +346,33 @@ namespace MemoryForge.Client
         bool ShowInfo(CardInfo info) { cardInfo = info; Render(); return true; }
         string PartLine(string id) => "· " + PartName(id) + " (" + SlotName(id) + ") — " + (partDefs.TryGetValue(id, out var part) ? part.Text : "");
         string EvolutionNote(BattleCardDef def) => def.Evolutions == null || def.Evolutions.Count == 0 ? "" : "성장 후 진화 후보: " + string.Join(", ", def.Evolutions.Select(CardName));
+
+        // ───────── play forecast (labels of Core's pure Run.BattleForecast; reading it never reaches the Run) ─────────
+        /// <summary>Core's forecast of the exact play request PlayCard would send: this card and mode, the current target and these
+        /// picks (null/empty: Core's automatic choice). Null without a Run.</summary>
+        public BattlePlayForecast? PlayForecast(string uid, string mode, IReadOnlyList<string>? picks = null) => run?.BattleForecast(uid, mode, target, picks);
+        /// <summary>The action line for a forecast: its basis ("예상", or Core's automatic card choice when a pick card's picks stay
+        /// unmade), the mode and ForecastText.</summary>
+        public string ForecastLine(BattlePlayForecast f, bool autoPicks) => (autoPicks ? "자동 선택 기준 예상" : "예상") + " · " + ModeName(f.Mode) + " · " + ForecastText(f);
+        /// <summary>Error text, else the AP cost and ForecastOutcome; a reservation adds that its actual result is seen when it resolves.</summary>
+        public string ForecastText(BattlePlayForecast f) => f.Error != null ? ErrorText(f.Error)
+            : "행동력 " + f.Cost + " · " + ForecastOutcome(f) + (f.Mode == "now" ? "" : " · 예약의 실제 해결 결과는 그때 확인해요");
+        /// <summary>Only the DTO's own values: error text; a reservation's absolute due turn (never a future damage); the draw/random
+        /// notice with every number hidden; or the actual enemy HP loss, signed party block/HP and a defeat warning.</summary>
+        public string ForecastOutcome(BattlePlayForecast f)
+        {
+            if (f.Error != null) return ErrorText(f.Error);
+            if (f.Mode != "now") return f.Due + "턴 시작(" + ModeName(f.Mode) + ")에 해결";
+            if (f.Hidden) return "드로우·무작위 결과는 사용한 뒤에 알 수 있어요";
+            var parts = new List<string>();
+            if (f.EnemyHpLoss != 0) parts.Add("적 체력 -" + f.EnemyHpLoss);
+            if (f.BlockDelta != 0) parts.Add("방어 " + Signed(f.BlockDelta));
+            if (f.HpDelta != 0) parts.Add("파티 체력 " + Signed(f.HpDelta));
+            if (f.Defeat) parts.Add("이 행동으로 패배해요");
+            return parts.Count == 0 ? "체력·방어 변화 없음" : string.Join(" · ", parts);
+        }
+        static string Signed(int value) => (value > 0 ? "+" : "") + value;
+        static Color ForecastColor(BattlePlayForecast f) => f.Error != null || f.Defeat ? Danger : Memory;
 
         bool SaveOpen(RunState s) => closedKind == null && (s.Phase == "VICTORY" || s.Phase == "DEFEAT") && Text(Get(s.Pending, "type")) == "save";
         bool Finished(RunState s) => closedKind != null || s.Phase == "DONE";
@@ -549,8 +580,15 @@ namespace MemoryForge.Client
             }
 
             var actions = Box(frame!, "CardActions", 32, 582, 1536, 98, Panel);
-            string hint = "카드를 고르고 방식을 정한 뒤 사용을 확정하세요. 고르는 동안에는 아무것도 쓰지 않아요.";
-            TrackNotice(Label(actions, notice.Length != 0 ? notice : hint, 18, 6, 1498, 30, 23, LastError == null ? Muted : Danger), hint, Muted);
+            string hint = "카드를 고르고 방식을 정한 뒤 사용을 확정하세요. 고르는 동안에는 아무것도 쓰지 않아요."; var hintColor = Muted;
+            if (selectedCard != null && selectedMode != null && b.Phase == "PLAYER")
+            {
+                // The exact request ConfirmCard leads to; a pick card's unmade picks are Core's automatic choice. Recomputed on Render only.
+                var forecast = run!.BattleForecast(selectedCard, selectedMode, target);
+                bool auto = forecast.Error == null && ChoiceRequests(run.BattleEffectiveCard(selectedCard), selectedMode, data!.Memory.Battle).Count != 0;
+                hint = ForecastLine(forecast, auto); hintColor = ForecastColor(forecast);
+            }
+            TrackNotice(Label(actions, notice.Length != 0 ? notice : hint, 18, 6, 1498, 30, 23, notice.Length != 0 ? (LastError == null ? Muted : Danger) : hintColor), hint, hintColor);
             if (selectedCard != null && b.Phase == "PLAYER")
             {
                 string uid = selectedCard; var def = run!.BattleEffectiveCard(uid);
@@ -585,19 +623,27 @@ namespace MemoryForge.Client
         void PickSheet(BattleState b)
         {
             var pick = picker!; var request = pick.Requests[pick.Index];
+            // PickCard plays at once when this click completes the picks, so each candidate then shows the forecast of its own picks.
+            bool last = pick.Index == pick.Requests.Count - 1 && pick.Left == 1;
             var p = OverlayPanel("BattlePicks", 300, 150, 1000, 600);
             Label(p, request.Label + " 고르기 (" + (pick.Picks.Count + 1) + "/" + pick.Requests.Sum(r => r.Count) + ")", 24, 18, 952, 44, 30, Ink, FontStyle.Bold);
-            Label(p, "고른 순서대로 적용돼요. 사용을 확정하기 전에는 행동력과 카드를 쓰지 않아요.", 24, 64, 952, 28, 20, Muted);
+            Label(p, last ? "마지막 선택이에요. 카드를 누르면 바로 사용해요. 각 카드 아래 줄은 그 카드를 골랐을 때의 예상이에요."
+                : "고른 순서대로 적용돼요. 사용을 확정하기 전에는 행동력과 카드를 쓰지 않아요.", 24, 64, 952, 28, 20, Muted);
             IEnumerable<string> options = request.From == "hand" ? b.Zones.Hand.Where(u => u != pick.Uid) : request.From == "discard" ? b.Zones.Discard : b.Reservations.Select(r => r.Uid);
             if (request.GrowthOnly) options = options.Where(u => b.Cards.TryGetValue(u, out var c) && cardDefs.TryGetValue(c.Id, out var d) && d.Growth == true);
             var list = options.Where(u => !pick.Picks.Contains(u)).ToList();
-            var content = Scroll(p, "PickList", 24, 104, 952, 380, 952, ((list.Count + 2) / 3) * 64, Panel);
+            var content = Scroll(p, "PickList", 24, 104, 952, 336, 952, ((list.Count + 2) / 3) * 64, Panel);
             for (int i = 0; i < list.Count; i++)
             {
                 string uid = list[i]; string zone = b.Zones.Hand.Contains(uid) ? "손패" : b.Zones.Discard.Contains(uid) ? "버림" : "예약";
-                Button(content, "Pick:" + uid, BattleCardName(uid) + " · " + zone, i % 3 * 320, i / 3 * 64, 308, 54, () => PickCard(uid), Line, 21);
+                string caption = BattleCardName(uid) + " · " + zone;
+                if (last) caption += "\n" + ForecastOutcome(run!.BattleForecast(pick.Uid, pick.Mode, target, pick.Picks.Concat(new[] { uid }).ToList()));
+                Button(content, "Pick:" + uid, caption, i % 3 * 320, i / 3 * 64, 308, 54, () => PickCard(uid), Line, 21);
             }
             if (list.Count == 0) Label(p, "고를 카드가 없어요.", 24, 110, 952, 40, 22, Muted);
+            // AutoPick sends exactly the picks made so far and Core chooses the rest: that request's forecast.
+            var auto = run!.BattleForecast(pick.Uid, pick.Mode, target, pick.Picks);
+            Label(p, "자동으로 고르고 사용하면 · " + ForecastText(auto), 24, 448, 952, 52, 20, ForecastColor(auto));
             Button(p, "PickAuto", "남은 대상은 자동으로 고르고 사용", 24, 510, 420, 62, () => AutoPick(), Brass, 21);
             Button(p, "PickCancel", "취소", 776, 510, 200, 62, CancelPick, Line, 22);
         }

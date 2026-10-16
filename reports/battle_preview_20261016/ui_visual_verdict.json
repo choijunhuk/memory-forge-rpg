@@ -1,0 +1,19 @@
+{
+  "score": 94,
+  "verdict": "pass",
+  "category_match": true,
+  "differences": [],
+  "suggestions": [
+    "130% text/device/worst-case candidate labels remain separate."
+  ],
+  "reasoning": "Actual now/reservation/error/hidden/pick-sheet labels fit the existing action line/overlay and clearly name automatic choice and final-use action. No hidden outcome numbers are shown.",
+  "threshold": 90,
+  "threshold_pass": true,
+  "generated_screenshot": "reports/battle_preview_20261016/ui_now.png",
+  "additionalScreenshots": [
+    "ui_reservation.png",
+    "ui_picker.png",
+    "ui_hidden.png",
+    "ui_rapid_error.png"
+  ]
+}

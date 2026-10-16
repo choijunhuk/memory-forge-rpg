@@ -1,0 +1,28 @@
+{
+  "session_id": "b0545ad4-ddb1-421f-8c73-4b7511e293bd",
+  "basis": "Positive-output assistant metadata segmented by exact Task ID; raw reasoning and account data excluded",
+  "tasks": {
+    "P1-EXPEDITION-FORECAST-UI": {
+      "positive_output_assistant_messages": 42,
+      "models": [
+        "claude-opus-5-5"
+      ],
+      "actual_per_turn_efforts": [
+        "xhigh"
+      ],
+      "first": "2026-10-16T00:43:58.497Z",
+      "last": "2026-10-16T00:54:42.662Z"
+    },
+    "P1-FORECAST-VISIBILITY-FIX": {
+      "positive_output_assistant_messages": 19,
+      "models": [
+        "claude-opus-5-5"
+      ],
+      "actual_per_turn_efforts": [
+        "high"
+      ],
+      "first": "2026-10-16T00:58:40.534Z",
+      "last": "2026-10-16T01:00:16.203Z"
+    }
+  }
+}

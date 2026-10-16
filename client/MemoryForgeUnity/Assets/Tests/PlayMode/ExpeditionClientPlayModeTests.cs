@@ -479,7 +479,8 @@ namespace MemoryForge.Client.Tests
             var view = ActiveView(host); Canvas.ForceUpdateCanvases();
             AssertReadable(view, t => t == expected, "full effect text");
             AssertReadable(view, t => t.Contains("즉시 비용 " + mirror.BattleCostOf(card!, "now")), "current cost");
-            AssertReadable(view, t => t.Contains("피해 예측은 아직"), "explicit forecast gap");
+            // The note keeps the definition-text vs actual-outcome distinction and now points at the action-line forecast.
+            AssertReadable(view, t => t.Contains("카드 정의의 값") && t.Contains("행동 안내 줄에 보여요") && t.Contains("미리 보여 주지 않아요"), "definition text vs forecast note");
 
             // The detail overlay intercepts the obscured confirm; a click there spends nothing and keeps the detail open.
             var pointer = new PointerEventData(EventSystem.current) { position = behind, button = PointerEventData.InputButton.Left };
@@ -504,6 +505,321 @@ namespace MemoryForge.Client.Tests
             Assert.That(client.LastError, Is.Null);
             Assert.That(Fingerprint(client.Snapshot!), Is.EqualTo(Fingerprint(mirror.State)), "the confirmed play is exactly one actual Run.BattleCommand");
             yield return null;
+        }
+
+        // ───────── P1-EXPEDITION-FORECAST-UI §14.3/§14.7/§6: labels of Core's pure Run.BattleForecast ─────────
+        // Reference party (power4 160 / vit 81 / level 1, no weapon passive or relic) against a living turn-1 enemy without block:
+        // the original card values (sera_cover: block 5, then 4 damage).
+        static readonly Dictionary<string, (int Loss, int Block)> TurnOneLiterals = new Dictionary<string, (int Loss, int Block)>(StringComparer.Ordinal)
+        {
+            ["sera_round"] = (8, 0), ["sera_cover"] = (4, 5), ["wc_basic_ranged"] = (7, 0), ["com_guard"] = (0, 6), ["harin_shield"] = (0, 8), ["harin_bash"] = (6, 0),
+            ["harin_counter"] = (0, 5), ["com_slash"] = (6, 0), ["wc_basic_melee"] = (7, 0), ["nia_wrench"] = (7, 0), ["nia_barrier"] = (0, 7), ["wc_basic_device"] = (0, 6)
+        };
+
+        // Every hand card × mode × living target: the view's forecast equals the mirror's, its action line is exactly that forecast's label,
+        // nothing is spent; then real rays select one reference card and only the confirmed play reaches the Run, matching the forecast.
+        [UnityTest]
+        public IEnumerator ActionLineShowsCoresForecastWhileSelectingAndOnlyTheConfirmedPlayMatchesItOnce()
+        {
+            var opening = new Opening(); yield return Open(opening);
+            var host = opening.Host!; var client = opening.Client!; var mirror = opening.Mirror!;
+            var content = ClientBattleContent.Load().Battle;
+            string first = mirror.Available()[0];
+            Assert.That(client.EnterNode(first), Is.True); mirror.Enter(first);
+            yield return null;
+            var b = mirror.State.Battle!; string before = Fingerprint(client.Snapshot!);
+            Assert.That(before, Is.EqualTo(Fingerprint(mirror.State)));
+            int literals = 0, reservations = 0; string? played = null, playedTarget = null;
+            foreach (var enemy in b.Enemies.Where(e => e.Alive).ToList())
+                foreach (string uid in b.Zones.Hand)
+                    foreach (string mode in mirror.BattleAllowedModes(uid))
+                    {
+                        client.SelectEnemy(enemy.Uid); client.SelectCard(uid); client.SelectMode(mode);
+                        var f = mirror.BattleForecast(uid, mode, enemy.Uid);
+                        Assert.That(Project(client.PlayForecast(uid, mode)!), Is.EqualTo(Project(f)), "the view forecasts Core's own result of the exact request " + uid + "/" + mode);
+                        bool auto = f.Error == null && MemoryForgeExpeditionClient.ChoiceRequests(mirror.BattleEffectiveCard(uid), mode, content).Count != 0;
+                        string line = client.ForecastLine(f, auto);
+                        yield return null; Canvas.ForceUpdateCanvases();
+                        AssertReadable(ActiveView(host), t => t == line, "action-line forecast of " + uid + "/" + mode + " on " + enemy.Uid);
+                        if (f.Error != null)
+                        {
+                            Assert.That((f.Cost, f.Due, f.Hidden, f.EnemyHpLoss, f.BlockDelta, f.HpDelta, f.Defeat), Is.EqualTo((0, (int?)null, false, 0, 0, 0, false)), "a rejected request reports only its code");
+                            continue;
+                        }
+                        Assert.That(line, Does.StartWith((auto ? "자동 선택 기준 예상 · " : "예상 · ") + ModeLabel(mode) + " · 행동력 " + f.Cost + " · "));
+                        if (mode != "now")
+                        {
+                            reservations++;
+                            Assert.That(f.Due, Is.EqualTo(b.Turn + (mode == "next" ? 1 : 2)), "a reservation shows its absolute due turn");
+                            Assert.That((f.Hidden, f.EnemyHpLoss, f.BlockDelta, f.HpDelta, f.Defeat), Is.EqualTo((false, 0, 0, 0, false)));
+                            Assert.That(line, Does.EndWith(f.Due + "턴 시작(" + ModeLabel(mode) + ")에 해결 · 예약의 실제 해결 결과는 그때 확인해요"));
+                            Assert.That(line.Contains("적 체력") || line.Contains("방어 +"), Is.False, "no invented future damage or block");
+                            continue;
+                        }
+                        if (f.Hidden) { Assert.That(line, Does.EndWith("드로우·무작위 결과는 사용한 뒤에 알 수 있어요")); continue; }
+                        if (TurnOneLiterals.TryGetValue(b.Cards[uid].Id, out var literal) && enemy.Block == 0 && enemy.Hp >= literal.Loss)
+                        {
+                            literals++;
+                            Assert.That((f.EnemyHpLoss, f.BlockDelta, f.HpDelta, f.Defeat), Is.EqualTo((literal.Loss, literal.Block, 0, false)), "original card value of " + b.Cards[uid].Id);
+                            Assert.That(line, Does.Contain(literal.Loss != 0 ? "적 체력 -" + literal.Loss : "방어 +" + literal.Block));
+                            if (played == null && !auto) { played = uid; playedTarget = enemy.Uid; }
+                        }
+                    }
+            Assert.That(literals, Is.GreaterThan(0), "seed 1234's opening hand holds a reference attack or shield card");
+            Assert.That(reservations, Is.GreaterThan(0), "seed 1234's opening hand offers a reservation");
+            Assert.That(Fingerprint(client.Snapshot!), Is.EqualTo(before), "every selection, mode, target and forecast left the Run, RNG, log, events and AP untouched");
+            Assert.That(Fingerprint(mirror.State), Is.EqualTo(before));
+
+            // Real rays: target, card, mode; the shown forecast is the clicked request's, and only the confirm plays it.
+            string card = played!, target = playedTarget!;
+            Canvas.ForceUpdateCanvases();
+            Click(ButtonNamed(host, "Enemy:" + target)); yield return null; Canvas.ForceUpdateCanvases();
+            Click(ButtonNamed(host, "Hand:" + card)); yield return null; Canvas.ForceUpdateCanvases();
+            Click(ButtonNamed(host, "Mode:now")); yield return null; Canvas.ForceUpdateCanvases();
+            Assert.That(new[] { client.Target, client.SelectedCard, client.SelectedMode }, Is.EqualTo(new[] { target, card, "now" }));
+            var forecast = mirror.BattleForecast(card, "now", target);
+            string shown = client.ForecastLine(forecast, false);
+            AssertReadable(ActiveView(host), t => t == shown, "forecast of the clicked selection");
+            Assert.That(Fingerprint(client.Snapshot!), Is.EqualTo(before), "real clicks on target, card and mode spend nothing");
+            var start = mirror.State.Battle!;
+            Click(ButtonNamed(host, "ConfirmCard"));
+            mirror.BattleCommand("play", Play(card, "now", target));
+            Assert.That(client.LastError, Is.Null);
+            var after = client.Snapshot!;
+            Assert.That(Fingerprint(after), Is.EqualTo(Fingerprint(mirror.State)), "the confirmed play is exactly one actual Run.BattleCommand");
+            if (after.Battle != null)
+            {
+                BattleState done = after.Battle;
+                int loss = start.Enemies.Sum(e => Math.Max(0, e.Hp - done.Enemies.Single(a => a.Uid == e.Uid).Hp));
+                Assert.That(done.V, Is.EqualTo(start.V + 1));
+                Assert.That((loss, done.Block - start.Block, done.Hp - start.Hp, done.Ap), Is.EqualTo((forecast.EnemyHpLoss, forecast.BlockDelta, forecast.HpDelta, start.Ap - forecast.Cost)),
+                    "the actual play equals the forecast that was shown");
+            }
+            else Assert.That(after.Phase, Is.EqualTo("REWARD").Or.EqualTo("DEFEAT"));
+            yield return null;
+        }
+
+        // P1-FORECAST-VISIBILITY-FIX regression: right after an actual play its 2.6 s success toast is showing. Choosing the next card, mode
+        // and target at once (no wait on the timer) must show that request's forecast immediately, change nothing in the Run, and only the
+        // explicit confirm then plays it once.
+        [UnityTest]
+        public IEnumerator NextIntentShowsItsForecastImmediatelyWhileThePreviousToastWouldStillBeActive()
+        {
+            var opening = new Opening(); yield return Open(opening);
+            var host = opening.Host!; var client = opening.Client!; var mirror = opening.Mirror!;
+            var content = ClientBattleContent.Load().Battle;
+            string first = mirror.Available()[0];
+            Assert.That(client.EnterNode(first), Is.True); mirror.Enter(first);
+            yield return null;
+            var b = mirror.State.Battle!; string enemy = b.Enemies.First(e => e.Alive).Uid;
+            bool Plain(string uid) => mirror.BattleAllowedModes(uid).Contains("now") && mirror.BattleCheck(uid, "now", enemy) == null
+                && MemoryForgeExpeditionClient.ChoiceRequests(mirror.BattleEffectiveCard(uid), "now", content).Count == 0;
+            string? card = b.Zones.Hand.FirstOrDefault(Plain);
+            Assert.That(card, Is.Not.Null, "seed 1234's opening hand offers an immediate card without card picks");
+            client.SelectEnemy(enemy); client.SelectCard(card!); client.SelectMode("now");
+            Assert.That(client.ConfirmCard(), Is.True, client.LastError);
+            float played = Time.realtimeSinceStartup;
+            mirror.BattleCommand("play", Play(card!, "now", enemy));
+            Assert.That(Fingerprint(client.Snapshot!), Is.EqualTo(Fingerprint(mirror.State)), "the first play is exactly one actual Run.BattleCommand");
+            string toast = client.Notice;
+            Assert.That(toast, Is.Not.Empty, "the actual play's success toast is active");
+            var live = mirror.State.Battle;
+            Assert.That(live, Is.Not.Null, "seed 1234's first play leaves the battle running");
+            enemy = live!.Enemies.First(e => e.Alive).Uid;
+            string? next = live.Zones.Hand.FirstOrDefault(Plain);
+            Assert.That(next, Is.Not.Null, "a second immediate card without picks is still playable");
+            yield return null; Canvas.ForceUpdateCanvases();
+            AssertReadable(ActiveView(host), t => t == toast, "positive control: the toast is drawn before the next intent");
+            string before = Fingerprint(client.Snapshot!);
+
+            // The next intent by real rays, without waiting on the toast timer.
+            Click(ButtonNamed(host, "Enemy:" + enemy)); yield return null; Canvas.ForceUpdateCanvases();
+            Click(ButtonNamed(host, "Hand:" + next)); yield return null; Canvas.ForceUpdateCanvases();
+            Click(ButtonNamed(host, "Mode:now")); yield return null; Canvas.ForceUpdateCanvases();
+            Assert.That(Time.realtimeSinceStartup - played, Is.LessThan(2.6f), "read while the previous toast's real timer would still be running");
+            Assert.That(new[] { client.Target, client.SelectedCard, client.SelectedMode }, Is.EqualTo(new[] { enemy, next, "now" }));
+            Assert.That(client.Notice, Is.Empty, "the new intent retired the stale toast");
+            Assert.That(client.LastError, Is.Null);
+            var forecast = mirror.BattleForecast(next!, "now", enemy);
+            Assert.That(Project(client.PlayForecast(next!, "now")!), Is.EqualTo(Project(forecast)));
+            string shown = client.ForecastLine(forecast, false);
+            var view = ActiveView(host);
+            AssertReadable(view, t => t == shown, "the current request's forecast is drawn immediately");
+            Assert.That(view.GetComponentsInChildren<Text>().Any(t => t.text == toast), Is.False, "the previous command's toast no longer hides the forecast");
+            Assert.That(Fingerprint(client.Snapshot!), Is.EqualTo(before), "the new selection leaves the Run, RNG, log, events and AP untouched");
+            Assert.That(Fingerprint(mirror.State), Is.EqualTo(before));
+
+            var start = mirror.State.Battle!;
+            Click(ButtonNamed(host, "ConfirmCard"));
+            mirror.BattleCommand("play", Play(next!, "now", enemy));
+            Assert.That(client.LastError, Is.Null);
+            Assert.That(Fingerprint(client.Snapshot!), Is.EqualTo(Fingerprint(mirror.State)), "the explicit confirm is exactly one actual Run.BattleCommand");
+            if (client.Snapshot!.Battle is BattleState done) Assert.That(done.V, Is.EqualTo(start.V + 1));
+            yield return null;
+        }
+
+        // The reference kit's draw card nia_scan: every number of the immediate play stays hidden, its reservation shows only cost and due,
+        // and the confirmed play is the one actual command.
+        [UnityTest]
+        public IEnumerator DrawCardForecastHidesEveryNumberAndOnlyTheConfirmedPlayReachesTheRun()
+        {
+            var opening = new Opening(); yield return Open(opening);
+            var host = opening.Host!; var client = opening.Client!; var mirror = opening.Mirror!;
+            var found = new Found(); yield return DriveUntil(client, mirror, "nia_scan", found);
+            Assert.That(found.Uid, Is.Not.Null, "the reference kit's nia_scan must reach a playable hand within the bounded actual commands");
+            string card = found.Uid!, enemy = found.Enemy!;
+            yield return AwaitNoticeExpiry(client);
+            string before = Fingerprint(client.Snapshot!);
+            Assert.That(before, Is.EqualTo(Fingerprint(mirror.State)));
+            client.SelectEnemy(enemy); client.SelectCard(card); client.SelectMode("now");
+            var f = mirror.BattleForecast(card, "now", enemy);
+            Assert.That((f.Error, f.Hidden, f.EnemyHpLoss, f.BlockDelta, f.HpDelta, f.Defeat), Is.EqualTo(((string?)null, true, 0, 0, 0, false)), "a draw card's numeric outcome stays hidden");
+            Assert.That(Project(client.PlayForecast(card, "now")!), Is.EqualTo(Project(f)));
+            string hidden = "예상 · 즉시 · 행동력 " + f.Cost + " · 드로우·무작위 결과는 사용한 뒤에 알 수 있어요";
+            Assert.That(client.ForecastLine(f, false), Is.EqualTo(hidden));
+            yield return null; Canvas.ForceUpdateCanvases();
+            AssertReadable(ActiveView(host), t => t == hidden, "hidden draw forecast");
+            Assert.That(ActiveView(host).GetComponentsInChildren<Text>().Any(t => t.text.Contains("적 체력 -") || t.text.Contains("파티 체력 -") || t.text.Contains("파티 체력 +") || t.text.Contains("방어 +")),
+                Is.False, "no forecast number is drawn anywhere");
+
+            var reserved = mirror.BattleForecast(card, "next", enemy);
+            if (reserved.Error == null)
+            {
+                client.SelectMode("next");
+                string line = "예상 · 다음 턴 · 행동력 " + reserved.Cost + " · " + (mirror.State.Battle!.Turn + 1) + "턴 시작(다음 턴)에 해결 · 예약의 실제 해결 결과는 그때 확인해요";
+                Assert.That(client.ForecastLine(reserved, false), Is.EqualTo(line));
+                yield return null; Canvas.ForceUpdateCanvases();
+                AssertReadable(ActiveView(host), t => t == line, "reservation forecast");
+                client.SelectMode("now");
+            }
+            Assert.That(Fingerprint(client.Snapshot!), Is.EqualTo(before), "hidden and reservation forecasts spend nothing");
+            yield return null; Canvas.ForceUpdateCanvases();
+            var start = mirror.State.Battle!;
+            Click(ButtonNamed(host, "ConfirmCard"));
+            mirror.BattleCommand("play", Play(card, "now", enemy));
+            Assert.That(client.LastError, Is.Null);
+            Assert.That(Fingerprint(client.Snapshot!), Is.EqualTo(Fingerprint(mirror.State)), "the confirmed hidden play is exactly one actual Run.BattleCommand");
+            if (client.Snapshot!.Battle is BattleState done) Assert.That(done.V, Is.EqualTo(start.V + 1));
+            yield return null;
+        }
+
+        // The reference kit's pick card nia_tune: the action line names Core's automatic choice as its basis, the last pick's candidates each
+        // show the forecast of exactly their own picks, the auto line that of the auto request, and the clicked candidate is the one play.
+        [UnityTest]
+        public IEnumerator PickSheetForecastsMatchTheAutoPromiseAndEachConcreteFinalCandidate()
+        {
+            var opening = new Opening(); yield return Open(opening);
+            var host = opening.Host!; var client = opening.Client!; var mirror = opening.Mirror!;
+            var content = ClientBattleContent.Load().Battle;
+            var found = new Found(); yield return DriveUntil(client, mirror, "nia_tune", found);
+            Assert.That(found.Uid, Is.Not.Null, "the reference kit's nia_tune must reach a playable hand within the bounded actual commands");
+            string card = found.Uid!, enemy = found.Enemy!;
+            yield return AwaitNoticeExpiry(client);
+            string before = Fingerprint(client.Snapshot!);
+            Assert.That(MemoryForgeExpeditionClient.ChoiceRequests(mirror.BattleEffectiveCard(card), "now", content).Count, Is.EqualTo(1), "nia_tune asks for one card, so the first candidate click completes the picks");
+            client.SelectEnemy(enemy); client.SelectCard(card); client.SelectMode("now");
+            var auto = mirror.BattleForecast(card, "now", enemy);
+            string line = client.ForecastLine(auto, true);
+            Assert.That(line, Does.StartWith("자동 선택 기준 예상 · 즉시 · "));
+            yield return null; Canvas.ForceUpdateCanvases();
+            AssertReadable(ActiveView(host), t => t == line, "auto-basis action line");
+            Click(ButtonNamed(host, "ConfirmCard"));
+            Assert.That(client.PickerOpen, Is.True);
+            Assert.That(Fingerprint(client.Snapshot!), Is.EqualTo(before), "opening the pick sheet spends nothing");
+            yield return null; Canvas.ForceUpdateCanvases();
+            var view = ActiveView(host); var b = mirror.State.Battle!;
+            var candidates = b.Zones.Hand.Where(u => u != card).ToList();
+            Assert.That(candidates, Is.Not.Empty, "a hand card to tune");
+            foreach (string uid in candidates)
+            {
+                var picks = new List<string> { uid };
+                var f = mirror.BattleForecast(card, "now", enemy, picks);
+                Assert.That(Project(client.PlayForecast(card, "now", picks)!), Is.EqualTo(Project(f)), "the candidate forecast is Core's for exactly that pick");
+                Assert.That(picks, Is.EqualTo(new[] { uid }), "forecasting never consumes the caller's picks");
+                string caption = mirror.BattleEffectiveCard(uid).Name + " · 손패\n" + client.ForecastOutcome(f);
+                AssertReadable(view, t => t == caption, "final candidate " + uid);
+            }
+            AssertReadable(view, t => t == "자동으로 고르고 사용하면 · " + client.ForecastText(auto), "auto-pick forecast");
+            AssertReadable(view, t => t.StartsWith("마지막 선택이에요", StringComparison.Ordinal), "final-pick promise");
+            Assert.That(Fingerprint(client.Snapshot!), Is.EqualTo(before), "candidate and auto forecasts spend nothing");
+            var start = b; string chosen = candidates[0];
+            Click(ButtonNamed(host, "Pick:" + chosen));
+            mirror.BattleCommand("play", Play(card, "now", enemy, new[] { chosen }));
+            Assert.That(client.LastError, Is.Null);
+            Assert.That(client.PickerOpen, Is.False);
+            Assert.That(Fingerprint(client.Snapshot!), Is.EqualTo(Fingerprint(mirror.State)), "the final candidate click is exactly one actual play with that pick");
+            if (client.Snapshot!.Battle is BattleState done) Assert.That(done.V, Is.EqualTo(start.V + 1));
+            yield return null;
+        }
+
+        // Supplement, not the client path: Core forecasts of original authored battles (the forecast oracle's reflect-defeat and
+        // hidden-definition setups) through the view's own formatter, for labels the reference opening cannot reach.
+        [UnityTest]
+        public IEnumerator ForecastLabelsOfAuthoredCoreBattlesWarnDefeatAndHideDrawResults()
+        {
+            var opening = new Opening(); yield return Open(opening);
+            var client = opening.Client!; var content = ClientBattleContent.Load().Battle;
+            var reflect = Battle.Create(content, new BattleSetup { Party = { new BattleActorSetup { CharId = "sera" } },
+                Deck = { new BattleCardSpec { Id = "sera_double" }, new BattleCardSpec { Id = "sera_round" } }, Hp = 3, MaxHp = 81, Seed = 13, Enemies = { "e_mirrorclerk" } });
+            reflect.Command(new BattleRequest("begin", 0, "begin")); reflect.Command(new BattleRequest("end", 1, "end"));
+            string reflectBefore = BattlePrint(reflect);
+            var lethal = reflect.Forecast("c1");
+            Assert.That(Project(lethal), Is.EqualTo(Project(new BattlePlayForecast { Cost = 1, EnemyHpLoss = 4, HpDelta = -3, Defeat = true })), "oracle literal: the first reflected hit is lethal");
+            Assert.That(client.ForecastText(lethal), Is.EqualTo("행동력 1 · 적 체력 -4 · 파티 체력 -3 · 이 행동으로 패배해요"));
+            Assert.That(BattlePrint(reflect), Is.EqualTo(reflectBefore), "a defeat forecast changes nothing");
+
+            var hidden = Battle.Create(content, new BattleSetup { Party = { new BattleActorSetup { CharId = "sion" }, new BattleActorSetup { CharId = "lumi" }, new BattleActorSetup { CharId = "rien" } },
+                Deck = { new BattleCardSpec { Id = "sion_erase" }, new BattleCardSpec { Id = "lumi_storm" }, new BattleCardSpec { Id = "rien_rest" }, new BattleCardSpec { Id = "sion_cut" } },
+                Hp = 243, MaxHp = 243, Seed = 15, Enemies = { "e_cog", "e_page" } });
+            hidden.Command(new BattleRequest("begin", 0, "begin"));
+            string hiddenBefore = BattlePrint(hidden);
+            foreach (var (uid, cost) in new[] { ("c1", 0), ("c2", 3), ("c3", 1) })
+            {
+                var f = hidden.Forecast(uid);
+                Assert.That((f.Error, f.Hidden, f.Cost, f.EnemyHpLoss, f.BlockDelta, f.HpDelta, f.Defeat), Is.EqualTo(((string?)null, true, cost, 0, 0, 0, false)), "draw/random/nested-draw " + uid);
+                Assert.That(client.ForecastText(f), Is.EqualTo("행동력 " + cost + " · 드로우·무작위 결과는 사용한 뒤에 알 수 있어요"));
+            }
+            Assert.That(client.ForecastText(hidden.Forecast("c3", "next")), Is.EqualTo("행동력 1 · 2턴 시작(다음 턴)에 해결 · 예약의 실제 해결 결과는 그때 확인해요"));
+            Assert.That(client.ForecastText(hidden.Forecast("c4", "now", "e6")), Is.EqualTo("행동력 1 · 적 체력 -8"));
+            var rejected = hidden.Forecast("c99");
+            Assert.That(rejected.Error, Is.EqualTo("NOT_IN_HAND"));
+            Assert.That(client.ForecastText(rejected), Does.Not.StartWith("행동력 "), "a rejected request shows its error text, not an outcome");
+            Assert.That(BattlePrint(hidden), Is.EqualTo(hiddenBefore), "forecasts change nothing");
+            yield return null;
+        }
+
+        sealed class Found { public string? Uid, Enemy; }
+        // Actual commands through the existing bounded Step until the live hand holds `cardId` playable now against the first living enemy.
+        static IEnumerator DriveUntil(MemoryForgeExpeditionClient client, CoreRun mirror, string cardId, Found found)
+        {
+            var content = ClientBattleContent.Load().Battle; var events = ClientRunContent.Load().Events;
+            for (int steps = 0; steps < 3000; steps++)
+            {
+                var s = mirror.State;
+                if (s.Phase == "VICTORY" || s.Phase == "DEFEAT") yield break;
+                if (s.Phase == "BATTLE" && s.Battle != null && s.Battle.Phase == "PLAYER")
+                {
+                    var battle = s.Battle; string enemy = battle.Enemies.First(e => e.Alive).Uid;
+                    string? uid = battle.Zones.Hand.FirstOrDefault(u => battle.Cards[u].Id == cardId && mirror.BattleCheck(u, "now", enemy) == null);
+                    if (uid != null) { found.Uid = uid; found.Enemy = enemy; yield break; }
+                }
+                Step(client, mirror, s, content, events);
+                if (steps % 8 == 7) yield return null;
+            }
+        }
+        // The last driver command's 2.6 s toast covers the action line: wait on the component's real timer (nothing set or shortened).
+        static IEnumerator AwaitNoticeExpiry(MemoryForgeExpeditionClient client)
+        {
+            float deadline = Time.realtimeSinceStartup + 6f;
+            while (client.Notice.Length != 0 && Time.realtimeSinceStartup < deadline) yield return null;
+            Assert.That(client.Notice, Is.Empty, "the driver's last toast must expire on its real timer");
+        }
+        static (string?, string, int, int?, bool, int, int, int, bool) Project(BattlePlayForecast f) => (f.Error, f.Mode, f.Cost, f.Due, f.Hidden, f.EnemyHpLoss, f.BlockDelta, f.HpDelta, f.Defeat);
+        static string ModeLabel(string mode) => mode == "now" ? "즉시" : mode == "next" ? "다음 턴" : "다다음 턴";
+        static string BattlePrint(Battle battle)
+        {
+            var graph = battle.State.ToJsonGraph();
+            return CanonicalState.Hash(graph) + "/" + CanonicalState.Hash(graph["log"]) + "/" + CanonicalState.Hash(graph["ev"]);
         }
 
         [UnityTest]
@@ -729,6 +1045,8 @@ namespace MemoryForge.Client.Tests
 
         static BattleArgument Play(string uid, string mode, string? target) => BattleArgument.Object(new[] { Pair("uid", uid), Pair("mode", mode), Pair("target", target),
             new KeyValuePair<string, BattleArgument>("picks", BattleArgument.Array(new BattleArgument[0])) });
+        static BattleArgument Play(string uid, string mode, string? target, IEnumerable<string> picks) => BattleArgument.Object(new[] { Pair("uid", uid), Pair("mode", mode), Pair("target", target),
+            new KeyValuePair<string, BattleArgument>("picks", BattleArgument.Array(picks.Select(BattleArgument.String))) });
         static KeyValuePair<string, BattleArgument> Pair(string key, string? value) => new KeyValuePair<string, BattleArgument>(key, value == null ? BattleArgument.Null() : BattleArgument.String(value));
         static object? Get(object? node, string key) => node is IDictionary<string, object?> map && map.TryGetValue(key, out var value) ? value : null;
         static List<object?> ListOf(object? value) => value is IList list ? list.Cast<object?>().ToList() : new List<object?>();
