@@ -671,6 +671,8 @@ namespace MemoryForge.Client.Tests
             Assert.That(Fingerprint(client.Snapshot!), Is.EqualTo(before), "the new selection leaves the Run, RNG, log, events and AP untouched");
             Assert.That(Fingerprint(mirror.State), Is.EqualTo(before));
 
+            // The first play's display refuses the next command; it is finished explicitly (it may already have ended on its timer).
+            FinishActionDisplay(client, false);
             var start = mirror.State.Battle!;
             Click(ButtonNamed(host, "ConfirmCard"));
             mirror.BattleCommand("play", Play(next!, "now", enemy));
@@ -1190,18 +1192,30 @@ namespace MemoryForge.Client.Tests
                     Assert.That(client.ConfirmCard(), Is.False);
                     Assert.That(client.PickerOpen, Is.True);
                     Assert.That(Fingerprint(client.Snapshot!), Is.EqualTo(before), "opening the pick overlay must spend nothing");
-                    if (Both(client, mirror, () => client.AutoPick(), () => mirror.BattleCommand("play", Play(card, "now", enemy)))) return;
+                    if (Both(client, mirror, () => client.AutoPick(), () => mirror.BattleCommand("play", Play(card, "now", enemy)))) { FinishActionDisplay(client); return; }
                 }
-                else if (Both(client, mirror, () => client.ConfirmCard(), () => mirror.BattleCommand("play", Play(card, "now", enemy)))) return;
+                else if (Both(client, mirror, () => client.ConfirmCard(), () => mirror.BattleCommand("play", Play(card, "now", enemy)))) { FinishActionDisplay(client); return; }
             }
             var ready = b.Actors.FirstOrDefault(a => a.Gauge >= content.Rules.GaugeMax);
             if (ready != null)
             {
                 client.SelectEnemy(enemy);
                 var args = BattleArgument.Object(new[] { Pair("actor", ready.Id), Pair("target", enemy) });
-                if (Both(client, mirror, () => client.UseUltimate(ready.Id), () => mirror.BattleCommand("ult", args))) return;
+                if (Both(client, mirror, () => client.UseUltimate(ready.Id), () => mirror.BattleCommand("ult", args))) { FinishActionDisplay(client); return; }
             }
             if (Both(client, mirror, () => client.EndTurn(), () => mirror.BattleCommand("end"))) DismissTurnSummary(client);
+        }
+        // P1-CARD-FLOW-ACTION-PRESENTATION: an actual play or ultimate opens its display, which refuses the next command. Drivers not about
+        // it finish it explicitly (skip; a repeat is inert); both are display only and must leave the Run exactly as it was. `open`: the
+        // display must still be open (a driver right after its command); otherwise it may already have ended on its real timer.
+        static void FinishActionDisplay(MemoryForgeExpeditionClient client, bool open = true)
+        {
+            string before = Fingerprint(client.Snapshot!);
+            if (open) Assert.That(client.HasActionPresentation, Is.True, "an actual play or ultimate opens its display");
+            if (client.HasActionPresentation) Assert.That(client.SkipActionPresentation(), Is.True);
+            Assert.That(client.HasActionPresentation, Is.False);
+            Assert.That(client.SkipActionPresentation(), Is.False, "a repeated skip is inert");
+            Assert.That(Fingerprint(client.Snapshot!), Is.EqualTo(before), "finishing the display never reaches the Run");
         }
         // P1-CARD-FLOW-TURN-BARRIER: an actual end opens the blocking turn summary. These drivers are not about it, so they close it
         // explicitly (skip, then continue) before the next command; both are display only and must leave the Run exactly as it was.

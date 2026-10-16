@@ -29,6 +29,10 @@ namespace MemoryForge.Client
     // P1-CARD-FLOW-PICKER-GUARD §14.3/§14.7: the card-pick sheet is a local unsent intent of one play, tied to the state it was opened in.
     // It offers exactly PickCandidates and accepts nothing else; once that state is gone it can no longer send and closes. While it is
     // open every other command and selection is refused. Nothing is spent until its final pick or auto sends the one play.
+    // P1-CARD-FLOW-ACTION-PRESENTATION §14.2/§14.3/§14.7: after an actual play or ultimate its own committed digest rows step through a
+    // small inline strip (a covering sheet once the battle has ended) over the already committed view. Meanwhile only the pure next card/
+    // mode/target selection is accepted; every command is refused until the display finishes, skips or is dropped. Speed, reduced motion
+    // and skip change only that text (local prototype timing, unscaled real time), never Time.timeScale or the Run.
     [ExecuteAlways]
     public sealed class MemoryForgeExpeditionClient : MonoBehaviour
     {
@@ -81,6 +85,18 @@ namespace MemoryForge.Client
         /// <summary>True after a failed Run calculation quarantined the practice: every command and selection is refused and only
         /// DiscardFailedPractice remains. It survives disable/enable and focus/pause.</summary>
         public bool RecoveryRequired => recovery != null;
+        /// <summary>Presentation pace of a committed player action. Display only: it never changes Time.timeScale or reaches the Run.</summary>
+        public enum ActionPacing { Normal, Double, Reduced }
+        /// <summary>The chosen pace (session-local preference; not saved).</summary>
+        public ActionPacing ActionPace => actionPace;
+        /// <summary>True while the last actual play/ultimate is presented; only the next card/mode/target selection is accepted then.</summary>
+        public bool HasActionPresentation => actionRows != null;
+        /// <summary>The open display's rows: the committed command's event rows and enemy results (no summary or previous-intent rows).</summary>
+        public IReadOnlyList<BattleDigestEntry> ActionPresentationRows => actionRows ?? Array.Empty<BattleDigestEntry>();
+        /// <summary>How many rows of the open display are shown; 0 without one.</summary>
+        public int ActionPresentationShown => actionRows == null ? 0 : actionShown;
+        /// <summary>True while the open display is the battle's last command (the battle has left the Run): it covers the next screen.</summary>
+        public bool ActionPresentationTerminal => actionRows != null && actionTerminal;
 
         enum Sheet { None, Deck, Log, Abandon, Assign, DeckPick }
         enum Purpose { Upgrade, ForgeOffer, ForgeRemove, ShopRemove, EventCards, FoundPart }
@@ -138,6 +154,23 @@ namespace MemoryForge.Client
         const int BattleLogLimit = 40;            // §14.3 기록: the recent 40 lines
         string? recovery; // the failure that quarantined the practice (a Core code or exception type); null while healthy
         const string RecoveryCode = "RECOVERY_REQUIRED";
+        // Player-action display (cosmetic): its rows, how many are shown, when the next row may appear and when the finished display
+        // closes (<0: not scheduled), whether the battle ended with it, and the labels/controls it rewrites in place (cleared with the view).
+        IReadOnlyList<BattleDigestEntry>? actionRows;
+        int actionShown;
+        float actionNextAt = -1, actionUntil = -1;
+        bool actionTerminal, actionAll, actionDropped;
+        string actionTitle = "";
+        ActionPacing actionPace = ActionPacing.Normal;
+        Text? actionText, actionStatus;
+        Button? actionSkip;
+        GameObject? actionOverlay;
+        readonly List<(Selectable Control, bool Enabled)> actionGated = new List<(Selectable, bool)>();
+        readonly List<(Image Back, Text Caption, ActionPacing Pace)> paceButtons = new List<(Image, Text, ActionPacing)>();
+        const string ActionShowing = "ACTION_SHOWING";
+        // Local prototype timing (not a measured or approved target): each row 0.2 s, an actual time-reservation resolution row the
+        // original 0.3 s, then 0.6 s with every row shown. 2x halves all three; reduced motion shows every row at once and keeps the hold.
+        const float ActionRowSeconds = 0.2f, ActionHoldSeconds = 0.6f;
         // Pick sheet refusals: another command or selection while a sheet is open, a card outside its drawn list, and any pick or auto
         // once the state the sheet was opened in is gone. These are local client codes; Core never sees the refused input.
         const string PickSheetOpen = "PICKER_OPEN", PickInvalid = "PICK_INVALID", PickStale = "PICK_STALE";
@@ -164,23 +197,26 @@ namespace MemoryForge.Client
             if (Resources.Load<TextAsset>(ClientRunContent.ResourcePath) == null || Resources.Load<TextAsset>("MemoryForge/battle-content") == null) return;
             if (run == null) StartPractice(); else Render();
         }
-        // Disabling drops only the cosmetic summary and its timer; OnEnable redraws the actual Run without restarting or changing it.
-        void OnDisable() { RemoveView(); CloseTurnSummary(); }
+        // Disabling drops only the cosmetic summary, the player-action display and their timers; OnEnable redraws the actual Run without
+        // restarting or changing it.
+        void OnDisable() { RemoveView(); CloseTurnSummary(); CloseActionPresentation(); }
         void Update()
         {
             FitView();
             if (noticeUntil > 0 && Time.realtimeSinceStartup >= noticeUntil) ExpireNotice();
             if (turnSummary != null && summaryShown < turnSummary.Count) AdvanceTurnSummary(Time.realtimeSinceStartup);
+            if (actionRows != null) AdvanceActionPresentation(Time.realtimeSinceStartup);
         }
-        void OnApplicationPause(bool paused) { if (!paused) ResumeView(); }
-        void OnApplicationFocus(bool focused) { if (focused) ResumeView(); }
+        void OnApplicationPause(bool paused) { if (paused) DropActionPresentation(); else ResumeView(); }
+        void OnApplicationFocus(bool focused) { if (focused) ResumeView(); else DropActionPresentation(); }
         // Resume: a pick sheet whose opening state is gone (Fresh) is dropped, and the view is redrawn from the actual Run only when that
-        // happened or the view is missing. No Run command, restart or server fetch; an open summary stays (it is not stale).
+        // happened, a player-action display was dropped while away, or the view is missing. No Run command, replay, restart or server
+        // fetch; an open summary stays (it is not stale).
         void ResumeView()
         {
             if (!Application.isPlaying || !isActiveAndEnabled || run == null || data == null || font == null) return;
             if (recovery != null) { if (canvasRoot == null) Render(); return; } // the failed Run is not read; the quarantine stays
-            var s = run.State; bool stale = false;
+            var s = run.State; bool stale = actionDropped; actionDropped = false;
             if (picker != null && !Fresh(picker, s)) { picker = null; stale = true; }
             if (stale || canvasRoot == null) Render();
         }
@@ -231,6 +267,7 @@ namespace MemoryForge.Client
             battleLog.Clear(); // the battle log belongs to one expedition
             departures++; Length = chosen; closedKind = null; lastSave = null; lastSaveCount = 0; LastRequestId = null;
             selectedCard = null; selectedMode = null; target = null; picker = null; cardInfo = null; sheet = Sheet.None; selectedChanges.Clear();
+            CloseActionPresentation();
             LastError = null; notice = "출발했어요. 밝게 표시된 칸을 골라 나아가세요."; noticeUntil = Time.realtimeSinceStartup + 2.6f;
             Render(); return true;
         }
@@ -263,9 +300,10 @@ namespace MemoryForge.Client
             }
             Render(); return ok;
         }
-        public void SelectCard(string uid) { if (Blocked()) return; selectedCard = uid; selectedMode = null; ClearIntentNotice(); Render(); }
-        public void SelectMode(string mode) { if (Blocked()) return; selectedMode = mode; ClearIntentNotice(); Render(); }
-        public void SelectEnemy(string uid) { if (Blocked()) return; target = uid; ClearIntentNotice(); Render(); }
+        // Selections pass a battle's player-action display (Locked, not Blocked): preparing the next card spends nothing.
+        public void SelectCard(string uid) { if (Locked()) return; selectedCard = uid; selectedMode = null; ClearIntentNotice(); Render(); }
+        public void SelectMode(string mode) { if (Locked()) return; selectedMode = mode; ClearIntentNotice(); Render(); }
+        public void SelectEnemy(string uid) { if (Locked()) return; target = uid; ClearIntentNotice(); Render(); }
         // A new card/mode/target intent retires the previous command's toast (or error) at once, so the action line shows this request's
         // forecast before any confirm. Only view text changes; the Run is untouched.
         void ClearIntentNotice() { noticeUntil = 0; LastError = null; notice = ""; }
@@ -353,6 +391,7 @@ namespace MemoryForge.Client
                 var rows = Digest(before, response.Events, after, s.Battle);
                 AppendBattleLog(rows);
                 if (kind == "end") OpenTurnSummary(rows);
+                else OpenActionPresentation(rows, kind == "ult", s.Phase != "BATTLE");
             }
             Render(); return ok;
         }
@@ -604,14 +643,14 @@ namespace MemoryForge.Client
             }
         }
         // Stops the practice after a failed calculation: the session store goes back to its copy from before the command, cosmetic
-        // intent (pick sheet, selection, sheets, card detail, turn summary) is dropped and one diagnostic is logged. No retry, refund,
+        // intent (pick sheet, selection, sheets, card detail, turn summary, action display) is dropped and one diagnostic is logged. No retry, refund,
         // auto-advance, auto-save or server fetch; the recovery screen's action is the only way on.
         void Quarantine(string reason, Exception error, object? kept, bool render)
         {
             recovery = reason;
             if (kept is Dictionary<string, object?> valid) store = valid;
             picker = null; cardInfo = null; sheet = Sheet.None; deckPicks.Clear(); selectedChanges.Clear();
-            selectedCard = null; selectedMode = null; target = null; CloseTurnSummary();
+            selectedCard = null; selectedMode = null; target = null; CloseTurnSummary(); CloseActionPresentation();
             LastError = reason; notice = ""; noticeUntil = 0;
             Debug.LogError("[MemoryForge] Practice expedition quarantined after a failed local Run calculation (" + reason + "); "
                 + "the Run may be partly changed, so it will be discarded unsaved. Session memory version " + SessionMemoryVersion + " is kept.\n" + error);
@@ -653,11 +692,20 @@ namespace MemoryForge.Client
         // An open pick sheet is one prepared, unsent play, so every other command and selection is refused as well, after recovery and
         // the summary (their codes come first). Only the sheet's own pick, auto and cancel pass, through Barred alone; its final send
         // closes the sheet before playing, so this gate never refuses that one play.
+        // A player-action display refuses every command after those (its code comes last); the next card/mode/target selection passes
+        // it through Locked unless the battle ended with that action.
         bool Blocked()
         {
+            if (Locked()) return true;
+            if (actionRows == null) return false;
+            LastError = ActionShowing; return true;
+        }
+        bool Locked()
+        {
             if (Barred()) return true;
-            if (picker == null) return false;
-            LastError = PickSheetOpen; return true;
+            if (picker != null) { LastError = PickSheetOpen; return true; }
+            if (actionRows == null || !actionTerminal) return false;
+            LastError = ActionShowing; return true;
         }
         bool Barred()
         {
@@ -718,6 +766,119 @@ namespace MemoryForge.Client
                 summaryStatus.text = summaryShown < rows.Count ? "예약 해결을 차례로 보여 주는 중이에요 (" + summaryShown + "/" + rows.Count + ") · '남은 결과 모두 보기'로 바로 볼 수 있어요"
                     : "모두 표시했어요. '계속'을 누르면 다음 행동을 할 수 있어요.";
         }
+        // ───────── player-action display (§14.2/§14.3: text of the committed play/ultimate's own events; display only) ─────────
+        /// <summary>Ends the open player-action display at once so the next command is accepted. Display only: the Run is never called.
+        /// False (and nothing happens) without an open display.</summary>
+        public bool SkipActionPresentation()
+        {
+            if (actionRows == null) return false;
+            CloseActionPresentation(); RefreshActionPresentation(); return true;
+        }
+        /// <summary>Chooses the pace of player-action displays (this one's remaining rows and later ones). Display only: never
+        /// Time.timeScale, the Run or a reservation's timing. False when the pace is unknown or already chosen.</summary>
+        public bool SetActionPace(ActionPacing pace)
+        {
+            if (!Enum.IsDefined(typeof(ActionPacing), pace) || pace == actionPace) return false;
+            actionPace = pace;
+            if (actionRows != null) AdvanceActionPresentation(Time.realtimeSinceStartup);
+            RefreshActionPresentation(); return true;
+        }
+        /// <summary>The strip/sheet text of one display row: a short kind label (사용·예약·해결·메아리·유물·반격·필살기) and the row's own text.</summary>
+        public static string ActionRowText(BattleDigestEntry row) => ActionTag(row) + row.Text;
+        static string ActionTag(BattleDigestEntry row)
+        {
+            switch (row.Kind)
+            {
+                case BattleDigestKind.CardPlayed: return "[사용] ";
+                case BattleDigestKind.ReservationPlayed: case BattleDigestKind.ReservationRegistered: return "[예약] ";
+                case BattleDigestKind.CardResolved: case BattleDigestKind.ReservationResolved: return "[해결] ";
+                case BattleDigestKind.Copy: return "[메아리] ";
+                case BattleDigestKind.CounterDamage: return "[반격] ";
+                case BattleDigestKind.UltimateDamage: return "[필살기] ";
+                default: return row.Provenance == "유물" ? "[유물] " : "· ";
+            }
+        }
+        // The committed command's event rows and its enemy results; the summary and previous-intent rows belong to the turn summary.
+        // The first row shows at once (reduced motion: every row).
+        void OpenActionPresentation(IReadOnlyList<BattleDigestEntry> rows, bool ultimate, bool terminal)
+        {
+            var shown = rows.Where(r => r.Kind != BattleDigestKind.Summary && r.Kind != BattleDigestKind.PreviousIntent).ToArray();
+            if (shown.Length == 0) return;
+            actionRows = Array.AsReadOnly(shown); actionShown = 1; actionNextAt = -1; actionUntil = -1; actionTerminal = terminal;
+            actionTitle = ultimate ? "필살기 결과" : shown.Any(r => r.Kind == BattleDigestKind.ReservationPlayed) ? "예약 결과" : "카드 사용 결과";
+            AdvanceActionPresentation(Time.realtimeSinceStartup);
+        }
+        void CloseActionPresentation()
+        {
+            actionRows = null; actionShown = 0; actionNextAt = -1; actionUntil = -1; actionTerminal = false;
+            if (LastError == ActionShowing) LastError = null;
+        }
+        // Focus loss or pause: the display of an already committed action is dropped (it is in the battle log); the view is redrawn
+        // from the actual Run on resume. Nothing is replayed.
+        void DropActionPresentation()
+        {
+            if (actionRows == null) return;
+            CloseActionPresentation(); actionDropped = true; RefreshActionPresentation();
+        }
+        float PaceScale => actionPace == ActionPacing.Double ? 0.5f : 1f;
+        // One row per step on unscaled real time; when every row is shown the display holds, then closes. Labels and the gated controls
+        // change in place (no Render), so a held next-card press keeps its button, canvas and EventSystem.
+        void AdvanceActionPresentation(float now)
+        {
+            var rows = actionRows;
+            if (rows == null) return;
+            int shown = actionShown;
+            if (actionPace == ActionPacing.Reduced) { actionShown = rows.Count; actionNextAt = -1; }
+            while (actionShown < rows.Count)
+            {
+                if (actionNextAt < 0) actionNextAt = now + (rows[actionShown].IsReservedResolution ? ReservedRevealSeconds : ActionRowSeconds) * PaceScale;
+                if (now < actionNextAt) break;
+                actionNextAt = -1; actionShown++;
+            }
+            if (actionShown >= rows.Count)
+            {
+                if (actionUntil < 0) actionUntil = now + ActionHoldSeconds * PaceScale;
+                if (now >= actionUntil) { CloseActionPresentation(); RefreshActionPresentation(); return; }
+            }
+            if (actionShown != shown) RefreshActionPresentation();
+        }
+        void RefreshActionPresentation()
+        {
+            var rows = actionRows; bool open = rows != null;
+            foreach (var (control, allowed) in actionGated) if (control != null) control.interactable = allowed && !open;
+            if (actionSkip != null) actionSkip.interactable = open;
+            foreach (var (back, caption, pace) in paceButtons)
+            {
+                if (back == null || caption == null) continue;
+                bool chosen = pace == actionPace;
+                back.color = chosen ? Memory : Line; caption.color = chosen ? Background : Ink;
+                caption.text = (chosen ? "● " : "") + PaceName(pace);
+            }
+            if (actionOverlay != null && !open) actionOverlay.SetActive(false);
+            if (actionStatus != null)
+                actionStatus.text = rows == null ? "행동 결과" : actionTitle + " " + actionShown + "/" + rows.Count;
+            if (actionText != null)
+            {
+                if (rows == null) { actionText.text = "카드를 쓰면 확정된 결과를 여기서 차례로 보여 줘요. 그동안 다음 카드를 미리 고를 수 있어요."; actionText.color = Muted; }
+                else
+                {
+                    var visible = rows.Take(actionShown); if (!actionAll) visible = visible.Skip(Math.Max(0, actionShown - 2));
+                    actionText.text = string.Join("\n", visible.Select(ActionRowText)); actionText.color = Ink;
+                }
+            }
+        }
+        static string PaceName(ActionPacing pace) => pace == ActionPacing.Double ? "2배속" : pace == ActionPacing.Reduced ? "동작 줄이기" : "보통";
+        // A command control drawn while a display may be open: available only when its own state allows and no display is open.
+        T Gate<T>(T control, bool allowed) where T : Selectable
+        {
+            control.interactable = allowed && actionRows == null; actionGated.Add((control, allowed)); return control;
+        }
+        void PaceButton(Transform parent, ActionPacing pace, float x, float y, float width, float height, int size)
+        {
+            var button = Button(parent, "Pace:" + pace, "", x, y, width, height, () => SetActionPace(pace), Line, size);
+            paceButtons.Add((button.GetComponent<Image>(), Label(button.transform, "", 6, 4, width - 12, height - 8, size, Ink, FontStyle.Normal, TextAnchor.MiddleCenter), pace));
+        }
+
         // Summary, previous-intent and final-state rows frame a summary; only event rows are battle log lines.
         static bool Decoration(BattleDigestEntry row) => row.Kind == BattleDigestKind.Summary || row.Kind == BattleDigestKind.PreviousIntent || row.Kind == BattleDigestKind.EnemyState;
         void AppendBattleLog(IReadOnlyList<BattleDigestEntry> rows)
@@ -842,6 +1003,7 @@ namespace MemoryForge.Client
                 if (sheet == Sheet.Assign && SaveOpen(s)) AssignSheet(s);
                 if (sheet == Sheet.DeckPick && !Finished(s)) DeckPickSheet(s);
                 if (cardInfo != null) CardInfoSheet(cardInfo); // above the other sheets: it can be opened from the deck and deck-pick sheets
+                if (actionRows != null && actionTerminal) ActionPresentationSheet(); // the battle's last action covers the next screen
                 if (turnSummary != null) TurnSummarySheet(); // topmost: the turn barrier covers every other control
             }
             if (Application.isPlaying && EventSystem.current == null)
@@ -935,7 +1097,7 @@ namespace MemoryForge.Client
                 Label(actors, actor.Name, 18, y, 155, 38, 30, Ink, FontStyle.Bold);
                 Label(actors, Attribute(actor.Attr) + "  ·  " + actor.Gauge + "/" + rules.GaugeMax, 18, y + 40, 170, 24, 21, Muted);
                 Bar(actors, 188, y + 50, 142, 9, actor.Gauge, rules.GaugeMax, Brass);
-                Button(actors, "Ult:" + actor.Id, ready ? "필살기" : "충전 중", 188, y, 144, 44, () => UseUltimate(actor.Id), ready ? Brass : Line).interactable = ready && b.Phase == "PLAYER";
+                Gate(Button(actors, "Ult:" + actor.Id, ready ? "필살기" : "충전 중", 188, y, 144, 44, () => UseUltimate(actor.Id), ready ? Brass : Line), ready && b.Phase == "PLAYER");
             }
             float width = (1154 - 16 * (b.Enemies.Count - 1)) / Math.Max(1, b.Enemies.Count);
             for (int i = 0; i < b.Enemies.Count; i++)
@@ -954,8 +1116,9 @@ namespace MemoryForge.Client
                     + "\n다음  " + MemoryForgeBattleClient.IntentText(enemy.Next, enemy.Status, b.DifficultyDamage, rules.WeakBps, false), 18, 178, width - 36, 64, 22, enemy.Alive ? Brass : Muted);
             }
 
-            var timeline = Box(frame!, "Timeline", 32, 466, 1536, 100, Panel);
-            Label(timeline, "기억 시간표", 18, 10, 180, 32, 24, Memory, FontStyle.Bold);
+            // The timeline and action panels are 22 px and 4 px shorter than before to make room for the action strip between them.
+            var timeline = Box(frame!, "Timeline", 32, 458, 1536, 78, Panel);
+            Label(timeline, "기억 시간표", 18, 8, 180, 32, 24, Memory, FontStyle.Bold);
             var cells = MemoryForgeBattleClient.TimelineCells(b, rules);
             float slot = Math.Min(220, 1308f / Math.Max(1, cells.Count));
             for (int i = 0; i < cells.Count; i++)
@@ -963,11 +1126,12 @@ namespace MemoryForge.Client
                 var cell = cells[i];
                 string text = (cell.Group == "next" ? "다음" : "다다음") + "  " + (cell.Kind == "card" ? run!.BattleEffectiveCard(cell.Uid!).Name
                     : cell.Kind == "empty" ? "빈 칸" : cell.Kind == "sealed" ? "봉인" : "-");
-                var box = Box(timeline, "ReservationSlot", 204 + i * slot, 20, slot - 12, 60, cell.Kind == "sealed" ? Line : Background);
+                var box = Box(timeline, "ReservationSlot", 204 + i * slot, 9, slot - 12, 60, cell.Kind == "sealed" ? Line : Background);
                 Label(box, text, 10, 4, slot - 32, 52, 22, cell.Kind == "card" ? Memory : cell.Kind == "sealed" ? Danger : Muted, FontStyle.Normal, TextAnchor.MiddleCenter);
             }
 
-            var actions = Box(frame!, "CardActions", 32, 582, 1536, 98, Panel);
+            ActionStrip();
+            var actions = Box(frame!, "CardActions", 32, 596, 1536, 94, Panel);
             string hint = "카드를 고르고 방식을 정한 뒤 사용을 확정하세요. 고르는 동안에는 아무것도 쓰지 않아요."; var hintColor = Muted;
             if (selectedCard != null && selectedMode != null && b.Phase == "PLAYER")
             {
@@ -993,7 +1157,7 @@ namespace MemoryForge.Client
                 string? reason = selectedMode == null ? "MODE" : run.BattleCheck(uid, selectedMode, target);
                 string confirm = reason == null ? (ChoiceRequests(def, selectedMode!, data!.Memory.Battle).Count != 0 ? "카드 고르기" : "사용 확정")
                     : reason == "MODE" ? "방식 선택" : reason == "BAD_TARGET" || reason == "FIXED_MARK_REQUIRED" ? "대상 선택" : ErrorText(reason);
-                Button(actions, "ConfirmCard", confirm, 1360, 38, 158, 52, () => ConfirmCard(), reason == null ? Brass : Line, 22).interactable = reason == null;
+                Gate(Button(actions, "ConfirmCard", confirm, 1360, 38, 158, 52, () => ConfirmCard(), reason == null ? Brass : Line, 22), reason == null);
             }
 
             var dock = Scroll(frame!, "Hand", 32, 696, 1308, 180, b.Zones.Hand.Count * 194, 180, Background);
@@ -1006,7 +1170,35 @@ namespace MemoryForge.Client
                 Label(p, def.Name + (b.Cards.TryGetValue(uid, out var instance) && instance.Plus ? "+" : ""), 12, 52, 156, 64, 27, Ink, FontStyle.Bold);
                 Label(p, !modes.Contains("now") ? "예약 전용" : modes.Count > 1 ? "즉시 · 예약" : "즉시 사용", 12, 130, 156, 28, 20, Memory);
             }
-            Button(frame!, "EndTurn", b.Phase == "PLAYER" ? "턴 종료\n" + b.Turn + "턴" : "전투 종료", 1360, 696, 208, 180, () => EndTurn(), Brass, 32).interactable = b.Phase == "PLAYER";
+            Gate(Button(frame!, "EndTurn", b.Phase == "PLAYER" ? "턴 종료\n" + b.Turn + "턴" : "전투 종료", 1360, 696, 208, 180, () => EndTurn(), Brass, 32), b.Phase == "PLAYER");
+        }
+        // §14.3 행동 연출 (provisional text, no final VFX/audio): the committed action's rows step in here, apart from the action line,
+        // so the next card's forecast stays readable while they play. Pace and skip change only this strip.
+        void ActionStrip()
+        {
+            var strip = Box(frame!, "ActionPresentation", 32, 544, 1536, 44, Panel);
+            actionStatus = Label(strip, "", 14, 4, 226, 36, 18, Memory, FontStyle.Bold);
+            actionText = Label(strip, "", 248, 1, 764, 42, 16, Ink);
+            PaceButton(strip, ActionPacing.Normal, 1022, 4, 110, 36, 18);
+            PaceButton(strip, ActionPacing.Double, 1138, 4, 110, 36, 18);
+            PaceButton(strip, ActionPacing.Reduced, 1254, 4, 150, 36, 18);
+            actionSkip = Button(strip, "SkipActionPresentation", "건너뛰기", 1410, 4, 112, 36, () => SkipActionPresentation(), Line, 18);
+            actionAll = false; RefreshActionPresentation();
+        }
+        // The last command of a battle: the next screen (reward or save) is already drawn beneath this full-frame sheet, whose controls sit
+        // over that screen's status text rather than its buttons, so a repeated tap after the sheet closes reaches no reward or save.
+        void ActionPresentationSheet()
+        {
+            var p = OverlayPanel("ActionPresentationSheet", 260, 90, 1080, 600);
+            actionOverlay = p.parent.gameObject;
+            actionStatus = Label(p, "", 24, 14, 326, 48, 22, Brass, FontStyle.Bold);
+            PaceButton(p, ActionPacing.Normal, 360, 14, 130, 48, 20);
+            PaceButton(p, ActionPacing.Double, 500, 14, 130, 48, 20);
+            PaceButton(p, ActionPacing.Reduced, 640, 14, 170, 48, 20);
+            actionSkip = Button(p, "SkipActionPresentation", "건너뛰기", 820, 14, 200, 48, () => SkipActionPresentation(), Line, 22);
+            Label(p, "이 연습 세션에서 이미 확정된 결과예요. 표시가 끝나면 이 창이 닫히고 다음 화면을 쓸 수 있어요.", 24, 74, 1032, 28, 18, Muted);
+            actionText = Label(p, "", 24, 112, 1032, 468, 20, Ink);
+            actionAll = true; RefreshActionPresentation();
         }
         void PickSheet(BattleState b)
         {
@@ -1550,6 +1742,7 @@ namespace MemoryForge.Client
             [PickSheetOpen] = "카드를 고르는 중이에요. 고르기를 마치거나 취소한 뒤에 다른 행동을 할 수 있어요.",
             [PickInvalid] = "지금 목록에 있는 카드만 고를 수 있어요.",
             [PickStale] = "고르기를 연 뒤 전투가 바뀌어 고르기를 닫았어요. 아무것도 쓰지 않았어요. 다시 골라 주세요.",
+            [ActionShowing] = "방금 행동의 결과를 보여 주는 중이에요. 다음 카드는 미리 고를 수 있고, 표시가 끝나거나 건너뛰면 사용할 수 있어요.",
             ["INTERNAL"] = "문제가 생겼어요. 다시 시도해 주세요."
         };
         string ErrorText(string code)
@@ -1614,6 +1807,7 @@ namespace MemoryForge.Client
             previous.gameObject.SetActive(false);
             if (Application.isPlaying) Destroy(previous.gameObject); else DestroyImmediate(previous.gameObject);
             canvasRoot = null; frame = null; noticeLabel = null; summaryText = null; summaryStatus = null; summaryContent = null; summaryScroll = null;
+            actionText = null; actionStatus = null; actionSkip = null; actionOverlay = null; actionGated.Clear(); paceButtons.Clear();
         }
         RectTransform Box(Transform parent, string name, float x, float y, float width, float height, Color color)
         {

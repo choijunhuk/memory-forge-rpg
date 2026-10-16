@@ -100,5 +100,11 @@
     "positive_output_messages": 15,
     "actual_model": "claude-opus-5-5",
     "actual_per_turn_effort": "high"
+  },
+  "P1-CARD-FLOW-ACTION-PRESENTATION": {
+    "session_id": "3783efa8-31f2-4332-b2cb-3d352bdc19c7",
+    "actual_model": "claude-opus-5-5",
+    "actual_per_turn_effort": "high",
+    "positive_output_messages": 121
   }
 }

@@ -1,0 +1,31 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"actualScene\":\"MemoryForgeExpedition\",\"paceInput\":\"real EventSystem ray/pointer click\",\"pace\":\"Double\",\"paceOnlyChangesDisplay\":true,\"secondCardCommitted\":true,\"skip\":true,\"repeatSkip\":false,\"skipFullJsonPure\":true,\"canvasPreserved\":true,\"eventSystemPreserved\":true,\"ap\":2,\"version\":3,\"turn\":1},\"compiler\":\"codedom\"}}"
+    }
+  ],
+  "structuredContent": {
+    "success": true,
+    "message": "Code executed successfully.",
+    "data": {
+      "result": {
+        "actualScene": "MemoryForgeExpedition",
+        "paceInput": "real EventSystem ray/pointer click",
+        "pace": "Double",
+        "paceOnlyChangesDisplay": true,
+        "secondCardCommitted": true,
+        "skip": true,
+        "repeatSkip": false,
+        "skipFullJsonPure": true,
+        "canvasPreserved": true,
+        "eventSystemPreserved": true,
+        "ap": 2,
+        "version": 3,
+        "turn": 1
+      },
+      "compiler": "codedom"
+    }
+  },
+  "isError": false
+}

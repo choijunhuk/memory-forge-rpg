@@ -78,6 +78,7 @@ namespace MemoryForge.Client.Tests
             result.Uid = uid!; result.Name = s.Mirror.BattleEffectiveCard(uid!).Name;
             s.Client.SelectEnemy(enemy); s.Client.SelectCard(uid!); s.Client.SelectMode("next");
             Assert.That(Both(s, s.Client.ConfirmCard, BattleCore(s, "play", Play(uid!, "next", enemy))), Is.True);
+            FinishAction(s.Client);
             Assert.That(Both(s, s.Client.EndTurn, BattleCore(s, "end", null)), Is.True);
             Assert.That(s.Mirror.State.Battle, Is.Not.Null, "seed 1234's first battle is still running after one end");
             Assert.That(s.Client.HasTurnSummary, Is.True, "an actual end opens the turn summary");
@@ -197,6 +198,7 @@ namespace MemoryForge.Client.Tests
                 {
                     s.Client.SelectEnemy(target); s.Client.SelectCard(uid); s.Client.SelectMode("next");
                     Assert.That(Both(s, s.Client.ConfirmCard, BattleCore(s, "play", Play(uid, "next", target))), Is.True);
+                    FinishAction(s.Client);
                 }
                 yield return null; Canvas.ForceUpdateCanvases();
                 var endTurn = ButtonNamed(s.Host, "EndTurn"); Vector2 point = PointIn(endTurn, 25);
@@ -414,12 +416,14 @@ namespace MemoryForge.Client.Tests
             Assert.That(next, Is.Not.Null, "seed 1234's opening hand offers a next-turn reservation");
             s.Client.SelectEnemy(enemy); s.Client.SelectCard(next!); s.Client.SelectMode("next");
             Assert.That(Both(s, s.Client.ConfirmCard, BattleCore(s, "play", Play(next!, "next", enemy))), Is.True);
+            FinishAction(s.Client);
             var hand = s.Mirror.State.Battle!.Zones.Hand;
             string? later = hand.FirstOrDefault(u => s.Mirror.BattleAllowedModes(u).Contains("after") && s.Mirror.BattleCheck(u, "after", enemy) == null);
             if (later != null)
             {
                 s.Client.SelectEnemy(enemy); s.Client.SelectCard(later); s.Client.SelectMode("after");
                 Assert.That(Both(s, s.Client.ConfirmCard, BattleCore(s, "play", Play(later, "after", enemy))), Is.True);
+                FinishAction(s.Client);
             }
             int reservedBefore = s.Mirror.State.Battle!.Reservations.Count;
             Assert.That(Both(s, s.Client.EndTurn, BattleCore(s, "end", null)), Is.True);
@@ -596,6 +600,17 @@ namespace MemoryForge.Client.Tests
             Assert.That(client.HasTurnSummary, Is.False);
             Assert.That(Fingerprint(client.Snapshot!), Is.EqualTo(before), "skip and continue never reach the Run");
         }
+        // P1-CARD-FLOW-ACTION-PRESENTATION: an actual play or ultimate opens its display, which refuses the next command. Drivers not about
+        // it finish it explicitly right after that command (skip; a repeat is inert); both are display only and leave the Run as it was.
+        static void FinishAction(MemoryForgeExpeditionClient client)
+        {
+            Assert.That(client.HasActionPresentation, Is.True, "an actual play or ultimate opens its display");
+            string before = Fingerprint(client.Snapshot!);
+            Assert.That(client.SkipActionPresentation(), Is.True);
+            Assert.That(client.HasActionPresentation, Is.False);
+            Assert.That(client.SkipActionPresentation(), Is.False, "a repeated skip is inert");
+            Assert.That(Fingerprint(client.Snapshot!), Is.EqualTo(before), "finishing the display never reaches the Run");
+        }
         static bool Decoration(BattleDigestEntry row) => row.Kind == BattleDigestKind.Summary || row.Kind == BattleDigestKind.PreviousIntent || row.Kind == BattleDigestKind.EnemyState;
 
         // A fresh Run from the same public setup with every recorded mirror command; it starts exactly where the mirror is.
@@ -718,16 +733,16 @@ namespace MemoryForge.Client.Tests
                 {
                     Assert.That(client.ConfirmCard(), Is.False);
                     Assert.That(client.PickerOpen, Is.True);
-                    if (Both(s, client.AutoPick, BattleCore(s, "play", Play(card, "now", enemy)))) return;
+                    if (Both(s, client.AutoPick, BattleCore(s, "play", Play(card, "now", enemy)))) { FinishAction(client); return; }
                 }
-                else if (Both(s, client.ConfirmCard, BattleCore(s, "play", Play(card, "now", enemy)))) return;
+                else if (Both(s, client.ConfirmCard, BattleCore(s, "play", Play(card, "now", enemy)))) { FinishAction(client); return; }
             }
             var ready = b.Actors.FirstOrDefault(a => a.Gauge >= content.Rules.GaugeMax);
             if (ready != null)
             {
                 client.SelectEnemy(enemy);
                 var args = BattleArgument.Object(new[] { Pair("actor", ready.Id), Pair("target", enemy) });
-                if (Both(s, () => client.UseUltimate(ready.Id), BattleCore(s, "ult", args))) return;
+                if (Both(s, () => client.UseUltimate(ready.Id), BattleCore(s, "ult", args))) { FinishAction(client); return; }
             }
             if (Both(s, client.EndTurn, BattleCore(s, "end", null))) Dismiss(client);
         }

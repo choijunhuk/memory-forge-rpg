@@ -368,6 +368,8 @@ namespace MemoryForge.Client.Tests
             autoButton.onClick.Invoke();
             Assert.That(client.AutoPick(), Is.False);
             AssertSame(s, "a repeated auto reached nothing");
+            // The auto play's display would refuse the private Do boundary below; it is finished explicitly (display only).
+            FinishAction(client);
 
             // Recovery (seam 2): a failed calculation quarantines; the sheet's own entry points answer the recovery code first.
             LogAssert.Expect(LogType.Error, new Regex(Diagnostic + @"InvalidOperationException\)"));
@@ -452,6 +454,7 @@ namespace MemoryForge.Client.Tests
             client.SelectEnemy(enemy); client.SelectCard(card!); client.SelectMode("now");
             Assert.That(Both(s, client.ConfirmCard, r => r.BattleCommand("play", Play(card!, "now", enemy))), Is.True);
             Assert.That(client.PickerOpen, Is.False);
+            FinishAction(client); // the play's display, not a sheet lock, is what the end waits for
             Assert.That(Both(s, client.EndTurn, r => r.BattleCommand("end")), Is.True);
             Dismiss(client);
             yield return null;
@@ -605,18 +608,29 @@ namespace MemoryForge.Client.Tests
                 {
                     Assert.That(client.ConfirmCard(), Is.False);
                     Assert.That(client.PickerOpen, Is.True);
-                    if (Both(s, client.AutoPick, r => r.BattleCommand("play", Play(card, "now", enemy)))) return;
+                    if (Both(s, client.AutoPick, r => r.BattleCommand("play", Play(card, "now", enemy)))) { FinishAction(client); return; }
                 }
-                else if (Both(s, client.ConfirmCard, r => r.BattleCommand("play", Play(card, "now", enemy)))) return;
+                else if (Both(s, client.ConfirmCard, r => r.BattleCommand("play", Play(card, "now", enemy)))) { FinishAction(client); return; }
             }
             var ready = b.Actors.FirstOrDefault(a => a.Gauge >= content.Rules.GaugeMax);
             if (ready != null)
             {
                 client.SelectEnemy(enemy);
                 var args = BattleArgument.Object(new[] { Pair("actor", ready.Id), Pair("target", enemy) });
-                if (Both(s, () => client.UseUltimate(ready.Id), r => r.BattleCommand("ult", args))) return;
+                if (Both(s, () => client.UseUltimate(ready.Id), r => r.BattleCommand("ult", args))) { FinishAction(client); return; }
             }
             if (Both(s, client.EndTurn, r => r.BattleCommand("end"))) Dismiss(client);
+        }
+        // P1-CARD-FLOW-ACTION-PRESENTATION: an actual play or ultimate opens its display, which refuses the next command. Drivers not about
+        // it finish it explicitly right after that command (skip; a repeat is inert); both are display only and leave the Run as it was.
+        static void FinishAction(MemoryForgeExpeditionClient client)
+        {
+            Assert.That(client.HasActionPresentation, Is.True, "an actual play or ultimate opens its display");
+            string before = Fingerprint(client.Snapshot!);
+            Assert.That(client.SkipActionPresentation(), Is.True);
+            Assert.That(client.HasActionPresentation, Is.False);
+            Assert.That(client.SkipActionPresentation(), Is.False, "a repeated skip is inert");
+            Assert.That(Fingerprint(client.Snapshot!), Is.EqualTo(before), "finishing the display never reaches the Run");
         }
         static bool Both(Session s, Func<bool> view, Action<CoreRun> core)
         {
