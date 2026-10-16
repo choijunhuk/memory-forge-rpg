@@ -82,6 +82,12 @@ namespace MemoryForge.Client
         readonly Dictionary<string, string> cardNames = new Dictionary<string, string>(StringComparer.Ordinal);
         readonly Dictionary<string, string> characterNames = new Dictionary<string, string>(StringComparer.Ordinal);
         readonly Dictionary<string, string> errors = new Dictionary<string, string>(StringComparer.Ordinal);
+        // Display-only content texts for the reward screen (existing definitions; nothing here decides a reward).
+        readonly Dictionary<string, string> cardTexts = new Dictionary<string, string>(StringComparer.Ordinal);
+        readonly Dictionary<string, string> relicNames = new Dictionary<string, string>(StringComparer.Ordinal);
+        readonly Dictionary<string, string> relicTexts = new Dictionary<string, string>(StringComparer.Ordinal);
+        readonly Dictionary<string, string> partNames = new Dictionary<string, string>(StringComparer.Ordinal);
+        readonly Dictionary<string, string> partTexts = new Dictionary<string, string>(StringComparer.Ordinal);
 
         // ───────── read-only state for Root's checks ─────────
         public bool Configured => factory != null;
@@ -333,6 +339,44 @@ namespace MemoryForge.Client
             if (!CanCommand) return Refuse(NotReady());
             return Mutate((s, context) => s.CommandAsync(context, "end", null), true, true, "턴을 마쳤어요.");
         }
+
+        // ───────── battle reward (P1-SERVER-REWARD-UI): one existing command per button ─────────
+
+        /// <summary>takeCard {id}: id must be one of the published reward cards.</summary>
+        public Task<bool> TakeCardAsync(string id) =>
+            RewardAction(p => Ids(p["cards"]).Contains(id), "takeCard", new JObject { ["id"] = id }, "카드를 덱에 넣었어요.");
+        /// <summary>skipCard {}: only while reward cards are published.</summary>
+        public Task<bool> SkipCardAsync() => RewardAction(p => Ids(p["cards"]).Count > 0, "skipCard", null, "카드를 받지 않았어요.");
+        /// <summary>takeRelic {id}: id must be one of the published reward relics.</summary>
+        public Task<bool> TakeRelicAsync(string id) =>
+            RewardAction(p => Ids(p["relic"]).Contains(id), "takeRelic", new JObject { ["id"] = id }, "유물을 얻었어요.");
+        /// <summary>takePart {}: only while a reward part is published.</summary>
+        public Task<bool> TakePartAsync() => RewardAction(p => Str(p["part"]) != null, "takePart", null, "부품을 챙겼어요.");
+        /// <summary>evolve {key, branchId}: the pair must be one of the published evolution offers.</summary>
+        public Task<bool> EvolveAsync(string key, string branchId) => RewardAction(p => ((p["evolutions"] as JArray) ?? new JArray()).OfType<JObject>()
+            .Any(e => Str(e["key"]) == key && Ids(e["options"]).Contains(branchId)), "evolve", new JObject { ["key"] = key, ["branchId"] = branchId }, "진화했어요.");
+        /// <summary>proceed {}: an explicit command; Core decides whether it is allowed now.</summary>
+        public Task<bool> ProceedAsync() => RewardAction(p => true, "proceed", null, "다음으로 나아가요.");
+        /// <summary>True while the session's current snapshot shows the public pending battle reward.</summary>
+        public bool ShowingReward => Pending(session?.State.Snapshot?.Run?.StateJObject(), "reward") != null;
+
+        // Gate first (no request while busy, stale, pending, disconnected, during a barrier/sheet/prepared play), then the published
+        // choice from the SESSION's current snapshot, then exactly one existing command through Mutate and the outbox.
+        Task<bool> RewardAction(Func<JObject, bool> offered, string kind, JObject? args, string success)
+        {
+            if (!CanCommand) return Refuse(rows != null || picker != null || prepared != null ? "지금은 할 수 없어요." : NotReady());
+            var pending = Pending(session!.State.Snapshot?.Run?.StateJObject(), "reward");
+            if (pending == null || Str(session.State.Snapshot!.Run!.StateJObject()["phase"]) != "REWARD" || !offered(pending))
+                return Refuse("지금 고를 수 있는 보상이 아니에요.");
+            return Mutate((s, context) => s.CommandAsync(context, kind, args), false, false, success);
+        }
+
+        static JObject? Pending(JObject? state, string type)
+        {
+            var pending = state?["pending"] as JObject;
+            return pending != null && Str(pending["type"]) == type ? pending : null;
+        }
+        static List<string> Ids(JToken? list) => ((list as JArray) ?? new JArray()).Select(Str).OfType<string>().ToList();
 
         /// <summary>Barrier: shows every row at once. Ordinary presentation: closes it. Changes text only; sends nothing.</summary>
         public void SkipPresentation()
@@ -614,6 +658,7 @@ namespace MemoryForge.Client
                 else if (run == null) Label(frame, "진행 중인 서버 탐사가 없어요. '새 서버 탐사'로 시작할 수 있어요.", 32, 200, 1536, 60, 26, Ink);
                 else if (run.Phase == "MAP") MapView();
                 else if (run.Phase == "BATTLE" && Battle() != null) BattleView();
+                else if (run.Phase == "REWARD" && Pending(State(), "reward") != null) RewardView();
                 else LaterView(run.Phase);
                 Label(frame, notice, 32, 846, 1536, 44, 21, noticeError ? Danger : Memory);
                 if (picker != null) PickView();
@@ -693,7 +738,82 @@ namespace MemoryForge.Client
             var panel = Box(frame!, "Later", 32, 120, 1536, 300, Panel);
             Label(panel, PhaseName(phase), 24, 20, 1488, 44, 32, Brass, FontStyle.Bold);
             Label(panel, "체력 " + Int(state["hp"]) + " / " + Int(state["maxHp"]) + "   ·   동전 " + Int(state["coins"]), 24, 80, 1488, 36, 24, Ink);
-            Label(panel, "이 단계(보상·휴식·공방·상점·사건·기록소·기억 저장)는 다음 작업 단위에서 서버 화면으로 연결돼요. 원래 로컬 탐사 화면은 그대로 있어요.", 24, 140, 1488, 80, 22, Muted);
+            Label(panel, "이 단계(휴식·공방·상점·사건·기록소·기억 저장)는 다음 작업 단위에서 서버 화면으로 연결돼요. 원래 로컬 탐사 화면은 그대로 있어요.", 24, 140, 1488, 80, 22, Muted);
+        }
+
+        // P1-SERVER-REWARD-UI §7/§14.3/§17.4: the server's public pending reward exactly as published (coins, cards [id], relic [id]|null,
+        // part?, evolutions [{key, options}]). Every button is one existing command; only published choices are offered and Core decides
+        // the rest. A claimed choice disappears when the committed state no longer lists it — never by local deletion.
+        void RewardView()
+        {
+            var state = State()!;
+            var p = Pending(state, "reward")!;
+            bool ready = CanCommand;
+            var head = Box(frame!, "RewardCoins", 32, 100, 1536, 56, Panel);
+            Label(head, "전투 보상  ·  보상 동전 " + Int(p["coins"]) + "  ·  보유 동전 " + Int(state["coins"]) + "  (서버 기록)", 20, 10, 1210, 40, 26, Brass, FontStyle.Bold);
+            // Proceeding is an explicit command; whether unclaimed rewards may be left is Core's verdict.
+            Button(head, "Proceed", "다음으로 진행", 1256, 4, 268, 48, () => Launch(ProceedAsync), Brass, 23).interactable = ready;
+            // Every published offer stays reachable: the rows sit in a vertical scroll whose content height comes from the actual number
+            // of published evolution rows (growthCap can reach 4, and every qualifying deck card is offered) plus the card/relic/part rows.
+            var evolutions = ((p["evolutions"] as JArray) ?? new JArray()).OfType<JObject>().ToList();
+            var panel = Scroll(frame!, "Reward", 32, 166, 1536, 670, 1536, evolutions.Count * 80 + 204 + 132 + 72, Background);
+            float y = 0;
+            var deck = ((state["deck"] as JArray) ?? new JArray()).OfType<JObject>().ToList();
+            foreach (var offer in evolutions)
+            {
+                string key = Str(offer["key"]) ?? "";
+                string? from = Str(deck.FirstOrDefault(c => Str(c["key"]) == key)?["id"]);
+                var row = Box(panel, "Evolution:" + key, 0, y, 1536, 72, Panel);
+                Label(row, CardName(from) + " · 진화를 고르세요", 20, 8, 560, 56, 21, Ink);
+                var options = ((offer["options"] as JArray) ?? new JArray()).Select(Str).OfType<string>().ToList();
+                for (int k = 0; k < options.Count; k++)
+                {
+                    string branch = options[k];
+                    Button(row, "Evolve:" + key + ":" + branch, CardName(branch), 600 + k * 300, 10, 284, 52, () => Launch(() => EvolveAsync(key, branch)), Memory, 21).interactable = ready;
+                }
+                y += 80;
+            }
+            var cards = Ids(p["cards"]);
+            var cardPanel = Box(panel, "RewardCards", 0, y, 1536, 196, Panel);
+            if (cards.Count == 0) Label(cardPanel, "남은 카드 보상이 없어요.", 20, 10, 800, 34, 22, Muted);
+            else
+            {
+                Label(cardPanel, "카드 1장을 덱에 추가할 수 있어요.", 20, 8, 1100, 30, 21, Ink, FontStyle.Bold);
+                for (int k = 0; k < cards.Count; k++)
+                {
+                    string id = cards[k];
+                    var button = Button(cardPanel, "RewardCard:" + id, "", 20 + k * 380, 44, 360, 140, () => Launch(() => TakeCardAsync(id)), Line);
+                    button.interactable = ready;
+                    Label(button.transform, CardName(id), 12, 8, 336, 32, 23, Ink, FontStyle.Bold);
+                    Label(button.transform, cardTexts.TryGetValue(id, out var text) ? text : "", 12, 42, 336, 92, 16, Muted);
+                }
+                Button(cardPanel, "SkipCard", "카드 받지 않기", 1176, 44, 340, 60, () => Launch(SkipCardAsync), Line, 22).interactable = ready;
+            }
+            y += 204;
+            var relics = Ids(p["relic"]);
+            var relicPanel = Box(panel, "RewardRelics", 0, y, 1536, 124, Panel);
+            if (relics.Count == 0) Label(relicPanel, "남은 유물 보상이 없어요.", 20, 10, 800, 34, 22, Muted);
+            else
+            {
+                Label(relicPanel, "유물 1개 선택", 20, 6, 600, 30, 21, Ink, FontStyle.Bold);
+                for (int k = 0; k < relics.Count; k++)
+                {
+                    string id = relics[k];
+                    var button = Button(relicPanel, "Relic:" + id, "", 20 + k * 500, 40, 480, 78, () => Launch(() => TakeRelicAsync(id)), Line);
+                    button.interactable = ready;
+                    Label(button.transform, relicNames.TryGetValue(id, out var name) ? name : "유물", 12, 6, 456, 30, 22, Ink, FontStyle.Bold);
+                    Label(button.transform, relicTexts.TryGetValue(id, out var text) ? text : "", 12, 38, 456, 36, 16, Muted);
+                }
+            }
+            y += 132;
+            string? part = Str(p["part"]);
+            var partPanel = Box(panel, "RewardPart", 0, y, 1536, 72, Panel);
+            if (part == null) Label(partPanel, "남은 부품 보상이 없어요.", 20, 10, 800, 34, 22, Muted);
+            else
+            {
+                Label(partPanel, "부품 발견: " + (partNames.TryGetValue(part, out var name) ? name : "부품") + " — " + (partTexts.TryGetValue(part, out var text) ? text : ""), 20, 8, 1200, 56, 19, Ink);
+                Button(partPanel, "TakePart", "가져가기", 1296, 8, 220, 56, () => Launch(TakePartAsync), Memory, 22).interactable = ready;
+            }
         }
 
         void BattleView()
@@ -943,6 +1063,13 @@ namespace MemoryForge.Client
                 var data = ClientRunContent.Load();
                 foreach (var card in data.Memory.Battle.Cards) cardNames[card.Id] = card.Name;
                 foreach (var character in data.Memory.Battle.Characters) characterNames[character.Id] = character.Name;
+                foreach (var relic in data.Memory.Battle.Relics) { relicNames[relic.Id] = relic.Name; relicTexts[relic.Id] = relic.Text; }
+                foreach (var part in data.Memory.Battle.Parts) { partNames[part.Id] = part.Name; partTexts[part.Id] = part.Text; }
+                foreach (var card in data.Memory.Battle.Cards)
+                {
+                    try { cardTexts[card.Id] = BattleText.Card(card, data.Memory.Battle); }
+                    catch (Exception) { } // a card without readable text shows its name only
+                }
             }
             catch (Exception) { } // display names only: without content every card shows a generic name
             var messages = Resources.Load<TextAsset>("MemoryForge/error-messages");
@@ -1037,6 +1164,15 @@ namespace MemoryForge.Client
             bool light = color.HasValue && (color.Value == Brass || color.Value == Memory || color.Value == Danger);
             if (caption.Length != 0) Label(r, caption, 6, 5, width - 12, height - 10, size, light ? Background : Ink, FontStyle.Normal, TextAnchor.MiddleCenter);
             return button;
+        }
+        // The original's scroll construction: a masked viewport (RectMask2D) with a ScrollRect over a top-left anchored content box.
+        RectTransform Scroll(Transform parent, string name, float x, float y, float width, float height, float contentWidth, float contentHeight, Color color)
+        {
+            var viewport = Box(parent, name, x, y, width, height, color); viewport.GetComponent<Image>().raycastTarget = true; viewport.gameObject.AddComponent<RectMask2D>();
+            var content = Box(viewport, name + "Content", 0, 0, Math.Max(width, contentWidth), Math.Max(height, contentHeight), color);
+            var scroll = viewport.gameObject.AddComponent<ScrollRect>(); scroll.viewport = viewport; scroll.content = content;
+            scroll.horizontal = contentWidth > width; scroll.vertical = contentHeight > height; scroll.movementType = ScrollRect.MovementType.Clamped; scroll.scrollSensitivity = 25;
+            return content;
         }
         void Bar(Transform parent, float x, float y, float width, float height, int value, int max, Color color)
         { var back = Box(parent, "Bar", x, y, width, height, Line); Box(back, "Fill", 0, 0, width * Mathf.Clamp01(max > 0 ? (float)value / max : 0), height, color); }

@@ -1,0 +1,60 @@
+var c = UnityEngine.Object.FindObjectOfType<MemoryForge.Client.MemoryForgeServerPracticeClient>();
+System.Func<System.Func<bool>, System.Threading.Tasks.Task> until = async ready => {
+    for (int n = 0; n < 1500; n++) { if (ready()) return; await System.Threading.Tasks.Task.Delay(10); }
+    throw new System.Exception("Bounded public UI wait expired");
+};
+var commands = new Newtonsoft.Json.Linq.JArray();
+System.Func<System.Threading.Tasks.Task<string>> run = async () => {
+    try {
+        await until(() => c.CanCommand);
+        int start = c.Snapshot.Run.ServerVersion;
+        for (int step = 0; step < 80 && c.Snapshot.Run.Phase == "BATTLE"; step++) {
+            if (c.HasPresentation) { c.SkipPresentation(); c.ContinuePresentation(); }
+            await until(() => c.CanCommand);
+            var battle = (Newtonsoft.Json.Linq.JObject)c.Snapshot.Run.StateJObject()["battle"];
+            var hand = (Newtonsoft.Json.Linq.JArray)battle["hand"];
+            bool played = false;
+            foreach (Newtonsoft.Json.Linq.JObject card in hand) {
+                var modes = card["modes"] as Newtonsoft.Json.Linq.JArray;
+                bool now = false;
+                foreach (var mode in modes) if ((string)mode == "now") now = true;
+                if (!now) continue;
+                string uid = (string)card["uid"];
+                if (!c.SelectCard(uid)) continue;
+                await until(() => !c.Busy && c.QueryView != null);
+                if (c.SelectedMode != "now") { c.SelectMode("now"); await until(() => !c.Busy && c.QueryView != null); }
+                if (card["needsTarget"].Type != Newtonsoft.Json.Linq.JTokenType.Null) {
+                    string target = null;
+                    foreach (Newtonsoft.Json.Linq.JObject enemy in (Newtonsoft.Json.Linq.JArray)battle["enemies"])
+                        if ((bool)enemy["alive"] && ((string)card["needsTarget"] != "fixed" || (int)enemy["st"]["mark"] > 0)) { target = (string)enemy["uid"]; break; }
+                    if (target == null || !c.SelectEnemy(target)) continue;
+                    await until(() => !c.Busy && c.QueryView != null);
+                }
+                if (c.QueryView.ForecastError != null) continue;
+                int version = c.Snapshot.Run.ServerVersion;
+                await c.ConfirmAsync();
+                if (c.PickerOpen) { await until(() => !c.Busy && c.QueryView != null); await c.AutoPickAsync(); }
+                if (c.Snapshot.Run.ServerVersion == version + 1) {
+                    commands.Add(new Newtonsoft.Json.Linq.JObject { ["kind"] = "play", ["uid"] = uid, ["from_version"] = version, ["to_version"] = c.Snapshot.Run.ServerVersion });
+                    played = true; break;
+                }
+                if (c.SessionState.Pending != null) throw new System.Exception("Unexpected unresolved real command");
+            }
+            if (!played) {
+                int version = c.Snapshot.Run.ServerVersion;
+                await c.EndTurnAsync();
+                if (c.Snapshot.Run.ServerVersion != version + 1) throw new System.Exception("Real end command refused");
+                commands.Add(new Newtonsoft.Json.Linq.JObject { ["kind"] = "end", ["from_version"] = version, ["to_version"] = c.Snapshot.Run.ServerVersion });
+            }
+            if (c.HasPresentation) { c.SkipPresentation(); c.ContinuePresentation(); }
+            await System.Threading.Tasks.Task.Delay(20);
+        }
+        if (c.HasPresentation) { c.SkipPresentation(); c.ContinuePresentation(); }
+        if (c.Snapshot.Run.Phase != "REWARD") throw new System.Exception("Public-only bounded player did not reach reward");
+        return new Newtonsoft.Json.Linq.JObject { ["status"] = "PASS", ["phase"] = c.Snapshot.Run.Phase, ["start_version"] = start,
+            ["final_version"] = c.Snapshot.Run.ServerVersion, ["commands"] = commands, ["pending_reward"] = c.Snapshot.Run.StateJObject()["pending"],
+            ["scope"] = "actual Editor UI public actions and real Core HTTP; no snapshot/seed/RNG injection or physical-device claim" }.ToString(Newtonsoft.Json.Formatting.None);
+    } catch (System.Exception error) { return new Newtonsoft.Json.Linq.JObject { ["status"] = "FAIL", ["commands"] = commands, ["safe_error"] = error.GetType().Name + ": " + error.Message }.ToString(Newtonsoft.Json.Formatting.None); }
+};
+System.AppDomain.CurrentDomain.SetData("MemoryForge.Codex.ServerUI.Win.20261017", run());
+return "Started bounded public-only UI actions to earn an actual Core reward";

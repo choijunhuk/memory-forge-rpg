@@ -502,3 +502,5 @@ Unity 탐사 화면: [실제 지도·전투·보상/서비스·기억선택과 �
 §14.7/§17.2/§17.4 후속 — [실제 서버 전송·공개 상태 복구](../reports/practice_transport_20261017/root_acceptance.md): 동일NUnit83, 실제UnityPlay248/Edit3, 실제CoreHTTP서버재시작/새클라이언트동일요청복구, EditorMono응답손상복구 PASS. 기존미전송준비/시간예약·전체로컬원정은 보존했다. 서버지도·전투UI·전체앱프로세스/Android·운영인증은 별도이며 라이브러리 검증으로 완료표시하지 않는다.
 
 §14.2/§14.7/§17.4 후속 — [서버 지도·전투·복구 UI](../reports/practice_server_ui_20261017/root_acceptance.md): 실제Editor uGUI/CoreHTTP24판정·Play248/Edit3, 최종버전의입력잠금/미전송대기/정확한재확인과새지도→전투를확인. 별도개발씬이며기존전체로컬원정은보존. 서버보상/서비스/기억저장·필살기/상세/배속/실기기는미완료다.
+
+§7/§14.3/§17.4 후속 — [서버 전투 보상 UI](../reports/practice_server_reward_ui_20261017/root_acceptance.md): 실제전투8명령승리후공개된보상에서uGUI/HTTP11판정, 카드1회수령/중복거절/지도복귀를확인했다. 승인growthCap4를반영해모든보상에스크롤접근한다. 유물/부품/진화양성·4행실제획득검증과다른서비스/기억저장은남음.
