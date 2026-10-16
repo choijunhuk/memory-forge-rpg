@@ -1,0 +1,40 @@
+{
+  "play": {
+    "job_id": "0f990de36bb54309a71e4b2b62f61e26",
+    "summary": {
+      "total": 182,
+      "passed": 182,
+      "failed": 0,
+      "skipped": 0,
+      "durationSeconds": 55.8445607,
+      "resultState": "Passed"
+    }
+  },
+  "edit": {
+    "job_id": "ea5d2bb614a54ac19ac486a99db0af3f",
+    "summary": {
+      "total": 3,
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0,
+      "durationSeconds": 0.0657521,
+      "resultState": "Passed"
+    }
+  },
+  "fresh_compile_console": {
+    "errors": 0,
+    "warnings": 0
+  },
+  "negative_test_logs": "Ten expected existing LogAssert quarantine/restart error diagnostics were captured after the full suite, preserved, then cleared for a fresh live-scene check.",
+  "settings_exactly_restored": true,
+  "fresh_live_scene": {
+    "playing": true,
+    "phase": "MAP",
+    "canvas": true,
+    "pendingType": "MemoryForge.Client.PracticeCommandOutbox"
+  },
+  "fresh_live_console": {
+    "errors": 0,
+    "warnings": 0
+  }
+}

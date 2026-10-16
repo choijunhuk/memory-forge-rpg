@@ -1,0 +1,52 @@
+{
+  "scope": "OS lock primitive prerequisite, not the pending component",
+  "initial_dotnet": "ACQUIRED",
+  "mono_hold": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"held\":true,\"playing\":true},\"compiler\":\"codedom\"}}"
+      }
+    ],
+    "structuredContent": {
+      "success": true,
+      "message": "Code executed successfully.",
+      "data": {
+        "result": {
+          "held": true,
+          "playing": true
+        },
+        "compiler": "codedom"
+      }
+    },
+    "isError": false
+  },
+  "dotnet_while_mono_held": {
+    "exit": 0,
+    "result": "ACQUIRED"
+  },
+  "release": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"released\":true},\"compiler\":\"codedom\"}}"
+      }
+    ],
+    "structuredContent": {
+      "success": true,
+      "message": "Code executed successfully.",
+      "data": {
+        "result": {
+          "released": true
+        },
+        "compiler": "codedom"
+      }
+    },
+    "isError": false
+  },
+  "after_release": {
+    "exit": 0,
+    "result": "ACQUIRED"
+  },
+  "same_lock_inode": true
+}

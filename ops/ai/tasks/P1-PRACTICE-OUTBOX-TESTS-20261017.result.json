@@ -1,0 +1,29 @@
+{
+  "task_id": "P1-PRACTICE-OUTBOX-TESTS-20261017",
+  "run_id": "P1-PRACTICE-OUTBOX-TESTS-20261017-20261016T173650185336Z",
+  "status": "RECEIVED_UNVERIFIED",
+  "requestedEffort": "xhigh",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "changes_verified": false,
+  "raw_output": "ops/ai/local/P1-PRACTICE-OUTBOX-TESTS-20261017-20261016T173650185336Z*",
+  "billing_verified_at": "2026-10-15T21:22:01.277612+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "codex/public-battle-query-20261017",
+  "base_commit": "47502b797ebc2de262704968f85b9ce30ed7665f",
+  "worktree": "/Users/choi/.codex/worktrees/claude-public-battle/Memory_forge",
+  "allowed_files": [
+    "client/MemoryForgeUnity/Assets/Tests/PlayMode/PracticeCommandOutboxPlayModeTests.cs",
+    "reports/practice_command_outbox_20261017/author_report.md"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "82687d1f-cd97-479c-87fa-ed21193a6961",
+  "subtype": "success",
+  "is_error": false,
+  "result": "I've written the outbox test file: 17 real-file tests. I have not compiled or run them; they need your .NET 10 / NUnit 3.5 build and an actual Editor Mono run. The source stayed frozen, and only the test file and the report changed.\n\n**What the tests cover**\n- **Exact bodies:** pretty whitespace, member order, escapes, UTF-8 (including emoji and U+FFFD) and ordered picks survive into new objects byte for byte. Mutating a `BodyUtf8` copy changes nothing, and an equal restage leaves the file untouched.\n- **Conflicts and bindings:** same ID with a different body or route, or a different ID while pending, is refused with the original bytes kept. Another endpoint or account can't load, replace or clear the record.\n- **Confirm:** a stale Confirm can't clear a later, different request. An identical re-stage of an already confirmed request can be confirmed by the original expectation, as you specified.\n- **Damaged records:** every truncation length, every byte flipped three ways, padding, a BOM and garbage are refused and kept whole. Twenty-eight well-formed edits with recomputed checksums are refused too: unknown or missing fields, non-canonical forms, unknown schema, bad binding values, a mismatched requestId and invalid bodies. The test-side encoder is first checked to reproduce the store's own file exactly.\n- **Files and locks:**\n  - A stray temp file is never promoted.\n  - Holding the lock file in-process gives BUSY immediately, and it works again after release.\n  - A directory in the lock or record path, or a missing folder, gives an explicit error rather than false success.\n- **Permission failures (your chmod proposal, on the test's own folder only):**\n  - A read-only fresh folder gives LOCK_FAILED.\n  - With the lock already present and the folder read-only, Stage gives WRITE_FAILED.\n  - A pending record in a read-only folder gives CLEAR_FAILED and is kept.\n  - An unreadable record gives READ_FAILED.\n  - Modes are restored in `finally`, and the test asserts it is not running as root.\n- **Request limits:** the three mutation routes are accepted while query and read routes are refused. requestId 8/64 is accepted and 7/65 refused; versions 0 and Int32Max are accepted, with all the invalid forms refused. The 64 KiB UTF-8 body limit, depth 8 vs 9, 56 JSON extensions or malformed bodies, and valid standard JSON in other fields are all covered.\n- **Records:** the largest valid record (backslash-heavy body, over 3×64 KiB) reloads, and a file over 1 MiB is refused and kept.\n- **Races:** four instances race on threads over 25 rounds. Exactly one stage wins each round, and losers get BUSY or PENDING_OTHER. Confirm racing a new Stage never clears the newcomer.\n\n**Expected failure**\n- `EscapedUnpairedSurrogatesAreRefused` is the RED regression for the review finding and should fail against the current source. A lone escaped surrogate in `picks` is staged because Newtonsoft turns it into U+FFFD before the pairing check runs.\n- The report suggests a narrow fix, not applied: require each high-surrogate escape to be immediately followed by a low-surrogate escape, and refuse a low one that isn't. That check also runs when an existing record is reloaded, so the same fix covers both.\n\n**Other issues for review**\n- Any unexpected I/O error while opening the lock file is reported as BUSY. It fails closed with nothing changed, but the error code is misleading.\n- Record, temp and lock files take the process umask, typically 0644. That matters for your privacy probe.\n- Please confirm on both runtimes:\n  - an in-process `FileShare.None` hold is refused;\n  - EACCES surfaces as `UnauthorizedAccessException` or `IOException`;\n  - libc `chmod` with an `int` mode marshals correctly to macOS's 16-bit `mode_t`.\n\n**Not shown by these tests:** other OS processes and the cross-process flock lock, a client restart, HTTP or server receipts, power loss, Android/IL2CPP, file-mode privacy, and a failing rename inside `File.Move`.\n\nSession: `82687d1f-cd97-479c-87fa-ed21193a6961`.\n\nFiles changed:\n- `client/MemoryForgeUnity/Assets/Tests/PlayMode/PracticeCommandOutboxPlayModeTests.cs`\n- `reports/practice_command_outbox_20261017/author_report.md` (test delta and defect list appended)",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ]
+}

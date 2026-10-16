@@ -104,3 +104,8 @@ R0는 [실제18Play/3Edit](../reports/run_create_20261015/unity_playmode18.json)
 [정제 CLI 메타데이터](../reports/public_battle_query_20261017/actual_cli_metadata.json)에서 Opus5.5의 실제 Max181, xhigh(서버27+경계38+Core104+보강25), High12 기록을 확인했다. 최초Max작업30분시간초과를 한도/성공으로 바꾸지 않았고, 뒤의 범위분리작업은 exit0으로 회수했다. Codex GPT-6.1 Sol Max가 독립 리뷰·실행·통합했고 반대편의 테스트 보강도 두 번째 리뷰에서 승인했다. 기존계정 구독인증·계정일치·24시간이내 creditsOFF/autoreloadOFF UI증거를 적용했으며 API/추가크레딧/유료우회·다른모델은 사용하지 않았다. 원시인증/과금/응답로그는 공개보고서에 복사하지 않는다.
 
 UnityMCP의 실제 MemoryForgeUnity@4034a4e2fe236d6e /6000.0.46f1 Editor에 새Core·공유정책·Mono시험을 임포트하고 Play165/Edit3·skip0·Console0오류/0경고를 확인했다([근거](../reports/public_battle_query_20261017/unity_verification.json)). Scene/Prefab 쓰기는 Codex단독이며 기존설정바이트를 복구했다. Headless Core553·파일952·실제PG859와 이 Editor 결과는 서로 다른 검증이다. 새native/실기기·Unity네트워크/프로세스복구·운영API 완료로 확대하지 않는다. 이미지작업은 없고 Codex전담·GitHub비공개·기존설계/수치/보존정책을 유지한다.
+
+
+## 2026-10-17 미확정 요청 보존 — 실제 실행 경계
+
+[원문 보존 컴포넌트](../reports/practice_command_outbox_20261017/root_acceptance.md)는 공식OpusMax로 시작했고, Codex의 실제Mono잠금반증 뒤 같은세션xhigh 구현/시험/수정·High한줄보강으로 회수했다. 원래중단FAILED는그대로이고과금/모델우회가아니다. [실제CLI모델·노력기록](../reports/practice_command_outbox_20261017/actual_cli_metadata.json)과구독인증/계정일치·유효creditsOFF/autoreloadOFF증거를구분한다. CodexGPT-6.1SolMax의독립리뷰·실행과두번째좁은승인을완료했으며Root저장/HTTP25·새파일0600Mac/Linux·실제Mono전체Play182/Edit3을확인했다. 전체클라이언트전송/UI/기기복구·전원장애가아니며기존설계/수치/이미지Codex담당/Private정책을유지한다.

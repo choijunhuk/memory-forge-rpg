@@ -1,0 +1,19 @@
+{
+  "scope": "actual Editor Mono vs separate bundled Mono6.13 process; primitive only",
+  "initial_mono": "ACQUIRED",
+  "actual_editor_handle": {
+    "held": true,
+    "handleClosed": false,
+    "playing": true
+  },
+  "mono_while_editor_mono_held": {
+    "exit": 0,
+    "result": "ACQUIRED"
+  },
+  "after_release": {
+    "exit": 0,
+    "result": "ACQUIRED"
+  },
+  "same_lock_inode": true,
+  "exclusion_proven": false
+}

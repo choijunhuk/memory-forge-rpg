@@ -1,0 +1,29 @@
+PASS MemoryForge.Client.Tests.PracticeCommandOutboxPlayModeTests.ExactPrettyUnicodeBodySurvivesInNewObjectsAndCopiesAreDetached
+PASS MemoryForge.Client.Tests.PracticeCommandOutboxPlayModeTests.EqualRestageKeepsTheFileAndConflictingRequestsAreRefusedWithTheOriginalBytes
+PASS MemoryForge.Client.Tests.PracticeCommandOutboxPlayModeTests.AnotherEndpointOrAccountNeverSeesReplacesOrClearsTheRecord
+PASS MemoryForge.Client.Tests.PracticeCommandOutboxPlayModeTests.AStaleConfirmationNeverClearsALaterDifferentRequest
+PASS MemoryForge.Client.Tests.PracticeCommandOutboxPlayModeTests.TruncatedBitFlippedOrPaddedRecordsAreRefusedAndKeptWhole
+PASS MemoryForge.Client.Tests.PracticeCommandOutboxPlayModeTests.WellFormedRecordsWithUnknownFieldsFormsOrBindingsAreRefusedAndKept
+PASS MemoryForge.Client.Tests.PracticeCommandOutboxPlayModeTests.AStrayTempFileIsNeverPromotedOrTouched
+PASS MemoryForge.Client.Tests.PracticeCommandOutboxPlayModeTests.AHeldPermanentLockIsBusyImmediatelyAndUsableAfterRelease
+PASS MemoryForge.Client.Tests.PracticeCommandOutboxPlayModeTests.OccupiedPathsAndAMissingFolderFailExplicitlyWithoutFalseSuccess
+PASS MemoryForge.Client.Tests.PracticeCommandOutboxPlayModeTests.ReadOnlyOrUnreadableOwnFilesFailExplicitlyAndKeepTheRecord
+PASS MemoryForge.Client.Tests.PracticeCommandOutboxPlayModeTests.OnlyTheThreeMutationsWithServerLimitedIdentityAreStaged
+PASS MemoryForge.Client.Tests.PracticeCommandOutboxPlayModeTests.JsonExtensionsAndMalformedBodiesAreRefusedBeforeAnyFileIsTouched
+PASS MemoryForge.Client.Tests.PracticeCommandOutboxPlayModeTests.StandardJsonInOpaqueMembersIsAcceptedAndKeptExactly
+FAIL MemoryForge.Client.Tests.PracticeCommandOutboxPlayModeTests.EscapedUnpairedSurrogatesAreRefused NUnit.Framework.AssertionException:   Expected: <MemoryForge.Client.PracticeOutboxException>
+  But was:  null
+
+   at NUnit.Framework.Assert.That[TActual](TActual actual, IResolveConstraint expression, String message, Object[] args)
+   at NUnit.Framework.Assert.Throws(IResolveConstraint expression, TestDelegate code, String message, Object[] args)
+   at NUnit.Framework.Assert.Throws(Type expectedExceptionType, TestDelegate code, String message, Object[] args)
+   at NUnit.Framework.Assert.Throws[TActual](TestDelegate code, String message, Object[] args)
+   at NUnit.Framework.Assert.Throws[TActual](TestDelegate code)
+   at MemoryForge.Client.Tests.PracticeCommandOutboxPlayModeTests.Refused(TestDelegate action, String[] codes) in /Users/choi/Documents/Memory_forge/ops/ai/local/outbox-tests-preview-1/PracticeCommandOutboxPlayModeTests.cs:line 626
+   at MemoryForge.Client.Tests.PracticeCommandOutboxPlayModeTests.EscapedUnpairedSurrogatesAreRefused() in /Users/choi/Documents/Memory_forge/ops/ai/local/outbox-tests-preview-1/PracticeCommandOutboxPlayModeTests.cs:line 520
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+PASS MemoryForge.Client.Tests.PracticeCommandOutboxPlayModeTests.TheLargestRecordReloadsAndAnOversizedFileIsRefusedAndKept
+PASS MemoryForge.Client.Tests.PracticeCommandOutboxPlayModeTests.InvalidConfigurationIsRefusedWithoutTouchingTheFolder
+PASS MemoryForge.Client.Tests.PracticeCommandOutboxPlayModeTests.SeparateInstancesOnThreadsNeverOverwriteOrStaleClear
+Actual identical NUnit tests on .NET10: 16/17 passed; 1 failed

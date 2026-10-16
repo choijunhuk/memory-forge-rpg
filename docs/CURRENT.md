@@ -2,6 +2,10 @@
 
 ## 현재 요약 — 2026-10-17 / 서버 영속 저장·공개 상태 복구 진행 중
 
+[미확정 요청 한 건의 영속 보존](../reports/practice_command_outbox_20261017/root_acceptance.md)을 구현했다. 실제.NET·Mono16/17RED→17/17GREEN·전체UnityPlay182/Edit3, 별도클라이언트프로세스/실제HTTP25판정·새기록0600Mac/Linux·구형잘못된기록원본보존을 확인했다. Mono프로세스간 FileShare.None의 비배타성을 실제입증하고 확인된nativeflock으로 보완했다. 기존미전송준비/시간예약/AP·수치를바꾸지않으며 전체Unity서버전송·공개상태UI/프로세스복구는 다음 단위다.
+
+전투공개조회 커밋3ec042e의 push/PR CI는 새Core553·파일/실제PG·인계단계까지 모두성공했다([정확한커밋근거](../reports/public_battle_query_20261017/remote_ci_verified.json)). 아래의 해당커밋CI대기문장은 당시이력이며 이 범위만갱신한다.
+
 전투 공개 조회·공유 후보 정책을 구현하고 독립 검토·실행 검증했다. [최신 수용](../reports/public_battle_query_20261017/root_acceptance.md): Core553·기존1000탐사/273504명령, 파일서버952·실제PG859판정, 실제UnityPlay165/Edit3·Console0오류/0경고. 서버 명령버전과 전투v를 분리하고 손패 밖 UID는 고정거절하며 조회는 AP/RNG/영수증/저장행을 만들지 않는다. 기존Unity선택은 같은Core정책으로 연결했다. 전체Unity서버전송·미확정요청영속화·앱프로세스복구는 다음 작업이며 이 API 성공으로 완료 처리하지 않는다.
 
 앞선 PostgreSQL CI 커밋d0a3f32의 push/PR 두 건도 실제 새PG단계까지 모두 성공했다([정확한 커밋 근거](../reports/postgres_ci_20261017/remote_ci_verified.json),190/191판정). 아래의 “푸시 뒤 확인/리뷰 대기”는 그 작업 당시 기록이며 이 범위만 갱신한다. 이번 공개조회 커밋의 CI는 별도로 확인한다.
