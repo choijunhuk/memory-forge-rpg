@@ -3,8 +3,9 @@
 // before it is first sent, so closing the client after a send never regenerates its requestId or body: an uncertain commit is retried
 // with the same bytes instead of becoming a new action. At most one request is pending per configured file. While it is pending, the same
 // exact request reloads/restages unchanged and any other request (or its requestId with another route or body) is refused, the record
-// kept. Only Confirm clears it, for exactly the current request, after the owning transport validated a successful response to a send
-// of it. Nothing else clears it: no timeout, disconnect, 503 STORE_COMMIT_UNKNOWN, focus/pause/disable, restart or current-state GET.
+// kept. Only Confirm (a validated successful response) or ConfirmNotCommitted (a validated refusal the server guarantees committed
+// nothing) clears it, for exactly the current request, after the owning transport validated that response to a send of it. Nothing
+// else clears it: no timeout, disconnect, 503 STORE_COMMIT_UNKNOWN, focus/pause/disable, restart or current-state GET.
 // This is not a transport, UI, queue, credential store or authority: the server judges every command, nothing here reads Core state,
 // and unsent prepared intents and real reservations/AP stay where they are.
 // Files (the record path is explicit, trusted Development configuration; no account or request value becomes part of a path):
@@ -194,7 +195,20 @@ namespace MemoryForge.Client
         /// request. Only the exact current request (endpoint, account, route, body) is cleared; anything else is OUTBOX_NOT_CURRENT. This
         /// neither authenticates the response nor applies any state. Never call it for a timeout, disconnect, 503 (STORE_COMMIT_UNKNOWN
         /// included), a rejection, a lifecycle event or a current-state GET. After OUTBOX_CLEAR_FAILED the request is still pending.</summary>
-        public void Confirm(PendingPracticeCommand expectedPending)
+        public void Confirm(PendingPracticeCommand expectedPending) =>
+            ClearCurrent(expectedPending, "The confirmed request could not be cleared; treat it as still pending.");
+
+        /// <summary>Clears the pending request after the owning transport, with the same credential whose account it verified, received a
+        /// validated refusal of a send of exactly this request that the server guarantees was decided before anything was committed (its
+        /// requestId not consumed). The transport alone decides which refusals qualify, from the server's actual codes; this method neither
+        /// authenticates nor judges the response. The identity check, lock and removal are Confirm's own; anything else is
+        /// OUTBOX_NOT_CURRENT. Never call it for a timeout, disconnect, 401, 500, 503 (STORE_COMMIT_UNKNOWN included), 409
+        /// IDEMPOTENCY_CONFLICT, a store binding refusal, an unreadable reply, a lifecycle event or a current-state GET. After
+        /// OUTBOX_CLEAR_FAILED the request is still pending.</summary>
+        public void ConfirmNotCommitted(PendingPracticeCommand expectedPending) =>
+            ClearCurrent(expectedPending, "The refused request could not be cleared; treat it as still pending.");
+
+        void ClearCurrent(PendingPracticeCommand expectedPending, string clearFailed)
         {
             if (expectedPending == null) throw new ArgumentNullException(nameof(expectedPending));
             using (Lock())
@@ -205,7 +219,7 @@ namespace MemoryForge.Client
                 try { File.Delete(recordPath); }
                 catch (Exception error) when (error is IOException || error is UnauthorizedAccessException)
                 {
-                    throw Fail(PracticeOutboxException.ClearFailed, "The confirmed request could not be cleared; treat it as still pending.");
+                    throw Fail(PracticeOutboxException.ClearFailed, clearFailed);
                 }
             }
         }
@@ -451,8 +465,9 @@ namespace MemoryForge.Client
 
         /// <summary>The lexical layer Newtonsoft is lenient about: only "-quoted strings with JSON escapes and no raw control character,
         /// JSON number lexemes (no leading zero, '+', hex/octal, NaN/Infinity), true/false/null, the six structural characters and the
-        /// four whitespace characters. No comment, single quote, unquoted name, byte order mark, empty or trailing comma.</summary>
-        static void CheckLexemes(string text)
+        /// four whitespace characters. No comment, single quote, unquoted name, byte order mark, empty or trailing comma. Also the lexical
+        /// pass of PracticePublicJson (server replies), so both read JSON with one checker.</summary>
+        internal static void CheckLexemes(string text)
         {
             char previous = '\0';
             int i = 0;

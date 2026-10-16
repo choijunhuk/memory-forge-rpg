@@ -1,0 +1,54 @@
+{
+  "head": "ed4ebf89a42b67e4a4e50c5290d917c188310fd1",
+  "observed_utc": "2026-10-16T18:34:31.708581+00:00",
+  "runs": [
+    {
+      "event": "push",
+      "id": 38945069065,
+      "url": "https://github.com/choijunhuk/memory-forge-rpg/actions/runs/38945069065",
+      "conclusion": "success",
+      "required_steps": {
+        "locked_restore": "success",
+        "file": "success",
+        "pg": "success",
+        "handoff": "success"
+      },
+      "file_assertions": [
+        "885"
+      ],
+      "postgres_assertions": [
+        "900"
+      ],
+      "new_core_checks": [
+        [
+          "553",
+          "553"
+        ]
+      ]
+    },
+    {
+      "event": "pr",
+      "id": 38945076839,
+      "url": "https://github.com/choijunhuk/memory-forge-rpg/actions/runs/38945076839",
+      "conclusion": "success",
+      "required_steps": {
+        "locked_restore": "success",
+        "file": "success",
+        "pg": "success",
+        "handoff": "success"
+      },
+      "file_assertions": [
+        "967"
+      ],
+      "postgres_assertions": [
+        "887"
+      ],
+      "new_core_checks": [
+        [
+          "553",
+          "553"
+        ]
+      ]
+    }
+  ]
+}

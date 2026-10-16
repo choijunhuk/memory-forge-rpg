@@ -1,5 +1,10 @@
 # 현재 기준 — ALL-IN-ONE
 
+## 2026-10-17 — 실제 서버 전송·공개 상태 복구
+
+[실제 전송 수용](../reports/practice_transport_20261017/root_acceptance.md): 미확정 요청을 실제 Development HTTP에 연결하고 전체 공개 상태를 분리해 복구한다. .NET동일NUnit83·실제UnityPlay248/Edit3, 실제서버SIGKILL/같은주소/새클라이언트동일ID·본문재전송과 실제EditorMono응답손상복구를 확인했다. 세 가지 오류 경계를 수정·재검증했고 AP/예약 중복·오래된영수증의 상태역행/연출재생을 방지한다. 원본수치·Core·서버·로컬연습·보호47은 유지한다. 실제계정/운영·Android 및 전체네트워크UI 완료는 아니며, 눈에 보이는 서버지도·전투·복구화면은 다음 의존작업으로 구현 중이다.
+
+
 ## 현재 요약 — 2026-10-17 / 서버 영속 저장·공개 상태 복구 진행 중
 
 [미확정 요청 한 건의 영속 보존](../reports/practice_command_outbox_20261017/root_acceptance.md)을 구현했다. 실제.NET·Mono16/17RED→17/17GREEN·전체UnityPlay182/Edit3, 별도클라이언트프로세스/실제HTTP25판정·새기록0600Mac/Linux·구형잘못된기록원본보존을 확인했다. Mono프로세스간 FileShare.None의 비배타성을 실제입증하고 확인된nativeflock으로 보완했다. 기존미전송준비/시간예약/AP·수치를바꾸지않으며 전체Unity서버전송·공개상태UI/프로세스복구는 다음 단위다.

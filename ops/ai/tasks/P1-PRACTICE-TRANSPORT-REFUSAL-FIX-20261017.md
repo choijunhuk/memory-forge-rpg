@@ -1,0 +1,12 @@
+# Narrow exact-attempt refusal correction after independent server-path review
+
+Continue the same approved transport source unit, Opus5.5 xhigh, subscription only, separate C2 worktree; root alone Editor. Own only PracticeServerSession.cs, PracticePublicSnapshot.cs if strictly necessary, and reports/practice_transport_20261017/author_report.md. Other sources/tests are READONLY. You are not alone; do not revert others. No Bash/MCP/recursive AI/deps/rule/data/API changes. Root's earlier source task §5 examples were too broad; this correction takes precedence. Keep actual coherent implementation and minimal delta; author runtime NOT_RUN.
+
+The opposite-provider native Sol6.1 Max review traced actual backend ordering:
+- Program.cs Create245 has NO expectedVersion. ALL create errors, including409RUN_ACTIVE/422, MUST keep pending. A delayed prior copy can execute after the active run becomesDONE; the rejected later copy does not fence it.
+- Program.cs Command274 parses BEFORE PracticeRunStore.Mutate346 receipt lookup; all400 errors keep pending. A parse rejection does not prove an earlier receipt absent.
+- PracticeRunStore.cs Decode364/RequireWithinLimit396 may throw507STORE_TOO_LARGE BEFORE receipt lookup; the same507 also describes candidate overflow, so ALL507 keep pending.
+- Execute Program.cs331 checks Current(runId), expectedVersion inequality332, then isolated Core; receipt lookup precedes these. ONLY /commands or /memory-commit validated exact-attempt 409STALE_VERSION or422 Core/COMMAND_REJECTED may clear. Conservatively require the SAME captured-credential POST-immediately-preceding account summary names pending.runId and its journal version >= pending.ExpectedVersion. STALE_VERSION is inequality, not proof actual isgreater: a future-version body must not be cleared. Do not use a later GET to retroactively legitimize an earlier refusal.
+- 401/404/409IDEMPOTENCY_CONFLICT/all500/503/507/unknown/malformed/store-binding keep pending. GET/query/refresh refusal is never the POST refusal. No genericdrop, newID, auto retry, or state rollback.
+
+Implement only this narrowly grounded whitelist plus concise comments/relevant report correction. The outbox exact-current ConfirmNotCommitted helper is policy-neutral and need not change record/locking/identity. Preserve all existing 17 tests readonly. Root immediately runs build/tests/actualHTTP+Mono/review/UI after source correction; do not claim fullUI or your ownruntime. Return prompt coherent delta.

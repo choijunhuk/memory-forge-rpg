@@ -1,0 +1,15 @@
+{
+  "operation": "wrong-auth",
+  "owner_verified": true,
+  "before_server_version": 3,
+  "before_battle_version": 3,
+  "code": "UNAUTHORIZED",
+  "status": "Pending",
+  "refresh_code": null,
+  "request_id": "6220d7fc-f9ad-4d32-bb47-71aab59f6f8e",
+  "request_body_sha256": "91c3762a1116e87852f1d764e3120fe96821e9a7b1694261d03285d1b1f7fdf4",
+  "presentable_event_count": null,
+  "pending": true,
+  "needs_refresh": false,
+  "after_server_version": 3
+}

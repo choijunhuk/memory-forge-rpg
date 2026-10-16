@@ -1,0 +1,31 @@
+{
+  "task_id": "P1-PRACTICE-TRANSPORT-SOURCE-20261017",
+  "run_id": "P1-PRACTICE-TRANSPORT-SOURCE-20261017-20261016T181403878892Z",
+  "status": "RECEIVED_UNVERIFIED",
+  "requestedEffort": "xhigh",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "changes_verified": false,
+  "raw_output": "ops/ai/local/P1-PRACTICE-TRANSPORT-SOURCE-20261017-20261016T181403878892Z*",
+  "billing_verified_at": "2026-10-15T21:22:01.277612+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "codex/public-battle-query-20261017",
+  "base_commit": "47502b797ebc2de262704968f85b9ce30ed7665f",
+  "worktree": "/Users/choi/.codex/worktrees/claude-public-battle/Memory_forge",
+  "allowed_files": [
+    "client/MemoryForgeUnity/Assets/Scripts/PracticeCommandOutbox.cs",
+    "client/MemoryForgeUnity/Assets/Scripts/PracticePublicSnapshot.cs",
+    "client/MemoryForgeUnity/Assets/Scripts/PracticeServerSession.cs",
+    "reports/practice_transport_20261017/author_report.md"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "cfcd60b9-d701-4abf-874b-b6915e50765e",
+  "subtype": "success",
+  "is_error": false,
+  "result": "I've written the transport source, the public read model and the one outbox addition, but nothing has been compiled, run or tested; that was out of scope for this call. The existing 17 outbox tests, new tests, real-host HTTP on .NET and Mono, Unity and Android are all NOT_RUN. My session_id isn't visible to me from inside the session, so take it from the CLI metadata.\n\n**Files changed (only the four allowed):**\n- **`PracticeServerSession.cs`** (new): the HTTP session. It uses only BCL `System.Net.Http` and Newtonsoft, no UnityEngine. It runs one operation at a time; a second call gets `SESSION_BUSY` immediately, with no queue. The credential is read once per operation and used for the account check (`accountId` must equal the configured alias) and every request in that operation.\n- **`PracticePublicSnapshot.cs`** (new): strict reply parsing and the public views (account, run/receipt, snapshot, UI context, battle query). Each keeps the full reply JSON and returns copies. Typed fields cover owner, runId, the server journal version (kept separate from `battle.v`), node, turn and the two memory versions.\n- **`PracticeCommandOutbox.cs`**: added `ConfirmNotCommitted`, which reuses Confirm's lock, identity check and delete. Record format, locking and body validation are unchanged.\n- **`reports/practice_transport_20261017/author_report.md`**: API, server-code whitelist with sources, limits, NOT_RUN status.\n\n**Needs your review:** I changed `CheckLexemes` in the outbox from private to internal so server replies reuse the same strictness check instead of copying it. Behaviour is unchanged, but it goes beyond \"add one method\". If you reject it, the fallback is a second check in the snapshot file.\n\n**How the boundary behaves:**\n- **Mutations:** create, command (existing kinds only) and memory-commit run only when:\n  - the UI context matches the current snapshot;\n  - nothing is pending;\n  - no refresh is due.\n\n  The body is built once with a new Guid requestId and staged in the outbox before any network call. `RetryPendingAsync` sends the stored request exactly as saved.\n- **Clearing a pending request:** a validated 200 calls `Confirm`. These server refusals, all raised before anything is written, call `ConfirmNotCommitted`:\n\n  | Status | Codes |\n  |---|---|\n  | 400 | the strict-input codes |\n  | 404 | `RUN_NOT_FOUND` |\n  | 409 | `STALE_VERSION`, `RUN_ACTIVE` |\n  | 422 | any Core rule code |\n  | 507 | `STORE_TOO_LARGE` |\n\n  Everything else stays pending and blocks new mutations: 401/403, 500, any 503, `IDEMPOTENCY_CONFLICT`, store-binding refusals, timeouts, disconnects, cancel, Dispose, and bad or truncated replies.\n- **State updates:** state only comes from fresh account and run reads, never from a receipt. A refresh that would move the same run to an older version, or the account's memory version or finished-run count backwards, is refused with `ROLLBACK_REFUSED`.\n- **Events:** a receipt's events are offered for presentation only when the UI showed exactly the version before that command and the re-read shows exactly the version after it. An old or replayed receipt offers nothing.\n- **Battle query:** read-only, no requestId or outbox, allowed while something is pending. The reply must echo the asking context and the exact request, and it never changes the current state.\n\n**Known limits (details in the report):**\n- A server rebuild that changes request validation between an attempt and its retry could clear a request that had actually committed.\n- `IDEMPOTENCY_CONFLICT`, store-binding refusals, a malformed 200 or a corrupt outbox record leave a request pending permanently. There is deliberately no drop or reset; recovery would need a separately approved flow.\n- Wiping the dev store while the client runs blocks refresh until a new session is created.\n- Replies must carry Content-Length; the server always sends it.\n- On an Android phone `127.0.0.1` is the phone itself. I added no endpoint switch; that would be a separate decision.\n\n**Next (yours):**\n- NUnit tests for `ConfirmNotCommitted` and the parsers.\n- Real-host .NET and Mono runs covering the acceptance list in the report.\n- Re-running the 17 existing outbox tests unchanged.\n- Unity UI wiring.",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ]
+}

@@ -498,3 +498,5 @@ Unity 탐사 화면: [실제 지도·전투·보상/서비스·기억선택과 �
 
 
 §14.7/§17.2/§17.4 후속 — [미확정 요청 영속 보존](../reports/practice_command_outbox_20261017/root_acceptance.md): 정확한본문/ID1건·확인된native잠금·손상원본보존·매칭성공확인만삭제. 실제.NET/Mono17·전체Play182/Edit3·별도프로세스/HTTP25·Mac/Linux0600을확인했다. 미전송준비/실제시간예약과다르며UI/전송/낡은응답적용방지/명시적서버거절해결/전체프로세스복구는후속이다. 기존Source/Core/서버수치·기능을대체하지않았다.
+
+§14.7/§17.2/§17.4 후속 — [실제 서버 전송·공개 상태 복구](../reports/practice_transport_20261017/root_acceptance.md): 동일NUnit83, 실제UnityPlay248/Edit3, 실제CoreHTTP서버재시작/새클라이언트동일요청복구, EditorMono응답손상복구 PASS. 기존미전송준비/시간예약·전체로컬원정은 보존했다. 서버지도·전투UI·전체앱프로세스/Android·운영인증은 별도이며 라이브러리 검증으로 완료표시하지 않는다.
