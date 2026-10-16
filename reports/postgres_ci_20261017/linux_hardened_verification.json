@@ -1,0 +1,20 @@
+{
+  "scope": "same exact native Linux PG16 harness after two reviewed hardening notes",
+  "script_sha256": "88ed060d615875787c6b6fd49c6141bba37b1ef015c399ea1e5b2764594e55c7",
+  "workflow_sha256": "913522572db008da5f28702eb3860191194927e652f4aec18167a496a1dad15b",
+  "status": "PASS",
+  "execution_user": "postgres (non-root)",
+  "postgres_assertions": 188,
+  "actual_dotnet_executed": true,
+  "admin_passfile_absent_from_application_environment": true,
+  "negative_setup_failure": {
+    "expected_setup_failure_exit": 23,
+    "line_number_only_diagnostic": true,
+    "planted_secret_reached_private_log": true,
+    "planted_secret_absent_from_public_output": true,
+    "owned_cluster_stopped": true
+  },
+  "product_rules_unchanged": true,
+  "host_or_existing_db_touched": false,
+  "TLS_verification_disabled": false
+}

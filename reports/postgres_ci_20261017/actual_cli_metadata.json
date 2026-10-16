@@ -1,0 +1,28 @@
+[
+  {
+    "task": "P1-POSTGRES-CI-REVIEW-20261017",
+    "session_id": "a1d7a222-69d8-4b5b-8137-fdcd8d5e2b39",
+    "actual_model": "claude-opus-5-5",
+    "actual_efforts": [
+      "max"
+    ],
+    "positive_records": 61,
+    "exit": 0,
+    "billing_account_matched": true,
+    "reviewer_runtime": "NOT_RUN",
+    "result": "APPROVE"
+  },
+  {
+    "task": "P1-POSTGRES-CI-DELTA-20261017",
+    "session_id": "a1d7a222-69d8-4b5b-8137-fdcd8d5e2b39",
+    "actual_model": "claude-opus-5-5",
+    "actual_efforts": [
+      "high"
+    ],
+    "positive_records": 6,
+    "exit": 0,
+    "billing_account_matched": true,
+    "reviewer_runtime": "NOT_RUN",
+    "result": "APPROVE"
+  }
+]
