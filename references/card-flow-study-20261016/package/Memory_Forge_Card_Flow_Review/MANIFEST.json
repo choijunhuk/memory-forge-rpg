@@ -1,0 +1,143 @@
+{
+  "edition": "reference-review-1",
+  "role": "read-only-research-and-diagnostics",
+  "original_code_modified": false,
+  "game_project_modified": false,
+  "files": [
+    {
+      "path": "README_REVIEW.md",
+      "bytes": 1506,
+      "sha256": "4c7d95a3730a9f27b89cd40ee59ea6bb07351b6f906fde73a0f38faf8898adec"
+    },
+    {
+      "path": "START_CODEX_MESSAGE.txt",
+      "bytes": 4880,
+      "sha256": "c8b177c8e4be35381758e36725150691d8b97213608a777eceae2e23adbf38a6"
+    },
+    {
+      "path": "card-flow-study/01-research.md",
+      "bytes": 22516,
+      "sha256": "4e5778d188539acdd62969ee189cc03b52fe943b905b0a6043da6d33be2cccbb"
+    },
+    {
+      "path": "card-flow-study/02-observation-protocol.md",
+      "bytes": 9743,
+      "sha256": "4dccaa94c0803a0dd1d666cdd57965d1e6ce1c55ebd18b4b13ddd282cfa3078d"
+    },
+    {
+      "path": "card-flow-study/03-design-spec.md",
+      "bytes": 24240,
+      "sha256": "a95d922199ac5c622e485b68bfdd7c8fd33c40aef9ace02289b1756b018bc547"
+    },
+    {
+      "path": "card-flow-study/README.md",
+      "bytes": 3952,
+      "sha256": "710851c555b33de60fedad56f65fb096a9a303e69cefd447fb380276fd815a02"
+    },
+    {
+      "path": "card-flow-study/observation-log.csv",
+      "bytes": 353,
+      "sha256": "d36c87370ce9b5f2893953b0e31d90aa4a7d52dd4cbc2d780f793783c0b49954"
+    },
+    {
+      "path": "card-flow-study/prototype/package.json",
+      "bytes": 386,
+      "sha256": "ecb9ad2a4856e91766469f3b7be4c8933f7d6b564196f258b4e14ddc2eec33d7"
+    },
+    {
+      "path": "card-flow-study/prototype/src/cards.ts",
+      "bytes": 4071,
+      "sha256": "faeb1bd1a206887635111fff5f2271626b1e57ee5ccff81510200bff7900aa20"
+    },
+    {
+      "path": "card-flow-study/prototype/src/demo.ts",
+      "bytes": 5958,
+      "sha256": "c2a832be430b7bef49c05b57b1a234cb2a1d418f70f7e4e0cb0989cf9567cbbe"
+    },
+    {
+      "path": "card-flow-study/prototype/src/engine.ts",
+      "bytes": 24945,
+      "sha256": "f058bfc788f41df8c147204d5b76a63d2cee7283b1f8786206fb2b79ffb9c3d3"
+    },
+    {
+      "path": "card-flow-study/prototype/src/presenter.ts",
+      "bytes": 7982,
+      "sha256": "fa280f1187b63e7ae137ac91d15208c0d7e813a287efdcc0bca40b2f224125bf"
+    },
+    {
+      "path": "card-flow-study/prototype/src/rng.ts",
+      "bytes": 820,
+      "sha256": "482e9075f841b48b584c07f4c04ac2857a2212857219545d965f68f3ef68a02c"
+    },
+    {
+      "path": "card-flow-study/prototype/src/types.ts",
+      "bytes": 8092,
+      "sha256": "9003f9aa8d48ccb5186789c165da4182c184465123830a11dc0481939b283c88"
+    },
+    {
+      "path": "card-flow-study/prototype/test/engine.test.ts",
+      "bytes": 14488,
+      "sha256": "6ef4614cf17d1f277b610e5dcbef6c81c83b6e289febdf51be4a115c572bd9fe"
+    },
+    {
+      "path": "card-flow-study/prototype/test/helpers.ts",
+      "bytes": 4063,
+      "sha256": "7ebfc4a5832b9a802ac5748b9707bbf43f51bd945ccdd834da559bec920975cd"
+    },
+    {
+      "path": "card-flow-study/prototype/test/presenter.test.ts",
+      "bytes": 5194,
+      "sha256": "bf42bd402ab4fdbbf2e8b851b1c99b3b6e7197b72051ad009e881fc3f224ef20"
+    },
+    {
+      "path": "card-flow-study/prototype/tsconfig.json",
+      "bytes": 415,
+      "sha256": "fe103e58335bea3258d2c5128e0bd35de4027d01fc8a565c1af7d2474e070529"
+    },
+    {
+      "path": "review/ADOPTION_REVIEW.md",
+      "bytes": 14768,
+      "sha256": "9b15a4d90702a522de108f6801250f2e69815c22bb38ce912fda9af7acc8ae23"
+    },
+    {
+      "path": "review/demo.txt",
+      "bytes": 4605,
+      "sha256": "8a571c22430a973f2d30eab46d714391b3e3ad02ee1b86bd525be606320585b9"
+    },
+    {
+      "path": "review/independent-probes.json",
+      "bytes": 1806,
+      "sha256": "c0556092f847cf08bd1552300a15e281a4637b7ee2b3f3f48a0da38ec57d5359"
+    },
+    {
+      "path": "review/independent-probes.stderr.txt",
+      "bytes": 175,
+      "sha256": "040f307ede34748c24d0b92e46a6b6a65f1b0cbb5a673175feb5a092c4f6a98a"
+    },
+    {
+      "path": "review/independent-probes.ts",
+      "bytes": 3887,
+      "sha256": "735d46ea470005af9f0d1b882cd4b143ed4c9ce9f41176445033cdf76c51e2ad"
+    },
+    {
+      "path": "review/original-tests.tap",
+      "bytes": 7822,
+      "sha256": "e682d704b7f6bc9a02380ecd5aec9f7c40c31082c86fd5b2e0dc1005e37306d3"
+    },
+    {
+      "path": "review/source_integrity.json",
+      "bytes": 2968,
+      "sha256": "0778d468158b9232aa2016c5261ca3f5d1bb519d4cfe7f6dd0aa9c05ab7db079"
+    },
+    {
+      "path": "review/typecheck-original.txt",
+      "bytes": 842,
+      "sha256": "5b1938f3623234f7946c3fe5b5cb6d2dd81feb0a6db9b7c6065bbf7de0868a66"
+    },
+    {
+      "path": "review/typecheck-with-installed-node-types.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

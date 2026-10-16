@@ -1,0 +1,22 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":false,\"message\":\"Compilation failed\",\"data\":{\"errors\":[\"Line 5: A local variable named `button' cannot be declared in this scope because it would give a different meaning to `button', which is already used in a `child' scope to denote something else\",\"Line 5: A local variable named `rect' cannot be declared in this scope because it would give a different meaning to `rect', which is already used in a `child' scope to denote something else\",\"Line 5: A local variable named `screen' cannot be declared in this scope because it would give a different meaning to `screen', which is already used in a `child' scope to denote something else\",\"Line 5: A local variable named `hits' cannot be declared in this scope because it would give a different meaning to `hits', which is already used in a `child' scope to denote something else\"],\"compiler\":\"codedom\"}}"
+    }
+  ],
+  "structuredContent": {
+    "success": false,
+    "message": "Compilation failed",
+    "data": {
+      "errors": [
+        "Line 5: A local variable named `button' cannot be declared in this scope because it would give a different meaning to `button', which is already used in a `child' scope to denote something else",
+        "Line 5: A local variable named `rect' cannot be declared in this scope because it would give a different meaning to `rect', which is already used in a `child' scope to denote something else",
+        "Line 5: A local variable named `screen' cannot be declared in this scope because it would give a different meaning to `screen', which is already used in a `child' scope to denote something else",
+        "Line 5: A local variable named `hits' cannot be declared in this scope because it would give a different meaning to `hits', which is already used in a `child' scope to denote something else"
+      ],
+      "compiler": "codedom"
+    }
+  },
+  "isError": false
+}

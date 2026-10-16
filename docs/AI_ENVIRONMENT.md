@@ -89,3 +89,5 @@ R0는 [실제18Play/3Edit](../reports/run_create_20261015/unity_playmode18.json)
 ## 실제 표시된 전투 연습 / 추가 검증
 
 [MemoryForgeBattle 실행안내](../client/MemoryForgeUnity/README.md)에 따라 실제C#Core의 카드·예약·턴·의도/상태를 표시했다. [현재26Play](../reports/unity_client_20261015/playmode26_pass.json)·[3Edit](../reports/unity_client_20261015/editmode3_pass.json)는 초기중단/23개통과기록과 구분한다. Claude High콘텐츠/표시수정과 xhigh교차검토를 Codex가 호출·회수·검증했으며, Core값/원문/기존자산은 보존했다. OFL폰트의 허용은 한 경로/정확한바이너리/라이선스체크섬에만 한정하고 계정파일차단은 유지했다. 현재Mac잠금으로 최종시각재확인/새standalone빌드확인만보류하며 기존기술씬빌드로 대신하지 않는다.
+
+2026-10-16 카드흐름 후속: [실제11개공식Opus모델/High·xhigh·Max세그먼트](../reports/card_flow_20261016/actual_cli_metadata.json), [112Play/3Edit/새macOS지도시작](../reports/card_flow_20261016/root_acceptance.md)를 확인했다. 호스트 프로세스 중단 뒤 같은원본프로젝트/설치된무료MCP10.3.0/Unity6000.0.46f1을복구했고 임시복구훅은시험전에제거했다. Root한명만Editor를쓰고 Claude범위CLI는MCP없이분리worktree에서구현했다. Max작업2개시간종료는한도도달이아니며같은구독Opus세션xhigh로회수했다. 새물리입력/Android/서버복구는확인하지않았다.

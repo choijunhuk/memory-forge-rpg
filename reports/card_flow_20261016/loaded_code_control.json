@@ -1,0 +1,24 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"compiling\":false,\"playing\":false,\"hasLatePhase\":true,\"digestLoaded\":true,\"reservationLabel\":\"행동력 1 · 2턴 시작(다음 턴)에 해결 · 현재 상태 기준 예상: 방어 +11\",\"recoveryHookAbsent\":true},\"compiler\":\"codedom\"}}"
+    }
+  ],
+  "structuredContent": {
+    "success": true,
+    "message": "Code executed successfully.",
+    "data": {
+      "result": {
+        "compiling": false,
+        "playing": false,
+        "hasLatePhase": true,
+        "digestLoaded": true,
+        "reservationLabel": "행동력 1 · 2턴 시작(다음 턴)에 해결 · 현재 상태 기준 예상: 방어 +11",
+        "recoveryHookAbsent": true
+      },
+      "compiler": "codedom"
+    }
+  },
+  "isError": false
+}

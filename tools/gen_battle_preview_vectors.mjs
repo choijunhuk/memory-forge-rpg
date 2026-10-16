@@ -1,7 +1,9 @@
-// P1-EXPEDITION-BATTLE-FORECAST §14.3/§6/§16.2: independent JS oracle for the C# Battle.Forecast / Run.BattleForecast play forecast.
-// Only the original public JS API supplies expectations: check() gives the precheck code; otherwise a fresh Battle.create (or Run.create,
-// enter and battleCmd) replay of the recorded setup and real requests plays the request once and its before/after states are read.
-// The C# method is never consulted. Each C# case starts from the same setup and replays the same real commands; no state is restored.
+// P1-EXPEDITION-BATTLE-FORECAST / P1-RESERVED-FORECAST-CORE §14.2/§14.3/§5.4-5.6/§6/§16.2: independent JS oracle for the C#
+// Battle.Forecast / Run.BattleForecast play forecast. Only the original public JS API supplies expectations: check() gives the precheck
+// code; otherwise a fresh Battle.create (or Run.create, enter and battleCmd) replay of the recorded setup and real requests plays the
+// request once and its before/after states are read. A next/after outcome follows the original HTML preview's reserved branch
+// (prototype/index.html preview, source-pinned and statement-checked) on another fresh replay. The C# method is never consulted. Each C#
+// case starts from the same setup and replays the same real commands; no state is restored.
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { createRequire } from 'node:module';
@@ -20,33 +22,42 @@ const data = JSON.parse(readFileSync(join(root, 'data/game_data.json'), 'utf8'))
 const originalData = JSON.stringify(data);
 const clone = value => JSON.parse(JSON.stringify(value));
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
-const schema = 'mf-battle-preview-v1';
-const scope = 'Fresh Battle.create/command and Run.create/enter/battleCmd replays; each play forecast is the original JS check() code or one independent fresh-candidate play; C# Battle.Forecast/Run.BattleForecast comparison only. Unity view, device and server acceptance PENDING';
+const schema = 'mf-battle-preview-v2';
+const scope = 'Fresh Battle.create/command and Run.create/enter/battleCmd replays; each play forecast is the original JS check() code, one independent fresh-candidate play and, for next/after, the original HTML preview current-state reserved resolution on another fresh replay; C# Battle.Forecast/Run.BattleForecast comparison only. Unity view, device and server acceptance PENDING';
 export const fixturePath = join(root, 'engine/tests/vectors/battle_preview_vectors.json.gz');
-const fields = ['error', 'mode', 'cost', 'due', 'hidden', 'enemyHpLoss', 'blockDelta', 'hpDelta', 'defeat'];
+const fields = ['error', 'mode', 'cost', 'due', 'hidden', 'enemyHpLoss', 'blockDelta', 'hpDelta', 'defeat', 'enemyDamage', 'newlyBroken'];
 const contract = {
   request: 'A forecast reads the play request {uid, mode, target, picks} at the current state and never changes it',
-  error: 'check() code, else the RuleError code of the real play (Run: battleCmd NO_BATTLE outside battle); every other field keeps its default',
-  reservation: 'next/after: cost from the play event and due from the reserve event only; no outcome numbers and hidden false',
-  hidden: 'now: tgt rand, pick random or draw anywhere in the effective if/then/else, or the real play changed the RNG or the draw pile; numbers stay zero. hiddenBy lists definition/rng/draw as oracle metadata only',
-  outcome: 'otherwise from the real play: enemyHpLoss sums max(0, hp before - hp after) per enemy; blockDelta and hpDelta are signed party changes; defeat is phase DEFEAT',
+  error: 'check() code, else the RuleError code of the real play, else a RuleError of the current-state reservation estimate (Run: battleCmd NO_BATTLE outside battle); every other field keeps its default',
+  reservation: 'next/after: cost from the real play event and due from its reserve event; the outcome fields are the original HTML preview current-state estimate: a JSON copy of an independent fresh replay of the unpaid point, the card spliced out of the hand, phase RESOLVING, resolveCard(uid, {reserved: mode, target, picks: []}) with the target the real reservation stores (the HTML UI passes app.target || first alive; for authored cards these differ only for untargeted cards, whose effects never read the target). No payment, turn advance, enemy turn, draw or capture; never a promise of the future',
+  hidden: 'tgt rand, pick random or draw anywhere in the effective if/then/else, or the resolution (now: the real play; next/after: the estimate) changed the RNG or the draw pile; every outcome field keeps its default. hiddenBy lists definition/rng/draw as oracle metadata only',
+  outcome: 'enemyHpLoss sums max(0, hp before - hp after) per enemy; enemyDamage sums max(0, (hp+block) before - (hp+block) after) as the HTML preview dmg; newlyBroken counts enemies whose brokenUntil turned truthy from falsy as the HTML preview brokeN; blockDelta and hpDelta are signed party changes; defeat is phase DEFEAT',
   replay: 'Battle cases: fresh Battle.create(setup) and the recorded requests. Run case: fresh Run.create(setup), enter, then Run.battleCmd. Recorded states are comparison data only',
+  transition: 'v1 -> v2: two appended fields (enemyDamage, newlyBroken) and current-state next/after estimates; v1 cases, queries and commands are kept and three reserved cases are appended after the expedition',
 };
 const reachability = {
   notCovered: { definitionPickRandom: 'No authored card effect has pick "random" (only the Nia resonance battleStart tune, never a card play); the rule branch is kept for parity with the accepted practice view' },
-  csharpOnly: { lateCommandRejection: 'Every authored play that passes check() commits; the C# consumer probes a local-definition fault instead' },
+  csharpOnly: { lateCommandRejection: 'Every authored play that passes check() commits; the C# consumer probes a local-definition fault instead',
+    estimateRejection: 'No authored reservation estimate raises a RuleError; the C# consumer probes a local-definition fault that only the current-state resolution reaches' },
 };
+// The original HTML preview statements this oracle follows; generation stops if the pinned source no longer contains them verbatim.
+const htmlSeam = ['const c = new MF.Battle(IX, JSON.parse(JSON.stringify(s)));',
+  'const before = { hp: c.s.hp, block: c.s.block, e: Object.fromEntries(c.s.enemies.map((e) => [e.uid, e.hp + e.block])) };',
+  "c.s.zones.hand.splice(c.s.zones.hand.indexOf(uid), 1); c.s.phase = 'RESOLVING'; c.resolveCard(uid, { reserved: mode, target, picks: [] });",
+  'let dmg = 0; for (const e of c.s.enemies) { const was = before.e[e.uid]; if (was !== undefined) dmg += Math.max(0, was - (e.hp + e.block)); }',
+  'const brokeN = c.s.enemies.filter((e) => e.brokenUntil && !s.enemies.find((x) => x.uid === e.uid).brokenUntil).length;'];
 const runSetup = { party: [{ charId: 'sera' }, { charId: 'harin' }, { charId: 'nia' }], seed: 4242, length: 'short', memoryPolicy: 'v2', memory: {},
   relics: [], difficulty: { hp: 100, dmg: 100 }, zones: [1], runId: 'preview-run', memoryVersion: 0, useMemory: true };
 
 function sources() {
   return Object.fromEntries(Object.entries({ data: 'data/game_data.json', engine: 'engine/rules-core.js', memory: 'proposals/memory_v2.cjs',
-    canonical: 'tools/gen_traces.mjs', runCreateDecoder: 'tools/gen_run_create_vectors.mjs', generator: 'tools/gen_battle_preview_vectors.mjs',
+    canonical: 'tools/gen_traces.mjs', runCreateDecoder: 'tools/gen_run_create_vectors.mjs', htmlPreview: 'prototype/index.html',
+    generator: 'tools/gen_battle_preview_vectors.mjs',
   }).map(([key, path]) => [key, { path, sha256: sha256(readFileSync(join(root, path))) }]));
 }
 const loadedSources = sources();
 
-const blank = (mode, error) => ({ error, mode, cost: 0, due: null, hidden: false, enemyHpLoss: 0, blockDelta: 0, hpDelta: 0, defeat: false });
+const blank = (mode, error) => ({ error, mode, cost: 0, due: null, hidden: false, enemyHpLoss: 0, blockDelta: 0, hpDelta: 0, defeat: false, enemyDamage: 0, newlyBroken: 0 });
 // Unity MemoryForgeBattleClient.HiddenOutcome, the accepted practice-view rule, read from the original effective definition.
 const hiddenOps = ops => (ops || []).some(op => op.tgt === 'rand' || op.pick === 'random' || op.op === 'draw' || hiddenOps(op.then) || hiddenOps(op.else));
 const q = (label, uid, mode = 'now', target = null, picks = []) => ({ label, uid, mode, target, picks });
@@ -63,6 +74,20 @@ const inHand = (battle, owners) => {
 };
 const point = battle => { const state = clone(battle.s); return { state, stateHash: stateHash(state) }; };
 const lost = (before, after) => before.enemies.reduce((sum, e) => sum + Math.max(0, e.hp - (after.enemies.find(x => x.uid === e.uid)?.hp ?? 0)), 0);
+// The visible outcome fields; enemyDamage and newlyBroken are the HTML preview's own dmg and brokeN expressions.
+function outcome(before, after) {
+  const was = Object.fromEntries(before.enemies.map(e => [e.uid, e.hp + e.block]));
+  let enemyDamage = 0;
+  for (const e of after.enemies) if (was[e.uid] !== undefined) enemyDamage += Math.max(0, was[e.uid] - (e.hp + e.block));
+  const newlyBroken = after.enemies.filter(e => e.brokenUntil && !before.enemies.find(x => x.uid === e.uid).brokenUntil).length;
+  return { enemyHpLoss: lost(before, after), blockDelta: after.block - before.block, hpDelta: after.hp - before.hp, defeat: after.phase === 'DEFEAT', enemyDamage, newlyBroken };
+}
+// The original HTML preview's reserved branch on an independent fresh replay `base` of the unpaid point; returns the estimate state.
+function reservedEstimate(base, uid, mode, target) {
+  const c = new MF.Battle(data, JSON.parse(JSON.stringify(base.s)));
+  c.s.zones.hand.splice(c.s.zones.hand.indexOf(uid), 1); c.s.phase = 'RESOLVING'; c.resolveCard(uid, { reserved: mode, target, picks: [] });
+  return c.s;
+}
 
 // live: the battle at the forecast point (pure check/effDef only). fresh(): an independent public replay {battle, play(args)} of that point.
 function expectForecast(live, fresh, query) {
@@ -77,30 +102,33 @@ function expectForecast(live, fresh, query) {
   let response;
   try { response = clone(candidate.play(playArgs(query))); }
   catch (error) { if (error instanceof MF.RuleError) return { expected: blank(query.mode, error.code), hiddenBy: [] }; throw error; }
-  const after = candidate.battle.s, expected = blank(query.mode, null);
+  let after = candidate.battle.s;
+  const expected = blank(query.mode, null);
   expected.cost = response.ev.find(e => e.e === 'play').cost;
   if (query.mode !== 'now') {
     expected.due = response.ev.find(e => e.e === 'reserve' && e.uid === query.uid).due;
-    return { expected, hiddenBy: [] };
+    const stored = after.res.find(r => r.uid === query.uid).target, base = fresh().battle;
+    assert.ok(isDeepStrictEqual(base.s, live.s), 'Independent estimate replay differs from the live battle');
+    try { after = reservedEstimate(base, query.uid, query.mode, stored); }
+    catch (error) { if (error instanceof MF.RuleError) return { expected: blank(query.mode, error.code), hiddenBy: [] }; throw error; }
+    assert.ok(isDeepStrictEqual(base.s, before), 'The reserved estimate changed its replay instead of its own copy');
   }
   const hiddenBy = [...(definition ? ['definition'] : []), ...(isDeepStrictEqual(before.rng, after.rng) ? [] : ['rng']),
     ...(isDeepStrictEqual(before.zones.draw, after.zones.draw) ? [] : ['draw'])];
   if (hiddenBy.length) { expected.hidden = true; return { expected, hiddenBy }; }
-  expected.enemyHpLoss = lost(before, after);
-  expected.blockDelta = after.block - before.block;
-  expected.hpDelta = after.hp - before.hp;
-  expected.defeat = after.phase === 'DEFEAT';
+  Object.assign(expected, outcome(before, after));
   return { expected, hiddenBy };
 }
-// Determinism sanity: when a step's real play is one of its forecast requests, the live result must equal that forecast.
+// Determinism sanity: when a step's real play is one of its forecast requests, the live result must equal that forecast. A reservation's
+// real play schedules only (cost and due); its outcome fields are a current-state estimate, not the play's result.
 function assertRealPlay(forecasts, request, before, after, response, label) {
   const twin = forecasts.find(f => isDeepStrictEqual(f.args, request.args));
   if (request.kind !== 'play' || !twin || twin.expected.error !== null) return;
   assert.equal(response.ev.find(e => e.e === 'play').cost, twin.expected.cost, `${label}: real play cost differs from its forecast`);
   if (twin.expected.mode !== 'now') { assert.equal(response.ev.find(e => e.e === 'reserve').due, twin.expected.due, `${label}: real due differs`); return; }
   if (twin.expected.hidden) return;
-  assert.deepEqual([lost(before, after), after.block - before.block, after.hp - before.hp, after.phase === 'DEFEAT'],
-    [twin.expected.enemyHpLoss, twin.expected.blockDelta, twin.expected.hpDelta, twin.expected.defeat], `${label}: real outcome differs from its forecast`);
+  const { error, mode, cost, due, hidden, ...shown } = twin.expected;
+  assert.deepEqual(outcome(before, after), shown, `${label}: real outcome differs from its forecast`);
 }
 
 function freshBattle(setup, requests) {
@@ -185,6 +213,17 @@ function runCase() {
     setup, created, steps };
 }
 
+// v2 next/after witness, bounded to one forecast point: within one step of one case, a visible next and a visible after forecast of the same
+// uid, target and picks whose estimates differ. Same uids recur across steps whose states differ, so pairs are never matched across points.
+const estimateOutcome = e => [e.enemyHpLoss, e.enemyDamage, e.blockDelta, e.hpDelta, e.defeat, e.newlyBroken].join();
+export function nextAfterDiffers(cases) {
+  return cases.some(row => row.steps.some(step => {
+    const shown = step.forecasts.filter(f => f.expected.error === null && !f.expected.hidden);
+    return shown.some(a => a.args.mode === 'next' && shown.some(b => b.args.mode === 'after' && b.args.uid === a.args.uid && b.args.target === a.args.target
+      && isDeepStrictEqual(b.args.picks, a.args.picks) && estimateOutcome(b.expected) !== estimateOutcome(a.expected)));
+  }));
+}
+
 const begin = () => ({ kind: 'begin', args: {} });
 const end = () => ({ kind: 'end', args: {} });
 const play = (uid, mode = 'now', target = null, picks = []) => ({ kind: 'play', args: playArgs(q('', uid, mode, target, picks)) });
@@ -192,6 +231,8 @@ const play = (uid, mode = 'now', target = null, picks = []) => ({ kind: 'play', 
 export function generateCases() {
   assert.deepEqual(sources(), loadedSources, 'Preview sources changed after module load; rerun exporter');
   assert.equal(JSON.stringify(data), originalData, 'Original preview source data changed');
+  const html = readFileSync(join(root, 'prototype/index.html'), 'utf8');
+  for (const statement of htmlSeam) assert.ok(html.includes(statement), `The pinned HTML preview no longer contains: ${statement}`);
   const cases = [
     battleCase('damage-block-targets', 'Exact card damage and block, enemy block absorbing damage, two-enemy targeting and invalid requests',
       { party: [{ charId: 'sera' }, { charId: 'harin' }], deck: [{ id: 'sera_round' }, { id: 'sera_cover' }, { id: 'harin_shield' }, { id: 'harin_bash' }],
@@ -264,6 +305,39 @@ export function generateCases() {
           q('pull invalid pick', 'c3', 'now', null, ['c99'])], request: () => play('c3', 'now', null, ['c1']) },
       ]),
     runCase(),
+    // v2 reserved cases, appended after the expedition so every v1 case keeps its index.
+    battleCase('reserved-estimates', 'Current-state next/after estimates: distinct rv/ra values, block in the estimate, a newly broken enemy, the broken bonus with Sera foresight on an already broken enemy, enemy block absorbing damage, a zero outcome and an AP rejection',
+      { party: [{ charId: 'sera' }], deck: [{ id: 'sera_round' }, { id: 'sera_double' }, { id: 'sera_cover' }, { id: 'sera_timed' }, { id: 'sera_aim' }],
+        hp: 81, maxHp: 81, seed: 19, enemies: ['e_keeper', 'e_cog'], relics: [] }, [
+        { request: begin },
+        { forecasts: b => [q('timed next keeper', 'c4', 'next', enemy(b, 'e_keeper')), q('timed after keeper', 'c4', 'after', enemy(b, 'e_keeper')),
+          q('aim next zero outcome', 'c5', 'next'), q('cover next keeper', 'c3', 'next', enemy(b, 'e_keeper'))], request: b => play('c1', 'now', enemy(b, 'e_keeper')) },
+        { forecasts: b => [q('timed next breaks keeper', 'c4', 'next', enemy(b, 'e_keeper'))], request: b => play('c2', 'now', enemy(b, 'e_keeper')) },
+        { forecasts: b => [q('cover now breaks keeper', 'c3', 'now', enemy(b, 'e_keeper'))], request: b => play('c3', 'now', enemy(b, 'e_keeper')) },
+        { forecasts: b => [q('timed next ap low', 'c4', 'next', enemy(b, 'e_keeper'))], request: end },
+        { forecasts: b => [q('cover next broken keeper', 'c3', 'next', enemy(b, 'e_keeper')), q('cover now broken keeper', 'c3', 'now', enemy(b, 'e_keeper')),
+          q('round next cog block', 'c1', 'next', enemy(b, 'e_cog')), q('round now cog block', 'c1', 'now', enemy(b, 'e_cog')),
+          q('double after cog block', 'c2', 'after', enemy(b, 'e_cog')), q('timed next broken keeper', 'c4', 'next', enemy(b, 'e_keeper'))],
+          request: b => play('c4', 'next', enemy(b, 'e_keeper')) },
+      ]),
+    battleCase('reserved-hidden-definition-rng', 'Reserved draw and random-target definitions stay hidden; a reserved exhaust under void_shard is hidden by its RNG hook; a plain reservation stays visible',
+      { party: [{ charId: 'nia' }, { charId: 'sera' }, { charId: 'yuri' }], deck: [{ id: 'nia_scan' }, { id: 'yuri_root_hunt' }, { id: 'sera_last' }, { id: 'sera_round' }],
+        hp: 243, maxHp: 243, seed: 20, enemies: ['e_mirrorclerk'], relics: ['void_shard'] }, [
+        { request: begin },
+        { forecasts: b => [q('scan next draw definition', 'c1', 'next', enemy(b, 'e_mirrorclerk')), q('hunt after random definition', 'c2', 'after'),
+          q('last after rng hook', 'c3', 'after', enemy(b, 'e_mirrorclerk')), q('round next visible control', 'c4', 'next', enemy(b, 'e_mirrorclerk'))],
+          request: b => play('c3', 'after', enemy(b, 'e_mirrorclerk')) },
+      ]),
+    battleCase('reserved-hidden-draw-hook', 'A reserved estimate that kills a marked enemy draws through detective_notebook and stays hidden; the marked conditional branch differs between now and next',
+      { party: [{ charId: 'kaya' }, { charId: 'sera' }], deck: [{ id: 'kaya_clue' }, { id: 'kaya_clue' }, { id: 'kaya_crossfire' }, { id: 'sera_timed' }, { id: 'sera_round' }],
+        hp: 162, maxHp: 162, seed: 21, enemies: ['e_page', 'e_keeper'], relics: ['detective_notebook'] }, [
+        { request: begin },
+        { request: b => play('c1', 'now', enemy(b, 'e_page')) },
+        { request: b => play('c2', 'now', enemy(b, 'e_keeper')) },
+        { forecasts: b => [q('crossfire next marked branch', 'c3', 'next', enemy(b, 'e_keeper')), q('crossfire now marked branch', 'c3', 'now', enemy(b, 'e_keeper')),
+          q('timed next marked kill hook', 'c4', 'next', enemy(b, 'e_page')), q('round now marked page control', 'c5', 'now', enemy(b, 'e_page'))],
+          request: b => play('c4', 'next', enemy(b, 'e_page')) },
+      ]),
   ];
   assert.equal(JSON.stringify(data), originalData, 'The preview oracle changed original source data');
   assert.equal(new Set(cases.map(c => c.id)).size, cases.length, 'Duplicate preview case id');
@@ -280,6 +354,21 @@ export function generateCases() {
   assert.ok(records.some(r => r.expected.defeat) && records.some(r => r.expected.hpDelta > 0) && records.some(r => r.expected.hpDelta < 0)
     && records.some(r => r.expected.blockDelta > 0) && records.some(r => r.expected.enemyHpLoss > 0), 'Preview lacks a visible outcome kind');
   for (const mode of ['next', 'after']) assert.ok(records.some(r => r.expected.error === null && r.expected.mode === mode), `Preview lacks ${mode} timing`);
+  // v2 witnesses: the restored current-state reservation estimates and the two appended fields are actually exercised.
+  const reserved = records.filter(r => r.expected.mode !== 'now' && r.expected.error === null), visible = reserved.filter(r => !r.expected.hidden);
+  const numbers = e => e.enemyHpLoss || e.blockDelta || e.hpDelta || e.defeat || e.enemyDamage || e.newlyBroken;
+  for (const [ok, what] of [
+    [visible.some(r => numbers(r.expected)), 'a visible reserved estimate'], [visible.some(r => !numbers(r.expected)), 'a zero reserved estimate'],
+    [visible.some(r => r.expected.newlyBroken > 0), 'a reserved estimate breaking an enemy'], [visible.some(r => r.expected.defeat), 'a reserved estimate ending in defeat'],
+    [visible.some(r => r.expected.enemyDamage > r.expected.enemyHpLoss), 'reserved damage absorbed by enemy block'],
+    [records.some(r => r.expected.mode === 'now' && r.expected.enemyDamage > r.expected.enemyHpLoss), 'immediate damage absorbed by enemy block'],
+    [records.some(r => r.expected.mode === 'now' && r.expected.newlyBroken > 0), 'an immediate play breaking an enemy'],
+    [reserved.some(r => r.expected.hidden && r.hiddenBy.includes('definition')), 'a reserved estimate hidden by its definition'],
+    [reserved.some(r => r.expected.hidden && !r.hiddenBy.includes('definition')), 'a reserved estimate hidden only by a hook'],
+    [records.some(r => r.expected.mode !== 'now' && r.expected.error !== null), 'a rejected reservation'],
+    [nextAfterDiffers(cases), 'distinct next/after estimates of one request at one forecast point'],
+  ]) assert.ok(ok, `Preview lacks ${what}`);
+  for (const r of records) assert.ok(r.expected.enemyDamage >= r.expected.enemyHpLoss, `${r.label}: enemy damage below enemy HP loss`);
   assert.ok(!data.cards.some(card => JSON.stringify([card.eff, card.plus ?? null]).includes('"pick":"random"')), 'An authored pick:"random" card now exists; cover it');
   const battles = cases.filter(row => row.group === 'battle'), run = cases.find(row => row.group === 'run');
   const forecastCount = list => list.reduce((n, row) => n + row.steps.reduce((m, step) => m + step.forecasts.length, 0), 0);
@@ -288,7 +377,8 @@ export function generateCases() {
   const counts = { cases: cases.length, battleForecasts: forecastCount(battles), battleCommands: commandCount(battles),
     runFixedForecasts: forecastCount([run]) - runPolicyForecasts, runPolicyForecasts, runCommands: commandCount([run]),
     forecasts: forecastCount(cases), commands: commandCount(cases) };
-  assert.deepEqual([counts.cases, counts.battleForecasts, counts.battleCommands, counts.runFixedForecasts], [9, 51, 23, 6], 'Preview fixed denominators changed');
+  // v1 9 cases/51 battle forecasts/23 battle commands + v2 reserved cases 13+4+4 forecasts and 6+2+4 commands.
+  assert.deepEqual([counts.cases, counts.battleForecasts, counts.battleCommands, counts.runFixedForecasts], [12, 72, 35, 6], 'Preview fixed denominators changed');
   assert.ok(counts.runPolicyForecasts >= 1 && counts.runCommands > counts.runPolicyForecasts, 'Run policy did not play and finish its battle');
   assert.deepEqual(sources(), loadedSources, 'Preview sources changed during generation; rerun exporter');
   return { schema, scope, status: 'JS_ORACLE', dataVersion: data.meta.version, sources: clone(loadedSources), fields: [...fields], contract: clone(contract),
@@ -323,7 +413,7 @@ export function exportVectors(output = fixturePath) {
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const args = process.argv.slice(2);
   if (args.length > 1 || (args.length && !['--check', '--help'].includes(args[0]))) throw new Error('Usage: node tools/gen_battle_preview_vectors.mjs [--check|--help]');
-  if (args[0] === '--help') console.log('Export the source-pinned battle play forecast oracle (fresh public JS replays of bounded authored battles and one actual expedition), or --check the lossless gzip fixture.');
+  if (args[0] === '--help') console.log('Export the source-pinned v2 battle play forecast oracle (fresh public JS replays of bounded authored battles and one actual expedition; next/after outcomes follow the original HTML preview current-state reserved resolution), or --check the lossless gzip fixture.');
   else if (args[0] === '--check') console.log(JSON.stringify({ checked: fixturePath, ...checkFixture(decodeVectors(readFileSync(fixturePath))) }));
   else console.log(JSON.stringify({ output: fixturePath, ...exportVectors() }, null, 2));
 }

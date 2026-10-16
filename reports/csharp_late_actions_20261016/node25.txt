@@ -1,0 +1,15 @@
+✔ the overlay is the unchanged candidate proposal, test-local enemies stay separate and live content gains nothing (1.976334ms)
+✔ all 23 candidate patterns run two full cycles alive and all 23 candidate encounter groups run (0.541958ms)
+✔ every checkpoint is reproduced by fresh creation and the recorded real commands with independent hashes (355.893958ms)
+✔ the six behaviors keep the exact original rules at their boundaries (0.590833ms)
+✔ fixture freshness rejects stale pins, overlay or test-local edits, missing/duplicate cases and diagnostic tampering (813.651166ms)
+✔ exports pass only the existing strict single-member decoder, are byte deterministic and preserve the old fixture on failure (512.568583ms)
+✔ the checked-in late-action fixture is a lossless fresh command oracle through the strict decoder (250.44875ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2231.968375

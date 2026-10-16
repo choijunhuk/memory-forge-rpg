@@ -1,0 +1,12 @@
+{
+  "head": "72607490084de692799497410caf21c34c7152f6",
+  "push": {
+    "run_id": 38835235090,
+    "conclusion": "success"
+  },
+  "pull_request": {
+    "run_id": 38835238412,
+    "conclusion": "success"
+  },
+  "scope": "Accepted view before the ongoing original reservation estimate extension"
+}

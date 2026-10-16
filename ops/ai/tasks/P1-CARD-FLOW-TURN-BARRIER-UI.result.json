@@ -1,0 +1,32 @@
+{
+  "task_id": "P1-CARD-FLOW-TURN-BARRIER-UI",
+  "run_id": "P1-CARD-FLOW-TURN-BARRIER-UI-20261016T025256142684Z",
+  "status": "VERIFIED",
+  "requestedEffort": "xhigh",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "changes_verified": true,
+  "raw_output": "ops/ai/local/P1-CARD-FLOW-TURN-BARRIER-UI-20261016T025256142684Z*",
+  "billing_verified_at": "2026-10-15T21:22:01.277612+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "claude/balance-audit",
+  "base_commit": "9be537f4c5ef59e890322cb2d1de914fb49bfed6",
+  "worktree": "/Users/choi/.codex/worktrees/claude-balance-audit/Memory_forge",
+  "allowed_files": [
+    "client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs",
+    "client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionClientPlayModeTests.cs",
+    "client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionTurnFlowPlayModeTests.cs",
+    "reports/card_flow_20261016/turn_barrier_author_report.md"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "d2bda3e6-a0ab-4f84-82e6-c15d5d12127f",
+  "subtype": "success",
+  "is_error": false,
+  "result": "I connected the turn digest to the expedition client and added the turn barrier; none of it has been compiled or run (no Editor or shell here). Compile, Unity Edit/PlayMode tests, screenshots and the build are all **NOT_RUN**. I only checked the code by reading it against the Core event sources, the digest text, the existing test helpers and the button coordinates.\n\n**Turn summary.**\n- After a successful `end`, including one that wins or loses the battle, a blocking text summary opens over the already-committed screen.\n- The digest is built only from public battle fields before the command, the returned events, and the state after. Draw order and RNG are never read.\n- If the battle is gone after a win or loss, the \"after\" side is only the battle's final phase and the Run's HP; nothing else is invented.\n- Card names come only from the event's own card id or from public zones (hand, discard, exhausted, reservations).\n- Reservation-resolution rows appear 0.3 s apart (§14.3); every other row appears at once. Updates rewrite the labels in place, so a held press on a button survives.\n- \"남은 결과 모두 보기\" (skip) and \"계속\" (continue) only change the display. They sit away from 턴 종료, 지도로 and the save buttons.\n\n**Barrier.**\n- While the summary is open, every public command and selection is refused with `TURN_SUMMARY_OPEN` before it reaches the Run, including `StartPractice`, `Depart` and the save-screen commands.\n- As you decided, continue only closes the summary; it never runs a command on the player's behalf.\n- Every button now acts only if it is active and interactable, which stops stale buttons from an old screen.\n- A pick sheet prepared before a battle command is cleared once that command succeeds.\n\n**Lifecycle.**\n- Disabling the component drops the summary; re-enabling redraws the actual Run with no barrier left behind.\n- On focus/pause resume, only a pick sheet whose card or player phase is gone is cleared. The view is redrawn only in that case or if it is missing; an open summary stays.\n\n**Battle log.** The log keeps the last 40 event rows, including each battle's opening events, and leaves out summary decoration. It survives onto the reward and save screens and is cleared on the next departure. The log sheet now scrolls; the old `EventText` is removed.\n\n**Tests.**\n- **Existing tests:** in `ExpeditionClientPlayModeTests.cs`, the driver now explicitly closes the summary (skip, then continue) after each successful end and checks the Run is unchanged. No existing assertion was weakened.\n- **New tests:** `ExpeditionTurnFlowPlayModeTests.cs` adds 9 tests:\n  - two taps on one end-turn point give exactly one end;\n  - a losing end's repeated tap cannot hit \"저장하지 않고 닫기\";\n  - a winning end's repeated tap cannot hit 지도로 or drop the rewards;\n  - 29 commands and 5 selections are all refused under the barrier;\n  - the 0.3 s reveal, skip, disable/enable and resume all leave the same committed state;\n  - a held continue press survives the reveal and releases once;\n  - the timeline shows only Core's reservations;\n  - a pick sheet is cleared by the end;\n  - the 40-row log keeps its rows after the battle and resets on departure.\n\n**Not done or uncertain.**\n- The defeat and victory tests rely on a bounded search. I couldn't confirm the reference party actually reaches those states, so they report Inconclusive (not a pass) if it doesn't.\n- A double tap on a winning card play or ultimate is not protected; only `end` opens the summary.\n- Repeated taps when the map or reward screen re-lays out are out of scope, since tap-cooldown constants were ruled out.\n- Resume is tested only through `SendMessage`. Device, physical input, the new build and S2 fail-closed recovery are all outstanding.\n\n**Next:** you run the PlayMode suites and full PlayMode/EditMode, check the Console and any Inconclusive reasons, take screenshots at 1600×900 and 640×360 with 130% text, then review before S2. The report lists the exact public API, every UI string, the full gate list and these steps.\n\nFiles changed (all four allowed):\n- `client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs`\n- `client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionClientPlayModeTests.cs`\n- `client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionTurnFlowPlayModeTests.cs`\n- `reports/card_flow_20261016/turn_barrier_author_report.md`",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ],
+  "root_verification": "reports/card_flow_20261016/root_acceptance.md"
+}

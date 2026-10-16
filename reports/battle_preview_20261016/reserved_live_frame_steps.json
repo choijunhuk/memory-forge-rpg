@@ -1,0 +1,87 @@
+[
+  {
+    "step": "enemy",
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"target\":\"e19\",\"phase\":\"BATTLE\"},\"compiler\":\"codedom\"}}"
+        }
+      ],
+      "structuredContent": {
+        "success": true,
+        "message": "Code executed successfully.",
+        "data": {
+          "result": {
+            "target": "e19",
+            "phase": "BATTLE"
+          },
+          "compiler": "codedom"
+        }
+      },
+      "isError": false
+    }
+  },
+  {
+    "step": "card",
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"selected\":\"c7\",\"ap\":4},\"compiler\":\"codedom\"}}"
+        }
+      ],
+      "structuredContent": {
+        "success": true,
+        "message": "Code executed successfully.",
+        "data": {
+          "result": {
+            "selected": "c7",
+            "ap": 4
+          },
+          "compiler": "codedom"
+        }
+      },
+      "isError": false
+    }
+  },
+  {
+    "step": "mode",
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"actualRays\":true,\"forecast\":{\"Error\":null,\"Mode\":\"next\",\"Cost\":1,\"Due\":2,\"Hidden\":false,\"EnemyHpLoss\":0,\"BlockDelta\":11,\"HpDelta\":0,\"Defeat\":false,\"EnemyDamage\":0,\"NewlyBroken\":0},\"label\":\"예상 · 다음 턴 · 행동력 1 · 2턴 시작(다음 턴)에 해결 · 현재 상태 기준 예상: 방어 +11\",\"drawn\":true,\"pure\":true,\"ap\":4},\"compiler\":\"codedom\"}}"
+        }
+      ],
+      "structuredContent": {
+        "success": true,
+        "message": "Code executed successfully.",
+        "data": {
+          "result": {
+            "actualRays": true,
+            "forecast": {
+              "Error": null,
+              "Mode": "next",
+              "Cost": 1,
+              "Due": 2,
+              "Hidden": false,
+              "EnemyHpLoss": 0,
+              "BlockDelta": 11,
+              "HpDelta": 0,
+              "Defeat": false,
+              "EnemyDamage": 0,
+              "NewlyBroken": 0
+            },
+            "label": "예상 · 다음 턴 · 행동력 1 · 2턴 시작(다음 턴)에 해결 · 현재 상태 기준 예상: 방어 +11",
+            "drawn": true,
+            "pure": true,
+            "ap": 4
+          },
+          "compiler": "codedom"
+        }
+      },
+      "isError": false
+    }
+  }
+]

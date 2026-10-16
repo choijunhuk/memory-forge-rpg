@@ -53,18 +53,46 @@ static class BattleDataLoader
             Fields(relic, "id", "name", "rarity", "text");
             data.Relics.Add(new BattleRelicDef { Id = S(relic, "id"), Name = S(relic, "name"), Rarity = S(relic, "rarity"), Text = S(relic, "text") });
         }
-        foreach (var enemy in json.GetProperty("enemies").EnumerateArray())
-        {
-            Fields(enemy, "id", "name", "zone", "tier", "hp", "brk", "weak", "passive", "pattern");
-            EnemyPassiveDef? passive = null;
-            if (enemy.TryGetProperty("passive", out var p) && p.ValueKind != JsonValueKind.Null)
-            {
-                Fields(p, "id", "n"); passive = new EnemyPassiveDef { Id = S(p, "id"), N = I(p, "n") };
-            }
-            data.Enemies.Add(new BattleEnemyDef { Id = S(enemy, "id"), Name = S(enemy, "name"), Tier = S(enemy, "tier"), Hp = I(enemy, "hp"), Brk = I(enemy, "brk"),
-                Weak = Strings(enemy.GetProperty("weak")), Passive = passive, Pattern = enemy.GetProperty("pattern").EnumerateArray().Select(Move).ToList() });
-        }
+        foreach (var enemy in json.GetProperty("enemies").EnumerateArray()) data.Enemies.Add(Enemy(enemy));
+        data.SetAttributeIds(json.GetProperty("attributes").EnumerateArray().Select(a => S(a, "id")));
         data.Index(); return data;
+    }
+
+    /// <summary>Test-only overlay in the proposals/late_enemies.cjs withLateEnemies shape: appends enemy definitions through the same strict
+    /// parser and never replaces an existing ID. Load(root) stays the unchanged live content.</summary>
+    public static BattleData LoadWithEnemies(string root, params JsonElement[] enemyLists)
+    {
+        var data = Load(root);
+        foreach (var list in enemyLists)
+        {
+            if (list.ValueKind != JsonValueKind.Array) throw new InvalidDataException("Overlay enemies must be an array");
+            foreach (var enemy in list.EnumerateArray()) data.Enemies.Add(Enemy(enemy));
+        }
+        if (data.Enemies.Select(e => e.Id).Distinct(StringComparer.Ordinal).Count() != data.Enemies.Count) throw new InvalidDataException("Overlay enemy would overwrite existing content");
+        data.Index(); return data;
+    }
+
+    static BattleEnemyDef Enemy(JsonElement enemy)
+    {
+        Fields(enemy, "id", "name", "zone", "tier", "hp", "brk", "weak", "passive", "pattern", "phase");
+        EnemyPassiveDef? passive = null;
+        if (enemy.TryGetProperty("passive", out var p) && p.ValueKind != JsonValueKind.Null)
+        {
+            Fields(p, "id", "n"); passive = new EnemyPassiveDef { Id = S(p, "id"), N = I(p, "n") };
+        }
+        var definition = new BattleEnemyDef { Id = S(enemy, "id"), Name = S(enemy, "name"), Tier = S(enemy, "tier"), Hp = I(enemy, "hp"), Brk = I(enemy, "brk"),
+            Weak = Strings(enemy.GetProperty("weak")), Passive = passive, Pattern = enemy.GetProperty("pattern").EnumerateArray().Select(Move).ToList() };
+        if (enemy.TryGetProperty("phase", out var phase) && phase.ValueKind != JsonValueKind.Null) definition.SetPhaseDescriptor(Phase(phase));
+        return definition;
+    }
+    // Typed exactly as written: missing members stay null and the engine validates the values at the first HP 0, where the original does.
+    static EnemyPhaseDef Phase(JsonElement json)
+    {
+        if (json.ValueKind != JsonValueKind.Object) throw new InvalidDataException("Enemy phase must be an object");
+        Fields(json, "t", "hp", "brk", "weak", "pattern");
+        return new EnemyPhaseDef { Type = ContentString(json, "t"), Hp = NI(json, "hp"), Brk = NI(json, "brk"),
+            Weak = json.TryGetProperty("weak", out var weak) ? Strings(weak) : null,
+            Pattern = json.TryGetProperty("pattern", out var pattern) ? pattern.EnumerateArray().Select(Move).ToList() : null };
     }
 
     static (int Numerator, int Denominator) Ratio(JsonElement json)

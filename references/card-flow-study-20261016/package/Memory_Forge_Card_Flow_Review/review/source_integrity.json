@@ -1,0 +1,86 @@
+{
+  "input_zip_sha256": "6ff8859ff3dbbbddbc14fd501bbf8301b24cde1f68bca2ae2f109c23e6ca9e7a",
+  "original_file_count": 16,
+  "files": [
+    {
+      "path": "card-flow-study/01-research.md",
+      "sha256": "4e5778d188539acdd62969ee189cc03b52fe943b905b0a6043da6d33be2cccbb",
+      "unchanged": true
+    },
+    {
+      "path": "card-flow-study/02-observation-protocol.md",
+      "sha256": "4dccaa94c0803a0dd1d666cdd57965d1e6ce1c55ebd18b4b13ddd282cfa3078d",
+      "unchanged": true
+    },
+    {
+      "path": "card-flow-study/03-design-spec.md",
+      "sha256": "a95d922199ac5c622e485b68bfdd7c8fd33c40aef9ace02289b1756b018bc547",
+      "unchanged": true
+    },
+    {
+      "path": "card-flow-study/observation-log.csv",
+      "sha256": "d36c87370ce9b5f2893953b0e31d90aa4a7d52dd4cbc2d780f793783c0b49954",
+      "unchanged": true
+    },
+    {
+      "path": "card-flow-study/prototype/package.json",
+      "sha256": "ecb9ad2a4856e91766469f3b7be4c8933f7d6b564196f258b4e14ddc2eec33d7",
+      "unchanged": true
+    },
+    {
+      "path": "card-flow-study/prototype/src/cards.ts",
+      "sha256": "faeb1bd1a206887635111fff5f2271626b1e57ee5ccff81510200bff7900aa20",
+      "unchanged": true
+    },
+    {
+      "path": "card-flow-study/prototype/src/demo.ts",
+      "sha256": "c2a832be430b7bef49c05b57b1a234cb2a1d418f70f7e4e0cb0989cf9567cbbe",
+      "unchanged": true
+    },
+    {
+      "path": "card-flow-study/prototype/src/engine.ts",
+      "sha256": "f058bfc788f41df8c147204d5b76a63d2cee7283b1f8786206fb2b79ffb9c3d3",
+      "unchanged": true
+    },
+    {
+      "path": "card-flow-study/prototype/src/presenter.ts",
+      "sha256": "fa280f1187b63e7ae137ac91d15208c0d7e813a287efdcc0bca40b2f224125bf",
+      "unchanged": true
+    },
+    {
+      "path": "card-flow-study/prototype/src/rng.ts",
+      "sha256": "482e9075f841b48b584c07f4c04ac2857a2212857219545d965f68f3ef68a02c",
+      "unchanged": true
+    },
+    {
+      "path": "card-flow-study/prototype/src/types.ts",
+      "sha256": "9003f9aa8d48ccb5186789c165da4182c184465123830a11dc0481939b283c88",
+      "unchanged": true
+    },
+    {
+      "path": "card-flow-study/prototype/test/engine.test.ts",
+      "sha256": "6ef4614cf17d1f277b610e5dcbef6c81c83b6e289febdf51be4a115c572bd9fe",
+      "unchanged": true
+    },
+    {
+      "path": "card-flow-study/prototype/test/helpers.ts",
+      "sha256": "7ebfc4a5832b9a802ac5748b9707bbf43f51bd945ccdd834da559bec920975cd",
+      "unchanged": true
+    },
+    {
+      "path": "card-flow-study/prototype/test/presenter.test.ts",
+      "sha256": "bf42bd402ab4fdbbf2e8b851b1c99b3b6e7197b72051ad009e881fc3f224ef20",
+      "unchanged": true
+    },
+    {
+      "path": "card-flow-study/prototype/tsconfig.json",
+      "sha256": "fe103e58335bea3258d2c5128e0bd35de4027d01fc8a565c1af7d2474e070529",
+      "unchanged": true
+    },
+    {
+      "path": "card-flow-study/README.md",
+      "sha256": "710851c555b33de60fedad56f65fb096a9a303e69cefd447fb380276fd815a02",
+      "unchanged": true
+    }
+  ]
+}

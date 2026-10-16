@@ -1,0 +1,142 @@
+{
+  "_meta": {
+    "fastmcp": {
+      "wrap_result": true
+    }
+  },
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Test job status retrieved.\",\"error\":null,\"data\":{\"job_id\":\"a2ed05bfdca64bb58dcb0759b0f85187\",\"status\":\"succeeded\",\"mode\":\"PlayMode\",\"started_unix_ms\":1792121432028,\"finished_unix_ms\":1792121436027,\"last_update_unix_ms\":1792121436027,\"progress\":{\"completed\":9,\"total\":9,\"current_test_full_name\":null,\"current_test_started_unix_ms\":null,\"last_finished_test_full_name\":\"MemoryForge.Client.Tests.ExpeditionTurnFlowPlayModeTests.WinningEndKeepsTheRewardsAndItsRepeatedTapCannotProceed\",\"last_finished_unix_ms\":1792121436014,\"stuck_suspected\":false,\"editor_is_focused\":false,\"run_in_background\":false,\"focus_nudge_attempts\":null,\"focus_nudge_limit\":null,\"focus_nudge_status\":null,\"blocked_reason\":null,\"failures_so_far\":[],\"failures_capped\":false},\"error\":null,\"result\":{\"mode\":\"PlayMode\",\"summary\":{\"total\":9,\"passed\":9,\"failed\":0,\"skipped\":0,\"durationSeconds\":2.9327661,\"resultState\":\"Passed\"},\"results\":[{\"name\":\"AHeldContinueSurvivesTheRevealStepsAndItsReleaseClosesTheSummaryOnce\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionTurnFlowPlayModeTests.AHeldContinueSurvivesTheRevealStepsAndItsReleaseClosesTheSummaryOnce\",\"state\":\"Passed\",\"durationSeconds\":0.4587363,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"APickSheetPreparedBeforeAnEndDoesNotSurviveBeneathTheSummary\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionTurnFlowPlayModeTests.APickSheetPreparedBeforeAnEndDoesNotSurviveBeneathTheSummary\",\"state\":\"Passed\",\"durationSeconds\":0.1018696,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"BattleLogKeepsTheRecent40EventRowsThroughTheBattleEndAndResetsOnTheNextDeparture\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionTurnFlowPlayModeTests.BattleLogKeepsTheRecent40EventRowsThroughTheBattleEndAndResetsOnTheNextDeparture\",\"state\":\"Passed\",\"durationSeconds\":0.4159886,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"EveryPublicCommandAndSelectionUnderTheTurnBarrierIsRefusedBeforeTheRun\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionTurnFlowPlayModeTests.EveryPublicCommandAndSelectionUnderTheTurnBarrierIsRefusedBeforeTheRun\",\"state\":\"Passed\",\"durationSeconds\":0.1128361,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"LosingEndKeepsTheSaveScreenOpenAndItsRepeatedTapCannotCloseWithoutSaving\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionTurnFlowPlayModeTests.LosingEndKeepsTheSaveScreenOpenAndItsRepeatedTapCannotCloseWithoutSaving\",\"state\":\"Passed\",\"durationSeconds\":0.3245472,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"ReservationRowsRevealOnTheApprovedTimerAndSkipDisableOrResumeLeaveTheSameCommittedState\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionTurnFlowPlayModeTests.ReservationRowsRevealOnTheApprovedTimerAndSkipDisableOrResumeLeaveTheSameCommittedState\",\"state\":\"Passed\",\"durationSeconds\":0.7010146,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"TimeReservationSlotsBeneathTheSummaryAreOnlyCoresReservations\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionTurnFlowPlayModeTests.TimeReservationSlotsBeneathTheSummaryAreOnlyCoresReservations\",\"state\":\"Passed\",\"durationSeconds\":0.1358784,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"TwoTapsOnEndTurnAtOnePointAreExactlyOneEndAndContinueThenAcceptsTheNextEnd\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionTurnFlowPlayModeTests.TwoTapsOnEndTurnAtOnePointAreExactlyOneEndAndContinueThenAcceptsTheNextEnd\",\"state\":\"Passed\",\"durationSeconds\":0.2236672,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"WinningEndKeepsTheRewardsAndItsRepeatedTapCannotProceed\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionTurnFlowPlayModeTests.WinningEndKeepsTheRewardsAndItsRepeatedTapCannotProceed\",\"state\":\"Passed\",\"durationSeconds\":0.4398212,\"message\":null,\"stackTrace\":null,\"output\":\"\"}]}},\"hint\":null}"
+    }
+  ],
+  "structuredContent": {
+    "result": {
+      "success": true,
+      "message": "Test job status retrieved.",
+      "error": null,
+      "data": {
+        "job_id": "a2ed05bfdca64bb58dcb0759b0f85187",
+        "status": "succeeded",
+        "mode": "PlayMode",
+        "started_unix_ms": 1792121432028,
+        "finished_unix_ms": 1792121436027,
+        "last_update_unix_ms": 1792121436027,
+        "progress": {
+          "completed": 9,
+          "total": 9,
+          "current_test_full_name": null,
+          "current_test_started_unix_ms": null,
+          "last_finished_test_full_name": "MemoryForge.Client.Tests.ExpeditionTurnFlowPlayModeTests.WinningEndKeepsTheRewardsAndItsRepeatedTapCannotProceed",
+          "last_finished_unix_ms": 1792121436014,
+          "stuck_suspected": false,
+          "editor_is_focused": false,
+          "run_in_background": false,
+          "focus_nudge_attempts": null,
+          "focus_nudge_limit": null,
+          "focus_nudge_status": null,
+          "blocked_reason": null,
+          "failures_so_far": [],
+          "failures_capped": false
+        },
+        "error": null,
+        "result": {
+          "mode": "PlayMode",
+          "summary": {
+            "total": 9,
+            "passed": 9,
+            "failed": 0,
+            "skipped": 0,
+            "durationSeconds": 2.9327661,
+            "resultState": "Passed"
+          },
+          "results": [
+            {
+              "name": "AHeldContinueSurvivesTheRevealStepsAndItsReleaseClosesTheSummaryOnce",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionTurnFlowPlayModeTests.AHeldContinueSurvivesTheRevealStepsAndItsReleaseClosesTheSummaryOnce",
+              "state": "Passed",
+              "durationSeconds": 0.4587363,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "APickSheetPreparedBeforeAnEndDoesNotSurviveBeneathTheSummary",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionTurnFlowPlayModeTests.APickSheetPreparedBeforeAnEndDoesNotSurviveBeneathTheSummary",
+              "state": "Passed",
+              "durationSeconds": 0.1018696,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "BattleLogKeepsTheRecent40EventRowsThroughTheBattleEndAndResetsOnTheNextDeparture",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionTurnFlowPlayModeTests.BattleLogKeepsTheRecent40EventRowsThroughTheBattleEndAndResetsOnTheNextDeparture",
+              "state": "Passed",
+              "durationSeconds": 0.4159886,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "EveryPublicCommandAndSelectionUnderTheTurnBarrierIsRefusedBeforeTheRun",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionTurnFlowPlayModeTests.EveryPublicCommandAndSelectionUnderTheTurnBarrierIsRefusedBeforeTheRun",
+              "state": "Passed",
+              "durationSeconds": 0.1128361,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "LosingEndKeepsTheSaveScreenOpenAndItsRepeatedTapCannotCloseWithoutSaving",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionTurnFlowPlayModeTests.LosingEndKeepsTheSaveScreenOpenAndItsRepeatedTapCannotCloseWithoutSaving",
+              "state": "Passed",
+              "durationSeconds": 0.3245472,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "ReservationRowsRevealOnTheApprovedTimerAndSkipDisableOrResumeLeaveTheSameCommittedState",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionTurnFlowPlayModeTests.ReservationRowsRevealOnTheApprovedTimerAndSkipDisableOrResumeLeaveTheSameCommittedState",
+              "state": "Passed",
+              "durationSeconds": 0.7010146,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "TimeReservationSlotsBeneathTheSummaryAreOnlyCoresReservations",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionTurnFlowPlayModeTests.TimeReservationSlotsBeneathTheSummaryAreOnlyCoresReservations",
+              "state": "Passed",
+              "durationSeconds": 0.1358784,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "TwoTapsOnEndTurnAtOnePointAreExactlyOneEndAndContinueThenAcceptsTheNextEnd",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionTurnFlowPlayModeTests.TwoTapsOnEndTurnAtOnePointAreExactlyOneEndAndContinueThenAcceptsTheNextEnd",
+              "state": "Passed",
+              "durationSeconds": 0.2236672,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "WinningEndKeepsTheRewardsAndItsRepeatedTapCannotProceed",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionTurnFlowPlayModeTests.WinningEndKeepsTheRewardsAndItsRepeatedTapCannotProceed",
+              "state": "Passed",
+              "durationSeconds": 0.4398212,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            }
+          ]
+        }
+      },
+      "hint": null
+    }
+  },
+  "isError": false
+}

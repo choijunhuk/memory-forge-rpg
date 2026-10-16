@@ -122,15 +122,24 @@ namespace MemoryForge.Core
         public BattleEnemyStatus Status = new BattleEnemyStatus();
         public EnemyMoveDef? Intent, Next;
         public EnemyPassiveDef? Passive;
+        // Absent until a boss's first HP 0 opens its phase descriptor: then phase 1 and the second body's own pattern copy.
+        public int? PhaseIndex;
+        public List<EnemyMoveDef>? Pattern;
         internal BattleEnemyState Copy()
         {
             var copy = (BattleEnemyState)MemberwiseClone();
             copy.Weak = new List<string>(Weak); copy.Status = Status.Copy(); copy.Passive = Passive?.Copy();
-            copy.Intent = Intent?.Copy(); copy.Next = Next?.Copy(); return copy;
+            copy.Intent = Intent?.Copy(); copy.Next = Next?.Copy(); copy.Pattern = Pattern?.Select(m => m.Copy()).ToList(); return copy;
         }
-        public Dictionary<string, object?> ToJsonGraph() => BattleGraph.Object("uid", Uid, "id", Id, "name", Name, "tier", Tier,
-            "hp", Hp, "maxHp", MaxHp, "block", Block, "brkMax", BrkMax, "brk", Brk, "weak", new List<string>(Weak), "st", Status.ToJsonGraph(),
-            "brokenUntil", BrokenUntil, "stunned", Stunned, "pi", PatternIndex, "intent", Intent?.ToJsonGraph(), "next", Next?.ToJsonGraph(), "alive", Alive, "passive", Passive?.ToJsonGraph());
+        public Dictionary<string, object?> ToJsonGraph()
+        {
+            var graph = BattleGraph.Object("uid", Uid, "id", Id, "name", Name, "tier", Tier,
+                "hp", Hp, "maxHp", MaxHp, "block", Block, "brkMax", BrkMax, "brk", Brk, "weak", new List<string>(Weak), "st", Status.ToJsonGraph(),
+                "brokenUntil", BrokenUntil, "stunned", Stunned, "pi", PatternIndex, "intent", Intent?.ToJsonGraph(), "next", Next?.ToJsonGraph(), "alive", Alive, "passive", Passive?.ToJsonGraph());
+            BattleGraph.Optional(graph, "phaseIndex", PhaseIndex);
+            if (Pattern != null) graph.Add("pattern", Pattern.Select(m => m.ToJsonGraph()).ToList());
+            return graph;
+        }
     }
 
     public sealed class BattleZones
@@ -202,9 +211,9 @@ namespace MemoryForge.Core
     public sealed class BattleEvent
     {
         public string E = "";
-        public int? T, N, Growth, Turn, Ap, Damage, Blocked, Cost, Due;
+        public int? T, N, Growth, Turn, Ap, Damage, Blocked, Cost, Due, Until, From, To, Index, Hp, Brk;
         public string? Uid, Source, Status, Part, Phase, Id, Card, Mode, Target, Kind, Reserved, Actor;
-        public bool? Fizzled;
+        public bool? Fizzled, Fallback, Discarded;
         internal BattleEvent Copy() => (BattleEvent)MemberwiseClone();
         public Dictionary<string, object?> ToJsonGraph()
         {
@@ -220,6 +229,11 @@ namespace MemoryForge.Core
             BattleGraph.Optional(graph, "kind", Kind); BattleGraph.Optional(graph, "actor", Actor); BattleGraph.Optional(graph, "fizzled", Fizzled);
             if (E == "play") graph.Add("target", Target); else BattleGraph.Optional(graph, "target", Target);
             if (E == "resolved") graph.Add("reserved", Reserved); else BattleGraph.Optional(graph, "reserved", Reserved);
+            BattleGraph.Optional(graph, "until", Until); BattleGraph.Optional(graph, "fallback", Fallback);
+            BattleGraph.Optional(graph, "from", From); BattleGraph.Optional(graph, "to", To); BattleGraph.Optional(graph, "discarded", Discarded);
+            BattleGraph.Optional(graph, "index", Index); BattleGraph.Optional(graph, "hp", Hp); BattleGraph.Optional(graph, "brk", Brk);
+            // eatName/delayRes with nothing to act on still report the original explicit null uid.
+            if ((E == "eatName" || E == "delayRes") && Uid == null) graph.Add("uid", null);
             return graph;
         }
     }

@@ -1,0 +1,66 @@
+{
+  "basis": "Fresh public original-JS Create/commands, then exact original HTML current-state preview seam; no C# consulted",
+  "sources": {
+    "data/game_data.json": "6a09e6dd2d81055738c84951ea5b5ae50c25fd8c9732c8443e81ec1498625688",
+    "engine/rules-core.js": "dae99192bfa137762c1c863efda8207b3851e3a6e7ecf2ff029bed3585a33ab4",
+    "prototype/index.html": "e2d917bb282bef88381f00c25c53edfe9cf17e4e2c53207a8ca9cb493cd6af60"
+  },
+  "rows": [
+    {
+      "mode": "now",
+      "damage": 8,
+      "hpLoss": 8,
+      "blockDelta": 0,
+      "breaks": 0
+    },
+    {
+      "mode": "next",
+      "damage": 22,
+      "hpLoss": 22,
+      "blockDelta": 0,
+      "breaks": 0
+    },
+    {
+      "mode": "after",
+      "damage": 30,
+      "hpLoss": 30,
+      "blockDelta": 0,
+      "breaks": 0
+    },
+    {
+      "mode": "next",
+      "damage": 0,
+      "hpLoss": 0,
+      "blockDelta": 11,
+      "breaks": 0
+    },
+    {
+      "mode": "now",
+      "damage": 8,
+      "hpLoss": 0,
+      "blockDelta": 0,
+      "breaks": 0
+    },
+    {
+      "mode": "next",
+      "damage": 12,
+      "hpLoss": 2,
+      "blockDelta": 0,
+      "breaks": 0
+    },
+    {
+      "mode": "next",
+      "damage": 18,
+      "hpLoss": 18,
+      "blockDelta": 0,
+      "breaks": 1
+    },
+    {
+      "mode": "now",
+      "damage": 6,
+      "hpLoss": 6,
+      "blockDelta": 0,
+      "breaks": 0
+    }
+  ]
+}

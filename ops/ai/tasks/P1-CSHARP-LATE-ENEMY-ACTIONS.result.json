@@ -1,0 +1,32 @@
+{
+  "task_id": "P1-CSHARP-LATE-ENEMY-ACTIONS",
+  "run_id": "P1-CSHARP-LATE-ENEMY-ACTIONS-20261016T013227781058Z",
+  "status": "IMPLEMENTATION_VERIFIED_AFTER_RESUME",
+  "requestedEffort": "max",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": null,
+  "changes_verified": true,
+  "raw_output": "ops/ai/local/P1-CSHARP-LATE-ENEMY-ACTIONS-20261016T013227781058Z*",
+  "billing_verified_at": "2026-10-15T21:22:01.277612+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "codex/csharp-battle-opening",
+  "base_commit": "2ffc29ecdbdeee5027258ad6f73302b98820fc35",
+  "worktree": "/Users/choi/.codex/worktrees/csharp-battle-opening/Memory_forge",
+  "allowed_files": [
+    "core/MemoryForge.Core/Battle.cs",
+    "core/MemoryForge.Core/BattleDefinitions.cs",
+    "core/MemoryForge.Core/BattleState.cs",
+    "core/MemoryForge.CoreChecks/BattleDataLoader.cs",
+    "core/MemoryForge.CoreChecks/BattleLateActionsChecks.cs",
+    "engine/tests/battle_late_actions_vectors.test.mjs",
+    "reports/csharp_late_actions_20261016/author_report.md",
+    "tools/gen_battle_late_actions_vectors.mjs"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "blocking_reason": "CLI timeout; local checkpoint saved; no retry",
+  "root_verification": "reports/card_flow_20261016/root_acceptance.md",
+  "original_invocation_completed": false,
+  "recovery_note": "Original Max invocation timed out after writing sources; same Opus session resumed at xhigh. Root independently verified final completed sources; this is not a successful original CLI completion."
+}

@@ -1,0 +1,35 @@
+{
+  "after_completed_tests_and_build": true,
+  "files": [
+    {
+      "path": "client/MemoryForgeUnity/ProjectSettings/EditorSettings.asset",
+      "restored": true,
+      "sha256": "691af7b61d75e5dce6b6e923c8f83c6e32d73959bdfa5fa42ff51b6dba97561a",
+      "semantic_changes": false
+    },
+    {
+      "path": "client/MemoryForgeUnity/ProjectSettings/ProjectSettings.asset",
+      "restored": true,
+      "sha256": "21b8b9135d5f4c87ae2b49a14309719557cdd7f1977badd5d5f0bd07c12f6a83",
+      "semantic_changes": false
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/Settings/UniversalRP.asset",
+      "restored": true,
+      "sha256": "9fb41b6fbeaab7b09b56821d2afa77ce7b56e6dad38b9ccb7b5057b03cee91a5",
+      "semantic_changes": false
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/UniversalRenderPipelineGlobalSettings.asset",
+      "restored": true,
+      "sha256": "31878add831fa42bcbe51c0050823cb817930f80d97a0b7bb7d77847b6e4a8cf",
+      "semantic_changes": false
+    },
+    {
+      "path": "client/MemoryForgeUnity/ProjectSettings/UnityConnectSettings.asset",
+      "restored": false,
+      "sha256": "91a1feab5703108babeec96d61300b38d6d00544868457391038e605615ad750",
+      "semantic_changes": false
+    }
+  ]
+}

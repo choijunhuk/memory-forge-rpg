@@ -1,0 +1,8 @@
+test/engine.test.ts(2,22): error TS2307: Cannot find module 'node:test' or its corresponding type declarations.
+test/engine.test.ts(3,20): error TS2307: Cannot find module 'node:assert/strict' or its corresponding type declarations.
+test/engine.test.ts(157,22): error TS2339: Property 'events' does not exist on type 'DispatchResult'.
+  Property 'events' does not exist on type '{ ok: false; reason: RejectReason; }'.
+test/engine.test.ts(191,19): error TS2339: Property 'events' does not exist on type 'DispatchResult'.
+  Property 'events' does not exist on type '{ ok: false; reason: RejectReason; }'.
+test/presenter.test.ts(2,22): error TS2307: Cannot find module 'node:test' or its corresponding type declarations.
+test/presenter.test.ts(3,20): error TS2307: Cannot find module 'node:assert/strict' or its corresponding type declarations.

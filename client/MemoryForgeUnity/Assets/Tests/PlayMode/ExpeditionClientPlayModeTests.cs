@@ -479,8 +479,10 @@ namespace MemoryForge.Client.Tests
             var view = ActiveView(host); Canvas.ForceUpdateCanvases();
             AssertReadable(view, t => t == expected, "full effect text");
             AssertReadable(view, t => t.Contains("즉시 비용 " + mirror.BattleCostOf(card!, "now")), "current cost");
-            // The note keeps the definition-text vs actual-outcome distinction and now points at the action-line forecast.
-            AssertReadable(view, t => t.Contains("카드 정의의 값") && t.Contains("행동 안내 줄에 보여요") && t.Contains("미리 보여 주지 않아요"), "definition text vs forecast note");
+            // The note keeps the definition-text vs actual-outcome distinction, points at the action-line forecast and states that a
+            // reservation forecast is the current-state estimate (the old "later power is not previewed" phrase is gone).
+            AssertReadable(view, t => t.Contains("카드 정의의 값") && t.Contains("행동 안내 줄에 보여요") && t.Contains("미리 보여 주지 않아요")
+                && t.Contains("적 방어에 막힌 몫도 들어가요") && t.Contains("예약의 예상은 지금 상태에서 바로 해결한다고 가정한 값") && !t.Contains("나중 위력"), "definition text vs forecast note");
 
             // The detail overlay intercepts the obscured confirm; a click there spends nothing and keeps the detail open.
             var pointer = new PointerEventData(EventSystem.current) { position = behind, button = PointerEventData.InputButton.Left };
@@ -543,25 +545,42 @@ namespace MemoryForge.Client.Tests
                         AssertReadable(ActiveView(host), t => t == line, "action-line forecast of " + uid + "/" + mode + " on " + enemy.Uid);
                         if (f.Error != null)
                         {
-                            Assert.That((f.Cost, f.Due, f.Hidden, f.EnemyHpLoss, f.BlockDelta, f.HpDelta, f.Defeat), Is.EqualTo((0, (int?)null, false, 0, 0, 0, false)), "a rejected request reports only its code");
+                            Assert.That((f.Cost, f.Due, f.Hidden, f.EnemyHpLoss, f.BlockDelta, f.HpDelta, f.Defeat, f.EnemyDamage, f.NewlyBroken), Is.EqualTo((0, (int?)null, false, 0, 0, 0, false, 0, 0)),
+                                "a rejected request reports only its code");
                             continue;
                         }
                         Assert.That(line, Does.StartWith((auto ? "자동 선택 기준 예상 · " : "예상 · ") + ModeLabel(mode) + " · 행동력 " + f.Cost + " · "));
                         if (mode != "now")
                         {
+                            // The actual cost and absolute due turn, then Core's current-state estimate labelled as such (or nothing when hidden).
                             reservations++;
+                            string due = f.Due + "턴 시작(" + ModeLabel(mode) + ")에 해결 · ";
                             Assert.That(f.Due, Is.EqualTo(b.Turn + (mode == "next" ? 1 : 2)), "a reservation shows its absolute due turn");
-                            Assert.That((f.Hidden, f.EnemyHpLoss, f.BlockDelta, f.HpDelta, f.Defeat), Is.EqualTo((false, 0, 0, 0, false)));
-                            Assert.That(line, Does.EndWith(f.Due + "턴 시작(" + ModeLabel(mode) + ")에 해결 · 예약의 실제 해결 결과는 그때 확인해요"));
-                            Assert.That(line.Contains("적 체력") || line.Contains("방어 +"), Is.False, "no invented future damage or block");
+                            Assert.That(line.Contains("예약의 실제 해결 결과는 그때 확인해요") || line.Contains("이 행동으로 패배해요"), Is.False,
+                                "no cost/due-only note, and an estimate never says committing the reservation defeats the party");
+                            if (f.Hidden)
+                            {
+                                Assert.That((f.EnemyHpLoss, f.EnemyDamage, f.NewlyBroken, f.BlockDelta, f.HpDelta, f.Defeat), Is.EqualTo((0, 0, 0, 0, 0, false)), "a hidden estimate discloses no outcome");
+                                Assert.That(line, Does.EndWith(due + "드로우·무작위 결과는 해결된 뒤에 알 수 있어요"));
+                                continue;
+                            }
+                            Assert.That(line, Does.Contain(due + "현재 상태 기준 예상: "), "a visible reservation outcome is the labelled current-state estimate");
+                            if (f.EnemyDamage != 0) Assert.That(line, Does.Contain("적 피해 " + f.EnemyDamage));
+                            if (f.BlockDelta != 0) Assert.That(line, Does.Contain("방어 " + (f.BlockDelta > 0 ? "+" : "") + f.BlockDelta));
+                            if (f.NewlyBroken != 0) Assert.That(line, Does.Contain("새 균열 " + f.NewlyBroken + "체"));
+                            Assert.That(line.Contains("지금 해결되면 패배해요"), Is.EqualTo(f.Defeat));
+                            // Source harin_shield rv11 on the unmodified opening (its immediate value 8 is a TurnOneLiterals entry).
+                            if (b.Cards[uid].Id == "harin_shield")
+                                Assert.That((f.BlockDelta, f.EnemyDamage, f.EnemyHpLoss, f.HpDelta, f.NewlyBroken, f.Defeat), Is.EqualTo((11, 0, 0, 0, 0, false)), "harin_shield reservation estimate");
                             continue;
                         }
                         if (f.Hidden) { Assert.That(line, Does.EndWith("드로우·무작위 결과는 사용한 뒤에 알 수 있어요")); continue; }
                         if (TurnOneLiterals.TryGetValue(b.Cards[uid].Id, out var literal) && enemy.Block == 0 && enemy.Hp >= literal.Loss)
                         {
                             literals++;
-                            Assert.That((f.EnemyHpLoss, f.BlockDelta, f.HpDelta, f.Defeat), Is.EqualTo((literal.Loss, literal.Block, 0, false)), "original card value of " + b.Cards[uid].Id);
-                            Assert.That(line, Does.Contain(literal.Loss != 0 ? "적 체력 -" + literal.Loss : "방어 +" + literal.Block));
+                            // Without enemy block, the damage is exactly the HP loss.
+                            Assert.That((f.EnemyHpLoss, f.EnemyDamage, f.BlockDelta, f.HpDelta, f.Defeat), Is.EqualTo((literal.Loss, literal.Loss, literal.Block, 0, false)), "original card value of " + b.Cards[uid].Id);
+                            Assert.That(line, Does.Contain(literal.Loss != 0 ? "적 피해 " + literal.Loss : "방어 +" + literal.Block));
                             if (played == null && !auto) { played = uid; playedTarget = enemy.Uid; }
                         }
                     }
@@ -591,8 +610,11 @@ namespace MemoryForge.Client.Tests
             {
                 BattleState done = after.Battle;
                 int loss = start.Enemies.Sum(e => Math.Max(0, e.Hp - done.Enemies.Single(a => a.Uid == e.Uid).Hp));
+                int damage = start.Enemies.Sum(e => { var a = done.Enemies.Single(x => x.Uid == e.Uid); return Math.Max(0, e.Hp + e.Block - (a.Hp + a.Block)); });
+                int broken = done.Enemies.Count(a => a.BrokenUntil != 0 && start.Enemies.Single(e => e.Uid == a.Uid).BrokenUntil == 0);
                 Assert.That(done.V, Is.EqualTo(start.V + 1));
-                Assert.That((loss, done.Block - start.Block, done.Hp - start.Hp, done.Ap), Is.EqualTo((forecast.EnemyHpLoss, forecast.BlockDelta, forecast.HpDelta, start.Ap - forecast.Cost)),
+                Assert.That((loss, damage, broken, done.Block - start.Block, done.Hp - start.Hp, done.Ap),
+                    Is.EqualTo((forecast.EnemyHpLoss, forecast.EnemyDamage, forecast.NewlyBroken, forecast.BlockDelta, forecast.HpDelta, start.Ap - forecast.Cost)),
                     "the actual play equals the forecast that was shown");
             }
             else Assert.That(after.Phase, Is.EqualTo("REWARD").Or.EqualTo("DEFEAT"));
@@ -673,23 +695,27 @@ namespace MemoryForge.Client.Tests
             Assert.That(before, Is.EqualTo(Fingerprint(mirror.State)));
             client.SelectEnemy(enemy); client.SelectCard(card); client.SelectMode("now");
             var f = mirror.BattleForecast(card, "now", enemy);
-            Assert.That((f.Error, f.Hidden, f.EnemyHpLoss, f.BlockDelta, f.HpDelta, f.Defeat), Is.EqualTo(((string?)null, true, 0, 0, 0, false)), "a draw card's numeric outcome stays hidden");
+            Assert.That((f.Error, f.Hidden, f.EnemyHpLoss, f.BlockDelta, f.HpDelta, f.Defeat, f.EnemyDamage, f.NewlyBroken), Is.EqualTo(((string?)null, true, 0, 0, 0, false, 0, 0)),
+                "a draw card's numeric outcome stays hidden");
             Assert.That(Project(client.PlayForecast(card, "now")!), Is.EqualTo(Project(f)));
             string hidden = "예상 · 즉시 · 행동력 " + f.Cost + " · 드로우·무작위 결과는 사용한 뒤에 알 수 있어요";
             Assert.That(client.ForecastLine(f, false), Is.EqualTo(hidden));
             yield return null; Canvas.ForceUpdateCanvases();
             AssertReadable(ActiveView(host), t => t == hidden, "hidden draw forecast");
-            Assert.That(ActiveView(host).GetComponentsInChildren<Text>().Any(t => t.text.Contains("적 체력 -") || t.text.Contains("파티 체력 -") || t.text.Contains("파티 체력 +") || t.text.Contains("방어 +")),
-                Is.False, "no forecast number is drawn anywhere");
+            AssertNoForecastNumbers(ActiveView(host));
 
+            // The draw definition hides its reservation estimate too: cost and absolute due only, no outcome, break or defeat.
             var reserved = mirror.BattleForecast(card, "next", enemy);
             if (reserved.Error == null)
             {
                 client.SelectMode("next");
-                string line = "예상 · 다음 턴 · 행동력 " + reserved.Cost + " · " + (mirror.State.Battle!.Turn + 1) + "턴 시작(다음 턴)에 해결 · 예약의 실제 해결 결과는 그때 확인해요";
+                Assert.That((reserved.Hidden, reserved.EnemyHpLoss, reserved.EnemyDamage, reserved.NewlyBroken, reserved.BlockDelta, reserved.HpDelta, reserved.Defeat),
+                    Is.EqualTo((true, 0, 0, 0, 0, 0, false)), "a reserved draw card discloses no estimate");
+                string line = "예상 · 다음 턴 · 행동력 " + reserved.Cost + " · " + (mirror.State.Battle!.Turn + 1) + "턴 시작(다음 턴)에 해결 · 드로우·무작위 결과는 해결된 뒤에 알 수 있어요";
                 Assert.That(client.ForecastLine(reserved, false), Is.EqualTo(line));
                 yield return null; Canvas.ForceUpdateCanvases();
-                AssertReadable(ActiveView(host), t => t == line, "reservation forecast");
+                AssertReadable(ActiveView(host), t => t == line, "hidden reservation forecast");
+                AssertNoForecastNumbers(ActiveView(host));
                 client.SelectMode("now");
             }
             Assert.That(Fingerprint(client.Snapshot!), Is.EqualTo(before), "hidden and reservation forecasts spend nothing");
@@ -764,9 +790,15 @@ namespace MemoryForge.Client.Tests
             reflect.Command(new BattleRequest("begin", 0, "begin")); reflect.Command(new BattleRequest("end", 1, "end"));
             string reflectBefore = BattlePrint(reflect);
             var lethal = reflect.Forecast("c1");
-            Assert.That(Project(lethal), Is.EqualTo(Project(new BattlePlayForecast { Cost = 1, EnemyHpLoss = 4, HpDelta = -3, Defeat = true })), "oracle literal: the first reflected hit is lethal");
-            Assert.That(client.ForecastText(lethal), Is.EqualTo("행동력 1 · 적 체력 -4 · 파티 체력 -3 · 이 행동으로 패배해요"));
-            Assert.That(BattlePrint(reflect), Is.EqualTo(reflectBefore), "a defeat forecast changes nothing");
+            Assert.That(Project(lethal), Is.EqualTo(Project(new BattlePlayForecast { Cost = 1, EnemyHpLoss = 4, EnemyDamage = 4, HpDelta = -3, Defeat = true })), "oracle literal: the first reflected hit is lethal");
+            Assert.That(client.ForecastText(lethal), Is.EqualTo("행동력 1 · 적 피해 4 · 파티 체력 -3 · 이 행동으로 패배해요"));
+            // The reservation's current-state estimate (the oracle's rv6 'reflect reservation') warns only conditionally: committing it
+            // pays and schedules; the reflect is not promised for turn 3.
+            var estimate = reflect.Forecast("c1", "next");
+            Assert.That(Project(estimate), Is.EqualTo(Project(new BattlePlayForecast { Mode = "next", Cost = 1, Due = 3, EnemyHpLoss = 6, EnemyDamage = 6, HpDelta = -3, Defeat = true })),
+                "oracle literal: reflect reservation estimate");
+            Assert.That(client.ForecastText(estimate), Is.EqualTo("행동력 1 · 3턴 시작(다음 턴)에 해결 · 현재 상태 기준 예상: 적 피해 6 · 파티 체력 -3 · 지금 해결되면 패배해요"));
+            Assert.That(BattlePrint(reflect), Is.EqualTo(reflectBefore), "defeat forecasts change nothing");
 
             var hidden = Battle.Create(content, new BattleSetup { Party = { new BattleActorSetup { CharId = "sion" }, new BattleActorSetup { CharId = "lumi" }, new BattleActorSetup { CharId = "rien" } },
                 Deck = { new BattleCardSpec { Id = "sion_erase" }, new BattleCardSpec { Id = "lumi_storm" }, new BattleCardSpec { Id = "rien_rest" }, new BattleCardSpec { Id = "sion_cut" } },
@@ -776,15 +808,138 @@ namespace MemoryForge.Client.Tests
             foreach (var (uid, cost) in new[] { ("c1", 0), ("c2", 3), ("c3", 1) })
             {
                 var f = hidden.Forecast(uid);
-                Assert.That((f.Error, f.Hidden, f.Cost, f.EnemyHpLoss, f.BlockDelta, f.HpDelta, f.Defeat), Is.EqualTo(((string?)null, true, cost, 0, 0, 0, false)), "draw/random/nested-draw " + uid);
+                Assert.That((f.Error, f.Hidden, f.Cost, f.EnemyHpLoss, f.BlockDelta, f.HpDelta, f.Defeat, f.EnemyDamage, f.NewlyBroken), Is.EqualTo(((string?)null, true, cost, 0, 0, 0, false, 0, 0)),
+                    "draw/random/nested-draw " + uid);
                 Assert.That(client.ForecastText(f), Is.EqualTo("행동력 " + cost + " · 드로우·무작위 결과는 사용한 뒤에 알 수 있어요"));
             }
-            Assert.That(client.ForecastText(hidden.Forecast("c3", "next")), Is.EqualTo("행동력 1 · 2턴 시작(다음 턴)에 해결 · 예약의 실제 해결 결과는 그때 확인해요"));
-            Assert.That(client.ForecastText(hidden.Forecast("c4", "now", "e6")), Is.EqualTo("행동력 1 · 적 체력 -8"));
+            Assert.That(client.ForecastText(hidden.Forecast("c3", "next")), Is.EqualTo("행동력 1 · 2턴 시작(다음 턴)에 해결 · 드로우·무작위 결과는 해결된 뒤에 알 수 있어요"),
+                "oracle literal: the nested-draw reservation estimate stays hidden");
+            Assert.That(client.ForecastText(hidden.Forecast("c4", "now", "e6")), Is.EqualTo("행동력 1 · 적 피해 8"));
             var rejected = hidden.Forecast("c99");
             Assert.That(rejected.Error, Is.EqualTo("NOT_IN_HAND"));
             Assert.That(client.ForecastText(rejected), Does.Not.StartWith("행동력 "), "a rejected request shows its error text, not an outcome");
             Assert.That(BattlePrint(hidden), Is.EqualTo(hiddenBefore), "forecasts change nothing");
+            yield return null;
+        }
+
+        // P1-RESERVED-FORECAST-UI §14.2/§14.3/§5.4: a visible reservation of the actual opening hand, chosen by real rays, shows its actual
+        // cost and absolute due turn and Core's labelled current-state estimate. Choosing spends nothing; only the explicit confirm schedules
+        // it, once, paying exactly that cost and applying none of the estimate (the reservation resolves later, against that later state).
+        [UnityTest]
+        public IEnumerator ReservationShowsItsCurrentStateEstimateAndOnlyTheConfirmSchedulesItWithoutApplyingIt()
+        {
+            var opening = new Opening(); yield return Open(opening);
+            var host = opening.Host!; var client = opening.Client!; var mirror = opening.Mirror!;
+            string first = mirror.Available()[0];
+            Assert.That(client.EnterNode(first), Is.True); mirror.Enter(first);
+            yield return null;
+            var b = mirror.State.Battle!; string enemy = b.Enemies.First(e => e.Alive).Uid;
+            var choice = b.Zones.Hand.SelectMany(uid => mirror.BattleAllowedModes(uid).Where(m => m != "now").Select(m => (Uid: uid, Mode: m)))
+                .FirstOrDefault(r => mirror.BattleForecast(r.Uid, r.Mode, enemy) is var f && f.Error == null && !f.Hidden);
+            Assert.That(choice.Uid, Is.Not.Null, "seed 1234's opening hand offers a visible reservation");
+            string card = choice.Uid, mode = choice.Mode;
+            var forecast = mirror.BattleForecast(card, mode, enemy);
+            string before = Fingerprint(client.Snapshot!);
+            Assert.That(before, Is.EqualTo(Fingerprint(mirror.State)));
+            Canvas.ForceUpdateCanvases();
+            Click(ButtonNamed(host, "Enemy:" + enemy)); yield return null; Canvas.ForceUpdateCanvases();
+            Click(ButtonNamed(host, "Hand:" + card)); yield return null; Canvas.ForceUpdateCanvases();
+            Click(ButtonNamed(host, "Mode:" + mode)); yield return null; Canvas.ForceUpdateCanvases();
+            Assert.That(new[] { client.Target, client.SelectedCard, client.SelectedMode }, Is.EqualTo(new[] { enemy, card, mode }));
+            Assert.That(Project(client.PlayForecast(card, mode)!), Is.EqualTo(Project(forecast)), "the view forecasts Core's own result of the clicked request");
+            Assert.That(forecast.Due, Is.EqualTo(b.Turn + (mode == "next" ? 1 : 2)));
+            string line = client.ForecastLine(forecast, false);
+            Assert.That(line, Does.StartWith("예상 · " + ModeLabel(mode) + " · 행동력 " + forecast.Cost + " · " + forecast.Due + "턴 시작(" + ModeLabel(mode) + ")에 해결 · 현재 상태 기준 예상: "));
+            Assert.That(line.Contains("이 행동으로 패배해요"), Is.False);
+            AssertReadable(ActiveView(host), t => t == line, "the reservation's labelled current-state estimate on the action line");
+            Assert.That(Fingerprint(client.Snapshot!), Is.EqualTo(before), "real clicks on target, card and reservation mode spend nothing");
+            Assert.That(Fingerprint(mirror.State), Is.EqualTo(before));
+
+            var start = mirror.State.Battle!;
+            Click(ButtonNamed(host, "ConfirmCard"));
+            mirror.BattleCommand("play", Play(card, mode, enemy));
+            Assert.That(client.LastError, Is.Null);
+            Assert.That(Fingerprint(client.Snapshot!), Is.EqualTo(Fingerprint(mirror.State)), "the confirmed reservation is exactly one actual Run.BattleCommand");
+            var done = client.Snapshot!.Battle;
+            Assert.That(done, Is.Not.Null, "a reservation does not end the battle");
+            Assert.That(done!.V, Is.EqualTo(start.V + 1));
+            Assert.That(done.Ap, Is.EqualTo(start.Ap - forecast.Cost), "the reservation pays exactly the forecast cost");
+            Assert.That(done.Reservations.Single(r => r.Uid == card).Due, Is.EqualTo(forecast.Due), "scheduled for the forecast's absolute turn");
+            Assert.That((done.Hp, done.Block), Is.EqualTo((start.Hp, start.Block)), "the estimate is not applied to the party now");
+            Assert.That(done.Enemies.Select(e => e.Uid + ":" + e.Hp + "/" + e.Block + "/" + e.BrokenUntil), Is.EqualTo(start.Enemies.Select(e => e.Uid + ":" + e.Hp + "/" + e.Block + "/" + e.BrokenUntil)),
+                "the estimate is not applied to the enemies now");
+            yield return null;
+        }
+
+        // Supplement, not the client path: standalone Core forecasts (fresh public Battle.Create, begin and the forecast oracle's recorded
+        // commands for its authored setups; independent original-source literals) through the view's own formatter, for reservation labels
+        // the reference opening cannot reach deterministically.
+        [UnityTest]
+        public IEnumerator ReservationEstimateLabelsOfAuthoredCoreBattlesKeepCostDueAndCurrentStateSemantics()
+        {
+            var opening = new Opening(); yield return Open(opening);
+            var client = opening.Client!; var content = ClientBattleContent.Load().Battle;
+            const string Estimate = "현재 상태 기준 예상: ";
+
+            // harin_shield rv11: block in the estimate; committing the reservation pays and schedules it but gains no block.
+            var shield = Begin(content, 0, 81, new[] { "harin" }, new[] { "harin_shield" }, new[] { "e_cog" });
+            string print = BattlePrint(shield);
+            var guard = shield.Forecast("c1", "next");
+            Assert.That(Project(guard), Is.EqualTo(Project(new BattlePlayForecast { Mode = "next", Cost = 1, Due = 2, BlockDelta = 11 })), "source harin_shield rv11");
+            Assert.That(client.ForecastText(guard), Is.EqualTo("행동력 1 · 2턴 시작(다음 턴)에 해결 · " + Estimate + "방어 +11"));
+            Assert.That(BattlePrint(shield), Is.EqualTo(print), "an estimate changes nothing");
+            Commit(shield, "play", Play("c1", "next", null));
+            Assert.That((shield.State.Block, shield.State.Ap, shield.State.Reservations.Single().Due), Is.EqualTo((0, 3, 2)), "the real reservation schedules without its estimated block");
+
+            // reserved-estimates (seed 19): sera_timed rv22/ra30 differ by mode at one point; a zero estimate; block in an estimate; a newly
+            // broken keeper against an already broken one; the cog's block absorbing damage.
+            var est = Begin(content, 19, 81, new[] { "sera" }, new[] { "sera_round", "sera_double", "sera_cover", "sera_timed", "sera_aim" }, new[] { "e_keeper", "e_cog" });
+            string keeper = EnemyUid(est, "e_keeper"), cog = EnemyUid(est, "e_cog");
+            print = BattlePrint(est);
+            var timedNext = est.Forecast("c4", "next", keeper); var timedAfter = est.Forecast("c4", "after", keeper);
+            Assert.That(Project(timedNext), Is.EqualTo(Project(new BattlePlayForecast { Mode = "next", Cost = 2, Due = 2, EnemyHpLoss = 22, EnemyDamage = 22 })), "source sera_timed rv22");
+            Assert.That(Project(timedAfter), Is.EqualTo(Project(new BattlePlayForecast { Mode = "after", Cost = 2, Due = 3, EnemyHpLoss = 30, EnemyDamage = 30 })), "source sera_timed ra30");
+            Assert.That(client.ForecastText(timedNext), Is.EqualTo("행동력 2 · 2턴 시작(다음 턴)에 해결 · " + Estimate + "적 피해 22"));
+            Assert.That(client.ForecastText(timedAfter), Is.EqualTo("행동력 2 · 3턴 시작(다다음 턴)에 해결 · " + Estimate + "적 피해 30"));
+            Assert.That(client.ForecastText(est.Forecast("c5", "next")), Is.EqualTo("행동력 1 · 2턴 시작(다음 턴)에 해결 · " + Estimate + "체력·방어 변화 없음"), "sera_aim: a zero estimate");
+            Assert.That(client.ForecastText(est.Forecast("c3", "next", keeper)), Is.EqualTo("행동력 1 · 2턴 시작(다음 턴)에 해결 · " + Estimate + "적 피해 6 · 방어 +7"));
+            Assert.That(BattlePrint(est), Is.EqualTo(print), "estimates change nothing");
+            Commit(est, "play", Play("c1", "now", keeper));
+            var breaks = est.Forecast("c4", "next", keeper);
+            Assert.That((breaks.EnemyDamage, breaks.NewlyBroken), Is.EqualTo((22, 1)), "the estimate breaks the keeper");
+            Assert.That(client.ForecastText(breaks), Is.EqualTo("행동력 2 · 2턴 시작(다음 턴)에 해결 · " + Estimate + "적 피해 22 · 새 균열 1체"));
+            Commit(est, "play", Play("c2", "now", keeper));
+            Assert.That(client.ForecastText(est.Forecast("c3", "now", keeper)), Is.EqualTo("행동력 1 · 적 피해 4 · 방어 +5 · 새 균열 1체"), "an immediate play breaking the keeper");
+            Commit(est, "play", Play("c3", "now", keeper));
+            Commit(est, "end");
+            Assert.That(est.State.Enemies.Single(e => e.Uid == keeper).BrokenUntil, Is.Not.EqualTo(0), "the keeper is already broken");
+            var broken = est.Forecast("c3", "next", keeper);
+            Assert.That(Project(broken), Is.EqualTo(Project(new BattlePlayForecast { Mode = "next", Cost = 1, Due = 3, EnemyHpLoss = 9, EnemyDamage = 9, BlockDelta = 7 })),
+                "an already broken keeper is not newly broken (Sera foresight × broken: rv6 -> 9)");
+            Assert.That(client.ForecastText(broken), Is.EqualTo("행동력 1 · 3턴 시작(다음 턴)에 해결 · " + Estimate + "적 피해 9 · 방어 +7"));
+            Assert.That(client.ForecastText(est.Forecast("c1", "next", cog)), Is.EqualTo("행동력 1 · 3턴 시작(다음 턴)에 해결 · " + Estimate + "적 피해 12 (체력 -6)"), "cog block 6 in an estimate");
+            Assert.That(client.ForecastText(est.Forecast("c1", "now", cog)), Is.EqualTo("행동력 1 · 적 피해 8 (체력 -2)"), "cog block 6 now");
+
+            // damage-block-targets (seed 11) turn 2: sera_cover's 4 damage is all absorbed by the cog's block 6, so it is damage with HP loss 0.
+            var blocked = Begin(content, 11, 162, new[] { "sera", "harin" }, new[] { "sera_round", "sera_cover", "harin_shield", "harin_bash" }, new[] { "e_cog", "e_moth" });
+            Commit(blocked, "end");
+            var absorbed = blocked.Forecast("c2", "now", EnemyUid(blocked, "e_cog"));
+            Assert.That(Project(absorbed), Is.EqualTo(Project(new BattlePlayForecast { Cost = 1, BlockDelta = 5, EnemyDamage = 4 })), "oracle literal: block absorption");
+            Assert.That(client.ForecastText(absorbed), Is.EqualTo("행동력 1 · 적 피해 4 (체력 그대로) · 방어 +5"));
+
+            // reserved-hidden-definition-rng (seed 20, void_shard): draw and random definitions and an RNG exhaust hook hide the estimate,
+            // keeping cost and due; a plain reservation stays visible.
+            var hook = Begin(content, 20, 243, new[] { "nia", "sera", "yuri" }, new[] { "nia_scan", "yuri_root_hunt", "sera_last", "sera_round" }, new[] { "e_mirrorclerk" }, "void_shard");
+            string clerk = EnemyUid(hook, "e_mirrorclerk");
+            print = BattlePrint(hook);
+            foreach (var (uid, mode, target, cost, due) in new[] { ("c1", "next", clerk, 1, 2), ("c2", "after", (string?)null, 1, 3), ("c3", "after", clerk, 3, 3) })
+            {
+                var f = hook.Forecast(uid, mode, target);
+                Assert.That(Project(f), Is.EqualTo(Project(new BattlePlayForecast { Mode = mode, Cost = cost, Due = due, Hidden = true })), "hidden reserved estimate " + uid);
+                Assert.That(client.ForecastText(f), Is.EqualTo("행동력 " + cost + " · " + due + "턴 시작(" + ModeLabel(mode) + ")에 해결 · 드로우·무작위 결과는 해결된 뒤에 알 수 있어요"));
+            }
+            Assert.That(client.ForecastText(hook.Forecast("c4", "next", clerk)), Is.EqualTo("행동력 1 · 2턴 시작(다음 턴)에 해결 · " + Estimate + "적 피해 12"));
+            Assert.That(BattlePrint(hook), Is.EqualTo(print), "hidden and visible estimates change nothing");
             yield return null;
         }
 
@@ -814,7 +969,23 @@ namespace MemoryForge.Client.Tests
             while (client.Notice.Length != 0 && Time.realtimeSinceStartup < deadline) yield return null;
             Assert.That(client.Notice, Is.Empty, "the driver's last toast must expire on its real timer");
         }
-        static (string?, string, int, int?, bool, int, int, int, bool) Project(BattlePlayForecast f) => (f.Error, f.Mode, f.Cost, f.Due, f.Hidden, f.EnemyHpLoss, f.BlockDelta, f.HpDelta, f.Defeat);
+        static (string?, string, int, int?, bool, int, int, int, bool, int, int) Project(BattlePlayForecast f) =>
+            (f.Error, f.Mode, f.Cost, f.Due, f.Hidden, f.EnemyHpLoss, f.BlockDelta, f.HpDelta, f.Defeat, f.EnemyDamage, f.NewlyBroken);
+        // No forecast outcome wording anywhere in the view (the enemy panels' own "체력 n / m" and "균열 n/m" are not forecast labels).
+        static void AssertNoForecastNumbers(GameObject view) =>
+            Assert.That(view.GetComponentsInChildren<Text>().Any(t => new[] { "적 피해 ", "적 체력 -", "파티 체력 -", "파티 체력 +", "방어 +", "새 균열 ", "이 행동으로 패배해요", "지금 해결되면 패배해요", "현재 상태 기준 예상" }
+                .Any(t.text.Contains)), Is.False, "no forecast number is drawn anywhere");
+        // A fresh public Battle.Create of an original authored setup followed by the real begin command.
+        static Battle Begin(BattleData content, uint seed, int hp, string[] party, string[] deck, string[] enemies, params string[] relics)
+        {
+            var setup = new BattleSetup { Hp = hp, MaxHp = hp, Seed = seed };
+            setup.Party.AddRange(party.Select(id => new BattleActorSetup { CharId = id })); setup.Deck.AddRange(deck.Select(id => new BattleCardSpec { Id = id }));
+            setup.Enemies.AddRange(enemies); setup.Relics.AddRange(relics);
+            var battle = Battle.Create(content, setup); battle.Command(new BattleRequest("begin", 0, "begin"));
+            return battle;
+        }
+        static void Commit(Battle battle, string kind, BattleArgument? args = null) => battle.Command(new BattleRequest(kind + "-" + battle.State.V, battle.State.V, kind, args));
+        static string EnemyUid(Battle battle, string id) => battle.State.Enemies.First(e => e.Id == id).Uid;
         static string ModeLabel(string mode) => mode == "now" ? "즉시" : mode == "next" ? "다음 턴" : "다다음 턴";
         static string BattlePrint(Battle battle)
         {
@@ -1030,7 +1201,19 @@ namespace MemoryForge.Client.Tests
                 var args = BattleArgument.Object(new[] { Pair("actor", ready.Id), Pair("target", enemy) });
                 if (Both(client, mirror, () => client.UseUltimate(ready.Id), () => mirror.BattleCommand("ult", args))) return;
             }
-            Both(client, mirror, () => client.EndTurn(), () => mirror.BattleCommand("end"));
+            if (Both(client, mirror, () => client.EndTurn(), () => mirror.BattleCommand("end"))) DismissTurnSummary(client);
+        }
+        // P1-CARD-FLOW-TURN-BARRIER: an actual end opens the blocking turn summary. These drivers are not about it, so they close it
+        // explicitly (skip, then continue) before the next command; both are display only and must leave the Run exactly as it was.
+        static void DismissTurnSummary(MemoryForgeExpeditionClient client)
+        {
+            Assert.That(client.HasTurnSummary, Is.True, "an actual end opens the turn summary");
+            string before = Fingerprint(client.Snapshot!);
+            Assert.That(client.SkipTurnSummary(), Is.True);
+            Assert.That(client.TurnSummaryFullyShown, Is.True);
+            Assert.That(client.ContinueTurnSummary(), Is.True);
+            Assert.That(client.HasTurnSummary, Is.False);
+            Assert.That(Fingerprint(client.Snapshot!), Is.EqualTo(before), "skip and continue never reach the Run");
         }
         static bool Both(MemoryForgeExpeditionClient client, CoreRun mirror, Func<bool> view, Action core)
         {

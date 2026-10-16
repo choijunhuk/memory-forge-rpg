@@ -286,6 +286,16 @@ namespace MemoryForge.Core
         }
     }
 
+    /// <summary>Original enemy "phase" descriptor (§10.6), typed as written. It is descriptor data, never a pattern move: the engine
+    /// validates it only at the boss's first HP 0, with the original INVALID_ENEMY_MOVE/WRONG_PHASE codes.</summary>
+    public sealed class EnemyPhaseDef
+    {
+        public string? Type;
+        public int? Hp, Brk;
+        public List<string>? Weak;
+        public List<EnemyMoveDef>? Pattern;
+    }
+
     public sealed class BattleEnemyDef
     {
         public string Id = "", Name = "", Tier = "";
@@ -293,6 +303,11 @@ namespace MemoryForge.Core
         public List<string> Weak = new List<string>();
         public List<EnemyMoveDef> Pattern = new List<EnemyMoveDef>();
         public EnemyPassiveDef? Passive;
+        EnemyPhaseDef? phase;
+        // Methods rather than a public field: the exported definition contract (Unity content round trip) keeps its shape,
+        // and live content has no phase descriptor.
+        public EnemyPhaseDef? PhaseDescriptor() => phase;
+        public void SetPhaseDescriptor(EnemyPhaseDef? descriptor) => phase = descriptor;
     }
 
     public sealed class BattleData
@@ -309,6 +324,11 @@ namespace MemoryForge.Core
         internal Dictionary<string, BattleWeaponDef> WeaponIndex = new Dictionary<string, BattleWeaponDef>(StringComparer.Ordinal);
         internal Dictionary<string, BattlePartDef> PartIndex = new Dictionary<string, BattlePartDef>(StringComparer.Ordinal);
         internal Dictionary<string, BattleEnemyDef> EnemyIndex = new Dictionary<string, BattleEnemyDef>(StringComparer.Ordinal);
+        HashSet<string> attributeIds = new HashSet<string>(StringComparer.Ordinal);
+        /// <summary>Original data.attributes IDs; only a phase descriptor's weaknesses are checked against them. Undeclared means none,
+        /// so a phase change then rejects as the original does with no attributes. Not a public field: exported content keeps its shape.</summary>
+        public void SetAttributeIds(IEnumerable<string> ids) => attributeIds = new HashSet<string>(ids, StringComparer.Ordinal);
+        internal bool IsAttribute(string id) => attributeIds.Contains(id);
         public void Index()
         {
             CharacterIndex = Characters.ToDictionary(x => x.Id, StringComparer.Ordinal);

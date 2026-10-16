@@ -1,0 +1,40 @@
+TAP version 13
+# Subtest: original-JS regeneration keeps every v1 case/query/command and adds the bounded v2 reserved cases: 91 forecasts / 52 real commands
+ok 1 - original-JS regeneration keeps every v1 case/query/command and adds the bounded v2 reserved cases: 91 forecasts / 52 real commands
+  ---
+  duration_ms: 75.109458
+  ...
+# Subtest: independent original-source literals: damage, block, heal, self-damage, reflect defeat, reservation estimates, breaks, picks and hidden reasons
+ok 2 - independent original-source literals: damage, block, heal, self-damage, reflect defeat, reservation estimates, breaks, picks and hidden reasons
+  ---
+  duration_ms: 0.464792
+  ...
+# Subtest: every forecast re-derives from independent public replays, matches the original HTML preview() when visible, and every real command reproduces its state
+ok 3 - every forecast re-derives from independent public replays, matches the original HTML preview() when visible, and every real command reproduces its state
+  ---
+  duration_ms: 71.032208
+  ...
+# Subtest: source pins, strict freshness and tampered fixtures are rejected
+ok 4 - source pins, strict freshness and tampered fixtures are rejected
+  ---
+  duration_ms: 758.56625
+  ...
+# Subtest: strict shared decoder: exact export round trip, corrupted containers and empty gzip prefix/suffix members rejected, previous output preserved
+ok 5 - strict shared decoder: exact export round trip, corrupted containers and empty gzip prefix/suffix members rejected, previous output preserved
+  ---
+  duration_ms: 251.201792
+  ...
+# Subtest: checked-in fixture decodes strictly and equals fresh original-JS regeneration
+ok 6 - checked-in fixture decodes strictly and equals fresh original-JS regeneration
+  ---
+  duration_ms: 74.093833
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1400.589041

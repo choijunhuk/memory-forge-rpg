@@ -1,4 +1,5 @@
 // §5.3/5.7-9/5.13-18: real Create/begin/end with skipped player turns. Play/ult/Run remain unported.
+// §10.4-10.6: the six late enemy behaviors run only when supplied definitions use them; live content has none.
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -399,7 +400,8 @@ namespace MemoryForge.Core
             var s = state; var rules = data.Rules;
             RequireSupportedTurnState();
             int due = StateNumber(s.Debts.Where(d => d.Due <= (long)s.Turn + 1).Aggregate(BigInteger.Zero, (total, d) => total + d.N));
-            int ap = StateNumber(BigInteger.Max(0, BigInteger.Min(rules.ApMax, (BigInteger)rules.ApPerTurn + s.ApNext + (Has("chrono_crown") ? 1 : 0) - (s.Turn == 0 && Has("cracked_hourglass") ? 1 : 0) - due)));
+            // Original nextTurnAp outside a player phase: due debt and the enemy AP drain are subtracted separately, then clamped once.
+            int ap = StateNumber(BigInteger.Max(0, BigInteger.Min(rules.ApMax, (BigInteger)rules.ApPerTurn + s.ApNext + (Has("chrono_crown") ? 1 : 0) - (s.Turn == 0 && Has("cracked_hourglass") ? 1 : 0) - due - s.ApDrainNext)));
             s.Turn = checked(s.Turn + 1); s.Phase = "RESOLVING";
             if (!first) { s.Block = Math.Min(s.Block, s.Powers.Where(p => p.Id == "bulwark").Select(p => p.Keep ?? 0).DefaultIfEmpty(0).Max()); s.Counter = 0; }
             s.Buffs = s.Buffs.Where(b => b.Until >= s.Turn).ToList();
@@ -433,7 +435,6 @@ namespace MemoryForge.Core
         }
         void RequireSupportedTurnState()
         {
-            if (state.ApDrainNext != 0 || state.SilenceUntil != 0) throw new RuleException("BATTLE_STATE_NOT_IMPLEMENTED");
             if (state.Powers.Any(p => !new[] { "blueprint", "greenhouse", "bulwark", "rebirth", "oblivion", "casefile", "echochamber" }.Contains(p.Id)) ||
                 state.Buffs.Any(b => !new[] { "charge", "seraLock", "healUp", "lumiRush", "counterDouble", "overloadFree" }.Contains(b.Status)))
                 throw new RuleException("BATTLE_STATE_NOT_IMPLEMENTED");
@@ -441,7 +442,7 @@ namespace MemoryForge.Core
         }
         List<EnemyMoveDef> EnemyPattern(BattleEnemyState enemy)
         {
-            var pattern = data.EnemyIndex[enemy.Id].Pattern;
+            var pattern = enemy.Pattern ?? data.EnemyIndex[enemy.Id].Pattern;
             if (pattern.Count == 0) throw new RuleException("BATTLE_PATTERN_NOT_IMPLEMENTED");
             return pattern;
         }
@@ -531,10 +532,12 @@ namespace MemoryForge.Core
                         RequireMoveShape(move, new[] { "d", "s", "n" }, "h");
                         if (move.Status != "weak") throw new RuleException("BATTLE_ENEMY_MOVE_NOT_IMPLEMENTED");
                     }
+                    int? body = enemy.PhaseIndex;
                     for (int h = 0; h < Or(move.Hits ?? 1, 1); h++)
                     {
                         EnemyHit(enemy, move.Damage!.Value);
-                        if (CheckEnd() || !enemy.Alive) return;
+                        // A counter that opens the attacker's next phase also ends the old body's attack.
+                        if (CheckEnd() || !enemy.Alive || enemy.PhaseIndex != body) return;
                     }
                     if (move.Type == "atkdebuff") state.Weak = checked(state.Weak + move.N!.Value);
                     break;
@@ -577,8 +580,82 @@ namespace MemoryForge.Core
                     Emit(new BattleEvent { E = "expose", Uid = enemy.Uid }); if (move.Then != null) EnemyMove(enemy, move.Then); break;
                 case "blockAll":
                     RequireMoveShape(move, new[] { "b" }); foreach (var alive in state.Enemies.Where(e => e.Alive)) alive.Block = checked(alive.Block + move.Block!.Value); break;
+                case "apDrain":
+                {
+                    // Next turn's AP only, kept apart from debt; StartTurn subtracts it once and clears it.
+                    RequireMoveShape(move, new string[0], "n");
+                    int drain = move.N ?? -1;
+                    if (drain < 0) throw new RuleException("INVALID_ENEMY_MOVE");
+                    state.ApDrainNext = checked(state.ApDrainNext + drain);
+                    Emit(new BattleEvent { E = "apDrain", Uid = enemy.Uid, N = drain }); break;
+                }
+                case "sealSlot":
+                {
+                    // Seals the next column of the following player turn (due turn+2); an existing seal or a full column gives block 10 instead.
+                    RequireMoveShape(move, new string[0]);
+                    long due = (long)state.Turn + 2;
+                    bool fallback = state.SealedUntil >= (long)state.Turn + 1 || state.Reservations.Count(r => r.Due == due) >= NextPlayerSlotCapacity(due);
+                    if (fallback) enemy.Block = checked(enemy.Block + 10); else state.SealedUntil = checked(state.Turn + 1);
+                    Emit(new BattleEvent { E = "sealSlot", Uid = enemy.Uid, Until = state.SealedUntil, Fallback = fallback }); break;
+                }
+                case "delayRes":
+                {
+                    // The newest reservation moves one turn later and keeps its kind (power); with no room there it is discarded unrefunded.
+                    RequireMoveShape(move, new string[0]);
+                    BattleReservationState? newest = null;
+                    foreach (var reservation in state.Reservations) if (newest == null || reservation.Order > newest.Order) newest = reservation;
+                    if (newest == null) { Emit(new BattleEvent { E = "delayRes", Discarded = false }); break; }
+                    int from = newest.Due, to = checked(newest.Due + 1);
+                    bool discarded = state.Reservations.Count(r => r != newest && r.Due == to) >= NextPlayerSlotCapacity(to);
+                    if (discarded) { state.Reservations.Remove(newest); state.Zones.Discard.Add(newest.Uid); }
+                    else { newest.Due = to; newest.Delayed = true; }
+                    Emit(new BattleEvent { E = "delayRes", Uid = newest.Uid, From = from, To = to, Kind = newest.Kind, Discarded = discarded }); break;
+                }
+                case "silence":
+                    // +1 to next/after reservation costs on the following player turn; repeats extend nothing and do not stack.
+                    RequireMoveShape(move, new string[0], "n");
+                    if (move.N.HasValue && move.N != 1) throw new RuleException("INVALID_ENEMY_MOVE");
+                    state.SilenceUntil = Math.Max(state.SilenceUntil, checked(state.Turn + 1));
+                    Emit(new BattleEvent { E = "silence", Uid = enemy.Uid, Until = state.SilenceUntil }); break;
+                case "eatName":
+                {
+                    // Exhausts a random discard card, tokens first, through the normal exhaust hooks; an empty discard draws no RNG.
+                    RequireMoveShape(move, new string[0]);
+                    var tokens = state.Zones.Discard.Where(uid => state.Cards[uid].Token).ToList();
+                    var pool = tokens.Count != 0 ? tokens : state.Zones.Discard.ToList();
+                    string? eaten = pool.Count == 0 ? null : pool[Below(pool.Count)];
+                    if (eaten != null) ExhaustCard(eaten);
+                    Emit(new BattleEvent { E = "eatName", Uid = eaten }); break;
+                }
+                // "phase" is descriptor data opened by KillEnemy, never a pattern move.
                 default: throw new RuleException("BATTLE_ENEMY_MOVE_NOT_IMPLEMENTED");
             }
+        }
+
+        // Original nextPlayerSlotCapacity: the following player turn's base columns (its temporary slots expire first) minus its seal.
+        int NextPlayerSlotCapacity(long due)
+        {
+            long turn = (long)state.Turn + 1; var rules = data.Rules;
+            if (due == turn + 1) return Math.Max(0, Math.Min(rules.NextSlotsMax, state.SlotsBase.Next) - (state.SealedUntil >= turn ? 1 : 0));
+            return due == turn + 2 ? Math.Min(rules.AfterSlotsMax, state.SlotsBase.After) : 0;
+        }
+
+        // Original enemyMove "phase": the same UID becomes the second body with fresh HP/break/weakness/pattern/status, no excess
+        // damage carried over and no kill hooks.
+        void EnterPhase(BattleEnemyState enemy, EnemyPhaseDef phase)
+        {
+            if (enemy.Tier != "boss" || enemy.Hp != 0 || (enemy.PhaseIndex ?? 0) != 0) throw new RuleException("WRONG_PHASE");
+            int hp = phase.Hp ?? 0, brk = phase.Brk ?? 0; var weak = phase.Weak; var pattern = phase.Pattern;
+            if (hp <= 0 || brk <= 0 || weak == null || weak.Count == 0 || weak.Distinct(StringComparer.Ordinal).Count() != weak.Count || !weak.All(data.IsAttribute)
+                || pattern == null || pattern.Count == 0 || pattern.Any(m => m == null || m.Type == null || m.Type == "phase"))
+                throw new RuleException("INVALID_ENEMY_MOVE");
+            enemy.PhaseIndex = 1;
+            enemy.MaxHp = StateNumber(BigInteger.Max(1, Round((BigInteger)hp * state.DifficultyHp, 100))); enemy.Hp = enemy.MaxHp;
+            enemy.BrkMax = brk; enemy.Brk = brk; enemy.Weak = new List<string>(weak);
+            enemy.Pattern = pattern.Select(m => m.Copy()).ToList(); enemy.PatternIndex = 0;
+            enemy.Block = 0; enemy.Status = new BattleEnemyStatus(); enemy.Stunned = false; enemy.BrokenUntil = 0;
+            SetIntents(enemy);
+            Emit(new BattleEvent { E = "phase", Uid = enemy.Uid, Index = 1, Hp = enemy.Hp, Brk = enemy.Brk });
         }
 
         BattleEnemyState? LowestHealthEnemy()
@@ -628,6 +705,13 @@ namespace MemoryForge.Core
         }
         void KillEnemy(BattleEnemyState enemy, EffectContext? context = null)
         {
+            // A boss's first HP 0 opens its phase descriptor instead of dying; kill hooks wait for the final body.
+            var phase = data.EnemyIndex[enemy.Id].PhaseDescriptor();
+            if (phase != null && (enemy.PhaseIndex ?? 0) == 0)
+            {
+                if (phase.Type != "phase") throw new RuleException("INVALID_ENEMY_MOVE");
+                EnterPhase(enemy, phase); return;
+            }
             enemy.Alive = false; Emit(new BattleEvent { E = "kill", Uid = enemy.Uid, Id = enemy.Id });
             if (context != null) context.Killed = true;
             if (enemy.Status.Mark <= 0) return;

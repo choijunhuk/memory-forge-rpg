@@ -17,7 +17,11 @@ namespace MemoryForge.Client
     // practice data held by this component only — no PlayerPrefs, file, account, server or real-asset write — so closing the app
     // discards it, and the screens say so. Full card text is Core's BattleText.Card of the battle's effective definition (hand) or of
     // the source definition (reward, shop, deck). The play forecast on the action line and the pick sheet labels Core's pure
-    // Run.BattleForecast of the exact request a button would send; reading it never reaches the Run.
+    // Run.BattleForecast of the exact request a button would send; reading it never reaches the Run. A next/after outcome is Core's
+    // current-state estimate (the original preview) and is labelled as such.
+    // P1-CARD-FLOW-TURN-BARRIER §14.3/§14.7/§16.4: after an actual end the committed events are shown as a blocking text summary
+    // (BattleTurnDigest of public projections) over the already committed view. While it is open every public command and selection
+    // is refused before it reaches the Run; its timer, skip and continue only change text. It is local practice, not a server reply.
     [ExecuteAlways]
     public sealed class MemoryForgeExpeditionClient : MonoBehaviour
     {
@@ -44,6 +48,14 @@ namespace MemoryForge.Client
         /// <summary>The open card detail's effect text: exactly BattleText.Card of the definition named by CardInfoBasis.</summary>
         public string? CardInfoText => cardInfo?.Text;
         public string? CardInfoBasis => cardInfo?.Basis;
+        /// <summary>True while the turn-result summary of the last committed end is open; every public command and selection is refused.</summary>
+        public bool HasTurnSummary => turnSummary != null;
+        /// <summary>True when every row of the open summary is shown (after the 0.3 s reservation steps, or SkipTurnSummary).</summary>
+        public bool TurnSummaryFullyShown => turnSummary != null && summaryShown >= turnSummary.Count;
+        /// <summary>The open summary's immutable rows (BattleTurnDigest of the committed end); empty when none is open.</summary>
+        public IReadOnlyList<BattleDigestEntry> TurnSummaryRows => turnSummary ?? Array.Empty<BattleDigestEntry>();
+        /// <summary>A copy of the recent battle event rows (at most 40) the log sheet shows; kept after a battle until the next departure.</summary>
+        public IReadOnlyList<string> BattleLog => battleLog.ToArray();
 
         enum Sheet { None, Deck, Log, Abandon, Assign, DeckPick }
         enum Purpose { Upgrade, ForgeOffer, ForgeRemove, ShopRemove, EventCards, FoundPart }
@@ -84,6 +96,17 @@ namespace MemoryForge.Client
         Text? noticeLabel; // the current view's label showing `notice`; cleared with the view
         Color noticeFallbackColor;
         readonly List<string> deckPicks = new List<string>(), selectedChanges = new List<string>();
+        // Turn summary (cosmetic): rows of the committed end, how many are shown, and when the next reservation row may appear (<0: no wait).
+        IReadOnlyList<BattleDigestEntry>? turnSummary;
+        int summaryShown;
+        float summaryRevealAt = -1;
+        Text? summaryText, summaryStatus; // the current view's summary labels, rewritten in place; cleared with the view
+        RectTransform? summaryContent;
+        ScrollRect? summaryScroll;
+        readonly List<string> battleLog = new List<string>();
+        const string TurnSummaryOpen = "TURN_SUMMARY_OPEN";
+        const float ReservedRevealSeconds = 0.3f; // §14.3 예약 해결: 0.3 s per card, skippable
+        const int BattleLogLimit = 40;            // §14.3 기록: the recent 40 lines
         static readonly Color Background = Hex("0d1322"), Panel = Hex("141c31"), Line = Hex("2f3d63"), Ink = Hex("e9eef8"),
             Muted = Hex("98a5c0"), Brass = Hex("e2b45f"), Memory = Hex("62d6c6"), Danger = Hex("ff6f6f");
         const string PracticeNote = "연습용 탐사 · 진행과 기억은 이 세션에만 있어요. 앱을 닫으면 사라져요.";
@@ -93,11 +116,24 @@ namespace MemoryForge.Client
             if (Resources.Load<TextAsset>(ClientRunContent.ResourcePath) == null || Resources.Load<TextAsset>("MemoryForge/battle-content") == null) return;
             if (run == null) StartPractice(); else Render();
         }
-        void OnDisable() { RemoveView(); }
+        // Disabling drops only the cosmetic summary and its timer; OnEnable redraws the actual Run without restarting or changing it.
+        void OnDisable() { RemoveView(); CloseTurnSummary(); }
         void Update()
         {
             FitView();
             if (noticeUntil > 0 && Time.realtimeSinceStartup >= noticeUntil) ExpireNotice();
+            if (turnSummary != null && summaryShown < turnSummary.Count) AdvanceTurnSummary(Time.realtimeSinceStartup);
+        }
+        void OnApplicationPause(bool paused) { if (!paused) ResumeView(); }
+        void OnApplicationFocus(bool focused) { if (focused) ResumeView(); }
+        // Resume: a pick sheet whose card or player phase is gone is dropped, and the view is redrawn from the actual Run only when that
+        // happened or the view is missing. No Run command, restart or server fetch; an open summary stays (it is not stale).
+        void ResumeView()
+        {
+            if (!Application.isPlaying || !isActiveAndEnabled || run == null || data == null || font == null) return;
+            var s = run.State; bool stale = false;
+            if (picker != null && (s.Phase != "BATTLE" || s.Battle == null || s.Battle.Phase != "PLAYER" || !s.Battle.Zones.Hand.Contains(picker.Uid))) { picker = null; stale = true; }
+            if (stale || canvasRoot == null) Render();
         }
         // §14.2 2.6 s toast: expiring it rewrites only its own label to the screen's fallback text and color. Rebuilding the view here
         // would destroy the canvas, its buttons and the owned EventSystem while a pointer may be held, dropping that press.
@@ -125,6 +161,7 @@ namespace MemoryForge.Client
         /// <summary>New practice session: an empty session-local v2 memory store, then the first departure.</summary>
         public void StartPractice()
         {
+            if (Blocked()) return;
             Load();
             store = MemoryV2.Migrate(data!.Memory, new Dictionary<string, object?>(StringComparer.Ordinal),
                 new Dictionary<string, object?>(StringComparer.Ordinal)).ToJsonGraph();
@@ -135,12 +172,14 @@ namespace MemoryForge.Client
         /// <summary>Next departure from the session store's saved memory and version. Refused while an expedition is in progress.</summary>
         public bool Depart(string? length = null)
         {
+            if (Blocked()) return false;
             if (data == null || store == null) { StartPractice(); return run != null; }
             if (run != null && !Finished(run.State)) { Reject("RUN_IN_PROGRESS"); return false; }
             string chosen = length ?? Length; long seed = Seed + departures;
             string runId = "practice-" + (departures + 1) + "-" + seed;
             try { run = CoreRun.Create(data, PracticeSetup(seed, chosen, runId, Copy(Get(store, "memory")), SessionMemoryVersion)); }
             catch (RuleException error) { Reject(error.Code); return false; }
+            battleLog.Clear(); // the battle log belongs to one expedition
             departures++; Length = chosen; closedKind = null; lastSave = null; lastSaveCount = 0; LastRequestId = null;
             selectedCard = null; selectedMode = null; target = null; picker = null; cardInfo = null; sheet = Sheet.None; selectedChanges.Clear();
             LastError = null; notice = "출발했어요. 밝게 표시된 칸을 골라 나아가세요."; noticeUntil = Time.realtimeSinceStartup + 2.6f;
@@ -163,17 +202,28 @@ namespace MemoryForge.Client
         }
 
         // ───────── commands (each button calls exactly one of these) ─────────
-        public bool EnterNode(string nodeId) => Do(() => run!.Enter(nodeId), null);
-        public void SelectCard(string uid) { selectedCard = uid; selectedMode = null; picker = null; ClearIntentNotice(); Render(); }
-        public void SelectMode(string mode) { selectedMode = mode; ClearIntentNotice(); Render(); }
-        public void SelectEnemy(string uid) { target = uid; ClearIntentNotice(); Render(); }
+        public bool EnterNode(string nodeId)
+        {
+            if (Blocked()) return false;
+            bool ok = Do(() => run!.Enter(nodeId), null, false);
+            if (ok)
+            {
+                // A new battle's own begin events (opening relic/weapon effects, turn 1) start its part of the battle log; no summary.
+                var s = run!.State;
+                if (s.Phase == "BATTLE" && s.Battle != null) AppendBattleLog(Digest(null, s.Battle.Events, PublicBattle(s.Battle, false), s.Battle));
+            }
+            Render(); return ok;
+        }
+        public void SelectCard(string uid) { if (Blocked()) return; selectedCard = uid; selectedMode = null; picker = null; ClearIntentNotice(); Render(); }
+        public void SelectMode(string mode) { if (Blocked()) return; selectedMode = mode; ClearIntentNotice(); Render(); }
+        public void SelectEnemy(string uid) { if (Blocked()) return; target = uid; ClearIntentNotice(); Render(); }
         // A new card/mode/target intent retires the previous command's toast (or error) at once, so the action line shows this request's
         // forecast before any confirm. Only view text changes; the Run is untouched.
         void ClearIntentNotice() { noticeUntil = 0; LastError = null; notice = ""; }
         /// <summary>Plays the selected card, or first opens the pick overlay when the card lets the player choose cards (spends nothing).</summary>
         public bool ConfirmCard()
         {
-            if (run == null || selectedCard == null || selectedMode == null) return false;
+            if (Blocked() || run == null || selectedCard == null || selectedMode == null) return false;
             List<(string Label, string From, int Count, bool GrowthOnly)> requests;
             try { requests = ChoiceRequests(run.BattleEffectiveCard(selectedCard), selectedMode, data?.Memory.Battle); }
             catch (RuleException error) { Reject(error.Code); return false; }
@@ -183,6 +233,7 @@ namespace MemoryForge.Client
         }
         public bool PlayCard(string uid, string mode = "now", IReadOnlyList<string>? picks = null)
         {
+            if (Blocked()) return false;
             var args = new List<KeyValuePair<string, BattleArgument>> { Pair("uid", uid), Pair("mode", mode), Pair("target", target),
                 new KeyValuePair<string, BattleArgument>("picks", BattleArgument.Array((picks ?? new string[0]).Select(BattleArgument.String))) };
             string name = BattleCardName(uid);
@@ -192,25 +243,38 @@ namespace MemoryForge.Client
         public bool UseUltimate(string actor) => SendBattle("ult", BattleArgument.Object(new[] { Pair("actor", actor), Pair("target", target) }), "필살기를 사용했어요.");
         public bool PickCard(string uid)
         {
-            if (picker == null) return false;
+            if (Blocked() || picker == null) return false;
             picker.Picks.Add(uid); picker.Left--;
             if (picker.Left <= 0 && ++picker.Index < picker.Requests.Count) picker.Left = picker.Requests[picker.Index].Count;
             if (picker.Index >= picker.Requests.Count) return SendPicks();
             Render(); return true;
         }
         /// <summary>Plays with the picks made so far; Core chooses any remaining ones, as the button says.</summary>
-        public bool AutoPick() => picker != null && SendPicks();
-        public void CancelPick() { picker = null; Render(); }
+        public bool AutoPick() => !Blocked() && picker != null && SendPicks();
+        public void CancelPick() { if (Blocked()) return; picker = null; Render(); }
         bool SendPicks() { var pick = picker!; picker = null; return PlayCard(pick.Uid, pick.Mode, pick.Picks); }
         bool SendBattle(string kind, BattleArgument? args, string success)
         {
-            bool ok = Do(() => run!.BattleCommand(kind, args), success, false);
-            if (ok)
+            if (Blocked()) return false;
+            var live = run;
+            if (live == null) return false;
+            // Only public fields of the battle before the command are projected; its draw order and RNG are never read for display.
+            var previous = live.State.Battle;
+            var before = previous == null ? null : PublicBattle(previous, true);
+            BattleResponse? response = null;
+            bool ok = Do(() => response = live.BattleCommand(kind, args), success, false);
+            if (ok && response != null)
             {
+                picker = null; // a pick sheet prepared before this command must not outlive it
                 if (kind == "play") selectedMode = null;
-                var s = run!.State;
+                var s = live.State;
                 if (s.Phase == "REWARD") notice = "전투에서 이겼어요. 보상을 고르세요.";
                 if (s.Phase == "DEFEAT") notice = "파티가 쓰러졌어요. 남길 기억을 고르세요.";
+                // A finished battle leaves the Run: the honest after-view is then only the battle's final phase and the Run's HP.
+                var after = s.Battle != null ? PublicBattle(s.Battle, false) : new BattleDigestSnapshot { Phase = response.Phase, Hp = s.Hp };
+                var rows = Digest(before, response.Events, after, s.Battle);
+                AppendBattleLog(rows);
+                if (kind == "end") OpenTurnSummary(rows);
             }
             Render(); return ok;
         }
@@ -234,6 +298,7 @@ namespace MemoryForge.Client
         public bool ApplyFoundPart(string part, string key) => Do(() => run!.ApplyFoundPart(part, key), "부품을 붙였어요.");
         public bool Assign(string key, string charId)
         {
+            if (Blocked()) return false;
             bool ok = Do(() => run!.Assign(key, charId), "배정을 바꿨어요. 고른 변화는 초기화했어요.", false);
             if (ok) selectedChanges.Clear();
             Render(); return ok;
@@ -241,7 +306,7 @@ namespace MemoryForge.Client
         /// <summary>Gives up a running expedition without touching the session store; the terminal save screen uses CloseWithoutSave.</summary>
         public bool Abandon()
         {
-            if (run == null || Finished(run.State) || SaveOpen(run.State)) return false;
+            if (Blocked() || run == null || Finished(run.State) || SaveOpen(run.State)) return false;
             closedKind = "abandon"; sheet = Sheet.None; picker = null; cardInfo = null; LastError = null; notice = "탐사를 포기했어요. 기억 덱은 바뀌지 않았어요."; Render(); return true;
         }
 
@@ -251,7 +316,7 @@ namespace MemoryForge.Client
         /// <summary>Toggles one actual change ID of this Run's terminal change list; nothing is spent or committed.</summary>
         public bool ToggleChange(string changeId)
         {
-            if (run == null) return false;
+            if (Blocked() || run == null) return false;
             var s = run.State;
             if (!SaveOpen(s)) { Reject("WRONG_PHASE"); return false; }
             if (!ChangeOrder(run.MemoryChanges(), s).Contains(changeId)) { Reject("INVALID_SELECTION"); return false; }
@@ -264,7 +329,7 @@ namespace MemoryForge.Client
         /// Core validates everything; on success the returned store becomes the session store for the next departure.</summary>
         public bool CommitMemory()
         {
-            if (run == null) return false;
+            if (Blocked() || run == null) return false;
             var s = run.State; var flat = SaveOpen(s) ? Flatten(run.MemoryChanges(), s) : new List<string>();
             string requestId = "practice-save-" + s.RunId + "-" + (++requestSerial);
             var request = new Dictionary<string, object?>(StringComparer.Ordinal)
@@ -284,6 +349,7 @@ namespace MemoryForge.Client
         /// <summary>Closes the finished expedition without writing anything to the session store.</summary>
         public bool CloseWithoutSave()
         {
+            if (Blocked()) return false;
             if (run == null || !SaveOpen(run.State)) { Reject("WRONG_PHASE"); return false; }
             closedKind = "closed"; selectedChanges.Clear(); cardInfo = null; LastError = null; notice = "저장하지 않고 탐사를 닫았어요. 기억 덱은 바뀌지 않았어요."; Render(); return true;
         }
@@ -305,7 +371,8 @@ namespace MemoryForge.Client
             if (parts.Count != 0) notes.Add("붙은 부품\n" + string.Join("\n", parts.Select(PartLine)));
             if (instance != null && def.Uses.GetValueOrDefault() != 0) notes.Add("이번 전투 사용 " + instance.Used + " / " + def.Uses);
             if (instance != null && def.Growth == true) notes.Add("성장 " + instance.Growth);
-            notes.Add("적힌 수치는 카드 정의의 값이에요. 약점·상태·유물까지 반영한 예상은 방식을 고르면 행동 안내 줄에 보여요. 드로우·무작위 결과와 예약 카드의 나중 위력은 미리 보여 주지 않아요.");
+            notes.Add("적힌 수치는 카드 정의의 값이에요. 약점·상태·유물까지 반영한 예상은 방식을 고르면 행동 안내 줄에 보여요. 적 피해에는 적 방어에 막힌 몫도 들어가요. "
+                + "예약의 예상은 지금 상태에서 바로 해결한다고 가정한 값이라, 실제 결과는 해결되는 턴의 상태로 정해져요. 드로우·무작위 결과는 미리 보여 주지 않아요.");
             return ShowInfo(new CardInfo
             {
                 Title = def.Name + (instance != null && instance.Plus ? "+" : ""),
@@ -354,22 +421,26 @@ namespace MemoryForge.Client
         /// <summary>The action line for a forecast: its basis ("예상", or Core's automatic card choice when a pick card's picks stay
         /// unmade), the mode and ForecastText.</summary>
         public string ForecastLine(BattlePlayForecast f, bool autoPicks) => (autoPicks ? "자동 선택 기준 예상" : "예상") + " · " + ModeName(f.Mode) + " · " + ForecastText(f);
-        /// <summary>Error text, else the AP cost and ForecastOutcome; a reservation adds that its actual result is seen when it resolves.</summary>
-        public string ForecastText(BattlePlayForecast f) => f.Error != null ? ErrorText(f.Error)
-            : "행동력 " + f.Cost + " · " + ForecastOutcome(f) + (f.Mode == "now" ? "" : " · 예약의 실제 해결 결과는 그때 확인해요");
-        /// <summary>Only the DTO's own values: error text; a reservation's absolute due turn (never a future damage); the draw/random
-        /// notice with every number hidden; or the actual enemy HP loss, signed party block/HP and a defeat warning.</summary>
+        /// <summary>Error text, else the AP cost and ForecastOutcome.</summary>
+        public string ForecastText(BattlePlayForecast f) => f.Error != null ? ErrorText(f.Error) : "행동력 " + f.Cost + " · " + ForecastOutcome(f);
+        /// <summary>Only the DTO's own values: error text; for a reservation first its absolute due turn, then Core's estimate labelled
+        /// "현재 상태 기준 예상" (the original preview: resolving it in the present state, never a promise of that later turn); the
+        /// draw/random notice with every number hidden; else the enemy damage including enemy block (the HP loss named when it differs),
+        /// the signed party block/HP, newly broken enemies and a defeat warning (for an estimate: if it resolved now).</summary>
         public string ForecastOutcome(BattlePlayForecast f)
         {
             if (f.Error != null) return ErrorText(f.Error);
-            if (f.Mode != "now") return f.Due + "턴 시작(" + ModeName(f.Mode) + ")에 해결";
-            if (f.Hidden) return "드로우·무작위 결과는 사용한 뒤에 알 수 있어요";
+            bool reserved = f.Mode != "now";
+            string due = reserved ? f.Due + "턴 시작(" + ModeName(f.Mode) + ")에 해결 · " : "";
+            if (f.Hidden) return due + "드로우·무작위 결과는 " + (reserved ? "해결된" : "사용한") + " 뒤에 알 수 있어요";
             var parts = new List<string>();
-            if (f.EnemyHpLoss != 0) parts.Add("적 체력 -" + f.EnemyHpLoss);
+            if (f.EnemyDamage != 0) parts.Add("적 피해 " + f.EnemyDamage + (f.EnemyHpLoss == f.EnemyDamage ? "" : f.EnemyHpLoss == 0 ? " (체력 그대로)" : " (체력 -" + f.EnemyHpLoss + ")"));
+            else if (f.EnemyHpLoss != 0) parts.Add("적 체력 -" + f.EnemyHpLoss);
             if (f.BlockDelta != 0) parts.Add("방어 " + Signed(f.BlockDelta));
             if (f.HpDelta != 0) parts.Add("파티 체력 " + Signed(f.HpDelta));
-            if (f.Defeat) parts.Add("이 행동으로 패배해요");
-            return parts.Count == 0 ? "체력·방어 변화 없음" : string.Join(" · ", parts);
+            if (f.NewlyBroken != 0) parts.Add("새 균열 " + f.NewlyBroken + "체");
+            if (f.Defeat) parts.Add(reserved ? "지금 해결되면 패배해요" : "이 행동으로 패배해요");
+            return due + (reserved ? "현재 상태 기준 예상: " : "") + (parts.Count == 0 ? "체력·방어 변화 없음" : string.Join(" · ", parts));
         }
         static string Signed(int value) => (value > 0 ? "+" : "") + value;
         static Color ForecastColor(BattlePlayForecast f) => f.Error != null || f.Defeat ? Danger : Memory;
@@ -387,7 +458,7 @@ namespace MemoryForge.Client
 
         bool Do(Action command, string? success, bool render = true)
         {
-            if (run == null) return false;
+            if (run == null || Blocked()) return false; // every Run command passes here: none reaches the Run under the turn barrier
             try { command(); }
             catch (RuleException error) { Reject(error.Code, render); return false; }
             catch (MemoryBoundaryException error) { Debug.LogException(error); Reject("INTERNAL", render); return false; }
@@ -400,6 +471,105 @@ namespace MemoryForge.Client
         {
             LastError = code; notice = ErrorText(code); noticeUntil = Time.realtimeSinceStartup + 2.6f;
             if (render) Render();
+        }
+
+        // ───────── turn summary and battle log (§14.3/§16.4: text of Core's committed events; display only) ─────────
+        // The turn barrier: while the summary is open every public command and selection is refused before it reaches the Run. Only
+        // the summary's own skip/continue and display-only reads stay available. A refusal changes no view state, so nothing is redrawn.
+        bool Blocked()
+        {
+            if (turnSummary == null) return false;
+            LastError = TurnSummaryOpen; return true;
+        }
+        /// <summary>Shows every remaining row of the open turn summary at once. Display only: the Run is never called.</summary>
+        public bool SkipTurnSummary()
+        {
+            if (turnSummary == null) return false;
+            summaryShown = turnSummary.Count; summaryRevealAt = -1; RefreshTurnSummary(); return true;
+        }
+        /// <summary>Closes the open turn summary so the next input is accepted. Display only: the Run is never called.</summary>
+        public bool ContinueTurnSummary()
+        {
+            if (turnSummary == null) return false;
+            CloseTurnSummary(); Render(); return true;
+        }
+        void OpenTurnSummary(IReadOnlyList<BattleDigestEntry> rows)
+        {
+            turnSummary = rows; summaryShown = 0; summaryRevealAt = -1; AdvanceTurnSummary(Time.realtimeSinceStartup);
+        }
+        void CloseTurnSummary()
+        {
+            turnSummary = null; summaryShown = 0; summaryRevealAt = -1;
+            if (LastError == TurnSummaryOpen) LastError = null;
+        }
+        // §14.3 예약 해결: each actual time-reservation resolution row appears 0.3 s after the previous reveal; every other row at once.
+        // Labels change in place (no Render), so a held skip/continue keeps its button, canvas and EventSystem.
+        void AdvanceTurnSummary(float now)
+        {
+            var rows = turnSummary;
+            if (rows == null) return;
+            int shown = summaryShown;
+            while (summaryShown < rows.Count)
+            {
+                if (rows[summaryShown].IsReservedResolution)
+                {
+                    if (summaryRevealAt < 0) summaryRevealAt = now + ReservedRevealSeconds;
+                    if (now < summaryRevealAt) break;
+                    summaryRevealAt = -1;
+                }
+                summaryShown++;
+            }
+            if (summaryShown != shown) RefreshTurnSummary();
+        }
+        void RefreshTurnSummary()
+        {
+            var rows = turnSummary;
+            if (rows == null || summaryText == null || summaryContent == null) return;
+            summaryText.text = string.Join("\n", rows.Take(summaryShown).Select(row => Decoration(row) ? row.Text : "· " + row.Text));
+            float height = Mathf.Ceil(summaryText.preferredHeight) + 6;
+            summaryText.rectTransform.sizeDelta = new Vector2(1184, height);
+            summaryContent.sizeDelta = new Vector2(1216, Math.Max(600, height + 24));
+            if (summaryScroll != null) summaryScroll.vertical = height + 24 > 600;
+            if (summaryStatus != null)
+                summaryStatus.text = summaryShown < rows.Count ? "예약 해결을 차례로 보여 주는 중이에요 (" + summaryShown + "/" + rows.Count + ") · '남은 결과 모두 보기'로 바로 볼 수 있어요"
+                    : "모두 표시했어요. '계속'을 누르면 다음 행동을 할 수 있어요.";
+        }
+        // Summary, previous-intent and final-state rows frame a summary; only event rows are battle log lines.
+        static bool Decoration(BattleDigestEntry row) => row.Kind == BattleDigestKind.Summary || row.Kind == BattleDigestKind.PreviousIntent || row.Kind == BattleDigestKind.EnemyState;
+        void AppendBattleLog(IReadOnlyList<BattleDigestEntry> rows)
+        {
+            foreach (var row in rows) if (!Decoration(row)) battleLog.Add(row.Text);
+            if (battleLog.Count > BattleLogLimit) battleLog.RemoveRange(0, battleLog.Count - BattleLogLimit);
+        }
+        // The public part of a live battle: turn/phase/HP/block/AP, each enemy with its shown "이번" intent text, the time reservations and
+        // the names of hand and reservation cards. Draw order, RNG and other private card mappings are not read.
+        BattleDigestSnapshot PublicBattle(BattleState b, bool intents)
+        {
+            var rules = data!.Memory.Battle.Rules;
+            var names = new Dictionary<string, string>(StringComparer.Ordinal);
+            foreach (string uid in b.Zones.Hand.Concat(b.Reservations.Select(r => r.Uid))) names[uid] = BattleCardName(uid);
+            return new BattleDigestSnapshot
+            {
+                Turn = b.Turn, Phase = b.Phase, Hp = b.Hp, Block = b.Block, Ap = b.Ap, CardNames = names,
+                Enemies = b.Enemies.Select(e => new BattleDigestEnemy { Uid = e.Uid, Name = e.Name, Hp = e.Hp, Block = e.Block, Alive = e.Alive,
+                    IntentText = intents && e.Alive ? MemoryForgeBattleClient.IntentText(e.Intent, e.Status, b.DifficultyDamage, rules.WeakBps, true) : null }).ToList(),
+                Reservations = b.Reservations.Select(r => new BattleDigestReservation { Uid = r.Uid, Name = BattleCardName(r.Uid), Due = r.Due, Kind = r.Kind }).ToList()
+            };
+        }
+        // Card uids named by the events: a play/resolved/echoCopy event names its own card definition (static catalog); any other uid only
+        // when it now lies in a public zone (hand, discard, exhaust, reservations) of the live battle. Others stay unnamed ("카드").
+        IReadOnlyList<BattleDigestEntry> Digest(BattleDigestSnapshot? before, List<BattleEvent> events, BattleDigestSnapshot after, BattleState? live)
+        {
+            var names = after.CardNames ??= new Dictionary<string, string>(StringComparer.Ordinal);
+            var open = live == null ? null : new HashSet<string>(live.Zones.Hand.Concat(live.Zones.Discard).Concat(live.Zones.Exhaust).Concat(live.Reservations.Select(r => r.Uid)), StringComparer.Ordinal);
+            foreach (var e in events)
+            {
+                if (string.IsNullOrEmpty(e.Uid) || names.ContainsKey(e.Uid!)) continue;
+                string uid = e.Uid!;
+                if ((e.E == "play" || e.E == "resolved" || e.E == "echoCopy") && e.Id != null && cardDefs.TryGetValue(e.Id, out var def)) names[uid] = def.Name;
+                else if (open != null && open.Contains(uid)) names[uid] = BattleCardName(uid);
+            }
+            return BattleTurnDigest.Build(before, events, after);
         }
 
         // Display-only projection of prototype/src/ui.js choiceRequests: the immediate plays whose card picks the player makes.
@@ -467,7 +637,8 @@ namespace MemoryForge.Client
             if (sheet == Sheet.Abandon) AbandonSheet();
             if (sheet == Sheet.Assign && SaveOpen(s)) AssignSheet(s);
             if (sheet == Sheet.DeckPick && !Finished(s)) DeckPickSheet(s);
-            if (cardInfo != null) CardInfoSheet(cardInfo); // topmost: it can be opened from the deck and deck-pick sheets
+            if (cardInfo != null) CardInfoSheet(cardInfo); // above the other sheets: it can be opened from the deck and deck-pick sheets
+            if (turnSummary != null) TurnSummarySheet(); // topmost: the turn barrier covers every other control
             if (Application.isPlaying && EventSystem.current == null)
             { var events = new GameObject("ExpeditionInput", typeof(EventSystem), typeof(StandaloneInputModule)); events.transform.SetParent(canvasObject.transform, false); }
             Canvas.ForceUpdateCanvases(); FitView();
@@ -1003,22 +1174,45 @@ namespace MemoryForge.Client
             content.sizeDelta = new Vector2(1072, Math.Max(636, y));
             content.parent.GetComponent<ScrollRect>().vertical = y > 636;
         }
-        float Flow(RectTransform content, string value, float y, int size, Color color)
+        float Flow(RectTransform content, string value, float y, int size, Color color, float width = 1040)
         {
-            var text = Label(content, value, 16, y, 1040, 10, size, color);
+            var text = Label(content, value, 16, y, width, 10, size, color);
             text.resizeTextForBestFit = false; text.verticalOverflow = VerticalWrapMode.Overflow;
             float height = Mathf.Ceil(text.preferredHeight) + 6;
-            text.rectTransform.sizeDelta = new Vector2(1040, height);
+            text.rectTransform.sizeDelta = new Vector2(width, height);
             return y + height + 14;
         }
+        // §14.3 기록: the Run's own log and the recent 40 battle event rows (digest event rows only; kept after a battle ends until the
+        // next departure). Read-only text; the body scrolls.
         void LogSheet(RunState s)
         {
-            var p = OverlayPanel("ExpeditionLog", 360, 120, 880, 660);
+            var p = OverlayPanel("ExpeditionLog", 300, 80, 1000, 740);
             Label(p, "탐사 기록", 22, 14, 700, 40, 28, Brass, FontStyle.Bold);
-            Button(p, "CloseLog", "닫기", 736, 8, 122, 48, CloseSheet, Line, 22);
+            Button(p, "CloseLog", "닫기", 856, 8, 122, 48, CloseSheet, Line, 22);
+            var content = Scroll(p, "ExpeditionLogScroll", 22, 68, 956, 650, 956, 650, Background);
             var lines = s.Log.TakeLast(14).ToList();
-            if (s.Battle != null) lines.AddRange(s.Battle.Log.TakeLast(10).Select(EventText));
-            Label(p, lines.Count == 0 ? "아직 기록이 없어요." : string.Join("\n", lines), 22, 68, 836, 570, 21, Ink);
+            float y = Flow(content, "탐사 진행", 12, 20, Memory, 924);
+            y = Flow(content, lines.Count == 0 ? "아직 기록이 없어요." : string.Join("\n", lines), y, 19, Ink, 924);
+            y = Flow(content, "전투 기록 · 최근 " + battleLog.Count + "개 (최대 " + BattleLogLimit + "개)", y, 20, Memory, 924);
+            y = Flow(content, battleLog.Count == 0 ? "아직 전투 기록이 없어요." : string.Join("\n", battleLog), y, 19, Ink, 924);
+            content.sizeDelta = new Vector2(956, Math.Max(650, y));
+            content.parent.GetComponent<ScrollRect>().vertical = y > 650;
+        }
+        // The turn barrier sheet: a full-frame blocker, the summary text revealed by AdvanceTurnSummary, and skip/continue placed away
+        // from the end-turn, map/proceed and save buttons so a repeated tap cannot reach them.
+        void TurnSummarySheet()
+        {
+            var p = OverlayPanel("TurnSummary", 160, 60, 1280, 830);
+            Label(p, "턴 결과", 32, 16, 900, 46, 32, Brass, FontStyle.Bold);
+            Label(p, "이 연습 세션에서 이미 확정된 결과예요. '계속'을 누르면 다음 행동을 할 수 있어요.", 32, 66, 1216, 30, 18, Muted);
+            summaryContent = Scroll(p, "TurnSummaryScroll", 32, 104, 1216, 600, 1216, 600, Background);
+            summaryScroll = summaryContent.parent.GetComponent<ScrollRect>();
+            summaryText = Label(summaryContent, "", 16, 12, 1184, 10, 21, Ink);
+            summaryText.resizeTextForBestFit = false; summaryText.verticalOverflow = VerticalWrapMode.Overflow;
+            summaryStatus = Label(p, "", 32, 712, 1216, 34, 19, Memory);
+            Button(p, "SkipTurnSummary", "남은 결과 모두 보기", 40, 760, 340, 60, () => SkipTurnSummary(), Line, 22);
+            Button(p, "ContinueTurnSummary", "계속", 400, 760, 380, 60, () => ContinueTurnSummary(), Brass, 24);
+            RefreshTurnSummary();
         }
         void AbandonSheet()
         {
@@ -1106,6 +1300,7 @@ namespace MemoryForge.Client
         static string Signature(object? spec) => string.Join("|", Get(spec, "id") as string, Truthy(Get(spec, "plus")), Get(spec, "from") as string,
             Get(Get(spec, "mods"), "c") as string, Get(Get(spec, "mods"), "e") as string, Get(spec, "assigned") as string);
         static string Attribute(string attr) => attr == "volt" ? "전격" : attr == "flame" ? "화염" : attr == "frost" ? "빙결" : attr == "void" ? "공허" : attr == "none" ? "무속성" : attr;
+        // Retain the existing legacy mapper; the new event log uses the richer detached digest.
         string EventText(BattleEvent e)
         {
             string actor = e.Actor != null && characterNames.TryGetValue(e.Actor, out var name) ? name : "";
@@ -1135,6 +1330,7 @@ namespace MemoryForge.Client
             ["RUN_MISMATCH"] = "이 탐사와 저장 요청이 맞지 않아요.",
             ["REASSIGNMENT_REQUIRES_SEPARATE_FLOW"] = "출발 전 기억에 있던 공용 카드의 배정은 여기서 바꿀 수 없어요.",
             ["RUN_IN_PROGRESS"] = "진행 중인 탐사를 끝내거나 포기한 뒤에 출발할 수 있어요.",
+            [TurnSummaryOpen] = "턴 결과를 확인하는 중이에요. '계속'을 누르면 다음 행동을 할 수 있어요.",
             ["INTERNAL"] = "문제가 생겼어요. 다시 시도해 주세요."
         };
         string ErrorText(string code)
@@ -1198,7 +1394,7 @@ namespace MemoryForge.Client
             if (previous == null) return;
             previous.gameObject.SetActive(false);
             if (Application.isPlaying) Destroy(previous.gameObject); else DestroyImmediate(previous.gameObject);
-            canvasRoot = null; frame = null; noticeLabel = null;
+            canvasRoot = null; frame = null; noticeLabel = null; summaryText = null; summaryStatus = null; summaryContent = null; summaryScroll = null;
         }
         RectTransform Box(Transform parent, string name, float x, float y, float width, float height, Color color)
         {
@@ -1217,7 +1413,9 @@ namespace MemoryForge.Client
         Button Button(Transform parent, string name, string caption, float x, float y, float width, float height, Action click, Color? color = null, int size = 24)
         {
             var r = Box(parent, name, x, y, width, height, color ?? Line); var image = r.GetComponent<Image>(); image.raycastTarget = true;
-            var button = r.gameObject.AddComponent<Button>(); button.targetGraphic = image; button.onClick.AddListener(() => click());
+            var button = r.gameObject.AddComponent<Button>(); button.targetGraphic = image;
+            // Only a live, interactable button acts: a replaced view's button is inactive (RemoveView) until its deferred destroy.
+            button.onClick.AddListener(() => { if (button != null && button.IsActive() && button.IsInteractable()) click(); });
             var colors = button.colors; colors.highlightedColor = new Color(1.1f, 1.1f, 1.1f); colors.pressedColor = new Color(0.78f, 0.78f, 0.78f); colors.disabledColor = new Color(0.45f, 0.45f, 0.45f); button.colors = colors;
             bool light = color.HasValue && (color.Value == Brass || color.Value == Memory || color.Value == Danger);
             if (caption.Length != 0) Label(r, caption, 6, 5, width - 12, height - 10, size, light ? Background : Ink, FontStyle.Normal, TextAnchor.MiddleCenter);

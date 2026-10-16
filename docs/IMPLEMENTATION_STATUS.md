@@ -13,9 +13,9 @@
 | P1 JS→C# 트레이스 생성기 | IMPLEMENTED/VERIFIED(코퍼스) | §16.2·§20.9. 현행 legacy JS1000탐사와 [실제 C#273504명령/1000완주](../reports/run_memory_core_20261016/root_acceptance.md)를 대조했다. 정답상태 주입 없이 생성·명령·최종상태를 검증하며 지원 숫자/진단 범위와 중도Run복원은 구별한다. |
 | C# 전체 Battle·Run·기억 저장 | IMPLEMENTED(현행 참조)/PARTIAL(전체 수용) | 실제 Battle/Create/begin/end/play/ult·노드서비스·legacy/v2기억변화/미리보기/확정·새출발을 연결했다. [Run21902검사·5전체사례2684명령/1074질의·1000legacy273504명령/1000완주](../reports/run_memory_core_20261016/root_acceptance.md), [행동87991검사](../reports/player_actions_20261015/), [순수기억5451검사](../reports/memory_rules_20261015/)와 반대 작성자 검토가 있다. typed숫자/JS-native진단 범위, generic base0미결, 중도Run복원·계정/서버·후반후보·기기·전체게임 수용은 남음. 과거0명령/완주0은 아래 이력과 해당 단위 보고서에 보존한다. |
 | 후반 본편 활성화 | BLOCKED_ACCEPTANCE | JS 여섯 행동·HTML·23종 후보 있음. 최신40시나리오/조우 확대는44조우×40×3=5280회, 목표 미달21개. C#·서사/연출·목표 미달 해소 전 `authored` 활성화/본편 완료 선언 금지. |
-| 실제 Unity 게임 수직 슬라이스 | PARTIAL(실제탐사연습) | [실제 지도→전투→보상/서비스→기억선택→새출발](../reports/expedition_client_20261016/root_acceptance.md)과 [즉시 예측/예약 만기 화면92Play/3Edit·새macOS빌드](../reports/battle_preview_20261016/ui_root_acceptance.md)를 확인했다. 원문 예약피해/균열·적방어포함피해 예측은 다음 구현 중. 실제 계정/영속저장·로비/편성·최종아트/연출·네이티브 물리입력/실기기는 남음. 기존 전투/샘플/MCP 씬은 유지한다. |
+| 실제 Unity 게임 수직 슬라이스 | PARTIAL(실제탐사연습) | [실제 지도→전투→보상/서비스→기억선택→새출발](../reports/expedition_client_20261016/root_acceptance.md)과 [즉시 예측/예약 만기 화면92Play/3Edit·새macOS빌드](../reports/battle_preview_20261016/ui_root_acceptance.md)를 확인했다. [원문 예약피해/균열·방어포함피해와 턴잠금112Play/3Edit](../reports/card_flow_20261016/root_acceptance.md)를 확인했다. 실제 계정/영속저장·로비/편성·최종아트/연출·네이티브 물리입력/실기기는 남음. 기존 전투/샘플/MCP 씬은 유지한다. |
 | 서버 앱·저장v2 접합 | NOT_IMPLEMENTED | §17 전체 및 §8.11·§17.5: 소유권·버전·고정 잠금·원장·이력·멱등·rollback·다기기 동시성. 스키마/JS 로컬 저장으로 대체 불가. |
-| 반대 AI 최종 검토 | 단위별회수/후속IN_PROGRESS | 전투·M0/R0·노드서비스·기억완주·Unity원정·알림보완과 [미리보기Core/화면](../reports/battle_preview_20261016/ui_root_acceptance.md)의 반대 작성자 검토/결함수정/재검증을 회수했다. 원문 예약피해/균열 예측은 다음 단위이며 전체게임 최종검토가 아니다. 두 차례 미해결은 해당 쟁점만 보류한다. |
+| 반대 AI 최종 검토 | 단위별회수/후속IN_PROGRESS | 전투·M0/R0·노드서비스·기억완주·Unity원정·알림보완과 [미리보기Core/화면](../reports/battle_preview_20261016/ui_root_acceptance.md)의 반대 작성자 검토/결함수정/재검증을 회수했다. 예약예측v2·후반81사례·카드흐름S1도 반대작성자 검토와 실제112Play를 회수했으며 전체게임 최종검토가 아니다. 두 차례 미해결은 해당 쟁점만 보류한다. |
 
 P1/P2 완료로 개발을 끝내지 않는다. 이 표와 아래 장별 요구에서 의존성이 풀린 다음 작업을 고른다. 정책·권한·환경·구독 한도는 해당 항목만 보류하고 현재 세션의 독립 작업을 이어간다. 세션 밖 자동 개발은 약속하지 않는다.
 
@@ -486,3 +486,5 @@ Unity 탐사 화면: [실제 지도·전투·보상/서비스·기억선택과 �
 원정 미리보기 최신 증거: [92Play/3Edit·실제화면/새macOS빌드](../reports/battle_preview_20261016/ui_root_acceptance.md). Core895검사 이후 실제 원정의 예측/숨은결과/예약/후보별효과 안내를 연결했다. 빠른 다음선택을 가리던 알림은 구형RED→92GREEN으로 수정했다. 모든영웅/멀티픽/최악밀도·130%/기기/계정·서버·아트 전체수용은 별도다.
 
 원문 대조에서 예약 피해·균열과 적방어를 포함한 피해 예측 누락을 확인했다. 원본 HTML `preview`의 현재상태 복사본/예약종류별 실제resolver 경로를 C#에 연결하는 다음 작업을 OpusMax에 배정했다. 현재92Play 통과가 이 누락까지 구현했다는 뜻은 아니다. 원문·수치·검사 기준을 줄이지 않는다.
+
+최신 카드흐름/예측/후반Core: [참고자료 채택표](../reports/card_flow_20261016/adoption_status.md)·[112Play/3Edit/새macOS시작](../reports/card_flow_20261016/root_acceptance.md)·[원문예약예측v2](../reports/battle_preview_20261016/reserved_root_acceptance.md)·[후반81사례473요청 실제Mono](../reports/csharp_late_actions_20261016/root_acceptance.md). §5.5/5.7/10.4의C#행동은 시험후보로검증했으며 활성화/목표밸런스는미완료다. §14.3/14.7/16.4의턴잠금/40사건/로컬복귀는구현했고 오류후차단·미전송준비·배속전체/서버복구는후속이다. 위 과거단계의미구현기록은그시점이력으로보존한다.

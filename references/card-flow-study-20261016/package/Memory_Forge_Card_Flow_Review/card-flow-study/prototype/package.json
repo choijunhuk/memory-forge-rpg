@@ -1,0 +1,14 @@
+{
+  "name": "card-flow-prototype",
+  "version": "0.1.0",
+  "private": true,
+  "description": "카드 사용 → 효과 해결 → 다음 입력 가능까지의 흐름을 검증하는 독립 레퍼런스 구현 (의존성 없음)",
+  "type": "module",
+  "engines": {
+    "node": ">=23.6"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.ts",
+    "demo": "node src/demo.ts"
+  }
+}

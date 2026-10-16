@@ -1,6 +1,8 @@
-// P1-EXPEDITION-BATTLE-FORECAST §14.3/§6/§16.2: actual C# Battle.Forecast and Run.BattleForecast against the independent original-JS oracle.
-// Every case starts from its recorded setup through a fresh Battle.Create or Run.Create and replays the recorded real commands; recorded
-// states and forecasts are comparison data only and are never injected. Late command rejection is a C#-only local-definition probe.
+// P1-EXPEDITION-BATTLE-FORECAST / P1-RESERVED-FORECAST-CORE §14.2/§14.3/§5.4-5.6/§6/§16.2: actual C# Battle.Forecast and Run.BattleForecast
+// against the independent original-JS oracle (v2: current-state next/after estimates of the original HTML preview, enemy damage including
+// block and newly broken enemies). Every case starts from its recorded setup through a fresh Battle.Create or Run.Create and replays the
+// recorded real commands; recorded states and forecasts are comparison data only and are never injected. Late command and estimate
+// rejections are C#-only local-definition probes.
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -13,22 +15,29 @@ using ExpeditionRun = MemoryForge.Core.Run;
 
 static class BattlePreviewChecks
 {
-    const string Schema = "mf-battle-preview-v1", Status = "JS_ORACLE";
-    const string Scope = "Fresh Battle.create/command and Run.create/enter/battleCmd replays; each play forecast is the original JS check() code or one independent fresh-candidate play; C# Battle.Forecast/Run.BattleForecast comparison only. Unity view, device and server acceptance PENDING";
+    const string Schema = "mf-battle-preview-v2", Status = "JS_ORACLE";
+    const string Scope = "Fresh Battle.create/command and Run.create/enter/battleCmd replays; each play forecast is the original JS check() code, one independent fresh-candidate play and, for next/after, the original HTML preview current-state reserved resolution on another fresh replay; C# Battle.Forecast/Run.BattleForecast comparison only. Unity view, device and server acceptance PENDING";
     // Exact allowlist in source order, compared before any file is hashed: a fixture can never steer the host to read another path.
     static readonly (string Key, string Path)[] Sources = { ("data", "data/game_data.json"), ("engine", "engine/rules-core.js"), ("memory", "proposals/memory_v2.cjs"),
-        ("canonical", "tools/gen_traces.mjs"), ("runCreateDecoder", "tools/gen_run_create_vectors.mjs"), ("generator", "tools/gen_battle_preview_vectors.mjs") };
-    static readonly string[] Fields = { "error", "mode", "cost", "due", "hidden", "enemyHpLoss", "blockDelta", "hpDelta", "defeat" };
+        ("canonical", "tools/gen_traces.mjs"), ("runCreateDecoder", "tools/gen_run_create_vectors.mjs"), ("htmlPreview", "prototype/index.html"), ("generator", "tools/gen_battle_preview_vectors.mjs") };
+    static readonly string[] Fields = { "error", "mode", "cost", "due", "hidden", "enemyHpLoss", "blockDelta", "hpDelta", "defeat", "enemyDamage", "newlyBroken" };
     static readonly string[] Reasons = { "definition", "rng", "draw" };
     static readonly string[] Errors = { "AP_LOW", "BAD_TARGET", "INVALID_MODE", "NOT_IN_HAND", "NOT_RESERVABLE", "NO_BATTLE", "OVERLOAD_WOULD_KILL", "RESERVE_ONLY", "SLOT_FULL", "WRONG_PHASE" };
+    // v1 cases keep their order, queries and commands; the v2 reserved cases follow the expedition so its index stays 8.
     static readonly (string Id, string Group, int Forecasts, int Commands)[] Plan =
     {
         ("damage-block-targets", "battle", 12, 3), ("heal-reservation-slots", "battle", 11, 2), ("reflect-defeat", "battle", 5, 3), ("overload-self-damage", "battle", 5, 2),
-        ("hidden-definition", "battle", 7, 3), ("hidden-hook-draw", "battle", 3, 4), ("hidden-hook-rng", "battle", 4, 2), ("picks-pull", "battle", 4, 4), ("run-expedition", "run", 19, 17)
+        ("hidden-definition", "battle", 7, 3), ("hidden-hook-draw", "battle", 3, 4), ("hidden-hook-rng", "battle", 4, 2), ("picks-pull", "battle", 4, 4), ("run-expedition", "run", 19, 17),
+        ("reserved-estimates", "battle", 13, 6), ("reserved-hidden-definition-rng", "battle", 4, 2), ("reserved-hidden-draw-hook", "battle", 4, 4)
     };
-    // Fixed denominators: 8 authored battles 51 forecasts/23 commands; the expedition 6 fixed probes + 13 policy forecasts over 17 Run commands (measured).
-    static readonly (string Key, int Value)[] Counts = { ("cases", 9), ("battleForecasts", 51), ("battleCommands", 23), ("runFixedForecasts", 6), ("runPolicyForecasts", 13),
-        ("runCommands", 17), ("forecasts", 70), ("commands", 40) };
+    // Fixed denominators: 11 authored battles 72 forecasts/35 commands (v1 51/23 + v2 21/12); the expedition 6 fixed probes + 13 policy
+    // forecasts over 17 Run commands (measured); 85 v1 + 46 v2 receipt probes.
+    static readonly (string Key, int Value)[] Counts = { ("cases", 12), ("battleForecasts", 72), ("battleCommands", 35), ("runFixedForecasts", 6), ("runPolicyForecasts", 13),
+        ("runCommands", 17), ("forecasts", 91), ("commands", 52) };
+    const int ReceiptProbes = 131;
+    // Behaviours the v2 corpus must contain, derived here from the records alone.
+    static readonly string[] Witnesses = { "reserved:visible", "reserved:zero", "reserved:broken", "reserved:defeat", "reserved:absorbed", "reserved:hidden:definition",
+        "reserved:hidden:hook", "reserved:error", "reserved:next-after-differ", "now:absorbed", "now:broken" };
     const string ExpeditionSetup = "{\"party\":[{\"charId\":\"sera\"},{\"charId\":\"harin\"},{\"charId\":\"nia\"}],\"seed\":4242,\"length\":\"short\",\"memoryPolicy\":\"v2\",\"memory\":{},"
         + "\"relics\":[],\"difficulty\":{\"hp\":100,\"dmg\":100},\"zones\":[1],\"runId\":\"preview-run\",\"memoryVersion\":0,\"useMemory\":true}";
     const string PolicyLabel = "run policy play ";
@@ -57,7 +66,7 @@ static class BattlePreviewChecks
                 Check(Full(Catalog(data)) == definitions, Text(row, "id") + " original combat definitions unchanged by every forecast and command");
             }
             Check(Full(Catalog(runData.Memory.Battle)) == runDefinitions, "actual Run-owned card/character/weapon/part/relic definitions remain unchanged");
-            Check(forecasts == 70 && commands == 40, "exactly 70 actual C# forecasts (each repeated after caller mutation) and 40 real commands");
+            Check(forecasts == 91 && commands == 52 && receiptProbes == ReceiptProbes, "exactly 91 actual C# forecasts (each repeated after caller mutation), 52 real commands and 131 receipt probes");
             IndependentAssertions();
             LateRejection(root);
             FixtureRejections(fixture, content.RootElement, root);
@@ -65,7 +74,7 @@ static class BattlePreviewChecks
         catch (Exception error) { Check(false, "fixture/execution: " + error); }
         Console.WriteLine($"BattlePreviewChecks: {checks - failures}/{checks} passed; {forecasts} actual forecasts, {commands} real commands, {receiptProbes} receipt probes");
         Console.WriteLine("BattlePreviewScope: actual Battle.Forecast/Run.BattleForecast vs fresh original-JS replays; Unity view integration, device and server acceptance PENDING");
-        Console.WriteLine("BattlePreviewNotCovered: the pick:\"random\" definition branch has no authored card; late command rejection is a C#-only local-definition probe");
+        Console.WriteLine("BattlePreviewNotCovered: the pick:\"random\" definition branch has no authored card; late command and estimate rejections are C#-only local-definition probes");
         return failures;
     }
 
@@ -137,7 +146,7 @@ static class BattlePreviewChecks
         }
     }
 
-    // One recorded request: all nine fields, complete live-state purity, caller picks untouched, then a repeat after mutating the returned object.
+    // One recorded request: all eleven fields, complete live-state purity, caller picks untouched, then a repeat after mutating the returned object.
     static Dictionary<string, object?> Probe(string id, JsonElement record, string label, Func<string, string, string?, IReadOnlyList<string>?, BattlePlayForecast> forecast,
         Func<string> print, Func<string, BattleCardDef> card)
     {
@@ -147,7 +156,7 @@ static class BattlePreviewChecks
         string before = print();
         var first = forecast(uid, mode, target, picks); forecasts++;
         var result = Project(first);
-        Same(record.GetProperty("expected"), result, where + " all nine fields equal the original JS forecast");
+        Same(record.GetProperty("expected"), result, where + " all eleven fields equal the original JS forecast");
         Check(print() == before, where + " forecast leaves complete live state/RNG/log/events/version/public view unchanged");
         Check(picks.SequenceEqual(supplied), where + " forecast neither consumes nor reorders the caller's picks");
         Mutate(first); picks.Reverse(); picks.Add("caller-mutation");
@@ -163,7 +172,8 @@ static class BattlePreviewChecks
         Require(Actual.TryAdd(id + "/" + name, result), "Duplicate preview forecast label " + id + "/" + name);
         return result;
     }
-    // When a step's real play is one of its forecast requests, the actual C# outcome must be exactly that forecast.
+    // When a step's real play is one of its forecast requests, the actual C# outcome must be exactly that forecast. A reservation's real
+    // play only pays and schedules, so it is checked for cost and due; its outcome fields are a current-state estimate.
     static void Consistency(List<(JsonElement Record, Dictionary<string, object?> Result)> results, string kind, JsonElement args, BattleState before, BattleState after,
         BattleResponse response, string label)
     {
@@ -182,8 +192,11 @@ static class BattlePreviewChecks
             return;
         }
         long loss = before.Enemies.Sum(e => (long)Math.Max(0, e.Hp - (after.Enemies.FirstOrDefault(a => a.Uid == e.Uid)?.Hp ?? 0)));
+        long damage = before.Enemies.Sum(e => after.Enemies.FirstOrDefault(x => x.Uid == e.Uid) is BattleEnemyState now ? Math.Max(0L, (long)e.Hp + e.Block - ((long)now.Hp + now.Block)) : 0L);
+        int broken = after.Enemies.Count(a => a.BrokenUntil != 0 && before.Enemies.Any(e => e.Uid == a.Uid && e.BrokenUntil == 0));
         Check(loss == (int)result["enemyHpLoss"]! && after.Block - before.Block == (int)result["blockDelta"]! && after.Hp - before.Hp == (int)result["hpDelta"]!
-            && (after.Phase == "DEFEAT") == (bool)result["defeat"]!, label + " visible forecast equals the real play's enemy HP loss, block, HP and defeat");
+            && (after.Phase == "DEFEAT") == (bool)result["defeat"]! && damage == (int)result["enemyDamage"]! && broken == (int)result["newlyBroken"]!,
+            label + " visible forecast equals the real play's enemy HP loss, damage, newly broken enemies, block, HP and defeat");
     }
     static void CompareState(JsonElement point, BattleState state, string label)
     {
@@ -204,22 +217,28 @@ static class BattlePreviewChecks
     static Dictionary<string, object?> Project(BattlePlayForecast f) => new(StringComparer.Ordinal)
     {
         ["error"] = f.Error, ["mode"] = f.Mode, ["cost"] = f.Cost, ["due"] = f.Due, ["hidden"] = f.Hidden,
-        ["enemyHpLoss"] = f.EnemyHpLoss, ["blockDelta"] = f.BlockDelta, ["hpDelta"] = f.HpDelta, ["defeat"] = f.Defeat
+        ["enemyHpLoss"] = f.EnemyHpLoss, ["blockDelta"] = f.BlockDelta, ["hpDelta"] = f.HpDelta, ["defeat"] = f.Defeat,
+        ["enemyDamage"] = f.EnemyDamage, ["newlyBroken"] = f.NewlyBroken
     };
     static void Mutate(BattlePlayForecast f)
     {
         f.Error = "caller-mutation"; f.Mode = "caller-mutation"; f.Cost = -1; f.Due = -1; f.Hidden = !f.Hidden;
-        f.EnemyHpLoss = -1; f.BlockDelta = int.MinValue; f.HpDelta = int.MaxValue; f.Defeat = !f.Defeat;
+        f.EnemyHpLoss = -1; f.BlockDelta = int.MinValue; f.HpDelta = int.MaxValue; f.Defeat = !f.Defeat; f.EnemyDamage = -1; f.NewlyBroken = -1;
     }
     // Independent of Core: the accepted practice-view rule (random target/pick or draw anywhere in if/then/else).
     static bool HiddenDefinition(IEnumerable<EffectDef> effects) => effects.Any(e => e.Target == "rand" || e.Pick == "random" || e.Op == "draw"
         || e.Then != null && HiddenDefinition(e.Then) || e.Else != null && HiddenDefinition(e.Else));
 
     // ───────── independent literals from the unchanged original sources ─────────
-    static void Expect(string key, string? error, string mode, int cost, int? due = null, bool hidden = false, int loss = 0, int block = 0, int hp = 0, bool defeat = false)
+    // damage defaults to loss (no enemy block absorbed); broken defaults to 0.
+    static void Expect(string key, string? error, string mode, int cost, int? due = null, bool hidden = false, int loss = 0, int block = 0, int hp = 0, bool defeat = false,
+        int? damage = null, int broken = 0)
     {
         var expected = new Dictionary<string, object?>(StringComparer.Ordinal)
-        { ["error"] = error, ["mode"] = mode, ["cost"] = cost, ["due"] = due, ["hidden"] = hidden, ["enemyHpLoss"] = loss, ["blockDelta"] = block, ["hpDelta"] = hp, ["defeat"] = defeat };
+        {
+            ["error"] = error, ["mode"] = mode, ["cost"] = cost, ["due"] = due, ["hidden"] = hidden, ["enemyHpLoss"] = loss, ["blockDelta"] = block, ["hpDelta"] = hp, ["defeat"] = defeat,
+            ["enemyDamage"] = damage ?? loss, ["newlyBroken"] = broken
+        };
         Check(Actual.TryGetValue(key, out var actual) && JsonGraphComparison.Difference(expected, actual, "$", 0) == null, "independent original-source literal " + key);
     }
     static void IndependentAssertions()
@@ -227,27 +246,35 @@ static class BattlePreviewChecks
         const string D = "damage-block-targets/", H = "heal-reservation-slots/", R = "reflect-defeat/", O = "overload-self-damage/", F = "hidden-definition/", P = "picks-pull/";
         // power4 160/vit 81/level 1: sera_round 8, harin_shield 8, sera_cover blk5+dmg4, harin_bash 6; e_cog def b6 on its first enemy turn.
         Expect(D + "turn1 sera_round cog", null, "now", 1, loss: 8); Expect(D + "turn1 harin_shield", null, "now", 1, block: 8);
-        Expect(D + "turn2 sera_round cog block6", null, "now", 1, loss: 2); Expect(D + "turn2 sera_cover cog block6", null, "now", 1, block: 5);
+        Expect(D + "turn2 sera_round cog block6", null, "now", 1, loss: 2, damage: 8); Expect(D + "turn2 sera_cover cog block6", null, "now", 1, block: 5, damage: 4);
         Expect(D + "turn2 harin_bash moth", null, "now", 1, loss: 6); Expect(D + "turn2 sera_cover cog after hit", null, "now", 1, loss: 4, block: 5);
-        Expect(D + "turn1 sera_round next", null, "next", 1, due: 2);
+        // Current-state estimate: sera_round rv12 against the unblocked turn-1 cog.
+        Expect(D + "turn1 sera_round next", null, "next", 1, due: 2, loss: 12);
         foreach (var (label, code, mode) in new[] { ("created phase", "WRONG_PHASE", "now"), ("turn1 missing target", "BAD_TARGET", "now"), ("turn1 invalid mode", "INVALID_MODE", "later"),
             ("turn1 unknown uid", "NOT_IN_HAND", "now"), ("turn2 played card", "NOT_IN_HAND", "now") }) Expect(D + label, code, mode, 0);
-        // aila_bell heal5 at HP150/162; empty_clock -1 only before the first reservation; base after slot 1.
+        // aila_bell heal5 at HP150/162; empty_clock -1 only before the first reservation; base after slot 1. Every estimate kills the 12-HP page.
         Expect(H + "heal", null, "now", 1, hp: 5); Expect(H + "heal again", null, "now", 1, hp: 5); Expect(H + "page damage", null, "now", 1, loss: 8);
-        Expect(H + "first reservation next", null, "next", 1, due: 2); Expect(H + "first reservation after", null, "after", 1, due: 3);
-        Expect(H + "after-only after", null, "after", 2, due: 3); Expect(H + "discounted zero cost after", null, "after", 0, due: 3); Expect(H + "clock used next", null, "next", 1, due: 2);
+        Expect(H + "first reservation next", null, "next", 1, due: 2, loss: 12); Expect(H + "first reservation after", null, "after", 1, due: 3, loss: 12);
+        Expect(H + "after-only after", null, "after", 2, due: 3, loss: 12); Expect(H + "discounted zero cost after", null, "after", 0, due: 3, loss: 12);
+        Expect(H + "clock used next", null, "next", 1, due: 2, loss: 12);
         Expect(H + "reserve-only now", "RESERVE_ONLY", "now", 0); Expect(H + "after-only next", "NOT_RESERVABLE", "next", 0); Expect(H + "after slot full", "SLOT_FULL", "after", 0);
-        // e_mirrorclerk reflect3 from its first turn; HP3: the first reflected hit is lethal and stops later hits.
+        // e_mirrorclerk reflect3 from its first turn; HP3: the first reflected hit is lethal and stops later hits (the estimate at rv6 too).
         Expect(R + "turn1 no reflect yet", null, "now", 1, loss: 8); Expect(R + "reflect lethal multi-hit", null, "now", 1, loss: 4, hp: -3, defeat: true);
-        Expect(R + "reflect lethal single hit", null, "now", 1, loss: 8, hp: -3, defeat: true); Expect(R + "reflect reservation", null, "next", 1, due: 3);
+        Expect(R + "reflect lethal single hit", null, "now", 1, loss: 8, hp: -3, defeat: true); Expect(R + "reflect reservation", null, "next", 1, due: 3, loss: 6, hp: -3, defeat: true);
         Expect(R + "after defeat", "WRONG_PHASE", "now", 0);
         // HP5/81 <= 50%: lumi_critical +30% (18 -> 23, 8 -> 10); overdrive self-damage 5 would leave HP below 1.
         Expect(O + "selfdmg critical damage", null, "now", 1, loss: 23, hp: -4); Expect(O + "critical jab", null, "now", 1, loss: 10); Expect(O + "hp1 critical jab", null, "now", 1, loss: 10);
         Expect(O + "overload would kill", "OVERLOAD_WOULD_KILL", "now", 0); Expect(O + "hp1 overload would kill", "OVERLOAD_WOULD_KILL", "now", 0);
         Expect(F + "draw definition", null, "now", 0, hidden: true); Expect(F + "random target definition", null, "now", 3, hidden: true);
         Expect(F + "nested draw definition", null, "now", 1, hidden: true); Expect(F + "nested draw definition after owner change", null, "now", 1, hidden: true);
-        Expect(F + "visible control", null, "now", 1, loss: 8); Expect(F + "nested draw reserved", null, "next", 1, due: 2); Expect(F + "ap low", "AP_LOW", "now", 0);
-        Expect("hidden-hook-draw/third owner hook draw", null, "now", 1, hidden: true); Expect("hidden-hook-draw/third owner reserve", null, "next", 1, due: 2);
+        Expect(F + "visible control", null, "now", 1, loss: 8); Expect(F + "nested draw reserved", null, "next", 1, due: 2, hidden: true); Expect(F + "ap low", "AP_LOW", "now", 0);
+        Expect("hidden-hook-draw/third owner hook draw", null, "now", 1, hidden: true);
+        // The estimate starts before the third owner's play, so unfinished_score never draws in it: nia_wrench rv10 or nia_barrier rv10.
+        Check(Actual.TryGetValue("hidden-hook-draw/third owner reserve", out var reserve) && reserve["error"] == null && !(bool)reserve["hidden"]! && (int)reserve["cost"]! == 1
+            && Equals(reserve["due"], 2) && (int)reserve["hpDelta"]! == 0 && (int)reserve["newlyBroken"]! == 0
+            && ((int)reserve["enemyHpLoss"]! == 10 && (int)reserve["enemyDamage"]! == 10 && (int)reserve["blockDelta"]! == 0
+                || (int)reserve["enemyHpLoss"]! == 0 && (int)reserve["enemyDamage"]! == 0 && (int)reserve["blockDelta"]! == 10),
+            "independent: the third owner's reservation estimate stays visible without the play-time hook draw");
         Check(Actual.TryGetValue("hidden-hook-draw/earlier owner control", out var control) && control["error"] == null && !(bool)control["hidden"]! && (int)control["cost"]! == 1
             && ((int)control["enemyHpLoss"]! > 0 || (int)control["blockDelta"]! > 0), "independent: an earlier owner's card stays visible while the third owner's hook draw hides");
         Expect("hidden-hook-rng/exhaust hook random damage", null, "now", 3, hidden: true); Expect("hidden-hook-rng/harin_shield control", null, "now", 1, block: 8);
@@ -256,6 +283,20 @@ static class BattlePreviewChecks
         Expect(P + "pull default", null, "now", 0); Expect(P + "pull next reservation", null, "now", 0, loss: 12); Expect(P + "pull after reservation", null, "now", 0); Expect(P + "pull invalid pick", null, "now", 0);
         Expect("run-expedition/map now", "NO_BATTLE", "now", 0); Expect("run-expedition/map after with picks", "NO_BATTLE", "after", 0);
         Expect("run-expedition/after battle", "NO_BATTLE", "now", 0); Expect("run-expedition/run unknown uid", "NOT_IN_HAND", "now", 0);
+
+        // v2 reserved estimates. Keeper 38 HP/brk4, cog 24 HP/brk4 (both volt-weak); Sera foresight +25% and broken +25% stack multiplicatively.
+        const string E = "reserved-estimates/", X = "reserved-hidden-definition-rng/", K = "reserved-hidden-draw-hook/";
+        Expect(E + "timed next keeper", null, "next", 2, due: 2, loss: 22); Expect(E + "timed after keeper", null, "after", 2, due: 3, loss: 30);
+        Expect(E + "aim next zero outcome", null, "next", 1, due: 2); Expect(E + "cover next keeper", null, "next", 1, due: 2, loss: 6, block: 7);
+        Expect(E + "timed next breaks keeper", null, "next", 2, due: 2, loss: 22, broken: 1); Expect(E + "cover now breaks keeper", null, "now", 1, loss: 4, block: 5, broken: 1);
+        Expect(E + "timed next ap low", "AP_LOW", "next", 0);
+        Expect(E + "cover next broken keeper", null, "next", 1, due: 3, loss: 9, block: 7); Expect(E + "cover now broken keeper", null, "now", 1, loss: 5, block: 5);
+        Expect(E + "round next cog block", null, "next", 1, due: 3, loss: 6, damage: 12); Expect(E + "round now cog block", null, "now", 1, loss: 2, damage: 8);
+        Expect(E + "double after cog block", null, "after", 1, due: 4, loss: 6, damage: 12); Expect(E + "timed next broken keeper", null, "next", 2, due: 3, loss: 18);
+        Expect(X + "scan next draw definition", null, "next", 1, due: 2, hidden: true); Expect(X + "hunt after random definition", null, "after", 1, due: 3, hidden: true);
+        Expect(X + "last after rng hook", null, "after", 3, due: 3, hidden: true); Expect(X + "round next visible control", null, "next", 1, due: 2, loss: 12);
+        Expect(K + "crossfire next marked branch", null, "next", 2, due: 2, loss: 30); Expect(K + "crossfire now marked branch", null, "now", 2, loss: 21);
+        Expect(K + "timed next marked kill hook", null, "next", 2, due: 2, hidden: true); Expect(K + "round now marked page control", null, "now", 1, loss: 8);
     }
 
     // C#-only: authored plays that pass Check always commit, so a negative local-definition fault after real Create/begin shows the late path.
@@ -270,8 +311,7 @@ static class BattlePreviewChecks
         effects.Add(new EffectDef { Op = "blk", V = int.MaxValue }); // block 8 + Int32.MaxValue overflows inside the real play
         string before = Full(battle.State.ToJsonGraph()), faulty = Full(Catalog(data));
         Check(battle.Check("c1") == null, "C#-only late rejection: Check passes before the faulty effect runs");
-        SameGraph(new Dictionary<string, object?>(StringComparer.Ordinal) { ["error"] = "BATTLE_NUMBER_OUT_OF_RANGE", ["mode"] = "now", ["cost"] = 0, ["due"] = null, ["hidden"] = false,
-            ["enemyHpLoss"] = 0, ["blockDelta"] = 0, ["hpDelta"] = 0, ["defeat"] = false }, Project(battle.Forecast("c1")), "C#-only late rejection: the forecast returns the real command's code with default fields");
+        SameGraph(Rejected("now"), Project(battle.Forecast("c1")), "C#-only late rejection: the forecast returns the real command's code with default fields");
         Check(Full(battle.State.ToJsonGraph()) == before && Full(Catalog(data)) == faulty, "C#-only late rejection leaves live state and the local definitions unchanged");
         Check(Throws(() => battle.Command(play), "BATTLE_NUMBER_OUT_OF_RANGE") && Full(battle.State.ToJsonGraph()) == before, "C#-only late rejection: the real play rejects with the same code atomically");
         effects.RemoveAt(effects.Count - 1);
@@ -280,7 +320,30 @@ static class BattlePreviewChecks
             "corrected definition forecasts block +8 without poisoned state");
         var response = battle.Command(play);
         Check(response.V == 2 && battle.State.Block == 8, "the failed request ID stays free and the corrected real play gains exactly the forecast block");
+
+        // C#-only estimate rejection: the reservation itself is legal and pays/schedules fine; only its current-state resolution reaches
+        // the faulty effect (rv11 block + Int32.MaxValue overflows). The forecast reports that code and leaves everything unchanged.
+        data = BattleDataLoader.Load(root); effects = data.Cards.Single(c => c.Id == "harin_shield").Effects;
+        battle = Battle.Create(data, setup); battle.Command(new BattleRequest("estimate-begin", 0, "begin"));
+        var reserve = BattleDataLoader.Request("{\"rid\":\"estimate-reserve\",\"v\":1,\"kind\":\"play\",\"args\":{\"uid\":\"c1\",\"mode\":\"next\",\"target\":null,\"picks\":[]}}");
+        effects.Add(new EffectDef { Op = "blk", V = int.MaxValue });
+        before = Full(battle.State.ToJsonGraph()); faulty = Full(Catalog(data));
+        Check(battle.Check("c1", "next") == null, "C#-only estimate rejection: Check passes for the reservation");
+        SameGraph(Rejected("next"), Project(battle.Forecast("c1", "next")), "C#-only estimate rejection: the forecast returns the estimate's code with default fields");
+        Check(Full(battle.State.ToJsonGraph()) == before && Full(Catalog(data)) == faulty, "C#-only estimate rejection leaves live state and the local definitions unchanged");
+        effects.RemoveAt(effects.Count - 1);
+        var estimate = battle.Forecast("c1", "next");
+        Check(estimate.Error == null && estimate.Cost == 1 && estimate.Due == 2 && estimate.BlockDelta == 11 && !estimate.Hidden && estimate.EnemyHpLoss == 0 && estimate.EnemyDamage == 0
+            && estimate.NewlyBroken == 0 && estimate.HpDelta == 0 && !estimate.Defeat, "corrected definition estimates the reserved rv11 block without poisoned state");
+        response = battle.Command(reserve);
+        Check(response.V == 2 && battle.State.Block == 0 && battle.State.Reservations.Count == 1 && battle.State.Reservations[0].Due == 2 && battle.State.Ap == 3,
+            "the real reservation pays its cost and schedules due2 without resolving the estimated block");
     }
+    static Dictionary<string, object?> Rejected(string mode) => new(StringComparer.Ordinal)
+    {
+        ["error"] = "BATTLE_NUMBER_OUT_OF_RANGE", ["mode"] = mode, ["cost"] = 0, ["due"] = null, ["hidden"] = false, ["enemyHpLoss"] = 0, ["blockDelta"] = 0,
+        ["hpDelta"] = 0, ["defeat"] = false, ["enemyDamage"] = 0, ["newlyBroken"] = 0
+    };
 
     // ───────── fixture validation (structure only; values are proven by actual execution above) ─────────
     static void ValidateFixture(JsonElement fixture, JsonElement source, string root)
@@ -297,17 +360,17 @@ static class BattlePreviewChecks
         }
         Require(fixture.GetProperty("fields").ValueKind == JsonValueKind.Array && fixture.GetProperty("fields").EnumerateArray().Select(f => f.ValueKind == JsonValueKind.String ? f.GetString() : null).SequenceEqual(Fields), "Preview forecast field list differs");
         var contract = fixture.GetProperty("contract");
-        RequireKeys(contract, new[] { "request", "error", "reservation", "hidden", "outcome", "replay" }, "Preview contract members");
+        RequireKeys(contract, new[] { "request", "error", "reservation", "hidden", "outcome", "replay", "transition" }, "Preview contract members");
         Require(contract.EnumerateObject().All(p => p.Value.ValueKind == JsonValueKind.String && p.Value.GetString()!.Length != 0), "Preview contract text missing");
         var reach = fixture.GetProperty("reachability");
         RequireKeys(reach, new[] { "notCovered", "csharpOnly" }, "Preview reachability categories");
         RequireKeys(reach.GetProperty("notCovered"), new[] { "definitionPickRandom" }, "Preview NOT_COVERED category hidden or changed");
-        RequireKeys(reach.GetProperty("csharpOnly"), new[] { "lateCommandRejection" }, "Preview C#-only category hidden or changed");
+        RequireKeys(reach.GetProperty("csharpOnly"), new[] { "lateCommandRejection", "estimateRejection" }, "Preview C#-only category hidden or changed");
         Require(!AuthoredPickRandom(source), "An authored pick:\"random\" card exists; the NOT_COVERED claim is stale");
         var rows = Items(fixture.GetProperty("cases"), "Preview cases");
         Require(rows.Count == Plan.Length, "Preview case count differs");
         int battleForecasts = 0, battleCommands = 0, runFixed = 0, runPolicy = 0, runCommands = 0;
-        var errors = new SortedSet<string>(StringComparer.Ordinal); var hidden = new SortedSet<string>(StringComparer.Ordinal);
+        var seen = new Seen();
         for (int i = 0; i < rows.Count; i++)
         {
             var row = rows[i]; var plan = Plan[i];
@@ -315,17 +378,22 @@ static class BattlePreviewChecks
             Require(Text(row, "id") == plan.Id && Text(row, "group") == plan.Group && Text(row, "role").Length != 0, "Preview case identity/order changed");
             if (plan.Group == "battle")
             {
-                var (f, c) = ValidateBattleCase(row, errors, hidden);
+                var (f, c) = ValidateBattleCase(row, seen);
                 Require(f == plan.Forecasts && c == plan.Commands, "Preview per-case forecast/command denominator changed: " + plan.Id);
                 battleForecasts += f; battleCommands += c;
             }
             else
             {
-                var (f, c, p) = ValidateRunCase(row, errors, hidden);
+                var (f, c, p) = ValidateRunCase(row, seen);
                 Require(f == plan.Forecasts && c == plan.Commands, "Preview per-case forecast/command denominator changed: " + plan.Id);
                 runFixed += f - p; runPolicy += p; runCommands += c;
             }
         }
+        var errors = seen.Errors; var hidden = seen.Hidden;
+        // One forecast point only (same case and step): same uid, target and picks, next against after, different estimates.
+        if (seen.Estimates.Any(a => a.Mode == "next" && seen.Estimates.Any(b => b.Point == a.Point && b.Mode == "after" && b.Uid == a.Uid && b.Target == a.Target
+            && b.Picks == a.Picks && b.Outcome != a.Outcome))) seen.Witnesses.Add("reserved:next-after-differ");
+        Require(seen.Witnesses.SetEquals(Witnesses), "Preview v2 corpus lacks a required behaviour: " + string.Join(", ", Witnesses.Where(w => !seen.Witnesses.Contains(w))));
         var measured = new Dictionary<string, int>(StringComparer.Ordinal) { ["cases"] = rows.Count, ["battleForecasts"] = battleForecasts, ["battleCommands"] = battleCommands,
             ["runFixedForecasts"] = runFixed, ["runPolicyForecasts"] = runPolicy, ["runCommands"] = runCommands, ["forecasts"] = battleForecasts + runFixed + runPolicy, ["commands"] = battleCommands + runCommands };
         var counts = fixture.GetProperty("counts");
@@ -336,7 +404,16 @@ static class BattlePreviewChecks
         Require(Items(coverage.GetProperty("hidden"), "hidden").Select(e => e.GetString()).SequenceEqual(hidden) && Reasons.All(hidden.Contains),
             "Preview hidden coverage differs or lacks a forecast hidden only by definition, rng or draw");
     }
-    static (int Forecasts, int Commands) ValidateBattleCase(JsonElement row, SortedSet<string> errors, SortedSet<string> hidden)
+    // Structural accumulation across all records: error codes, hidden-reason signatures, v2 behaviour witnesses and visible reserved estimates
+    // keyed by their forecast point (one number per case step, advanced by the case validators).
+    sealed class Seen
+    {
+        public readonly SortedSet<string> Errors = new(StringComparer.Ordinal), Hidden = new(StringComparer.Ordinal);
+        public readonly HashSet<string> Witnesses = new(StringComparer.Ordinal);
+        public readonly List<(int Point, string Uid, string? Target, string Picks, string Mode, string Outcome)> Estimates = new();
+        public int Point;
+    }
+    static (int Forecasts, int Commands) ValidateBattleCase(JsonElement row, Seen seen)
     {
         string id = Text(row, "id"); var setup = row.GetProperty("setup");
         RequireKeys(setup, new[] { "party", "deck", "hp", "maxHp", "seed", "enemies", "relics" }, id + " setup must hold only Battle.create inputs");
@@ -348,7 +425,8 @@ static class BattlePreviewChecks
         int version = 0, forecastCount = 0, commandCount = 0, index = 0;
         foreach (var step in Items(row.GetProperty("steps"), id + " steps"))
         {
-            foreach (var record in Items(step.GetProperty("forecasts"), id + " forecasts")) { ValidateRecord(record, false, errors, hidden, id); forecastCount++; }
+            seen.Point++;
+            foreach (var record in Items(step.GetProperty("forecasts"), id + " forecasts")) { ValidateRecord(record, false, seen, id); forecastCount++; }
             var request = step.GetProperty("request");
             if (request.ValueKind == JsonValueKind.Null) { RequireKeys(step, new[] { "forecasts", "request" }, id + " forecast-only step"); index++; continue; }
             RequireKeys(step, new[] { "forecasts", "request", "response", "after" }, id + " command step fields");
@@ -367,7 +445,7 @@ static class BattlePreviewChecks
         }
         return (forecastCount, commandCount);
     }
-    static (int Forecasts, int Commands, int Policy) ValidateRunCase(JsonElement row, SortedSet<string> errors, SortedSet<string> hidden)
+    static (int Forecasts, int Commands, int Policy) ValidateRunCase(JsonElement row, Seen seen)
     {
         string id = Text(row, "id");
         using (var expected = JsonDocument.Parse(ExpeditionSetup)) RequireSame(expected.RootElement, BattleDataLoader.Graph(row.GetProperty("setup")), id + " expedition setup changed or injects state");
@@ -377,10 +455,10 @@ static class BattlePreviewChecks
         int forecastCount = 0, commandCount = 0, policy = 0; int? version = null; var point = created;
         for (int i = 0; i < steps.Count; i++)
         {
-            var step = steps[i]; bool outside = point.GetProperty("battle").ValueKind == JsonValueKind.Null;
+            var step = steps[i]; bool outside = point.GetProperty("battle").ValueKind == JsonValueKind.Null; seen.Point++;
             var records = Items(step.GetProperty("forecasts"), id + " forecasts");
             var plays = records.Where(r => Text(r, "label").StartsWith(PolicyLabel, StringComparison.Ordinal)).ToList();
-            foreach (var record in records) { ValidateRecord(record, outside, errors, hidden, id); forecastCount++; }
+            foreach (var record in records) { ValidateRecord(record, outside, seen, id); forecastCount++; }
             foreach (var record in plays) Require(Text(record, "label") == PolicyLabel + (policy++).ToString(CultureInfo.InvariantCulture), id + " policy forecast labels must be sequential");
             var request = step.GetProperty("request");
             if (request.ValueKind == JsonValueKind.Null)
@@ -421,31 +499,47 @@ static class BattlePreviewChecks
         if (point.GetProperty("battle").ValueKind == JsonValueKind.Null) Require(point.GetProperty("battleHash").ValueKind == JsonValueKind.Null, label + " battleHash without a battle");
         else ValidateHash(point.GetProperty("battle"), point.GetProperty("battleHash"), label);
     }
-    static void ValidateRecord(JsonElement record, bool outside, SortedSet<string> errors, SortedSet<string> hidden, string id)
+    static void ValidateRecord(JsonElement record, bool outside, Seen seen, string id)
     {
         RequireKeys(record, new[] { "label", "args", "expected", "hiddenBy" }, id + " forecast record fields");
         string label = id + " " + Text(record, "label"); var args = record.GetProperty("args");
         RequireKeys(args, new[] { "uid", "mode", "target", "picks" }, label + " forecast args");
-        _ = Text(args, "uid"); string mode = Text(args, "mode");
+        string uid = Text(args, "uid"), mode = Text(args, "mode"); string? target = OptionalText(args, "target");
         Require(args.GetProperty("target").ValueKind is JsonValueKind.Null or JsonValueKind.String && Items(args.GetProperty("picks"), label + " picks").All(p => p.ValueKind == JsonValueKind.String), label + " forecast arg types");
         var expected = record.GetProperty("expected");
-        Require(expected.ValueKind == JsonValueKind.Object && expected.EnumerateObject().Select(p => p.Name).SequenceEqual(Fields), label + " expected must be exactly the nine ordered forecast fields");
+        Require(expected.ValueKind == JsonValueKind.Object && expected.EnumerateObject().Select(p => p.Name).SequenceEqual(Fields), label + " expected must be exactly the eleven ordered forecast fields");
         var error = expected.GetProperty("error"); var due = expected.GetProperty("due");
         Require(error.ValueKind is JsonValueKind.Null or JsonValueKind.String && due.ValueKind is JsonValueKind.Null or JsonValueKind.Number && Text(expected, "mode") == mode, label + " expected types/mode");
         int cost = Int(expected.GetProperty("cost")), loss = Int(expected.GetProperty("enemyHpLoss")), block = Int(expected.GetProperty("blockDelta")), hp = Int(expected.GetProperty("hpDelta"));
+        int damage = Int(expected.GetProperty("enemyDamage")), broken = Int(expected.GetProperty("newlyBroken"));
         bool isHidden = Bool(expected.GetProperty("hidden")), defeat = Bool(expected.GetProperty("defeat"));
         var reasons = Items(record.GetProperty("hiddenBy"), label + " hiddenBy").Select(r => r.ValueKind == JsonValueKind.String ? r.GetString()! : throw new InvalidDataException(label + " hidden reason type")).ToList();
         Require(reasons.Distinct(StringComparer.Ordinal).Count() == reasons.Count && reasons.SequenceEqual(Reasons.Where(reasons.Contains)), label + " hidden reasons must be distinct definition/rng/draw in order");
-        bool numbers = loss == 0 && block == 0 && hp == 0 && !defeat;
+        bool numbers = loss == 0 && block == 0 && hp == 0 && !defeat && damage == 0 && broken == 0;
+        bool reserved = mode != "now";
         if (error.ValueKind == JsonValueKind.String)
         {
             Require(cost == 0 && due.ValueKind == JsonValueKind.Null && !isHidden && numbers && reasons.Count == 0, label + " a rejected forecast keeps every other field at its default");
-            Require(outside == (error.GetString() == "NO_BATTLE"), label + " NO_BATTLE exactly outside battle"); errors.Add(error.GetString()!); return;
+            Require(outside == (error.GetString() == "NO_BATTLE"), label + " NO_BATTLE exactly outside battle"); seen.Errors.Add(error.GetString()!);
+            if (reserved) seen.Witnesses.Add("reserved:error");
+            return;
         }
-        Require(!outside && mode is "now" or "next" or "after" && cost >= 0 && loss >= 0, label + " accepted forecast inside battle with a valid mode/cost/loss");
-        if (mode != "now") { Require(due.ValueKind == JsonValueKind.Number && Int(due) >= 1 && !isHidden && numbers && reasons.Count == 0, label + " a reservation reports only cost and due"); return; }
-        Require(due.ValueKind == JsonValueKind.Null && isHidden == (reasons.Count != 0), label + " a now forecast has no due and is hidden exactly when a reason exists");
-        if (isHidden) { Require(numbers, label + " hidden numbers stay zero"); hidden.Add(string.Join("+", reasons)); }
+        Require(!outside && mode is "now" or "next" or "after" && cost >= 0 && loss >= 0 && damage >= loss && broken >= 0, label + " accepted forecast inside battle with a valid mode/cost/loss/damage/broken");
+        Require(reserved ? due.ValueKind == JsonValueKind.Number && Int(due) >= 1 : due.ValueKind == JsonValueKind.Null, label + " a reservation has its due turn and an immediate play none");
+        Require(isHidden == (reasons.Count != 0), label + " hidden exactly when a reason exists");
+        if (isHidden)
+        {
+            Require(numbers, label + " hidden outcome fields stay at their defaults"); seen.Hidden.Add(string.Join("+", reasons));
+            if (reserved) seen.Witnesses.Add(reasons.Contains("definition") ? "reserved:hidden:definition" : "reserved:hidden:hook");
+            return;
+        }
+        string prefix = reserved ? "reserved:" : "now:";
+        if (damage > loss) seen.Witnesses.Add(prefix + "absorbed");
+        if (broken > 0) seen.Witnesses.Add(prefix + "broken");
+        if (!reserved) return;
+        seen.Witnesses.Add(numbers ? "reserved:zero" : "reserved:visible");
+        if (defeat) seen.Witnesses.Add("reserved:defeat");
+        seen.Estimates.Add((seen.Point, uid, target, args.GetProperty("picks").GetRawText(), mode, string.Join(",", loss, damage, block, hp, defeat, broken)));
     }
     static void ValidateHash(JsonElement state, JsonElement hash, string label) =>
         Require(CanonicalState.Hash(BattleDataLoader.Graph(state)) == HashText(hash), "Stale preview state hash " + label);
@@ -505,6 +599,29 @@ static class BattlePreviewChecks
         { var bad = Fresh(); O(O(bad["reachability"])["notCovered"]).Clear(); Reject(bad, "hidden NOT_COVERED category"); }
         { var bad = Fresh(); Case(bad, 8)["setup"] = new Dictionary<string, object?>(O(Case(bad, 8)["setup"]), StringComparer.Ordinal) { ["seed"] = 4243L }; Reject(bad, "changed expedition setup"); }
         { var bad = Fresh(); L(Case(bad, 8)["steps"]).RemoveAt(5); Reject(bad, "truncated expedition policy"); }
+        { var bad = Fresh(); O(Forecast(bad, 0, 1, 1)["expected"])["enemyDamage"] = 7L; Reject(bad, "enemy damage below enemy HP loss"); }
+        { var bad = Fresh(); O(Forecast(bad, 0, 0, 0)["expected"])["newlyBroken"] = 1L; Reject(bad, "rejected forecast with a newly broken enemy"); }
+        {
+            var bad = Fresh();
+            foreach (var row in L(bad["cases"])) foreach (var step in L(O(row)["steps"])) foreach (var record in L(O(step)["forecasts"]))
+                if (O(O(record)["args"])["mode"] as string != "now") O(O(record)["expected"])["newlyBroken"] = 0L;
+            Reject(bad, "every reserved break witness removed");
+        }
+        {
+            // Cross-point lookalike: equalising the one-point timed next/after keeper pair (reserved-estimates step 1) leaves only pairs from
+            // different steps (e.g. step 5 'timed next broken keeper' 18 against step 1 after 22), which must not satisfy the witness.
+            var bad = Fresh(); var pair = L(Step(bad, 9, 1)["forecasts"]);
+            var next = O(O(pair[0])["expected"]); var after = O(O(pair[1])["expected"]);
+            Require(O(pair[0])["label"] as string == "timed next keeper" && O(pair[1])["label"] as string == "timed after keeper", "lookalike control locates the timed keeper pair");
+            after["enemyHpLoss"] = next["enemyHpLoss"]; after["enemyDamage"] = next["enemyDamage"];
+            using var json = JsonDocument.Parse(JsonSerializer.Serialize(bad)); string? reason = null;
+            try { ValidateFixture(json.RootElement, source, root); } catch (InvalidDataException error) { reason = error.Message; }
+            Check(reason != null && reason.Contains("reserved:next-after-differ", StringComparison.Ordinal),
+                "fixture tamper rejected: a cross-point-only next/after lookalike cannot satisfy the one-point witness");
+        }
+        { var bad = Fresh(); O(O(bad["reachability"])["csharpOnly"]).Remove("estimateRejection"); Reject(bad, "hidden C#-only estimate category"); }
+        { var bad = Fresh(); O(bad["contract"]).Remove("transition"); Reject(bad, "missing v1 to v2 transition note"); }
+        { var bad = Fresh(); O(bad["sources"]).Remove("htmlPreview"); Reject(bad, "unpinned original HTML preview"); }
         var actual = Actual["damage-block-targets/turn1 sera_round cog"];
         Check(JsonGraphComparison.Difference(new Dictionary<string, object?>(actual, StringComparer.Ordinal) { ["enemyHpLoss"] = 9 }, actual, "$", 0) != null,
             "a forged expected number is reported against the actual C# forecast");

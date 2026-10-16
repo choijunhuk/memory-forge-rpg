@@ -1,0 +1,30 @@
+{
+  "task_id": "P1-LATE-ACTIONS-MONO-PARITY",
+  "run_id": "P1-LATE-ACTIONS-MONO-PARITY-20261016T031439091915Z",
+  "status": "VERIFIED",
+  "requestedEffort": "xhigh",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "changes_verified": true,
+  "raw_output": "ops/ai/local/P1-LATE-ACTIONS-MONO-PARITY-20261016T031439091915Z*",
+  "billing_verified_at": "2026-10-15T21:22:01.277612+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "codex/csharp-battle-opening",
+  "base_commit": "2ffc29ecdbdeee5027258ad6f73302b98820fc35",
+  "worktree": "/Users/choi/.codex/worktrees/csharp-battle-opening/Memory_forge",
+  "allowed_files": [
+    "client/MemoryForgeUnity/Assets/Tests/PlayMode/BattleLateActionsPlayModeTests.cs",
+    "reports/csharp_late_actions_20261016/mono_author_report.md"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "3037701a-550b-4a17-a764-107680bf5b79",
+  "subtype": "success",
+  "is_error": false,
+  "result": "I wrote the Unity PlayMode test that replays the candidate-only late-action corpus through Mono, plus its report. I haven't compiled it, run it, or looked at the Editor Console.\n\n**What the test does** (`client/MemoryForgeUnity/Assets/Tests/PlayMode/BattleLateActionsPlayModeTests.cs`): one coroutine, `CandidateLateCorpusReplaysThroughMonoCore`. It requires `Application.isPlaying` and yields a frame after each case.\n- **Fixture and source checks:** it finds the repo from `Application.dataPath` and reads `engine/tests/vectors/battle_late_actions_vectors.json.gz` with `GZipStream`, a UTF-8 decoder that throws on bad bytes, and Newtonsoft with duplicate keys rejected and dates left as strings. It then checks:\n  - schema, scope and status are exact;\n  - the six source pins are hashed only from their fixed allowlist paths, so the fixture can't choose which file is read;\n  - counts are 81/473/445/2/26 and coverage is 23/23/34/1;\n  - overlay provenance is `candidate-only`;\n  - the Resources `SourceSha256` matches both `data/game_data.json` and the fixture's data pin.\n- **Definitions:** each of the 81 cases gets a fresh `ClientBattleContent.Load().Battle`. The fixture's unchanged `overlay.enemies` (plus `boundaryEnemies` for boundary cases) are mapped onto the existing public enemy, move and phase types.\n  - Missing fields stay null; any unknown field fails instead of being skipped.\n  - Phase data and attribute IDs are set only through this test's explicit `SetPhaseDescriptor` and `SetAttributeIds` calls.\n  - Each mapped definition must match its source JSON exactly, except `zone`, which Battle never reads.\n  - Resources must still hold exactly the live 20 enemies, with nothing activated, both before and after the run.\n- **Replay:** only the corpus's legal create inputs are mapped. Each recorded request goes unchanged through the public `BattleArgument` factories into `Battle.Command`.\n  - A rejected step must raise exactly the recorded `RuleException` code and leave state and public view identical.\n  - A successful or replayed step must match the recorded response, and a commit must advance exactly one version.\n  - All 554 checkpoints are compared in full against the oracle: state including log and events, public view, and every recorded hash. The recorded snapshots are used only for comparison and are never fed back into the engine.\n- **Proof it actually ran:** it asserts 81 real `Battle.Create` calls and 473 real requests (445 committed, 2 replayed, 26 rejected), and prints those counts to the log.\n\n**Limits, also in the report:**\n- This reader is not the strict gzip decoder; CoreChecks and the Node decoder still prove that.\n- There is still no shipping export or Resources bridge for candidates.\n- The C#-only rejection codes and the mutated-copy probes are covered only in CoreChecks, not here.\n- This is Editor Mono only, not an IL2CPP or device check.\n\n**Your steps:**\n1. Make sure the fixture and `battle-content.json` are current.\n2. Compile and confirm the Console shows no errors and no new warnings.\n3. Run the PlayMode suite and check the log line shows 81 / 473 / 445 / 2 / 26 and 554 checkpoints, with the existing 102 tests still green.\n4. If anything fails, send me the exact failure lines; they include a first-difference excerpt.\n\nThe report is `reports/csharp_late_actions_20261016/mono_author_report.md`. I can't see this session's ID; take it from the CLI metadata.",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ],
+  "root_verification": "reports/card_flow_20261016/root_acceptance.md"
+}

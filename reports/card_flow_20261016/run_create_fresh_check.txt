@@ -1,0 +1,5 @@
+R0 factory progress 500/2131
+R0 factory progress 1000/2131
+R0 factory progress 1500/2131
+R0 factory progress 2000/2131
+{"checked":"/Users/choi/Documents/Memory_forge/engine/tests/vectors/run_create_vectors.json.gz","cases":2131,"factories":2131,"created":2028,"rejected":103,"queries":45238,"supportedFactories":2121,"supportedCreated":2023,"supportedRejected":98,"supportedQueries":45130,"sourceOnlyFactories":5,"typedDomainProbes":5,"runCommands":0}
