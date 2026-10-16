@@ -1,0 +1,12 @@
+{
+  "task": "P1-JSON-CI-SUBSCRIPTION-RESUME-REVIEW",
+  "session_id": "f940c2f4-c3be-47a6-8554-f7cc03e5daf9",
+  "actual_model": "claude-opus-5-5",
+  "actual_per_turn_effort": "high",
+  "positive_output_messages": 45,
+  "exit": 0,
+  "billing_account_matched": true,
+  "billing_verified_at": "2026-10-15T21:22:01.277612+00:00",
+  "only_existing_included_subscription": true,
+  "review": "APPROVE; author execution NOT_RUN; Root validates independently"
+}

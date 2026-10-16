@@ -1,4 +1,4 @@
-# Proposed CI gate (NOT run on GitHub in this delivery). Pin reviewed action commits before production use.
+# Development CI gate; local Unity/device validation is recorded separately. Pin reviewed action commits before production use.
 name: checks
 on: [push, pull_request]
 permissions:
@@ -20,7 +20,7 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with: { dotnet-version: '10.0.x' }
       - run: npm install --no-audit --no-fund && npx playwright install --with-deps chromium
-      - run: pip install openapi-spec-validator -r tools/audit/requirements-docs.txt
+      - run: pip install openapi-spec-validator -r tools/audit/requirements-docs.txt -r tools/ai/requirements.txt
       - run: sudo apt-get update && sudo apt-get install -y postgresql-16 poppler-utils fonts-nanum
       - run: node content/build.mjs data && git diff --exit-code data/
       - run: node tools/gen_vectors.mjs && git diff --exit-code engine/tests/vectors/
@@ -32,3 +32,4 @@ jobs:
       - run: node tools/review/balance_causes.mjs reports/paired_balance_late.json reports/paired_balance_causes.json
       - run: npm run test:late-ui
       - run: python3 tools/check_integrated_release.py
+      - run: npm run test:handoff

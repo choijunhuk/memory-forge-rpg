@@ -1,0 +1,24 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"name\":\"com.unity.nuget.newtonsoft-json\",\"version\":\"3.2.1\",\"direct\":true,\"assembly\":\"Newtonsoft.Json\",\"playing\":false,\"compiling\":false},\"compiler\":\"codedom\"}}"
+    }
+  ],
+  "structuredContent": {
+    "success": true,
+    "message": "Code executed successfully.",
+    "data": {
+      "result": {
+        "name": "com.unity.nuget.newtonsoft-json",
+        "version": "3.2.1",
+        "direct": true,
+        "assembly": "Newtonsoft.Json",
+        "playing": false,
+        "compiling": false
+      },
+      "compiler": "codedom"
+    }
+  },
+  "isError": false
+}
