@@ -1,0 +1,26 @@
+{
+  "status": "FAIL",
+  "checks": [
+    "raycast selections and pure query spend nothing",
+    "approved ordinary play opens nonterminal presentation",
+    "already consumed UID cannot be selected twice",
+    "one confirmed next play stays unsent during presentation",
+    "second preparation does not create a request",
+    "disable drops only unsent UI and presentation",
+    "reenable refreshes without dispatch or replay",
+    "real committed reply replaced by503 keeps pending and locks new commands",
+    "reconnect reads full committed state without auto retry or old events",
+    "explicit retry clears exact record without another gain or event replay",
+    "committed end and reservation resolution open full turn barrier",
+    "turn barrier refuses card selection",
+    "skip and continue only change presentation"
+  ],
+  "failures": [
+    "selection locked while end-turn request is in flight"
+  ],
+  "initial_server_version": 5,
+  "final_server_version": 8,
+  "actual_editor_play": true,
+  "actual_core_http": true,
+  "input_kind": "uGUI raycast + PointerDown/Up/Click and public lifecycle actions; not physical native mouse/device"
+}

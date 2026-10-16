@@ -1,0 +1,31 @@
+{
+  "jobs": [
+    {
+      "task_id": "P1-PRACTICE-SERVER-UI-20261017",
+      "session_id": "cfcd60b9-d701-4abf-874b-b6915e50765e",
+      "requestedModel": "claude-opus-5-5",
+      "requestedEffort": "high",
+      "model_usage_keys": [
+        "claude-opus-5-5"
+      ],
+      "process_exit": 0,
+      "billing_account_matched": true,
+      "billing_verified_at": "2026-10-15T21:22:01.277612+00:00"
+    },
+    {
+      "task_id": "P1-SERVER-UI-INPUT-GATE-20261017",
+      "session_id": "cfcd60b9-d701-4abf-874b-b6915e50765e",
+      "requestedModel": "claude-opus-5-5",
+      "requestedEffort": "high",
+      "model_usage_keys": [
+        "claude-opus-5-5"
+      ],
+      "process_exit": 0,
+      "billing_account_matched": true,
+      "billing_verified_at": "2026-10-15T21:22:01.277612+00:00"
+    }
+  ],
+  "author_runtime": "NOT_RUN",
+  "runtime_verifier": "Codex; actual Unity and local Core HTTP",
+  "effort_proof": "actual --effort high CLI arguments; same-session top-level effort/perTurnEffort metadata"
+}

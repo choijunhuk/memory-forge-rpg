@@ -1,0 +1,28 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"playing\":true,\"options\":\"None\",\"scene\":\"Assets/Scenes/MemoryForgeServerPractice.unity\",\"connected\":true,\"busy\":false,\"stale\":false,\"can_command\":true,\"phase\":\"BATTLE\",\"version\":1,\"pending\":false},\"compiler\":\"codedom\"}}"
+    }
+  ],
+  "structuredContent": {
+    "success": true,
+    "message": "Code executed successfully.",
+    "data": {
+      "result": {
+        "playing": true,
+        "options": "None",
+        "scene": "Assets/Scenes/MemoryForgeServerPractice.unity",
+        "connected": true,
+        "busy": false,
+        "stale": false,
+        "can_command": true,
+        "phase": "BATTLE",
+        "version": 1,
+        "pending": false
+      },
+      "compiler": "codedom"
+    }
+  },
+  "isError": false
+}

@@ -1,0 +1,29 @@
+{
+  "task_id": "P1-SERVER-UI-INPUT-GATE-20261017",
+  "run_id": "P1-SERVER-UI-INPUT-GATE-20261017-20261016T193929766623Z",
+  "status": "RECEIVED_UNVERIFIED",
+  "requestedEffort": "high",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "changes_verified": false,
+  "raw_output": "ops/ai/local/P1-SERVER-UI-INPUT-GATE-20261017-20261016T193929766623Z*",
+  "billing_verified_at": "2026-10-15T21:22:01.277612+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "codex/public-battle-query-20261017",
+  "base_commit": "47502b797ebc2de262704968f85b9ce30ed7665f",
+  "worktree": "/Users/choi/.codex/worktrees/claude-public-battle/Memory_forge",
+  "allowed_files": [
+    "client/MemoryForgeUnity/Assets/Scripts/MemoryForgeServerPracticeClient.cs",
+    "reports/practice_transport_20261017/ui_author_report.md"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "cfcd60b9-d701-4abf-874b-b6915e50765e",
+  "subtype": "success",
+  "is_error": false,
+  "result": "I've patched the selection gate in `MemoryForgeServerPracticeClient.cs`, but it hasn't been compiled or run (author NOT_RUN). Selection and every new action now refuse while a request is in flight, unresolved, or the screen is stale. No other file changed.\n\n**Changes:**\n- **Readiness check:** a new `Ready()` is true only when this view isn't mid-request and the session's `State.CanMutate` is true. `CanMutate` already covers: a current snapshot, nothing pending, a readable outbox, no refresh due, and nothing in flight.\n- **Selection:** `SelectionLocked()` is now `!Ready()`, or a barrier, open pick sheet or prepared play, or no battle in the **session's own** snapshot (not the last good one). So `SelectCard`, `SelectMode`, `SelectEnemy` and their buttons refuse during any network call, pending or unknown requests, outbox failure, a stale snapshot or disconnection. This fixes your repro where `SelectCard` returned true while `EndTurnAsync` was still running.\n- **Ordinary presentation:** `Ready()` stays true during an approved ordinary presentation, so selection and one prepared confirmation still work.\n- **`ConfirmAsync`:** checks `Ready()` before it opens a pick sheet, prepares a play or sends.\n- **`ConfirmPicksAsync` / `AutoPickAsync`:** check readiness (and that no presentation is open) **before** closing the sheet. A refused send now leaves the sheet open and usable. `PickCard` and `CancelPick` are unchanged.\n- **`EndTurnAsync`:** also refuses while a prepared play is waiting, so after a skip it can't jump ahead of the play that sends on the next Update. It now needs `CanCommand` before sending.\n- **`CreateRunAsync` / `EnterNodeAsync`:** need `CanCommand` before sending.\n- **Unchanged:** the prepared-play dispatch, refresh and the explicit retry, Core and target semantics, time reservations, presentation timings, request IDs and visuals.\n\n**Behaviour change for your pointer automation:** a second selection made while the first selection's battle query is still in flight is now refused until that query returns. Steps that click card, mode and enemy back to back may need to wait for `Busy` to clear.\n\n`ui_author_report.md` has a new \"Input-gate fix\" section describing this.\n\n**Next (yours):** re-run the 14 actual Unity flow checks, including the 13 that passed, then the full Unity regression and the targeted opposite review. My session_id isn't visible to me; your prompt gives cfcd60b9-d701-4abf-874b-b6915e50765e.",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ]
+}
