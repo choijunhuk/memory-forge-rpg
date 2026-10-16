@@ -109,6 +109,17 @@ Root's results quoted below are Root's own runs, not author execution; nothing h
 | + | Leak-helper coverage | The response scan now flags known seeds/credentials inside strings; the log scan also flags raw private JSON members (`"rng":`, `"seed":`, …). Covered by the planted-marker assertions. |
 | + | Earned-card save restart | After the first nonempty earned-card save (run 1 or a later bounded departure), the host is SIGKILLed and a new process must serve the saved card and return that save's original receipt bytes before the next departure is checked. |
 
+## Follow-up — P1-LOCAL-HOSTING-URL-PIN (same session, High; author runtime NOT_RUN)
+
+Root's safe loopback-only repro on the committed `7e38544` host: `MemoryForge:PracticePort=53122` with `--preferHostingUrls=true
+--urls=http://127.0.0.1:53123` made the host report and listen on 53123. The endpoint-section refusal and the non-reloading Kestrel loader
+do not govern `PreferHostingUrls`. Change in `Program.cs`: `builder.WebHost.PreferHostingUrls(false)` (official `IWebHostBuilder`
+extension, applied at the builder after the command line/environment are read), and the post-start check now requires the single address
+to be `http://127.0.0.1` on the configured port (any port only when it is 0). New required scenario `hosting-url-pin` in ServerChecks: two
+free loopback ports, an explicit `PracticePort`, conflicting `urls`+`preferHostingUrls=true` once as command-line configuration and once as
+`ASPNETCORE_URLS`/`ASPNETCORE_PREFERHOSTINGURLS`; the host must listen on the configured port, serve the authenticated route there and leave
+the other port closed. No wildcard/public address is used. All earlier fixes and checks are kept. Not compiled or run by the author.
+
 CI (read-only review of `.github/workflows/ci.yml`): `ubuntu-latest`, `setup-dotnet` 10.0.x on PATH, the unprivileged `runner` user (the
 write-failure check needs non-root), Linux flock/inotify/chmod, `/tmp` outside the repository. The step
 `dotnet run --project server/MemoryForge.ServerChecks -- "$PWD"` is compatible as written: no concrete incompatibility found, and no new

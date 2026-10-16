@@ -1,0 +1,15 @@
+{
+  "task_id": "P1-LOCAL-HOSTING-URL-PIN",
+  "session_id": "a1d7a222-69d8-4b5b-8137-fdcd8d5e2b39",
+  "requestedModel": "claude-opus-5-5",
+  "requestedEffort": "high",
+  "process_exit": 0,
+  "billing_account_matched": true,
+  "billing_verified_at": "2026-10-15T21:22:01.277612+00:00",
+  "actual_model": "claude-opus-5-5",
+  "actual_per_turn_effort": "high",
+  "positive_output_records": 14,
+  "author_execution": "NOT_RUN",
+  "included_subscription_only": true,
+  "automatic_fallback": false
+}

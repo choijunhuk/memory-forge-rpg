@@ -40,7 +40,9 @@ real account/auth, gacha, collection, purchase, Unity transport or deployment he
 
 Development environment only (anything else exits 2), Kestrel bound to `127.0.0.1` only: configured `Kestrel:Endpoints` refuse startup,
 the default reloadable Kestrel configuration loader is replaced by an empty non-reloading one (an appsettings/environment change after
-start cannot open another socket), and a non-loopback binding at start stops the host. Loopback `Host`/remote address only, no CORS, no
+start cannot open another socket), `PreferHostingUrls` is pinned to false at the builder (so `--urls`/`ASPNETCORE_URLS` with
+`preferHostingUrls=true` cannot replace the configured `PracticePort`), and any bound address other than `127.0.0.1` on the configured
+port (or the server-chosen port when it is 0) stops the host. Loopback `Host`/remote address only, no CORS, no
 anonymous route, no query strings, 64 KiB bodies.
 Every route needs `Authorization: Bearer <credential>`; the server compares SHA-256(credential) with the fixture digests in constant time
 and the account comes only from that match. Requests are strict allowlists: a client seed, state, party, HP/power or unknown member is
@@ -89,7 +91,7 @@ dotnet run --project server/MemoryForge.ServerChecks -- "$PWD" [--server-dll <bu
 
 They build the host, launch real processes with a temp test-only fixture/credentials/stores, and exercise startup refusals, auth,
 strict input, restart/retry, duplicate/conflict/stale, rule and write-failure rollback, a runtime appsettings Kestrel endpoint that must
-never open, a genuine partial Core mutation, ownership, two processes on one store, tampered stores and a complete-capture leak scan.
+never open, conflicting loopback hosting URLs (command line and environment) that must not move the configured port, a genuine partial Core mutation, ownership, two processes on one store, tampered stores and a complete-capture leak scan.
 Console failure output carries only check names, statuses, safe codes and keyed fingerprints; raw responses, host/build output and
 exception text go to `diagnostics.log` (0600) in the owner-only temp directory, which is kept only on failure. Run as a normal user (the
 write-failure check needs enforced directory permissions; as root it fails rather than skips).

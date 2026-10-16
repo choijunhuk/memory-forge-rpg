@@ -1,0 +1,31 @@
+{
+  "task_id": "P1-LOCAL-HOSTING-URL-PIN",
+  "run_id": "P1-LOCAL-HOSTING-URL-PIN-20261016T112813874369Z",
+  "status": "RECEIVED_UNVERIFIED",
+  "requestedEffort": "high",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "changes_verified": false,
+  "raw_output": "ops/ai/local/P1-LOCAL-HOSTING-URL-PIN-20261016T112813874369Z*",
+  "billing_verified_at": "2026-10-15T21:22:01.277612+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "claude/balance-audit",
+  "base_commit": "9be537f4c5ef59e890322cb2d1de914fb49bfed6",
+  "worktree": "/Users/choi/.codex/worktrees/claude-balance-audit/Memory_forge",
+  "allowed_files": [
+    "reports/server_persistence_20261016/author_report.md",
+    "server/MemoryForge.Server/Program.cs",
+    "server/MemoryForge.Server/README.md",
+    "server/MemoryForge.ServerChecks/Program.cs"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "a1d7a222-69d8-4b5b-8137-fdcd8d5e2b39",
+  "subtype": "success",
+  "is_error": false,
+  "result": "The hosting-URL bypass fix is written, but I have not compiled or run anything (author runtime **NOT_RUN**). This session has no shell.\n\n- **Fix in `server/MemoryForge.Server/Program.cs`:**\n  - `builder.WebHost.PreferHostingUrls(false)` is set at the builder, so `--urls` or `ASPNETCORE_URLS` with `preferHostingUrls=true` should no longer replace the single explicit `Listen`. I'm relying on this setting being applied after the command line and environment are read; your repro is the real test of that.\n  - The post-start check now requires exactly one address, `http://127.0.0.1` on the configured `PracticePort`, with any port accepted only when it is 0. Otherwise the host stops with exit code 3.\n- **New check in `server/MemoryForge.ServerChecks/Program.cs`:** `HostingUrlsCannotMoveThePort` is added to the required scenarios as `hosting-url-pin`. It picks two different free 127.0.0.1 ports, sets one as `PracticePort`, and points a conflicting hosting URL with `preferHostingUrls=true` at the other. It does this twice: once on the command line (`urls` / `preferHostingUrls`) and once through `ASPNETCORE_URLS` / `ASPNETCORE_PREFERHOSTINGURLS`. Each time the host must:\n  - listen on the configured port;\n  - return 200 for the authenticated route there;\n  - leave the other port closed;\n  - keep running.\n\n  No wildcard or public address is used. All earlier tests and fixes are kept.\n- **README and author report:** both describe the pinned preference and the port check. The report records your repro on `7e38544` and states author NOT_RUN.\n\nSession: `a1d7a222-69d8-4b5b-8137-fdcd8d5e2b39`.",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ]
+}

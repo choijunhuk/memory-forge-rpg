@@ -1,7 +1,8 @@
 // P1-LOCAL-AUTHORITATIVE-PERSISTENCE §16.5/§17.2-17.5/§18.1/§20.9 P1-2: the LOCAL DEVELOPMENT practice host. It is not the production
 // API of server/openapi.yaml: explicit /dev/practice routes, Development environment only, Kestrel bound to 127.0.0.1 only (configured
 // Kestrel endpoints refuse startup, the default reloadable Kestrel configuration loader is replaced by an empty non-reloading one so no
-// configuration change can open another socket later, and any other bound address at start stops the host), a bearer credential matched in constant time against the trusted fixture's SHA-256 digests, no CORS,
+// configuration change can open another socket later, PreferHostingUrls is pinned false so --urls/ASPNETCORE_URLS cannot replace the
+// explicit Listen, and any address other than 127.0.0.1 on the configured port at start stops the host), a bearer credential matched in constant time against the trusted fixture's SHA-256 digests, no CORS,
 // no anonymous route, no static files, no query parameters. Configuration (command line --MemoryForge:Key=value or MemoryForge__Key):
 // ContentRoot (repository with data/game_data.json), PracticeFixture (owner-only fixture file), PracticeStore (owner-only directory
 // outside the content root) and PracticePort (0 = ephemeral). A missing or invalid value refuses startup with exit code 2. Logs carry
@@ -41,6 +42,9 @@ namespace MemoryForge.Server
             PracticeHost host;
             try { host = PracticeHost.Configure(builder.Environment, builder.Configuration); }
             catch (StartupRefusal refusal) { Console.Error.WriteLine("MemoryForge dev practice server refused to start: " + refusal.Message); return 2; }
+            // Hosting URLs (--urls, ASPNETCORE_URLS, ...) must never take precedence over the single explicit Listen below, whatever a
+            // command-line or environment preferHostingUrls says; this setting is applied last at the builder, so it wins.
+            builder.WebHost.PreferHostingUrls(false);
             builder.WebHost.ConfigureKestrel(kestrel =>
             {
                 kestrel.AddServerHeader = false;
@@ -56,9 +60,10 @@ namespace MemoryForge.Server
             try { await app.StartAsync(); }
             catch (Exception error) { Console.Error.WriteLine("MemoryForge dev practice server refused to start: the loopback port could not be bound (" + error.GetType().Name + ")"); return 2; }
             var addresses = app.Urls.ToList();
-            if (addresses.Count != 1 || !addresses.All(IsLoopback))
+            // Final fail-closed check: exactly one http://127.0.0.1 address, on the configured port (0 = the server-chosen ephemeral port).
+            if (addresses.Count != 1 || !addresses.All(address => IsApproved(address, host.Port)))
             {
-                Console.Error.WriteLine("MemoryForge dev practice server stopped: it was bound outside 127.0.0.1");
+                Console.Error.WriteLine("MemoryForge dev practice server stopped: it was bound outside the approved 127.0.0.1 port");
                 await app.StopAsync();
                 return 3;
             }
@@ -68,8 +73,8 @@ namespace MemoryForge.Server
             return 0;
         }
 
-        static bool IsLoopback(string address) => Uri.TryCreate(address, UriKind.Absolute, out var uri) && uri.Scheme == Uri.UriSchemeHttp
-            && IPAddress.TryParse(uri.Host, out var ip) && ip.Equals(IPAddress.Loopback);
+        static bool IsApproved(string address, int port) => Uri.TryCreate(address, UriKind.Absolute, out var uri) && uri.Scheme == Uri.UriSchemeHttp
+            && IPAddress.TryParse(uri.Host, out var ip) && ip.Equals(IPAddress.Loopback) && (port == 0 || uri.Port == port);
     }
 
     sealed class PracticeHost

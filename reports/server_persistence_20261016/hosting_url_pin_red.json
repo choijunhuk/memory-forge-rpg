@@ -1,0 +1,8 @@
+{
+  "scope": "explicit hosting-URL preference, safe loopback addresses only, no public bind attempted",
+  "configured_practice_port": 53122,
+  "injected_hosting_port": 53123,
+  "actual_listening_uri": "http://127.0.0.1:53123",
+  "status": "FAIL",
+  "exit": 0
+}

@@ -6,6 +6,8 @@ JSON·CI 후속 패치를 적용했다. Unity가 이미 사용하는 Newtonsoft 
 
 사용자가 Claude 한도 해제를 알려 주어 구독 인증·기존 과금 차단 증거·계정 일치를 다시 확인하고 공식 CLI 협업을 재개했다. 별도 worktree의 Opus Max 분석과 xhigh 구현·결함 수정을 회수해 **Development 전용 로컬 서버와 파일 영속 저장**을 연결했다. 루트에서 실제 HTTP/프로세스 검사 241개와 독립 경계 24개, 원래 PostgreSQL 16.15 스키마 시험을 통과했다. [서버 수용 기록](../reports/server_persistence_20261016/root_acceptance.md)이 범위와 한계를 정한다. PostgreSQL 앱 연결·실계정·Unity 서버 복구 완료는 아니다.
 
+최종 추가 검사에서 시작 주소 우선순위 우회도 재현·수정했다. 공식 Opus High의 좁은 수정과 Codex 독립 검토 후 전체 서버246판정·HTTP24·명령행/환경변수 실제 포트/인증2경계를 통과했다. [후속 기록](../reports/server_persistence_20261016/hosting_url_pin_acceptance.md)을 따르며 최초241판정과 실패 증거를 보존한다.
+
 JS/HTML과 C#에는 실제 전투·탐사·기억 저장 v2가 연결돼 있다. Unity는 지도 → 전투 → 보상·서비스 → 기억 선택 → 다음 출발이 가능한 **세션 로컬 연습판**이다. 별도 로컬 서버는 실제 Core 명령·기억·영수증을 재시작 후 복원하지만, Unity의 계정·디스크 영속 저장/서버 재접속 연결, Android/실기기 수용, 완성 아트·전체 온보딩은 남아 있다.
 
 커밋 `dec7688`의 같은 턴 미전송 입력 대기는 실제 Unity Play 147/147·Edit 3/3을 통과했고, 해당 커밋의 push·PR CI도 모두 성공했다. 후속 [효과별 카드 후보 수정](../reports/card_flow_20261016/effect_root_acceptance.md)은 기존 0/3 실패 재현 → 수정 3/3 통과, 독립 경계 10개와 실제 전체 Play 160/160·Edit 3/3, C# 전체 회귀를 확인했다. 이 결과를 서버·전체 게임 완료로 확대하지 않는다.

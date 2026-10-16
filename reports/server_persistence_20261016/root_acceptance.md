@@ -2,6 +2,8 @@
 
 Accepted scope: original §17.2 receipt-first transactions, §17.4 public projection, §17.5 existing v2 memory, §14.7 recovery and the first local §20.9 P1-2 slice. The game role is to preserve a real expedition, saved cards and exact successful responses across server-process restart without trusting client state or retaining partial benefits from failed commands.
 
+Latest narrow correction: [hosting URL preference acceptance](hosting_url_pin_acceptance.md), after parent7e38544. Root's final startup probe found and fixed a separate PreferHostingUrls override. Corrected source passed a fresh246-assertion suite, HTTP24 and independent CLI/environment socket/auth probes2/2. The first unit's source hashes/results below remain historical evidence; use `source_hashes_after_hosting_url_pin.json` for the corrected source.
+
 ## Implemented and independently reviewed
 
 - `server/MemoryForge.Server`: an actual ASP.NET Core net10 Development-only HTTP host at `/dev/practice`. It binds one approved loopback endpoint, requires a private explicitly labelled development account/party fixture and bearer credential, rejects client seeds/state/derived stats and uses existing Core public APIs. The production SQL/OpenAPI, Core and game data are unchanged.

@@ -222,7 +222,7 @@ sealed class ServerChecks
     readonly ResponseCapture capture = new ResponseCapture();
     readonly List<long> seeds = new List<long>();
     // Scenarios that must all have completed before the final leak scan counts as covering the suite.
-    static readonly string[] RequiredScenarios = { "refusals", "auth-input", "expedition", "concurrency", "ownership", "write-failure", "kestrel-reload", "partial-mutation", "corrupt-stores" };
+    static readonly string[] RequiredScenarios = { "refusals", "auth-input", "expedition", "concurrency", "ownership", "write-failure", "kestrel-reload", "hosting-url-pin", "partial-mutation", "corrupt-stores" };
     readonly HashSet<string> completed = new HashSet<string>(StringComparer.Ordinal);
     string serverDll = "", fixture = "", store = "", alphaRunId = "", lockedDirectory = "";
     byte[] alphaDone = Array.Empty<byte>();
@@ -254,6 +254,7 @@ sealed class ServerChecks
         await WriteFailureRollback(main);
         main.Kill();
         await KestrelReloadCannotOpenEndpoints();
+        await HostingUrlsCannotMoveThePort();
         await PartialMutationRollback();
         await CorruptStores();
         LeakScan();
@@ -888,6 +889,37 @@ sealed class ServerChecks
         Check(!server.Process.HasExited, "the host keeps running after the configuration change");
         server.Kill();
         completed.Add("kestrel-reload");
+    }
+    // ───────── hosting URLs cannot replace the configured port ─────────
+    // An explicit PracticePort plus a conflicting loopback-only hosting URL with preferHostingUrls=true, given once on the command line and
+    // once through ASPNETCORE_* environment entries: the host must listen on the configured port, serve the authenticated route there,
+    // and leave the other port closed. Both ports are free 127.0.0.1 ports; no wildcard or public address is used.
+    async Task HostingUrlsCannotMoveThePort()
+    {
+        foreach (bool viaEnvironment in new[] { false, true })
+        {
+            string how = viaEnvironment ? "environment" : "command line";
+            int pinned = FreeLoopbackPort(), other = FreeLoopbackPort();
+            while (other == pinned) other = FreeLoopbackPort();
+            string url = "http://127.0.0.1:" + other.ToString(CultureInfo.InvariantCulture);
+            var config = Config(root, Path.Combine(temp, "store-pinned"));
+            config["MemoryForge:PracticePort"] = pinned.ToString(CultureInfo.InvariantCulture);
+            Dictionary<string, string>? environment = null;
+            if (viaEnvironment) environment = new Dictionary<string, string> { ["ASPNETCORE_URLS"] = url, ["ASPNETCORE_PREFERHOSTINGURLS"] = "true" };
+            else { config["urls"] = url; config["preferHostingUrls"] = "true"; }
+            var server = Launch("pinned port (" + how + ")", config, extra: environment);
+            if (!await server.WaitListening(TimeSpan.FromSeconds(120)))
+            {
+                Record(server.Name + " output", server.Output);
+                throw new CheckFailure(server.Name + " did not start listening (output in diagnostics.log)");
+            }
+            Same(server.Port, pinned, "hosting URLs from the " + how + " cannot move the configured port");
+            Status(await Client(server).Get(AccountPath, tokens["gamma"]), 200, null, "the authenticated route works on the configured port (" + how + ")");
+            Check(!await CanConnect(other), "the hosting URL port from the " + how + " stays closed");
+            Check(!server.Process.HasExited, "the pinned host keeps running (" + how + ")");
+            server.Kill();
+        }
+        completed.Add("hosting-url-pin");
     }
     static int FreeLoopbackPort()
     {
