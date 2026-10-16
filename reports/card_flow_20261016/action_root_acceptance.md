@@ -16,3 +16,5 @@ Actual evidence:
 Only player-action display is paced here. Confirmed one-card unsent waiting, full server ACK/reconnect/public-state transport, final art, Android/IL2CPP/device, worst-case density/48dp/130percent remain separate. Latest native executable is still S2Recovery; no new S4A native launch/physical input is claimed. Original47 protected inputs, manifest423/29 historical changes, inactive23 candidates and separate1320/32 versus5280/21 balance misses remain unchanged.
 
 Fresh final EditMode3/3,0skips also passed after the135Play source (`action_edit_result.json`).
+
+Later native continuation: fresh S4A Pacing macOSDevelopment build succeeded0errors/0warnings,255.10MB/13.777245s (`action_build.json`). Exact new app path, PID3546 and compiled HasActionPresentation/SetActionPace metadata were verified; CUA visibly confirmed the new Korean initial map (`action_native_launch.json`). Earlier S2 was at its initial map; UI quit attempts were unconfirmed and only its exact owned binary PID3191 was sent SIGTERM. No native interaction/physical mouse/pace/fault proof is inferred from startup. This supersedes only the earlier no-new-S4A-native-build statement.

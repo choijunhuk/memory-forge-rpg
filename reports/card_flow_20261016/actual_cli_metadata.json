@@ -106,5 +106,30 @@
     "actual_model": "claude-opus-5-5",
     "actual_per_turn_effort": "high",
     "positive_output_messages": 121
+  },
+  "P1-CARD-FLOW-ONE-UNSENT-INTENT": {
+    "session_id": "9e72e086-dd3f-4efa-8840-28d42f883c9b",
+    "actual_model": "claude-opus-5-5",
+    "actual_per_turn_effort": "xhigh",
+    "positive_output_messages": 151
+  },
+  "P1-CARD-FLOW-FINAL-REVIEW": {
+    "session_id": "291d1676-60e8-4699-b338-d676a274153b",
+    "actual_model": "claude-opus-5-5",
+    "actual_per_turn_effort": "max",
+    "positive_output_messages": 82,
+    "verdict": "CHANGES_REQUESTED; P2-1 repair required"
+  },
+  "P1-CARD-FLOW-CANCEL-TAP-FIX": {
+    "session_id": "9e72e086-dd3f-4efa-8840-28d42f883c9b",
+    "actual_model": "claude-opus-5-5",
+    "actual_per_turn_effort": "high",
+    "positive_output_messages": 24
+  },
+  "P1-CARD-FLOW-TAP-ASSERT-FIX": {
+    "session_id": "9e72e086-dd3f-4efa-8840-28d42f883c9b",
+    "actual_model": "claude-opus-5-5",
+    "actual_per_turn_effort": "high",
+    "positive_output_messages": 9
   }
 }

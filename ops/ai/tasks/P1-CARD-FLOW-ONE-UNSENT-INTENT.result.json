@@ -1,0 +1,40 @@
+{
+  "task_id": "P1-CARD-FLOW-ONE-UNSENT-INTENT",
+  "run_id": "P1-CARD-FLOW-ONE-UNSENT-INTENT-20261016T053905227037Z",
+  "status": "VERIFIED_BY_CODEX",
+  "requestedEffort": "xhigh",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "changes_verified": true,
+  "raw_output": "ops/ai/local/P1-CARD-FLOW-ONE-UNSENT-INTENT-20261016T053905227037Z*",
+  "billing_verified_at": "2026-10-15T21:22:01.277612+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "claude/balance-audit",
+  "base_commit": "9be537f4c5ef59e890322cb2d1de914fb49bfed6",
+  "worktree": "/Users/choi/.codex/worktrees/claude-balance-audit/Memory_forge",
+  "allowed_files": [
+    "client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs",
+    "client/MemoryForgeUnity/Assets/Tests/PlayMode/ActionPresentationPlayModeTests.cs",
+    "client/MemoryForgeUnity/Assets/Tests/PlayMode/PreparedIntentPlayModeTests.cs",
+    "reports/card_flow_20261016/prepared_intent_author_report.md"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "9e72e086-dd3f-4efa-8840-28d42f883c9b",
+  "subtype": "success",
+  "is_error": false,
+  "result": "I've implemented the one-unsent-card slot and written 11 tests for it (10 new, 2 adapted in the existing action-presentation file). Nothing has been compiled or run: I had no Bash, Unity or Editor access, so author execution is **NOT_RUN** and your run is the only evidence. I edited only the four allowed files.\n\n**How it works now**\n- **Confirming during a display:** while the last play or ultimate is still being shown, confirming a card freezes that exact request (card, mode, target, a copy of any picks, and the battle turn/version it was made in). Nothing reaches the Run. `ConfirmCard`, and the sheet's final pick or Auto, return `false` in that case and `HasPreparedIntent` becomes true.\n- **Choice cards:** confirming opens the existing pick sheet even during a display, and the sheet keeps its own lock. If the display ends while the player is still choosing, nothing happens on its own; their later pick plays immediately as usual.\n- **Sending:** the display closes on its timer or on skip, without sending anything. On the next Update the request is taken out of the slot first, then re-checked: same battle state, card still in hand, target alive, every pick still on the sheet's candidate list, then Core's own `BattleCheck`. If that passes, the frozen request goes out as exactly one `Run.BattleCommand` through the normal `SendBattle` path and opens its own display. If not, it is dropped with `INTENT_STALE` and no retry, refund, retarget or fallback.\n- **Blocked while it waits:** a second confirm, any selection change, and every command are refused. Commands get `ACTION_SHOWING` while the display runs and `INTENT_PENDING` in the frame before the send. Recovery, the turn summary, the pick sheet and the battle-ending display still take precedence.\n- **Dropped unsent:** on Cancel, focus loss, pause, disable, resume, quarantine or a new departure. Cancel and the drop notices say nothing was spent.\n- **On screen:** the confirm/mode area shows `미전송 사용 대기 1/1 · …` with a `대기 취소` button. A next/after request says its timeline slot is only taken when sent; the timeline still shows only Core's slots. The confirm caption changes in place between `사용 대기` and `사용 확정`, and no timer ever redraws the view.\n\n**Things to check when you run it**\n- **Selection lock:** I read \"changed selections require explicit Cancel first\" as locking card/mode/target selection until Cancel. If you'd rather only refuse a second confirm, it's a small change in `Locked()`.\n- **Mandatory witnesses fail rather than skip if the bounded driver can't reach them:** a second plain card, a legal next-turn card, `nia_tune` with a pick Core accepts, and a finishing card (each after a plain play).\n- **Two tests depend on frame timing:** the natural-end test and the held-cancel test assume the test coroutine resumes between the Update that closes the display and the one that sends. A release in that frame cancels; a release after the send hits an inactive button and does nothing.\n- **An Editor focus event mid-test** drops the intent by design, the same risk the action-presentation work noted for displays.\n- **Readability:** the 796×52 waiting label and the slightly longer idle strip sentence. `AssertReadable` will catch truncation.\n\n**Not covered by a public witness**\n- With the battle version unchanged, the hand, target and pick checks hold by construction, so only the version branch is actually reached (by the \"real end beneath\" test). The other branches are defensive.\n- A waiting intent at the moment of quarantine can't be reached publicly, since every command is refused while one waits; quarantine still clears it.\n- Next mode is tested; after mode uses the same code but isn't tested separately.\n\nStill not covered: server transport/ACK/reconnect (not implemented), Android/IL2CPP/device input, 48 dp touch targets, 130% text, final VFX/audio, and measured timing (0.2/0.3/0.6 s is prototype pacing).\n\nDetails, test coverage and the session-id note are in `reports/card_flow_20261016/prepared_intent_author_report.md`. Next step is your compile, a full PlayMode and EditMode run, and a look at the waiting label in the actual view.",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ],
+  "verification": {
+    "author_execution": "NOT_RUN",
+    "independent_root_source_review": "APPROVE; full B and each received repair diff inspected",
+    "playmode": "147/147,failed0/skipped0",
+    "editmode": "3/3,failed0/skipped0",
+    "P2_regression": "old Main0/2 with intended semantic failures -> final2/2 PASS",
+    "evidence": "reports/card_flow_20261016/prepared_root_acceptance.md",
+    "max_review": "original CHANGES_REQUESTED preserved; P2 repaired by Opus and independently re-reviewed/tested by Codex"
+  }
+}

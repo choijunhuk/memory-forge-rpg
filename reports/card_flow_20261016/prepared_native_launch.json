@@ -1,0 +1,11 @@
+{
+  "verified_at": "2026-10-16T06:17:15.676160+00:00",
+  "build_receipt": "prepared_build.json",
+  "app_name": "MemoryForgeExpedition-Prepared-20261016.app",
+  "exact_owned_pid": 16780,
+  "managed_sha256": "019386a7a51faf86cc397b7d418fb2c13a6767fcefbd147b9c6b744a75dfc662",
+  "prepared_symbols_present": true,
+  "actual_cua_map_start": "PASS: Korean expedition map, HP243/243, coins60, deck18; current new app observed again after launch",
+  "native_battle_queue_or_physical_input": "NOT_RUN; older Final user-reported mouse acceptance is separate",
+  "android_il2cpp_device_server": "NOT_RUN"
+}

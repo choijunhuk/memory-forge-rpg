@@ -1,0 +1,19 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"_mcp_status\":\"pending\",\"_mcp_poll_interval\":5.0,\"message\":\"Build scheduled for StandaloneOSX. Polling for completion...\",\"data\":{\"job_id\":\"build-97089a28ef\",\"platform\":\"StandaloneOSX\"}}"
+    }
+  ],
+  "structuredContent": {
+    "success": true,
+    "_mcp_status": "pending",
+    "_mcp_poll_interval": 5.0,
+    "message": "Build scheduled for StandaloneOSX. Polling for completion...",
+    "data": {
+      "job_id": "build-97089a28ef",
+      "platform": "StandaloneOSX"
+    }
+  },
+  "isError": false
+}

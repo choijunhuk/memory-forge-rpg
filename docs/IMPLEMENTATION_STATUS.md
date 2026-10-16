@@ -249,12 +249,12 @@ P1/P2 완료로 개발을 끝내지 않는다. 이 표와 아래 장별 요구�
 | 원문 요구사항 | 현재 상태 | 코드·시험·기록 근거 | 남은 인수 조건/한계 |
 |---|---|---|---|
 | **§14.1 정보 구조** | PARTIAL(HTML) | [UI][ui]·[스모크][smoke] | 참조 탐사/모집/도감/기억/설정 외 전체 메뉴·Unity 연결 |
-| **§14.2 공통 규칙** | PARTIAL(HTML) | [UI][ui]·[P0 브라우저][p0-browser] | 실기기48dp·안전영역·라이선스·Unity 접근성 검증 |
+| **§14.2 공통 규칙** | PARTIAL(HTML/Unity연습) | [UI][ui]·[P0 브라우저][p0-browser]·[147Play/미전송입력·표시](../reports/card_flow_20261016/prepared_root_acceptance.md) | 실기기48dp·안전영역·라이선스·Unity 접근성 검증 |
 | **§14.3 전투 화면 (가로 16:9)** | PARTIAL(HTML/Unity전투·원정연습) | [원문예약예측v2](../reports/battle_preview_20261016/reserved_root_acceptance.md)·[턴잠금/40사건기록112Play](../reports/card_flow_20261016/root_acceptance.md)·[오류복구119Play](../reports/card_flow_20261016/s2_root_acceptance.md) | 실제카드/대상/예약/피해·균열예측·턴요약/skip/continue연결. 선택창검증·미전송준비/배속·최종아트/연출·최악화면/기기는후속 |
 | **§14.4 화면별 명세** | PARTIAL(HTML) | [UI][ui]·[스모크][smoke] | 성장/인연/도전/우편/상점/계정삭제 등 미구현 화면과 서버 |
 | **§14.5 온보딩 순서** | NOT_IMPLEMENTED | [원문14장](source_v0.8.1/14_chapter.md) | 단계별 실제 튜토리얼·강제 첫 저장 안내·지급/해금 |
 | **§14.6 접근성·현지화** | PARTIAL | [UI][ui]·[브라우저 시험][memory-ui] | 전체 키 기반 번역·영/일 길이·Unity 색약/아이콘 수용 |
-| **§14.7 정보 밀도와 안전한 입력** | PARTIAL(HTML/Unity연습) | [상세/알림입력보존](../reports/expedition_client_20261016/root_acceptance.md)·[119Play/오류후잠금/전체세션보존](../reports/card_flow_20261016/s2_root_acceptance.md) | 선택/상세무소비·턴배리어·복귀·실패Run차단확인. 낡은선택검사·최악밀도/48dp/130%/기기·서버는후속 |
+| **§14.7 정보 밀도와 안전한 입력** | PARTIAL(HTML/Unity연습) | [상세/알림입력보존](../reports/expedition_client_20261016/root_acceptance.md)·[오류후잠금](../reports/card_flow_20261016/s2_root_acceptance.md)·[선택창가드](../reports/card_flow_20261016/s3_root_acceptance.md)·[147Play/미전송1회](../reports/card_flow_20261016/prepared_root_acceptance.md) | 선택/상세무소비·턴배리어·실패Run차단·낡은입력취소/복귀검증. 최악밀도/48dp/130%/기기·서버는후속 |
 | **§14.8 작은 화면의 기존 관찰과 추가 인수 시험** | PARTIAL(브라우저) | [화면 증거][late-screens]·[브라우저 시험][memory-ui] | 640×360·노치·글자130%·터치·헤더 겹침 실기기 별도 |
 
 ## 장 15 — 15. 아트·연출·사운드
@@ -492,3 +492,6 @@ Unity 탐사 화면: [실제 지도·전투·보상/서비스·기억선택과 �
 §14.7/16.4오류복구 최신: [S2실제119Play/3Edit와독립RED→GREEN](../reports/card_flow_20261016/s2_root_acceptance.md). 실패Run부분이득으로진행하지않으며 전체세션기억/이력/영수증을보존한다. 앱세션연습범위이고 서버/계정/영속저장복구는미구현이다. 선택창중복/낡은입력과연출중미전송준비는후속작업이다.
 
 §14.2/14.3/14.7행동표시최신: [S4A실제135Play/3Edit·1배/2배/동작줄이기/생략](../reports/card_flow_20261016/action_root_acceptance.md). Core확정결과와표시를분리하고누른버튼/Canvas/EventSystem을유지한다. 순수다음선택은가능하며확인된미전송대기는다음단위다. 기존턴요약은정상0.3초/skip이고최종VFX/전역배속/기기·서버수용은별도다.
+
+
+§14.2/14.3/14.7같은턴미전송입력최신: [S4B실제147Play/3Edit·1개대기·취소·재검증후1회전송](../reports/card_flow_20261016/prepared_root_acceptance.md). 실제씬의대기AP3/V2→자동AP2/V3가전체JSON/로그/이벤트/저장소와일치한다. 시간예약/미전송/확정후연출을구분하고서버ACK는미구현이다. 새독립OpusMax가발견한확인/취소연타P2는Opus수정→Codex재검토·실제0/2RED→2/2GREEN·전체147/147로해결했다. 효과별후보의기존Core조건과UI차이·전역턴배속·기기/서버는별도다.

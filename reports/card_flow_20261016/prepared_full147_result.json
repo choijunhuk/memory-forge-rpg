@@ -1,0 +1,1384 @@
+{
+  "_meta": {
+    "fastmcp": {
+      "wrap_result": true
+    }
+  },
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Test job status retrieved.\",\"error\":null,\"data\":{\"job_id\":\"b02b9434a32d469f81c09d4f8251c81f\",\"status\":\"succeeded\",\"mode\":\"PlayMode\",\"started_unix_ms\":1792132682482,\"finished_unix_ms\":1792132742769,\"last_update_unix_ms\":1792132742769,\"progress\":{\"completed\":147,\"total\":147,\"current_test_full_name\":null,\"current_test_started_unix_ms\":null,\"last_finished_test_full_name\":\"MemoryForge.PlayModeTests.SharedCorePlayModeTests.SharedRngAndReservationsKeepTheirStateAcrossARealTurn\",\"last_finished_unix_ms\":1792132742728,\"stuck_suspected\":false,\"editor_is_focused\":true,\"run_in_background\":false,\"focus_nudge_attempts\":null,\"focus_nudge_limit\":null,\"focus_nudge_status\":null,\"blocked_reason\":null,\"failures_so_far\":[],\"failures_capped\":false},\"error\":null,\"result\":{\"mode\":\"PlayMode\",\"summary\":{\"total\":147,\"passed\":147,\"failed\":0,\"skipped\":0,\"durationSeconds\":54.604809,\"resultState\":\"Passed\"},\"results\":[{\"name\":\"ACommittedPlayIsShownInlineWhileOnlyThePureNextSelectionIsAccepted\",\"fullName\":\"MemoryForge.Client.Tests.ActionPresentationPlayModeTests.ACommittedPlayIsShownInlineWhileOnlyThePureNextSelectionIsAccepted\",\"state\":\"Passed\",\"durationSeconds\":1.2802732,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"AHeldNextCardPressSurvivesTheDisplayCompletionAndItsReleaseSelectsOnce\",\"fullName\":\"MemoryForge.Client.Tests.ActionPresentationPlayModeTests.AHeldNextCardPressSurvivesTheDisplayCompletionAndItsReleaseSelectsOnce\",\"state\":\"Passed\",\"durationSeconds\":1.0870249,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"AnActualUltimateIsPresentedAsItsOwnCommittedEvents\",\"fullName\":\"MemoryForge.Client.Tests.ActionPresentationPlayModeTests.AnActualUltimateIsPresentedAsItsOwnCommittedEvents\",\"state\":\"Passed\",\"durationSeconds\":3.8136012,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"EveryPaceAndSkipLeaveTheSameCommittedStateAndChangeOnlyTheDisplay\",\"fullName\":\"MemoryForge.Client.Tests.ActionPresentationPlayModeTests.EveryPaceAndSkipLeaveTheSameCommittedStateAndChangeOnlyTheDisplay\",\"state\":\"Passed\",\"durationSeconds\":3.3220105,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"FocusLossPauseAndDisableDropTheDisplayAndResumeRedrawsWithoutReplay\",\"fullName\":\"MemoryForge.Client.Tests.ActionPresentationPlayModeTests.FocusLossPauseAndDisableDropTheDisplayAndResumeRedrawsWithoutReplay\",\"state\":\"Passed\",\"durationSeconds\":0.3712357,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"PickSheetAndTurnSummaryKeepTheirOwnLocksAroundTheDisplay\",\"fullName\":\"MemoryForge.Client.Tests.ActionPresentationPlayModeTests.PickSheetAndTurnSummaryKeepTheirOwnLocksAroundTheDisplay\",\"state\":\"Passed\",\"durationSeconds\":0.2013766,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"RecoveryQuarantineOutranksAndOutlivesTheDisplay\",\"fullName\":\"MemoryForge.Client.Tests.ActionPresentationPlayModeTests.RecoveryQuarantineOutranksAndOutlivesTheDisplay\",\"state\":\"Passed\",\"durationSeconds\":0.1101879,\"message\":null,\"stackTrace\":null,\"output\":\"[MemoryForge] Practice expedition quarantined after a failed local Run calculation (BATTLE_ENEMY_MOVE_NOT_IMPLEMENTED); the Run may be partly changed, so it will be discarded unsaved. Session memory version 0 is kept.\\nMemoryForge.Core.RuleException: BATTLE_ENEMY_MOVE_NOT_IMPLEMENTED\\n  at MemoryForge.Core.Battle.EnemyMove (MemoryForge.Core.BattleEnemyState enemy, MemoryForge.Core.EnemyMoveDef move) [0x00d34] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Battle.cs:633 \\n  at MemoryForge.Core.Battle.EndTurn () [0x0021f] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Battle.cs:481 \\n  at MemoryForge.Core.Battle.Command (MemoryForge.Core.BattleRequest request) [0x000dd] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Battle.cs:135 \\n  at MemoryForge.Core.Run+<>c__DisplayClass55_0.<BattleCommand>b__0 () [0x00022] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Progression.cs:48 \\n  at MemoryForge.Core.Run.Guarded[T] (System.Func`1[TResult] command) [0x00000] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Progression.cs:284 \\n  at MemoryForge.Core.Run.BattleCommand (System.String kind, MemoryForge.Core.BattleArgument args) [0x0001a] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Progression.cs:44 \\n  at MemoryForge.Client.MemoryForgeExpeditionClient+<>c__DisplayClass197_0.<SendBattle>b__0 () [0x00000] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:511 \\n  at MemoryForge.Client.MemoryForgeExpeditionClient.Do (System.Action command, System.String success, System.Boolean render) [0x00046] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:717 \\n\"},{\"name\":\"TheBattlesLastActionCoversTheNextScreenUntilItEndsInPlace\",\"fullName\":\"MemoryForge.Client.Tests.ActionPresentationPlayModeTests.TheBattlesLastActionCoversTheNextScreenUntilItEndsInPlace\",\"state\":\"Passed\",\"durationSeconds\":1.8727576,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"DefaultPracticeOpensTheReferenceBattleWithReadableCriticalLabels\",\"fullName\":\"MemoryForge.Client.Tests.BattleClientPlayModeTests.DefaultPracticeOpensTheReferenceBattleWithReadableCriticalLabels\",\"state\":\"Passed\",\"durationSeconds\":0.053469,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"DrawForecastDoesNotRevealOrConsumeTheHiddenDeck\",\"fullName\":\"MemoryForge.Client.Tests.BattleClientPlayModeTests.DrawForecastDoesNotRevealOrConsumeTheHiddenDeck\",\"state\":\"Passed\",\"durationSeconds\":0.049573,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"EnemyIntentForecastMatchesActualHitsAndStatusesAreVisible\",\"fullName\":\"MemoryForge.Client.Tests.BattleClientPlayModeTests.EnemyIntentForecastMatchesActualHitsAndStatusesAreVisible\",\"state\":\"Passed\",\"durationSeconds\":0.0788437,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"ExportedContentLoadsEveryOriginalDefinitionAndRoundTripsExactly\",\"fullName\":\"MemoryForge.Client.Tests.BattleClientPlayModeTests.ExportedContentLoadsEveryOriginalDefinitionAndRoundTripsExactly\",\"state\":\"Passed\",\"durationSeconds\":0.135336,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"ModeAndTargetSelectionSpendNothingAndHistoryBlocksBackgroundClicks\",\"fullName\":\"MemoryForge.Client.Tests.BattleClientPlayModeTests.ModeAndTargetSelectionSpendNothingAndHistoryBlocksBackgroundClicks\",\"state\":\"Passed\",\"durationSeconds\":0.0796863,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"PreviewLeavesTheBattleUntouchedAndPlayCommitsThroughTheCore\",\"fullName\":\"MemoryForge.Client.Tests.BattleClientPlayModeTests.PreviewLeavesTheBattleUntouchedAndPlayCommitsThroughTheCore\",\"state\":\"Passed\",\"durationSeconds\":0.0845448,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"ReservationResolvesOnTheNextTurnAndResetRebuildsOneOwnedView\",\"fullName\":\"MemoryForge.Client.Tests.BattleClientPlayModeTests.ReservationResolvesOnTheNextTurnAndResetRebuildsOneOwnedView\",\"state\":\"Passed\",\"durationSeconds\":0.2070309,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"TimelineKeepsEveryReservationAfterSeraUltimateAndLabelsSealedSlots\",\"fullName\":\"MemoryForge.Client.Tests.BattleClientPlayModeTests.TimelineKeepsEveryReservationAfterSeraUltimateAndLabelsSealedSlots\",\"state\":\"Passed\",\"durationSeconds\":0.042189,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"CandidateLateCorpusReplaysThroughMonoCore\",\"fullName\":\"MemoryForge.Client.Tests.BattleLateActionsPlayModeTests.CandidateLateCorpusReplaysThroughMonoCore\",\"state\":\"Passed\",\"durationSeconds\":2.6417104,\"message\":null,\"stackTrace\":null,\"output\":\"BattleLateActionsPlayMode: 8459/8459 checks; 81 actual Battle.Create, 473 actual requests (445 committed, 2 replayed, 26 rejected), 554 compared checkpoints\\n\"},{\"name\":\"CopiesAreCopyRowsNotPlaysAndUseOnlyNamesTheEventsSupport\",\"fullName\":\"MemoryForge.Client.Tests.BattleTurnDigestPlayModeTests.CopiesAreCopyRowsNotPlaysAndUseOnlyNamesTheEventsSupport\",\"state\":\"Passed\",\"durationSeconds\":0.0017411,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"EndTurnEventsKeepCoreChronologicalOrder\",\"fullName\":\"MemoryForge.Client.Tests.BattleTurnDigestPlayModeTests.EndTurnEventsKeepCoreChronologicalOrder\",\"state\":\"Passed\",\"durationSeconds\":0.0013965,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"EnemyAttackCounterRelicBurnReflectAndOverloadKeepTheirOwnProvenance\",\"fullName\":\"MemoryForge.Client.Tests.BattleTurnDigestPlayModeTests.EnemyAttackCounterRelicBurnReflectAndOverloadKeepTheirOwnProvenance\",\"state\":\"Passed\",\"durationSeconds\":0.0026069,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"ImmediateUseTimeReservationRegistrationAndReservationResolutionAreDistinctRows\",\"fullName\":\"MemoryForge.Client.Tests.BattleTurnDigestPlayModeTests.ImmediateUseTimeReservationRegistrationAndReservationResolutionAreDistinctRows\",\"state\":\"Passed\",\"durationSeconds\":0.000778,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"PreviousIntentIsOnlyAnAnnouncementAndOnlyEventsOrFinalPublicStateReportWhatHappened\",\"fullName\":\"MemoryForge.Client.Tests.BattleTurnDigestPlayModeTests.PreviousIntentIsOnlyAnAnnouncementAndOnlyEventsOrFinalPublicStateReportWhatHappened\",\"state\":\"Passed\",\"durationSeconds\":0.0007491,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"RowsAreReadOnlyAndDetachedFromLaterCallerMutationAndBuildDoesNotChangeItsInputs\",\"fullName\":\"MemoryForge.Client.Tests.BattleTurnDigestPlayModeTests.RowsAreReadOnlyAndDetachedFromLaterCallerMutationAndBuildDoesNotChangeItsInputs\",\"state\":\"Passed\",\"durationSeconds\":0.0022978,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"SummaryAndFinalEnemyStateShowOnlyProjectedPublicDeltasIncludingVictoryAndDefeat\",\"fullName\":\"MemoryForge.Client.Tests.BattleTurnDigestPlayModeTests.SummaryAndFinalEnemyStateShowOnlyProjectedPublicDeltasIncludingVictoryAndDefeat\",\"state\":\"Passed\",\"durationSeconds\":0.0009258,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"UnknownEventsMissingFieldsAndNullInputsGiveSafeGenericRows\",\"fullName\":\"MemoryForge.Client.Tests.BattleTurnDigestPlayModeTests.UnknownEventsMissingFieldsAndNullInputsGiveSafeGenericRows\",\"state\":\"Passed\",\"durationSeconds\":0.0011246,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"AbandonKeepsTheSessionMemoryAndTheNextDepartureStartsFromIt\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionClientPlayModeTests.AbandonKeepsTheSessionMemoryAndTheNextDepartureStartsFromIt\",\"state\":\"Passed\",\"durationSeconds\":0.0841055,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"ActionLineShowsCoresForecastWhileSelectingAndOnlyTheConfirmedPlayMatchesItOnce\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionClientPlayModeTests.ActionLineShowsCoresForecastWhileSelectingAndOnlyTheConfirmedPlayMatchesItOnce\",\"state\":\"Passed\",\"durationSeconds\":0.7958437,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"ActualCommandsReachTheTerminalMemoryChoiceCommitAndDepartFromTheSavedVersion\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionClientPlayModeTests.ActualCommandsReachTheTerminalMemoryChoiceCommitAndDepartFromTheSavedVersion\",\"state\":\"Passed\",\"durationSeconds\":4.1547327,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"BattleSelectionSpendsNothingAndOnlyTheConfirmedPlayReachesTheRun\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionClientPlayModeTests.BattleSelectionSpendsNothingAndOnlyTheConfirmedPlayReachesTheRun\",\"state\":\"Passed\",\"durationSeconds\":0.3940034,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"DrawCardForecastHidesEveryNumberAndOnlyTheConfirmedPlayReachesTheRun\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionClientPlayModeTests.DrawCardForecastHidesEveryNumberAndOnlyTheConfirmedPlayReachesTheRun\",\"state\":\"Passed\",\"durationSeconds\":3.1142809,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"ForecastLabelsOfAuthoredCoreBattlesWarnDefeatAndHideDrawResults\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionClientPlayModeTests.ForecastLabelsOfAuthoredCoreBattlesWarnDefeatAndHideDrawResults\",\"state\":\"Passed\",\"durationSeconds\":0.0509972,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"FreshPracticeOpensTheActualReachableMapInOneOwnedCanvas\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionClientPlayModeTests.FreshPracticeOpensTheActualReachableMapInOneOwnedCanvas\",\"state\":\"Passed\",\"durationSeconds\":0.0606418,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"HandCardInfoIsCoresTextOfTheEffectiveCardAndOnlyTheLaterExplicitConfirmPlays\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionClientPlayModeTests.HandCardInfoIsCoresTextOfTheEffectiveCardAndOnlyTheLaterExplicitConfirmPlays\",\"state\":\"Passed\",\"durationSeconds\":0.2575275,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"NextIntentShowsItsForecastImmediatelyWhileThePreviousToastWouldStillBeActive\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionClientPlayModeTests.NextIntentShowsItsForecastImmediatelyWhileThePreviousToastWouldStillBeActive\",\"state\":\"Passed\",\"durationSeconds\":0.1320416,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"NoticeExpiryDuringAHeldPressKeepsTheViewAndTheReleaseEntersTheBattleOnce\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionClientPlayModeTests.NoticeExpiryDuringAHeldPressKeepsTheViewAndTheReleaseEntersTheBattleOnce\",\"state\":\"Passed\",\"durationSeconds\":2.6365654,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"PickSheetForecastsMatchTheAutoPromiseAndEachConcreteFinalCandidate\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionClientPlayModeTests.PickSheetForecastsMatchTheAutoPromiseAndEachConcreteFinalCandidate\",\"state\":\"Passed\",\"durationSeconds\":0.1350965,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"PointerOnAReachableNodeEntersTheActualBattleAndAnUnreachableNodeChangesNothing\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionClientPlayModeTests.PointerOnAReachableNodeEntersTheActualBattleAndAnUnreachableNodeChangesNothing\",\"state\":\"Passed\",\"durationSeconds\":0.0674328,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"ReservationEstimateLabelsOfAuthoredCoreBattlesKeepCostDueAndCurrentStateSemantics\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionClientPlayModeTests.ReservationEstimateLabelsOfAuthoredCoreBattlesKeepCostDueAndCurrentStateSemantics\",\"state\":\"Passed\",\"durationSeconds\":0.0742883,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"ReservationShowsItsCurrentStateEstimateAndOnlyTheConfirmSchedulesItWithoutApplyingIt\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionClientPlayModeTests.ReservationShowsItsCurrentStateEstimateAndOnlyTheConfirmSchedulesItWithoutApplyingIt\",\"state\":\"Passed\",\"durationSeconds\":0.1426806,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"RewardShopAndDeckDetailsAreReadableBeforeTakingOrPayingAndNeverChangeTheRun\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionClientPlayModeTests.RewardShopAndDeckDetailsAreReadableBeforeTakingOrPayingAndNeverChangeTheRun\",\"state\":\"Passed\",\"durationSeconds\":1.8094836,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"RunBattleQueriesAreDetachedPureReadsOfTheLiveBattle\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionClientPlayModeTests.RunBattleQueriesAreDetachedPureReadsOfTheLiveBattle\",\"state\":\"Passed\",\"durationSeconds\":0.0183066,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"ComparisonIsOrderFreeForObjectsOrderedForArraysAndExactForNestedDoubles\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionFailurePlayModeTests.ComparisonIsOrderFreeForObjectsOrderedForArraysAndExactForNestedDoubles\",\"state\":\"Passed\",\"durationSeconds\":0.0025758,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"FailedRecoveryRetriesKeepTheQuarantineAndTheEarnedSaveUntilARepairedRetryDepartsOnce\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionFailurePlayModeTests.FailedRecoveryRetriesKeepTheQuarantineAndTheEarnedSaveUntilARepairedRetryDepartsOnce\",\"state\":\"Passed\",\"durationSeconds\":0.6198955,\"message\":null,\"stackTrace\":null,\"output\":\"[MemoryForge] Practice expedition quarantined after a failed local Run calculation (UNKNOWN_ENEMY); the Run may be partly changed, so it will be discarded unsaved. Session memory version 1 is kept.\\nMemoryForge.Core.RuleException: UNKNOWN_ENEMY\\n  at MemoryForge.Core.Battle.AddEnemy (MemoryForge.Core.BattleState s, MemoryForge.Core.BattleData data, System.String id) [0x00134] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Battle.cs:76 \\n  at MemoryForge.Core.Battle.Create (MemoryForge.Core.BattleData data, MemoryForge.Core.BattleSetup setup) [0x004c2] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Battle.cs:62 \\n  at MemoryForge.Core.Run.StartBattle (System.String type) [0x00159] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Progression.cs:72 \\n  at MemoryForge.Core.Run+<>c__DisplayClass54_0.<Enter>b__0 () [0x00157] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Progression.cs:26 \\n  at MemoryForge.Core.Run.Guard (System.Action command) [0x00000] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Progression.cs:279 \\n  at MemoryForge.Core.Run.Enter (System.String nodeId) [0x00013] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Progression.cs:18 \\n  at MemoryForge.Client.MemoryForgeExpeditionClient+<>c__DisplayClass175_0.<EnterNode>b__0 () [0x00000] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:328 \\n  at MemoryForge.Client.MemoryForgeExpeditionClient.Do (System.Action command, System.String success, System.Boolean render) [0x00046] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:717 \\n[MemoryForge] Practice recovery could not start a new departure (NullReferenceException); the quarantine and session memory version 1 are kept.\\nSystem.NullReferenceException: Object reference not set to an instance of an object\\n  at MemoryForge.Core.RunData.Index () [0x00000] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/RunDefinitions.cs:149 \\n  at MemoryForge.Core.Run.CreateCore (MemoryForge.Core.RunData data, MemoryForge.Core.RunSetup setup) [0x0000d] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.cs:28 \\n  at MemoryForge.Core.Run.Create (MemoryForge.Core.RunData data, MemoryForge.Core.RunSetup setup) [0x00000] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.cs:23 \\n  at MemoryForge.Client.MemoryForgeExpeditionClient.Depart (System.String length) [0x00095] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:299 \\n  at MemoryForge.Client.MemoryForgeExpeditionClient.DiscardFailedPractice () [0x0009c] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:805 \\n[MemoryForge] Practice recovery could not start a new departure (NullReferenceException); the quarantine and session memory version 1 are kept.\\nSystem.NullReferenceException: Object reference not set to an instance of an object\\n  at MemoryForge.Core.RunData.Index () [0x00000] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/RunDefinitions.cs:149 \\n  at MemoryForge.Core.Run.CreateCore (MemoryForge.Core.RunData data, MemoryForge.Core.RunSetup setup) [0x0000d] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.cs:28 \\n  at MemoryForge.Core.Run.Create (MemoryForge.Core.RunData data, MemoryForge.Core.RunSetup setup) [0x00000] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.cs:23 \\n  at MemoryForge.Client.MemoryForgeExpeditionClient.Depart (System.String length) [0x00095] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:299 \\n  at MemoryForge.Client.MemoryForgeExpeditionClient.DiscardFailedPractice () [0x0009c] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:805 \\n\"},{\"name\":\"FractionalOpaqueMetadataComparesExactlyWhereTheCanonicalHashRefuses\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionFailurePlayModeTests.FractionalOpaqueMetadataComparesExactlyWhereTheCanonicalHashRefuses\",\"state\":\"Passed\",\"durationSeconds\":0.0439571,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"OrdinaryUnchangedRejectionsStayToastsWithoutQuarantineOrErrorLog\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionFailurePlayModeTests.OrdinaryUnchangedRejectionsStayToastsWithoutQuarantineOrErrorLog\",\"state\":\"Passed\",\"durationSeconds\":0.1472586,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"PartialEnterFailureQuarantinesKeepsTheEarnedSaveAndTheDiscardDepartsFromIt\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionFailurePlayModeTests.PartialEnterFailureQuarantinesKeepsTheEarnedSaveAndTheDiscardDepartsFromIt\",\"state\":\"Passed\",\"durationSeconds\":0.3011559,\"message\":null,\"stackTrace\":null,\"output\":\"[MemoryForge] Practice expedition quarantined after a failed local Run calculation (UNKNOWN_ENEMY); the Run may be partly changed, so it will be discarded unsaved. Session memory version 1 is kept.\\nMemoryForge.Core.RuleException: UNKNOWN_ENEMY\\n  at MemoryForge.Core.Battle.AddEnemy (MemoryForge.Core.BattleState s, MemoryForge.Core.BattleData data, System.String id) [0x00134] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Battle.cs:76 \\n  at MemoryForge.Core.Battle.Create (MemoryForge.Core.BattleData data, MemoryForge.Core.BattleSetup setup) [0x004c2] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Battle.cs:62 \\n  at MemoryForge.Core.Run.StartBattle (System.String type) [0x00159] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Progression.cs:72 \\n  at MemoryForge.Core.Run+<>c__DisplayClass54_0.<Enter>b__0 () [0x00157] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Progression.cs:26 \\n  at MemoryForge.Core.Run.Guard (System.Action command) [0x00000] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Progression.cs:279 \\n  at MemoryForge.Core.Run.Enter (System.String nodeId) [0x00013] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Progression.cs:18 \\n  at MemoryForge.Client.MemoryForgeExpeditionClient+<>c__DisplayClass175_0.<EnterNode>b__0 () [0x00000] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:328 \\n  at MemoryForge.Client.MemoryForgeExpeditionClient.Do (System.Action command, System.String success, System.Boolean render) [0x00046] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:717 \\n\"},{\"name\":\"ThePrivateDoBoundaryQuarantinesNonRuleFailuresAndChangedRunsButKeepsUnchangedInputRejections\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionFailurePlayModeTests.ThePrivateDoBoundaryQuarantinesNonRuleFailuresAndChangedRunsButKeepsUnchangedInputRejections\",\"state\":\"Passed\",\"durationSeconds\":0.0546494,\"message\":null,\"stackTrace\":null,\"output\":\"[MemoryForge] Practice expedition quarantined after a failed local Run calculation (InvalidOperationException); the Run may be partly changed, so it will be discarded unsaved. Session memory version 0 is kept.\\nSystem.InvalidOperationException: test fault\\n  at MemoryForge.Client.Tests.ExpeditionFailurePlayModeTests+<>c.<ThePrivateDoBoundaryQuarantinesNonRuleFailuresAndChangedRunsButKeepsUnchangedInputRejections>b__12_2 () [0x00000] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionFailurePlayModeTests.cs:325 \\n  at MemoryForge.Client.MemoryForgeExpeditionClient.Do (System.Action command, System.String success, System.Boolean render) [0x00046] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:717 \\n[MemoryForge] Practice expedition quarantined after a failed local Run calculation (NOT_IN_HAND); the Run may be partly changed, so it will be discarded unsaved. Session memory version 0 is kept.\\nMemoryForge.Core.RuleException: NOT_IN_HAND\\n  at MemoryForge.Client.Tests.ExpeditionFailurePlayModeTests+<>c__DisplayClass12_0.<ThePrivateDoBoundaryQuarantinesNonRuleFailuresAndChangedRunsButKeepsUnchangedInputRejections>b__3 () [0x00011] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionFailurePlayModeTests.cs:335 \\n  at MemoryForge.Client.MemoryForgeExpeditionClient.Do (System.Action command, System.String success, System.Boolean render) [0x00046] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:717 \\n\"},{\"name\":\"UnknownBattleErrorQuarantinesEvenThoughTheBattleRolledBack\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionFailurePlayModeTests.UnknownBattleErrorQuarantinesEvenThoughTheBattleRolledBack\",\"state\":\"Passed\",\"durationSeconds\":0.1049535,\"message\":null,\"stackTrace\":null,\"output\":\"[MemoryForge] Practice expedition quarantined after a failed local Run calculation (BATTLE_ENEMY_MOVE_NOT_IMPLEMENTED); the Run may be partly changed, so it will be discarded unsaved. Session memory version 0 is kept.\\nMemoryForge.Core.RuleException: BATTLE_ENEMY_MOVE_NOT_IMPLEMENTED\\n  at MemoryForge.Core.Battle.EnemyMove (MemoryForge.Core.BattleEnemyState enemy, MemoryForge.Core.EnemyMoveDef move) [0x00d34] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Battle.cs:633 \\n  at MemoryForge.Core.Battle.EndTurn () [0x0021f] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Battle.cs:481 \\n  at MemoryForge.Core.Battle.Command (MemoryForge.Core.BattleRequest request) [0x000dd] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Battle.cs:135 \\n  at MemoryForge.Core.Run+<>c__DisplayClass55_0.<BattleCommand>b__0 () [0x00022] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Progression.cs:48 \\n  at MemoryForge.Core.Run.Guarded[T] (System.Func`1[TResult] command) [0x00000] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Progression.cs:284 \\n  at MemoryForge.Core.Run.BattleCommand (System.String kind, MemoryForge.Core.BattleArgument args) [0x0001a] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Progression.cs:44 \\n  at MemoryForge.Client.MemoryForgeExpeditionClient+<>c__DisplayClass197_0.<SendBattle>b__0 () [0x00000] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:511 \\n  at MemoryForge.Client.MemoryForgeExpeditionClient.Do (System.Action command, System.String success, System.Boolean render) [0x00046] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:717 \\n\"},{\"name\":\"ACardWithoutPicksPlaysAtOnceAndNoSheetLockEngages\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionPickerGuardPlayModeTests.ACardWithoutPicksPlaysAtOnceAndNoSheetLockEngages\",\"state\":\"Passed\",\"durationSeconds\":0.1468324,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"AStaleSheetsStillDrawnCandidateCannotSendAndTheSheetCloses\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionPickerGuardPlayModeTests.AStaleSheetsStillDrawnCandidateCannotSendAndTheSheetCloses\",\"state\":\"Passed\",\"durationSeconds\":0.1275229,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"CancelRestoresTheSelectionAutoSendsCoresOwnChoiceOnceAndRecoveryStaysFirst\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionPickerGuardPlayModeTests.CancelRestoresTheSelectionAutoSendsCoresOwnChoiceOnceAndRecoveryStaysFirst\",\"state\":\"Passed\",\"durationSeconds\":0.1652076,\"message\":null,\"stackTrace\":null,\"output\":\"[MemoryForge] Practice expedition quarantined after a failed local Run calculation (InvalidOperationException); the Run may be partly changed, so it will be discarded unsaved. Session memory version 0 is kept.\\nSystem.InvalidOperationException: test fault\\n  at MemoryForge.Client.Tests.ExpeditionPickerGuardPlayModeTests+<>c.<CancelRestoresTheSelectionAutoSendsCoresOwnChoiceOnceAndRecoveryStaysFirst>b__17_3 () [0x00000] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionPickerGuardPlayModeTests.cs:376 \\n  at MemoryForge.Client.MemoryForgeExpeditionClient.Do (System.Action command, System.String success, System.Boolean render) [0x00046] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:717 \\n\"},{\"name\":\"ResumeDropsASheetWhoseStateChangedBeneathItWithoutSending\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionPickerGuardPlayModeTests.ResumeDropsASheetWhoseStateChangedBeneathItWithoutSending\",\"state\":\"Passed\",\"durationSeconds\":0.0956932,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"ResumeKeepsACurrentSheetAndAutoNeverSendsAStaleOne\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionPickerGuardPlayModeTests.ResumeKeepsACurrentSheetAndAutoNeverSendsAStaleOne\",\"state\":\"Passed\",\"durationSeconds\":0.1096085,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"TestLocalTwoPickVariantKeepsTheFirstPickUnsentRefusesItsRepeatAndSendsOnce\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionPickerGuardPlayModeTests.TestLocalTwoPickVariantKeepsTheFirstPickUnsentRefusesItsRepeatAndSendsOnce\",\"state\":\"Passed\",\"durationSeconds\":0.1086735,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"TheSharedCandidateHelperFiltersSourceZoneRepeatsAndGrowthOnCoreBattleStates\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionPickerGuardPlayModeTests.TheSharedCandidateHelperFiltersSourceZoneRepeatsAndGrowthOnCoreBattleStates\",\"state\":\"Passed\",\"durationSeconds\":0.0168273,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"TheSheetAcceptsOnlyItsSharedCandidatesAndItsFinalPickIsExactlyOneActualPlay\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionPickerGuardPlayModeTests.TheSheetAcceptsOnlyItsSharedCandidatesAndItsFinalPickIsExactlyOneActualPlay\",\"state\":\"Passed\",\"durationSeconds\":0.330392,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"AHeldContinueSurvivesTheRevealStepsAndItsReleaseClosesTheSummaryOnce\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionTurnFlowPlayModeTests.AHeldContinueSurvivesTheRevealStepsAndItsReleaseClosesTheSummaryOnce\",\"state\":\"Passed\",\"durationSeconds\":0.404677,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"APickSheetPreparedBeforeAnEndDoesNotSurviveBeneathTheSummary\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionTurnFlowPlayModeTests.APickSheetPreparedBeforeAnEndDoesNotSurviveBeneathTheSummary\",\"state\":\"Passed\",\"durationSeconds\":0.1356499,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"BattleLogKeepsTheRecent40EventRowsThroughTheBattleEndAndResetsOnTheNextDeparture\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionTurnFlowPlayModeTests.BattleLogKeepsTheRecent40EventRowsThroughTheBattleEndAndResetsOnTheNextDeparture\",\"state\":\"Passed\",\"durationSeconds\":0.5390051,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"EveryPublicCommandAndSelectionUnderTheTurnBarrierIsRefusedBeforeTheRun\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionTurnFlowPlayModeTests.EveryPublicCommandAndSelectionUnderTheTurnBarrierIsRefusedBeforeTheRun\",\"state\":\"Passed\",\"durationSeconds\":0.1258775,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"LosingEndKeepsTheSaveScreenOpenAndItsRepeatedTapCannotCloseWithoutSaving\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionTurnFlowPlayModeTests.LosingEndKeepsTheSaveScreenOpenAndItsRepeatedTapCannotCloseWithoutSaving\",\"state\":\"Passed\",\"durationSeconds\":0.3501216,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"ReservationRowsRevealOnTheApprovedTimerAndSkipDisableOrResumeLeaveTheSameCommittedState\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionTurnFlowPlayModeTests.ReservationRowsRevealOnTheApprovedTimerAndSkipDisableOrResumeLeaveTheSameCommittedState\",\"state\":\"Passed\",\"durationSeconds\":1.0082207,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"TimeReservationSlotsBeneathTheSummaryAreOnlyCoresReservations\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionTurnFlowPlayModeTests.TimeReservationSlotsBeneathTheSummaryAreOnlyCoresReservations\",\"state\":\"Passed\",\"durationSeconds\":0.1423191,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"TwoTapsOnEndTurnAtOnePointAreExactlyOneEndAndContinueThenAcceptsTheNextEnd\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionTurnFlowPlayModeTests.TwoTapsOnEndTurnAtOnePointAreExactlyOneEndAndContinueThenAcceptsTheNextEnd\",\"state\":\"Passed\",\"durationSeconds\":0.1071706,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"WinningEndKeepsTheRewardsAndItsRepeatedTapCannotProceed\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionTurnFlowPlayModeTests.WinningEndKeepsTheRewardsAndItsRepeatedTapCannotProceed\",\"state\":\"Passed\",\"durationSeconds\":0.5975357,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"AChoiceSheetDuringTheDisplayFreezesItsFinalPickOrExplicitAutoAndNeverActsOnItsOwn\",\"fullName\":\"MemoryForge.Client.Tests.PreparedIntentPlayModeTests.AChoiceSheetDuringTheDisplayFreezesItsFinalPickOrExplicitAutoAndNeverActsOnItsOwn\",\"state\":\"Passed\",\"durationSeconds\":1.371235,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"ACommittedChangeBeneathTheWaitingIntentDropsItWithoutAnyCommand\",\"fullName\":\"MemoryForge.Client.Tests.PreparedIntentPlayModeTests.ACommittedChangeBeneathTheWaitingIntentDropsItWithoutAnyCommand\",\"state\":\"Passed\",\"durationSeconds\":0.3431058,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"AConfirmDuringTheDisplayIsOnePureUnsentIntentThatTheNaturalEndSendsOnce\",\"fullName\":\"MemoryForge.Client.Tests.PreparedIntentPlayModeTests.AConfirmDuringTheDisplayIsOnePureUnsentIntentThatTheNaturalEndSendsOnce\",\"state\":\"Passed\",\"durationSeconds\":1.1582484,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"ADispatchedPlayThatEndsTheBattleLeavesNoIntentAndItsSheetRefusesPreparation\",\"fullName\":\"MemoryForge.Client.Tests.PreparedIntentPlayModeTests.ADispatchedPlayThatEndsTheBattleLeavesNoIntentAndItsSheetRefusesPreparation\",\"state\":\"Passed\",\"durationSeconds\":1.1182783,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"AFullSlotRefusesAnOverwriteAndCancelOrOldButtonsSendNothing\",\"fullName\":\"MemoryForge.Client.Tests.PreparedIntentPlayModeTests.AFullSlotRefusesAnOverwriteAndCancelOrOldButtonsSendNothing\",\"state\":\"Passed\",\"durationSeconds\":0.1611948,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"AHeldCancelSurvivesTheDisplayCompletionAndItsReleaseCancelsBeforeTheDispatch\",\"fullName\":\"MemoryForge.Client.Tests.PreparedIntentPlayModeTests.AHeldCancelSurvivesTheDisplayCompletionAndItsReleaseCancelsBeforeTheDispatch\",\"state\":\"Passed\",\"durationSeconds\":1.09274,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"DoubleTapCancelNeverPreparesOrPlaysAgain\",\"fullName\":\"MemoryForge.Client.Tests.PreparedIntentPlayModeTests.DoubleTapCancelNeverPreparesOrPlaysAgain\",\"state\":\"Passed\",\"durationSeconds\":1.0838876,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"DoubleTapConfirmKeepsOneUnsentIntent\",\"fullName\":\"MemoryForge.Client.Tests.PreparedIntentPlayModeTests.DoubleTapConfirmKeepsOneUnsentIntent\",\"state\":\"Passed\",\"durationSeconds\":1.0939826,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"EveryPaceAndSkipSendTheSameFrozenRequestAndCommitTheSameTwoCommands\",\"fullName\":\"MemoryForge.Client.Tests.PreparedIntentPlayModeTests.EveryPaceAndSkipSendTheSameFrozenRequestAndCommitTheSameTwoCommands\",\"state\":\"Passed\",\"durationSeconds\":3.3391436,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"LeavingTheAppOrDisablingDropsTheWaitingIntentWithoutUnseenExecution\",\"fullName\":\"MemoryForge.Client.Tests.PreparedIntentPlayModeTests.LeavingTheAppOrDisablingDropsTheWaitingIntentWithoutUnseenExecution\",\"state\":\"Passed\",\"durationSeconds\":5.36915,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"NoSpentCardOrRefusedRequestBecomesAnIntentAndANextRequestTakesNoSlotUntilSent\",\"fullName\":\"MemoryForge.Client.Tests.PreparedIntentPlayModeTests.NoSpentCardOrRefusedRequestBecomesAnIntentAndANextRequestTakesNoSlotUntilSent\",\"state\":\"Passed\",\"durationSeconds\":0.2342614,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"RecoveryAndTheTurnSummaryOutrankPreparation\",\"fullName\":\"MemoryForge.Client.Tests.PreparedIntentPlayModeTests.RecoveryAndTheTurnSummaryOutrankPreparation\",\"state\":\"Passed\",\"durationSeconds\":0.0824874,\"message\":null,\"stackTrace\":null,\"output\":\"[MemoryForge] Practice expedition quarantined after a failed local Run calculation (BATTLE_ENEMY_MOVE_NOT_IMPLEMENTED); the Run may be partly changed, so it will be discarded unsaved. Session memory version 0 is kept.\\nMemoryForge.Core.RuleException: BATTLE_ENEMY_MOVE_NOT_IMPLEMENTED\\n  at MemoryForge.Core.Battle.EnemyMove (MemoryForge.Core.BattleEnemyState enemy, MemoryForge.Core.EnemyMoveDef move) [0x00d34] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Battle.cs:633 \\n  at MemoryForge.Core.Battle.EndTurn () [0x0021f] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Battle.cs:481 \\n  at MemoryForge.Core.Battle.Command (MemoryForge.Core.BattleRequest request) [0x000dd] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Battle.cs:135 \\n  at MemoryForge.Core.Run+<>c__DisplayClass55_0.<BattleCommand>b__0 () [0x00022] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Progression.cs:48 \\n  at MemoryForge.Core.Run.Guarded[T] (System.Func`1[TResult] command) [0x00000] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Progression.cs:284 \\n  at MemoryForge.Core.Run.BattleCommand (System.String kind, MemoryForge.Core.BattleArgument args) [0x0001a] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Progression.cs:44 \\n  at MemoryForge.Client.MemoryForgeExpeditionClient+<>c__DisplayClass197_0.<SendBattle>b__0 () [0x00000] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:511 \\n  at MemoryForge.Client.MemoryForgeExpeditionClient.Do (System.Action command, System.String success, System.Boolean render) [0x00046] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:717 \\n\"},{\"name\":\"AuthoredBulwarkRetainsTenBlockOnTheNextTurn\",\"fullName\":\"MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.AuthoredBulwarkRetainsTenBlockOnTheNextTurn\",\"state\":\"Passed\",\"durationSeconds\":0.0040628,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"AuthoredOpeningAndIdempotentRetryExecuteInsidePlayMode\",\"fullName\":\"MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.AuthoredOpeningAndIdempotentRetryExecuteInsidePlayMode\",\"state\":\"Passed\",\"durationSeconds\":0.0006883,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"AuthoredUltimateSpendsGaugeWithoutPlayingTheCardInHand\",\"fullName\":\"MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.AuthoredUltimateSpendsGaugeWithoutPlayingTheCardInHand\",\"state\":\"Passed\",\"durationSeconds\":0.0005699,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"CircuitTerminationAndEnvelopeSurvivalExecuteInsidePlayMode(False)\",\"fullName\":\"MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.CircuitTerminationAndEnvelopeSurvivalExecuteInsidePlayMode(False)\",\"state\":\"Passed\",\"durationSeconds\":0.0004308,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"CircuitTerminationAndEnvelopeSurvivalExecuteInsidePlayMode(True)\",\"fullName\":\"MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.CircuitTerminationAndEnvelopeSurvivalExecuteInsidePlayMode(True)\",\"state\":\"Passed\",\"durationSeconds\":0.0001307,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"EnemyPhaseAndNextPlayerTurnReuseTheAuthoredOpening\",\"fullName\":\"MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.EnemyPhaseAndNextPlayerTurnReuseTheAuthoredOpening\",\"state\":\"Passed\",\"durationSeconds\":0.0004849,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"ExhaustKillReshuffleUsesTheCurrentDiscardPile\",\"fullName\":\"MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.ExhaustKillReshuffleUsesTheCurrentDiscardPile\",\"state\":\"Passed\",\"durationSeconds\":0.0033674,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"PureCardQueriesReturnDetachedDefinitionsWithoutChangingTheRunningBattle\",\"fullName\":\"MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.PureCardQueriesReturnDetachedDefinitionsWithoutChangingTheRunningBattle\",\"state\":\"Passed\",\"durationSeconds\":0.0007812,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"ReservedShieldPaysNowAndEarnsGaugeOnlyWhenResolved\",\"fullName\":\"MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.ReservedShieldPaysNowAndEarnsGaugeOnlyWhenResolved\",\"state\":\"Passed\",\"durationSeconds\":0.0005855,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"UsedEnvelopeDoesNotHideAFatalSecondTurnCircuitCost\",\"fullName\":\"MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.UsedEnvelopeDoesNotHideAFatalSecondTurnCircuitCost\",\"state\":\"Passed\",\"durationSeconds\":0.0003743,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"CompleteResultCostDecidesSelectedChangesWithDetachedGraphs\",\"fullName\":\"MemoryForge.PlayModeTests.MemoryRulesPlayModeTests.CompleteResultCostDecidesSelectedChangesWithDetachedGraphs\",\"state\":\"Passed\",\"durationSeconds\":0.0031105,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"MigrationArrayRowsDoNotHideEarlierValidationErrors(False,\\\"INVALID_UPGRADE\\\")\",\"fullName\":\"MemoryForge.PlayModeTests.MemoryRulesPlayModeTests.MigrationArrayRowsDoNotHideEarlierValidationErrors(False,\\\"INVALID_UPGRADE\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.0005839,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"MigrationArrayRowsDoNotHideEarlierValidationErrors(True,\\\"IDENTITY_REQUIRED\\\")\",\"fullName\":\"MemoryForge.PlayModeTests.MemoryRulesPlayModeTests.MigrationArrayRowsDoNotHideEarlierValidationErrors(True,\\\"IDENTITY_REQUIRED\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.0000755,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"MigrationQuarantinesAnOwnProtoOwnerWithItsCompleteOriginal\",\"fullName\":\"MemoryForge.PlayModeTests.MemoryRulesPlayModeTests.MigrationQuarantinesAnOwnProtoOwnerWithItsCompleteOriginal\",\"state\":\"Passed\",\"durationSeconds\":0.0009268,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"ActualRunCreateFromPackagedContentMatchesOriginalJs(\\\"legacy\\\",\\\"56a6ba8623a1cb296f5a8c83f5c855464a04aea56aaeec9838b1455d272a1973\\\")\",\"fullName\":\"MemoryForge.PlayModeTests.RunClientContentPlayModeTests.ActualRunCreateFromPackagedContentMatchesOriginalJs(\\\"legacy\\\",\\\"56a6ba8623a1cb296f5a8c83f5c855464a04aea56aaeec9838b1455d272a1973\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.0135059,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"ActualRunCreateFromPackagedContentMatchesOriginalJs(\\\"v2\\\",\\\"11a43e7465dc0089d3b8fdfded7acc4b12c84ef0cd77d38a3df66acc075c7cc3\\\")\",\"fullName\":\"MemoryForge.PlayModeTests.RunClientContentPlayModeTests.ActualRunCreateFromPackagedContentMatchesOriginalJs(\\\"v2\\\",\\\"11a43e7465dc0089d3b8fdfded7acc4b12c84ef0cd77d38a3df66acc075c7cc3\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.0130939,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"EveryLoadReturnsFreshDataWithoutASharedMutableCache\",\"fullName\":\"MemoryForge.PlayModeTests.RunClientContentPlayModeTests.EveryLoadReturnsFreshDataWithoutASharedMutableCache\",\"state\":\"Passed\",\"durationSeconds\":0.0395943,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"MalformedSidecarFailsClosed(\\\"missing-stat\\\")\",\"fullName\":\"MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\\\"missing-stat\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.0150557,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"MalformedSidecarFailsClosed(\\\"missing-stat-ratio\\\")\",\"fullName\":\"MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\\\"missing-stat-ratio\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.0118773,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"MalformedSidecarFailsClosed(\\\"missing-stage-weapon\\\")\",\"fullName\":\"MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\\\"missing-stage-weapon\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.0119962,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"MalformedSidecarFailsClosed(\\\"null-stats\\\")\",\"fullName\":\"MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\\\"null-stats\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.0118184,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"MalformedSidecarFailsClosed(\\\"missing-cost\\\")\",\"fullName\":\"MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\\\"missing-cost\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.0116401,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"MalformedSidecarFailsClosed(\\\"null-cost\\\")\",\"fullName\":\"MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\\\"null-cost\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.0122011,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"MalformedSidecarFailsClosed(\\\"string-cost\\\")\",\"fullName\":\"MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\\\"string-cost\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.012216,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"MalformedSidecarFailsClosed(\\\"fractional-cost\\\")\",\"fullName\":\"MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\\\"fractional-cost\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.013115,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"MalformedSidecarFailsClosed(\\\"float-integral-cost\\\")\",\"fullName\":\"MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\\\"float-integral-cost\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.011873,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"MalformedSidecarFailsClosed(\\\"overflow-cost\\\")\",\"fullName\":\"MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\\\"overflow-cost\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.0122049,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"MalformedSidecarFailsClosed(\\\"negative-cost\\\")\",\"fullName\":\"MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\\\"negative-cost\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.0125569,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"MalformedSidecarFailsClosed(\\\"unknown-cost\\\")\",\"fullName\":\"MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\\\"unknown-cost\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.0120115,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"MalformedSidecarFailsClosed(\\\"missing-capacity\\\")\",\"fullName\":\"MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\\\"missing-capacity\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.0120858,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"MalformedSidecarFailsClosed(\\\"missing-ascension\\\")\",\"fullName\":\"MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\\\"missing-ascension\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.0120569,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"MalformedSidecarFailsClosed(\\\"missing-ascension-add\\\")\",\"fullName\":\"MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\\\"missing-ascension-add\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.0120006,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"MalformedSidecarFailsClosed(\\\"missing-events\\\")\",\"fullName\":\"MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\\\"missing-events\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.0113122,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"MalformedSidecarFailsClosed(\\\"empty-events\\\")\",\"fullName\":\"MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\\\"empty-events\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.011783,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"MalformedSidecarFailsClosed(\\\"dropped-event\\\")\",\"fullName\":\"MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\\\"dropped-event\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.011902,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"MalformedSidecarFailsClosed(\\\"missing-event-count\\\")\",\"fullName\":\"MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\\\"missing-event-count\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.0116612,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"MalformedSidecarFailsClosed(\\\"missing-effect-key\\\")\",\"fullName\":\"MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\\\"missing-effect-key\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.0117896,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"MalformedSidecarFailsClosed(\\\"missing-need\\\")\",\"fullName\":\"MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\\\"missing-need\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.0116753,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"MalformedSidecarFailsClosed(\\\"null-choice\\\")\",\"fullName\":\"MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\\\"null-choice\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.0119475,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"MalformedSidecarFailsClosed(\\\"empty-choices\\\")\",\"fullName\":\"MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\\\"empty-choices\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.011734,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"MalformedSidecarFailsClosed(\\\"unknown-effect\\\")\",\"fullName\":\"MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\\\"unknown-effect\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.0118295,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"MalformedSidecarFailsClosed(\\\"duplicate-event-id\\\")\",\"fullName\":\"MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\\\"duplicate-event-id\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.012269,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"MalformedSidecarFailsClosed(\\\"unresolved-curse\\\")\",\"fullName\":\"MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\\\"unresolved-curse\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.0117396,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"MalformedSidecarFailsClosed(\\\"unresolved-card-rarity\\\")\",\"fullName\":\"MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\\\"unresolved-card-rarity\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.0116617,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"MalformedSidecarFailsClosed(\\\"unresolved-stage-weapon\\\")\",\"fullName\":\"MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\\\"unresolved-stage-weapon\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.0120057,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"MalformedSidecarFailsClosed(\\\"sha-mismatch\\\")\",\"fullName\":\"MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\\\"sha-mismatch\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.0117067,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"MalformedSidecarFailsClosed(\\\"missing-sha\\\")\",\"fullName\":\"MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\\\"missing-sha\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.0118531,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"MalformedSidecarFailsClosed(\\\"version-mismatch\\\")\",\"fullName\":\"MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\\\"version-mismatch\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.0119877,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"MalformedSidecarFailsClosed(\\\"missing-version\\\")\",\"fullName\":\"MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\\\"missing-version\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.0116531,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"MalformedSidecarFailsClosed(\\\"schema\\\")\",\"fullName\":\"MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\\\"schema\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.0117779,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"MalformedSidecarFailsClosed(\\\"type-metadata\\\")\",\"fullName\":\"MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\\\"type-metadata\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.012044,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"MalformedSidecarFailsClosed(\\\"unknown-member\\\")\",\"fullName\":\"MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\\\"unknown-member\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.0126312,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"MalformedSidecarFailsClosed(\\\"duplicate-member\\\")\",\"fullName\":\"MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\\\"duplicate-member\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.0126245,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"MalformedSidecarFailsClosed(\\\"trailing-content\\\")\",\"fullName\":\"MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\\\"trailing-content\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.0119424,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"MalformedSidecarFailsClosed(\\\"comment\\\")\",\"fullName\":\"MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\\\"comment\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.0113635,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"OriginalMemoryCostsAndCapacityReachTheActualCoreRules\",\"fullName\":\"MemoryForge.PlayModeTests.RunClientContentPlayModeTests.OriginalMemoryCostsAndCapacityReachTheActualCoreRules\",\"state\":\"Passed\",\"durationSeconds\":0.0129475,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"PackagedSidecarCarriesEveryOriginalCostCapacityStatAndEvent\",\"fullName\":\"MemoryForge.PlayModeTests.RunClientContentPlayModeTests.PackagedSidecarCarriesEveryOriginalCostCapacityStatAndEvent\",\"state\":\"Passed\",\"durationSeconds\":0.0321021,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"UnmodifiedPackagedTextLoadsThroughFromJson\",\"fullName\":\"MemoryForge.PlayModeTests.RunClientContentPlayModeTests.UnmodifiedPackagedTextLoadsThroughFromJson\",\"state\":\"Passed\",\"durationSeconds\":0.0235334,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"LegacySeraLevel20CreatesSourceDeckMapAndDetachedQueries\",\"fullName\":\"MemoryForge.PlayModeTests.RunCreatePlayModeTests.LegacySeraLevel20CreatesSourceDeckMapAndDetachedQueries\",\"state\":\"Passed\",\"durationSeconds\":0.0059338,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"V2BasePlaySkipsOccupiedSavedIdentityAndKeepsInputsDetached\",\"fullName\":\"MemoryForge.PlayModeTests.RunCreatePlayModeTests.V2BasePlaySkipsOccupiedSavedIdentityAndKeepsInputsDetached\",\"state\":\"Passed\",\"durationSeconds\":0.005799,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"ActualMonoJsonNumbersMatchAllOriginalJsExactBits\",\"fullName\":\"MemoryForge.PlayModeTests.RunJsonNumberPlayModeTests.ActualMonoJsonNumbersMatchAllOriginalJsExactBits\",\"state\":\"Passed\",\"durationSeconds\":0.1356015,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"MatchingOriginalJsReceiptWithALargeIntegerVersionReplaysBeforePhaseCheck\",\"fullName\":\"MemoryForge.PlayModeTests.RunJsonNumberPlayModeTests.MatchingOriginalJsReceiptWithALargeIntegerVersionReplaysBeforePhaseCheck\",\"state\":\"Passed\",\"durationSeconds\":0.0139102,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"NearbyNumericReceiptBodiesRemainConflicts(\\\"next-double\\\")\",\"fullName\":\"MemoryForge.PlayModeTests.RunJsonNumberPlayModeTests.NearbyNumericReceiptBodiesRemainConflicts(\\\"next-double\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.0150825,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"NearbyNumericReceiptBodiesRemainConflicts(\\\"wrong-body\\\")\",\"fullName\":\"MemoryForge.PlayModeTests.RunJsonNumberPlayModeTests.NearbyNumericReceiptBodiesRemainConflicts(\\\"wrong-body\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.0143032,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"OriginalLegacyAndV2RunsSaveAndRestartThroughActualUnityCore\",\"fullName\":\"MemoryForge.PlayModeTests.RunMemoryFlowPlayModeTests.OriginalLegacyAndV2RunsSaveAndRestartThroughActualUnityCore\",\"state\":\"Passed\",\"durationSeconds\":2.0037103,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"ActualCommonAssignmentMatchesOriginalJs(\\\"legacy\\\")\",\"fullName\":\"MemoryForge.PlayModeTests.RunProgressionPlayModeTests.ActualCommonAssignmentMatchesOriginalJs(\\\"legacy\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.0156122,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"ActualCommonAssignmentMatchesOriginalJs(\\\"v2\\\")\",\"fullName\":\"MemoryForge.PlayModeTests.RunProgressionPlayModeTests.ActualCommonAssignmentMatchesOriginalJs(\\\"v2\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.0144888,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"ActualRunEnterBattleRewardAndProceedMatchEveryOriginalJsHash\",\"fullName\":\"MemoryForge.PlayModeTests.RunProgressionPlayModeTests.ActualRunEnterBattleRewardAndProceedMatchEveryOriginalJsHash\",\"state\":\"Passed\",\"durationSeconds\":0.0445802,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"SharedCoreHashesTheSameJsonInTheRunningPlayer\",\"fullName\":\"MemoryForge.PlayModeTests.SharedCorePlayModeTests.SharedCoreHashesTheSameJsonInTheRunningPlayer\",\"state\":\"Passed\",\"durationSeconds\":0.000247,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"SharedRngAndReservationsKeepTheirStateAcrossARealTurn\",\"fullName\":\"MemoryForge.PlayModeTests.SharedCorePlayModeTests.SharedRngAndReservationsKeepTheirStateAcrossARealTurn\",\"state\":\"Passed\",\"durationSeconds\":0.001663,\"message\":null,\"stackTrace\":null,\"output\":\"\"}]}},\"hint\":null}"
+    }
+  ],
+  "structuredContent": {
+    "result": {
+      "success": true,
+      "message": "Test job status retrieved.",
+      "error": null,
+      "data": {
+        "job_id": "b02b9434a32d469f81c09d4f8251c81f",
+        "status": "succeeded",
+        "mode": "PlayMode",
+        "started_unix_ms": 1792132682482,
+        "finished_unix_ms": 1792132742769,
+        "last_update_unix_ms": 1792132742769,
+        "progress": {
+          "completed": 147,
+          "total": 147,
+          "current_test_full_name": null,
+          "current_test_started_unix_ms": null,
+          "last_finished_test_full_name": "MemoryForge.PlayModeTests.SharedCorePlayModeTests.SharedRngAndReservationsKeepTheirStateAcrossARealTurn",
+          "last_finished_unix_ms": 1792132742728,
+          "stuck_suspected": false,
+          "editor_is_focused": true,
+          "run_in_background": false,
+          "focus_nudge_attempts": null,
+          "focus_nudge_limit": null,
+          "focus_nudge_status": null,
+          "blocked_reason": null,
+          "failures_so_far": [],
+          "failures_capped": false
+        },
+        "error": null,
+        "result": {
+          "mode": "PlayMode",
+          "summary": {
+            "total": 147,
+            "passed": 147,
+            "failed": 0,
+            "skipped": 0,
+            "durationSeconds": 54.604809,
+            "resultState": "Passed"
+          },
+          "results": [
+            {
+              "name": "ACommittedPlayIsShownInlineWhileOnlyThePureNextSelectionIsAccepted",
+              "fullName": "MemoryForge.Client.Tests.ActionPresentationPlayModeTests.ACommittedPlayIsShownInlineWhileOnlyThePureNextSelectionIsAccepted",
+              "state": "Passed",
+              "durationSeconds": 1.2802732,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "AHeldNextCardPressSurvivesTheDisplayCompletionAndItsReleaseSelectsOnce",
+              "fullName": "MemoryForge.Client.Tests.ActionPresentationPlayModeTests.AHeldNextCardPressSurvivesTheDisplayCompletionAndItsReleaseSelectsOnce",
+              "state": "Passed",
+              "durationSeconds": 1.0870249,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "AnActualUltimateIsPresentedAsItsOwnCommittedEvents",
+              "fullName": "MemoryForge.Client.Tests.ActionPresentationPlayModeTests.AnActualUltimateIsPresentedAsItsOwnCommittedEvents",
+              "state": "Passed",
+              "durationSeconds": 3.8136012,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "EveryPaceAndSkipLeaveTheSameCommittedStateAndChangeOnlyTheDisplay",
+              "fullName": "MemoryForge.Client.Tests.ActionPresentationPlayModeTests.EveryPaceAndSkipLeaveTheSameCommittedStateAndChangeOnlyTheDisplay",
+              "state": "Passed",
+              "durationSeconds": 3.3220105,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "FocusLossPauseAndDisableDropTheDisplayAndResumeRedrawsWithoutReplay",
+              "fullName": "MemoryForge.Client.Tests.ActionPresentationPlayModeTests.FocusLossPauseAndDisableDropTheDisplayAndResumeRedrawsWithoutReplay",
+              "state": "Passed",
+              "durationSeconds": 0.3712357,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "PickSheetAndTurnSummaryKeepTheirOwnLocksAroundTheDisplay",
+              "fullName": "MemoryForge.Client.Tests.ActionPresentationPlayModeTests.PickSheetAndTurnSummaryKeepTheirOwnLocksAroundTheDisplay",
+              "state": "Passed",
+              "durationSeconds": 0.2013766,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "RecoveryQuarantineOutranksAndOutlivesTheDisplay",
+              "fullName": "MemoryForge.Client.Tests.ActionPresentationPlayModeTests.RecoveryQuarantineOutranksAndOutlivesTheDisplay",
+              "state": "Passed",
+              "durationSeconds": 0.1101879,
+              "message": null,
+              "stackTrace": null,
+              "output": "[MemoryForge] Practice expedition quarantined after a failed local Run calculation (BATTLE_ENEMY_MOVE_NOT_IMPLEMENTED); the Run may be partly changed, so it will be discarded unsaved. Session memory version 0 is kept.\nMemoryForge.Core.RuleException: BATTLE_ENEMY_MOVE_NOT_IMPLEMENTED\n  at MemoryForge.Core.Battle.EnemyMove (MemoryForge.Core.BattleEnemyState enemy, MemoryForge.Core.EnemyMoveDef move) [0x00d34] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Battle.cs:633 \n  at MemoryForge.Core.Battle.EndTurn () [0x0021f] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Battle.cs:481 \n  at MemoryForge.Core.Battle.Command (MemoryForge.Core.BattleRequest request) [0x000dd] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Battle.cs:135 \n  at MemoryForge.Core.Run+<>c__DisplayClass55_0.<BattleCommand>b__0 () [0x00022] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Progression.cs:48 \n  at MemoryForge.Core.Run.Guarded[T] (System.Func`1[TResult] command) [0x00000] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Progression.cs:284 \n  at MemoryForge.Core.Run.BattleCommand (System.String kind, MemoryForge.Core.BattleArgument args) [0x0001a] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Progression.cs:44 \n  at MemoryForge.Client.MemoryForgeExpeditionClient+<>c__DisplayClass197_0.<SendBattle>b__0 () [0x00000] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:511 \n  at MemoryForge.Client.MemoryForgeExpeditionClient.Do (System.Action command, System.String success, System.Boolean render) [0x00046] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:717 \n"
+            },
+            {
+              "name": "TheBattlesLastActionCoversTheNextScreenUntilItEndsInPlace",
+              "fullName": "MemoryForge.Client.Tests.ActionPresentationPlayModeTests.TheBattlesLastActionCoversTheNextScreenUntilItEndsInPlace",
+              "state": "Passed",
+              "durationSeconds": 1.8727576,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "DefaultPracticeOpensTheReferenceBattleWithReadableCriticalLabels",
+              "fullName": "MemoryForge.Client.Tests.BattleClientPlayModeTests.DefaultPracticeOpensTheReferenceBattleWithReadableCriticalLabels",
+              "state": "Passed",
+              "durationSeconds": 0.053469,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "DrawForecastDoesNotRevealOrConsumeTheHiddenDeck",
+              "fullName": "MemoryForge.Client.Tests.BattleClientPlayModeTests.DrawForecastDoesNotRevealOrConsumeTheHiddenDeck",
+              "state": "Passed",
+              "durationSeconds": 0.049573,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "EnemyIntentForecastMatchesActualHitsAndStatusesAreVisible",
+              "fullName": "MemoryForge.Client.Tests.BattleClientPlayModeTests.EnemyIntentForecastMatchesActualHitsAndStatusesAreVisible",
+              "state": "Passed",
+              "durationSeconds": 0.0788437,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "ExportedContentLoadsEveryOriginalDefinitionAndRoundTripsExactly",
+              "fullName": "MemoryForge.Client.Tests.BattleClientPlayModeTests.ExportedContentLoadsEveryOriginalDefinitionAndRoundTripsExactly",
+              "state": "Passed",
+              "durationSeconds": 0.135336,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "ModeAndTargetSelectionSpendNothingAndHistoryBlocksBackgroundClicks",
+              "fullName": "MemoryForge.Client.Tests.BattleClientPlayModeTests.ModeAndTargetSelectionSpendNothingAndHistoryBlocksBackgroundClicks",
+              "state": "Passed",
+              "durationSeconds": 0.0796863,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "PreviewLeavesTheBattleUntouchedAndPlayCommitsThroughTheCore",
+              "fullName": "MemoryForge.Client.Tests.BattleClientPlayModeTests.PreviewLeavesTheBattleUntouchedAndPlayCommitsThroughTheCore",
+              "state": "Passed",
+              "durationSeconds": 0.0845448,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "ReservationResolvesOnTheNextTurnAndResetRebuildsOneOwnedView",
+              "fullName": "MemoryForge.Client.Tests.BattleClientPlayModeTests.ReservationResolvesOnTheNextTurnAndResetRebuildsOneOwnedView",
+              "state": "Passed",
+              "durationSeconds": 0.2070309,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "TimelineKeepsEveryReservationAfterSeraUltimateAndLabelsSealedSlots",
+              "fullName": "MemoryForge.Client.Tests.BattleClientPlayModeTests.TimelineKeepsEveryReservationAfterSeraUltimateAndLabelsSealedSlots",
+              "state": "Passed",
+              "durationSeconds": 0.042189,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "CandidateLateCorpusReplaysThroughMonoCore",
+              "fullName": "MemoryForge.Client.Tests.BattleLateActionsPlayModeTests.CandidateLateCorpusReplaysThroughMonoCore",
+              "state": "Passed",
+              "durationSeconds": 2.6417104,
+              "message": null,
+              "stackTrace": null,
+              "output": "BattleLateActionsPlayMode: 8459/8459 checks; 81 actual Battle.Create, 473 actual requests (445 committed, 2 replayed, 26 rejected), 554 compared checkpoints\n"
+            },
+            {
+              "name": "CopiesAreCopyRowsNotPlaysAndUseOnlyNamesTheEventsSupport",
+              "fullName": "MemoryForge.Client.Tests.BattleTurnDigestPlayModeTests.CopiesAreCopyRowsNotPlaysAndUseOnlyNamesTheEventsSupport",
+              "state": "Passed",
+              "durationSeconds": 0.0017411,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "EndTurnEventsKeepCoreChronologicalOrder",
+              "fullName": "MemoryForge.Client.Tests.BattleTurnDigestPlayModeTests.EndTurnEventsKeepCoreChronologicalOrder",
+              "state": "Passed",
+              "durationSeconds": 0.0013965,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "EnemyAttackCounterRelicBurnReflectAndOverloadKeepTheirOwnProvenance",
+              "fullName": "MemoryForge.Client.Tests.BattleTurnDigestPlayModeTests.EnemyAttackCounterRelicBurnReflectAndOverloadKeepTheirOwnProvenance",
+              "state": "Passed",
+              "durationSeconds": 0.0026069,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "ImmediateUseTimeReservationRegistrationAndReservationResolutionAreDistinctRows",
+              "fullName": "MemoryForge.Client.Tests.BattleTurnDigestPlayModeTests.ImmediateUseTimeReservationRegistrationAndReservationResolutionAreDistinctRows",
+              "state": "Passed",
+              "durationSeconds": 0.000778,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "PreviousIntentIsOnlyAnAnnouncementAndOnlyEventsOrFinalPublicStateReportWhatHappened",
+              "fullName": "MemoryForge.Client.Tests.BattleTurnDigestPlayModeTests.PreviousIntentIsOnlyAnAnnouncementAndOnlyEventsOrFinalPublicStateReportWhatHappened",
+              "state": "Passed",
+              "durationSeconds": 0.0007491,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "RowsAreReadOnlyAndDetachedFromLaterCallerMutationAndBuildDoesNotChangeItsInputs",
+              "fullName": "MemoryForge.Client.Tests.BattleTurnDigestPlayModeTests.RowsAreReadOnlyAndDetachedFromLaterCallerMutationAndBuildDoesNotChangeItsInputs",
+              "state": "Passed",
+              "durationSeconds": 0.0022978,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "SummaryAndFinalEnemyStateShowOnlyProjectedPublicDeltasIncludingVictoryAndDefeat",
+              "fullName": "MemoryForge.Client.Tests.BattleTurnDigestPlayModeTests.SummaryAndFinalEnemyStateShowOnlyProjectedPublicDeltasIncludingVictoryAndDefeat",
+              "state": "Passed",
+              "durationSeconds": 0.0009258,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "UnknownEventsMissingFieldsAndNullInputsGiveSafeGenericRows",
+              "fullName": "MemoryForge.Client.Tests.BattleTurnDigestPlayModeTests.UnknownEventsMissingFieldsAndNullInputsGiveSafeGenericRows",
+              "state": "Passed",
+              "durationSeconds": 0.0011246,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "AbandonKeepsTheSessionMemoryAndTheNextDepartureStartsFromIt",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionClientPlayModeTests.AbandonKeepsTheSessionMemoryAndTheNextDepartureStartsFromIt",
+              "state": "Passed",
+              "durationSeconds": 0.0841055,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "ActionLineShowsCoresForecastWhileSelectingAndOnlyTheConfirmedPlayMatchesItOnce",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionClientPlayModeTests.ActionLineShowsCoresForecastWhileSelectingAndOnlyTheConfirmedPlayMatchesItOnce",
+              "state": "Passed",
+              "durationSeconds": 0.7958437,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "ActualCommandsReachTheTerminalMemoryChoiceCommitAndDepartFromTheSavedVersion",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionClientPlayModeTests.ActualCommandsReachTheTerminalMemoryChoiceCommitAndDepartFromTheSavedVersion",
+              "state": "Passed",
+              "durationSeconds": 4.1547327,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "BattleSelectionSpendsNothingAndOnlyTheConfirmedPlayReachesTheRun",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionClientPlayModeTests.BattleSelectionSpendsNothingAndOnlyTheConfirmedPlayReachesTheRun",
+              "state": "Passed",
+              "durationSeconds": 0.3940034,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "DrawCardForecastHidesEveryNumberAndOnlyTheConfirmedPlayReachesTheRun",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionClientPlayModeTests.DrawCardForecastHidesEveryNumberAndOnlyTheConfirmedPlayReachesTheRun",
+              "state": "Passed",
+              "durationSeconds": 3.1142809,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "ForecastLabelsOfAuthoredCoreBattlesWarnDefeatAndHideDrawResults",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionClientPlayModeTests.ForecastLabelsOfAuthoredCoreBattlesWarnDefeatAndHideDrawResults",
+              "state": "Passed",
+              "durationSeconds": 0.0509972,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "FreshPracticeOpensTheActualReachableMapInOneOwnedCanvas",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionClientPlayModeTests.FreshPracticeOpensTheActualReachableMapInOneOwnedCanvas",
+              "state": "Passed",
+              "durationSeconds": 0.0606418,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "HandCardInfoIsCoresTextOfTheEffectiveCardAndOnlyTheLaterExplicitConfirmPlays",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionClientPlayModeTests.HandCardInfoIsCoresTextOfTheEffectiveCardAndOnlyTheLaterExplicitConfirmPlays",
+              "state": "Passed",
+              "durationSeconds": 0.2575275,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "NextIntentShowsItsForecastImmediatelyWhileThePreviousToastWouldStillBeActive",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionClientPlayModeTests.NextIntentShowsItsForecastImmediatelyWhileThePreviousToastWouldStillBeActive",
+              "state": "Passed",
+              "durationSeconds": 0.1320416,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "NoticeExpiryDuringAHeldPressKeepsTheViewAndTheReleaseEntersTheBattleOnce",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionClientPlayModeTests.NoticeExpiryDuringAHeldPressKeepsTheViewAndTheReleaseEntersTheBattleOnce",
+              "state": "Passed",
+              "durationSeconds": 2.6365654,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "PickSheetForecastsMatchTheAutoPromiseAndEachConcreteFinalCandidate",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionClientPlayModeTests.PickSheetForecastsMatchTheAutoPromiseAndEachConcreteFinalCandidate",
+              "state": "Passed",
+              "durationSeconds": 0.1350965,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "PointerOnAReachableNodeEntersTheActualBattleAndAnUnreachableNodeChangesNothing",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionClientPlayModeTests.PointerOnAReachableNodeEntersTheActualBattleAndAnUnreachableNodeChangesNothing",
+              "state": "Passed",
+              "durationSeconds": 0.0674328,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "ReservationEstimateLabelsOfAuthoredCoreBattlesKeepCostDueAndCurrentStateSemantics",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionClientPlayModeTests.ReservationEstimateLabelsOfAuthoredCoreBattlesKeepCostDueAndCurrentStateSemantics",
+              "state": "Passed",
+              "durationSeconds": 0.0742883,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "ReservationShowsItsCurrentStateEstimateAndOnlyTheConfirmSchedulesItWithoutApplyingIt",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionClientPlayModeTests.ReservationShowsItsCurrentStateEstimateAndOnlyTheConfirmSchedulesItWithoutApplyingIt",
+              "state": "Passed",
+              "durationSeconds": 0.1426806,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "RewardShopAndDeckDetailsAreReadableBeforeTakingOrPayingAndNeverChangeTheRun",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionClientPlayModeTests.RewardShopAndDeckDetailsAreReadableBeforeTakingOrPayingAndNeverChangeTheRun",
+              "state": "Passed",
+              "durationSeconds": 1.8094836,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "RunBattleQueriesAreDetachedPureReadsOfTheLiveBattle",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionClientPlayModeTests.RunBattleQueriesAreDetachedPureReadsOfTheLiveBattle",
+              "state": "Passed",
+              "durationSeconds": 0.0183066,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "ComparisonIsOrderFreeForObjectsOrderedForArraysAndExactForNestedDoubles",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionFailurePlayModeTests.ComparisonIsOrderFreeForObjectsOrderedForArraysAndExactForNestedDoubles",
+              "state": "Passed",
+              "durationSeconds": 0.0025758,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "FailedRecoveryRetriesKeepTheQuarantineAndTheEarnedSaveUntilARepairedRetryDepartsOnce",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionFailurePlayModeTests.FailedRecoveryRetriesKeepTheQuarantineAndTheEarnedSaveUntilARepairedRetryDepartsOnce",
+              "state": "Passed",
+              "durationSeconds": 0.6198955,
+              "message": null,
+              "stackTrace": null,
+              "output": "[MemoryForge] Practice expedition quarantined after a failed local Run calculation (UNKNOWN_ENEMY); the Run may be partly changed, so it will be discarded unsaved. Session memory version 1 is kept.\nMemoryForge.Core.RuleException: UNKNOWN_ENEMY\n  at MemoryForge.Core.Battle.AddEnemy (MemoryForge.Core.BattleState s, MemoryForge.Core.BattleData data, System.String id) [0x00134] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Battle.cs:76 \n  at MemoryForge.Core.Battle.Create (MemoryForge.Core.BattleData data, MemoryForge.Core.BattleSetup setup) [0x004c2] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Battle.cs:62 \n  at MemoryForge.Core.Run.StartBattle (System.String type) [0x00159] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Progression.cs:72 \n  at MemoryForge.Core.Run+<>c__DisplayClass54_0.<Enter>b__0 () [0x00157] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Progression.cs:26 \n  at MemoryForge.Core.Run.Guard (System.Action command) [0x00000] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Progression.cs:279 \n  at MemoryForge.Core.Run.Enter (System.String nodeId) [0x00013] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Progression.cs:18 \n  at MemoryForge.Client.MemoryForgeExpeditionClient+<>c__DisplayClass175_0.<EnterNode>b__0 () [0x00000] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:328 \n  at MemoryForge.Client.MemoryForgeExpeditionClient.Do (System.Action command, System.String success, System.Boolean render) [0x00046] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:717 \n[MemoryForge] Practice recovery could not start a new departure (NullReferenceException); the quarantine and session memory version 1 are kept.\nSystem.NullReferenceException: Object reference not set to an instance of an object\n  at MemoryForge.Core.RunData.Index () [0x00000] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/RunDefinitions.cs:149 \n  at MemoryForge.Core.Run.CreateCore (MemoryForge.Core.RunData data, MemoryForge.Core.RunSetup setup) [0x0000d] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.cs:28 \n  at MemoryForge.Core.Run.Create (MemoryForge.Core.RunData data, MemoryForge.Core.RunSetup setup) [0x00000] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.cs:23 \n  at MemoryForge.Client.MemoryForgeExpeditionClient.Depart (System.String length) [0x00095] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:299 \n  at MemoryForge.Client.MemoryForgeExpeditionClient.DiscardFailedPractice () [0x0009c] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:805 \n[MemoryForge] Practice recovery could not start a new departure (NullReferenceException); the quarantine and session memory version 1 are kept.\nSystem.NullReferenceException: Object reference not set to an instance of an object\n  at MemoryForge.Core.RunData.Index () [0x00000] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/RunDefinitions.cs:149 \n  at MemoryForge.Core.Run.CreateCore (MemoryForge.Core.RunData data, MemoryForge.Core.RunSetup setup) [0x0000d] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.cs:28 \n  at MemoryForge.Core.Run.Create (MemoryForge.Core.RunData data, MemoryForge.Core.RunSetup setup) [0x00000] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.cs:23 \n  at MemoryForge.Client.MemoryForgeExpeditionClient.Depart (System.String length) [0x00095] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:299 \n  at MemoryForge.Client.MemoryForgeExpeditionClient.DiscardFailedPractice () [0x0009c] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:805 \n"
+            },
+            {
+              "name": "FractionalOpaqueMetadataComparesExactlyWhereTheCanonicalHashRefuses",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionFailurePlayModeTests.FractionalOpaqueMetadataComparesExactlyWhereTheCanonicalHashRefuses",
+              "state": "Passed",
+              "durationSeconds": 0.0439571,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "OrdinaryUnchangedRejectionsStayToastsWithoutQuarantineOrErrorLog",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionFailurePlayModeTests.OrdinaryUnchangedRejectionsStayToastsWithoutQuarantineOrErrorLog",
+              "state": "Passed",
+              "durationSeconds": 0.1472586,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "PartialEnterFailureQuarantinesKeepsTheEarnedSaveAndTheDiscardDepartsFromIt",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionFailurePlayModeTests.PartialEnterFailureQuarantinesKeepsTheEarnedSaveAndTheDiscardDepartsFromIt",
+              "state": "Passed",
+              "durationSeconds": 0.3011559,
+              "message": null,
+              "stackTrace": null,
+              "output": "[MemoryForge] Practice expedition quarantined after a failed local Run calculation (UNKNOWN_ENEMY); the Run may be partly changed, so it will be discarded unsaved. Session memory version 1 is kept.\nMemoryForge.Core.RuleException: UNKNOWN_ENEMY\n  at MemoryForge.Core.Battle.AddEnemy (MemoryForge.Core.BattleState s, MemoryForge.Core.BattleData data, System.String id) [0x00134] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Battle.cs:76 \n  at MemoryForge.Core.Battle.Create (MemoryForge.Core.BattleData data, MemoryForge.Core.BattleSetup setup) [0x004c2] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Battle.cs:62 \n  at MemoryForge.Core.Run.StartBattle (System.String type) [0x00159] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Progression.cs:72 \n  at MemoryForge.Core.Run+<>c__DisplayClass54_0.<Enter>b__0 () [0x00157] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Progression.cs:26 \n  at MemoryForge.Core.Run.Guard (System.Action command) [0x00000] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Progression.cs:279 \n  at MemoryForge.Core.Run.Enter (System.String nodeId) [0x00013] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Progression.cs:18 \n  at MemoryForge.Client.MemoryForgeExpeditionClient+<>c__DisplayClass175_0.<EnterNode>b__0 () [0x00000] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:328 \n  at MemoryForge.Client.MemoryForgeExpeditionClient.Do (System.Action command, System.String success, System.Boolean render) [0x00046] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:717 \n"
+            },
+            {
+              "name": "ThePrivateDoBoundaryQuarantinesNonRuleFailuresAndChangedRunsButKeepsUnchangedInputRejections",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionFailurePlayModeTests.ThePrivateDoBoundaryQuarantinesNonRuleFailuresAndChangedRunsButKeepsUnchangedInputRejections",
+              "state": "Passed",
+              "durationSeconds": 0.0546494,
+              "message": null,
+              "stackTrace": null,
+              "output": "[MemoryForge] Practice expedition quarantined after a failed local Run calculation (InvalidOperationException); the Run may be partly changed, so it will be discarded unsaved. Session memory version 0 is kept.\nSystem.InvalidOperationException: test fault\n  at MemoryForge.Client.Tests.ExpeditionFailurePlayModeTests+<>c.<ThePrivateDoBoundaryQuarantinesNonRuleFailuresAndChangedRunsButKeepsUnchangedInputRejections>b__12_2 () [0x00000] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionFailurePlayModeTests.cs:325 \n  at MemoryForge.Client.MemoryForgeExpeditionClient.Do (System.Action command, System.String success, System.Boolean render) [0x00046] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:717 \n[MemoryForge] Practice expedition quarantined after a failed local Run calculation (NOT_IN_HAND); the Run may be partly changed, so it will be discarded unsaved. Session memory version 0 is kept.\nMemoryForge.Core.RuleException: NOT_IN_HAND\n  at MemoryForge.Client.Tests.ExpeditionFailurePlayModeTests+<>c__DisplayClass12_0.<ThePrivateDoBoundaryQuarantinesNonRuleFailuresAndChangedRunsButKeepsUnchangedInputRejections>b__3 () [0x00011] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionFailurePlayModeTests.cs:335 \n  at MemoryForge.Client.MemoryForgeExpeditionClient.Do (System.Action command, System.String success, System.Boolean render) [0x00046] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:717 \n"
+            },
+            {
+              "name": "UnknownBattleErrorQuarantinesEvenThoughTheBattleRolledBack",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionFailurePlayModeTests.UnknownBattleErrorQuarantinesEvenThoughTheBattleRolledBack",
+              "state": "Passed",
+              "durationSeconds": 0.1049535,
+              "message": null,
+              "stackTrace": null,
+              "output": "[MemoryForge] Practice expedition quarantined after a failed local Run calculation (BATTLE_ENEMY_MOVE_NOT_IMPLEMENTED); the Run may be partly changed, so it will be discarded unsaved. Session memory version 0 is kept.\nMemoryForge.Core.RuleException: BATTLE_ENEMY_MOVE_NOT_IMPLEMENTED\n  at MemoryForge.Core.Battle.EnemyMove (MemoryForge.Core.BattleEnemyState enemy, MemoryForge.Core.EnemyMoveDef move) [0x00d34] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Battle.cs:633 \n  at MemoryForge.Core.Battle.EndTurn () [0x0021f] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Battle.cs:481 \n  at MemoryForge.Core.Battle.Command (MemoryForge.Core.BattleRequest request) [0x000dd] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Battle.cs:135 \n  at MemoryForge.Core.Run+<>c__DisplayClass55_0.<BattleCommand>b__0 () [0x00022] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Progression.cs:48 \n  at MemoryForge.Core.Run.Guarded[T] (System.Func`1[TResult] command) [0x00000] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Progression.cs:284 \n  at MemoryForge.Core.Run.BattleCommand (System.String kind, MemoryForge.Core.BattleArgument args) [0x0001a] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Progression.cs:44 \n  at MemoryForge.Client.MemoryForgeExpeditionClient+<>c__DisplayClass197_0.<SendBattle>b__0 () [0x00000] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:511 \n  at MemoryForge.Client.MemoryForgeExpeditionClient.Do (System.Action command, System.String success, System.Boolean render) [0x00046] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:717 \n"
+            },
+            {
+              "name": "ACardWithoutPicksPlaysAtOnceAndNoSheetLockEngages",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionPickerGuardPlayModeTests.ACardWithoutPicksPlaysAtOnceAndNoSheetLockEngages",
+              "state": "Passed",
+              "durationSeconds": 0.1468324,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "AStaleSheetsStillDrawnCandidateCannotSendAndTheSheetCloses",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionPickerGuardPlayModeTests.AStaleSheetsStillDrawnCandidateCannotSendAndTheSheetCloses",
+              "state": "Passed",
+              "durationSeconds": 0.1275229,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "CancelRestoresTheSelectionAutoSendsCoresOwnChoiceOnceAndRecoveryStaysFirst",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionPickerGuardPlayModeTests.CancelRestoresTheSelectionAutoSendsCoresOwnChoiceOnceAndRecoveryStaysFirst",
+              "state": "Passed",
+              "durationSeconds": 0.1652076,
+              "message": null,
+              "stackTrace": null,
+              "output": "[MemoryForge] Practice expedition quarantined after a failed local Run calculation (InvalidOperationException); the Run may be partly changed, so it will be discarded unsaved. Session memory version 0 is kept.\nSystem.InvalidOperationException: test fault\n  at MemoryForge.Client.Tests.ExpeditionPickerGuardPlayModeTests+<>c.<CancelRestoresTheSelectionAutoSendsCoresOwnChoiceOnceAndRecoveryStaysFirst>b__17_3 () [0x00000] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionPickerGuardPlayModeTests.cs:376 \n  at MemoryForge.Client.MemoryForgeExpeditionClient.Do (System.Action command, System.String success, System.Boolean render) [0x00046] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:717 \n"
+            },
+            {
+              "name": "ResumeDropsASheetWhoseStateChangedBeneathItWithoutSending",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionPickerGuardPlayModeTests.ResumeDropsASheetWhoseStateChangedBeneathItWithoutSending",
+              "state": "Passed",
+              "durationSeconds": 0.0956932,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "ResumeKeepsACurrentSheetAndAutoNeverSendsAStaleOne",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionPickerGuardPlayModeTests.ResumeKeepsACurrentSheetAndAutoNeverSendsAStaleOne",
+              "state": "Passed",
+              "durationSeconds": 0.1096085,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "TestLocalTwoPickVariantKeepsTheFirstPickUnsentRefusesItsRepeatAndSendsOnce",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionPickerGuardPlayModeTests.TestLocalTwoPickVariantKeepsTheFirstPickUnsentRefusesItsRepeatAndSendsOnce",
+              "state": "Passed",
+              "durationSeconds": 0.1086735,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "TheSharedCandidateHelperFiltersSourceZoneRepeatsAndGrowthOnCoreBattleStates",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionPickerGuardPlayModeTests.TheSharedCandidateHelperFiltersSourceZoneRepeatsAndGrowthOnCoreBattleStates",
+              "state": "Passed",
+              "durationSeconds": 0.0168273,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "TheSheetAcceptsOnlyItsSharedCandidatesAndItsFinalPickIsExactlyOneActualPlay",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionPickerGuardPlayModeTests.TheSheetAcceptsOnlyItsSharedCandidatesAndItsFinalPickIsExactlyOneActualPlay",
+              "state": "Passed",
+              "durationSeconds": 0.330392,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "AHeldContinueSurvivesTheRevealStepsAndItsReleaseClosesTheSummaryOnce",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionTurnFlowPlayModeTests.AHeldContinueSurvivesTheRevealStepsAndItsReleaseClosesTheSummaryOnce",
+              "state": "Passed",
+              "durationSeconds": 0.404677,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "APickSheetPreparedBeforeAnEndDoesNotSurviveBeneathTheSummary",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionTurnFlowPlayModeTests.APickSheetPreparedBeforeAnEndDoesNotSurviveBeneathTheSummary",
+              "state": "Passed",
+              "durationSeconds": 0.1356499,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "BattleLogKeepsTheRecent40EventRowsThroughTheBattleEndAndResetsOnTheNextDeparture",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionTurnFlowPlayModeTests.BattleLogKeepsTheRecent40EventRowsThroughTheBattleEndAndResetsOnTheNextDeparture",
+              "state": "Passed",
+              "durationSeconds": 0.5390051,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "EveryPublicCommandAndSelectionUnderTheTurnBarrierIsRefusedBeforeTheRun",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionTurnFlowPlayModeTests.EveryPublicCommandAndSelectionUnderTheTurnBarrierIsRefusedBeforeTheRun",
+              "state": "Passed",
+              "durationSeconds": 0.1258775,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "LosingEndKeepsTheSaveScreenOpenAndItsRepeatedTapCannotCloseWithoutSaving",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionTurnFlowPlayModeTests.LosingEndKeepsTheSaveScreenOpenAndItsRepeatedTapCannotCloseWithoutSaving",
+              "state": "Passed",
+              "durationSeconds": 0.3501216,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "ReservationRowsRevealOnTheApprovedTimerAndSkipDisableOrResumeLeaveTheSameCommittedState",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionTurnFlowPlayModeTests.ReservationRowsRevealOnTheApprovedTimerAndSkipDisableOrResumeLeaveTheSameCommittedState",
+              "state": "Passed",
+              "durationSeconds": 1.0082207,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "TimeReservationSlotsBeneathTheSummaryAreOnlyCoresReservations",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionTurnFlowPlayModeTests.TimeReservationSlotsBeneathTheSummaryAreOnlyCoresReservations",
+              "state": "Passed",
+              "durationSeconds": 0.1423191,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "TwoTapsOnEndTurnAtOnePointAreExactlyOneEndAndContinueThenAcceptsTheNextEnd",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionTurnFlowPlayModeTests.TwoTapsOnEndTurnAtOnePointAreExactlyOneEndAndContinueThenAcceptsTheNextEnd",
+              "state": "Passed",
+              "durationSeconds": 0.1071706,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "WinningEndKeepsTheRewardsAndItsRepeatedTapCannotProceed",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionTurnFlowPlayModeTests.WinningEndKeepsTheRewardsAndItsRepeatedTapCannotProceed",
+              "state": "Passed",
+              "durationSeconds": 0.5975357,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "AChoiceSheetDuringTheDisplayFreezesItsFinalPickOrExplicitAutoAndNeverActsOnItsOwn",
+              "fullName": "MemoryForge.Client.Tests.PreparedIntentPlayModeTests.AChoiceSheetDuringTheDisplayFreezesItsFinalPickOrExplicitAutoAndNeverActsOnItsOwn",
+              "state": "Passed",
+              "durationSeconds": 1.371235,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "ACommittedChangeBeneathTheWaitingIntentDropsItWithoutAnyCommand",
+              "fullName": "MemoryForge.Client.Tests.PreparedIntentPlayModeTests.ACommittedChangeBeneathTheWaitingIntentDropsItWithoutAnyCommand",
+              "state": "Passed",
+              "durationSeconds": 0.3431058,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "AConfirmDuringTheDisplayIsOnePureUnsentIntentThatTheNaturalEndSendsOnce",
+              "fullName": "MemoryForge.Client.Tests.PreparedIntentPlayModeTests.AConfirmDuringTheDisplayIsOnePureUnsentIntentThatTheNaturalEndSendsOnce",
+              "state": "Passed",
+              "durationSeconds": 1.1582484,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "ADispatchedPlayThatEndsTheBattleLeavesNoIntentAndItsSheetRefusesPreparation",
+              "fullName": "MemoryForge.Client.Tests.PreparedIntentPlayModeTests.ADispatchedPlayThatEndsTheBattleLeavesNoIntentAndItsSheetRefusesPreparation",
+              "state": "Passed",
+              "durationSeconds": 1.1182783,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "AFullSlotRefusesAnOverwriteAndCancelOrOldButtonsSendNothing",
+              "fullName": "MemoryForge.Client.Tests.PreparedIntentPlayModeTests.AFullSlotRefusesAnOverwriteAndCancelOrOldButtonsSendNothing",
+              "state": "Passed",
+              "durationSeconds": 0.1611948,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "AHeldCancelSurvivesTheDisplayCompletionAndItsReleaseCancelsBeforeTheDispatch",
+              "fullName": "MemoryForge.Client.Tests.PreparedIntentPlayModeTests.AHeldCancelSurvivesTheDisplayCompletionAndItsReleaseCancelsBeforeTheDispatch",
+              "state": "Passed",
+              "durationSeconds": 1.09274,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "DoubleTapCancelNeverPreparesOrPlaysAgain",
+              "fullName": "MemoryForge.Client.Tests.PreparedIntentPlayModeTests.DoubleTapCancelNeverPreparesOrPlaysAgain",
+              "state": "Passed",
+              "durationSeconds": 1.0838876,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "DoubleTapConfirmKeepsOneUnsentIntent",
+              "fullName": "MemoryForge.Client.Tests.PreparedIntentPlayModeTests.DoubleTapConfirmKeepsOneUnsentIntent",
+              "state": "Passed",
+              "durationSeconds": 1.0939826,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "EveryPaceAndSkipSendTheSameFrozenRequestAndCommitTheSameTwoCommands",
+              "fullName": "MemoryForge.Client.Tests.PreparedIntentPlayModeTests.EveryPaceAndSkipSendTheSameFrozenRequestAndCommitTheSameTwoCommands",
+              "state": "Passed",
+              "durationSeconds": 3.3391436,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "LeavingTheAppOrDisablingDropsTheWaitingIntentWithoutUnseenExecution",
+              "fullName": "MemoryForge.Client.Tests.PreparedIntentPlayModeTests.LeavingTheAppOrDisablingDropsTheWaitingIntentWithoutUnseenExecution",
+              "state": "Passed",
+              "durationSeconds": 5.36915,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "NoSpentCardOrRefusedRequestBecomesAnIntentAndANextRequestTakesNoSlotUntilSent",
+              "fullName": "MemoryForge.Client.Tests.PreparedIntentPlayModeTests.NoSpentCardOrRefusedRequestBecomesAnIntentAndANextRequestTakesNoSlotUntilSent",
+              "state": "Passed",
+              "durationSeconds": 0.2342614,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "RecoveryAndTheTurnSummaryOutrankPreparation",
+              "fullName": "MemoryForge.Client.Tests.PreparedIntentPlayModeTests.RecoveryAndTheTurnSummaryOutrankPreparation",
+              "state": "Passed",
+              "durationSeconds": 0.0824874,
+              "message": null,
+              "stackTrace": null,
+              "output": "[MemoryForge] Practice expedition quarantined after a failed local Run calculation (BATTLE_ENEMY_MOVE_NOT_IMPLEMENTED); the Run may be partly changed, so it will be discarded unsaved. Session memory version 0 is kept.\nMemoryForge.Core.RuleException: BATTLE_ENEMY_MOVE_NOT_IMPLEMENTED\n  at MemoryForge.Core.Battle.EnemyMove (MemoryForge.Core.BattleEnemyState enemy, MemoryForge.Core.EnemyMoveDef move) [0x00d34] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Battle.cs:633 \n  at MemoryForge.Core.Battle.EndTurn () [0x0021f] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Battle.cs:481 \n  at MemoryForge.Core.Battle.Command (MemoryForge.Core.BattleRequest request) [0x000dd] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Battle.cs:135 \n  at MemoryForge.Core.Run+<>c__DisplayClass55_0.<BattleCommand>b__0 () [0x00022] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Progression.cs:48 \n  at MemoryForge.Core.Run.Guarded[T] (System.Func`1[TResult] command) [0x00000] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Progression.cs:284 \n  at MemoryForge.Core.Run.BattleCommand (System.String kind, MemoryForge.Core.BattleArgument args) [0x0001a] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Progression.cs:44 \n  at MemoryForge.Client.MemoryForgeExpeditionClient+<>c__DisplayClass197_0.<SendBattle>b__0 () [0x00000] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:511 \n  at MemoryForge.Client.MemoryForgeExpeditionClient.Do (System.Action command, System.String success, System.Boolean render) [0x00046] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:717 \n"
+            },
+            {
+              "name": "AuthoredBulwarkRetainsTenBlockOnTheNextTurn",
+              "fullName": "MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.AuthoredBulwarkRetainsTenBlockOnTheNextTurn",
+              "state": "Passed",
+              "durationSeconds": 0.0040628,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "AuthoredOpeningAndIdempotentRetryExecuteInsidePlayMode",
+              "fullName": "MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.AuthoredOpeningAndIdempotentRetryExecuteInsidePlayMode",
+              "state": "Passed",
+              "durationSeconds": 0.0006883,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "AuthoredUltimateSpendsGaugeWithoutPlayingTheCardInHand",
+              "fullName": "MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.AuthoredUltimateSpendsGaugeWithoutPlayingTheCardInHand",
+              "state": "Passed",
+              "durationSeconds": 0.0005699,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "CircuitTerminationAndEnvelopeSurvivalExecuteInsidePlayMode(False)",
+              "fullName": "MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.CircuitTerminationAndEnvelopeSurvivalExecuteInsidePlayMode(False)",
+              "state": "Passed",
+              "durationSeconds": 0.0004308,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "CircuitTerminationAndEnvelopeSurvivalExecuteInsidePlayMode(True)",
+              "fullName": "MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.CircuitTerminationAndEnvelopeSurvivalExecuteInsidePlayMode(True)",
+              "state": "Passed",
+              "durationSeconds": 0.0001307,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "EnemyPhaseAndNextPlayerTurnReuseTheAuthoredOpening",
+              "fullName": "MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.EnemyPhaseAndNextPlayerTurnReuseTheAuthoredOpening",
+              "state": "Passed",
+              "durationSeconds": 0.0004849,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "ExhaustKillReshuffleUsesTheCurrentDiscardPile",
+              "fullName": "MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.ExhaustKillReshuffleUsesTheCurrentDiscardPile",
+              "state": "Passed",
+              "durationSeconds": 0.0033674,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "PureCardQueriesReturnDetachedDefinitionsWithoutChangingTheRunningBattle",
+              "fullName": "MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.PureCardQueriesReturnDetachedDefinitionsWithoutChangingTheRunningBattle",
+              "state": "Passed",
+              "durationSeconds": 0.0007812,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "ReservedShieldPaysNowAndEarnsGaugeOnlyWhenResolved",
+              "fullName": "MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.ReservedShieldPaysNowAndEarnsGaugeOnlyWhenResolved",
+              "state": "Passed",
+              "durationSeconds": 0.0005855,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "UsedEnvelopeDoesNotHideAFatalSecondTurnCircuitCost",
+              "fullName": "MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.UsedEnvelopeDoesNotHideAFatalSecondTurnCircuitCost",
+              "state": "Passed",
+              "durationSeconds": 0.0003743,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "CompleteResultCostDecidesSelectedChangesWithDetachedGraphs",
+              "fullName": "MemoryForge.PlayModeTests.MemoryRulesPlayModeTests.CompleteResultCostDecidesSelectedChangesWithDetachedGraphs",
+              "state": "Passed",
+              "durationSeconds": 0.0031105,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "MigrationArrayRowsDoNotHideEarlierValidationErrors(False,\"INVALID_UPGRADE\")",
+              "fullName": "MemoryForge.PlayModeTests.MemoryRulesPlayModeTests.MigrationArrayRowsDoNotHideEarlierValidationErrors(False,\"INVALID_UPGRADE\")",
+              "state": "Passed",
+              "durationSeconds": 0.0005839,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "MigrationArrayRowsDoNotHideEarlierValidationErrors(True,\"IDENTITY_REQUIRED\")",
+              "fullName": "MemoryForge.PlayModeTests.MemoryRulesPlayModeTests.MigrationArrayRowsDoNotHideEarlierValidationErrors(True,\"IDENTITY_REQUIRED\")",
+              "state": "Passed",
+              "durationSeconds": 7.55e-05,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "MigrationQuarantinesAnOwnProtoOwnerWithItsCompleteOriginal",
+              "fullName": "MemoryForge.PlayModeTests.MemoryRulesPlayModeTests.MigrationQuarantinesAnOwnProtoOwnerWithItsCompleteOriginal",
+              "state": "Passed",
+              "durationSeconds": 0.0009268,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "ActualRunCreateFromPackagedContentMatchesOriginalJs(\"legacy\",\"56a6ba8623a1cb296f5a8c83f5c855464a04aea56aaeec9838b1455d272a1973\")",
+              "fullName": "MemoryForge.PlayModeTests.RunClientContentPlayModeTests.ActualRunCreateFromPackagedContentMatchesOriginalJs(\"legacy\",\"56a6ba8623a1cb296f5a8c83f5c855464a04aea56aaeec9838b1455d272a1973\")",
+              "state": "Passed",
+              "durationSeconds": 0.0135059,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "ActualRunCreateFromPackagedContentMatchesOriginalJs(\"v2\",\"11a43e7465dc0089d3b8fdfded7acc4b12c84ef0cd77d38a3df66acc075c7cc3\")",
+              "fullName": "MemoryForge.PlayModeTests.RunClientContentPlayModeTests.ActualRunCreateFromPackagedContentMatchesOriginalJs(\"v2\",\"11a43e7465dc0089d3b8fdfded7acc4b12c84ef0cd77d38a3df66acc075c7cc3\")",
+              "state": "Passed",
+              "durationSeconds": 0.0130939,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "EveryLoadReturnsFreshDataWithoutASharedMutableCache",
+              "fullName": "MemoryForge.PlayModeTests.RunClientContentPlayModeTests.EveryLoadReturnsFreshDataWithoutASharedMutableCache",
+              "state": "Passed",
+              "durationSeconds": 0.0395943,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "MalformedSidecarFailsClosed(\"missing-stat\")",
+              "fullName": "MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\"missing-stat\")",
+              "state": "Passed",
+              "durationSeconds": 0.0150557,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "MalformedSidecarFailsClosed(\"missing-stat-ratio\")",
+              "fullName": "MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\"missing-stat-ratio\")",
+              "state": "Passed",
+              "durationSeconds": 0.0118773,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "MalformedSidecarFailsClosed(\"missing-stage-weapon\")",
+              "fullName": "MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\"missing-stage-weapon\")",
+              "state": "Passed",
+              "durationSeconds": 0.0119962,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "MalformedSidecarFailsClosed(\"null-stats\")",
+              "fullName": "MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\"null-stats\")",
+              "state": "Passed",
+              "durationSeconds": 0.0118184,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "MalformedSidecarFailsClosed(\"missing-cost\")",
+              "fullName": "MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\"missing-cost\")",
+              "state": "Passed",
+              "durationSeconds": 0.0116401,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "MalformedSidecarFailsClosed(\"null-cost\")",
+              "fullName": "MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\"null-cost\")",
+              "state": "Passed",
+              "durationSeconds": 0.0122011,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "MalformedSidecarFailsClosed(\"string-cost\")",
+              "fullName": "MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\"string-cost\")",
+              "state": "Passed",
+              "durationSeconds": 0.012216,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "MalformedSidecarFailsClosed(\"fractional-cost\")",
+              "fullName": "MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\"fractional-cost\")",
+              "state": "Passed",
+              "durationSeconds": 0.013115,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "MalformedSidecarFailsClosed(\"float-integral-cost\")",
+              "fullName": "MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\"float-integral-cost\")",
+              "state": "Passed",
+              "durationSeconds": 0.011873,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "MalformedSidecarFailsClosed(\"overflow-cost\")",
+              "fullName": "MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\"overflow-cost\")",
+              "state": "Passed",
+              "durationSeconds": 0.0122049,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "MalformedSidecarFailsClosed(\"negative-cost\")",
+              "fullName": "MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\"negative-cost\")",
+              "state": "Passed",
+              "durationSeconds": 0.0125569,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "MalformedSidecarFailsClosed(\"unknown-cost\")",
+              "fullName": "MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\"unknown-cost\")",
+              "state": "Passed",
+              "durationSeconds": 0.0120115,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "MalformedSidecarFailsClosed(\"missing-capacity\")",
+              "fullName": "MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\"missing-capacity\")",
+              "state": "Passed",
+              "durationSeconds": 0.0120858,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "MalformedSidecarFailsClosed(\"missing-ascension\")",
+              "fullName": "MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\"missing-ascension\")",
+              "state": "Passed",
+              "durationSeconds": 0.0120569,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "MalformedSidecarFailsClosed(\"missing-ascension-add\")",
+              "fullName": "MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\"missing-ascension-add\")",
+              "state": "Passed",
+              "durationSeconds": 0.0120006,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "MalformedSidecarFailsClosed(\"missing-events\")",
+              "fullName": "MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\"missing-events\")",
+              "state": "Passed",
+              "durationSeconds": 0.0113122,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "MalformedSidecarFailsClosed(\"empty-events\")",
+              "fullName": "MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\"empty-events\")",
+              "state": "Passed",
+              "durationSeconds": 0.011783,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "MalformedSidecarFailsClosed(\"dropped-event\")",
+              "fullName": "MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\"dropped-event\")",
+              "state": "Passed",
+              "durationSeconds": 0.011902,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "MalformedSidecarFailsClosed(\"missing-event-count\")",
+              "fullName": "MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\"missing-event-count\")",
+              "state": "Passed",
+              "durationSeconds": 0.0116612,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "MalformedSidecarFailsClosed(\"missing-effect-key\")",
+              "fullName": "MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\"missing-effect-key\")",
+              "state": "Passed",
+              "durationSeconds": 0.0117896,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "MalformedSidecarFailsClosed(\"missing-need\")",
+              "fullName": "MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\"missing-need\")",
+              "state": "Passed",
+              "durationSeconds": 0.0116753,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "MalformedSidecarFailsClosed(\"null-choice\")",
+              "fullName": "MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\"null-choice\")",
+              "state": "Passed",
+              "durationSeconds": 0.0119475,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "MalformedSidecarFailsClosed(\"empty-choices\")",
+              "fullName": "MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\"empty-choices\")",
+              "state": "Passed",
+              "durationSeconds": 0.011734,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "MalformedSidecarFailsClosed(\"unknown-effect\")",
+              "fullName": "MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\"unknown-effect\")",
+              "state": "Passed",
+              "durationSeconds": 0.0118295,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "MalformedSidecarFailsClosed(\"duplicate-event-id\")",
+              "fullName": "MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\"duplicate-event-id\")",
+              "state": "Passed",
+              "durationSeconds": 0.012269,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "MalformedSidecarFailsClosed(\"unresolved-curse\")",
+              "fullName": "MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\"unresolved-curse\")",
+              "state": "Passed",
+              "durationSeconds": 0.0117396,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "MalformedSidecarFailsClosed(\"unresolved-card-rarity\")",
+              "fullName": "MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\"unresolved-card-rarity\")",
+              "state": "Passed",
+              "durationSeconds": 0.0116617,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "MalformedSidecarFailsClosed(\"unresolved-stage-weapon\")",
+              "fullName": "MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\"unresolved-stage-weapon\")",
+              "state": "Passed",
+              "durationSeconds": 0.0120057,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "MalformedSidecarFailsClosed(\"sha-mismatch\")",
+              "fullName": "MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\"sha-mismatch\")",
+              "state": "Passed",
+              "durationSeconds": 0.0117067,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "MalformedSidecarFailsClosed(\"missing-sha\")",
+              "fullName": "MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\"missing-sha\")",
+              "state": "Passed",
+              "durationSeconds": 0.0118531,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "MalformedSidecarFailsClosed(\"version-mismatch\")",
+              "fullName": "MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\"version-mismatch\")",
+              "state": "Passed",
+              "durationSeconds": 0.0119877,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "MalformedSidecarFailsClosed(\"missing-version\")",
+              "fullName": "MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\"missing-version\")",
+              "state": "Passed",
+              "durationSeconds": 0.0116531,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "MalformedSidecarFailsClosed(\"schema\")",
+              "fullName": "MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\"schema\")",
+              "state": "Passed",
+              "durationSeconds": 0.0117779,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "MalformedSidecarFailsClosed(\"type-metadata\")",
+              "fullName": "MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\"type-metadata\")",
+              "state": "Passed",
+              "durationSeconds": 0.012044,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "MalformedSidecarFailsClosed(\"unknown-member\")",
+              "fullName": "MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\"unknown-member\")",
+              "state": "Passed",
+              "durationSeconds": 0.0126312,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "MalformedSidecarFailsClosed(\"duplicate-member\")",
+              "fullName": "MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\"duplicate-member\")",
+              "state": "Passed",
+              "durationSeconds": 0.0126245,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "MalformedSidecarFailsClosed(\"trailing-content\")",
+              "fullName": "MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\"trailing-content\")",
+              "state": "Passed",
+              "durationSeconds": 0.0119424,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "MalformedSidecarFailsClosed(\"comment\")",
+              "fullName": "MemoryForge.PlayModeTests.RunClientContentPlayModeTests.MalformedSidecarFailsClosed(\"comment\")",
+              "state": "Passed",
+              "durationSeconds": 0.0113635,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "OriginalMemoryCostsAndCapacityReachTheActualCoreRules",
+              "fullName": "MemoryForge.PlayModeTests.RunClientContentPlayModeTests.OriginalMemoryCostsAndCapacityReachTheActualCoreRules",
+              "state": "Passed",
+              "durationSeconds": 0.0129475,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "PackagedSidecarCarriesEveryOriginalCostCapacityStatAndEvent",
+              "fullName": "MemoryForge.PlayModeTests.RunClientContentPlayModeTests.PackagedSidecarCarriesEveryOriginalCostCapacityStatAndEvent",
+              "state": "Passed",
+              "durationSeconds": 0.0321021,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "UnmodifiedPackagedTextLoadsThroughFromJson",
+              "fullName": "MemoryForge.PlayModeTests.RunClientContentPlayModeTests.UnmodifiedPackagedTextLoadsThroughFromJson",
+              "state": "Passed",
+              "durationSeconds": 0.0235334,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "LegacySeraLevel20CreatesSourceDeckMapAndDetachedQueries",
+              "fullName": "MemoryForge.PlayModeTests.RunCreatePlayModeTests.LegacySeraLevel20CreatesSourceDeckMapAndDetachedQueries",
+              "state": "Passed",
+              "durationSeconds": 0.0059338,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "V2BasePlaySkipsOccupiedSavedIdentityAndKeepsInputsDetached",
+              "fullName": "MemoryForge.PlayModeTests.RunCreatePlayModeTests.V2BasePlaySkipsOccupiedSavedIdentityAndKeepsInputsDetached",
+              "state": "Passed",
+              "durationSeconds": 0.005799,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "ActualMonoJsonNumbersMatchAllOriginalJsExactBits",
+              "fullName": "MemoryForge.PlayModeTests.RunJsonNumberPlayModeTests.ActualMonoJsonNumbersMatchAllOriginalJsExactBits",
+              "state": "Passed",
+              "durationSeconds": 0.1356015,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "MatchingOriginalJsReceiptWithALargeIntegerVersionReplaysBeforePhaseCheck",
+              "fullName": "MemoryForge.PlayModeTests.RunJsonNumberPlayModeTests.MatchingOriginalJsReceiptWithALargeIntegerVersionReplaysBeforePhaseCheck",
+              "state": "Passed",
+              "durationSeconds": 0.0139102,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "NearbyNumericReceiptBodiesRemainConflicts(\"next-double\")",
+              "fullName": "MemoryForge.PlayModeTests.RunJsonNumberPlayModeTests.NearbyNumericReceiptBodiesRemainConflicts(\"next-double\")",
+              "state": "Passed",
+              "durationSeconds": 0.0150825,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "NearbyNumericReceiptBodiesRemainConflicts(\"wrong-body\")",
+              "fullName": "MemoryForge.PlayModeTests.RunJsonNumberPlayModeTests.NearbyNumericReceiptBodiesRemainConflicts(\"wrong-body\")",
+              "state": "Passed",
+              "durationSeconds": 0.0143032,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "OriginalLegacyAndV2RunsSaveAndRestartThroughActualUnityCore",
+              "fullName": "MemoryForge.PlayModeTests.RunMemoryFlowPlayModeTests.OriginalLegacyAndV2RunsSaveAndRestartThroughActualUnityCore",
+              "state": "Passed",
+              "durationSeconds": 2.0037103,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "ActualCommonAssignmentMatchesOriginalJs(\"legacy\")",
+              "fullName": "MemoryForge.PlayModeTests.RunProgressionPlayModeTests.ActualCommonAssignmentMatchesOriginalJs(\"legacy\")",
+              "state": "Passed",
+              "durationSeconds": 0.0156122,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "ActualCommonAssignmentMatchesOriginalJs(\"v2\")",
+              "fullName": "MemoryForge.PlayModeTests.RunProgressionPlayModeTests.ActualCommonAssignmentMatchesOriginalJs(\"v2\")",
+              "state": "Passed",
+              "durationSeconds": 0.0144888,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "ActualRunEnterBattleRewardAndProceedMatchEveryOriginalJsHash",
+              "fullName": "MemoryForge.PlayModeTests.RunProgressionPlayModeTests.ActualRunEnterBattleRewardAndProceedMatchEveryOriginalJsHash",
+              "state": "Passed",
+              "durationSeconds": 0.0445802,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "SharedCoreHashesTheSameJsonInTheRunningPlayer",
+              "fullName": "MemoryForge.PlayModeTests.SharedCorePlayModeTests.SharedCoreHashesTheSameJsonInTheRunningPlayer",
+              "state": "Passed",
+              "durationSeconds": 0.000247,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "SharedRngAndReservationsKeepTheirStateAcrossARealTurn",
+              "fullName": "MemoryForge.PlayModeTests.SharedCorePlayModeTests.SharedRngAndReservationsKeepTheirStateAcrossARealTurn",
+              "state": "Passed",
+              "durationSeconds": 0.001663,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            }
+          ]
+        }
+      },
+      "hint": null
+    }
+  },
+  "isError": false
+}

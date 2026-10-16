@@ -1,0 +1,25 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Build Succeeded.\",\"data\":{\"job_id\":\"build-5a0933a392\",\"result\":\"succeeded\",\"platform\":\"StandaloneOSX\",\"output_path\":\"/Users/choi/Documents/Memory_forge/ops/ai/local/builds/MemoryForgeExpedition-PreparedSafe-20261016.app\",\"started_at\":\"2026-10-16T06:45:43.337929Z\",\"duration_seconds\":9.889073,\"completed_at\":\"2026-10-16T06:45:53.227002Z\",\"total_size_mb\":255.11,\"errors\":0,\"warnings\":0}}"
+    }
+  ],
+  "structuredContent": {
+    "success": true,
+    "message": "Build Succeeded.",
+    "data": {
+      "job_id": "build-5a0933a392",
+      "result": "succeeded",
+      "platform": "StandaloneOSX",
+      "output_path": "/Users/choi/Documents/Memory_forge/ops/ai/local/builds/MemoryForgeExpedition-PreparedSafe-20261016.app",
+      "started_at": "2026-10-16T06:45:43.337929Z",
+      "duration_seconds": 9.889073,
+      "completed_at": "2026-10-16T06:45:53.227002Z",
+      "total_size_mb": 255.11,
+      "errors": 0,
+      "warnings": 0
+    }
+  },
+  "isError": false
+}

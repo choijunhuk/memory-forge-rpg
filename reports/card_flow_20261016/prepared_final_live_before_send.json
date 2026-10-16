@@ -1,0 +1,33 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"firstActualCommit\":true,\"firstFullJsonMatchesMirror\":true,\"confirmReturned\":false,\"hasPrepared\":true,\"preparedCard\":\"c1\",\"preparedMode\":\"now\",\"preparedTarget\":\"e19\",\"preparedFullJsonPure\":true,\"storeUnchanged\":true,\"ap\":3,\"block\":8,\"version\":2,\"turn\":1,\"timeReservations\":0,\"expectedStateInjected\":false},\"compiler\":\"codedom\"}}"
+    }
+  ],
+  "structuredContent": {
+    "success": true,
+    "message": "Code executed successfully.",
+    "data": {
+      "result": {
+        "firstActualCommit": true,
+        "firstFullJsonMatchesMirror": true,
+        "confirmReturned": false,
+        "hasPrepared": true,
+        "preparedCard": "c1",
+        "preparedMode": "now",
+        "preparedTarget": "e19",
+        "preparedFullJsonPure": true,
+        "storeUnchanged": true,
+        "ap": 3,
+        "block": 8,
+        "version": 2,
+        "turn": 1,
+        "timeReservations": 0,
+        "expectedStateInjected": false
+      },
+      "compiler": "codedom"
+    }
+  },
+  "isError": false
+}

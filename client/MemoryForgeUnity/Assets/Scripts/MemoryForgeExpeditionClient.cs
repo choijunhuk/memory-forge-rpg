@@ -33,6 +33,10 @@ namespace MemoryForge.Client
     // small inline strip (a covering sheet once the battle has ended) over the already committed view. Meanwhile only the pure next card/
     // mode/target selection is accepted; every command is refused until the display finishes, skips or is dropped. Speed, reduced motion
     // and skip change only that text (local prototype timing, unscaled real time), never Time.timeScale or the Run.
+    // P1-CARD-FLOW-ONE-UNSENT-INTENT §14.2/§14.3/§14.7: during a non-terminal display the player may confirm at most one next play (a
+    // local UI bound, not a reservation slot). Its request is frozen with the state it was confirmed in and nothing reaches the Run; on
+    // the Update after the display closes it is taken, checked against that state and sent as exactly one Run.BattleCommand, or dropped
+    // with its reason. Cancel, leaving the app or disabling drops it unsent. There is no server, ACK or request id behind it.
     [ExecuteAlways]
     public sealed class MemoryForgeExpeditionClient : MonoBehaviour
     {
@@ -97,6 +101,17 @@ namespace MemoryForge.Client
         public int ActionPresentationShown => actionRows == null ? 0 : actionShown;
         /// <summary>True while the open display is the battle's last command (the battle has left the Run): it covers the next screen.</summary>
         public bool ActionPresentationTerminal => actionRows != null && actionTerminal;
+        /// <summary>How many confirmed plays may wait unsent: a conservative local UI bound, not a measured value or a reservation slot.</summary>
+        public const int PreparedLimit = 1;
+        /// <summary>True while one confirmed play waits unsent for the current player-action display to finish. It reaches the Run only
+        /// at the dispatch on the Update after the display closes, or is dropped. A confirm that prepares it returns false.</summary>
+        public bool HasPreparedIntent => prepared != null;
+        /// <summary>The waiting intent's frozen card uid, mode and target; null without one.</summary>
+        public string? PreparedCard => prepared?.Uid;
+        public string? PreparedMode => prepared?.Mode;
+        public string? PreparedTarget => prepared?.Target;
+        /// <summary>A copy of the waiting intent's frozen ordered picks; empty without one (or for no picks: Core's own choice).</summary>
+        public IReadOnlyList<string> PreparedPicks => prepared?.Picks.ToArray() ?? Array.Empty<string>();
 
         enum Sheet { None, Deck, Log, Abandon, Assign, DeckPick }
         enum Purpose { Upgrade, ForgeOffer, ForgeRemove, ShopRemove, EventCards, FoundPart }
@@ -110,6 +125,16 @@ namespace MemoryForge.Client
             public CoreRun? Run;
             public string? Node, Target;
             public int Version;
+        }
+        // The one confirmed, unsent next play (see Prepare): its frozen request and the state it was confirmed in. Never changed once made.
+        sealed class PreparedPlay
+        {
+            public string Uid = "", Mode = "now";
+            public string? Target, Node;
+            public IReadOnlyList<(string Label, string From, int Count, bool GrowthOnly)> Requests = Array.Empty<(string, string, int, bool)>();
+            public IReadOnlyList<string> Picks = Array.Empty<string>();
+            public CoreRun? Run;
+            public int Version, Turn;
         }
         // A read-only snapshot for the detail overlay; opening or closing it never reaches the Run.
         sealed class CardInfo
@@ -131,6 +156,7 @@ namespace MemoryForge.Client
         Font? font;
         string? selectedCard, selectedMode, target;
         BattlePick? picker;
+        PreparedPlay? prepared;
         CardInfo? cardInfo;
         Sheet sheet;
         Purpose purpose;
@@ -164,6 +190,7 @@ namespace MemoryForge.Client
         ActionPacing actionPace = ActionPacing.Normal;
         Text? actionText, actionStatus;
         Button? actionSkip;
+        Text? confirmCaption; // the plain confirm's caption, rewritten in place when a display opens or closes (사용 대기 / 사용 확정)
         GameObject? actionOverlay;
         readonly List<(Selectable Control, bool Enabled)> actionGated = new List<(Selectable, bool)>();
         readonly List<(Image Back, Text Caption, ActionPacing Pace)> paceButtons = new List<(Image, Text, ActionPacing)>();
@@ -174,6 +201,9 @@ namespace MemoryForge.Client
         // Pick sheet refusals: another command or selection while a sheet is open, a card outside its drawn list, and any pick or auto
         // once the state the sheet was opened in is gone. These are local client codes; Core never sees the refused input.
         const string PickSheetOpen = "PICKER_OPEN", PickInvalid = "PICK_INVALID", PickStale = "PICK_STALE";
+        // Unsent-intent codes (local, never sent to Core): a command, selection or second confirm while one waits; a waiting request whose
+        // confirmed state is gone at its dispatch; one dropped because the app was left or the view disabled.
+        const string IntentPending = "INTENT_PENDING", IntentStale = "INTENT_STALE", IntentDropped = "INTENT_DROPPED";
         // Ordinary input rejections: Core refuses the request as asked (wrong phase, unreachable node, missing card/target/AP, unpaid
         // price, invalid memory selection…) after checks that precede any change. Only these, and only when the Run and the session
         // store compare unchanged, stay a normal toast. Engine/definition gaps, invariants, number ranges, unknown ids, malformed
@@ -197,26 +227,30 @@ namespace MemoryForge.Client
             if (Resources.Load<TextAsset>(ClientRunContent.ResourcePath) == null || Resources.Load<TextAsset>("MemoryForge/battle-content") == null) return;
             if (run == null) StartPractice(); else Render();
         }
-        // Disabling drops only the cosmetic summary, the player-action display and their timers; OnEnable redraws the actual Run without
-        // restarting or changing it.
-        void OnDisable() { RemoveView(); CloseTurnSummary(); CloseActionPresentation(); }
+        // Disabling drops only the cosmetic summary, the player-action display and their timers, and the unsent intent (never sent);
+        // OnEnable redraws the actual Run without restarting or changing it.
+        void OnDisable() { RemoveView(); CloseTurnSummary(); CloseActionPresentation(); DropPrepared(IntentDropped); }
         void Update()
         {
             FitView();
             if (noticeUntil > 0 && Time.realtimeSinceStartup >= noticeUntil) ExpireNotice();
             if (turnSummary != null && summaryShown < turnSummary.Count) AdvanceTurnSummary(Time.realtimeSinceStartup);
             if (actionRows != null) AdvanceActionPresentation(Time.realtimeSinceStartup);
+            else if (prepared != null) DispatchPrepared(); // the Update after the display closed on its timer or by skip
         }
-        void OnApplicationPause(bool paused) { if (paused) DropActionPresentation(); else ResumeView(); }
-        void OnApplicationFocus(bool focused) { if (focused) ResumeView(); else DropActionPresentation(); }
-        // Resume: a pick sheet whose opening state is gone (Fresh) is dropped, and the view is redrawn from the actual Run only when that
-        // happened, a player-action display was dropped while away, or the view is missing. No Run command, replay, restart or server
-        // fetch; an open summary stays (it is not stale).
+        void OnApplicationPause(bool paused) { if (paused) Leave(); else ResumeView(); }
+        void OnApplicationFocus(bool focused) { if (focused) ResumeView(); else Leave(); }
+        // Leaving the app (focus loss, pause) drops the unsent intent, so nothing is sent unseen, and then the committed display.
+        void Leave() { if (DropPrepared(IntentDropped)) actionDropped = true; DropActionPresentation(); }
+        // Resume: an unsent intent still waiting is dropped (never sent on resume), a pick sheet whose opening state is gone (Fresh) is
+        // dropped, and the view is redrawn from the actual Run only when one of those happened, a player-action display or intent was
+        // dropped while away, or the view is missing. No Run command, replay, restart or server fetch; an open summary stays (it is not stale).
         void ResumeView()
         {
             if (!Application.isPlaying || !isActiveAndEnabled || run == null || data == null || font == null) return;
             if (recovery != null) { if (canvasRoot == null) Render(); return; } // the failed Run is not read; the quarantine stays
             var s = run.State; bool stale = actionDropped; actionDropped = false;
+            if (DropPrepared(IntentDropped)) stale = true;
             if (picker != null && !Fresh(picker, s)) { picker = null; stale = true; }
             if (stale || canvasRoot == null) Render();
         }
@@ -266,7 +300,7 @@ namespace MemoryForge.Client
             catch (RuleException error) { Reject(error.Code); return false; }
             battleLog.Clear(); // the battle log belongs to one expedition
             departures++; Length = chosen; closedKind = null; lastSave = null; lastSaveCount = 0; LastRequestId = null;
-            selectedCard = null; selectedMode = null; target = null; picker = null; cardInfo = null; sheet = Sheet.None; selectedChanges.Clear();
+            selectedCard = null; selectedMode = null; target = null; picker = null; prepared = null; cardInfo = null; sheet = Sheet.None; selectedChanges.Clear();
             CloseActionPresentation();
             LastError = null; notice = "출발했어요. 밝게 표시된 칸을 골라 나아가세요."; noticeUntil = Time.realtimeSinceStartup + 2.6f;
             Render(); return true;
@@ -300,33 +334,39 @@ namespace MemoryForge.Client
             }
             Render(); return ok;
         }
-        // Selections pass a battle's player-action display (Locked, not Blocked): preparing the next card spends nothing.
+        // Selections pass a battle's player-action display (Locked, not Blocked): preparing the next card spends nothing. While an unsent
+        // intent waits they are refused: changing it takes an explicit cancel first.
         public void SelectCard(string uid) { if (Locked()) return; selectedCard = uid; selectedMode = null; ClearIntentNotice(); Render(); }
         public void SelectMode(string mode) { if (Locked()) return; selectedMode = mode; ClearIntentNotice(); Render(); }
         public void SelectEnemy(string uid) { if (Locked()) return; target = uid; ClearIntentNotice(); Render(); }
         // A new card/mode/target intent retires the previous command's toast (or error) at once, so the action line shows this request's
         // forecast before any confirm. Only view text changes; the Run is untouched.
         void ClearIntentNotice() { noticeUntil = 0; LastError = null; notice = ""; }
-        /// <summary>Plays the selected card, or first opens the pick overlay when the card lets the player choose cards (spends nothing).</summary>
+        /// <summary>Plays the selected card, or first opens the pick overlay when the card lets the player choose cards (spends nothing).
+        /// During a non-terminal player-action display it instead confirms the selection as the one unsent intent (HasPreparedIntent)
+        /// or opens the overlay for it; either way it returns false, because nothing was committed.</summary>
         public bool ConfirmCard()
         {
-            if (Blocked() || run == null || selectedCard == null || selectedMode == null) return false;
+            // Locked, not Blocked: a non-terminal display lets the confirm prepare. A waiting intent refuses a second one (no overwrite).
+            if (Locked() || run == null || selectedCard == null || selectedMode == null) return false;
             List<(string Label, string From, int Count, bool GrowthOnly)> requests;
             try { requests = ChoiceRequests(run.BattleEffectiveCard(selectedCard), selectedMode, data?.Memory.Battle); }
             catch (RuleException error) { Reject(error.Code); return false; }
-            if (requests.Count == 0) return PlayCard(selectedCard, selectedMode);
-            // The sheet keeps the state it is opened in; a card that is not a live hand card of the player phase opens nothing.
+            // The sheet (and an intent) keeps the state it is made in; a card that is not a live hand card of the player phase opens nothing.
             var s = run.State;
-            var pick = new BattlePick { Uid = selectedCard, Mode = selectedMode, Requests = requests, Left = requests[0].Count,
+            var pick = new BattlePick { Uid = selectedCard, Mode = selectedMode, Requests = requests, Left = requests.Count == 0 ? 0 : requests[0].Count,
                 Run = run, Node = s.Position, Version = s.Battle?.V ?? -1, Target = target };
+            if (requests.Count == 0) return actionRows != null ? Prepare(pick) : PlayCard(selectedCard, selectedMode);
             if (!Fresh(pick, s)) { Reject(run.BattleCheck(selectedCard, selectedMode, target) ?? "NOT_IN_HAND"); return false; }
             picker = pick;
             Render(); return false;
         }
-        public bool PlayCard(string uid, string mode = "now", IReadOnlyList<string>? picks = null)
+        public bool PlayCard(string uid, string mode = "now", IReadOnlyList<string>? picks = null) => Play(uid, mode, target, picks);
+        // One play request with an explicit target: the current selection's (PlayCard) or a waiting intent's frozen one (DispatchPrepared).
+        bool Play(string uid, string mode, string? aim, IReadOnlyList<string>? picks)
         {
             if (Blocked()) return false;
-            var args = new List<KeyValuePair<string, BattleArgument>> { Pair("uid", uid), Pair("mode", mode), Pair("target", target),
+            var args = new List<KeyValuePair<string, BattleArgument>> { Pair("uid", uid), Pair("mode", mode), Pair("target", aim),
                 new KeyValuePair<string, BattleArgument>("picks", BattleArgument.Array((picks ?? new string[0]).Select(BattleArgument.String))) };
             string name = BattleCardName(uid);
             return SendBattle("play", BattleArgument.Object(args), mode == "now" ? name + " 사용" : name + " 예약");
@@ -335,8 +375,9 @@ namespace MemoryForge.Client
         public bool UseUltimate(string actor) => SendBattle("ult", BattleArgument.Object(new[] { Pair("actor", actor), Pair("target", target) }), "필살기를 사용했어요.");
         // The sheet's own pick, auto and cancel are its explicit owners: they pass the recovery/summary gate (Barred) only, never the
         // sheet lock of Blocked.
-        /// <summary>Adds one card of the open sheet's current list (exactly the cards it draws); the last pick plays at once. Any other
-        /// card is refused without adding or sending; any pick once the sheet's opening state is gone closes the sheet unsent.</summary>
+        /// <summary>Adds one card of the open sheet's current list (exactly the cards it draws); the last pick plays at once (during a
+        /// player-action display: confirms the one unsent intent and returns false). Any other card is refused without adding or
+        /// sending; any pick once the sheet's opening state is gone closes the sheet unsent.</summary>
         public bool PickCard(string uid)
         {
             if (Barred() || run == null || picker == null) return false;
@@ -348,8 +389,9 @@ namespace MemoryForge.Client
             if (pick.Index >= pick.Requests.Count) return SendPicks(pick);
             Render(); return true;
         }
-        /// <summary>Plays with the picks made so far; Core chooses any remaining ones by its own rule, as the button says. Once the
-        /// sheet's opening state is gone it closes the sheet unsent instead.</summary>
+        /// <summary>Plays with the picks made so far; Core chooses any remaining ones by its own rule, as the button says (during a
+        /// player-action display: confirms that request as the one unsent intent and returns false). Once the sheet's opening state is
+        /// gone it closes the sheet unsent instead.</summary>
         public bool AutoPick() => !Barred() && picker != null && SendPicks(picker);
         /// <summary>Closes the open sheet without sending anything; the selected card, mode and target stay as the ordinary selection.</summary>
         public void CancelPick()
@@ -360,15 +402,103 @@ namespace MemoryForge.Client
             Render();
         }
         // The sheet's one play, checked against its opening state right before sending. The sheet closes first, so the ordinary gate
-        // (which refuses everything else while a sheet is open) lets exactly this request through, whatever Core then answers.
+        // (which refuses everything else while a sheet is open) lets exactly this request through, whatever Core then answers. While a
+        // player-action display is open the same request becomes the one unsent intent instead; once the display has closed (even if it
+        // closed while the sheet was open) it plays at once, as without a display.
         bool SendPicks(BattlePick pick)
         {
             if (run == null || !Fresh(pick, run.State)) return RetirePicker();
             picker = null;
-            return PlayCard(pick.Uid, pick.Mode, pick.Picks);
+            return actionRows != null ? Prepare(pick) : PlayCard(pick.Uid, pick.Mode, pick.Picks);
         }
         // A sheet whose opening state is gone closes with a notice. It spent nothing, so nothing is sent, refunded or retargeted.
         bool RetirePicker() { picker = null; Reject(PickStale); return false; }
+
+        // ───────── one unsent next play (§14.2/§14.3/§14.7: local UI intent; no server, ACK, request id or reservation slot) ─────────
+        // Freezes one explicitly confirmed request while the last play/ultimate is shown: the Run, battle node, turn and version it was
+        // confirmed in, its card, mode, target and a copy of its ordered picks. Nothing reaches the Run, so AP, cards, RNG, receipts and
+        // time-reservation slots stay as they are (a next/after request takes its slot only when sent). A request Core would refuse now,
+        // a card no longer in hand or a dead target never becomes an intent. Returns false: nothing was committed.
+        bool Prepare(BattlePick from)
+        {
+            var live = run; var b = live?.State.Battle;
+            if (live == null || b == null) return false;
+            var intent = new PreparedPlay { Uid = from.Uid, Mode = from.Mode, Target = from.Target, Node = from.Node, Requests = from.Requests.ToArray(),
+                Picks = from.Picks.ToArray(), Run = from.Run, Version = from.Version, Turn = b.Turn };
+            string? reason = Unsendable(intent);
+            if (reason != null) { Reject(reason); return false; }
+            prepared = intent;
+            LastError = null; notice = "사용 대기 " + PreparedLimit + "/" + PreparedLimit + " · " + BattleCardName(intent.Uid) + " · 방금 행동의 결과 표시가 끝나면 보내요.";
+            noticeUntil = Time.realtimeSinceStartup + 2.6f;
+            Render(); return false;
+        }
+        /// <summary>Drops the waiting unsent intent without sending it: nothing was spent, so nothing is refunded. The card, mode and
+        /// target stay as the ordinary selection. False (and nothing happens) without one.</summary>
+        public bool CancelPreparedIntent()
+        {
+            if (Barred() || prepared == null) return false;
+            prepared = null;
+            LastError = null; notice = "사용 대기를 취소했어요. 아무것도 쓰지 않았어요."; noticeUntil = Time.realtimeSinceStartup + 2.6f;
+            Render(); return true;
+        }
+        // The intent's command boundary, reached from Update once no display is open: the natural end or a skip only unblocks it, and
+        // neither calls the Run. The slot is cleared first, so reentry, a later Update or a repeated skip finds nothing to send. A request
+        // whose confirmed state is gone is dropped with its reason: nothing is sent, refunded, retargeted or retried. Otherwise exactly
+        // its frozen card, mode, target and picks go out as one Run.BattleCommand through the ordinary SendBattle, which opens that
+        // play's own display.
+        void DispatchPrepared()
+        {
+            var intent = prepared;
+            if (intent == null || actionRows != null) return;
+            prepared = null;
+            if (LastError == IntentPending) LastError = null;
+            string? reason = Unsendable(intent);
+            if (reason == null) { Play(intent.Uid, intent.Mode, intent.Target, intent.Picks); return; }
+            Dropped(IntentStale, reason); Render();
+        }
+        // Null while the frozen request still holds, else why not: the same Run, node, turn and battle version in the player phase, its
+        // card in hand, its target (if any) a living enemy, the same pick requests with every frozen pick, in order, on the shared
+        // candidate list (PickCandidates) given the picks before it, and finally Core's own precheck of exactly this request. The client
+        // list check comes first, so a pick that is gone is never handed to Core's automatic remaining-picks rule; fewer picks than
+        // requested is an explicit auto, whose rest stays Core's choice. Core's effect predicates are not duplicated or changed here.
+        string? Unsendable(PreparedPlay p)
+        {
+            var live = run; var s = live?.State; var b = s?.Battle;
+            if (live == null || s == null || b == null || !ReferenceEquals(live, p.Run) || s.Phase != "BATTLE" || b.Phase != "PLAYER" || s.Position != p.Node
+                || b.Turn != p.Turn || b.V != p.Version) return IntentStale;
+            if (!b.Zones.Hand.Contains(p.Uid)) return "NOT_IN_HAND";
+            if (p.Target != null && !b.Enemies.Any(e => e.Uid == p.Target && e.Alive)) return "BAD_TARGET";
+            List<(string Label, string From, int Count, bool GrowthOnly)> requests;
+            try { requests = ChoiceRequests(live.BattleEffectiveCard(p.Uid), p.Mode, data?.Memory.Battle); }
+            catch (RuleException error) { return error.Code; }
+            if (!requests.SequenceEqual(p.Requests) || !PicksHold(b, p.Uid, requests, p.Picks)) return PickInvalid;
+            return live.BattleCheck(p.Uid, p.Mode, p.Target, p.Picks);
+        }
+        // The ordered picks replayed through the sheet's own progression: each on its request's current list given the picks before it.
+        bool PicksHold(BattleState b, string source, List<(string Label, string From, int Count, bool GrowthOnly)> requests, IReadOnlyList<string> picks)
+        {
+            if (picks.Count > requests.Sum(r => r.Count)) return false;
+            var made = new List<string>(); int index = 0, left = requests.Count == 0 ? 0 : requests[0].Count;
+            foreach (string uid in picks)
+            {
+                if (!PickCandidates(b, source, requests[index], made, cardDefs).Contains(uid)) return false;
+                made.Add(uid);
+                if (--left <= 0 && ++index < requests.Count) left = requests[index].Count;
+            }
+            return true;
+        }
+        // Drops a waiting intent unsent and says why; false when none waited. The view is redrawn by resume/enable, not here.
+        bool DropPrepared(string code)
+        {
+            if (prepared == null) return false;
+            prepared = null; Dropped(code, null); return true;
+        }
+        // The drop notice stays until the next intent or command (the player may only see it after coming back).
+        void Dropped(string code, string? reason)
+        {
+            LastError = code; noticeUntil = 0;
+            notice = ErrorText(code) + (reason == null || reason == code ? "" : " (" + ErrorText(reason) + ")");
+        }
         bool SendBattle(string kind, BattleArgument? args, string success)
         {
             if (Blocked()) return false;
@@ -649,7 +779,7 @@ namespace MemoryForge.Client
         {
             recovery = reason;
             if (kept is Dictionary<string, object?> valid) store = valid;
-            picker = null; cardInfo = null; sheet = Sheet.None; deckPicks.Clear(); selectedChanges.Clear();
+            picker = null; prepared = null; cardInfo = null; sheet = Sheet.None; deckPicks.Clear(); selectedChanges.Clear();
             selectedCard = null; selectedMode = null; target = null; CloseTurnSummary(); CloseActionPresentation();
             LastError = reason; notice = ""; noticeUntil = 0;
             Debug.LogError("[MemoryForge] Practice expedition quarantined after a failed local Run calculation (" + reason + "); "
@@ -692,20 +822,32 @@ namespace MemoryForge.Client
         // An open pick sheet is one prepared, unsent play, so every other command and selection is refused as well, after recovery and
         // the summary (their codes come first). Only the sheet's own pick, auto and cancel pass, through Barred alone; its final send
         // closes the sheet before playing, so this gate never refuses that one play.
-        // A player-action display refuses every command after those (its code comes last); the next card/mode/target selection passes
-        // it through Locked unless the battle ended with that action.
+        // A player-action display refuses every command after those; the next card/mode/target selection and its confirm pass it through
+        // Locked unless the battle ended with that action. A waiting unsent intent refuses everything after those (its code comes last):
+        // every command until its dispatch (which takes it out of the slot first, so this gate never refuses that one play), and every
+        // selection or second confirm until it is cancelled.
         bool Blocked()
         {
-            if (Locked()) return true;
-            if (actionRows == null) return false;
-            LastError = ActionShowing; return true;
+            if (Held()) return true;
+            if (actionRows != null) { LastError = ActionShowing; return true; }
+            return Waiting();
         }
         bool Locked()
         {
+            if (Held()) return true;
+            if (actionRows != null && actionTerminal) { LastError = ActionShowing; return true; }
+            return Waiting();
+        }
+        bool Held()
+        {
             if (Barred()) return true;
-            if (picker != null) { LastError = PickSheetOpen; return true; }
-            if (actionRows == null || !actionTerminal) return false;
-            LastError = ActionShowing; return true;
+            if (picker == null) return false;
+            LastError = PickSheetOpen; return true;
+        }
+        bool Waiting()
+        {
+            if (prepared == null) return false;
+            LastError = IntentPending; return true;
         }
         bool Barred()
         {
@@ -845,8 +987,9 @@ namespace MemoryForge.Client
         void RefreshActionPresentation()
         {
             var rows = actionRows; bool open = rows != null;
-            foreach (var (control, allowed) in actionGated) if (control != null) control.interactable = allowed && !open;
+            foreach (var (control, allowed) in actionGated) if (control != null) control.interactable = allowed && !open && prepared == null;
             if (actionSkip != null) actionSkip.interactable = open;
+            if (confirmCaption != null) confirmCaption.text = ConfirmCaption(open);
             foreach (var (back, caption, pace) in paceButtons)
             {
                 if (back == null || caption == null) continue;
@@ -859,7 +1002,7 @@ namespace MemoryForge.Client
                 actionStatus.text = rows == null ? "행동 결과" : actionTitle + " " + actionShown + "/" + rows.Count;
             if (actionText != null)
             {
-                if (rows == null) { actionText.text = "카드를 쓰면 확정된 결과를 여기서 차례로 보여 줘요. 그동안 다음 카드를 미리 고를 수 있어요."; actionText.color = Muted; }
+                if (rows == null) { actionText.text = "카드를 쓰면 확정된 결과를 여기서 차례로 보여 줘요. 그동안 다음 카드 1장을 사용 대기로 둘 수 있어요."; actionText.color = Muted; }
                 else
                 {
                     var visible = rows.Take(actionShown); if (!actionAll) visible = visible.Skip(Math.Max(0, actionShown - 2));
@@ -868,10 +1011,13 @@ namespace MemoryForge.Client
             }
         }
         static string PaceName(ActionPacing pace) => pace == ActionPacing.Double ? "2배속" : pace == ActionPacing.Reduced ? "동작 줄이기" : "보통";
-        // A command control drawn while a display may be open: available only when its own state allows and no display is open.
+        // A ready plain confirm during a display prepares the one unsent intent; otherwise it plays.
+        static string ConfirmCaption(bool showing) => showing ? "사용 대기" : "사용 확정";
+        // A command control drawn while a display may be open: available only when its own state allows, no display is open and no
+        // unsent intent waits for its dispatch.
         T Gate<T>(T control, bool allowed) where T : Selectable
         {
-            control.interactable = allowed && actionRows == null; actionGated.Add((control, allowed)); return control;
+            control.interactable = allowed && actionRows == null && prepared == null; actionGated.Add((control, allowed)); return control;
         }
         void PaceButton(Transform parent, ActionPacing pace, float x, float y, float width, float height, int size)
         {
@@ -1133,7 +1279,14 @@ namespace MemoryForge.Client
             ActionStrip();
             var actions = Box(frame!, "CardActions", 32, 596, 1536, 94, Panel);
             string hint = "카드를 고르고 방식을 정한 뒤 사용을 확정하세요. 고르는 동안에는 아무것도 쓰지 않아요."; var hintColor = Muted;
-            if (selectedCard != null && selectedMode != null && b.Phase == "PLAYER")
+            var intent = prepared;
+            if (intent != null)
+            {
+                // The waiting intent's own request: its frozen card, mode, target and picks (unmade picks are Core's automatic choice).
+                var forecast = run!.BattleForecast(intent.Uid, intent.Mode, intent.Target, intent.Picks);
+                hint = ForecastLine(forecast, forecast.Error == null && intent.Picks.Count < intent.Requests.Sum(r => r.Count)); hintColor = ForecastColor(forecast);
+            }
+            else if (selectedCard != null && selectedMode != null && b.Phase == "PLAYER")
             {
                 // The exact request ConfirmCard leads to; a pick card's unmade picks are Core's automatic choice. Recomputed on Render only.
                 var forecast = run!.BattleForecast(selectedCard, selectedMode, target);
@@ -1141,7 +1294,8 @@ namespace MemoryForge.Client
                 hint = ForecastLine(forecast, auto); hintColor = ForecastColor(forecast);
             }
             TrackNotice(Label(actions, notice.Length != 0 ? notice : hint, 18, 6, 1498, 30, 23, notice.Length != 0 ? (LastError == null ? Muted : Danger) : hintColor), hint, hintColor);
-            if (selectedCard != null && b.Phase == "PLAYER")
+            if (intent != null) PreparedControls(actions, b, intent);
+            else if (selectedCard != null && b.Phase == "PLAYER")
             {
                 string uid = selectedCard; var def = run!.BattleEffectiveCard(uid);
                 Label(actions, def.Name + " → " + (b.Enemies.FirstOrDefault(e => e.Uid == target)?.Name ?? (run.BattleNeedsTarget(uid) == null ? "파티" : "적 선택")), 18, 44, 360, 42, 25, Ink, FontStyle.Bold);
@@ -1155,9 +1309,13 @@ namespace MemoryForge.Client
                         .interactable = error == null || error == "BAD_TARGET" || error == "FIXED_MARK_REQUIRED";
                 }
                 string? reason = selectedMode == null ? "MODE" : run.BattleCheck(uid, selectedMode, target);
-                string confirm = reason == null ? (ChoiceRequests(def, selectedMode!, data!.Memory.Battle).Count != 0 ? "카드 고르기" : "사용 확정")
+                bool plain = reason == null && ChoiceRequests(def, selectedMode!, data!.Memory.Battle).Count == 0;
+                string confirm = reason == null ? (plain ? ConfirmCaption(actionRows != null) : "카드 고르기")
                     : reason == "MODE" ? "방식 선택" : reason == "BAD_TARGET" || reason == "FIXED_MARK_REQUIRED" ? "대상 선택" : ErrorText(reason);
-                Gate(Button(actions, "ConfirmCard", confirm, 1360, 38, 158, 52, () => ConfirmCard(), reason == null ? Brass : Line, 22), reason == null);
+                // Not gated by the display: during one it confirms the single unsent intent (or opens its sheet) and spends nothing.
+                var button = Button(actions, "ConfirmCard", confirm, 1360, 38, 158, 52, () => ConfirmCard(), reason == null ? Brass : Line, 22);
+                button.interactable = reason == null;
+                if (plain) confirmCaption = button.GetComponentInChildren<Text>();
             }
 
             var dock = Scroll(frame!, "Hand", 32, 696, 1308, 180, b.Zones.Hand.Count * 194, 180, Background);
@@ -1185,6 +1343,27 @@ namespace MemoryForge.Client
             actionSkip = Button(strip, "SkipActionPresentation", "건너뛰기", 1410, 4, 112, 36, () => SkipActionPresentation(), Line, 18);
             actionAll = false; RefreshActionPresentation();
         }
+        // The waiting intent in place of the selection controls: its frozen card and target, its card text, a 1/1 waiting label kept apart
+        // from the timeline's time reservations (a next/after request takes its slot only when it is sent), and its cancel, which sends
+        // nothing and so is never gated by the display. Cancel and card text trade places with the ordinary rects: cancel sits where the
+        // ordinary card text is and card text where the ordinary confirm is, so a repeated tap after a confirm or a cancel (each redraws
+        // synchronously) can only open the read-only card text, never cancel a just-confirmed intent or confirm a just-cancelled one.
+        void PreparedControls(RectTransform actions, BattleState b, PreparedPlay intent)
+        {
+            string aim = b.Enemies.FirstOrDefault(e => e.Uid == intent.Target)?.Name ?? (intent.Target == null ? "파티" : "대상");
+            Label(actions, BattleCardName(intent.Uid) + " → " + aim, 18, 44, 360, 42, 25, Ink, FontStyle.Bold);
+            Button(actions, "CancelPreparedIntent", "대기 취소", 388, 38, 148, 52, () => CancelPreparedIntent(), Line, 22);
+            Label(actions, PreparedText(intent), 548, 38, 796, 52, 19, Brass);
+            if (b.Zones.Hand.Contains(intent.Uid)) Button(actions, "CardInfoButton", "카드 설명", 1360, 38, 158, 52, () => ShowHandCardInfo(intent.Uid), Line, 21);
+        }
+        string PreparedText(PreparedPlay intent)
+        {
+            int total = intent.Requests.Sum(r => r.Count);
+            string picks = total == 0 ? "" : intent.Picks.Count == 0 ? " · 고를 카드는 자동 선택"
+                : " · 고른 카드 " + string.Join("·", intent.Picks.Select(BattleCardName)) + (intent.Picks.Count < total ? " · 나머지 자동" : "");
+            return "미전송 사용 대기 " + PreparedLimit + "/" + PreparedLimit + " · " + ModeName(intent.Mode) + (intent.Mode == "now" ? " 사용" : " 예약 요청 · 시간표 칸은 보낼 때 차지해요")
+                + picks + "\n결과 표시가 끝나면 이 요청 하나만 보내요 · 바꾸려면 먼저 대기 취소";
+        }
         // The last command of a battle: the next screen (reward or save) is already drawn beneath this full-frame sheet, whose controls sit
         // over that screen's status text rather than its buttons, so a repeated tap after the sheet closes reaches no reward or save.
         void ActionPresentationSheet()
@@ -1207,7 +1386,10 @@ namespace MemoryForge.Client
             bool last = pick.Index == pick.Requests.Count - 1 && pick.Left == 1;
             var p = OverlayPanel("BattlePicks", 300, 150, 1000, 600);
             Label(p, request.Label + " 고르기 (" + (pick.Picks.Count + 1) + "/" + pick.Requests.Sum(r => r.Count) + ")", 24, 18, 952, 44, 30, Ink, FontStyle.Bold);
-            Label(p, last ? "마지막 선택이에요. 카드를 누르면 바로 사용해요. 각 카드 아래 줄은 그 카드를 골랐을 때의 예상이에요."
+            // Opened during a player-action display, the final pick confirms the unsent intent until that display ends (it may end while
+            // the sheet is open, so the text holds either way).
+            Label(p, last ? (actionRows != null ? "마지막 선택이에요. 누르면 사용을 확정하고, 결과 표시 중이면 끝난 뒤 보내요. 아래 줄은 고를 때의 예상이에요."
+                : "마지막 선택이에요. 카드를 누르면 바로 사용해요. 각 카드 아래 줄은 그 카드를 골랐을 때의 예상이에요.")
                 : "고른 순서대로 적용돼요. 사용을 확정하기 전에는 행동력과 카드를 쓰지 않아요.", 24, 64, 952, 28, 20, Muted);
             var list = PickOptions(b, pick); // the same list PickCard accepts
             var content = Scroll(p, "PickList", 24, 104, 952, 336, 952, ((list.Count + 2) / 3) * 64, Panel);
@@ -1743,6 +1925,9 @@ namespace MemoryForge.Client
             [PickInvalid] = "지금 목록에 있는 카드만 고를 수 있어요.",
             [PickStale] = "고르기를 연 뒤 전투가 바뀌어 고르기를 닫았어요. 아무것도 쓰지 않았어요. 다시 골라 주세요.",
             [ActionShowing] = "방금 행동의 결과를 보여 주는 중이에요. 다음 카드는 미리 고를 수 있고, 표시가 끝나거나 건너뛰면 사용할 수 있어요.",
+            [IntentPending] = "보내지 않은 사용 대기가 이미 1개 있어요. 결과 표시가 끝나면 보내요. 바꾸려면 먼저 '대기 취소'를 눌러 주세요.",
+            [IntentStale] = "사용 대기를 확정한 뒤 전투가 바뀌어 보내지 않고 취소했어요. 아무것도 쓰지 않았어요. 다시 골라 주세요.",
+            [IntentDropped] = "화면을 벗어나 보내지 않은 사용 대기를 취소했어요. 아무것도 쓰지 않았어요.",
             ["INTERNAL"] = "문제가 생겼어요. 다시 시도해 주세요."
         };
         string ErrorText(string code)
@@ -1807,7 +1992,7 @@ namespace MemoryForge.Client
             previous.gameObject.SetActive(false);
             if (Application.isPlaying) Destroy(previous.gameObject); else DestroyImmediate(previous.gameObject);
             canvasRoot = null; frame = null; noticeLabel = null; summaryText = null; summaryStatus = null; summaryContent = null; summaryScroll = null;
-            actionText = null; actionStatus = null; actionSkip = null; actionOverlay = null; actionGated.Clear(); paceButtons.Clear();
+            actionText = null; actionStatus = null; actionSkip = null; confirmCaption = null; actionOverlay = null; actionGated.Clear(); paceButtons.Clear();
         }
         RectTransform Box(Transform parent, string name, float x, float y, float width, float height, Color color)
         {

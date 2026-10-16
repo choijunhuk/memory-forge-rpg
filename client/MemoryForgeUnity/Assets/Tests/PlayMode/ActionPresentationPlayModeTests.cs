@@ -95,8 +95,9 @@ namespace MemoryForge.Client.Tests
         }
 
         // The committed play is shown in the strip at once over the actual current view; the next card, mode and target are prepared by
-        // real rays during the display with their forecast on the action line; every command is refused before the Run; the display ends
-        // on its real timer in place; then the prepared intent is the next actual play.
+        // real rays during the display with their forecast on the action line; a confirm then only prepares the one unsent intent, which
+        // is cancelled explicitly; every command is refused before the Run; the display ends on its real timer in place; then the prepared
+        // selection is the next actual play.
         [UnityTest]
         public IEnumerator ACommittedPlayIsShownInlineWhileOnlyThePureNextSelectionIsAccepted()
         {
@@ -150,14 +151,23 @@ namespace MemoryForge.Client.Tests
             var shown = ActiveView(s.Host);
             AssertReadable(shown, t => t == client.ForecastLine(forecast, false), "the next request's forecast on the action line");
             AssertReadable(shown, t => t == "카드 사용 결과 " + client.ActionPresentationShown + "/" + rows.Count, "the display continues beside it");
-            Assert.That(ButtonNamed(s.Host, "ConfirmCard").interactable, Is.False, "a valid next request still waits for the display");
+            // P1-CARD-FLOW-ONE-UNSENT-INTENT: a valid next request may now be confirmed during the display, but only as the one unsent intent.
+            Assert.That(ButtonNamed(s.Host, "ConfirmCard").interactable, Is.True, "a valid next request can be confirmed into the unsent intent");
             Assert.That(Fingerprint(client.Snapshot!), Is.EqualTo(committed), "selections and forecasts during the display never reach the Run");
             AssertSame(s, "the mirror received nothing either");
+            Assert.That(client.ConfirmCard(), Is.False, "a confirm during the display commits nothing");
+            Assert.That((client.LastError, client.HasPreparedIntent, client.PreparedCard, client.HasActionPresentation), Is.EqualTo(((string?)null, true, next, true)),
+                "it prepares the one unsent intent");
+            Assert.That((Fingerprint(client.Snapshot!), StorePrint(client)), Is.EqualTo((committed, store)), "preparing reached the Run or the store");
+            Assert.That(client.CancelPreparedIntent(), Is.True, "the explicit cancel drops it unsent");
+            Assert.That((client.HasPreparedIntent, client.LastError), Is.EqualTo((false, (string?)null)));
+            Assert.That(new[] { client.SelectedCard, client.SelectedMode, client.Target }, Is.EqualTo(new[] { next, "now", target }), "the selection stays");
+            AssertSame(s, "preparing and cancelling sent nothing");
 
             // Every command is refused before the Run with the display code; the private Do boundary itself refuses.
             var commands = new (string Name, Func<bool> Call)[]
             {
-                ("ConfirmCard", () => client.ConfirmCard()), ("PlayCard", () => client.PlayCard(next!, "now")), ("EndTurn", () => client.EndTurn()),
+                ("PlayCard", () => client.PlayCard(next!, "now")), ("EndTurn", () => client.EndTurn()),
                 ("UseUltimate", () => client.UseUltimate(b.Actors[0].Id)), ("EnterNode", () => client.EnterNode("none")), ("TakeCard", () => client.TakeCard("sera_round")),
                 ("SkipCard", () => client.SkipCard()), ("TakeRelic", () => client.TakeRelic("lucky_coin")), ("TakePart", () => client.TakePart()),
                 ("Evolve", () => client.Evolve("k1", "sera_round")), ("Proceed", () => client.Proceed()), ("RestHeal", () => client.RestHeal()),
@@ -172,7 +182,7 @@ namespace MemoryForge.Client.Tests
             {
                 Assert.That(call(), Is.False, label + " must be refused during the display");
                 Assert.That(client.LastError, Is.EqualTo(Showing), label);
-                Assert.That((client.HasActionPresentation, client.PickerOpen, client.RecoveryRequired), Is.EqualTo((true, false, false)), label);
+                Assert.That((client.HasActionPresentation, client.PickerOpen, client.RecoveryRequired, client.HasPreparedIntent), Is.EqualTo((true, false, false, false)), label);
                 Assert.That((Fingerprint(client.Snapshot!), StorePrint(client)), Is.EqualTo((committed, store)), label + " reached the Run or the store");
             }
             client.StartPractice();
@@ -423,7 +433,7 @@ namespace MemoryForge.Client.Tests
                 yield return null; Canvas.ForceUpdateCanvases();
                 Assert.That(client.HasActionPresentation, Is.True);
                 var view = ActiveView(s.Host); var endTurn = ButtonNamed(s.Host, "EndTurn");
-                string committed = Fingerprint(client.Snapshot!), runId = client.Snapshot!.RunId; int version = client.Snapshot!.Battle!.V;
+                string committed = Fingerprint(client.Snapshot!); string? runId = client.Snapshot!.RunId; int version = client.Snapshot!.Battle!.V;
                 var log = client.BattleLog;
                 if (way == "focus") s.Host.SendMessage("OnApplicationFocus", false);
                 else if (way == "pause") s.Host.SendMessage("OnApplicationPause", true);
@@ -500,8 +510,8 @@ namespace MemoryForge.Client.Tests
             AssertSame(s, "nothing reached the mirror");
         }
 
-        // The display never opens a pick sheet (that is a command path); after it the sheet keeps its own lock. A summary refuses with its own
-        // code and has no display beneath it.
+        // During the display a pick card's confirm opens only its pure local sheet (P1-CARD-FLOW-ONE-UNSENT-INTENT), whose lock comes first;
+        // after it the sheet opens and keeps its own lock as before. A summary refuses with its own code and has no display beneath it.
         [UnityTest]
         public IEnumerator PickSheetAndTurnSummaryKeepTheirOwnLocksAroundTheDisplay()
         {
@@ -528,13 +538,22 @@ namespace MemoryForge.Client.Tests
             Assert.That(s.Mirror.BattleCheck(tuneCard, "now", enemyUid), Is.Null, "precondition: nia_tune is still playable after the first card");
             string committed = Fingerprint(client.Snapshot!);
 
-            // During the display the pick card is prepared, but its confirm (the sheet's entry) is a command and is refused.
+            // During the display the pick card is prepared. P1-CARD-FLOW-ONE-UNSENT-INTENT: its confirm now opens the sheet as a pure local
+            // choice (the unsent intent's own picker); the sheet's lock comes before the display's, and cancelling it sends nothing.
             client.SelectEnemy(enemyUid); client.SelectCard(tuneCard); client.SelectMode("now");
             Assert.That((client.LastError, client.SelectedCard), Is.EqualTo(((string?)null, (string?)tuneCard)));
             Assert.That(client.ConfirmCard(), Is.False);
-            Assert.That((client.LastError, client.PickerOpen, client.HasActionPresentation), Is.EqualTo(((string?)Showing, false, true)), "no sheet opens during the display");
-            Assert.That(client.AutoPick() || client.PickCard(tuneCard), Is.False);
+            Assert.That((client.LastError, client.PickerOpen, client.HasActionPresentation, client.HasPreparedIntent), Is.EqualTo(((string?)null, true, true, false)),
+                "the sheet opens during the display, spending nothing");
+            Assert.That(client.EndTurn(), Is.False);
+            Assert.That(client.LastError, Is.EqualTo(SheetOpen), "the sheet's lock comes before the display's");
             Assert.That(Fingerprint(client.Snapshot!), Is.EqualTo(committed));
+            client.CancelPick();
+            Assert.That((client.PickerOpen, client.HasPreparedIntent, client.LastError), Is.EqualTo((false, false, (string?)null)));
+            Assert.That(client.AutoPick() || client.PickCard(tuneCard), Is.False, "the cancelled sheet's pick and auto reach nothing");
+            Assert.That(client.HasPreparedIntent, Is.False);
+            Assert.That(Fingerprint(client.Snapshot!), Is.EqualTo(committed));
+            AssertSame(s, "opening and cancelling the sheet during the display sent nothing");
             FinishAction(client);
 
             // After the display the sheet opens as before and keeps its own lock.
