@@ -14,7 +14,7 @@
 | C# 전체 Battle·Run·기억 저장 | IMPLEMENTED(현행 참조)/PARTIAL(전체 수용) | 실제 Battle/Create/begin/end/play/ult·노드서비스·legacy/v2기억변화/미리보기/확정·새출발을 연결했다. [Run21902검사·5전체사례2684명령/1074질의·1000legacy273504명령/1000완주](../reports/run_memory_core_20261016/root_acceptance.md), [행동87991검사](../reports/player_actions_20261015/), [순수기억5451검사](../reports/memory_rules_20261015/)와 반대 작성자 검토가 있다. typed숫자/JS-native진단 범위, generic base0미결, 중도Run복원·계정/서버·후반후보·기기·전체게임 수용은 남음. 과거0명령/완주0은 아래 이력과 해당 단위 보고서에 보존한다. |
 | 후반 본편 활성화 | BLOCKED_ACCEPTANCE | JS 여섯 행동·HTML·23종 후보 있음. 최신40시나리오/조우 확대는44조우×40×3=5280회, 목표 미달21개. C#·서사/연출·목표 미달 해소 전 `authored` 활성화/본편 완료 선언 금지. |
 | 실제 Unity 게임 수직 슬라이스 | PARTIAL(실제탐사연습) | [실제 지도→전투→보상/서비스→기억선택→새출발](../reports/expedition_client_20261016/root_acceptance.md)과 [즉시 예측/예약 만기 화면92Play/3Edit·새macOS빌드](../reports/battle_preview_20261016/ui_root_acceptance.md)를 확인했다. [원문 예약피해/균열·방어포함피해와 턴잠금112Play/3Edit](../reports/card_flow_20261016/root_acceptance.md)를 확인했다. 실제 계정/영속저장·로비/편성·최종아트/연출·네이티브 물리입력/실기기는 남음. 기존 전투/샘플/MCP 씬은 유지한다. |
-| 서버 앱·저장v2 접합 | NOT_IMPLEMENTED | §17 전체 및 §8.11·§17.5: 소유권·버전·고정 잠금·원장·이력·멱등·rollback·다기기 동시성. 스키마/JS 로컬 저장으로 대체 불가. |
+| 서버 앱·저장v2 접합 | PARTIAL(로컬 개발 서버) | [실제 HTTP/프로세스 241검사·독립 24경계](../reports/server_persistence_20261016/root_acceptance.md): 실제 Core·파일 영속 기억/영수증·고정 OS 잠금·실패 무변경·SIGKILL 복원. 신뢰된 개발 fixture 범위다. 실제 계정/보유권·PostgreSQL 앱 연결·원장·다기기/Unity 수용은 미완료이며 기존 SQL/legacy API를 교체하지 않는다. |
 | 반대 AI 최종 검토 | 단위별회수/후속IN_PROGRESS | 전투·M0/R0·노드서비스·기억완주·Unity원정·알림보완과 [미리보기Core/화면](../reports/battle_preview_20261016/ui_root_acceptance.md)의 반대 작성자 검토/결함수정/재검증을 회수했다. 예약예측v2·후반81사례·카드흐름S1도 반대작성자 검토와 실제112Play를 회수했으며 전체게임 최종검토가 아니다. 두 차례 미해결은 해당 쟁점만 보류한다. |
 
 P1/P2 완료로 개발을 끝내지 않는다. 이 표와 아래 장별 요구에서 의존성이 풀린 다음 작업을 고른다. 정책·권한·환경·구독 한도는 해당 항목만 보류하고 현재 세션의 독립 작업을 이어간다. 세션 밖 자동 개발은 약속하지 않는다.
@@ -102,7 +102,7 @@ P1/P2 완료로 개발을 끝내지 않는다. 이 표와 아래 장별 요구�
 | **§5.12 피해·방어 수식** | IMPLEMENTED(JS) | [Battle/Stats][js]·[벡터][vectors]·[엔진 시험][engine-tests] | C# 전체 피해/방어/회복 BigInteger·반올림 동치 |
 | **§5.13 손패·더미** | IMPLEMENTED(JS) | [Battle][js]·[성장 회귀][review-tests] | 더미 보존·무료 토큰·메아리의 C# 동치 |
 | **§5.14 종료** | IMPLEMENTED(JS) | [치명 다단 시험][lethal-tests]·[플레이어 반사 시험][player-reflect] | 종료 뒤 효과 중단·예약 회수 C# 동치 |
-| **§5.15 명령·결정론·공개 정보** | PARTIAL | [command/publicView][js]·[엔진 시험][engine-tests] | JS 및 C# begin 원자성/멱등·공개 정보 검사 있음; [JS 상속 rid 수정·26회귀](../reports/receipt_keys_20261015/) 완료. 서버 비공개 상태·CSPRNG·동시성 미구현 |
+| **§5.15 명령·결정론·공개 정보** | PARTIAL | [command/publicView][js]·[엔진 시험][engine-tests]·[로컬 서버](../reports/server_persistence_20261016/root_acceptance.md) | JS/C#와 개발 서버의 비공개 seed·전체 상태 재생 해시·영구 영수증/동시성 검사를 구분한다. 실제 계정·운영 서버·전역 결정론 수용은 남음. [JS 상속 rid 수정·26회귀](../reports/receipt_keys_20261015/) 유지. |
 | **§5.16 첫 턴 경계의 회귀 기준** | IMPLEMENTED(JS) | [첫 턴 회귀][review-tests]·[Battle][js] | [C# 첫 턴·시작 성장267사례](../reports/csharp_opening_20261015/) 확인; [반복턴·시작 방어해제](../reports/csharp_turns_20261015/) 확인; 실제 보루 카드 경계는 남음 |
 | **§5.17 진화 카드의 성장 계열 판정** | IMPLEMENTED(JS) | [growthRoot/isGrowthInst][js]·[성장 회귀][review-tests] | 유효 진화 계보·토큰 복제 C# 동치 |
 | **§5.18 성장 이벤트와 공생 이끼** | IMPLEMENTED(JS) | [applyGrowth][js]·[성장 회귀][review-tests] | 이끼 실제 성장 이벤트·효과별 상한 C# 동치 |
@@ -279,9 +279,9 @@ P1/P2 완료로 개발을 끝내지 않는다. 이 표와 아래 장별 요구�
 |---|---|---|---|
 | **§16.1 구성** | PARTIAL | [콘텐츠 빌드][content-build]·[JS][js]·[기존 C#][core] | 공유 전체 C# DLL·권위 서버·콘텐츠 해시 배포 연결 |
 | **§16.2 규칙 코어 이식 (JS → C#)** | PARTIAL(현행명령 동치검증) | [실제전투/노드/저장21902검사·1000완주/273504명령](../reports/run_memory_core_20261016/root_acceptance.md)·[행동87991검사](../reports/player_actions_20261015/) | 실제공개명령으로 전체Run재생. typed숫자/JS-native진단 경계·generic base0미결·중도Run복원·서버/기기·후반후보는 남음 |
-| **§16.3 결정론과 숨겨진 정보** | PARTIAL | [publicView][js]·[API 계약][api] | 서버 비공개 RNG/뽑을더미·모집 CSPRNG·문의 재생 구현 |
+| **§16.3 결정론과 숨겨진 정보** | PARTIAL(로컬 서버 경계) | [publicView][js]·[실제 서버 공개 투영/재생 검사](../reports/server_persistence_20261016/root_acceptance.md) | 개발 서버가 seed/runId 생성·명시적 공개 DTO·상태 해시 재생을 사용한다. 실제 모집 CSPRNG·운영 문의 재생·전체 공개 복구/보안 수용은 남음. |
 | **§16.4 Unity 클라이언트** | PARTIAL(실제전투·원정연습) | [S1새macOS지도시작/112Play](../reports/card_flow_20261016/root_acceptance.md)·[S2실제119Play/3Edit](../reports/card_flow_20261016/s2_root_acceptance.md)·[앞선Final물리마우스사용자보고](../reports/expedition_client_20261016/native_user_mouse_acceptance.json) | S2새native입력·전체편성/로비·계정/디스크/서버복구·Addressables/리그·AndroidIL2CPP/성능/기기는별도 |
-| **§16.5 서버** | NOT_IMPLEMENTED(서버 앱) | [스키마][schema]·[API 계약][api] | 인증/세션·무결성·명령·원장·속도제한 실제 ASP.NET 앱 |
+| **§16.5 서버** | PARTIAL(Development 앱) | [ASP.NET Core 실제 로컬 서버](../server/MemoryForge.Server/README.md)·[수용](../reports/server_persistence_20261016/root_acceptance.md) | `/dev/practice`·loopback·fixture 인증만 구현. 실제 인증/세션·계정/보유권·DB/원장·속도제한·운영 API는 별도. |
 | **§16.6 텔레메트리(이벤트 사전)** | NOT_IMPLEMENTED(전송/운영) | [이벤트 사전](source_v0.8.1/16_chapter.md)·[JS 이벤트][js] | 서버/클라이언트 계측·보관·개인정보 계약; MCP telemetry OFF와 별개 |
 | **§16.7 버전 세 종류를 구분한다** | IMPLEMENTED(버전 구분) | [현재 상태][current]·[목표 정책][policy-data] | 문서0.8.1/데이터0.7.0/JS 수정·목표 활성 상태 계속 구분 |
 
@@ -291,11 +291,11 @@ P1/P2 완료로 개발을 끝내지 않는다. 이 표와 아래 장별 요구�
 
 | 원문 요구사항 | 현재 상태 | 코드·시험·기록 근거 | 남은 인수 조건/한계 |
 |---|---|---|---|
-| **§17.1 테이블** | PARTIAL(스키마) | [schema.sql][schema]·[SQL 제약 시험][schema-tests] | 현재 코드 존재/과거 적용 증거; 서버 앱 연결·v2 스키마 이관 필요 |
-| **§17.2 핵심 트랜잭션** | NOT_IMPLEMENTED(앱 트랜잭션) | [트랜잭션 명세](source_v0.8.1/17_chapter.md)·[SQL][schema] | 고정 잠금·상태/원장/영수증 커밋·동시성/rollback 실행 시험 |
+| **§17.1 테이블** | PARTIAL(스키마) | [schema.sql][schema]·[SQL 제약 시험][schema-tests]·[새 PostgreSQL16.15 검사](../reports/server_persistence_20261016/postgres_validation.json) | 원래 SQL을 별도 일회용 클러스터에 실제 적용했다. 서버 앱 연결·v2 스키마 이관은 필요. |
+| **§17.2 핵심 트랜잭션** | PARTIAL(로컬 파일 경계) | [고정 잠금·영수증·실제 프로세스 시험](../reports/server_persistence_20261016/root_acceptance.md) | 한 계정 envelope의 원자 교체·버전/영수증·두 프로세스 경쟁·실제 부분 Run 실패 rollback을 검증. PostgreSQL 원장/구매/100병렬·운영 수용은 미완료. |
 | **§17.3 API 요약** | PARTIAL(계약) | [OpenAPI][api] | 27경로 실제 핸들러·요청/응답 계약 시험 |
-| **§17.4 공개 상태 DTO (전투)** | PARTIAL(JS 공개 뷰) | [publicView][js]·[DTO 원문](source_v0.8.1/17_chapter.md) | 서버 어댑터·공개 비용/방식 DTO·숨김 정보 시험 |
-| **§17.5 저장 v2와 기존 API·DB의 접합 작업** | NOT_IMPLEMENTED(서버 v2) | [legacy 스키마][schema]·[API][api]·[v2 JS][js] | selectedChangeIds/version/stable key·이력/소유권/잠금 접합 |
+| **§17.4 공개 상태 DTO (전투)** | PARTIAL(개발 서버 DTO) | [명시적 투영](../server/MemoryForge.Server/PublicView.cs)·[숨김 정보/순수성 검사](../reports/server_persistence_20261016/root_acceptance.md) | Core 비용/방식·공개 손패/적 의도와 더미 개수를 제공한다. 계산된 슬롯 cap/used/sealed·버린/소멸 카드 수동 후보·전체 네트워크 UI 복구는 남음. |
+| **§17.5 저장 v2와 기존 API·DB의 접합 작업** | PARTIAL(개발 서버 v2) | [실제 획득 카드 저장·SIGKILL/새 프로세스/원래 영수증](../reports/server_persistence_20261016/root_acceptance.md)·[legacy 스키마][schema] | 개발 계정 파일의 selectedChangeIds/version/stable key·기억/이력/영수증 접합. legacy API 교체·실계정 보유권·PostgreSQL 이관/접합은 미완료. |
 
 ## 장 18 — 18. 운영·배포·정책 준수
 

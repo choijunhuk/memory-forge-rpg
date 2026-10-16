@@ -1,0 +1,59 @@
+{
+  "scope": "copy for Root build/review, acceptance pending final checks",
+  "source_worktree": "/Users/choi/.codex/worktrees/claude-balance-audit/Memory_forge",
+  "root_parent_commit": "2b811d53c42912be4f4d91688a03f4c764475f31",
+  "files": {
+    "server/MemoryForge.Server/MemoryForge.Server.csproj": {
+      "sha256": "70fcfc6e158a18d2f4ed0453fbdeaeb7170f87b82f77b4a3aab8d7d869f6fe59",
+      "bytes": 1814,
+      "equal_author": true
+    },
+    "server/MemoryForge.Server/Program.cs": {
+      "sha256": "56afd1190c2df7e9cd7dc8f2370211f9c5931293ec382787876d0a0319fd366a",
+      "bytes": 19934,
+      "equal_author": true
+    },
+    "server/MemoryForge.Server/Content.cs": {
+      "sha256": "16a73f796609454ce6b75bd16cb9277e0726b77ce6d86cbbf1d15d8c2d6a0f00",
+      "bytes": 11464,
+      "equal_author": true
+    },
+    "server/MemoryForge.Server/PracticeRunStore.cs": {
+      "sha256": "f4cd8c0a260e0ce4f1b751a21f809210d143e3e8de79750ef36daa16c6398fab",
+      "bytes": 28838,
+      "equal_author": true
+    },
+    "server/MemoryForge.Server/PublicView.cs": {
+      "sha256": "b759b0db21dd248b719cdb04bc81073ff7a6c6cefb0ea35e1990a7d29add0639",
+      "bytes": 16886,
+      "equal_author": true
+    },
+    "server/MemoryForge.Server/Contracts.cs": {
+      "sha256": "e21a9093503d1f1ab9070322c295813b09a900759bfdbc4a316c0a0bac808ada",
+      "bytes": 19335,
+      "equal_author": true
+    },
+    "server/MemoryForge.Server/README.md": {
+      "sha256": "2f236efcf2de1b9fbcfa9f13484df0a3a12f312f1d63e3a0956d9ab2e5b422ca",
+      "bytes": 9654,
+      "equal_author": true
+    },
+    "server/MemoryForge.ServerChecks/MemoryForge.ServerChecks.csproj": {
+      "sha256": "51acf9eb47b9accf3686de708a3a3f93c5bc2a4ad584653e6073bf83957c3a5c",
+      "bytes": 1504,
+      "equal_author": true
+    },
+    "server/MemoryForge.ServerChecks/Program.cs": {
+      "sha256": "a0a09181b399235ace27919e460add0f97192231bbba64287405f54b350cb8b3",
+      "bytes": 79852,
+      "equal_author": true
+    },
+    "reports/server_persistence_20261016/author_report.md": {
+      "sha256": "6a02081483d7b7f2161cdf18d656b473bcc4f8f7f69db01edc30accb2c776c69",
+      "bytes": 11969,
+      "equal_author": true
+    }
+  },
+  "source_stable_during_import": true,
+  "native_fixed_checks_snapshot_matches": true
+}

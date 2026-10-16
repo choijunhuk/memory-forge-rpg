@@ -1,0 +1,33 @@
+{
+  "scope": "Root independent actual HTTP/process checks; explicit temporary development fixture only",
+  "server_assembly_sha256": "bb4e722a510d77c3dca6d74a0c7c4e137a6ec9b635afc4ae0c2481f951bfd7b6",
+  "status": "PASS",
+  "passed": [
+    "real development process binds one loopback endpoint",
+    "account query does not create persistent account state",
+    "anonymous account access refused",
+    "unknown bearer credential refused",
+    "untrusted Host header refused",
+    "unknown/private/duplicate create field refused",
+    "unknown/private/duplicate create field refused",
+    "unknown/private/duplicate create field refused",
+    "actual Run.Create committed with uncached public response",
+    "duplicate create returns exact original bytes without persistent mutation",
+    "same request ID with changed payload conflicts without persistent mutation",
+    "other fixture account cannot read this run",
+    "real available map node entered via HTTP",
+    "rejected Core command leaves full envelope and receipts unchanged",
+    "stale version cannot mutate state",
+    "public GET replays without persistent mutation",
+    "new host process reconstructs identical full public state",
+    "command receipt survives process restart and precedes stale-version check",
+    "two actual server processes return one durable receipt without duplicate commit",
+    "recursive public response checks exclude private RNG/order/journal/credentials",
+    "config reload cannot open an additional unapproved endpoint",
+    "production environment refuses startup",
+    "configured extra endpoint refuses startup",
+    "corrupt envelope refuses service without reset or overwrite"
+  ],
+  "independent_operator_probe_sha256": "bacec8ba7f1efe7f29d36c1b7e5fcb443cf25e30a9a1ad97dd8e1557ad317b3f",
+  "probe_scope": "private Root operator probe; shipped BCL checks include the mandatory regression scenarios"
+}

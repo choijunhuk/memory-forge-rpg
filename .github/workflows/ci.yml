@@ -26,6 +26,7 @@ jobs:
       - run: node tools/gen_vectors.mjs && git diff --exit-code engine/tests/vectors/
       - run: node tools/gen_hash_vectors.mjs && git diff --exit-code engine/tests/vectors/canonical_hash_vectors.json
       - run: bash tools/run_all_checks.sh
+      - run: dotnet run --project server/MemoryForge.ServerChecks -- "$PWD"
       - run: npm run test:memory-ui
       - run: node engine/tests/fuzz_runs.mjs 100 full --late
       - run: node engine/tests/balance_probe.mjs 350 --late --out reports/paired_balance_late.json

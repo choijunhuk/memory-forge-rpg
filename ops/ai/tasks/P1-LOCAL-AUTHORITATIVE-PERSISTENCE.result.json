@@ -1,0 +1,31 @@
+{
+  "task_id": "P1-LOCAL-AUTHORITATIVE-PERSISTENCE",
+  "run_id": "P1-LOCAL-AUTHORITATIVE-PERSISTENCE-20261016T101304887118Z",
+  "status": "TIMED_OUT",
+  "requestedEffort": "max",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": null,
+  "changes_verified": false,
+  "raw_output": "ops/ai/local/P1-LOCAL-AUTHORITATIVE-PERSISTENCE-20261016T101304887118Z*",
+  "billing_verified_at": "2026-10-15T21:22:01.277612+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "claude/balance-audit",
+  "base_commit": "9be537f4c5ef59e890322cb2d1de914fb49bfed6",
+  "worktree": "/Users/choi/.codex/worktrees/claude-balance-audit/Memory_forge",
+  "allowed_files": [
+    "reports/server_persistence_20261016/author_report.md",
+    "server/MemoryForge.Server/Content.cs",
+    "server/MemoryForge.Server/Contracts.cs",
+    "server/MemoryForge.Server/MemoryForge.Server.csproj",
+    "server/MemoryForge.Server/PracticeRunStore.cs",
+    "server/MemoryForge.Server/Program.cs",
+    "server/MemoryForge.Server/PublicView.cs",
+    "server/MemoryForge.Server/README.md",
+    "server/MemoryForge.ServerChecks/MemoryForge.ServerChecks.csproj",
+    "server/MemoryForge.ServerChecks/Program.cs"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "blocking_reason": "CLI timeout; local checkpoint saved; no retry"
+}

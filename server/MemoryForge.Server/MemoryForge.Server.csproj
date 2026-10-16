@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <!-- P1-LOCAL-AUTHORITATIVE-PERSISTENCE: loopback-only Development practice host over the shared Core (§16.5/§17.2/§17.4/§17.5/§20.9 P1-2).
+       ASP.NET Core shared framework + BCL only: no NuGet package, database, external service or production mode. -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <RollForward>Major</RollForward>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <RootNamespace>MemoryForge.Server</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../core/MemoryForge.Core/MemoryForge.Core.csproj" />
+  </ItemGroup>
+  <!-- The reviewed host JSON loaders are linked, not copied, moved or rewritten (the same files CoreChecks and the Unity content export
+       compile). MemoryV2DataLoader.Difference names JsonGraphComparison, so that one helper is linked with them. This couples the server to
+       the loaders' location under core/MemoryForge.CoreChecks; moving them into a shared host library is a separate, reviewed change. -->
+  <ItemGroup>
+    <Compile Include="../../core/MemoryForge.CoreChecks/BattleDataLoader.cs" Link="Linked/BattleDataLoader.cs" />
+    <Compile Include="../../core/MemoryForge.CoreChecks/MemoryV2DataLoader.cs" Link="Linked/MemoryV2DataLoader.cs" />
+    <Compile Include="../../core/MemoryForge.CoreChecks/RunDataLoader.cs" Link="Linked/RunDataLoader.cs" />
+    <Compile Include="../../core/MemoryForge.CoreChecks/StatsDataLoader.cs" Link="Linked/StatsDataLoader.cs" />
+    <Compile Include="../../core/MemoryForge.CoreChecks/JsonGraphComparison.cs" Link="Linked/JsonGraphComparison.cs" />
+  </ItemGroup>
+</Project>
