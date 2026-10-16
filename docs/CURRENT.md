@@ -2,6 +2,10 @@
 
 ## 현재 요약 — 2026-10-17 / 서버 영속 저장·공개 상태 복구 진행 중
 
+전투 공개 조회·공유 후보 정책을 구현하고 독립 검토·실행 검증했다. [최신 수용](../reports/public_battle_query_20261017/root_acceptance.md): Core553·기존1000탐사/273504명령, 파일서버952·실제PG859판정, 실제UnityPlay165/Edit3·Console0오류/0경고. 서버 명령버전과 전투v를 분리하고 손패 밖 UID는 고정거절하며 조회는 AP/RNG/영수증/저장행을 만들지 않는다. 기존Unity선택은 같은Core정책으로 연결했다. 전체Unity서버전송·미확정요청영속화·앱프로세스복구는 다음 작업이며 이 API 성공으로 완료 처리하지 않는다.
+
+앞선 PostgreSQL CI 커밋d0a3f32의 push/PR 두 건도 실제 새PG단계까지 모두 성공했다([정확한 커밋 근거](../reports/postgres_ci_20261017/remote_ci_verified.json),190/191판정). 아래의 “푸시 뒤 확인/리뷰 대기”는 그 작업 당시 기록이며 이 범위만 갱신한다. 이번 공개조회 커밋의 CI는 별도로 확인한다.
+
 2026-10-17 재개: 공식 OpusMax의 CI 독립 승인과 High의 좁은 재검토를 실제 회수했다. [PostgreSQL CI 수용](../reports/postgres_ci_20261017/root_acceptance.md)에 따라 별도 임시 PG16을 만드는 실행기와 locked restore를 CI에 연결한다. Linux에서 실제 원형190/보완188판정과 비밀번호 환경변수 범위·비밀표식 오류진단·정확한 locked restore를 확인했고, 새 원격 CI 결과는 푸시 뒤 별도 확인한다. 기존47502b7의 원격 성공과 새 PG 단계 성공을 혼동하지 않는다. 다음 공개 전투 조회·공유 선택 정책은 별도 worktree에서 OpusMax가 구현 중이며 Unity 서버 전송/복구 완료로 표시하지 않는다.
 
 사용자가 Npgsql10.0.3 추가를 명시 승인한 뒤 **Development 전용 PostgreSQL 앱 영속 저장**을 연결했다. 기존 파일 저장과 같은 전투·기억·영수증 바이트를 별도 `dev_practice` 행에 원자적으로 저장하며 원래 SQL/수치·파일 기본 경로는 유지한다. [새 수용 기록](../reports/postgres_persistence_20261016/root_acceptance.md): 주 브랜치 파일251·실제PG202판정, 독립 장애27·HTTP24, 실제 Unity 지도 Play 확인. OpusMax 작성 소스를 Codex가 독립 검토·실행 검증했다. 작성 말미 Claude 구독 세션 한도로 종료1을 그대로 보존했고 유료 우회/추가 호출은 하지 않았다. 새PG CI 실행 스크립트는 반대AI 리뷰 대기로 별도 보관하며 현재 원격CI를 PG 검사 성공으로 표시하지 않는다. 실계정·운영 SQL 이관·Unity 서버 재접속은 아직 미연결이다.

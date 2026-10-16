@@ -199,6 +199,8 @@ namespace MemoryForge.Server
                     Method(post); return await Preview(account, RunId(id), await Body(request));
                 case ["runs", var id, "memory-commit"]:
                     Method(post); return await Commit(account, RunId(id), await Body(request));
+                case ["runs", var id, "battle-query"]:
+                    Method(post); return await BattleQuery(account, RunId(id), await Body(request));
                 default: throw new ApiError(404, "NOT_FOUND");
             }
         }
@@ -296,6 +298,30 @@ namespace MemoryForge.Server
                 catch (MemoryBoundaryException) { throw new ApiError(422, "COMMAND_REJECTED"); }
                 PracticeRunStore.RequireUnchanged(run, digest);
                 return Reply.Json(200, GraphJson.Object("runId", runId, "version", record.Journal.Count, "preview", PublicView.Preview(preview)));
+            });
+        }
+
+        // P1-PUBLIC-BATTLE-QUERY §17.4/§14.3/§14.7, pure: one card play's pick sheet and Core forecast on the replayed Run. Owner/run →
+        // expectedVersion (the server journal version, not battle.v) → a live battle → Core's hand-source gate: a uid outside the hand gets
+        // the one fixed NOT_IN_HAND before any definition, price or forecast of it is read. No receipt, journal entry, revision or row is
+        // written and no command runs; the full-state digest must be unchanged. The default omitted-picks check (a hand card's
+        // blocked[mode]) is never applied here: explicit picks/targets are forecast as sent.
+        async Task<Reply> BattleQuery(PracticeAccount account, string runId, byte[] body)
+        {
+            var request = Contracts.ParseBattleQuery(body);
+            return await host.Store.Read(account, (envelope, live) =>
+            {
+                var record = Current(envelope, runId);
+                if (request.ExpectedVersion != record.Journal.Count) throw new ApiError(409, "STALE_VERSION");
+                var run = live ?? throw new InvalidOperationException("current run was not replayed");
+                string digest = PracticeRunStore.StateDigest(run);
+                if (run.State.Battle == null) throw new ApiError(422, "NO_BATTLE");
+                var choices = run.BattleHandChoices(request.Uid, request.Mode, request.Picks);
+                if (choices.Error == "NOT_IN_HAND") throw new ApiError(422, "NOT_IN_HAND");
+                var forecast = run.BattleForecast(request.Uid, request.Mode, request.Target, request.Picks);
+                var reply = PublicView.BattleQuery(run, runId, record.Journal.Count, request, choices, forecast, host.Content.Data.Memory.Battle);
+                PracticeRunStore.RequireUnchanged(run, digest);
+                return Reply.Json(200, reply);
             });
         }
 

@@ -126,8 +126,9 @@ static class Program
         int textFailures = CardTextChecks.Run(root);
         int previewFailures = BattlePreviewChecks.Run(root);
         int lateFailures = BattleLateActionsChecks.Run(root);
+        int presentationFailures = BattlePresentationQueryChecks.Run(root);
         return failures == 0 && traceFailures == 0 && openingFailures == 0 && turnFailures == 0 && queryFailures == 0 && playerFailures == 0 && memoryFailures == 0 && runCreateFailures == 0
-            && progressionFailures == 0 && numberFailures == 0 && textFailures == 0 && previewFailures == 0 && lateFailures == 0 ? 0 : 1;
+            && progressionFailures == 0 && numberFailures == 0 && textFailures == 0 && previewFailures == 0 && lateFailures == 0 && presentationFailures == 0 ? 0 : 1;
     }
 
     static bool Throws(Action a, string code) { try { a(); return false; } catch (RuleException e) { return e.Code == code; } }

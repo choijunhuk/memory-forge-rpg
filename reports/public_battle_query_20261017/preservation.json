@@ -1,0 +1,279 @@
+{
+  "files": [
+    {
+      "path": "engine/rules-core.js",
+      "sha256": "dae99192bfa137762c1c863efda8207b3851e3a6e7ecf2ff029bed3585a33ab4",
+      "same_as_accepted_protected_hash": true
+    },
+    {
+      "path": "data/game_data.json",
+      "sha256": "6a09e6dd2d81055738c84951ea5b5ae50c25fd8c9732c8443e81ec1498625688",
+      "same_as_accepted_protected_hash": true
+    },
+    {
+      "path": "MANIFEST_AIO.json",
+      "sha256": "6869a3ab11e26d5070c150e8f8670cd76ac37a97f91972ec9d0a76c1539929fe",
+      "same_as_accepted_protected_hash": true
+    },
+    {
+      "path": "MANIFEST.sha256",
+      "sha256": "0b11a86e13ec329db417089c11e093029dc556c6c5ac55bc2669abedf4e41081",
+      "same_as_accepted_protected_hash": true
+    },
+    {
+      "path": "Memory_Forge_Complete_Design.pdf",
+      "sha256": "61d478db9905162924ec0dec1322689ac16008aa0e8142e72ce0af94a071eecc",
+      "same_as_accepted_protected_hash": true
+    },
+    {
+      "path": "art/briefs/characters_v0.8.json",
+      "sha256": "1ce144b7727aac238899e340feb6f13bbb6f141c07c80189a3d525bf20447a7d",
+      "same_as_accepted_protected_hash": true
+    },
+    {
+      "path": "art/briefs/prompts_v0.8.1.json",
+      "sha256": "68a610f6a8cadb5f3d3dc0285495e87d800c7a02866cd6473db885708ec13da3",
+      "same_as_accepted_protected_hash": true
+    },
+    {
+      "path": "art/provenance.csv",
+      "sha256": "946c16f0933ee02d64baea7cca7a7b2594291ed66a14a82b83a43538b093e425",
+      "same_as_accepted_protected_hash": true
+    },
+    {
+      "path": "art/requests/README.md",
+      "sha256": "4fe02d9ea6ab9b47fee0c42aed2a9a7d32eb28f3363d6c4aafe531c0b7395d5a",
+      "same_as_accepted_protected_hash": true
+    },
+    {
+      "path": "content/build.mjs",
+      "sha256": "45de77313d61acd0695ba53a5d26bf172977803940095d473ff8f32d403054d2",
+      "same_as_accepted_protected_hash": true
+    },
+    {
+      "path": "content/character_notes.mjs",
+      "sha256": "d4b31d00021f97650cf5f4397cdb963dcf5519f9d5e8f93308dc563c0b865f15",
+      "same_as_accepted_protected_hash": true
+    },
+    {
+      "path": "content/characters.mjs",
+      "sha256": "5e393b0437512134130571106e8ed25aed346ac8115746a6c1ab1fdb90d62c3f",
+      "same_as_accepted_protected_hash": true
+    },
+    {
+      "path": "content/gacha.mjs",
+      "sha256": "6e762335fdc978866346c214d03dce00089cbe22bc5394ae73731518090aa7b1",
+      "same_as_accepted_protected_hash": true
+    },
+    {
+      "path": "content/helpers.mjs",
+      "sha256": "29528c1bca3849ee9e170922eddaacecc5d753efaae03dd3add8166f2f2c4ea4",
+      "same_as_accepted_protected_hash": true
+    },
+    {
+      "path": "content/progression.mjs",
+      "sha256": "52ecc3f5cbef70cf4fefb0321ffb3136b54383dcc0ad8d8f0fcdef75257447ad",
+      "same_as_accepted_protected_hash": true
+    },
+    {
+      "path": "content/world.mjs",
+      "sha256": "71e6b2f21f2becb2a57c49800c02c52338b10c020dbf422865c2ccb78337642c",
+      "same_as_accepted_protected_hash": true
+    },
+    {
+      "path": "docs/source_v0.8.1/00_chapter.md",
+      "sha256": "471d155f19b986f0ddc34f9eb3e5798975c92357bc6d7438a3714049904d8847",
+      "same_as_accepted_protected_hash": true
+    },
+    {
+      "path": "docs/source_v0.8.1/01_chapter.md",
+      "sha256": "5c11915d9e6a98fd881780674794f51e51bc1e83033419757bef3e5d009c6ae2",
+      "same_as_accepted_protected_hash": true
+    },
+    {
+      "path": "docs/source_v0.8.1/02_chapter.md",
+      "sha256": "f556cac3437abff961a699f4c2ad2d30001760721ae97356babddf54f51e2426",
+      "same_as_accepted_protected_hash": true
+    },
+    {
+      "path": "docs/source_v0.8.1/03_chapter.md",
+      "sha256": "fecad871d0d5b12dc8c1ff84ee6ef4da7b17590bef1b938fd62dfc7cba53b0df",
+      "same_as_accepted_protected_hash": true
+    },
+    {
+      "path": "docs/source_v0.8.1/04_chapter.md",
+      "sha256": "4cb083e53d3930ff13f494acb16be3d940120ec6e50f113b874800c92ca1375c",
+      "same_as_accepted_protected_hash": true
+    },
+    {
+      "path": "docs/source_v0.8.1/05_chapter.md",
+      "sha256": "c2eb883197adf58cda6603daf5e9e012ccb4e635c150dcb2b1a0de5a61fe07f0",
+      "same_as_accepted_protected_hash": true
+    },
+    {
+      "path": "docs/source_v0.8.1/06_chapter.md",
+      "sha256": "9208ff611e14456acc878cfe229b17e00bf13552c5d4ddac77f21e3031508df5",
+      "same_as_accepted_protected_hash": true
+    },
+    {
+      "path": "docs/source_v0.8.1/07_chapter.md",
+      "sha256": "455b010181a78afdeb628cd0f29e97c1464f9403126a62ea8415b29cb7ae5841",
+      "same_as_accepted_protected_hash": true
+    },
+    {
+      "path": "docs/source_v0.8.1/08_chapter.md",
+      "sha256": "168552e3409b8caeb2abddc7ecd8abda7f4ccbfeaac7053d982a39f238d5a325",
+      "same_as_accepted_protected_hash": true
+    },
+    {
+      "path": "docs/source_v0.8.1/09_chapter.md",
+      "sha256": "d5a6b5be28fb7b62e037e154a7eca2994101cd31aede113fe492dc79f8ed1e53",
+      "same_as_accepted_protected_hash": true
+    },
+    {
+      "path": "docs/source_v0.8.1/10_chapter.md",
+      "sha256": "a96bd376dfc52afacb12036af5ca2bac5a4c081cd7af446e475a82fcd4faf0e9",
+      "same_as_accepted_protected_hash": true
+    },
+    {
+      "path": "docs/source_v0.8.1/11_chapter.md",
+      "sha256": "77a451dd18a3709b427e68c4489408f3fe20228858033999213bf449d5c2c15a",
+      "same_as_accepted_protected_hash": true
+    },
+    {
+      "path": "docs/source_v0.8.1/12_chapter.md",
+      "sha256": "1c1a516dc94bb045d51091ed81c875d8e6e52f36104622d46baa753cf7a76c08",
+      "same_as_accepted_protected_hash": true
+    },
+    {
+      "path": "docs/source_v0.8.1/13_chapter.md",
+      "sha256": "27c7ea15293af1dc942924cacd551c5c82bc9d1688603d7ba03a9925c16f6ab4",
+      "same_as_accepted_protected_hash": true
+    },
+    {
+      "path": "docs/source_v0.8.1/14_chapter.md",
+      "sha256": "fae1ea6e018d304029691066635c22e8ef998bd1ed77578d14ce53d078a47ee7",
+      "same_as_accepted_protected_hash": true
+    },
+    {
+      "path": "docs/source_v0.8.1/15_chapter.md",
+      "sha256": "2a3430816e327af864c6ecd0a7df8e34687ef7065289243a70062a3f78cf4231",
+      "same_as_accepted_protected_hash": true
+    },
+    {
+      "path": "docs/source_v0.8.1/16_chapter.md",
+      "sha256": "e3a9b089f8c208cf0055d41d384b2ce598500e28cc83c4fa260011160dc4132d",
+      "same_as_accepted_protected_hash": true
+    },
+    {
+      "path": "docs/source_v0.8.1/17_chapter.md",
+      "sha256": "9e85c8fbd194d60ec30af52e0e8183d79a7f27caccf3266a6e9d33f1e3c29040",
+      "same_as_accepted_protected_hash": true
+    },
+    {
+      "path": "docs/source_v0.8.1/18_chapter.md",
+      "sha256": "81b8b4910fe76e7474f84f05bc4d4008f96c05e52b47ae31cfbd9397c4407b8e",
+      "same_as_accepted_protected_hash": true
+    },
+    {
+      "path": "docs/source_v0.8.1/19_chapter.md",
+      "sha256": "93e357d548077fbca23c55ae6275e415edbba69c0f2dbab8cff86b3f45b97509",
+      "same_as_accepted_protected_hash": true
+    },
+    {
+      "path": "docs/source_v0.8.1/20_chapter.md",
+      "sha256": "8e3e98657d13979ad65f51478a854b045891c62b6fabd79ccb559b8b1083306d",
+      "same_as_accepted_protected_hash": true
+    },
+    {
+      "path": "docs/source_v0.8.1/21_chapter.md",
+      "sha256": "41e5bdb8b07affd45ff6ff16bdf85ce383d09065cc2304b73393db940da69c49",
+      "same_as_accepted_protected_hash": true
+    },
+    {
+      "path": "docs/source_v0.8.1/22_chapter.md",
+      "sha256": "a248cb319ddba6ce540589a07dafcba2a9610090a48f37167f167104c2bd010d",
+      "same_as_accepted_protected_hash": true
+    },
+    {
+      "path": "docs/source_v0.8.1/23_chapter.md",
+      "sha256": "1642c384f595cefe34b0dd89823e138af2df864d7ce66246c0edbd2e6d7da351",
+      "same_as_accepted_protected_hash": true
+    },
+    {
+      "path": "proposals/memory_v2.cjs",
+      "sha256": "6ee5aa939e3169d034c99418ceebdc864473fe5cc9b4464fccf7e80dcbec308d",
+      "same_as_accepted_protected_hash": true
+    },
+    {
+      "path": "engine/tests/vectors/battle_opening_vectors.json.gz",
+      "sha256": "25cc035c29967710454da43ed7c8677b2ceb4ce172cc03ede19eb75a8e3b5602",
+      "same_as_accepted_protected_hash": true
+    },
+    {
+      "path": "engine/tests/vectors/battle_turn_vectors.json.gz",
+      "sha256": "748f3d51dacbdbd84169ceeb7881f2ed0b495298e9614045a1330cc8b8dc25dc",
+      "same_as_accepted_protected_hash": true
+    },
+    {
+      "path": "engine/tests/vectors/battle_player_query_vectors.json.gz",
+      "sha256": "478cc50ae1902b1b5b6d26e65d1418c6ef92341c18e4b8fa90b0a81f78ff3018",
+      "same_as_accepted_protected_hash": true
+    },
+    {
+      "path": "engine/tests/vectors/traces.jsonl.gz",
+      "sha256": "854f8f1f0b355fa3e5f2ce371a8605273424bd6a48703b90ec8f5077a3864286",
+      "same_as_accepted_protected_hash": true
+    },
+    {
+      "path": "engine/tests/vectors/canonical_hash_vectors.json",
+      "sha256": "429076667030a9d3ed27175cad9106628e3aa3aff4519935acf95fa791bbba53",
+      "same_as_accepted_protected_hash": true
+    },
+    {
+      "path": "engine/tests/vectors/rng_gacha_vectors.json",
+      "sha256": "0ad030475b6bf9260051f7610e99d8e65f106c70bc990e2c60141824bce93984",
+      "same_as_accepted_protected_hash": true
+    }
+  ],
+  "protected47_unchanged": true,
+  "runner_sha256": "34f4b54447d4fdf6a1ced5cc3cb9076b505e81d4b292c78151ac91f79d4f7257",
+  "settings_exact": true,
+  "input_manifest": {
+    "entries": 423,
+    "pass": false,
+    "errors": [
+      "CHANGED .gitattributes",
+      "CHANGED .github/workflows/ci.yml",
+      "CHANGED AGENTS.md",
+      "CHANGED CLAUDE.md",
+      "CHANGED Memory_Forge_Complete_Design.pdf",
+      "CHANGED START_HERE.txt",
+      "CHANGED core/MemoryForge.Core/ReservationBook.cs",
+      "CHANGED core/MemoryForge.CoreChecks/Program.cs",
+      "CHANGED core/README.md",
+      "CHANGED docs/AI_Start_Guide.md",
+      "CHANGED docs/AI_WORKFLOW.md",
+      "CHANGED docs/CURRENT.md",
+      "CHANGED docs/Memory_Forge_v0.8.1_Restored_Design.pdf",
+      "CHANGED docs/START_CLAUDE.md",
+      "CHANGED docs/START_CODEX.md",
+      "CHANGED docs/decisions_v0.8.1.md",
+      "CHANGED docs/design/gen/errors.md",
+      "CHANGED engine/rules-core.js",
+      "CHANGED engine/tests/balance_probe.mjs",
+      "CHANGED engine/tests/fuzz_runs.mjs",
+      "CHANGED engine/tests/review_v071.test.mjs",
+      "CHANGED package.json",
+      "CHANGED proposals/memory_v2.cjs",
+      "CHANGED prototype/index.html",
+      "CHANGED prototype/src/ui.js",
+      "CHANGED tools/ai/build_manifest.py",
+      "CHANGED tools/ai/test_handoff.py",
+      "CHANGED tools/build_prototype.mjs",
+      "CHANGED tools/gen_docs.mjs"
+    ],
+    "same_29_historical_changes": true,
+    "regenerated": false
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "play": {
+    "job_id": "319ffb71729045a58262b9c38a1204dd",
+    "status": "succeeded",
+    "summary": {
+      "total": 165,
+      "passed": 165,
+      "failed": 0,
+      "skipped": 0,
+      "durationSeconds": 53.8919423,
+      "resultState": "Passed"
+    }
+  },
+  "edit": {
+    "job_id": "059a3b03aeb44f76a8dae4ab0e6518cd",
+    "status": "succeeded",
+    "summary": {
+      "total": 3,
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0,
+      "durationSeconds": 0.0553037,
+      "resultState": "Passed"
+    }
+  },
+  "console": {
+    "success": true,
+    "message": "Retrieved 0 log entries.",
+    "data": []
+  },
+  "settings_exactly_restored": true,
+  "live_expedition_scene": {
+    "playing": true,
+    "phase": "MAP",
+    "canvas": true,
+    "slotQuery": true,
+    "choiceQuery": true,
+    "sharedPolicy": "MemoryForge.Core.BattleChoicePolicy",
+    "module": "e5c0b132-8f19-4026-a832-1c90281aaf3d"
+  }
+}

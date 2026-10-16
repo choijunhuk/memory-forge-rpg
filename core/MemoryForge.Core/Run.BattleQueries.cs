@@ -1,4 +1,5 @@
-// P1-UNITY-EXPEDITION-CLIENT §14.3/§16.2: read-only battle queries for the Unity expedition view over the Run's private live battle.
+// P1-UNITY-EXPEDITION-CLIENT §14.3/§16.2 (and P1-PUBLIC-BATTLE-QUERY §17.4/§14.7 for the server's battle query): read-only battle
+// queries over the Run's private live battle.
 // Each wrapper forwards to the existing public Battle query and returns that query's own detached result: the mutable Battle never
 // leaves the Run, no rule is duplicated here, and nothing injects or restores state or advances RNG, version or receipts. Card
 // actions still commit only through BattleCommand. Outside a battle the value queries throw NO_BATTLE exactly as BattleCommand does;
@@ -34,6 +35,15 @@ namespace MemoryForge.Core
         /// memory, versions and receipts stay unchanged. Like BattleCheck, outside battle it returns Error "NO_BATTLE" instead of throwing.</summary>
         public BattlePlayForecast BattleForecast(string uid, string mode = "now", string? target = null, IReadOnlyList<string>? picks = null)
             => battle == null ? new BattlePlayForecast { Mode = mode, Error = "NO_BATTLE" } : battle.Forecast(uid, mode, target, picks);
+
+        /// <summary>P1-PUBLIC-BATTLE-QUERY §17.4/§14.7: Battle.ReservationSlots of the live battle, a fresh detached board (capacity, exact-due
+        /// use and seal per column, every reservation with its own kind). NO_BATTLE outside battle.</summary>
+        public BattleSlotView BattleReservationSlots() => LiveBattle().ReservationSlots();
+
+        /// <summary>P1-PUBLIC-BATTLE-QUERY §14.3: Battle.HandChoices, the pick sheet of a play whose source must be a hand card. Any other uid
+        /// is the same fixed NOT_IN_HAND before its definition, price or zone is read, so a hidden card cannot be probed; the picks are
+        /// copied. A fresh detached result. NO_BATTLE outside battle.</summary>
+        public BattleChoiceView BattleHandChoices(string uid, string mode = "now", IReadOnlyList<string>? picks = null) => LiveBattle().HandChoices(uid, mode, picks);
 
         Battle LiveBattle() => battle ?? throw new RuleException("NO_BATTLE");
     }

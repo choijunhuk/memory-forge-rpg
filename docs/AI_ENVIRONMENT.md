@@ -97,3 +97,10 @@ R0는 [실제18Play/3Edit](../reports/run_create_20261015/unity_playmode18.json)
 같은 후속에서 만료된 MCP HTTP 세션을 재초기화하고 원정 씬을 실제 Play·게임 화면 캡처·Console·stop으로 확인했다([실제 지도](../reports/postgres_persistence_20261016/unity_play_map.png), [범위/도구 영수증](../reports/postgres_persistence_20261016/unity_play_smoke.json)). Play 캡처 중 Console오류0/메모리리스 depth surface 경고2를 관찰했다. Editor상태 캐시는 Play 중 stale이라 준비 완료 근거로 쓰지 않는다. 이번 서버 변경은 Core/Unity 소스·씬·프리팹을 바꾸지 않으며 새 전체Play 자동시험/네이티브빌드/기기/Unity 네트워크 복구 수용은 아니다.
 
 2026-10-17 재개: 같은 계정의 공식 claude.ai Max/firstParty 인증과 기존24시간 이내 과금 UI 증거를 대조한 뒤 CLI를 호출했다. [실제 Max61/High6 출력·종료0](../reports/postgres_ci_20261017/actual_cli_metadata.json)으로 CI 리뷰 협업 재개를 확인했으며 이전 session-limit FAILED는 고치지 않았다. 추가 과금/API/다른 모델로 우회하지 않았다. 별도 Linux 검증 컨테이너의 PG16.15/.NET10.0.402에서 새 CI 실행기188판정·locked restore·오류 출력 비밀 비노출을 실제 확인했다. 새 원격 CI는 별도 확인 대상이다. 기존 C1은 CI 읽기 리뷰, 새 관리 worktree `claude-public-battle`는 공개 조회13파일 구현으로 쓰기 범위를 분리했다. 한 Editor의 쓰기 담당은 계속 Root이며 두 작업 모두 CLI MCP/Bash/하위 AI 호출은 허용하지 않는다.
+
+
+## 2026-10-17 공개 전투 조회 — 실제 협업·Editor 증거
+
+[정제 CLI 메타데이터](../reports/public_battle_query_20261017/actual_cli_metadata.json)에서 Opus5.5의 실제 Max181, xhigh(서버27+경계38+Core104+보강25), High12 기록을 확인했다. 최초Max작업30분시간초과를 한도/성공으로 바꾸지 않았고, 뒤의 범위분리작업은 exit0으로 회수했다. Codex GPT-6.1 Sol Max가 독립 리뷰·실행·통합했고 반대편의 테스트 보강도 두 번째 리뷰에서 승인했다. 기존계정 구독인증·계정일치·24시간이내 creditsOFF/autoreloadOFF UI증거를 적용했으며 API/추가크레딧/유료우회·다른모델은 사용하지 않았다. 원시인증/과금/응답로그는 공개보고서에 복사하지 않는다.
+
+UnityMCP의 실제 MemoryForgeUnity@4034a4e2fe236d6e /6000.0.46f1 Editor에 새Core·공유정책·Mono시험을 임포트하고 Play165/Edit3·skip0·Console0오류/0경고를 확인했다([근거](../reports/public_battle_query_20261017/unity_verification.json)). Scene/Prefab 쓰기는 Codex단독이며 기존설정바이트를 복구했다. Headless Core553·파일952·실제PG859와 이 Editor 결과는 서로 다른 검증이다. 새native/실기기·Unity네트워크/프로세스복구·운영API 완료로 확대하지 않는다. 이미지작업은 없고 Codex전담·GitHub비공개·기존설계/수치/보존정책을 유지한다.

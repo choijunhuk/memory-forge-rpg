@@ -1,0 +1,29 @@
+{
+  "task_id": "P1-PUBLIC-QUERY-APP-DOCS-20261017",
+  "run_id": "P1-PUBLIC-QUERY-APP-DOCS-20261017-20261016T165026699532Z",
+  "status": "RECEIVED_UNVERIFIED",
+  "requestedEffort": "high",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "changes_verified": false,
+  "raw_output": "ops/ai/local/P1-PUBLIC-QUERY-APP-DOCS-20261017-20261016T165026699532Z*",
+  "billing_verified_at": "2026-10-15T21:22:01.277612+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "codex/public-battle-query-20261017",
+  "base_commit": "47502b797ebc2de262704968f85b9ce30ed7665f",
+  "worktree": "/Users/choi/.codex/worktrees/claude-public-battle/Memory_forge",
+  "allowed_files": [
+    "reports/public_battle_query_20261017/author_report.md",
+    "server/MemoryForge.Server/README.md"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "bc4c8bd8-684e-4e74-be0f-e49277bc4530",
+  "subtype": "success",
+  "is_error": false,
+  "result": "I updated `server/MemoryForge.Server/README.md` and added a short job delta to the author report; no code or `server/openapi.yaml` was touched. I ran nothing (docs only, NOT_RUN). Your Core, legacy, file, PostgreSQL and Unity acceptance is cited only as recorded by you.\n\n**What the README now says**\n- **Intro:** Core gained only pure read-only presentation queries. Data, numbers, SQL, the schema and the production OpenAPI are unchanged.\n- **Slots:** the raw `base/temp/max/sealedUntil` members stay for backward compatibility, and Core's `cap/used/sealed/due` sit beside them. `used` counts reservations by exact due turn and can exceed `cap`. Every reservation is still listed with its own `kind`.\n- **`blocked[mode]`:** only the check for the default request with no manual picks. The example given is a legal explicit pull while the default pull is `PULL_DESTINATION_FULL`.\n- **Piles:** still counts only. The battle query lists only the candidates of one request.\n- **New \"Battle query\" section and route-table row:**\n  - **Body:** `{expectedVersion, uid, mode?, target?, picks?}`. Mode is now/next/after, default now; at most 64 picks; a null optional member is dropped. A `requestId`, seed, state or any unknown member is a 400.\n  - **What it doesn't do:** it creates no row, journal entry, receipt or write.\n  - **Refusal order:** 404, then `STALE_VERSION` against the server journal version, then `NO_BATTLE`, then the fixed `NOT_IN_HAND` gate.\n  - **Reply:** context showing the server version vs `battleVersion`, the source, slots, the forecast (hidden outcomes stay default), and choices with candidates carrying `zone`.\n  - **`choices.error: null` doesn't mean playable:** whether the play is legal (phase, AP, target, slot) is `forecast.error`, and only the real command commits.\n  - **Not provided:** draw order, RNG, the card map, client transport or process recovery.\n- **Checks:** both modes make the scenario mandatory (`battle-query` / `pg-battle-query`), including a query round where the server version and `battle.v` differ and the v2 assignment-boundary check. It proves the query contract, not transport.\n- **Known limits:** the rebuilt Core binding refuses old dev envelopes and rows with `STORE_IMPLEMENTATION_MISMATCH` and keeps them byte for byte, with no reset or migration.\n\n**Report:** the stale \"README not updated\" note is struck through as closed in §6. The dated history (job-1 timeout, earlier missing coverage) is kept as recorded.\n\nSession: `bc4c8bd8-684e-4e74-be0f-e49277bc4530`",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ]
+}

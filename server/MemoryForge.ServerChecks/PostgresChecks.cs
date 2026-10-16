@@ -147,7 +147,7 @@ sealed class PostgresChecks
 sealed partial class ServerChecks
 {
     const string PostgresPasswordKey = "#postgres-password";
-    static readonly string[] PostgresScenarios = { "pg-refusals", "pg-auth-input", "pg-expedition", "pg-concurrency", "pg-ownership", "pg-row-lock", "pg-partial-mutation", "pg-corrupt" };
+    static readonly string[] PostgresScenarios = { "pg-refusals", "pg-auth-input", "pg-expedition", "pg-concurrency", "pg-ownership", "pg-battle-query", "pg-row-lock", "pg-partial-mutation", "pg-corrupt" };
     PostgresChecks? oracle;
     string postgresFile = "", runTag = "";
 
@@ -183,6 +183,7 @@ sealed partial class ServerChecks
         host = await PostgresExpedition(host);
         await PostgresConcurrency(host);
         await PostgresOwnership(host);
+        await PostgresBattleQuery(host);
         await PostgresRowLock(host);
         host.Kill();
         await PostgresPartialMutation();
@@ -446,6 +447,17 @@ sealed partial class ServerChecks
         Check(await Oracle.Rows(Alias("gamma")) == 0, "gamma's refused first mutation left no row (the placeholder insert rolled back)");
         Status(await api.Get(RunsPath + "/" + alphaRunId, Credential("alpha")), 200, null, "alpha still reads its own run (postgres)");
         completed.Add("pg-ownership");
+    }
+
+    // ───────── the read-only battle query: the same backend-neutral scenario as the file suite, on the stored rows ─────────
+    // alpha's current departure (version 0 on the map) and its committed bytea; gamma has no row yet (PostgresOwnership checked it), so
+    // every refused query must keep it rowless. Later scenarios use beta, gamma and alpha's latest stored bytes, not alpha's map state.
+    async Task PostgresBattleQuery(ServerProcess server)
+    {
+        string alpha = Alias("alpha"), gamma = Alias("gamma");
+        await BattleQueryScenario(Client(server), Credential("alpha"), Credential("beta"), Credential("gamma"), () => Stored(alpha),
+            async () => await Oracle.Rows(gamma) == 0, " (postgres)");
+        completed.Add("pg-battle-query");
     }
 
     // ───────── a real per-account row-lock contention: bounded wait, nothing committed, then the same requestId commits once ─────────

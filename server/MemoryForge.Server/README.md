@@ -2,8 +2,10 @@
 
 This is a **local development slice**, not the production API of `server/openapi.yaml` and not P1-2 as a whole. There is no production
 database or migration, real account/auth, gacha, collection, purchase, Unity transport or deployment here. `server/schema.sql`,
-`server/openapi.yaml`, Core and `data/` are unchanged. Storage is a private file per account by default, or, when selected explicitly, one
-Development-only PostgreSQL row per account (see "PostgreSQL backend").
+`server/openapi.yaml`, the SQL files and `data/` (all numbers and content) are unchanged. Core gained pure read-only presentation queries
+for the battle query below (P1-PUBLIC-BATTLE-QUERY: `Battle.ReservationSlots`/`HandChoices`, the shared `BattleChoicePolicy`, and the
+`Run.BattleReservationSlots`/`BattleHandChoices` wrappers); no Core rule or command changed. Storage is a private file per account by
+default, or, when selected explicitly, one Development-only PostgreSQL row per account (see "PostgreSQL backend").
 
 ## What it does
 
@@ -31,11 +33,43 @@ Development-only PostgreSQL row per account (see "PostgreSQL backend").
   per mode; piles are counts; enemies show only the current and next intent. Never returned: seed, RNG, draw order, enemy pattern/index,
   receipts, journal, digests, run flags. Limits of this first DTO:
   - `blocked[mode]` is Core `Check` for the default request of that mode (auto target, **no manual picks**). It is not a verdict on every
-    manual target/pick alternative; a client must still send its real choice and accept the command result.
-  - `slots` are Core's raw values (`base`, `temp`, `max` per kind, `sealedUntil`). They are not the §17.4 computed `cap`/`used`/`sealed`:
-    Core has no public capacity query yet, and the server does not re-derive it. Per-card `SLOT_FULL` still comes from `Check`.
-  - `piles.discard`/`piles.exhaust` are counts only; they do not enumerate candidates for recall/discard/exhaust choices.
+    manual target/pick alternative (an explicit pull of a next-turn reservation can be legal while the default pull is
+    `PULL_DESTINATION_FULL`); ask the battle query for the exact request, and a client must still send its real choice and accept the
+    command result.
+  - `slots.next`/`slots.after` keep the raw Core-held `base`, `temp`, `max` and `slots.sealedUntil` unchanged (backwards compatible) and
+    add Core's own `Run.BattleReservationSlots` values: `cap` (the capacity a new reservation meets, the seal included), `used` (the
+    reservations due exactly on that column's turn, whatever their kind; it may exceed `cap`), `sealed` (`sealedUntil >= turn`, the
+    capacity predicate, next column only) and `due` (turn + 1 / turn + 2). The server does not re-derive them; every reservation stays
+    listed in `reservations` with its own `due` and `kind`. Per-card `SLOT_FULL` still comes from `Check`.
+  - `piles` are counts only. Pick candidates of one hand card's request (hand, discard pile or reservations) are listed only by the battle
+    query below, never as a pile dump.
   - A pending event shows its event ID, `done` and `choice`; rendering its text and options needs the client's matching content.
+
+## Battle query (read-only, P1-PUBLIC-BATTLE-QUERY)
+
+`POST /dev/practice/runs/{runId}/battle-query` with exactly `{expectedVersion, uid, mode?, target?, picks?}` (one card play as the
+`play` command would send it). Strict like every body: `mode` is `now|next|after` (default `now`), `target` and each pick are ASCII text,
+at most 64 picks, an optional member given as `null` is dropped; a `requestId`, seed, state, battle version, operation or any other
+member is `400 UNKNOWN_FIELD`, a duplicate member `400 DUPLICATE_FIELD`.
+
+- Pure: it runs under the same credential/owner check and `Store.Read` as the run read, on the replayed Run with the full-state digest
+  guard. It creates no account file/row, journal entry, receipt or revision and runs no command; there is no `requestId` to retry.
+- Order: another account's or unknown run `404 RUN_NOT_FOUND` → `expectedVersion` must equal the **server journal version** (the run's
+  committed command count, as in commands), else `409 STALE_VERSION` → no battle `422 NO_BATTLE` → hand gate.
+- Hand gate: a `uid` that is not in the current hand (draw, discard or exhaust pile, a reservation, an enemy, no card at all) gets the one
+  fixed `422 NOT_IN_HAND` before its definition, price or forecast is read, so a hidden card instance cannot be probed.
+- Reply: `runId`, `version` (server journal version), `phase`, `context {node, turn, battleVersion, battlePhase}` — `battleVersion` is the
+  battle's own `v`, which differs from `version` once the run has other commands (a later battle, an `assign`); `source {uid, id, name,
+  text, mode, target, picks}` with the effective name and Core `BattleText`; the same computed `slots` as above; `forecast` = Core
+  `Run.BattleForecast` of exactly this request (`error`, `mode`, `cost`, `due`, `hidden`, `enemyHpLoss`, `enemyDamage`, `newlyBroken`,
+  `blockDelta`, `hpDelta`, `defeat`; with `hidden` the outcome fields stay default, so no draw order or random result is revealed);
+  `choices` = Core's shared pick sheet for the effective definition and Core prices: `requests [{label, from, count, growthOnly, op, part,
+  leading}]`, `accepted` (leading picks that hold), `index`/`left` (the request the next pick fills), `blocked` (`PICK_GROWTH_CAP`),
+  `candidates [{uid, id, zone, plus, mods, temp, growth}]` of that request only (`zone` is its `from`: `hand`, `discard` or `res`), and
+  `error` (`PICK_INVALID` when a supplied pick does not hold).
+- `choices.error: null` only means the pick sheet was computed. Whether the play is legal (phase, AP, target, slot, pull destination) is
+  `forecast.error`, and only the real command commits anything. A forecast for next/after is a current-state estimate, not a promise.
+- Not provided: draw order, RNG, the card map, replayable history, client transport, an unconfirmed-request store or process recovery.
 
 ## Security boundary (local only)
 
@@ -78,6 +112,7 @@ The store must be outside the repository and owner-only (created `0700` when mis
 | `POST /dev/practice/runs/{runId}/commands` `{requestId, expectedVersion, kind, args}` | one journal command |
 | `POST /dev/practice/runs/{runId}/memory-preview` `{selectedChangeIds}` | Core `PreviewMemory` (pure) |
 | `POST /dev/practice/runs/{runId}/memory-commit` `{requestId, expectedVersion, expectedMemoryVersion, selectedChangeIds}` | Core v2 save |
+| `POST /dev/practice/runs/{runId}/battle-query` `{expectedVersion, uid, mode?, target?, picks?}` | one card play's forecast and pick sheet (pure; see "Battle query") |
 
 Command kinds and arguments: `enter{nodeId}`, `play{uid, mode?, target?, picks?}`, `ult{actor, target?, picks?}`, `end`, `takeCard{id}`,
 `skipCard`, `takeRelic{id}`, `takePart`, `evolve{key, branchId}`, `proceed`, `archive{choice: return|continue}`,
@@ -123,13 +158,21 @@ connection file, and a psql wrapper already bound to that database (ordinary `-X
 arguments). It runs real hosts on fresh run-tagged fixture aliases: PostgreSQL startup refusals (including a non-existent database), auth
 and strict input with no row created, create/enter/play with exact receipt retries across a SIGKILL, a legitimate defeat and v2 save with
 an earned card surviving another SIGKILL, 16-way duplicate/stale races in one and two hosts (checked against the one stored row), a real
-row-lock timeout and retry, a genuine partial Core `Enter` rollback, content-binding refusal, tampered rows refused and preserved, and
-the complete-capture privacy scan (including the database password). Database outage/reconnect, revoked permissions during requests
+row-lock timeout and retry, a genuine partial Core `Enter` rollback, content-binding refusal, tampered rows refused and preserved, the
+mandatory `pg-battle-query` scenario, and the complete-capture privacy scan (including the database password). Database outage/reconnect, revoked permissions during requests
 and a database without the schema marker are not covered by these checks.
 
 They build the host, launch real processes with a temp test-only fixture/credentials/stores, and exercise startup refusals, auth,
 strict input, restart/retry, duplicate/conflict/stale, rule and write-failure rollback, a runtime appsettings Kestrel endpoint that must
 never open, conflicting loopback hosting URLs (command line and environment) that must not move the configured port, a genuine partial Core mutation, ownership, two processes on one store, tampered stores and a complete-capture leak scan.
+
+Both modes make the battle query scenario mandatory (`battle-query` / `pg-battle-query`, required before the privacy scan counts): auth,
+ownership and no file/row on refusal, `NO_BATTLE` on the map, stale versions, the strict body, every hand card and mode compared member
+by member with a check-side Core replay of the stored inputs, explicit picks, the fixed `NOT_IN_HAND` for every instance outside the hand
+(byte-identical to no card), byte/SHA-256 envelope purity, and at least one query round whose server journal version differs from
+`battle.v`, each checked against its own source. The v2 assignment boundary is checked too: a saved starting-memory key (the base common
+card included) is refused with `REASSIGNMENT_REQUIRES_SEPARATE_FLOW`, so the separate versions come from a legitimate assignment of a card
+gained in the run or from progression to a later battle. This proves the query contract, not client transport or process recovery.
 Console failure output carries only check names, statuses, safe codes and keyed fingerprints; raw responses, host/build output and
 exception text go to `diagnostics.log` (0600) in the owner-only temp directory, which is kept only on failure. Run as a normal user (the
 write-failure check needs enforced directory permissions; as root it fails rather than skips).
@@ -149,7 +192,9 @@ observed server result, and no game value or seed is adjusted to make it pass.
 - Performance: every request replays the whole current journal and rewrites (file) or updates (PostgreSQL) the whole envelope; receipts
   and finished runs are never pruned, so the 512 MiB dev-store boundary is eventually reached. Snapshots/compaction need an approved
   retention and migration policy.
-- Binding is strict: rebuilding Core (another module ID), changing `data/game_data.json` or the fixture refuses existing envelopes.
+- Binding is strict: rebuilding Core (another module ID), changing `data/game_data.json` or the fixture refuses existing envelopes. The
+  Core build with the battle-query queries is such a rebuild: older dev envelopes/rows answer `409 STORE_IMPLEMENTATION_MISMATCH` and are
+  preserved byte for byte, never reset or migrated; use a fresh store or a fresh dedicated test database.
 - The host reuses the reviewed loaders from `core/MemoryForge.CoreChecks` as compile links (plus `JsonGraphComparison.cs`, which
   `MemoryV2DataLoader` references); moving them to a shared host library is a separate change.
 - Windows is refused (POSIX permissions and flock semantics are part of the contract).

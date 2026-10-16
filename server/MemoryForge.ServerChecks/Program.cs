@@ -239,7 +239,7 @@ sealed partial class ServerChecks
     readonly ResponseCapture capture = new ResponseCapture();
     readonly List<long> seeds = new List<long>();
     // Scenarios that must all have completed before the final leak scan counts as covering the suite.
-    static readonly string[] RequiredScenarios = { "refusals", "auth-input", "expedition", "concurrency", "ownership", "write-failure", "kestrel-reload", "hosting-url-pin", "partial-mutation", "corrupt-stores" };
+    static readonly string[] RequiredScenarios = { "refusals", "auth-input", "expedition", "concurrency", "ownership", "write-failure", "battle-query", "kestrel-reload", "hosting-url-pin", "partial-mutation", "corrupt-stores" };
     readonly HashSet<string> completed = new HashSet<string>(StringComparer.Ordinal);
     string serverDll = "", fixture = "", store = "", alphaRunId = "", lockedDirectory = "";
     byte[] alphaDone = Array.Empty<byte>();
@@ -269,6 +269,7 @@ sealed partial class ServerChecks
         await Concurrency(main);
         await Ownership(main);
         await WriteFailureRollback(main);
+        await BattleQuery(main);
         main.Kill();
         await KestrelReloadCannotOpenEndpoints();
         await HostingUrlsCannotMoveThePort();
@@ -747,15 +748,7 @@ sealed partial class ServerChecks
         var run = ReadBody(file).GetProperty("run");
         var journal = run.GetProperty("journal").EnumerateArray().ToList();
         Check(journal.Select(e => S(e, "kind")).SequenceEqual(kinds), "the stored journal is exactly the committed command sequence");
-        var setup = new RunSetup
-        {
-            Seed = run.GetProperty("seed").GetInt64(), Length = "short", MemoryPolicy = "v2", RunId = S(run, "runId"), MemoryVersion = run.GetProperty("memoryVersion").GetInt64(),
-            Memory = MemoryV2DataLoader.Graph(run.GetProperty("startMemory")), Difficulty = new RunDifficulty { Hp = 100, Damage = 100 },
-            UseMemory = run.GetProperty("useMemory").GetBoolean() ? (bool?)null : false
-        };
-        foreach (string cid in Party) setup.Party.Add(new RunPartyEntry { CharId = cid, Res = 0 });
-        var core = Run.Create(RunDataLoader.Load(root), setup);
-        foreach (var entry in journal) CoreExecute(core, S(entry, "kind"), entry.GetProperty("args"));
+        var core = CheckSideRun(run);
         var s = core.State;
         Check(s.Phase == S(served, "phase") && s.Hp == I(served, "hp") && s.MaxHp == I(served, "maxHp") && s.Coins == I(served, "coins")
             && s.Position == served.GetProperty("position").GetString(), "the independent Core replay matches the served phase, HP, coins and position");
@@ -767,6 +760,21 @@ sealed partial class ServerChecks
             var actual = A(served.GetProperty("memory").GetProperty(pair.Key), "changes").Select(c => S(c, "id")).ToList();
             Check(expected.SequenceEqual(actual), "the independent Core replay offers the served change list for " + SafeName(pair.Key));
         }
+    }
+    // The check-side Core oracle of one stored run record: Run.Create from its stored inputs (seed, runId, memory version, start memory,
+    // useMemory and the fixture party) plus an independent dispatch of its stored journal. No host code is involved and nothing is injected.
+    Run CheckSideRun(JsonElement run)
+    {
+        var setup = new RunSetup
+        {
+            Seed = run.GetProperty("seed").GetInt64(), Length = "short", MemoryPolicy = "v2", RunId = S(run, "runId"), MemoryVersion = run.GetProperty("memoryVersion").GetInt64(),
+            Memory = MemoryV2DataLoader.Graph(run.GetProperty("startMemory")), Difficulty = new RunDifficulty { Hp = 100, Damage = 100 },
+            UseMemory = run.GetProperty("useMemory").GetBoolean() ? (bool?)null : false
+        };
+        foreach (string cid in Party) setup.Party.Add(new RunPartyEntry { CharId = cid, Res = 0 });
+        var core = Run.Create(RunDataLoader.Load(root), setup);
+        foreach (var entry in run.GetProperty("journal").EnumerateArray()) CoreExecute(core, S(entry, "kind"), entry.GetProperty("args"));
+        return core;
     }
     static void CoreExecute(Run run, string kind, JsonElement args)
     {

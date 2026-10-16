@@ -294,7 +294,7 @@ P1/P2 완료로 개발을 끝내지 않는다. 이 표와 아래 장별 요구�
 | **§17.1 테이블** | PARTIAL(스키마/개발 앱) | [schema.sql][schema]·[SQL 제약 시험][schema-tests]·[개발 전용 추가 PG 스키마](../server/dev_practice_schema.sql) | 원래 UUID 테이블은 유지하며 별도 dev envelope 행에 앱 연결. 운영 v2 스키마/기존 자산 이관은 미구현. |
 | **§17.2 핵심 트랜잭션** | PARTIAL(파일/PG 개발 경계) | [기존 파일 잠금](../reports/server_persistence_20261016/root_acceptance.md)·[실제 PG 트랜잭션/장애27](../reports/postgres_persistence_20261016/root_acceptance.md) | 최초 생성·두 프로세스 경쟁·부분 Run 실패·권한/DB 장애·COMMIT 응답 유실을 검증. 원장/구매/100병렬·운영 수용은 미완료. |
 | **§17.3 API 요약** | PARTIAL(계약) | [OpenAPI][api] | 27경로 실제 핸들러·요청/응답 계약 시험 |
-| **§17.4 공개 상태 DTO (전투)** | PARTIAL(개발 서버 DTO) | [명시적 투영](../server/MemoryForge.Server/PublicView.cs)·[숨김 정보/순수성 검사](../reports/server_persistence_20261016/root_acceptance.md) | Core 비용/방식·공개 손패/적 의도와 더미 개수를 제공한다. 계산된 슬롯 cap/used/sealed·버린/소멸 카드 수동 후보·전체 네트워크 UI 복구는 남음. |
+| **§17.4 공개 상태 DTO (전투)** | PARTIAL(개발 서버 DTO) | [명시적 투영](../server/MemoryForge.Server/PublicView.cs)·[숨김 정보/순수성 검사](../reports/server_persistence_20261016/root_acceptance.md) | Core 비용/방식·공개 손패/적 의도와 더미 개수, 계산된 슬롯 cap/used/sealed/due와 엄격한 손패원천 전투조회·효과별 손/버림/예약 후보를 제공한다([실제 수용](../reports/public_battle_query_20261017/root_acceptance.md)). 서버버전과 전투v를 구분하며 전체 네트워크 UI·앱프로세스 복구는 남음. |
 | **§17.5 저장 v2와 기존 API·DB의 접합 작업** | PARTIAL(개발 서버 v2/PG) | [파일 저장](../reports/server_persistence_20261016/root_acceptance.md)·[실제 PG 획득 카드 저장/재시작/영수증](../reports/postgres_persistence_20261016/root_acceptance.md)·[legacy 스키마][schema] | 같은 selectedChangeIds/version/stable key·기억/이력/영수증을 별도 dev 행에 보존. legacy API 교체·실계정 보유권·운영 이관은 미완료. |
 
 ## 장 18 — 18. 운영·배포·정책 준수

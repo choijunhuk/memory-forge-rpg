@@ -120,6 +120,7 @@ namespace MemoryForge.Server
     sealed record CommandRequest(string RequestId, int ExpectedVersion, string Kind, Dictionary<string, object?> Args, string Identity);
     sealed record PreviewRequest(List<object?> SelectedChangeIds);
     sealed record CommitRequest(string RequestId, int ExpectedVersion, Dictionary<string, object?> Args, string Identity);
+    sealed record BattleQueryRequest(int ExpectedVersion, string Uid, string Mode, string? Target, List<string> Picks);
 
     static class Contracts
     {
@@ -154,6 +155,10 @@ namespace MemoryForge.Server
             ["assign"] = new[] { ("key", true, "text"), ("charId", true, "text") },
             [MemoryCommit] = new[] { ("requestId", true, "text"), ("expectedMemoryVersion", true, "int"), ("selectedChangeIds", true, "list") },
         };
+        // The read-only battle query's play request: play's own uid/target/picks types, the mode limited to Core's three modes. It is not a
+        // journal kind, so the command route can never reach it.
+        static readonly (string Name, bool Required, string Type)[] BattleQueryArgs =
+            { ("uid", true, "text"), ("mode", false, "choice:now|next|after"), ("target", false, "text"), ("picks", false, "list") };
 
         public static CreateRequest ParseCreate(byte[] body)
         {
@@ -204,11 +209,31 @@ namespace MemoryForge.Server
             return new CommitRequest(requestId, expected, args, identity);
         }
 
+        /// <summary>P1-PUBLIC-BATTLE-QUERY §17.4: {expectedVersion, uid, mode?, target?, picks?} of the read-only battle query. There is no
+        /// requestId (nothing is committed or replayed), and a seed, state, battle version, operation or any other member is UNKNOWN_FIELD.
+        /// The play members go through the same normalization as command arguments; a null optional member is dropped, mode defaults to now.</summary>
+        public static BattleQueryRequest ParseBattleQuery(byte[] body)
+        {
+            using var document = Document(body);
+            var members = Members(document.RootElement, "expectedVersion", "uid", "mode", "target", "picks");
+            int expected = Version(members, "expectedVersion");
+            var raw = new Dictionary<string, object?>(StringComparer.Ordinal);
+            foreach (var pair in members) if (pair.Key != "expectedVersion") raw.Add(pair.Key, Value(pair.Value, 0));
+            var args = Normalize(BattleQueryArgs, raw);
+            return new BattleQueryRequest(expected, (string)args["uid"]!, args.TryGetValue("mode", out object? mode) ? (string)mode! : "now",
+                args.TryGetValue("target", out object? target) ? (string)target! : null,
+                args.TryGetValue("picks", out object? picks) ? ((List<object?>)picks!).Select(pick => (string)pick!).ToList() : new List<string>());
+        }
+
         /// <summary>Members ⊆ the kind's allowlist, required members present, null optional members dropped, values typed (ASCII text,
         /// non-negative Int32 as long, lists of text). Returns a fresh normalized dictionary; anything else is 400.</summary>
         public static Dictionary<string, object?> CheckArgs(string kind, IDictionary<string, object?> args)
         {
             if (!CommandArgs.TryGetValue(kind, out var specs)) throw new ApiError(400, "UNSUPPORTED_COMMAND");
+            return Normalize(specs, args);
+        }
+        static Dictionary<string, object?> Normalize((string Name, bool Required, string Type)[] specs, IDictionary<string, object?> args)
+        {
             foreach (string name in args.Keys) if (!specs.Any(spec => spec.Name == name)) throw new ApiError(400, "UNKNOWN_FIELD");
             var normalized = new Dictionary<string, object?>(StringComparer.Ordinal);
             foreach (var spec in specs)

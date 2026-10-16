@@ -2,8 +2,9 @@
 // is listed here; nothing copies Run.State.ToJsonGraph, Battle.PublicView, a pending graph or a memory store wholesale. Never shown: seed,
 // RNG, draw order (piles are counts), enemy pattern/pattern index/passive, receipts, journal, digests, run flags, offer counters or card
 // cost modifiers. Card costs, modes, targets and usability come from the Core queries (CostOf/AllowedModes/NeedsTarget/Check with the
-// "auto" target), never re-derived here. Core has no public slot-capacity query, so slots show the Core-held base/temp/max/seal values
-// and per-card SLOT_FULL comes from Check; a server-computed §17.4 "cap" is a follow-up that needs that query, not UI arithmetic.
+// "auto" target), never re-derived here. Slots keep the Core-held raw base/temp/max/sealedUntil members and add, per column, Core's own
+// Run.BattleReservationSlots cap/used/sealed/due (P1-PUBLIC-BATTLE-QUERY §17.4); per-card SLOT_FULL still comes from Check. The battle
+// query reply (BattleQuery) projects Core's forecast and pick sheet the same explicit way.
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -64,6 +65,34 @@ namespace MemoryForge.Server
                     "version", Scalar(Member(h, "version")), "selectedChangeIds", Texts(Member(h, "selectedChangeIds")))).ToList() : new List<object?>()),
                 "run", run, "finishedRuns", finishedRuns);
 
+        /// <summary>P1-PUBLIC-BATTLE-QUERY §17.4/§14.3/§14.7: the battle-query reply. The caller has already refused a source that is not a
+        /// hand card (Core's fixed NOT_IN_HAND), so every member is public: the server run version and the node/turn/battle version the answer
+        /// belongs to, the requested source (its effective name and BattleText) and request, the reservation board, Core's forecast of exactly
+        /// that play and the source's pick sheet. Not a promise about later states and not a replay of earlier ones.</summary>
+        public static Dictionary<string, object?> BattleQuery(Run run, string runId, int version, BattleQueryRequest request, BattleChoiceView choices,
+            BattlePlayForecast forecast, BattleData content)
+        {
+            var s = run.State; var b = s.Battle ?? throw new System.InvalidOperationException("a battle query reply needs the live battle");
+            // Candidates exist only for the request at Index; their zone is that request's own From (hand, discard or res).
+            string? zone = choices.Index < choices.Requests.Count ? choices.Requests[choices.Index].From : null;
+            string? name = null, text = null;
+            try { var effective = run.BattleEffectiveCard(request.Uid); name = effective.Name; text = BattleText.Card(effective, content); }
+            catch (RuleException) { }
+            return Obj("runId", runId, "version", version, "phase", s.Phase,
+                "context", Obj("node", s.Position, "turn", b.Turn, "battleVersion", b.V, "battlePhase", b.Phase),
+                "source", Obj("uid", request.Uid, "id", b.Cards[request.Uid].Id, "name", name, "text", text, "mode", request.Mode, "target", request.Target,
+                    "picks", request.Picks.Select(p => (object?)p).ToList()),
+                "slots", Slots(run.BattleReservationSlots(), b, content.Rules),
+                "forecast", Obj("error", forecast.Error, "mode", forecast.Mode, "cost", forecast.Cost, "due", forecast.Due, "hidden", forecast.Hidden,
+                    "enemyHpLoss", forecast.EnemyHpLoss, "enemyDamage", forecast.EnemyDamage, "newlyBroken", forecast.NewlyBroken,
+                    "blockDelta", forecast.BlockDelta, "hpDelta", forecast.HpDelta, "defeat", forecast.Defeat),
+                "choices", Obj("error", choices.Error,
+                    "requests", choices.Requests.Select(r => (object?)Obj("label", r.Label, "from", r.From, "count", r.Count, "growthOnly", r.GrowthOnly,
+                        "op", r.Op, "part", r.Part, "leading", r.Leading)).ToList(),
+                    "accepted", choices.Accepted, "index", choices.Index, "left", choices.Left, "blocked", choices.Blocked,
+                    "candidates", choices.Candidates.Select(uid => (object?)Candidate(b.Cards[uid], zone)).ToList()));
+        }
+
         static Dictionary<string, object?> Battle(Run run, BattleState b, BattleRules rules) => Obj(
             "v", b.V, "phase", b.Phase, "turn", b.Turn, "hp", b.Hp, "maxHp", b.MaxHp, "block", b.Block, "counter", b.Counter,
             "ap", b.Ap, "apNext", b.ApNext, "apDrainNext", b.ApDrainNext, "silenceUntil", b.SilenceUntil, "weak", b.Weak,
@@ -77,8 +106,7 @@ namespace MemoryForge.Server
             "hand", b.Zones.Hand.Select(uid => (object?)HandCard(run, b, uid)).ToList(),
             "reservations", b.Reservations.Select(r => (object?)Obj("uid", r.Uid, "id", b.Cards.TryGetValue(r.Uid, out var card) ? card.Id : null,
                 "due", r.Due, "order", r.Order, "kind", r.Kind, "target", r.Target, "delayed", r.Delayed)).ToList(),
-            "slots", Obj("next", Obj("base", b.SlotsBase.Next, "temp", b.SlotsTemp.Next, "max", rules.NextSlotsMax),
-                "after", Obj("base", b.SlotsBase.After, "temp", b.SlotsTemp.After, "max", rules.AfterSlotsMax), "sealedUntil", b.SealedUntil),
+            "slots", Slots(run.BattleReservationSlots(), b, rules),
             "gaugeMax", rules.GaugeMax,
             "actors", b.Actors.Select(a => (object?)Obj("id", a.Id, "name", a.Name, "attr", a.Attr, "gauge", a.Gauge, "res", a.Res)).ToList(),
             "enemies", b.Enemies.Select(e => (object?)Enemy(e)).ToList(),
@@ -104,6 +132,18 @@ namespace MemoryForge.Server
             view["modes"] = modes.Select(m => (object?)m).ToList(); view["costs"] = costs; view["blocked"] = blocked;
             return view;
         }
+
+        // The Core-held raw base/temp/max and sealedUntil exactly as before, plus Core's ReservationSlots cap/used/sealed/due of each column.
+        static Dictionary<string, object?> Slots(BattleSlotView slots, BattleState b, BattleRules rules) => Obj(
+            "next", Obj("base", b.SlotsBase.Next, "temp", b.SlotsTemp.Next, "max", rules.NextSlotsMax,
+                "cap", slots.Next.Cap, "used", slots.Next.Used, "sealed", slots.Next.Sealed, "due", slots.Next.Due),
+            "after", Obj("base", b.SlotsBase.After, "temp", b.SlotsTemp.After, "max", rules.AfterSlotsMax,
+                "cap", slots.After.Cap, "used", slots.After.Used, "sealed", slots.After.Sealed, "due", slots.After.Due),
+            "sealedUntil", b.SealedUntil);
+        // A pick candidate (a hand, discard or reservation card the request offers): its zone (the current request's From) and the same
+        // public instance members as a hand card shows.
+        static Dictionary<string, object?> Candidate(BattleCardState card, string? zone) => Obj("uid", card.Uid, "id", card.Id, "zone", zone, "plus", card.Plus,
+            "mods", Obj("c", card.Circuit, "e", card.Edge), "temp", card.Temp.Select(t => (object?)t).ToList(), "growth", card.Growth);
 
         static Dictionary<string, object?> Enemy(BattleEnemyState e)
         {
