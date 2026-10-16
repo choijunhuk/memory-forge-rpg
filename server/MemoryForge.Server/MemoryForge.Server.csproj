@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <!-- P1-LOCAL-AUTHORITATIVE-PERSISTENCE: loopback-only Development practice host over the shared Core (§16.5/§17.2/§17.4/§17.5/§20.9 P1-2).
-       ASP.NET Core shared framework + BCL only: no NuGet package, database, external service or production mode. -->
+       Initial file slice used ASP.NET Core + BCL only. The user approved Npgsql10.0.3 for the optional local PostgreSQL backend;
+       no ORM, paid service or production mode is added. -->
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
@@ -9,9 +10,11 @@
     <RollForward>Major</RollForward>
     <InvariantGlobalization>true</InvariantGlobalization>
     <RootNamespace>MemoryForge.Server</RootNamespace>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="../../core/MemoryForge.Core/MemoryForge.Core.csproj" />
+    <PackageReference Include="Npgsql" Version="10.0.3" />
   </ItemGroup>
   <!-- The reviewed host JSON loaders are linked, not copied, moved or rewritten (the same files CoreChecks and the Unity content export
        compile). MemoryV2DataLoader.Difference names JsonGraphComparison, so that one helper is linked with them. This couples the server to

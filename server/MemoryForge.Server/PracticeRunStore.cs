@@ -1,16 +1,17 @@
-// P1-LOCAL-AUTHORITATIVE-PERSISTENCE §17.2/§17.5/§14.7/§16.3: an account's durable practice state as one private envelope file, replaced
+// P1-LOCAL-AUTHORITATIVE-PERSISTENCE §17.2/§17.5/§14.7/§16.3: an account's durable practice state as one private envelope, replaced
 // atomically. The live Run is never stored or restored: every request rebuilds it by real Run.Create from the recorded server-chosen inputs
 // and replays the version-pinned public-command journal, checking the full-state digest after Create and after every command. A mutation
-// runs on that fresh, isolated candidate under the in-process gate and the account's permanent OS lock file (FileShare.None, bounded wait;
-// the lock file is never deleted and the replaceable data file is never locked). A rule, I/O or unexpected failure discards the candidate
-// and leaves the committed file, run version, memory store and receipts exactly as they were. Receipts are checked before any version
-// check and return their original response bytes. Unknown, corrupt, tampered or differently bound envelopes are refused and left
-// untouched. An envelope above MaxEnvelopeBytes (512 MiB, the dev-store boundary) is refused on load and never written. Durability scope:
-// the complete new envelope is written to a private temp file, flushed with Flush(flushToDisk: true), then renamed over the old one in
-// the same directory, and the reply is sent only after that rename. That covers a crash of this process (the file is either the previous
-// or the new complete envelope). The directory entry is not fsynced and macOS F_FULLFSYNC is not used, so nothing is claimed for power or
-// storage failure: afterwards the store needs inspection and recovery, and a client retry is not guaranteed to be safe (a lost create
-// receipt, for instance, would choose a new seed and runId).
+// runs on that fresh, isolated candidate under the in-process gate and the account's exclusive persistence lock. A rule, I/O or unexpected
+// failure discards the candidate and leaves the committed envelope, run version, memory store and receipts exactly as they were. Receipts
+// are checked before any version check and return their original response bytes. Unknown, corrupt, tampered or differently bound
+// envelopes are refused and left untouched. An envelope above MaxEnvelopeBytes (512 MiB, the dev-store boundary) is refused on load and
+// never written. The decision above is shared once (PracticeRunStore); persistence only stores the exact envelope bytes:
+// - FileEnvelopePersistence (default): permanent per-account lock file (FileShare.None, bounded wait; never deleted, and the replaceable
+//   data file is never locked), private temp file flushed with Flush(flushToDisk: true) and renamed over the old one in the same directory
+//   before the reply. That covers a crash of this process (the file is the previous or the new complete envelope). The directory entry is
+//   not fsynced and macOS F_FULLFSYNC is not used, so nothing is claimed for power or storage failure: afterwards the store needs inspection
+//   and recovery, and a client retry is not guaranteed to be safe (a lost create receipt, for instance, would choose a new seed and runId).
+// - PostgresEnvelopePersistence (explicit PracticeBackend=postgres, PracticePostgresStore.cs): one database transaction per mutation.
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -267,20 +268,40 @@ namespace MemoryForge.Server
         }
     }
 
+    /// <summary>One exclusive section's outcome: the reply, and the complete new envelope to commit (null: commit nothing — a stored receipt).</summary>
+    sealed class Transition
+    {
+        public Reply Reply { get; }
+        public byte[]? NewEnvelope { get; }
+        public Transition(Reply reply, byte[]? newEnvelope) { Reply = reply; NewEnvelope = newEnvelope; }
+    }
+
+    /// <summary>Where an account's committed envelope bytes live. ReadAsync is a pure snapshot read (null: no account yet) that never creates
+    /// anything. TransactAsync holds the account's exclusive lock around decide and the write: decide gets the committed bytes, or null when no
+    /// envelope existed before this section, and runs synchronously under the store's Core gate; only its NewEnvelope is written and the reply
+    /// is returned only after it is durably committed. Any exception from decide or from the write commits nothing. freshEnvelope is a valid
+    /// empty envelope a backend may use as a lock placeholder (it never becomes visible unless decide's own envelope replaces it).</summary>
+    interface IEnvelopePersistence
+    {
+        Task<byte[]?> ReadAsync(PracticeAccount account);
+        Task<Reply> TransactAsync(PracticeAccount account, byte[] freshEnvelope, Func<byte[]?, Transition> decide);
+    }
+
+    /// <summary>The request-facing store: one global in-process Core gate (shared RunData) and the single shared decision — decode and binding,
+    /// receipt before any version check, fresh full-state replay, the isolated command, receipt + revision, encode and size guard — around
+    /// whichever persistence holds the bytes.</summary>
     sealed class PracticeRunStore
     {
-        const UnixFileMode PrivateFile = UnixFileMode.UserRead | UnixFileMode.UserWrite;
-        const UnixFileMode GroupOrOther = UnixFileMode.GroupRead | UnixFileMode.GroupWrite | UnixFileMode.GroupExecute | UnixFileMode.OtherRead | UnixFileMode.OtherWrite | UnixFileMode.OtherExecute;
         static readonly TimeSpan Wait = TimeSpan.FromSeconds(10);
-        /// <summary>The dev-store boundary for one account file, enforced identically on load and before any write (RequireWithinLimit).
-        /// Growing past it needs the reviewed database/migration work, never history truncation.</summary>
+        /// <summary>The dev-store boundary for one account envelope, enforced identically on load and before any write (RequireWithinLimit),
+        /// for the file and the PostgreSQL backend. Growing past it needs the reviewed database/migration work, never history truncation.</summary>
         public const long MaxEnvelopeBytes = 512L * 1024 * 1024;
-        readonly string directory;
         readonly PracticeContent content;
-        // One Core execution at a time in this process (shared RunData); the per-account OS lock serializes writers across processes.
+        readonly IEnvelopePersistence persistence;
+        // One Core execution at a time in this process (shared RunData); the persistence's account lock serializes writers across processes.
         readonly SemaphoreSlim gate = new SemaphoreSlim(1, 1);
 
-        public PracticeRunStore(string directory, PracticeContent content) { this.directory = directory; this.content = content; }
+        public PracticeRunStore(PracticeContent content, IEnvelopePersistence persistence) { this.content = content; this.persistence = persistence; }
 
         public static bool IsRunId(string id) => id.Length == 35 && id.StartsWith("pr-", StringComparison.Ordinal) && id.Skip(3).All(c => c >= '0' && c <= '9' || c >= 'a' && c <= 'f');
         public static string StateDigest(Run run) => GraphJson.Digest(run.State.ToJsonGraph());
@@ -289,38 +310,23 @@ namespace MemoryForge.Server
         {
             if (StateDigest(run) != digest) throw new InvalidOperationException("A read-only query changed the Run state");
         }
-
-        /// <summary>Startup: an absolute directory outside the content root (repository), not a link, owner-only (created 0700).</summary>
-        public static string PrepareDirectory(string path, string contentRoot)
+        /// <summary>Whether path is root itself or inside it (case-insensitive on macOS). Private stores and secrets must stay outside the repository.</summary>
+        public static bool IsInside(string path, string root)
         {
             var comparison = OperatingSystem.IsMacOS() ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
-            string full = Path.TrimEndingDirectorySeparator(Path.GetFullPath(path)), root = Path.TrimEndingDirectorySeparator(Path.GetFullPath(contentRoot));
-            if (full.Equals(root, comparison) || full.StartsWith(root + Path.DirectorySeparatorChar, comparison)) throw new StartupRefusal("the private store must be outside the content root (repository)");
-            if (File.Exists(full)) throw new StartupRefusal("the private store path is a file");
-            var info = new DirectoryInfo(full);
-            try
-            {
-                if (info.Exists)
-                {
-                    if (info.LinkTarget != null) throw new StartupRefusal("the private store must not be a symbolic link");
-                    if ((File.GetUnixFileMode(full) & GroupOrOther) != 0) throw new StartupRefusal("the private store directory must not be accessible to group/other (chmod 700)");
-                }
-                else Directory.CreateDirectory(full, UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.UserExecute);
-            }
-            catch (Exception error) when (error is IOException || error is UnauthorizedAccessException) { throw new StartupRefusal("the private store directory cannot be prepared"); }
-            return full;
+            string full = Path.TrimEndingDirectorySeparator(Path.GetFullPath(path)), parent = Path.TrimEndingDirectorySeparator(Path.GetFullPath(root));
+            return full.Equals(parent, comparison) || full.StartsWith(parent + Path.DirectorySeparatorChar, comparison);
         }
 
-        string EnvelopePath(PracticeAccount account) => Path.Combine(directory, "account-" + account.Id + ".json");
-        string LockPath(PracticeAccount account) => Path.Combine(directory, "account-" + account.Id + ".lock");
-
-        /// <summary>A pure read: no lock, no write. The envelope is replaced atomically, so this sees one complete committed revision.</summary>
+        /// <summary>A pure read: no lock, no write, no row or file created. The envelope is replaced atomically, so this sees one complete
+        /// committed revision.</summary>
         public async Task<Reply> Read(PracticeAccount account, Func<AccountEnvelope?, Run?, Reply> read)
         {
             await EnterGate();
             try
             {
-                var envelope = Load(account);
+                byte[]? bytes = await persistence.ReadAsync(account);
+                var envelope = bytes == null ? null : Decode(account, bytes);
                 Run? live = envelope != null && envelope.Run != null ? Replay(account, envelope) : null;
                 return read(envelope, live);
             }
@@ -328,30 +334,37 @@ namespace MemoryForge.Server
         }
 
         /// <summary>§17.2 under the account lock: receipt (same identity → stored reply, else 409) → fresh replay → the command on that isolated
-        /// candidate → receipt + revision → atomic replace → reply. Any exception before the replace commits nothing.</summary>
+        /// candidate → receipt + revision → encode and size guard → durable write → reply. Any exception before the write commits nothing.</summary>
         public async Task<Reply> Mutate(PracticeAccount account, string requestId, string identity, Func<AccountEnvelope, Run?, Reply> mutate)
         {
             await EnterGate();
             try
             {
-                using (await LockAccount(account))
+                return await persistence.TransactAsync(account, Envelopes.Encode(AccountEnvelope.Fresh(account, content)), committed =>
                 {
-                    var envelope = Load(account);
+                    var envelope = committed == null ? null : Decode(account, committed);
                     if (envelope != null && envelope.Receipts.TryGetValue(requestId, out var receipt))
                     {
                         if (receipt.Identity != identity) throw new ApiError(409, "IDEMPOTENCY_CONFLICT");
-                        return new Reply(receipt.Status, receipt.Body);
+                        return new Transition(new Reply(receipt.Status, receipt.Body), null);
                     }
                     envelope ??= AccountEnvelope.Fresh(account, content);
                     var live = envelope.Run == null ? null : Replay(account, envelope);
                     var reply = mutate(envelope, live);
                     envelope.Receipts.Add(requestId, new StoredReceipt { Identity = identity, Status = reply.Status, Body = reply.Body });
                     envelope.Revision = checked(envelope.Revision + 1);
-                    Persist(account, envelope);
-                    return reply;
-                }
+                    byte[] bytes = Envelopes.Encode(envelope);
+                    RequireWithinLimit(bytes.Length);
+                    return new Transition(reply, bytes);
+                });
             }
             finally { gate.Release(); }
+        }
+
+        AccountEnvelope Decode(PracticeAccount account, byte[] bytes)
+        {
+            RequireWithinLimit(bytes.Length);
+            return Envelopes.Decode(bytes, account, content);
         }
 
         /// <summary>Real Run.Create from the recorded inputs, then every journal command through RunCommands, each step's full-state digest
@@ -376,35 +389,83 @@ namespace MemoryForge.Server
             return run;
         }
 
-        AccountEnvelope? Load(PracticeAccount account)
+        /// <summary>The one size guard of load and write for both backends: above the boundary the account is refused (507) and nothing is
+        /// touched; the committed envelope, receipts and version stay as they were and no history is dropped to make room.</summary>
+        internal static void RequireWithinLimit(long length)
+        {
+            if (length > MaxEnvelopeBytes) throw new ApiError(507, "STORE_TOO_LARGE");
+        }
+        async Task EnterGate()
+        {
+            if (!await gate.WaitAsync(Wait)) throw new ApiError(503, "ACCOUNT_BUSY");
+        }
+    }
+
+    /// <summary>The default file backend, behaviour unchanged from the first slice: one private envelope file per account in an owner-only
+    /// directory outside the repository, a permanent per-account lock file, and a flushed temp file renamed over the envelope.</summary>
+    sealed class FileEnvelopePersistence : IEnvelopePersistence
+    {
+        const UnixFileMode PrivateFile = UnixFileMode.UserRead | UnixFileMode.UserWrite;
+        const UnixFileMode GroupOrOther = UnixFileMode.GroupRead | UnixFileMode.GroupWrite | UnixFileMode.GroupExecute | UnixFileMode.OtherRead | UnixFileMode.OtherWrite | UnixFileMode.OtherExecute;
+        static readonly TimeSpan Wait = TimeSpan.FromSeconds(10);
+        readonly string directory;
+
+        public FileEnvelopePersistence(string directory) { this.directory = directory; }
+
+        /// <summary>Startup: an absolute directory outside the content root (repository), not a link, owner-only (created 0700).</summary>
+        public static string PrepareDirectory(string path, string contentRoot)
+        {
+            string full = Path.TrimEndingDirectorySeparator(Path.GetFullPath(path));
+            if (PracticeRunStore.IsInside(full, contentRoot)) throw new StartupRefusal("the private store must be outside the content root (repository)");
+            if (File.Exists(full)) throw new StartupRefusal("the private store path is a file");
+            var info = new DirectoryInfo(full);
+            try
+            {
+                if (info.Exists)
+                {
+                    if (info.LinkTarget != null) throw new StartupRefusal("the private store must not be a symbolic link");
+                    if ((File.GetUnixFileMode(full) & GroupOrOther) != 0) throw new StartupRefusal("the private store directory must not be accessible to group/other (chmod 700)");
+                }
+                else Directory.CreateDirectory(full, UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.UserExecute);
+            }
+            catch (Exception error) when (error is IOException || error is UnauthorizedAccessException) { throw new StartupRefusal("the private store directory cannot be prepared"); }
+            return full;
+        }
+
+        string EnvelopePath(PracticeAccount account) => Path.Combine(directory, "account-" + account.Id + ".json");
+        string LockPath(PracticeAccount account) => Path.Combine(directory, "account-" + account.Id + ".lock");
+
+        public Task<byte[]?> ReadAsync(PracticeAccount account) => Task.FromResult(LoadBytes(account));
+
+        /// <summary>The permanent lock file is held across decide and the write; no file means decide gets null (freshEnvelope is not needed).</summary>
+        public async Task<Reply> TransactAsync(PracticeAccount account, byte[] freshEnvelope, Func<byte[]?, Transition> decide)
+        {
+            using (await LockAccount(account))
+            {
+                var transition = decide(LoadBytes(account));
+                if (transition.NewEnvelope != null) Persist(account, transition.NewEnvelope);
+                return transition.Reply;
+            }
+        }
+
+        byte[]? LoadBytes(PracticeAccount account)
         {
             string path = EnvelopePath(account);
-            byte[] bytes;
             try
             {
                 var info = new FileInfo(path);
                 if (!info.Exists) return null;
                 if (info.LinkTarget != null) throw new ApiError(500, "STORE_CORRUPT");
-                RequireWithinLimit(info.Length);
-                bytes = File.ReadAllBytes(path);
+                PracticeRunStore.RequireWithinLimit(info.Length);
+                return File.ReadAllBytes(path);
             }
             catch (Exception error) when (error is IOException || error is UnauthorizedAccessException) { throw new ApiError(500, "STORE_READ_FAILED"); }
-            return Envelopes.Decode(bytes, account, content);
         }
 
-        /// <summary>The one size guard of load and write: above the boundary the account is refused (507) and nothing is touched; the
-        /// committed file, receipts and version stay as they were and no history is dropped to make room.</summary>
-        static void RequireWithinLimit(long length)
+        // Private temp file in the same directory, written and flushed (fsync), then renamed over the envelope (atomic replace). The shared
+        // size guard already ran on these bytes, before the temp file exists, so an oversized result never touches the committed envelope.
+        void Persist(PracticeAccount account, byte[] bytes)
         {
-            if (length > MaxEnvelopeBytes) throw new ApiError(507, "STORE_TOO_LARGE");
-        }
-
-        // Private temp file in the same directory, written and flushed (fsync), then renamed over the envelope (atomic replace).
-        // The size guard runs before the temp file exists, so an oversized result never touches the committed envelope.
-        void Persist(PracticeAccount account, AccountEnvelope envelope)
-        {
-            byte[] bytes = Envelopes.Encode(envelope);
-            RequireWithinLimit(bytes.Length);
             string temp = Path.Combine(directory, ".account-" + account.Id + "." + Convert.ToHexStringLower(RandomNumberGenerator.GetBytes(8)) + ".tmp");
             try
             {
@@ -437,10 +498,6 @@ namespace MemoryForge.Server
                 catch (IOException) when (waited.Elapsed < Wait) { await Task.Delay(10); }
                 catch (IOException) { throw new ApiError(503, "ACCOUNT_BUSY"); }
             }
-        }
-        async Task EnterGate()
-        {
-            if (!await gate.WaitAsync(Wait)) throw new ApiError(503, "ACCOUNT_BUSY");
         }
     }
 }

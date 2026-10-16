@@ -1,0 +1,30 @@
+{
+  "reviewer": "Codex gpt-6.1-sol Max, not the Claude author",
+  "author": "official Claude Code claude-opus-5-5 Max",
+  "reviewed_final_hashes": {
+    "server/MemoryForge.Server/PracticePostgresStore.cs": "8daa083edfb9a63f57425ca82e5a5f77aed2110e26feca416196444f92d8c61d",
+    "server/MemoryForge.Server/PracticeRunStore.cs": "9c008d308b6b1ff00c04fdc9aec60dcb2d2857e2beec2ed0dc29295669a78087",
+    "server/MemoryForge.Server/Program.cs": "9a24f314b299b298ac3e87f4bf311c4e6a1faeae173edb79db257174ef887b82",
+    "server/MemoryForge.ServerChecks/PostgresChecks.cs": "243f9a1167cc64cea2c624bcc9f939e3446ba3c610d979bbd7542f38a34a9399",
+    "server/MemoryForge.ServerChecks/Program.cs": "58dd73bfc39e7a5e55cbab4bfff2c99ad941e414beeb891b62571f7932cb268b",
+    "server/dev_practice_schema.sql": "73bcad986ab8c656ad7d9861bc12b7dd255595f52ab4a5fcd1c6785def292aac"
+  },
+  "status": "NO_NEW_BLOCKER_OR_EXISTING_TEST_WEAKENING_FOUND",
+  "scope": [
+    "transaction/settings/schema from frozen snapshot and final safe-error delta",
+    "shared file-suite delta and PostgreSQL test adequacy",
+    "Root facade/host/shared callback/receipt/binding review"
+  ],
+  "runtime_by_native_reviewer": "NOT_RUN",
+  "independent_runtime_by_root": "reported separately, final root DB runs pending",
+  "not_proven_by_authored_pg_suite": [
+    "initial absent-account INSERT race",
+    "lost COMMIT acknowledgement",
+    "live UPDATE permission revocation",
+    "DB outage/reconnect and actual DB restart",
+    "missing schema marker",
+    "separate normal-path complete Core state/RNG/log/events oracle"
+  ],
+  "root_extra_faults": "preview actual faults passed27, original probe failure preserved; repeat on imported root assembly",
+  "minor_documentation_limit": "IEnvelopePersistence summary overstates any write exception committing nothing; PostgreSQL implementation, Contracts, README and acceptance distinguish in-flight COMMIT uncertainty. No behavior change made."
+}

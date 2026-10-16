@@ -1,8 +1,9 @@
-# MemoryForge.Server — local development practice host (P1-LOCAL-AUTHORITATIVE-PERSISTENCE)
+# MemoryForge.Server — local development practice host (P1-LOCAL-AUTHORITATIVE-PERSISTENCE, P1-POSTGRES-TRANSACTIONAL-PRACTICE)
 
-This is a **local development slice**, not the production API of `server/openapi.yaml` and not P1-2 as a whole. There is no PostgreSQL,
-real account/auth, gacha, collection, purchase, Unity transport or deployment here. `server/schema.sql`, `server/openapi.yaml`, Core and
-`data/` are unchanged.
+This is a **local development slice**, not the production API of `server/openapi.yaml` and not P1-2 as a whole. There is no production
+database or migration, real account/auth, gacha, collection, purchase, Unity transport or deployment here. `server/schema.sql`,
+`server/openapi.yaml`, Core and `data/` are unchanged. Storage is a private file per account by default, or, when selected explicitly, one
+Development-only PostgreSQL row per account (see "PostgreSQL backend").
 
 ## What it does
 
@@ -83,11 +84,48 @@ Command kinds and arguments: `enter{nodeId}`, `play{uid, mode?, target?, picks?}
 `rest{choice: heal|upgrade, key?}`, `forgeOffer{key}`, `forgeApply{partId}`, `forgeRemove{key}`, `applyPart{partId, key}`,
 `buy{kind: cards|parts|relics|remove, id?, key?}`, `event{index, keys?}`, `assign{key, charId}`.
 
+## PostgreSQL backend (explicit, Development only)
+
+`--MemoryForge:PracticeBackend=postgres --MemoryForge:PracticePostgresFile=/abs/private/practice.conn` (instead of `PracticeStore`).
+`PracticeBackend` absent or `file` keeps the file store above; `postgres` together with `PracticeStore`, a connection file without
+`postgres`, or any other backend name refuses startup. There is no fallback between backends and no automatic migration or copy.
+
+- Connection file: absolute, owner-only (`chmod 600`), not a symlink, outside the repository, at most 4 KiB, holding only a connection
+  string with `Host`, `Port`, `Database`, `Username`, `Password` and optionally `SSL Mode` (Npgsql aliases accepted). Exactly one host,
+  which must be a loopback IP or a local Unix-socket directory (no host names, no host lists); database, username and password are
+  required. The host forces `Include Error Detail`, `Log Parameters` and `Enlist` off and fixed timeouts; secrets never go on the command
+  line, into defaults, logs or error bodies.
+- Schema: `server/dev_practice_schema.sql`, applied explicitly by an administrator/test harness to a dedicated development/test database
+  after (and without changing) `server/schema.sql`. One marker table plus `dev_practice.account_state(account_alias, envelope bytea)`: one
+  row per authenticated fixture alias holding the exact `Envelopes.Encode` bytes (never JSONB), limited to 512 MiB like the file store.
+  The host runs no DDL and needs only `SELECT, INSERT, UPDATE` on that table, `SELECT` on the marker and `USAGE` on the schema; before it
+  listens it verifies PostgreSQL 16, `fsync`/`full_page_writes` on, `synchronous_commit` not off, the marker and those privileges.
+- Transaction per mutation (after the same in-process Core gate and the same shared decision as the file store): `BEGIN` → `lock_timeout`
+  5 s, `statement_timeout` 30 s, `idle_in_transaction_session_timeout` 60 s → `INSERT` a fresh valid envelope `ON CONFLICT DO NOTHING` →
+  `SELECT … FOR UPDATE` of that one row → receipt/identity → replay → command → `UPDATE` → `COMMIT` → reply. Anything before `COMMIT`
+  rolls back, the placeholder insert included, so refused requests create no row and consume no requestId, version or memory.
+- Failures: lock wait over 5 s → `503 ACCOUNT_BUSY`; any other database failure before the commit → `503 STORE_UNAVAILABLE`; a failure
+  during `COMMIT` → `503 STORE_COMMIT_UNKNOWN` (the commit may have landed; retry with the same requestId, which returns the stored
+  receipt or runs the command once). Error bodies are fixed text; logs carry only the operation, exception type and SQLSTATE.
+- Reads are one `SELECT` of one row (an atomic committed envelope), take no row lock and never insert.
+- Durability rests on PostgreSQL's commit under the verified settings; this slice adds no power-loss or hardware claim of its own.
+
 ## Checks
 
 ```sh
 dotnet run --project server/MemoryForge.ServerChecks -- "$PWD" [--server-dll <built MemoryForge.Server.dll>]
+dotnet run --project server/MemoryForge.ServerChecks -- "$PWD" --postgres-file /abs/private/practice.conn --psql /abs/psql-wrapper
 ```
+
+The second form is the explicit PostgreSQL mode (the file suite is then NOT_RUN in that invocation; without both arguments the
+PostgreSQL mode is NOT_RUN). It needs a dedicated test database with `server/dev_practice_schema.sql` applied, the application role's
+connection file, and a psql wrapper already bound to that database (ordinary `-X -q -A -t -v` flags, SQL on stdin, no connection
+arguments). It runs real hosts on fresh run-tagged fixture aliases: PostgreSQL startup refusals (including a non-existent database), auth
+and strict input with no row created, create/enter/play with exact receipt retries across a SIGKILL, a legitimate defeat and v2 save with
+an earned card surviving another SIGKILL, 16-way duplicate/stale races in one and two hosts (checked against the one stored row), a real
+row-lock timeout and retry, a genuine partial Core `Enter` rollback, content-binding refusal, tampered rows refused and preserved, and
+the complete-capture privacy scan (including the database password). Database outage/reconnect, revoked permissions during requests
+and a database without the schema marker are not covered by these checks.
 
 They build the host, launch real processes with a temp test-only fixture/credentials/stores, and exercise startup refusals, auth,
 strict input, restart/retry, duplicate/conflict/stale, rule and write-failure rollback, a runtime appsettings Kestrel endpoint that must
@@ -106,9 +144,11 @@ observed server result, and no game value or seed is adjusted to make it pass.
   which covers a crash of the host process (the file is the previous or the new complete envelope). The directory entry is not `fsync`ed
   and macOS `F_FULLFSYNC` is not used, so nothing is claimed for power or storage failure: afterwards the store needs inspection and
   recovery, and a client retry is not guaranteed to be safe (for example, a lost create receipt would choose a new seed and runId).
-- Not in this slice: PostgreSQL and its migrations, real account auth, network UI recovery flows and Unity transport.
-- Performance: every request replays the whole current journal and rewrites the whole envelope; receipts and finished runs are never
-  pruned, so the 512 MiB dev-store boundary is eventually reached. Snapshots/compaction need an approved retention and migration policy.
+- Not in this slice: the production schema/API mapping (UUID accounts and runs, `command_receipt`, `memory_deck`) and its migrations,
+  real account auth, network UI recovery flows and Unity transport. The Development PostgreSQL rows are never a migration source.
+- Performance: every request replays the whole current journal and rewrites (file) or updates (PostgreSQL) the whole envelope; receipts
+  and finished runs are never pruned, so the 512 MiB dev-store boundary is eventually reached. Snapshots/compaction need an approved
+  retention and migration policy.
 - Binding is strict: rebuilding Core (another module ID), changing `data/game_data.json` or the fixture refuses existing envelopes.
 - The host reuses the reviewed loaders from `core/MemoryForge.CoreChecks` as compile links (plus `JsonGraphComparison.cs`, which
   `MemoryV2DataLoader` references); moving them to a shared host library is a separate change.

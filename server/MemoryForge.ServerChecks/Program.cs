@@ -7,6 +7,9 @@
 // fingerprints: raw responses, host/build output and exception text go only to diagnostics.log (0600) in the owner-only temp directory,
 // and known credentials/seeds are additionally redacted from every console line. Usage:
 //   dotnet run --project server/MemoryForge.ServerChecks -- <repoRoot> [--server-dll <built MemoryForge.Server.dll>]
+//   dotnet run --project server/MemoryForge.ServerChecks -- <repoRoot> --postgres-file <private connection file> --psql <oracle wrapper>
+// The default runs the file-backend suite only (the PostgreSQL mode is then NOT_RUN). The PostgreSQL mode (PostgresChecks.cs) runs only
+// when both PostgreSQL arguments are given, and then the file-backend suite is NOT_RUN in that invocation.
 using System.Net;
 using System.Net.Sockets;
 using System;
@@ -32,25 +35,39 @@ using MemoryForge.Core;
 
 static class Program
 {
-    const string Usage = "usage: dotnet run --project server/MemoryForge.ServerChecks -- <repoRoot> [--server-dll <MemoryForge.Server.dll>]";
+    const string Usage = "usage: dotnet run --project server/MemoryForge.ServerChecks -- <repoRoot> [--server-dll <MemoryForge.Server.dll>] "
+        + "[--postgres-file <private connection file> --psql <oracle wrapper>]";
 
     static async Task<int> Main(string[] args)
     {
         if (args.Length < 1) { Console.Error.WriteLine(Usage); return 2; }
-        string? dll = null;
+        string? dll = null, postgresFile = null, psql = null;
         for (int i = 1; i < args.Length; i++)
         {
             if (args[i] == "--server-dll" && i + 1 < args.Length) dll = Path.GetFullPath(args[++i]);
+            else if (args[i] == "--postgres-file" && i + 1 < args.Length) postgresFile = Path.GetFullPath(args[++i]);
+            else if (args[i] == "--psql" && i + 1 < args.Length) psql = Path.GetFullPath(args[++i]);
             else { Console.Error.WriteLine(Usage); return 2; }
         }
+        // The PostgreSQL mode needs both of its arguments; one alone is a usage error, never a silently skipped mode.
+        if ((postgresFile == null) != (psql == null)) { Console.Error.WriteLine(Usage); return 2; }
         if (OperatingSystem.IsWindows()) { Console.Error.WriteLine("These checks need POSIX permissions and file locks (macOS/Linux)."); return 2; }
         var checks = new ServerChecks(Path.GetFullPath(args[0]), dll);
         bool passed = false;
         try
         {
+            if (postgresFile != null && psql != null)
+            {
+                await checks.RunPostgres(postgresFile, psql);
+                passed = true;
+                Console.WriteLine("SERVER CHECKS PASS [postgres]: " + checks.Passed + " assertions");
+                Console.WriteLine("File-backend suite: NOT_RUN in this invocation (run without the PostgreSQL arguments)");
+                return 0;
+            }
             await checks.RunAll();
             passed = true;
             Console.WriteLine("SERVER CHECKS PASS: " + checks.Passed + " assertions");
+            Console.WriteLine("PostgreSQL mode: NOT_RUN in this invocation (select it with --postgres-file and --psql)");
             return 0;
         }
         catch (CheckFailure failure) { Console.Error.WriteLine(checks.Redact("SERVER CHECKS FAIL after " + checks.Passed + " assertions: " + failure.Message)); }
@@ -202,7 +219,7 @@ sealed class ServerProcess
     }
 }
 
-sealed class ServerChecks
+sealed partial class ServerChecks
 {
     const string RunsPath = "dev/practice/runs", AccountPath = "dev/practice/account";
     const UnixFileMode Owner = UnixFileMode.UserRead | UnixFileMode.UserWrite;
@@ -257,12 +274,13 @@ sealed class ServerChecks
         await HostingUrlsCannotMoveThePort();
         await PartialMutationRollback();
         await CorruptStores();
-        LeakScan();
+        LeakScan(RequiredScenarios);
     }
 
     public void Finish(bool passed)
     {
         foreach (var process in processes) process.Kill();
+        oracle?.StopAll();
         if (lockedDirectory.Length != 0) File.SetUnixFileMode(lockedDirectory, OwnerDirectory);
         if (passed) { try { Directory.Delete(temp, true); } catch (IOException) { } return; }
         // Host output stays private: raw text to the owner-only diagnostics file, only its size on the console.
@@ -367,10 +385,11 @@ sealed class ServerChecks
         fixture = Path.Combine(temp, "fixture.json");
         WritePrivate(fixture, FixtureJson(null));
     }
-    string FixtureJson(Action<JsonObject>? change)
+    // ids: the fixture's account IDs (default alpha/beta/gamma); each needs its credential in tokens.
+    string FixtureJson(Action<JsonObject>? change, IReadOnlyList<string>? ids = null)
     {
         var accounts = new JsonArray();
-        foreach (string id in AccountIds)
+        foreach (string id in ids ?? AccountIds)
         {
             var party = new JsonArray();
             foreach (string cid in Party) party.Add(new JsonObject { ["charId"] = cid, ["res"] = 0 });
@@ -1031,10 +1050,12 @@ sealed class ServerChecks
     // ───────── privacy: no response or log carries a credential, seed, RNG or private member ─────────
     // Complete capture: every started request's response body and every launched process's output is scanned, after every required
     // scenario completed. Findings are reported by safe JSON path/category only; the raw material goes to diagnostics.log.
-    void LeakScan()
+    // required: the invocation's mandatory scenarios (file suite or PostgreSQL mode). tokens holds every secret to look for, including the
+    // database password in the PostgreSQL mode.
+    void LeakScan(IReadOnlyList<string> required)
     {
         var secrets = new Secrets(tokens.Values.ToArray(), seeds.Where(s => s >= 1000000).Select(s => s.ToString(CultureInfo.InvariantCulture)).ToArray());
-        Check(RequiredScenarios.All(completed.Contains), "every required scenario completed before the privacy scan");
+        Check(required.All(completed.Contains), "every required scenario completed before the privacy scan");
         int scanned = 0;
         foreach (string body in capture.Bodies)
         {

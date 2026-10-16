@@ -31,10 +31,13 @@ namespace MemoryForge.Server
         public string Body { get; }
         public Reply(int status, string body) { Status = status; Body = body; }
         public static Reply Json(int status, object? graph) => new Reply(status, GraphJson.Text(graph, false));
-        public static Reply Error(int status, string code) => Json(status, GraphJson.Object("code", code, "message", Message(status)));
+        public static Reply Error(int status, string code) => Json(status, GraphJson.Object("code", code, "message", Message(status, code)));
         // Fixed category text only: no request, state or exception content.
-        static string Message(int status)
+        static string Message(int status, string code)
         {
+            // A commit whose outcome is unknown must not claim that nothing changed.
+            if (code == "STORE_COMMIT_UNKNOWN") return "The commit outcome is unknown; retry with the same requestId to resolve it.";
+            if (code == "STORE_UNAVAILABLE") return "The development store is unavailable; nothing was committed. Retry with the same requestId.";
             switch (status)
             {
                 case 400: return "The request does not match the dev practice contract; nothing changed.";

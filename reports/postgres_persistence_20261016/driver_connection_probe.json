@@ -1,0 +1,12 @@
+{
+  "scope": "actual Npgsql/loopback PostgreSQL16 connection, parameterized bytea and least-privilege baseline only; server adapter acceptance pending",
+  "result": {
+    "role": "mf_runtime",
+    "version": "16.15 (Debian 16.15-1.pgdg13+2)",
+    "fsync": "on",
+    "synchronous": "on",
+    "parameterized_bytea_roundtrip": true,
+    "original_tables_denied": true
+  },
+  "exit": 0
+}

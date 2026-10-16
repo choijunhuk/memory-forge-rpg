@@ -4,9 +4,12 @@
 // configuration change can open another socket later, PreferHostingUrls is pinned false so --urls/ASPNETCORE_URLS cannot replace the
 // explicit Listen, and any address other than 127.0.0.1 on the configured port at start stops the host), a bearer credential matched in constant time against the trusted fixture's SHA-256 digests, no CORS,
 // no anonymous route, no static files, no query parameters. Configuration (command line --MemoryForge:Key=value or MemoryForge__Key):
-// ContentRoot (repository with data/game_data.json), PracticeFixture (owner-only fixture file), PracticeStore (owner-only directory
-// outside the content root) and PracticePort (0 = ephemeral). A missing or invalid value refuses startup with exit code 2. Logs carry
-// only exception type names: never credentials, seeds, RNG, private state or exception messages.
+// ContentRoot (repository with data/game_data.json), PracticeFixture (owner-only fixture file), PracticePort (0 = ephemeral) and the
+// backend: PracticeBackend absent or "file" uses PracticeStore (owner-only directory outside the content root); PracticeBackend=postgres
+// uses PracticePostgresFile (owner-only connection-string file outside the content root, loopback/Unix-socket database only) and must not
+// be combined with PracticeStore; a connection file without the postgres backend, or any other backend name, is refused. There is no
+// fallback between backends. A missing or invalid value, or a database that fails verification, refuses startup with exit code 2. Logs
+// carry only exception type names (and SQLSTATE codes): never credentials, seeds, RNG, private state or exception messages.
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -40,8 +43,9 @@ namespace MemoryForge.Server
             builder.Logging.AddSimpleConsole(options => { options.SingleLine = true; options.IncludeScopes = false; });
             builder.Logging.SetMinimumLevel(LogLevel.Warning);
             PracticeHost host;
-            try { host = PracticeHost.Configure(builder.Environment, builder.Configuration); }
+            try { host = await PracticeHost.ConfigureAsync(builder.Environment, builder.Configuration); }
             catch (StartupRefusal refusal) { Console.Error.WriteLine("MemoryForge dev practice server refused to start: " + refusal.Message); return 2; }
+            await using var owned = host;
             // Hosting URLs (--urls, ASPNETCORE_URLS, ...) must never take precedence over the single explicit Listen below, whatever a
             // command-line or environment preferHostingUrls says; this setting is applied last at the builder, so it wins.
             builder.WebHost.PreferHostingUrls(false);
@@ -55,6 +59,7 @@ namespace MemoryForge.Server
                 kestrel.Listen(IPAddress.Loopback, host.Port);
             });
             var app = builder.Build();
+            host.UseLogger(app.Logger);
             var api = new PracticeApi(host, app.Logger);
             app.Run(api.Handle);
             try { await app.StartAsync(); }
@@ -77,29 +82,56 @@ namespace MemoryForge.Server
             && IPAddress.TryParse(uri.Host, out var ip) && ip.Equals(IPAddress.Loopback) && (port == 0 || uri.Port == port);
     }
 
-    sealed class PracticeHost
+    sealed class PracticeHost : IAsyncDisposable
     {
         public PracticeContent Content { get; }
         public PracticeFixture Fixture { get; }
         public PracticeRunStore Store { get; }
         public int Port { get; }
-        PracticeHost(PracticeContent content, PracticeFixture fixture, PracticeRunStore store, int port) { Content = content; Fixture = fixture; Store = store; Port = port; }
+        readonly PostgresEnvelopePersistence? postgres;
+        PracticeHost(PracticeContent content, PracticeFixture fixture, PracticeRunStore store, int port, PostgresEnvelopePersistence? postgres)
+        {
+            Content = content; Fixture = fixture; Store = store; Port = port; this.postgres = postgres;
+        }
 
-        public static PracticeHost Configure(IHostEnvironment environment, IConfiguration configuration)
+        public static async Task<PracticeHost> ConfigureAsync(IHostEnvironment environment, IConfiguration configuration)
         {
             if (!environment.IsDevelopment()) throw new StartupRefusal("only the Development environment is supported; there is no production mode or fallback");
             if (configuration.GetSection("Kestrel:Endpoints").GetChildren().Any()) throw new StartupRefusal("Kestrel endpoint configuration is not accepted; the host binds 127.0.0.1 only");
             string contentRoot = AbsolutePath(configuration, "MemoryForge:ContentRoot");
             string fixture = AbsolutePath(configuration, "MemoryForge:PracticeFixture");
-            string store = AbsolutePath(configuration, "MemoryForge:PracticeStore");
+            string? backend = configuration["MemoryForge:PracticeBackend"];
+            bool postgresBackend = backend == "postgres";
+            if (backend != null && backend != "file" && !postgresBackend) throw new StartupRefusal("MemoryForge:PracticeBackend must be file (the default) or postgres");
+            string store = "", connectionFile = "";
+            if (postgresBackend)
+            {
+                if (!string.IsNullOrEmpty(configuration["MemoryForge:PracticeStore"])) throw new StartupRefusal("MemoryForge:PracticeStore must not be set with the postgres backend (no dual or fallback store)");
+                connectionFile = AbsolutePath(configuration, "MemoryForge:PracticePostgresFile");
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(configuration["MemoryForge:PracticePostgresFile"])) throw new StartupRefusal("MemoryForge:PracticePostgresFile is only accepted with MemoryForge:PracticeBackend=postgres");
+                store = AbsolutePath(configuration, "MemoryForge:PracticeStore");
+            }
             if (!int.TryParse(configuration["MemoryForge:PracticePort"], System.Globalization.NumberStyles.None, System.Globalization.CultureInfo.InvariantCulture, out int port) || port > 65535)
                 throw new StartupRefusal("MemoryForge:PracticePort must be 0..65535 (0 = ephemeral)");
             if (!Directory.Exists(contentRoot)) throw new StartupRefusal("MemoryForge:ContentRoot is not a directory");
             var content = PracticeContent.Load(contentRoot);
             var practiceFixture = PracticeFixture.Load(fixture, content);
-            string directory = PracticeRunStore.PrepareDirectory(store, contentRoot);
-            return new PracticeHost(content, practiceFixture, new PracticeRunStore(directory, content), port);
+            if (!postgresBackend)
+            {
+                string directory = FileEnvelopePersistence.PrepareDirectory(store, contentRoot);
+                return new PracticeHost(content, practiceFixture, new PracticeRunStore(content, new FileEnvelopePersistence(directory)), port, null);
+            }
+            var postgres = await PostgresEnvelopePersistence.OpenAsync(PostgresSettings.ConnectionString(connectionFile, contentRoot));
+            return new PracticeHost(content, practiceFixture, new PracticeRunStore(content, postgres), port, postgres);
         }
+
+        /// <summary>Lets the PostgreSQL backend log failure categories (type and SQLSTATE only) once the host's logger exists.</summary>
+        public void UseLogger(ILogger logger) => postgres?.UseLogger(logger);
+
+        public ValueTask DisposeAsync() => postgres?.DisposeAsync() ?? ValueTask.CompletedTask;
         static string AbsolutePath(IConfiguration configuration, string key)
         {
             string? value = configuration[key];

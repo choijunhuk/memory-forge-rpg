@@ -1,0 +1,8 @@
+  MemoryForge.Core -> /Users/choi/Documents/Memory_forge/ops/ai/local/postgres-root-artifacts/bin/MemoryForge.Core/debug/MemoryForge.Core.dll
+  MemoryForge.Server -> /Users/choi/Documents/Memory_forge/ops/ai/local/postgres-root-artifacts/bin/MemoryForge.Server/debug/MemoryForge.Server.dll
+
+빌드했습니다.
+    경고 0개
+    오류 0개
+
+경과 시간: 00:00:02.34

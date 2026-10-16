@@ -2,9 +2,11 @@
 
 ## 현재 요약 — 2026-10-16 / 외부 점검 수용 중
 
+사용자가 Npgsql10.0.3 추가를 명시 승인한 뒤 **Development 전용 PostgreSQL 앱 영속 저장**을 연결했다. 기존 파일 저장과 같은 전투·기억·영수증 바이트를 별도 `dev_practice` 행에 원자적으로 저장하며 원래 SQL/수치·파일 기본 경로는 유지한다. [새 수용 기록](../reports/postgres_persistence_20261016/root_acceptance.md): 주 브랜치 파일251·실제PG202판정, 독립 장애27·HTTP24, 실제 Unity 지도 Play 확인. OpusMax 작성 소스를 Codex가 독립 검토·실행 검증했다. 작성 말미 Claude 구독 세션 한도로 종료1을 그대로 보존했고 유료 우회/추가 호출은 하지 않았다. 새PG CI 실행 스크립트는 반대AI 리뷰 대기로 별도 보관하며 현재 원격CI를 PG 검사 성공으로 표시하지 않는다. 실계정·운영 SQL 이관·Unity 서버 재접속은 아직 미연결이다.
+
 JSON·CI 후속 패치를 적용했다. Unity가 이미 사용하는 Newtonsoft `3.2.1`을 직접 의존성으로 선언했고, 기존 PDF requirements와 인계 13개 검사를 CI에 추가했다. 공식 Opus High의 독립 승인, 실제 Editor 패키지 해석·전체 Play 160/160·Edit 3/3, Node 333·Python 57·인계 13, 새 macOS 빌드와 지도 시작을 확인했다. [이번 수용 기록](../reports/runtime_json_ci_20261016/root_acceptance.md)을 따른다.
 
-사용자가 Claude 한도 해제를 알려 주어 구독 인증·기존 과금 차단 증거·계정 일치를 다시 확인하고 공식 CLI 협업을 재개했다. 별도 worktree의 Opus Max 분석과 xhigh 구현·결함 수정을 회수해 **Development 전용 로컬 서버와 파일 영속 저장**을 연결했다. 루트에서 실제 HTTP/프로세스 검사 241개와 독립 경계 24개, 원래 PostgreSQL 16.15 스키마 시험을 통과했다. [서버 수용 기록](../reports/server_persistence_20261016/root_acceptance.md)이 범위와 한계를 정한다. PostgreSQL 앱 연결·실계정·Unity 서버 복구 완료는 아니다.
+사용자가 Claude 한도 해제를 알려 주어 구독 인증·기존 과금 차단 증거·계정 일치를 다시 확인하고 공식 CLI 협업을 재개했다. 별도 worktree의 Opus Max 분석과 xhigh 구현·결함 수정을 회수해 **Development 전용 로컬 서버와 파일 영속 저장**을 연결했다. 루트에서 실제 HTTP/프로세스 검사 241개와 독립 경계 24개, 원래 PostgreSQL 16.15 스키마 시험을 통과했다. [첫 서버 수용 기록](../reports/server_persistence_20261016/root_acceptance.md)은 당시 파일 단위의 범위와 한계다. 이후 PostgreSQL 개발 앱 연결은 위 새 기록으로 갱신하며 실계정·Unity 서버 복구 완료로 확대하지 않는다.
 
 최종 추가 검사에서 시작 주소 우선순위 우회도 재현·수정했다. 공식 Opus High의 좁은 수정과 Codex 독립 검토 후 전체 서버246판정·HTTP24·명령행/환경변수 실제 포트/인증2경계를 통과했다. [후속 기록](../reports/server_persistence_20261016/hosting_url_pin_acceptance.md)을 따르며 최초241판정과 실패 증거를 보존한다.
 
