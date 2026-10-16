@@ -125,15 +125,19 @@ namespace MemoryForge.Client.Tests
             var defs = s.Data.Memory.Battle.Cards.ToDictionary(c => c.Id, StringComparer.Ordinal);
             var request = MemoryForgeExpeditionClient.ChoiceRequests(s.Mirror.BattleEffectiveCard(card), "now", s.Data.Memory.Battle).Single();
             Assert.That((request.From, request.Count, request.GrowthOnly), Is.EqualTo(("hand", 1, false)), "nia_tune asks for one hand card");
-            var expected = b.Zones.Hand.Where(u => u != card).ToList();
+            // P1-CARD-FLOW-EFFECT-CANDIDATES: the sheet offers only the hand cards Core's tune(one) effect itself takes (no amp yet, rarity not C:
+            // Battle.Effects tune); the zone helper without a rule still returns the whole hand without the playing card.
+            var zone = b.Zones.Hand.Where(u => u != card).ToList();
+            var expected = zone.Where(u => !b.Cards[u].Temp.Contains("amp") && defs[b.Cards[u].Id].Rarity != "C").ToList();
             Assert.That(expected, Is.Not.Empty, "a hand card to tune");
-            Assert.That(MemoryForgeExpeditionClient.PickCandidates(b, card, request, Array.Empty<string>(), defs), Is.EqualTo(expected), "the helper offers the hand without the playing card");
-            Assert.That(client.PickerOptions, Is.EqualTo(expected), "the open sheet's list is the helper's");
+            Assert.That(MemoryForgeExpeditionClient.PickCandidates(b, card, request, Array.Empty<string>(), defs), Is.EqualTo(zone), "the zone helper offers the hand without the playing card");
+            Assert.That(client.PickerOptions, Is.EqualTo(expected), "the open sheet's list is the tune effect's own candidates");
             Assert.That(ActiveView(s.Host).GetComponentsInChildren<Button>().Where(x => x.name.StartsWith("Pick:", StringComparison.Ordinal)).Select(x => x.name.Substring(5)),
                 Is.EqualTo(expected), "the sheet draws exactly that list");
 
             // Source, out-of-zone, enemy and unknown ids: refused with the sheet's own code, nothing added or sent.
             var others = new List<string> { card };
+            others.AddRange(zone.Except(expected)); // hand cards the effect refuses (none at the usual first nia_tune; refused like any other)
             others.AddRange(b.Zones.Draw); others.AddRange(b.Zones.Discard); others.AddRange(b.Zones.Exhaust); others.AddRange(b.Reservations.Select(r => r.Uid));
             others.AddRange(b.Enemies.Select(e => e.Uid)); others.Add(""); others.Add("not-a-card");
             Assert.That(others.Intersect(expected), Is.Empty);

@@ -37,6 +37,12 @@ namespace MemoryForge.Client
     // local UI bound, not a reservation slot). Its request is frozen with the state it was confirmed in and nothing reaches the Run; on
     // the Update after the display closes it is taken, checked against that state and sent as exactly one Run.BattleCommand, or dropped
     // with its reason. Cancel, leaving the app or disabling drops it unsent. There is no server, ACK or request id behind it.
+    // P1-CARD-FLOW-EFFECT-CANDIDATES §14.3/§14.7: within a known scope a sheet offers, accepts and revalidates only cards the reached Core
+    // effect takes, so such a manual pick is not silently replaced by Core's fallback. tune, recall, growPick and copyPick leave out only
+    // cards their effect refuses now and cannot take later in the same play; costdown, as its card's first effect, is priced as Core will
+    // price it after the play's own "next card costs 0" charge. Outside that scope (a costdown after other effects, a conditional cost, a
+    // price Core refuses) the sheet keeps its earlier zone list, never shrinking manual choice. Filtering uses the current public zones;
+    // it does not predict cards drawn by the commit or later effects. Core's resolution, fallback order and explicit auto are unchanged.
     [ExecuteAlways]
     public sealed class MemoryForgeExpeditionClient : MonoBehaviour
     {
@@ -119,6 +125,7 @@ namespace MemoryForge.Client
         {
             public string Uid = "", Mode = "now";
             public List<(string Label, string From, int Count, bool GrowthOnly)> Requests = new List<(string, string, int, bool)>();
+            public List<(string Op, string? Part, bool Leading)> Rules = new List<(string, string?, bool)>(); // the Core effect of each request (ChoiceRules)
             public int Index, Left;
             public readonly List<string> Picks = new List<string>();
             // The state the sheet was opened in (see Fresh): its Run, battle node, battle version and target.
@@ -132,6 +139,7 @@ namespace MemoryForge.Client
             public string Uid = "", Mode = "now";
             public string? Target, Node;
             public IReadOnlyList<(string Label, string From, int Count, bool GrowthOnly)> Requests = Array.Empty<(string, string, int, bool)>();
+            public IReadOnlyList<(string Op, string? Part, bool Leading)> Rules = Array.Empty<(string, string?, bool)>();
             public IReadOnlyList<string> Picks = Array.Empty<string>();
             public CoreRun? Run;
             public int Version, Turn;
@@ -201,6 +209,8 @@ namespace MemoryForge.Client
         // Pick sheet refusals: another command or selection while a sheet is open, a card outside its drawn list, and any pick or auto
         // once the state the sheet was opened in is gone. These are local client codes; Core never sees the refused input.
         const string PickSheetOpen = "PICKER_OPEN", PickInvalid = "PICK_INVALID", PickStale = "PICK_STALE";
+        // Why a request offers no card at all (PickBlocked): Core skips its effect before choosing, so no pick could do anything.
+        public const string PickGrowthCap = "PICK_GROWTH_CAP";
         // Unsent-intent codes (local, never sent to Core): a command, selection or second confirm while one waits; a waiting request whose
         // confirmed state is gone at its dispatch; one dropped because the app was left or the view disabled.
         const string IntentPending = "INTENT_PENDING", IntentStale = "INTENT_STALE", IntentDropped = "INTENT_DROPPED";
@@ -349,13 +359,14 @@ namespace MemoryForge.Client
         {
             // Locked, not Blocked: a non-terminal display lets the confirm prepare. A waiting intent refuses a second one (no overwrite).
             if (Locked() || run == null || selectedCard == null || selectedMode == null) return false;
-            List<(string Label, string From, int Count, bool GrowthOnly)> requests;
-            try { requests = ChoiceRequests(run.BattleEffectiveCard(selectedCard), selectedMode, data?.Memory.Battle); }
+            BattleCardDef effective;
+            try { effective = run.BattleEffectiveCard(selectedCard); }
             catch (RuleException error) { Reject(error.Code); return false; }
+            var requests = ChoiceRequests(effective, selectedMode, data?.Memory.Battle);
             // The sheet (and an intent) keeps the state it is made in; a card that is not a live hand card of the player phase opens nothing.
             var s = run.State;
-            var pick = new BattlePick { Uid = selectedCard, Mode = selectedMode, Requests = requests, Left = requests.Count == 0 ? 0 : requests[0].Count,
-                Run = run, Node = s.Position, Version = s.Battle?.V ?? -1, Target = target };
+            var pick = new BattlePick { Uid = selectedCard, Mode = selectedMode, Requests = requests, Rules = ChoiceRules(effective, selectedMode),
+                Left = requests.Count == 0 ? 0 : requests[0].Count, Run = run, Node = s.Position, Version = s.Battle?.V ?? -1, Target = target };
             if (requests.Count == 0) return actionRows != null ? Prepare(pick) : PlayCard(selectedCard, selectedMode);
             if (!Fresh(pick, s)) { Reject(run.BattleCheck(selectedCard, selectedMode, target) ?? "NOT_IN_HAND"); return false; }
             picker = pick;
@@ -424,7 +435,7 @@ namespace MemoryForge.Client
             var live = run; var b = live?.State.Battle;
             if (live == null || b == null) return false;
             var intent = new PreparedPlay { Uid = from.Uid, Mode = from.Mode, Target = from.Target, Node = from.Node, Requests = from.Requests.ToArray(),
-                Picks = from.Picks.ToArray(), Run = from.Run, Version = from.Version, Turn = b.Turn };
+                Rules = from.Rules.ToArray(), Picks = from.Picks.ToArray(), Run = from.Run, Version = from.Version, Turn = b.Turn };
             string? reason = Unsendable(intent);
             if (reason != null) { Reject(reason); return false; }
             prepared = intent;
@@ -457,10 +468,10 @@ namespace MemoryForge.Client
             Dropped(IntentStale, reason); Render();
         }
         // Null while the frozen request still holds, else why not: the same Run, node, turn and battle version in the player phase, its
-        // card in hand, its target (if any) a living enemy, the same pick requests with every frozen pick, in order, on the shared
-        // candidate list (PickCandidates) given the picks before it, and finally Core's own precheck of exactly this request. The client
-        // list check comes first, so a pick that is gone is never handed to Core's automatic remaining-picks rule; fewer picks than
-        // requested is an explicit auto, whose rest stays Core's choice. Core's effect predicates are not duplicated or changed here.
+        // card in hand, its target (if any) a living enemy, the same pick requests and effects with every frozen pick, in order, on the
+        // sheet's own candidate list (PickCandidates with the effect's rule) given the picks before it, and finally Core's own precheck of
+        // exactly this request. Within the list's known scope a pick the reached effect would no longer take is refused here, before Core
+        // could replace it by its fallback; fewer picks than requested is an explicit auto, whose rest stays Core's choice.
         string? Unsendable(PreparedPlay p)
         {
             var live = run; var s = live?.State; var b = s?.Battle;
@@ -468,20 +479,22 @@ namespace MemoryForge.Client
                 || b.Turn != p.Turn || b.V != p.Version) return IntentStale;
             if (!b.Zones.Hand.Contains(p.Uid)) return "NOT_IN_HAND";
             if (p.Target != null && !b.Enemies.Any(e => e.Uid == p.Target && e.Alive)) return "BAD_TARGET";
-            List<(string Label, string From, int Count, bool GrowthOnly)> requests;
-            try { requests = ChoiceRequests(live.BattleEffectiveCard(p.Uid), p.Mode, data?.Memory.Battle); }
+            BattleCardDef effective;
+            try { effective = live.BattleEffectiveCard(p.Uid); }
             catch (RuleException error) { return error.Code; }
-            if (!requests.SequenceEqual(p.Requests) || !PicksHold(b, p.Uid, requests, p.Picks)) return PickInvalid;
+            var requests = ChoiceRequests(effective, p.Mode, data?.Memory.Battle); var rules = ChoiceRules(effective, p.Mode);
+            if (!requests.SequenceEqual(p.Requests) || !rules.SequenceEqual(p.Rules) || !PicksHold(b, p.Uid, requests, rules, p.Picks)) return PickInvalid;
             return live.BattleCheck(p.Uid, p.Mode, p.Target, p.Picks);
         }
         // The ordered picks replayed through the sheet's own progression: each on its request's current list given the picks before it.
-        bool PicksHold(BattleState b, string source, List<(string Label, string From, int Count, bool GrowthOnly)> requests, IReadOnlyList<string> picks)
+        bool PicksHold(BattleState b, string source, List<(string Label, string From, int Count, bool GrowthOnly)> requests,
+            List<(string Op, string? Part, bool Leading)> rules, IReadOnlyList<string> picks)
         {
             if (picks.Count > requests.Sum(r => r.Count)) return false;
             var made = new List<string>(); int index = 0, left = requests.Count == 0 ? 0 : requests[0].Count;
             foreach (string uid in picks)
             {
-                if (!PickCandidates(b, source, requests[index], made, cardDefs).Contains(uid)) return false;
+                if (!PickCandidates(b, source, requests[index], made, cardDefs, rules[index], Price).Contains(uid)) return false;
                 made.Add(uid);
                 if (--left <= 0 && ++index < requests.Count) left = requests[index].Count;
             }
@@ -1063,43 +1076,111 @@ namespace MemoryForge.Client
             return BattleTurnDigest.Build(before, events, after);
         }
 
-        // Display-only projection of prototype/src/ui.js choiceRequests: the immediate plays whose card picks the player makes.
-        // Core still validates and resolves them; picks left unmade keep Core's own choice, which the overlay states.
-        public static List<(string Label, string From, int Count, bool GrowthOnly)> ChoiceRequests(BattleCardDef card, string mode, BattleData? content = null)
+        // Display-only projection of prototype/src/ui.js choiceRequests: the immediate plays whose card picks the player makes, each with the
+        // Core effect it feeds and whether that effect is the card's first one (Leading: only the play's commit runs before it). Core still
+        // validates and resolves them; picks left unmade keep Core's own choice, which the overlay states.
+        static IEnumerable<((string Label, string From, int Count, bool GrowthOnly) Request, (string Op, string? Part, bool Leading) Rule)> Choices(BattleCardDef card, string mode, BattleData? content)
         {
-            var requests = new List<(string Label, string From, int Count, bool GrowthOnly)>();
-            if (mode != "now") return requests;
-            foreach (var op in card.Effects)
+            if (mode != "now") yield break;
+            for (int i = 0; i < card.Effects.Count; i++)
             {
+                var op = card.Effects[i]; bool leading = i == 0;
                 int count = Math.Max(1, op.N ?? 1);
                 switch (op.Op)
                 {
-                    case "exhaustPick": requests.Add((op.From == "discard" ? "버린 카드에서 소멸할 카드" : "손에서 소멸할 카드", op.From == "discard" ? "discard" : "hand", count, false)); break;
-                    case "discard": requests.Add(("버릴 카드", "hand", count, false)); break;
+                    case "exhaustPick": yield return ((op.From == "discard" ? "버린 카드에서 소멸할 카드" : "손에서 소멸할 카드", op.From == "discard" ? "discard" : "hand", count, false), (op.Op, null, leading)); break;
+                    case "discard": yield return (("버릴 카드", "hand", count, false), (op.Op, null, leading)); break;
                     case "tune" when op.Pick == "one":
                         string part = content?.Parts.FirstOrDefault(p => p.Id == op.Part)?.Name ?? "부품";
-                        requests.Add(("「" + part + "」을 붙일 카드", "hand", 1, false)); break;
-                    case "costdown" when op.Pick == "one": requests.Add(("비용을 낮출 카드", "hand", 1, false)); break;
-                    case "recall": requests.Add(("손으로 가져올 카드", "discard", 1, false)); break;
-                    case "growPick": requests.Add(("성장시킬 카드", "hand", 1, true)); break;
-                    case "copyPick": requests.Add(("사본을 만들 성장 카드", "hand", 1, true)); break;
-                    case "pull": requests.Add(("앞당길 예약", "res", 1, false)); break;
+                        yield return (("「" + part + "」을 붙일 카드", "hand", 1, false), (op.Op, op.Part, leading)); break;
+                    case "costdown" when op.Pick == "one": yield return (("비용을 낮출 카드", "hand", 1, false), (op.Op, null, leading)); break;
+                    case "recall": yield return (("손으로 가져올 카드", "discard", 1, false), (op.Op, null, leading)); break;
+                    case "growPick": yield return (("성장시킬 카드", "hand", 1, true), (op.Op, null, leading)); break;
+                    case "copyPick": yield return (("사본을 만들 성장 카드", "hand", 1, true), (op.Op, null, leading)); break;
+                    case "pull": yield return (("앞당길 예약", "res", 1, false), (op.Op, null, leading)); break;
                 }
             }
-            return requests;
         }
+        public static List<(string Label, string From, int Count, bool GrowthOnly)> ChoiceRequests(BattleCardDef card, string mode, BattleData? content = null) =>
+            Choices(card, mode, content).Select(c => c.Request).ToList();
+        /// <summary>The Core effect each request of ChoiceRequests feeds, in the same order: its operation (tune, costdown, recall, growPick,
+        /// copyPick, discard, exhaustPick, pull), for tune the part it attaches, and whether it is the card's first top-level effect (only
+        /// the play's commit runs before it). Metadata of the given (effective) definition only; nothing is resolved here.</summary>
+        public static List<(string Op, string? Part, bool Leading)> ChoiceRules(BattleCardDef card, string mode) => Choices(card, mode, null).Select(c => c.Rule).ToList();
         /// <summary>The cards a pick sheet offers for one request, in zone order (prototype/src/ui.js pickerOptions): the hand without the
-        /// playing card, the discard pile or the time reservations; only growth-card definitions when the request says so; none already
-        /// picked. PickSheet draws exactly this list and PickCard accepts nothing else. Core still validates and resolves the picks.</summary>
+        /// playing card, the discard pile or the time reservations, none already picked. Without a rule this is that zone list (growth-card
+        /// definitions only when the request says so), the sheet's earlier list. With the request's rule (ChoiceRules) it is the list
+        /// PickSheet draws, PickCard accepts and a prepared intent revalidates: inside the known scope (see Narrowed) only the zone cards the
+        /// reached Core effect takes (EffectEligible; a card it cannot tell stays) and none when Core skips the effect (PickBlocked); outside
+        /// that scope the zone list again, so manual choice never shrinks for what the client cannot know. price is Core's price of a hand
+        /// card in mode now: price(uid, false) is Run.BattleCostOf / Battle.CostOf, price(uid, true) Run.BattleCostOfWithoutNextFree /
+        /// Battle.CostOfWithoutNextFree; a refusal is Core's RuleException. Core still validates and resolves the picks, and its own fallback
+        /// for unmade picks. Not promised outside the scope: a card offered there may still be one Core then does not take.</summary>
         public static List<string> PickCandidates(BattleState b, string source, (string Label, string From, int Count, bool GrowthOnly) request,
-            IEnumerable<string> picked, IReadOnlyDictionary<string, BattleCardDef> definitions)
+            IEnumerable<string> picked, IReadOnlyDictionary<string, BattleCardDef> definitions, (string Op, string? Part, bool Leading)? rule = null,
+            Func<string, bool, int>? price = null)
         {
             IEnumerable<string> options = request.From == "hand" ? b.Zones.Hand.Where(u => u != source) : request.From == "discard" ? b.Zones.Discard : b.Reservations.Select(r => r.Uid);
-            if (request.GrowthOnly) options = options.Where(u => b.Cards.TryGetValue(u, out var c) && definitions.TryGetValue(c.Id, out var d) && d.Growth == true);
             var used = new HashSet<string>(picked, StringComparer.Ordinal);
-            return options.Where(u => !used.Contains(u)).ToList();
+            options = options.Where(u => !used.Contains(u));
+            if (rule == null || !Narrowed(rule.Value, price))
+                return (request.GrowthOnly ? options.Where(u => b.Cards.TryGetValue(u, out var c) && definitions.TryGetValue(c.Id, out var d) && d.Growth == true) : options).ToList();
+            if (PickBlocked(b, rule.Value) != null) return new List<string>();
+            var effect = rule.Value;
+            return options.Where(u => EffectEligible(b, effect, u, definitions, price) != false).ToList();
         }
-        List<string> PickOptions(BattleState b, BattlePick pick) => PickCandidates(b, pick.Uid, pick.Requests[pick.Index], pick.Picks, cardDefs);
+        // The known scope where a request is narrowed to its effect's own candidates. tune, recall, growPick and copyPick: always, because a
+        // card their effect refuses now stays refused for the rest of the play (parts are never removed, rarity and growth definitions are
+        // fixed, growth and the battle's growth count never go down), so leaving it out never removes a card Core would take. costdown: only
+        // as the card's first effect and with Core's price, because then only the play's commit runs before it (see EffectEligible). discard,
+        // exhaustPick and pull take any card of their zone.
+        static bool Narrowed((string Op, string? Part, bool Leading) rule, Func<string, bool, int>? price)
+        {
+            switch (rule.Op)
+            {
+                case "tune": case "recall": case "growPick": case "copyPick": return true;
+                case "costdown": return rule.Leading && price != null;
+                default: return false;
+            }
+        }
+        /// <summary>PICK_GROWTH_CAP when the battle's growth cap is already reached: Core skips growPick before choosing and the cap count never
+        /// goes down, so no pick could do anything. Otherwise null.</summary>
+        public static string? PickBlocked(BattleState b, (string Op, string? Part, bool Leading) rule) =>
+            rule.Op == "growPick" && b.GrowthCount >= b.GrowthCap ? PickGrowthCap : null;
+        /// <summary>The reached Core effect's own validity predicate for one zone card (Battle.Effects ExecuteOp → TakePick), for a request
+        /// inside the known scope (see PickCandidates). tune: not already carrying the part and definition rarity not C. recall: definition
+        /// rarity not C. growPick: a growth definition below growth 3. copyPick: a growth instance (a growth definition, or an evolution of
+        /// the growth root it came from). costdown, as the card's first effect: Core's price above 0 as the effect will see it after the
+        /// play's commit spent its one "next card costs 0" charge, which is CostOf while no charge or two or more remain and
+        /// CostOfWithoutNextFree while exactly one remains (the source's own play consumes it). discard, exhaustPick and pull: any zone card.
+        /// Null when it cannot be told here, and such a card stays offered: a costdown card with a conditional cost (the commit may change
+        /// it), a price Core refuses (its RuleException is never read as 0), no price, or a card the state or definitions do not hold.</summary>
+        public static bool? EffectEligible(BattleState b, (string Op, string? Part, bool Leading) rule, string uid, IReadOnlyDictionary<string, BattleCardDef> definitions,
+            Func<string, bool, int>? price)
+        {
+            if (!b.Cards.TryGetValue(uid, out var card) || !definitions.TryGetValue(card.Id, out var def)) return null;
+            switch (rule.Op)
+            {
+                case "tune": return (rule.Part == null || !card.Temp.Contains(rule.Part)) && def.Rarity != "C";
+                case "recall": return def.Rarity != "C";
+                case "growPick": return def.Growth == true && card.Growth < 3;
+                case "copyPick":
+                    return def.Growth == true || card.From != null && definitions.TryGetValue(card.From, out var root) && root.Growth == true && root.Evolutions?.Contains(card.Id) == true;
+                case "costdown":
+                    if (price == null || def.CostIf != null) return null;
+                    try { return price(uid, b.FreeNext == 1) > 0; }
+                    catch (RuleException) { return null; }
+                default: return true;
+            }
+        }
+        List<string> PickOptions(BattleState b, BattlePick pick) => PickCandidates(b, pick.Uid, pick.Requests[pick.Index], pick.Picks, cardDefs, pick.Rules[pick.Index], Price);
+        // Core's price of a live hand card in mode now (Run.BattleCostOf), or the same calculation without a remaining "next card costs 0"
+        // charge (Run.BattleCostOfWithoutNextFree). A refusal stays Core's RuleException, which the candidate check reads as unknown, never 0.
+        int Price(string uid, bool withoutNextFree)
+        {
+            var live = run ?? throw new RuleException("NO_BATTLE");
+            return withoutNextFree ? live.BattleCostOfWithoutNextFree(uid, "now") : live.BattleCostOf(uid, "now");
+        }
         // The sheet's opening state still holds: the same Run and battle node, the battle version and target it was opened at, the
         // player phase and its card in hand. Any committed change moves the battle version, so picks made against an older state never
         // send; the target is compared, never replaced.
@@ -1400,13 +1481,16 @@ namespace MemoryForge.Client
                 if (last) caption += "\n" + ForecastOutcome(run!.BattleForecast(pick.Uid, pick.Mode, target, pick.Picks.Concat(new[] { uid }).ToList()));
                 Button(content, "Pick:" + uid, caption, i % 3 * 320, i / 3 * 64, 308, 54, () => PickCard(uid), Line, 21);
             }
-            if (list.Count == 0) Label(p, "고를 카드가 없어요.", 24, 110, 952, 40, 22, Muted);
+            if (list.Count == 0) Label(p, PickEmptyText(PickBlocked(b, pick.Rules[pick.Index])), 24, 110, 952, 96, 22, Muted);
             // AutoPick sends exactly the picks made so far and Core chooses the rest: that request's forecast.
             var auto = run!.BattleForecast(pick.Uid, pick.Mode, target, pick.Picks);
             Label(p, "자동으로 고르고 사용하면 · " + ForecastText(auto), 24, 448, 952, 52, 20, ForecastColor(auto));
             Button(p, "PickAuto", "남은 대상은 자동으로 고르고 사용", 24, 510, 420, 62, () => AutoPick(), Brass, 21);
             Button(p, "PickCancel", "취소", 776, 510, 200, 62, CancelPick, Line, 22);
         }
+        // An empty list says why: Core skips the effect at the growth cap; otherwise no card of its zone is one the effect takes.
+        static string PickEmptyText(string? blocked) =>
+            blocked == PickGrowthCap ? "이번 전투의 성장 한도에 닿아 이 효과는 건너뛰어요. 고를 카드가 없어요." : "이 효과가 받을 수 있는 카드가 없어요.";
 
         // ───────── rewards and node services ─────────
         void RewardView(RunState s)

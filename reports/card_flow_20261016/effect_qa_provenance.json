@@ -1,0 +1,14 @@
+{
+  "origin": "original official Opus initial seven witnesses, reconstructed from exact tool-use edit inputs; historical draft not accepted",
+  "initial_reconstructed_sha256": "71a05d1fc8bc949fce0bda78ad542f41a3ad85ff51aedb533ea73c2e023cbd74",
+  "independent_codex_qa_file": "ops/ai/local/EffectCandidateCoreWitnessTests.cs",
+  "new_tests": 3,
+  "recovered_adapted_tests": 7,
+  "changes": "three-field rule metadata and two-argument exact-price callback; replace rejected auto-only last-free test with legal explicit manual-target witness; conservative unknown handling; add pricing/conditional/overflow/purity/receipt probes",
+  "production_source": "No Codex production logic changes; received Claude components still exact",
+  "status": "ACTUAL_UNITY_10_OF_10_PASS_THEN_FULL_160_OF_160_PASS",
+  "source_test_file": "client/MemoryForgeUnity/Assets/Tests/PlayMode/EffectCandidateCoreWitnessTests.cs",
+  "production_amendment": "Codex comment-only scope clarification; no logic change to received Claude implementation",
+  "compile_fix": "two public-collection lookups; initial CS1061 and failed initialization retained separately",
+  "final_public_qa_sha256": "27b491b5900b0ab691cc0696985582025017084f7052600a1bd38d94a253dc69"
+}

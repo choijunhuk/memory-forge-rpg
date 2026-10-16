@@ -1,0 +1,27 @@
+{
+  "observed_at": "2026-10-16T07:21:03.473709+00:00",
+  "head_sha": "dec7688fe022d7d41cac6a9f212184222cda460b",
+  "runs": [
+    {
+      "id": 38864480736,
+      "event": "pull_request",
+      "head_sha": "dec7688fe022d7d41cac6a9f212184222cda460b",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/choijunhuk/memory-forge-rpg/actions/runs/38864480736",
+      "run_started_at": "2026-10-16T07:00:23Z",
+      "updated_at": "2026-10-16T07:20:18Z"
+    },
+    {
+      "id": 38864473829,
+      "event": "push",
+      "head_sha": "dec7688fe022d7d41cac6a9f212184222cda460b",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/choijunhuk/memory-forge-rpg/actions/runs/38864473829",
+      "run_started_at": "2026-10-16T07:00:19Z",
+      "updated_at": "2026-10-16T07:20:05Z"
+    }
+  ],
+  "unity_validation_separate": "147Play/3Edit locally verified; CI does not substitute for Editor/native/device evidence"
+}

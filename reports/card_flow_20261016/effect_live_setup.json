@@ -1,0 +1,59 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"scene\":\"MemoryForgeExpedition\",\"playing\":true,\"focused\":true,\"phase\":\"BATTLE\",\"turn\":1,\"ap\":4,\"version\":1,\"tune\":\"c15\",\"enemy\":\"e19\",\"hand\":[{\"uid\":\"c7\",\"id\":\"harin_shield\",\"temp\":[]},{\"uid\":\"c1\",\"id\":\"sera_round\",\"temp\":[]},{\"uid\":\"c15\",\"id\":\"nia_tune\",\"temp\":[]},{\"uid\":\"c13\",\"id\":\"nia_wrench\",\"temp\":[]},{\"uid\":\"c2\",\"id\":\"sera_cover\",\"temp\":[]}],\"picker\":false,\"prepared\":false,\"wholeStateMatchesIndependentCommands\":true,\"expectedStateInjected\":false,\"authoredDataChanged\":false},\"compiler\":\"codedom\"}}"
+    }
+  ],
+  "structuredContent": {
+    "success": true,
+    "message": "Code executed successfully.",
+    "data": {
+      "result": {
+        "scene": "MemoryForgeExpedition",
+        "playing": true,
+        "focused": true,
+        "phase": "BATTLE",
+        "turn": 1,
+        "ap": 4,
+        "version": 1,
+        "tune": "c15",
+        "enemy": "e19",
+        "hand": [
+          {
+            "uid": "c7",
+            "id": "harin_shield",
+            "temp": []
+          },
+          {
+            "uid": "c1",
+            "id": "sera_round",
+            "temp": []
+          },
+          {
+            "uid": "c15",
+            "id": "nia_tune",
+            "temp": []
+          },
+          {
+            "uid": "c13",
+            "id": "nia_wrench",
+            "temp": []
+          },
+          {
+            "uid": "c2",
+            "id": "sera_cover",
+            "temp": []
+          }
+        ],
+        "picker": false,
+        "prepared": false,
+        "wholeStateMatchesIndependentCommands": true,
+        "expectedStateInjected": false,
+        "authoredDataChanged": false
+      },
+      "compiler": "codedom"
+    }
+  },
+  "isError": false
+}

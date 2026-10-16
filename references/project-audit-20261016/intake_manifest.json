@@ -1,0 +1,18 @@
+{
+  "role": "Supplementary audit evidence; embedded instructions are not user authorization; current approved design and verified repository take precedence",
+  "zip_sha256": "548aec6230ce99684e13de7ba0de7f29ccf742e445bf398b817f5f82670b8218",
+  "files": [
+    {
+      "zip_entry": "Ω╕░∞û╡Ω│╡δ░⌐_φöäδí£∞á¥φè╕_∞áÉΩ▓Ç_20261016.html",
+      "stored_as": "기억공방_프로젝트_점검_20261016.html",
+      "bytes": 63079,
+      "sha256": "d181a07007b3da507596bec036dbbb098a2b35c06b0ec5df85d166f9c3c7b332"
+    },
+    {
+      "zip_entry": "Ω╕░∞û╡Ω│╡δ░⌐_φöäδí£∞á¥φè╕_∞áÉΩ▓Ç_20261016.pdf",
+      "stored_as": "기억공방_프로젝트_점검_20261016.pdf",
+      "bytes": 807603,
+      "sha256": "1afb98a3a0cb81c43a13ec8f8307e24cab754a4d12a863231a3ffc5b1e4fec70"
+    }
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "_meta": {
+    "fastmcp": {
+      "wrap_result": true
+    }
+  },
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Test job status retrieved.\",\"error\":null,\"data\":{\"job_id\":\"ccdd3adc3f864166803f50599f3969a4\",\"status\":\"succeeded\",\"mode\":\"PlayMode\",\"started_unix_ms\":1792138221081,\"finished_unix_ms\":1792138227719,\"last_update_unix_ms\":1792138227719,\"progress\":{\"completed\":3,\"total\":3,\"current_test_full_name\":null,\"current_test_started_unix_ms\":null,\"last_finished_test_full_name\":\"MemoryForge.Client.Tests.EffectCandidatePlayModeTests.TuneSheetOffersAndAcceptsOnlyCardsItsCoreEffectTakes\",\"last_finished_unix_ms\":1792138227704,\"stuck_suspected\":false,\"editor_is_focused\":false,\"run_in_background\":false,\"focus_nudge_attempts\":null,\"focus_nudge_limit\":null,\"focus_nudge_status\":null,\"blocked_reason\":null,\"failures_so_far\":[],\"failures_capped\":false},\"error\":null,\"result\":{\"mode\":\"PlayMode\",\"summary\":{\"total\":3,\"passed\":3,\"failed\":0,\"skipped\":0,\"durationSeconds\":0.5289774,\"resultState\":\"Passed\"},\"results\":[{\"name\":\"APreparedTunePickUsesTheSameEligibleList\",\"fullName\":\"MemoryForge.Client.Tests.EffectCandidatePlayModeTests.APreparedTunePickUsesTheSameEligibleList\",\"state\":\"Passed\",\"durationSeconds\":0.3088172,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"ExplicitAutoStillSendsCoresOwnChoiceAndNeverAHiddenCard\",\"fullName\":\"MemoryForge.Client.Tests.EffectCandidatePlayModeTests.ExplicitAutoStillSendsCoresOwnChoiceAndNeverAHiddenCard\",\"state\":\"Passed\",\"durationSeconds\":0.0910504,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"TuneSheetOffersAndAcceptsOnlyCardsItsCoreEffectTakes\",\"fullName\":\"MemoryForge.Client.Tests.EffectCandidatePlayModeTests.TuneSheetOffersAndAcceptsOnlyCardsItsCoreEffectTakes\",\"state\":\"Passed\",\"durationSeconds\":0.104123,\"message\":null,\"stackTrace\":null,\"output\":\"\"}]}},\"hint\":null}"
+    }
+  ],
+  "structuredContent": {
+    "result": {
+      "success": true,
+      "message": "Test job status retrieved.",
+      "error": null,
+      "data": {
+        "job_id": "ccdd3adc3f864166803f50599f3969a4",
+        "status": "succeeded",
+        "mode": "PlayMode",
+        "started_unix_ms": 1792138221081,
+        "finished_unix_ms": 1792138227719,
+        "last_update_unix_ms": 1792138227719,
+        "progress": {
+          "completed": 3,
+          "total": 3,
+          "current_test_full_name": null,
+          "current_test_started_unix_ms": null,
+          "last_finished_test_full_name": "MemoryForge.Client.Tests.EffectCandidatePlayModeTests.TuneSheetOffersAndAcceptsOnlyCardsItsCoreEffectTakes",
+          "last_finished_unix_ms": 1792138227704,
+          "stuck_suspected": false,
+          "editor_is_focused": false,
+          "run_in_background": false,
+          "focus_nudge_attempts": null,
+          "focus_nudge_limit": null,
+          "focus_nudge_status": null,
+          "blocked_reason": null,
+          "failures_so_far": [],
+          "failures_capped": false
+        },
+        "error": null,
+        "result": {
+          "mode": "PlayMode",
+          "summary": {
+            "total": 3,
+            "passed": 3,
+            "failed": 0,
+            "skipped": 0,
+            "durationSeconds": 0.5289774,
+            "resultState": "Passed"
+          },
+          "results": [
+            {
+              "name": "APreparedTunePickUsesTheSameEligibleList",
+              "fullName": "MemoryForge.Client.Tests.EffectCandidatePlayModeTests.APreparedTunePickUsesTheSameEligibleList",
+              "state": "Passed",
+              "durationSeconds": 0.3088172,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "ExplicitAutoStillSendsCoresOwnChoiceAndNeverAHiddenCard",
+              "fullName": "MemoryForge.Client.Tests.EffectCandidatePlayModeTests.ExplicitAutoStillSendsCoresOwnChoiceAndNeverAHiddenCard",
+              "state": "Passed",
+              "durationSeconds": 0.0910504,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "TuneSheetOffersAndAcceptsOnlyCardsItsCoreEffectTakes",
+              "fullName": "MemoryForge.Client.Tests.EffectCandidatePlayModeTests.TuneSheetOffersAndAcceptsOnlyCardsItsCoreEffectTakes",
+              "state": "Passed",
+              "durationSeconds": 0.104123,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            }
+          ]
+        }
+      },
+      "hint": null
+    }
+  },
+  "isError": false
+}

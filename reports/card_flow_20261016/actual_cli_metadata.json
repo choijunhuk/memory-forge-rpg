@@ -131,5 +131,30 @@
     "actual_model": "claude-opus-5-5",
     "actual_per_turn_effort": "high",
     "positive_output_messages": 9
+  },
+  "P1-CARD-FLOW-EFFECT-CANDIDATES": {
+    "session_id": "9e72e086-dd3f-4efa-8840-28d42f883c9b",
+    "actual_model": "claude-opus-5-5",
+    "actual_per_turn_effort": "xhigh",
+    "positive_output_messages": 158,
+    "root_review": "changes required; FreeNext1 manual choice must be preserved"
+  },
+  "P1-CARD-FLOW-CANDIDATE-COST-QUERY": {
+    "session_id": "9e72e086-dd3f-4efa-8840-28d42f883c9b",
+    "actual_model": "claude-opus-5-5",
+    "actual_per_turn_effort": "max",
+    "positive_output_messages": 89,
+    "status": "FAILED_INCLUDED_SUBSCRIPTION_SESSION_LIMIT",
+    "reset_display": "19:00 Asia/Seoul 2026-10-16",
+    "first_positive_message": "2026-10-16T07:42:07.973Z",
+    "last_positive_message": "2026-10-16T07:52:55.534Z",
+    "source_components_received": 6,
+    "missing_outputs": [
+      "pure witness split file",
+      "corrected author report"
+    ],
+    "followup_inference_after_limit": false,
+    "fallback_api_extra_or_credits": false,
+    "root_independent_validation": "new10 QA witnesses and actual .NET/Unity validation; completion not attributed to failed Claude task"
   }
 }

@@ -114,11 +114,14 @@ namespace MemoryForge.Client.Tests
         static string? NextReservation(Session s, string enemy) =>
             s.Mirror.State.Battle!.Zones.Hand.FirstOrDefault(u => s.Mirror.BattleAllowedModes(u).Contains("next") && s.Mirror.BattleCheck(u, "next", enemy) == null);
         // The reference kit's nia_tune (one hand card to pick), playable now with at least one other hand card Core's precheck accepts as its pick.
+        // P1-CARD-FLOW-EFFECT-CANDIDATES: that card must also be one the tune effect itself takes (no amp yet, rarity not C), since the sheet
+        // now offers only those.
         static string? Tune(Session s, string enemy)
         {
-            var b = s.Mirror.State.Battle!;
+            var b = s.Mirror.State.Battle!; var cards = s.Data.Memory.Battle.Cards;
             return b.Zones.Hand.FirstOrDefault(u => b.Cards[u].Id == "nia_tune" && s.Mirror.BattleCheck(u, "now", enemy) == null
-                && b.Zones.Hand.Any(c => c != u && s.Mirror.BattleCheck(u, "now", enemy, new[] { c }) == null));
+                && b.Zones.Hand.Any(c => c != u && !b.Cards[c].Temp.Contains("amp") && cards.Single(d => d.Id == b.Cards[c].Id).Rarity != "C"
+                    && s.Mirror.BattleCheck(u, "now", enemy, new[] { c }) == null));
         }
         // A plain card whose exact forecast (Core's pure play on a copy, no hidden draw/random outcome) defeats the last living enemy.
         static string? Finisher(Session s, string enemy)

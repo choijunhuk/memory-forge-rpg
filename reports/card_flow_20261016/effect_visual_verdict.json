@@ -1,0 +1,10 @@
+{
+  "score": 95,
+  "verdict": "pass",
+  "category_match": true,
+  "differences": [
+    "현재 배경에는 기존 S4A/S4B의 배속·생략 컨트롤이 추가돼 있다. 후보 오버레이의 레이아웃과 읽기 순서는 기준 화면과 같다."
+  ],
+  "suggestions": [],
+  "reasoning": "기존 실제 S3 선택창을 기준으로 제목·카드 후보·자동 선택·취소가 겹침 없이 유지된다. 실제 EventSystem 광선 입력과 상태 검증은 별도 JSON으로 확인했으며 최종 아트·기기 수용은 포함하지 않는다."
+}

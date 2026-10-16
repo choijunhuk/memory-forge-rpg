@@ -167,7 +167,14 @@ namespace MemoryForge.Core
                 default: return new List<string> { "now" };
             }
         }
-        public int CostOf(string uid, string mode = "now")
+        public int CostOf(string uid, string mode = "now") => CalculateCost(uid, mode, true);
+        /// <summary>CostOf's own calculation with the global "next card costs 0" charge (FreeNext) left out: the card's price once no such
+        /// charge remains. A free instance, the effective definition, CostMod, parts, the conditional cost, the mode adjustments, the clamp at
+        /// 0 and the checked number range are exactly CostOf's, and so are its errors. Read-only: it changes no state, RNG, version or
+        /// receipt, and it simulates no other part of a play.</summary>
+        public int CostOfWithoutNextFree(string uid, string mode = "now") => CalculateCost(uid, mode, false);
+        // The one cost calculation behind CostOf (nextFree: a remaining FreeNext charge makes the price 0) and CostOfWithoutNextFree.
+        int CalculateCost(string uid, string mode, bool nextFree)
         {
             try
             {
@@ -179,7 +186,7 @@ namespace MemoryForge.Core
                 state.BattleFlags.TryGetValue("emptyClockUsed", out var clockUsed);
                 if (mode != "now" && Has("empty_clock") && !BattleGraph.Truthy(clockUsed)) cost--;
                 if (mode != "now" && state.SilenceUntil > 0 && state.SilenceUntil >= state.Turn) cost++;
-                if (state.FreeNext > 0) cost = 0;
+                if (nextFree && state.FreeNext > 0) cost = 0;
                 return StateNumber(BigInteger.Max(0, cost));
             }
             catch (OverflowException) { throw new RuleException("BATTLE_NUMBER_OUT_OF_RANGE"); }

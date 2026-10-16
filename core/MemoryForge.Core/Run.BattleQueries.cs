@@ -15,6 +15,10 @@ namespace MemoryForge.Core
         /// <summary>Battle.CostOf of a live card instance for a mode. NO_BATTLE outside battle.</summary>
         public int BattleCostOf(string uid, string mode = "now") => LiveBattle().CostOf(uid, mode);
 
+        /// <summary>Battle.CostOfWithoutNextFree of a live card instance for a mode: CostOf's calculation without a remaining "next card
+        /// costs 0" charge. NO_BATTLE outside battle.</summary>
+        public int BattleCostOfWithoutNextFree(string uid, string mode = "now") => LiveBattle().CostOfWithoutNextFree(uid, mode);
+
         /// <summary>Battle.NeedsTarget of a live card instance: "one", "fixed" or null. NO_BATTLE outside battle.</summary>
         public string? BattleNeedsTarget(string uid) => LiveBattle().NeedsTarget(uid);
 
