@@ -203,15 +203,15 @@ P1/P2 완료로 개발을 끝내지 않는다. 이 표와 아래 장별 요구�
 | **§11.2 레벨·경험치** | PARTIAL | [Stats][js]·[성장 데이터][progression]·[경제 시험][economy-tests] | 실제 아이템 최소조합·상한 미소모·승급 명령 서버 |
 | **§11.3 1명 완성 비용과 수급 속도** | IMPLEMENTED(분석) | [경제 검산][economy-tool]·[경제 시험][economy-tests] | 시뮬레이션 비용과 실제 계정 수급을 구분 |
 | **§11.4 집중(스태미나)** | PARTIAL(데이터) | [stamina][progression]·[경제 시험][economy-tests] | 회복 시각·상한·충전 한도·차감 서버 |
-| **§11.5 성장 던전** | NOT_IMPLEMENTED(진행기) | [dungeons 데이터][progression] | 1~3웨이브·별 판정·소탕/집중 원장 실제 구현 |
-| **§11.6 주간 보스** | NOT_IMPLEMENTED(게임/API) | [weeklyBoss 데이터][progression]·[DB 제약][schema] | 주간 공유3회·실패 미차감·연습·승리 검증 트랜잭션 |
-| **§11.7 기록 균열 (2주 순환 고난도)** | NOT_IMPLEMENTED(진행기) | [recordRift 데이터][progression] | 6개 수정자·3연전·팀별 HP 이월·덱 초기화·별 지급 |
+| **§11.5 성장 던전** | IMPLEMENTED(JS 진행기·원장)/DECISION_PENDING(웨이브 적 구성) | [ContentModes.Dungeon][content-modes]·[원문 수치/보류 데이터][content-modes-data]·[시험][content-modes-tests]·[콘텐츠 모드 보고](../reports/content_modes_20261017/README.md) | 해금·단계 보상(정수 버림)·별 3기준·소탕(3성 후 1~12회)·집중/계정XP 원장·같은 전투 안 웨이브 진행. 던전·단계별 적 구성과 패배 시 집중 차감이 원문에 없어 CONTENT_NOT_AUTHORED로 막는다(원문에 없는 단계별 잠금은 만들지 않음). 서버 트랜잭션·C# 이식·UI 미구현 |
+| **§11.6 주간 보스** | IMPLEMENTED(JS 진행기·원장) | [ContentModes.WeeklyBoss][content-modes]·[시험][content-modes-tests]·[DB 제약][schema]·[콘텐츠 모드 보고](../reports/content_modes_20261017/README.md) | 해금15·보스4종·난이도5단계 배율·월 05:00 KST 주간 공유3회·실패/연습 미차감·종료 전투 1회 정산(한도 초과 승리 이월 불가). 서버 한 트랜잭션 적용·API·C# 이식·UI 미구현 |
+| **§11.7 기록 균열 (2주 순환 고난도)** | IMPLEMENTED(JS 3연전·6규칙·원장)/DECISION_PENDING(회전표·적 조합·별2/3 기준) | [ContentModes.RiftRun/Rift][content-modes]·[시험][content-modes-tests]·[콘텐츠 모드 보고](../reports/content_modes_20261017/README.md) | 해금20·주기(시즌1·15·29일 11:00)·층 배율·1·2·1파티 3연전·팀별 HP 이월·전투마다 덱/예약/게이지 초기화·6명 미만 재출전 시 별2 상한·별 60/20/20 주기당 1회 분할 지급·6규칙. 주기별 규칙 배정·적 조합·총 턴/남은 체력 기준이 원문에 없어 클리어 층 정산을 CONTENT_NOT_AUTHORED로 막는다. 서버·C#·UI 미구현 |
 | **§11.8 메인 스토리 탐사** | PARTIAL | [storyChapters][progression]·[Run][js] | 4~6장 후보·대본·보상·잠금 수용, 첫 클리어 서버 |
 | **§11.9 계정 레벨** | PARTIAL(데이터/분석) | [accountLevel][progression]·[경제 시험][economy-tests] | 계정 XP·해금·승급 서버 명령 |
 | **§11.10 인연(호감도)** | PARTIAL(데이터) | [affinity][progression]·[인물 원본][notes] | 선물/일일 상한·4편씩40편 에피소드·보상/로비 연결 |
 | **§11.11 일일·주간 임무** | PARTIAL(데이터) | [missions][progression] | 실제 진척·일일/주간 지급·리셋·멱등 원장 |
 | **§11.12 계정 공통 재료와 다인 육성** | IMPLEMENTED(분석) | [독립 경제 시험][economy-tests]·[검산 도구][economy-tool] | 다인 육성의 실제 해금/집중 배분 계정 모델 수용 |
-| **§11.13 주간 보스·기록 균열·일일 활동** | NOT_IMPLEMENTED(목표) | [현행/목표 정책][policy-data]·[성장 데이터][progression] | 초기1팀·후반2팀·선택형100점·주간 공유 보상 구현 |
+| **§11.13 주간 보스·기록 균열·일일 활동** | PARTIAL(JS 구조)/DECISION_PENDING(선택형 임무 목록) | [ContentModes.Daily/RiftRun][content-modes]·[현행/목표 정책][policy-data]·[시험][content-modes-tests]·[콘텐츠 모드 보고](../reports/content_modes_20261017/README.md) | 주간 공유3회·실패 미차감·연습 무제한 구현. 균열 1~3층 1팀/4~6층 2팀은 `target` 정책으로 선택 가능(현행 기본은 §11.7 전 층 2팀). 일일 100점 상한·05:00 KST 초기화·이정표 지급 구현, 선택형 임무 목록·점수가 원문에 없어 보류. 정책 전환 승인·서버 API 미구현 |
 | **§11.14 최대 기억 용량의 무료 해금 — 목표** | NOT_IMPLEMENTED | [현행 Stats][js]·[목표 정책][policy-data] | 무료 승급 최대9·저장 이관·UI·C# 벡터 |
 | **§11.15 업적 — 구판 요구 보존, 최신 데이터 이식 전** | DECISION_PENDING | [구판 보존](archive/v0.6_materials/)·[원문11장](source_v0.8.1/11_chapter.md) | 120개 업적 ID/조건/소급/보상원장·총합 확정 전 지급 없음 |
 
@@ -426,6 +426,9 @@ P1/P2 완료로 개발을 끝내지 않는다. 이 표와 아래 장별 요구�
 [js]: ../engine/rules-core.js
 [ui]: ../prototype/src/ui.js
 [engine-tests]: ../engine/tests/engine.test.mjs
+[content-modes]: ../engine/content-modes.js
+[content-modes-data]: ../data/content_modes.json
+[content-modes-tests]: ../engine/tests/content_modes.test.mjs
 [review-tests]: ../engine/tests/review_v071.test.mjs
 [memory-tests]: ../engine/tests/memory_v2_integration.test.mjs
 [memory-edges]: ../engine/tests/memory_v2_edges.test.mjs
