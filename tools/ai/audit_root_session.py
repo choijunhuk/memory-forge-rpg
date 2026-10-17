@@ -204,6 +204,15 @@ def codex_args(words):
     return values, flags, positional
 
 
+def art_folder(path):
+    """A repository-relative folder strictly inside art/ (no absolute, ~, $, .. or symlink escape)."""
+    if not re.fullmatch(r'art/[A-Za-z0-9_][A-Za-z0-9_./-]*', path) or '..' in path.split('/'):
+        return False
+    root = os.path.realpath(os.path.join(str(ROOT), 'art'))
+    target = os.path.realpath(os.path.join(str(ROOT), path))
+    return target != root and os.path.commonpath([target, root]) == root
+
+
 def git_command(args):
     i = 0
     while i < len(args) and args[i].startswith('-'):
@@ -272,8 +281,7 @@ def scan(cmd, codex_model, owner, depth=0):
             configs = values.get('config', [])
             # Reviews are read-only; image work may write only inside a folder under art/ given with -C (AI_WORKFLOW §17).
             cd = values.get('cd', [])
-            art_write = values.get('sandbox') == ['workspace-write'] and len(cd) == 1 and bool(re.match(r'(.*/)?art/[^.][^\s]*$', cd[0])) \
-                and '..' not in cd[0].split('/')
+            art_write = values.get('sandbox') == ['workspace-write'] and len(cd) == 1 and art_folder(cd[0])
             if not (via_command and not env and (values.get('sandbox') == ['read-only'] or art_write) and values.get('model') == [codex_model]
                     and configs and all(c.startswith('model_reasoning_effort=') for c in configs) and 'profile' not in values
                     and not flags & {'--dangerously-bypass-approvals-and-sandbox', '--full-auto'}):

@@ -417,6 +417,8 @@ class ClaudeMcpProfileTests(unittest.TestCase):
    ('codex_call',[bash('x',"command codex exec 'see --help'")]),('codex_call',[bash('x','command codex exec -- --help')]),
    ('codex_call',[bash('x',"command codex exec -s workspace-write -m gpt-6.1-sol -c model_reasoning_effort=high -C tools 'x'")]),
    ('codex_call',[bash('x',"command codex exec -s workspace-write -m gpt-6.1-sol -c model_reasoning_effort=high -C art/../tools 'x'")]),
+   ('codex_call',[bash('x',"command codex exec -s workspace-write -m gpt-6.1-sol -c model_reasoning_effort=high -C /tmp/art/x 'x'")]),
+   ('codex_call',[bash('x',"command codex exec -s workspace-write -m gpt-6.1-sol -c model_reasoning_effort=high -C '~/art/x' 'x'")]),
    ('force_push_main',[bash('x',push)]),('env_value_print',[bash('x','printenv OPENAI_API_KEY')]),
    ('env_value_print',[bash('x',"bash -c 'printenv OPENAI_API_KEY'")]),('env_value_print',[bash('x','printf "%s" "$(printenv OPENAI_API_KEY)"')]),
    ('env_value_print',[bash('x','cat > f <<EOF\n$(printenv OPENAI_API_KEY)\nEOF')]),
