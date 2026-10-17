@@ -1,6 +1,6 @@
 # Android 개발용 APK 실기기 점검 — 2026-10-17
 
-결과: **빌드 성공, 실기기 실행 미확인(설치 중 기기 연결 `offline`).** 사용 한도 도달로 재시도 전에 멈췄다.
+결과: **빌드 성공, 실기기 설치·실행·터치 확인 완료.** 처음 시도는 설치 중 기기 연결이 `offline`이 되어 멈췄다. 사용자가 다시 연결한 뒤 루트 세션이 이어서 확인했다(아래 §4).
 
 ## 브랜치 기준
 - 지시된 worktree는 `main`(f4077c8)에서 시작해 루트 브랜치 `codex/late-actions-balance`(b93d928)보다 55커밋 뒤였고 `tools/ai/audit_root_session.py`가 없었다.
@@ -48,3 +48,19 @@
 2. APK 재빌드(약 4분, Library 있으면 더 짧음) 또는 scratch의 APK 재사용:
    `MF_APK_OUT=<path> Unity -batchmode -quit -nographics -buildTarget Android -projectPath <worktree>/client/MemoryForgeUnity -executeMethod MemoryForgeAndroidBuild.BuildDevApk -logFile <log>`
 3. `adb -s R3CX10PCWCW install -r <apk>` → `adb shell am start -W -n com.memoryforge.rpg.dev/com.unity3d.player.UnityPlayerActivity` → `adb exec-out screencap -p` → 밝은 1층 칸 탭 → 스크린샷 → `adb logcat -d | grep -E " E Unity|Exception"`.
+
+## 4. 재시도 결과 (루트 세션, 23:27 KST)
+
+- **설치:** 사용자가 USB를 다시 연결한 뒤 `adb devices`가 `device`였다. 같은 APK를 `install -r`로 설치했다(Streamed Install, Success). APK 사본은 `ops/ai/local/builds/MemoryForge-dev-20261017.apk`(Git 제외)에 있다.
+- **기동:** `am start -W` 결과 Status ok, TotalTime 595ms. 가로 화면에 지도가 정상 표시됐다(`01_device_launch.png`).
+- **터치:** 밝은 1층 칸을 탭하자 전투 화면으로 넘어갔다(`03_device_battle.png`). 1600×900 프레임이 2340×1080 화면에 맞게 들어갔고 글자 잘림은 보이지 않았다. 오른쪽 아래에 `Development Build` 표시가 있다.
+- **logcat (앱 pid만):** Unity 스크립트 예외·치명 오류는 0이다. 오류 줄은 기기 드라이버 탐색 로그뿐이다: Gralloc 4×4 형식 탐색 실패, 삼성 `libpenguin.so` 없음, ashmem 경고.
+- **Android 16 경고 — 16KB 페이지 크기:** 첫 실행 때 "이 앱은 16KB와 호환되지 않습니다. ELF 정렬 검사에 실패했습니다" 대화상자가 떴다. 확인을 누르면 계속 진행된다.
+  - 점검 결과 `libunity.so`·`libil2cpp.so`·`libmain.so`·`libc++_shared.so`·`libswappywrapper.so`는 LOAD 정렬이 0x4000(16KB)이다. **`lib_burst_generated.so`만 0x1000(4KB)**이다.
+  - APK의 zip 정렬은 `zipalign -c -P 16` 통과다(.so는 압축 저장).
+  - 대화상자는 `libunity.so`도 "알 수 없는 오류"로 표시했지만 실제 정렬은 16KB였다.
+  - **출시 차단 항목:** Google Play는 Android 15 이상을 대상으로 하는 앱에 16KB 페이지 지원을 요구한다. Burst 출력 정렬을 고치거나(Burst·Unity 버전 갱신 또는 Burst AOT 설정), 그것이 어렵다면 Burst를 끄는 방안을 출시 전에 정한다. 개발 시험에는 영향이 없다.
+- **아직 결정하지 않은 것:**
+  - 표시 이름: 이 APK는 `2D_URP`로 빌드됐다. 이후 `PlayerSettings.productName`이 `Memory Forge`로 바뀌었다(PC 빌드 커밋).
+  - 가로 고정·패키지 이름: 빌드 스크립트 안에서만 지정한다. 프로젝트 설정으로 올리는 것은 출시 전에 정한다.
+
