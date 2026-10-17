@@ -94,5 +94,58 @@
       "sha256": "d895e00377ed5b56f7dca20be23adda59b0de186eae2fd02e720039d1b0f4477",
       "viewed_this_session": true
     }
+  ],
+  "continuation_passes": [
+    {
+      "id": "character-moments-images-pass2-20261018",
+      "scope": "art/moments only; image generation and source metadata; no game code / Unity / commits / push / Claude",
+      "success_criteria": "all six A plus Sera B/C declared image assets exist; ready honest; idle files; protected narrative data preserved",
+      "sources": [
+        {
+          "path": "art/requests/character-moments-20261018.md",
+          "sha256": "a7f0681d74edf4fb5c1ef531c55d60c634b2ff6b2e1be261c7b18ca12698cdb5"
+        },
+        {
+          "path": "docs/MOMENTS_FORMAT.md",
+          "sha256": "523f276c5b8c721d6a3eda06dfabb17cef020f342143224f68abcd592c513d82"
+        },
+        {
+          "path": "docs/AI_WORKFLOW.md",
+          "sha256": "6e9fa9b35decec9e8927d72ade768cb178478ffae63ca4bbf44dbb32808494c2"
+        },
+        {
+          "path": "OWNERSHIP.md",
+          "sha256": "94a2ecd25be311d92ce4fee13081eaf7426ea5d06070cd81dbc58bf8dd58e634"
+        },
+        {
+          "path": "reports/ui_skin_20261018/sera_lobby_01_log.txt",
+          "sha256": "3ab89eb4816debca4677139f8360efff60a9f61893ab3d6f4c4829345489f854"
+        },
+        {
+          "path": "reports/ui_skin_20261018/sera_lobby_01_4.png",
+          "sha256": "69a9935266a1f1b409f1115c917249483abc09da733805643aff4c1838c95a88"
+        },
+        {
+          "path": "art/generated/starter-20261017/char_harin_sheet_default_v01.png",
+          "sha256": "2c736b1ef79868dfa8dd8150750f9339469f54df25ccea7f5358edbd7ddefce1"
+        },
+        {
+          "path": "art/candidates/20261018/codex/assets/backgrounds/bg_zone1_event_workshop_v02.png",
+          "sha256": "a049b8449d5d04312f05a4c60bb01aa4b770f2cf9394e0b11d4b4fcdb4bf8214"
+        },
+        {
+          "path": "art/moments/sera/images/char_sera_lobby_smile_v01.png",
+          "sha256": "03f5074681a1bdc7639b39e8cb2c24d6b2146b3aaa6759bcf2eaa98fb2ece236"
+        }
+      ],
+      "notes": [
+        "Old source records describe the preceding pass; not all earlier visual inputs were viewed again.",
+        "Current actual views: Harin sheet, Sera smile, existing workshop background, provided Sera A capture4; generated outputs inspected inline.",
+        "New background reuse is exact file copying. No source files outside moments edited."
+      ],
+      "generation_records": "production-20261018/generation-records.json",
+      "validation": "VALIDATION.json",
+      "input_snapshot": "production-20261018/input-hashes.json"
+    }
   ]
 }

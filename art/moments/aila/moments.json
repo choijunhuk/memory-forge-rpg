@@ -3,14 +3,14 @@
   "character": "aila",
   "status": "draft",
   "images": {
-    "fig_neutral": "moments/aila/images/char_aila_moment_neutral_v01.png",
-    "fig_action1": "moments/aila/images/char_aila_moment_action1_v01.png",
-    "fig_action2": "moments/aila/images/char_aila_moment_action2_v01.png",
-    "fig_happy": "moments/aila/images/char_aila_moment_happy_v01.png",
+    "fig_neutral": "moments/aila/images/char_aila_moment_neutral_v02.png",
+    "fig_action1": "moments/aila/images/char_aila_moment_action1_v02.png",
+    "fig_action2": "moments/aila/images/char_aila_moment_action2_v02.png",
+    "fig_happy": "moments/aila/images/char_aila_moment_happy_v02.png",
     "fig_worried": "moments/aila/images/char_aila_moment_worried_v01.png",
     "fig_surprised": "moments/aila/images/char_aila_moment_surprised_v01.png",
     "fig_determined": "moments/aila/images/char_aila_moment_determined_v01.png",
-    "fig_soft": "moments/aila/images/char_aila_moment_soft_v01.png",
+    "fig_soft": "moments/aila/images/char_aila_moment_soft_v02.png",
     "expr_neutral": "moments/aila/images/char_aila_expression_neutral_v01.png",
     "expr_happy": "moments/aila/images/char_aila_expression_happy_v01.png",
     "expr_annoyed": "moments/aila/images/char_aila_expression_annoyed_v01.png",
@@ -26,58 +26,58 @@
   "anchors": {
     "fig_neutral": {
       "face": [
-        0.5,
-        0.17
+        0.53,
+        0.1
       ],
       "body": [
-        0.5,
+        0.53,
         0.5
       ],
       "hands": [
-        0.48,
-        0.55
+        0.42,
+        0.51
       ]
     },
     "fig_action1": {
       "face": [
-        0.5,
-        0.17
+        0.51,
+        0.09
       ],
       "body": [
-        0.5,
+        0.51,
         0.5
       ],
       "hands": [
-        0.48,
-        0.55
+        0.8,
+        0.14
       ]
     },
     "fig_action2": {
       "face": [
-        0.5,
-        0.17
+        0.43,
+        0.105
       ],
       "body": [
-        0.5,
+        0.43,
         0.5
       ],
       "hands": [
-        0.48,
-        0.55
+        0.27,
+        0.28
       ]
     },
     "fig_happy": {
       "face": [
-        0.5,
-        0.17
+        0.53,
+        0.105
       ],
       "body": [
-        0.5,
+        0.53,
         0.5
       ],
       "hands": [
-        0.48,
-        0.55
+        0.29,
+        0.41
       ]
     },
     "fig_worried": {
@@ -124,16 +124,16 @@
     },
     "fig_soft": {
       "face": [
-        0.5,
-        0.17
+        0.53,
+        0.105
       ],
       "body": [
-        0.5,
+        0.53,
         0.5
       ],
       "hands": [
-        0.48,
-        0.55
+        0.43,
+        0.49
       ]
     },
     "fig_victory_check": {
@@ -242,32 +242,32 @@
         {
           "key": "bg",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_action1",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_action2",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_happy",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_neutral",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_soft",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "stage_settle",
@@ -302,7 +302,7 @@
           },
           "line": {
             "speaker": null,
-            "text": "에일라는 장부를 덮고 손끝으로 종을 고른다. 등불을 든 팔은 낮게, 열린 등과 서리 자수는 측후면에서 한 번 읽힌다.",
+            "text": "에일라는 장부를 덮고 손끝으로 종을 고른다. 등불을 낮게 든 채 고개를 돌리자, 열린 등과 서리 자수가 저녁빛을 받는다.",
             "tone": "무성 지문. 장부를 덮은 정면 3/4, 어깨 편안, 입가 중립"
           },
           "hold": 0.55
@@ -388,17 +388,17 @@
         {
           "key": "bg",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_action1",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_action2",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_determined",
@@ -408,17 +408,17 @@
         {
           "key": "fig_happy",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_neutral",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_soft",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_surprised",
@@ -821,7 +821,7 @@
         {
           "key": "bg",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_victory_check",
@@ -932,5 +932,6 @@
         }
       ]
     }
-  ]
+  ],
+  "idle_figure": "fig_soft"
 }

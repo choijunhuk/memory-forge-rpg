@@ -159,7 +159,7 @@ namespace MemoryForge.Client
     public sealed class MemoryForgeMomentPlayer : MonoBehaviour
     {
         public const float RefWidth = 1600, RefHeight = 900, AuthoredWidth = 1920; // keyframe x/y are authored on 1920x1080
-        const float FigureHeight = 860, CharsPerSecond = 38;
+        const float FigureHeight = 860, CharsPerSecond = 38, HeadMargin = 12, MinDialogWidth = 420;
         static readonly Dictionary<string, float> ShotScale = new Dictionary<string, float> { { "full", 1f }, { "medium", 1.45f }, { "bust", 1.9f }, { "close", 2.6f } };
         static readonly Color Empty = new Color(0.051f, 0.075f, 0.133f, 1f);
 
@@ -174,7 +174,8 @@ namespace MemoryForge.Client
 
         Font font = null!;
         Func<string, Sprite?> sprite = null!;
-        RectTransform stage = null!, lens = null!, dialog = null!;
+        RectTransform stage = null!, lens = null!, dialog = null!, dialogEdge = null!;
+        Rect dialogArea;
         Image figure = null!, backdrop = null!;
         Text speaker = null!, line = null!, waitMark = null!;
         Button skip = null!, tapCatcher = null!;
@@ -200,10 +201,10 @@ namespace MemoryForge.Client
             figureHome = new Vector2(figureCenterX - RefWidth / 2, -10); figure.rectTransform.anchoredPosition = figureHome;
 
             tapCatcher = MakeButton("MomentTap", parent, Color.clear, Tap); Stretch((RectTransform)tapCatcher.transform); tapCatcher.gameObject.SetActive(false);
-            dialog = Rect("MomentDialog", parent, new Color(0.055f, 0.075f, 0.13f, 0.93f));
-            var area = dialogArea ?? new Rect(200, 668, 1200, 206);
+            dialog = Rect("MomentDialog", parent, new Color(0.055f, 0.075f, 0.13f, 0.86f));
+            var area = this.dialogArea = dialogArea ?? new Rect(200, 668, 1200, 206);
             Place(dialog, area.x, area.y, area.width, area.height);
-            var edge = Rect("Edge", dialog, new Color(0.886f, 0.706f, 0.373f, 0.85f)); Place(edge, 0, 0, area.width, 3);
+            dialogEdge = Rect("Edge", dialog, new Color(0.886f, 0.706f, 0.373f, 0.85f)); Place(dialogEdge, 0, 0, area.width, 3);
             speaker = MakeText(dialog, 34, 16, 600, 40, 26, new Color(0.886f, 0.706f, 0.373f), FontStyle.Bold);
             line = MakeText(dialog, 34, 62, area.width - 68, area.height - 78, 29, new Color(0.914f, 0.933f, 0.973f), FontStyle.Normal);
             dialog.gameObject.SetActive(false);
@@ -380,6 +381,7 @@ namespace MemoryForge.Client
             waitMark.gameObject.SetActive(false); WaitingForTap = false;
             Rest();
             if (cameraMove != null) StopCoroutine(cameraMove);
+            FitDialog(Vector2.zero, 1);
             if (instant || MemoryForgeUiMotion.Reduced) { lens.anchoredPosition = Vector2.zero; lens.localScale = Vector3.one; }
             else cameraMove = StartCoroutine(MoveCamera(Vector2.zero, 1, 0.45f));
         }
@@ -533,7 +535,9 @@ namespace MemoryForge.Client
             _ => u
         };
 
-        // Framing: scale the stage by the shot and move it so the named anchor of the current figure sits above the dialogue box.
+        // Framing: scale the stage by the shot and move it so the named anchor of the current figure sits at the shot target, then
+        // keep the top of the figure (the head) inside the screen. Without that, a centred "body" anchor in a medium shot pushed the
+        // face above the viewport and cut the face-and-hand relationship the scene is about (Codex visual review, 2026-10-18).
         void Frame(MomentCamera shot)
         {
             float scale = ShotScale.TryGetValue(shot.Shot, out var s) ? s : 1f;
@@ -545,10 +549,30 @@ namespace MemoryForge.Client
             }
             var targetPoint = new Vector2(figureHome.x, scale > 1f ? 150 : 0);
             Vector2 position = scale > 1f ? targetPoint - focus * scale : Vector2.zero;
+            if (scale > 1f)
+            {
+                float top = (figureHome.y + figure.rectTransform.sizeDelta.y / 2) * scale + position.y, limit = RefHeight / 2 - HeadMargin;
+                if (top > limit) position.y -= top - limit;
+            }
+            FitDialog(position, scale);
             float duration = shot.Move == "none" || MemoryForgeUiMotion.Reduced ? 0 : shot.Duration ?? 0.8f;
             if (cameraMove != null) StopCoroutine(cameraMove);
             cameraMove = StartCoroutine(MoveCamera(position, scale, duration));
         }
+
+        // The dialogue box keeps clear of the figure: it narrows so its right edge stays left of the figure's frame at the
+        // shot's final framing (down to MinDialogWidth; text is re-paged for the new width, never cut).
+        void FitDialog(Vector2 lensPosition, float scale)
+        {
+            float figureLeft = RefWidth / 2 + lensPosition.x + (figureHome.x - figure.rectTransform.sizeDelta.x / 2) * scale;
+            float width = Mathf.Clamp(figureLeft - 24 - dialogArea.x, Mathf.Min(MinDialogWidth, dialogArea.width), dialogArea.width);
+            dialog.sizeDelta = new Vector2(width, dialogArea.height);
+            dialogEdge.sizeDelta = new Vector2(width, 3);
+            line.rectTransform.sizeDelta = new Vector2(width - 68, dialogArea.height - 78);
+            ((RectTransform)waitMark.transform).anchoredPosition = new Vector2(dialogArea.x + width - 56, -(dialogArea.y + dialogArea.height - 50));
+        }
+
+        public float DialogWidth => dialog.sizeDelta.x;
 
         IEnumerator MoveCamera(Vector2 position, float scale, float duration)
         {

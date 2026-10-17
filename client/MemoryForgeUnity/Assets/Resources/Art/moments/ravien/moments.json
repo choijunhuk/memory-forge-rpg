@@ -22,51 +22,71 @@
     "fig_default": {
       "face": [
         0.5,
-        0.16
+        0.105
       ],
       "hands": [
-        0.49,
-        0.51
+        0.63,
+        0.48
+      ],
+      "body": [
+        0.5,
+        0.5
       ]
     },
     "fig_stamp": {
       "face": [
-        0.5,
-        0.16
+        0.54,
+        0.105
       ],
       "hands": [
-        0.49,
-        0.51
+        0.2,
+        0.43
+      ],
+      "body": [
+        0.54,
+        0.5
       ]
     },
     "fig_turn": {
       "face": [
         0.5,
-        0.16
+        0.105
       ],
       "hands": [
-        0.49,
-        0.51
+        0.7,
+        0.26
+      ],
+      "body": [
+        0.5,
+        0.5
       ]
     },
     "fig_offer": {
       "face": [
-        0.5,
-        0.16
+        0.7,
+        0.105
       ],
       "hands": [
-        0.49,
-        0.51
+        0.26,
+        0.41
+      ],
+      "body": [
+        0.7,
+        0.5
       ]
     },
     "fig_lobby_soft": {
       "face": [
-        0.5,
-        0.16
+        0.51,
+        0.105
       ],
       "hands": [
-        0.49,
-        0.51
+        0.66,
+        0.37
+      ],
+      "body": [
+        0.51,
+        0.5
       ]
     },
     "fig_bond_turn": {
@@ -112,11 +132,15 @@
     "fig_annoyed": {
       "face": [
         0.5,
-        0.16
+        0.105
       ],
       "hands": [
-        0.49,
-        0.51
+        0.47,
+        0.36
+      ],
+      "body": [
+        0.5,
+        0.5
       ]
     },
     "fig_seal": {
@@ -301,32 +325,32 @@
         {
           "key": "bg_room",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_default",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_lobby_soft",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_offer",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_stamp",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_turn",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "pause_near",
@@ -351,7 +375,7 @@
         {
           "key": "fig_annoyed",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         }
       ],
       "input": {
@@ -369,7 +393,7 @@
           "hold": 0.25,
           "line": {
             "speaker": null,
-            "text": "서류철을 팔에 받친 라비엔이 도장을 한 번 누른다. 몸 전체는 거의 움직이지 않고 손과 눈의 순서로 업무를 끝낸다.",
+            "text": "서류철을 팔에 받친 라비엔이 도장을 한 번 누른다. 도장 자국을 확인하고 서류에서 손을 뗀다.",
             "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
           },
           "figure": "fig_stamp",
@@ -402,7 +426,7 @@
           "hold": 0.25,
           "line": {
             "speaker": null,
-            "text": "종이 끝을 손끝으로 반 바퀴 돌려 서류철 안으로 넣는다. 고개가 종이보다 반 박자 늦게 돌아오며 초록 눈이 공방장을 붙든다.",
+            "text": "종이 끝을 손끝으로 반 바퀴 돌려 서류철 안으로 넣는다. 종이를 내려놓고서야 고개를 든다. 초록 눈이 공방장을 붙든다.",
             "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
           },
           "figure": "fig_turn",
@@ -425,7 +449,7 @@
           "figure": "fig_offer",
           "gaze": "side",
           "camera": {
-            "shot": "medium",
+            "shot": "full",
             "focus": "face",
             "move": "none",
             "duration": 0
@@ -435,13 +459,13 @@
           "hold": 1.0,
           "line": {
             "speaker": null,
-            "text": "손끝으로 옆 의자를 가리킨 뒤 손을 내린다. 대답을 재촉하지 않고 자기 자리는 그대로 둔다.",
+            "text": "손끝으로 옆 의자를 가리킨 뒤 손을 내린다. 비워 둔 자리를 사이에 두고 공방장의 대답을 기다린다.",
             "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
           },
           "figure": "fig_offer",
           "gaze": "player",
           "camera": {
-            "shot": "bust",
+            "shot": "full",
             "focus": "face",
             "move": "none",
             "duration": 0
@@ -468,7 +492,7 @@
           "hold": 0.25,
           "line": {
             "speaker": null,
-            "text": "라비엔은 몸을 제자리로 돌리고 서류철을 닫아 둔다. 옆 의자는 비워 둔 채, 응답을 받아도 업무 동작으로 되돌리지 않는다.",
+            "text": "라비엔은 몸을 제자리로 돌리고 서류철을 닫아 둔다. 옆 의자는 비워 둔 채, 닫힌 서류철에는 손을 대지 않고 공방장에게 시선을 둔다.",
             "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
           },
           "figure": "fig_default",
@@ -496,7 +520,7 @@
         {
           "key": "bg_room",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_bond_turn",
@@ -801,7 +825,7 @@
           "hold": 0.25,
           "line": {
             "speaker": null,
-            "text": "저울 펜던트를 만지던 손이 멈춘다. 붉은 넥타이의 매듭은 원래처럼 느슨하고, 드러난 목선 위로 저녁빛이 옅게 걸린다. 카메라는 얼굴과 손을 함께 두고, 그녀가 말을 고르는 시간을 자르지 않는다.",
+            "text": "저울 펜던트를 만지던 손이 멈춘다. 붉은 넥타이의 매듭은 원래처럼 느슨하고, 드러난 목선 위로 저녁빛이 옅게 걸린다. 그녀는 대답을 서두르지 않고 공방장의 눈을 보며 다음 말을 고른다.",
             "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
           },
           "figure": "fig_soft",
@@ -1058,7 +1082,7 @@
           "hold": 0.25,
           "line": {
             "speaker": null,
-            "text": "공방장의 대답을 듣는 동안 라비엔의 눈가가 부드러워진다. 그녀는 이제 새로운 조건을 찾지 않는다. 나란한 두 사람이 문으로 향하는 데서 장면이 닫힌다. 책상 위 빈 종이는 어떤 약속도 대신하지 않은 채 남는다.",
+            "text": "공방장의 대답을 듣는 동안 라비엔의 눈가가 부드러워진다. 그녀는 이제 새로운 조건을 찾지 않는다. 두 사람은 나란히 문으로 향한다. 책상 위 빈 종이는 어떤 약속도 대신하지 않은 채 남는다.",
             "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
           },
           "figure": "fig_resolve",
@@ -1101,7 +1125,7 @@
         {
           "key": "fig_turn",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_victory",
@@ -1205,7 +1229,7 @@
           "hold": 1.0,
           "line": {
             "speaker": null,
-            "text": "라비엔은 서류철을 옆구리에 끼우고 열린 손을 편하게 내린다. 기다리는 눈웃음으로 끝내며 윙크하거나 카메라에 입술을 들이밀지 않는다.",
+            "text": "라비엔은 서류철을 옆구리에 끼우고 열린 손을 편하게 내린다. 눈가에 옅은 웃음을 남긴 채 공방장의 대답을 기다린다.",
             "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
           },
           "figure": "fig_resolve",
@@ -1219,5 +1243,6 @@
         }
       ]
     }
-  ]
+  ],
+  "idle_figure": "fig_lobby_soft"
 }

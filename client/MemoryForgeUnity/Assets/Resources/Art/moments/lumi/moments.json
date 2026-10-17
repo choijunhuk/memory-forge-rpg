@@ -26,58 +26,58 @@
   "anchors": {
     "fig_neutral": {
       "face": [
-        0.5,
-        0.17
+        0.48,
+        0.105
       ],
       "body": [
-        0.5,
+        0.48,
         0.5
       ],
       "hands": [
-        0.48,
-        0.55
+        0.26,
+        0.51
       ]
     },
     "fig_action1": {
       "face": [
-        0.5,
-        0.17
+        0.48,
+        0.105
       ],
       "body": [
-        0.5,
+        0.48,
         0.5
       ],
       "hands": [
-        0.48,
-        0.55
+        0.24,
+        0.22
       ]
     },
     "fig_action2": {
       "face": [
-        0.5,
-        0.17
+        0.48,
+        0.105
       ],
       "body": [
-        0.5,
+        0.48,
         0.5
       ],
       "hands": [
-        0.48,
-        0.55
+        0.72,
+        0.39
       ]
     },
     "fig_happy": {
       "face": [
-        0.5,
-        0.17
+        0.48,
+        0.105
       ],
       "body": [
-        0.5,
+        0.48,
         0.5
       ],
       "hands": [
-        0.48,
-        0.55
+        0.71,
+        0.41
       ]
     },
     "fig_worried": {
@@ -124,16 +124,16 @@
     },
     "fig_soft": {
       "face": [
-        0.5,
-        0.17
+        0.48,
+        0.105
       ],
       "body": [
-        0.5,
+        0.48,
         0.5
       ],
       "hands": [
-        0.48,
-        0.55
+        0.28,
+        0.36
       ]
     },
     "fig_victory_land": {
@@ -242,32 +242,32 @@
         {
           "key": "bg",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_action1",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_action2",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_happy",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_neutral",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_soft",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "stage_settle",
@@ -318,7 +318,7 @@
           },
           "line": {
             "speaker": null,
-            "text": "헬멧을 손목 위에서 짧게 돌려 잡는다. 팔에 끼우자 빈손이 생기고, 재킷 자락은 한 박자 늦게 멈춘다.",
+            "text": "헬멧을 손목 위에서 짧게 돌려 잡는다. 팔에 끼우고 손을 비우자, 뒤따라 흔들리던 재킷 자락도 가라앉는다.",
             "tone": "무성 지문. 헬멧을 손목 위에서 짧게 회전시키는 키포즈, 손가락 고정점 가시"
           },
           "hold": 0.55
@@ -367,7 +367,7 @@
           },
           "line": {
             "speaker": null,
-            "text": "손바닥을 위로 내밀고 기다린다. 발은 움직이지 않는다. 상대의 답을 재촉하는 끌어당김은 없다.",
+            "text": "손바닥을 위로 내민 루미는 발을 움직이지 않은 채 공방장의 대답을 기다린다.",
             "tone": "무성 지문. 헬멧을 한 팔에 끼고 다른 손바닥을 위로 내민 기다리는 자세"
           },
           "hold": 0.55
@@ -388,17 +388,17 @@
         {
           "key": "bg",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_action1",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_action2",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_determined",
@@ -408,17 +408,17 @@
         {
           "key": "fig_happy",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_neutral",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_soft",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_surprised",
@@ -821,7 +821,7 @@
         {
           "key": "bg",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_victory_land",
@@ -892,7 +892,7 @@
           },
           "line": {
             "speaker": null,
-            "text": "양발이 지면을 잡고 단검은 화면 바깥 안전한 방향으로 낮아진다. 뻗친 머리와 재킷 자락의 잔움직임 뒤에 루미가 돌아본다.",
+            "text": "양발이 지면을 딛자 루미가 두 단검을 몸 바깥쪽으로 낮춘다. 뻗친 머리와 재킷 자락이 가라앉은 뒤, 루미가 고개를 돌려 공방장을 본다.",
             "tone": "무성 지문. 쌍단검을 몸 바깥쪽 낮게 유지하고 양발을 지면에 붙인 3/4 회전 자세, 재킷·머리 잔움직임 뒤 고개만 돌아봄; 헬멧 없음"
           },
           "hold": 0.55
@@ -932,5 +932,6 @@
         }
       ]
     }
-  ]
+  ],
+  "idle_figure": "fig_neutral"
 }

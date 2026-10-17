@@ -1,0 +1,57 @@
+[
+  {
+    "image": "ravien/images/char_ravien_stamp_focused_v01.png",
+    "score": 92,
+    "verdict": "pass",
+    "category_match": true,
+    "differences": [
+      "Minor generated hair and accessory variation remains."
+    ],
+    "suggestions": [],
+    "reasoning": "Same adult identity and approved costume; stamp contact, page turn, chair invitation or expression is clearly distinguishable."
+  },
+  {
+    "image": "ravien/images/char_ravien_paper_turn_playful_v01.png",
+    "score": 92,
+    "verdict": "pass",
+    "category_match": true,
+    "differences": [
+      "Minor generated hair and accessory variation remains."
+    ],
+    "suggestions": [],
+    "reasoning": "Same adult identity and approved costume; stamp contact, page turn, chair invitation or expression is clearly distinguishable."
+  },
+  {
+    "image": "ravien/images/char_ravien_chair_offer_happy_v01.png",
+    "score": 90,
+    "verdict": "pass",
+    "category_match": true,
+    "differences": [
+      "Chair pose shifts the face right; set its measured face anchor. Props are attached to pose sprites and may cut with pose changes."
+    ],
+    "suggestions": [],
+    "reasoning": "Same adult identity and approved costume; stamp contact, page turn, chair invitation or expression is clearly distinguishable."
+  },
+  {
+    "image": "ravien/images/char_ravien_stand_soft_v01.png",
+    "score": 92,
+    "verdict": "pass",
+    "category_match": true,
+    "differences": [
+      "Minor generated hair and accessory variation remains."
+    ],
+    "suggestions": [],
+    "reasoning": "Same adult identity and approved costume; stamp contact, page turn, chair invitation or expression is clearly distinguishable."
+  },
+  {
+    "image": "ravien/images/char_ravien_stand_annoyed_v01.png",
+    "score": 92,
+    "verdict": "pass",
+    "category_match": true,
+    "differences": [
+      "Minor generated hair and accessory variation remains."
+    ],
+    "suggestions": [],
+    "reasoning": "Same adult identity and approved costume; stamp contact, page turn, chair invitation or expression is clearly distinguishable."
+  }
+]

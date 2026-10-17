@@ -26,58 +26,58 @@
   "anchors": {
     "fig_neutral": {
       "face": [
-        0.5,
-        0.17
+        0.51,
+        0.105
       ],
       "body": [
-        0.5,
+        0.51,
         0.5
       ],
       "hands": [
-        0.48,
-        0.55
+        0.64,
+        0.29
       ]
     },
     "fig_action1": {
       "face": [
-        0.5,
-        0.17
+        0.51,
+        0.105
       ],
       "body": [
-        0.5,
+        0.51,
         0.5
       ],
       "hands": [
-        0.48,
-        0.55
+        0.65,
+        0.29
       ]
     },
     "fig_action2": {
       "face": [
-        0.5,
-        0.17
+        0.51,
+        0.105
       ],
       "body": [
-        0.5,
+        0.51,
         0.5
       ],
       "hands": [
-        0.48,
-        0.55
+        0.61,
+        0.13
       ]
     },
     "fig_happy": {
       "face": [
-        0.5,
-        0.17
+        0.51,
+        0.105
       ],
       "body": [
-        0.5,
+        0.51,
         0.5
       ],
       "hands": [
-        0.48,
-        0.55
+        0.5,
+        0.18
       ]
     },
     "fig_worried": {
@@ -124,16 +124,16 @@
     },
     "fig_soft": {
       "face": [
-        0.5,
-        0.17
+        0.51,
+        0.105
       ],
       "body": [
-        0.5,
+        0.51,
         0.5
       ],
       "hands": [
-        0.48,
-        0.55
+        0.73,
+        0.42
       ]
     },
     "fig_victory_check": {
@@ -242,32 +242,32 @@
         {
           "key": "bg",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_action1",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_action2",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_happy",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_neutral",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_soft",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "stage_settle",
@@ -302,7 +302,7 @@
           },
           "line": {
             "speaker": null,
-            "text": "시온은 페이지 끝을 들어 올린 채 멈춘다. 장검은 무대 밖 안전한 거치 상태이며 코트 사슬만 작게 흔들린다.",
+            "text": "시온은 페이지 끝을 들어 올린 채 멈춘다. 코트 사슬이 작게 흔들리다가 멎는다.",
             "tone": "무성 지문. 책을 펼쳐 든 3/4 정면, 입가 중립, 은회색 눈을 가리지 않는 안경 반사"
           },
           "hold": 0.55
@@ -388,17 +388,17 @@
         {
           "key": "bg",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_action1",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_action2",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_determined",
@@ -408,17 +408,17 @@
         {
           "key": "fig_happy",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_neutral",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_soft",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_surprised",
@@ -821,7 +821,7 @@
         {
           "key": "bg",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_victory_check",
@@ -932,5 +932,6 @@
         }
       ]
     }
-  ]
+  ],
+  "idle_figure": "fig_soft"
 }

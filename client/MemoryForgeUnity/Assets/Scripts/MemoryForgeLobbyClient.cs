@@ -103,7 +103,9 @@ namespace MemoryForge.Client
             tapArea.transition = Selectable.Transition.None;
             var stage = Box(root, "Stage", 0, 0, 1600, 900, Color.clear);
             player = gameObject.AddComponent<MemoryForgeMomentPlayer>();
-            player.Build(stage, font, SpriteForArt, FigureCenterX, new Rect(470, 672, 1106, 204));
+            // The menu hides during a scene, so the dialogue takes the free left side and never covers the figure or the props
+            // at its feet (a chair, a table): the figure stands right of x=740 at rest.
+            player.Build(stage, font, SpriteForArt, FigureCenterX, new Rect(40, 610, 600, 256));
             player.NameOf = id => companions.FirstOrDefault(c => c.Id == id)?.Name;
 
             // Left column: brand, companion, actions. Kept clear of the figure (x >= 710) so the UI never covers the character.

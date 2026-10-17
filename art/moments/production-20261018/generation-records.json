@@ -1,0 +1,862 @@
+{
+  "tool": "Codex built-in image_gen; subscription-included; no API fallback",
+  "backend_model": "not exposed",
+  "records": [
+    {
+      "c": "ravien",
+      "key": "fig_default",
+      "prompt": "Use case: stylized-concept. Asset: one production lobby character sprite, full length single adult woman, transparent background. Ravien, age 28, 175cm tall elegant mature adult proportions, long flowing wine-red wavy hair, vivid green eyes, clever composed expression, slight private knowing smile. Approved outfit: fitted deep neckline black sleeveless tailored vest, loose red necktie, black high-waist slit pencil skirt, garter stockings, long black gloves, black heels, golden scales pendant. Preserve the revealing tailored outfit, do not add undershirt or coat. Warm brass details, fantasy memory workshop aesthetic; polished Japanese/Korean RPG anime illustration with fine linework and soft painterly cel shading, similar to high quality illustrated gacha sprites. Pose: standing upright three-quarter front, weight naturally on one leg, a CLOSED dark red document folder held against left hip, right gloved arm relaxed. No stamp in this idle pose. Face about (0.50,0.16) normalized in full canvas; heels near y=.96; full head, hair, hands and shoes inside frame; centered vertical 1024x1536 canvas, roughly 8 heads tall. Isolated actual transparent alpha; no environment, no baked aura, no shadow rectangle, no captions, no extra panels, one character only. Charming self-assured adult, not generic wink.",
+      "source": "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-fa2bc88f-69d2-4c9e-a3ac-b166ad0530f6.png",
+      "path": "ravien/images/char_ravien_stand_neutral_v01.png",
+      "sha256": "36d32168b79245642ba4db63cbe952c19d452d1dc44485b927197f53784e6367",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "review": "pass as draft key-pose source; identity and outfit inspected, no articulated rig claim"
+    },
+    {
+      "c": "harin",
+      "key": "fig_default",
+      "prompt": "Use case: identity-preserve. Reference image is Harin's existing character sheet, preserve face, short dark navy bob, gray-blue eyes, scar ABOVE HER LEFT EYEBROW, tall 180cm powerfully athletic ADULT female age 26, white/navy/brass frost-knight design, single long navy frost embroidered cape on one side and huge deployable shield. Deliver ONE new full-length lobby sprite, not a sheet. Apply the approved lobby outfit description faithfully: frost-white LIGHT armor leaving shoulders and waistline exposed, opaque high-waist fitted combat TROUSERS, armored boots and gloves, one long cape. Do not shrink her broad shoulders, muscles or adult build, no chibi. Pose: shield parked upright on floor to HER left, one hand lightly resting on top, other arm relaxed beside waist; tiny stuffed cat ears just visible at belt pocket. Neutral stoic face looking forward, hips and legs planted, 3/4 front standing. Premium anime RPG illustration, clean fine linework, soft detailed cel painting, cohesive with reference face and metal motifs. Centered 1024x1536 vertical, entire head, cape, boots, shield within frame, face around (.50,.16), boot soles .96, same canvas for later variants. ACTUAL transparent alpha background with no environment, no glow backdrop, no text, no labels or multiple panels.",
+      "source": "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-2b8b4abf-b7b4-43f2-b528-1dc5e3ef1985.png",
+      "path": "harin/images/char_harin_stand_neutral_v01.png",
+      "sha256": "bc0d480879c54124365bbc1630a1dda13d2755a075225c7e1927171fd1964cf3",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "review": "pass as draft key-pose source; identity and outfit inspected, no articulated rig claim"
+    },
+    {
+      "c": "aila",
+      "key": "fig_neutral",
+      "prompt": "Use case: stylized-concept. Asset: single full-length transparent lobby sprite, one adult female character Aila, age 23, graceful young ADULT proportions, long lavender-silver braided hair, violet eyes. Approved outfit lavender and white frost-embroidered robe with deeply OPEN BACK, wide detached draping sleeves, waist fitting, side slit flowing skirt and delicate shoes, small silver-bell lantern. Preserve back exposure and slit, do not cover with extra layers. High quality fantasy anime RPG character illustration, fine clean contours and softly painted cel shading, brass and frost magical workshop design. Pose: standing in a subtle rear three-quarter angle so open back is briefly readable, head turned enough for eyes and face toward viewer, calm neutral mouth with kind intentional gaze, right hand resting on a CLOSED small ledger held at waist, left hand lowering silver lantern beside hip. No chair/table/room in sprite. One full figure centered on vertical 1024x1536 canvas, face approx (.50,.17), feet y=.96, entire hair and skirt inside with transparent margins. No wings, no halos, no extra people, no text, no background or opaque glow. Warm initiative, not maternal.",
+      "source": "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-c5659bf3-781e-4f38-9e43-b496a7f44e0b.png",
+      "path": "aila/source/candidates/char_aila_moment_neutral_v01.png",
+      "sha256": "18cf757eff5ea878b4bcd94ef37941c26bc6ea131997e516556b06be558cdc86",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "review": "Superseded by silver lantern/bell material correction; retained original candidate.",
+      "selected": false
+    },
+    {
+      "c": "sion",
+      "key": "fig_neutral",
+      "prompt": "Use case: stylized-concept. Asset: single full-length transparent character sprite for fantasy anime RPG lobby. Sion age 27, adult woman with refined cool composure, waist-length straight black hair, silver-gray eyes clearly visible through half-rim eyeglasses. Approved outfit: close-fitted deep purple LONG COAT with bookmark chains, high-waisted black MINISKIRT and thigh-high heeled boots with small brass trims. Preserve the skirt length and visible interval above boots. One old closed/openable dark violet book, NO sword in lobby. Pose: standing in slight three-quarter front, holding an OPEN book below chest, one fingertip lifting a page edge, gaze lowered to page, lips neutral, shoulders controlled yet relaxed. Fine anime linework, high-quality soft painterly cel shading, detailed but coherent brass/silver accessories, attractive adult proportions 8 heads tall. Whole body head to heels, centered vertical 1024x1536 canvas; face near (.50,.17), heels .96; transparent padding around hair and coat. Genuine transparent alpha background, no library, no floor or light haze. No captions, text, multiple poses or panels. No wink, no large blush.",
+      "source": "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-9f5aaefc-b375-4fd2-9ea8-bc74b8fa554a.png",
+      "path": "sion/images/char_sion_moment_neutral_v01.png",
+      "sha256": "8f1325f20daf44f869c3337bb37f230101cab532028fae27d8411d05f5ba826c",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "review": "pass as draft key-pose source; identity and outfit inspected, no articulated rig claim"
+    },
+    {
+      "c": "lumi",
+      "key": "fig_neutral",
+      "prompt": "Use case: stylized-concept. Asset: one full-length character sprite for fantasy anime RPG lobby on genuine transparent background. Lumi age 22, athletic young ADULT woman, short spiky blonde hair with a conspicuous electric-blue streak, sky blue eyes, confident energetic adult expression. Approved outfit: quick courier jacket slipped off the shoulders with electric circuit line trim, cropped sports top, black bike shorts and luminous-track sneakers. Yellow charcoal and electric-blue accents; do not add extra covering or replace shorts with skirt. Pose: both feet grounded, weight on one athletic leg, looking directly at viewer, holding one glossy blue and charcoal motorcycle helmet by its lower edge in right hand at hip, left hand relaxed on hip. No weapons for lobby. Crisp finely drawn premium anime RPG illustration, soft painterly cel shading, appealing adult athletic anatomy, not chibi. Single full character, centered 1024x1536 vertical composition, face approx (.50,.17), shoes .95, full hair/jacket/shoes inside transparent margins. No environment, floor, speed lines, electrical aura, captions, labels, duplicate helmets or extra people.",
+      "source": "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-d42c9541-3966-47a2-a42a-323bd181d2b7.png",
+      "path": "lumi/images/char_lumi_moment_neutral_v01.png",
+      "sha256": "ee0eb2f06b8498227bd93b3371bd193c35a638c62f30543b585aa8a7e1a651d9",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "review": "pass as draft key-pose source; identity and outfit inspected, no articulated rig claim"
+    },
+    {
+      "c": "ravien",
+      "key": "fig_stamp",
+      "pose": "Ravien age 28. Focused eyes looking down. Keep left forearm supporting the document folder. Right long-gloved hand firmly presses a brass handled rubber seal stamp straight down on one paper on the edge of a narrow waist-height wooden writing stand to image left. Clear contact stamp-paper, wrist and five fingers readable; shoulders upright, not bending her chest down. Include only the small writing-stand edge needed for contact; everything else transparent.",
+      "prompt": "Edit this reference into ONE new full-body transparent character key-pose, maintaining the SAME adult identity, face, hair, approved outfit, colors, proportions, canvas 1024x1536, head position and foot baseline. No new clothing, no extra character, no captions, no opaque backdrop, preserve actual alpha. Premium anime RPG painterly cel illustration. Ravien age 28. Focused eyes looking down. Keep left forearm supporting the document folder. Right long-gloved hand firmly presses a brass handled rubber seal stamp straight down on one paper on the edge of a narrow waist-height wooden writing stand to image left. Clear contact stamp-paper, wrist and five fingers readable; shoulders upright, not bending her chest down. Include only the small writing-stand edge needed for contact; everything else transparent.",
+      "refs": [
+        "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-fa2bc88f-69d2-4c9e-a3ac-b166ad0530f6.png"
+      ],
+      "source": "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-ce036c31-fc97-48e7-8fc9-7cf4b33b0ddf.png",
+      "path": "ravien/images/char_ravien_stamp_focused_v01.png",
+      "sha256": "7c31332f513b93bed93c2098bba614d7382564ac806295905433803c73b6378a",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "c": "ravien",
+      "key": "fig_turn",
+      "pose": "Ravien age 28. Right long-gloved thumb and index finger gently turn the corner of one cream paper back into the folder held OPEN in left hand at waist. Her head turns half a beat after her hand; green eyes directly meeting viewer, clever restrained smile. Clear paper corner and fingertips, no stamp/table.",
+      "prompt": "Edit this reference into ONE new full-body transparent character key-pose, maintaining the SAME adult identity, face, hair, approved outfit, colors, proportions, canvas 1024x1536, head position and foot baseline. No new clothing, no extra character, no captions, no opaque backdrop, preserve actual alpha. Premium anime RPG painterly cel illustration. Ravien age 28. Right long-gloved thumb and index finger gently turn the corner of one cream paper back into the folder held OPEN in left hand at waist. Her head turns half a beat after her hand; green eyes directly meeting viewer, clever restrained smile. Clear paper corner and fingertips, no stamp/table.",
+      "refs": [
+        "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-fa2bc88f-69d2-4c9e-a3ac-b166ad0530f6.png"
+      ],
+      "source": "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-4c945104-f396-483e-bd35-8c153585b8bb.png",
+      "path": "ravien/images/char_ravien_paper_turn_playful_v01.png",
+      "sha256": "a7dd2bdcaa533aecc7c5dd0252bbf9c7e619d219e1e4e25cc4ba421885a6e7ca",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "c": "ravien",
+      "key": "fig_offer",
+      "pose": "Ravien age 28. CLOSED folder under left forearm at waist. Her right long-gloved hand extends sideways low to point with index and relaxed fingers toward an EMPTY elegant wooden chair at image left. Show full empty chair beside her as part of sprite, distinct from her body; confident playful inviting smile, face and green eyes angled toward viewer. She stays standing; no sitting, no touch toward viewer.",
+      "prompt": "Edit this reference into ONE new full-body transparent character key-pose, maintaining the SAME adult identity, face, hair, approved outfit, colors, proportions, canvas 1024x1536, head position and foot baseline. No new clothing, no extra character, no captions, no opaque backdrop, preserve actual alpha. Premium anime RPG painterly cel illustration. Ravien age 28. CLOSED folder under left forearm at waist. Her right long-gloved hand extends sideways low to point with index and relaxed fingers toward an EMPTY elegant wooden chair at image left. Show full empty chair beside her as part of sprite, distinct from her body; confident playful inviting smile, face and green eyes angled toward viewer. She stays standing; no sitting, no touch toward viewer.",
+      "refs": [
+        "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-fa2bc88f-69d2-4c9e-a3ac-b166ad0530f6.png"
+      ],
+      "source": "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-db9ab43d-684d-4fe1-8840-26f6595f7034.png",
+      "path": "ravien/images/char_ravien_chair_offer_happy_v01.png",
+      "sha256": "b31c5dba5a887e81cd02941cfc9bb0e4592d5031632fc3853bb45c7ef2ff3b63",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "c": "ravien",
+      "key": "fig_lobby_soft",
+      "pose": "Ravien age 28. After pointing toward a chair, right gloved hand is lowered relaxed with open fingers at hip. Closed folder tucked under left arm. Her composed green eyes meet viewer with an unusually honest slight softness and small expectant smile; clever ease with vulnerable pause, no exaggerated blush or wink. No chair/table in this pose.",
+      "prompt": "Edit this reference into ONE new full-body transparent character key-pose, maintaining the SAME adult identity, face, hair, approved outfit, colors, proportions, canvas 1024x1536, head position and foot baseline. No new clothing, no extra character, no captions, no opaque backdrop, preserve actual alpha. Premium anime RPG painterly cel illustration. Ravien age 28. After pointing toward a chair, right gloved hand is lowered relaxed with open fingers at hip. Closed folder tucked under left arm. Her composed green eyes meet viewer with an unusually honest slight softness and small expectant smile; clever ease with vulnerable pause, no exaggerated blush or wink. No chair/table in this pose.",
+      "refs": [
+        "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-fa2bc88f-69d2-4c9e-a3ac-b166ad0530f6.png"
+      ],
+      "source": "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-9d30d512-1a42-4038-9c9e-24ba71292186.png",
+      "path": "ravien/images/char_ravien_stand_soft_v01.png",
+      "sha256": "cc9d6c0d7a5d51c00a1a3aaebcba1a343393791dc4d1936c1159f07250d535cf",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "c": "ravien",
+      "key": "fig_annoyed",
+      "pose": "Ravien age 28. Closed folder held at left hip, right gloved hand lightly at waist. Only brows narrow slightly, lips softly pressed in controlled irritation; green eyes on viewer. Full-body same idle alignment, no anger symbols, no table/chair.",
+      "prompt": "Edit this reference into ONE new full-body transparent character key-pose, maintaining the SAME adult identity, face, hair, approved outfit, colors, proportions, canvas 1024x1536, head position and foot baseline. No new clothing, no extra character, no captions, no opaque backdrop, preserve actual alpha. Premium anime RPG painterly cel illustration. Ravien age 28. Closed folder held at left hip, right gloved hand lightly at waist. Only brows narrow slightly, lips softly pressed in controlled irritation; green eyes on viewer. Full-body same idle alignment, no anger symbols, no table/chair.",
+      "refs": [
+        "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-fa2bc88f-69d2-4c9e-a3ac-b166ad0530f6.png"
+      ],
+      "source": "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-2f9d65b7-966b-4e29-8cb0-67be1b0f03b3.png",
+      "path": "ravien/images/char_ravien_stand_annoyed_v01.png",
+      "sha256": "2c85c8a6e99a6eccdae34662189b554f7a75a01e20dac727dadcded15a58ac2d",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "c": "harin",
+      "key": "fig_glove",
+      "pose": "Both gloved hands at waist, RIGHT fingers pull and adjust the strap on LEFT glove cuff clearly. Eyes lowered to cuff, concentrated expression. Tiny stuffed gray cat ears poke from belt pouch on image right. Shield stands unsupported beside her. Upright, broad shoulders remain.",
+      "prompt": "Use case: identity-preserve. Edit reference into ONE new full-length transparent key-pose of Harin, adult woman age26,180cm tall sturdy athletic build. Keep EXACT same face, dark navy short hair, left-eyebrow scar, white frost light armor with bare shoulders and waistline, high-waist combat trousers, gloves, boots and one long navy cape. Shield upright on ground at image left, same design, not held in front of torso. Same 1024x1536 vertical canvas/head/boot baseline, no crop, no environment or text, genuine transparent alpha. Premium anime RPG fine line and painted cel shading. Both gloved hands at waist, RIGHT fingers pull and adjust the strap on LEFT glove cuff clearly. Eyes lowered to cuff, concentrated expression. Tiny stuffed gray cat ears poke from belt pouch on image right. Shield stands unsupported beside her. Upright, broad shoulders remain.",
+      "refs": [
+        "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-2b8b4abf-b7b4-43f2-b528-1dc5e3ef1985.png"
+      ],
+      "source": "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-f3fbcbfc-4917-4be7-bdcb-86b569721d49.png",
+      "selected": true,
+      "path": "harin/images/char_harin_glove_determined_v01.png",
+      "sha256": "9977a4978842b9184bd81ea9d42d037defc3507ab2ddeb409976fdd4ac557e14",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "c": "harin",
+      "key": "fig_hide",
+      "pose": "Her LEFT gloved palm hastily covers the little stuffed-cat ears protruding from the belt pouch on image right. Right arm relaxed off the shield. Eyes suddenly slide sideways as if caught, eyebrows lift slightly. Clear glove-over-pouch gesture, no giant blush, adult composure.",
+      "prompt": "Use case: identity-preserve. Edit reference into ONE new full-length transparent key-pose of Harin, adult woman age26,180cm tall sturdy athletic build. Keep EXACT same face, dark navy short hair, left-eyebrow scar, white frost light armor with bare shoulders and waistline, high-waist combat trousers, gloves, boots and one long navy cape. Shield upright on ground at image left, same design, not held in front of torso. Same 1024x1536 vertical canvas/head/boot baseline, no crop, no environment or text, genuine transparent alpha. Premium anime RPG fine line and painted cel shading. Her LEFT gloved palm hastily covers the little stuffed-cat ears protruding from the belt pouch on image right. Right arm relaxed off the shield. Eyes suddenly slide sideways as if caught, eyebrows lift slightly. Clear glove-over-pouch gesture, no giant blush, adult composure.",
+      "refs": [
+        "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-2b8b4abf-b7b4-43f2-b528-1dc5e3ef1985.png"
+      ],
+      "source": "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-0db4f478-0af1-4c60-942e-78a7dabf0a03.png",
+      "selected": true,
+      "path": "harin/images/char_harin_pocket_surprised_v01.png",
+      "sha256": "041d906435edf1bdc8f47f184ba4989652b5e3783632aec8e37f28b3993fdc1f",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "c": "harin",
+      "key": "fig_cough",
+      "pose": "RIGHT gloved fist raised loosely in front of her mouth for a restrained throat clearing. Left hand away from pouch relaxed at her side. Eyes avert sideways, brows slightly knit in embarrassment rather than anger. Stuffed cat now mostly tucked in pouch, tips of ears visible. Stand tall, no hunching or childish expression.",
+      "prompt": "Use case: identity-preserve. Edit reference into ONE new full-length transparent key-pose of Harin, adult woman age26,180cm tall sturdy athletic build. Keep EXACT same face, dark navy short hair, left-eyebrow scar, white frost light armor with bare shoulders and waistline, high-waist combat trousers, gloves, boots and one long navy cape. Shield upright on ground at image left, same design, not held in front of torso. Same 1024x1536 vertical canvas/head/boot baseline, no crop, no environment or text, genuine transparent alpha. Premium anime RPG fine line and painted cel shading. RIGHT gloved fist raised loosely in front of her mouth for a restrained throat clearing. Left hand away from pouch relaxed at her side. Eyes avert sideways, brows slightly knit in embarrassment rather than anger. Stuffed cat now mostly tucked in pouch, tips of ears visible. Stand tall, no hunching or childish expression.",
+      "refs": [
+        "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-2b8b4abf-b7b4-43f2-b528-1dc5e3ef1985.png"
+      ],
+      "source": "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-c99c120a-3d7e-40ca-a11c-f58a48d907a6.png",
+      "selected": true,
+      "path": "harin/images/char_harin_cough_annoyed_v01.png",
+      "sha256": "515d23787581c0b6ce3f3aaf71d630291f31f018104d15a796a401a163c3118e",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "c": "harin",
+      "key": "fig_lobby_cat",
+      "pose": "LEFT gloved thumb and index finger gently pull just the tiny stuffed cat's ears back into view at belt pouch, allowing viewer to see her cute preference. Eyes deliberately return to viewer, guarded mouth softens a little; not a broad smile. Right gloved hand resting on shield top.",
+      "prompt": "Use case: identity-preserve. Edit reference into ONE new full-length transparent key-pose of Harin, adult woman age26,180cm tall sturdy athletic build. Keep EXACT same face, dark navy short hair, left-eyebrow scar, white frost light armor with bare shoulders and waistline, high-waist combat trousers, gloves, boots and one long navy cape. Shield upright on ground at image left, same design, not held in front of torso. Same 1024x1536 vertical canvas/head/boot baseline, no crop, no environment or text, genuine transparent alpha. Premium anime RPG fine line and painted cel shading. LEFT gloved thumb and index finger gently pull just the tiny stuffed cat's ears back into view at belt pouch, allowing viewer to see her cute preference. Eyes deliberately return to viewer, guarded mouth softens a little; not a broad smile. Right gloved hand resting on shield top.",
+      "refs": [
+        "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-2b8b4abf-b7b4-43f2-b528-1dc5e3ef1985.png"
+      ],
+      "source": "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-91e5f0e5-609f-448c-af91-1f27908161bc.png",
+      "selected": true,
+      "path": "harin/images/char_harin_pocket_reveal_soft_v01.png",
+      "sha256": "aa0224ba6a5f7e616932af65451ffe0f987f3f15980bd7922078f0facfd829c4",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "c": "harin",
+      "key": "fig_lobby_soft",
+      "pose": "Both gloved hands lowered relaxed; right hand lightly on shield top, left hand OPEN beside pouch without covering it. Cat ears remain visible. She turns her gaze voluntarily toward viewer with a very small awkward soft smile, strong jaw/shoulders, restrained warmth, no wink, no childish blush.",
+      "prompt": "Use case: identity-preserve. Edit reference into ONE new full-length transparent key-pose of Harin, adult woman age26,180cm tall sturdy athletic build. Keep EXACT same face, dark navy short hair, left-eyebrow scar, white frost light armor with bare shoulders and waistline, high-waist combat trousers, gloves, boots and one long navy cape. Shield upright on ground at image left, same design, not held in front of torso. Same 1024x1536 vertical canvas/head/boot baseline, no crop, no environment or text, genuine transparent alpha. Premium anime RPG fine line and painted cel shading. Both gloved hands lowered relaxed; right hand lightly on shield top, left hand OPEN beside pouch without covering it. Cat ears remain visible. She turns her gaze voluntarily toward viewer with a very small awkward soft smile, strong jaw/shoulders, restrained warmth, no wink, no childish blush.",
+      "refs": [
+        "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-2b8b4abf-b7b4-43f2-b528-1dc5e3ef1985.png"
+      ],
+      "source": "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-7c41e519-f00c-4cc3-9abf-d526398f9551.png",
+      "selected": true,
+      "path": "harin/images/char_harin_stand_soft_v01.png",
+      "sha256": "65bd76c8831fa87601720b1bd0c500980fde00cfc200998bd2dc86ed63afd584",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "c": "harin",
+      "key": "fig_resolve",
+      "pose": "Relaxed square standing posture, broad shoulders loosened, shield checked then right glove rests on shield edge. Left arm lowered without hiding cat ears at pouch. Direct steady gray-blue eyes with calm determined faint warmth, inviting space beside her. No action lunge.",
+      "prompt": "Use case: identity-preserve. Edit reference into ONE new full-length transparent key-pose of Harin, adult woman age26,180cm tall sturdy athletic build. Keep EXACT same face, dark navy short hair, left-eyebrow scar, white frost light armor with bare shoulders and waistline, high-waist combat trousers, gloves, boots and one long navy cape. Shield upright on ground at image left, same design, not held in front of torso. Same 1024x1536 vertical canvas/head/boot baseline, no crop, no environment or text, genuine transparent alpha. Premium anime RPG fine line and painted cel shading. Relaxed square standing posture, broad shoulders loosened, shield checked then right glove rests on shield edge. Left arm lowered without hiding cat ears at pouch. Direct steady gray-blue eyes with calm determined faint warmth, inviting space beside her. No action lunge.",
+      "refs": [
+        "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-2b8b4abf-b7b4-43f2-b528-1dc5e3ef1985.png"
+      ],
+      "source": "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-b5b414bb-2961-483a-8020-48d4f675a423.png",
+      "selected": true,
+      "path": "harin/images/char_harin_stand_determined_v01.png",
+      "sha256": "a1b89efe43746b4767313ed0495da76c2f9c76b40a3e47a986262578ad8c19fd",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "c": "aila",
+      "key": "fig_action1",
+      "pose": "Slight rear 3/4 view, with her HEAD TURNED over shoulder toward viewer so the whole face is visible. Her LEFT hand lifts lantern handle to waist, right fingertips flick the small SILVER BELL on its handle once; bell, fingertips, and handle clearly separated and readable. Closed ledger no longer held. Her expression says she deliberately called viewer for a private reason: small knowing warm smile. Stable grounded feet, not a pinup bend.",
+      "prompt": "Use case: identity-preserve. Edit the reference into ONE new full-length transparent key-pose of Aila, ADULT woman age23. Preserve EXACT same face, violet eyes, long braided lavender-silver hair, frost-embroidered white/lavender open-back side-slit robe, detached wide sleeves, jewelry and silver-bell lantern design. No extra clothing across bare back, no wings. Same head/heel position and 1024x1536 vertical canvas, complete figure inside frame, pure transparent alpha, no opaque background or text. Fine anime line and softly painted premium RPG illustration. Slight rear 3/4 view, with her HEAD TURNED over shoulder toward viewer so the whole face is visible. Her LEFT hand lifts lantern handle to waist, right fingertips flick the small SILVER BELL on its handle once; bell, fingertips, and handle clearly separated and readable. Closed ledger no longer held. Her expression says she deliberately called viewer for a private reason: small knowing warm smile. Stable grounded feet, not a pinup bend.",
+      "refs": [
+        "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-c5659bf3-781e-4f38-9e43-b496a7f44e0b.png"
+      ],
+      "source": "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-90053ef3-a717-4f00-be8a-601d960c5a80.png",
+      "selected": false,
+      "path": "aila/source/candidates/char_aila_moment_action1_v01.png",
+      "sha256": "8cdac1feb277a85726917502c51af6a5b65d1bebccb94e616ed03a34de3436b7",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "review": "Superseded by silver lantern/bell material correction; retained original candidate."
+    },
+    {
+      "c": "aila",
+      "key": "fig_action2",
+      "pose": "She rotates into FRONT three-quarter view, gaze down at a TEACUP on a matching saucer. Right hand supports saucer and left fingertips steady the cup handle, extending it gently toward the EMPTY adjacent seat to image left, hands just forward of waist. Show the cup clearly and no seated person. Lantern hung low at her belt so hands are free, CLOSED ledger under left upper arm. No desk or chair in this sprite. Soft initiative and poised adult posture, neck relaxed.",
+      "prompt": "Use case: identity-preserve. Edit the reference into ONE new full-length transparent key-pose of Aila, ADULT woman age23. Preserve EXACT same face, violet eyes, long braided lavender-silver hair, frost-embroidered white/lavender open-back side-slit robe, detached wide sleeves, jewelry and silver-bell lantern design. No extra clothing across bare back, no wings. Same head/heel position and 1024x1536 vertical canvas, complete figure inside frame, pure transparent alpha, no opaque background or text. Fine anime line and softly painted premium RPG illustration. She rotates into FRONT three-quarter view, gaze down at a TEACUP on a matching saucer. Right hand supports saucer and left fingertips steady the cup handle, extending it gently toward the EMPTY adjacent seat to image left, hands just forward of waist. Show the cup clearly and no seated person. Lantern hung low at her belt so hands are free, CLOSED ledger under left upper arm. No desk or chair in this sprite. Soft initiative and poised adult posture, neck relaxed.",
+      "refs": [
+        "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-c5659bf3-781e-4f38-9e43-b496a7f44e0b.png"
+      ],
+      "source": "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-db2e57d5-6664-444f-aaa4-3f86228c8d64.png",
+      "selected": false,
+      "path": "aila/source/candidates/char_aila_moment_action2_v01.png",
+      "sha256": "e5e6072b7bc380b94e17a1fe19aab47226089334d030f41ad730b840f718b69c",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "review": "Superseded by silver lantern/bell material correction; retained original candidate."
+    },
+    {
+      "c": "aila",
+      "key": "fig_happy",
+      "pose": "Front three-quarter standing, violet eyes meet viewer with a small warmly confident inviting smile. Right hand rests naturally on the back of one EMPTY elegant pale wooden chair beside her to image left; include the chair within frame, NOT sitting on it. Left hand lowering silver-bell lantern at hip. Robe neckline tasteful and approved, original open-back construction unchanged. No cup held, no ledger.",
+      "prompt": "Use case: identity-preserve. Edit the reference into ONE new full-length transparent key-pose of Aila, ADULT woman age23. Preserve EXACT same face, violet eyes, long braided lavender-silver hair, frost-embroidered white/lavender open-back side-slit robe, detached wide sleeves, jewelry and silver-bell lantern design. No extra clothing across bare back, no wings. Same head/heel position and 1024x1536 vertical canvas, complete figure inside frame, pure transparent alpha, no opaque background or text. Fine anime line and softly painted premium RPG illustration. Front three-quarter standing, violet eyes meet viewer with a small warmly confident inviting smile. Right hand rests naturally on the back of one EMPTY elegant pale wooden chair beside her to image left; include the chair within frame, NOT sitting on it. Left hand lowering silver-bell lantern at hip. Robe neckline tasteful and approved, original open-back construction unchanged. No cup held, no ledger.",
+      "refs": [
+        "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-c5659bf3-781e-4f38-9e43-b496a7f44e0b.png"
+      ],
+      "source": "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-e6359557-261f-40e8-88c9-bd0c4f20c007.png",
+      "selected": false,
+      "path": "aila/source/candidates/char_aila_moment_happy_v01.png",
+      "sha256": "d609457a8f3002e77195021cbc9d187fcee2fc6e0627ce0e9a4a211129c0ebc4",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "review": "Superseded by silver lantern/bell material correction; retained original candidate."
+    },
+    {
+      "c": "aila",
+      "key": "fig_soft",
+      "pose": "FRONT three-quarter view with one shoulder gently toward viewer; warm steady direct eye contact, lips in a small patient smile, shoulders relaxed. LEFT hand lowers silver-bell lantern, RIGHT hand open with relaxed fingers near waist, quietly waiting for an answer. No leaning into viewer, no wink, no blush. No chair/table/cup/ledger in sprite. Original white-lavender robe and open back construction.",
+      "prompt": "Use case: identity-preserve. Edit the reference into ONE new full-length transparent key-pose of Aila, ADULT woman age23. Preserve EXACT same face, violet eyes, long braided lavender-silver hair, frost-embroidered white/lavender open-back side-slit robe, detached wide sleeves, jewelry and silver-bell lantern design. No extra clothing across bare back, no wings. Same head/heel position and 1024x1536 vertical canvas, complete figure inside frame, pure transparent alpha, no opaque background or text. Fine anime line and softly painted premium RPG illustration. FRONT three-quarter view with one shoulder gently toward viewer; warm steady direct eye contact, lips in a small patient smile, shoulders relaxed. LEFT hand lowers silver-bell lantern, RIGHT hand open with relaxed fingers near waist, quietly waiting for an answer. No leaning into viewer, no wink, no blush. No chair/table/cup/ledger in sprite. Original white-lavender robe and open back construction.",
+      "refs": [
+        "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-c5659bf3-781e-4f38-9e43-b496a7f44e0b.png"
+      ],
+      "source": "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-31cc85e8-0ea9-4cbd-81ce-e82e83150ba2.png",
+      "selected": false,
+      "path": "aila/source/candidates/char_aila_moment_soft_v01.png",
+      "sha256": "536e7468f5dee84cd00104e60dde028571a86d1d3eafcfbab32e14fa8d56f896",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "review": "Superseded by silver lantern/bell material correction; retained original candidate."
+    },
+    {
+      "c": "sion",
+      "key": "fig_action1",
+      "pose": "One hand holding open book BELOW chest; other hand pinches a page corner but STOPS mid turn. Chin lifts just a little from reading, silver eyes glance sideways toward viewer with composed restraint, lips slightly parted as if saying there is no need to repeat a compliment. Distinct arrested page gesture.",
+      "prompt": "Use case: identity-preserve. Edit reference into ONE new full-length transparent sprite of Sion, age27 ADULT woman. Preserve exact face, waist-length straight black hair, silver-gray eyes, HALF-RIM glasses, fitted deep purple long coat with bookmark chains, high-waist black miniskirt, thigh-high boots, original jewelry. Same 1024x1536 canvas and head/foot alignment, full figure uncropped. No sword in these lobby poses. Actual transparent alpha with no opaque aura/background, no text or panels. Fine anime RPG linework and painted cel shading. One hand holding open book BELOW chest; other hand pinches a page corner but STOPS mid turn. Chin lifts just a little from reading, silver eyes glance sideways toward viewer with composed restraint, lips slightly parted as if saying there is no need to repeat a compliment. Distinct arrested page gesture.",
+      "refs": [
+        "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-9f5aaefc-b375-4fd2-9ea8-bc74b8fa554a.png"
+      ],
+      "source": "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-bf1ce3cb-3cac-46f6-bf95-e7fd407ab381.png",
+      "selected": true,
+      "path": "sion/images/char_sion_moment_action1_v01.png",
+      "sha256": "abd352b5d984b4718cd3f06bef6b7c7681891c3b5a8baaf0f0d7d38b27cb8b22",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "c": "sion",
+      "key": "fig_action2",
+      "pose": "LEFT hand supports open book at waist; RIGHT index and middle fingers gently adjust glasses at the temple, not hiding either eye. Eyes glance away just off viewer, mouth tense with a small personal hesitation, no broad smile or exaggerated blush. Clear five-finger hand and eyeglass contact.",
+      "prompt": "Use case: identity-preserve. Edit reference into ONE new full-length transparent sprite of Sion, age27 ADULT woman. Preserve exact face, waist-length straight black hair, silver-gray eyes, HALF-RIM glasses, fitted deep purple long coat with bookmark chains, high-waist black miniskirt, thigh-high boots, original jewelry. Same 1024x1536 canvas and head/foot alignment, full figure uncropped. No sword in these lobby poses. Actual transparent alpha with no opaque aura/background, no text or panels. Fine anime RPG linework and painted cel shading. LEFT hand supports open book at waist; RIGHT index and middle fingers gently adjust glasses at the temple, not hiding either eye. Eyes glance away just off viewer, mouth tense with a small personal hesitation, no broad smile or exaggerated blush. Clear five-finger hand and eyeglass contact.",
+      "refs": [
+        "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-9f5aaefc-b375-4fd2-9ea8-bc74b8fa554a.png"
+      ],
+      "source": "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-48bdbd8d-1f20-4e64-a236-4e5911e84fe2.png",
+      "selected": true,
+      "path": "sion/images/char_sion_moment_action2_v01.png",
+      "sha256": "ef8c114fa46c5033c14b4514c59c0ae7e6144596978b3ff2928389612f46c6a7",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "c": "sion",
+      "key": "fig_happy",
+      "pose": "Both hands raise the OPEN book ONLY high enough to hide her MOUTH. Her NOSE, glasses and both silver-gray eyes remain fully visible above the top edge. Eyes return directly to viewer, brows relax very slightly revealing a secret restrained smile. Book horizontal top edge just below nose, do not cover eyes or whole face.",
+      "prompt": "Use case: identity-preserve. Edit reference into ONE new full-length transparent sprite of Sion, age27 ADULT woman. Preserve exact face, waist-length straight black hair, silver-gray eyes, HALF-RIM glasses, fitted deep purple long coat with bookmark chains, high-waist black miniskirt, thigh-high boots, original jewelry. Same 1024x1536 canvas and head/foot alignment, full figure uncropped. No sword in these lobby poses. Actual transparent alpha with no opaque aura/background, no text or panels. Fine anime RPG linework and painted cel shading. Both hands raise the OPEN book ONLY high enough to hide her MOUTH. Her NOSE, glasses and both silver-gray eyes remain fully visible above the top edge. Eyes return directly to viewer, brows relax very slightly revealing a secret restrained smile. Book horizontal top edge just below nose, do not cover eyes or whole face.",
+      "refs": [
+        "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-9f5aaefc-b375-4fd2-9ea8-bc74b8fa554a.png"
+      ],
+      "source": "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-ee9370b3-963a-44ce-a23a-2235cf3240fe.png",
+      "selected": true,
+      "path": "sion/images/char_sion_moment_happy_v01.png",
+      "sha256": "ae57ba677e543b6023297706e5fed857527af1c0c2164bd128e9b793694fbc38",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "c": "sion",
+      "key": "fig_soft",
+      "pose": "Book is lowered CLOSED to waist in LEFT hand, RIGHT hand relaxed at side, shoulders gently loosened, eyes now meet viewer directly. A tiny honest closed-mouth smile is visible. Inviting space beside her, not a broad grin or wink; adult cool composure yielding a little.",
+      "prompt": "Use case: identity-preserve. Edit reference into ONE new full-length transparent sprite of Sion, age27 ADULT woman. Preserve exact face, waist-length straight black hair, silver-gray eyes, HALF-RIM glasses, fitted deep purple long coat with bookmark chains, high-waist black miniskirt, thigh-high boots, original jewelry. Same 1024x1536 canvas and head/foot alignment, full figure uncropped. No sword in these lobby poses. Actual transparent alpha with no opaque aura/background, no text or panels. Fine anime RPG linework and painted cel shading. Book is lowered CLOSED to waist in LEFT hand, RIGHT hand relaxed at side, shoulders gently loosened, eyes now meet viewer directly. A tiny honest closed-mouth smile is visible. Inviting space beside her, not a broad grin or wink; adult cool composure yielding a little.",
+      "refs": [
+        "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-9f5aaefc-b375-4fd2-9ea8-bc74b8fa554a.png"
+      ],
+      "source": "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-264fdfdb-514d-4fa9-bb42-d4b3661e81f2.png",
+      "selected": true,
+      "path": "sion/images/char_sion_moment_soft_v01.png",
+      "sha256": "f11353244a43bc528c5d232f567b95c8fb39222f74ca7ba5c0f8fbc162f3b350",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "c": "lumi",
+      "key": "fig_action1",
+      "pose": "RIGHT wrist raised beside waist with palm up, fingertips inserted under helmet rim, showing ONE helmet tilted mid quarter-turn over wrist, fingers CLEARLY provide support, not magical levitation. Left hand relaxed near hip. Eyes briefly lowered watching the helmet, confident small grin; both shoes grounded. No motion blur, this is a key-pose.",
+      "prompt": "Use case: identity-preserve. Edit reference into ONE full-length transparent sprite of Lumi age22 ADULT woman, same athletic build, short spiky blond hair with electric-blue streak, sky-blue eyes, yellow/charcoal circuit-line courier jacket slipped off shoulders, cropped sports top, bike shorts, futuristic sneakers. Do not add covering or change costume. Match face, helmet design, head and feet baseline in same 1024x1536 vertical canvas, whole character inside, real transparent alpha, no background/electric aura/text/panels. Premium anime RPG fine line and cel painting. RIGHT wrist raised beside waist with palm up, fingertips inserted under helmet rim, showing ONE helmet tilted mid quarter-turn over wrist, fingers CLEARLY provide support, not magical levitation. Left hand relaxed near hip. Eyes briefly lowered watching the helmet, confident small grin; both shoes grounded. No motion blur, this is a key-pose.",
+      "refs": [
+        "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-d42c9541-3966-47a2-a42a-323bd181d2b7.png"
+      ],
+      "source": "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-c49306dd-577a-4d3b-878a-81fcfa7a11de.png",
+      "selected": true,
+      "path": "lumi/images/char_lumi_moment_action1_v01.png",
+      "sha256": "0c995339841469ccea50fb5076722fb86a8fc9f0e816dfe5f7d71b2942b26cf9",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "c": "lumi",
+      "key": "fig_action2",
+      "pose": "ONE helmet tucked firmly in the crook of LEFT elbow against her side, LEFT forearm supports its underside. RIGHT arm now free, relaxed with loose open fingers near hip. Eyes return directly to viewer, confident conversational smile, both feet grounded. Same helmet not duplicated, no weapons.",
+      "prompt": "Use case: identity-preserve. Edit reference into ONE full-length transparent sprite of Lumi age22 ADULT woman, same athletic build, short spiky blond hair with electric-blue streak, sky-blue eyes, yellow/charcoal circuit-line courier jacket slipped off shoulders, cropped sports top, bike shorts, futuristic sneakers. Do not add covering or change costume. Match face, helmet design, head and feet baseline in same 1024x1536 vertical canvas, whole character inside, real transparent alpha, no background/electric aura/text/panels. Premium anime RPG fine line and cel painting. ONE helmet tucked firmly in the crook of LEFT elbow against her side, LEFT forearm supports its underside. RIGHT arm now free, relaxed with loose open fingers near hip. Eyes return directly to viewer, confident conversational smile, both feet grounded. Same helmet not duplicated, no weapons.",
+      "refs": [
+        "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-d42c9541-3966-47a2-a42a-323bd181d2b7.png"
+      ],
+      "source": "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-7516db94-48a9-41ae-9ee2-6d15390b25ee.png",
+      "selected": true,
+      "path": "lumi/images/char_lumi_moment_action2_v01.png",
+      "sha256": "30a55603c9cca90223997307f61de0293eefd987d351ffc3a5c0d94ae3dee963",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "c": "lumi",
+      "key": "fig_happy",
+      "pose": "ONE helmet tucked firmly in LEFT elbow at hip, LEFT forearm underneath. RIGHT hand comfortably on hip. Face toward viewer with broad refreshing TOOTHY confident laugh, energetic adult athlete appeal. Upright, no wink, no coy childish blush. Same sneakers and jacket, stable legs.",
+      "prompt": "Use case: identity-preserve. Edit reference into ONE full-length transparent sprite of Lumi age22 ADULT woman, same athletic build, short spiky blond hair with electric-blue streak, sky-blue eyes, yellow/charcoal circuit-line courier jacket slipped off shoulders, cropped sports top, bike shorts, futuristic sneakers. Do not add covering or change costume. Match face, helmet design, head and feet baseline in same 1024x1536 vertical canvas, whole character inside, real transparent alpha, no background/electric aura/text/panels. Premium anime RPG fine line and cel painting. ONE helmet tucked firmly in LEFT elbow at hip, LEFT forearm underneath. RIGHT hand comfortably on hip. Face toward viewer with broad refreshing TOOTHY confident laugh, energetic adult athlete appeal. Upright, no wink, no coy childish blush. Same sneakers and jacket, stable legs.",
+      "refs": [
+        "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-d42c9541-3966-47a2-a42a-323bd181d2b7.png"
+      ],
+      "source": "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-f8157020-f3c9-4235-9b12-6ba248f00b6d.png",
+      "selected": true,
+      "path": "lumi/images/char_lumi_moment_happy_v01.png",
+      "sha256": "a28b2ea95c984034b3cf5caebf8f0232870359e35a43593d3ece61edbae968e8",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "c": "lumi",
+      "key": "fig_soft",
+      "pose": "ONE helmet tucked securely in LEFT elbow at hip. RIGHT hand extended gently forward and slightly sideways with OPEN PALM UP, distinct five relaxed fingers offering company without pulling. She makes direct eye contact with patient confident small toothy smile. BOTH FEET are planted, she is genuinely WAITING, not running. Full figure uncropped.",
+      "prompt": "Use case: identity-preserve. Edit reference into ONE full-length transparent sprite of Lumi age22 ADULT woman, same athletic build, short spiky blond hair with electric-blue streak, sky-blue eyes, yellow/charcoal circuit-line courier jacket slipped off shoulders, cropped sports top, bike shorts, futuristic sneakers. Do not add covering or change costume. Match face, helmet design, head and feet baseline in same 1024x1536 vertical canvas, whole character inside, real transparent alpha, no background/electric aura/text/panels. Premium anime RPG fine line and cel painting. ONE helmet tucked securely in LEFT elbow at hip. RIGHT hand extended gently forward and slightly sideways with OPEN PALM UP, distinct five relaxed fingers offering company without pulling. She makes direct eye contact with patient confident small toothy smile. BOTH FEET are planted, she is genuinely WAITING, not running. Full figure uncropped.",
+      "refs": [
+        "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-d42c9541-3966-47a2-a42a-323bd181d2b7.png"
+      ],
+      "source": "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-2661a7f9-fcb2-4abb-b9fd-00e8ef97e727.png",
+      "selected": true,
+      "path": "lumi/images/char_lumi_moment_soft_v01.png",
+      "sha256": "6c25868d210f42984db596a352b527829606c7e83c3bbed96fa7b39d8d90816b",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "c": "aila",
+      "key": "bg",
+      "prompt": "Use case: illustration-story. Asset: standalone wide landscape visual-novel stage BACKGROUND for Memory Forge fantasy anime RPG. Rich painterly anime environment, nuanced cinematic lighting, crisp polished details, wide 16:9 landscape approx1536x864 or higher, opaque full background. NO people, figures, faces, silhouettes, captions, writing, logos, HUD or frames. Keep middle/right staging area and lower center relatively open for transparent character sprite and dialogue overlay, not a poster. A quiet memory archive at evening, white stone and dark lavender wood, rows of orderly brass-handled card-catalog drawers, one drawer slightly open and EMPTY with no secret contents, frosted glass panes, soft violet hour beyond high arched windows. A small tea table with TWO simple matching tea cups on saucers at image left, pale wooden chairs adjacent, closed leather ledger, silver-bell lantern on far-left shelf. Warm amber practical lamps against lavender dusk. Intimate welcoming private conversation, architecture grounded, no glowing portals or floating letters.",
+      "source": "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-82f84e06-3f79-4ac7-bc85-185272b98dda.png",
+      "selected": true,
+      "path": "aila/images/char_aila_background_archive_evening_v01.png",
+      "sha256": "6beabfcd1ca8f597ec2db11afd8cd5bc25efd89c7a535d89cbfc7c03b68a398e",
+      "size": [
+        1672,
+        941
+      ]
+    },
+    {
+      "c": "sion",
+      "key": "bg",
+      "prompt": "Use case: illustration-story. Asset: standalone wide landscape visual-novel stage BACKGROUND for Memory Forge fantasy anime RPG. Rich painterly anime environment, nuanced cinematic lighting, crisp polished details, wide 16:9 landscape approx1536x864 or higher, opaque full background. NO people, figures, faces, silhouettes, captions, writing, logos, HUD or frames. Keep middle/right staging area and lower center relatively open for transparent character sprite and dialogue overlay, not a poster. An intimate old library reading alcove at night under warm amber lamplight, tall dark bookcases with deep violet and charcoal bindings, brass bookmark-chain details, long clear wooden reading desk on left with blank cream loose papers and a closed violet book, two adjacent empty chairs. Cool blue moonlit arched window in back, tiny brass desk lamps, deep-purple velvet accent. Calm restrained mood for a private admission after a compliment. Open right-center wooden floor and subdued shelves behind character. No weapons, no magical glyph text.",
+      "source": "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-2b7ddf48-1574-47fb-9b2e-c02364d8a8e3.png",
+      "selected": true,
+      "path": "sion/images/char_sion_background_library_lamplight_v01.png",
+      "sha256": "5b79cc835a8cb3160a306ec13e13dc674887b3ab5118bbd382212760e61c6750",
+      "size": [
+        1672,
+        941
+      ]
+    },
+    {
+      "c": "lumi",
+      "key": "bg",
+      "prompt": "Use case: illustration-story. Asset: standalone wide landscape visual-novel stage BACKGROUND for Memory Forge fantasy anime RPG. Rich painterly anime environment, nuanced cinematic lighting, crisp polished details, wide 16:9 landscape approx1536x864 or higher, opaque full background. NO people, figures, faces, silhouettes, captions, writing, logos, HUD or frames. Keep middle/right staging area and lower center relatively open for transparent character sprite and dialogue overlay, not a poster. Peaceful cobbled street immediately OUTSIDE a clockwork memory workshop at evening, amber glow from workshop windows, blue dusk sky with distant clock tower, brass pipes and blue enamel trim, warm small door light, courier-route city details without readable signage, parked streamlined motorcycle far LEFT partly visible with TWO seat positions but NO helmets or people. Door and safe standing area at right-center, a quiet nearby alley corner inviting a shared walk; no fighting, rubble, traffic, storms or excessive speed effects. Yellow/blue accents link to courier character.",
+      "source": "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-770cf09e-8dae-463c-9859-7ddda5d4f485.png",
+      "selected": true,
+      "path": "lumi/images/char_lumi_background_workshop_street_evening_v01.png",
+      "sha256": "732403540d1e46d091da43736e8115d1f7a6e3e8d0342b4f26dded58b19a9c4c",
+      "size": [
+        1672,
+        941
+      ]
+    },
+    {
+      "c": "ravien",
+      "key": "bg_room",
+      "path": "ravien/images/char_ravien_background_workshop_evening_v01.png",
+      "source": "/Users/choi/Documents/Memory_forge/art/candidates/20261018/codex/assets/backgrounds/bg_zone1_event_workshop_v02.png",
+      "method": "existing project workshop background reused byte-for-byte; no regeneration",
+      "selected": true,
+      "sha256": "a049b8449d5d04312f05a4c60bb01aa4b770f2cf9394e0b11d4b4fcdb4bf8214",
+      "size": [
+        1672,
+        941
+      ]
+    },
+    {
+      "c": "harin",
+      "key": "bg_room",
+      "path": "harin/images/char_harin_background_workshop_evening_v01.png",
+      "source": "/Users/choi/Documents/Memory_forge/art/candidates/20261018/codex/assets/backgrounds/bg_zone1_event_workshop_v02.png",
+      "method": "existing project workshop background reused byte-for-byte; no regeneration",
+      "selected": true,
+      "sha256": "a049b8449d5d04312f05a4c60bb01aa4b770f2cf9394e0b11d4b4fcdb4bf8214",
+      "size": [
+        1672,
+        941
+      ]
+    },
+    {
+      "c": "aila",
+      "key": "fig_neutral",
+      "revision": "silver-v02",
+      "prompt": "Use case: precise-object-edit. Make ONE extremely targeted material correction to this exact Aila age23 ADULT lobby sprite. Change ONLY the metallic framework of her LANTERN and ALL SMALL BELLS from gold/brass to unmistakable COOL SILVER/PEWTER, with silver-white highlights and charcoal-gray shadow tones. This includes the bell hanging near lantern handle. NOT the jewelry or robe embroidery: keep original golden embroidery/jewelry accents. Preserve everything else exactly: same face, violet eyes, lavender braided hair, open-back white/lavender slit robe, pose, gesture, hands, props, body, exposure, 1024x1536 framing, real transparent alpha. Do not add background or new clothing. One full-body sprite, no labels.",
+      "refs": [
+        "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-c5659bf3-781e-4f38-9e43-b496a7f44e0b.png"
+      ],
+      "source": "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-db951fd5-69b2-4e0f-aaf9-af057b6c53c6.png",
+      "selected": true,
+      "path": "aila/images/char_aila_moment_neutral_v02.png",
+      "sha256": "84d1468e00ecd54ea1372c1315f3680dc18653416029ac272242a67658c74ad1",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "c": "aila",
+      "key": "fig_action1",
+      "revision": "silver-v02",
+      "prompt": "Use case: precise-object-edit. Make ONE extremely targeted material correction to this exact Aila age23 ADULT lobby sprite. Change ONLY the metallic framework of her LANTERN and ALL SMALL BELLS from gold/brass to unmistakable COOL SILVER/PEWTER, with silver-white highlights and charcoal-gray shadow tones. This includes the bell hanging near lantern handle. NOT the jewelry or robe embroidery: keep original golden embroidery/jewelry accents. Preserve everything else exactly: same face, violet eyes, lavender braided hair, open-back white/lavender slit robe, pose, gesture, hands, props, body, exposure, 1024x1536 framing, real transparent alpha. Do not add background or new clothing. One full-body sprite, no labels.",
+      "refs": [
+        "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-90053ef3-a717-4f00-be8a-601d960c5a80.png"
+      ],
+      "source": "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-cd772674-921b-45c1-994b-c49ec62340cc.png",
+      "selected": true,
+      "path": "aila/images/char_aila_moment_action1_v02.png",
+      "sha256": "0ca39b9c89a059834c18bf6f4b4727b3ba650a5456603a3147cdd29c23e4e9c7",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "c": "aila",
+      "key": "fig_action2",
+      "revision": "silver-v02",
+      "prompt": "Use case: precise-object-edit. Make ONE extremely targeted material correction to this exact Aila age23 ADULT lobby sprite. Change ONLY the metallic framework of her LANTERN and ALL SMALL BELLS from gold/brass to unmistakable COOL SILVER/PEWTER, with silver-white highlights and charcoal-gray shadow tones. This includes the bell hanging near lantern handle. NOT the jewelry or robe embroidery: keep original golden embroidery/jewelry accents. Preserve everything else exactly: same face, violet eyes, lavender braided hair, open-back white/lavender slit robe, pose, gesture, hands, props, body, exposure, 1024x1536 framing, real transparent alpha. Do not add background or new clothing. One full-body sprite, no labels.",
+      "refs": [
+        "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-db2e57d5-6664-444f-aaa4-3f86228c8d64.png"
+      ],
+      "source": "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-11747a11-706c-4777-a85e-9fc74bb4f8fc.png",
+      "selected": true,
+      "path": "aila/images/char_aila_moment_action2_v02.png",
+      "sha256": "a408081bc494b4482bea92ee19cca4d435cffc97ff9793e9db5b5b5008dceb43",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "c": "aila",
+      "key": "fig_happy",
+      "revision": "silver-v02",
+      "prompt": "Use case: precise-object-edit. Make ONE extremely targeted material correction to this exact Aila age23 ADULT lobby sprite. Change ONLY the metallic framework of her LANTERN and ALL SMALL BELLS from gold/brass to unmistakable COOL SILVER/PEWTER, with silver-white highlights and charcoal-gray shadow tones. This includes the bell hanging near lantern handle. NOT the jewelry or robe embroidery: keep original golden embroidery/jewelry accents. Preserve everything else exactly: same face, violet eyes, lavender braided hair, open-back white/lavender slit robe, pose, gesture, hands, props, body, exposure, 1024x1536 framing, real transparent alpha. Do not add background or new clothing. One full-body sprite, no labels.",
+      "refs": [
+        "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-e6359557-261f-40e8-88c9-bd0c4f20c007.png"
+      ],
+      "source": "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-744c9f25-5ade-474e-abff-aae9800fef84.png",
+      "selected": true,
+      "path": "aila/images/char_aila_moment_happy_v02.png",
+      "sha256": "a455b6dd4f6c10d08a4c1dfeef6e42996587cd25df722239c08bb3fe03bc4b46",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "c": "aila",
+      "key": "fig_soft",
+      "revision": "silver-v02",
+      "prompt": "Use case: precise-object-edit. Make ONE extremely targeted material correction to this exact Aila age23 ADULT lobby sprite. Change ONLY the metallic framework of her LANTERN and ALL SMALL BELLS from gold/brass to unmistakable COOL SILVER/PEWTER, with silver-white highlights and charcoal-gray shadow tones. This includes the bell hanging near lantern handle. NOT the jewelry or robe embroidery: keep original golden embroidery/jewelry accents. Preserve everything else exactly: same face, violet eyes, lavender braided hair, open-back white/lavender slit robe, pose, gesture, hands, props, body, exposure, 1024x1536 framing, real transparent alpha. Do not add background or new clothing. One full-body sprite, no labels.",
+      "refs": [
+        "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-31cc85e8-0ea9-4cbd-81ce-e82e83150ba2.png"
+      ],
+      "source": "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-89550090-9d52-42a6-a11a-9fca74acef7a.png",
+      "selected": true,
+      "path": "aila/images/char_aila_moment_soft_v02.png",
+      "sha256": "9a7267fb110261c63fccab90e7c429ab48d0ac6a4b4597d2397ba960077eafa9",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "c": "sera",
+      "key": "fig_bond_notes",
+      "pose": "Evening private clocktower conversation, STANDING upright in relaxed three-quarter front pose. Left hand supports a small OPEN notebook at waist, RIGHT gloved fingertips hold a short used pencil above a visibly crossed-out tiny diagram and two SIMPLE cup doodles, no readable words. Eyes down toward notebook, restrained thoughtful mouth, shoulders slightly hesitant. No rifle held or visible in this bond sprite, it is safely racked offstage. Full head-to-boot figure, face around (.52,.11), feet near .96.",
+      "prompt": "Use case: identity-preserve. Reference is Sera's existing lobby sprite. Create ONE new full-length transparent key-pose of Sera, adult woman age24. Preserve EXACT same face and amber eyes, very long silver hair gathered into a low ponytail, brass clock/amber hair clip, fitted long black bodysuit, open NAVY long coat with brass clock motifs and long fitted boots. No extra clothing or costume redesign. Fine anime RPG linework and softly painted detailed cel shading. 1024x1536 vertical full figure fully within transparent margins; NO text, panels, environment or opaque glow. Evening private clocktower conversation, STANDING upright in relaxed three-quarter front pose. Left hand supports a small OPEN notebook at waist, RIGHT gloved fingertips hold a short used pencil above a visibly crossed-out tiny diagram and two SIMPLE cup doodles, no readable words. Eyes down toward notebook, restrained thoughtful mouth, shoulders slightly hesitant. No rifle held or visible in this bond sprite, it is safely racked offstage. Full head-to-boot figure, face around (.52,.11), feet near .96.",
+      "refs": [
+        "/Users/choi/Documents/Memory_forge/art/moments/sera/images/char_sera_lobby_smile_v01.png"
+      ],
+      "source": "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-4cf46e12-3daa-4a93-8da8-fd69a330481f.png",
+      "selected": true,
+      "path": "sera/images/char_sera_bond_notes_v01.png",
+      "sha256": "36877a722f9de77bbe79797744fd3b7a8c92a59d273fa36b208a37498bcd24f8",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "c": "sera",
+      "key": "fig_bond_listen",
+      "pose": "Evening private clocktower conversation. SEATED upright on a low small plain stone bench, NOT high stool, making eye contact toward the unseen person sitting alongside at equal height on image left. Leave visible empty space beside her on bench. Coat arranged naturally beside hips, both knees and boots inside full frame. Small OPEN notebook rests supported on her lap, right hand relaxed near notebook and left hand on knee. Soft almost surprised tiny smile while listening, no wink or grand blush. No rifle visible; no tea cup held. Face higher center near (.52,.20), enough full-body vertical transparent padding around seated silhouette; bench is included only under her.",
+      "prompt": "Use case: identity-preserve. Reference is Sera's existing lobby sprite. Create ONE new full-length transparent key-pose of Sera, adult woman age24. Preserve EXACT same face and amber eyes, very long silver hair gathered into a low ponytail, brass clock/amber hair clip, fitted long black bodysuit, open NAVY long coat with brass clock motifs and long fitted boots. No extra clothing or costume redesign. Fine anime RPG linework and softly painted detailed cel shading. 1024x1536 vertical full figure fully within transparent margins; NO text, panels, environment or opaque glow. Evening private clocktower conversation. SEATED upright on a low small plain stone bench, NOT high stool, making eye contact toward the unseen person sitting alongside at equal height on image left. Leave visible empty space beside her on bench. Coat arranged naturally beside hips, both knees and boots inside full frame. Small OPEN notebook rests supported on her lap, right hand relaxed near notebook and left hand on knee. Soft almost surprised tiny smile while listening, no wink or grand blush. No rifle visible; no tea cup held. Face higher center near (.52,.20), enough full-body vertical transparent padding around seated silhouette; bench is included only under her.",
+      "refs": [
+        "/Users/choi/Documents/Memory_forge/art/moments/sera/images/char_sera_lobby_smile_v01.png"
+      ],
+      "source": "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-87e2e3a8-7cd2-4950-a8f9-e89a2c15fb46.png",
+      "selected": true,
+      "path": "sera/images/char_sera_bond_listen_v01.png",
+      "sha256": "e8d24e4cd5cd19fad036d943065a6691f632b263ac764b62a0be3577fee118dd",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "c": "sera",
+      "key": "fig_bond_offer",
+      "pose": "SEATED on same low plain stone bench as a quiet private clocktower conversation. Body upright, head turned toward unseen companion alongside to image left, amber eyes gently meeting them, very small dry amused smile. Both gloved hands hold and tilt the OPEN small notebook toward the viewer/companion at waist, showing TWO simple cup doodles side by side and a short crossed-out mark, NO readable words, paper un-torn. Short pencil tucked in notebook fold. Full seated body/boots, coat naturally arranged, no rifle and no cup held. Keep some empty bench space to her left. Face near (.52,.20).",
+      "prompt": "Use case: identity-preserve. Reference is Sera's existing lobby sprite. Create ONE new full-length transparent key-pose of Sera, adult woman age24. Preserve EXACT same face and amber eyes, very long silver hair gathered into a low ponytail, brass clock/amber hair clip, fitted long black bodysuit, open NAVY long coat with brass clock motifs and long fitted boots. No extra clothing or costume redesign. Fine anime RPG linework and softly painted detailed cel shading. 1024x1536 vertical full figure fully within transparent margins; NO text, panels, environment or opaque glow. SEATED on same low plain stone bench as a quiet private clocktower conversation. Body upright, head turned toward unseen companion alongside to image left, amber eyes gently meeting them, very small dry amused smile. Both gloved hands hold and tilt the OPEN small notebook toward the viewer/companion at waist, showing TWO simple cup doodles side by side and a short crossed-out mark, NO readable words, paper un-torn. Short pencil tucked in notebook fold. Full seated body/boots, coat naturally arranged, no rifle and no cup held. Keep some empty bench space to her left. Face near (.52,.20).",
+      "refs": [
+        "/Users/choi/Documents/Memory_forge/art/moments/sera/images/char_sera_lobby_smile_v01.png"
+      ],
+      "source": "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-b334a86e-23fd-4d27-a90a-2dd583ce6801.png",
+      "selected": true,
+      "path": "sera/images/char_sera_bond_offer_v01.png",
+      "sha256": "69d2738409b0482337b0a54429a2c77676455869ecb010fb62c8ba5cdbf4d474",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "c": "sera",
+      "key": "fig_victory_scope",
+      "pose": "Post-battle victory, full-length STANDING. Hold the exact long brass hourglass SNIPER RIFLE low in both gloved hands, crossing body on a long diagonal with MUZZLE pointing safely DOWN and away toward lower image right, never toward camera. Eyes follow scope briefly to side, calm focused face, coat settles in slight diagonal. BOTH hands clearly support stock and fore-end. Preserve weapon silhouette and fitted bodysuit/coat. Face approx (.52,.11), both boots at .96.",
+      "prompt": "Use case: identity-preserve. Reference is Sera's existing lobby sprite. Create ONE new full-length transparent key-pose of Sera, adult woman age24. Preserve EXACT same face and amber eyes, very long silver hair gathered into a low ponytail, brass clock/amber hair clip, fitted long black bodysuit, open NAVY long coat with brass clock motifs and long fitted boots. No extra clothing or costume redesign. Fine anime RPG linework and softly painted detailed cel shading. 1024x1536 vertical full figure fully within transparent margins; NO text, panels, environment or opaque glow. Post-battle victory, full-length STANDING. Hold the exact long brass hourglass SNIPER RIFLE low in both gloved hands, crossing body on a long diagonal with MUZZLE pointing safely DOWN and away toward lower image right, never toward camera. Eyes follow scope briefly to side, calm focused face, coat settles in slight diagonal. BOTH hands clearly support stock and fore-end. Preserve weapon silhouette and fitted bodysuit/coat. Face approx (.52,.11), both boots at .96.",
+      "refs": [
+        "/Users/choi/Documents/Memory_forge/art/moments/sera/images/char_sera_lobby_smile_v01.png"
+      ],
+      "source": "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-0f95a294-d04f-4e48-96f5-44fdca48018a.png",
+      "selected": true,
+      "path": "sera/images/char_sera_victory_scope_v01.png",
+      "sha256": "a81a2927d83f1ac8d1bc7f4ce7ef69347c3373602c69656ac7f8171996c25feb",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "c": "sera",
+      "key": "fig_victory_turn",
+      "pose": "Post-battle standing pose: long brass hourglass sniper rifle still held LOW in both hands on same downward diagonal toward lower image right, safe muzzle. Shoulders and HEAD now turn toward viewer. Direct amber eye contact and tiny dry playful closed-mouth smile that asks whether viewer was watching HER instead of bullet impact. Subtle confidence, no wink, no raised finger/watch gesture. Same full-body and coat silhouette, complete rifle and boots inside frame. Face approx (.52,.11).",
+      "prompt": "Use case: identity-preserve. Reference is Sera's existing lobby sprite. Create ONE new full-length transparent key-pose of Sera, adult woman age24. Preserve EXACT same face and amber eyes, very long silver hair gathered into a low ponytail, brass clock/amber hair clip, fitted long black bodysuit, open NAVY long coat with brass clock motifs and long fitted boots. No extra clothing or costume redesign. Fine anime RPG linework and softly painted detailed cel shading. 1024x1536 vertical full figure fully within transparent margins; NO text, panels, environment or opaque glow. Post-battle standing pose: long brass hourglass sniper rifle still held LOW in both hands on same downward diagonal toward lower image right, safe muzzle. Shoulders and HEAD now turn toward viewer. Direct amber eye contact and tiny dry playful closed-mouth smile that asks whether viewer was watching HER instead of bullet impact. Subtle confidence, no wink, no raised finger/watch gesture. Same full-body and coat silhouette, complete rifle and boots inside frame. Face approx (.52,.11).",
+      "refs": [
+        "/Users/choi/Documents/Memory_forge/art/moments/sera/images/char_sera_lobby_smile_v01.png"
+      ],
+      "source": "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-f42e75b8-8ec4-4842-9bcc-7b85f4540bde.png",
+      "selected": true,
+      "path": "sera/images/char_sera_victory_turn_v01.png",
+      "sha256": "9391666104d596d54ec9b8f0b040138eb96bb68b29a1e34da323790163d8b9a0",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "c": "sera",
+      "key": "bg_tower",
+      "prompt": "Use case: illustration-story. Asset: opaque wide 16:9 visual-novel stage background, Memory Forge premium fantasy anime RPG. The TOP TERRACE of an old brass-and-stone CLOCK TOWER overlooking a harbor at EVENING. Warm late sunset changing into indigo, small amber harbor lights turning on below. Low stone parapet, visibly LOW stone sitting ledge/bench along side, enough adjacent empty sitting space for two adults, central/right foreground clear for character sprite. On far-left parapet TWO simple tea cups with light steam, folded dark navy cloth and a short used pencil. A closed small notebook nearby, with NO legible writing. A SAFE upright sniper-rifle rack subtly set inside railing at far background right, no person and no weapon pointed at camera. Architectural brass clock mechanism and narrow stair entrance at back; intimate grounded rooftop, no floating magic. Fine painted anime environment, crisp details and rich sunset palette compatible with navy/brass character. NO characters, silhouettes, captions, text, HUD, watermark or picture frames.",
+      "source": "/Users/choi/.codex/generated_images/01a14bd3-8e05-7a71-9dbe-c78c6b2bd564/exec-dc2c7811-52b1-4b38-b595-c76bca049918.png",
+      "selected": true,
+      "path": "sera/images/bg_sera_clocktower_evening_v01.png",
+      "sha256": "ced267fa566216855f1b2513a7f5c5d249ec99dd26e6578cc050424241aba070",
+      "size": [
+        1672,
+        941
+      ]
+    }
+  ]
+}

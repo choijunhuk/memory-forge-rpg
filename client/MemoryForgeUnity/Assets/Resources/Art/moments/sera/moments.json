@@ -52,52 +52,72 @@
     },
     "fig_bond_notes": {
       "face": [
-        0.5,
-        0.17
+        0.56,
+        0.1
       ],
       "hands": [
-        0.5,
-        0.48
+        0.62,
+        0.25
+      ],
+      "body": [
+        0.56,
+        0.5
       ]
     },
     "fig_bond_listen": {
       "face": [
-        0.5,
-        0.17
+        0.49,
+        0.13
       ],
       "hands": [
-        0.5,
-        0.48
+        0.55,
+        0.43
+      ],
+      "body": [
+        0.49,
+        0.5
       ]
     },
     "fig_bond_offer": {
       "face": [
-        0.5,
-        0.17
+        0.52,
+        0.11
       ],
       "hands": [
-        0.5,
-        0.48
+        0.51,
+        0.31
+      ],
+      "body": [
+        0.52,
+        0.5
       ]
     },
     "fig_victory_scope": {
       "face": [
-        0.5,
-        0.17
+        0.53,
+        0.085
       ],
       "hands": [
-        0.5,
-        0.48
+        0.56,
+        0.33
+      ],
+      "body": [
+        0.53,
+        0.5
       ]
     },
     "fig_victory_turn": {
       "face": [
-        0.5,
-        0.17
+        0.52,
+        0.09
       ],
       "hands": [
-        0.5,
-        0.48
+        0.65,
+        0.4
+      ],
+      "body": [
+        0.52,
+        0.5
       ]
     }
   },
@@ -364,22 +384,22 @@
         {
           "key": "fig_bond_notes",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_bond_listen",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_bond_offer",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "bg_tower",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "bond_turn",
@@ -675,12 +695,12 @@
         {
           "key": "fig_victory_scope",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_victory_turn",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "victory_settle",

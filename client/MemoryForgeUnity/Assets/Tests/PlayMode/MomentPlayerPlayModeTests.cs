@@ -121,6 +121,9 @@ namespace MemoryForge.Client.Tests
             Assert.IsTrue(player.WaitingForTap, "a tap-mode beat without dialogue waits for input");
             player.Tap(); yield return null; yield return null;
 
+            // The close shot narrowed the dialogue to clear the figure, so the line pages at the width it is shown in.
+            pages = player.Pages(LongText());
+            Assert.AreEqual(LongText(), string.Concat(pages));
             var dialog = player.transform.Find("MomentDialog").gameObject;
             for (int page = 0; page < pages.Count; page++)
             {
@@ -244,6 +247,39 @@ namespace MemoryForge.Client.Tests
             var slot = (RectTransform)player.transform.Find("MomentStage/MomentCamera/Figure/Overlay:o");
             Assert.AreEqual(384f * MemoryForgeMomentPlayer.RefWidth / MemoryForgeMomentPlayer.AuthoredWidth, slot.anchoredPosition.x, 0.5f);
             player.Stop();
+        }
+
+        [UnityTest]
+        public IEnumerator MediumBodyShotsKeepTheHeadInViewAndTheDialogueClearsTheFigure()
+        {
+            const string Framing = @"{ ""format"": ""memory-forge-moments/1"", ""character"": ""t_char"",
+  ""images"": { ""fig_a"": ""t/a.png"" }, ""anchors"": { ""fig_a"": { ""body"": [0.5, 0.5], ""face"": [0.5, 0.15] } },
+  ""scenes"": [ { ""id"": ""t_lobby_05"", ""kind"": ""lobby"", ""input"": { ""advance"": ""tap"" }, ""beats"": [
+    { ""figure"": ""fig_a"", ""camera"": { ""shot"": ""medium"", ""focus"": ""body"", ""move"": ""none"" }, ""line"": { ""text"": ""a"" } },
+    { ""camera"": { ""shot"": ""close"", ""focus"": ""face"", ""move"": ""none"" }, ""line"": { ""text"": ""b"" } } ] } ] }";
+            var tex = new Texture2D(200, 300); art["t/a.png"] = Sprite.Create(tex, new Rect(0, 0, 200, 300), new Vector2(0.5f, 0.5f));
+            var host = new GameObject("MomentHost", typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler)); hosts.Add(host);
+            host.GetComponent<Canvas>().renderMode = RenderMode.ScreenSpaceOverlay;
+            var player = host.AddComponent<MemoryForgeMomentPlayer>();
+            var area = new Rect(40, 610, 600, 256);
+            player.Build((RectTransform)host.transform, Resources.Load<Font>("Fonts/IBMPlexSansKR-Regular"), p => art.TryGetValue(p, out var s) ? s : null, 1040, area);
+            var file = MomentFile.Parse(Framing, out var error)!;
+            Assert.IsNull(error);
+            player.Bind(file);
+            Assert.AreEqual(area.width, player.DialogWidth, 0.01f, "at rest the dialogue keeps its full width");
+            player.Play(file.Scenes[0]);
+            yield return null;
+            var lens = (RectTransform)player.transform.Find("MomentStage/MomentCamera");
+            var fig = (RectTransform)player.transform.Find("MomentStage/MomentCamera/Figure");
+            float top = (fig.anchoredPosition.y + fig.sizeDelta.y / 2) * lens.localScale.x + lens.anchoredPosition.y;
+            Assert.LessOrEqual(top, MemoryForgeMomentPlayer.RefHeight / 2, "the head stays inside the screen in a medium body shot");
+            float left = MemoryForgeMomentPlayer.RefWidth / 2 + lens.anchoredPosition.x + (fig.anchoredPosition.x - fig.sizeDelta.x / 2) * lens.localScale.x;
+            Assert.LessOrEqual(area.x + player.DialogWidth, left, "the dialogue ends left of the figure");
+            player.Tap(); yield return null; player.Tap(); yield return null; // next beat: close shot
+            Assert.LessOrEqual(player.DialogWidth, area.width);
+            Assert.GreaterOrEqual(player.DialogWidth, 420f, "the dialogue never shrinks below its minimum");
+            player.Stop();
+            Assert.AreEqual(area.width, player.DialogWidth, 0.01f, "after the scene the dialogue width is restored");
         }
 
         [UnityTest]

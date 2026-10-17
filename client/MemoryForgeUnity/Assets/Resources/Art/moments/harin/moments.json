@@ -22,32 +22,44 @@
   "anchors": {
     "fig_default": {
       "face": [
-        0.5,
-        0.16
+        0.51,
+        0.085
       ],
       "hands": [
-        0.49,
-        0.51
+        0.62,
+        0.46
+      ],
+      "body": [
+        0.51,
+        0.5
       ]
     },
     "fig_glove": {
       "face": [
-        0.5,
-        0.16
+        0.51,
+        0.085
       ],
       "hands": [
-        0.49,
-        0.51
+        0.57,
+        0.22
+      ],
+      "body": [
+        0.51,
+        0.5
       ]
     },
     "fig_lobby_cat": {
       "face": [
-        0.5,
-        0.16
+        0.51,
+        0.085
       ],
       "hands": [
-        0.49,
-        0.51
+        0.61,
+        0.32
+      ],
+      "body": [
+        0.51,
+        0.5
       ]
     },
     "fig_guard": {
@@ -62,22 +74,30 @@
     },
     "fig_hide": {
       "face": [
-        0.5,
-        0.16
+        0.51,
+        0.085
       ],
       "hands": [
-        0.49,
-        0.51
+        0.59,
+        0.32
+      ],
+      "body": [
+        0.51,
+        0.5
       ]
     },
     "fig_cough": {
       "face": [
-        0.5,
-        0.16
+        0.51,
+        0.085
       ],
       "hands": [
-        0.49,
-        0.51
+        0.46,
+        0.12
+      ],
+      "body": [
+        0.51,
+        0.5
       ]
     },
     "fig_worry": {
@@ -112,12 +132,16 @@
     },
     "fig_lobby_soft": {
       "face": [
-        0.5,
-        0.16
+        0.51,
+        0.085
       ],
       "hands": [
-        0.49,
-        0.51
+        0.62,
+        0.46
+      ],
+      "body": [
+        0.51,
+        0.5
       ]
     },
     "fig_rest": {
@@ -132,12 +156,16 @@
     },
     "fig_resolve": {
       "face": [
-        0.5,
-        0.16
+        0.51,
+        0.085
       ],
       "hands": [
-        0.49,
-        0.51
+        0.62,
+        0.46
+      ],
+      "body": [
+        0.51,
+        0.5
       ]
     },
     "fig_victory": {
@@ -312,37 +340,37 @@
         {
           "key": "bg_room",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_cough",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_glove",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_hide",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_lobby_cat",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_lobby_soft",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_resolve",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "pause_near",
@@ -367,7 +395,7 @@
         {
           "key": "fig_default",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         }
       ],
       "input": {
@@ -418,7 +446,7 @@
           "hold": 0.25,
           "line": {
             "speaker": null,
-            "text": "인형을 손으로 덮었다가 급히 넣는 핵심 포즈로 전환한다. 눈은 공방장을 피하고 손을 뗀 뒤 낮게 헛기침한다.",
+            "text": "인형을 손으로 덮었다가 급히 주머니 안으로 밀어 넣는다. 공방장의 눈길을 피한 채 손을 떼고 낮게 헛기침한다.",
             "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
           },
           "figure": "fig_cough",
@@ -451,7 +479,7 @@
           "hold": 0.9,
           "line": {
             "speaker": null,
-            "text": "인형 귀를 다시 조금 내놓고 손을 내린다. 굳은 입매가 아주 짧게 풀린다. 몸을 숙여 어려 보이게 하지 않는다.",
+            "text": "인형 귀를 다시 조금 내놓고 손을 내린다. 굳은 입매가 아주 짧게 풀린다.",
             "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
           },
           "figure": "fig_lobby_soft",
@@ -512,7 +540,7 @@
         {
           "key": "bg_room",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_cat",
@@ -522,7 +550,7 @@
         {
           "key": "fig_hide",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_rest",
@@ -1079,7 +1107,7 @@
           "hold": 0.25,
           "line": {
             "speaker": null,
-            "text": "하린은 두 장갑을 벗어 무릎 위에 포갠다. 문 옆 방패와 테이블 위 고양이가 같은 화면에 들어온다. 그녀는 둘 중 어느 쪽도 감추지 않고, 공방장과 마주 앉은 채 짧지만 분명한 미소를 짓는다.",
+            "text": "하린은 두 장갑을 벗어 무릎 위에 포갠다. 문 옆에는 방패가, 테이블 위에는 고양이가 놓여 있다. 그녀는 둘 중 어느 쪽도 감추지 않고, 공방장과 마주 앉은 채 짧지만 분명한 미소를 짓는다.",
             "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
           },
           "figure": "fig_rest",
@@ -1117,12 +1145,12 @@
         {
           "key": "fig_lobby_soft",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_resolve",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_victory",
@@ -1160,7 +1188,7 @@
           "hold": 0.25,
           "line": {
             "speaker": null,
-            "text": "하린이 방패로 전방을 가린 자세에서 시작한다. 마지막 충격 뒤 발을 옮기지 않고 먼저 어깨의 힘을 풀며 공방장 쪽을 확인한다.",
+            "text": "하린은 방패로 전방을 가리고 서 있다. 마지막 충격 뒤 발을 옮기지 않고 먼저 어깨의 힘을 풀며 공방장 쪽을 확인한다.",
             "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
           },
           "figure": "fig_guard",
@@ -1193,7 +1221,7 @@
           "hold": 0.25,
           "line": {
             "speaker": null,
-            "text": "방패를 바깥쪽으로 치워 자기 옆의 길을 연다. 열린 손은 잡아끄는 자세가 아니라, 필요하면 잡을 수 있도록 허리 높이에서 멈춘다.",
+            "text": "방패를 바깥쪽으로 치워 자기 옆의 길을 연다. 다른 손은 허리 높이에서 멈춘 채 공방장을 향해 열린다.",
             "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
           },
           "figure": "fig_victory",
@@ -1226,7 +1254,7 @@
           "hold": 1.0,
           "line": {
             "speaker": null,
-            "text": "하린은 손을 천천히 거두고 나란히 걸을 자세로 발끝을 돌린다. 어깨와 허리가 드러나는 기본 갑주 실루엣, 탄탄한 팔과 긴 망토가 전신 구도에서 함께 읽힌다.",
+            "text": "하린은 손을 천천히 거두고 나란히 걸을 자세로 발끝을 돌린다. 어깨와 허리가 드러나는 갑주 위로 긴 망토가 가라앉고, 탄탄한 팔의 긴장이 풀린다.",
             "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
           },
           "figure": "fig_resolve",
@@ -1240,5 +1268,6 @@
         }
       ]
     }
-  ]
+  ],
+  "idle_figure": "fig_lobby_soft"
 }
