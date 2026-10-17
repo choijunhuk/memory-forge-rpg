@@ -1,0 +1,17 @@
+add email prop: failures=2 OK-caught
+add userId in party: failures=2 OK-caught
+drop source field: failures=2 OK-caught
+field not required: failures=1 OK-caught
+open object: failures=2 OK-caught
+free text string: failures=2 OK-caught
+loose id pattern: failures=2 OK-caught
+extra event: failures=4 OK-caught
+missing event: failures=2 OK-caught
+sample rate: failures=1 OK-caught
+retention: failures=1 OK-caught
+omit w/o reason: failures=1 OK-caught
+unsupported kw: failures=1 OK-caught
+seed field: failures=2 OK-caught
+root oneOf sibling type: failures=1 OK-caught
+source row without backticks: failures=1 OK-caught
+duplicate key: OK-caught

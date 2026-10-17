@@ -288,7 +288,7 @@ P1/P2 완료로 개발을 끝내지 않는다. 이 표와 아래 장별 요구�
 | **§16.3 결정론과 숨겨진 정보** | PARTIAL(로컬 서버 경계) | [publicView][js]·[실제 서버 공개 투영/재생 검사](../reports/server_persistence_20261016/root_acceptance.md) | 개발 서버가 seed/runId 생성·명시적 공개 DTO·상태 해시 재생을 사용한다. 실제 모집 CSPRNG·운영 문의 재생·전체 공개 복구/보안 수용은 남음. |
 | **§16.4 Unity 클라이언트** | PARTIAL(실제전투·원정연습) | [S1새macOS지도시작/112Play](../reports/card_flow_20261016/root_acceptance.md)·[S2실제119Play/3Edit](../reports/card_flow_20261016/s2_root_acceptance.md)·[앞선Final물리마우스사용자보고](../reports/expedition_client_20261016/native_user_mouse_acceptance.json) | S2새native입력·전체편성/로비·계정/디스크/서버복구·Addressables/리그·AndroidIL2CPP/성능/기기는별도 |
 | **§16.5 서버** | PARTIAL(Development 앱) | [ASP.NET Core 실제 로컬 서버](../server/MemoryForge.Server/README.md)·[수용](../reports/server_persistence_20261016/root_acceptance.md) | `/dev/practice`·loopback·fixture 인증만 구현. 실제 인증/세션·계정/보유권·DB/원장·속도제한·운영 API는 별도. |
-| **§16.6 텔레메트리(이벤트 사전)** | NOT_IMPLEMENTED(전송/운영) | [이벤트 사전](source_v0.8.1/16_chapter.md)·[JS 이벤트][js] | 서버/클라이언트 계측·보관·개인정보 계약; MCP telemetry OFF와 별개 |
+| **§16.6 텔레메트리(이벤트 사전)** | PARTIAL(명세·스키마)/NOT_IMPLEMENTED(수집·전송) | [이벤트 사전 명세](../ops/telemetry/EVENTS.md)·[JSON Schema](../ops/telemetry/events.schema.json)·[스키마 시험](../ops/telemetry/test_events_schema.py)(원문 표 직접 대조, 8 PASS/1 SKIP: 로컬 jsonschema 없음) | 9개 이벤트·원문 필드·필수·10% 표본·13개월·닫힌 객체·금지 PII 이름을 강제한다. 수집·전송·저장 코드는 승인 경계라 없음. 해시 방식·봉투 필드·동의·삭제·Data safety 등 결정 대기 D-1~D-9. MCP telemetry OFF와 별개 |
 | **§16.7 버전 세 종류를 구분한다** | IMPLEMENTED(버전 구분) | [현재 상태][current]·[목표 정책][policy-data] | 문서0.8.1/데이터0.7.0/JS 수정·목표 활성 상태 계속 구분 |
 
 ## 장 17 — 17. 서버: 데이터베이스·트랜잭션·API
@@ -311,8 +311,8 @@ P1/P2 완료로 개발을 끝내지 않는다. 이 표와 아래 장별 요구�
 |---|---|---|---|
 | **§18.1 환경** | PARTIAL(로컬) | [Unity 로컬][env]·[CI][ci] | dev/staging/production 계정·DB·키·발급자 분리 미구현 |
 | **§18.2 CI/CD** | PARTIAL(CI) | [GitHub workflow][ci]·[로컬 검사][checks] | 현재 head CI와 배포를 별도 확인; staging/production 배포 미수행 |
-| **§18.3 백업·장애** | NOT_IMPLEMENTED(운영) | [백업/장애 원문](source_v0.8.1/18_chapter.md) | PITR·복구 리허설·차단 스위치·계정별 원장 보정 |
-| **§18.4 출시 요건 확인 — 미검증 체크리스트** | NOT_IMPLEMENTED(출시 수용) | [출시 체크리스트](source_v0.8.1/18_chapter.md) | 출시일 공식 조건·AAB/서명/16KB·결제·등급·개인정보·권리 검증 |
+| **§18.3 백업·장애** | PARTIAL(개발 서버 절차·파일 복원 리허설)/NOT_IMPLEMENTED(운영) | [백업·장애 명세](ops/backup_recovery.md)·[파일 저장소 복원 리허설 PASS](../reports/ops_specs_20261017/file_restore_rehearsal.json)·[리허설 도구](ops/rehearse_file_store_restore.py) | 파일 백업→복원·영수증 재생·손상 복원 거부를 1회 확인. PG 덤프 왕복 미실행, PITR 7일·스냅샷 30일·분기 일정·차단 스위치·원장 보정 우편·전원 장애 미구현. 제공자/비용·스위치 범위 결정 대기 B-1~B-4 |
+| **§18.4 출시 요건 확인 — 미검증 체크리스트** | PARTIAL(항목별 점검표)/NOT_IMPLEMENTED(출시 수용) | [출시 점검표](ops/launch_checklist.md)·[Android 실기기](../reports/android_device_20261017/README.md)·[macOS 빌드](../reports/pc_playthrough_20261017/README.md) | 확인됨: 실기기 실행·ARM64(dev)·macOS 빌드. 출시 차단 확인: 16KB(`lib_burst_generated.so` 4KB, 별도 세션 수정 중). target API는 관찰값 35·원문 가정 36↑이며 제출일 요구치 미확인. AAB/서명·결제·등급·확률 공개·개인정보·권리 미확인, 결제 보호·국가 결정 대기 |
 
 ## 장 19 — 19. 시험·검증·밸런스 목표
 
@@ -322,7 +322,7 @@ P1/P2 완료로 개발을 끝내지 않는다. 이 표와 아래 장별 요구�
 |---|---|---|---|
 | **§19.1 이번 재검증 상태** | PARTIAL | [P0][p0]·[후반][late]·[현재 환경][env] | 과거 PASS를 새 실행에 합산하지 않음; 제품 단계 수용 별도 |
 | **§19.2 엔진 단위 시험이 보장하는 것** | IMPLEMENTED(JS 시험) | [엔진 시험][engine-tests]·[회귀][review-tests]·[204개 최신 로그][receipt-engine] | 테스트 범위 밖 C#/서버/사람 플레이는 별도 |
-| **§19.3 제품 단계 인수 시험 (P1 이후 추가)** | NOT_IMPLEMENTED(제품 수용) | [제품 수용 원문](source_v0.8.1/19_chapter.md) | C#1000·서버100병렬/구매·분포·실기기/성능 인수 |
+| **§19.3 제품 단계 인수 시험 (P1 이후 추가)** | PARTIAL(일부 시험)/NOT_IMPLEMENTED(제품 수용) | [인수 시험 현황](ops/product_acceptance.md) | 같은 requestId 재시도만 개발 서버에서 통과. C#1000은 최종 스냅샷 비교(명령별 전체 비교는 5사례)·주간 보스는 DB 제약만 부분. 모집100병렬·구매 토큰·100만 회 분포·공개표 해시 미구현, 최악 화면·130%·60fps·p95 미측정 |
 | **§19.4 밸런스 목표와 현재값 (기준 전투, 시작 덱)** | PARTIAL(목표 FAIL) | [최신 확대 결과][balance-latest] | 5280회 중 미달21개; 사람10판·공명/장비 전구간 수용 필요 |
 | **§19.5 문서 보존·릴리스 검사** | IMPLEMENTED(문서 검사) | [보존 검사][doc-check]·[인계/PDF 검사][handoff] | 원문·카드·시트·프롬프트·표 행·음성 시험을 재배포마다 유지 |
 | **§19.6 같은 조건으로 비교하는 밸런스 측정** | IMPLEMENTED(측정 도구) | [짝지은 프로브][balance-code]·[최신 확대 결과][balance-latest] | 측정 성공과 목표 FAIL 구분; 사람 난도 인증 별도 |
