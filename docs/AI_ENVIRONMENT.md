@@ -161,3 +161,10 @@ UnityMCP의 실제 MemoryForgeUnity@4034a4e2fe236d6e /6000.0.46f1 Editor에 새C
 ## 2026-10-17 저장 직전 부품 — Opus High 병렬 작성
 
 공식 Opus5.5 High UI 세션 `36a97798-9701-4e6b-b293-710e6dd81eaa`와 독립 시험 세션 `0195f194-56db-453b-b50c-2f43e5c12a96`을 서로 다른 worktree에서 실제 회수했다. 모델 집계는 Opus뿐이며 기존 구독/동일 계정/유효한 추가 크레딧·자동 충전 OFF 증거를 실행기가 검증했다. Source/UI와 시험은 Claude, 독립 검토·실제 Editor 쓰기/검증은 Codex다. [수용](../reports/server_save_parts_ui_20261017/README.md): 새 파일 전체 임포트/메서드 로딩 확인 후 실제 Play309·Edit3, 실제 Core/uGUI28판정과 종료 후 부품 snapshot 재캡처/같은 요청 복구/별도 영구 저장을 확인했다. 기존 모델/구독·Private·이미지 Codex 담당을 유지하며 새 이미지 생성은 없었다.
+
+
+## 2026-10-17 진행 중 전투 조작 단위 종료
+
+기준0623d61 뒤 이미 시작한 단위에 한해 공식 Opus5.5의 UI 세션 `36a97798-9701-4e6b-b293-710e6dd81eaa`를 xhigh(구현)/High(좁은 상세 잠금 수정), 독립 시험 세션 `0195f194-56db-453b-b50c-2f43e5c12a96`을 High로 실제 회수했다. 요청/반환 모델은 고정 Opus이고 모든 결과는 원래 RECEIVED_UNVERIFIED 상태를 보존한다. Codex가 독립133/134 RED→134/134·전체316/Edit3/BCL120·실제 Core/uGUI27판정을 수행했다. [수용과 한계](../reports/server_battle_controls_20261017/README.md)를 따른다. 구독 인증/동일 계정·credits/자동 충전 OFF 사전 증거를 검사했고 유료 우회·이미지 생성은 없다.
+
+이 진행 중 단위의 Unity 단일 쓰기 담당은 Codex였다. 실제 MCP Editor Play/Console/스크린샷을 사용했으며 원래 설정 바이트를 복원했다. 이후 새 작업은 최신 AI_WORKFLOW §17의 Claude 루트 전환을 따르며 Codex가 새 Claude 작업을 배정하지 않는다. 현재 함께 수정 중인 별도 역할 정책 파일은 이 전투 기능 커밋에 섞지 않고 보존한다. 사용자 요청에 따라 새 기능을 열지 않고 [완료/미완료 인계](HANDOFF_20261017.md) 후 종료한다.

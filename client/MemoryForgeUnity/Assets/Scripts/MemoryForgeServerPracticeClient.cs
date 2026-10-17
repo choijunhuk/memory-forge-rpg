@@ -14,7 +14,7 @@ namespace MemoryForge.Client
 {
     // P1-PRACTICE-SERVER-UI §14.2/§14.3/§14.7/§17.2/§17.4: a Development-only, optional uGUI view of the local practice SERVER: one scoped
     // map → battle slice over PracticeServerSession. It renders only the server's complete public snapshot and sends only the existing
-    // commands (create, enter, play, end, the reward and node-service kinds, proceed) and pure battle queries; it never creates or
+    // commands (create, enter, play, ult, end, the reward and node-service kinds, proceed) and pure battle queries; it never creates or
     // hydrates a Run/BattleState, seeds anything or computes a cost, slot, target, legality or damage. Costs, modes, blocked[mode] (the
     // DEFAULT request only), forecasts and pick sheets
     // are the server's values; card/character names come from the existing content for display only. It does not replace the original
@@ -35,7 +35,8 @@ namespace MemoryForge.Client
     //   reservations are the server's public state.
     // - Targets: "auto" exists only in Core's pure Check; a play sends the clicked live enemy uid, or no target (Core's own rule for a
     //   single living enemy) — never a client re-target. A query answer is applied only for the selection generation and context it was
-    //   asked in. Local prototype timing (not a measurement): rows 0.2 s, a reservation resolution row the original 0.3 s, 0.6 s hold.
+    //   asked in. Local prototype timing (not a measurement): rows 0.2 s, a reservation resolution row the original 0.3 s, 0.6 s hold;
+    //   the original's display pace (Normal, Double ×0.5, Reduced: every row at once) changes only these waits, never a barrier's Continue.
     // - Services and event choices that need deck cards open a local, unsent deck sheet bound to the context it was opened in; cancel,
     //   any snapshot change (a commit, another device, a new node) and a reconnect drop it, so an old selection is never sent.
     public sealed class MemoryForgeServerPracticeClient : MonoBehaviour
@@ -98,6 +99,14 @@ namespace MemoryForge.Client
         bool barrier;
         int shown;
         float nextAt = -1, closeAt = -1;
+        // P1-SERVER-BATTLE-CONTROLS-UI: the shown presentation's title, the display pace of result rows (display only, default Normal,
+        // kept for this component only), and the read-only card detail bound to the selection generation it was opened in (-1: closed).
+        string presentationTitle = "턴 결과";
+        MemoryForgeExpeditionClient.ActionPacing actionPace = MemoryForgeExpeditionClient.ActionPacing.Normal;
+        int detailsAt = -1;
+        RectTransform? detailsContent;
+        float? detailsScrollY;
+        int detailsScrollAt = -1;
         string notice = "";
         bool noticeError;
         Text? presentationText;
@@ -162,6 +171,11 @@ namespace MemoryForge.Client
         public bool PresentationBarrier => rows != null && barrier;
         public IReadOnlyList<BattleDigestEntry> PresentationRows => rows ?? Array.Empty<BattleDigestEntry>();
         public int PresentationShown => rows == null ? 0 : shown;
+        /// <summary>The pace of result rows (display only): Normal, Double (every wait ×0.5) or Reduced (every row at once).</summary>
+        public MemoryForgeExpeditionClient.ActionPacing ActionPace => actionPace;
+        /// <summary>True while the read-only detail of the selected hand card is open (it closes with any selection, query generation,
+        /// snapshot change, pick sheet, barrier or leave).</summary>
+        public bool CardDetailsOpen => DetailsCurrent();
         public bool DeckPickOpen => deckPick != null;
         public DeckPurpose? DeckPickPurpose => deckPick?.Purpose;
         /// <summary>The first deck key chosen in the open (unsent) deck sheet; null while none is chosen or no sheet is open.</summary>
@@ -244,6 +258,7 @@ namespace MemoryForge.Client
             saveContext = null; saveSelection.Clear(); assignOpen = false; previewResult = null; previewWanted = false; saveRevision++;
             saveContent = null; saveScrollContext = null; saveScrollY = null;
             DropParts();
+            detailsAt = -1; detailsContent = null; detailsScrollY = null; detailsScrollAt = -1;
         }
         void DropParts() { partsOpen = false; partPick = null; partsContext = null; }
 
@@ -332,6 +347,7 @@ namespace MemoryForge.Client
         /// prepares it (one, unsent) during an ordinary presentation, or sends exactly one play.</summary>
         public Task<bool> ConfirmAsync()
         {
+            if (DetailsCurrent()) return Refuse(DetailsOpenText);
             if (picker != null || PresentationBarrier) return Refuse("지금은 카드를 사용할 수 없어요.");
             if (!Ready()) return Refuse(NotReady());
             if (selectedCard == null || selectedMode == null) return Refuse("사용할 카드를 먼저 골라 주세요.");
@@ -411,11 +427,77 @@ namespace MemoryForge.Client
 
         public Task<bool> EndTurnAsync()
         {
+            if (DetailsCurrent()) return Refuse(DetailsOpenText);
             // A prepared play still waiting (e.g. after skip, before its Update dispatch) is never overtaken by an end.
             if (rows != null || picker != null || prepared != null) return Refuse("지금은 턴을 마칠 수 없어요.");
             if (!CanCommand) return Refuse(NotReady());
             return Mutate((s, context) => s.CommandAsync(context, "end", null), true, true, "턴을 마쳤어요.");
         }
+
+        // ───────── battle controls (P1-SERVER-BATTLE-CONTROLS-UI): ultimate, result pace, card detail ─────────
+        // §5.10: an ultimate is the existing ult {actor, target?} command, offered from the published actors' gauge and gaugeMax only. No
+        // authored ultimate or resonance asks for picks, so none is ever sent; whether one needs a target is Core's (a single living enemy
+        // is its own choice, a missing or dead one its BAD_TARGET refusal before anything changes). There is no ult query or forecast, as in
+        // the original. Its fresh events are shown like a play's, titled with the actor and tagged by kind (ActionRowText).
+
+        /// <summary>ult {actor, target?}: a published actor whose published gauge has reached the published gaugeMax, in the live PLAYER
+        /// phase, through the existing mutation/outbox. Sends the actor and, only when one is selected, the clicked live enemy. Refused
+        /// while busy, unresolved, during a presentation, an open pick sheet or a prepared play; nothing is shown as spent before the server
+        /// answers.</summary>
+        public Task<bool> UltAsync(string actorId)
+        {
+            if (actorId == null) throw new ArgumentNullException(nameof(actorId));
+            if (DetailsCurrent()) return Refuse(DetailsOpenText);
+            if (rows != null || picker != null || prepared != null) return Refuse("지금은 필살기를 쓸 수 없어요.");
+            if (!CanCommand) return Refuse(Blocked());
+            var b = session!.State.Snapshot?.Run?.StateJObject()["battle"] as JObject;
+            if (b == null || Str(b["phase"]) != "PLAYER" || b["result"] is JObject) return Refuse("지금은 필살기를 쓸 수 없어요.");
+            var actor = Actors(b).FirstOrDefault(a => Str(a["id"]) == actorId);
+            if (actor == null) return Refuse("지금 전투에 없는 동료예요.");
+            if (!GaugeFull(actor, b)) return Refuse("필살기 게이지가 아직 차지 않았어요.");
+            var args = new JObject { ["actor"] = actorId };
+            if (target != null && Enemies().Any(e => Str(e["uid"]) == target && Bool(e["alive"]))) args["target"] = target;
+            return Mutate((s, context) => s.CommandAsync(context, "ult", args), true, false, ActorName(actor) + "의 필살기를 사용했어요.");
+        }
+
+        /// <summary>Chooses the pace of result rows (the open presentation's remaining rows and later ones). Display only: never
+        /// Time.timeScale, a request, the selection, the mode/target/picks or the prepared play; a turn or terminal barrier still waits
+        /// for Continue. False when the pace is unknown or already chosen.</summary>
+        public bool SetActionPace(MemoryForgeExpeditionClient.ActionPacing pace)
+        {
+            if (!Enum.IsDefined(typeof(MemoryForgeExpeditionClient.ActionPacing), pace) || pace == actionPace) return false;
+            actionPace = pace;
+            if (rows != null) Advance(Time.realtimeSinceStartup);
+            Render();
+            return true;
+        }
+
+        /// <summary>Opens the read-only detail of the selected hand card: the current battle query's server name and text, the published
+        /// modes, costs, default-request verdicts and parts. Asks and sends nothing; changes no selection, target, mode, pick sheet or
+        /// prepared play. Refused without a selected hand card, with a pick sheet open or during a barrier.</summary>
+        public bool OpenCardDetails()
+        {
+            if (selectedCard == null || Hand(selectedCard) == null || picker != null || PresentationBarrier || Snapshot?.Run?.Phase != "BATTLE") return false;
+            detailsAt = generation;
+            Render();
+            return true;
+        }
+
+        public void CloseCardDetails()
+        {
+            if (detailsAt < 0) return;
+            detailsAt = -1;
+            Render();
+        }
+
+        // The open detail is modal for the manual commands (ConfirmAsync, EndTurnAsync, UltAsync refuse first, changing nothing); the
+        // already-prepared play keeps its own dispatch (DispatchPrepared/SendPlayAsync are not gated here).
+        const string DetailsOpenText = "카드 설명 창을 먼저 닫아 주세요. 보낸 것은 없어요.";
+        // The detail belongs to the selection generation it was opened in: a card/mode/enemy selection, a pick sheet, a snapshot change
+        // (a commit, refresh or the prepared play's own dispatch) and a leave move the generation on and so close it, as do a barrier and
+        // leaving the battle. A query answer for the same generation only fills it in.
+        bool DetailsCurrent() => detailsAt >= 0 && detailsAt == generation && selectedCard != null && picker == null && !PresentationBarrier
+            && Snapshot?.Run?.Phase == "BATTLE" && Hand(selectedCard) != null;
 
         // ───────── battle reward (P1-SERVER-REWARD-UI): one existing command per button ─────────
 
@@ -1099,28 +1181,51 @@ namespace MemoryForge.Client
             var list = barrier ? built.ToList() : built.Where(r => !Decoration(r)).ToList();
             if (list.Count == 0) return;
             rows = list.AsReadOnly(); shown = 0; nextAt = Time.realtimeSinceStartup; closeAt = -1;
+            presentationTitle = UltTitle(before, events) ?? (endTurn ? "턴 결과"
+                : list.Any(r => r.Kind == BattleDigestKind.ReservationPlayed) ? "예약 결과" : "카드 사용 결과");
         }
 
+        // The fresh receipt's own ult event names whose ultimate this is (its actor, as the battle before the command published it).
+        string? UltTitle(PracticeSnapshot before, JArray events)
+        {
+            var ult = events.OfType<JObject>().FirstOrDefault(e => Str(e["e"]) == "ult");
+            if (ult == null) return null;
+            string? id = Str(ult["actor"]);
+            var b = Battle(before);
+            var actor = b == null ? null : Actors(b).FirstOrDefault(a => Str(a["id"]) == id);
+            return (actor != null ? ActorName(actor) : CharacterName(id)) + " 필살기 결과";
+        }
+
+        // Display pace only: Double halves every wait, Reduced shows every row at once (a barrier still waits for Continue).
+        float PaceScale => actionPace == MemoryForgeExpeditionClient.ActionPacing.Double ? 0.5f : 1f;
         void Advance(float now)
         {
             if (rows == null) return;
+            if (actionPace == MemoryForgeExpeditionClient.ActionPacing.Reduced && shown < rows.Count)
+            {
+                shown = rows.Count;
+                UpdatePresentation();
+                return;
+            }
             if (shown < rows.Count)
             {
                 if (now < nextAt) return;
                 shown++;
-                nextAt = now + (shown < rows.Count && rows[shown].IsReservedResolution ? ReservedRowSeconds : RowSeconds);
+                nextAt = now + (shown < rows.Count && rows[shown].IsReservedResolution ? ReservedRowSeconds : RowSeconds) * PaceScale;
                 UpdatePresentation();
                 return;
             }
             if (barrier) return;
-            if (closeAt < 0) closeAt = now + HoldSeconds;
+            if (closeAt < 0) closeAt = now + HoldSeconds * PaceScale;
             else if (now >= closeAt) ClosePresentation();
         }
 
         void UpdatePresentation()
         {
             if (rows == null) return;
-            if (presentationText != null) presentationText.text = string.Join("\n", rows.Take(shown).Select(r => r.Text).Reverse().Take(barrier ? 14 : 3).Reverse());
+            // Each row with its kind tag ([사용]·[예약]·[해결]·[메아리]·[반격]·[필살기]·[유물]), exactly as the original labels them.
+            if (presentationText != null)
+                presentationText.text = string.Join("\n", rows.Take(shown).Select(MemoryForgeExpeditionClient.ActionRowText).Reverse().Take(barrier ? 14 : 3).Reverse());
             if (continueButton != null) continueButton.interactable = shown >= rows.Count;
         }
 
@@ -1176,6 +1281,10 @@ namespace MemoryForge.Client
         JObject? Battle() => State()?["battle"] as JObject;
         JObject? Hand(string uid) => (Battle()?["hand"] as JArray)?.OfType<JObject>().FirstOrDefault(c => Str(c["uid"]) == uid);
         List<JObject> Enemies() => (Battle()?["enemies"] as JArray)?.OfType<JObject>().ToList() ?? new List<JObject>();
+        static List<JObject> Actors(JObject battle) => ((battle["actors"] as JArray) ?? new JArray()).OfType<JObject>().ToList();
+        // The published gauge against the published gaugeMax (both required; nothing is assumed when either is missing).
+        static bool GaugeFull(JObject actor, JObject battle) => Int(actor["gauge"]) is int gauge && Int(battle["gaugeMax"]) is int max && gauge >= max;
+        string ActorName(JObject actor) => Str(actor["name"]) ?? CharacterName(Str(actor["id"]));
         HashSet<string> Available() => new HashSet<string>(((State()?["available"] as JArray) ?? new JArray()).Select(Str).OfType<string>(), StringComparer.Ordinal);
         List<JObject> Deck() => ((State()?["deck"] as JArray) ?? new JArray()).OfType<JObject>().ToList();
         JObject? DeckCard(string? key) => key == null ? null : Deck().FirstOrDefault(c => Str(c["key"]) == key);
@@ -1199,6 +1308,7 @@ namespace MemoryForge.Client
             if (!isActiveAndEnabled || font == null || !Application.isPlaying) return;
             // The offset the player scrolled the save list to (SaveView restores it only for the same context).
             saveScrollY = saveContent != null ? saveContent.anchoredPosition.y : (float?)null;
+            detailsScrollY = detailsContent != null ? detailsContent.anchoredPosition.y : (float?)null;
             RemoveView();
             var canvasObject = new GameObject(OwnedCanvas, typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
             canvasObject.transform.SetParent(transform, false);
@@ -1239,6 +1349,7 @@ namespace MemoryForge.Client
                 if (deckPick != null) DeckPickView();
                 if (assignOpen && SaveState(snap) != null) AssignView();
                 if (partsOpen && SaveState(snap) != null) SavePartsView();
+                if (DetailsCurrent()) CardDetailsView();
                 if (rows != null && barrier) BarrierView();
             }
             if (factory != null && EventSystem.current == null)
@@ -1823,15 +1934,14 @@ namespace MemoryForge.Client
             var b = Battle()!;
             // Party
             var party = Box(frame!, "Party", 32, 96, 380, 264, Panel);
-            Label(party, "파티 체력  " + Int(b["hp"]) + " / " + Int(b["maxHp"]), 18, 10, 344, 34, 26, Ink, FontStyle.Bold);
-            Bar(party, 18, 50, 344, 10, Int(b["hp"]) ?? 0, Int(b["maxHp"]) ?? 0, Memory);
-            Label(party, "방어 " + Int(b["block"]) + "   ·   " + Int(b["turn"]) + "턴", 18, 72, 344, 30, 22, Ink);
-            Label(party, "행동력  " + Int(b["ap"]), 18, 108, 344, 44, 36, Brass, FontStyle.Bold);
+            Label(party, "파티 체력  " + Int(b["hp"]) + " / " + Int(b["maxHp"]), 18, 8, 344, 30, 24, Ink, FontStyle.Bold);
+            Bar(party, 18, 42, 344, 8, Int(b["hp"]) ?? 0, Int(b["maxHp"]) ?? 0, Memory);
+            Label(party, "방어 " + Int(b["block"]) + "   ·   " + Int(b["turn"]) + "턴", 18, 56, 184, 30, 20, Ink);
+            Label(party, "행동력  " + Int(b["ap"]), 206, 52, 156, 36, 28, Brass, FontStyle.Bold);
             var piles = b["piles"] as JObject;
             Label(party, "뽑을 더미 " + Int(piles?["draw"]) + " · 손패 " + Int(piles?["hand"]) + " · 버린 더미 " + Int(piles?["discard"]) + " · 소멸 " + Int(piles?["exhaust"]),
-                18, 162, 344, 56, 19, Muted);
-            var actors = ((b["actors"] as JArray) ?? new JArray()).OfType<JObject>().Select(a => Str(a["name"]) ?? CharacterName(Str(a["id"])));
-            Label(party, string.Join(" · ", actors), 18, 222, 344, 34, 19, Muted);
+                18, 88, 344, 40, 16, Muted);
+            ActorsView(party, b);
 
             // Enemies (public HP, block, alive, current and next intent as published)
             var enemies = Enemies();
@@ -1860,18 +1970,52 @@ namespace MemoryForge.Client
                 .Select(r => CardName(Str(r["id"])) + " (" + Int(r["due"]) + "턴)").ToList();
             Label(board, reserved.Count == 0 ? "예약된 카드 없음" : string.Join(" · ", reserved), 450, 10, 534, 94, 18, reserved.Count == 0 ? Muted : Ink);
 
-            // Ordinary action presentation strip (text only; the next selection stays open)
+            // Ordinary action presentation strip (text only; the next selection stays open): its title, the display pace and skip.
             var strip = Box(frame!, "Presentation", 1048, 370, 520, 112, Panel);
-            presentationText = Label(strip, "", 14, 8, 380, 96, 17, Memory);
+            Label(strip, rows != null && !barrier ? presentationTitle : "행동 결과", 14, 6, 182, 28, 18, Brass, FontStyle.Bold);
+            PaceButton(strip, MemoryForgeExpeditionClient.ActionPacing.Normal, "보통", 200, 84);
+            PaceButton(strip, MemoryForgeExpeditionClient.ActionPacing.Double, "2배속", 288, 96);
+            PaceButton(strip, MemoryForgeExpeditionClient.ActionPacing.Reduced, "동작 줄이기", 388, 124);
+            presentationText = Label(strip, "", 14, 40, 380, 68, 16, Memory);
             if (rows != null && !barrier)
             {
-                Button(strip, "SkipPresentation", "건너뛰기", 404, 30, 104, 52, SkipPresentation, Line, 19);
+                Button(strip, "SkipPresentation", "건너뛰기", 404, 44, 104, 60, SkipPresentation, Line, 19);
                 UpdatePresentation();
             }
             else presentationText.text = prepared != null ? "사용 대기: " + CardName(Str(Hand(prepared.Uid)?["id"])) : "";
 
             HandView(b);
             ActionView();
+        }
+
+        // §5.10: every published actor (never capped or cut: the rows scroll) with its published gauge/gaugeMax and one ult button. The
+        // button opens only for a full gauge in the live PLAYER phase while a new command may be sent; the gauge shown is the server's.
+        void ActorsView(Transform party, JObject b)
+        {
+            var actors = Actors(b);
+            int? max = Int(b["gaugeMax"]);
+            bool open = CanCommand && Str(b["phase"]) == "PLAYER" && !(b["result"] is JObject);
+            var list = Scroll(party, "Actors", 8, 130, 364, 128, 364, actors.Count * 42, Panel);
+            for (int i = 0; i < actors.Count; i++)
+            {
+                var actor = actors[i];
+                string id = Str(actor["id"]) ?? "";
+                int? gauge = Int(actor["gauge"]);
+                bool full = GaugeFull(actor, b);
+                float y = i * 42;
+                Label(list, ActorName(actor) + "  " + (gauge?.ToString() ?? "-") + " / " + (max?.ToString() ?? "-"), 8, y + 1, 216, 26, 18, full ? Brass : Ink);
+                Bar(list, 8, y + 29, 216, 6, gauge ?? 0, max ?? 0, Brass);
+                Button(list, "Ult:" + id, full ? "필살기" : "충전 중", 232, y + 2, 124, 38, () => Launch(() => UltAsync(id)), full ? Brass : Line, 18)
+                    .interactable = full && open;
+            }
+            if (actors.Count == 0) Label(list, "서버가 동료 정보를 보내지 않았어요.", 8, 8, 340, 30, 17, Muted);
+        }
+
+        // One display-pace choice of the strip (the chosen one marked); changing it sends nothing.
+        void PaceButton(Transform strip, MemoryForgeExpeditionClient.ActionPacing pace, string caption, float x, float width)
+        {
+            bool chosen = pace == actionPace;
+            Button(strip, "Pace:" + pace, (chosen ? "● " : "") + caption, x, 4, width, 30, () => SetActionPace(pace), chosen ? Memory : Line, 15);
         }
 
         void HandView(JObject b)
@@ -1898,6 +2042,7 @@ namespace MemoryForge.Client
             if (card == null)
             {
                 Label(panel, "손패의 카드를 누르면 서버의 비용과 예상을 보여 줘요.", 18, 14, 1100, 36, 22, Muted);
+                Label(panel, "필살기는 왼쪽 동료의 버튼으로 써요. 적이 여럿일 때 대상이 필요한 필살기는 적을 먼저 눌러 골라 주세요.", 18, 58, 1100, 34, 19, Muted);
             }
             else
             {
@@ -1917,6 +2062,9 @@ namespace MemoryForge.Client
                     button.interactable = !SelectionLocked();
                 }
                 if (modes.Count == 0) Label(panel, ErrorText(Str(card["error"]) ?? ""), 790, 20, 380, 60, 18, Danger);
+                // The summary above is cut to its box; the detail shows the whole server text in a scroll (read-only, sends nothing).
+                Button(panel, "OpenCardDetails", "카드 설명 전체 보기", 790, 116, 240, 44, () => OpenCardDetails(), Line, 18)
+                    .interactable = picker == null && !PresentationBarrier;
             }
             var confirm = Button(panel, "Confirm", rows != null && !barrier ? "사용 대기" : "사용 확정", 1190, 14, 160, 92, () => Launch(ConfirmAsync), Brass, 24);
             confirm.interactable = card != null && !busy && session != null && session.State.CanMutate && picker == null && !PresentationBarrier && prepared == null;
@@ -1964,11 +2112,83 @@ namespace MemoryForge.Client
             var blocker = Box(frame!, "ResultBlocker", 0, 0, 1600, 900, new Color(0, 0, 0, 0.7f));
             blocker.GetComponent<Image>().raycastTarget = true;
             var p = Box(frame!, "ResultSheet", 260, 90, 1080, 720, Panel);
-            Label(p, "턴 결과", 32, 16, 900, 46, 32, Brass, FontStyle.Bold);
+            Label(p, presentationTitle, 32, 16, 900, 46, 32, Brass, FontStyle.Bold);
             presentationText = Label(p, "", 32, 76, 1016, 520, 21, Ink);
             Button(p, "ResultSkip", "모두 보기", 32, 620, 300, 76, SkipPresentation, Line, 24);
             continueButton = Button(p, "ResultContinue", "계속", 748, 620, 300, 76, ContinuePresentation, Brass, 24);
             UpdatePresentation();
+        }
+
+        // The read-only detail of the selected hand card (the original's card-info sheet) above the battle: the current battle query's
+        // server name and full text (its effective BattleText), the published modes with cost and default-request verdict, the attached
+        // parts with their texts and the current forecast. Every block grows to its wrapped height and the body scrolls, so nothing is cut
+        // off; a missing server value is said to be missing and nothing is predicted here. The prepared play keeps its own dispatch.
+        void CardDetailsView()
+        {
+            var card = Hand(selectedCard!)!;
+            var view = QueryCurrent() ? queryResult!.View : null;
+            var source = view?.ToJObject()["source"];
+            string? serverName = Str(source?["name"]), serverText = Str(source?["text"]);
+            bool loading = view == null && (busy || queryWanted);
+            var blocker = Box(frame!, "CardDetailsBlocker", 0, 0, 1600, 900, new Color(0, 0, 0, 0.6f));
+            blocker.GetComponent<Image>().raycastTarget = true;
+            var p = Box(frame!, "CardDetailsSheet", 240, 80, 1120, 740, Panel);
+            Label(p, serverName ?? CardName(Str(card["id"])) + (Bool(card["plus"]) ? "+" : ""), 24, 14, 920, 52, 30, Ink, FontStyle.Bold);
+            Button(p, "CloseCardDetails", "닫기", 960, 12, 136, 56, CloseCardDetails, Line, 22);
+            var content = Scroll(p, "CardDetailsScroll", 24, 80, 1072, 636, 1072, 636, Background);
+            string basis = view == null
+                ? (loading ? "서버 설명을 불러오는 중이에요." : "서버 설명을 지금 받지 못했어요.") + " 위 이름은 이 기기의 콘텐츠 기준이에요."
+                : "서버 전투 조회의 현재 설명 · " + ModeName(view.Mode) + " " + TargetText() + (serverName == null ? " · 서버가 이름을 보내지 않아 이 기기의 이름을 보여 줘요" : "");
+            float y = Flow(content, basis, 12, 19, Memory);
+            string body = view == null ? (loading ? "설명을 불러오는 중이에요…" : "설명을 받지 못했어요. 창을 닫고 카드를 다시 골라 주세요.")
+                : serverText ?? "서버가 이 카드의 설명을 보내지 않았어요.";
+            y = Flow(content, body, y, 24, serverText != null ? Ink : Muted, "CardDetailsBody");
+            y = Flow(content, ModesText(card), y, 20, Brass);
+            string parts = PartsText(card);
+            if (parts.Length != 0) y = Flow(content, parts, y, 19, Ink);
+            y = Flow(content, view == null ? "예상: 서버 조회를 기다리는 중이에요." : (view.ForecastError != null ? "지금 이 요청으로는 쓸 수 없어요: " : "") + ForecastText(view),
+                y, 19, view?.ForecastError != null ? Danger : Memory);
+            content.sizeDelta = new Vector2(1072, Math.Max(636, y));
+            content.parent.GetComponent<ScrollRect>().vertical = y > 636;
+            // A redraw of the same open detail keeps where the player scrolled (clamped to the new content).
+            if (detailsScrollY != null && detailsScrollAt == detailsAt)
+                content.anchoredPosition = new Vector2(0, Mathf.Clamp(detailsScrollY.Value, 0, Math.Max(0, y - 636)));
+            detailsContent = content; detailsScrollAt = detailsAt;
+        }
+        // A label that grows to its wrapped height (no best fit, no truncation); returns the y below it.
+        float Flow(RectTransform content, string value, float y, int size, Color color, string name = "Text")
+        {
+            var text = Label(content, value, 16, y, 1040, 10, size, color);
+            text.gameObject.name = name;
+            text.resizeTextForBestFit = false; text.verticalOverflow = VerticalWrapMode.Overflow;
+            float height = Mathf.Ceil(text.preferredHeight) + 6;
+            text.rectTransform.sizeDelta = new Vector2(1040, height);
+            return y + height + 14;
+        }
+        // The published modes of a hand card with each cost and the default-request verdict (blocked[mode]: auto target, no picks; shown,
+        // never enforced here); the selected one marked.
+        string ModesText(JObject card)
+        {
+            var modes = (card["modes"] as JArray)?.Select(Str).OfType<string>().ToList() ?? new List<string>();
+            if (modes.Count == 0) return "사용 방식 없음 · " + ErrorText(Str(card["error"]) ?? "");
+            return "사용 방식 (서버 공개 값)\n" + string.Join("\n", modes.Select(mode =>
+            {
+                string? blocked = Str((card["blocked"] as JObject)?[mode]);
+                return (mode == selectedMode ? "● " : "· ") + ModeName(mode) + " · 행동력 " + (Int((card["costs"] as JObject)?[mode])?.ToString() ?? "-")
+                    + (blocked != null ? " · 기본 요청: " + ErrorText(blocked) : "");
+            }));
+        }
+        // The card's attached circuit/engraving parts and temporary parts with their content texts; an id this device cannot name is
+        // still listed as it is published.
+        string PartsText(JObject card)
+        {
+            var slots = card["mods"] as JObject;
+            var ids = new[] { Str(slots?["c"]), Str(slots?["e"]) }.OfType<string>().Where(m => m.Length != 0)
+                .Concat(((card["temp"] as JArray) ?? new JArray()).Select(Str).OfType<string>()).ToList();
+            if (ids.Count == 0) return "";
+            return "부품\n" + string.Join("\n", ids.Select(id => partNames.ContainsKey(id)
+                ? "· " + PartName(id) + (SlotName(id).Length != 0 ? " (" + SlotName(id) + ")" : "") + (partTexts.TryGetValue(id, out var text) && text.Length != 0 ? " — " + text : "")
+                : "· 이 기기에서 이름을 모르는 표시: " + id));
         }
 
         // ───────── text (labels of server values; no rule is computed) ─────────
@@ -2205,7 +2425,7 @@ namespace MemoryForge.Client
         void RemoveView()
         {
             var previous = canvasRoot != null ? canvasRoot : transform.Find(OwnedCanvas);
-            canvasRoot = null; frame = null; presentationText = null; continueButton = null; saveContent = null;
+            canvasRoot = null; frame = null; presentationText = null; continueButton = null; saveContent = null; detailsContent = null;
             if (previous == null) return;
             previous.gameObject.SetActive(false);
             Destroy(previous.gameObject);

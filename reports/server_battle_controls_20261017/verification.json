@@ -1,0 +1,89 @@
+{
+  "scope": "Development server battle UI, not whole-game completion",
+  "source_base": "0623d61bb1ee016b082281054bcd7165d8c01de2",
+  "source_sha256": {
+    "client/MemoryForgeUnity/Assets/Scripts/MemoryForgeServerPracticeClient.cs": "28eeb2f6e6b299b0f484c2e79349f1424727df344659a1bc42d18150c01c9a58",
+    "client/MemoryForgeUnity/Assets/Tests/PlayMode/PracticeServerBattleControlsPlayModeTests.cs": "5fed2357ef4b6c9b4f6d8751403fd5742f30951bda69fab1eb55e52806caa1db"
+  },
+  "unity": "6000.0.46f1",
+  "editor_instance": "MemoryForgeUnity@4034a4e2fe236d6e",
+  "class_initial": {
+    "total": 134,
+    "passed": 133,
+    "failed": 1,
+    "file": "class_initial_failed.json"
+  },
+  "class_final": {
+    "total": 134,
+    "passed": 134,
+    "failed": 0,
+    "file": "class_final.json"
+  },
+  "play_final": {
+    "total": 316,
+    "passed": 316,
+    "failed": 0,
+    "skipped": 0,
+    "file": "play_final.json"
+  },
+  "edit_final": {
+    "total": 3,
+    "passed": 3,
+    "failed": 0,
+    "file": "edit_final.json"
+  },
+  "same_current_source_BCL_NUnit": {
+    "passed": 120,
+    "failed": 0
+  },
+  "actual_core_http_ugui": {
+    "passed_assertions": 27,
+    "file": "actual_ui_result.json",
+    "profile": "isolated trusted development solo Nia level60/res0; gauge0 earned to100 by15 normal commands and27 pure queries; not normal progression/balance"
+  },
+  "console": {
+    "errors": 0,
+    "warnings": 2,
+    "description": "existing Metal memoryless depth warnings",
+    "file": "console_final.json"
+  },
+  "review": {
+    "author": "official Claude Code2.1.285 Opus5.5 UI xhigh + independent tests High; bounded repair High",
+    "independent_reviewer_and_execution": "Codex",
+    "defect": "Details modal did not gate direct manual Confirm/End/Ult calls",
+    "fix": "gate those three manual entry points only; keep prepared dispatch and global CanCommand unchanged",
+    "red_then_green": true
+  },
+  "unchanged": [
+    "Core",
+    "server",
+    "original design and numerical data",
+    "RNG/targeting/time reservation rules",
+    "scenes/prefabs",
+    "dependencies",
+    "input manifest",
+    "original editor settings bytes"
+  ],
+  "not_run": [
+    "physical pointer/touch",
+    "Android/IL2CPP/new standalone",
+    "130% text and worst-density visual acceptance",
+    "all10 actual charged ultimates/real Sera multi-target case",
+    "production auth/accounts/PG UI/load/payment"
+  ],
+  "billing": "included subscriptions only; preflight account match and Usage credits/auto reload OFF; no paid/provider fallback",
+  "remote_ci": "must be verified for resulting full commit SHA after push; not inferred from prior passes",
+  "final_repository_checks": {
+    "docs_tests": 9,
+    "handoff_tests": 31,
+    "git_diff_check": "pass",
+    "file": "final_repository_checks.json"
+  },
+  "editor_end_state": {
+    "playing": false,
+    "scene": "Assets/Scenes/MemoryForgeServerPractice.unity",
+    "dirty": false,
+    "enterPlayModeOptions": 0,
+    "protected_file_hashes": "protected_file_checks.json"
+  }
+}

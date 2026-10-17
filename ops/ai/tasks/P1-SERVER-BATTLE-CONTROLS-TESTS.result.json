@@ -1,0 +1,29 @@
+{
+  "task_id": "P1-SERVER-BATTLE-CONTROLS-TESTS",
+  "run_id": "P1-SERVER-BATTLE-CONTROLS-TESTS-20261017T085848819524Z",
+  "status": "RECEIVED_UNVERIFIED",
+  "requestedEffort": "high",
+  "requestedModel": "claude-opus-5-5",
+  "mcp_profile": "none",
+  "process_exit": 0,
+  "changes_verified": false,
+  "raw_output": "ops/ai/local/P1-SERVER-BATTLE-CONTROLS-TESTS-20261017T085848819524Z*",
+  "billing_verified_at": "2026-10-17T05:01:40.332532+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "codex/claude-save-parts-tests-20261017",
+  "base_commit": "062caf89782fdd6fda9d7e0c317a06483fb67ce5",
+  "worktree": "/Users/choi/.codex/worktrees/claude-save-parts-tests/Memory_forge",
+  "allowed_files": [
+    "client/MemoryForgeUnity/Assets/Tests/PlayMode/PracticeServerBattleControlsPlayModeTests.cs"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "0195f194-56db-453b-b50c-2f43e5c12a96",
+  "subtype": "success",
+  "is_error": false,
+  "result": "I've written 7 UnityTests for the server battle controls (ultimates, action pace, card details). **None were run (NOT_RUN):** this job had no Bash or Unity access, so the file hasn't even been compiled. It also can't pass yet: `UltAsync`, `CardDetailsOpen`, `OpenCardDetails` and `CloseCardDetails` don't exist anywhere in `client/`. `ActionPace`/`SetActionPace` and `ActionRowText` only exist on `MemoryForgeExpeditionClient`, not on the server client. You'll need to compile and run them in Unity once the main UI lane is merged.\n\n**Changed file (only this one):** `client/MemoryForgeUnity/Assets/Tests/PlayMode/PracticeServerBattleControlsPlayModeTests.cs`. It's a `partial class PracticeServerSessionPlayModeTests` under `UNITY_5_3_OR_NEWER` that reuses the shared fixture helpers, plus `Pierce`/`Precise`/`ButtonText` from the save/parts test file. Nothing is copied or inherited, and no base test or production code was edited.\n\n**Tests:**\n1. **Ultimate readiness and exact args:** the 3 ultimate buttons and 5 enemy buttons are all on screen and none overlap. Readiness comes from the published gauge against `gaugeMax`, so yuri at 60/100 and an unpublished actor send nothing. With no target the body is exactly `{actor}`. A live enemy can be picked without a hand card, giving `{actor, target}` at expectedVersion 4, a fallen enemy can't be picked, and no query is asked. Outside the live PLAYER phase a full gauge sends nothing.\n2. **`BAD_TARGET` refusal:** the request is cleared and the usual refusal message (\"반영되지 않았어요\") appears. Version, gauge and enemy HP stay the same and nothing is presented.\n3. **Double click and lost reply:** the second click is refused, there's no optimistic gauge, everything is blocked while unresolved, the retry sends the same bytes, and the fixture server spends the gauge only once.\n4. **Row tags:** the ultimate's rows carry `[필살기]` and their panel is titled with \"세라\". A card play shows `[사용]` without `[필살기]`. The end-turn barrier shows `[반격]` and waits for Continue.\n5. **Pace:** Normal is the start value. Choosing the same pace or an unknown one returns false, and the `Pace:` buttons exist. Changing pace keeps the card, mode, target and current query, and sends nothing. `Time.timeScale` never changes. Under Reduced, Double and Normal, the turn barrier reveals every row, blocks a new ultimate, and still hasn't closed by itself after 2.5 s.\n6. **Prepared card:** it survives opening the details and switching to Double then Reduced, and still blocks an ultimate. It then goes out through the existing dispatch with the same body at version 4, and the now-stale details close.\n7. **Card details:** the server's long source text appears in full in `CardDetailsBody`. It isn't best-fit, the label is as tall as its wrapped text, it scrolls inside `CardDetailsScroll`, and it's read-only. Part names (정밀 회로/관통) show. Opening or closing asks nothing and sends nothing, and Confirm, ultimate and end turn are refused while open. Details close on a selection change (or that change is refused while they're open), on a refresh into a new context, and on leaving. A source with no name or text shows a non-empty \"unavailable\" message, never the old text or \"null\".\n\n**Assumptions the main UI lane needs to match:**\n- An `Ult:<id>` button exists for every published actor, disabled when not ready.\n- `OpenCardDetails()` returns false with no card selected and true while a prepared card is waiting.\n- The details overlay blocks Confirm, ultimate and end turn, but doesn't cancel a prepared card.\n- The ultimate's title text sits in the same panel as its rows.\n- The turn barrier still uses the existing `ResultContinue` button.\n- Refresh is still allowed while the details are open.\n\n**Limits:**\n- All replies are fixture data standing in for Core. Gauges, damage, events and the source name/text are written in the test; this isn't real Core or the real `BattleText`.\n- The only exact wording checked is the tags `[필살기]`/`[사용]`/`[반격]`, the actor name \"세라\", the content part names, and the existing refusal message.\n- No picker test for ultimates, because none needs manual picks.\n\n**Next:** the main UI lane implements the agreed API, then Root compiles and runs these tests with the existing save, parts and services tests, and checks the real Core battle in the actual UI.",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ]
+}

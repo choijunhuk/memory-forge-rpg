@@ -1,0 +1,26 @@
+{
+  "docs": {
+    "command": [
+      "npm",
+      "run",
+      "test:docs"
+    ],
+    "exit": 0
+  },
+  "handoff": {
+    "command": [
+      "npm",
+      "run",
+      "test:handoff"
+    ],
+    "exit": 0
+  },
+  "diff": {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit": 0
+  }
+}
