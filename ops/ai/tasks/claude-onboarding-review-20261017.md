@@ -37,3 +37,29 @@ Round 1 returned CHANGES_REQUESTED with six findings. The author changed, in the
 6. The additive scene load is unloaded in `UnityTearDown`; tests now cover the lesson-2 reservation through the real buttons, a wrong end-turn at `reserve.confirm`, close-without-save then a second save screen, and disable/enable.
 
 Batchmode Unity runs (this worktree): onboarding class 5/5 PASS (explicit screenshot test separate). Please re-check the six findings and anything new; same classification and verdict format.
+
+## Round 3 (after fixes for round-2 thread 01a14a74-1d7b-7192-9a0c-aa04ef18ff6a)
+
+Round 2 returned CHANGES_REQUESTED with three P2 findings. Changes since (same three files; commits 7b99a77, 67cf8b1 and the uncommitted working tree):
+
+1. `battle.confirm` / `battle.ult` finish on a command committed after the mark: an open action display that is a different instance (`ReferenceEquals`) from the one at the mark, with a CardPlayed/ReservationPlayed (or UltimateDamage) row — so switching cards counts any real play, and an older display never counts.
+2. `reserve.confirm` finishes only on a new `next` reservation; its Alt shows unless the selected mode is `next`; `reserve.timeline` shows only with a `next` reservation on the timeline.
+3. `battle.ult` is Core, so lesson 3 needs the ultimate. Boss steps have `OwnBattle = true`: they may follow lesson 3 inside the boss fight (the boss is lesson 4's only battle); otherwise lessons still start in a later battle.
+4. Highlights skip the mode button that is already selected (so the next control is outlined).
+5. New per root request: stable object names — root `Guide`, `Guide:Panel`, `Guide:Text`, `Guide:Next` (acknowledge), `Guide:Skip`, and one `GuideHighlight:<target name>` group per outlined control with `Top`/`Bottom`/`Left`/`Right` edges. The edges pulse (1.2 s) unless the client's pace is `Reduced` (동작 줄이기).
+6. Test 1 now follows the guide through a whole short expedition (seed 1234): cleared, 6 battles, steps after lesson 2 were battle.break, battle.ult, boss.timing, boss.after, save — so §14.5 ①–⑤ are all reached with the original numbers. Test clicks call `Canvas.ForceUpdateCanvases()` first (a view rebuilt in the same frame's Update was raycast before layout).
+
+Batchmode Unity: onboarding class 5/5 PASS. Context: the root branch adds `MemoryForgeUiSkin.cs`, which decorates `ExpeditionFrame`, `Enemy:<uid>`, `Party/Ult:<id>` and the "파티 체력" text by name and adds `UiSkin*` images (first sibling, non-raycast); the guide renames none of the client's objects. Please re-check the three findings and anything new (blocking = implementation_defect or design_mismatch that breaks the brief); same format and verdict.
+
+## Round 4 (after fixes for round-3 thread 01a14bb9-89f7-7890-b9f0-f7d6dc0a54b6)
+
+Round 3: CHANGES_REQUESTED, one P2 and one P3.
+
+1. P2 fixed: `OnboardingMark.Battle` records the battle key; `battle.ult`'s gauge comparison holds only when `c.BattleKey == m.Battle`. New regression test `UltimateStepComparesGaugesOnlyWithinTheBattleItWasMarkedIn` (a full gauge marked in another battle is not done in a fresh battle; positive control in the same battle).
+2. P3 adopted: the full-run test now asserts outcome `clear` and the boss steps unconditionally.
+
+Batchmode Unity: onboarding class 6/6 PASS (explicit capture skipped); full PlayMode before this fix 320/322 (pre-existing batchmode failure `PracticeServerSessionPlayModeTests.CardDetails…` that also fails without these files; explicit capture skipped), EditMode 3/3. Please re-check; verdict APPROVE if no blocking defect remains.
+
+## Round 5 (after fixes for round-4 thread 01a14bbc-c335-7c01-bad1-7da92af18f74)
+
+Round 4: CHANGES_REQUESTED, one P2 (`battle.hand` finished by the next turn's auto-selected card). Fixed: `battle.hand` is done only by a real hand press (`HandClicked`) or a chosen mode; the selected-card-change condition is removed. New regression test `HandStepNeedsARealHandPressNotTheNextTurnsAutoSelection` (end turn without a press keeps the step open and unrecorded; a real hand press finishes it). Onboarding class 7/7 PASS. Please re-check; APPROVE if no blocking defect remains.

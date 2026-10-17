@@ -39,7 +39,7 @@ namespace MemoryForge.Client
     /// <summary>The public state when a step became the current one, so its Done can tell what the player changed since.</summary>
     public sealed class OnboardingMark
     {
-        public string? Card;
+        public string? Card, Battle; // Battle: the battle (run@node) the mark was taken in
         public object? Rows; // the action display open at the mark (a newer one is a newer command)
         public int Turn;
         public long Memory;
@@ -106,7 +106,8 @@ namespace MemoryForge.Client
                 Id = "battle.hand", Lesson = 1, Core = true, Targets = new[] { "Hand" },
                 Text = "아래 손패가 이번 턴에 쓸 카드예요. 카드에 적힌 행동력만큼 오른쪽 위 행동력이 줄어요. 카드 하나를 눌러 보세요.",
                 Show = c => c.PlayerTurn && c.Client.SelectedMode == null,
-                Done = (c, m) => c.HandClicked || c.Client.SelectedMode != null || c.Client.SelectedCard != m.Card
+                // A real press: the client auto-selects a card on its own (a new turn, a played card), so a changed selection is no proof.
+                Done = (c, m) => c.HandClicked || c.Client.SelectedMode != null
             },
             new OnboardingStep
             {
@@ -192,7 +193,7 @@ namespace MemoryForge.Client
                 Text = "캐릭터 게이지가 가득 차면 '필살기'를 쓸 수 있어요. 대상이 필요하면 먼저 적을 골라요. '필살기'를 눌러 보세요.",
                 Show = c => CanEndTurn(c) && c.Ready("Ult:*") != null,
                 Done = (c, m) => Committed(c, m, BattleDigestKind.UltimateDamage)
-                    || (c.Battle != null && c.Battle.Actors.Any(a => m.ReadyGauges.TryGetValue(a.Id, out int gauge) && a.Gauge < gauge))
+                    || (c.Battle != null && c.BattleKey == m.Battle && c.Battle.Actors.Any(a => m.ReadyGauges.TryGetValue(a.Id, out int gauge) && a.Gauge < gauge))
             },
             // ④ 보스: 다다음 턴 예약 + 균열 타이밍 맞추기
             new OnboardingStep

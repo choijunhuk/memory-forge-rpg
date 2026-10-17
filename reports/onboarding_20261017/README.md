@@ -19,7 +19,8 @@
 - **붙는 곳:** `RuntimeInitializeOnLoadMethod`와 `SceneManager.sceneLoaded`로 `MemoryForgeExpedition` 씬의 클라이언트에만 컴포넌트를 붙인다. 씬 파일은 수정하지 않는다. 다른 시험들이 만드는 일반 클라이언트에는 붙지 않는다.
 - **보이는 것:**
   - 머리줄의 제목·위치 글자 자리(프레임 x 20–920, y 2–74)에 안내 패널 하나를 띄운다.
-  - 눌러야 할 조작 주위에 황동색 테두리를 그린다.
+  - 눌러야 할 조작 주위에 흰(Ink) 테두리를 그린다. 눌러야 할 버튼이 황동색인 경우가 많아 황동 테두리는 보이지 않았다. 테두리는 1.2초 주기로 옅어졌다 짙어지고, 클라이언트의 `동작 줄이기`(§14.2)에서는 멈춘다.
+  - 이미 고른 방식 버튼은 다시 테두리하지 않는다. 다음에 누를 것만 표시한다.
   - 패널·테두리·글자는 레이캐스트를 받지 않는다. 받는 것은 안내 자체의 `안내 건너뛰기`·`알겠어요` 버튼뿐이고, 이 버튼들은 머리줄 글자 위에만 있다.
   - 덱·기록·카드 설명·카드 고르기·턴 결과·마지막 행동 결과 같은 덮개 창이 열려 있으면 안내를 숨긴다. 단, 턴 결과 단계는 예외로 그 창 위에 표시한다.
 - **넘어가는 기준:** 단계는 그 조작이 실제로 그려져 있고 쓸 수 있을 때만 보인다. 연습판의 공개 상태가 실제로 바뀌었을 때 끝난다.
@@ -27,6 +28,7 @@
   - 카드 사용은 그 카드가 손패를 떠나고 행동 결과 표시가 열려야 끝난다.
   - 저장은 기억 버전이 올라가야 끝난다.
   - 설명만 있는 단계는 `알겠어요`로 끝난다.
+- **고정 이름(후속 재스타일용):** 루트 `Guide`(프레임 `ExpeditionFrame`의 마지막 자식), `Guide:Panel`, `Guide:Text`, `Guide:Next`(알겠어요), `Guide:Skip`, 테두리마다 `GuideHighlight:<대상 이름>` 묶음과 그 안의 `Top`·`Bottom`·`Left`·`Right`. 클라이언트 객체 이름은 하나도 바꾸지 않았다. 루트 브랜치의 `MemoryForgeUiSkin.cs`가 읽는 `ExpeditionFrame`·`Enemy:<uid>`·`Party`/`Ult:<id>`·"파티 체력" 글자는 그대로다. UiSkin이 첫 자식으로 넣는 `UiSkin:Background`보다 안내가 위에 있다(정적 확인, 결합 실행은 미검증).
 - **기록:** `PlayerPrefs`에 `MemoryForge.Onboarding.v1.done`(끝난 단계 id)과 `.skipped`를 둔다. 계정·서버 연결은 없다. 끝난 단계는 다시 보이지 않는다.
   - 건너뛰기를 누르면 기억 저장 안내를 뺀 모든 단계가 이후 실행에서도 숨는다.
 - **레슨 간격:** 레슨 2·3·4는 앞 레슨을 끝낸 전투가 아닌 **다음 전투**에서 시작한다(§14.5의 전투당 한 레슨). 보스 레슨은 레슨 3까지 끝나야 열린다.
@@ -57,9 +59,10 @@
 
 | 실행 | 결과 |
 |---|---|
-| 새 시험 `OnboardingPlayModeTests` 5개 | PASS 5/5 (명시 실행 캡처 시험 1개는 일반 실행에서 Skipped) |
-| 전체 PlayMode | 322개 중 PASS 320, Skipped 1(명시 실행 캡처), **FAIL 1(기존, 아래)** |
+| 새 시험 `OnboardingPlayModeTests` 7개 | PASS 7/7 (명시 실행 캡처 시험 1개는 일반 실행에서 Skipped, 캡처 실행 PASS) |
+| 전체 PlayMode (최종 코드, 테두리 색 변경 전) | 324개 중 PASS 322, Skipped 1(명시 실행 캡처), **FAIL 1(기존, 아래)** |
 | 전체 EditMode | PASS 3/3 |
+| 테두리 색(Brass→Ink) 변경 뒤 | 새 시험 7/7 PASS, 캡처 PASS. 전체 스위트는 색 상수 한 줄 차이라 다시 돌리지 않았다 |
 | `node tools/gen_run_create_vectors.mjs --check` | PASS (fixture drift 없음) |
 
 새 시험 내용. 모든 누름은 실제 EventSystem 레이캐스트 클릭이고, 그 지점의 맨 위 대상이 해당 버튼인지 확인한다. 즉 안내가 버튼을 가리지 않는지도 함께 본다.
@@ -72,6 +75,8 @@
    - 다음 전투에서 레슨 2가 열리는지 본다.
    - 예약 확정 단계에서 일부러 턴을 끝내면 그 단계가 끝나지 않고 다음 턴에 다시 안내되는지 본다.
    - 안내대로 실제 예약 → 턴 종료 해결까지 레슨 2를 끝낸다.
+   - 이어서 짧은 탐사 끝까지 안내를 따른다. 원래 수치로 **완주(clear, 전투 6회, 카드 사용 99회)**하고, 레슨 2 뒤 `battle.break → battle.ult → boss.timing → boss.after → save` 순서로 모든 단계를 실제로 완료한다(§14.5 ①–⑤ 전부).
+   - 고정 이름 확인: `Guide`가 `ExpeditionFrame` 아래에 있고, `Guide:Panel`·`Guide:Text`·`Guide:Skip`이 있으며, 갈 수 있는 칸마다 `GuideHighlight:Node:<id>` 묶음(Top/Bottom/Left/Right)이 그 칸을 감싼다.
 2. `SkipHidesTheGuideForGoodButTheMemorySaveGuideStillShowsAndCannotBeSkipped`
    - 건너뛰기 뒤에는 아무 단계도 보이지 않는다.
    - 패배 저장 화면에서는 저장 안내만 건너뛰기 버튼 없이 나온다.
@@ -86,7 +91,9 @@
    - 저장 단계만 건너뛸 수 없는지, 선행 단계 순서가 맞는지 본다.
 5. `OnlyTheShippedSceneClientGetsTheCoach`
    - 일반 클라이언트에는 붙지 않는다.
-   - 배포 씬을 additive로 불러오면 그 씬의 클라이언트에 하나만 붙는다.
+   - 배포 씬을 additive로 불러오면 그 씬의 클라이언트에 하나만 붙는다. 씬은 teardown에서 내린다.
+6. `HandStepNeedsARealHandPressNotTheNextTurnsAutoSelection` — 손패를 누르지 않고 턴을 끝내면, 새 턴의 자동 선택 카드는 완료로 치지 않는다. 기록에도 남지 않는다. 실제 손패 클릭으로 끝나는지 양성 대조도 한다.
+7. `UltimateStepComparesGaugesOnlyWithinTheBattleItWasMarkedIn` — 다른 전투에서 가득 찼던 게이지를, 새 전투의 0 게이지와 비교해 필살기 사용으로 보지 않는다. 같은 전투에서의 양성 대조도 한다.
 
 ### 새 시험과 무관한 기존 실패 1건
 
@@ -106,14 +113,14 @@
   - 확인된 것: 레이캐스트·패널 겹침 없음, 규칙 문구가 원문과 일치, 새 지급·수치 없음.
   - 6건 모두 수정했다(위 "동작 방식"·"설계 판단"과 시험 1·2·3).
 - **2차** — thread `01a14a74-1d7b-7192-9a0c-aa04ef18ff6a`, 종료 0, **CHANGES_REQUESTED**(P2 3건): 확인 단계에서 카드를 바꾸면 사용을 인정하지 않음, 다음 턴 레슨이 다다음 예약으로 끝남, 필살기가 레슨 3 경계에 없음. 세 건 모두 수정했다(새 행동 표시 인스턴스로 판정, `next` 예약만 인정, `battle.ult`를 Core로, 보스 레슨은 보스전 안에서 레슨 3 뒤에 이어질 수 있음).
-- **3차 리뷰는 아직 받지 않았다.**
-
-## 현재 상태 (2차 수정 뒤)
-
-- 시험 1을 탐사 끝까지 늘렸다. seed 1234 짧은 탐사가 원래 수치 그대로 실제 버튼으로 **완주**했다(clear, 전투 6회, 카드 사용 99회). 안내 단계는 lessons 1–2 뒤 `battle.break → battle.ult → boss.timing → boss.after → save` 순서로 나왔다. 즉 §14.5 ①–⑤가 한 판에서 모두 실제로 도달·완료된다.
-- 앞선 실패는 같은 프레임에 다시 그려진 화면을 배치 전에 레이캐스트한 시험 쪽 문제였다. 클릭 전에 `Canvas.ForceUpdateCanvases()`를 부르게 고쳤다.
-- 2차 수정 뒤 새 시험 5개: **PASS 5/5**(캡처 1개는 Skipped). 2차 수정 뒤 전체 PlayMode·EditMode 재실행과 Codex 3차 리뷰는 하지 못했다. 위 "시험" 표의 320/322·3/3은 2차 수정 전 결과다.
-- 남은 일(루트 요청): 안내 요소 이름을 `Guide`·`Guide:Next`·`Guide:Skip`·`GuideHighlight:<target>` 같은 고정 이름으로 바꾸기. 지금 이름은 `OnboardingCoach`·`OnboardingPanel`·`OnboardingText`·`OnboardingSkip`·`OnboardingAck`·`OnboardingOutline`이다.
+- **3차** — thread `01a14bb9-89f7-7890-b9f0-f7d6dc0a54b6`, **CHANGES_REQUESTED**.
+  - P2: 전투가 바뀌면 필살기 게이지 비교가 오판함.
+  - P3 의견: 완주 시험이 보스 검증을 조건부로 건너뜀.
+  - 처리: 게이지 비교를 표시한 전투 안으로 한정하고 회귀 시험을 추가했다. 완주·보스 검증은 무조건으로 바꿨다.
+- **4차** — thread `01a14bbc-c335-7c01-bad1-7da92af18f74`, **CHANGES_REQUESTED**.
+  - P2: 턴 종료 뒤 자동 선택으로 `battle.hand`가 끝남.
+  - 처리: 실제 손패 클릭이나 방식 선택만 인정하고 회귀 시험을 추가했다.
+- **5차** — thread `01a14bbf-9dad-75a0-8eb6-0681ddeb35bb`, 종료 0, **APPROVE**. 차단 결함 없음. 남은 한계는 Unity 미재실행(호출자 결과 기준)과 UiSkin 결합 미검증이다.
 
 ## 스크린샷 (1600×900, 시험 안에서 카메라로 그린 실제 화면)
 
@@ -139,7 +146,8 @@
 - 고정 프롤로그 조우와 "실패해도 승리 가능한 수치". 새 수치라 설계 승인이 필요하다.
 - 캐릭터·모집권·결정 지급, 초심자 모집, 계약·주간 보스 소개. 승인 경계이고 연습판에는 없는 기능이다.
 - 안내 기록의 계정·서버 저장. 지금은 기기 로컬 PlayerPrefs다.
-- 레슨 3·4(균열·필살기·보스)는 실제 전투 경로에서 자동 시험하지 않았다. 문구·순서·완료 조건은 정적 시험과 리뷰로만 확인했다.
+- 루트 `MemoryForgeUiSkin.cs`와 합친 상태의 실행 확인. 이 브랜치에는 그 파일이 없다.
+- 레슨 3·4·저장의 자동 확인은 seed 1234 한 경로다. 다른 지도·조우에서는 필살기 게이지가 늦게 차면, 보스 레슨이 다음 탐사의 보스로 미뤄질 수 있다.
 - 기존 batchmode 실패 1건(위).
 
 ## 실행 증거

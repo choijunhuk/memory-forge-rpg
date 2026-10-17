@@ -18,7 +18,10 @@ namespace MemoryForge.Client
     public sealed class MemoryForgeOnboarding : MonoBehaviour
     {
         public const string SceneName = "MemoryForgeExpedition", DefaultPrefsKey = "MemoryForge.Onboarding.v1";
-        public const string CoachName = "OnboardingCoach", PanelName = "OnboardingPanel", SkipName = "OnboardingSkip", AckName = "OnboardingAck";
+        // Stable object names (a later restyle finds the guide by these): the root, its panel, text and buttons, and one
+        // "GuideHighlight:<target name>" group per outlined control with "Top"/"Bottom"/"Left"/"Right" edges.
+        public const string GuideName = "Guide", PanelName = "Guide:Panel", TextName = "Guide:Text", NextName = "Guide:Next", SkipName = "Guide:Skip",
+            HighlightPrefix = "GuideHighlight:";
         public const int FontSize = 17;
         // The coach panel covers only the header's title and practice/location text (frame x 20–920, y 2–74); every sheet starts lower.
         const float PanelX = 20, PanelY = 2, PanelWidth = 900, PanelHeight = 72, Pad = 16, ButtonWidth = 132, ButtonHeight = 48, Gap = 8, Edge = 4;
@@ -37,6 +40,7 @@ namespace MemoryForge.Client
         readonly HashSet<string> done = new HashSet<string>(StringComparer.Ordinal);
         readonly Dictionary<int, string?> finishedIn = new Dictionary<int, string?>(); // lesson → battle that finished it (this session)
         readonly List<RectTransform> highlighted = new List<RectTransform>();
+        readonly List<Image> edges = new List<Image>(); // the drawn highlight edges, pulsed in place
         bool skipped;
         OnboardingStep? shown, last; // last: the step most recently shown, whose Done is still checked while nothing else shows
         OnboardingMark mark = new OnboardingMark();
@@ -129,7 +133,7 @@ namespace MemoryForge.Client
         static OnboardingMark Capture(OnboardingContext c)
         {
             var b = c.Battle;
-            var mark = new OnboardingMark { Card = c.Client.SelectedCard, Turn = b?.Turn ?? 0, Memory = c.Client.SessionMemoryVersion,
+            var mark = new OnboardingMark { Card = c.Client.SelectedCard, Battle = c.BattleKey, Turn = b?.Turn ?? 0, Memory = c.Client.SessionMemoryVersion,
                 Rows = c.Client.HasActionPresentation ? c.Client.ActionPresentationRows : null };
             if (b == null) return mark;
             mark.Reserved.UnionWith(b.Reservations.Select(r => r.Uid));
@@ -179,9 +183,9 @@ namespace MemoryForge.Client
                     if ((button == null || (button.IsInteractable() && target.name != "Mode:" + c.Client.SelectedMode)) && !highlighted.Contains(target)) highlighted.Add(target);
                 }
             string key = view.GetInstanceID() + "|" + step.Id + "|" + CurrentText + "|" + string.Join(",", highlighted.Select(h => h.GetInstanceID()));
-            if (coach != null && key == drawnKey) { if (coach.transform.GetSiblingIndex() != view.childCount - 1) coach.transform.SetAsLastSibling(); return; }
+            if (coach != null && key == drawnKey) { if (coach.transform.GetSiblingIndex() != view.childCount - 1) coach.transform.SetAsLastSibling(); Pulse(); return; }
             RemoveCoach(); drawnKey = key;
-            var root = new GameObject(CoachName, typeof(RectTransform)).GetComponent<RectTransform>();
+            var root = new GameObject(GuideName, typeof(RectTransform)).GetComponent<RectTransform>();
             root.SetParent(view, false); root.anchorMin = Vector2.zero; root.anchorMax = Vector2.one; root.pivot = new Vector2(0, 1);
             root.offsetMin = root.offsetMax = Vector2.zero; root.SetAsLastSibling(); coach = root.gameObject;
             var corners = new Vector3[4];
@@ -189,27 +193,48 @@ namespace MemoryForge.Client
             {
                 target.GetWorldCorners(corners);
                 Vector2 min = root.InverseTransformPoint(corners[0]), max = root.InverseTransformPoint(corners[2]);
-                Bar(root, min.x - Edge, max.y + Edge, max.x - min.x + 2 * Edge, Edge);
-                Bar(root, min.x - Edge, min.y, max.x - min.x + 2 * Edge, Edge);
-                Bar(root, min.x - Edge, max.y + Edge, Edge, max.y - min.y + 2 * Edge);
-                Bar(root, max.x, max.y + Edge, Edge, max.y - min.y + 2 * Edge);
+                Highlight(root, target.name, min.x - Edge, max.y + Edge, max.x - min.x + 2 * Edge, max.y - min.y + 2 * Edge);
             }
             var panel = Box(root, PanelName, PanelX, -PanelY, PanelWidth, PanelHeight, new Color(0.078f, 0.110f, 0.192f, 0.97f));
             var border = panel.gameObject.AddComponent<Outline>(); border.effectColor = Brass; border.effectDistance = new Vector2(2, -2);
             var label = Label(panel, Compose(CurrentText), Pad, 3, TextWidth(step), PanelHeight - 6, FontSize, Ink, TextAnchor.MiddleLeft);
-            label.name = "OnboardingText";
+            label.name = TextName;
             float x = PanelWidth - Pad - ButtonWidth;
-            if (step.Ack) { CoachButton(panel, AckName, "알겠어요", x, () => Acknowledge(), Brass, Background); x -= ButtonWidth + Gap; }
+            if (step.Ack) { CoachButton(panel, NextName, "알겠어요", x, () => Acknowledge(), Brass, Background); x -= ButtonWidth + Gap; }
             if (!step.Required) CoachButton(panel, SkipName, "안내 건너뛰기", x, () => Skip(), Line, Ink);
         }
         void RemoveCoach()
         {
             if (coach != null) { coach.SetActive(false); Destroy(coach); }
-            coach = null; drawnKey = null;
+            coach = null; drawnKey = null; edges.Clear();
+        }
+        // The outlines breathe (1.2 s) so the next control catches the eye; with the client's 동작 줄이기 (§14.2) they stay still.
+        void Pulse()
+        {
+            float alpha = client!.ActionPace == MemoryForgeExpeditionClient.ActionPacing.Reduced ? 1f : 0.55f + 0.45f * Mathf.Abs(Mathf.Cos(Time.unscaledTime * Mathf.PI / 1.2f));
+            foreach (var edge in edges) if (edge != null) edge.color = new Color(Ink.r, Ink.g, Ink.b, alpha);
         }
 
         static readonly Color Background = Hex("0d1322"), Line = Hex("2f3d63"), Ink = Hex("e9eef8"), Brass = Hex("e2b45f");
-        void Bar(RectTransform parent, float x, float y, float width, float height) => Box(parent, "OnboardingOutline", x, y, width, height, Brass);
+        // An empty group over the control (top-left at x, y in the guide's space) with four edges anchored to its sides.
+        void Highlight(RectTransform parent, string target, float x, float y, float width, float height)
+        {
+            var group = new GameObject(HighlightPrefix + target, typeof(RectTransform)).GetComponent<RectTransform>();
+            group.SetParent(parent, false); group.anchorMin = group.anchorMax = new Vector2(0, 1); group.pivot = new Vector2(0, 1);
+            group.anchoredPosition = new Vector2(x, y); group.sizeDelta = new Vector2(width, height);
+            Side(group, "Top", new Vector2(0, 1), new Vector2(1, 1), new Vector2(0, Edge));
+            Side(group, "Bottom", new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, Edge));
+            Side(group, "Left", new Vector2(0, 0), new Vector2(0, 1), new Vector2(Edge, 0));
+            Side(group, "Right", new Vector2(1, 0), new Vector2(1, 1), new Vector2(Edge, 0));
+        }
+        void Side(RectTransform group, string name, Vector2 anchorMin, Vector2 anchorMax, Vector2 size)
+        {
+            var obj = new GameObject(name, typeof(RectTransform), typeof(Image)); obj.transform.SetParent(group, false);
+            var r = obj.GetComponent<RectTransform>(); r.anchorMin = anchorMin; r.anchorMax = anchorMax; r.pivot = (anchorMin + anchorMax) / 2;
+            r.anchoredPosition = Vector2.zero; r.sizeDelta = size;
+            // Ink, not brass: the controls to press are often brass themselves (사용 확정, 턴 종료, 저장).
+            var image = obj.GetComponent<Image>(); image.color = Ink; image.raycastTarget = false; edges.Add(image);
+        }
         // Top-left placement in the coach's own space (pivot at the frame's top-left, y up); never a raycast target.
         static RectTransform Box(RectTransform parent, string name, float x, float y, float width, float height, Color color)
         {

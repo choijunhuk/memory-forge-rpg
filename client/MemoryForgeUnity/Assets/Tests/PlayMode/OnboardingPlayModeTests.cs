@@ -67,6 +67,22 @@ namespace MemoryForge.Client.Tests
                 Is.True, "only the coach's own buttons take a raycast");
             var reachable = view.GetComponentsInChildren<Button>().Where(b => b.name.StartsWith("Node:", StringComparison.Ordinal) && b.interactable).ToList();
             Assert.That(coach.Highlighted.Select(r => r.name), Is.EquivalentTo(reachable.Select(b => b.name)), "the map step outlines exactly the reachable nodes");
+            // Stable names for a later restyle: the guide root last under the frame, its panel/text/skip, one highlight group per node.
+            var guide = panel.transform.parent;
+            Assert.That(guide.name, Is.EqualTo(MemoryForgeOnboarding.GuideName));
+            Assert.That(guide.parent.name, Is.EqualTo("ExpeditionFrame"));
+            Assert.That(panel.GetComponentsInChildren<Text>().Any(t => t.name == MemoryForgeOnboarding.TextName), Is.True);
+            Assert.That(panel.GetComponentsInChildren<Button>().Select(b => b.name), Is.EqualTo(new[] { MemoryForgeOnboarding.SkipName }));
+            var groups = guide.Cast<Transform>().Where(t => t.name.StartsWith(MemoryForgeOnboarding.HighlightPrefix, StringComparison.Ordinal)).ToList();
+            Assert.That(groups.Select(t => t.name), Is.EquivalentTo(reachable.Select(b => MemoryForgeOnboarding.HighlightPrefix + b.name)));
+            foreach (var group in groups)
+            {
+                Assert.That(group.Cast<Transform>().Select(t => t.name), Is.EqualTo(new[] { "Top", "Bottom", "Left", "Right" }));
+                var node = reachable.Single(b => MemoryForgeOnboarding.HighlightPrefix + b.name == group.name).GetComponent<RectTransform>();
+                Vector3[] outer = new Vector3[4], inner = new Vector3[4];
+                ((RectTransform)group).GetWorldCorners(outer); node.GetWorldCorners(inner);
+                Assert.That(outer[0].x <= inner[0].x && outer[0].y <= inner[0].y && outer[2].x >= inner[2].x && outer[2].y >= inner[2].y, Is.True, group.name + " surrounds its node");
+            }
 
             var seen = new List<string>(); var driver = new Driver();
             for (int guard = 0; guard < 800 && client.Snapshot!.Phase != "REWARD"; guard++)
@@ -116,7 +132,7 @@ namespace MemoryForge.Client.Tests
             yield return null;
             Assert.That(coach.CurrentStep, Is.EqualTo("battle.intent"));
             Assert.That(coach.Highlighted.All(r => r.name.StartsWith("Enemy:", StringComparison.Ordinal)), Is.True);
-            Click(ButtonNamed(o.Host, MemoryForgeOnboarding.AckName));
+            Click(ButtonNamed(o.Host, MemoryForgeOnboarding.NextName));
             yield return null;
             Assert.That(coach.Completed, Does.Contain("battle.intent"));
             Assert.That(coach.CurrentStep, Is.EqualTo("reserve.next"));
@@ -161,12 +177,9 @@ namespace MemoryForge.Client.Tests
             Assert.That(lessons, Does.Contain("save"));
             Assert.That(coach.Completed, Is.SupersetOf(new[] { "battle.break", "battle.ult", "save" }), "lesson 3 and the first save by the real buttons; seen: " + string.Join(",", lessons));
             Assert.That(lessons.IndexOf("battle.break"), Is.LessThan(lessons.IndexOf("battle.ult")));
-            bool boss = client.Snapshot!.Statistics.Battles > 0 && Get(client.Snapshot.Result, "outcome") as string == "clear";
-            if (boss)
-            {
-                Assert.That(coach.Completed, Is.SupersetOf(new[] { "boss.timing", "boss.after" }), "a cleared expedition went through the boss lesson; seen: " + string.Join(",", lessons));
-                Assert.That(lessons.IndexOf("battle.ult"), Is.LessThan(lessons.IndexOf("boss.timing")), "§14.5 order: ③ before ④");
-            }
+            Assert.That(Get(client.Snapshot!.Result, "outcome"), Is.EqualTo("clear"), "seed 1234's short expedition is cleared by following the guide");
+            Assert.That(coach.Completed, Is.SupersetOf(new[] { "boss.timing", "boss.after" }), "the boss lesson by the real buttons; seen: " + string.Join(",", lessons));
+            Assert.That(lessons.IndexOf("battle.ult"), Is.LessThan(lessons.IndexOf("boss.timing")), "§14.5 order: ③ before ④");
             TestContext.WriteLine("onboarding run: outcome=" + Get(client.Snapshot.Result, "outcome") + " battles=" + client.Snapshot.Statistics.Battles
                 + " plays=" + driver.Plays + " steps=" + string.Join(",", lessons));
         }
@@ -183,7 +196,7 @@ namespace MemoryForge.Client.Tests
             Assert.That(coach.Skipped, Is.True);
             Assert.That(PlayerPrefs.GetInt(key + ".skipped"), Is.EqualTo(1));
             Assert.That(coach.CurrentStep, Is.Null);
-            Assert.That(View(o.Host).GetComponentsInChildren<RectTransform>().Any(r => r.name == MemoryForgeOnboarding.CoachName), Is.False, "a skipped guide draws nothing");
+            Assert.That(View(o.Host).GetComponentsInChildren<RectTransform>().Any(r => r.name == MemoryForgeOnboarding.GuideName), Is.False, "a skipped guide draws nothing");
 
             Click(View(o.Host).GetComponentsInChildren<Button>().First(b => b.name.StartsWith("Node:", StringComparison.Ordinal) && b.interactable));
             yield return null;
@@ -252,7 +265,7 @@ namespace MemoryForge.Client.Tests
             var next = new Opening(); yield return Open(next, key);
             Assert.That(next.Client.Snapshot!.Phase, Is.EqualTo("MAP"));
             Assert.That(next.Coach.CurrentStep, Is.Null, "the map step done on the earlier launch does not show again");
-            Assert.That(View(next.Host).GetComponentsInChildren<RectTransform>().Any(r => r.name == MemoryForgeOnboarding.CoachName), Is.False);
+            Assert.That(View(next.Host).GetComponentsInChildren<RectTransform>().Any(r => r.name == MemoryForgeOnboarding.GuideName), Is.False);
             Click(View(next.Host).GetComponentsInChildren<Button>().First(b => b.name.StartsWith("Node:", StringComparison.Ordinal) && b.interactable));
             yield return null;
             Assert.That(next.Coach.CurrentStep, Is.EqualTo("battle.hand"), "a step not yet done still shows");
@@ -261,6 +274,45 @@ namespace MemoryForge.Client.Tests
 
             var fresh = new Opening(); yield return Open(fresh, NewKey());
             Assert.That(fresh.Coach.CurrentStep, Is.EqualTo("map"), "positive control: an empty record starts from the map step");
+        }
+
+        // Codex round 4: ending the turn without touching the hand lets the client auto-select the new hand's first card; that is not
+        // the player's press, so the hand step stays open.
+        [UnityTest]
+        public IEnumerator HandStepNeedsARealHandPressNotTheNextTurnsAutoSelection()
+        {
+            var o = new Opening(); string key = NewKey(); yield return Open(o, key);
+            Click(View(o.Host).GetComponentsInChildren<Button>().First(b => b.name.StartsWith("Node:", StringComparison.Ordinal) && b.interactable));
+            yield return null;
+            Assert.That(o.Coach.CurrentStep, Is.EqualTo("battle.hand"));
+            Click(ButtonNamed(o.Host, "EndTurn"));
+            yield return null;
+            Click(ButtonNamed(o.Host, "ContinueTurnSummary"));
+            yield return null; yield return null;
+            Assert.That(o.Client.Snapshot!.Battle!.Turn, Is.EqualTo(2));
+            Assert.That(o.Coach.Completed, Does.Not.Contain("battle.hand"), "the auto-selected card of the new turn is not a press");
+            Assert.That(PlayerPrefs.GetString(key + ".done").Split(','), Does.Not.Contain("battle.hand"));
+            Assert.That(o.Coach.CurrentStep, Is.EqualTo("battle.hand"));
+            PressFirstHandCard(o);
+            yield return null;
+            Assert.That(o.Coach.Completed, Does.Contain("battle.hand"), "positive control: a real hand press finishes it");
+        }
+        static void PressFirstHandCard(Opening o) => Click(View(o.Host).GetComponentsInChildren<Button>().First(b => b.name.StartsWith("Hand:", StringComparison.Ordinal)));
+
+        // Codex round 3: a gauge marked full in one battle must not read as an ultimate used when the next battle starts at 0.
+        [UnityTest]
+        public IEnumerator UltimateStepComparesGaugesOnlyWithinTheBattleItWasMarkedIn()
+        {
+            var o = new Opening(); yield return Open(o, NewKey());
+            Click(View(o.Host).GetComponentsInChildren<Button>().First(b => b.name.StartsWith("Node:", StringComparison.Ordinal) && b.interactable));
+            yield return null;
+            var battle = o.Client.Snapshot!.Battle!; var actor = battle.Actors[0];
+            Assert.That(actor.Gauge, Is.LessThan(100), "a fresh battle starts below a full gauge");
+            var context = new OnboardingContext(o.Client); var ult = OnboardingSteps.All.Single(s => s.Id == "battle.ult");
+            var earlier = new OnboardingMark { Battle = "an earlier battle" }; earlier.ReadyGauges[actor.Id] = 100;
+            Assert.That(ult.Done!(context, earlier), Is.False, "a full gauge from another battle is not an ultimate used here");
+            var here = new OnboardingMark { Battle = context.BattleKey }; here.ReadyGauges[actor.Id] = 100;
+            Assert.That(ult.Done!(context, here), Is.True, "positive control: in the marked battle a lower gauge is a used ultimate");
         }
 
         [Test]
@@ -365,7 +417,7 @@ namespace MemoryForge.Client.Tests
         void PressCoach(Opening o, Driver driver)
         {
             var coach = o.Coach;
-            var ack = o.Host.GetComponentsInChildren<Button>().FirstOrDefault(b => b.name == MemoryForgeOnboarding.AckName && b.IsInteractable());
+            var ack = o.Host.GetComponentsInChildren<Button>().FirstOrDefault(b => b.name == MemoryForgeOnboarding.NextName && b.IsInteractable());
             if (ack != null) { Click(ack); return; }
             var button = coach.Highlighted.Select(r => r.GetComponent<Button>()).FirstOrDefault(b => b != null && b.IsInteractable());
             if (button != null && button.name.StartsWith("Ult:", StringComparison.Ordinal) && o.Client.Target == null)
@@ -472,7 +524,7 @@ namespace MemoryForge.Client.Tests
         static void AssertThreeLines(GameObject view, string step)
         {
             Canvas.ForceUpdateCanvases();
-            var text = CoachPanel(view).GetComponentsInChildren<Text>().Single(t => t.name == "OnboardingText");
+            var text = CoachPanel(view).GetComponentsInChildren<Text>().Single(t => t.name == MemoryForgeOnboarding.TextName);
             Assert.That(text.cachedTextGenerator.lineCount, Is.InRange(1, 3), step + " coach text lines");
             Assert.That(text.preferredHeight, Is.LessThanOrEqualTo(text.rectTransform.rect.height + 1), step + " coach text fits its panel");
         }
