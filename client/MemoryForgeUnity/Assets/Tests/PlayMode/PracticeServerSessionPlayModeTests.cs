@@ -5,6 +5,9 @@
 // test-released gate, drop the connection after reading the request, truncate a body or omit its length. Records live in a fresh temp
 // folder. These are NOT Core/server acceptance: no real Run, receipt store, restart or fault proxy is involved (Root runs the actual
 // unchanged host separately). Every wait is bounded; held replies are released in finally.
+// The node-service, event and archive view checks at the end (P1-SERVER-SERVICES-UI, P1-SERVER-EVENT-ARCHIVE-UI) drive the real
+// MemoryForgeServerPracticeClient over the same fixture and need UnityEngine, so they compile only inside Unity (#if UNITY_5_3_OR_NEWER);
+// the .NET run of this file keeps the BCL-only checks above.
 #nullable enable
 using System;
 using System.Collections.Generic;
@@ -21,6 +24,12 @@ using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using Codes = MemoryForge.Client.PracticeSessionCodes;
 using MutationStatus = MemoryForge.Client.PracticeMutationStatus;
+#if UNITY_5_3_OR_NEWER
+using System.Collections;
+using UnityEngine;
+using UnityEngine.TestTools;
+using Purpose = MemoryForge.Client.MemoryForgeServerPracticeClient.DeckPurpose;
+#endif
 
 namespace MemoryForge.Client.Tests
 {
@@ -53,6 +62,10 @@ namespace MemoryForge.Client.Tests
         [TearDown]
         public void StopFixture()
         {
+#if UNITY_5_3_OR_NEWER
+            // The view first: disabling it disposes its session (an unresolved request stays in the outbox) before the fixture stops.
+            if (viewObject != null) { viewObject.SetActive(false); UnityEngine.Object.Destroy(viewObject); viewObject = null; }
+#endif
             foreach (var session in sessions) session.Dispose();
             sessions.Clear();
             host?.Dispose();
@@ -659,6 +672,556 @@ namespace MemoryForge.Client.Tests
             Assert.That(File.Exists(RecordPath), Is.False);
         }
 
+#if UNITY_5_3_OR_NEWER
+        // ---- the server practice view's rest/forge/shop services (Unity only: the real MemoryForgeServerPracticeClient) ----
+        // P1-SERVER-SERVICES-UI §7.3/§14.3/§14.7/§17.4. The fixture plays the server: a commit moves the world to the next version and the
+        // receipt and every later read show that state. These check the exact command body, one send while its reply is held, the lock
+        // while a request is uncertain, an unchanged screen after a refusal, only the committed server state after a commit, and that a
+        // deck selection is never reused after cancel, progress or reconnect. Fixture ids and prices are protocol data, not content.
+
+        GameObject? viewObject;
+
+        [UnityTest]
+        public IEnumerator AShopBuyIsSentOnceWhileHeldAndOnlyTheCommittedServerStateIsShown()
+        {
+            Node("SHOP", Shop(), coins: 100);
+            var view = View();
+            yield return Settled(view);
+            Assert.That(view.ShowingService, Is.EqualTo("shop"));
+            var posted = new TaskCompletionSource<bool>();
+            var release = new TaskCompletionSource<bool>();
+            post = request =>
+            {
+                posted.TrySetResult(true);
+                return Commit(state => { state["coins"] = 30; Listing(state, "cards", 0)["sold"] = true; }, release.Task);
+            };
+            try
+            {
+                var buying = view.BuyAsync("cards", "c-shop");
+                yield return Until(() => posted.Task.IsCompleted, "the buy is posted");
+                Assert.That(view.Busy, Is.True);
+                Assert.That(view.CanCommand, Is.False);
+                // A second click, another listing, leaving and the removal sheet are refused at once: nothing is queued or sent.
+                Assert.That(Refused(view.BuyAsync("cards", "c-shop")), Is.True);
+                Assert.That(Refused(view.BuyAsync("parts", "p-shop")), Is.True);
+                Assert.That(Refused(view.ProceedAsync()), Is.True);
+                Assert.That(view.OpenDeckPick(Purpose.ShopRemove), Is.False);
+                // Nothing is shown as bought before the server answers.
+                Assert.That(Shown(view)["coins"]!.Value<int>(), Is.EqualTo(100));
+                Assert.That(Listing(Shown(view), "cards", 0)["sold"]!.Value<bool>(), Is.False);
+                release.TrySetResult(true);
+                yield return Until(() => buying.IsCompleted, "the buy resolves");
+                Assert.That(buying.Result, Is.True);
+            }
+            finally { release.TrySetResult(true); }
+            Sent(host.Posts.Single(), "buy", 3, new JObject { ["kind"] = "cards", ["id"] = "c-shop" });
+            Assert.That(Outbox().Load(), Is.Null);
+            Assert.That(view.Snapshot!.Context.ServerVersion, Is.EqualTo(4));
+            Assert.That(view.SnapshotStale, Is.False);
+            Assert.That(Shown(view)["coins"]!.Value<int>(), Is.EqualTo(30));
+            Assert.That(Listing(Shown(view), "cards", 0)["sold"]!.Value<bool>(), Is.True);
+            // The sold listing is no longer offered, and an unlisted id or kind never was: nothing more is sent.
+            Assert.That(Refused(view.BuyAsync("cards", "c-shop")), Is.True);
+            Assert.That(Refused(view.BuyAsync("cards", "c-missing")), Is.True);
+            Assert.That(Refused(view.BuyAsync("remove", "c-dear")), Is.True);
+            Assert.That(host.Posts.Length, Is.EqualTo(1));
+        }
+
+        [UnityTest]
+        public IEnumerator ACoreRefusalChangesNothingShownAndTheShopRemovalSendsOnlyTheConfirmedKey()
+        {
+            Node("SHOP", Shop(), coins: 60);
+            var view = View();
+            yield return Settled(view);
+            // c-dear costs more than the shown coins: its button stays disabled, but COINS_LOW is Core's, so the explicit call is sent.
+            post = request => Error(422, "COINS_LOW");
+            var refused = view.BuyAsync("cards", "c-dear");
+            yield return Until(() => refused.IsCompleted, "the refused buy resolves");
+            Assert.That(refused.Result, Is.False);
+            Sent(host.Posts.Single(), "buy", 3, new JObject { ["kind"] = "cards", ["id"] = "c-dear" });
+            Assert.That(Outbox().Load(), Is.Null, "a proven Core refusal clears the request");
+            Assert.That(view.Notice, Does.Contain("반영되지 않았어요"));
+            Assert.That(view.Snapshot!.Context.ServerVersion, Is.EqualTo(3));
+            Assert.That(Shown(view)["coins"]!.Value<int>(), Is.EqualTo(60));
+            Assert.That(Listing(Shown(view), "cards", 1)["sold"]!.Value<bool>(), Is.False);
+            Assert.That(view.CanCommand, Is.True);
+
+            // Removal: the sheet refuses weapon or unknown cards, blocks every other command and sends nothing until confirmed.
+            Assert.That(view.OpenDeckPick(Purpose.ShopRemove), Is.True);
+            Assert.That(view.CanCommand, Is.False);
+            Assert.That(Refused(view.ProceedAsync()), Is.True);
+            Assert.That(view.PickDeckCard("k3"), Is.False, "a weapon card");
+            Assert.That(view.PickDeckCard("k-missing"), Is.False);
+            Assert.That(view.PickDeckCard("k2"), Is.True);
+            Assert.That(view.DeckPickKey, Is.EqualTo("k2"));
+            Assert.That(host.Posts.Length, Is.EqualTo(1));
+            post = request => Commit(state => { state["coins"] = 10; state["pending"]!["removeCost"] = null; Remove(state, "k2"); });
+            var removing = view.ConfirmDeckPickAsync();
+            Assert.That(view.DeckPickOpen, Is.False, "the sheet is gone once sent");
+            yield return Until(() => removing.IsCompleted, "the removal resolves");
+            Assert.That(removing.Result, Is.True);
+            Assert.That(host.Posts.Length, Is.EqualTo(2));
+            Sent(host.Posts[1], "buy", 3, new JObject { ["kind"] = "remove", ["key"] = "k2" });
+            Assert.That(view.Snapshot!.Context.ServerVersion, Is.EqualTo(4));
+            Assert.That(Shown(view)["pending"]!["removeCost"]!.Type, Is.EqualTo(JTokenType.Null));
+            Assert.That(Shown(view)["deck"]!.Select(c => c["key"]!.Value<string>()), Is.EqualTo(new[] { "k1", "k3" }));
+            Assert.That(view.OpenDeckPick(Purpose.ShopRemove), Is.False, "one removal per shop, as published");
+            Assert.That(host.Posts.Length, Is.EqualTo(2));
+        }
+
+        [UnityTest]
+        public IEnumerator AnUncertainServiceSendLocksEveryCommandShowsNoGainAndRetriesTheExactBytes()
+        {
+            Node("REST", Rest(1), coins: 12, hp: 20);
+            var view = View();
+            yield return Settled(view);
+            byte[] receipt = Array.Empty<byte>();
+            // The server commits the heal and its reply never arrives.
+            post = request =>
+            {
+                receipt = Commit(state => { state["hp"] = 35; state["pending"]!["uses"] = 0; }).Body;
+                return new Reply(200, receipt) { Drop = true };
+            };
+            var healing = view.RestHealAsync();
+            yield return Until(() => healing.IsCompleted, "the lost reply resolves");
+            Assert.That(healing.Result, Is.False);
+            Sent(host.Posts.Single(), "rest", 3, new JObject { ["choice"] = "heal" });
+            Assert.That(Outbox().Load()!.Body, Is.EqualTo(host.Posts[0].Text));
+            Assert.That(view.SessionState!.Pending, Is.Not.Null);
+            // No gain is shown while unresolved: the last good state, marked stale.
+            Assert.That(view.SnapshotStale, Is.True);
+            Assert.That(Shown(view)["hp"]!.Value<int>(), Is.EqualTo(20));
+            Assert.That(Shown(view)["pending"]!["uses"]!.Value<int>(), Is.EqualTo(1));
+            // Every new command is refused before anything is sent.
+            Assert.That(view.CanCommand, Is.False);
+            Assert.That(Refused(view.RestHealAsync()), Is.True);
+            Assert.That(view.OpenDeckPick(Purpose.Upgrade), Is.False);
+            Assert.That(Refused(view.ProceedAsync()), Is.True);
+            Assert.That(host.Posts.Length, Is.EqualTo(1));
+
+            // The explicit retry sends the stored bytes again and then shows the server's committed state.
+            post = request => new Reply(200, receipt);
+            var retry = view.RetryAsync();
+            yield return Until(() => retry.IsCompleted, "the retry resolves");
+            Assert.That(retry.Result, Is.True);
+            Assert.That(host.Posts.Length, Is.EqualTo(2));
+            Assert.That(host.Posts[1].Body, Is.EqualTo(host.Posts[0].Body));
+            Assert.That(Outbox().Load(), Is.Null);
+            Assert.That(view.Snapshot!.Context.ServerVersion, Is.EqualTo(4));
+            Assert.That(Shown(view)["hp"]!.Value<int>(), Is.EqualTo(35));
+            Assert.That(Shown(view)["pending"]!["uses"]!.Value<int>(), Is.EqualTo(0));
+            // The used rest offers neither choice any more.
+            Assert.That(Refused(view.RestHealAsync()), Is.True);
+            Assert.That(view.OpenDeckPick(Purpose.Upgrade), Is.False);
+            Assert.That(host.Posts.Length, Is.EqualTo(2));
+        }
+
+        [UnityTest]
+        public IEnumerator ARefusedHealChangesNothingAndADeckSelectionIsNeverReusedAfterCancelProgressOrReconnect()
+        {
+            Node("REST", Rest(1), coins: 12, hp: 20);
+            world.Extra!["relics"] = new JArray("memory_anvil");
+            var view = View();
+            yield return Settled(view);
+            // Whether healing is allowed is Core's (CANNOT_HEAL): nothing changes and the rest stays usable.
+            post = request => Error(422, "CANNOT_HEAL");
+            var heal = view.RestHealAsync();
+            yield return Until(() => heal.IsCompleted, "the refused heal resolves");
+            Assert.That(heal.Result, Is.False);
+            Sent(host.Posts.Single(), "rest", 3, new JObject { ["choice"] = "heal" });
+            Assert.That(Outbox().Load(), Is.Null);
+            Assert.That(view.Snapshot!.Context.ServerVersion, Is.EqualTo(3));
+            Assert.That(Shown(view)["hp"]!.Value<int>(), Is.EqualTo(20));
+            Assert.That(Shown(view)["pending"]!["uses"]!.Value<int>(), Is.EqualTo(1));
+            Assert.That(view.CanCommand, Is.True);
+
+            // Cancel: nothing is sent and a reopened sheet starts empty.
+            Assert.That(view.OpenDeckPick(Purpose.Upgrade), Is.True);
+            Assert.That(view.PickDeckCard("k2"), Is.False, "already upgraded");
+            Assert.That(view.PickDeckCard("k3"), Is.False, "a weapon card");
+            Assert.That(view.PickDeckCard("k1"), Is.True);
+            view.CancelDeckPick();
+            Assert.That(view.DeckPickOpen, Is.False);
+            Assert.That(Refused(view.ConfirmDeckPickAsync()), Is.True);
+            Assert.That(view.OpenDeckPick(Purpose.Upgrade), Is.True);
+            Assert.That(view.DeckPickKey, Is.Null);
+
+            // Progress elsewhere: another device moved the run on; the refresh closes the sheet bound to the older context, unsent.
+            Assert.That(view.PickDeckCard("k1"), Is.True);
+            world.Version = 4;
+            var refresh = view.RefreshAsync();
+            yield return Until(() => refresh.IsCompleted, "the refresh resolves");
+            Assert.That(view.Snapshot!.Context.ServerVersion, Is.EqualTo(4));
+            Assert.That(view.DeckPickOpen, Is.False);
+            Assert.That(Refused(view.ConfirmDeckPickAsync()), Is.True);
+
+            // Reconnect: leaving drops the unsent sheet with the session, and the new session starts without it.
+            Assert.That(view.OpenDeckPick(Purpose.Upgrade), Is.True);
+            Assert.That(view.PickDeckCard("k1"), Is.True);
+            view.enabled = false;
+            Assert.That(view.DeckPickOpen, Is.False);
+            view.enabled = true;
+            yield return Settled(view);
+            Assert.That(view.DeckPickOpen, Is.False);
+            Assert.That(view.DeckPickKey, Is.Null);
+            Assert.That(Refused(view.ConfirmDeckPickAsync()), Is.True);
+            Assert.That(host.Posts.Length, Is.EqualTo(1), "no selection above was ever sent");
+
+            // A fresh choice is sent once at the current version; the used rest then offers only leaving.
+            Assert.That(view.OpenDeckPick(Purpose.Upgrade), Is.True);
+            Assert.That(view.PickDeckCard("k1"), Is.True);
+            post = request => Commit(state => { state["pending"]!["uses"] = 0; state["deck"]![0]!["plus"] = true; });
+            var upgrade = view.ConfirmDeckPickAsync();
+            yield return Until(() => upgrade.IsCompleted, "the upgrade resolves");
+            Assert.That(upgrade.Result, Is.True);
+            Sent(host.Posts[1], "rest", 4, new JObject { ["choice"] = "upgrade", ["key"] = "k1" });
+            Assert.That(Shown(view)["deck"]![0]!["plus"]!.Value<bool>(), Is.True);
+            Assert.That(view.OpenDeckPick(Purpose.Upgrade), Is.False);
+            Assert.That(Refused(view.RestHealAsync()), Is.True);
+
+            // Leaving is the existing proceed; the next phase is the server's.
+            post = request => Commit(state => state["pending"] = null, phase: "MAP");
+            var leaving = view.ProceedAsync();
+            yield return Until(() => leaving.IsCompleted, "proceed resolves");
+            Assert.That(leaving.Result, Is.True);
+            Sent(host.Posts[2], "proceed", 5, new JObject());
+            Assert.That(view.Snapshot!.Run!.Phase, Is.EqualTo("MAP"));
+            Assert.That(view.ShowingService, Is.Null);
+            Assert.That(Refused(view.ProceedAsync()), Is.True, "nothing to leave on the map");
+            Assert.That(host.Posts.Length, Is.EqualTo(3));
+        }
+
+        [UnityTest]
+        public IEnumerator AForgeVariationSendsTheChosenCardThenOnlyAPublishedPartAndNeverReRolls()
+        {
+            Node("FORGE", new JObject { ["type"] = "forge", ["uses"] = 1, ["offers"] = null }, coins: 12);
+            var view = View();
+            yield return Settled(view);
+            Assert.That(view.ShowingService, Is.EqualTo("forge"));
+            Assert.That(Refused(view.ForgeApplyAsync("p-a")), Is.True, "no offer is open");
+
+            Assert.That(view.OpenDeckPick(Purpose.ForgeOffer), Is.True);
+            Assert.That(view.PickDeckCard("k3"), Is.False, "a weapon card");
+            Assert.That(view.PickDeckCard("k2"), Is.True, "an upgraded card may still take a part");
+            post = request => Commit(state => state["pending"]!["offers"] = new JObject { ["key"] = "k2", ["parts"] = new JArray("p-a", "p-b", "p-c") });
+            var offering = view.ConfirmDeckPickAsync();
+            yield return Until(() => offering.IsCompleted, "the variation offer resolves");
+            Assert.That(offering.Result, Is.True);
+            Sent(host.Posts.Single(), "forgeOffer", 3, new JObject { ["key"] = "k2" });
+            Assert.That(Shown(view)["pending"]!["offers"]!["parts"]!.Values<string>(), Is.EqualTo(new[] { "p-a", "p-b", "p-c" }));
+            Assert.That(Shown(view)["pending"]!["uses"]!.Value<int>(), Is.EqualTo(1), "an offer spends no use");
+
+            // While the offer is open: no second offer (re-roll) or removal, and only a published part is sent.
+            Assert.That(view.OpenDeckPick(Purpose.ForgeOffer), Is.False);
+            Assert.That(view.OpenDeckPick(Purpose.ForgeRemove), Is.False);
+            Assert.That(Refused(view.ForgeApplyAsync("p-z")), Is.True);
+            Assert.That(host.Posts.Length, Is.EqualTo(1));
+            post = request => Commit(state =>
+            {
+                state["pending"]!["offers"] = null;
+                state["pending"]!["uses"] = 0;
+                state["deck"]![1]!["mods"] = new JObject { ["c"] = "p-b", ["e"] = null };
+            });
+            var applying = view.ForgeApplyAsync("p-b");
+            yield return Until(() => applying.IsCompleted, "the part resolves");
+            Assert.That(applying.Result, Is.True);
+            Sent(host.Posts[1], "forgeApply", 4, new JObject { ["partId"] = "p-b" });
+            Assert.That(Shown(view)["deck"]![1]!["mods"]!["c"]!.Value<string>(), Is.EqualTo("p-b"));
+            Assert.That(Refused(view.ForgeApplyAsync("p-b")), Is.True, "the offer is closed");
+            Assert.That(view.OpenDeckPick(Purpose.ForgeRemove), Is.False, "no use left");
+            Assert.That(host.Posts.Length, Is.EqualTo(2));
+        }
+
+        // ---- events and the archive (P1-SERVER-EVENT-ARCHIVE-UI §7.5/§7.7) ----
+        // The event ids are the real run content's (the view draws and counts picks from it); the committed states are what Core's
+        // EventChoose/Archive publish for that choice with this fixture's party (hpRef 0: event hp values apply as authored).
+
+        [UnityTest]
+        public IEnumerator AnEventChoiceIsSentOnceAsItsIndexAndAMadeChoiceIsNeverChosenAgain()
+        {
+            // ev_busker: 0 노래를 청한다 (need 25), 1 같이 쉰다 (heal 15), 2 지나친다.
+            Node("EVENT", Event("ev_busker"), coins: 12, hp: 20);
+            var view = View();
+            yield return Settled(view);
+            Assert.That(Refused(view.ProceedAsync()), Is.True, "leaving waits for a choice, as in the original");
+            Assert.That(Refused(view.ChooseEventAsync(3)), Is.True, "no such choice in the content");
+            Assert.That(Refused(view.ChooseEventAsync(-1)), Is.True);
+            Assert.That(host.Posts, Is.Empty);
+            var posted = new TaskCompletionSource<bool>();
+            var release = new TaskCompletionSource<bool>();
+            post = request =>
+            {
+                posted.TrySetResult(true);
+                return Commit(state => { state["hp"] = 35; state["pending"]!["done"] = true; state["pending"]!["choice"] = 1; }, release.Task);
+            };
+            try
+            {
+                var resting = view.ChooseEventAsync(1);
+                yield return Until(() => posted.Task.IsCompleted, "the choice is posted");
+                Assert.That(view.Busy, Is.True);
+                // Another choice, the same one again and leaving are refused at once; nothing is shown as gained yet.
+                Assert.That(Refused(view.ChooseEventAsync(2)), Is.True);
+                Assert.That(Refused(view.ChooseEventAsync(1)), Is.True);
+                Assert.That(Refused(view.ProceedAsync()), Is.True);
+                Assert.That(Shown(view)["hp"]!.Value<int>(), Is.EqualTo(20));
+                Assert.That(Shown(view)["pending"]!["done"], Is.Null);
+                release.TrySetResult(true);
+                yield return Until(() => resting.IsCompleted, "the choice resolves");
+                Assert.That(resting.Result, Is.True);
+            }
+            finally { release.TrySetResult(true); }
+            Sent(host.Posts.Single(), "event", 3, new JObject { ["index"] = 1 });
+            Assert.That(Shown(view)["hp"]!.Value<int>(), Is.EqualTo(35));
+            Assert.That(Shown(view)["pending"]!["choice"]!.Value<int>(), Is.EqualTo(1));
+            // The event resolves once: every choice is refused before sending; leaving is now the explicit proceed.
+            Assert.That(Refused(view.ChooseEventAsync(0)), Is.True);
+            Assert.That(Refused(view.ChooseEventAsync(1)), Is.True);
+            Assert.That(host.Posts.Length, Is.EqualTo(1));
+            post = request => Commit(state => state["pending"] = null, phase: "MAP");
+            var leaving = view.ProceedAsync();
+            yield return Until(() => leaving.IsCompleted, "proceed resolves");
+            Assert.That(leaving.Result, Is.True);
+            Sent(host.Posts[1], "proceed", 4, new JObject());
+            Assert.That(view.Snapshot!.Run!.Phase, Is.EqualTo("MAP"));
+        }
+
+        [UnityTest]
+        public IEnumerator AnEventRemovalAsksItsAuthoredCountAndNeverSendsACanceledOrOutdatedSelection()
+        {
+            // ev_archive: 0 정리한다 (maxHp -5, cardRemove 2), 1 한 권 빌린다, 2 지나친다.
+            Node("EVENT", Event("ev_archive"), coins: 12, hp: 20);
+            var view = View();
+            yield return Settled(view);
+            var opening = view.ChooseEventAsync(0);
+            Assert.That(opening.IsCompleted && !opening.Result, Is.True, "a removal first opens the deck sheet");
+            Assert.That(view.DeckPickOpen, Is.True);
+            Assert.That(view.DeckPickPurpose, Is.EqualTo(Purpose.EventCards));
+            Assert.That(view.DeckPickRequired, Is.EqualTo(2));
+            Assert.That(view.CanCommand, Is.False, "the open sheet blocks every other command");
+            Assert.That(Refused(view.ChooseEventAsync(2)), Is.True);
+            Assert.That(view.PickDeckCard("k3"), Is.False, "a weapon card");
+            Assert.That(view.PickDeckCard("k1"), Is.True);
+            Assert.That(Refused(view.ConfirmDeckPickAsync()), Is.True, "one of two");
+            Assert.That(view.DeckPickOpen, Is.True, "a refused send leaves the sheet open");
+            Assert.That(view.PickDeckCard("k2"), Is.True);
+            Assert.That(view.DeckPickKeys, Is.EqualTo(new[] { "k1", "k2" }));
+
+            // Cancel sends nothing; the reopened sheet starts empty.
+            view.CancelDeckPick();
+            Assert.That(view.DeckPickOpen, Is.False);
+            view.ChooseEventAsync(0);
+            Assert.That(view.DeckPickKeys, Is.Empty);
+
+            // Another device moved the run on: the refresh closes the sheet of the older context, unsent.
+            Assert.That(view.PickDeckCard("k1"), Is.True);
+            Assert.That(view.PickDeckCard("k2"), Is.True);
+            world.Version = 4;
+            var refresh = view.RefreshAsync();
+            yield return Until(() => refresh.IsCompleted, "the refresh resolves");
+            Assert.That(view.DeckPickOpen, Is.False);
+            Assert.That(Refused(view.ConfirmDeckPickAsync()), Is.True);
+            Assert.That(host.Posts, Is.Empty);
+
+            // A fresh choice sends the index and both keys once, in the order chosen.
+            view.ChooseEventAsync(0);
+            Assert.That(view.PickDeckCard("k2"), Is.True);
+            Assert.That(view.PickDeckCard("k1"), Is.True);
+            post = request => Commit(state =>
+            {
+                state["maxHp"] = 45;
+                Remove(state, "k1");
+                Remove(state, "k2");
+                state["pending"]!["done"] = true;
+                state["pending"]!["choice"] = 0;
+            });
+            var removing = view.ConfirmDeckPickAsync();
+            Assert.That(view.DeckPickOpen, Is.False);
+            yield return Until(() => removing.IsCompleted, "the removal resolves");
+            Assert.That(removing.Result, Is.True);
+            Sent(host.Posts.Single(), "event", 4, new JObject { ["index"] = 0, ["keys"] = new JArray("k2", "k1") });
+            Assert.That(Shown(view)["deck"]!.Select(c => c["key"]!.Value<string>()), Is.EqualTo(new[] { "k3" }));
+            Assert.That(Refused(view.ChooseEventAsync(0)), Is.True, "the event resolves once");
+            Assert.That(host.Posts.Length, Is.EqualTo(1));
+        }
+
+        [UnityTest]
+        public IEnumerator AnUncertainEventCopyLocksEveryCommandShowsNoCopyAndRetriesTheExactBytes()
+        {
+            // ev_mirror: 0 한 조각을 집는다 (hp -6, cardCopy 1), 1 조각을 묻는다 (need 30, cardRemove 1), 2 지나친다.
+            Node("EVENT", Event("ev_mirror"), coins: 12, hp: 20);
+            var view = View();
+            yield return Settled(view);
+            view.ChooseEventAsync(0);
+            Assert.That(view.DeckPickRequired, Is.EqualTo(1));
+            Assert.That(view.PickDeckCard("k1"), Is.True);
+            Assert.That(view.PickDeckCard("k2"), Is.True, "a one-card sheet replaces its choice");
+            Assert.That(view.DeckPickKeys, Is.EqualTo(new[] { "k2" }));
+            byte[] receipt = Array.Empty<byte>();
+            // The server commits the copy and its reply never arrives.
+            post = request =>
+            {
+                receipt = Commit(state =>
+                {
+                    state["hp"] = 14;
+                    ((JArray)state["deck"]!).Add(new JObject { ["key"] = "k4", ["id"] = "guard", ["owner"] = "sera", ["plus"] = true, ["gained"] = true });
+                    state["pending"]!["done"] = true;
+                    state["pending"]!["choice"] = 0;
+                }).Body;
+                return new Reply(200, receipt) { Drop = true };
+            };
+            var copying = view.ConfirmDeckPickAsync();
+            yield return Until(() => copying.IsCompleted, "the lost reply resolves");
+            Assert.That(copying.Result, Is.False);
+            Sent(host.Posts.Single(), "event", 3, new JObject { ["index"] = 0, ["keys"] = new JArray("k2") });
+            Assert.That(view.SessionState!.Pending, Is.Not.Null);
+            Assert.That(view.SnapshotStale, Is.True);
+            Assert.That(((JArray)Shown(view)["deck"]!).Count, Is.EqualTo(3), "no copy is shown while unresolved");
+            Assert.That(Shown(view)["hp"]!.Value<int>(), Is.EqualTo(20));
+            Assert.That(Refused(view.ChooseEventAsync(2)), Is.True);
+            Assert.That(Refused(view.ChooseEventAsync(0)), Is.True);
+            Assert.That(Refused(view.ProceedAsync()), Is.True);
+            Assert.That(view.DeckPickOpen, Is.False);
+            Assert.That(host.Posts.Length, Is.EqualTo(1));
+
+            post = request => new Reply(200, receipt);
+            var retry = view.RetryAsync();
+            yield return Until(() => retry.IsCompleted, "the retry resolves");
+            Assert.That(retry.Result, Is.True);
+            Assert.That(host.Posts.Length, Is.EqualTo(2));
+            Assert.That(host.Posts[1].Body, Is.EqualTo(host.Posts[0].Body));
+            Assert.That(Outbox().Load(), Is.Null);
+            Assert.That(((JArray)Shown(view)["deck"]!).Count, Is.EqualTo(4));
+            Assert.That(Shown(view)["hp"]!.Value<int>(), Is.EqualTo(14));
+            Assert.That(Refused(view.ChooseEventAsync(2)), Is.True, "resolved once");
+        }
+
+        [UnityTest]
+        public IEnumerator TheArchiveSendsOnlyItsExistingChoicesOnceAndIsNotChosenAgainAfterContinuing()
+        {
+            Node("ARCHIVE", new JObject { ["type"] = "archive" }, coins: 12, hp: 20);
+            var view = View();
+            yield return Settled(view);
+            Assert.That(Refused(view.ArchiveAsync("abandon")), Is.True, "only continue or return");
+            Assert.That(Refused(view.ProceedAsync()), Is.True, "the archive is left by its own choice");
+            Assert.That(host.Posts, Is.Empty);
+            var posted = new TaskCompletionSource<bool>();
+            var release = new TaskCompletionSource<bool>();
+            // Continue: Core heals floor(maxHp * 15 / 100) = 7 and opens the next zone's map.
+            post = request =>
+            {
+                posted.TrySetResult(true);
+                return Commit(state => { state["hp"] = 27; state["zoneIndex"] = 1; state["zone"] = 2; state["floor"] = 0; state["position"] = null; state["pending"] = null; },
+                    release.Task, "MAP");
+            };
+            try
+            {
+                var continuing = view.ArchiveAsync("continue");
+                yield return Until(() => posted.Task.IsCompleted, "the archive choice is posted");
+                Assert.That(Refused(view.ArchiveAsync("return")), Is.True);
+                Assert.That(Refused(view.ArchiveAsync("continue")), Is.True);
+                Assert.That(Shown(view)["hp"]!.Value<int>(), Is.EqualTo(20));
+                release.TrySetResult(true);
+                yield return Until(() => continuing.IsCompleted, "the archive choice resolves");
+                Assert.That(continuing.Result, Is.True);
+            }
+            finally { release.TrySetResult(true); }
+            Sent(host.Posts.Single(), "archive", 3, new JObject { ["choice"] = "continue" });
+            Assert.That(view.Snapshot!.Run!.Phase, Is.EqualTo("MAP"));
+            Assert.That(Shown(view)["hp"]!.Value<int>(), Is.EqualTo(27));
+            Assert.That(Refused(view.ArchiveAsync("return")), Is.True, "the archive was already handled");
+            Assert.That(host.Posts.Length, Is.EqualTo(1));
+        }
+
+        [UnityTest]
+        public IEnumerator ReturningFromTheArchiveShowsTheServersSaveStateWhichStaysALaterUnit()
+        {
+            Node("ARCHIVE", new JObject { ["type"] = "archive" }, coins: 12, hp: 20);
+            var view = View();
+            yield return Settled(view);
+            post = request => Commit(state =>
+            {
+                state["pending"] = new JObject { ["type"] = "save", ["defeat"] = false };
+                state["result"] = new JObject { ["outcome"] = "return", ["floor"] = 2 };
+            }, phase: "VICTORY");
+            var returning = view.ArchiveAsync("return");
+            yield return Until(() => returning.IsCompleted, "the return resolves");
+            Assert.That(returning.Result, Is.True);
+            Sent(host.Posts.Single(), "archive", 3, new JObject { ["choice"] = "return" });
+            Assert.That(view.Snapshot!.Run!.Phase, Is.EqualTo("VICTORY"));
+            // No save screen here yet: nothing on this phase sends anything.
+            Assert.That(Refused(view.ArchiveAsync("return")), Is.True);
+            Assert.That(Refused(view.ProceedAsync()), Is.True);
+            Assert.That(Refused(view.ChooseEventAsync(0)), Is.True);
+            Assert.That(host.Posts.Length, Is.EqualTo(1));
+        }
+
+        MemoryForgeServerPracticeClient View()
+        {
+            viewObject = new GameObject("ServerPracticeServicesTest");
+            var view = viewObject.AddComponent<MemoryForgeServerPracticeClient>();
+            Assert.That(view.Connect(() => Session()), Is.True);
+            return view;
+        }
+
+        // A node-service run: PublicView's state members for the phase, its pending and a three-card deck.
+        void Node(string phase, JObject pending, int coins, int hp = 40)
+        {
+            world.Phase = phase;
+            world.InBattle = false;
+            world.Extra = new JObject { ["hp"] = hp, ["coins"] = coins, ["pending"] = pending, ["deck"] = Deck(), ["relics"] = new JArray(), ["partsFound"] = new JArray() };
+        }
+
+        // The fixture server commits: the world moves to the next version with the change applied, and the receipt is that run.
+        Reply Commit(Action<JObject> change, Task? hold = null, string? phase = null)
+        {
+            world.Version++;
+            if (phase != null) world.Phase = phase;
+            change(world.Extra!);
+            return new Reply(200, Utf8(RunJson(world, world.Version))) { Hold = hold };
+        }
+
+        static JObject Rest(int uses) => new JObject { ["type"] = "rest", ["uses"] = uses };
+        // PublicView's unresolved event pending: {type, id}; done and choice appear only once Core resolves it.
+        static JObject Event(string id) => new JObject { ["type"] = "event", ["id"] = id };
+        static JObject Shop() => new JObject
+        {
+            ["type"] = "shop", ["cards"] = new JArray(Listed("c-shop", 70), Listed("c-dear", 110)), ["parts"] = new JArray(Listed("p-shop", 60)),
+            ["relics"] = new JArray(Listed("r-shop", 120)), ["removeCost"] = 50
+        };
+        static JObject Listed(string id, int price) => new JObject { ["id"] = id, ["price"] = price, ["sold"] = false };
+        // k1 a plain card, k2 an upgraded one, k3 a weapon card (PublicView deck members).
+        static JArray Deck() => new JArray(
+            new JObject { ["key"] = "k1", ["id"] = "strike", ["owner"] = "sera", ["plus"] = false },
+            new JObject { ["key"] = "k2", ["id"] = "guard", ["owner"] = "sera", ["plus"] = true },
+            new JObject { ["key"] = "k3", ["id"] = "blade", ["owner"] = "sera", ["wielder"] = "sera", ["weapon"] = true });
+        static void Remove(JObject state, string key) =>
+            state["deck"] = new JArray(((JArray)state["deck"]!).Where(card => card["key"]!.Value<string>() != key));
+        static JObject Listing(JObject state, string kind, int index) => (JObject)state["pending"]![kind]![index]!;
+        static JObject Shown(MemoryForgeServerPracticeClient view) => view.Snapshot!.Run!.StateJObject();
+        static bool Refused(Task<bool> task) => task.IsCompleted && !task.Result;
+
+        static void Sent(Seen seen, string kind, int expectedVersion, JObject args)
+        {
+            Assert.That(seen.Path, Is.EqualTo(PracticeCommandOutbox.CommandRoute(RunA)));
+            var body = JObject.Parse(seen.Text);
+            Assert.That(body["kind"]!.Value<string>(), Is.EqualTo(kind));
+            Assert.That(body["expectedVersion"]!.Value<int>(), Is.EqualTo(expectedVersion));
+            Assert.That(JToken.DeepEquals(body["args"], args), Is.True, "args " + body["args"]!.ToString(Formatting.None));
+        }
+
+        static IEnumerator Settled(MemoryForgeServerPracticeClient view) =>
+            Until(() => !view.Busy && view.SessionState?.Snapshot != null && view.SessionState.CanMutate, "the view's refresh settles");
+        static IEnumerator Until(Func<bool> done, string what)
+        {
+            var watch = System.Diagnostics.Stopwatch.StartNew();
+            while (!done())
+            {
+                Assert.That(watch.Elapsed, Is.LessThan(Bound), what + " within the bound");
+                yield return null;
+            }
+        }
+#endif
+
         // ---- fixture server and protocol fixtures ----
 
         sealed class World
@@ -670,6 +1233,8 @@ namespace MemoryForge.Client.Tests
             public string Phase = "BATTLE", Node = "z1-f2-n0";
             public bool InBattle = true;
             public Reply? AccountFailure;
+            /// <summary>Public run-state members that replace or add to the default state (the node-service fixtures); null keeps the default.</summary>
+            public JObject? Extra;
         }
 
         Reply Serve(Seen request)
@@ -752,6 +1317,7 @@ namespace MemoryForge.Client.Tests
                 ["log"] = new JArray("The seed of doubt grows."), ["futurePublic"] = new JObject { ["note"] = "kept" },
                 ["battle"] = w.InBattle ? (JToken)Battle(w) : JValue.CreateNull()
             };
+            if (w.Extra != null) foreach (var member in w.Extra.Properties()) state[member.Name] = member.Value.DeepClone();
             var reply = new JObject { ["runId"] = w.RunId, ["version"] = version, ["phase"] = w.Phase, ["memoryVersion"] = w.MemoryVersion };
             if (events != null) reply["events"] = events;
             reply["state"] = state;

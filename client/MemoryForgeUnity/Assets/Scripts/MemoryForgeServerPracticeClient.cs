@@ -14,10 +14,12 @@ namespace MemoryForge.Client
 {
     // P1-PRACTICE-SERVER-UI §14.2/§14.3/§14.7/§17.2/§17.4: a Development-only, optional uGUI view of the local practice SERVER: one scoped
     // map → battle slice over PracticeServerSession. It renders only the server's complete public snapshot and sends only the existing
-    // commands (create, enter, play, end) and pure battle queries; it never creates or hydrates a Run/BattleState, seeds anything or
-    // computes a cost, slot, target, legality or damage. Costs, modes, blocked[mode] (the DEFAULT request only), forecasts and pick sheets
+    // commands (create, enter, play, end, the reward and node-service kinds, proceed) and pure battle queries; it never creates or
+    // hydrates a Run/BattleState, seeds anything or computes a cost, slot, target, legality or damage. Costs, modes, blocked[mode] (the
+    // DEFAULT request only), forecasts and pick sheets
     // are the server's values; card/character names come from the existing content for display only. It does not replace the original
-    // local expedition client, and rewards/services/memory screens are a later unit (shown as such).
+    // local expedition client. The battle reward, the rest/forge/shop node services, events and the archive have their own screens (one
+    // existing command per button); the memory-save screens are a later unit (shown as such).
     // - Unconfigured it shows a small harmless status. Connect(factory) (runtime, Editor or development build only) creates the session
     //   and only refreshes: nothing is created, sent or retried on Connect or resume. The factory, session, credential, outbox, bodies
     //   and snapshots are never serialized or logged; nothing here chooses an endpoint or credential.
@@ -32,8 +34,14 @@ namespace MemoryForge.Client
     // - Targets: "auto" exists only in Core's pure Check; a play sends the clicked live enemy uid, or no target (Core's own rule for a
     //   single living enemy) — never a client re-target. A query answer is applied only for the selection generation and context it was
     //   asked in. Local prototype timing (not a measurement): rows 0.2 s, a reservation resolution row the original 0.3 s, 0.6 s hold.
+    // - Services and event choices that need deck cards open a local, unsent deck sheet bound to the context it was opened in; cancel,
+    //   any snapshot change (a commit, another device, a new node) and a reconnect drop it, so an old selection is never sent.
     public sealed class MemoryForgeServerPracticeClient : MonoBehaviour
     {
+        /// <summary>Why the deck sheet is open: a node service that needs one card (§7.3 node table: rest upgrade, forge variation or
+        /// removal, shop removal), or an event choice that copies or removes cards (§7.7, its authored count).</summary>
+        public enum DeckPurpose { Upgrade, ForgeOffer, ForgeRemove, ShopRemove, EventCards }
+
         public const string OwnedCanvas = "MemoryForgeServerPracticeView";
         /// <summary>At most one confirmed play may wait unsent behind an ordinary action presentation (a local UI bound, not a slot).</summary>
         public const int PreparedLimit = 1;
@@ -58,6 +66,21 @@ namespace MemoryForge.Client
             public string Mode { get; }
             public string? Target { get; }
         }
+        sealed class DeckPick
+        {
+            public DeckPick(PracticeUiContext context, DeckPurpose purpose, int count, int eventIndex)
+            {
+                Context = context; Purpose = purpose; Count = count; EventIndex = eventIndex;
+            }
+            public PracticeUiContext Context { get; }
+            public DeckPurpose Purpose { get; }
+            /// <summary>How many cards the purpose asks for: 1, or the event choice's authored copy (1) / removal count.</summary>
+            public int Count { get; }
+            /// <summary>The event choice index for EventCards; -1 otherwise.</summary>
+            public int EventIndex { get; }
+            /// <summary>The chosen deck keys in the order chosen (Core reads event picks in this order).</summary>
+            public List<string> Keys { get; } = new List<string>();
+        }
 
         Func<PracticeServerSession>? factory;
         PracticeServerSession? session;
@@ -68,6 +91,7 @@ namespace MemoryForge.Client
         string? selectedCard, selectedMode, target;
         PickSheet? picker;
         Prepared? prepared;
+        DeckPick? deckPick;
         IReadOnlyList<BattleDigestEntry>? rows;
         bool barrier;
         int shown;
@@ -88,6 +112,9 @@ namespace MemoryForge.Client
         readonly Dictionary<string, string> relicTexts = new Dictionary<string, string>(StringComparer.Ordinal);
         readonly Dictionary<string, string> partNames = new Dictionary<string, string>(StringComparer.Ordinal);
         readonly Dictionary<string, string> partTexts = new Dictionary<string, string>(StringComparer.Ordinal);
+        readonly Dictionary<string, string> partSlots = new Dictionary<string, string>(StringComparer.Ordinal);
+        // Display-only event content (names, texts, choice labels, need.coins and the authored copy/remove counts); Core runs the effects.
+        readonly Dictionary<string, RunEventDefinition> events = new Dictionary<string, RunEventDefinition>(StringComparer.Ordinal);
 
         // ───────── read-only state for Root's checks ─────────
         public bool Configured => factory != null;
@@ -117,8 +144,16 @@ namespace MemoryForge.Client
         public bool PresentationBarrier => rows != null && barrier;
         public IReadOnlyList<BattleDigestEntry> PresentationRows => rows ?? Array.Empty<BattleDigestEntry>();
         public int PresentationShown => rows == null ? 0 : shown;
+        public bool DeckPickOpen => deckPick != null;
+        public DeckPurpose? DeckPickPurpose => deckPick?.Purpose;
+        /// <summary>The first deck key chosen in the open (unsent) deck sheet; null while none is chosen or no sheet is open.</summary>
+        public string? DeckPickKey => deckPick?.Keys.FirstOrDefault();
+        /// <summary>Every deck key chosen in the open sheet, in the order chosen.</summary>
+        public IReadOnlyList<string> DeckPickKeys => deckPick?.Keys.ToArray() ?? Array.Empty<string>();
+        /// <summary>How many keys the open sheet needs before it can be sent: its count, at most the pickable cards (the original rule).</summary>
+        public int DeckPickRequired => deckPick == null ? 0 : Required(deckPick);
         /// <summary>Whether a new command may be sent now (session CanMutate, nothing local open, no presentation, no operation).</summary>
-        public bool CanCommand => !busy && session != null && session.State.CanMutate && rows == null && picker == null && prepared == null;
+        public bool CanCommand => !busy && session != null && session.State.CanMutate && rows == null && picker == null && prepared == null && deckPick == null;
 
         // ───────── lifecycle ─────────
 
@@ -171,7 +206,7 @@ namespace MemoryForge.Client
         }
         void DropUnsent()
         {
-            selectedCard = null; selectedMode = null; target = null; picker = null; prepared = null; rows = null;
+            selectedCard = null; selectedMode = null; target = null; picker = null; prepared = null; deckPick = null; rows = null;
             queryResult = null; queryWanted = false; refreshWanted = false; generation++;
         }
 
@@ -355,8 +390,17 @@ namespace MemoryForge.Client
         /// <summary>evolve {key, branchId}: the pair must be one of the published evolution offers.</summary>
         public Task<bool> EvolveAsync(string key, string branchId) => RewardAction(p => ((p["evolutions"] as JArray) ?? new JArray()).OfType<JObject>()
             .Any(e => Str(e["key"]) == key && Ids(e["options"]).Contains(branchId)), "evolve", new JObject { ["key"] = key, ["branchId"] = branchId }, "진화했어요.");
-        /// <summary>proceed {}: an explicit command; Core decides whether it is allowed now.</summary>
-        public Task<bool> ProceedAsync() => RewardAction(p => true, "proceed", null, "다음으로 나아가요.");
+        /// <summary>proceed {}: leaves the battle reward, a published rest/forge/shop node (unclaimed rewards and unused services are
+        /// left, as in the original) or an event once its choice is published as made (the original offers leaving only then; every
+        /// authored event has a free choice). An explicit command; Core decides whether it is allowed now and where it leads.</summary>
+        public Task<bool> ProceedAsync()
+        {
+            string? phase = session?.State.Snapshot?.Run?.Phase;
+            if (phase == "EVENT") return EventAction(p => Truthy(p["done"]), "proceed", null, "지도로 돌아가요.", "먼저 선택지를 골라 주세요.");
+            string? service = ServiceType(phase);
+            return service != null ? ServiceAction(service, p => true, "proceed", null, "다음으로 나아가요.")
+                : RewardAction(p => true, "proceed", null, "다음으로 나아가요.");
+        }
         /// <summary>True while the session's current snapshot shows the public pending battle reward.</summary>
         public bool ShowingReward => Pending(session?.State.Snapshot?.Run?.StateJObject(), "reward") != null;
 
@@ -364,7 +408,7 @@ namespace MemoryForge.Client
         // choice from the SESSION's current snapshot, then exactly one existing command through Mutate and the outbox.
         Task<bool> RewardAction(Func<JObject, bool> offered, string kind, JObject? args, string success)
         {
-            if (!CanCommand) return Refuse(rows != null || picker != null || prepared != null ? "지금은 할 수 없어요." : NotReady());
+            if (!CanCommand) return Refuse(Blocked());
             var pending = Pending(session!.State.Snapshot?.Run?.StateJObject(), "reward");
             if (pending == null || Str(session.State.Snapshot!.Run!.StateJObject()["phase"]) != "REWARD" || !offered(pending))
                 return Refuse("지금 고를 수 있는 보상이 아니에요.");
@@ -377,6 +421,196 @@ namespace MemoryForge.Client
             return pending != null && Str(pending["type"]) == type ? pending : null;
         }
         static List<string> Ids(JToken? list) => ((list as JArray) ?? new JArray()).Select(Str).OfType<string>().ToList();
+
+        // ───────── node services (P1-SERVER-SERVICES-UI): one existing command per button ─────────
+        // §7.3 node table / §14.3 / §17.4: the server's published pending rest {uses}, forge {uses, offers {key, parts}|null, fromEvent?}
+        // and shop {cards|parts|relics [{id, price, sold}], removeCost|null}. Buttons are offered only from those members, mirroring the
+        // original local screens; amounts, prices, CANNOT_HEAL, COINS_LOW, BAD_UPGRADE/BAD_CARD and the next phase stay Core's verdict. A
+        // used service or sold listing disappears only when the committed state says so — never by local change.
+
+        static readonly string[] ShopKinds = { "cards", "parts", "relics" };
+
+        /// <summary>rest {choice: "heal"}: only while the published rest has uses left.</summary>
+        public Task<bool> RestHealAsync() =>
+            ServiceAction("rest", p => (Int(p["uses"]) ?? 0) > 0, "rest", new JObject { ["choice"] = "heal" }, "체력을 회복했어요.");
+        /// <summary>forgeApply {partId}: the part must be one of the published open offer's parts.</summary>
+        public Task<bool> ForgeApplyAsync(string partId) =>
+            ServiceAction("forge", p => Ids((p["offers"] as JObject)?["parts"]).Contains(partId), "forgeApply", new JObject { ["partId"] = partId }, "부품을 붙였어요.");
+        /// <summary>buy {kind, id}: kind cards|parts|relics and an unsold published listing with that id.</summary>
+        public Task<bool> BuyAsync(string kind, string id) => ServiceAction("shop",
+            p => ShopKinds.Contains(kind) && Items(p, kind).Any(x => Str(x["id"]) == id && !Bool(x["sold"])), "buy", new JObject { ["kind"] = kind, ["id"] = id }, "구매했어요.");
+        /// <summary>"rest", "forge" or "shop" while the session's current snapshot shows that published node service; else null.</summary>
+        public string? ShowingService
+        {
+            get
+            {
+                var run = session?.State.Snapshot?.Run;
+                string? type = ServiceType(run?.Phase);
+                return type != null && Pending(run!.StateJObject(), type) != null ? type : null;
+            }
+        }
+
+        /// <summary>Opens the local deck sheet for a published service that needs one card; nothing is sent until ConfirmDeckPickAsync.
+        /// Rest upgrade and forge variation/removal need uses left (forge also no open offer: the original offers no re-roll); shop
+        /// removal needs a published removeCost.</summary>
+        public bool OpenDeckPick(DeckPurpose purpose) => OpenDeck(purpose, 1, -1);
+
+        bool OpenDeck(DeckPurpose purpose, int count, int eventIndex)
+        {
+            if (!CanCommand) { Refuse(Blocked()); return false; }
+            if (DeckService(purpose, eventIndex) == null) { Refuse("지금은 이 서비스를 이용할 수 없어요."); return false; }
+            deckPick = new DeckPick(session!.State.Snapshot!.Context, purpose, count, eventIndex);
+            Say(DeckTitle(deckPick) + ". 확정하기 전에는 보내지 않아요.", false);
+            Render();
+            return true;
+        }
+
+        /// <summary>Chooses (or, again, clears) one public deck card the purpose allows; local only. A one-card sheet replaces its choice;
+        /// a multi-card sheet adds in order up to its required count and refuses more.</summary>
+        public bool PickDeckCard(string key)
+        {
+            var sheet = deckPick;
+            if (sheet == null || busy || !Pickable(DeckCard(key), sheet.Purpose)) return false;
+            if (!sheet.Keys.Remove(key))
+            {
+                if (sheet.Count == 1) sheet.Keys.Clear();
+                if (sheet.Keys.Count >= Required(sheet)) return false;
+                sheet.Keys.Add(key);
+            }
+            Render();
+            return true;
+        }
+
+        /// <summary>Sends the sheet's one existing command with its chosen keys: rest {upgrade, key}, forgeOffer {key}, forgeRemove {key},
+        /// buy {remove, key} or event {index, keys}. Gated before the sheet is dropped (a refused send leaves it open); once sent the sheet
+        /// is gone, whatever the answer. A sheet whose context, service or event choice is no longer current is closed unsent.</summary>
+        public Task<bool> ConfirmDeckPickAsync()
+        {
+            var sheet = deckPick;
+            if (sheet == null) return Refuse("열린 카드 선택 창이 없어요.");
+            if (!Ready() || rows != null || picker != null || prepared != null) return Refuse(NotReady());
+            if (!sheet.Context.Equals(session!.State.Snapshot!.Context) || DeckService(sheet.Purpose, sheet.EventIndex) == null)
+            {
+                deckPick = null;
+                return Refuse("상태가 바뀌어 카드 선택을 닫았어요. 보낸 것은 없어요.");
+            }
+            var keys = sheet.Keys.ToList();
+            int required = Required(sheet);
+            if (required == 0 || keys.Count != required || !keys.All(k => Pickable(DeckCard(k), sheet.Purpose)))
+                return Refuse(sheet.Count > 1 ? "카드를 " + required + "장 골라 주세요." : "카드를 먼저 골라 주세요.");
+            deckPick = null;
+            string key = keys[0];
+            var (kind, args, success) = sheet.Purpose == DeckPurpose.Upgrade ? ("rest", new JObject { ["choice"] = "upgrade", ["key"] = key }, "카드를 강화했어요.")
+                : sheet.Purpose == DeckPurpose.ForgeOffer ? ("forgeOffer", new JObject { ["key"] = key }, "붙일 부품을 고르세요.")
+                : sheet.Purpose == DeckPurpose.ForgeRemove ? ("forgeRemove", new JObject { ["key"] = key }, "카드를 덱에서 뺐어요.")
+                : sheet.Purpose == DeckPurpose.ShopRemove ? ("buy", new JObject { ["kind"] = "remove", ["key"] = key }, "카드를 덱에서 뺐어요.")
+                : ("event", new JObject { ["index"] = sheet.EventIndex, ["keys"] = new JArray(keys.Cast<object>().ToArray()) }, "선택의 결과가 반영됐어요.");
+            return Mutate((s, context) => s.CommandAsync(context, kind, args), false, false, success);
+        }
+
+        public void CancelDeckPick()
+        {
+            if (deckPick == null) return;
+            deckPick = null;
+            Say("카드 선택을 취소했어요. 보낸 것은 없어요.", false);
+            Render();
+        }
+
+        // RewardAction's gate for a node service: readiness, then the SESSION's current phase and published pending of that type.
+        Task<bool> ServiceAction(string type, Func<JObject, bool> offered, string kind, JObject? args, string success)
+        {
+            if (!CanCommand) return Refuse(Blocked());
+            var pending = CurrentService(type);
+            if (pending == null || !offered(pending)) return Refuse("지금은 이 서비스를 이용할 수 없어요.");
+            return Mutate((s, context) => s.CommandAsync(context, kind, args), false, false, success);
+        }
+
+        JObject? CurrentService(string type)
+        {
+            var run = session?.State.Snapshot?.Run;
+            return run != null && ServiceType(run.Phase) == type ? Pending(run.StateJObject(), type) : null;
+        }
+        static string? ServiceType(string? phase) => phase == "REST" ? "rest" : phase == "FORGE" ? "forge" : phase == "SHOP" ? "shop" : null;
+
+        // The published service a deck purpose belongs to, while it still offers that purpose (the original screens' enabling rule); for
+        // EventCards the published, unresolved event while choice eventIndex still asks for cards.
+        JObject? DeckService(DeckPurpose purpose, int eventIndex = -1)
+        {
+            if (purpose == DeckPurpose.EventCards)
+            {
+                var choice = OfferedChoice(eventIndex);
+                return choice != null && EventPicks(choice) > 0 ? CurrentEvent() : null;
+            }
+            var p = CurrentService(purpose == DeckPurpose.Upgrade ? "rest" : purpose == DeckPurpose.ShopRemove ? "shop" : "forge");
+            if (p == null) return null;
+            bool open = purpose == DeckPurpose.ShopRemove ? Int(p["removeCost"]) != null
+                : (Int(p["uses"]) ?? 0) > 0 && (purpose == DeckPurpose.Upgrade || !(p["offers"] is JObject));
+            return open ? p : null;
+        }
+
+        // The original deck picker's rule over the public deck members: never a weapon card; an upgrade never an already-plus card.
+        static bool Pickable(JObject? card, DeckPurpose purpose) =>
+            card != null && !Truthy(card["weapon"]) && !(purpose == DeckPurpose.Upgrade && Truthy(card["plus"]));
+        // The original's required count: what the purpose asks for, at most the pickable cards in the public deck.
+        int Required(DeckPick sheet) => Math.Min(sheet.Count, Deck().Count(c => Pickable(c, sheet.Purpose)));
+        static List<JObject> Items(JObject pending, string kind) => ((pending[kind] as JArray) ?? new JArray()).OfType<JObject>().ToList();
+
+        // ───────── events and the archive (P1-SERVER-EVENT-ARCHIVE-UI): one existing command per button ─────────
+        // §7.5/§7.7 / §17.4: the published pending event {id, done?, choice?} drawn with this device's matching run content (name, text,
+        // choice labels/texts, need.coins and the authored copy/remove counts — display and pick counts only), and the published archive
+        // {type}. Effects, random draws, COINS_LOW, WOULD_KILL, the heal, the next zone and the save that follows are Core's; a choice
+        // shows as made only when the committed state says done. A variation choice is Core's move to a fromEvent forge (ForgeView).
+
+        /// <summary>event {index}: one choice of the published, unresolved event, as this device's matching content lists it. A choice that
+        /// copies or removes cards first opens the local deck sheet for its authored count (nothing sent, false); ConfirmDeckPickAsync then
+        /// sends event {index, keys}.</summary>
+        public Task<bool> ChooseEventAsync(int index)
+        {
+            if (!CanCommand) return Refuse(Blocked());
+            var choice = OfferedChoice(index);
+            if (choice == null) return Refuse("지금 고를 수 있는 선택지가 아니에요.");
+            int picks = EventPicks(choice);
+            if (picks > 0) { OpenDeck(DeckPurpose.EventCards, picks, index); return Task.FromResult(false); }
+            return EventAction(p => true, "event", new JObject { ["index"] = index }, "선택의 결과가 반영됐어요.", "지금 고를 수 있는 선택지가 아니에요.");
+        }
+
+        /// <summary>archive {choice: "continue"|"return"}: only while the published archive is open (§7.5).</summary>
+        public Task<bool> ArchiveAsync(string choice)
+        {
+            if (!CanCommand) return Refuse(Blocked());
+            var run = session!.State.Snapshot?.Run;
+            if (run == null || run.Phase != "ARCHIVE" || Pending(run.StateJObject(), "archive") == null) return Refuse("지금은 기록소가 열려 있지 않아요.");
+            if (choice != "continue" && choice != "return") return Refuse("보낼 수 없는 선택이에요.");
+            return Mutate((s, context) => s.CommandAsync(context, "archive", new JObject { ["choice"] = choice }), false, false,
+                choice == "return" ? "기록소에서 귀환했어요." : "다음 구역으로 나아가요.");
+        }
+
+        // RewardAction's gate for the published event: readiness, then the SESSION's current EVENT phase and pending, then one command.
+        Task<bool> EventAction(Func<JObject, bool> offered, string kind, JObject? args, string success, string refused)
+        {
+            if (!CanCommand) return Refuse(Blocked());
+            var pending = CurrentEvent();
+            if (pending == null || !offered(pending)) return Refuse(refused);
+            return Mutate((s, context) => s.CommandAsync(context, kind, args), false, false, success);
+        }
+
+        JObject? CurrentEvent()
+        {
+            var run = session?.State.Snapshot?.Run;
+            return run != null && run.Phase == "EVENT" ? Pending(run.StateJObject(), "event") : null;
+        }
+        // A choice of the published event that is not yet resolved, by index into the matching content definition (Core's own bounds).
+        RunEventChoice? OfferedChoice(int index)
+        {
+            var p = CurrentEvent();
+            if (p == null || Truthy(p["done"])) return null;
+            var definition = EventDefinition(Str(p["id"]));
+            return definition != null && index >= 0 && index < definition.Choices.Count ? definition.Choices[index] : null;
+        }
+        RunEventDefinition? EventDefinition(string? id) => id != null && events.TryGetValue(id, out var definition) ? definition : null;
+        // The original's pick count: a copy takes one card, a removal its authored count (Core falls back for missing picks).
+        static int EventPicks(RunEventChoice choice) =>
+            choice.Effects.CardCopy.GetValueOrDefault() != 0 ? 1 : Math.Max(0, choice.Effects.CardRemove.GetValueOrDefault());
 
         /// <summary>Barrier: shows every row at once. Ordinary presentation: closes it. Changes text only; sends nothing.</summary>
         public void SkipPresentation()
@@ -459,6 +693,7 @@ namespace MemoryForge.Client
             var snap = session?.State.Snapshot;
             if (snap != null) lastGood = snap;
             if (picker != null && (snap == null || !picker.Context.Equals(snap.Context))) picker = null;
+            if (deckPick != null && (snap == null || !deckPick.Context.Equals(snap.Context))) deckPick = null;
             if (selectedCard != null && Hand(selectedCard) == null) { selectedCard = null; selectedMode = null; }
             if (target != null && !Enemies().Any(e => Str(e["uid"]) == target && Bool(e["alive"]))) target = null;
             generation++; queryResult = null;
@@ -523,6 +758,7 @@ namespace MemoryForge.Client
         string NotReady() => busy ? "이전 요청을 처리하는 중이에요."
             : session == null ? "서버 연습에 연결되어 있지 않아요."
             : "서버 확인이 끝나지 않았어요. 새로고침하거나 '같은 요청 다시 보내기'로 확인해 주세요.";
+        string Blocked() => rows != null || picker != null || prepared != null || deckPick != null ? "지금은 할 수 없어요." : NotReady();
         bool SelectionLocked() => !Ready() || PresentationBarrier || picker != null || prepared != null || session!.State.Snapshot?.Run?.BattleVersion == null;
 
         // ───────── presentation (cosmetic public event rows) ─────────
@@ -614,6 +850,8 @@ namespace MemoryForge.Client
         JObject? Hand(string uid) => (Battle()?["hand"] as JArray)?.OfType<JObject>().FirstOrDefault(c => Str(c["uid"]) == uid);
         List<JObject> Enemies() => (Battle()?["enemies"] as JArray)?.OfType<JObject>().ToList() ?? new List<JObject>();
         HashSet<string> Available() => new HashSet<string>(((State()?["available"] as JArray) ?? new JArray()).Select(Str).OfType<string>(), StringComparer.Ordinal);
+        List<JObject> Deck() => ((State()?["deck"] as JArray) ?? new JArray()).OfType<JObject>().ToList();
+        JObject? DeckCard(string? key) => key == null ? null : Deck().FirstOrDefault(c => Str(c["key"]) == key);
         static List<string> Candidates(PracticeBattleQueryView view) =>
             ((view.ToJObject()["choices"]?["candidates"] as JArray) ?? new JArray()).OfType<JObject>().Select(c => Str(c["uid"])).OfType<string>().ToList();
         static bool NeedsPicks(PracticeBattleQueryView view)
@@ -659,9 +897,15 @@ namespace MemoryForge.Client
                 else if (run.Phase == "MAP") MapView();
                 else if (run.Phase == "BATTLE" && Battle() != null) BattleView();
                 else if (run.Phase == "REWARD" && Pending(State(), "reward") != null) RewardView();
+                else if (run.Phase == "REST" && Pending(State(), "rest") != null) RestView();
+                else if (run.Phase == "FORGE" && Pending(State(), "forge") != null) ForgeView();
+                else if (run.Phase == "SHOP" && Pending(State(), "shop") != null) ShopView();
+                else if (run.Phase == "EVENT" && Pending(State(), "event") != null) EventView();
+                else if (run.Phase == "ARCHIVE" && Pending(State(), "archive") != null) ArchiveView();
                 else LaterView(run.Phase);
                 Label(frame, notice, 32, 846, 1536, 44, 21, noticeError ? Danger : Memory);
                 if (picker != null) PickView();
+                if (deckPick != null) DeckPickView();
                 if (rows != null && barrier) BarrierView();
             }
             if (factory != null && EventSystem.current == null)
@@ -738,7 +982,193 @@ namespace MemoryForge.Client
             var panel = Box(frame!, "Later", 32, 120, 1536, 300, Panel);
             Label(panel, PhaseName(phase), 24, 20, 1488, 44, 32, Brass, FontStyle.Bold);
             Label(panel, "체력 " + Int(state["hp"]) + " / " + Int(state["maxHp"]) + "   ·   동전 " + Int(state["coins"]), 24, 80, 1488, 36, 24, Ink);
-            Label(panel, "이 단계(휴식·공방·상점·사건·기록소·기억 저장)는 다음 작업 단위에서 서버 화면으로 연결돼요. 원래 로컬 탐사 화면은 그대로 있어요.", 24, 140, 1488, 80, 22, Muted);
+            Label(panel, "이 단계(기억 저장)는 다음 작업 단위에서 서버 화면으로 연결돼요. 원래 로컬 탐사 화면은 그대로 있어요.", 24, 140, 1488, 80, 22, Muted);
+        }
+
+        // P1-SERVER-EVENT-ARCHIVE-UI §7.7: the published event by this device's matching content. Before the choice: every authored choice
+        // (label, need.coins, text) in a scroll; a choice is enabled, as in the original, when the shown coins cover its need (COINS_LOW
+        // and WOULD_KILL themselves are Core's). After it: the choice the server records and leaving to the map.
+        void EventView()
+        {
+            var state = State()!;
+            var p = Pending(state, "event")!;
+            var definition = EventDefinition(Str(p["id"]));
+            int coins = Int(state["coins"]) ?? 0;
+            bool ready = CanCommand;
+            var panel = Box(frame!, "Event", 32, 100, 1536, 736, Panel);
+            Label(panel, "체력 " + Int(state["hp"]) + " / " + Int(state["maxHp"]) + "   ·   동전 " + Int(state["coins"]) + "  (서버 기록)", 900, 22, 616, 32, 20, Ink);
+            if (definition == null)
+            {
+                // The server's event is not in this device's content: no choice can be offered or explained, so none is sent; a choice
+                // the server already records as made can still be left.
+                Label(panel, "알 수 없는 사건이에요. 이 기기의 콘텐츠가 서버와 맞지 않아요.", 20, 14, 860, 44, 26, Danger);
+                if (Truthy(p["done"])) Button(panel, "Proceed", "지도로", 1196, 640, 320, 72, () => Launch(ProceedAsync), Brass, 24).interactable = ready;
+                return;
+            }
+            Label(panel, definition.Name, 20, 14, 860, 44, 32, Brass, FontStyle.Bold);
+            Label(panel, definition.Text, 20, 66, 1496, 96, 22, Ink);
+            if (Truthy(p["done"]))
+            {
+                int chosen = Int(p["choice"]) ?? -1;
+                var choice = chosen >= 0 && chosen < definition.Choices.Count ? definition.Choices[chosen] : null;
+                Label(panel, choice != null ? "선택: " + choice.Label + " — " + choice.Text : "선택을 마쳤어요.", 20, 180, 1496, 90, 22, Memory);
+                Button(panel, "Proceed", "지도로", 1196, 640, 320, 72, () => Launch(ProceedAsync), Brass, 24).interactable = ready;
+                return;
+            }
+            var list = Scroll(panel, "EventChoices", 20, 176, 1496, 540, 1496, definition.Choices.Count * 100, Panel);
+            for (int i = 0; i < definition.Choices.Count; i++)
+            {
+                int index = i;
+                var choice = definition.Choices[i];
+                int need = choice.RequiredCoins.GetValueOrDefault();
+                Button(list, "EventChoice:" + i, choice.Label + (need > 0 ? " (동전 " + need + " 필요)" : "") + "\n" + choice.Text, 0, i * 100, 1496, 88,
+                    () => Launch(() => ChooseEventAsync(index)), Line, 21).interactable = ready && coins >= need;
+            }
+        }
+
+        // §7.5: the published archive. Continue or return is the existing archive command; the heal, the next zone map and the save that
+        // follows are Core's (the save screens remain a later unit).
+        void ArchiveView()
+        {
+            var state = State()!;
+            bool ready = CanCommand;
+            int zone = (Int(state["zoneIndex"]) ?? 0) + 1, zones = (state["zones"] as JArray)?.Count ?? 0;
+            var panel = Box(frame!, "Archive", 32, 100, 1536, 400, Panel);
+            Label(panel, "기록소", 20, 14, 400, 44, 32, Brass, FontStyle.Bold);
+            Label(panel, "체력 " + Int(state["hp"]) + " / " + Int(state["maxHp"]) + "   ·   동전 " + Int(state["coins"]) + "  (서버 기록)", 900, 22, 616, 32, 20, Ink);
+            Label(panel, zone + "구역" + (zones > 0 ? " / " + zones : "") + "의 기록을 확정했다", 20, 66, 1496, 40, 26, Ink, FontStyle.Bold);
+            Label(panel, "여기서 돌아가면 이번 탐사의 변화를 골라 기억에 더할 수 있어요. 계속 가면 최대 체력의 15%를 회복하고 다음 구역으로 갑니다. "
+                + "그 뒤 패배하면 출발 전 기억 덱은 그대로 유지되고, 이번 탐사의 변화는 파티 전체에서 1개까지만 더해 저장해요.",
+                20, 116, 1496, 90, 21, Muted);
+            Button(panel, "ArchiveContinue", "계속 탐사", 20, 220, 440, 72, () => Launch(() => ArchiveAsync("continue")), Brass, 24).interactable = ready;
+            Button(panel, "ArchiveReturn", "귀환하고 저장", 480, 220, 440, 72, () => Launch(() => ArchiveAsync("return")), Line, 24).interactable = ready;
+            Label(panel, "귀환하면 기억 저장 단계로 가요. 기억 저장 화면은 다음 작업 단위에서 서버 화면으로 연결돼요.", 20, 316, 1496, 60, 20, Muted);
+        }
+
+        // P1-SERVER-SERVICES-UI: the published rest {uses}. How much is healed and whether healing is allowed (CANNOT_HEAL) are Core's,
+        // so no amount is stated here; the new HP appears only from the committed state.
+        void RestView()
+        {
+            var state = State()!;
+            int uses = Int(Pending(state, "rest")!["uses"]) ?? 0;
+            bool ready = CanCommand;
+            var panel = Box(frame!, "Rest", 32, 100, 1536, 330, Panel);
+            Label(panel, "휴식", 20, 14, 400, 44, 32, Brass, FontStyle.Bold);
+            Label(panel, "체력 " + Int(state["hp"]) + " / " + Int(state["maxHp"]) + "   ·   남은 이용 " + uses + "회  (서버 기록)", 20, 66, 1496, 36, 24, Ink);
+            Button(panel, "RestHeal", "체력 회복", 20, 140, 440, 72, () => Launch(RestHealAsync), Memory, 23).interactable = ready && uses > 0;
+            Button(panel, "RestUpgrade", "카드 강화(+)", 480, 140, 440, 72, () => OpenDeckPick(DeckPurpose.Upgrade), Line, 23).interactable = ready && uses > 0;
+            Button(panel, "Proceed", "떠나기", 1196, 140, 320, 72, () => Launch(ProceedAsync), Brass, 24).interactable = ready;
+            Label(panel, "회복이나 강화 중 남은 이용 횟수만큼 고를 수 있어요. 회복량과 회복할 수 있는지는 서버가 판정해요.", 20, 236, 1496, 64, 20, Muted);
+        }
+
+        // The published forge {uses, offers, fromEvent?}. Without an open offer: variation (forgeOffer, no use spent) or removal, each on one
+        // chosen deck card. With one: only its published parts (forgeApply) or leaving — no re-roll, as in the original.
+        void ForgeView()
+        {
+            var state = State()!;
+            var p = Pending(state, "forge")!;
+            int uses = Int(p["uses"]) ?? 0;
+            var offers = p["offers"] as JObject;
+            bool ready = CanCommand;
+            var panel = Box(frame!, "Forge", 32, 100, 1536, 440, Panel);
+            Label(panel, "공방" + (Truthy(p["fromEvent"]) ? " · 사건의 변주" : ""), 20, 14, 600, 44, 32, Brass, FontStyle.Bold);
+            Label(panel, "남은 이용 " + uses + "회  (서버 기록)", 640, 22, 876, 36, 22, Ink);
+            if (offers != null)
+            {
+                Label(panel, CardName(Str(DeckCard(Str(offers["key"]))?["id"])) + "에 붙일 부품을 고르세요", 20, 66, 1496, 36, 24, Ink);
+                var parts = Ids(offers["parts"]);
+                float width = Math.Min(490, (1496f + 16) / Math.Max(1, parts.Count) - 16);
+                for (int k = 0; k < parts.Count; k++)
+                {
+                    string id = parts[k];
+                    var button = Button(panel, "ForgePart:" + id, "", 20 + k * (width + 16), 116, width, 180, () => Launch(() => ForgeApplyAsync(id)), Line);
+                    button.interactable = ready;
+                    Label(button.transform, PartName(id) + (SlotName(id).Length != 0 ? "  ·  " + SlotName(id) : ""), 14, 8, width - 28, 34, 23, Ink, FontStyle.Bold);
+                    Label(button.transform, partTexts.TryGetValue(id, out var text) ? text : "", 14, 48, width - 28, 124, 18, Muted);
+                }
+                Button(panel, "Proceed", "변주하지 않고 떠나기", 1196, 350, 320, 64, () => Launch(ProceedAsync), Line, 22).interactable = ready;
+                Label(panel, "부품 하나를 고르면 그 카드에 붙고 이용 1회를 써요.", 20, 360, 1150, 44, 20, Muted);
+            }
+            else
+            {
+                Label(panel, "카드를 다듬는다. 변주는 고른 카드에 서버가 제시한 부품 하나를 붙이고(회로·각인 각 1칸), 제거는 덱에서 카드 1장을 빼요.", 20, 66, 1496, 60, 22, Ink);
+                Button(panel, "ForgeVariation", "카드 변주", 20, 150, 440, 72, () => OpenDeckPick(DeckPurpose.ForgeOffer), Memory, 23).interactable = ready && uses > 0;
+                Button(panel, "ForgeRemove", "카드 제거", 480, 150, 440, 72, () => OpenDeckPick(DeckPurpose.ForgeRemove), Line, 23).interactable = ready && uses > 0;
+                Button(panel, "Proceed", "떠나기", 1196, 150, 320, 72, () => Launch(ProceedAsync), Brass, 24).interactable = ready;
+            }
+        }
+
+        // The published shop: every listing with its server price and sold mark, and the one removal at its published cost. Every row stays
+        // reachable on a small screen: a vertical scroll whose height comes from the published counts. A buy button is enabled, as in the
+        // original, only for an unsold listing the shown coins cover; COINS_LOW itself is Core's.
+        void ShopView()
+        {
+            var state = State()!;
+            var p = Pending(state, "shop")!;
+            int coins = Int(state["coins"]) ?? 0;
+            bool ready = CanCommand;
+            var head = Box(frame!, "ShopHead", 32, 100, 1536, 56, Panel);
+            Label(head, "상점  ·  보유 동전 " + Int(state["coins"]) + "  (서버 기록)", 20, 10, 1210, 40, 26, Brass, FontStyle.Bold);
+            Button(head, "Proceed", "떠나기", 1256, 4, 268, 48, () => Launch(ProceedAsync), Brass, 23).interactable = ready;
+            var sections = ShopKinds.Select(kind => (kind, items: Items(p, kind))).ToList();
+            var list = Scroll(frame!, "Shop", 32, 166, 1536, 670, 1536, sections.Sum(s => 40 + s.items.Count * 96) + 80, Background);
+            float y = 0;
+            foreach (var (kind, items) in sections)
+            {
+                string title = kind == "cards" ? "카드" : kind == "parts" ? "부품" : "유물";
+                Label(list, title + (items.Count == 0 ? "  ·  진열된 상품이 없어요" : ""), 20, y + 6, 1000, 30, 21, Memory, FontStyle.Bold);
+                y += 40;
+                for (int k = 0; k < items.Count; k++)
+                {
+                    string id = Str(items[k]["id"]) ?? "";
+                    int? price = Int(items[k]["price"]);
+                    bool sold = Bool(items[k]["sold"]);
+                    var row = Box(list, "Shop:" + kind + ":" + k, 0, y, 1536, 88, Panel);
+                    Label(row, ItemName(kind, id), 20, 8, 1260, 32, 23, sold ? Muted : Ink, FontStyle.Bold);
+                    Label(row, ItemText(kind, id), 20, 42, 1260, 42, 16, Muted);
+                    Button(row, "Buy:" + kind + ":" + k + ":" + id, sold ? "판매 완료" : "동전 " + price, 1316, 16, 200, 56, () => Launch(() => BuyAsync(kind, id)), sold ? Line : Brass, 22)
+                        .interactable = ready && !sold && price != null && coins >= price;
+                    y += 96;
+                }
+            }
+            var removal = Box(list, "ShopRemoval", 0, y, 1536, 80, Panel);
+            int? removeCost = Int(p["removeCost"]);
+            if (removeCost == null) Label(removal, "카드 제거는 이 상점에서 이미 이용했어요.", 20, 20, 1200, 40, 22, Muted);
+            else
+            {
+                Label(removal, "카드 제거 1회  ·  동전 " + removeCost, 20, 20, 1100, 40, 22, Ink);
+                Button(removal, "ShopRemove", "제거할 카드 고르기", 1176, 12, 340, 56, () => OpenDeckPick(DeckPurpose.ShopRemove), Line, 22).interactable = ready && coins >= removeCost;
+            }
+        }
+
+        // The local, unsent deck sheet: every public deck card in a scroll (a deck has no fixed size), the original's pickable rule, the
+        // chosen keys in order (numbered when more than one is asked), confirm (one command) or cancel (nothing sent).
+        void DeckPickView()
+        {
+            var sheet = deckPick!;
+            int required = Required(sheet);
+            var blocker = Box(frame!, "DeckPickBlocker", 0, 0, 1600, 900, new Color(0, 0, 0, 0.6f));
+            blocker.GetComponent<Image>().raycastTarget = true;
+            var p = Box(frame!, "DeckPicker", 160, 90, 1280, 720, Panel);
+            Label(p, DeckTitle(sheet), 24, 16, 1232, 44, 28, Ink, FontStyle.Bold);
+            Label(p, (sheet.Purpose == DeckPurpose.Upgrade ? "이미 강화한 카드와 무기 카드는 고를 수 없어요." : "무기 카드는 고를 수 없어요.") + " 확정하기 전에는 아무것도 보내지 않아요.",
+                24, 62, 1232, 28, 19, Muted);
+            var deck = Deck();
+            var list = Scroll(p, "DeckPickList", 24, 100, 1232, 500, 1232, (deck.Count + 2) / 3 * 62, Background);
+            for (int i = 0; i < deck.Count; i++)
+            {
+                string key = Str(deck[i]["key"]) ?? "";
+                bool ok = Pickable(deck[i], sheet.Purpose);
+                int order = sheet.Keys.IndexOf(key);
+                Button(list, "DeckCard:" + key, (order >= 0 && sheet.Count > 1 ? (order + 1) + ". " : "") + DeckCardText(deck[i]) + (ok ? "" : " · 선택 불가"),
+                    i % 3 * 412, i / 3 * 62, 400, 54, () => PickDeckCard(key), order >= 0 ? Memory : Line, 18).interactable = ok && !busy;
+            }
+            bool complete = required > 0 && sheet.Keys.Count == required;
+            string verb = sheet.Purpose == DeckPurpose.Upgrade ? "강화하기" : sheet.Purpose == DeckPurpose.ForgeOffer ? "이 카드에 변주"
+                : sheet.Purpose == DeckPurpose.EventCards ? "선택 완료" : "제거하기";
+            Button(p, "ConfirmDeckPick", verb + (sheet.Count > 1 ? " (" + sheet.Keys.Count + "/" + required + ")" : ""), 24, 620, 420, 64,
+                () => Launch(ConfirmDeckPickAsync), complete ? Brass : Line, 22).interactable = complete && !busy && session != null && session.State.CanMutate;
+            Button(p, "CancelDeckPick", "취소 (보내지 않음)", 1000, 620, 256, 64, CancelDeckPick, Line, 22);
         }
 
         // P1-SERVER-REWARD-UI §7/§14.3/§17.4: the server's public pending reward exactly as published (coins, cards [id], relic [id]|null,
@@ -1064,7 +1494,8 @@ namespace MemoryForge.Client
                 foreach (var card in data.Memory.Battle.Cards) cardNames[card.Id] = card.Name;
                 foreach (var character in data.Memory.Battle.Characters) characterNames[character.Id] = character.Name;
                 foreach (var relic in data.Memory.Battle.Relics) { relicNames[relic.Id] = relic.Name; relicTexts[relic.Id] = relic.Text; }
-                foreach (var part in data.Memory.Battle.Parts) { partNames[part.Id] = part.Name; partTexts[part.Id] = part.Text; }
+                foreach (var part in data.Memory.Battle.Parts) { partNames[part.Id] = part.Name; partTexts[part.Id] = part.Text; partSlots[part.Id] = part.Slot; }
+                foreach (var definition in data.Events) events[definition.Id] = definition; // the last with an id wins, as in Core
                 foreach (var card in data.Memory.Battle.Cards)
                 {
                     try { cardTexts[card.Id] = BattleText.Card(card, data.Memory.Battle); }
@@ -1084,6 +1515,27 @@ namespace MemoryForge.Client
 
         string CardName(string? id) => id != null && cardNames.TryGetValue(id, out var name) ? name : "카드";
         string CharacterName(string? id) => id != null && characterNames.TryGetValue(id, out var name) ? name : "동료";
+        string PartName(string id) => partNames.TryGetValue(id, out var name) ? name : "부품";
+        string SlotName(string id) => !partSlots.TryGetValue(id, out var slot) ? "" : slot == "circuit" ? "시간 회로" : slot == "engraving" ? "보조 각인" : "임시";
+        string ItemName(string kind, string id) => kind == "cards" ? CardName(id)
+            : kind == "parts" ? PartName(id) + (SlotName(id).Length != 0 ? " · " + SlotName(id) : "") : relicNames.TryGetValue(id, out var name) ? name : "유물";
+        string ItemText(string kind, string id) =>
+            (kind == "cards" ? cardTexts : kind == "parts" ? partTexts : relicTexts).TryGetValue(id, out var text) ? text : "";
+        // The original deck row: name, + when upgraded, attached parts, and whose card it is (public deck members only).
+        string DeckCardText(JObject card)
+        {
+            var slots = card["mods"] as JObject;
+            var mods = new[] { Str(slots?["c"]), Str(slots?["e"]) }.OfType<string>().Where(m => m.Length != 0).Select(PartName).ToList();
+            string owner = Str(card["owner"]) ?? "";
+            string whose = Truthy(card["weapon"]) ? CharacterName(Str(card["wielder"])) + " 무기" : owner == "common" ? "공용→" + CharacterName(Str(card["assigned"]))
+                : owner == "curse" ? "저주" : CharacterName(owner);
+            return CardName(Str(card["id"])) + (Truthy(card["plus"]) ? "+" : "") + (mods.Count == 0 ? "" : "[" + string.Join("·", mods) + "]") + " · " + whose;
+        }
+        string DeckTitle(DeckPick sheet) => sheet.Purpose == DeckPurpose.Upgrade ? "강화할 카드를 고르세요"
+            : sheet.Purpose == DeckPurpose.ForgeOffer ? "변주할 카드를 고르세요" : sheet.Purpose == DeckPurpose.ForgeRemove ? "덱에서 뺄 카드를 고르세요"
+            : sheet.Purpose == DeckPurpose.ShopRemove ? "제거할 카드를 고르세요 (동전 " + Int(Pending(State(), "shop")?["removeCost"]) + ")"
+            : (OfferedChoice(sheet.EventIndex)?.Effects.CardCopy ?? 0) != 0 ? "복제할 카드를 고르세요"
+            : "제거할 카드를 고르세요 (" + sheet.Count + "장)";
         static string NodeName(string type)
         {
             switch (type)
@@ -1120,6 +1572,9 @@ namespace MemoryForge.Client
         static int? Int(JToken? token) => token != null && token.Type == JTokenType.Integer ? (int?)(long)token : null;
         static bool Bool(JToken? token) => token != null && token.Type == JTokenType.Boolean && (bool)token;
         static bool? BoolOrNull(JToken? token) => token != null && token.Type == JTokenType.Boolean ? (bool?)(bool)token : null;
+        // JS truthiness of a public scalar, as Core reads plus/weapon/fromEvent (MemoryJson.Truthy).
+        static bool Truthy(JToken? token) => token != null && (token.Type == JTokenType.Boolean ? (bool)token
+            : token.Type == JTokenType.Integer ? (long)token != 0 : token.Type == JTokenType.String && ((string?)token)?.Length > 0);
 
         // ───────── uGUI helpers (the same construction and palette as MemoryForgeExpeditionClient) ─────────
 

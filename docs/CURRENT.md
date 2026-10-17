@@ -1,5 +1,13 @@
 # 현재 기준 — ALL-IN-ONE
 
+## 2026-10-17 최신 — Claude 병렬 자율 개발·실제 MCP·서버 노드 화면
+
+[운영/도구 수용](../reports/claude_tools_20261017/README.md): Claude Opus 공식 CLI의 구현 비중을 높이고 별도 worktree에서 노드 UI·MCP/정책·아트 도구를 병렬 작성했다. 캐릭터를 포함해 의견은 자유롭게 받고 채택은 근거로 판단하며, 외형 최종 디자인·이미지 생성/내용 수정은 Codex가 맡는다. 실제 지정 Bash 시험31/57, Unity 읽기 및 **Play→Pause→Resume→Stop** 직접 조작·상태 재조회까지 확인했다. 무료 화면 MCP는 실제 Unity 캡처에 성공했으나 좌표 클릭은 호스트 응답 오류로2회 미확인이라 해당 경로만 보류한다. 구독 포함 사용량·고정 모델/High 기본·xhigh/Max 자율·Private·기존 수치/원문은 유지한다. ImagineArt는 무료 차감 경로 확인 전 미사용이다.
+
+[서버 노드 UI](../reports/server_node_services_20261017/README.md): 휴식·공방·상점·사건·기록소를 기존 public state/명령으로 연결했다. 미전송/미확정/확정 후 표시 경계를 유지하고 중복/오래된 선택을 차단한다. 실제 GUI 전체 Play258개 완료/succeeded, 최종 view 상세76/76·Edit3/3·.NET 전송83/83을 검증했다(상세 결과 보존 한계는 수용 기록에 명시). 실제 Core HTTP로 얻은 REST에서 uGUI 회복210→243/이용1→0와 지도 복귀를 확인했다. 서버 기억 저장 UI와 필살기/상세/배속·모든 실제 사건/기록소 경로·Android/새 빌드/운영은 다음 미완료 범위다.
+
+Codex 아트 단위의 실제 Claude 독립 리뷰도 완료했고, 기존 씬 덮어쓰기·PNG 잘림/게시 실패 보존을 보강했다. 최초 CI의 원인은 art/provenance 추가 후 오래된 Run-create 감사 자료였으며2,131개 game 행/분모/source pin 동일·감사29→30만 변경해 수정했다. fresh JS333·Python57·proposals14·docs9·handoff31 및 전체 CoreChecks를 통과했다. 아래의 이전 '미구현/미검토' 표시는 당시 이력으로 보존하며 현재 상태는 이 최신 절과 링크된 실제 증거를 우선한다.
+
 ## 2026-10-17 — 로컬 SSH 이미지 생성과 첫 3인 아트셋
 
 [생성·검증 기록](../reports/starter_art_20261017/README.md): Mac에 `aiimg "프롬프트"`를 설치하고, 사용자 Windows의 고정 지문 SSH로 PNG 1장을 실제 생성·검증해 Downloads에 저장하고 Preview로 열었다. ComfyUI·OpenWebUI 자동 시작 작업은 실제 조회에서 모두 Disabled다. 첫 ComfyUI 세라 시안은 서명 무기/눈 표현 때문에 보관만 하고, 사용자 승인 조건에 따라 Codex 내장 이미지 도구로 세라·하린·니아의 시트·컷인·투명 SD 총 9장을 제작했다. [첫 세트](../art/generated/starter-20261017/README.md)와 원본·미채택·수정 시안, 프롬프트·참조·해시를 보존했다.

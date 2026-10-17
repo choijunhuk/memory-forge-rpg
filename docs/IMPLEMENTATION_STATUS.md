@@ -504,3 +504,7 @@ Unity 탐사 화면: [실제 지도·전투·보상/서비스·기억선택과 �
 §14.2/§14.7/§17.4 후속 — [서버 지도·전투·복구 UI](../reports/practice_server_ui_20261017/root_acceptance.md): 실제Editor uGUI/CoreHTTP24판정·Play248/Edit3, 최종버전의입력잠금/미전송대기/정확한재확인과새지도→전투를확인. 별도개발씬이며기존전체로컬원정은보존. 서버보상/서비스/기억저장·필살기/상세/배속/실기기는미완료다.
 
 §7/§14.3/§17.4 후속 — [서버 전투 보상 UI](../reports/practice_server_reward_ui_20261017/root_acceptance.md): 실제전투8명령승리후공개된보상에서uGUI/HTTP11판정, 카드1회수령/중복거절/지도복귀를확인했다. 승인growthCap4를반영해모든보상에스크롤접근한다. 유물/부품/진화양성·4행실제획득검증과다른서비스/기억저장은남음.
+
+§7.3/§7.5/§7.7/§14.3/§17.4 최신 — [서버 휴식·공방·상점·사건·기록소 UI](../reports/server_node_services_20261017/README.md): 기존 public state/명령과 콘텐츠를 연결하고 승인 전 이득·중복·미확정 요청·낡은 카드 선택을 제어했다. 실제 GUI 전체 Play258개 완료/succeeded·최종 관련 view76/76(skip0)·Edit3/3·동일 .NET 전송83/83. 실제 Core HTTP로 얻은 REST의 uGUI 회복210→243/이용1→0와 지도 복귀를 확인했다. 원문/수치/엔진·서버·기존 로컬 원정은 유지한다. 서버 기억 저장 UI, 모든 실제 사건/공방/상점/기록소 경로, Android/운영은 미완료다.
+
+운영 최신 — [Claude 병렬 자율성·도구 수용](../reports/claude_tools_20261017/README.md): 공식 Opus CLI 구현과 Codex 독립 검토를 분담하고 실제 지정 Bash 시험, Unity MCP Play/Pause/Resume/Stop·상태 재조회, 무료 native 화면 캡처를 확인했다. Native 클릭은 호스트 응답 오류로 미확인. 구독 전용·고정 모델·이미지 Codex·Private 정책과46/47 원본 동일/승인 provenance1개 변경을 유지한다. 이는 게임 기능 완성 판정과 별개다.
