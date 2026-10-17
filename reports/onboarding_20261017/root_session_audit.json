@@ -2,7 +2,8 @@
   "transcript": "/Users/choi/.claude/projects/-Users-choi-Documents-Memory-forge--claude-worktrees-onboarding-c82499/9bebcfcd-9239-45f2-ad7e-854deb8b63f9.jsonl",
   "session_id": "9bebcfcd-9239-45f2-ad7e-854deb8b63f9",
   "models": {
-    "claude-opus-5-5": 183
+    "claude-opus-5-5": 196,
+    "<synthetic>": 2
   },
   "permission_modes": [
     "bypassPermissions"

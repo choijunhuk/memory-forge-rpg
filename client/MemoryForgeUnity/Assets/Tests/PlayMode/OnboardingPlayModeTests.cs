@@ -155,7 +155,7 @@ namespace MemoryForge.Client.Tests
                 if (step == "forge") PressCoachProceed(o);
                 else if (step != null) PressCoach(o, driver);
                 else driver.Practice(o);
-                yield return null;
+                yield return null; yield return null;
             }
             Assert.That(client.ShowingResult, Is.True, "the expedition ends at its result screen; lessons seen: " + string.Join(",", lessons));
             Assert.That(lessons, Does.Contain("save"));
@@ -459,6 +459,7 @@ namespace MemoryForge.Client.Tests
         // A real pointer click at the button's own center; the button must be the top raycast hit there.
         static void Click(Button button)
         {
+            Canvas.ForceUpdateCanvases(); // a view rebuilt in this frame's Update is laid out before the raycast
             var rect = button.GetComponent<RectTransform>();
             var pointer = new PointerEventData(EventSystem.current)
                 { position = RectTransformUtility.WorldToScreenPoint(null, rect.TransformPoint(rect.rect.center)), button = PointerEventData.InputButton.Left };
