@@ -1,6 +1,7 @@
 #nullable enable
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
@@ -22,6 +23,8 @@ namespace MemoryForge.Client
         readonly Dictionary<string, int> lastHp = new Dictionary<string, int>();
         Dictionary<string, string>? enemyIds;
         int lastPartyHp = -1;
+        GameObject? lastFrame;
+        string? lastKind;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         static void Install()
@@ -52,6 +55,25 @@ namespace MemoryForge.Client
                 if (image != null) { image.preserveAspect = false; image.name = Marker + ":Background"; }
             }
             if (!battle) { lastHp.Clear(); lastPartyHp = -1; }
+            if (frame != lastFrame) Motion(frame, battle);
+        }
+
+        // Once per rebuilt frame: press feedback on every button, hover lift on hand cards, and a short fade-in when the screen
+        // changes kind (map, battle, other) so a phase change reads as a transition while ordinary redraws stay instant.
+        void Motion(GameObject frame, bool battle)
+        {
+            lastFrame = frame;
+            foreach (var button in frame.GetComponentsInChildren<Button>(true))
+            {
+                if (button.GetComponent<UiPress>() == null) button.gameObject.AddComponent<UiPress>();
+                if (button.name.StartsWith("Hand:") && button.GetComponent<UiHoverLift>() == null) button.gameObject.AddComponent<UiHoverLift>();
+            }
+            string kind = battle ? "battle" : frame.transform.Find("Map") != null || frame.GetComponentsInChildren<Button>().Any(b => b.name.StartsWith("Node:")) ? "map" : "other";
+            if (kind == lastKind) return;
+            lastKind = kind;
+            var group = frame.GetComponent<CanvasGroup>();
+            if (group == null) group = frame.AddComponent<CanvasGroup>();
+            StartCoroutine(MemoryForgeUiMotion.Fade(group, 0.15f, 1f, 0.28f));
         }
 
         void Enemy(RectTransform panel)
@@ -107,7 +129,7 @@ namespace MemoryForge.Client
             {
                 if (panel == null) yield break;
                 float k = 1 - t / duration;
-                panel.anchoredPosition = origin + new Vector2(Mathf.Sin(t * 90f) * 9f * k, 0);
+                if (!MemoryForgeUiMotion.Reduced) panel.anchoredPosition = origin + new Vector2(Mathf.Sin(t * 90f) * 9f * k, 0); // reduced motion keeps the flash only
                 if (flash != null) flash.color = new Color(HitFlash.r, HitFlash.g, HitFlash.b, HitFlash.a * k);
                 yield return null;
             }

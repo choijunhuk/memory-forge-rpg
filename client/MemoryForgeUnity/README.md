@@ -1,6 +1,6 @@
 # Unity에서 현재 개발 결과 보기
 
-Unity **6000.0.46f1**에서 이 프로젝트를 열고 **`Assets/Scenes/MemoryForgeExpedition.unity`**를 실행한다. 현재 빌드의 첫 씬이다. 기존 `MemoryForgeBattle`·`SampleScene`·MCP 연결 확인 씬은 보존한다.
+Unity **6000.0.46f1**에서 이 프로젝트를 열고 **`Assets/Scenes/MemoryForgeLobby.unity`**를 실행한다. 현재 빌드의 첫 씬이다(2026-10-18). 로비는 공방 배경 위에 동료 한 명과 Codex가 만든 모먼트(`art/moments` → `python3 tools/import_moments.py`)를 재생하고, **탐사 시작**으로 `MemoryForgeExpedition`을 연다. 탐사 연습만 볼 때는 `MemoryForgeExpedition.unity`를 바로 실행해도 된다. 기존 `MemoryForgeBattle`·`SampleScene`·MCP 연결 확인 씬은 보존한다.
 
 현재 첫 화면은 실제 공유 C# Run을 조작하는 **탐사 연습**이다. 세라·하린·니아의 원본 기본 덱과 실제 생성 지도를 사용한다. 지도·전투·보상·휴식·공방·상점·이벤트·기록보관소·종료 기억 선택과 다음 출발을 연결한다. 저장은 이 실행 세션 안에만 있으며 앱을 닫으면 사라진다. 계정·서버·디스크 영속 저장이나 중도 탐사 복원은 아니다.
 

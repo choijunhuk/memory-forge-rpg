@@ -1,0 +1,166 @@
+{
+  "status": "PASS",
+  "scope": "art/moments creative data and PNG/APNG static acceptance; not Unity/runtime acceptance",
+  "checks": [
+    "six adult IDs / unchanged ages documented",
+    "18 unique scenes; required schema fields and allowed values",
+    "all image/motion/stage/camera-anchor references",
+    "ready/todo file-existence honesty",
+    "six complete bond scripts 2000–3000 Unicode chars including spaces",
+    "finite ordered slot-keyframes and real frame sequence",
+    "selected PNG decode, chunk CRC and actual transparent alpha",
+    "APNG 5 decoded frames byte-identical RGBA to source sequence, 500ms each",
+    "source document hashes rechecked; MOMENTS_FORMAT external optional-field update reviewed; other source and reference-art hashes unchanged"
+  ],
+  "characters": [
+    {
+      "character": "sera",
+      "moments_sha256": "4113ce25b3b75704992b24a3a90282df43c4198498b1135dd29dc7cebe2915cf",
+      "age_unchanged": 24,
+      "scenes": 3,
+      "beats": 32,
+      "bond_characters_including_spaces": 2378,
+      "mapped_images": 15,
+      "ready_pngs": 3,
+      "todo_pngs": 12,
+      "motion_data": 5
+    },
+    {
+      "character": "ravien",
+      "moments_sha256": "65bf68f2e5f854937dd3ebfdd9c292cbd60c9842eb1fe52a696d3e52c3895c95",
+      "age_unchanged": 28,
+      "scenes": 3,
+      "beats": 45,
+      "bond_characters_including_spaces": 2689,
+      "mapped_images": 14,
+      "ready_pngs": 0,
+      "todo_pngs": 14,
+      "motion_data": 4
+    },
+    {
+      "character": "harin",
+      "moments_sha256": "cdf842bc0f5750d7f505f4f58351a97aad29ba79896edeed992883d8cc68e61f",
+      "age_unchanged": 26,
+      "scenes": 3,
+      "beats": 45,
+      "bond_characters_including_spaces": 2604,
+      "mapped_images": 15,
+      "ready_pngs": 0,
+      "todo_pngs": 15,
+      "motion_data": 4
+    },
+    {
+      "character": "aila",
+      "moments_sha256": "e9516d43ea74240854dc99459151e1846770210f1685391dd2539cd6bdb4192d",
+      "age_unchanged": 23,
+      "scenes": 3,
+      "beats": 31,
+      "bond_characters_including_spaces": 2509,
+      "mapped_images": 19,
+      "ready_pngs": 0,
+      "todo_pngs": 19,
+      "motion_data": 1
+    },
+    {
+      "character": "sion",
+      "moments_sha256": "f2878474f1812fb12071de039130dd7225ac2c4771ad8135d49c4a1df44a4ba2",
+      "age_unchanged": 27,
+      "scenes": 3,
+      "beats": 31,
+      "bond_characters_including_spaces": 2575,
+      "mapped_images": 19,
+      "ready_pngs": 0,
+      "todo_pngs": 19,
+      "motion_data": 1
+    },
+    {
+      "character": "lumi",
+      "moments_sha256": "8146229f88462dc128f02dcb2e718c9cd3f4daf4eddf2d9512e1ac89391e46c5",
+      "age_unchanged": 22,
+      "scenes": 3,
+      "beats": 31,
+      "bond_characters_including_spaces": 2597,
+      "mapped_images": 19,
+      "ready_pngs": 0,
+      "todo_pngs": 19,
+      "motion_data": 1
+    }
+  ],
+  "pngs": [
+    {
+      "key": "fig_scope",
+      "path": "moments/sera/images/char_sera_lobby_scope_v02.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "transparent_pixels": 889804,
+      "sha256": "0025e262e4ef2a8c21e680323839ac5791628882832b963b2e669264a03e6100"
+    },
+    {
+      "key": "fig_watch",
+      "path": "moments/sera/images/char_sera_lobby_watch_v02.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "transparent_pixels": 872355,
+      "sha256": "cf476519a0d833fdd8874c6aed6f4d1a2bccbc8d8b07c5e630d1efeff08411b9"
+    },
+    {
+      "key": "fig_smile",
+      "path": "moments/sera/images/char_sera_lobby_smile_v01.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "transparent_pixels": 875143,
+      "sha256": "03f5074681a1bdc7639b39e8cb2c24d6b2146b3aaa6759bcf2eaa98fb2ece236"
+    }
+  ],
+  "apng": {
+    "path": "sera/char_sera_lobby_check_time_v01.apng",
+    "sha256": "f969203b01b1b2c154d779da78ff110d9b1a56d2bcda0489cb7cd1c7747ff20f",
+    "frames": 5,
+    "duration_ms": 2500,
+    "loops": 0,
+    "source_pixel_identity": "PASS"
+  },
+  "totals": {
+    "scenes": 18,
+    "selected_pngs": 3,
+    "beats": 215,
+    "mapped_pngs": 101,
+    "todo_pngs": 98,
+    "motion_data": 16
+  },
+  "not_run": [
+    "Unity import/player/Editor/device playback and camera acceptance",
+    "independent Claude review (user forbids call)",
+    "voice recording/lipsync",
+    "rig/PSD/AnimationClip/Timeline/VFX creation",
+    "game code tests/lint/typecheck/build (no game code changed)",
+    "visual playback of APNG in interactive viewer; decoded all frames instead"
+  ],
+  "remaining_limits": [
+    "draft not user-approved",
+    "key poses have generated detail/position differences and lack intermediate articulated frames",
+    "todo images remain missing on purpose; no substitute images"
+  ],
+  "real_constraint": []
+}

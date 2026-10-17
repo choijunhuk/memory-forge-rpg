@@ -1,5 +1,26 @@
 # 현재 기준 — ALL-IN-ONE
 
+## 2026-10-18 최신 — 창작 원본·구현 담당 분리, 로비와 캐릭터 모먼트
+
+**역할(사용자 지시 2026-10-18, `docs/AI_WORKFLOW.md` §18, [OWNERSHIP.md](../OWNERSHIP.md)).** 아래 절의 "시각 디자인 전체는 Codex"를 대신한다.
+- **Codex:** 캐릭터·보스·적 디자인, 이미지, 스토리·대사, 표정·포즈·모션·연출의 창작 원본을 `art/` 아래에 둔다.
+- **Claude:** UI/UX, 시스템, 범용 재생기, 임포트, 시험을 맡는다. 원본의 의상·나이·대사·감정·모션 의도는 바꾸지 않는다.
+- **표현 방향:** 성인 캐릭터는 실제 장면으로 매력을 기획하고, 미성년 캐릭터에는 성적 연출을 하지 않는다.
+
+**로비·모먼트.** [보고서](../reports/lobby_moments_20261018/README.md).
+- `MemoryForgeLobby`가 빌드 첫 씬이다. 공방 배경, 동료, 탭·입장·대기·시간대 반응, 인연·연출 미리보기, 탐사 시작을 넣었다.
+- 재생기 `MemoryForgeMomentPlayer`는 Codex가 쓴 [`memory-forge-moments/1`](MOMENTS_FORMAT.md) 파일을 그대로 재생한다.
+- Codex 초안: 성인 6명 × 3장면 = 18장면, 인연 대본 6편(전부 `draft`). 그림은 세라 로비 3장에서 시작해 Codex가 계속 만들고 있다.
+- Unity에서 세라 로비 장면을 실제로 재생해 캡처했다. Codex 시각 검토는 "의도대로 보임"이었다.
+- UI 움직임(버튼 눌림, 카드 호버, 화면 전환 페이드)과 움직임 줄이기 설정을 더했다.
+
+**검증.**
+- PlayMode 329/329, `MomentPlayerPlayModeTests` 13/13.
+- Codex 읽기 전용 리뷰 5회: 결함 11 → 6 → 3 → 1 → NO_BLOCKING_DEFECT.
+- `tools/check_art_copies.py`가 CI에서 Unity 복사본을 원본 해시와 대조한다.
+
+**병렬 결과 통합.** 운영 명세(`d1a21ef`)와 콘텐츠 모드(`236b66e`)를 이 브랜치로 가져왔다. 둘 다 Codex 리뷰 통과. 온보딩은 자기 worktree에서 3차 리뷰를 진행 중이다.
+
 ## 2026-10-18 최신 — Claude 루트 전환, PC 완주, Android 실기기
 
 **역할.** 개발 루트는 Claude(Opus 5.5)다. 시각 디자인 전체(이미지, 만드는 방법, 화면 배치와 보이는 모습)는 Codex가 맡는다. Codex는 읽기 전용 독립 리뷰도 한다. 기준은 [AI_WORKFLOW §17](AI_WORKFLOW.md)이다. 루트 세션 감사는 `tools/ai/audit_root_session.py`([수용 기록](../reports/role_switch_20261017/README.md))로 한다.

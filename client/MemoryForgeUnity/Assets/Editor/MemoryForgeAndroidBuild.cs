@@ -12,7 +12,8 @@ using UnityEngine;
 public static class MemoryForgeAndroidBuild
 {
     const string DevPackage = "com.memoryforge.rpg.dev";
-    const string Scene = "Assets/Scenes/MemoryForgeExpedition.unity";
+    // The lobby opens first and loads the expedition by name, so both scenes ship.
+    static readonly string[] Scenes = { "Assets/Scenes/MemoryForgeLobby.unity", "Assets/Scenes/MemoryForgeExpedition.unity" };
 
     public static void BuildDevApk()
     {
@@ -32,7 +33,7 @@ public static class MemoryForgeAndroidBuild
 
         var report = BuildPipeline.BuildPlayer(new BuildPlayerOptions
         {
-            scenes = new[] { Scene },
+            scenes = Scenes,
             locationPathName = output,
             target = BuildTarget.Android,
             targetGroup = BuildTargetGroup.Android,

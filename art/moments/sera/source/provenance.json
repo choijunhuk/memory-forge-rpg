@@ -1,0 +1,110 @@
+{
+  "status": "draft",
+  "imagegen_calls": 5,
+  "selected_pngs": 3,
+  "unselected_pngs": 2,
+  "records": [
+    {
+      "tool": "Codex built-in image_gen",
+      "backend_model": "not exposed by tool response",
+      "prompt": "sera/source/prompt-01.txt",
+      "path": "sera/source/candidates/char_sera_lobby_scope_v01.png",
+      "selected": false,
+      "edit_references": [],
+      "tool_output_location": "/Users/choi/.codex/generated_images/01a14bbc-9d86-7813-b064-e84cdb49f133/exec-f32ba243-6ef2-4bb7-8bd1-205fc95f8dfa.png",
+      "review": "기준 포즈 첫 시안, 재검수/수정 전 보관",
+      "reference_images": [
+        "art/generated/starter-20261017/char_sera_sheet_default_v02.png",
+        "art/generated/starter-20261017/char_sera_cutin_default_v01.png"
+      ],
+      "sha256": "23daddd7a065de49eb669c68f5f85a0050be86b1524d6d72d07ea99b8242dcfe",
+      "bytes": 2086799,
+      "width": 1024,
+      "height": 1536,
+      "mode": "RGBA"
+    },
+    {
+      "tool": "Codex built-in image_gen",
+      "backend_model": "not exposed by tool response",
+      "prompt": "sera/source/prompt-01b.txt",
+      "path": "sera/images/char_sera_lobby_scope_v02.png",
+      "selected": true,
+      "edit_references": [
+        "char_sera_lobby_scope_v01.png"
+      ],
+      "tool_output_location": "/Users/choi/.codex/generated_images/01a14bbc-9d86-7813-b064-e84cdb49f133/exec-4655d21b-45ce-4478-b919-e3ef28be6bd0.png",
+      "review": "알파 실제 검사 후 선택한 조준경 확인 포즈",
+      "sha256": "0025e262e4ef2a8c21e680323839ac5791628882832b963b2e669264a03e6100",
+      "bytes": 2114478,
+      "width": 1024,
+      "height": 1536,
+      "mode": "RGBA"
+    },
+    {
+      "tool": "Codex built-in image_gen",
+      "backend_model": "not exposed by tool response",
+      "prompt": "sera/source/prompt-02.txt",
+      "path": "sera/source/candidates/char_sera_lobby_watch_v01.png",
+      "selected": false,
+      "edit_references": [
+        "char_sera_lobby_scope_v02.png"
+      ],
+      "tool_output_location": "/Users/choi/.codex/generated_images/01a14bbc-9d86-7813-b064-e84cdb49f133/exec-6a890e20-c8f1-4328-a60a-da07b93fe346.png",
+      "review": "손끝이 손목시계를 향하지 않아 미채택",
+      "sha256": "7d5a762552bc4f9d32b2111ae7a77f978535ba01e0a80468d3f2d6d8277fb78b",
+      "bytes": 2118722,
+      "width": 1024,
+      "height": 1536,
+      "mode": "RGBA"
+    },
+    {
+      "tool": "Codex built-in image_gen",
+      "backend_model": "not exposed by tool response",
+      "prompt": "sera/source/prompt-02b.txt",
+      "path": "sera/images/char_sera_lobby_watch_v02.png",
+      "selected": true,
+      "edit_references": [
+        "char_sera_lobby_scope_v02.png"
+      ],
+      "tool_output_location": "/Users/choi/.codex/generated_images/01a14bbc-9d86-7813-b064-e84cdb49f133/exec-ce54af80-8dba-461a-8a1f-1d8d716d997d.png",
+      "review": "손목시계 탭이 읽히는 키포즈",
+      "sha256": "cf476519a0d833fdd8874c6aed6f4d1a2bccbc8d8b07c5e630d1efeff08411b9",
+      "bytes": 2170656,
+      "width": 1024,
+      "height": 1536,
+      "mode": "RGBA"
+    },
+    {
+      "tool": "Codex built-in image_gen",
+      "backend_model": "not exposed by tool response",
+      "prompt": "sera/source/prompt-03.txt",
+      "path": "sera/images/char_sera_lobby_smile_v01.png",
+      "selected": true,
+      "edit_references": [
+        "char_sera_lobby_watch_v02.png"
+      ],
+      "tool_output_location": "/Users/choi/.codex/generated_images/01a14bbc-9d86-7813-b064-e84cdb49f133/exec-9663df4d-8fcd-4474-83f4-2b33678a8453.png",
+      "review": "마지막 시선·미소 변화",
+      "sha256": "03f5074681a1bdc7639b39e8cb2c24d6b2146b3aaa6759bcf2eaa98fb2ece236",
+      "bytes": 2161277,
+      "width": 1024,
+      "height": 1536,
+      "mode": "RGBA"
+    }
+  ],
+  "animation_preview": {
+    "path": "sera/char_sera_lobby_check_time_v01.apng",
+    "method": "APNG container assembly of existing PNG IDAT data; no raster editing or resampling",
+    "status": "draft key-pose flipbook; not articulated rig",
+    "frames": 5,
+    "fps": 2,
+    "duration_s": 2.5,
+    "source_sequence": [
+      "scope_v02",
+      "scope_v02",
+      "watch_v02",
+      "watch_v02",
+      "smile_v01"
+    ]
+  }
+}

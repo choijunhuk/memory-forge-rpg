@@ -1,0 +1,25 @@
+{
+  "task": "Lobby, moment player, UI motion and moment import (Claude) for Codex's character moments",
+  "model": "gpt-6.1-sol",
+  "effort": "high",
+  "sandbox": "read-only",
+  "invocation": "command codex exec -s read-only -m gpt-6.1-sol -c model_reasoning_effort=\"high\" --json -o <file> \"<prompt>\" < <diff>",
+  "rounds": [
+    {"round": 1, "thread_id": "01a14bc6-dfb8-7961-800e-cc233323b6f4", "verdict": "BLOCKING", "findings": 12, "blocking": 11,
+     "summary": "dialogue under the menu, zero-length loop freeze, no return to rest, backgrounds ignored, malformed files, stale slot jobs, import containment, paging trimmed whitespace, tap mode without lines, music after silence, time triggers and preview gating; 1 optional camera-anchor test"},
+    {"round": 2, "thread_id": "01a14bd3-397e-7122-a99e-6fcaf184c721", "verdict": "BLOCKING", "findings": 6,
+     "summary": "validation holes and Finished after step exceptions, replaced slot kept a stale base, import mkdir before ancestry check, reduced motion missed scene-end camera and hit shake, overlapping menu fades, exit veil did not block input",
+     "visual_fidelity": "sera_lobby_01 captures show the authored poses, expressions, lines and framing; no visual design_mismatch"},
+    {"round": 3, "thread_id": "01a14bd9-35fd-7722-bb28-89a89a50c6d1", "verdict": "BLOCKING", "findings": 3,
+     "summary": "infinite camera duration accepted, cleanup failure could suppress Finished, overlay replacement lost a finished track's offset",
+     "design_check": "slot rule (a new picture ends frames, not tracks) matches the authored Sera scene"},
+    {"round": 4, "thread_id": "01a14bdc-88a0-7b83-9020-98e5cb8dbfce", "verdict": "BLOCKING", "findings": 1,
+     "summary": "removed overlay kept its base, so re-adding it started at the wrong position"},
+    {"round": 5, "thread_id": "01a14bde-b736-7162-886f-7bb33d4eb9e4", "verdict": "NO_BLOCKING_DEFECT", "findings": 0}
+  ],
+  "held_optional": ["round-1 #12: camera framing uses the untransformed figure; add a transformed-anchor test if moving-camera scenes need it"],
+  "creative_runs": [
+    {"thread_id": "01a14bbc-9d86-7813-b064-e84cdb49f133", "sandbox": "workspace-write -C art/moments", "effort": "xhigh", "result": "18 scenes for 6 adults, 6 bond scripts, Sera lobby PNGs; all draft"},
+    {"thread_id": "01a14bd3-8e05-7a71-9dbe-c78c6b2bd564", "sandbox": "workspace-write -C art/moments", "effort": "xhigh", "result": "in progress at commit time: lobby images for the other adults"}
+  ]
+}

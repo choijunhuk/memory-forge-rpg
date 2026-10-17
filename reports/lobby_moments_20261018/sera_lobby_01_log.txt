@@ -1,0 +1,7 @@
+t=0.3 playing=True fig=fig_scope sprite=char_sera_lobby_scope_v02 scale=1.45 pos=(240.00, -10.00) dialog=-
+t=1.3 playing=True fig=fig_scope sprite=char_sera_lobby_watch_v02 scale=1.45 pos=(240.00, -10.00) dialog=-
+t=2.4 playing=True fig=fig_scope sprite=char_sera_lobby_smile_v01 scale=1.45 pos=(240.00, -10.00) dialog=-
+t=4.2 playing=True fig=fig_smile sprite=char_sera_lobby_smile_v01 scale=1.90 pos=(233.33, -10.00) dialog=세라 / 시간은 비워 뒀어요. 아직 누구와 보낼지는 안 적었지만.
+t=6 playing=True fig=fig_smile sprite=char_sera_lobby_smile_v01 scale=1.90 pos=(233.33, -10.00) dialog=세라 / 시간은 비워 뒀어요. 아직 누구와 보낼지는 안 적었지만.
+t=8.6 playing=True fig=fig_smile sprite=char_sera_lobby_smile_v01 scale=1.90 pos=(233.33, -10.00) dialog=세라 / 시간은 비워 뒀어요. 아직 누구와 보낼지는 안 적었지만.
+t=11.5 playing=True fig=fig_smile sprite=char_sera_lobby_smile_v01 scale=1.90 pos=(233.33, -10.00) dialog=세라 / …힌트가 더 필요해요?
