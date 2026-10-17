@@ -2,7 +2,7 @@
   "transcript": "/Users/choi/.claude/projects/-Users-choi-Documents-Memory-forge/ae5b927f-1411-4970-b956-f4c51f67d2c1.jsonl",
   "session_id": "ae5b927f-1411-4970-b956-f4c51f67d2c1",
   "models": {
-    "claude-opus-5-5": 367
+    "claude-opus-5-5": 383
   },
   "permission_modes": [
     "bypassPermissions"

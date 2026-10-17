@@ -116,6 +116,12 @@
       "Bash(security find-internet-password:*)",
       "Bash(security dump-keychain:*)",
       "Bash(printenv:*)",
+      "Bash(env:*)",
+      "Bash(/usr/bin/security find-generic-password:*)",
+      "Bash(/usr/bin/security find-internet-password:*)",
+      "Bash(/usr/bin/security dump-keychain:*)",
+      "Bash(/usr/bin/printenv:*)",
+      "Bash(/usr/bin/env:*)",
       "Bash(claude --bare:*)"
     ]
   },

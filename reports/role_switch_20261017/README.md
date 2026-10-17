@@ -64,6 +64,7 @@ thread ID와 사용량은 `ops/ai/tasks/ROLE-SWITCH-CODEX-REVIEW.result.json`에
 - **지적:** `bypassPermissions` 루트 세션에서는 Bash가 실행 전에 제한되지 않고, 감사는 사후 확인뿐이다.
 - **보강:** `root_denied_permissions`를 `.claude/settings.local.json`의 deny에 추가했다. 대상은 자격 증명 파일 읽기, `security find-*-password`·`dump-keychain`, `printenv`, `claude --bare`이며, 시작 확인이 적용 여부를 검사한다.
 - **실측:** bypass 모드에서도 `printenv SHELL`이 실행 전에 거부됐다.
+- **2차 보강 (같은 리뷰의 후속 지적):** `env`와 `/usr/bin/` 전체 경로 형태를 deny에 추가했다. 정책 키 `root_denied_permissions`가 없으면 시작 확인이 통과하지 않고 오류로 실패한다.
 - **남는 위험:** 접두어 deny는 복합·간접 형태로 우회될 수 있다. 권한 모드는 사용자가 정한다. `default`·`acceptEdits` 모드나 OS 샌드박스가 더 강하다는 점을 §17과 `permission_mode_tradeoff`에 적었다. 시작 확인은 모드 때문에 실패시키지 않는다.
 
 ## 감사 미검증 (수용을 막지 않음)

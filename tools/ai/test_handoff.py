@@ -462,6 +462,8 @@ class ClaudeMcpProfileTests(unittest.TestCase):
   self.assertFalse(A.start_check({},failing,policy)['checks']['codex_chatgpt_login'])
   local=Path(tempfile.mkdtemp());(local/'.claude').mkdir();(local/'.claude/settings.local.json').write_text('{"permissions":{"deny":null}}')
   with patch.object(A,'ROOT',local):self.assertFalse(A.start_check({},auth,policy)['checks']['root_denied_tools_enforced'])
+  with self.assertRaises(KeyError):A.start_check({},auth,dict(policy,work_routing={k:v for k,v in policy['work_routing'].items() if k!='root_denied_permissions'}))
+  self.assertLessEqual({'Bash(env:*)','Bash(/usr/bin/env:*)','Bash(/usr/bin/printenv:*)'},set(policy['work_routing']['root_denied_permissions']))
  def test_shared_mcp_files_and_runtime_policy_match_the_runner(self):
   self.assertEqual(json.loads((ROOT/'.mcp.json').read_text()),{'mcpServers':RUNNER.UNITY_SERVER})
   self.assertIn('url = "'+RUNNER.UNITY_URL+'"',(ROOT/'.codex/config.toml').read_text())
