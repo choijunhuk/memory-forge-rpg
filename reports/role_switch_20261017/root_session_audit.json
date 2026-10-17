@@ -2,7 +2,7 @@
   "transcript": "/Users/choi/.claude/projects/-Users-choi-Documents-Memory-forge/ae5b927f-1411-4970-b956-f4c51f67d2c1.jsonl",
   "session_id": "ae5b927f-1411-4970-b956-f4c51f67d2c1",
   "models": {
-    "claude-opus-5-5": 383
+    "claude-opus-5-5": 407
   },
   "permission_modes": [
     "bypassPermissions"
@@ -31,6 +31,96 @@
   "start_check_current": true,
   "violations": [],
   "waived": [
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__90598b53-3e39-4750-a9e5-938a578721de__append_wireframe_pages",
+      "reason": "claude.ai connector tool; the deny entry was not observed to remove it from the session; its server is outside root_allowed_mcp_servers so any call fails the audit; never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__90598b53-3e39-4750-a9e5-938a578721de__continue_chat_thread",
+      "reason": "claude.ai connector tool; the deny entry was not observed to remove it from the session; its server is outside root_allowed_mcp_servers so any call fails the audit; never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__90598b53-3e39-4750-a9e5-938a578721de__generate_user_flow",
+      "reason": "claude.ai connector tool; the deny entry was not observed to remove it from the session; its server is outside root_allowed_mcp_servers so any call fails the audit; never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__90598b53-3e39-4750-a9e5-938a578721de__generate_wireframe",
+      "reason": "claude.ai connector tool; the deny entry was not observed to remove it from the session; its server is outside root_allowed_mcp_servers so any call fails the audit; never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__90598b53-3e39-4750-a9e5-938a578721de__regenerate_meta",
+      "reason": "claude.ai connector tool; the deny entry was not observed to remove it from the session; its server is outside root_allowed_mcp_servers so any call fails the audit; never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__90598b53-3e39-4750-a9e5-938a578721de__regenerate_user_flow",
+      "reason": "claude.ai connector tool; the deny entry was not observed to remove it from the session; its server is outside root_allowed_mcp_servers so any call fails the audit; never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__90598b53-3e39-4750-a9e5-938a578721de__regenerate_wireframe",
+      "reason": "claude.ai connector tool; the deny entry was not observed to remove it from the session; its server is outside root_allowed_mcp_servers so any call fails the audit; never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__90598b53-3e39-4750-a9e5-938a578721de__regenerate_wireframe_page",
+      "reason": "claude.ai connector tool; the deny entry was not observed to remove it from the session; its server is outside root_allowed_mcp_servers so any call fails the audit; never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__90598b53-3e39-4750-a9e5-938a578721de__run_chat_turn",
+      "reason": "claude.ai connector tool; the deny entry was not observed to remove it from the session; its server is outside root_allowed_mcp_servers so any call fails the audit; never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__mobile__mobile_allocate_remote_device",
+      "reason": "exposed before the MCP review added this deny entry; removed from the session once applied; never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__mobile__mobile_list_remote_devices",
+      "reason": "exposed before the MCP review added this deny entry; removed from the session once applied; never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__mobile__mobile_login_to_cloud_provider",
+      "reason": "exposed before the MCP review added this deny entry; removed from the session once applied; never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__mobile__mobile_release_remote_device",
+      "reason": "exposed before the MCP review added this deny entry; removed from the session once applied; never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__plugin_greptile_greptile__trigger_code_review",
+      "reason": "exposed before the MCP review added this deny entry; removed from the session once applied; never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__unityMCP__blender_bridge",
+      "reason": "exposed before the MCP review added this deny entry; removed from the session once applied; never called"
+    },
     {
       "kind": "denied_tool_exposed",
       "id": null,
@@ -66,6 +156,12 @@
       "id": null,
       "detail": "mcp__unityMCP__manage_packages",
       "reason": "exposed at session start before .claude/settings.local.json deny existed; removed once the deny applied; never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__github__delete_repository",
+      "reason": "exposed before the MCP review added this deny entry; removed from the session once applied; never called"
     },
     {
       "kind": "protected_before_start_check",
@@ -193,11 +289,15 @@
     },
     {
       "kind": "exposed_server_not_allowed",
+      "detail": "plugin_desktop-commander_desktop-commander"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
       "detail": "plugin_greptile_greptile"
     },
     {
       "kind": "exposed_server_not_allowed",
-      "detail": "plugin_pdf-viewer_pdf"
+      "detail": "plugin_serena_serena"
     },
     {
       "kind": "exposed_server_not_allowed",

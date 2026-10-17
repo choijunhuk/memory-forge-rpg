@@ -26,11 +26,11 @@
 | `tools/ai/test_handoff.py` | 33/33 OK. 실행 환경은 scratch venv이고 `tools/ai/requirements.txt`와 `tools/audit/requirements-docs.txt`를 설치했다 |
 | `npm run test:docs` | OK |
 | `audit_root_session.py --start-check` | pass. 인증 claude.ai/firstParty, 공급자 환경 깨끗함, 설정 고정, deny 적용, Codex ChatGPT 로그인 |
-| 루트 세션 감사 | [root_session_audit.json](root_session_audit.json): pass. 위반 0, 예외 17, Codex 호출 6건, 권한 모드 `bypassPermissions` |
+| 루트 세션 감사 | [root_session_audit.json](root_session_audit.json): pass. 위반 0, 예외 33, Codex 호출 6건, 권한 모드 `bypassPermissions` |
 | deny 실효 | 적용 직후 생성 도구 6개가 실제 세션의 도구 목록에서 빠진 것을 관찰했다 |
 | Unity | MCP 읽기(editor state, Console 오류 0)를 확인했다. computer-use로 Unity 탭 클릭이 됨을 확인했고 원래 상태로 되돌렸다 |
 
-## 예외 17건의 사유
+## 예외 33건의 사유
 
 모두 감사 규칙이 생기기 전이거나 더 엄격해지기 전의 이력이며, 각 사유는 감사 보고서에 그대로 있다.
 
@@ -40,6 +40,10 @@
   - 3건은 복합 명령으로 돌린 시작 확인(결과는 pass) 뒤에 실행했다. "단독 명령만 인정" 규칙은 그 뒤에 추가됐다.
 - **잠금 보조 함수 자체 시험 1건:** 소유자 `claude-root-locktest`로 한 명령 안에서 획득, 재획득 거부, 해제를 했다. Editor 쓰기는 없었다.
 - **Unity 클릭 시연 1건:** Project 탭을 눌렀다가 Console 탭으로 되돌렸다. 프로젝트 변경은 없다.
+- **MCP 점검 뒤 추가한 deny 대상의 이전 노출 16건:**
+  - 7개(원격 유료 기기, 외부 리뷰 실행, `blender_bridge`, `delete_repository`)는 deny 적용 뒤 세션에서 빠졌다.
+  - claude.ai 커넥터 Manyfast의 생성 도구 9개는 deny를 넣어도 세션에서 빠지는 것이 관찰되지 않았다. 그 서버는 허용 목록 밖이라 호출하면 감사 위반이 된다. 완전히 없애려면 사용자가 claude.ai 커넥터 설정에서 끈다.
+  - 모두 호출한 적은 없다.
 - **deny 확인 1건:** 해롭지 않은 변수로 `printenv SHELL`을 시도했다. 실행 전에 permissions.deny로 거부됐고 아무것도 출력되지 않았다.
 
 ## Codex 독립 리뷰 (읽기 전용, gpt-6.1-sol, high)
@@ -78,5 +82,10 @@ thread ID와 사용량은 `ops/ai/tasks/ROLE-SWITCH-CODEX-REVIEW.result.json`에
 ## 사용자 판정·후속
 
 - computer-use의 앱 허용 창은 세션마다 뜨고, 이 앱 설정으로는 상시 허용으로 바꿀 수 없다. Unity 작업은 Unity MCP 위주로 한다.
-- MCP 점검·추가 설치는 별도 세션이 `reports/mcp_setup_20261017/`에 정리 중이다. 이 커밋에는 넣지 않았다. 그 세션이 제안하는 허용 서버는 `root_allowed_mcp_servers`에 따로 반영한다.
+- **MCP 점검·추가 설치** (별도 세션, [보고서](../mcp_setup_20261017/README.md)):
+  - `serena` 1.7.0(C# 기호 탐색·진단)과 `context7` 4.1.1(최신 라이브러리 문서)을 local 범위에 설치했다. 루트 세션이 `claude mcp list`에서 둘 다 Connected임을 다시 확인했다.
+  - 이 프로젝트에서 고장 난 플러그인 serena와 desktop-commander를 껐다.
+  - 허용 서버·deny 목록을 반영했다. 추가된 deny는 원격 유료 기기, 외부 리뷰 실행, 생성형 도구, `delete_repository`다.
+  - `.serena/`를 `.gitignore`에 넣었다.
+  - 새 서버는 다음에 여는 세션부터 보인다.
 - 머지는 하지 않았다. 브랜치는 Codex 시기의 PR #2(`codex/late-actions-balance`)와 같다.

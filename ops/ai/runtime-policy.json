@@ -70,7 +70,23 @@
       "mcp__unityMCP__import_model",
       "mcp__unityMCP__import_model_file",
       "mcp__unityMCP__asset_gen",
-      "mcp__unityMCP__manage_packages"
+      "mcp__unityMCP__manage_packages",
+      "mcp__unityMCP__blender_bridge",
+      "mcp__mobile__mobile_allocate_remote_device",
+      "mcp__mobile__mobile_list_remote_devices",
+      "mcp__mobile__mobile_release_remote_device",
+      "mcp__mobile__mobile_login_to_cloud_provider",
+      "mcp__plugin_greptile_greptile__trigger_code_review",
+      "mcp__github__delete_repository",
+      "mcp__90598b53-3e39-4750-a9e5-938a578721de__generate_wireframe",
+      "mcp__90598b53-3e39-4750-a9e5-938a578721de__generate_user_flow",
+      "mcp__90598b53-3e39-4750-a9e5-938a578721de__regenerate_wireframe",
+      "mcp__90598b53-3e39-4750-a9e5-938a578721de__regenerate_wireframe_page",
+      "mcp__90598b53-3e39-4750-a9e5-938a578721de__regenerate_user_flow",
+      "mcp__90598b53-3e39-4750-a9e5-938a578721de__regenerate_meta",
+      "mcp__90598b53-3e39-4750-a9e5-938a578721de__append_wireframe_pages",
+      "mcp__90598b53-3e39-4750-a9e5-938a578721de__run_chat_turn",
+      "mcp__90598b53-3e39-4750-a9e5-938a578721de__continue_chat_thread"
     ],
     "root_allowed_mcp_servers": [
       "ccd_turn",
@@ -91,13 +107,14 @@
       "chrome-devtools",
       "plugin_playwright_playwright",
       "github",
-      "plugin_serena_serena",
+      "serena",
+      "context7",
       "mobile",
       "terminal",
       "visualize",
+      "plugin_pdf-viewer_pdf",
       "plugin_claude-mem_mcp-search",
-      "plugin_oh-my-claudecode_t",
-      "plugin_desktop-commander_desktop-commander"
+      "plugin_oh-my-claudecode_t"
     ],
     "root_session_audit": {
       "script": "tools/ai/audit_root_session.py",
@@ -123,7 +140,8 @@
       "Bash(/usr/bin/printenv:*)",
       "Bash(/usr/bin/env:*)",
       "Bash(claude --bare:*)"
-    ]
+    ],
+    "root_mcp_setup": "reports/mcp_setup_20261017/README.md: serena (PyPI serena-agent==1.7.0, .NET 10 from ~/.dotnet in server env only) and context7 (@upstash/context7-mcp@4.1.1, no API key; public library queries only) at local scope; plugin serena and desktop-commander disabled for this project; .serena/ ignored"
   },
   "billing": "existing_subscription_included_allowance_only",
   "api_auth_allowed": false,
