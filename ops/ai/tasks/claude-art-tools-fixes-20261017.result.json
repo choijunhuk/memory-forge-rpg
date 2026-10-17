@@ -1,0 +1,29 @@
+{
+  "task_id": "claude-art-tools-fixes-20261017",
+  "run_id": "claude-art-tools-fixes-20261017-20261017T054716988648Z",
+  "status": "RECEIVED_UNVERIFIED",
+  "requestedEffort": "xhigh",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "changes_verified": false,
+  "raw_output": "ops/ai/local/claude-art-tools-fixes-20261017-20261017T054716988648Z*",
+  "billing_verified_at": "2026-10-17T05:01:40.332532+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "codex/claude-ci-fixture-20261017",
+  "base_commit": "2b2d8ca9e5c2471247f47434001e832e0e948a0d",
+  "worktree": "/Users/choi/.codex/worktrees/claude-ci-fixture/Memory_forge",
+  "allowed_files": [
+    "tools/ai/aiimg.zsh",
+    "tools/ai/build_art_review_scene.cs"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "dd75f3c7-8225-427b-8c0c-51e17a0ebcd7",
+  "subtype": "success",
+  "is_error": false,
+  "result": "요청한 세 결함을 두 파일에서 고쳤습니다. 이번 호출에서는 실행 도구가 없어 zsh 구문, Python, Unity 컴파일·실행 모두 NOT_RUN입니다. 커밋하지 않았고, 이전 CI 변경과 다른 파일은 건드리지 않았습니다.\n\n## 변경\n**`tools/ai/build_art_review_scene.cs`**\n- 기존 dirty scene 거절과 AssetDatabase guard 뒤에, `Application.dataPath`에서 계산한 정확한 디스크 목적지(`<project>/Assets/Scenes/MemoryForgeArtReview.unity`)를 검사하는 `refuseDiskScene`을 넣었습니다.\n  - 파일, 디렉터리, 끊어진 symlink(디렉터리 항목을 대소문자 무시로 비교)를 모두 거절합니다.\n  - Refresh/import 전에 한 번, `SaveScene` 직전에 한 번 더 실행합니다.\n- 한국어 font 존재 확인을 맨 앞(Refresh·importer 변경 전)으로 옮겼습니다.\n- **요청 범위를 조금 넘긴 부분:** 같은 \"부분 import 수정 방지\" 목적으로, 9장 importer를 모두 먼저 확인한 뒤에 설정을 바꾸도록 반복문을 둘로 나눴습니다. 설정 값과 Scene·Prefab·build settings·SaveAssets는 바꾸지 않았습니다.\n\n**`tools/ai/aiimg.zsh`**\n- 원격 생성 전에 `python3 -c 'import os, struct, sys, zlib'`를 실제로 실행해 확인합니다. macOS의 python3 stub도 이 단계에서 걸러집니다.\n- Python 표준 라이브러리 PNG 검사(`aiimg_png_check`)가 확인하는 것:\n  - 서명\n  - 각 chunk의 길이(2³¹−1 이하)·형식(영문자)·CRC\n  - 맨 앞에 IHDR이 하나만 있는지\n  - IHDR 길이 13, 가로·세로 1 이상, bit depth와 color type 조합, compression·filter 0, interlace 0 또는 1\n  - IDAT가 1개 이상인지\n  - 마지막이 빈 IEND이고 뒤에 남은 바이트가 없는지, 잘린 데이터가 없는지\n- 이미지 치수는 고정하지 않습니다. 기존 `-s`/`file`/`sips` 검사는 그대로 두고, Python 검사는 `-s` 바로 뒤에 넣었습니다.\n- 링크 실패가 이름 충돌이 아니면 `trap - EXIT`로 임시파일 정리만 해제하고, 보존한 `.aiimg-XXXXXXXX` 경로를 stderr로 알린 뒤 1로 끝납니다.\n- 전송 실패나 검증 실패 때의 정리, 충돌 시 접미사로 다시 시도하는 동작, `os.link` 게시, SSH 옵션, INT/TERM/HUP 처리, Preview는 바꾸지 않았습니다.\n\n## Codex가 시험할 회귀 조건\n1. **builder**\n   - 디스크에만 있고 import되지 않은 `.unity` 파일, 같은 이름의 디렉터리, 끊어진 symlink → 거절되고 importer와 원래 파일이 그대로인지\n   - font 누락, 이미지 1장 누락 → importer 설정 변경이 0건인지\n   - 정상 실행 → 장면 생성, `textures = 9`\n   - 대소문자만 다른 기존 파일 → 거절됩니다(의도한 보수적 동작)\n2. **aiimg PNG**\n   - 거절되어야 하는 경우: 끝을 1바이트 이상 자른 파일, CRC 1비트 변조, IEND 뒤 후행 바이트, IHDR 길이나 값 위반, IDAT 없음\n   - 통과해야 하는 경우: 일반 RGBA·팔레트·16-bit·interlace PNG와 여러 치수\n3. **python3 없음** → ssh를 호출하지 않는지\n4. **게시 실패**\n   - 예: 대상 디렉터리 권한을 막은 뒤 link 실패 → 임시 PNG가 남고 경로가 출력되는지\n   - 이름 충돌(기존 파일·디렉터리·symlink) → 덮어쓰지 않고 `-1` 접미사로 게시되는지\n   - 빈/불완전 전송과 Ctrl-C → 기존대로 임시파일이 정리되는지\n\n## 막힌 점과 메모\n- 캐릭터 일관성 의견은 기록하라고 하셨지만, 쓸 수 있는 파일이 이 두 개뿐이라 따로 남기지 않았습니다. 생성은 Codex 담당입니다.\n- ComfyUI/OpenWebUI 자동 시작 관련 우려는 채택하지 않았고, 해당 작업은 Disabled 상태 그대로입니다.\n- `session_id`는 제가 볼 수 없으니 CLI 메타데이터에서 확인해 주세요.",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ]
+}

@@ -10,12 +10,29 @@ for (var loadedIndex = 0; loadedIndex < UnityEngine.SceneManagement.SceneManager
 var scenePath = "Assets/Scenes/MemoryForgeArtReview.unity";
 if (UnityEditor.AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(scenePath) != null)
     throw new System.InvalidOperationException("Review scene already exists; do not overwrite it automatically.");
+// AssetDatabase misses a not-yet-imported file that Refresh/SaveScene would replace, so the exact disk entry is refused too
+// (file, directory or dangling symlink), before any import and again right before saving.
+var sceneDisk = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(UnityEngine.Application.dataPath), scenePath);
+System.Action refuseDiskScene = () =>
+{
+    var sceneDirectory = System.IO.Path.GetDirectoryName(sceneDisk);
+    var sceneName = System.IO.Path.GetFileName(sceneDisk);
+    if (System.IO.File.Exists(sceneDisk) || System.IO.Directory.Exists(sceneDisk)
+        || (System.IO.Directory.Exists(sceneDirectory) && System.Array.Exists(System.IO.Directory.GetFileSystemEntries(sceneDirectory),
+            existing => string.Equals(System.IO.Path.GetFileName(existing), sceneName, System.StringComparison.OrdinalIgnoreCase))))
+        throw new System.InvalidOperationException("Review scene already exists on disk; do not overwrite it automatically: " + sceneDisk);
+};
+refuseDiskScene();
+var font = UnityEngine.Resources.Load<UnityEngine.Font>("Fonts/IBMPlexSansKR-Regular");
+if (font == null) throw new System.InvalidOperationException("Existing Korean font not found.");
 var folder = "Assets/Art/Candidates/Starter20261017/";
 var ids = new[] { "sera", "harin", "nia" };
 var titles = new[] { "세라", "하린", "니아" };
 var kinds = new[] { "sheet", "cutin", "sd" };
 var textures = new System.Collections.Generic.Dictionary<string, UnityEngine.Texture2D>();
 UnityEditor.AssetDatabase.Refresh();
+// Every image must resolve before the first importer setting changes, so a missing file leaves no partial import edits.
+var importers = new System.Collections.Generic.Dictionary<string, UnityEditor.TextureImporter>();
 foreach (var id in ids)
 foreach (var kind in kinds)
 {
@@ -23,6 +40,13 @@ foreach (var kind in kinds)
     var path = folder + "char_" + id + "_" + kind + "_default_" + version + ".png";
     var importer = UnityEditor.AssetImporter.GetAtPath(path) as UnityEditor.TextureImporter;
     if (importer == null) throw new System.InvalidOperationException("Missing image: " + path);
+    importers.Add(id + "_" + kind, importer);
+}
+foreach (var entry in importers)
+{
+    var importer = entry.Value;
+    var path = importer.assetPath;
+    var kind = entry.Key.Substring(entry.Key.IndexOf('_') + 1);
     importer.textureType = UnityEditor.TextureImporterType.Default;
     importer.npotScale = UnityEditor.TextureImporterNPOTScale.None;
     importer.maxTextureSize = 2048;
@@ -34,10 +58,8 @@ foreach (var kind in kinds)
     importer.SaveAndReimport();
     var texture = UnityEditor.AssetDatabase.LoadAssetAtPath<UnityEngine.Texture2D>(path);
     if (texture == null) throw new System.InvalidOperationException("Import failed: " + path);
-    textures.Add(id + "_" + kind, texture);
+    textures.Add(entry.Key, texture);
 }
-var font = UnityEngine.Resources.Load<UnityEngine.Font>("Fonts/IBMPlexSansKR-Regular");
-if (font == null) throw new System.InvalidOperationException("Existing Korean font not found.");
 var scene = UnityEditor.SceneManagement.EditorSceneManager.NewScene(
     UnityEditor.SceneManagement.NewSceneSetup.EmptyScene,
     UnityEditor.SceneManagement.NewSceneMode.Single);
@@ -96,6 +118,7 @@ for (var col = 0; col < ids.Length; col++)
     label(ids[col] + "_SdLabel", "지도 SD · 투명", 22, x + 308, 522, 280, 34);
     label(ids[col] + "_Note", "외형·의상·무기 참조 시안\n최종 리그·애니메이션 별도", 20, x + 20, 938, 568, 64);
 }
+refuseDiskScene();
 if (!UnityEditor.SceneManagement.EditorSceneManager.SaveScene(scene, scenePath))
     throw new System.InvalidOperationException("Could not save the review scene.");
 UnityEditor.EditorApplication.ExecuteMenuItem("Window/General/Game");

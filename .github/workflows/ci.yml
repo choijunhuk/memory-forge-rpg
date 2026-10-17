@@ -26,6 +26,18 @@ jobs:
       - run: node tools/gen_vectors.mjs && git diff --exit-code engine/tests/vectors/
       - run: node tools/gen_hash_vectors.mjs && git diff --exit-code engine/tests/vectors/canonical_hash_vectors.json
       - run: bash tools/run_all_checks.sh
+        id: all_checks
+      # Failure-only: the runner keeps tail -3 per step, so print the full reports this run marked FAIL. reports/ also holds committed
+      # older evidence; a delivery_status.json unchanged from checkout is not trusted. The job keeps the original failure.
+      - name: Show failed run_all_checks reports
+        if: failure() && steps.all_checks.outcome == 'failure'
+        run: |
+          status=reports/delivery_status.json
+          if [ -z "$(git status --porcelain -- "$status")" ]; then echo "$status was not rewritten by this run; see the run_all_checks log"; exit 0; fi
+          stop="diag-$(od -An -N16 -tx1 /dev/urandom | tr -d ' \n')"
+          for name in $(grep -oE '"[a-z_]+": "FAIL"' "$status" | cut -d'"' -f2); do
+            echo "::group::reports/$name.txt"; echo "::stop-commands::$stop"; cat "reports/$name.txt" || true; echo "::$stop::"; echo "::endgroup::"
+          done
       - run: dotnet restore server/MemoryForge.Server/MemoryForge.Server.csproj --locked-mode
       - run: dotnet run --project server/MemoryForge.ServerChecks -- "$PWD"
       - run: bash tools/check_practice_postgres.sh
