@@ -178,3 +178,38 @@ P1·P2 또는 개별 작업이 끝났다는 이유로 현재 세션의 개발을
 - **화면 도구 교정:** Codex가 provider 환경변수 없이 Peekaboo 4.9.5를 로컬 stdio로 띄워 initialize/tools-list만 확인했다(serverInfo peekaboo-mcp 4.9.5, 추론·화면 조작 없음). `list`·`hotkey`는 없고 `app`/`window`의 list 동작이 발견 경로다. `image`는 AI 입력이 없는 스크린샷, `see` OCR은 로컬 Apple Vision이다. `desktop`은 실제 26개 중 무료 native 21개(앱·창·메뉴·Dock·대화상자·Space·캡처·AX 검사/검증·클릭·입력·키·스크롤·드래그·선택·값 설정·의미 동작·대기)를 작업 대상 앱·창에 한해 허용하고 `analyze`·`agent`(AI 공급자), `clipboard`·`paste`(비밀 가능 클립보드), `browser`(대상 밖 웹 이동)를 금지한다. 도구 설명의 기본 provider 문구는 실제 호출 증거가 아니다. 계정·청구·비밀·키체인·터미널을 GUI로 우회 조작하지 않는다.
 - **실제 노출 기준 보강(2026-10-17):** 첫 실제 `unity-read` init에 허용 목록 밖 같은 서버 도구 17개(`generate_image`·`generate_model`·`generate_audio`·`import_model` 등 포함)가 남았다. 이 이름들은 두 Unity 프로필에서 정확한 deny로 제외하고, 같은 서버의 미허용 도구가 문맥에 노출되면 기록만 하지 않고 FAILED로 처리한다. 새 도구가 필요하면 무료 여부와 쓰기 성격을 확인해 별도로 배정한다. 정확한 `Bash(명령)` 규칙 밖의 읽기 전용 셸이 CLI에서 자동 허용될 수 있음을 관찰했으므로 실행기 감사 결과로 판정한다. 상세 기록은 [AI_ENVIRONMENT.md](AI_ENVIRONMENT.md)다.
 - **Unity `execute_code`:** 무료 Editor C# method-body 도구를 `unity-write`에서만 허용한다(설치·검수·실행 확인용). 임의 코드 실행이므로 파일 범위를 OS 수준으로 강제한다고 주장하지 않는다. 기존 Editor·파일 보존, 유료 asset/AI 생성·다른 모델 호출 금지를 유지한다. 실제 Unity tools/list와 CLI 노출·도구 호출은 다음 실험에서 검증하며 설정만으로 연결됐다고 쓰지 않는다.
+
+## 17. 2026-10-17 최신 우선 — Claude 루트, Codex는 이미지·캐릭터 외형·읽기 전용 리뷰
+
+사용자 지시(2026-10-17): 개발은 Claude가 맡고 Codex는 이미지·캐릭터 외형·읽기 전용 리뷰만 맡는다. Codex를 주축으로 쓴 이유는 디자인이었으며, 개발 판단은 Claude에 둔다. 이 절은 역할과 호출 방향에 한해 §1–§4·§8, §10의 「실행과 독립 검토」, §11·§14·§16의 Codex 담당 서술, `AGENTS.md` 보호 2의 「초기 구성은 Codex만」(초기 구성 완료), `README.md`·`docs/AI_ENVIRONMENT.md`·`docs/START_CODEX.md`·`START_HERE.txt`의 Codex 오케스트레이터·Claude 호출 서술에 우선한다. 그 서술들은 전환 전 이력으로 보존한다. 구독 전용·과금 차단(§2), 모델 고정(`gpt-6.1-sol`, `claude-opus-5-5`), 노력 선택(§12), 이미지 공급 경로(§5·§13·§15), 승인된 캐릭터 표현 보존(§16), 가격·확률·재화·영구 자산·나이 정책·운영 배포 승인 경계, GitHub Private, 설계·수치 보호는 그대로다.
+
+- **Claude = 루트.** 작업 선택·요구사항 기록·계획, 구현·원인 분석·테스트 작성과 실행, Unity Editor 단일 쓰기(Scene·Prefab·Play 시험·임포트·빌드), 통합·커밋·push·PR·CI 확인, 원격·브랜치·PR 관리, 수용 기록과 `docs/CURRENT.md` 갱신, 의견 채택 판단을 맡는다. 실제 셸과 Unity MCP가 있는 세션에서 작업하고 자기 변경을 직접 컴파일·실행해 검증한다. 셸 없이 작성만 하고 검증을 다른 AI에 넘기는 방식을 기본으로 쓰지 않는다. 병렬 구현은 Claude 세션·하위 작업을 별도 branch/worktree와 겹치지 않는 파일로 나눈다.
+- **Codex = 세 가지 전담.** ① 이미지 생성·재생성·인페인팅·내용 수정, ② 캐릭터 외형 최종 디자인, ③ 읽기 전용 독립 코드 리뷰. 작업 배정·지시·계획, 구현, 통합·커밋·push, Unity Editor 쓰기는 하지 않는다. 전환 시점(SAVE-PARTS 커밋 `0623d61` 이후)에 이미 진행 중이던 Codex 루트 단위는 이미 작성·검증된 변경의 커밋·CI 확인과 인계 기록까지만 마친다. 새 구현·수정 범위 확장·새 Claude 호출은 하지 않으며, 그 안에 끝나지 않으면 체크포인트를 남기고 Claude에 넘긴다. 새 Codex 루트 작업은 열지 않는다.
+- **호출 방향.** Claude가 구독 인증·과금 차단을 확인한 뒤 공식 Codex CLI를 호출한다(이미지 요청, 리뷰 요청). Codex는 Claude를 호출하지 않으며 재귀 호출 금지는 그대로다. `tools/ai/run_claude.py`와 그 MCP 프로필·`--allow-test`·셸 금지 규칙·잠금·감사는 그 실행기로 띄운 이력 작업에만 적용하며, 기존 증거와 재현용으로 보존하되 새 작업 배정에 쓰지 않는다.
+- **루트 세션 운영.** Claude 루트는 이 저장소 루트를 작업 디렉터리로 연 공식 Claude Code 구독 로그인 세션(Desktop 또는 대화형 CLI)이다. `docs/AI_ENVIRONMENT.md`의 계정 일치·Usage credits/Extra usage·자동 충전 OFF 확인 규칙을 그대로 따른다.
+  1. **시작 확인(값은 출력하지 않고 존재·유형만):** 세션 시작 때와 계정·환경·설정이 바뀐 뒤 `python3 tools/ai/audit_root_session.py --start-check`를 실행한다. 이 명령이 다음을 확인하고 `ROOT_START_CHECK` 한 줄을 남긴다. `claude auth status`가 `authMethod: claude.ai`·`apiProvider: firstParty`인지, ANTHROPIC·OPENAI·CODEX·AWS·GOOGLE·GEMINI·AZURE·VERTEX 계열의 API 키·인증 토큰 환경 변수와 `CLAUDE_CODE_USE_BEDROCK`·`CLAUDE_CODE_USE_VERTEX`·`CLAUDE_CODE_USE_FOUNDRY`·`OPENAI_BASE_URL`이 없는지, `ANTHROPIC_BASE_URL`이 없거나 호스트가 `anthropic.com`인지 본다. 프로젝트 `.claude/settings.json`의 Opus 고정·`forceLoginMethod: claudeai`·fallback 없음, deny 목록 적용, `codex login status`의 ChatGPT 로그인도 함께 본다. 설정 파일이 넣은 환경 변수도 세션의 셸 환경에 들어오므로 같이 검사된다. 하나라도 다르면 추론 작업을 멈추고 보고한다.
+  2. **도구 제한:** 루트 세션은 이미지·모델·오디오 생성, 유료 asset 경로, 패키지 변경 MCP 도구를 쓰지 않는다. 기준 목록은 runtime-policy `work_routing.root_denied_tools`이고, 이 기기에서는 `.claude/settings.local.json`의 `permissions.deny`로 강제한다. 이력 실행기가 `.claude/settings.json`의 추가 키를 거부하므로 local 파일을 쓰며, 이 파일은 Git에 포함되지 않으니 다른 기기에서는 같은 목록으로 다시 만든다. 같은 파일의 `permissions.allow`에 `mcp__unityMCP`를 두어 Unity MCP 호출마다 묻지 않게 한다. deny는 allow보다 우선한다. 권한 모드는 사용자가 Desktop에서 고른 `default`·`acceptEdits`·`auto`·`bypassPermissions` 중 하나다. 감사 보고서가 실제 모드를 기록하며, `bypassPermissions`에서도 deny 규칙은 그대로 적용된다. 쓸 수 있는 MCP 서버는 `work_routing.root_allowed_mcp_servers`뿐이다. 목록 밖 서버는 노출만 돼 있으면 경고이고, 호출하면 위반이다. 그 밖의 권한은 하드 레일(시험 삭제·기대값 조작 금지, main force-push 금지, 비밀값 출력 금지, 요청 없는 의존성·유료 서비스·시스템 설정 변경 금지, 승인 경계)로 제한한다.
+  3. **Unity 잠금:** Editor에 쓰기 전에(Scene·Prefab·Play 시험·`execute_code`·임포트·빌드, computer-use로 Unity 창을 클릭·입력하는 경우 포함) 이력 실행기와 같은 `ops/ai/local/exclusive-control.lock`을 `python3 -c "import sys;sys.path.insert(0,'tools/ai');import run_claude as r;r.acquire_lock(r.CONTROL_LOCK,{'run_id':'claude-root-<session_id>'},'Editor busy')"`로 잡는다. 이미 있으면 쓰지 않고 소유자를 확인한다. 쓰기가 끝나면 같은 방식의 `r.release_lock(r.ROOT/r.CONTROL_LOCK,'claude-root-<session_id>')`로 자기 잠금만 푼다. 세션이 중단돼 남은 잠금은 Editor 상태를 확인한 뒤에만 지운다.
+  4. **Codex 호출:** `codex login status`가 ChatGPT 로그인이고 OpenAI/Codex API 키·base URL 환경 변수가 없을 때만 호출한다. 리뷰는 `codex exec -s read-only -m gpt-6.1-sol -c model_reasoning_effort=...`로 실행하고 이미지 작업은 §5·§13·§15 경로를 따른다.
+  5. **감사:** 각 단위를 커밋·수용하기 전에 `python3 tools/ai/audit_root_session.py --out reports/<단위>/root_session_audit.json`을 실행한다. 이 명령은 현재 세션(`CLAUDE_CODE_SESSION_ID`)의 JSONL과 하위 에이전트 기록을 runtime-policy와 대조한다.
+     - 대조 항목: 모델 고정, deny 도구 호출·노출, 허용 목록 밖 MCP 서버 호출, Agent 모델 재정의, 잠금 없는 Unity 쓰기·GUI 입력, 규칙에 어긋난 Codex 호출(`command codex exec`·`-s read-only`·`-m gpt-6.1-sol` 필수), 비밀 조회·환경 값 덤프·`--bare`·main force-push, 통과한 `ROOT_START_CHECK` 기록 여부.
+     - 종료 코드 1(위반 또는 증거 누락)이면 커밋·수용을 막는다.
+     - 예외는 `--waive TOOL_USE_ID=사유`로만 남긴다. 이 예외는 보고서와 수용 기록에 그대로 드러난다.
+     - 수용 기록에는 루트 `session_id`, 감사 결과, Unity 잠금 획득·해제, Codex 호출의 thread ID·모델·노력·종료 상태를 남긴다.
+     - 원본 JSONL은 로컬(`~/.claude/projects/`)에 두고 Git에 넣지 않는다.
+  6. **결정(2026-10-17, 사용자 선택 (가)):** Desktop 루트 세션을 유지하고 위 감사로 수용을 막는다. 전용 CLI 래퍼는 쓰지 않는다. 이 감사는 실행 환경을 강제하지 않는다. 기록된 호출을 사후에 대조하는 제한된 증거이며, 이력 실행기의 정제된 실행과 같지 않다.
+     - **보는 것 (셸):** 셸 입력은 shlex로 나눠 실제 프로그램과 인자를 본다.
+       - 따옴표로 감싼 구분자의 heredoc 본문(`<<'EOF'`)만 그대로의 데이터로 본다.
+       - 따옴표 없는 heredoc 본문과 따옴표 안 낱말은 `$(...)`·백틱 치환을 찾아 다시 검사한다.
+       - `sh|bash|zsh -c`, `eval`, 셸에 넘기는 heredoc은 안쪽을 재귀로 검사한다.
+       - 나눌 수 없는 입력이 민감한 프로그램을 언급하면 통과시키지 않고 막는다.
+     - **보는 것 (그 밖):**
+       - 코드를 실행하지만 입력을 읽을 수 없는 도구(`interact_with_process`, `browser_run_code_unsafe`, `python_repl`)와 대상 앱이 없는 전체 화면 입력은 막는다.
+       - 하위 에이전트의 보호 작업(Unity 쓰기, Codex 실행, git commit/push)은 막는다.
+       - 잠금과 시작 확인은 루트 세션이 문서의 정확한 형태로 단독 실행하고 그 결과가 기록된 뒤에만 인정한다.
+       - 설정·인증 변경 뒤에는 시작 확인을 다시 통과해야 한다.
+     - **확인하지 못하는 것:** 첫 도구 목록, MCP 하위 프로세스의 환경, 실제 추론 프로세스 환경과 확인한 셸 환경의 일치, 인터프리터 코드의 의미(`python -c`, Python heredoc, `node -e` 안에서 환경 변수를 읽는 경우 등), 계정 화면의 Usage credits OFF. 보고서의 `unverified`에 늘 적혀 있다. 수용 기록에는 "감사 미검증"으로 옮겨 적되 수용을 막지는 않는다. 이 감사는 실수로 생긴 위반을 잡는 장치다. 감사를 일부러 피하려는 세션까지 막는다고 주장하지 않는다.
+     - 리뷰 이력은 `ops/ai/tasks/ROLE-SWITCH-CODEX-REVIEW.result.json`이다.
+- **리뷰 계약.** 의미 있는 Claude 변경은 통합 전에 Codex의 읽기 전용 리뷰를 받는다. Codex는 파일을 수정·커밋하지 않고 `implementation_defect`·`design_mismatch`·`real_constraint`·`optional_opinion`으로 구분해 반환한다. 채택·수정·재검증은 Claude가 한다. 핵심 결함은 해결·재리뷰 전 통합하지 않고, 두 차례 미해결 규칙(§10)은 그대로다. 서버·저장/기억·경제·인증·이관·넷코드·핵심 판정 로직은 Codex 리뷰 없이 통합하지 않는다. 그 밖의 변경은 Codex 한도·장애 때 별도 컨텍스트의 Claude 리뷰로 통합할 수 있으며, 그 사실을 기록하고 Codex 리뷰를 이후에 받는다.
+- **이미지·캐릭터.** Claude는 `art/requests/`에 §5 형식의 요청서를 쓰고 Codex에 전달한다. 생성물 검수와 비생성형 리사이즈·압축·슬라이스·Unity 임포트·화면 연결은 Claude가 한다. 얼굴·의상·포즈 등 내용 변경은 Codex 수정 요청으로 돌린다. Claude는 캐릭터에 의견을 낼 수 있지만 외형 최종안은 Codex가 정한다.
+- **증거.** Codex 호출도 실제 세션·모델·노력·종료 상태·결과를 `ops/ai/tasks/`에 남긴다. 실제 호출 결과가 없으면 리뷰·생성 완료로 기록하지 않는다. 기계 판독용 배분은 [runtime-policy.json](../ops/ai/runtime-policy.json) `work_routing`이다.

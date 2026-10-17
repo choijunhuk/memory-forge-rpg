@@ -1,5 +1,5 @@
 {
-  "version": "2026-10-17-claude-autonomy-mcp-tests-imagineart-free-credits",
+  "version": "2026-10-17-claude-root-codex-image-design-review",
   "models": {
     "codex": "gpt-6.1-sol",
     "claude": "claude-opus-5-5"
@@ -22,19 +22,91 @@
   },
   "fallbacks": [],
   "work_routing": {
-    "preferred_implementation_analysis_tests": "Claude Opus via official subscription CLI",
+    "user_direction_on": "2026-10-17",
+    "effective_after_commit": "0623d61",
+    "root": "Claude Opus root session: task selection, planning, implementation, analysis, tests, Unity Editor single writer, integration, commit/push/PR/CI, acceptance records, adoption of review feedback",
     "codex_responsibilities": [
-      "scoped dispatch",
-      "independent review of Claude changes",
-      "integration",
-      "Unity final verification",
-      "image generation and content edits"
+      "image generation and content edits",
+      "final character visual design",
+      "read-only independent code review"
     ],
-    "native_codex_agents": "finish already-started bounded tasks; prefer Claude for new implementation and analysis",
-    "development_tool_install_and_use": "Claude Opus via official subscription CLI (user direction 2026-10-17); Codex directs, independently verifies and integrates",
-    "allocation_basis": "latest user-reported included allowance and reset window; no fixed token percentage enforcement",
+    "codex_must_not": [
+      "task dispatch, direction or planning",
+      "implementation",
+      "integration, commits or pushes",
+      "Unity Editor writes",
+      "calling Claude"
+    ],
+    "invocation_direction": "Claude calls the official Codex CLI after subscription and billing checks; Codex never calls Claude; no recursion",
+    "codex_review": "read-only; Codex edits and commits nothing and returns claude_autonomy.feedback_classes; Claude adopts, fixes and reverifies; core defects block integration",
+    "codex_review_required_before_integration": [
+      "server",
+      "save_and_memory",
+      "economy",
+      "auth",
+      "migration",
+      "netcode",
+      "core_rules"
+    ],
+    "codex_review_unavailable": "sensitive paths hold; other changes may integrate after a separate-context Claude review, recorded, with Codex review later",
+    "in_flight_codex_root_work": "a Codex root unit already in progress at the switch may only commit and CI-check its already written and verified changes and record its handoff; no new implementation, scope growth or Claude calls; otherwise checkpoint and hand off to Claude; open no new Codex root work",
+    "legacy_claude_runner": "tools/ai/run_claude.py, its MCP profiles, --allow-test registry, shell deny rules, locks and audits apply only to jobs launched through that runner; kept for evidence and reproduction; not used for new dispatch",
+    "allocation_basis": "user direction: Claude for development, Codex for images, character design and review; no fixed token percentage enforcement",
     "quality_and_cross_review_unchanged": true,
-    "enforcement": "task dispatch; not a provider quota-transfer setting"
+    "enforcement": "task dispatch; not a provider quota-transfer setting",
+    "root_session_controls": {
+      "session": "official Claude Code subscription session opened at the repository root (Desktop or interactive CLI); AI_ENVIRONMENT account match and Usage credits/Extra usage/auto-recharge OFF checks",
+      "start_checks": "python3 tools/ai/audit_root_session.py --start-check at session start and after account, environment or settings changes: claude auth status claude.ai/firstParty; no ANTHROPIC/OPENAI/CODEX/AWS/GOOGLE/GEMINI/AZURE/VERTEX API key or auth token env, no CLAUDE_CODE_USE_BEDROCK/VERTEX/FOUNDRY or OPENAI_BASE_URL; ANTHROPIC_BASE_URL absent or anthropic.com; project settings pins; deny list enforced; codex ChatGPT login; names/types only; stop inference on failure",
+      "tool_restriction": "root_denied_tools enforced through untracked .claude/settings.local.json permissions.deny (the legacy runner rejects extra keys in .claude/settings.json), which also allows mcp__unityMCP; deny wins over allow and applies in every permission mode (default, acceptEdits, auto, bypassPermissions; the audit records the mode); only root_allowed_mcp_servers may be called; recreate the local file on another machine; plus repository hard rails",
+      "unity_lock": "acquire ops/ai/local/exclusive-control.lock through run_claude.acquire_lock with run_id claude-root-<session_id> before any Editor write, including computer-use clicks or typing in the Unity window; do not write if held; release only its own lock through run_claude.release_lock; a stale lock is removed only after checking the Editor",
+      "codex_calls": "only when codex login status is ChatGPT and no OpenAI/Codex API key or base URL env; reviews via codex exec -s read-only -m gpt-6.1-sol with explicit model_reasoning_effort",
+      "audit": "tools/ai/audit_root_session.py before each commit or acceptance (see root_session_audit); exit 1 blocks; acceptance records the root session_id, audit result, Unity lock events and Codex thread id/model/effort/exit; raw JSONL stays local"
+    },
+    "root_denied_tools": [
+      "mcp__unityMCP__generate_image",
+      "mcp__unityMCP__generate_model",
+      "mcp__unityMCP__generate_audio",
+      "mcp__unityMCP__import_model",
+      "mcp__unityMCP__import_model_file",
+      "mcp__unityMCP__asset_gen",
+      "mcp__unityMCP__manage_packages"
+    ],
+    "root_allowed_mcp_servers": [
+      "ccd_turn",
+      "ccd_session",
+      "ccd_session_mgmt",
+      "ccd_view",
+      "ccd_pr",
+      "ccd_host",
+      "ccd_settings",
+      "ccd_sidebar",
+      "ccd_window",
+      "ccd_directory",
+      "ccd_connectors",
+      "unityMCP",
+      "computer-use",
+      "Claude_Browser",
+      "claude-in-chrome",
+      "chrome-devtools",
+      "plugin_playwright_playwright",
+      "github",
+      "plugin_serena_serena",
+      "mobile",
+      "terminal",
+      "visualize",
+      "plugin_claude-mem_mcp-search",
+      "plugin_oh-my-claudecode_t",
+      "plugin_desktop-commander_desktop-commander"
+    ],
+    "root_session_audit": {
+      "script": "tools/ai/audit_root_session.py",
+      "start": "python3 tools/ai/audit_root_session.py --start-check at session start and after any account, environment or settings change",
+      "before_acceptance": "python3 tools/ai/audit_root_session.py --out reports/<unit>/root_session_audit.json before each commit or acceptance of a unit",
+      "blocking": "exit 1 (violations, or no current passing ROOT_START_CHECK after the last settings/auth change) blocks commit and acceptance; shell input is parsed with shlex: only quoted-delimiter heredoc bodies are literal, unquoted heredoc bodies and quoted words are searched for $(...)/backtick substitutions, sh|bash|zsh -c, eval and shell heredocs are scanned recursively, and an unparsable input naming a sensitive program blocks; opaque code-execution tools and untargeted full-screen input block; subagent protected work (Unity writes, codex exec, git commit/push) blocks; lock and start-check events count only for the exact documented single plain command after its recorded result; --waive TOOL_USE_ID=REASON or KIND:DETAIL=REASON records an explained exception in the report and the acceptance record",
+      "warnings": "exposed-but-unused servers outside the allowlist, proxy env names and a lock still held; reviewed but not blocking",
+      "limits": "unverified and listed in every report: initial tool list, MCP subprocess environments, live inference environment versus the checked shell environment, interpreter code semantics (python -c, python heredocs, node -e), Usage credits/Extra usage OFF (account UI); acceptance records them as audit-unverified without blocking",
+      "nature": "bounded retrospective evidence against accidental policy breaks; not launch enforcement, not equivalent to the legacy runner's sanitized launch, and not proof against a session that sets out to evade it"
+    }
   },
   "billing": "existing_subscription_included_allowance_only",
   "api_auth_allowed": false,
@@ -71,7 +143,8 @@
     "endpoint": "http://127.0.0.1:8080/mcp",
     "telemetry": false,
     "paid_asset_generation": false,
-    "single_writer": true
+    "single_writer": true,
+    "writer": "Claude root session"
   },
   "claude_mcp_profiles": {
     "selection": "explicit tools/ai/run_claude.py --mcp-profile; unknown profiles, URLs and commands are rejected",
@@ -263,7 +336,7 @@
         ],
         "exclusive_control_lock": true,
         "preflight": "TCP listening check of the fixed local endpoint only",
-        "writes_land_in": "the Editor-open root Unity project, outside the Claude worktree; Codex independently reviews the root diff, Console and Play",
+        "writes_land_in": "the Editor-open root Unity project, outside the Claude worktree; for these legacy runner jobs the root (Claude since 2026-10-17 per AI_WORKFLOW section 17; Codex in earlier records) independently checks the root diff, Console and Play",
         "execute_code": "free Editor C# method-body tool for install, inspection and verification by the write owner; arbitrary code, so file scope is not enforced at OS level; existing Editor/files preserved, no paid or AI generation or other model calls"
       },
       "desktop": {
@@ -365,12 +438,9 @@
     "parallel_independent_jobs": true,
     "parallel_rule": "independent implementations run in separate branches/worktrees with non-overlapping allowed files; the runner refuses a second job in the same worktree; one Unity Editor/desktop control lock stays global",
     "codex_keeps": [
-      "task boundaries and direction",
-      "planning",
-      "independent verification",
-      "integration",
       "image generation and content edits",
-      "final character visual design"
+      "final character visual design",
+      "read-only independent code review"
     ],
     "character_final_visual_design_owner": "Codex",
     "claude_may_comment_on_all_fields_including_characters": true,
@@ -390,7 +460,7 @@
       "real_constraint",
       "optional_opinion"
     ],
-    "adoption_decision": "Codex decides adoption; optional opinions never block integration by themselves",
+    "adoption_decision": "Claude decides adoption of review feedback; optional opinions never block integration by themselves",
     "approved_character_expression": "approved non-sexual character age, existence, appearance and subculture expression are not removed, reduced or changed on generic terms-of-service speculation; a concrete cited constraint goes to Codex as real_constraint",
     "approval_still_required": [
       "price",
@@ -441,7 +511,7 @@
     ],
     "evidence": "stream-json Bash calls are recorded as runs/not_run; a successful shell command outside the registry entries of the job fails the job",
     "os_sandbox": false,
-    "limits": "tests execute repository code (including files in the job's edit scope) as the user with the scrubbed environment; test:docs writes its report file; Codex reviews git status and re-runs checks before integration"
+    "limits": "tests execute repository code (including files in the job's edit scope) as the user with the scrubbed environment; test:docs writes its report file; the root (Claude since 2026-10-17; Codex in earlier records) checks git status and re-runs checks before integration"
   },
   "workflow": [
     "requirements",

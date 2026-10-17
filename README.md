@@ -6,6 +6,8 @@
 
 Codex에서 이 `memory-forge-rpg` 폴더를 열고 `START_HERE.txt`를 읽고 시작하라고 지시한다. Codex가 설치·인증·권한을 확인한 뒤 구독으로 로그인된 Claude Code CLI를 직접 호출하도록 통합했다. 사용자 환경에서 실제 호출을 시험한 것은 아니며, 막히면 필요한 확인만 보고하도록 했다.
 
+**2026-10-17부터는 역할이 바뀌었다.** 개발 루트는 Claude(Opus)가 맡고, Codex는 이미지 생성·내용 수정, 캐릭터 외형 최종 디자인, 읽기 전용 독립 코드 리뷰만 맡는다. 위 시작 방식은 전환 전 이력이다. 현재 기준은 `docs/AI_WORKFLOW.md` §17이다.
+
 - 전체 PDF: `Memory_Forge_Complete_Design.pdf`
 - 모든 시작/운영 기준: `docs/AI_WORKFLOW.md`
 - 코드·데이터·HTML: 기존 각 폴더에 전부 포함

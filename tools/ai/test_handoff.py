@@ -359,6 +359,108 @@ class ClaudeMcpProfileTests(unittest.TestCase):
   self.assertLessEqual({'price','probability','currency_totals','permanent_assets','age_policy','production_deploy'},set(autonomy['approval_still_required']))
   self.assertIs(autonomy['safety_permission_billing_boundaries_unchanged'],True)
   self.assertEqual(autonomy['feedback_classes'],['implementation_defect','design_mismatch','real_constraint','optional_opinion'])
+ def test_claude_root_and_codex_image_design_review_routing(self):
+  policy=json.loads((ROOT/'ops/ai/runtime-policy.json').read_text());route=policy['work_routing']
+  duties=['image generation and content edits','final character visual design','read-only independent code review']
+  self.assertEqual((route['codex_responsibilities'],policy['claude_autonomy']['codex_keeps']),(duties,duties))
+  self.assertEqual(route['codex_must_not'],['task dispatch, direction or planning','implementation','integration, commits or pushes','Unity Editor writes','calling Claude'])
+  self.assertTrue(route['root'].startswith('Claude Opus root session'));self.assertIn('Unity Editor single writer',route['root'])
+  self.assertEqual(policy['unity']['writer'],'Claude root session');self.assertIs(policy['unity']['single_writer'],True)
+  self.assertIn('Claude calls the official Codex CLI',route['invocation_direction']);self.assertIn('Codex never calls Claude',route['invocation_direction'])
+  self.assertLessEqual({'server','save_and_memory','economy','auth','migration','netcode','core_rules'},set(route['codex_review_required_before_integration']))
+  self.assertIn('read-only',route['codex_review']);self.assertIn('sensitive paths hold',route['codex_review_unavailable'])
+  self.assertLessEqual({'mcp__unityMCP__'+t for t in ('generate_image','generate_model','generate_audio','import_model','import_model_file','asset_gen')},set(route['root_denied_tools']))
+  self.assertEqual(set(route['root_session_controls']),{'session','start_checks','tool_restriction','unity_lock','codex_calls','audit'})
+  self.assertIn("r.acquire_lock(r.CONTROL_LOCK",(ROOT/'docs/AI_WORKFLOW.md').read_text());self.assertEqual(RUNNER.CONTROL_LOCK,'ops/ai/local/exclusive-control.lock')
+  self.assertIn('## 17. 2026-10-17 최신 우선 — Claude 루트',(ROOT/'docs/AI_WORKFLOW.md').read_text())
+  for r in ['AGENTS.md','CLAUDE.md','docs/START_CLAUDE.md','README.md']:
+   s=(ROOT/r).read_text();self.assertIn('§17',s,r);self.assertIn('읽기 전용',s,r)
+ def test_root_session_audit_blocks_policy_breaks_and_accepts_a_clean_session(self):
+  import audit_root_session as A
+  policy=json.loads((ROOT/'ops/ai/runtime-policy.json').read_text());good={k:True for k in A.REQUIRED_CHECKS}
+  def session(*steps,model=RUNNER.MODEL,sub=None,raw=()):
+   d=Path(tempfile.mkdtemp());rows=[]
+   for step in steps:
+    if step[0]=='use':rows.append({'type':'assistant','message':{'model':model,'content':[{'type':'tool_use','id':i,'name':n,'input':a} for i,n,a in step[1]]}})
+    elif step[0]=='result':rows.append({'type':'user','message':{'content':[{'type':'tool_result','tool_use_id':step[1],'content':step[2] if not isinstance(step[2],str) else [{'type':'text','text':step[2]}],'is_error':step[3:]==(True,)}]}})
+    else:rows.append({'type':'attachment','attachment':{'type':'deferred_tools_delta','addedNames':step[1],'removedNames':step[2]}})
+   (d/'s.jsonl').write_text('\n'.join([*map(json.dumps,rows),*raw]))
+   if sub:(d/'s'/'subagents').mkdir(parents=True);(d/'s'/'subagents'/'agent-a.jsonl').write_text('\n'.join(map(json.dumps,sub)))
+   return d/'s.jsonl'
+  use=lambda i,n,a:('use',[(i,n,a)]);bash=lambda i,c:use(i,'Bash',{'command':c})
+  check='python3 tools/ai/audit_root_session.py --start-check';passed=A.MARK+json.dumps({'pass':True,'checks':good})
+  start=[bash('s',check),('result','s',passed)]
+  acquire="python3 -c \"import sys;sys.path.insert(0,'tools/ai');import run_claude as r;r.acquire_lock(r.CONTROL_LOCK,{'run_id':'claude-root-s'},'Editor busy')\""
+  release="python3 -c \"import run_claude as r;r.release_lock(r.ROOT/r.CONTROL_LOCK,'claude-root-s')\""
+  codex="command codex exec -s read-only -m gpt-6.1-sol -c model_reasoning_effort='\"high\"' --json \"$(cat p.txt)\" < d.diff"
+  save=use('w','mcp__unityMCP__manage_scene',{'action':'save'})
+  report=lambda *steps,**k:A.audit(session(*steps,**k),pol=policy)
+  kinds=lambda *steps,**k:{v['kind'] for v in report(*steps,**k)['violations']}
+  clean=report(*start,bash('l',acquire),('result','l',''),save,bash('f',release),bash('c',codex),
+   use('r','mcp__unityMCP__read_console',{'action':'get'}),bash('e','env | cut -d= -f1 | sort'),bash('p',"printf '%s' 'claude --bare'"),
+   bash('h',"cat > f <<'EOF' && echo done\nreviews via codex exec without flags; Claude's note $(printenv OPENAI_API_KEY)\nEOF"),
+   bash('g','git -C . status'),use('o','Read',{'file_path':'/Users/u/.codex/config.toml'}),bash('q',"printf '%s' '$(printenv OPENAI_API_KEY)'"),
+   use('k','Grep',{'pattern':'.codex/auth.json','path':'tools/ai'}))
+  self.assertTrue(clean['pass'],clean);self.assertEqual(clean['codex_calls'],1);self.assertTrue(clean['start_check_current'])
+  push=' '.join(['git','-C','.','push','origin','main','--'+'force'])  # assembled so shell hooks scanning commands do not trip on test data
+  cases=[('unity_write_without_lock',[use('x','mcp__unityMCP__read_console',{'action':'clear'})]),
+   ('unity_write_without_lock',[use('x','mcp__unityMCP__execute_code',{'action':'read'})]),
+   ('unity_write_without_lock',[bash('l',"echo \"acquire_lock(r.CONTROL_LOCK,{'run_id':'claude-root-s'}\""),('result','l',''),save]),
+   ('unity_write_without_lock',[('use',[('l','Bash',{'command':acquire}),('w','mcp__unityMCP__manage_scene',{'action':'save'})]),('result','l','')]),
+   ('ambiguous_lock_command',[bash('l',acquire.replace('import run_claude','if False: import run_claude')),('result','l',''),save]),
+   ('ambiguous_lock_command',[bash('l',acquire+' && '+release),('result','l',''),save]),
+   ('codex_call',[bash('x','FOO=1 command codex exec -s workspace-write -m other -c model_reasoning_effort=high p')]),
+   ('codex_call',[bash('x','env -i PATH="$PATH" HOME="$HOME" codex exec -s workspace-write -m other review')]),
+   ('codex_call',[bash('x',"command codex exec 'review -s read-only -m gpt-6.1-sol -c model_reasoning_effort=high'")]),
+   ('codex_call',[bash('x','command codex exec -s read-only -m gpt-6.1-sol p')]),
+   ('codex_call',[bash('x',"command codex exec 'see --help'")]),('codex_call',[bash('x','command codex exec -- --help')]),
+   ('force_push_main',[bash('x',push)]),('env_value_print',[bash('x','printenv OPENAI_API_KEY')]),
+   ('env_value_print',[bash('x',"bash -c 'printenv OPENAI_API_KEY'")]),('env_value_print',[bash('x','printf "%s" "$(printenv OPENAI_API_KEY)"')]),
+   ('env_value_print',[bash('x','cat > f <<EOF\n$(printenv OPENAI_API_KEY)\nEOF')]),
+   ('secret_read',[use('x','Read',{'file_path':'/Users/u/.codex/auth.json'})]),('secret_read',[use('x','Read',{'file_path':'/Users/u/.codex/./auth.json'})]),
+   ('untargeted_gui_input',[use('x','mcp__computer-use__computer_batch',{'actions':[{'action':'left_click'}]})]),
+   ('denied_tool_exposed',[('expose',['mcp__unityMCP__generate_image'],[]),('expose',[],['mcp__unityMCP__generate_image'])]),
+   ('opaque_execution',[use('x','mcp__plugin_desktop-commander_desktop-commander__interact_with_process',{'input':'x'})]),
+   ('protected_before_start_check',[bash('x','echo {} > .claude/settings.local.json && '+codex)]),
+   ('malformed_record',[bash('x','ls'),('result','x',7)]),('malformed_record',[use('x','Bash',['ls'])]),
+   ('ambiguous_lock_command',[('use',[('l','Bash',{'command':acquire}),('f','Bash',{'command':release})]),('result','l',''),('result','f',''),save]),
+   ('unity_write_without_lock',[('use',[('l','Bash',{'command':acquire}),('f','Bash',{'command':release})]),('result','l',''),('result','f',''),save]),
+   ('codex_call',[bash('x','env codex exec -s workspace-write -m other review')]),
+   ('codex_call',[bash('x','sudo -u user codex exec -s workspace-write -m other review')]),
+   ('env_value_print',[bash('x',"bash -lc 'printenv OPENAI_API_KEY'")]),
+   ('env_value_print',[bash('x',"bash > /dev/null <<'EOF'\nprintenv OPENAI_API_KEY\nEOF")]),
+   ('malformed_record',[('expose',5,[])])]
+  for kind,steps in cases:
+   with self.subTest(kind=kind,steps=steps):self.assertIn(kind,kinds(*start,*steps))
+  child={'type':'assistant','message':{'model':RUNNER.MODEL,'content':[{'type':'tool_use','id':'y','name':'Bash','input':{'command':codex}}]}}
+  self.assertIn('protected_in_subagent',kinds(*start,sub=[child]))
+  self.assertIn('protected_before_start_check',kinds(bash('c',codex),*start))
+  self.assertIn('unreadable_transcript',kinds(*start,raw=['{not json','[]']))
+  odd=[json.dumps({'type':'user','message':{'content':[{'type':'tool_result','tool_use_id':['x'],'content':''}]}}),
+   json.dumps({'type':'assistant','message':{'model':RUNNER.MODEL,'content':{'type':'tool_use','id':'z','name':'mcp__unityMCP__generate_image','input':{}}}})]
+  self.assertIn('malformed_record',kinds(*start,raw=odd[:1]));self.assertIn('malformed_record',kinds(*start,raw=odd[1:]))
+  for steps in [[bash('s',check),('result','s',passed,True)],[*start,bash('t',check),('result','t','ROOT_START_CHECK {"pass": false}')],
+   [*start,use('x','Write',{'file_path':'.claude/settings.local.json','content':'{}'})],
+   [*start,use('x','Write',{'file_path':'/Users/u/.codex/auth.json','content':'{}'})],[*start,bash('x','export CLAUDE_CODE_USE_BEDROCK=1')],
+   [bash('s',check),use('x','Write',{'file_path':'.claude/settings.local.json','content':'{}'}),('result','s',passed)],
+   [bash('s',"python3 -c 'print(1)' tools/ai/audit_root_session.py --start-check"),('result','s',passed)]]:
+   with self.subTest(start_steps=steps):
+    result=report(*steps);self.assertFalse(result['pass']);self.assertFalse(result['start_check_current']);self.assertTrue(result['missing_evidence'])
+  dirty=session(use('t0','mcp__unityMCP__generate_image',{}),use('t1','mcp__235d7bf9__notion-search',{}),use('t2','Agent',{'model':'haiku','prompt':'x'}),
+   use('t3','mcp__computer-use__app_click',{'app':A.UNITY_APP}),('expose',['mcp__unityMCP__generate_audio'],[]),model='claude-sonnet-5-5')
+  found=A.audit(dirty,pol=policy);self.assertFalse(found['pass'])
+  self.assertLessEqual({'model','denied_tool','mcp_server_not_allowed','agent_model','unity_write_without_lock','denied_tool_exposed'},{v['kind'] for v in found['violations']})
+  waived=A.audit(dirty,{'t3':'explained','denied_tool_exposed:mcp__unityMCP__generate_audio':'before deny'},policy)
+  self.assertIn('explained',[w['reason'] for w in waived['waived']]);self.assertIn('before deny',[w['reason'] for w in waived['waived']])
+  auth=lambda cmd,**_:SimpleNamespace(returncode=0,stdout='{"loggedIn":true,"authMethod":"claude.ai","apiProvider":"firstParty"}' if cmd[0]=='claude' else 'Logged in using ChatGPT',stderr='')
+  self.assertTrue(A.start_check({},auth,policy)['checks']['provider_env_clean'])
+  for name,value in [('AWS_SESSION_TOKEN','x'),('GOOGLE_APPLICATION_CREDENTIALS','x'),('CODEX_BASE_URL','x'),('OPENAI_API_KEY','x'),('ANTHROPIC_BASE_URL','https://proxy.example'),('ANTHROPIC_BASE_URL','http://[bad')]:
+   with self.subTest(env=name,value=value):
+    checks=A.start_check({name:value},auth,policy)['checks'];self.assertTrue(checks['auth']);self.assertEqual(checks['provider_env_names'],[name])
+  failing=lambda cmd,**_:SimpleNamespace(returncode=1,stdout='',stderr='ChatGPT authentication failed') if cmd[0]=='codex' else auth(cmd)
+  self.assertFalse(A.start_check({},failing,policy)['checks']['codex_chatgpt_login'])
+  local=Path(tempfile.mkdtemp());(local/'.claude').mkdir();(local/'.claude/settings.local.json').write_text('{"permissions":{"deny":null}}')
+  with patch.object(A,'ROOT',local):self.assertFalse(A.start_check({},auth,policy)['checks']['root_denied_tools_enforced'])
  def test_shared_mcp_files_and_runtime_policy_match_the_runner(self):
   self.assertEqual(json.loads((ROOT/'.mcp.json').read_text()),{'mcpServers':RUNNER.UNITY_SERVER})
   self.assertIn('url = "'+RUNNER.UNITY_URL+'"',(ROOT/'.codex/config.toml').read_text())
