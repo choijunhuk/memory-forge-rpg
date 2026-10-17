@@ -1,0 +1,2484 @@
+{
+  "version": "zone1-first-pass-20261018",
+  "status": "design candidate; not Unity acceptance",
+  "coordinate_system": {
+    "width": 1600,
+    "height": 900,
+    "origin": "top-left",
+    "x": "right",
+    "y": "down",
+    "rect": "[x,y,width,height]",
+    "unity_anchor": [
+      0,
+      1
+    ],
+    "unity_pivot": [
+      0,
+      1
+    ],
+    "unity_anchored_position": "[x,-y]",
+    "all_rects": "absolute canvas units unless space is explicit"
+  },
+  "scaling": {
+    "reference": [
+      1600,
+      900
+    ],
+    "mode": "uniform fit inside Screen.safeArea",
+    "formula": "s=min(safeArea.width/1600,safeArea.height/900); center the 1600s by 900s canvas",
+    "phone_2340x1080_no_inset": {
+      "scale": 1.2,
+      "content": [
+        210,
+        0,
+        1920,
+        1080
+      ],
+      "side_bars": "background"
+    },
+    "input": "Raycast only named interactive roots. Art is raycastTarget=false.",
+    "physical_acceptance": "48dp is NOT 48 canvas units. Use actual display density and font scale. Physical phone dp/sp acceptance NOT_RUN.",
+    "large_text": "Use large_text_battle when requested text scale >1 or physical minimum body14sp requires >22 canvas units."
+  },
+  "tokens": {
+    "background": "#0d1322",
+    "panel": "#141c31",
+    "line": "#2f3d63",
+    "ink": "#e9eef8",
+    "muted": "#98a5c0",
+    "brass": "#e2b45f",
+    "memory": "#62d6c6",
+    "danger": "#ff6f6f",
+    "volt": "#ffd84d",
+    "flame": "#ff7a3d",
+    "frost": "#7cc8ff",
+    "void": "#b68cff"
+  },
+  "fonts": {
+    "title_family": "Hahmlet; fallback existing IBM Plex Sans KR",
+    "body_family": "existing IBM Plex Sans KR",
+    "numeric": "Orbit if already installed; otherwise existing IBM Plex tabular numerals; no new download required",
+    "minimum_body": 20,
+    "body": 22,
+    "card_title": 23,
+    "enemy_title": 22,
+    "title": 32,
+    "critical_number": 28,
+    "rasterized_text": false
+  },
+  "styles": {
+    "primary": {
+      "fill": "brass",
+      "text": "background",
+      "border": "brass",
+      "border_px": 2,
+      "radius": 8
+    },
+    "secondary": {
+      "fill": "panel",
+      "text": "ink",
+      "border": "line",
+      "border_px": 2,
+      "radius": 8
+    },
+    "mode_now": {
+      "fill": "panel",
+      "text": "ink",
+      "selected_border": "brass",
+      "border_px": 3,
+      "radius": 8
+    },
+    "mode_reserved": {
+      "fill": "panel",
+      "text": "ink",
+      "selected_border": "memory",
+      "border_px": 3,
+      "dash": [
+        8,
+        6
+      ],
+      "radius": 8
+    },
+    "panel": {
+      "fill": "panel",
+      "alpha": 1,
+      "border": "line",
+      "border_px": 1,
+      "radius": 8,
+      "corner_decoration": "two 12px brass L marks; never over text"
+    },
+    "disabled": {
+      "fill": "panel",
+      "text": "muted",
+      "border": "line",
+      "alpha": 1,
+      "reason": "full text inside button or adjacent persistent reason area; never opacity-fade text"
+    },
+    "selected": {
+      "border": "memory",
+      "border_px": 3,
+      "marker": "checkmark + label",
+      "tint_alpha": 0.08
+    },
+    "focus": {
+      "border": "ink",
+      "border_px": 3,
+      "inset": 4
+    },
+    "pressed": {
+      "fill": "line",
+      "movement_px": 0
+    }
+  },
+  "common": [
+    {
+      "selector": "ExpeditionFrame",
+      "rect": [
+        0,
+        0,
+        1600,
+        900
+      ],
+      "fill": "background",
+      "z": 0
+    },
+    {
+      "selector": "Visual:Background",
+      "rect": [
+        0,
+        0,
+        1600,
+        900
+      ],
+      "z": 1,
+      "fit": "cover",
+      "raycast": false
+    },
+    {
+      "selector": "Visual:Scrim",
+      "rect": [
+        0,
+        0,
+        1600,
+        900
+      ],
+      "fill": "background",
+      "alpha": 0.36,
+      "z": 2,
+      "raycast": false
+    },
+    {
+      "selector": "Visual:Header",
+      "rect": [
+        32,
+        16,
+        1536,
+        60
+      ],
+      "fill": "background",
+      "alpha": 0.96,
+      "z": 10
+    },
+    {
+      "selector": "DeckButton",
+      "rect": [
+        930,
+        20,
+        240,
+        52
+      ],
+      "style": "secondary",
+      "z": 30
+    },
+    {
+      "selector": "LogButton",
+      "rect": [
+        1186,
+        20,
+        120,
+        52
+      ],
+      "style": "secondary",
+      "z": 30
+    },
+    {
+      "selector": "AbandonButton",
+      "rect": [
+        1322,
+        20,
+        246,
+        52
+      ],
+      "style": "secondary",
+      "z": 30
+    },
+    {
+      "selector": "Visual:Title",
+      "rect": [
+        48,
+        24,
+        244,
+        40
+      ],
+      "font": 30,
+      "color": "brass",
+      "z": 20
+    },
+    {
+      "selector": "Visual:Context",
+      "rect": [
+        310,
+        22,
+        600,
+        48
+      ],
+      "font": 22,
+      "color": "ink",
+      "z": 20
+    }
+  ],
+  "templates": {
+    "party": {
+      "count": 3,
+      "order": [
+        "sera",
+        "harin",
+        "nia"
+      ],
+      "row_pitch": 104,
+      "portrait": {
+        "selector": "Visual:Portrait:<characterId>",
+        "rect": [
+          8,
+          8,
+          80,
+          88
+        ],
+        "space": "Party row",
+        "source": "references/char_<characterId>_sd_default_v02.png",
+        "fit": "contain",
+        "raycast": false
+      },
+      "name": {
+        "selector": "Visual:Name:<characterId>",
+        "rect": [
+          96,
+          8,
+          104,
+          32
+        ],
+        "space": "Party row",
+        "font": 25
+      },
+      "attribute_and_gauge": {
+        "selector": "Visual:GaugeText:<characterId>",
+        "rect": [
+          96,
+          66,
+          104,
+          30
+        ],
+        "space": "Party row",
+        "font": 20
+      },
+      "gauge": {
+        "selector": "Visual:Gauge:<characterId>",
+        "rect": [
+          96,
+          48,
+          104,
+          10
+        ],
+        "space": "Party row"
+      },
+      "ultimate": {
+        "selector": "Ult:<characterId>",
+        "rect": [
+          214,
+          16,
+          116,
+          64
+        ],
+        "space": "Party row",
+        "font": 21
+      },
+      "ready": "brass button + 필살기; show actual gauge value; no fake member HP"
+    },
+    "enemy": {
+      "area": [
+        390,
+        182,
+        1178,
+        316
+      ],
+      "gap": 16,
+      "order": "existing b.Enemies order, including dead entries",
+      "root_formula": "w=(1178-16*(n-1))/n; root=[390+i*(w+16),182,w,316]",
+      "count_1_to_3": {
+        "art_formula": "artW=min(450,floor(w*.40)); art=[8,8,artW-8,300]",
+        "data_formula": "[artW+16,8,w-artW-32,300]",
+        "fit": "contain",
+        "root_fill": "panel at alpha .22; opaque data panel"
+      },
+      "count_4_to_5": {
+        "art_formula": "[(w-64)/2,0,64,64]",
+        "data_formula": "[0,64,w,252]",
+        "fit": "contain",
+        "root_fill": "none; opaque data panel"
+      },
+      "data_fields": [
+        {
+          "selector": "name",
+          "rect": [
+            12,
+            4,
+            "width-24",
+            28
+          ],
+          "font": 22
+        },
+        {
+          "selector": "hp_and_block",
+          "rect": [
+            12,
+            34,
+            "width-24",
+            24
+          ],
+          "font": 20
+        },
+        {
+          "selector": "hp_bar",
+          "rect": [
+            12,
+            60,
+            "width-24",
+            8
+          ],
+          "fill": "danger"
+        },
+        {
+          "selector": "crack",
+          "rect": [
+            12,
+            72,
+            "width-24",
+            24
+          ],
+          "font": 20,
+          "color": "memory"
+        },
+        {
+          "selector": "weakness",
+          "rect": [
+            12,
+            100,
+            "width-24",
+            24
+          ],
+          "font": 20,
+          "color": "ink"
+        },
+        {
+          "selector": "statuses",
+          "rect": [
+            12,
+            128,
+            "width-24",
+            28
+          ],
+          "font": 20,
+          "overflow": "horizontal scroller, never replace with ellipsis"
+        },
+        {
+          "selector": "intent_current",
+          "rect": [
+            12,
+            160,
+            "width-24",
+            44
+          ],
+          "font": 20,
+          "color": "brass",
+          "wrap": true
+        },
+        {
+          "selector": "intent_next",
+          "rect": [
+            12,
+            204,
+            "width-24",
+            44
+          ],
+          "font": 20,
+          "color": "ink",
+          "wrap": true
+        }
+      ],
+      "sparse_data": "use same data fields; extra area below remains empty",
+      "wrapped_weakness": "If weakness preferred height>24, increase weakness height to50 and shift statuses/current/next26px down. If final field exceeds data panel height, use accessible row layout for this encounter.",
+      "sprite_source": "assets/enemies/enemy_<enemyDefinitionId>_default_v01.png; map uid to definition id, never parse uid as an asset id",
+      "dead": "keep position/name/HP0; art alpha .25; muted contour, 처치 label; root noninteractable; never reflow dead slots",
+      "target": "teal 3px border around root, target corner brackets, 선택 text; no flash",
+      "targetable": "teal corner brackets only while target step is active; do not recolor HP or weaknesses",
+      "sealed": "danger hatching confined to status symbol; keep full status text"
+    },
+    "hand": {
+      "pitch": 194,
+      "rect": [
+        0,
+        4,
+        180,
+        138
+      ],
+      "fill": "panel",
+      "padding": 10,
+      "art": {
+        "selector": "Visual:CardArt",
+        "rect": [
+          2,
+          2,
+          176,
+          48
+        ],
+        "fit": "cover",
+        "uv": [
+          0,
+          0.05,
+          1,
+          0.4
+        ],
+        "alpha": 0.65,
+        "raycast": false,
+        "source": "owner sera/harin/nia uses matching approved cutin; common/unknown owner uses plain panel, no invented owner"
+      },
+      "cost": {
+        "selector": "Visual:Cost",
+        "rect": [
+          10,
+          6,
+          72,
+          32
+        ],
+        "fill": "background",
+        "alpha": 1,
+        "font": 22,
+        "color": "brass"
+      },
+      "title": {
+        "selector": "Visual:CardTitle",
+        "rect": [
+          10,
+          54,
+          160,
+          48
+        ],
+        "font": 23,
+        "wrap": true
+      },
+      "mode": {
+        "selector": "Visual:CardModes",
+        "rect": [
+          10,
+          106,
+          160,
+          26
+        ],
+        "font": 20,
+        "color": "memory"
+      },
+      "selected": "root y=0, teal border3 + check; retain costs/modes; no fanning/overlap",
+      "unplayable": "art alpha .25 only; name/cost remain full contrast; full reason in CardActions when selected",
+      "overflow": "1308px viewport, horizontal clamped scroll; content=max(1308,count*194-14); no overlapping cards"
+    },
+    "timeline": {
+      "label": [
+        44,
+        516,
+        160,
+        42
+      ],
+      "slots_start": [
+        218,
+        512
+      ],
+      "slot_width_formula": "min(250,(1340-12*(count-1))/count)",
+      "gap": 12,
+      "height": 48,
+      "fields": "group timing + card name / empty / sealed; live count and order unchanged",
+      "states": {
+        "reserved": "dashed teal border2",
+        "empty": "dashed line border2 + 빈 칸",
+        "sealed": "danger border2 + diagonal strokes + 봉인",
+        "unavailable": "line border1 + -"
+      },
+      "overflow": "horizontal scroll inside [218,512,1338,48] if computed slot width <180; never drop slots"
+    },
+    "action_strip": {
+      "status": [
+        44,
+        580,
+        176,
+        36
+      ],
+      "text": [
+        228,
+        578,
+        712,
+        40
+      ],
+      "font": 20,
+      "normal": [
+        952,
+        580,
+        112,
+        36
+      ],
+      "double": [
+        1072,
+        580,
+        112,
+        36
+      ],
+      "reduced": [
+        1192,
+        580,
+        180,
+        36
+      ],
+      "skip": [
+        1380,
+        580,
+        172,
+        36
+      ],
+      "expanded_hit_height": 48,
+      "detail": "existing action summary sheet retains every row; strip may scroll horizontally; pace changes presentation only"
+    },
+    "service": {
+      "body_origin": [
+        486,
+        378
+      ],
+      "body_width": 1058,
+      "row_height": 96,
+      "row_gap": 12,
+      "option_template": "full-width button, title24 and description20; content grows and scrolls rather than clips",
+      "option_fields": {
+        "title": [
+          16,
+          8,
+          1026,
+          32
+        ],
+        "detail": [
+          16,
+          44,
+          1026,
+          44
+        ],
+        "height": "max(96,44+measured description height+12)"
+      },
+      "rest_selectors": [
+        "RestHeal",
+        "RestUpgrade"
+      ],
+      "forge_selectors": [
+        "ForgeVariation",
+        "ForgeRemove",
+        "ForgePart:<id>"
+      ],
+      "shop": "each existing Shop:<kind>:<id> gets a 1058x132 row, title/detail left736, Info button [752,8,140,52], Buy button [900,64,142,56]; rows retain category order",
+      "event": "EventChoice:<index> full-width 1058xmax(96,measured text height+24), preserve label/cost/effect text",
+      "archive_selectors": [
+        "ArchiveContinue",
+        "ArchiveReturn"
+      ]
+    },
+    "memory": {
+      "column_formula": "[32+i*518,236,500,572]",
+      "order": [
+        "sera",
+        "harin",
+        "nia"
+      ],
+      "header_portrait": [
+        16,
+        10,
+        64,
+        70
+      ],
+      "name": [
+        96,
+        10,
+        384,
+        32
+      ],
+      "capacity": [
+        96,
+        48,
+        384,
+        32
+      ],
+      "unchanged_heading": [
+        20,
+        90,
+        460,
+        28
+      ],
+      "unchanged_list": [
+        20,
+        124,
+        460,
+        72
+      ],
+      "change_heading": [
+        20,
+        204,
+        460,
+        28
+      ],
+      "changes": [
+        20,
+        240,
+        460,
+        160
+      ],
+      "change_row_height": 72,
+      "row_gap": 8,
+      "preview_heading": [
+        20,
+        408,
+        460,
+        28
+      ],
+      "preview_list": [
+        20,
+        444,
+        460,
+        72
+      ],
+      "removed": [
+        20,
+        524,
+        460,
+        40
+      ],
+      "overflow": "separate vertical scrollers for before, changes and result; no comma-list truncation",
+      "capacity_meter": "teal segmented line only if capacity>0; show numeric used/capacity and 용량 초과 text on error"
+    }
+  },
+  "screens": {
+    "map": {
+      "background": "bg_zone1_map_clockcity_v02",
+      "scrim_alpha": 0.45,
+      "elements": [
+        {
+          "selector": "RunStatus",
+          "rect": [
+            32,
+            88,
+            1536,
+            82
+          ],
+          "fill": "panel",
+          "alpha": 1,
+          "z": 10
+        },
+        {
+          "selector": "Visual:RunHP",
+          "rect": [
+            52,
+            96,
+            390,
+            36
+          ],
+          "font": 26
+        },
+        {
+          "selector": "Visual:RunHPBar",
+          "rect": [
+            52,
+            144,
+            390,
+            10
+          ],
+          "fill": "memory"
+        },
+        {
+          "selector": "Visual:CurrencyRelics",
+          "rect": [
+            466,
+            94,
+            550,
+            32
+          ],
+          "font": 22,
+          "color": "brass"
+        },
+        {
+          "selector": "Visual:RelicNames",
+          "rect": [
+            466,
+            130,
+            550,
+            32
+          ],
+          "font": 20,
+          "color": "muted",
+          "overflow": "horizontal read-only scroller"
+        },
+        {
+          "selector": "Visual:PracticeNote",
+          "rect": [
+            1040,
+            96,
+            508,
+            62
+          ],
+          "font": 20,
+          "color": "muted"
+        },
+        {
+          "selector": "Map",
+          "rect": [
+            32,
+            182,
+            1536,
+            630
+          ],
+          "fill": "background",
+          "alpha": 0.68,
+          "z": 5
+        },
+        {
+          "selector": "Node:<nodeId>",
+          "rect": [
+            0,
+            0,
+            152,
+            112
+          ],
+          "template": "node",
+          "z": 30
+        },
+        {
+          "selector": "Visual:Legend",
+          "rect": [
+            48,
+            826,
+            1200,
+            52
+          ],
+          "font": 20
+        },
+        {
+          "selector": "Visual:MapInputNote",
+          "rect": [
+            1250,
+            826,
+            302,
+            52
+          ],
+          "font": 20
+        }
+      ],
+      "node": {
+        "columns": "floors plus boss; columnWidth=1536/count",
+        "floor_label_y": 196,
+        "center_formula": "[32+(f+.5)*columnWidth,258+(i+.5)*520/rowCount]",
+        "size": [
+          152,
+          112
+        ],
+        "icon_rect": [
+          56,
+          8,
+          40,
+          40
+        ],
+        "type_text": [
+          8,
+          52,
+          136,
+          24
+        ],
+        "state_text": [
+          8,
+          80,
+          136,
+          24
+        ],
+        "font": 20,
+        "hit_rect": "full root",
+        "all_nodes": "preserve every generated node and link; long runs horizontal scroll at minimum column width176",
+        "icon": "vector glyph by node type; see design-spec.md",
+        "states": {
+          "reachable": "brass border3 + 갈 수 있음; panel fill",
+          "current": "teal border3 + 현재 위치",
+          "visited": "brass border1 + check; muted ink label",
+          "future": "line border1 + type label in muted; no false lock symbol"
+        },
+        "connectors": "line2; traversed actual history brass3; current-to-reachable teal3; no inferred visits"
+      }
+    },
+    "battle": {
+      "background": "bg_zone1_battle_street_v02",
+      "scrim_alpha": 0.32,
+      "elements": [
+        {
+          "selector": "PartyStatus",
+          "rect": [
+            32,
+            88,
+            1536,
+            82
+          ],
+          "fill": "panel",
+          "alpha": 1,
+          "z": 10
+        },
+        {
+          "selector": "Visual:PartyHP",
+          "rect": [
+            52,
+            96,
+            390,
+            36
+          ],
+          "font": 28
+        },
+        {
+          "selector": "Visual:PartyHPBar",
+          "rect": [
+            52,
+            144,
+            390,
+            10
+          ],
+          "fill": "memory"
+        },
+        {
+          "selector": "Visual:BattleTurnAndStatuses",
+          "rect": [
+            466,
+            94,
+            722,
+            32
+          ],
+          "font": 22
+        },
+        {
+          "selector": "Visual:DrawDiscardExhaustCoins",
+          "rect": [
+            466,
+            130,
+            520,
+            32
+          ],
+          "font": 20,
+          "color": "muted"
+        },
+        {
+          "selector": "Visual:PartyExtraStatuses",
+          "rect": [
+            1000,
+            130,
+            256,
+            32
+          ],
+          "font": 20,
+          "color": "brass",
+          "overflow": "horizontal read-only scroller"
+        },
+        {
+          "selector": "Visual:AP",
+          "rect": [
+            1270,
+            100,
+            278,
+            52
+          ],
+          "font": 38,
+          "color": "brass"
+        },
+        {
+          "selector": "Party",
+          "rect": [
+            32,
+            182,
+            342,
+            316
+          ],
+          "fill": "panel",
+          "alpha": 1,
+          "z": 10
+        },
+        {
+          "selector": "Enemy:<uid>",
+          "rect": [
+            390,
+            182,
+            1178,
+            316
+          ],
+          "template": "enemy",
+          "z": 10
+        },
+        {
+          "selector": "Timeline",
+          "rect": [
+            32,
+            506,
+            1536,
+            60
+          ],
+          "fill": "panel",
+          "alpha": 1,
+          "z": 10
+        },
+        {
+          "selector": "ActionPresentation",
+          "rect": [
+            32,
+            574,
+            1536,
+            48
+          ],
+          "fill": "panel",
+          "alpha": 1,
+          "z": 10
+        },
+        {
+          "selector": "CardActions",
+          "rect": [
+            32,
+            630,
+            1536,
+            96
+          ],
+          "fill": "panel",
+          "alpha": 1,
+          "z": 10
+        },
+        {
+          "selector": "Visual:Forecast",
+          "rect": [
+            50,
+            634,
+            1498,
+            26
+          ],
+          "font": 21,
+          "z": 20
+        },
+        {
+          "selector": "Visual:SelectedCardAndTarget",
+          "rect": [
+            50,
+            668,
+            308,
+            48
+          ],
+          "font": 23,
+          "z": 20
+        },
+        {
+          "selector": "CardInfoButton",
+          "rect": [
+            370,
+            664,
+            136,
+            56
+          ],
+          "style": "secondary",
+          "z": 30
+        },
+        {
+          "selector": "Mode:now",
+          "rect": [
+            522,
+            664,
+            248,
+            56
+          ],
+          "style": "mode_now",
+          "z": 30
+        },
+        {
+          "selector": "Mode:next",
+          "rect": [
+            782,
+            664,
+            248,
+            56
+          ],
+          "style": "mode_reserved",
+          "z": 30
+        },
+        {
+          "selector": "Mode:after",
+          "rect": [
+            1042,
+            664,
+            248,
+            56
+          ],
+          "style": "mode_reserved",
+          "z": 30
+        },
+        {
+          "selector": "ConfirmCard",
+          "rect": [
+            1310,
+            664,
+            240,
+            56
+          ],
+          "style": "primary",
+          "z": 30
+        },
+        {
+          "selector": "Hand",
+          "rect": [
+            32,
+            734,
+            1308,
+            142
+          ],
+          "fill": "background",
+          "alpha": 1,
+          "scroll": "horizontal",
+          "z": 10
+        },
+        {
+          "selector": "Hand:<uid>",
+          "rect": [
+            0,
+            4,
+            180,
+            138
+          ],
+          "space": "Hand content",
+          "pitch": 194,
+          "template": "hand",
+          "z": 30
+        },
+        {
+          "selector": "EndTurn",
+          "rect": [
+            1360,
+            734,
+            208,
+            142
+          ],
+          "style": "primary",
+          "z": 30
+        }
+      ]
+    },
+    "reward": {
+      "background": "bg_zone1_event_workshop_v02",
+      "scrim_alpha": 0.4,
+      "elements": [
+        {
+          "selector": "RunStatus",
+          "rect": [
+            32,
+            88,
+            1536,
+            82
+          ],
+          "fill": "panel",
+          "alpha": 1,
+          "z": 10
+        },
+        {
+          "selector": "Visual:RunHP",
+          "rect": [
+            52,
+            96,
+            390,
+            36
+          ],
+          "font": 26
+        },
+        {
+          "selector": "Visual:RunHPBar",
+          "rect": [
+            52,
+            144,
+            390,
+            10
+          ],
+          "fill": "memory"
+        },
+        {
+          "selector": "Visual:CurrencyRelics",
+          "rect": [
+            466,
+            94,
+            550,
+            32
+          ],
+          "font": 22,
+          "color": "brass"
+        },
+        {
+          "selector": "Visual:RelicNames",
+          "rect": [
+            466,
+            130,
+            550,
+            32
+          ],
+          "font": 20,
+          "color": "muted",
+          "overflow": "horizontal read-only scroller"
+        },
+        {
+          "selector": "Visual:PracticeNote",
+          "rect": [
+            1040,
+            96,
+            508,
+            62
+          ],
+          "font": 20,
+          "color": "muted"
+        },
+        {
+          "selector": "Reward",
+          "rect": [
+            32,
+            182,
+            1536,
+            630
+          ],
+          "scroll": "vertical",
+          "fill": "background",
+          "alpha": 0.8,
+          "z": 10
+        },
+        {
+          "selector": "Proceed",
+          "rect": [
+            1288,
+            826,
+            280,
+            52
+          ],
+          "style": "primary",
+          "z": 30
+        },
+        {
+          "selector": "Visual:Notice",
+          "rect": [
+            32,
+            826,
+            1236,
+            52
+          ],
+          "font": 21
+        }
+      ],
+      "content": {
+        "padding": 20,
+        "width": 1496,
+        "coin_header_height": 64,
+        "row_gap": 16,
+        "evolution": "each existing offer: height=max(128,measured label height+88); label first, branches below; branch width=min(350,(1496-24*(n-1))/n); retain separate Info buttons",
+        "cards": "heading48; three 360x260 RewardCard:<id> at x=20+380*i, y=headingBottom+12; 52px CardInfo:<id> below each; SkipCard [1160,headingBottom+12,356,64]; card selection stays immediate",
+        "card_art": "matching approved owner cutin, header band only at alpha.65; effect/body opaque panel",
+        "card_fields": {
+          "art": [
+            2,
+            2,
+            356,
+            74
+          ],
+          "cost_badge": [
+            12,
+            8,
+            92,
+            32
+          ],
+          "title": [
+            16,
+            84,
+            328,
+            40
+          ],
+          "mode_cost": [
+            16,
+            128,
+            328,
+            32
+          ],
+          "effect": [
+            16,
+            166,
+            328,
+            84
+          ],
+          "info_button": "[card.x,card.y+272,360,52]"
+        },
+        "relics": "heading40; existing choices in 480x112 cells, gap20; wrap rows if >3",
+        "part": "height112; full part description on left1220, TakePart at right220x56",
+        "dynamic": "sum section heights; empty sections omitted, no placeholder rewards; keep all pending choices available before Proceed"
+      }
+    },
+    "rest": {
+      "background": "bg_zone1_event_workshop_v02",
+      "scrim_alpha": 0.4,
+      "elements": [
+        {
+          "selector": "RunStatus",
+          "rect": [
+            32,
+            88,
+            1536,
+            82
+          ],
+          "fill": "panel",
+          "alpha": 1,
+          "z": 10
+        },
+        {
+          "selector": "Visual:RunHP",
+          "rect": [
+            52,
+            96,
+            390,
+            36
+          ],
+          "font": 26
+        },
+        {
+          "selector": "Visual:RunHPBar",
+          "rect": [
+            52,
+            144,
+            390,
+            10
+          ],
+          "fill": "memory"
+        },
+        {
+          "selector": "Visual:CurrencyRelics",
+          "rect": [
+            466,
+            94,
+            550,
+            32
+          ],
+          "font": 22,
+          "color": "brass"
+        },
+        {
+          "selector": "Visual:RelicNames",
+          "rect": [
+            466,
+            130,
+            550,
+            32
+          ],
+          "font": 20,
+          "color": "muted",
+          "overflow": "horizontal read-only scroller"
+        },
+        {
+          "selector": "Visual:PracticeNote",
+          "rect": [
+            1040,
+            96,
+            508,
+            62
+          ],
+          "font": 20,
+          "color": "muted"
+        },
+        {
+          "selector": "Visual:ServiceArt",
+          "rect": [
+            32,
+            182,
+            410,
+            630
+          ],
+          "image": "bg_zone1_event_workshop_v02",
+          "fit": "cover",
+          "uv": [
+            0,
+            0,
+            0.48,
+            1
+          ],
+          "z": 5,
+          "raycast": false
+        },
+        {
+          "selector": "Visual:ServicePanel",
+          "rect": [
+            462,
+            182,
+            1106,
+            630
+          ],
+          "fill": "panel",
+          "alpha": 1,
+          "z": 10
+        },
+        {
+          "selector": "Visual:ServiceTitle",
+          "rect": [
+            486,
+            198,
+            1058,
+            48
+          ],
+          "font": 32,
+          "color": "brass"
+        },
+        {
+          "selector": "Visual:ServiceIntro",
+          "rect": [
+            486,
+            254,
+            1058,
+            108
+          ],
+          "font": 22,
+          "overflow": "vertical scroller"
+        },
+        {
+          "selector": "Visual:ServiceBody",
+          "rect": [
+            486,
+            378,
+            1058,
+            338
+          ],
+          "scroll": "vertical",
+          "z": 20
+        },
+        {
+          "selector": "Proceed",
+          "rect": [
+            1288,
+            740,
+            256,
+            56
+          ],
+          "style": "primary",
+          "z": 30
+        },
+        {
+          "selector": "Visual:ServiceReason",
+          "rect": [
+            486,
+            738,
+            780,
+            60
+          ],
+          "font": 20,
+          "color": "muted"
+        },
+        {
+          "selector": "Visual:Notice",
+          "rect": [
+            32,
+            826,
+            1536,
+            52
+          ],
+          "font": 21,
+          "color": "muted"
+        }
+      ],
+      "selector": "Rest"
+    },
+    "forge": {
+      "background": "bg_zone1_event_workshop_v02",
+      "scrim_alpha": 0.4,
+      "elements": [
+        {
+          "selector": "RunStatus",
+          "rect": [
+            32,
+            88,
+            1536,
+            82
+          ],
+          "fill": "panel",
+          "alpha": 1,
+          "z": 10
+        },
+        {
+          "selector": "Visual:RunHP",
+          "rect": [
+            52,
+            96,
+            390,
+            36
+          ],
+          "font": 26
+        },
+        {
+          "selector": "Visual:RunHPBar",
+          "rect": [
+            52,
+            144,
+            390,
+            10
+          ],
+          "fill": "memory"
+        },
+        {
+          "selector": "Visual:CurrencyRelics",
+          "rect": [
+            466,
+            94,
+            550,
+            32
+          ],
+          "font": 22,
+          "color": "brass"
+        },
+        {
+          "selector": "Visual:RelicNames",
+          "rect": [
+            466,
+            130,
+            550,
+            32
+          ],
+          "font": 20,
+          "color": "muted",
+          "overflow": "horizontal read-only scroller"
+        },
+        {
+          "selector": "Visual:PracticeNote",
+          "rect": [
+            1040,
+            96,
+            508,
+            62
+          ],
+          "font": 20,
+          "color": "muted"
+        },
+        {
+          "selector": "Visual:ServiceArt",
+          "rect": [
+            32,
+            182,
+            410,
+            630
+          ],
+          "image": "bg_zone1_event_workshop_v02",
+          "fit": "cover",
+          "uv": [
+            0,
+            0,
+            0.48,
+            1
+          ],
+          "z": 5,
+          "raycast": false
+        },
+        {
+          "selector": "Visual:ServicePanel",
+          "rect": [
+            462,
+            182,
+            1106,
+            630
+          ],
+          "fill": "panel",
+          "alpha": 1,
+          "z": 10
+        },
+        {
+          "selector": "Visual:ServiceTitle",
+          "rect": [
+            486,
+            198,
+            1058,
+            48
+          ],
+          "font": 32,
+          "color": "brass"
+        },
+        {
+          "selector": "Visual:ServiceIntro",
+          "rect": [
+            486,
+            254,
+            1058,
+            108
+          ],
+          "font": 22,
+          "overflow": "vertical scroller"
+        },
+        {
+          "selector": "Visual:ServiceBody",
+          "rect": [
+            486,
+            378,
+            1058,
+            338
+          ],
+          "scroll": "vertical",
+          "z": 20
+        },
+        {
+          "selector": "Proceed",
+          "rect": [
+            1288,
+            740,
+            256,
+            56
+          ],
+          "style": "primary",
+          "z": 30
+        },
+        {
+          "selector": "Visual:ServiceReason",
+          "rect": [
+            486,
+            738,
+            780,
+            60
+          ],
+          "font": 20,
+          "color": "muted"
+        },
+        {
+          "selector": "Visual:Notice",
+          "rect": [
+            32,
+            826,
+            1536,
+            52
+          ],
+          "font": 21,
+          "color": "muted"
+        }
+      ],
+      "selector": "Forge"
+    },
+    "shop": {
+      "background": "bg_zone1_event_workshop_v02",
+      "scrim_alpha": 0.4,
+      "elements": [
+        {
+          "selector": "RunStatus",
+          "rect": [
+            32,
+            88,
+            1536,
+            82
+          ],
+          "fill": "panel",
+          "alpha": 1,
+          "z": 10
+        },
+        {
+          "selector": "Visual:RunHP",
+          "rect": [
+            52,
+            96,
+            390,
+            36
+          ],
+          "font": 26
+        },
+        {
+          "selector": "Visual:RunHPBar",
+          "rect": [
+            52,
+            144,
+            390,
+            10
+          ],
+          "fill": "memory"
+        },
+        {
+          "selector": "Visual:CurrencyRelics",
+          "rect": [
+            466,
+            94,
+            550,
+            32
+          ],
+          "font": 22,
+          "color": "brass"
+        },
+        {
+          "selector": "Visual:RelicNames",
+          "rect": [
+            466,
+            130,
+            550,
+            32
+          ],
+          "font": 20,
+          "color": "muted",
+          "overflow": "horizontal read-only scroller"
+        },
+        {
+          "selector": "Visual:PracticeNote",
+          "rect": [
+            1040,
+            96,
+            508,
+            62
+          ],
+          "font": 20,
+          "color": "muted"
+        },
+        {
+          "selector": "Visual:ServiceArt",
+          "rect": [
+            32,
+            182,
+            410,
+            630
+          ],
+          "image": "bg_zone1_event_workshop_v02",
+          "fit": "cover",
+          "uv": [
+            0,
+            0,
+            0.48,
+            1
+          ],
+          "z": 5,
+          "raycast": false
+        },
+        {
+          "selector": "Visual:ServicePanel",
+          "rect": [
+            462,
+            182,
+            1106,
+            630
+          ],
+          "fill": "panel",
+          "alpha": 1,
+          "z": 10
+        },
+        {
+          "selector": "Visual:ServiceTitle",
+          "rect": [
+            486,
+            198,
+            1058,
+            48
+          ],
+          "font": 32,
+          "color": "brass"
+        },
+        {
+          "selector": "Visual:ServiceIntro",
+          "rect": [
+            486,
+            254,
+            1058,
+            108
+          ],
+          "font": 22,
+          "overflow": "vertical scroller"
+        },
+        {
+          "selector": "Visual:ServiceBody",
+          "rect": [
+            486,
+            378,
+            1058,
+            338
+          ],
+          "scroll": "vertical",
+          "z": 20
+        },
+        {
+          "selector": "Proceed",
+          "rect": [
+            1288,
+            740,
+            256,
+            56
+          ],
+          "style": "primary",
+          "z": 30
+        },
+        {
+          "selector": "Visual:ServiceReason",
+          "rect": [
+            486,
+            738,
+            780,
+            60
+          ],
+          "font": 20,
+          "color": "muted"
+        },
+        {
+          "selector": "Visual:Notice",
+          "rect": [
+            32,
+            826,
+            1536,
+            52
+          ],
+          "font": 21,
+          "color": "muted"
+        }
+      ],
+      "selector": "Shop"
+    },
+    "event": {
+      "background": "bg_zone1_event_workshop_v02",
+      "scrim_alpha": 0.4,
+      "elements": [
+        {
+          "selector": "RunStatus",
+          "rect": [
+            32,
+            88,
+            1536,
+            82
+          ],
+          "fill": "panel",
+          "alpha": 1,
+          "z": 10
+        },
+        {
+          "selector": "Visual:RunHP",
+          "rect": [
+            52,
+            96,
+            390,
+            36
+          ],
+          "font": 26
+        },
+        {
+          "selector": "Visual:RunHPBar",
+          "rect": [
+            52,
+            144,
+            390,
+            10
+          ],
+          "fill": "memory"
+        },
+        {
+          "selector": "Visual:CurrencyRelics",
+          "rect": [
+            466,
+            94,
+            550,
+            32
+          ],
+          "font": 22,
+          "color": "brass"
+        },
+        {
+          "selector": "Visual:RelicNames",
+          "rect": [
+            466,
+            130,
+            550,
+            32
+          ],
+          "font": 20,
+          "color": "muted",
+          "overflow": "horizontal read-only scroller"
+        },
+        {
+          "selector": "Visual:PracticeNote",
+          "rect": [
+            1040,
+            96,
+            508,
+            62
+          ],
+          "font": 20,
+          "color": "muted"
+        },
+        {
+          "selector": "Visual:ServiceArt",
+          "rect": [
+            32,
+            182,
+            410,
+            630
+          ],
+          "image": "bg_zone1_event_workshop_v02",
+          "fit": "cover",
+          "uv": [
+            0,
+            0,
+            0.48,
+            1
+          ],
+          "z": 5,
+          "raycast": false
+        },
+        {
+          "selector": "Visual:ServicePanel",
+          "rect": [
+            462,
+            182,
+            1106,
+            630
+          ],
+          "fill": "panel",
+          "alpha": 1,
+          "z": 10
+        },
+        {
+          "selector": "Visual:ServiceTitle",
+          "rect": [
+            486,
+            198,
+            1058,
+            48
+          ],
+          "font": 32,
+          "color": "brass"
+        },
+        {
+          "selector": "Visual:ServiceIntro",
+          "rect": [
+            486,
+            254,
+            1058,
+            108
+          ],
+          "font": 22,
+          "overflow": "vertical scroller"
+        },
+        {
+          "selector": "Visual:ServiceBody",
+          "rect": [
+            486,
+            378,
+            1058,
+            338
+          ],
+          "scroll": "vertical",
+          "z": 20
+        },
+        {
+          "selector": "Proceed",
+          "rect": [
+            1288,
+            740,
+            256,
+            56
+          ],
+          "style": "primary",
+          "z": 30
+        },
+        {
+          "selector": "Visual:ServiceReason",
+          "rect": [
+            486,
+            738,
+            780,
+            60
+          ],
+          "font": 20,
+          "color": "muted"
+        },
+        {
+          "selector": "Visual:Notice",
+          "rect": [
+            32,
+            826,
+            1536,
+            52
+          ],
+          "font": 21,
+          "color": "muted"
+        }
+      ],
+      "selector": "Event"
+    },
+    "archive": {
+      "background": "bg_zone1_event_workshop_v02",
+      "scrim_alpha": 0.4,
+      "elements": [
+        {
+          "selector": "RunStatus",
+          "rect": [
+            32,
+            88,
+            1536,
+            82
+          ],
+          "fill": "panel",
+          "alpha": 1,
+          "z": 10
+        },
+        {
+          "selector": "Visual:RunHP",
+          "rect": [
+            52,
+            96,
+            390,
+            36
+          ],
+          "font": 26
+        },
+        {
+          "selector": "Visual:RunHPBar",
+          "rect": [
+            52,
+            144,
+            390,
+            10
+          ],
+          "fill": "memory"
+        },
+        {
+          "selector": "Visual:CurrencyRelics",
+          "rect": [
+            466,
+            94,
+            550,
+            32
+          ],
+          "font": 22,
+          "color": "brass"
+        },
+        {
+          "selector": "Visual:RelicNames",
+          "rect": [
+            466,
+            130,
+            550,
+            32
+          ],
+          "font": 20,
+          "color": "muted",
+          "overflow": "horizontal read-only scroller"
+        },
+        {
+          "selector": "Visual:PracticeNote",
+          "rect": [
+            1040,
+            96,
+            508,
+            62
+          ],
+          "font": 20,
+          "color": "muted"
+        },
+        {
+          "selector": "Visual:ServiceArt",
+          "rect": [
+            32,
+            182,
+            410,
+            630
+          ],
+          "image": "bg_zone1_event_workshop_v02",
+          "fit": "cover",
+          "uv": [
+            0,
+            0,
+            0.48,
+            1
+          ],
+          "z": 5,
+          "raycast": false
+        },
+        {
+          "selector": "Visual:ServicePanel",
+          "rect": [
+            462,
+            182,
+            1106,
+            630
+          ],
+          "fill": "panel",
+          "alpha": 1,
+          "z": 10
+        },
+        {
+          "selector": "Visual:ServiceTitle",
+          "rect": [
+            486,
+            198,
+            1058,
+            48
+          ],
+          "font": 32,
+          "color": "brass"
+        },
+        {
+          "selector": "Visual:ServiceIntro",
+          "rect": [
+            486,
+            254,
+            1058,
+            108
+          ],
+          "font": 22,
+          "overflow": "vertical scroller"
+        },
+        {
+          "selector": "Visual:ServiceBody",
+          "rect": [
+            486,
+            378,
+            1058,
+            338
+          ],
+          "scroll": "vertical",
+          "z": 20
+        },
+        {
+          "selector": "Proceed",
+          "rect": [
+            1288,
+            740,
+            256,
+            56
+          ],
+          "style": "primary",
+          "z": 30
+        },
+        {
+          "selector": "Visual:ServiceReason",
+          "rect": [
+            486,
+            738,
+            780,
+            60
+          ],
+          "font": 20,
+          "color": "muted"
+        },
+        {
+          "selector": "Visual:Notice",
+          "rect": [
+            32,
+            826,
+            1536,
+            52
+          ],
+          "font": 21,
+          "color": "muted"
+        }
+      ],
+      "selector": "Archive"
+    },
+    "memory_save": {
+      "background": "bg_zone1_event_workshop_v02",
+      "scrim_alpha": 0.5,
+      "elements": [
+        {
+          "selector": "SaveHeader",
+          "rect": [
+            32,
+            88,
+            1536,
+            136
+          ],
+          "fill": "panel",
+          "alpha": 1,
+          "z": 10
+        },
+        {
+          "selector": "Visual:SaveTitle",
+          "rect": [
+            52,
+            96,
+            1244,
+            38
+          ],
+          "font": 28,
+          "color": "brass"
+        },
+        {
+          "selector": "Visual:SaveRules",
+          "rect": [
+            52,
+            138,
+            1496,
+            48
+          ],
+          "font": 20
+        },
+        {
+          "selector": "Visual:SaveSessionNote",
+          "rect": [
+            52,
+            192,
+            1496,
+            26
+          ],
+          "font": 20,
+          "color": "muted"
+        },
+        {
+          "selector": "AssignButton",
+          "rect": [
+            1308,
+            96,
+            240,
+            52
+          ],
+          "style": "secondary"
+        },
+        {
+          "selector": "Memory:<characterId>",
+          "rect": [
+            0,
+            0,
+            500,
+            572
+          ],
+          "template": "memory",
+          "z": 10
+        },
+        {
+          "selector": "Visual:SaveErrors",
+          "rect": [
+            32,
+            816,
+            850,
+            62
+          ],
+          "font": 20,
+          "color": "danger"
+        },
+        {
+          "selector": "CommitMemory",
+          "rect": [
+            898,
+            816,
+            390,
+            62
+          ],
+          "style": "primary",
+          "z": 30
+        },
+        {
+          "selector": "CloseWithoutSave",
+          "rect": [
+            1304,
+            816,
+            264,
+            62
+          ],
+          "style": "secondary",
+          "z": 30
+        }
+      ],
+      "validity": "use live Core preview/error; do not infer capacity, defeat limit or persistence from art"
+    },
+    "result": {
+      "background": "bg_zone1_event_workshop_v02",
+      "scrim_alpha": 0.5,
+      "elements": [
+        {
+          "selector": "Result",
+          "rect": [
+            32,
+            88,
+            1536,
+            788
+          ],
+          "fill": "panel",
+          "alpha": 0.96,
+          "z": 10
+        },
+        {
+          "selector": "Visual:ResultTitle",
+          "rect": [
+            56,
+            104,
+            1488,
+            56
+          ],
+          "font": 40,
+          "color": "brass"
+        },
+        {
+          "selector": "Visual:ResultStats",
+          "rect": [
+            56,
+            172,
+            1488,
+            40
+          ],
+          "font": 22
+        },
+        {
+          "selector": "Visual:SaveOutcome",
+          "rect": [
+            56,
+            218,
+            1488,
+            40
+          ],
+          "font": 22,
+          "color": "memory"
+        },
+        {
+          "selector": "Saved:<characterId>",
+          "rect": [
+            0,
+            0,
+            480,
+            360
+          ],
+          "formula": "[56+i*500,272,480,360]",
+          "z": 10
+        },
+        {
+          "selector": "Visual:ResultPracticeNote",
+          "rect": [
+            56,
+            650,
+            1488,
+            64
+          ],
+          "font": 22,
+          "color": "muted"
+        },
+        {
+          "selector": "LengthShort",
+          "rect": [
+            56,
+            738,
+            300,
+            64
+          ],
+          "style": "secondary"
+        },
+        {
+          "selector": "LengthFull",
+          "rect": [
+            372,
+            738,
+            300,
+            64
+          ],
+          "style": "secondary"
+        },
+        {
+          "selector": "Depart",
+          "rect": [
+            1244,
+            738,
+            300,
+            64
+          ],
+          "style": "primary"
+        },
+        {
+          "selector": "Visual:Notice",
+          "rect": [
+            56,
+            818,
+            1488,
+            44
+          ],
+          "font": 20
+        }
+      ]
+    }
+  },
+  "large_text_battle": {
+    "trigger": "requested font scale115/130 or physical body14sp needs larger than22 canvas units",
+    "header": [
+      32,
+      16,
+      1536,
+      64
+    ],
+    "status": [
+      32,
+      88,
+      1536,
+      104
+    ],
+    "body_viewport": [
+      32,
+      200,
+      1536,
+      428
+    ],
+    "body_content_width": 1536,
+    "party": "three rows of min104, grow with measured text/hit area; shared HP remains in fixed PartyStatus",
+    "enemy_row": {
+      "min_height": 144,
+      "height_formula": "max(144,max(preferred column text heights)+16)",
+      "art": [
+        8,
+        8,
+        96,
+        128
+      ],
+      "name_hp_crack_weakness": [
+        120,
+        8,
+        392,
+        128
+      ],
+      "statuses": [
+        528,
+        8,
+        192,
+        128
+      ],
+      "current": [
+        736,
+        8,
+        376,
+        128
+      ],
+      "next": [
+        1128,
+        8,
+        392,
+        128
+      ],
+      "behavior": "all rows present, vertical scroll; no promise of five enlarged rows simultaneously on screen"
+    },
+    "timeline": [
+      32,
+      636,
+      1308,
+      80
+    ],
+    "action_summary_button": [
+      1360,
+      636,
+      208,
+      80
+    ],
+    "action_summary": "opens existing full result sheet with all pace/reduced/skip controls; label contains last result and pace",
+    "actions": [
+      32,
+      724,
+      1536,
+      152
+    ],
+    "forecast": [
+      48,
+      730,
+      1504,
+      40
+    ],
+    "selected_card_target": [
+      48,
+      778,
+      312,
+      90
+    ],
+    "card_info": [
+      376,
+      778,
+      140,
+      90
+    ],
+    "mode_now": [
+      532,
+      778,
+      240,
+      90
+    ],
+    "mode_next": [
+      788,
+      778,
+      240,
+      90
+    ],
+    "mode_after": [
+      1044,
+      778,
+      240,
+      90
+    ],
+    "confirm": [
+      1300,
+      778,
+      252,
+      90
+    ],
+    "open_hand": [
+      700,
+      20,
+      208,
+      56
+    ],
+    "drawer": [
+      32,
+      200,
+      1536,
+      428
+    ],
+    "drawer_close": [
+      1448,
+      208,
+      104,
+      56
+    ],
+    "hand_viewport": [
+      48,
+      280,
+      1260,
+      332
+    ],
+    "card_min_size": [
+      180,
+      320
+    ],
+    "card_pitch": 194,
+    "end_turn": [
+      1328,
+      296,
+      224,
+      312
+    ],
+    "drawer_behavior": "temporarily overlays body, not PartyStatus or CardActions; opens without command, selecting card closes drawer, no auto-confirm; hand scrolls horizontally",
+    "header_menu": "if original buttons cannot meet48dp, one menu button at[1322,20,246,56] opens deck/log/abandon rows of max(80,converted48dp)",
+    "minimums": "body=max(base*fontScale,converted14sp); card effect=max(base*fontScale,converted12sp); hit=max(base,converted48dp). Grow scroller content, never shrink text.",
+    "overflow": "if action button needs more than90height, vertical-scroll the action row inside CardActions; preserve every caption/reason",
+    "acceptance": "NOT_RUN on Unity/physical device; this is the specified fallback, not implemented game behavior"
+  },
+  "overlays": {
+    "scrim": "#0d1322 at .88",
+    "panel": [
+      160,
+      80,
+      1280,
+      740
+    ],
+    "z": 100,
+    "content_alpha": 1,
+    "art": "none behind body",
+    "scroll": "retain existing deck/log/card-info/picker scrolling",
+    "close": [
+      1328,
+      96,
+      88,
+      56
+    ],
+    "input": "modal root blocks background; no decorative image intercepts input; preserve prepared-control cancel/info swapped positions and existing no-double-submit behavior"
+  },
+  "motion": {
+    "default": "optional120ms outline fade; no layout movement except selected card4px",
+    "reduced": "all static; no parallax, flashes or forced cutins",
+    "first_pass": "no animation/VFX frames or parallax layers delivered"
+  },
+  "implementation_boundary": "Visual specification only. Unity source, state, balance, selection semantics and memory persistence remain developer-root work."
+}

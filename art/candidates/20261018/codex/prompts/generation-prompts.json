@@ -1,0 +1,32 @@
+{
+  "route": "Codex built-in image_gen; no API key or paid API",
+  "backend_model": "not exposed by tool",
+  "date": "2026-10-18",
+  "style": "Korean subculture 2D fantasy game, crisp hand-inked contours, cel-shaded forms with soft painterly lighting; midnight navy, antique brass, parchment, restrained teal memory-light; NO photorealism, NO 3D render, NO writing, NO letters, NO watermark, NO UI.",
+  "jobs": [
+    {
+      "id": "bg_zone1_battle_street_v01",
+      "file": "assets/backgrounds/bg_zone1_battle_street_v01.png",
+      "transparent": false,
+      "prompt": "Use case: stylized-concept. Asset type: 2560x1440 landscape 16:9 game battle environment, full bleed, no border. Korean subculture 2D fantasy game, crisp hand-inked contours, cel-shaded forms with soft painterly lighting; midnight navy, antique brass, parchment, restrained teal memory-light; NO photorealism, NO 3D render, NO writing, NO letters, NO watermark, NO UI. Scene: Lethe, a European-influenced harbor city of stopped clocks at midnight. Broad abandoned cobblestone clocktower plaza, rain-dark stone, brass gas lamps at left and right edges; imposing distant clocktower in upper center-left whose two hands meet at twelve, a few floating blank paper scraps and faint ink stains; muted teal mist. Side-on stage-like view with horizon at 40% height. Reserve the middle band from 40%-70% height as empty flat dark paving for enemy and party overlays; keep foreground and lower 30% quiet and dark for cards. Architectural detail stays behind stage, lighting focal point is distant tower not foreground. Readable big shapes, beautiful moody painted anime background, restrained contrast so character art is brightest. No characters or creatures."
+    },
+    {
+      "id": "bg_zone1_map_clockcity_v01",
+      "file": "assets/backgrounds/bg_zone1_map_clockcity_v01.png",
+      "transparent": false,
+      "prompt": "Use case: stylized-concept. Asset type: 2560x1440 landscape 16:9 background for a route-map UI, no border. Korean subculture 2D fantasy game, crisp hand-inked contours, cel-shaded forms with soft painterly lighting; midnight navy, antique brass, parchment, restrained teal memory-light; NO photorealism, NO 3D render, NO writing, NO letters, NO watermark, NO UI. Bird's-eye oblique illustration of Lethe harbor city at midnight. The stopped brass clocktower is at far right, winding harbor alleys and tightly clustered dark slate roofs, faint canals and gaslamp pools, tiny paper wisps. Painterly navy ink-wash city atlas with antique brass linework. Overall very low contrast and dark: blank smoky navy band across middle 65 percent where readable route nodes will be placed by code. Interest concentrated top fifth and bottom fifth and far edges. No routes, no nodes, no labels, no compass, no grid, no text. City environment must be present but never compete with UI."
+    },
+    {
+      "id": "bg_zone1_event_workshop_v01",
+      "file": "assets/backgrounds/bg_zone1_event_workshop_v01.png",
+      "transparent": false,
+      "prompt": "Use case: stylized-concept. Asset type: 2560x1440 landscape 16:9 game rest, forge, shop, event and memory-save environment, full bleed. Korean subculture 2D fantasy game, crisp hand-inked contours, cel-shaded forms with soft painterly lighting; midnight navy, antique brass, parchment, restrained teal memory-light; NO photorealism, NO 3D render, NO writing, NO letters, NO watermark, NO UI. Interior of the Memory Forge workshop at midnight: broad wooden workbench, small brass clock mechanism and fine repair tools at left edge, hanging dark tools, carefully placed blank memory cards with softly glowing teal edges near lower left. A warm shaded gaslamp at upper left, large round window with stopped clocktower silhouette in blue night outside at upper right. Rich dark wood and ink blue shadows, antique brass, small warm amber pool of light, restrained teal glow. Cozy, contemplative, no people. Main center-right 70 percent quiet low-contrast shadows for opaque UI overlays. No lettering on papers or clocks."
+    },
+    {
+      "id": "enemy_e_moth_default_v01",
+      "file": "assets/enemies/enemy_e_moth_default_v01.png",
+      "transparent": true,
+      "prompt": "Use case: stylized-concept. Asset type: single 1024x1024 transparent PNG 2D enemy sprite, isolated full silhouette, facing left toward player. Korean subculture 2D fantasy game, crisp hand-inked contours, cel-shaded forms with soft painterly lighting; midnight navy, antique brass, parchment, restrained teal memory-light; NO photorealism, NO 3D render, NO writing, NO letters, NO watermark, NO UI. Lethe zone 1 Memory Moth: graceful LARGE PAPER MOTH made of four blank parchment wings with black ink stains and fine brass ribs, small dark mechanical insect body and curled brass antennae, a tiny teal core. Wide moth silhouette distinct from hound, lantern, page, soldier. Full creature centered inside 10 percent transparent safety padding, no cropped wings or antennae, no cast shadow, no ground, no backdrop, no human face, no eye-pattern on wings. Designed to read at 140 px high."
+    }
+  ]
+}

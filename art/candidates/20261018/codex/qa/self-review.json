@@ -1,0 +1,63 @@
+{
+  "criteria": "docs/source_v0.8.1/15_chapter.md §15.5",
+  "reviewer": "Codex self-review only; no other agents called",
+  "status": "first-pass candidate, not final production approval",
+  "matrix": {
+    "character_consistency": {
+      "status": "PASS_REUSE",
+      "evidence": "Six approved starter PNGs copied byte-for-byte, source hashes in references/sources.json. No character generation or identity edits."
+    },
+    "individuality": {
+      "status": "PASS_CANDIDATE",
+      "evidence": "13 silhouettes reviewed in qa/enemy-contact-native.jpg and sparse/crowded battle previews. Moth/cog/blob/hound/lantern/page; broad bell, tall mirror, low garden bosses remain distinct."
+    },
+    "scene_suitability": {
+      "status": "PASS_CANDIDATE",
+      "evidence": "Dark quiet scenery, opaque data fields; no human enemy faces, baked UI labels or sexual imagery. Existing party costumes unchanged."
+    },
+    "clothing": {
+      "status": "PASS_REUSE_OR_NA",
+      "evidence": "Approved party images unchanged. Nonhuman ink/paper/brass enemy cloaks have connected forms; no new human clothing design."
+    },
+    "quality": {
+      "status": "PASS_FIRST_PASS_WITH_LIMITS",
+      "evidence": "Native and composed inspection; zero tested text overflows after four-weakness fix; all PNGs decode and enemy alpha is real. Native generated assets are below final background/boss spec, thin edge noise/tight margins remain production-retouch items."
+    },
+    "record": {
+      "status": "PASS",
+      "evidence": "Local provenance.csv, exact prompts, source references, native dimensions, alpha statistics and SHA256 in manifest. Root art/provenance.csv intentionally untouched under user write boundary."
+    }
+  },
+  "fixed": [
+    "Three clocktower faces corrected to stopped midnight",
+    "Seed four-weakness field expanded without losing current/next intents",
+    "Reward card cost and base effect retained"
+  ],
+  "not_run": [
+    "Unity import, Play Mode and gameplay regression",
+    "Physical phone safeArea,48dp,14sp/12sp and130% font scaling",
+    "Human artist retouch and layered PSD/rig/hit animation",
+    "Full4–8-variant production selection process",
+    "Independent Claude or human review"
+  ],
+  "native_size_limits": {
+    "backgrounds": [
+      1672,
+      941
+    ],
+    "enemies": [
+      1254,
+      1254
+    ],
+    "final_reference_background": [
+      2560,
+      1440
+    ],
+    "final_reference_boss": [
+      2048,
+      2048
+    ],
+    "upscaled": false
+  },
+  "display_inset": "Sprites are contained, never cropped; apply .92x fit inside specified art rect if edge clipping/filtering is observed; do not erase dark pixels as a key. Tight raw transparent margins do not imply8% native padding."
+}

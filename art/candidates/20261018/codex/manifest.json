@@ -1,0 +1,1764 @@
+{
+  "package": "Memory Forge Zone1 visual first pass",
+  "date": "2026-10-18",
+  "designer": "Codex",
+  "scope": "art/candidates/20261018/codex only",
+  "status": "SELF_REVIEWED_CANDIDATE_HANDOFF",
+  "production_final": false,
+  "entrypoints": [
+    "preview.html",
+    "design-spec.md",
+    "layout.json",
+    "qa/self-review.json"
+  ],
+  "totals": {
+    "selected_generated_backgrounds": 3,
+    "selected_generated_enemies": 13,
+    "original_ui_icons": 12,
+    "icon_png_exports": 12,
+    "approved_reference_copies": 6,
+    "static_screen_compositions": 14,
+    "phone_aspect_fit_compositions": 1,
+    "rejected_background_originals": 3
+  },
+  "generation_route": "Approved built-in Codex image_gen only; no external paid APIs, credits, Claude, agents or SSH calls",
+  "prompt_files": [
+    "prompts/generation-prompts.json",
+    "prompts/enemy-prompts.json",
+    "prompts/background-corrections.json",
+    "prompts/map-correction.json"
+  ],
+  "files": [
+    {
+      "file": "assets/backgrounds/bg_zone1_battle_street_v01.png",
+      "size": [
+        1672,
+        941
+      ],
+      "bytes": 2625079,
+      "alpha": {
+        "present": false
+      },
+      "sha256": "6545bc0c4458194cf6eaaa53efcea8f2959f513a764d6bfbbbf986226c577725",
+      "purpose": "Zone1 battle stage",
+      "selected": false,
+      "role": "new_asset",
+      "production_final": false,
+      "self_review": {
+        "status": "REJECTED_CLOCK_POSITION",
+        "chapter15_5": "Style/scene/quality/record reviewed; character/clothing N/A",
+        "notes": "Retain for provenance only; clock face not stopped at midnight."
+      },
+      "prompt_id": "bg_zone1_battle_street_v01",
+      "route": "Codex built-in image_gen",
+      "backend_model": "not exposed by tool",
+      "reference": null,
+      "source_result": "exec-43479ec0-ecbe-4dc2-97c2-1b3bf09abe5d.png"
+    },
+    {
+      "file": "assets/backgrounds/bg_zone1_battle_street_v02.png",
+      "size": [
+        1672,
+        941
+      ],
+      "bytes": 2270929,
+      "alpha": {
+        "present": false
+      },
+      "sha256": "11d9dbc444c962811c7964fb450b2b3acb052e524a58afb73a2f7a7470a237bf",
+      "purpose": "Zone1 battle stage",
+      "selected": true,
+      "role": "new_asset",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_CANDIDATE",
+        "chapter15_5": "Style/scene/quality/record reviewed; character/clothing N/A",
+        "notes": "Selected v02 clock hands inspected at12. Native1672×941; no upscaling, no parallax layers."
+      },
+      "prompt_id": "bg_zone1_battle_street_v02",
+      "route": "Codex built-in image_gen",
+      "backend_model": "not exposed by tool",
+      "reference": "assets/backgrounds/bg_zone1_battle_street_v01.png",
+      "source_result": "exec-6541228a-60c0-44d9-9e20-557a3488025e.png"
+    },
+    {
+      "file": "assets/backgrounds/bg_zone1_event_workshop_v01.png",
+      "size": [
+        1672,
+        941
+      ],
+      "bytes": 2255482,
+      "alpha": {
+        "present": false
+      },
+      "sha256": "2565ec1f66a108611710297e10b3f64b4a5db7e9d77f610dbccddb2878a684ad",
+      "purpose": "Zone1 shared service/reward/memory environment",
+      "selected": false,
+      "role": "new_asset",
+      "production_final": false,
+      "self_review": {
+        "status": "REJECTED_CLOCK_POSITION",
+        "chapter15_5": "Style/scene/quality/record reviewed; character/clothing N/A",
+        "notes": "Retain for provenance only; clock face not stopped at midnight."
+      },
+      "prompt_id": "bg_zone1_event_workshop_v01",
+      "route": "Codex built-in image_gen",
+      "backend_model": "not exposed by tool",
+      "reference": null,
+      "source_result": "exec-a4e6fd7a-1f47-45d7-9166-fe851d0fa4c0.png"
+    },
+    {
+      "file": "assets/backgrounds/bg_zone1_event_workshop_v02.png",
+      "size": [
+        1672,
+        941
+      ],
+      "bytes": 2028200,
+      "alpha": {
+        "present": false
+      },
+      "sha256": "a049b8449d5d04312f05a4c60bb01aa4b770f2cf9394e0b11d4b4fcdb4bf8214",
+      "purpose": "Zone1 shared service/reward/memory environment",
+      "selected": true,
+      "role": "new_asset",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_CANDIDATE",
+        "chapter15_5": "Style/scene/quality/record reviewed; character/clothing N/A",
+        "notes": "Selected v02 clock hands inspected at12. Native1672×941; no upscaling, no parallax layers."
+      },
+      "prompt_id": "bg_zone1_event_workshop_v02",
+      "route": "Codex built-in image_gen",
+      "backend_model": "not exposed by tool",
+      "reference": "assets/backgrounds/bg_zone1_event_workshop_v01.png",
+      "source_result": "exec-e87ff536-8504-4d88-8b9a-c5415505221b.png"
+    },
+    {
+      "file": "assets/backgrounds/bg_zone1_map_clockcity_v01.png",
+      "size": [
+        1672,
+        941
+      ],
+      "bytes": 2389960,
+      "alpha": {
+        "present": false
+      },
+      "sha256": "258474ead2045fc070bd4af949ee80dc1b65ab97f910ae67b7ccfdba43e6f2e3",
+      "purpose": "Zone1 route map",
+      "selected": false,
+      "role": "new_asset",
+      "production_final": false,
+      "self_review": {
+        "status": "REJECTED_CLOCK_POSITION",
+        "chapter15_5": "Style/scene/quality/record reviewed; character/clothing N/A",
+        "notes": "Retain for provenance only; clock face not stopped at midnight."
+      },
+      "prompt_id": "bg_zone1_map_clockcity_v01",
+      "route": "Codex built-in image_gen",
+      "backend_model": "not exposed by tool",
+      "reference": null,
+      "source_result": "/Users/choi/.codex/generated_images/01a14a61-f908-7932-9627-3eb9ae043070/exec-d86cbb1e-b740-4101-abd2-3533613ebdf7.png"
+    },
+    {
+      "file": "assets/backgrounds/bg_zone1_map_clockcity_v02.png",
+      "size": [
+        1672,
+        941
+      ],
+      "bytes": 2196392,
+      "alpha": {
+        "present": false
+      },
+      "sha256": "1226be33e43dd7bd92a91c2f4724814d1d9476cd12df13dea61251151f8c2b85",
+      "purpose": "Zone1 route map",
+      "selected": true,
+      "role": "new_asset",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_CANDIDATE",
+        "chapter15_5": "Style/scene/quality/record reviewed; character/clothing N/A",
+        "notes": "Selected v02 clock hands inspected at12. Native1672×941; no upscaling, no parallax layers."
+      },
+      "prompt_id": "bg_zone1_map_clockcity_v02",
+      "route": "Codex built-in image_gen",
+      "backend_model": "not exposed by tool",
+      "reference": "assets/backgrounds/bg_zone1_map_clockcity_v01.png",
+      "source_result": "exec-b8fe9160-1cab-490f-b720-da0de8fa7292.png"
+    },
+    {
+      "file": "assets/enemies/enemy_b_bell_default_v01.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "bytes": 2368694,
+      "alpha": {
+        "present": true,
+        "min": 0,
+        "max": 255,
+        "fully_transparent_fraction": 0.375742,
+        "bbox": [
+          0,
+          0,
+          1240,
+          1237
+        ]
+      },
+      "sha256": "af3af3b62e33512aab339e8595f6211d1f946fdfcd83c7ab8bfe36d208ed39f2",
+      "purpose": "b_bell / 종을 삼킨 기록관 enemy art",
+      "selected": true,
+      "role": "new_asset",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_CANDIDATE",
+        "chapter15_5": "Nonhuman identity/silhouette/scene/mechanical connections/record reviewed",
+        "notes": "Real alpha; no human face or writing. Native1254²; boss resolution below2048² target. Tight alpha edges/fine line cleanup remain final-retouch work. Contain in UI with padding."
+      },
+      "definition_id": "b_bell",
+      "prompt_id": "enemy_b_bell_default_v01",
+      "route": "Codex built-in image_gen",
+      "backend_model": "not exposed by tool",
+      "reference": null,
+      "source_result": "/Users/choi/.codex/generated_images/01a14a61-f908-7932-9627-3eb9ae043070/exec-289a33fd-5b38-4592-80e6-18de47307a23.png"
+    },
+    {
+      "file": "assets/enemies/enemy_b_garden_default_v01.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "bytes": 2212571,
+      "alpha": {
+        "present": true,
+        "min": 0,
+        "max": 255,
+        "fully_transparent_fraction": 0.504111,
+        "bbox": [
+          0,
+          19,
+          1228,
+          1232
+        ]
+      },
+      "sha256": "b3f181f0a977ab1bc0670669299a3f9829c07f8832b08fc897a294acb3a3fc7c",
+      "purpose": "b_garden / 잠든 정원 enemy art",
+      "selected": true,
+      "role": "new_asset",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_CANDIDATE",
+        "chapter15_5": "Nonhuman identity/silhouette/scene/mechanical connections/record reviewed",
+        "notes": "Real alpha; no human face or writing. Native1254²; boss resolution below2048² target. Tight alpha edges/fine line cleanup remain final-retouch work. Contain in UI with padding."
+      },
+      "definition_id": "b_garden",
+      "prompt_id": "enemy_b_garden_default_v01",
+      "route": "Codex built-in image_gen",
+      "backend_model": "not exposed by tool",
+      "reference": null,
+      "source_result": "/Users/choi/.codex/generated_images/01a14a61-f908-7932-9627-3eb9ae043070/exec-a61b3ed2-a295-4754-98b6-27ea297b9320.png"
+    },
+    {
+      "file": "assets/enemies/enemy_b_notary_default_v01.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "bytes": 1817024,
+      "alpha": {
+        "present": true,
+        "min": 0,
+        "max": 255,
+        "fully_transparent_fraction": 0.53719,
+        "bbox": [
+          0,
+          0,
+          1218,
+          1254
+        ]
+      },
+      "sha256": "cbbfbf386645e434c57c22607c1a93e498cf5557282c240af08a333554a663c8",
+      "purpose": "b_notary / 거울의 공증인 enemy art",
+      "selected": true,
+      "role": "new_asset",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_CANDIDATE",
+        "chapter15_5": "Nonhuman identity/silhouette/scene/mechanical connections/record reviewed",
+        "notes": "Real alpha; no human face or writing. Native1254²; boss resolution below2048² target. Tight alpha edges/fine line cleanup remain final-retouch work. Contain in UI with padding."
+      },
+      "definition_id": "b_notary",
+      "prompt_id": "enemy_b_notary_default_v01",
+      "route": "Codex built-in image_gen",
+      "backend_model": "not exposed by tool",
+      "reference": null,
+      "source_result": "/Users/choi/.codex/generated_images/01a14a61-f908-7932-9627-3eb9ae043070/exec-cd1f81f8-fb90-428e-8f62-032b8861e9d3.png"
+    },
+    {
+      "file": "assets/enemies/enemy_e_bellwarden_default_v01.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "bytes": 1994881,
+      "alpha": {
+        "present": true,
+        "min": 0,
+        "max": 255,
+        "fully_transparent_fraction": 0.500876,
+        "bbox": [
+          14,
+          21,
+          1241,
+          1254
+        ]
+      },
+      "sha256": "76eca76ae5db1769486f4c3ea3ade357cb00555a98e1efe8a92202a5eb32c283",
+      "purpose": "e_bellwarden / 종지기 enemy art",
+      "selected": true,
+      "role": "new_asset",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_CANDIDATE",
+        "chapter15_5": "Nonhuman identity/silhouette/scene/mechanical connections/record reviewed",
+        "notes": "Real alpha; no human face or writing. Native1254²; boss resolution below2048² target. Tight alpha edges/fine line cleanup remain final-retouch work. Contain in UI with padding."
+      },
+      "definition_id": "e_bellwarden",
+      "prompt_id": "enemy_e_bellwarden_default_v01",
+      "route": "Codex built-in image_gen",
+      "backend_model": "not exposed by tool",
+      "reference": null,
+      "source_result": "/Users/choi/.codex/generated_images/01a14a61-f908-7932-9627-3eb9ae043070/exec-faa67a62-577e-468b-9691-9b4f831e6f8a.png"
+    },
+    {
+      "file": "assets/enemies/enemy_e_cog_default_v01.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "bytes": 1553535,
+      "alpha": {
+        "present": true,
+        "min": 0,
+        "max": 255,
+        "fully_transparent_fraction": 0.616891,
+        "bbox": [
+          0,
+          3,
+          1224,
+          1254
+        ]
+      },
+      "sha256": "428b9121d8be875573de88311324c77978be2917d0f5fb35875a0e40fbc919d3",
+      "purpose": "e_cog / 톱니 병정 enemy art",
+      "selected": true,
+      "role": "new_asset",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_CANDIDATE",
+        "chapter15_5": "Nonhuman identity/silhouette/scene/mechanical connections/record reviewed",
+        "notes": "Real alpha; no human face or writing. Native1254²; boss resolution below2048² target. Tight alpha edges/fine line cleanup remain final-retouch work. Contain in UI with padding."
+      },
+      "definition_id": "e_cog",
+      "prompt_id": "enemy_e_cog_default_v01",
+      "route": "Codex built-in image_gen",
+      "backend_model": "not exposed by tool",
+      "reference": null,
+      "source_result": "/Users/choi/.codex/generated_images/01a14a61-f908-7932-9627-3eb9ae043070/exec-af717a74-6684-454b-be71-0c38005abecb.png"
+    },
+    {
+      "file": "assets/enemies/enemy_e_gardener_default_v01.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "bytes": 1797323,
+      "alpha": {
+        "present": true,
+        "min": 0,
+        "max": 255,
+        "fully_transparent_fraction": 0.594966,
+        "bbox": [
+          0,
+          31,
+          1216,
+          1238
+        ]
+      },
+      "sha256": "aebafd70089359c21b499128cda63b19ecbd6eef03b5be67a0bcb39bd7632835",
+      "purpose": "e_gardener / 시든 정원사 enemy art",
+      "selected": true,
+      "role": "new_asset",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_CANDIDATE",
+        "chapter15_5": "Nonhuman identity/silhouette/scene/mechanical connections/record reviewed",
+        "notes": "Real alpha; no human face or writing. Native1254²; boss resolution below2048² target. Tight alpha edges/fine line cleanup remain final-retouch work. Contain in UI with padding."
+      },
+      "definition_id": "e_gardener",
+      "prompt_id": "enemy_e_gardener_default_v01",
+      "route": "Codex built-in image_gen",
+      "backend_model": "not exposed by tool",
+      "reference": null,
+      "source_result": "/Users/choi/.codex/generated_images/01a14a61-f908-7932-9627-3eb9ae043070/exec-c9cf7a09-9efe-4ebe-9a2c-704c57d45d31.png"
+    },
+    {
+      "file": "assets/enemies/enemy_e_hound_default_v01.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "bytes": 1414967,
+      "alpha": {
+        "present": true,
+        "min": 0,
+        "max": 255,
+        "fully_transparent_fraction": 0.683154,
+        "bbox": [
+          30,
+          27,
+          1248,
+          1254
+        ]
+      },
+      "sha256": "fa2a5e135339a4c648da71a5cb8e40361977756a10cfe5ef757fefc6f4d1cfec",
+      "purpose": "e_hound / 시계 사냥개 enemy art",
+      "selected": true,
+      "role": "new_asset",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_CANDIDATE",
+        "chapter15_5": "Nonhuman identity/silhouette/scene/mechanical connections/record reviewed",
+        "notes": "Real alpha; no human face or writing. Native1254²; boss resolution below2048² target. Tight alpha edges/fine line cleanup remain final-retouch work. Contain in UI with padding."
+      },
+      "definition_id": "e_hound",
+      "prompt_id": "enemy_e_hound_default_v01",
+      "route": "Codex built-in image_gen",
+      "backend_model": "not exposed by tool",
+      "reference": null,
+      "source_result": "/Users/choi/.codex/generated_images/01a14a61-f908-7932-9627-3eb9ae043070/exec-005d5ac2-2853-446c-9d75-442cb81eed30.png"
+    },
+    {
+      "file": "assets/enemies/enemy_e_lantern_default_v01.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "bytes": 1250595,
+      "alpha": {
+        "present": true,
+        "min": 0,
+        "max": 255,
+        "fully_transparent_fraction": 0.692452,
+        "bbox": [
+          0,
+          17,
+          1244,
+          1254
+        ]
+      },
+      "sha256": "7638486c1c7d64505e3f8b33b7d1c1b23b2f20f55dd8d0a4961e08f0841f0f22",
+      "purpose": "e_lantern / 흐린 등불 enemy art",
+      "selected": true,
+      "role": "new_asset",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_CANDIDATE",
+        "chapter15_5": "Nonhuman identity/silhouette/scene/mechanical connections/record reviewed",
+        "notes": "Real alpha; no human face or writing. Native1254²; boss resolution below2048² target. Tight alpha edges/fine line cleanup remain final-retouch work. Contain in UI with padding."
+      },
+      "definition_id": "e_lantern",
+      "prompt_id": "enemy_e_lantern_default_v01",
+      "route": "Codex built-in image_gen",
+      "backend_model": "not exposed by tool",
+      "reference": null,
+      "source_result": "/Users/choi/.codex/generated_images/01a14a61-f908-7932-9627-3eb9ae043070/exec-0151a11a-3a8d-4d35-a543-e79b5f1312f0.png"
+    },
+    {
+      "file": "assets/enemies/enemy_e_mirrorclerk_default_v01.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "bytes": 1366759,
+      "alpha": {
+        "present": true,
+        "min": 0,
+        "max": 255,
+        "fully_transparent_fraction": 0.665668,
+        "bbox": [
+          0,
+          0,
+          1240,
+          1254
+        ]
+      },
+      "sha256": "680a2c46b72e266326ba58256a767bdfafe2fd84ebad66d6713146260490bcd2",
+      "purpose": "e_mirrorclerk / 거울 서기 enemy art",
+      "selected": true,
+      "role": "new_asset",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_CANDIDATE",
+        "chapter15_5": "Nonhuman identity/silhouette/scene/mechanical connections/record reviewed",
+        "notes": "Real alpha; no human face or writing. Native1254²; boss resolution below2048² target. Tight alpha edges/fine line cleanup remain final-retouch work. Contain in UI with padding."
+      },
+      "definition_id": "e_mirrorclerk",
+      "prompt_id": "enemy_e_mirrorclerk_default_v01",
+      "route": "Codex built-in image_gen",
+      "backend_model": "not exposed by tool",
+      "reference": null,
+      "source_result": "/Users/choi/.codex/generated_images/01a14a61-f908-7932-9627-3eb9ae043070/exec-67fc2457-619d-4dd7-892d-e7171cf75098.png"
+    },
+    {
+      "file": "assets/enemies/enemy_e_moth_default_v01.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "bytes": 1765635,
+      "alpha": {
+        "present": true,
+        "min": 0,
+        "max": 255,
+        "fully_transparent_fraction": 0.581749,
+        "bbox": [
+          23,
+          38,
+          1251,
+          1254
+        ]
+      },
+      "sha256": "ea2aeea3dd3e904148a32ef5dd3ee96648b5df21c06f59df8cc42dd25eefa076",
+      "purpose": "e_moth / 기억 나방 enemy art",
+      "selected": true,
+      "role": "new_asset",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_CANDIDATE",
+        "chapter15_5": "Nonhuman identity/silhouette/scene/mechanical connections/record reviewed",
+        "notes": "Real alpha; no human face or writing. Native1254²; boss resolution below2048² target. Tight alpha edges/fine line cleanup remain final-retouch work. Contain in UI with padding."
+      },
+      "definition_id": "e_moth",
+      "prompt_id": "enemy_e_moth_default_v01",
+      "route": "Codex built-in image_gen",
+      "backend_model": "not exposed by tool",
+      "reference": null,
+      "source_result": "/Users/choi/.codex/generated_images/01a14a61-f908-7932-9627-3eb9ae043070/exec-5f59b1b0-3343-457d-8b9c-33372d349d12.png"
+    },
+    {
+      "file": "assets/enemies/enemy_e_page_default_v01.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "bytes": 1154795,
+      "alpha": {
+        "present": true,
+        "min": 0,
+        "max": 255,
+        "fully_transparent_fraction": 0.671159,
+        "bbox": [
+          0,
+          39,
+          1208,
+          1254
+        ]
+      },
+      "sha256": "87d93b5dd62d31723d6b126b24d72b2cc3471aaae359822cf548353784654781",
+      "purpose": "e_page / 떠도는 페이지 enemy art",
+      "selected": true,
+      "role": "new_asset",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_CANDIDATE",
+        "chapter15_5": "Nonhuman identity/silhouette/scene/mechanical connections/record reviewed",
+        "notes": "Real alpha; no human face or writing. Native1254²; boss resolution below2048² target. Tight alpha edges/fine line cleanup remain final-retouch work. Contain in UI with padding."
+      },
+      "definition_id": "e_page",
+      "prompt_id": "enemy_e_page_default_v01",
+      "route": "Codex built-in image_gen",
+      "backend_model": "not exposed by tool",
+      "reference": null,
+      "source_result": "/Users/choi/.codex/generated_images/01a14a61-f908-7932-9627-3eb9ae043070/exec-b251c89f-a7e0-4844-b6c7-0326eea60e61.png"
+    },
+    {
+      "file": "assets/enemies/enemy_e_seed_default_v01.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "bytes": 1016021,
+      "alpha": {
+        "present": true,
+        "min": 0,
+        "max": 255,
+        "fully_transparent_fraction": 0.740845,
+        "bbox": [
+          25,
+          57,
+          1240,
+          1234
+        ]
+      },
+      "sha256": "220ab4824ce665955ee8a3e7975d7ab9c76cccd72c3b21bed80d2323b12d254a",
+      "purpose": "e_seed / 씨앗 enemy art",
+      "selected": true,
+      "role": "new_asset",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_CANDIDATE",
+        "chapter15_5": "Nonhuman identity/silhouette/scene/mechanical connections/record reviewed",
+        "notes": "Real alpha; no human face or writing. Native1254²; boss resolution below2048² target. Tight alpha edges/fine line cleanup remain final-retouch work. Contain in UI with padding."
+      },
+      "definition_id": "e_seed",
+      "prompt_id": "enemy_e_seed_default_v01",
+      "route": "Codex built-in image_gen",
+      "backend_model": "not exposed by tool",
+      "reference": null,
+      "source_result": "/Users/choi/.codex/generated_images/01a14a61-f908-7932-9627-3eb9ae043070/exec-e3404fa2-2354-4d6e-8476-b18baef59fa2.png"
+    },
+    {
+      "file": "assets/enemies/enemy_e_smudge_default_v01.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "bytes": 1056814,
+      "alpha": {
+        "present": true,
+        "min": 0,
+        "max": 255,
+        "fully_transparent_fraction": 0.67919,
+        "bbox": [
+          0,
+          17,
+          1234,
+          1242
+        ]
+      },
+      "sha256": "ac246b0148d1585a4c7b055d11dd0482e352d505b2984e581477eb887b9d544f",
+      "purpose": "e_smudge / 잉크 얼룩 enemy art",
+      "selected": true,
+      "role": "new_asset",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_CANDIDATE",
+        "chapter15_5": "Nonhuman identity/silhouette/scene/mechanical connections/record reviewed",
+        "notes": "Real alpha; no human face or writing. Native1254²; boss resolution below2048² target. Tight alpha edges/fine line cleanup remain final-retouch work. Contain in UI with padding."
+      },
+      "definition_id": "e_smudge",
+      "prompt_id": "enemy_e_smudge_default_v01",
+      "route": "Codex built-in image_gen",
+      "backend_model": "not exposed by tool",
+      "reference": null,
+      "source_result": "/Users/choi/.codex/generated_images/01a14a61-f908-7932-9627-3eb9ae043070/exec-99e1d82a-69bc-4659-b149-fabc8ea30567.png"
+    },
+    {
+      "file": "assets/ui/ico_attribute_flame.png",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 7209,
+      "alpha": {
+        "present": true,
+        "min": 0,
+        "max": 255,
+        "fully_transparent_fraction": 0.784241,
+        "bbox": [
+          17,
+          4,
+          113,
+          128
+        ]
+      },
+      "sha256": "f92248eaa21b5b61fee0fccfa71369405b92ec3c5ed70f967e510317f53e3668",
+      "purpose": "UI map-type or attribute shape; pair with text",
+      "selected": true,
+      "role": "new_asset",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_VECTOR",
+        "chapter15_5": "Shape differentiated; simple original code-native strokes; no image API",
+        "notes": "SVG originals and raster companion share motif; glyph geometry is deliberately simple"
+      }
+    },
+    {
+      "file": "assets/ui/ico_attribute_flame.svg",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 269,
+      "alpha": {
+        "present": true,
+        "kind": "transparent SVG canvas"
+      },
+      "sha256": "a8878f4a95ba674b98e428fb2561c728d89488d99fe983de65ed8c241dfac586",
+      "purpose": "UI map-type or attribute shape; pair with text",
+      "selected": true,
+      "role": "new_asset",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_VECTOR",
+        "chapter15_5": "Shape differentiated; simple original code-native strokes; no image API",
+        "notes": "SVG originals and raster companion share motif; glyph geometry is deliberately simple"
+      }
+    },
+    {
+      "file": "assets/ui/ico_attribute_frost.png",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 4371,
+      "alpha": {
+        "present": true,
+        "min": 0,
+        "max": 255,
+        "fully_transparent_fraction": 0.800598,
+        "bbox": [
+          11,
+          7,
+          118,
+          122
+        ]
+      },
+      "sha256": "75b6cb30f66ffb080fb2e66fc6742b5cd6b081dbab158eb0b379387fff066500",
+      "purpose": "UI map-type or attribute shape; pair with text",
+      "selected": true,
+      "role": "new_asset",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_VECTOR",
+        "chapter15_5": "Shape differentiated; simple original code-native strokes; no image API",
+        "notes": "SVG originals and raster companion share motif; glyph geometry is deliberately simple"
+      }
+    },
+    {
+      "file": "assets/ui/ico_attribute_frost.svg",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 315,
+      "alpha": {
+        "present": true,
+        "kind": "transparent SVG canvas"
+      },
+      "sha256": "d4f73a38424b0eb6bd53af3d0d3594593c5e46574316fdef578ad58f1e4edcf6",
+      "purpose": "UI map-type or attribute shape; pair with text",
+      "selected": true,
+      "role": "new_asset",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_VECTOR",
+        "chapter15_5": "Shape differentiated; simple original code-native strokes; no image API",
+        "notes": "SVG originals and raster companion share motif; glyph geometry is deliberately simple"
+      }
+    },
+    {
+      "file": "assets/ui/ico_attribute_void.png",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 8236,
+      "alpha": {
+        "present": true,
+        "min": 0,
+        "max": 255,
+        "fully_transparent_fraction": 0.699158,
+        "bbox": [
+          10,
+          10,
+          118,
+          118
+        ]
+      },
+      "sha256": "8c11290bb69e211096f08989d9d02f69364645cdc413373436c67c5216c605e0",
+      "purpose": "UI map-type or attribute shape; pair with text",
+      "selected": true,
+      "role": "new_asset",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_VECTOR",
+        "chapter15_5": "Shape differentiated; simple original code-native strokes; no image API",
+        "notes": "SVG originals and raster companion share motif; glyph geometry is deliberately simple"
+      }
+    },
+    {
+      "file": "assets/ui/ico_attribute_void.svg",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 262,
+      "alpha": {
+        "present": true,
+        "kind": "transparent SVG canvas"
+      },
+      "sha256": "cccf9b13021f901a710af23ce50981092e449f1bf0624a8e0ef91be43b46226a",
+      "purpose": "UI map-type or attribute shape; pair with text",
+      "selected": true,
+      "role": "new_asset",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_VECTOR",
+        "chapter15_5": "Shape differentiated; simple original code-native strokes; no image API",
+        "notes": "SVG originals and raster companion share motif; glyph geometry is deliberately simple"
+      }
+    },
+    {
+      "file": "assets/ui/ico_attribute_volt.png",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 6110,
+      "alpha": {
+        "present": true,
+        "min": 0,
+        "max": 255,
+        "fully_transparent_fraction": 0.794617,
+        "bbox": [
+          20,
+          2,
+          112,
+          128
+        ]
+      },
+      "sha256": "d9d27d2b79e0e80ec0fbf4aca6e20cbdd229090f32f368a51e6932302f917324",
+      "purpose": "UI map-type or attribute shape; pair with text",
+      "selected": true,
+      "role": "new_asset",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_VECTOR",
+        "chapter15_5": "Shape differentiated; simple original code-native strokes; no image API",
+        "notes": "SVG originals and raster companion share motif; glyph geometry is deliberately simple"
+      }
+    },
+    {
+      "file": "assets/ui/ico_attribute_volt.svg",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 228,
+      "alpha": {
+        "present": true,
+        "kind": "transparent SVG canvas"
+      },
+      "sha256": "db7e76ca8a37f2a5aa5bad82a1254edd23150545c8212c081c8145190cb3c9fa",
+      "purpose": "UI map-type or attribute shape; pair with text",
+      "selected": true,
+      "role": "new_asset",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_VECTOR",
+        "chapter15_5": "Shape differentiated; simple original code-native strokes; no image API",
+        "notes": "SVG originals and raster companion share motif; glyph geometry is deliberately simple"
+      }
+    },
+    {
+      "file": "assets/ui/ico_node_archive.png",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 4984,
+      "alpha": {
+        "present": true,
+        "min": 0,
+        "max": 255,
+        "fully_transparent_fraction": 0.701294,
+        "bbox": [
+          4,
+          13,
+          125,
+          119
+        ]
+      },
+      "sha256": "f71bc18c7ce2670ff8fcd80e4f5f663701d5c8149e013f541700e1b913d25bdf",
+      "purpose": "UI map-type or attribute shape; pair with text",
+      "selected": true,
+      "role": "new_asset",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_VECTOR",
+        "chapter15_5": "Shape differentiated; simple original code-native strokes; no image API",
+        "notes": "SVG originals and raster companion share motif; glyph geometry is deliberately simple"
+      }
+    },
+    {
+      "file": "assets/ui/ico_node_archive.svg",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 261,
+      "alpha": {
+        "present": true,
+        "kind": "transparent SVG canvas"
+      },
+      "sha256": "4853196af53990e8585d3e1a0d138db0f6f8129830066e01b02dcfa956bfd848",
+      "purpose": "UI map-type or attribute shape; pair with text",
+      "selected": true,
+      "role": "new_asset",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_VECTOR",
+        "chapter15_5": "Shape differentiated; simple original code-native strokes; no image API",
+        "notes": "SVG originals and raster companion share motif; glyph geometry is deliberately simple"
+      }
+    },
+    {
+      "file": "assets/ui/ico_node_battle.png",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 2416,
+      "alpha": {
+        "present": true,
+        "min": 0,
+        "max": 255,
+        "fully_transparent_fraction": 0.853455,
+        "bbox": [
+          21,
+          20,
+          109,
+          109
+        ]
+      },
+      "sha256": "670c8f350f9572c5f68a2a09cc129379010caed13255e8f7228b24ea16c2b858",
+      "purpose": "UI map-type or attribute shape; pair with text",
+      "selected": true,
+      "role": "new_asset",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_VECTOR",
+        "chapter15_5": "Shape differentiated; simple original code-native strokes; no image API",
+        "notes": "SVG originals and raster companion share motif; glyph geometry is deliberately simple"
+      }
+    },
+    {
+      "file": "assets/ui/ico_node_battle.svg",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 219,
+      "alpha": {
+        "present": true,
+        "kind": "transparent SVG canvas"
+      },
+      "sha256": "0b94db3ae308f197535b82df9bd1a9f594953d2f0e158887433701654d1a5bd2",
+      "purpose": "UI map-type or attribute shape; pair with text",
+      "selected": true,
+      "role": "new_asset",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_VECTOR",
+        "chapter15_5": "Shape differentiated; simple original code-native strokes; no image API",
+        "notes": "SVG originals and raster companion share motif; glyph geometry is deliberately simple"
+      }
+    },
+    {
+      "file": "assets/ui/ico_node_boss.png",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 5256,
+      "alpha": {
+        "present": true,
+        "min": 0,
+        "max": 255,
+        "fully_transparent_fraction": 0.809814,
+        "bbox": [
+          20,
+          14,
+          112,
+          116
+        ]
+      },
+      "sha256": "23126f4aa48bb0bf46dc7b24ad67f665fc0e88d70b343f774a2854319cc8bb3b",
+      "purpose": "UI map-type or attribute shape; pair with text",
+      "selected": true,
+      "role": "new_asset",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_VECTOR",
+        "chapter15_5": "Shape differentiated; simple original code-native strokes; no image API",
+        "notes": "SVG originals and raster companion share motif; glyph geometry is deliberately simple"
+      }
+    },
+    {
+      "file": "assets/ui/ico_node_boss.svg",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 260,
+      "alpha": {
+        "present": true,
+        "kind": "transparent SVG canvas"
+      },
+      "sha256": "9df4840f413bf50afb22c6edb9bf87db3b0fb84dc66ce8f78ddb4c4b0a0ae396",
+      "purpose": "UI map-type or attribute shape; pair with text",
+      "selected": true,
+      "role": "new_asset",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_VECTOR",
+        "chapter15_5": "Shape differentiated; simple original code-native strokes; no image API",
+        "notes": "SVG originals and raster companion share motif; glyph geometry is deliberately simple"
+      }
+    },
+    {
+      "file": "assets/ui/ico_node_elite.png",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 7577,
+      "alpha": {
+        "present": true,
+        "min": 0,
+        "max": 255,
+        "fully_transparent_fraction": 0.701843,
+        "bbox": [
+          3,
+          4,
+          126,
+          109
+        ]
+      },
+      "sha256": "f701a7defe26291a9d117870353fddca425956e4a9bb19c001df182313e6f2c4",
+      "purpose": "UI map-type or attribute shape; pair with text",
+      "selected": true,
+      "role": "new_asset",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_VECTOR",
+        "chapter15_5": "Shape differentiated; simple original code-native strokes; no image API",
+        "notes": "SVG originals and raster companion share motif; glyph geometry is deliberately simple"
+      }
+    },
+    {
+      "file": "assets/ui/ico_node_elite.svg",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 247,
+      "alpha": {
+        "present": true,
+        "kind": "transparent SVG canvas"
+      },
+      "sha256": "85ff965c6e76d4b2d53fd5bcfc501ed8854574ef60f4cb52368d930862b70cf5",
+      "purpose": "UI map-type or attribute shape; pair with text",
+      "selected": true,
+      "role": "new_asset",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_VECTOR",
+        "chapter15_5": "Shape differentiated; simple original code-native strokes; no image API",
+        "notes": "SVG originals and raster companion share motif; glyph geometry is deliberately simple"
+      }
+    },
+    {
+      "file": "assets/ui/ico_node_event.png",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 4380,
+      "alpha": {
+        "present": true,
+        "min": 0,
+        "max": 255,
+        "fully_transparent_fraction": 0.881775,
+        "bbox": [
+          30,
+          10,
+          99,
+          115
+        ]
+      },
+      "sha256": "bae9ed4cd408dbf80a30ee5c023f2b01c68a3d27ceeb843f98ff775cf2d27ad2",
+      "purpose": "UI map-type or attribute shape; pair with text",
+      "selected": true,
+      "role": "new_asset",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_VECTOR",
+        "chapter15_5": "Shape differentiated; simple original code-native strokes; no image API",
+        "notes": "SVG originals and raster companion share motif; glyph geometry is deliberately simple"
+      }
+    },
+    {
+      "file": "assets/ui/ico_node_event.svg",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 250,
+      "alpha": {
+        "present": true,
+        "kind": "transparent SVG canvas"
+      },
+      "sha256": "3a818ba2b150b3d6a34139763854328ba69c70c29c8babd012202a9b3076c9c7",
+      "purpose": "UI map-type or attribute shape; pair with text",
+      "selected": true,
+      "role": "new_asset",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_VECTOR",
+        "chapter15_5": "Shape differentiated; simple original code-native strokes; no image API",
+        "notes": "SVG originals and raster companion share motif; glyph geometry is deliberately simple"
+      }
+    },
+    {
+      "file": "assets/ui/ico_node_forge.png",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 11366,
+      "alpha": {
+        "present": true,
+        "min": 0,
+        "max": 255,
+        "fully_transparent_fraction": 0.685669,
+        "bbox": [
+          1,
+          1,
+          128,
+          128
+        ]
+      },
+      "sha256": "cba757ed04221c6f50f3890fdba1130170914f199863bdecac1928a6707ca74f",
+      "purpose": "UI map-type or attribute shape; pair with text",
+      "selected": true,
+      "role": "new_asset",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_VECTOR",
+        "chapter15_5": "Shape differentiated; simple original code-native strokes; no image API",
+        "notes": "SVG originals and raster companion share motif; glyph geometry is deliberately simple"
+      }
+    },
+    {
+      "file": "assets/ui/ico_node_forge.svg",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 327,
+      "alpha": {
+        "present": true,
+        "kind": "transparent SVG canvas"
+      },
+      "sha256": "bc5e451f4ff8d165ab28bd782a43231ff7d7cb668b85386d782f1b568b975bdb",
+      "purpose": "UI map-type or attribute shape; pair with text",
+      "selected": true,
+      "role": "new_asset",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_VECTOR",
+        "chapter15_5": "Shape differentiated; simple original code-native strokes; no image API",
+        "notes": "SVG originals and raster companion share motif; glyph geometry is deliberately simple"
+      }
+    },
+    {
+      "file": "assets/ui/ico_node_rest.png",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 2949,
+      "alpha": {
+        "present": true,
+        "min": 0,
+        "max": 255,
+        "fully_transparent_fraction": 0.719482,
+        "bbox": [
+          10,
+          23,
+          125,
+          119
+        ]
+      },
+      "sha256": "b521f071d22e12a118c063456159862ac3a4f5c6fbe4a709d1e8c32a2440c991",
+      "purpose": "UI map-type or attribute shape; pair with text",
+      "selected": true,
+      "role": "new_asset",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_VECTOR",
+        "chapter15_5": "Shape differentiated; simple original code-native strokes; no image API",
+        "notes": "SVG originals and raster companion share motif; glyph geometry is deliberately simple"
+      }
+    },
+    {
+      "file": "assets/ui/ico_node_rest.svg",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 241,
+      "alpha": {
+        "present": true,
+        "kind": "transparent SVG canvas"
+      },
+      "sha256": "327601e22f343afbe369ca87f0e8594583a41766765e527fb8905fd8ab2f353c",
+      "purpose": "UI map-type or attribute shape; pair with text",
+      "selected": true,
+      "role": "new_asset",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_VECTOR",
+        "chapter15_5": "Shape differentiated; simple original code-native strokes; no image API",
+        "notes": "SVG originals and raster companion share motif; glyph geometry is deliberately simple"
+      }
+    },
+    {
+      "file": "assets/ui/ico_node_shop.png",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 7780,
+      "alpha": {
+        "present": true,
+        "min": 0,
+        "max": 255,
+        "fully_transparent_fraction": 0.754883,
+        "bbox": [
+          10,
+          10,
+          118,
+          118
+        ]
+      },
+      "sha256": "b78f1442a4126141435244f928341835130b038277b14f550be84cae7d851ee1",
+      "purpose": "UI map-type or attribute shape; pair with text",
+      "selected": true,
+      "role": "new_asset",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_VECTOR",
+        "chapter15_5": "Shape differentiated; simple original code-native strokes; no image API",
+        "notes": "SVG originals and raster companion share motif; glyph geometry is deliberately simple"
+      }
+    },
+    {
+      "file": "assets/ui/ico_node_shop.svg",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 252,
+      "alpha": {
+        "present": true,
+        "kind": "transparent SVG canvas"
+      },
+      "sha256": "5e7f61f2bdcbb548c9c6d4e8b8a54ab3303bb5db891dc181f63aefd63fa56417",
+      "purpose": "UI map-type or attribute shape; pair with text",
+      "selected": true,
+      "role": "new_asset",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_VECTOR",
+        "chapter15_5": "Shape differentiated; simple original code-native strokes; no image API",
+        "notes": "SVG originals and raster companion share motif; glyph geometry is deliberately simple"
+      }
+    },
+    {
+      "file": "references/char_harin_cutin_default_v01.png",
+      "size": [
+        1086,
+        1448
+      ],
+      "bytes": 2872767,
+      "alpha": {
+        "present": false
+      },
+      "sha256": "1ef0e9dc0ff40f8817eaa83abd4d1d758dc6391e13ceddecef11a834285ef381",
+      "purpose": "Existing approved party cutin used only as decorative card header",
+      "selected": true,
+      "role": "approved_reference",
+      "production_final": false,
+      "self_review": {
+        "status": "BYTE_IDENTICAL_APPROVED_REUSE",
+        "chapter15_5": "Identity/clothing preserved by hash; no new character review claimed"
+      }
+    },
+    {
+      "file": "references/char_harin_sd_default_v02.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "bytes": 1674653,
+      "alpha": {
+        "present": true,
+        "min": 0,
+        "max": 255,
+        "fully_transparent_fraction": 0.515437,
+        "bbox": [
+          0,
+          25,
+          1240,
+          1254
+        ]
+      },
+      "sha256": "a36236fa000ee8c6d169c3c0264f8f9c2728d69e4fa76cdd8f588843a0b98745",
+      "purpose": "Existing approved party SD portrait",
+      "selected": true,
+      "role": "approved_reference",
+      "production_final": false,
+      "self_review": {
+        "status": "BYTE_IDENTICAL_APPROVED_REUSE",
+        "chapter15_5": "Identity/clothing preserved by hash; no new character review claimed"
+      }
+    },
+    {
+      "file": "references/char_nia_cutin_default_v01.png",
+      "size": [
+        1086,
+        1448
+      ],
+      "bytes": 2602313,
+      "alpha": {
+        "present": false
+      },
+      "sha256": "42b023d250ddd25a7915161c47cdae9835837f0810cf453e1db01dd7db865a1b",
+      "purpose": "Existing approved party cutin used only as decorative card header",
+      "selected": true,
+      "role": "approved_reference",
+      "production_final": false,
+      "self_review": {
+        "status": "BYTE_IDENTICAL_APPROVED_REUSE",
+        "chapter15_5": "Identity/clothing preserved by hash; no new character review claimed"
+      }
+    },
+    {
+      "file": "references/char_nia_sd_default_v02.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "bytes": 1635541,
+      "alpha": {
+        "present": true,
+        "min": 0,
+        "max": 255,
+        "fully_transparent_fraction": 0.528629,
+        "bbox": [
+          0,
+          16,
+          1228,
+          1254
+        ]
+      },
+      "sha256": "f92e9e99cb089c68e251dffa58d2bae50f0480edb7f09fed494dedd601862ca5",
+      "purpose": "Existing approved party SD portrait",
+      "selected": true,
+      "role": "approved_reference",
+      "production_final": false,
+      "self_review": {
+        "status": "BYTE_IDENTICAL_APPROVED_REUSE",
+        "chapter15_5": "Identity/clothing preserved by hash; no new character review claimed"
+      }
+    },
+    {
+      "file": "references/char_sera_cutin_default_v01.png",
+      "size": [
+        1086,
+        1448
+      ],
+      "bytes": 2785199,
+      "alpha": {
+        "present": false
+      },
+      "sha256": "5705d9152e21db67b4e2abda04ef77f97e7d404ea6ff713421e3e69ab681cfc1",
+      "purpose": "Existing approved party cutin used only as decorative card header",
+      "selected": true,
+      "role": "approved_reference",
+      "production_final": false,
+      "self_review": {
+        "status": "BYTE_IDENTICAL_APPROVED_REUSE",
+        "chapter15_5": "Identity/clothing preserved by hash; no new character review claimed"
+      }
+    },
+    {
+      "file": "references/char_sera_sd_default_v02.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "bytes": 1720591,
+      "alpha": {
+        "present": true,
+        "min": 0,
+        "max": 255,
+        "fully_transparent_fraction": 0.504233,
+        "bbox": [
+          31,
+          30,
+          1234,
+          1254
+        ]
+      },
+      "sha256": "6c0fb935031e3fce1a9039d7c6771e2cbd3f41526ef3313e17f865bd9ee9cced",
+      "purpose": "Existing approved party SD portrait",
+      "selected": true,
+      "role": "approved_reference",
+      "production_final": false,
+      "self_review": {
+        "status": "BYTE_IDENTICAL_APPROVED_REUSE",
+        "chapter15_5": "Identity/clothing preserved by hash; no new character review claimed"
+      }
+    },
+    {
+      "file": "previews/archive.png",
+      "size": [
+        1600,
+        900
+      ],
+      "bytes": 807425,
+      "alpha": {
+        "present": false
+      },
+      "sha256": "7674f6013577953c276f6abe94e588fab3c6e8da4266eece3c583626bb426d53",
+      "purpose": "Offline static design composition; never a Unity screenshot or live data source",
+      "selected": true,
+      "role": "preview",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_LAYOUT",
+        "chapter15_5": "Final-size information hierarchy reviewed",
+        "notes": "Fixture data illustrates layout; gameplay/device acceptance NOT_RUN"
+      }
+    },
+    {
+      "file": "previews/battle-boss-bell.png",
+      "size": [
+        1600,
+        900
+      ],
+      "bytes": 753165,
+      "alpha": {
+        "present": false
+      },
+      "sha256": "b1433b8c7f7998f86da5372183b38acddcd4496b890d4059e104035275b87ffd",
+      "purpose": "Offline static design composition; never a Unity screenshot or live data source",
+      "selected": true,
+      "role": "preview",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_LAYOUT",
+        "chapter15_5": "Final-size information hierarchy reviewed",
+        "notes": "Fixture data illustrates layout; gameplay/device acceptance NOT_RUN"
+      }
+    },
+    {
+      "file": "previews/battle-boss-garden.png",
+      "size": [
+        1600,
+        900
+      ],
+      "bytes": 764614,
+      "alpha": {
+        "present": false
+      },
+      "sha256": "e175d1d282f4310692fa66023ef5903d8639d66dc0275ea74767e01ce526a733",
+      "purpose": "Offline static design composition; never a Unity screenshot or live data source",
+      "selected": true,
+      "role": "preview",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_LAYOUT",
+        "chapter15_5": "Final-size information hierarchy reviewed",
+        "notes": "Fixture data illustrates layout; gameplay/device acceptance NOT_RUN"
+      }
+    },
+    {
+      "file": "previews/battle-boss-notary.png",
+      "size": [
+        1600,
+        900
+      ],
+      "bytes": 736580,
+      "alpha": {
+        "present": false
+      },
+      "sha256": "7a76f2fb523dfb57371d49218c4aefff2e0396cbfcbc8a61b5433bb3d23b09f9",
+      "purpose": "Offline static design composition; never a Unity screenshot or live data source",
+      "selected": true,
+      "role": "preview",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_LAYOUT",
+        "chapter15_5": "Final-size information hierarchy reviewed",
+        "notes": "Fixture data illustrates layout; gameplay/device acceptance NOT_RUN"
+      }
+    },
+    {
+      "file": "previews/battle-five-phone-2340x1080.png",
+      "size": [
+        2340,
+        1080
+      ],
+      "bytes": 1264614,
+      "alpha": {
+        "present": false
+      },
+      "sha256": "d084dd3fa4947312d324a99513af855f892dac28e846e6e8dc3b6e21de2fde76",
+      "purpose": "Offline static design composition; never a Unity screenshot or live data source",
+      "selected": true,
+      "role": "preview",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_LAYOUT",
+        "chapter15_5": "Final-size information hierarchy reviewed",
+        "notes": "Fixture data illustrates layout; gameplay/device acceptance NOT_RUN"
+      }
+    },
+    {
+      "file": "previews/battle-five.png",
+      "size": [
+        1600,
+        900
+      ],
+      "bytes": 640591,
+      "alpha": {
+        "present": false
+      },
+      "sha256": "ed0eedb7ced2e5dcfa29bcd732ad3e4d06616d1f282a91357c3d078b4d638785",
+      "purpose": "Offline static design composition; never a Unity screenshot or live data source",
+      "selected": true,
+      "role": "preview",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_LAYOUT",
+        "chapter15_5": "Final-size information hierarchy reviewed",
+        "notes": "Fixture data illustrates layout; gameplay/device acceptance NOT_RUN"
+      }
+    },
+    {
+      "file": "previews/battle-two.png",
+      "size": [
+        1600,
+        900
+      ],
+      "bytes": 763571,
+      "alpha": {
+        "present": false
+      },
+      "sha256": "c6c11db00495d55f7a210386cb3cd1f11e31cdccfeff0ffa13a7446fc6c450a3",
+      "purpose": "Offline static design composition; never a Unity screenshot or live data source",
+      "selected": true,
+      "role": "preview",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_LAYOUT",
+        "chapter15_5": "Final-size information hierarchy reviewed",
+        "notes": "Fixture data illustrates layout; gameplay/device acceptance NOT_RUN"
+      }
+    },
+    {
+      "file": "previews/event.png",
+      "size": [
+        1600,
+        900
+      ],
+      "bytes": 809091,
+      "alpha": {
+        "present": false
+      },
+      "sha256": "6b0dff09246f685df51231fff86af41ece84a23ec5ded5b59badc52c6789d269",
+      "purpose": "Offline static design composition; never a Unity screenshot or live data source",
+      "selected": true,
+      "role": "preview",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_LAYOUT",
+        "chapter15_5": "Final-size information hierarchy reviewed",
+        "notes": "Fixture data illustrates layout; gameplay/device acceptance NOT_RUN"
+      }
+    },
+    {
+      "file": "previews/forge.png",
+      "size": [
+        1600,
+        900
+      ],
+      "bytes": 804948,
+      "alpha": {
+        "present": false
+      },
+      "sha256": "6b622281234855d5f6e6d9fb2a82c3b993d09062e050d5418122159bcffc143d",
+      "purpose": "Offline static design composition; never a Unity screenshot or live data source",
+      "selected": true,
+      "role": "preview",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_LAYOUT",
+        "chapter15_5": "Final-size information hierarchy reviewed",
+        "notes": "Fixture data illustrates layout; gameplay/device acceptance NOT_RUN"
+      }
+    },
+    {
+      "file": "previews/map.png",
+      "size": [
+        1600,
+        900
+      ],
+      "bytes": 841449,
+      "alpha": {
+        "present": false
+      },
+      "sha256": "fbeaad50973055291e66f4919d3b8fa9d7cb31c18c51fbc2671af9a19641a018",
+      "purpose": "Offline static design composition; never a Unity screenshot or live data source",
+      "selected": true,
+      "role": "preview",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_LAYOUT",
+        "chapter15_5": "Final-size information hierarchy reviewed",
+        "notes": "Fixture data illustrates layout; gameplay/device acceptance NOT_RUN"
+      }
+    },
+    {
+      "file": "previews/memory-save.png",
+      "size": [
+        1600,
+        900
+      ],
+      "bytes": 388486,
+      "alpha": {
+        "present": false
+      },
+      "sha256": "efe8023af77fc79a08ce0ed7c0b10a5583f8abb7069ad5d1f9bca958c143346e",
+      "purpose": "Offline static design composition; never a Unity screenshot or live data source",
+      "selected": true,
+      "role": "preview",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_LAYOUT",
+        "chapter15_5": "Final-size information hierarchy reviewed",
+        "notes": "Fixture data illustrates layout; gameplay/device acceptance NOT_RUN"
+      }
+    },
+    {
+      "file": "previews/overview.jpg",
+      "size": [
+        1200,
+        1230
+      ],
+      "bytes": 196954,
+      "alpha": {
+        "present": false
+      },
+      "sha256": "1e6c85a654b5cc1764ed6186ef4394424d27ec8c61a988c498a049b3ed0c6159",
+      "purpose": "Offline static design composition; never a Unity screenshot or live data source",
+      "selected": true,
+      "role": "preview",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_LAYOUT",
+        "chapter15_5": "Final-size information hierarchy reviewed",
+        "notes": "Fixture data illustrates layout; gameplay/device acceptance NOT_RUN"
+      }
+    },
+    {
+      "file": "previews/rest.png",
+      "size": [
+        1600,
+        900
+      ],
+      "bytes": 809569,
+      "alpha": {
+        "present": false
+      },
+      "sha256": "e72a71b9b4b3c94da0c0c6ea393e0491312d87bc802ec121d35d7627dd7b78bb",
+      "purpose": "Offline static design composition; never a Unity screenshot or live data source",
+      "selected": true,
+      "role": "preview",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_LAYOUT",
+        "chapter15_5": "Final-size information hierarchy reviewed",
+        "notes": "Fixture data illustrates layout; gameplay/device acceptance NOT_RUN"
+      }
+    },
+    {
+      "file": "previews/result.png",
+      "size": [
+        1600,
+        900
+      ],
+      "bytes": 361588,
+      "alpha": {
+        "present": false
+      },
+      "sha256": "6967041a4c6868831f6437fed4407200ab60485caf2a0d377eb6aabe69c03213",
+      "purpose": "Offline static design composition; never a Unity screenshot or live data source",
+      "selected": true,
+      "role": "preview",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_LAYOUT",
+        "chapter15_5": "Final-size information hierarchy reviewed",
+        "notes": "Fixture data illustrates layout; gameplay/device acceptance NOT_RUN"
+      }
+    },
+    {
+      "file": "previews/reward.png",
+      "size": [
+        1600,
+        900
+      ],
+      "bytes": 701255,
+      "alpha": {
+        "present": false
+      },
+      "sha256": "8ed673c69aa9e63f175dd2611965015ad1f4ad933b76aa375da10e458888fa5d",
+      "purpose": "Offline static design composition; never a Unity screenshot or live data source",
+      "selected": true,
+      "role": "preview",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_LAYOUT",
+        "chapter15_5": "Final-size information hierarchy reviewed",
+        "notes": "Fixture data illustrates layout; gameplay/device acceptance NOT_RUN"
+      }
+    },
+    {
+      "file": "previews/shop.png",
+      "size": [
+        1600,
+        900
+      ],
+      "bytes": 816298,
+      "alpha": {
+        "present": false
+      },
+      "sha256": "32f85bd5d49ec3d3615ab806f6050a2510b4226053ec609e03fed80f3352fe04",
+      "purpose": "Offline static design composition; never a Unity screenshot or live data source",
+      "selected": true,
+      "role": "preview",
+      "production_final": false,
+      "self_review": {
+        "status": "SELF_REVIEWED_LAYOUT",
+        "chapter15_5": "Final-size information hierarchy reviewed",
+        "notes": "Fixture data illustrates layout; gameplay/device acceptance NOT_RUN"
+      }
+    }
+  ]
+}

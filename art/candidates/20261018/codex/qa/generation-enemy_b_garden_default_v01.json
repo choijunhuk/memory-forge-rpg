@@ -1,0 +1,9 @@
+{
+  "id": "enemy_b_garden_default_v01",
+  "source": "/Users/choi/.codex/generated_images/01a14a61-f908-7932-9627-3eb9ae043070/exec-a61b3ed2-a295-4754-98b6-27ea297b9320.png",
+  "file": "assets/enemies/enemy_b_garden_default_v01.png",
+  "output_hint": "Generated images are saved to /Users/choi/.codex/generated_images/01a14a61-f908-7932-9627-3eb9ae043070 as /Users/choi/.codex/generated_images/01a14a61-f908-7932-9627-3eb9ae043070/exec-a61b3ed2-a295-4754-98b6-27ea297b9320.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link.",
+  "route": "image_gen",
+  "backend_model": "not exposed",
+  "prompt": "Use case: stylized-concept. Asset type: single 2048x2048 transparent PNG game enemy sprite, full isolated silhouette facing left toward player. Korean subculture 2D fantasy game, crisp hand-inked contours, cel-shaded forms with soft painterly lighting; midnight navy, antique brass, parchment, restrained teal memory-light; NO photorealism, NO 3D render, NO writing, NO letters, NO watermark, NO UI. Sleeping Garden BOSS: a broad low living assemblage of wilted ink-black vines, blank curled parchment leaves and antique brass greenhouse ribs, arching trellis like a sleeping crown, closed large flower at center with faint teal light, three brass seed pods at base. Nonhuman plant construct, no face, no humanoid torso, no gore. Distinct broad garden silhouette, complete vine outline. Full subject centered inside at least 8 percent transparent safety margins on EVERY edge. No clipped extremities. NO backdrop, NO ground, NO cast shadow, NO extra creatures. Strong contour and large shapes readable at 120px high. Consistent Lethe zone 1 ink, blank paper and brass construction, 15-plus fantasy menace, no horror realism."
+}

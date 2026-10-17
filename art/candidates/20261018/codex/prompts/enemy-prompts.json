@@ -1,0 +1,91 @@
+{
+  "date": "2026-10-18",
+  "route": "Codex built-in image_gen",
+  "backend_model": "not exposed",
+  "jobs": [
+    {
+      "id": "bg_zone1_map_clockcity_v01",
+      "file": "assets/backgrounds/bg_zone1_map_clockcity_v01.png",
+      "transparent": false,
+      "prompt": "Use case: stylized-concept. Asset type: 2560x1440 landscape 16:9 background for a route-map UI, no border. Korean subculture 2D fantasy game, crisp hand-inked contours, cel-shaded forms with soft painterly lighting; midnight navy, antique brass, parchment, restrained teal memory-light; NO photorealism, NO 3D render, NO writing, NO letters, NO watermark, NO UI. Bird's-eye oblique illustration of Lethe harbor city at midnight. The stopped brass clocktower is at far right, winding harbor alleys and tightly clustered dark slate roofs, faint canals and gaslamp pools, tiny paper wisps. Painterly navy ink-wash city atlas with antique brass linework. Overall very low contrast and dark: blank smoky navy band across middle 65 percent where readable route nodes will be placed by code. Interest concentrated top fifth and bottom fifth and far edges. No routes, no nodes, no labels, no compass, no grid, no text. City environment must be present but never compete with UI."
+    },
+    {
+      "id": "enemy_e_moth_default_v01",
+      "file": "assets/enemies/enemy_e_moth_default_v01.png",
+      "transparent": true,
+      "prompt": "Use case: stylized-concept. Asset type: single 1024x1024 transparent PNG 2D enemy sprite, isolated full silhouette, facing left toward player. Korean subculture 2D fantasy game, crisp hand-inked contours, cel-shaded forms with soft painterly lighting; midnight navy, antique brass, parchment, restrained teal memory-light; NO photorealism, NO 3D render, NO writing, NO letters, NO watermark, NO UI. Lethe zone 1 Memory Moth: graceful LARGE PAPER MOTH made of four blank parchment wings with black ink stains and fine brass ribs, small dark mechanical insect body and curled brass antennae, a tiny teal core. Wide moth silhouette distinct from hound, lantern, page, soldier. Full creature centered inside 10 percent transparent safety padding, no cropped wings or antennae, no cast shadow, no ground, no backdrop, no human face, no eye-pattern on wings. Designed to read at 140 px high."
+    },
+    {
+      "id": "enemy_e_cog_default_v01",
+      "file": "assets/enemies/enemy_e_cog_default_v01.png",
+      "transparent": true,
+      "prompt": "Use case: stylized-concept. Asset type: single 1024x1024 transparent PNG game enemy sprite, full isolated silhouette facing left toward player. Korean subculture 2D fantasy game, crisp hand-inked contours, cel-shaded forms with soft painterly lighting; midnight navy, antique brass, parchment, restrained teal memory-light; NO photorealism, NO 3D render, NO writing, NO letters, NO watermark, NO UI. Cog Soldier: a squat armored wind-up automaton made of antique brass cogwheels and folded ink-black page armor; oversized toothed circular shield and short clock-hand spear; hollow faceless helmet, no eyes or human face. Thick readable blocky silhouette. Full subject centered inside at least 8 percent transparent safety margins on EVERY edge. No clipped extremities. NO backdrop, NO ground, NO cast shadow, NO extra creatures. Strong contour and large shapes readable at 120px high. Consistent Lethe zone 1 ink, blank paper and brass construction, 15-plus fantasy menace, no horror realism."
+    },
+    {
+      "id": "enemy_e_smudge_default_v01",
+      "file": "assets/enemies/enemy_e_smudge_default_v01.png",
+      "transparent": true,
+      "prompt": "Use case: stylized-concept. Asset type: single 1024x1024 transparent PNG game enemy sprite, full isolated silhouette facing left toward player. Korean subculture 2D fantasy game, crisp hand-inked contours, cel-shaded forms with soft painterly lighting; midnight navy, antique brass, parchment, restrained teal memory-light; NO photorealism, NO 3D render, NO writing, NO letters, NO watermark, NO UI. Ink Smudge: low amorphous puddle creature of blue-black ink, two curling ink tendrils, blank parchment strips trapped in the ink, one tiny brass gear as its core; asymmetrical simple blob silhouette; no eyes or mouth, not a humanoid. Full subject centered inside at least 8 percent transparent safety margins on EVERY edge. No clipped extremities. NO backdrop, NO ground, NO cast shadow, NO extra creatures. Strong contour and large shapes readable at 120px high. Consistent Lethe zone 1 ink, blank paper and brass construction, 15-plus fantasy menace, no horror realism."
+    },
+    {
+      "id": "enemy_e_hound_default_v01",
+      "file": "assets/enemies/enemy_e_hound_default_v01.png",
+      "transparent": true,
+      "prompt": "Use case: stylized-concept. Asset type: single 1024x1024 transparent PNG game enemy sprite, full isolated silhouette facing left toward player. Korean subculture 2D fantasy game, crisp hand-inked contours, cel-shaded forms with soft painterly lighting; midnight navy, antique brass, parchment, restrained teal memory-light; NO photorealism, NO 3D render, NO writing, NO letters, NO watermark, NO UI. Clock Hound: lean mechanical quadruped dog made of brass clockwork under layered midnight ink armor, arched tail like a clock hand, blank parchment joint wraps, angular featureless snout; four distinctly connected mechanical legs, alert stalking pose. Not a wolf with organic fur. Full subject centered inside at least 8 percent transparent safety margins on EVERY edge. No clipped extremities. NO backdrop, NO ground, NO cast shadow, NO extra creatures. Strong contour and large shapes readable at 120px high. Consistent Lethe zone 1 ink, blank paper and brass construction, 15-plus fantasy menace, no horror realism."
+    },
+    {
+      "id": "enemy_e_lantern_default_v01",
+      "file": "assets/enemies/enemy_e_lantern_default_v01.png",
+      "transparent": true,
+      "prompt": "Use case: stylized-concept. Asset type: single 1024x1024 transparent PNG game enemy sprite, full isolated silhouette facing left toward player. Korean subculture 2D fantasy game, crisp hand-inked contours, cel-shaded forms with soft painterly lighting; midnight navy, antique brass, parchment, restrained teal memory-light; NO photorealism, NO 3D render, NO writing, NO letters, NO watermark, NO UI. Dim Lantern: one floating antique brass gas-lantern with a warm pale teal flame, its glass clouded by black ink; lower wisps of ink and a few blank parchment streamers; curved handle forms the top silhouette. No creature face, no arms. Full subject centered inside at least 8 percent transparent safety margins on EVERY edge. No clipped extremities. NO backdrop, NO ground, NO cast shadow, NO extra creatures. Strong contour and large shapes readable at 120px high. Consistent Lethe zone 1 ink, blank paper and brass construction, 15-plus fantasy menace, no horror realism."
+    },
+    {
+      "id": "enemy_e_page_default_v01",
+      "file": "assets/enemies/enemy_e_page_default_v01.png",
+      "transparent": true,
+      "prompt": "Use case: stylized-concept. Asset type: single 1024x1024 transparent PNG game enemy sprite, full isolated silhouette facing left toward player. Korean subculture 2D fantasy game, crisp hand-inked contours, cel-shaded forms with soft painterly lighting; midnight navy, antique brass, parchment, restrained teal memory-light; NO photorealism, NO 3D render, NO writing, NO letters, NO watermark, NO UI. Wandering Page: one large curled blank parchment sheet with an elegant S-curve in flight, black ink pooling along torn edges, a tiny brass clasp and restrained teal edge light. Large recognisable paper silhouette, no runes, no face, no symbols resembling writing. Full subject centered inside at least 8 percent transparent safety margins on EVERY edge. No clipped extremities. NO backdrop, NO ground, NO cast shadow, NO extra creatures. Strong contour and large shapes readable at 120px high. Consistent Lethe zone 1 ink, blank paper and brass construction, 15-plus fantasy menace, no horror realism."
+    },
+    {
+      "id": "enemy_e_bellwarden_default_v01",
+      "file": "assets/enemies/enemy_e_bellwarden_default_v01.png",
+      "transparent": true,
+      "prompt": "Use case: stylized-concept. Asset type: single 1024x1024 transparent PNG game enemy sprite, full isolated silhouette facing left toward player. Korean subculture 2D fantasy game, crisp hand-inked contours, cel-shaded forms with soft painterly lighting; midnight navy, antique brass, parchment, restrained teal memory-light; NO photorealism, NO 3D render, NO writing, NO letters, NO watermark, NO UI. Bell Warden elite: broad heavy faceless mechanical guardian whose torso is a dark brass bell; two jointed brass arms holding a huge separate bell-shaped hammer, ink-stained page armor, small featureless hood. Stable broad silhouette, complete connected limbs, no organic human face. Full subject centered inside at least 8 percent transparent safety margins on EVERY edge. No clipped extremities. NO backdrop, NO ground, NO cast shadow, NO extra creatures. Strong contour and large shapes readable at 120px high. Consistent Lethe zone 1 ink, blank paper and brass construction, 15-plus fantasy menace, no horror realism."
+    },
+    {
+      "id": "enemy_e_mirrorclerk_default_v01",
+      "file": "assets/enemies/enemy_e_mirrorclerk_default_v01.png",
+      "transparent": true,
+      "prompt": "Use case: stylized-concept. Asset type: single 1024x1024 transparent PNG game enemy sprite, full isolated silhouette facing left toward player. Korean subculture 2D fantasy game, crisp hand-inked contours, cel-shaded forms with soft painterly lighting; midnight navy, antique brass, parchment, restrained teal memory-light; NO photorealism, NO 3D render, NO writing, NO letters, NO watermark, NO UI. Mirror Clerk elite: tall narrow faceless construct of folded ink-black parchment robes, oval brass-framed mirror held in one mechanical hand and brass filing spike in the other; mirror reflects only abstract teal light, never a face. Distinct clerk silhouette, no writing. Full subject centered inside at least 8 percent transparent safety margins on EVERY edge. No clipped extremities. NO backdrop, NO ground, NO cast shadow, NO extra creatures. Strong contour and large shapes readable at 120px high. Consistent Lethe zone 1 ink, blank paper and brass construction, 15-plus fantasy menace, no horror realism."
+    },
+    {
+      "id": "enemy_e_gardener_default_v01",
+      "file": "assets/enemies/enemy_e_gardener_default_v01.png",
+      "transparent": true,
+      "prompt": "Use case: stylized-concept. Asset type: single 1024x1024 transparent PNG game enemy sprite, full isolated silhouette facing left toward player. Korean subculture 2D fantasy game, crisp hand-inked contours, cel-shaded forms with soft painterly lighting; midnight navy, antique brass, parchment, restrained teal memory-light; NO photorealism, NO 3D render, NO writing, NO letters, NO watermark, NO UI. Withered Gardener elite: hunched faceless clockwork horticultural construct, ink-black dead vines twisting around brass joints, tattered blank page cape, long pruning shears and small wilted flower in hand. Mechanical body, no human face, no gore. Distinct lean bent silhouette. Full subject centered inside at least 8 percent transparent safety margins on EVERY edge. No clipped extremities. NO backdrop, NO ground, NO cast shadow, NO extra creatures. Strong contour and large shapes readable at 120px high. Consistent Lethe zone 1 ink, blank paper and brass construction, 15-plus fantasy menace, no horror realism."
+    },
+    {
+      "id": "enemy_e_seed_default_v01",
+      "file": "assets/enemies/enemy_e_seed_default_v01.png",
+      "transparent": true,
+      "prompt": "Use case: stylized-concept. Asset type: single 1024x1024 transparent PNG game enemy sprite, full isolated silhouette facing left toward player. Korean subculture 2D fantasy game, crisp hand-inked contours, cel-shaded forms with soft painterly lighting; midnight navy, antique brass, parchment, restrained teal memory-light; NO photorealism, NO 3D render, NO writing, NO letters, NO watermark, NO UI. Seed minion: single small split brass seed pod cupping one dark ink droplet, two curled parchment leaf shoots, tiny teal center; compact broad simple silhouette, no face or limbs. Full subject centered inside at least 8 percent transparent safety margins on EVERY edge. No clipped extremities. NO backdrop, NO ground, NO cast shadow, NO extra creatures. Strong contour and large shapes readable at 120px high. Consistent Lethe zone 1 ink, blank paper and brass construction, 15-plus fantasy menace, no horror realism."
+    },
+    {
+      "id": "enemy_b_bell_default_v01",
+      "file": "assets/enemies/enemy_b_bell_default_v01.png",
+      "transparent": true,
+      "prompt": "Use case: stylized-concept. Asset type: single 2048x2048 transparent PNG game enemy sprite, full isolated silhouette facing left toward player. Korean subculture 2D fantasy game, crisp hand-inked contours, cel-shaded forms with soft painterly lighting; midnight navy, antique brass, parchment, restrained teal memory-light; NO photorealism, NO 3D render, NO writing, NO letters, NO watermark, NO UI. Bell-Swallowing Archivist BOSS: enormous hulking faceless archive construct, a colossal cracked antique brass bell enclosed in its ribcage, layers of blank parchment books and ink-black robes forming broad shoulders, heavy clockwork hands at its sides. Empty dark hood, no face, small teal cracks in bell. The bell in chest is the focal motif; hulking silhouette distinct from thin mirror boss. Complete body. Full subject centered inside at least 8 percent transparent safety margins on EVERY edge. No clipped extremities. NO backdrop, NO ground, NO cast shadow, NO extra creatures. Strong contour and large shapes readable at 120px high. Consistent Lethe zone 1 ink, blank paper and brass construction, 15-plus fantasy menace, no horror realism."
+    },
+    {
+      "id": "enemy_b_notary_default_v01",
+      "file": "assets/enemies/enemy_b_notary_default_v01.png",
+      "transparent": true,
+      "prompt": "Use case: stylized-concept. Asset type: single 2048x2048 transparent PNG game enemy sprite, full isolated silhouette facing left toward player. Korean subculture 2D fantasy game, crisp hand-inked contours, cel-shaded forms with soft painterly lighting; midnight navy, antique brass, parchment, restrained teal memory-light; NO photorealism, NO 3D render, NO writing, NO letters, NO watermark, NO UI. Mirror Notary BOSS: imposing tall faceless judicial construct, monumental oval brass mirror forms its head and upper body, asymmetric folded ink-black parchment robes, one brass mechanical hand holds an oversized seal stamp and other a balance arm, floating blank paper seals; mirror is dark glass with a thin teal reflected rim, absolutely no human face or reflected person, no writing. Tall elegant silhouette. Full subject centered inside at least 8 percent transparent safety margins on EVERY edge. No clipped extremities. NO backdrop, NO ground, NO cast shadow, NO extra creatures. Strong contour and large shapes readable at 120px high. Consistent Lethe zone 1 ink, blank paper and brass construction, 15-plus fantasy menace, no horror realism."
+    },
+    {
+      "id": "enemy_b_garden_default_v01",
+      "file": "assets/enemies/enemy_b_garden_default_v01.png",
+      "transparent": true,
+      "prompt": "Use case: stylized-concept. Asset type: single 2048x2048 transparent PNG game enemy sprite, full isolated silhouette facing left toward player. Korean subculture 2D fantasy game, crisp hand-inked contours, cel-shaded forms with soft painterly lighting; midnight navy, antique brass, parchment, restrained teal memory-light; NO photorealism, NO 3D render, NO writing, NO letters, NO watermark, NO UI. Sleeping Garden BOSS: a broad low living assemblage of wilted ink-black vines, blank curled parchment leaves and antique brass greenhouse ribs, arching trellis like a sleeping crown, closed large flower at center with faint teal light, three brass seed pods at base. Nonhuman plant construct, no face, no humanoid torso, no gore. Distinct broad garden silhouette, complete vine outline. Full subject centered inside at least 8 percent transparent safety margins on EVERY edge. No clipped extremities. NO backdrop, NO ground, NO cast shadow, NO extra creatures. Strong contour and large shapes readable at 120px high. Consistent Lethe zone 1 ink, blank paper and brass construction, 15-plus fantasy menace, no horror realism."
+    }
+  ]
+}

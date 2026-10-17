@@ -1,0 +1,96 @@
+# Memory Forge — Zone 1 / Midnight, held in brass
+
+2026-10-18 · Codex visual design · **first-pass candidate for Claude to implement**
+
+This folder is the entire handoff. Nothing outside it was edited; no Claude, subagent, paid API, ImagineArt credit or SSH job was called. New paintings/sprites use the approved built-in Codex image tool. Its backend model is not exposed. Existing Sera/Harin/Nia art is copied without alteration into `references/` with source hashes.
+
+## Read this first
+
+`layout.json` is the numeric source of truth. Rectangles are **top-left x, y, width, height on 1600×900**. Bind existing named elements; `Visual:*` names describe new decorative children/labels, not new gameplay commands. Existing dynamic values, localized text and enabled/disabled conditions remain authoritative. Do not replace live data with the sample text in previews.
+
+Import the approved files listed in `manifest.json`; ignore unselected originals and `qa/` as runtime art. `previews/*.png` are composed design illustrations, **not Unity captures**. `preview.html` is an offline review contact book, not an executable game. All real current and next intents, gauges, selection reasons, costs, action results and memory rules must survive the visual change.
+
+## Art direction and scope
+
+The player should feel that memory has become light inside an abandoned clockwork city. Backgrounds are quiet navy, silhouettes are ink/paper/brass, time reservations are teal, and actionable controls are brass. Use the §14.2 token values exactly. Strong element colours belong only to attribute icons, card edge accents and VFX; do not recolour the entire screen by element.
+
+New set: three environments (route atlas, plaza battle, workshop); all thirteen current zone 1 enemy definitions including the seed and three bosses. Ordinary foes are small legible silhouettes; the bell archivist is broad, the notary upright and mirror-shaped, the garden low and spreading. Human faces are absent. Existing party identity, age, equipment and costume stay fixed.
+
+The workshop is deliberately reused for rewards, rest, forge, shop, events, archive and saving. The **screen title and existing event narrative identify the actual location**; the painting is a thematic backdrop, not a claim that every event literally occurs in the workshop. No new NPC identity or game mechanic is introduced. First-pass economy goes to the scenes seen every run and complete enemy coverage. A second battle painting, true parallax layers, animation/hit frames, per-card original illustrations and layered PSDs remain later work. Do not call these flat PNGs final rigged production assets.
+
+## Canvas, layering and typography
+
+Use uniform aspect-fit inside `Screen.safeArea`, centred. With no insets, 2340×1080 gets a 1920×1080 composition at x=210 and scale=1.2; fill both 210px side bands with #0d1322. Never stretch a 16:9 scene to 19.5:9. Recompute from actual safeArea rather than assuming the example covers notches.
+
+Draw order: frame0 → full-bleed background1 → navy scrim2 → static art5 → panels10 → sprites12 → borders15 → labels20 → controls30 → modal scrim90/panel100. Images, corner marks and highlights have `raycastTarget=false`. Preserve the existing modal input shield. A button root has one hit target; child images must not create another.
+
+Backgrounds use aspect-fill, centred, opaque; scrim opacity is specified per screen. Place field text on opaque #141c31, never directly on detailed scenery. Do not dim parent CanvasGroups to disable a panel: dim its illustration only. Titles32, body22, secondary20, hand title23, numbers28, AP38 canvas units at100%. Existing IBM Plex Sans KR can render the whole first pass; Hahmlet/Orbit are optional only if already licensed and installed. Do not download fonts for this handoff. Keep Korean and 140%-length English content; wrap or scroll, never silently ellipsize names/intents/reasons.
+
+Canvas units are **not dp/sp**. The full-density100% compositions are reviewed as images only. Phone48dp input, body14sp/card12sp, OS font scale, notches and finger occlusion require Unity device verification. If the measured physical size or requested115/130% exceeds the dense layout, use the explicit accessible scrolling layout below; do not shrink text to make it fit.
+
+## Battle
+
+The top header and party status remain fixed. The party has one **shared HP pool**; portraits must not imply three individual HP values. Retain turn, defense, counter, debt, echo, draw/discard/exhaust, coins and any actual extra state such as next-AP borrowing. Each party row uses the approved SD at80×88, name, attribute, numeric gauge, gauge bar and its original `Ult:<characterId>` control. A ready ultimate uses brass fill + the text 필살기; a nonready one reads 충전 중 and retains the gauge number.
+
+`Enemy:<uid>` uses the definition id from the enemy state for its sprite, never a guessed uid filename. Root width is `(1178−16×(n−1))/n` in the [390,182,1178,316] band, in existing enemy order. **One–three enemies:** sprite occupies the left40% (max450px), all data in an opaque right panel. **Four–five:**64px sprite above a252px data panel. Names, HP/block, HP bar, crack current/max, weakness shape+text, statuses, current intent and next intent all get distinct fields (see JSON). Empty space in a sparse encounter belongs to the painted stage, not stretched giant typography.
+
+The 5-enemy panel has two44px intent fields. Wrap each over two lines. For a longer live intent, grow its panel and use the accessible row layout; never discard the label, target, multiplier, amount, self-status prerequisite or next attack. Weakness words remain even where icons are supplied. For bosses retain10 crack pips, compress spacing only; show the numeric fraction as well. Status overflow has an independent horizontal scroller so it cannot cover the intents. Dead enemies keep their slot, name and HP0, receive a 처치 label, sprite alpha.25, muted border and no input. Do not rearrange surviving uid targets on death. No death illustration or damage animation is claimed.
+
+Selected enemy:3px teal edge, corner brackets, 선택 label; targetable-but-unselected: corner brackets only while a target is required. Current intent is brass, next intent is white with the explicit 다음 prefix. Threat colour alone never encodes meaning. Do not use a red background under every enemy.
+
+Time reservations: every existing slot appears in existing execution order. Reserved/empty slots use dashed borders; sealed slots add diagonal hatching and 봉인; unavailable slots retain '-'. Show next/after labels inside each cell, not only once above the row. Extra slots scroll horizontally rather than disappearing. Keep live capacity/usage. The action strip below is for committed results; the separate forecast line belongs to the currently selected card. Pace/reduced-motion/skip controls remain available. Full result history stays in the existing summary sheet/log.
+
+Hand:138px cards,194px pitch, no fan overlap, horizontal scrolling up to10 cards and beyond if the engine permits. Approved cutins are decorative48px header bands only; they do not claim to depict a specific card effect. Use owner id; a common card has a plain panel. Cost has an opaque dark badge; title and available mode summary sit below art. Selected card lifts4px, gets a teal3px border and check. An unusable card retains legible cost/title/mode and explains its exact rejection in the action area when selected.
+
+Keep the distinct flow: **select card → select now/next/after → choose target/picks → ConfirmCard**. Art clicks never consume a card. Existing immediate reward/map/event behaviors are not converted to this flow. Mode now selection uses brass edge; next/after use dashed teal. Disabled mode buttons display the real reason. `ConfirmCard` reads the existing actual caption and uses brass only when enabled. Keep prepared-intent cancel and read-only-info at their existing swapped semantic positions: repeated taps must never send or cancel a new command. EndTurn stays visually separate at the far right, with actual turn text. No new confirm dialog or altered turn semantics.
+
+### Accessible battle layout (required implementation fallback)
+
+At115/130% text or when physical14sp/48dp requires enlargement: retain the header/status; replace the enemy gallery with full-width **rows** in a vertical body scroller. Rects and columns below are exact; text may increase row height by measurement. Static dense-mode previews do not prove this behavior works.
+
+- Header [32,16,1536,64], PartyStatus [32,88,1536,104]. Full body viewport [32,200,1536,428]. Content width1536. Party summary first: three rows at104px minimum (portrait, name, gauge, Ult at right), then all enemy rows (minimum144px). Each enemy row: art [8,8,96,128]; name/HP/crack/weakness [120,8,392,128]; status [528,8,192,128]; current intent [736,8,376,128]; next intent [1128,8,392,128]. Rows grow to `max(144,max(column preferred height)+16)`. Body scroll preserves every field and does not pretend five enlarged enemies fit simultaneously.
+- Timeline [32,636,1308,80], horizontal scrolling; action-result summary button [1360,636,208,80] opens the existing full action sheet, labelled with latest result and current pace. The full sheet retains normal/2×/reduced/skip controls. This is a visual relocation of existing controls, no removed result information.
+- CardActions [32,724,1536,152]: preview [48,730,1504,40]; selected name+target [48,778,312,90]; CardInfo [376,778,140,90]; now [532,778,240,90]; next [788,778,240,90]; after [1044,778,240,90]; ConfirmCard [1300,778,252,90]. Mode labels wrap. If any control needs >90px from physical48dp, this row scrolls vertically within CardActions, preserving all buttons.
+- `Visual:OpenHand` [1360,636,208,80] would conflict with the action button, so instead put it **in header [700,20,208,56]**, replacing decorative context width only; caption 손패 count. It opens an opaque drawer [32,200,1536,428] above CardActions. Drawer cards minimum180×320 at194px pitch, clamped horizontal scroll; close [1448,208,104,56]. EndTurn remains in the drawer at [1328,296,224,312], outside a hand viewport [48,280,1260,332]. After card selection close drawer and keep selected card caption in CardActions. Drawer overlays the body temporarily; it never confirms or ends a turn on open/close. A scrollable drawer is preferable to undersized touch targets.
+- For header buttons that cannot reach physical48dp, use a single [1322,20,246,56] 메뉴 button opening the existing deck/log/abandon actions in a vertical modal, each row height=max(80,converted48dp). All actions remain reachable; no abandon action on menu-open. All text uses max(base×fontScale,converted minimum sp). Keep logical safe areas. Device testing remains necessary.
+
+## Map
+
+Use the city atlas at full canvas with .45 navy scrim. Map panel is [32,182,1536,630] at .68 dark opacity; floor labels sit at196. Keep every floor, node type, actual connector and boss. Columns=floors+boss; width=1536/count; node centres `[32+(floor+.5)*columnWidth,258+(row+.5)*520/rowCount]`. Node size152×112 (icon40, type line, reachability line). If columns would become <176px, horizontally scroll the map rather than shrinking nodes. Long-run floor numbering and boss remain visible in content; don't invent floor locations from this preview.
+
+Node icons are deterministic line art (2.5px, rounded ends,40px viewbox), white or token tint: battle=crossed clock hands; elite=three-point crown above hands; boss=bell; rest=cup; forge=gear; shop=coin; event=question mark; archive=open book. Glyph plus existing type word prevents colour-only meaning. Generate these with code-native vector/strokes; no paid bitmap route needed. Keep exact icon strokes in `assets/ui/ico_node_<type>.svg`.
+
+Reachable: brass3px border and 갈 수 있음, click unchanged/immediate. Current: teal3px + 현재 위치. Visited: check/brass1px using actual history only. Future: line1px/muted type, no fabricated lock state. Completed route links brass3, current-to-reachable teal3, other actual links line2. Keep the one-time irreversible-entry notice and full legend. Portrait SD can sit next to current node only at32px without covering any button; optional first pass hides it to keep route lines clear.
+
+## Rewards
+
+Use workshop background and opaque readable reward sections in the existing vertical scroll. Coins64px header. Then all live evolution offers, card-choice section, relics and part in current order; absent sections consume no space. Never show placeholder items. The three reward cards keep their id, cost and effect-derived text; owner cutin is a header accent only. Each card is360×260: art[2,2,356,74], title[16,84,328,40], mode/cost[16,128,328,32], full effect[16,166,328,84]; Info button is[card.x,card.y+272,360,52]. Long effect text grows the card/section together before scrolling. Their separate info buttons stay separate. `RewardCard:<id>` still takes immediately; the screen must retain the explicit instruction. `SkipCard` still shows its actual coin alternative. Evolution choice/info, relic choices, TakePart and all descriptions stay reachable even in a fully populated long reward. Proceed is pinned [1288,826,280,52], independent of body scroll. It does not auto-claim remaining offers.
+
+## Rest, forge, shop, event, archive
+
+Same layout, different existing title/intro/body bindings: left workshop art [32,182,410,630], right opaque service panel [462,182,1106,630]. Text begins [486,198]; intro [486,254,1058,108]; body scroll [486,378,1058,338]; footer reason [486,738,780,60]; Proceed [1288,740,256,56]. Crop workshop left half into left art; no special portrait or new NPC. Body content reflows to full-width rows,96px minimum plus12px gap, measured text can grow rows.
+
+RestHeal/RestUpgrade retain effect and remaining uses; ForgeVariation/ForgeRemove retain uses; ForgePart rows show name/slot/full actual effect. Shop rows132px: full item title/detail, separate Info and Buy; group headers for cards/parts/relics, sold text and coin requirement remain; ShopRemove is the last body row. EventChoice rows show label, required coins and complete text, preserving immediate effects and picker behavior. After choice, show full chosen outcome and Proceed. ArchiveContinue/ArchiveReturn show unchanged recovery and defeat/save implications. `Proceed` always retains the route's actual caption and no new behavior. If there are no valid targets or insufficient coins/uses, show the existing cause inside/near disabled control; do not hide it.
+
+## Memory save and result
+
+This screen is a sober ledger, not a victory illustration that implies persistence. Workshop scrim.50. SaveHeader [32,88,1536,136] keeps victory/defeat rule, current selection count, assignment control when applicable, and the session-only warning. Three memory columns at [32+i×518,236,500,572] have a small approved portrait, name, **before and result total capacity**, existing deck, selectable changes, result preview and removed-card warning. Each list scrolls within its own region; do not silently truncate comma lists. Change rows72px +8px gap, selection shows check+label+teal edge. Capacity above limit adds danger hatching **only to the capacity meter** plus numeric used/max and 용량 초과. The real preview error controls CommitMemory; visual design never recomputes validity. On defeat, preserve party-wide one-change rule and all before-deck protection wording. No selection stays a first-class valid existing-deck-preservation action.
+
+Error/reason [32,816,850,62], CommitMemory [898,816,390,62], CloseWithoutSave [1304,816,264,62]. Maintain complete session-local practice warning: **closing the app loses this practice memory**. Do not decorate this as cloud-saved or permanent. Preserve actual before/after diff, assignment and conflict/error behavior.
+
+Result: full statistics, relic names, real save outcome/used capacity and per-member saved or baseline deck lists. All long lists scroll. Keep session warning above length choices and Depart; no 'saved' badge for abandoned, failed or closed-without-save paths. Result art never changes outcome text. There is no invented progression or reward balance in this pass.
+
+## Import, states and implementation checklist
+
+- Import selected enemies as Sprite2D/UI, Full Rect mesh, pivot(.5,.5), alpha transparency enabled, sRGB on, mipmaps off, bilinear, clamp, max size2048. Use actual alpha; never remove dark pixels as a colour key. Backgrounds use Texture2D/Sprite Full Rect, clamp, bilinear, max size4096. See manifest for **native** dimensions. Any canonical resized file is explicitly identified as a derivative; enlarging a file is not new detail.
+- Never crop a silhouette to fill its rect. `preserveAspect=true` and contain. Card cutin bands may crop because the full approved original remains in references; avoid cutting across a face in an owner portrait.
+- Primary brass/selected teal/disabled grey have text+shape meaning. Keyboard/controller focus white3px inner edge. Pressed darkens to line token, no button travel. No hover-only instruction. Dead enemy stays named. Missing asset falls back to named opaque panel, with all rules information intact; log a missing-asset warning, do not substitute a different foe.
+- Reduced motion: static image, border and label changes only; no parallax, flash, shake, forced cutin or moving route. Existing result speed controls remain. Decorative effects never cover enemy intents or ConfirmCard.
+- Deck/log/detail/picker/assignment/abandon/action-summary modals keep existing handlers, complete content, scroll and cancel behavior. Opaque panel [160,80,1280,740], navy scrim.88, z100. Preserve no-double-submit placement safeguards; visual reparenting is not authority to rewrite request logic.
+- Integrate **only after** verifying2 and5 enemies; all3 bosses and summon coexistence; long intent/status;10 hand cards;5 reservations plus sealed; all reward sections; empty/sold/insufficient services; defeat1-change and capacity-overflow saving; no-selection save; result/no-save paths; English140%,115/130% text and actual landscape phone safeArea/48dp. Run developer-root regression checks after visual integration. This package does not claim those Unity checks ran.
+
+## Self-review / production limits
+
+Per-file review and hashes live in `manifest.json`; the full §15.5 matrix is in `qa/self-review.json`. The clock-hand correction was requested because v01 contradicted stopped-midnight lore. Final selection depends on inspection of v02, not the prompt alone. Enemy silhouette/alpha/safety margin checks are at native and composed size. Human hand anatomy is not applicable to nonhuman sprites; mechanical limb, tool and robe connections are reviewed instead. Existing approved party art is reused unchanged. No new age policy or costume variation.
+
+This is one selected first-pass candidate per new subject, with targeted background fixes, rather than the4–8 variants and human retouched layered originals described by §15.4's final production process. `production_final=false` is deliberate. No rigs, PSDs, VFX/audio, gameplay code, Unity import, Play/device acceptance, commit, push or deployment is included.
