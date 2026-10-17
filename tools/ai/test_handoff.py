@@ -400,9 +400,9 @@ class ClaudeMcpProfileTests(unittest.TestCase):
   clean=report(*start,bash('l',acquire),('result','l',''),save,bash('f',release),bash('c',codex),
    use('r','mcp__unityMCP__read_console',{'action':'get'}),bash('e','env | cut -d= -f1 | sort'),bash('p',"printf '%s' 'claude --bare'"),
    bash('h',"cat > f <<'EOF' && echo done\nreviews via codex exec without flags; Claude's note $(printenv OPENAI_API_KEY)\nEOF"),
-   bash('g','git -C . status'),use('o','Read',{'file_path':'/Users/u/.codex/config.toml'}),bash('q',"printf '%s' '$(printenv OPENAI_API_KEY)'"),
+   bash('g','git -C . status'),bash('i',"command codex exec -s workspace-write -m gpt-6.1-sol -c model_reasoning_effort='\"high\"' -C art/candidates/20261018/codex 'draw'"),use('o','Read',{'file_path':'/Users/u/.codex/config.toml'}),bash('q',"printf '%s' '$(printenv OPENAI_API_KEY)'"),
    use('k','Grep',{'pattern':'.codex/auth.json','path':'tools/ai'}))
-  self.assertTrue(clean['pass'],clean);self.assertEqual(clean['codex_calls'],1);self.assertTrue(clean['start_check_current'])
+  self.assertTrue(clean['pass'],clean);self.assertEqual(clean['codex_calls'],2);self.assertTrue(clean['start_check_current'])
   push=' '.join(['git','-C','.','push','origin','main','--'+'force'])  # assembled so shell hooks scanning commands do not trip on test data
   cases=[('unity_write_without_lock',[use('x','mcp__unityMCP__read_console',{'action':'clear'})]),
    ('unity_write_without_lock',[use('x','mcp__unityMCP__execute_code',{'action':'read'})]),
@@ -415,6 +415,8 @@ class ClaudeMcpProfileTests(unittest.TestCase):
    ('codex_call',[bash('x',"command codex exec 'review -s read-only -m gpt-6.1-sol -c model_reasoning_effort=high'")]),
    ('codex_call',[bash('x','command codex exec -s read-only -m gpt-6.1-sol p')]),
    ('codex_call',[bash('x',"command codex exec 'see --help'")]),('codex_call',[bash('x','command codex exec -- --help')]),
+   ('codex_call',[bash('x',"command codex exec -s workspace-write -m gpt-6.1-sol -c model_reasoning_effort=high -C tools 'x'")]),
+   ('codex_call',[bash('x',"command codex exec -s workspace-write -m gpt-6.1-sol -c model_reasoning_effort=high -C art/../tools 'x'")]),
    ('force_push_main',[bash('x',push)]),('env_value_print',[bash('x','printenv OPENAI_API_KEY')]),
    ('env_value_print',[bash('x',"bash -c 'printenv OPENAI_API_KEY'")]),('env_value_print',[bash('x','printf "%s" "$(printenv OPENAI_API_KEY)"')]),
    ('env_value_print',[bash('x','cat > f <<EOF\n$(printenv OPENAI_API_KEY)\nEOF')]),

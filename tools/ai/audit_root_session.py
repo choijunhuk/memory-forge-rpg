@@ -270,7 +270,11 @@ def scan(cmd, codex_model, owner, depth=0):
                 found('codex_call'); continue
             seen['codex'] += 1; seen['protected'] = True
             configs = values.get('config', [])
-            if not (via_command and not env and values.get('sandbox') == ['read-only'] and values.get('model') == [codex_model]
+            # Reviews are read-only; image work may write only inside a folder under art/ given with -C (AI_WORKFLOW §17).
+            cd = values.get('cd', [])
+            art_write = values.get('sandbox') == ['workspace-write'] and len(cd) == 1 and bool(re.match(r'(.*/)?art/[^.][^\s]*$', cd[0])) \
+                and '..' not in cd[0].split('/')
+            if not (via_command and not env and (values.get('sandbox') == ['read-only'] or art_write) and values.get('model') == [codex_model]
                     and configs and all(c.startswith('model_reasoning_effort=') for c in configs) and 'profile' not in values
                     and not flags & {'--dangerously-bypass-approvals-and-sandbox', '--full-auto'}):
                 found('codex_call')
