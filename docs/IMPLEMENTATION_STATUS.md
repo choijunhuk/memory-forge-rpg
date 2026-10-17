@@ -71,7 +71,7 @@ P1/P2 완료로 개발을 끝내지 않는다. 이 표와 아래 장별 요구�
 | **§3.1 핵심 루프** | PARTIAL | [Run][js]·[UI][ui]·[저장 v2 시험][memory-tests] | 탐사→저장→재탐사는 연결, 계정/고난도는 미연결 |
 | **§3.2 시간 단위별 루프** | PARTIAL(데이터) | [성장 데이터][progression]·[경제 시험][economy-tests] | 일일/주간/시즌 실제 진행·지급·리셋 서버 필요 |
 | **§3.3 콘텐츠 지도** | PARTIAL(데이터) | [성장 데이터][progression]·[Run][js] | 성장 던전·균열·인연·이벤트 진행기를 각각 구현 |
-| **§3.4 첫 7일 (온보딩·리텐션 목표)** | NOT_IMPLEMENTED | [온보딩 원문](source_v0.8.1/03_chapter.md)·[성장 데이터][progression] | 첫 7일 계정 시뮬레이션과 실제 온보딩·잔존 측정 |
+| **§3.4 첫 7일 (온보딩·리텐션 목표)** | PARTIAL(1일 안내·Unity연습) | [온보딩 원문](source_v0.8.1/03_chapter.md)·[성장 데이터][progression]·[첫 실행 안내](../reports/onboarding_20261017/README.md) | 1일의 튜토리얼 전투3회+보스·첫 기억 저장 안내만 로컬 연습 탐사의 실제 전투에 연결(전투·수치는 그대로). 고정 프롤로그 조우, 니아·하린·리엔·결정·상시권 지급, 초심자 모집, 2~7일 해금, 계정 시뮬레이션, 실제 잔존·완료율 측정은 미구현 |
 | **§3.5 현행과 목표 루프의 차이** | PARTIAL | [P0 증거][p0]·[목표 정책][policy-data] | 저장 v2 연결만 완료; 선택형 일일·초기1팀 미구현 |
 
 ## 장 04 — 4. 세계관과 이야기
@@ -258,7 +258,7 @@ P1/P2 완료로 개발을 끝내지 않는다. 이 표와 아래 장별 요구�
 | **§14.2 공통 규칙** | PARTIAL(HTML/Unity연습) | [UI][ui]·[P0 브라우저][p0-browser]·[147Play/미전송입력·표시](../reports/card_flow_20261016/prepared_root_acceptance.md) | 실기기48dp·안전영역·라이선스·Unity 접근성 검증 |
 | **§14.3 전투 화면 (가로 16:9)** | PARTIAL(HTML/Unity전투·원정연습) | [원문예약예측v2](../reports/battle_preview_20261016/reserved_root_acceptance.md)·[턴잠금/40사건기록112Play](../reports/card_flow_20261016/root_acceptance.md)·[오류복구119Play](../reports/card_flow_20261016/s2_root_acceptance.md) | 실제카드/대상/예약/피해·균열예측·턴요약/skip/continue연결. 선택창검증·미전송준비/배속·최종아트/연출·최악화면/기기는후속 |
 | **§14.4 화면별 명세** | PARTIAL(HTML) | [UI][ui]·[스모크][smoke] | 성장/인연/도전/우편/상점/계정삭제 등 미구현 화면과 서버 |
-| **§14.5 온보딩 순서** | NOT_IMPLEMENTED | [원문14장](source_v0.8.1/14_chapter.md) | 단계별 실제 튜토리얼·강제 첫 저장 안내·지급/해금 |
+| **§14.5 온보딩 순서** | PARTIAL(Unity연습 첫 실행 안내) | [원문14장](source_v0.8.1/14_chapter.md)·[첫 실행 안내](../reports/onboarding_20261017/README.md) | ①~④를 연습 탐사의 1·2·3번째 전투와 보스에 순서대로 붙인 "설명 1문장+직접 해 보기"(3줄 이하, 건너뛰기 가능), ⑤ 첫 기억 저장 안내(건너뛸 수 없음), ⑥ 공방 변주 소개를 PlayerPrefs 첫 실행 기록으로 구현. 고정 튜토리얼 조우·"실패해도 승리 가능한 수치", 캐릭터·모집권 지급, 초심자 모집·계약·주간 보스 소개, 계정/서버 기록, 사람 첫 플레이 시험은 미구현 |
 | **§14.6 접근성·현지화** | PARTIAL | [UI][ui]·[브라우저 시험][memory-ui] | 전체 키 기반 번역·영/일 길이·Unity 색약/아이콘 수용 |
 | **§14.7 정보 밀도와 안전한 입력** | PARTIAL(HTML/Unity연습) | [상세/알림입력보존](../reports/expedition_client_20261016/root_acceptance.md)·[오류후잠금](../reports/card_flow_20261016/s2_root_acceptance.md)·[선택창가드](../reports/card_flow_20261016/s3_root_acceptance.md)·[147Play/미전송1회](../reports/card_flow_20261016/prepared_root_acceptance.md) | 선택/상세무소비·턴배리어·실패Run차단·낡은입력취소/복귀검증. 최악밀도/48dp/130%/기기·서버는후속 |
 | **§14.8 작은 화면의 기존 관찰과 추가 인수 시험** | PARTIAL(브라우저) | [화면 증거][late-screens]·[브라우저 시험][memory-ui] | 640×360·노치·글자130%·터치·헤더 겹침 실기기 별도 |
