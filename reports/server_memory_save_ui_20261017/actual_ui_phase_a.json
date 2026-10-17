@@ -1,0 +1,25 @@
+{
+  "status": "PASS",
+  "checks": [
+    "real Core-earned defeat opens empty server-preview save",
+    "unpublished change cannot become an intent",
+    "actual save raycast reaches Change",
+    "changing selection immediately revokes old preview permission",
+    "one actual defeat change has server approval",
+    "actual save raycast reaches Change",
+    "two cross-party changes are blocked by Core defeat verdict",
+    "invalid save and every pure preview preserve the entire server envelope",
+    "actual save raycast reaches ClearChanges",
+    "actual save raycast reaches Change",
+    "exact selected Nia change is previewed",
+    "all selection actions remain uncommitted",
+    "actual save raycast reaches CommitSave",
+    "rapid duplicate save refused while first send is busy",
+    "lost real commit response stays unconfirmed and locks new actions"
+  ],
+  "start_version": 235,
+  "memory_version_before": 0,
+  "selected_change_id": "delta:nia:run%3Apr-1f2248f645912718f8b35cdfb5a9d987%3A7:add",
+  "pending_body_sha256_base64": "4rXMMIzg8mSK13iNY5Kqcyi96eE+hvMV1m/TMbIAhc4=",
+  "scope": "actual Editor uGUI raycast/Pointer events and genuine Development Core HTTP; physical mouse/device NOT_RUN"
+}

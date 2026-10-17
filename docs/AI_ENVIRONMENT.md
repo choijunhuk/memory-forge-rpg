@@ -149,3 +149,10 @@ UnityMCP의 실제 MemoryForgeUnity@4034a4e2fe236d6e /6000.0.46f1 Editor에 새C
 수정 후 **unity-write 실제 연결과 Play→Pause→Resume→Stop**, 각 단계 C# 상태 재조회, 원래 씬/정지/dirty=false 복구·Console0오류를 확인했다. init의 미허용 노출0개·apiKeySource none이며 Codex가 별도 조회로 재검증했다. 무료 Peekaboo4.9.5는 실제 권한3종/Unity 창 캡처에 성공했다. fresh snapshot을 쓴 native 좌표 클릭2회는 runtime-host canonical-result 오류로 미확인이며 키 입력은 실행하지 않았다. 해당 포인터 경로만 보류하고 실제 Unity 조작은 전용 MCP로 수행한다. 설정을 연결 성공으로 세거나 native 캡처를 마우스 조작 성공으로 세지 않는다.
 
 저장 기본값은 GPT-6.1 Sol High / Opus5.5 High, 실제 Claude Max·xhigh·High 요청·모델 반환·종료는 개별 기록을 따른다. 첫 Max 시간 종료·셸 감사 FAILED를 성공으로 바꾸지 않았다. 구독 계정 일치·credits/자동 충전 OFF 증거, 이미지 Codex 전담·비공개 원격을 유지했다. ImagineArt는 도구/무료 차감 경로가 확인되지 않아 미사용이며 별도 유료 fallback은 없다.
+
+
+## 2026-10-17 서버 기억 저장 UI — 실제 CLI·검증
+
+- 공식 Claude Code 2.1.285 / `claude-opus-5-5`만 사용했다. 별도 `codex/claude-save-transport-20261017`과 `codex/claude-save-view-20261017`의 첫 구현은 xhigh, 누락 응답/정확한 조회 문구/스크롤 보완은 High다. 실제 작성 세션은 각각 `5b4cc1ba-9519-47ef-88f7-930ce53c643b`, `2218f250-bd9b-4666-8537-1fe216702d61`이며 실행기 결과의 모델 집계도 Opus만이다. [작업·검토·실행 근거](../reports/server_memory_save_ui_20261017/README.md)를 따른다.
+- 추론 전 기존 구독 인증/동일 계정/유효한 Usage credits·자동 충전 OFF 계정 UI 증거를 재사용·검사했다. 추가 API/크레딧/모델·재귀 호출은 없고 Codex의 포함 사용량도 실제 조회에서27%가 남았다. 이 사용량은 그 조회 시점이며 고정 배분/과금 서버 차단 보장이 아니다.
+- 이 단위의 Claude는 겹치지 않는 소스/시험 파일 작성 담당이고 Editor 쓰기는 Codex 독점이다. 기존 실제 MCP 연결을 사용해 GUI Play304/304·Edit3/3, 실제 Core HTTP/uGUI62판정·원래 옵션0의 Play 종료/재시작/같은 pending 본문·다음 기억 덱16개를 확인했다. Console 오류0/기존 Metal 경고2이며 물리 입력·실기기/운영과 구분한다. 이미지 생성은 없었다.

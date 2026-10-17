@@ -1,0 +1,12 @@
+{
+  "score": 86,
+  "verdict": "revise",
+  "category_match": true,
+  "differences": [
+    "실제 Nia 변화를 스크롤해 누른 뒤 서버 미리보기가 도착하면 SaveList가 맨 위 Sera로 돌아간다."
+  ],
+  "suggestions": [
+    "같은 공개 상태 문맥의 재표시 동안 저장 목록 오프셋을 보존하고 콘텐츠 높이에 맞게 제한한다."
+  ],
+  "reasoning": "배경/한글/버튼은 일관되지만 선택한 캐릭터의 결과가 시야에서 벗어나는 실제 사용성 문제를 확인했다."
+}

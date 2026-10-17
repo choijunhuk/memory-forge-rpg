@@ -9,7 +9,8 @@
 // non-finite number or a member NAMED like a private server field (seed, rng, journal, receipts, binding, digests, enemy pattern, ...;
 // whole names, case-insensitive; words inside string values are content, not names) refuses the whole reply, and so does a hidden battle
 // container at its battle location (state.battle.zones/cards; battle piles must be counts). A required context member
-// that is missing or mistyped refuses it too, so a protocol failure never becomes a zero or empty game.
+// that is missing or mistyped refuses it too, so a protocol failure never becomes a zero or empty game. A memory preview's decks must be
+// saved card specs and its costs and capacities JSON integers 0..2147483647; the client still never compares, prices or judges them.
 #nullable enable
 using System;
 using System.Collections.Generic;
@@ -135,7 +136,7 @@ namespace MemoryForge.Client
             var token = Member(json, name);
             return token.Type == JTokenType.Null ? (int?)null : AsCount(token) ?? throw Invalid(name);
         }
-        static int? AsCount(JToken token) =>
+        internal static int? AsCount(JToken token) =>
             token is JValue value && value.Type == JTokenType.Integer && value.Value is long number && number >= 0 && number <= int.MaxValue ? (int?)number : null;
         internal static JObject Object(JObject json, string name) => Member(json, name) as JObject ?? throw Invalid(name);
         internal static JObject? NullableObject(JObject json, string name)
@@ -151,6 +152,13 @@ namespace MemoryForge.Client
             if (id.Length != 35 || !id.StartsWith("pr-", StringComparison.Ordinal)) throw Invalid(name);
             for (int i = 3; i < id.Length; i++) if (!(id[i] >= '0' && id[i] <= '9' || id[i] >= 'a' && id[i] <= 'f')) throw Invalid(name);
             return id;
+        }
+        /// <summary>A safe upper-case code of 1..64 [A-Z0-9_] starting with a letter (a server error code, a Core verdict).</summary>
+        internal static bool IsCode(string text)
+        {
+            if (text.Length == 0 || text.Length > 64 || text[0] < 'A' || text[0] > 'Z') return false;
+            foreach (char c in text) if (!(c >= 'A' && c <= 'Z' || c >= '0' && c <= '9' || c == '_')) return false;
+            return true;
         }
 
         internal static PracticeProtocolException Invalid(string what) =>
@@ -212,10 +220,10 @@ namespace MemoryForge.Client
     {
         readonly JObject json;
         PracticeRunView(JObject json, string runId, int serverVersion, string phase, int accountMemoryVersion, int? runMemoryVersion, string? node,
-            int? battleVersion, int? turn, string? battlePhase)
+            int? battleVersion, int? turn, string? battlePhase, string? pendingType)
         {
             this.json = json; RunId = runId; ServerVersion = serverVersion; Phase = phase; AccountMemoryVersion = accountMemoryVersion;
-            RunMemoryVersion = runMemoryVersion; Node = node; BattleVersion = battleVersion; Turn = turn; BattlePhase = battlePhase;
+            RunMemoryVersion = runMemoryVersion; Node = node; BattleVersion = battleVersion; Turn = turn; BattlePhase = battlePhase; PendingType = pendingType;
         }
 
         public string RunId { get; }
@@ -232,6 +240,9 @@ namespace MemoryForge.Client
         public int? BattleVersion { get; }
         public int? Turn { get; }
         public string? BattlePhase { get; }
+        /// <summary>state.pending.type when it is a string, else null. Only the session's gate for asking a memory preview on the shown
+        /// save screen; it refuses nothing in Parse and decides no rule.</summary>
+        internal string? PendingType { get; }
 
         public JObject ToJObject() => (JObject)json.DeepClone();
         public JObject StateJObject() => (JObject)json["state"]!.DeepClone();
@@ -273,12 +284,15 @@ namespace MemoryForge.Client
             }
             if (json.ContainsKey("events"))
                 foreach (var item in PracticePublicJson.Array(json, "events")) if (!(item is JObject)) throw PracticePublicJson.Invalid("events");
-            return new PracticeRunView(json, runId, version, phase, memoryVersion, runMemoryVersion, node, battleVersion, turn, battlePhase);
+            string? pendingType = state.TryGetValue("pending", out JToken? pending) && pending is JObject open && open.TryGetValue("type", out JToken? type)
+                && type is JValue text && text.Type == JTokenType.String ? (string)text.Value! : null;
+            return new PracticeRunView(json, runId, version, phase, memoryVersion, runMemoryVersion, node, battleVersion, turn, battlePhase, pendingType);
         }
     }
 
     /// <summary>What a UI showed when the player acted: owner, runId, server journal version, node, turn, battle.v and the saved memory
-    /// version. A mutation or battle query is accepted only with the context of the current snapshot, and a query answer stays bound to it.</summary>
+    /// version. A mutation, battle query or memory preview is accepted only with the context of the current snapshot, and a query or
+    /// preview answer stays bound to it.</summary>
     public sealed class PracticeUiContext : IEquatable<PracticeUiContext>
     {
         internal PracticeUiContext(string owner, string? runId, int? serverVersion, string? node, int? turn, int? battleVersion, int memoryVersion)
@@ -426,6 +440,99 @@ namespace MemoryForge.Client
             PracticePublicJson.Array(choices, "candidates");
             var copy = System.Array.AsReadOnly(new List<string>(picks).ToArray());
             return new PracticeBattleQueryView(json, context, uid, mode, target, copy, battlePhase, forecastError, choicesError, choicesBlocked);
+        }
+    }
+
+    /// <summary>POST /dev/practice/runs/{runId}/memory-preview exactly as received — {runId, version, preview {memory, used, error,
+    /// capacities}} — bound to the context it was asked in and to its own ordered selection. Core's PreviewMemory of exactly that
+    /// selection on the run's save screen: memory is the FULL resulting deck of every saved party member (the saved decks when nothing is
+    /// selected), used each deck's memory cost, capacities each member's capacity and error Core's verdict on the whole selection
+    /// (DEFEAT_KEEP_ONE, OVER_CAPACITY) or null. Nothing here compares decks, prices a change or judges a selection. It is not a save,
+    /// not a promise that a commit will pass and never a replacement for the current state; the commit is judged again by the server.</summary>
+    public sealed class PracticeMemoryPreviewView
+    {
+        // PublicView.SpecFields and the {c, e} part slots: a saved card spec, never a run deck card (owner, weapon, growth, ...).
+        static readonly HashSet<string> SpecMembers = new HashSet<string>(StringComparer.Ordinal) { "key", "id", "plus", "from", "assigned", "mods" };
+        readonly JObject json;
+        PracticeMemoryPreviewView(JObject json, PracticeUiContext context, IReadOnlyList<string> selectedChangeIds, string? error)
+        {
+            this.json = json; Context = context; SelectedChangeIds = selectedChangeIds; Error = error;
+        }
+
+        /// <summary>The context the preview was asked in; the answer belongs to it alone.</summary>
+        public PracticeUiContext Context { get; }
+        /// <summary>The selection this answer is for, in the order sent: a read-only copy taken when it was asked. The reply does not echo
+        /// it, so a screen whose selection changed since must not show this answer, even at the same server version.</summary>
+        public IReadOnlyList<string> SelectedChangeIds { get; }
+        /// <summary>preview.error: Core's verdict on exactly this selection; null = Core refused nothing in it.</summary>
+        public string? Error { get; }
+        /// <summary>The complete reply {runId, version, preview {memory, used, error, capacities}}; a detached copy per call.</summary>
+        public JObject ToJObject() => (JObject)json.DeepClone();
+
+        /// <summary>Strictly parses the reply and requires the asking context's runId and server version (RESPONSE_MISMATCH otherwise).
+        /// memory maps each character to its list of card specs: an object of only key (a non-empty string, unique across all decks), id (a
+        /// string), plus (a boolean), from and assigned (a string or null) and mods (null or {c, e} of strings or nulls). used gives every
+        /// deck of memory, and nothing else, a cost and capacities each of those same members, and nothing else, a capacity, all JSON
+        /// integers 0..2147483647 (a cost above its capacity is legal: that is Core's OVER_CAPACITY error); error is null or a safe
+        /// upper-case code. Anything else is RESPONSE_INVALID (RESPONSE_PRIVATE_FIELD for a private name).</summary>
+        public static PracticeMemoryPreviewView Parse(byte[] utf8, PracticeUiContext context, IReadOnlyList<string> selectedChangeIds)
+        {
+            if (context == null) throw new ArgumentNullException(nameof(context));
+            if (selectedChangeIds == null) throw new ArgumentNullException(nameof(selectedChangeIds));
+            var json = PracticePublicJson.ParseObject(utf8);
+            if (PracticePublicJson.RunId(json, "runId") != context.RunId || PracticePublicJson.Count(json, "version") != context.ServerVersion)
+                throw PracticePublicJson.Mismatch("run");
+            var preview = PracticePublicJson.Object(json, "preview");
+            var memory = PracticePublicJson.Object(preview, "memory");
+            var keys = new HashSet<string>(StringComparer.Ordinal);
+            foreach (var deck in memory.Properties())
+            {
+                if (deck.Name.Length == 0 || !(deck.Value is JArray rows)) throw PracticePublicJson.Invalid("memory");
+                foreach (var row in rows) Spec(row, keys);
+            }
+            SameCharacters(memory, Numbers(preview, "used"), "used");
+            SameCharacters(memory, Numbers(preview, "capacities"), "capacities");
+            string? error = PracticePublicJson.NullableText(preview, "error");
+            if (error != null && !PracticePublicJson.IsCode(error)) throw PracticePublicJson.Invalid("error");
+            var copy = System.Array.AsReadOnly(new List<string>(selectedChangeIds).ToArray());
+            return new PracticeMemoryPreviewView(json, context, copy, error);
+        }
+
+        static void Spec(JToken row, HashSet<string> keys)
+        {
+            if (!(row is JObject card)) throw PracticePublicJson.Invalid("memory");
+            foreach (var member in card.Properties()) if (!SpecMembers.Contains(member.Name)) throw PracticePublicJson.Invalid("memory");
+            string key = PracticePublicJson.Text(card, "key");
+            if (key.Length == 0 || !keys.Add(key)) throw PracticePublicJson.Invalid("key");
+            PracticePublicJson.Text(card, "id");
+            if (card.TryGetValue("plus", out JToken? plus) && plus!.Type != JTokenType.Boolean) throw PracticePublicJson.Invalid("plus");
+            if (card.ContainsKey("from")) PracticePublicJson.NullableText(card, "from");
+            if (card.ContainsKey("assigned")) PracticePublicJson.NullableText(card, "assigned");
+            if (!card.ContainsKey("mods")) return;
+            var mods = PracticePublicJson.NullableObject(card, "mods");
+            if (mods == null) return;
+            foreach (var slot in mods.Properties())
+            {
+                if (slot.Name != "c" && slot.Name != "e") throw PracticePublicJson.Invalid("mods");
+                PracticePublicJson.NullableText(mods, slot.Name);
+            }
+        }
+
+        // Core fills used and capacities for exactly the party members whose decks memory holds (Run.PreviewCore, MemoryV2.Apply): a
+        // missing, extra or foreign character is a malformed reply. Format only: whether a cost fits its capacity stays Core's error.
+        static void SameCharacters(JObject memory, JObject map, string name)
+        {
+            if (map.Count != memory.Count) throw PracticePublicJson.Invalid(name);
+            foreach (var deck in memory.Properties()) if (!map.ContainsKey(deck.Name)) throw PracticePublicJson.Invalid(name);
+        }
+
+        // A character → JSON integer 0..2147483647 map (Core's per-deck cost or per-member capacity), passed on as sent.
+        static JObject Numbers(JObject preview, string name)
+        {
+            var map = PracticePublicJson.Object(preview, name);
+            foreach (var member in map.Properties())
+                if (member.Name.Length == 0 || PracticePublicJson.AsCount(member.Value) == null) throw PracticePublicJson.Invalid(name);
+            return map;
         }
     }
 }

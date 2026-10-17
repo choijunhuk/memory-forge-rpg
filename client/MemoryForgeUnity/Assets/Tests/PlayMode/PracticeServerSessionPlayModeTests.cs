@@ -5,6 +5,8 @@
 // test-released gate, drop the connection after reading the request, truncate a body or omit its length. Records live in a fresh temp
 // folder. These are NOT Core/server acceptance: no real Run, receipt store, restart or fault proxy is involved (Root runs the actual
 // unchanged host separately). Every wait is bounded; held replies are released in finally.
+// The memory preview checks (P1-SERVER-MEMORY-PREVIEW §8.12/§14.7) answer from fixture decks, costs and verdicts: the client must pass
+// them on and judge nothing, so they are protocol data, not Core's memory rules. The class is partial for the save screen's view checks.
 // The node-service, event and archive view checks at the end (P1-SERVER-SERVICES-UI, P1-SERVER-EVENT-ARCHIVE-UI) drive the real
 // MemoryForgeServerPracticeClient over the same fixture and need UnityEngine, so they compile only inside Unity (#if UNITY_5_3_OR_NEWER);
 // the .NET run of this file keeps the BCL-only checks above.
@@ -33,7 +35,7 @@ using Purpose = MemoryForge.Client.MemoryForgeServerPracticeClient.DeckPurpose;
 
 namespace MemoryForge.Client.Tests
 {
-    public class PracticeServerSessionPlayModeTests
+    public partial class PracticeServerSessionPlayModeTests
     {
         const string Account = "dev-local", OtherAccount = "dev-other", AccountRoute = "/dev/practice/account";
         const string Credential = "fixture-credential-0001", RotatedCredential = "fixture-credential-0002";
@@ -670,6 +672,396 @@ namespace MemoryForge.Client.Tests
             Assert.That(Run(() => session.BattleQueryAsync(context, "h2", "next", null, new[] { "r1" })).Code, Is.EqualTo(Codes.ContextStale));
             Assert.That(host.Posts.Length, Is.EqualTo(posts));
             Assert.That(File.Exists(RecordPath), Is.False);
+        }
+
+        // ---- the pure memory preview (P1-SERVER-MEMORY-PREVIEW §8.12/§14.7/§17.4) ----
+
+        [Test]
+        public void TheMemoryPreviewIsPureAndKeepsTheFullServerReplyOfExactlyItsSelection()
+        {
+            MemorySaveWorld(defeat: false);
+            var session = Session();
+            var snapshot = Refreshed(session);
+            var context = snapshot.Context;
+            var replies = new List<JObject>();
+            post = request =>
+            {
+                var reply = MemoryPreviewJson(world, SelectedIds(request));
+                lock (replies) replies.Add(reply);
+                return Reply.Json(200, reply);
+            };
+            int start = host.Seen.Length;
+            // No selection keeps the saved decks; that answer is the server's too.
+            var kept = Run(() => session.PreviewMemoryAsync(context, NoSelection));
+            Assert.That(kept.Code, Is.EqualTo(Codes.Ok));
+            Assert.That(kept.HttpStatus, Is.EqualTo(200));
+            var operation = host.Seen.Skip(start).ToArray();
+            Assert.That(operation.Select(s => s.Method + " " + s.Path), Is.EqualTo(new[] { "GET " + AccountRoute, "POST /dev/practice/runs/" + RunA + "/memory-preview" }));
+            Assert.That(operation.All(s => s.Authorization == "Bearer " + Credential), Is.True);
+            Assert.That(operation[1].ContentType, Does.StartWith("application/json"));
+            Assert.That(operation[1].Text, Is.EqualTo("{\"selectedChangeIds\":[]}"), "only the selection: no requestId, version or state");
+            Assert.That(kept.Context, Is.EqualTo(context));
+            Assert.That(kept.View!.Context, Is.EqualTo(context));
+            Assert.That(kept.View.SelectedChangeIds, Is.Empty);
+            Assert.That(kept.View.Error, Is.Null);
+            Assert.That(JToken.DeepEquals(kept.View.ToJObject(), replies[0]), Is.True);
+
+            // One selected change: every party deck as it would result, the costs and the capacities, exactly as the server sent them.
+            var added = Run(() => session.PreviewMemoryAsync(context, new[] { ChangeAddK9 }));
+            Assert.That(added.Code, Is.EqualTo(Codes.Ok));
+            Assert.That(host.Posts.Last().Text, Is.EqualTo("{\"selectedChangeIds\":[\"" + ChangeAddK9 + "\"]}"));
+            Assert.That(added.View!.SelectedChangeIds, Is.EqualTo(new[] { ChangeAddK9 }));
+            Assert.That(added.View.Error, Is.Null);
+            var full = added.View.ToJObject();
+            Assert.That(JToken.DeepEquals(full, replies[1]), Is.True);
+            Assert.That(full.Properties().Select(p => p.Name), Is.EqualTo(new[] { "runId", "version", "preview" }));
+            Assert.That(((JObject)full["preview"]!).Properties().Select(p => p.Name), Is.EqualTo(new[] { "memory", "used", "error", "capacities" }));
+            Assert.That(PreviewKeys(added.View, "sera"), Is.EqualTo(new[] { "k1", "k2", "k-common", "k9" }));
+            Assert.That(PreviewKeys(added.View, "mira"), Is.EqualTo(new[] { "m1" }), "the whole party's decks, not only the changed one");
+            // Copies are detached.
+            full["preview"]!["used"]!["sera"] = 0;
+            ((JArray)full["preview"]!["memory"]!["sera"]!).Clear();
+            Assert.That(JToken.DeepEquals(added.View.ToJObject(), replies[1]), Is.True);
+
+            // Pure: no record or pending request, the same snapshot, nothing due, still free to act; only previews were posted.
+            Assert.That(File.Exists(RecordPath), Is.False);
+            Assert.That(session.State.Pending, Is.Null);
+            Assert.That(session.State.Snapshot, Is.SameAs(snapshot));
+            Assert.That(session.State.NeedsRefresh, Is.False);
+            Assert.That(session.State.CanMutate, Is.True);
+            Assert.That(host.Posts.All(p => p.Path == "/dev/practice/runs/" + RunA + "/memory-preview"), Is.True);
+            Assert.That(session.IsCurrent(kept) && session.IsCurrent(added), Is.True);
+        }
+
+        [Test]
+        public void APreviewVerdictOrRefusalIsTheServersAndChangesNothing()
+        {
+            MemorySaveWorld(defeat: true);
+            var session = Session();
+            var snapshot = Refreshed(session);
+            var context = snapshot.Context;
+            // Two new changes after a defeat: Core's verdict arrives in the answer; the client neither counts nor prices the selection.
+            post = request => Reply.Json(200, MemoryPreviewJson(world, SelectedIds(request), "DEFEAT_KEEP_ONE"));
+            var two = Run(() => session.PreviewMemoryAsync(context, new[] { ChangeAddK9, ChangeUpgradeK1 }));
+            Assert.That(two.Code, Is.EqualTo(Codes.Ok));
+            Assert.That(two.View!.Error, Is.EqualTo("DEFEAT_KEEP_ONE"));
+            Assert.That(two.View.SelectedChangeIds, Is.EqualTo(new[] { ChangeAddK9, ChangeUpgradeK1 }));
+            Assert.That(host.Posts.Last().Text, Is.EqualTo("{\"selectedChangeIds\":[\"" + ChangeAddK9 + "\",\"" + ChangeUpgradeK1 + "\"]}"));
+            // A cost above its capacity is a legal answer carrying Core's verdict, not a malformed one.
+            post = request =>
+            {
+                var reply = MemoryPreviewJson(world, SelectedIds(request), "OVER_CAPACITY");
+                reply["preview"]!["capacities"]!["sera"] = 1;
+                return Reply.Json(200, reply);
+            };
+            var over = Run(() => session.PreviewMemoryAsync(context, new[] { ChangeAddK9 }));
+            Assert.That(over.Code, Is.EqualTo(Codes.Ok));
+            Assert.That(over.View!.Error, Is.EqualTo("OVER_CAPACITY"));
+            Assert.That(over.View.ToJObject()["preview"]!["capacities"]!["sera"]!.Value<int>(), Is.EqualTo(1));
+
+            // A change the server does not offer: its refusal, and no answer to show.
+            post = request => Error(422, "INVALID_SELECTION");
+            var unknown = Run(() => session.PreviewMemoryAsync(context, new[] { "delta:none:none:add" }));
+            Assert.That(unknown.Code, Is.EqualTo("INVALID_SELECTION"));
+            Assert.That(unknown.HttpStatus, Is.EqualTo(422));
+            Assert.That(unknown.View, Is.Null);
+            Assert.That(session.State.NeedsRefresh, Is.False);
+
+            // A lost answer is only an unanswered question: nothing is pending, and asking again is a new pure preview.
+            post = request => new Reply(200, Utf8(MemoryPreviewJson(world, SelectedIds(request)))) { Drop = true };
+            var lost = Run(() => session.PreviewMemoryAsync(context, new[] { ChangeAddK9 }));
+            Assert.That(lost.Code, Is.EqualTo(Codes.NetworkFailed));
+            Assert.That(lost.View, Is.Null);
+            Assert.That(session.State.NeedsRefresh, Is.False);
+            post = request => Reply.Json(200, MemoryPreviewJson(world, SelectedIds(request)));
+            Assert.That(Run(() => session.PreviewMemoryAsync(context, new[] { ChangeAddK9 })).Code, Is.EqualTo(Codes.Ok));
+
+            // A null ID is refused before anything is sent.
+            int seen = host.Seen.Length;
+            var invalid = Run(() => session.PreviewMemoryAsync(context, new[] { ChangeAddK9, null! }));
+            Assert.That(invalid.Code, Is.EqualTo(Codes.InvalidCommand));
+            Assert.That(invalid.View, Is.Null);
+            Assert.That(host.Seen.Length, Is.EqualTo(seen));
+
+            // Nothing above wrote a record, staged a request, replaced the snapshot or blocked a save.
+            Assert.That(File.Exists(RecordPath), Is.False);
+            Assert.That(session.State.Pending, Is.Null);
+            Assert.That(session.State.Snapshot, Is.SameAs(snapshot));
+            Assert.That(session.State.CanMutate, Is.True);
+
+            // WRONG_PHASE although the shown run is on its save screen at this very version: the shown state is not the server's.
+            post = request => Error(422, "WRONG_PHASE");
+            var phase = Run(() => session.PreviewMemoryAsync(context, NoSelection));
+            Assert.That(phase.Code, Is.EqualTo("WRONG_PHASE"));
+            Assert.That(phase.View, Is.Null);
+            Assert.That(session.State.NeedsRefresh, Is.True);
+            Assert.That(Run(() => session.CommitMemoryAsync(context, NoSelection)).Code, Is.EqualTo(Codes.RefreshRequired), "a refused preview never leads into a save");
+            Assert.That(host.Posts.All(p => p.Path.EndsWith("/memory-preview", StringComparison.Ordinal)), Is.True);
+            Assert.That(File.Exists(RecordPath), Is.False);
+        }
+
+        [Test]
+        public void APreviewIsAskedOnlyOnTheShownSaveScreenOfAServerThatStillShowsIt()
+        {
+            // No current run: nothing to preview, nothing asked.
+            world.RunId = null;
+            var empty = Session();
+            var none = Refreshed(empty).Context;
+            int asked = host.Seen.Length;
+            Assert.That(Run(() => empty.PreviewMemoryAsync(none, NoSelection)).Code, Is.EqualTo(Codes.NoRun));
+            Assert.That(host.Seen.Length, Is.EqualTo(asked));
+            world.RunId = RunA;
+
+            MemorySaveWorld(defeat: true);
+            var session = Session();
+            var context = Refreshed(session).Context;
+            Assert.That(Run(() => Session().PreviewMemoryAsync(context, NoSelection)).Code, Is.EqualTo(Codes.NoSnapshot));
+            post = request => Reply.Json(200, MemoryPreviewJson(world, SelectedIds(request)));
+
+            // The route has no version, so the owner handshake must show exactly the asking context, its saved memory version included;
+            // otherwise nothing is posted and the shown state is due a refresh.
+            foreach (string moved in new[] { "memory", "version", "run" })
+            {
+                if (moved == "memory") world.MemoryVersion = 3;
+                if (moved == "version") world.Version = 4;
+                if (moved == "run") world.RunId = RunB;
+                var refused = Run(() => session.PreviewMemoryAsync(context, NoSelection));
+                Assert.That(refused.Code, Is.EqualTo(Codes.RefreshRequired), moved);
+                Assert.That(refused.HttpStatus, Is.EqualTo(200));
+                Assert.That(refused.View, Is.Null);
+                Assert.That(session.State.NeedsRefresh, Is.True, moved);
+                // A stale screen does not even reach the handshake.
+                int handshakes = host.Seen.Length;
+                Assert.That(Run(() => session.PreviewMemoryAsync(context, NoSelection)).Code, Is.EqualTo(Codes.RefreshRequired));
+                Assert.That(host.Seen.Length, Is.EqualTo(handshakes));
+                world.MemoryVersion = 2;
+                world.Version = 3;
+                world.RunId = RunA;
+                Assert.That(Refreshed(session).Context, Is.EqualTo(context));
+            }
+            world.AccountId = OtherAccount;
+            Assert.That(Run(() => session.PreviewMemoryAsync(context, NoSelection)).Code, Is.EqualTo(PracticeProtocolException.WrongAccount));
+            world.AccountId = Account;
+            Assert.That(host.Posts, Is.Empty);
+
+            // The server moved on between the handshake and the answer: an answer for another version is refused and the shown save
+            // screen is due a refresh.
+            post = request => { world.Version = 4; return Reply.Json(200, MemoryPreviewJson(world, SelectedIds(request))); };
+            var raced = Run(() => session.PreviewMemoryAsync(context, NoSelection));
+            Assert.That(raced.Code, Is.EqualTo(PracticeProtocolException.Mismatch));
+            Assert.That(raced.HttpStatus, Is.EqualTo(200));
+            Assert.That(raced.View, Is.Null);
+            Assert.That(session.State.NeedsRefresh, Is.True);
+            Assert.That(host.Posts.Length, Is.EqualTo(1));
+
+            // The refresh adopts the newer state; the older context is then stale, refused locally, and its answers are no longer current.
+            post = request => Reply.Json(200, MemoryPreviewJson(world, SelectedIds(request)));
+            var newer = Refreshed(session).Context;
+            Assert.That(newer.ServerVersion, Is.EqualTo(4));
+            var current = Run(() => session.PreviewMemoryAsync(newer, NoSelection));
+            Assert.That(current.Code, Is.EqualTo(Codes.Ok));
+            Assert.That(session.IsCurrent(current), Is.True);
+            Assert.That(session.IsCurrent(raced), Is.False);
+            int posts = host.Posts.Length;
+            Assert.That(Run(() => session.PreviewMemoryAsync(context, NoSelection)).Code, Is.EqualTo(Codes.ContextStale));
+            Assert.That(host.Posts.Length, Is.EqualTo(posts));
+
+            // The run was replaced on the server: refresh before anyone acts.
+            post = request => Error(404, "RUN_NOT_FOUND");
+            var gone = Run(() => session.PreviewMemoryAsync(newer, NoSelection));
+            Assert.That(gone.Code, Is.EqualTo("RUN_NOT_FOUND"));
+            Assert.That(gone.HttpStatus, Is.EqualTo(404));
+            Assert.That(gone.View, Is.Null);
+            Assert.That(session.State.NeedsRefresh, Is.True);
+
+            // Once the run has left its save screen, the shown state offers nothing to preview: nothing is asked.
+            world.Version = 5;
+            world.Phase = "DONE";
+            world.Extra!["pending"] = new JObject { ["type"] = "done" };
+            var done = Refreshed(session).Context;
+            int requests = host.Seen.Length;
+            Assert.That(Run(() => session.PreviewMemoryAsync(done, NoSelection)).Code, Is.EqualTo(Codes.NoSave));
+            Assert.That(host.Seen.Length, Is.EqualTo(requests));
+            Assert.That(File.Exists(RecordPath), Is.False);
+        }
+
+        [Test]
+        public void APreviewLeavesAnUnresolvedSaveExactlyPendingAndNeverUnblocksANewOne()
+        {
+            MemorySaveWorld(defeat: false);
+            var session = Session();
+            var context = Refreshed(session).Context;
+            // The save's reply is lost and the server did not commit it; here its outcome is unknown, so it stays pending.
+            post = request => request.Path.EndsWith("/memory-commit", StringComparison.Ordinal)
+                ? new Reply(200, Utf8(RunJson(world, 4))) { Drop = true }
+                : Reply.Json(200, MemoryPreviewJson(world, SelectedIds(request)));
+            var save = Run(() => session.CommitMemoryAsync(context, new[] { ChangeAddK9 }));
+            Assert.That(save.Status, Is.EqualTo(MutationStatus.Pending));
+            var record = Outbox().Load()!;
+            byte[] stored = File.ReadAllBytes(RecordPath);
+
+            // The server still shows the save screen, so the pure preview is answered; it neither resolves, re-stages nor clears the save.
+            var preview = Run(() => session.PreviewMemoryAsync(context, new[] { ChangeAddK9 }));
+            Assert.That(preview.Code, Is.EqualTo(Codes.Ok));
+            Assert.That(preview.View!.SelectedChangeIds, Is.EqualTo(new[] { ChangeAddK9 }));
+            Assert.That(File.ReadAllBytes(RecordPath), Is.EqualTo(stored));
+            Assert.That(session.State.Pending!.Body, Is.EqualTo(record.Body));
+            Assert.That(session.State.CanMutate, Is.False);
+            var blocked = Run(() => session.CommitMemoryAsync(context, new[] { ChangeAddK9 }));
+            Assert.That(blocked.Code, Is.EqualTo(Codes.PendingUnresolved), "a preview never unblocks a new save");
+            Assert.That(blocked.Request!.Body, Is.EqualTo(record.Body));
+            Assert.That(host.Posts.Select(p => p.Path), Is.EqualTo(new[] { PracticeCommandOutbox.MemoryCommitRoute(RunA), "/dev/practice/runs/" + RunA + "/memory-preview" }));
+
+            // Only the exact retry resolves it: the same bytes again.
+            post = request => Error(503, "ACCOUNT_BUSY");
+            var retried = Run(() => session.RetryPendingAsync());
+            Assert.That(retried.Status, Is.EqualTo(MutationStatus.Pending));
+            Assert.That(host.Posts.Length, Is.EqualTo(3));
+            Assert.That(host.Posts[2].Body, Is.EqualTo(host.Posts[0].Body));
+            Assert.That(Outbox().Load()!.Body, Is.EqualTo(record.Body));
+        }
+
+        [TestCase("duplicate-member", PracticeProtocolException.Invalid)]
+        [TestCase("trailing", PracticeProtocolException.Invalid)]
+        [TestCase("private-member", PracticeProtocolException.PrivateField)]
+        [TestCase("private-spec-member", PracticeProtocolException.PrivateField)]
+        [TestCase("fraction", PracticeProtocolException.Invalid)]
+        [TestCase("negative", PracticeProtocolException.Invalid)]
+        [TestCase("beyond-int32", PracticeProtocolException.Invalid)]
+        [TestCase("number-text", PracticeProtocolException.Invalid)]
+        [TestCase("no-memory", PracticeProtocolException.Invalid)]
+        [TestCase("no-used", PracticeProtocolException.Invalid)]
+        [TestCase("no-error", PracticeProtocolException.Invalid)]
+        [TestCase("no-capacities", PracticeProtocolException.Invalid)]
+        [TestCase("error-number", PracticeProtocolException.Invalid)]
+        [TestCase("error-prose", PracticeProtocolException.Invalid)]
+        [TestCase("deck-object", PracticeProtocolException.Invalid)]
+        [TestCase("row-null", PracticeProtocolException.Invalid)]
+        [TestCase("row-no-key", PracticeProtocolException.Invalid)]
+        [TestCase("row-empty-key", PracticeProtocolException.Invalid)]
+        [TestCase("row-repeated-key", PracticeProtocolException.Invalid)]
+        [TestCase("row-no-id", PracticeProtocolException.Invalid)]
+        [TestCase("row-run-member", PracticeProtocolException.Invalid)]
+        [TestCase("row-plus-number", PracticeProtocolException.Invalid)]
+        [TestCase("row-mods-list", PracticeProtocolException.Invalid)]
+        [TestCase("row-mods-slot", PracticeProtocolException.Invalid)]
+        [TestCase("used-missing-deck", PracticeProtocolException.Invalid)]
+        [TestCase("capacities-missing-deck", PracticeProtocolException.Invalid)]
+        [TestCase("capacities-empty", PracticeProtocolException.Invalid)]
+        [TestCase("capacities-foreign-deck", PracticeProtocolException.Invalid)]
+        [TestCase("preview-array", PracticeProtocolException.Invalid)]
+        [TestCase("version-text", PracticeProtocolException.Invalid)]
+        [TestCase("other-run", PracticeProtocolException.Mismatch)]
+        [TestCase("other-version", PracticeProtocolException.Mismatch)]
+        public void MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(string change, string expectedCode)
+        {
+            MemorySaveWorld(defeat: false);
+            var session = Session();
+            var snapshot = Refreshed(session);
+            var json = MemoryPreviewJson(world, new[] { ChangeAddK9 });
+            var preview = (JObject)json["preview"]!;
+            var sera = (JArray)preview["memory"]!["sera"]!;
+            var first = (JObject)sera[0];
+            byte[]? raw = null;
+            switch (change)
+            {
+                case "duplicate-member": raw = Utf8Text(json.ToString(Formatting.None).Replace("\"preview\":{", "\"preview\":{\"error\":null,")); break;
+                case "trailing": raw = Utf8Text(json.ToString(Formatting.None) + " {}"); break;
+                case "private-member": preview["requestId"] = "preview-0001"; break;
+                case "private-spec-member": first["seed"] = 7; break;
+                case "fraction": preview["used"]!["sera"] = 1.5; break;
+                case "negative": preview["capacities"]!["sera"] = -1; break;
+                case "beyond-int32": preview["used"]!["sera"] = 2147483648L; break;
+                case "number-text": preview["capacities"]!["sera"] = "6"; break;
+                case "no-memory": preview.Remove("memory"); break;
+                case "no-used": preview.Remove("used"); break;
+                case "no-error": preview.Remove("error"); break;
+                case "no-capacities": preview.Remove("capacities"); break;
+                case "error-number": preview["error"] = 1; break;
+                case "error-prose": preview["error"] = "Over capacity, sorry."; break;
+                case "deck-object": preview["memory"]!["mira"] = new JObject(); break;
+                case "row-null": sera.Add(JValue.CreateNull()); break;
+                case "row-no-key": first.Remove("key"); break;
+                case "row-empty-key": first["key"] = ""; break;
+                case "row-repeated-key": preview["memory"]!["mira"]![0]!["key"] = "k1"; break;
+                case "row-no-id": first.Remove("id"); break;
+                case "row-run-member": first["owner"] = "sera"; break;
+                case "row-plus-number": first["plus"] = 1; break;
+                case "row-mods-list": first["mods"] = new JArray("p-b"); break;
+                case "row-mods-slot": first["mods"] = new JObject { ["x"] = "p-b" }; break;
+                case "used-missing-deck": ((JObject)preview["used"]!).Remove("mira"); break;
+                case "capacities-missing-deck": ((JObject)preview["capacities"]!).Remove("sera"); break;
+                case "capacities-empty": preview["capacities"] = new JObject(); break;
+                case "capacities-foreign-deck":
+                    ((JObject)preview["capacities"]!).Remove("sera");
+                    preview["capacities"]!["nia"] = 6;
+                    break;
+                case "preview-array": json["preview"] = new JArray(); break;
+                case "version-text": json["version"] = "3"; break;
+                case "other-run": json["runId"] = RunB; break;
+                case "other-version": json["version"] = 4; break;
+                default: Assert.Fail("unknown case " + change); break;
+            }
+            post = request => raw != null ? new Reply(200, raw) : Reply.Json(200, json);
+            var result = Run(() => session.PreviewMemoryAsync(snapshot.Context, new[] { ChangeAddK9 }));
+            Assert.That(result.Code, Is.EqualTo(expectedCode));
+            Assert.That(result.HttpStatus, Is.EqualTo(200));
+            Assert.That(result.View, Is.Null);
+            Assert.That(session.State.Snapshot, Is.SameAs(snapshot));
+            Assert.That(session.State.NeedsRefresh, Is.EqualTo(expectedCode == PracticeProtocolException.Mismatch), "only another run or version means the server moved");
+            Assert.That(File.Exists(RecordPath), Is.False);
+            // The same bytes are refused the same way when parsed directly.
+            byte[] bytes = raw ?? Utf8(json);
+            Assert.That(Assert.Throws<PracticeProtocolException>(() => PracticeMemoryPreviewView.Parse(bytes, snapshot.Context, new[] { ChangeAddK9 })).Code,
+                Is.EqualTo(expectedCode));
+        }
+
+        [Test]
+        public void APreviewKeepsTheSelectionItWasAskedForAgainstLaterCallerChangesAndNewerSelections()
+        {
+            MemorySaveWorld(defeat: false);
+            var session = Session();
+            var context = Refreshed(session).Context;
+            var posted = new TaskCompletionSource<Seen>();
+            var release = new TaskCompletionSource<bool>();
+            post = request =>
+            {
+                posted.TrySetResult(request);
+                return new Reply(200, Utf8(MemoryPreviewJson(world, SelectedIds(request)))) { Hold = release.Task };
+            };
+            try
+            {
+                var selection = new List<string> { ChangeAddK9 };
+                var asking = session.PreviewMemoryAsync(context, selection);
+                // The caller's list changes while the answer is outstanding; the request and its answer keep the copy taken at the call.
+                selection[0] = ChangeUpgradeK1;
+                selection.Add("delta:sera:k2:remove");
+                Assert.That(posted.Task.Wait(Bound), Is.True);
+                Assert.That(posted.Task.Result.Text, Is.EqualTo("{\"selectedChangeIds\":[\"" + ChangeAddK9 + "\"]}"));
+                // One operation at a time: a second preview is refused at once, nothing queued.
+                Assert.That(Run(() => session.PreviewMemoryAsync(context, new[] { ChangeUpgradeK1 })).Code, Is.EqualTo(Codes.Busy));
+                release.TrySetResult(true);
+                var first = Wait(asking);
+                Assert.That(first.Code, Is.EqualTo(Codes.Ok));
+                Assert.That(first.View!.SelectedChangeIds, Is.EqualTo(new[] { ChangeAddK9 }));
+                Assert.That(((ICollection<string>)first.View.SelectedChangeIds).IsReadOnly, Is.True);
+                selection.Clear();
+                Assert.That(first.View.SelectedChangeIds, Is.EqualTo(new[] { ChangeAddK9 }));
+
+                // A newer selection at the same server version: both answers belong to the current context, so only the selection each
+                // one carries tells the screen which answers what it shows now.
+                post = request => Reply.Json(200, MemoryPreviewJson(world, SelectedIds(request)));
+                var second = Run(() => session.PreviewMemoryAsync(context, new[] { ChangeUpgradeK1 }));
+                Assert.That(second.Code, Is.EqualTo(Codes.Ok));
+                Assert.That(second.View!.SelectedChangeIds, Is.EqualTo(new[] { ChangeUpgradeK1 }));
+                Assert.That(second.View.Context, Is.EqualTo(first.View.Context));
+                Assert.That(session.IsCurrent(first) && session.IsCurrent(second), Is.True);
+                Assert.That(PreviewKeys(first.View, "sera"), Does.Contain("k9"));
+                Assert.That(PreviewKeys(second.View, "sera"), Does.Not.Contain("k9"));
+                Assert.That(host.Posts.Length, Is.EqualTo(2));
+                Assert.That(File.Exists(RecordPath), Is.False);
+            }
+            finally { release.TrySetResult(true); }
         }
 
 #if UNITY_5_3_OR_NEWER
@@ -1352,6 +1744,67 @@ namespace MemoryForge.Client.Tests
             ["choices"] = new JObject { ["error"] = JValue.CreateNull(), ["requests"] = new JArray(), ["accepted"] = 0, ["index"] = 0, ["left"] = 0,
                 ["blocked"] = JValue.CreateNull(), ["candidates"] = new JArray() }
         };
+
+        // P1-SERVER-MEMORY-PREVIEW: a two-member party on its terminal save screen, out of battle (PublicView's save pending and the v2
+        // memory changes of §8.12). Change ids, keys, costs and capacities are protocol data, not content or Core's memory rules.
+        const string ChangeAddK9 = "delta:sera:k9:add", ChangeUpgradeK1 = "delta:sera:k1:upgrade";
+        static readonly string[] NoSelection = Array.Empty<string>();
+
+        void MemorySaveWorld(bool defeat)
+        {
+            world.Phase = defeat ? "DEFEAT" : "VICTORY";
+            world.InBattle = false;
+            world.Extra = new JObject
+            {
+                ["party"] = new JArray(new JObject { ["charId"] = "sera", ["res"] = 0 }, new JObject { ["charId"] = "mira", ["res"] = 0 }),
+                ["pending"] = new JObject { ["type"] = "save", ["defeat"] = defeat },
+                ["memory"] = new JObject
+                {
+                    ["sera"] = new JObject
+                    {
+                        ["capacity"] = 6, ["usedBefore"] = 2, ["before"] = new JArray(), ["after"] = new JArray(),
+                        ["changes"] = new JArray(
+                            new JObject { ["id"] = ChangeAddK9, ["cid"] = "sera", ["key"] = "k9", ["kind"] = "add", ["label"] = "fixture add" },
+                            new JObject { ["id"] = ChangeUpgradeK1, ["cid"] = "sera", ["key"] = "k1", ["kind"] = "upgrade", ["label"] = "fixture upgrade", ["value"] = true })
+                    },
+                    ["mira"] = new JObject { ["capacity"] = 5, ["usedBefore"] = 0, ["before"] = new JArray(), ["after"] = new JArray(), ["changes"] = new JArray() }
+                }
+            };
+        }
+
+        // POST memory-preview reply (PublicView.Preview): the full resulting deck of every party member, each deck's used cost, the
+        // capacities and Core's verdict. No selection answers the saved decks; a selected add appends its card, an upgrade marks it.
+        static JObject MemoryPreviewJson(World w, IEnumerable<string> selected, string? error = null)
+        {
+            var sera = new JArray(
+                new JObject { ["key"] = "k1", ["id"] = "strike" },
+                new JObject { ["key"] = "k2", ["id"] = "guard_plus", ["from"] = "guard", ["plus"] = true,
+                    ["mods"] = new JObject { ["c"] = "p-b", ["e"] = JValue.CreateNull() } },
+                new JObject { ["key"] = "k-common", ["id"] = "focus", ["assigned"] = "sera" });
+            int cost = 2;
+            foreach (string id in selected)
+            {
+                string[] parts = id.Split(':');
+                if (parts.Length != 4) continue;
+                if (parts[3] == "add") { sera.Add(new JObject { ["key"] = parts[2], ["id"] = "pull" }); cost += 2; }
+                if (parts[3] == "upgrade") { sera.First(card => card["key"]!.Value<string>() == parts[2])["plus"] = true; cost += 1; }
+            }
+            return new JObject
+            {
+                ["runId"] = w.RunId, ["version"] = w.Version,
+                ["preview"] = new JObject
+                {
+                    ["memory"] = new JObject { ["sera"] = sera, ["mira"] = new JArray(new JObject { ["key"] = "m1", ["id"] = "spark", ["mods"] = JValue.CreateNull() }) },
+                    ["used"] = new JObject { ["sera"] = cost, ["mira"] = 0 },
+                    ["error"] = error == null ? (JToken)JValue.CreateNull() : error,
+                    ["capacities"] = new JObject { ["sera"] = 6, ["mira"] = 5 }
+                }
+            };
+        }
+
+        static string[] SelectedIds(Seen request) => JObject.Parse(request.Text)["selectedChangeIds"]!.Values<string>().Select(id => id!).ToArray();
+        static string[] PreviewKeys(PracticeMemoryPreviewView view, string cid) =>
+            view.ToJObject()["preview"]!["memory"]![cid]!.Select(card => card["key"]!.Value<string>()!).ToArray();
 
         static Reply Error(int status, string code) => Reply.Json(status, new JObject { ["code"] = code, ["message"] = "fixture" });
         static byte[] Utf8(JToken json) => Utf8Text(json.ToString(Formatting.None));

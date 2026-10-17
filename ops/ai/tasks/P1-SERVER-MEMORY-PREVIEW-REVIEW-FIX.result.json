@@ -1,0 +1,30 @@
+{
+  "task_id": "P1-SERVER-MEMORY-PREVIEW-REVIEW-FIX",
+  "run_id": "P1-SERVER-MEMORY-PREVIEW-REVIEW-FIX-20261017T075148122551Z",
+  "status": "RECEIVED_UNVERIFIED",
+  "requestedEffort": "high",
+  "requestedModel": "claude-opus-5-5",
+  "mcp_profile": "none",
+  "process_exit": 0,
+  "changes_verified": false,
+  "raw_output": "ops/ai/local/P1-SERVER-MEMORY-PREVIEW-REVIEW-FIX-20261017T075148122551Z*",
+  "billing_verified_at": "2026-10-17T05:01:40.332532+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "codex/claude-save-transport-20261017",
+  "base_commit": "fafed59efd4c0dbe043bab2d4990178bd8fa1ee8",
+  "worktree": "/Users/choi/.codex/worktrees/claude-save-transport/Memory_forge",
+  "allowed_files": [
+    "client/MemoryForgeUnity/Assets/Scripts/PracticePublicSnapshot.cs",
+    "client/MemoryForgeUnity/Assets/Tests/PlayMode/PracticeServerSessionPlayModeTests.cs"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "5b4cc1ba-9519-47ef-88f7-930ce53c643b",
+  "subtype": "success",
+  "is_error": false,
+  "result": "I've fixed the gap. A preview reply whose `capacities` doesn't list exactly the same characters as `memory` and `used` is now refused as `RESPONSE_INVALID`, so the UI no longer gets a view. Nothing was compiled or run, so the tests are **NOT_RUN** until Root reruns .NET and Unity.\n\n**`PracticePublicSnapshot.cs`**\n- I added a helper, `SameCharacters`. A map must have the same number of characters as `memory` and contain every character in it. Otherwise it's `RESPONSE_INVALID`.\n- `used` and `capacities` now both go through it. `used` is checked the same way as before. `capacities` is new: before, only its values were checked.\n- This only checks the reply's format. A cost above its capacity still parses, because that's Core's `OVER_CAPACITY` verdict, not a malformed reply.\n- I updated the doc comment on `Parse` to say this. The public API, numbers and rules are unchanged.\n\n**`PracticeServerSessionPlayModeTests.cs`**\n- I added three cases to `MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole`:\n  - `capacities-missing-deck`: `sera` removed.\n  - `capacities-empty`: `{}`.\n  - `capacities-foreign-deck`: `sera` replaced by `nia`, same count.\n- Each case expects `RESPONSE_INVALID`, no view, the same snapshot, no refresh needed and no outbox record. The same bytes must also fail when passed straight to `PracticeMemoryPreviewView.Parse`.\n- In `APreviewVerdictOrRefusalIsTheServersAndChangesNothing`, the `OVER_CAPACITY` reply now sets `sera`'s capacity to 1, below its cost. The test expects `OK`, the `OVER_CAPACITY` error and the capacity passed through as 1. This guards against the new check turning into a \"capacity must cover the cost\" rule.\n- All other tests are unchanged. The parameterized test now has 32 cases, up from 29.",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ]
+}

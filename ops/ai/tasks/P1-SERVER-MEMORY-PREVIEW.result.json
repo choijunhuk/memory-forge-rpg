@@ -1,0 +1,31 @@
+{
+  "task_id": "P1-SERVER-MEMORY-PREVIEW",
+  "run_id": "P1-SERVER-MEMORY-PREVIEW-20261017T073557366383Z",
+  "status": "RECEIVED_UNVERIFIED",
+  "requestedEffort": "xhigh",
+  "requestedModel": "claude-opus-5-5",
+  "mcp_profile": "none",
+  "process_exit": 0,
+  "changes_verified": false,
+  "raw_output": "ops/ai/local/P1-SERVER-MEMORY-PREVIEW-20261017T073557366383Z*",
+  "billing_verified_at": "2026-10-17T05:01:40.332532+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "codex/claude-save-transport-20261017",
+  "base_commit": "fafed59efd4c0dbe043bab2d4990178bd8fa1ee8",
+  "worktree": "/Users/choi/.codex/worktrees/claude-save-transport/Memory_forge",
+  "allowed_files": [
+    "client/MemoryForgeUnity/Assets/Scripts/PracticePublicSnapshot.cs",
+    "client/MemoryForgeUnity/Assets/Scripts/PracticeServerSession.cs",
+    "client/MemoryForgeUnity/Assets/Tests/PlayMode/PracticeServerSessionPlayModeTests.cs"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "5b4cc1ba-9519-47ef-88f7-930ce53c643b",
+  "subtype": "success",
+  "is_error": false,
+  "result": "I've implemented the memory preview transport and written the tests, but nothing has been compiled or run. This job had no permission to run test commands, so Root needs to run the .NET and Unity tests.\n\n**Changed files (only the three I was allowed to edit)**\n- `PracticeServerSession.cs`\n  - Adds `PreviewMemoryAsync`, `PracticeMemoryPreviewResult` and an `IsCurrent(PracticeMemoryPreviewResult)` overload, matching the agreed interface.\n  - The request body is only `{\"selectedChangeIds\":[…]}` sent to the existing `/memory-preview` route. It uses the same one-at-a-time lock and account check as the battle query.\n  - It never touches the outbox (not even to read it), never applies state, and produces no events.\n  - I moved two existing checks into shared helpers without changing their behaviour (the account-context check and the error-code check).\n- `PracticePublicSnapshot.cs`\n  - Adds `PracticeMemoryPreviewView`: `Context`, a read-only copy of `SelectedChangeIds`, `Error`, and `ToJObject()`, which returns a detached copy of the whole reply.\n  - Adds an internal `PracticeRunView.PendingType`, read loosely, so it changes nothing about what parses.\n- `PracticeServerSessionPlayModeTests.cs`\n  - The class is now `public partial`. No existing test was changed.\n  - Six new plain-.NET tests (34 cases in total): empty and selected preview, server verdicts and refusals, stale context, a pending save left untouched, malformed replies, and the caller's selection copy at the same version.\n\n**Rules I chose (please check in review)**\n1. **New code `CONTEXT_NO_SAVE`.** Nothing is sent unless the shown run's `state.pending.type` is `\"save\"`. The UI lane needs to map this code.\n2. **Account check before sending.** The live account must match the screen's memory version, run and server version, otherwise the result is `REFRESH_REQUIRED` and nothing is posted. The reply must also carry the same run and version, otherwise it is `RESPONSE_MISMATCH` and a refresh is required.\n   - The reply has no memory version, but checking the server version is enough. The server changes memory only when it records a save as a run step (`Program.cs:338`), which also raises the server version.\n3. **What forces a refresh.** A `404 RUN_NOT_FOUND`, a `422 WRONG_PHASE`, a version mismatch, or an account mismatch marks the session as needing a refresh. `INVALID_SELECTION`, network failures and malformed replies do not, because they only mean the question went unanswered.\n4. **Strict deck rows (strict on purpose).** Each card entry may only have `key, id, plus, from, assigned, mods`. Keys must be unique across all decks, and `used` must list exactly the characters in `memory`. All numbers must be whole numbers from 0 to 2147483647. `error` must be null or an upper-case code. If the server ever adds a field to a card entry, the client will reject the whole reply until both sides change together.\n5. **Selections.** A null ID is refused locally with `INVALID_COMMAND`. Duplicates, unknown IDs and length limits are left to the server.\n\n**Limitations**\n- Like the battle-query version, `IsCurrent` for a preview checks only the context, not whether a refresh is due. Before enabling the save button, the UI should check `State.CanMutate` and that the preview matches its current selection. The commit refuses a stale screen anyway.\n- A preview counts as an operation, so a commit started while one is running gets `SESSION_BUSY`.\n- The new test helper names could clash with the UI lane's partial test file: `MemorySaveWorld`, `MemoryPreviewJson`, `SelectedIds`, `PreviewKeys`, `ChangeAddK9`, `ChangeUpgradeK1`, `NoSelection`. They can also be reused there.\n- I can't see a session_id from inside this session; Root has it in the CLI metadata.\n\n**Next:** Root compiles and runs the old and new tests on .NET and in Unity, then reviews the five rules above.",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ]
+}

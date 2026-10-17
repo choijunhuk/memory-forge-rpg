@@ -1,0 +1,21 @@
+{
+  "status": "FAIL",
+  "checks": [
+    "actual next run wins with preserved server memory",
+    "before deck contains the previously saved Nia card",
+    "actual victory offers at least four new Sera changes",
+    "actual save raycast reaches Change",
+    "actual save raycast reaches Change",
+    "victory allows two real changes after authoritative preview",
+    "actual save raycast reaches ClearChanges",
+    "actual save raycast reaches Change",
+    "actual save raycast reaches Change",
+    "actual save raycast reaches Change",
+    "actual save raycast reaches Change",
+    "actual Core over-capacity result closes saving",
+    "capacity refusal and all queries preserve whole real server envelope",
+    "actual save raycast reaches ClearChanges",
+    "actual save raycast reaches Change"
+  ],
+  "safe_error": "Exception: actual lower-character selection keeps its viewport through server preview"
+}

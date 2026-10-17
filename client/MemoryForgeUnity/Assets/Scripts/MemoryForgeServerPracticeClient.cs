@@ -19,7 +19,8 @@ namespace MemoryForge.Client
     // DEFAULT request only), forecasts and pick sheets
     // are the server's values; card/character names come from the existing content for display only. It does not replace the original
     // local expedition client. The battle reward, the rest/forge/shop node services, events and the archive have their own screens (one
-    // existing command per button); the memory-save screens are a later unit (shown as such).
+    // existing command per button); so do the terminal memory save (VICTORY/DEFEAT: local selection, the server's memory-preview, one
+    // memory-commit) and the DONE screen of the confirmed saved memory (P1-SERVER-MEMORY-SAVE-UI).
     // - Unconfigured it shows a small harmless status. Connect(factory) (runtime, Editor or development build only) creates the session
     //   and only refreshes: nothing is created, sent or retried on Connect or resume. The factory, session, credential, outbox, bodies
     //   and snapshots are never serialized or logged; nothing here chooses an endpoint or credential.
@@ -115,6 +116,17 @@ namespace MemoryForge.Client
         readonly Dictionary<string, string> partSlots = new Dictionary<string, string>(StringComparer.Ordinal);
         // Display-only event content (names, texts, choice labels, need.coins and the authored copy/remove counts); Core runs the effects.
         readonly Dictionary<string, RunEventDefinition> events = new Dictionary<string, RunEventDefinition>(StringComparer.Ordinal);
+        // P1-SERVER-MEMORY-SAVE-UI: the local, unsent save selection bound to the context it was made in; its revision (every selection,
+        // assignment, refresh and snapshot change moves it on) and the server preview asked at one revision.
+        PracticeUiContext? saveContext;
+        readonly List<string> saveSelection = new List<string>();
+        int saveRevision, previewRevision = -1;
+        bool previewWanted, previewing, assignOpen;
+        PracticeMemoryPreviewResult? previewResult;
+        // The save list's scroll offset, kept across redraws of the same context only (a selection, preview or busy change redraws all).
+        RectTransform? saveContent;
+        PracticeUiContext? saveScrollContext;
+        float? saveScrollY;
 
         // ───────── read-only state for Root's checks ─────────
         public bool Configured => factory != null;
@@ -154,6 +166,19 @@ namespace MemoryForge.Client
         public int DeckPickRequired => deckPick == null ? 0 : Required(deckPick);
         /// <summary>Whether a new command may be sent now (session CanMutate, nothing local open, no presentation, no operation).</summary>
         public bool CanCommand => !busy && session != null && session.State.CanMutate && rows == null && picker == null && prepared == null && deckPick == null;
+        /// <summary>True while the session's current snapshot shows the published terminal save (VICTORY/DEFEAT, pending save, state.memory).</summary>
+        public bool ShowingSave => SaveState(session?.State.Snapshot) != null;
+        /// <summary>The unsent save selection in the published change order (what a preview or save sends); empty without a current save.</summary>
+        public IReadOnlyList<string> SaveSelection => OrderedSelection().ToArray();
+        /// <summary>The server's preview of exactly the current selection in exactly the current context; null while none is current.</summary>
+        public PracticeMemoryPreviewView? SavePreview => PreviewCurrent() ? previewResult!.View : null;
+        /// <summary>The code of the current selection's failed preview (an answer without a view); null otherwise.</summary>
+        public string? SavePreviewFailure => PreviewFailure();
+        /// <summary>True while a preview of the current selection is due or in flight.</summary>
+        public bool SavePreviewPending => ShowingSave && (previewWanted || previewing);
+        /// <summary>Whether the save may be sent now: CanCommand, no open sheet and a fresh, error-free server preview of exactly this selection.</summary>
+        public bool CanCommitSave => CanCommand && !assignOpen && ShowingSave && PreviewCurrent() && previewResult!.View!.Error == null;
+        public bool AssignOpen => assignOpen;
 
         // ───────── lifecycle ─────────
 
@@ -208,6 +233,8 @@ namespace MemoryForge.Client
         {
             selectedCard = null; selectedMode = null; target = null; picker = null; prepared = null; deckPick = null; rows = null;
             queryResult = null; queryWanted = false; refreshWanted = false; generation++;
+            saveContext = null; saveSelection.Clear(); assignOpen = false; previewResult = null; previewWanted = false; saveRevision++;
+            saveContent = null; saveScrollContext = null; saveScrollY = null;
         }
 
         void Update()
@@ -218,6 +245,7 @@ namespace MemoryForge.Client
             else if (prepared != null && !busy) DispatchPrepared();
             if (refreshWanted && !busy && session != null) { refreshWanted = false; Launch(RefreshAsync); }
             if (queryWanted && !busy && session != null && !PresentationBarrier) Launch(RunQueryAsync);
+            if (previewWanted && !busy && session != null && !PresentationBarrier) Launch(RunPreviewAsync);
         }
 
         // ───────── operations (each button calls one of these) ─────────
@@ -226,9 +254,12 @@ namespace MemoryForge.Client
         {
             var result = await s.RefreshAsync();
             if (!ReferenceEquals(s, session)) return false;
+            // A refresh never keeps an unsent save selection: the player chooses again from what the server shows now.
+            bool dropped = saveSelection.Count > 0;
+            saveContext = null; saveSelection.Clear();
             AfterSnapshotChange();
             if (result.Snapshot == null) { Say(Explain(result.Code) + " 마지막으로 받은 화면을 보여 주고 있어요.", true); return false; }
-            Say("서버의 최신 상태를 불러왔어요.", false);
+            Say("서버의 최신 상태를 불러왔어요." + (dropped ? " 고른 변화는 저장하지 않았으니 다시 골라 주세요." : ""), false);
             return true;
         });
 
@@ -612,6 +643,212 @@ namespace MemoryForge.Client
         static int EventPicks(RunEventChoice choice) =>
             choice.Effects.CardCopy.GetValueOrDefault() != 0 ? 1 : Math.Max(0, choice.Effects.CardRemove.GetValueOrDefault());
 
+        // ───────── terminal memory save (P1-SERVER-MEMORY-SAVE-UI): local selection, the server's preview, one memory-commit ─────────
+        // §8.9–8.12 / §14.7 / §17.4: the published pending {type: save, defeat} with state.memory {cid: {capacity, usedBefore, before, after,
+        // changes [{id, cid, key, kind, label, value?}]}}. A selection is local intent bound to the context it was made in. Every change of
+        // it, an assignment, a refresh and any snapshot change drops the earlier preview (an answer still in flight included) and asks the
+        // pure memory-preview of exactly the new selection. The resulting deck, used/capacities and the preview error — DEFEAT_KEEP_ONE (one
+        // NEW change across the party on a defeat) and OVER_CAPACITY (the whole resulting deck) — are the server's; nothing here diffs decks,
+        // adds costs or judges a rule. Saving is the existing memory-commit of exactly the previewed ids, enabled only by a fresh error-free
+        // preview in the current context; an uncertain save is the header's exact retry, and only the confirmed account shows it saved.
+
+        /// <summary>Adds or removes one published change id of the current save (local, unsent) and asks the server's preview of the new
+        /// selection. Allowed while an earlier preview is in flight (its answer is then dropped); refused during a send, an unresolved or
+        /// unreadable request, a due refresh, a presentation or the assignment sheet.</summary>
+        public bool ToggleChange(string changeId)
+        {
+            if (changeId == null) throw new ArgumentNullException(nameof(changeId));
+            var snap = session?.State.Snapshot;
+            var save = SaveState(snap);
+            if (save == null || !SaveSelectable() || !ChangeOrder(save).Contains(changeId)) return false;
+            BindSave(snap!.Context);
+            if (!saveSelection.Remove(changeId)) saveSelection.Add(changeId);
+            InvalidatePreview(true);
+            Say("선택을 바꿨어요. 서버 미리보기를 조회하며, 저장을 확정하기 전에는 기억이 바뀌지 않아요.", false);
+            Render();
+            return true;
+        }
+
+        /// <summary>Empties the local selection (keep the saved deck as it is) and asks the server's preview of no change.</summary>
+        public bool ClearChanges()
+        {
+            var snap = session?.State.Snapshot;
+            if (SaveState(snap) == null || !SaveSelectable() || OrderedSelection().Count == 0) return false;
+            saveSelection.Clear();
+            InvalidatePreview(true);
+            Say("선택을 비웠어요. 이대로 저장하면 기존 기억 덱을 그대로 유지해요.", false);
+            Render();
+            return true;
+        }
+
+        /// <summary>Asks the server's pure preview of exactly the current selection now (it is also asked by itself after every change).</summary>
+        public Task<bool> PreviewSaveAsync()
+        {
+            if (SaveState(session?.State.Snapshot) == null) return Refuse("지금은 기억 저장 단계가 아니에요.");
+            if (busy || !SaveReadable()) return Refuse(NotReady());
+            return RunPreviewAsync();
+        }
+
+        /// <summary>memory-commit {selectedChangeIds}: exactly the ids of the fresh, error-free server preview of the current selection in the
+        /// current context (published order), sent once. The selection is gone once sent, whatever the answer. An uncertain answer stays
+        /// pending for the exact retry; nothing is shown as saved before the server's confirmed account and run say so.</summary>
+        public Task<bool> CommitSaveAsync()
+        {
+            if (assignOpen) return Refuse("배정 창을 먼저 닫아 주세요.");
+            if (!CanCommand) return Refuse(Blocked());
+            if (SaveState(session!.State.Snapshot) == null) return Refuse("지금은 기억 저장 단계가 아니에요.");
+            if (!PreviewCurrent())
+            {
+                if (!previewing && PreviewFailure() == null) previewWanted = true;
+                return Refuse("서버 미리보기를 아직 받지 못했어요. 미리보기를 받은 뒤에 저장할 수 있어요.");
+            }
+            var view = previewResult!.View!;
+            if (view.Error != null) return Refuse("저장할 수 없어요: " + SaveReason(view));
+            var context = view.Context;
+            var ids = view.SelectedChangeIds.ToArray();
+            saveContext = null; saveSelection.Clear(); InvalidatePreview(false);
+            return Mutate((s, current) => s.CommitMemoryAsync(context, ids), false, false,
+                ids.Length == 0 ? "기존 기억 덱을 그대로 유지하고 탐사를 마쳤어요." : "고른 변화 " + ids.Length + "개를 기억에 저장했어요.");
+        }
+
+        /// <summary>Opens the save screen's local assignment sheet: every gained common card of the public deck, one button per party member.</summary>
+        public bool OpenAssign()
+        {
+            var save = SaveState(session?.State.Snapshot);
+            if (save == null || !SaveReadable() || busy || Assignable(save).Count == 0) return false;
+            assignOpen = true;
+            Render();
+            return true;
+        }
+
+        public void CloseAssign()
+        {
+            if (!assignOpen) return;
+            assignOpen = false;
+            Render();
+        }
+
+        /// <summary>assign {key, charId} (the existing command): a gained common card of the public deck to a party member. The selection and
+        /// preview are dropped before it is sent (the change list after it is the server's); BAD_ASSIGN and
+        /// REASSIGNMENT_REQUIRES_SEPARATE_FLOW stay Core's verdict. Nothing is ever assigned or selected by itself.</summary>
+        public Task<bool> AssignAsync(string key, string charId)
+        {
+            if (key == null) throw new ArgumentNullException(nameof(key));
+            if (charId == null) throw new ArgumentNullException(nameof(charId));
+            if (!CanCommand) return Refuse(Blocked());
+            var save = SaveState(session!.State.Snapshot);
+            if (save == null) return Refuse("지금은 기억 저장 단계가 아니에요.");
+            if (!Assignable(save).Any(c => Str(c["key"]) == key) || !PartyIds(save).Contains(charId)) return Refuse("지금 배정할 수 있는 카드나 동료가 아니에요.");
+            saveContext = null; saveSelection.Clear(); InvalidatePreview(false);
+            return Mutate((s, context) => s.CommandAsync(context, "assign", new JObject { ["key"] = key, ["charId"] = charId }), false, false,
+                "배정을 바꿨어요. 고른 변화와 미리보기는 초기화했어요. 서버가 다시 만든 변화 목록에서 골라 주세요.");
+        }
+
+        async Task<bool> RunPreviewAsync()
+        {
+            previewWanted = false;
+            var snap = session?.State.Snapshot;
+            if (snap == null || SaveState(snap) == null || !SaveReadable()) return false;
+            BindSave(snap.Context);
+            var ids = OrderedSelection();
+            int asking = saveRevision;
+            var context = snap.Context;
+            previewing = true;
+            try
+            {
+                return await Operate(async s =>
+                {
+                    var result = await s.PreviewMemoryAsync(context, ids);
+                    // A stale answer (another selection, context or session) is dropped: only the current one may enable saving.
+                    if (!ReferenceEquals(s, session) || asking != saveRevision || !s.IsCurrent(result)) return false;
+                    previewResult = result; previewRevision = asking;
+                    if (result.View == null) { Say("서버 미리보기를 받지 못했어요. " + Explain(result.Code), true); return false; }
+                    return true;
+                });
+            }
+            finally
+            {
+                previewing = false;
+                Render();
+            }
+        }
+
+        // The answer of the current revision, still bound to the session's current context, for exactly the current selection.
+        bool PreviewCurrent()
+        {
+            var view = previewResult?.View;
+            if (view == null || previewRevision != saveRevision || session == null || !session.IsCurrent(previewResult!)) return false;
+            return view.Context.Equals(saveContext) && view.SelectedChangeIds.SequenceEqual(OrderedSelection());
+        }
+        string? PreviewFailure() => previewResult != null && previewResult.View == null && previewRevision == saveRevision && session != null
+            && session.IsCurrent(previewResult) ? previewResult.Code : null;
+
+        // The selection belongs to the context it was made in; another context starts empty.
+        void BindSave(PracticeUiContext context)
+        {
+            if (saveContext != null && saveContext.Equals(context)) return;
+            saveContext = context; saveSelection.Clear(); InvalidatePreview(false);
+        }
+        // Every selection, assignment, refresh and snapshot change makes the earlier preview unusable, an answer still in flight included.
+        void InvalidatePreview(bool ask)
+        {
+            saveRevision++; previewResult = null;
+            previewWanted = ask && ShowingSave;
+        }
+        // The unsent selection in the published change order: exactly what a preview or save sends.
+        List<string> OrderedSelection()
+        {
+            var snap = session?.State.Snapshot;
+            var save = SaveState(snap);
+            if (save == null || saveContext == null || !saveContext.Equals(snap!.Context)) return new List<string>();
+            return ChangeOrder(save).Where(saveSelection.Contains).ToList();
+        }
+        // A preview may be asked with a current, refreshed snapshot and nothing unresolved or unreadable (an earlier preview may be running).
+        bool SaveReadable() => session != null && session.State.Snapshot != null && session.State.Pending == null && session.State.OutboxCode == null
+            && !session.State.NeedsRefresh;
+        bool SaveSelectable() => SaveReadable() && (!busy || previewing) && rows == null && picker == null && prepared == null && deckPick == null && !assignOpen;
+
+        // The published terminal save of a snapshot: VICTORY/DEFEAT with pending {type: save} and the public state.memory; else null.
+        static JObject? SaveState(PracticeSnapshot? snap)
+        {
+            var run = snap?.Run;
+            if (run == null || run.Phase != "VICTORY" && run.Phase != "DEFEAT") return null;
+            var state = run.StateJObject();
+            return Pending(state, "save") != null && state["memory"] is JObject ? state : null;
+        }
+        static List<string> PartyIds(JObject state) =>
+            ((state["party"] as JArray) ?? new JArray()).OfType<JObject>().Select(p => Str(p["charId"])).OfType<string>().Distinct().ToList();
+        // The save's characters: the party order, then any other published member of state.memory (shown, never dropped).
+        static List<string> SaveCharacters(JObject state)
+        {
+            var memory = state["memory"] as JObject;
+            var order = PartyIds(state).Where(cid => memory?[cid] is JObject).ToList();
+            if (memory != null) foreach (var member in memory.Properties()) if (member.Value is JObject && !order.Contains(member.Name)) order.Add(member.Name);
+            return order;
+        }
+        static List<JObject> SaveChanges(JObject state, string cid) =>
+            ((((state["memory"] as JObject)?[cid] as JObject)?["changes"] as JArray) ?? new JArray()).OfType<JObject>().ToList();
+        // Every published change id in the published order (the original's change-list order: party, then each character's list).
+        static List<string> ChangeOrder(JObject state)
+        {
+            var ids = new List<string>();
+            foreach (string cid in SaveCharacters(state))
+                foreach (var change in SaveChanges(state, cid))
+                    if (Str(change["id"]) is string id && !ids.Contains(id)) ids.Add(id);
+            return ids;
+        }
+        // The original assignment sheet's cards: gained common cards of the public deck (Core judges whether one may move).
+        static List<JObject> Assignable(JObject state) =>
+            ((state["deck"] as JArray) ?? new JArray()).OfType<JObject>().Where(c => Str(c["owner"]) == "common" && Truthy(c["gained"])).ToList();
+        // The ids of an unresolved memory-commit of this run, read from the stored request: shown as unconfirmed, never as saved.
+        List<string>? PendingSaveIds(string runId)
+        {
+            var pending = session?.State.Pending;
+            if (pending == null || pending.Route != PracticeCommandOutbox.MemoryCommitRoute(runId)) return null;
+            try { return ((JObject.Parse(pending.Body)["selectedChangeIds"] as JArray) ?? new JArray()).Select(Str).OfType<string>().ToList(); }
+            catch (Exception) { return new List<string>(); }
+        }
+
         /// <summary>Barrier: shows every row at once. Ordinary presentation: closes it. Changes text only; sends nothing.</summary>
         public void SkipPresentation()
         {
@@ -698,6 +935,12 @@ namespace MemoryForge.Client
             if (target != null && !Enemies().Any(e => Str(e["uid"]) == target && Bool(e["alive"]))) target = null;
             generation++; queryResult = null;
             queryWanted = selectedCard != null || picker != null;
+            // The save selection survives only in its own context with every id still published; the preview is always asked again.
+            var save = SaveState(snap);
+            if (save == null || saveContext == null || !saveContext.Equals(snap!.Context)) { saveContext = null; saveSelection.Clear(); }
+            else { var published = ChangeOrder(save); saveSelection.RemoveAll(id => !published.Contains(id)); }
+            if (save == null) assignOpen = false;
+            InvalidatePreview(save != null);
         }
 
         void SelectionChanged()
@@ -870,6 +1113,8 @@ namespace MemoryForge.Client
         void Render()
         {
             if (!isActiveAndEnabled || font == null || !Application.isPlaying) return;
+            // The offset the player scrolled the save list to (SaveView restores it only for the same context).
+            saveScrollY = saveContent != null ? saveContent.anchoredPosition.y : (float?)null;
             RemoveView();
             var canvasObject = new GameObject(OwnedCanvas, typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
             canvasObject.transform.SetParent(transform, false);
@@ -902,10 +1147,13 @@ namespace MemoryForge.Client
                 else if (run.Phase == "SHOP" && Pending(State(), "shop") != null) ShopView();
                 else if (run.Phase == "EVENT" && Pending(State(), "event") != null) EventView();
                 else if (run.Phase == "ARCHIVE" && Pending(State(), "archive") != null) ArchiveView();
+                else if (SaveState(snap) != null) SaveView();
+                else if (run.Phase == "DONE") DoneView();
                 else LaterView(run.Phase);
                 Label(frame, notice, 32, 846, 1536, 44, 21, noticeError ? Danger : Memory);
                 if (picker != null) PickView();
                 if (deckPick != null) DeckPickView();
+                if (assignOpen && SaveState(snap) != null) AssignView();
                 if (rows != null && barrier) BarrierView();
             }
             if (factory != null && EventSystem.current == null)
@@ -982,7 +1230,9 @@ namespace MemoryForge.Client
             var panel = Box(frame!, "Later", 32, 120, 1536, 300, Panel);
             Label(panel, PhaseName(phase), 24, 20, 1488, 44, 32, Brass, FontStyle.Bold);
             Label(panel, "체력 " + Int(state["hp"]) + " / " + Int(state["maxHp"]) + "   ·   동전 " + Int(state["coins"]), 24, 80, 1488, 36, 24, Ink);
-            Label(panel, "이 단계(기억 저장)는 다음 작업 단위에서 서버 화면으로 연결돼요. 원래 로컬 탐사 화면은 그대로 있어요.", 24, 140, 1488, 80, 22, Muted);
+            // A terminal phase without the published change list cannot be saved from here: nothing is offered or sent.
+            Label(panel, phase == "VICTORY" || phase == "DEFEAT" ? "서버가 기억 저장에 필요한 변화 목록을 보내지 않았어요. 새로고침해 주세요. 아무것도 보내지 않았어요."
+                : "이 단계는 아직 서버 화면이 없어요. 원래 로컬 탐사 화면은 그대로 있어요.", 24, 140, 1488, 80, 22, Muted);
         }
 
         // P1-SERVER-EVENT-ARCHIVE-UI §7.7: the published event by this device's matching content. Before the choice: every authored choice
@@ -1027,7 +1277,7 @@ namespace MemoryForge.Client
         }
 
         // §7.5: the published archive. Continue or return is the existing archive command; the heal, the next zone map and the save that
-        // follows are Core's (the save screens remain a later unit).
+        // follows are Core's (the save itself is SaveView's).
         void ArchiveView()
         {
             var state = State()!;
@@ -1042,7 +1292,191 @@ namespace MemoryForge.Client
                 20, 116, 1496, 90, 21, Muted);
             Button(panel, "ArchiveContinue", "계속 탐사", 20, 220, 440, 72, () => Launch(() => ArchiveAsync("continue")), Brass, 24).interactable = ready;
             Button(panel, "ArchiveReturn", "귀환하고 저장", 480, 220, 440, 72, () => Launch(() => ArchiveAsync("return")), Line, 24).interactable = ready;
-            Label(panel, "귀환하면 기억 저장 단계로 가요. 기억 저장 화면은 다음 작업 단위에서 서버 화면으로 연결돼요.", 20, 316, 1496, 60, 20, Muted);
+            Label(panel, "귀환하면 기억 저장 화면에서 이번 탐사의 변화를 골라 저장해요.", 20, 316, 1496, 60, 20, Muted);
+        }
+
+        // P1-SERVER-MEMORY-SAVE-UI §8.12: the published terminal save. Per character, top: the saved deck before this run ("그대로 유지");
+        // then this run's changes exactly as the server lists them (one button each: a local selection, only previewed, never committed); then the server's
+        // preview of exactly the current selection — its resulting deck and used/capacity. Everything sits in one vertical scroll whose
+        // height comes from the published counts, so no row or card is hidden. The footer states why saving is closed (preview due, failed
+        // or refused, an unresolved request) and offers the one save, clearing the selection (keep the saved deck) and an explicit re-ask.
+        void SaveView()
+        {
+            var state = State()!;
+            var snap = Snapshot!;
+            bool defeat = Truthy(Pending(state, "save")!["defeat"]);
+            var pendingIds = PendingSaveIds(snap.Run!.RunId);
+            var selected = OrderedSelection();
+            var view = SavePreview;
+            var preview = view?.ToJObject()["preview"] as JObject;
+            string? failure = PreviewFailure();
+            bool asking = previewWanted || previewing, selectable = SaveSelectable() && pendingIds == null;
+
+            var head = Box(frame!, "SaveHead", 32, 100, 1536, 132, Panel);
+            Label(head, defeat ? "패배 · 출발 전 기억은 그대로 지켜져요" : "탐사 종료 · 이번 탐사의 변화를 골라 기억에 더하세요", 20, 8, 1260, 42, 28, defeat ? Danger : Brass, FontStyle.Bold);
+            Label(head, defeat
+                ? "패배해도 출발 전 기억 덱은 그대로예요. 이번 탐사에서 생긴 변화는 파티 전체에서 1개까지 더할 수 있어요. 카드 한 장 단위가 아니라 강화·진화·부품·추가·제거 같은 변화 하나예요. 아무것도 고르지 않으면 기존 덱을 유지해요."
+                : "출발 전 기억 덱에 이번 탐사의 변화를 여러 개 더할 수 있어요. 용량은 고른 변화의 합이 아니라 완성된 결과 덱 전체로 서버가 계산해요. 저장한 덱은 다음 탐사의 시작 덱이 돼요.",
+                20, 52, 1496, 50, 18, Ink);
+            Label(head, "고른 변화 " + selected.Count + "개" + (defeat ? " (패배: 파티 전체 1개까지)" : "") + "  ·  고르기는 미리보기 조회만 해요 · 기억은 저장 후에 바뀌어요  ·  저장된 기억 버전 "
+                + snap.Context.MemoryVersion + " (서버)", 20, 104, 1260, 26, 17, Muted);
+            if (Assignable(state).Count > 0)
+                Button(head, "OpenAssign", "공용 카드 배정", 1300, 8, 216, 44, () => OpenAssign(), Line, 20).interactable = SaveReadable() && !busy && pendingIds == null;
+
+            var memory = (JObject)state["memory"]!;
+            var sections = SaveCharacters(state).Select(cid =>
+            {
+                var entry = (JObject)memory[cid]!;
+                var before = ((entry["before"] as JArray) ?? new JArray()).OfType<JObject>().ToList();
+                var result = ((preview?["memory"] as JObject)?[cid] as JArray)?.OfType<JObject>().ToList();
+                return (cid, entry, before, changes: SaveChanges(state, cid), result);
+            }).ToList();
+            var list = Scroll(frame!, "SaveList", 32, 242, 1536, 470, 1536, sections.Sum(s => SectionHeight(s.before.Count, s.changes.Count, s.result?.Count)), Background);
+            // A redraw in the same context keeps where the player scrolled (clamped to the new content); another context starts at the top.
+            if (saveScrollY != null && snap.Context.Equals(saveScrollContext))
+                list.anchoredPosition = new Vector2(list.anchoredPosition.x,
+                    Mathf.Clamp(saveScrollY.Value, 0, Math.Max(0, list.rect.height - ((RectTransform)list.parent).rect.height)));
+            saveContent = list; saveScrollContext = snap.Context;
+            float y = 0;
+            foreach (var (cid, entry, before, changes, result) in sections)
+            {
+                float height = SectionHeight(before.Count, changes.Count, result?.Count);
+                var section = Box(list, "Memory:" + cid, 0, y, 1536, height - 16, Panel);
+                string resultText = asking ? "결과 용량: 서버 미리보기 확인 중…" : failure != null ? "결과 용량: 미리보기를 받지 못했어요" : "결과 용량: 미리보기 없음";
+                Color resultColor = failure != null ? Danger : Muted;
+                if (preview != null)
+                {
+                    int? used = Int((preview["used"] as JObject)?[cid]), capacity = Int((preview["capacities"] as JObject)?[cid]);
+                    // Only points at the column the server's own OVER_CAPACITY refusal is about; the verdict is the preview's error.
+                    bool over = view!.Error == "OVER_CAPACITY" && used > capacity;
+                    resultText = "결과 용량 " + used + "/" + capacity + " (서버 미리보기)" + (over ? " · 초과" : "");
+                    resultColor = over ? Danger : Memory;
+                }
+                Label(section, CharacterName(cid), 20, 10, 400, 40, 28, Ink, FontStyle.Bold);
+                Label(section, "출발 전 용량 " + Int(entry["usedBefore"]) + "/" + Int(entry["capacity"]), 440, 14, 360, 34, 20, Brass);
+                Label(section, resultText, 820, 14, 696, 34, 20, resultColor);
+                float sy = 58;
+                Label(section, "출발 전에 있던 기억 " + before.Count + "장 — 그대로 유지", 20, sy, 1496, 30, 20, Memory, FontStyle.Bold);
+                sy = Chips(section, before.Select(SpecText).ToList(), sy + 34, "저장된 카드가 없어요.");
+                Label(section, "이번 탐사에서 생긴 변화 " + changes.Count + "개" + (changes.Count > 0 ? "  ·  눌러서 고르거나 해제해요 (아직 저장 안 함)" : ""), 20, sy, 1496, 30, 20, Memory, FontStyle.Bold);
+                sy += 34;
+                if (changes.Count == 0) { Label(section, "바뀐 점이 없어요. 출발 전 기억이 그대로 유지돼요.", 20, sy, 1496, 34, 18, Muted); sy += 40; }
+                foreach (var change in changes)
+                {
+                    string id = Str(change["id"]) ?? "";
+                    bool on = pendingIds != null ? pendingIds.Contains(id) : selected.Contains(id);
+                    string line = pendingIds != null ? (on ? "확인 중인 저장 요청에 들어 있어요 · 아직 저장된 것이 아니에요" : "확인 중인 저장 요청에 없어요")
+                        : on ? "고름 · 서버 미리보기 결과에 반영돼요" : "고르지 않음 · 이번에는 남기지 않아요";
+                    Button(section, "Change:" + id, (on ? "[선택] " : "") + KindName(Str(change["kind"])) + " · " + (Str(change["label"]) ?? "변화") + "\n" + line,
+                        20, sy, 1496, 62, () => ToggleChange(id), on ? Memory : Line, 19).interactable = selectable;
+                    sy += 70;
+                }
+                Label(section, result == null ? "서버 미리보기 결과 덱" : "서버 미리보기 결과 덱 " + result.Count + "장", 20, sy, 1496, 30, 20, Memory, FontStyle.Bold);
+                if (result != null) Chips(section, result.Select(SpecText).ToList(), sy + 34, "결과 덱이 비어 있어요.");
+                else Label(section, asking ? "서버 미리보기를 확인하는 중이에요…" : "서버 미리보기를 받으면 결과 덱을 보여 줘요.", 20, sy + 34, 1496, 34, 18, Muted);
+                y += height;
+            }
+
+            string status;
+            Color tone = Danger;
+            if (pendingIds != null)
+                status = "저장 요청(변화 " + pendingIds.Count + "개)을 서버에서 확인하지 못했어요. 위의 '같은 요청 다시 보내기'로 같은 요청을 확인해 주세요. 확인되기 전에는 저장된 것으로 보지 않아요.";
+            else if (!SaveReadable())
+                status = session == null ? "연결이 멈췄어요. 다시 돌아오면 서버 상태를 새로 불러와요." : "서버 확인이 끝나지 않아 고르거나 저장할 수 없어요. 새로고침해 주세요.";
+            else if (asking) { status = "서버 미리보기를 확인하는 중이에요… 미리보기를 받기 전에는 저장할 수 없어요."; tone = Muted; }
+            else if (failure != null) status = "서버 미리보기를 받지 못했어요: " + Explain(failure) + " '미리보기 다시 확인'을 눌러 주세요. 저장은 막혀 있어요.";
+            else if (view == null) { status = "서버 미리보기가 아직 없어요. '미리보기 다시 확인'을 눌러 주세요."; tone = Muted; }
+            else if (view.Error != null) status = "저장할 수 없는 이유: " + SaveReason(view) + " 선택을 바꾸거나 '선택 비우기'로 기존 덱을 유지할 수 있어요.";
+            else
+            {
+                status = selected.Count == 0 ? "서버 미리보기: 기존 기억 덱 그대로예요. 저장하면 이대로 탐사를 마쳐요."
+                    : "서버 미리보기: 고른 변화 " + selected.Count + "개를 더한 결과 덱이 위에 보여요. 저장하면 탐사를 마쳐요.";
+                tone = Memory;
+            }
+            var foot = Box(frame!, "SaveFoot", 32, 722, 1536, 116, Panel);
+            Label(foot, status, 20, 8, 936, 100, 19, tone);
+            bool ready = CanCommitSave;
+            string caption = pendingIds != null ? "저장 요청 확인 중" : selected.Count != 0 ? "고른 변화 " + selected.Count + "개 저장하고 끝내기" : "변화 없이 저장 (기존 덱 유지)";
+            Button(foot, "CommitSave", caption, 976, 10, 344, 96, () => Launch(CommitSaveAsync), ready ? Brass : Line, 22).interactable = ready;
+            Button(foot, "ClearChanges", "선택 비우기", 1336, 10, 180, 44, () => ClearChanges(), Line, 19).interactable = selectable && selected.Count > 0;
+            Button(foot, "PreviewSave", "미리보기 다시 확인", 1336, 62, 180, 44, () => Launch(PreviewSaveAsync), Line, 18).interactable = SaveReadable() && !busy;
+        }
+
+        // One character section of SaveView: header, the saved deck, the change rows and the preview deck (each deck in chip rows).
+        static float SectionHeight(int before, int changes, int? result) =>
+            58 + 34 + ChipsHeight(before) + 34 + (changes == 0 ? 40 : changes * 70) + 34 + (result == null ? 40 : ChipsHeight(result.Value)) + 10 + 16;
+        static float ChipsHeight(int count) => count == 0 ? 40 : (count + 3) / 4 * 46;
+        // Deck rows as fixed chips, four per line, so a long deck never cuts a card name off; returns the y below them.
+        float Chips(Transform parent, IReadOnlyList<string> names, float y, string empty)
+        {
+            if (names.Count == 0) { Label(parent, empty, 20, y, 1496, 34, 18, Muted); return y + ChipsHeight(0); }
+            for (int i = 0; i < names.Count; i++)
+            {
+                var chip = Box(parent, "Chip", 20 + i % 4 * 374, y + i / 4 * 46, 366, 40, Background);
+                Label(chip, names[i], 10, 4, 346, 32, 18, Ink);
+            }
+            return y + ChipsHeight(names.Count);
+        }
+
+        // The save screen's assignment sheet (the original's): every gained common card with one button per party member; each sends the
+        // existing assign command at once. Which assignment Core allows is its verdict (a card saved before this run is refused).
+        void AssignView()
+        {
+            var state = State()!;
+            var cards = Assignable(state);
+            var party = PartyIds(state);
+            var blocker = Box(frame!, "AssignBlocker", 0, 0, 1600, 900, new Color(0, 0, 0, 0.6f));
+            blocker.GetComponent<Image>().raycastTarget = true;
+            var p = Box(frame!, "AssignSheet", 160, 100, 1280, 700, Panel);
+            Label(p, "공용 카드는 누구의 기억에 넣을까요?", 24, 16, 1232, 44, 28, Ink, FontStyle.Bold);
+            Label(p, "누르면 바로 서버에 배정을 보내요. 배정을 바꾸면 고른 변화와 미리보기가 초기화되고, 서버가 다시 만든 변화 목록에서 다시 골라야 해요. "
+                + "출발 전 기억에 있던 카드의 배정은 여기서 바꿀 수 없어요.", 24, 62, 1232, 56, 18, Muted);
+            float width = Math.Min(260, (1232f - 420) / Math.Max(1, party.Count));
+            var list = Scroll(p, "AssignList", 24, 128, 1232, 460, 1232, cards.Count * 70, Background);
+            bool ready = CanCommand;
+            for (int i = 0; i < cards.Count; i++)
+            {
+                string key = Str(cards[i]["key"]) ?? "", assigned = Str(cards[i]["assigned"]) ?? "";
+                Label(list, CardName(Str(cards[i]["id"])) + (Truthy(cards[i]["plus"]) ? "+" : ""), 12, i * 70 + 14, 396, 44, 22, Ink);
+                for (int k = 0; k < party.Count; k++)
+                {
+                    string cid = party[k];
+                    Button(list, "Assign:" + key + ":" + cid, CharacterName(cid) + (assigned == cid ? " (지금)" : ""), 420 + k * width, i * 70 + 6, width - 8, 58,
+                        () => Launch(() => AssignAsync(key, cid)), assigned == cid ? Memory : Line, 20).interactable = ready;
+                }
+            }
+            Button(p, "CloseAssign", "닫기", 1000, 612, 256, 64, CloseAssign, Line, 22);
+        }
+
+        // DONE after a confirmed save: the run's outcome, this run's entry of the account's public history, and the saved decks and memory
+        // version exactly as the confirmed account read shows them — never a local copy of what was selected. The next run is the header's
+        // existing new-run command, which starts from this memory (useMemory).
+        void DoneView()
+        {
+            var snap = Snapshot!;
+            var state = State()!;
+            string runId = snap.Run!.RunId;
+            var memory = snap.Account.ToJObject()["memory"] as JObject;
+            var decks = memory?["memory"] as JObject;
+            var entry = ((memory?["history"] as JArray) ?? new JArray()).OfType<JObject>().LastOrDefault(h => Str(h["runId"]) == runId);
+            int? saved = (entry?["selectedChangeIds"] as JArray)?.Count;
+            var head = Box(frame!, "Done", 32, 100, 1536, 150, Panel);
+            Label(head, OutcomeName(Str((state["result"] as JObject)?["outcome"])) + " · 기억 저장을 마쳤어요", 20, 10, 1496, 44, 32, Brass, FontStyle.Bold);
+            Label(head, (entry == null ? "이 탐사의 저장 기록은 서버 계정 기록에서 찾지 못했어요" : saved == 0 ? "기존 기억 덱을 그대로 유지했어요" : "변화 " + saved + "개를 기억에 저장했어요")
+                + "  ·  저장된 기억 버전 " + snap.Account.MemoryVersion + " (서버 확인)", 20, 62, 1496, 34, 22, Memory);
+            Label(head, "다음 탐사는 아래의 저장된 기억 덱으로 시작해요. 위의 '새 서버 탐사'를 누르면 이 기억으로 출발해요.", 20, 104, 1496, 34, 19, Muted);
+            var columns = PartyIds(state).Concat(decks?.Properties().Select(p => p.Name) ?? Enumerable.Empty<string>()).Distinct()
+                .Select(cid => (cid, cards: (decks?[cid] as JArray)?.OfType<JObject>().Select(SpecText).ToList())).ToList();
+            float Height(List<string>? cards) => 50 + (cards == null ? 0 : ChipsHeight(cards.Count)) + 16;
+            var list = Scroll(frame!, "SavedList", 32, 260, 1536, 576, 1536, columns.Sum(c => Height(c.cards)), Background);
+            float y = 0;
+            foreach (var (cid, cards) in columns)
+            {
+                var section = Box(list, "Saved:" + cid, 0, y, 1536, Height(cards) - 16, Panel);
+                Label(section, CharacterName(cid) + (cards == null ? " · 기본 덱 (저장된 변화 없음)" : " · 저장된 기억 덱 " + cards.Count + "장"), 20, 8, 1496, 36, 24, Ink, FontStyle.Bold);
+                if (cards != null) Chips(section, cards, 50, "저장된 카드가 없어요.");
+                y += Height(cards);
+            }
         }
 
         // P1-SERVER-SERVICES-UI: the published rest {uses}. How much is healed and whether healing is allowed (CANNOT_HEAL) are Core's,
@@ -1481,7 +1915,30 @@ namespace MemoryForge.Client
         string ErrorText(string code)
         {
             if (errors.TryGetValue(code, out var text) && !text.Contains("내부")) return text;
+            if (SaveErrors.TryGetValue(code, out var save)) return save;
             return "지금은 이 행동을 할 수 없어요.";
+        }
+        // Fixed texts for the save codes the shared error table does not name (display only; the verdicts are Core's).
+        static readonly Dictionary<string, string> SaveErrors = new Dictionary<string, string>(StringComparer.Ordinal)
+        {
+            ["REASSIGNMENT_REQUIRES_SEPARATE_FLOW"] = "출발 전 기억에 있던 카드의 배정은 여기서 바꿀 수 없어요.",
+            ["INVALID_SELECTION"] = "고른 변화가 서버의 변화 목록과 맞지 않아요. 새로고침한 뒤 다시 골라 주세요.",
+            ["VERSION_CONFLICT"] = "저장된 기억이 그사이 바뀌었어요. 새로고침해서 최신 기억을 확인해 주세요."
+        };
+
+        // The server preview's refusal in words: its own error and numbers (nothing is recomputed here).
+        string SaveReason(PracticeMemoryPreviewView view)
+        {
+            if (view.Error == "DEFEAT_KEEP_ONE")
+                return "패배하면 이번 탐사의 변화는 파티 전체에서 1개까지만 더할 수 있어요(카드 한 장이 아니라 변화 하나). 지금 " + view.SelectedChangeIds.Count + "개를 골랐어요.";
+            if (view.Error != "OVER_CAPACITY") return ErrorText(view.Error ?? "");
+            var preview = view.ToJObject()["preview"] as JObject;
+            var used = preview?["used"] as JObject;
+            var capacities = preview?["capacities"] as JObject;
+            var over = (used?.Properties() ?? Enumerable.Empty<JProperty>()).Where(p => Int(p.Value) > Int(capacities?[p.Name]))
+                .Select(p => CharacterName(p.Name) + " " + Int(p.Value) + "/" + Int(capacities?[p.Name])).ToList();
+            return "완성된 결과 덱 전체의 비용이 용량을 넘어요" + (over.Count == 0 ? "" : " (" + string.Join(", ", over) + ")")
+                + ". 용량은 고른 변화의 합이 아니라 결과 덱 전체로 계산해요.";
         }
 
         void LoadNames()
@@ -1531,6 +1988,25 @@ namespace MemoryForge.Client
                 : owner == "curse" ? "저주" : CharacterName(owner);
             return CardName(Str(card["id"])) + (Truthy(card["plus"]) ? "+" : "") + (mods.Count == 0 ? "" : "[" + string.Join("·", mods) + "]") + " · " + whose;
         }
+        // A saved-memory row (§8.9 spec: key, id, plus, from, assigned, mods) under its character: name, + when upgraded, attached parts
+        // and a mark for a common card (only common rows carry assigned).
+        string SpecText(JObject spec)
+        {
+            var slots = spec["mods"] as JObject;
+            var mods = new[] { Str(slots?["c"]), Str(slots?["e"]) }.OfType<string>().Where(m => m.Length != 0).Select(PartName).ToList();
+            return CardName(Str(spec["id"])) + (Truthy(spec["plus"]) ? "+" : "") + (mods.Count == 0 ? "" : "[" + string.Join("·", mods) + "]")
+                + (Str(spec["assigned"]) != null ? " · 공용" : "");
+        }
+        static string KindName(string? kind)
+        {
+            switch (kind)
+            {
+                case "add": return "추가"; case "remove": return "제거"; case "evolve": return "진화"; case "upgrade": return "강화";
+                case "part": return "부품"; default: return "변화";
+            }
+        }
+        static string OutcomeName(string? outcome) =>
+            outcome == "defeat" ? "패배" : outcome == "return" ? "기록소 귀환" : outcome == "clear" ? "탐사 완주" : "탐사 종료";
         string DeckTitle(DeckPick sheet) => sheet.Purpose == DeckPurpose.Upgrade ? "강화할 카드를 고르세요"
             : sheet.Purpose == DeckPurpose.ForgeOffer ? "변주할 카드를 고르세요" : sheet.Purpose == DeckPurpose.ForgeRemove ? "덱에서 뺄 카드를 고르세요"
             : sheet.Purpose == DeckPurpose.ShopRemove ? "제거할 카드를 고르세요 (동전 " + Int(Pending(State(), "shop")?["removeCost"]) + ")"
@@ -1590,7 +2066,7 @@ namespace MemoryForge.Client
         void RemoveView()
         {
             var previous = canvasRoot != null ? canvasRoot : transform.Find(OwnedCanvas);
-            canvasRoot = null; frame = null; presentationText = null; continueButton = null;
+            canvasRoot = null; frame = null; presentationText = null; continueButton = null; saveContent = null;
             if (previous == null) return;
             previous.gameObject.SetActive(false);
             Destroy(previous.gameObject);

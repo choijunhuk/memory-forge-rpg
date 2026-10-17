@@ -29,7 +29,9 @@
 //   cannot start a mutation. A current-state GET never resolves a pending request. A receipt's events are offered for
 //   presentation only when the UI showed exactly the state before that command and the re-read state is exactly the one after it;
 //   presenting, skipping or speeding them sends nothing.
-// - The battle query is pure: no requestId and no outbox, bound to the asking context and its own request, never applied as state.
+// - The battle query and the memory preview are pure: no requestId and no outbox, bound to the asking context and its own request, never
+//   applied as state. The preview route takes no version, so its owner handshake must still show exactly the asking context (memory
+//   version included) and its reply the context's run and server version; anything else marks the shown state due a refresh.
 #nullable enable
 using System;
 using System.Collections.Generic;
@@ -66,6 +68,8 @@ namespace MemoryForge.Client
         public const string ContextStale = "CONTEXT_STALE";
         public const string NoRun = "NO_RUN";
         public const string NoBattle = "CONTEXT_NO_BATTLE";
+        /// <summary>The context's run shows no memory save (its state.pending.type is not save); no preview was asked.</summary>
+        public const string NoSave = "CONTEXT_NO_SAVE";
         /// <summary>A mutation is still pending; retry it exactly (RetryPendingAsync) before anything new.</summary>
         public const string PendingUnresolved = "PENDING_UNRESOLVED";
         public const string NothingPending = "NOTHING_PENDING";
@@ -147,6 +151,22 @@ namespace MemoryForge.Client
         public PracticeBattleQueryView? View { get; }
     }
 
+    public sealed class PracticeMemoryPreviewResult
+    {
+        internal PracticeMemoryPreviewResult(string code, int? httpStatus, PracticeUiContext context, PracticeMemoryPreviewView? view)
+        {
+            Code = code; HttpStatus = httpStatus; Context = context; View = view;
+        }
+        /// <summary>OK with a View; otherwise the server's refusal code (INVALID_SELECTION, WRONG_PHASE, ...) or the session/protocol code.
+        /// A failure has no View and decides nothing about a save.</summary>
+        public string Code { get; }
+        public int? HttpStatus { get; }
+        /// <summary>The context the preview was asked in; use the answer only while it is still the current one (PracticeServerSession.IsCurrent)
+        /// and only for the selection it carries (View.SelectedChangeIds).</summary>
+        public PracticeUiContext Context { get; }
+        public PracticeMemoryPreviewView? View { get; }
+    }
+
     /// <summary>What a UI may read at any time, also while mutations are blocked: the latest applied full public state and what blocks a
     /// new mutation. Immutable; PracticeServerSession.State returns the current one.</summary>
     public sealed class PracticeSessionState
@@ -173,7 +193,7 @@ namespace MemoryForge.Client
     {
         public const string AccountRoute = "/dev/practice/account";
         public static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(30), MinTimeout = TimeSpan.FromSeconds(1), MaxTimeout = TimeSpan.FromSeconds(120);
-        const string RunsPrefix = PracticeCommandOutbox.CreateRunRoute + "/", BattleQuerySuffix = "/battle-query";
+        const string RunsPrefix = PracticeCommandOutbox.CreateRunRoute + "/", BattleQuerySuffix = "/battle-query", MemoryPreviewSuffix = "/memory-preview";
         const int MinCredential = 16, MaxCredential = 512;
         // Contracts.CommandArgs: the existing journal kinds of the commands route (memoryCommit has its own route). Arguments are the server's.
         static readonly HashSet<string> CommandKinds = new HashSet<string>(StringComparer.Ordinal)
@@ -222,6 +242,9 @@ namespace MemoryForge.Client
         public PracticeSessionState State { get { lock (sync) return state; } }
         /// <summary>Whether a battle query answer still belongs to the current snapshot; a stale answer must not replace a selection.</summary>
         public bool IsCurrent(PracticeBattleQueryResult result) => result != null && State.Snapshot?.Context.Equals(result.Context) == true;
+        /// <summary>Whether a memory preview answer still belongs to the current snapshot. Its selection is the caller's to match: two
+        /// answers at the same context may be for different selections.</summary>
+        public bool IsCurrent(PracticeMemoryPreviewResult result) => result != null && State.Snapshot?.Context.Equals(result.Context) == true;
 
         /// <summary>Re-reads the outbox, then the account (owner checked first) and, when it names one, its current run, and applies them
         /// monotonically. Pure on the server; never resolves a pending request.</summary>
@@ -303,6 +326,23 @@ namespace MemoryForge.Client
             return Exclusive(() => QueryAsync(context, uid, effective, target, ordered, cancellation), code => new PracticeBattleQueryResult(code, null, context, null));
         }
 
+        /// <summary>Pure POST /dev/practice/runs/{runId}/memory-preview {selectedChangeIds} on the context's save screen: Core's full
+        /// resulting party decks, their memory costs, the capacities and Core's verdict for exactly this ordered selection (empty = keep
+        /// the saved decks). The IDs are copied once, at the call. The route takes no version, so the owner handshake must still show
+        /// exactly the context (owner, run, server and memory version; else REFRESH_REQUIRED, nothing posted) and the reply must carry
+        /// the context's run and server version (else RESPONSE_MISMATCH and a due refresh). Allowed while a mutation is pending; never
+        /// staged, applied or presented, and it authorizes nothing: CommitMemoryAsync is judged again by the server.</summary>
+        public Task<PracticeMemoryPreviewResult> PreviewMemoryAsync(PracticeUiContext context, IReadOnlyList<string> selectedChangeIds, CancellationToken cancellation = default)
+        {
+            if (context == null) throw new ArgumentNullException(nameof(context));
+            if (selectedChangeIds == null) throw new ArgumentNullException(nameof(selectedChangeIds));
+            var ordered = new List<string>(selectedChangeIds.Count);
+            foreach (string id in selectedChangeIds) ordered.Add(id);
+            if (ordered.Contains(null!)) return Task.FromResult(new PracticeMemoryPreviewResult(Codes.InvalidCommand, null, context, null));
+            var selected = System.Array.AsReadOnly(ordered.ToArray());
+            return Exclusive(() => PreviewAsync(context, selected, cancellation), code => new PracticeMemoryPreviewResult(code, null, context, null));
+        }
+
         /// <summary>Cancels a running exchange (it ends CANCELED; its request, if any, stays pending) and releases the HTTP client. The
         /// outbox record is never touched: an uncertain request stays pending for an exact retry by a later session.</summary>
         public void Dispose()
@@ -358,7 +398,7 @@ namespace MemoryForge.Client
             var handshake = await ReadAccountAsync(credential, cancellation).ConfigureAwait(false);
             var account = handshake.Value;
             if (account == null) return NotSentWith(handshake.Code, handshake.Status);
-            if (!(account.MemoryVersion == context.MemoryVersion && account.Run?.RunId == context.RunId && account.Run?.ServerVersion == context.ServerVersion))
+            if (!Shows(account, context))
             {
                 SetNeedsRefresh();
                 return NotSentWith(Codes.RefreshRequired, 200);
@@ -492,6 +532,57 @@ namespace MemoryForge.Client
             try { return new PracticeBattleQueryResult(Codes.Ok, 200, context, PracticeBattleQueryView.Parse(exchange.Body, context, uid, mode, target, picks)); }
             catch (PracticeProtocolException error) { return Fail(error.Code, 200); }
         }
+
+        async Task<PracticeMemoryPreviewResult> PreviewAsync(PracticeUiContext context, IReadOnlyList<string> selected, CancellationToken cancellation)
+        {
+            PracticeMemoryPreviewResult Fail(string code, int? status) => new PracticeMemoryPreviewResult(code, status, context, null);
+            var current = State;
+            var snapshot = current.Snapshot;
+            if (snapshot == null) return Fail(Codes.NoSnapshot, null);
+            if (current.NeedsRefresh) return Fail(Codes.RefreshRequired, null);
+            if (!context.Equals(snapshot.Context)) return Fail(Codes.ContextStale, null);
+            var run = snapshot.Run;
+            if (run == null) return Fail(Codes.NoRun, null);
+            if (run.PendingType != "save") return Fail(Codes.NoSave, null);
+            var ids = new JArray();
+            foreach (string id in selected) ids.Add(id);
+            byte[] body;
+            try { body = PracticeCommandOutbox.StrictUtf8.GetBytes(Json(new JObject { ["selectedChangeIds"] = ids })); }
+            catch (EncoderFallbackException) { return Fail(Codes.InvalidCommand, null); }
+            if (body.Length > PracticeCommandOutbox.MaxBodyBytes) return Fail(Codes.InvalidCommand, null);
+            string? credential = CaptureCredential();
+            if (credential == null) return Fail(Codes.CredentialUnavailable, null);
+            var handshake = await ReadAccountAsync(credential, cancellation).ConfigureAwait(false);
+            var account = handshake.Value;
+            if (account == null) return Fail(handshake.Code, handshake.Status);
+            // Only a server that still shows exactly this context is asked. The reply carries no memory version: an equal server version
+            // below proves it unchanged since this handshake, as only a journal entry of the current run (the save) changes it.
+            if (!Shows(account, context))
+            {
+                SetNeedsRefresh();
+                return Fail(Codes.RefreshRequired, 200);
+            }
+            var exchange = await ExchangeAsync(HttpMethod.Post, RunsPrefix + run.RunId + MemoryPreviewSuffix, body, credential, cancellation).ConfigureAwait(false);
+            if (exchange.Failure != null) return Fail(exchange.Failure, null);
+            if (exchange.Status != 200)
+            {
+                string code = ServerCode(exchange.Body) ?? PracticeProtocolException.Invalid;
+                // The run was replaced, or the server's run at this context is not on the shown save screen: re-read before anyone acts.
+                if (exchange.Status == 404 && code == "RUN_NOT_FOUND" || exchange.Status == 422 && code == "WRONG_PHASE") SetNeedsRefresh();
+                return Fail(code, exchange.Status);
+            }
+            try { return new PracticeMemoryPreviewResult(Codes.Ok, 200, context, PracticeMemoryPreviewView.Parse(exchange.Body, context, selected)); }
+            catch (PracticeProtocolException error)
+            {
+                // Another run or server version: the server moved on after the handshake, so the shown save screen is behind it.
+                if (error.Code == PracticeProtocolException.Mismatch) SetNeedsRefresh();
+                return Fail(error.Code, 200);
+            }
+        }
+
+        // The owner handshake still shows exactly the acting context: its saved memory version and its current run at that server version.
+        static bool Shows(PracticeAccountView account, PracticeUiContext context) =>
+            account.MemoryVersion == context.MemoryVersion && account.Run?.RunId == context.RunId && account.Run?.ServerVersion == context.ServerVersion;
 
         // ---- reads and snapshots ----
 
@@ -659,9 +750,7 @@ namespace MemoryForge.Client
             if (error.Count != 2 || !(error["message"] is JValue message && message.Type == JTokenType.String)
                 || !(error["code"] is JValue code && code.Type == JTokenType.String)) return null;
             string text = (string)code.Value!;
-            if (text.Length == 0 || text.Length > 64 || text[0] < 'A' || text[0] > 'Z') return null;
-            foreach (char c in text) if (!(c >= 'A' && c <= 'Z' || c >= '0' && c <= '9' || c == '_')) return null;
-            return text;
+            return PracticePublicJson.IsCode(text) ? text : null;
         }
 
         // ---- state ----
