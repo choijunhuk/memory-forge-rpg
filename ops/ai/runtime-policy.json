@@ -41,6 +41,15 @@
   "purchased_credit_spend_allowed": false,
   "auto_recharge_allowed": false,
   "image_generation_owner": "Codex",
+  "image_generation_routes": {
+    "user_authorized_on": "2026-10-17",
+    "local_trial": "Codex operates the user's existing Windows ComfyUI through pinned Mac SSH stdin/stdout",
+    "quality_fallback": "Codex built-in subscription image tool when local candidates fail the design review",
+    "browser_allowed_for_local_generation": false,
+    "separate_scp_allowed": false,
+    "enable_windows_autostart_tasks": false,
+    "new_paid_api_or_credit_routes_allowed": false
+  },
   "claude_invocation": "official CLI, subscription auth + verified account usage controls before inference",
   "unity": {
     "version": "6000.0.46f1",

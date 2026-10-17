@@ -141,3 +141,9 @@ P1·P2 또는 개별 작업이 끝났다는 이유로 현재 세션의 개발을
 로컬 Codex 모델 카탈로그의 GPT-6.1 Sol과 [공식 Claude Code 지원표](https://code.claude.com/docs/en/model-config#adjust-effort-level)의 Opus5.5 모두 xhigh를 지원한다. Claude2.1.285 실행기의 `--effort` 허용 목록에 xhigh를 추가하고 동일 환경 변수/명시 CLI 인자/결과 기록을 통과시킨다. 구독 인증·계정 일치·과금 OFF·파일 경계·모델 고정·반환 검증은 유지한다. 기본 High 설정 파일을 바꾸는 것과 이미 실행 중인 턴의 실제 수준은 구분한다. 실제 xhigh 적용은 해당 세션 메타데이터를 확인한 뒤 보고한다.
 
 이 절이 이전의 두 단계로 읽힐 수 있는 설명에 우선한다. Medium 이하를 관성적 절약 수단으로 쓰지 않는 품질 원칙과 Claude 구현 우선 배분, 양방향 교차 리뷰·Codex 이미지 담당·단일 Editor 쓰기 정책은 유지한다.
+
+## 13. 2026-10-17 사용자 승인 — 로컬 ComfyUI와 품질에 따른 전환
+
+사용자는 Codex가 자신의 기존 Windows ComfyUI를 Mac 터미널의 SSH로 호출해 이미지셋을 만들도록 명시적으로 승인했다. 이는 §5의 로컬 모델 자동 대체 금지에 대한 이 사용자 환경의 허용 경로다. 생성·내용 수정 담당은 계속 Codex이며, ComfyUI 시안이 제작 기준에 미달하면 Codex의 구독 포함 이미지 도구를 사용한다. 새 유료 서비스·API·추가 크레딧·자동 충전은 허용하지 않는다.
+
+전용 ED25519 지문을 확인한 SSH에서 프롬프트를 stdin으로 보내고 PNG를 stdout으로 받는다. `aiimg "프롬프트"`는 Mac의 `~/Downloads/ai-날짜시간.png`를 만들고 검증 후 Preview로 연다. 실패한 임시 파일은 제거하고 기존 결과는 덮어쓰지 않는다. 웹 브라우저·별도 scp를 쓰지 않으며 Windows ComfyUI/OpenWebUI 자동 시작 작업을 다시 활성화하지 않는다. 실제 생성·파일 형식·크기와 시안 품질, Unity 적용 여부는 각각 구분한다. 구체 실행 범위와 독립 검사는 [제작 기록](../art/requests/local-comfy-20261017.md)을 따른다.

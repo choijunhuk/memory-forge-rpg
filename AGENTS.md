@@ -45,3 +45,7 @@ Codex가 공식 Claude CLI를 별도 worktree에서 직접 호출·회수하며 
 ## 2026-10-15 추가 지시 — 추론 수준 자율 선택
 
 High·Extra High(`xhigh`)·Max를 실제 지원 범위에서 작업 난이도·위험·검증 결과에 맞춰 자율 선택한다. High/Max 두 단계로 제한하거나 핵심 작업이라는 이유만으로 Max에 고정하지 않는다. 기본 High, 복잡한 구현/분석은 xhigh 또는 Max, 가장 어려운 문제와 중대한 최종 검증은 Max를 적극 활용하되 관성적인 장시간 분석보다 구현과 독립 검증을 우선한다. GPT-6.1 Sol과 Opus5.5의 xhigh 지원을 확인했으며 실제 적용은 호출 인자·세션 메타데이터로 구분한다. 구독 전용·모델 고정·Claude 구현 우선·이미지 Codex 전담은 유지한다. 상세는 `docs/AI_WORKFLOW.md` §12다.
+
+## 2026-10-17 사용자 승인 — 로컬 ComfyUI 이미지셋
+
+Codex가 사용자 Windows의 기존 ComfyUI를 Mac 터미널의 고정 지문 SSH로 직접 호출하는 이미지 제작 경로를 승인했다. stdin/stdout으로 PNG를 `~/Downloads`에 저장하고 Preview로 확인한다. 웹 브라우저·별도 scp·자동 시작 작업 재활성화는 사용하지 않는다. 시안 품질이 부족하면 Codex 구독 이미지 도구로 전환한다. 이미지 담당·기존 설계·구독 외 과금 금지는 유지한다. 상세는 `docs/AI_WORKFLOW.md` §13과 `art/requests/local-comfy-20261017.md`다.

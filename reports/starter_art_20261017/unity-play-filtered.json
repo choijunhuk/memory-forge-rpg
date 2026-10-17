@@ -1,0 +1,24 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"playing\":true,\"isBatch\":false,\"images\":9,\"allAssigned\":true,\"width\":3140,\"height\":979},\"compiler\":\"codedom\"}}"
+    }
+  ],
+  "structuredContent": {
+    "success": true,
+    "message": "Code executed successfully.",
+    "data": {
+      "result": {
+        "playing": true,
+        "isBatch": false,
+        "images": 9,
+        "allAssigned": true,
+        "width": 3140,
+        "height": 979
+      },
+      "compiler": "codedom"
+    }
+  },
+  "isError": false
+}

@@ -1,0 +1,17 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Retrieved 2 log entries.\",\"data\":[\"Ignoring depth surface load action as it is memoryless\\n\",\"Ignoring depth surface store action as it is memoryless\\n\"]}"
+    }
+  ],
+  "structuredContent": {
+    "success": true,
+    "message": "Retrieved 2 log entries.",
+    "data": [
+      "Ignoring depth surface load action as it is memoryless\n",
+      "Ignoring depth surface store action as it is memoryless\n"
+    ]
+  },
+  "isError": false
+}

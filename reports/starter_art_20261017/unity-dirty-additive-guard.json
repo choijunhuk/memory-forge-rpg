@@ -1,0 +1,22 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"rejectedDirtyAdditive\":true,\"originalScene\":\"Assets/Scenes/MemoryForgeArtReview.unity\",\"noGlobalAssetSave\":true,\"loadedScenesPreserved\":true},\"compiler\":\"codedom\"}}"
+    }
+  ],
+  "structuredContent": {
+    "success": true,
+    "message": "Code executed successfully.",
+    "data": {
+      "result": {
+        "rejectedDirtyAdditive": true,
+        "originalScene": "Assets/Scenes/MemoryForgeArtReview.unity",
+        "noGlobalAssetSave": true,
+        "loadedScenesPreserved": true
+      },
+      "compiler": "codedom"
+    }
+  },
+  "isError": false
+}
