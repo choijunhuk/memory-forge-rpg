@@ -1,5 +1,19 @@
 # 현재 기준 — ALL-IN-ONE
 
+## 2026-10-18 최신 — Claude 루트 전환, PC 완주, Android 실기기
+
+**역할.** 개발 루트는 Claude(Opus 5.5)다. 시각 디자인 전체(이미지, 만드는 방법, 화면 배치와 보이는 모습)는 Codex가 맡는다. Codex는 읽기 전용 독립 리뷰도 한다. 기준은 [AI_WORKFLOW §17](AI_WORKFLOW.md)이다. 루트 세션 감사는 `tools/ai/audit_root_session.py`([수용 기록](../reports/role_switch_20261017/README.md))로 한다.
+
+**PC.** [한 판 완주](../reports/pc_playthrough_20261017/README.md): 로컬 연습판을 Editor에서 실제 uGUI 클릭으로 끝까지 진행했다. 전투 6, 보스, 기억 저장, 다음 출발까지 갔고 오류는 0이다. 새 macOS 빌드도 지도까지 정상 실행된다(창 제목 `Memory Forge`).
+
+**Android.** [실기기 확인](../reports/android_device_20261017/README.md): IL2CPP ARM64 개발 APK가 SM-S928N(Android 16)에서 설치·0.6초 기동·터치 전투 진입까지 동작했다. Android 16의 16KB 페이지 경고(`lib_burst_generated.so`만 4KB 정렬)는 출시 차단 항목이며, 별도 세션이 수정 중이다.
+
+**CI.** PR #2의 실패는 Run-create 입력 감사 목록에 `README.md`·`.gitignore` 두 줄이 늘어난 것이었다. 고정 자료를 재생성해 고쳤다(`a745e1a`).
+
+**병렬 진행 중.** 콘텐츠 모드(§11.5–11.7·11.13), 온보딩(§14.5·§3.4), Android 16KB, 운영 명세(§16.6·§18.3·§18.4)를 별도 세션에서 진행한다. Codex는 1구역 시각 디자인 1차안을 만들고 있다. 각 결과는 루트가 리뷰·통합한다.
+
+**장부 기준 남은 범위.** 183절 중 구현 68, 일부 87, 미구현 20, 결정 대기 6, 진행 중 2다. 결정 대기(연령 구성, 패스·월정액, 업적 등)는 사용자 승인 경계다.
+
 ## 2026-10-17 최신 — 서버 필살기·카드 상세·표시 속도 / 세션 종료 인계
 
 [전투 조작 수용](../reports/server_battle_controls_20261017/README.md): 기존 공개 게이지/ult·서버 설명 query·공유 종류 라벨·표시 pace를 연결했다. Opus xhigh UI/High 독립 시험을 Codex가 검토했고, 상세 창의 수동 명령 잠금 누락을133/134로 재현→작성자 수정→134/134, 전체 Play316/316·Edit3/3·BCL120/120을 확인했다. Core/서버/수치·예약/RNG/대상 규칙·장면·의존성은 유지했다.
