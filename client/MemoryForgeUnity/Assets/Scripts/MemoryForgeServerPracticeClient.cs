@@ -20,7 +20,8 @@ namespace MemoryForge.Client
     // are the server's values; card/character names come from the existing content for display only. It does not replace the original
     // local expedition client. The battle reward, the rest/forge/shop node services, events and the archive have their own screens (one
     // existing command per button); so do the terminal memory save (VICTORY/DEFEAT: local selection, the server's memory-preview, one
-    // memory-commit) and the DONE screen of the confirmed saved memory (P1-SERVER-MEMORY-SAVE-UI).
+    // memory-commit; its assignment and held-part sheets send the existing assign/applyPart) and the DONE screen of the confirmed saved
+    // memory (P1-SERVER-MEMORY-SAVE-UI, P1-SERVER-SAVE-PARTS-UI).
     // - Unconfigured it shows a small harmless status. Connect(factory) (runtime, Editor or development build only) creates the session
     //   and only refreshes: nothing is created, sent or retried on Connect or resume. The factory, session, credential, outbox, bodies
     //   and snapshots are never serialized or logged; nothing here chooses an endpoint or credential.
@@ -123,6 +124,11 @@ namespace MemoryForge.Client
         int saveRevision, previewRevision = -1;
         bool previewWanted, previewing, assignOpen;
         PracticeMemoryPreviewResult? previewResult;
+        // P1-SERVER-SAVE-PARTS-UI (SAVE-081-12): the save screen's held-part sheet, bound to the context it was opened in, and its local,
+        // unsent part choice (an inventory id; the server's applyPart is sent only from a target card).
+        bool partsOpen;
+        string? partPick;
+        PracticeUiContext? partsContext;
         // The save list's scroll offset, kept across redraws of the same context only (a selection, preview or busy change redraws all).
         RectTransform? saveContent;
         PracticeUiContext? saveScrollContext;
@@ -177,8 +183,10 @@ namespace MemoryForge.Client
         /// <summary>True while a preview of the current selection is due or in flight.</summary>
         public bool SavePreviewPending => ShowingSave && (previewWanted || previewing);
         /// <summary>Whether the save may be sent now: CanCommand, no open sheet and a fresh, error-free server preview of exactly this selection.</summary>
-        public bool CanCommitSave => CanCommand && !assignOpen && ShowingSave && PreviewCurrent() && previewResult!.View!.Error == null;
+        public bool CanCommitSave => CanCommand && !assignOpen && !partsOpen && ShowingSave && PreviewCurrent() && previewResult!.View!.Error == null;
         public bool AssignOpen => assignOpen;
+        /// <summary>True while the save screen's held-part sheet is open (selection, assignment and saving wait until it is closed).</summary>
+        public bool SavePartsOpen => partsOpen;
 
         // ───────── lifecycle ─────────
 
@@ -235,7 +243,9 @@ namespace MemoryForge.Client
             queryResult = null; queryWanted = false; refreshWanted = false; generation++;
             saveContext = null; saveSelection.Clear(); assignOpen = false; previewResult = null; previewWanted = false; saveRevision++;
             saveContent = null; saveScrollContext = null; saveScrollY = null;
+            DropParts();
         }
+        void DropParts() { partsOpen = false; partPick = null; partsContext = null; }
 
         void Update()
         {
@@ -255,11 +265,12 @@ namespace MemoryForge.Client
             var result = await s.RefreshAsync();
             if (!ReferenceEquals(s, session)) return false;
             // A refresh never keeps an unsent save selection: the player chooses again from what the server shows now.
-            bool dropped = saveSelection.Count > 0;
-            saveContext = null; saveSelection.Clear();
+            bool dropped = saveSelection.Count > 0, partsDropped = partsOpen;
+            saveContext = null; saveSelection.Clear(); DropParts();
             AfterSnapshotChange();
             if (result.Snapshot == null) { Say(Explain(result.Code) + " 마지막으로 받은 화면을 보여 주고 있어요.", true); return false; }
-            Say("서버의 최신 상태를 불러왔어요." + (dropped ? " 고른 변화는 저장하지 않았으니 다시 골라 주세요." : ""), false);
+            Say("서버의 최신 상태를 불러왔어요." + (dropped ? " 고른 변화는 저장하지 않았으니 다시 골라 주세요." : "")
+                + (partsDropped ? " 부품 창은 닫았어요(붙이지 않은 선택은 보내지 않았어요)." : ""), false);
             return true;
         });
 
@@ -695,6 +706,7 @@ namespace MemoryForge.Client
         public Task<bool> CommitSaveAsync()
         {
             if (assignOpen) return Refuse("배정 창을 먼저 닫아 주세요.");
+            if (partsOpen) return Refuse("부품 창을 먼저 닫아 주세요.");
             if (!CanCommand) return Refuse(Blocked());
             if (SaveState(session!.State.Snapshot) == null) return Refuse("지금은 기억 저장 단계가 아니에요.");
             if (!PreviewCurrent())
@@ -715,7 +727,7 @@ namespace MemoryForge.Client
         public bool OpenAssign()
         {
             var save = SaveState(session?.State.Snapshot);
-            if (save == null || !SaveReadable() || busy || Assignable(save).Count == 0) return false;
+            if (save == null || !SaveReadable() || busy || partsOpen || Assignable(save).Count == 0) return false;
             assignOpen = true;
             Render();
             return true;
@@ -735,6 +747,7 @@ namespace MemoryForge.Client
         {
             if (key == null) throw new ArgumentNullException(nameof(key));
             if (charId == null) throw new ArgumentNullException(nameof(charId));
+            if (partsOpen) return Refuse("부품 창을 먼저 닫아 주세요.");
             if (!CanCommand) return Refuse(Blocked());
             var save = SaveState(session!.State.Snapshot);
             if (save == null) return Refuse("지금은 기억 저장 단계가 아니에요.");
@@ -742,6 +755,66 @@ namespace MemoryForge.Client
             saveContext = null; saveSelection.Clear(); InvalidatePreview(false);
             return Mutate((s, context) => s.CommandAsync(context, "assign", new JObject { ["key"] = key, ["charId"] = charId }), false, false,
                 "배정을 바꿨어요. 고른 변화와 미리보기는 초기화했어요. 서버가 다시 만든 변화 목록에서 골라 주세요.");
+        }
+
+        // ───────── held parts on the save screen (P1-SERVER-SAVE-PARTS-UI, SAVE-081-12) ─────────
+        // The original's found-part flow: choose a held part (state.partsFound, one entry per copy), then a published non-weapon deck card;
+        // that sends the existing applyPart {partId, key} at once. Core consumes ONE matching copy, sets the card's circuit (c) or engraving
+        // (e) slot (an earlier part there is replaced, never refunded) and recaptures the save's change list. Nothing is decremented,
+        // attached or saved here: the inventory, the mods, the rebuilt changes and the whole resulting memory are the server's, and keeping
+        // the result in memory is still the player's change selection and the one memory-commit. Legality (NO_PART, BAD_CARD,
+        // INVALID_PART) is Core's verdict; a part this device cannot name or that has no circuit/engraving slot is shown, never offered.
+
+        /// <summary>Opens the save screen's held-part sheet (local, sends nothing) in the current context; refused without a readable
+        /// current save, while busy or unresolved, while the assignment sheet is open or when no part is held.</summary>
+        public bool OpenSaveParts()
+        {
+            var snap = session?.State.Snapshot;
+            var save = SaveState(snap);
+            if (save == null || !SaveReadable() || busy || assignOpen || rows != null || picker != null || prepared != null || deckPick != null
+                || HeldParts(save).Count == 0) return false;
+            partsOpen = true; partPick = null; partsContext = snap!.Context;
+            Render();
+            return true;
+        }
+
+        /// <summary>Closes the held-part sheet and drops its unsent part choice; sends nothing.</summary>
+        public void CloseSaveParts()
+        {
+            if (!partsOpen) return;
+            DropParts();
+            Render();
+        }
+
+        /// <summary>applyPart {partId, key} (the existing command): one held copy of partId onto a published non-weapon deck card. The
+        /// selection, preview and part sheet are dropped before it is sent (the change list after it is the server's); an uncertain answer
+        /// stays in the outbox for the exact retry. Refused while busy or unresolved (a second click cannot consume another copy).</summary>
+        public Task<bool> ApplySavePartAsync(string partId, string key)
+        {
+            if (partId == null) throw new ArgumentNullException(nameof(partId));
+            if (key == null) throw new ArgumentNullException(nameof(key));
+            if (assignOpen) return Refuse("배정 창을 먼저 닫아 주세요.");
+            if (!CanCommand) return Refuse(Blocked());
+            var save = SaveState(session!.State.Snapshot);
+            if (save == null) return Refuse("지금은 기억 저장 단계가 아니에요.");
+            if (!HeldParts(save).Contains(partId)) return Refuse("지금 가지고 있는 부품이 아니에요.");
+            if (!Attachable(partId)) return Refuse("이 기기에서 확인할 수 없는 부품이라 붙일 수 없어요. 아무것도 보내지 않았어요.");
+            if (!PartTargets(save).Any(c => Str(c["key"]) == key)) return Refuse("부품을 붙일 수 있는 카드가 아니에요. 무기 카드에는 붙일 수 없어요.");
+            DropParts();
+            saveContext = null; saveSelection.Clear(); InvalidatePreview(false);
+            return Mutate((s, context) => s.CommandAsync(context, "applyPart", new JObject { ["partId"] = partId, ["key"] = key }), false, false,
+                "「" + PartName(partId) + "」을 붙였어요. 부품 1개를 사용했고, 같은 칸에 있던 부품은 교체됐어요. 고른 변화와 미리보기는 초기화했어요. "
+                + "기억에 남기려면 서버가 다시 만든 변화 목록에서 골라 저장해 주세요.");
+        }
+
+        // The sheet's local part choice (unsent): a held, attachable inventory id; choosing it again clears it.
+        bool PickSavePart(string partId)
+        {
+            var save = SaveState(session?.State.Snapshot);
+            if (!partsOpen || save == null || !HeldParts(save).Contains(partId) || !Attachable(partId)) return false;
+            partPick = partPick == partId ? null : partId;
+            Render();
+            return true;
         }
 
         async Task<bool> RunPreviewAsync()
@@ -806,7 +879,8 @@ namespace MemoryForge.Client
         // A preview may be asked with a current, refreshed snapshot and nothing unresolved or unreadable (an earlier preview may be running).
         bool SaveReadable() => session != null && session.State.Snapshot != null && session.State.Pending == null && session.State.OutboxCode == null
             && !session.State.NeedsRefresh;
-        bool SaveSelectable() => SaveReadable() && (!busy || previewing) && rows == null && picker == null && prepared == null && deckPick == null && !assignOpen;
+        bool SaveSelectable() => SaveReadable() && (!busy || previewing) && rows == null && picker == null && prepared == null && deckPick == null && !assignOpen
+            && !partsOpen;
 
         // The published terminal save of a snapshot: VICTORY/DEFEAT with pending {type: save} and the public state.memory; else null.
         static JObject? SaveState(PracticeSnapshot? snap)
@@ -840,6 +914,13 @@ namespace MemoryForge.Client
         // The original assignment sheet's cards: gained common cards of the public deck (Core judges whether one may move).
         static List<JObject> Assignable(JObject state) =>
             ((state["deck"] as JArray) ?? new JArray()).OfType<JObject>().Where(c => Str(c["owner"]) == "common" && Truthy(c["gained"])).ToList();
+        // The public held parts, one entry per copy in the published order (two equal ids are two copies).
+        static List<string> HeldParts(JObject state) => ((state["partsFound"] as JArray) ?? new JArray()).Select(Str).OfType<string>().ToList();
+        // A part this device names with a circuit or engraving slot (what a v2 save attaches); any other is shown as unavailable.
+        bool Attachable(string partId) => partNames.ContainsKey(partId) && partSlots.TryGetValue(partId, out var slot) && (slot == "circuit" || slot == "engraving");
+        // Every published non-weapon deck card with a key, in deck order (Core judges whether the part may go on it).
+        static List<JObject> PartTargets(JObject state) =>
+            ((state["deck"] as JArray) ?? new JArray()).OfType<JObject>().Where(c => !Truthy(c["weapon"]) && Str(c["key"]) != null).ToList();
         // The ids of an unresolved memory-commit of this run, read from the stored request: shown as unconfirmed, never as saved.
         List<string>? PendingSaveIds(string runId)
         {
@@ -940,6 +1021,9 @@ namespace MemoryForge.Client
             if (save == null || saveContext == null || !saveContext.Equals(snap!.Context)) { saveContext = null; saveSelection.Clear(); }
             else { var published = ChangeOrder(save); saveSelection.RemoveAll(id => !published.Contains(id)); }
             if (save == null) assignOpen = false;
+            // The part sheet belongs to the context it was opened in; any other drops it with its unsent choice.
+            if (save == null || partsContext == null || !partsContext.Equals(snap!.Context)) DropParts();
+            else if (partPick != null && !HeldParts(save).Contains(partPick)) partPick = null;
             InvalidatePreview(save != null);
         }
 
@@ -1154,6 +1238,7 @@ namespace MemoryForge.Client
                 if (picker != null) PickView();
                 if (deckPick != null) DeckPickView();
                 if (assignOpen && SaveState(snap) != null) AssignView();
+                if (partsOpen && SaveState(snap) != null) SavePartsView();
                 if (rows != null && barrier) BarrierView();
             }
             if (factory != null && EventSystem.current == null)
@@ -1313,7 +1398,11 @@ namespace MemoryForge.Client
             bool asking = previewWanted || previewing, selectable = SaveSelectable() && pendingIds == null;
 
             var head = Box(frame!, "SaveHead", 32, 100, 1536, 132, Panel);
-            Label(head, defeat ? "패배 · 출발 전 기억은 그대로 지켜져요" : "탐사 종료 · 이번 탐사의 변화를 골라 기억에 더하세요", 20, 8, 1260, 42, 28, defeat ? Danger : Brass, FontStyle.Bold);
+            int held = HeldParts(state).Count;
+            Label(head, defeat ? "패배 · 출발 전 기억은 그대로 지켜져요" : "탐사 종료 · 이번 탐사의 변화를 골라 기억에 더하세요", 20, 8, held > 0 ? 1020 : 1260, 42, 28, defeat ? Danger : Brass, FontStyle.Bold);
+            if (held > 0)
+                Button(head, "OpenSaveParts", "보유 부품 " + held + "개 붙이기", 1060, 8, 224, 44, () => OpenSaveParts(), Line, 20).interactable =
+                    SaveReadable() && !busy && pendingIds == null && !assignOpen;
             Label(head, defeat
                 ? "패배해도 출발 전 기억 덱은 그대로예요. 이번 탐사에서 생긴 변화는 파티 전체에서 1개까지 더할 수 있어요. 카드 한 장 단위가 아니라 강화·진화·부품·추가·제거 같은 변화 하나예요. 아무것도 고르지 않으면 기존 덱을 유지해요."
                 : "출발 전 기억 덱에 이번 탐사의 변화를 여러 개 더할 수 있어요. 용량은 고른 변화의 합이 아니라 완성된 결과 덱 전체로 서버가 계산해요. 저장한 덱은 다음 탐사의 시작 덱이 돼요.",
@@ -1446,6 +1535,55 @@ namespace MemoryForge.Client
                 }
             }
             Button(p, "CloseAssign", "닫기", 1000, 612, 256, 64, CloseAssign, Line, 22);
+        }
+
+        // The save screen's held-part sheet (the original's found-part flow): every distinct held part id with its copy count and slot, an
+        // unknown or slotless one shown as unavailable; after a part is chosen, every published non-weapon deck card, each sending the
+        // existing applyPart at once. The counts and cards are the published state; nothing changes here before the server answers.
+        void SavePartsView()
+        {
+            var state = State()!;
+            var parts = HeldParts(state).GroupBy(id => id, StringComparer.Ordinal).Select(g => (id: g.Key, count: g.Count())).ToList();
+            var blocker = Box(frame!, "SavePartsBlocker", 0, 0, 1600, 900, new Color(0, 0, 0, 0.6f));
+            blocker.GetComponent<Image>().raycastTarget = true;
+            var p = Box(frame!, "SavePartsSheet", 160, 100, 1280, 700, Panel);
+            Label(p, "보유 부품을 카드에 붙일까요?", 24, 16, 1232, 44, 28, Ink, FontStyle.Bold);
+            Label(p, "부품을 고른 뒤 카드를 누르면 바로 서버에 보내요. 부품 1개를 사용하고, 그 카드의 같은 칸(시간 회로·보조 각인)에 있던 부품은 교체되며 돌려받지 않아요. "
+                + "붙이면 고른 변화와 미리보기가 초기화돼요. 영구 기억에 남기려면 서버가 다시 만든 변화 목록에서 그 변화를 골라 저장해야 해요. 무기 카드에는 붙일 수 없어요.",
+                24, 62, 1232, 78, 17, Muted);
+            Label(p, "보유 부품 " + parts.Sum(x => x.count) + "개 · 같은 부품은 개수로 보여 줘요", 24, 148, 1232, 28, 20, Memory, FontStyle.Bold);
+            var list = Scroll(p, "SavePartList", 24, 180, 1232, 124, 1232, (parts.Count + 2) / 3 * 62, Background);
+            bool readable = SaveReadable();
+            for (int i = 0; i < parts.Count; i++)
+            {
+                var (id, count) = parts[i];
+                bool ok = Attachable(id), on = id == partPick;
+                string caption = !partNames.ContainsKey(id) ? "알 수 없는 부품 (" + id + ") ×" + count + "\n이 기기에서 확인할 수 없어 붙일 수 없어요"
+                    : !ok ? PartName(id) + " ×" + count + "\n이 저장에서는 붙일 수 없는 부품이에요"
+                    : (on ? "[선택] " : "") + PartName(id) + " · " + SlotName(id) + " ×" + count;
+                Button(list, "SavePart:" + id, caption, i % 3 * 412, i / 3 * 62, 400, 56, () => PickSavePart(id), on ? Memory : Line, 18).interactable = ok && readable;
+            }
+            string? pick = partPick != null && parts.Any(x => x.id == partPick) ? partPick : null;
+            Label(p, pick == null ? "붙일 카드 · 먼저 부품을 고르세요" : "「" + PartName(pick) + "」(" + SlotName(pick) + ")을 붙일 카드 · 무기 카드는 빠져 있어요",
+                24, 314, 1232, 28, 20, Memory, FontStyle.Bold);
+            bool ready = CanCommand && !assignOpen;
+            if (pick != null)
+            {
+                string chosen = pick;
+                var cards = PartTargets(state);
+                string slot = partSlots.TryGetValue(chosen, out var kind) && kind == "circuit" ? "c" : "e";
+                var targets = Scroll(p, "SavePartTargetList", 24, 346, 1232, 250, 1232, (cards.Count + 2) / 3 * 62, Background);
+                for (int i = 0; i < cards.Count; i++)
+                {
+                    string key = Str(cards[i]["key"])!, current = Str((cards[i]["mods"] as JObject)?[slot]) ?? "";
+                    Button(targets, "SavePartTarget:" + key, DeckCardText(cards[i]) + "\n" + (current.Length != 0 ? "같은 칸의 「" + PartName(current) + "」 교체" : "빈 " + SlotName(chosen) + " 칸"),
+                        i % 3 * 412, i / 3 * 62, 400, 56, () => Launch(() => ApplySavePartAsync(chosen, key)), Line, 17).interactable = ready;
+                }
+            }
+            string status = !readable || session == null ? NotReady() : busy ? "서버와 통신하는 중이에요…" : pick == null ? "부품을 고르면 붙일 카드가 보여요. 아직 아무것도 보내지 않았어요."
+                : "카드를 누르면 바로 서버에 보내요. 붙일 수 있는지는 서버가 판정해요.";
+            Label(p, status, 24, 612, 960, 64, 18, readable ? Muted : Danger);
+            Button(p, "CloseSaveParts", "닫기", 1000, 612, 256, 64, CloseSaveParts, Line, 22);
         }
 
         // DONE after a confirmed save: the run's outcome, this run's entry of the account's public history, and the saved decks and memory
@@ -1923,7 +2061,8 @@ namespace MemoryForge.Client
         {
             ["REASSIGNMENT_REQUIRES_SEPARATE_FLOW"] = "출발 전 기억에 있던 카드의 배정은 여기서 바꿀 수 없어요.",
             ["INVALID_SELECTION"] = "고른 변화가 서버의 변화 목록과 맞지 않아요. 새로고침한 뒤 다시 골라 주세요.",
-            ["VERSION_CONFLICT"] = "저장된 기억이 그사이 바뀌었어요. 새로고침해서 최신 기억을 확인해 주세요."
+            ["VERSION_CONFLICT"] = "저장된 기억이 그사이 바뀌었어요. 새로고침해서 최신 기억을 확인해 주세요.",
+            ["INVALID_PART"] = "이 부품은 기억 저장에서 카드에 붙일 수 없어요."
         };
 
         // The server preview's refusal in words: its own error and numbers (nothing is recomputed here).

@@ -156,3 +156,8 @@ UnityMCP의 실제 MemoryForgeUnity@4034a4e2fe236d6e /6000.0.46f1 Editor에 새C
 - 공식 Claude Code 2.1.285 / `claude-opus-5-5`만 사용했다. 별도 `codex/claude-save-transport-20261017`과 `codex/claude-save-view-20261017`의 첫 구현은 xhigh, 누락 응답/정확한 조회 문구/스크롤 보완은 High다. 실제 작성 세션은 각각 `5b4cc1ba-9519-47ef-88f7-930ce53c643b`, `2218f250-bd9b-4666-8537-1fe216702d61`이며 실행기 결과의 모델 집계도 Opus만이다. [작업·검토·실행 근거](../reports/server_memory_save_ui_20261017/README.md)를 따른다.
 - 추론 전 기존 구독 인증/동일 계정/유효한 Usage credits·자동 충전 OFF 계정 UI 증거를 재사용·검사했다. 추가 API/크레딧/모델·재귀 호출은 없고 Codex의 포함 사용량도 실제 조회에서27%가 남았다. 이 사용량은 그 조회 시점이며 고정 배분/과금 서버 차단 보장이 아니다.
 - 이 단위의 Claude는 겹치지 않는 소스/시험 파일 작성 담당이고 Editor 쓰기는 Codex 독점이다. 기존 실제 MCP 연결을 사용해 GUI Play304/304·Edit3/3, 실제 Core HTTP/uGUI62판정·원래 옵션0의 Play 종료/재시작/같은 pending 본문·다음 기억 덱16개를 확인했다. Console 오류0/기존 Metal 경고2이며 물리 입력·실기기/운영과 구분한다. 이미지 생성은 없었다.
+
+
+## 2026-10-17 저장 직전 부품 — Opus High 병렬 작성
+
+공식 Opus5.5 High UI 세션 `36a97798-9701-4e6b-b293-710e6dd81eaa`와 독립 시험 세션 `0195f194-56db-453b-b50c-2f43e5c12a96`을 서로 다른 worktree에서 실제 회수했다. 모델 집계는 Opus뿐이며 기존 구독/동일 계정/유효한 추가 크레딧·자동 충전 OFF 증거를 실행기가 검증했다. Source/UI와 시험은 Claude, 독립 검토·실제 Editor 쓰기/검증은 Codex다. [수용](../reports/server_save_parts_ui_20261017/README.md): 새 파일 전체 임포트/메서드 로딩 확인 후 실제 Play309·Edit3, 실제 Core/uGUI28판정과 종료 후 부품 snapshot 재캡처/같은 요청 복구/별도 영구 저장을 확인했다. 기존 모델/구독·Private·이미지 Codex 담당을 유지하며 새 이미지 생성은 없었다.

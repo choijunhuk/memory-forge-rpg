@@ -1,0 +1,17 @@
+{
+  "scope": "actual owned Core HTTP, two applyPart attempts",
+  "attempts": [
+    {
+      "path": "/dev/practice/runs/pr-31d12c38bd1fd5d8f21d88309e86471f/commands",
+      "body_sha256": "460ffdbb5db4d0bc6bb854af7f9db78eb9abf5d7698aa85889b7c4aada8101f5",
+      "upstream_status": 200
+    },
+    {
+      "path": "/dev/practice/runs/pr-31d12c38bd1fd5d8f21d88309e86471f/commands",
+      "body_sha256": "460ffdbb5db4d0bc6bb854af7f9db78eb9abf5d7698aa85889b7c4aada8101f5",
+      "upstream_status": 200
+    }
+  ],
+  "exact_same_body": true,
+  "faults_total_including_prior_memory_unit": 2
+}
