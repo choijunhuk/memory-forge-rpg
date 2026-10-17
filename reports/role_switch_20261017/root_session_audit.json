@@ -2,7 +2,7 @@
   "transcript": "/Users/choi/.claude/projects/-Users-choi-Documents-Memory-forge/ae5b927f-1411-4970-b956-f4c51f67d2c1.jsonl",
   "session_id": "ae5b927f-1411-4970-b956-f4c51f67d2c1",
   "models": {
-    "claude-opus-5-5": 407
+    "claude-opus-5-5": 445
   },
   "permission_modes": [
     "bypassPermissions"
@@ -12,7 +12,9 @@
     "unityMCP",
     "computer-use",
     "ccd_session",
-    "ccd_settings"
+    "ccd_settings",
+    "ccd_pr",
+    "mobile"
   ],
   "codex_calls": 6,
   "lock_events": [],
@@ -35,55 +37,55 @@
       "kind": "denied_tool_exposed",
       "id": null,
       "detail": "mcp__90598b53-3e39-4750-a9e5-938a578721de__append_wireframe_pages",
-      "reason": "claude.ai connector tool; the deny entry was not observed to remove it from the session; its server is outside root_allowed_mcp_servers so any call fails the audit; never called"
+      "reason": "claude.ai Manyfast connector tool exposed before the user disabled the connector; the deny entry did not remove it; server outside root_allowed_mcp_servers; never called; connector now off"
     },
     {
       "kind": "denied_tool_exposed",
       "id": null,
       "detail": "mcp__90598b53-3e39-4750-a9e5-938a578721de__continue_chat_thread",
-      "reason": "claude.ai connector tool; the deny entry was not observed to remove it from the session; its server is outside root_allowed_mcp_servers so any call fails the audit; never called"
+      "reason": "claude.ai Manyfast connector tool exposed before the user disabled the connector; the deny entry did not remove it; server outside root_allowed_mcp_servers; never called; connector now off"
     },
     {
       "kind": "denied_tool_exposed",
       "id": null,
       "detail": "mcp__90598b53-3e39-4750-a9e5-938a578721de__generate_user_flow",
-      "reason": "claude.ai connector tool; the deny entry was not observed to remove it from the session; its server is outside root_allowed_mcp_servers so any call fails the audit; never called"
+      "reason": "claude.ai Manyfast connector tool exposed before the user disabled the connector; the deny entry did not remove it; server outside root_allowed_mcp_servers; never called; connector now off"
     },
     {
       "kind": "denied_tool_exposed",
       "id": null,
       "detail": "mcp__90598b53-3e39-4750-a9e5-938a578721de__generate_wireframe",
-      "reason": "claude.ai connector tool; the deny entry was not observed to remove it from the session; its server is outside root_allowed_mcp_servers so any call fails the audit; never called"
+      "reason": "claude.ai Manyfast connector tool exposed before the user disabled the connector; the deny entry did not remove it; server outside root_allowed_mcp_servers; never called; connector now off"
     },
     {
       "kind": "denied_tool_exposed",
       "id": null,
       "detail": "mcp__90598b53-3e39-4750-a9e5-938a578721de__regenerate_meta",
-      "reason": "claude.ai connector tool; the deny entry was not observed to remove it from the session; its server is outside root_allowed_mcp_servers so any call fails the audit; never called"
+      "reason": "claude.ai Manyfast connector tool exposed before the user disabled the connector; the deny entry did not remove it; server outside root_allowed_mcp_servers; never called; connector now off"
     },
     {
       "kind": "denied_tool_exposed",
       "id": null,
       "detail": "mcp__90598b53-3e39-4750-a9e5-938a578721de__regenerate_user_flow",
-      "reason": "claude.ai connector tool; the deny entry was not observed to remove it from the session; its server is outside root_allowed_mcp_servers so any call fails the audit; never called"
+      "reason": "claude.ai Manyfast connector tool exposed before the user disabled the connector; the deny entry did not remove it; server outside root_allowed_mcp_servers; never called; connector now off"
     },
     {
       "kind": "denied_tool_exposed",
       "id": null,
       "detail": "mcp__90598b53-3e39-4750-a9e5-938a578721de__regenerate_wireframe",
-      "reason": "claude.ai connector tool; the deny entry was not observed to remove it from the session; its server is outside root_allowed_mcp_servers so any call fails the audit; never called"
+      "reason": "claude.ai Manyfast connector tool exposed before the user disabled the connector; the deny entry did not remove it; server outside root_allowed_mcp_servers; never called; connector now off"
     },
     {
       "kind": "denied_tool_exposed",
       "id": null,
       "detail": "mcp__90598b53-3e39-4750-a9e5-938a578721de__regenerate_wireframe_page",
-      "reason": "claude.ai connector tool; the deny entry was not observed to remove it from the session; its server is outside root_allowed_mcp_servers so any call fails the audit; never called"
+      "reason": "claude.ai Manyfast connector tool exposed before the user disabled the connector; the deny entry did not remove it; server outside root_allowed_mcp_servers; never called; connector now off"
     },
     {
       "kind": "denied_tool_exposed",
       "id": null,
       "detail": "mcp__90598b53-3e39-4750-a9e5-938a578721de__run_chat_turn",
-      "reason": "claude.ai connector tool; the deny entry was not observed to remove it from the session; its server is outside root_allowed_mcp_servers so any call fails the audit; never called"
+      "reason": "claude.ai Manyfast connector tool exposed before the user disabled the connector; the deny entry did not remove it; server outside root_allowed_mcp_servers; never called; connector now off"
     },
     {
       "kind": "denied_tool_exposed",

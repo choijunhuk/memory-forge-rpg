@@ -42,7 +42,7 @@
 - **Unity 클릭 시연 1건:** Project 탭을 눌렀다가 Console 탭으로 되돌렸다. 프로젝트 변경은 없다.
 - **MCP 점검 뒤 추가한 deny 대상의 이전 노출 16건:**
   - 7개(원격 유료 기기, 외부 리뷰 실행, `blender_bridge`, `delete_repository`)는 deny 적용 뒤 세션에서 빠졌다.
-  - claude.ai 커넥터 Manyfast의 생성 도구 9개는 deny를 넣어도 세션에서 빠지는 것이 관찰되지 않았다. 그 서버는 허용 목록 밖이라 호출하면 감사 위반이 된다. 완전히 없애려면 사용자가 claude.ai 커넥터 설정에서 끈다.
+  - claude.ai 커넥터 Manyfast의 생성 도구 9개는 deny를 넣어도 세션에서 빠지는 것이 관찰되지 않았다. 그 서버는 허용 목록 밖이라 호출하면 감사 위반이 된다. 완전히 없애려면 사용자가 claude.ai 커넥터 설정에서 끈다. → 사용자가 껐고, 그 서버의 도구 80개가 세션에서 빠진 것을 확인했다.
   - 모두 호출한 적은 없다.
 - **deny 확인 1건:** 해롭지 않은 변수로 `printenv SHELL`을 시도했다. 실행 전에 permissions.deny로 거부됐고 아무것도 출력되지 않았다.
 
@@ -89,3 +89,5 @@ thread ID와 사용량은 `ops/ai/tasks/ROLE-SWITCH-CODEX-REVIEW.result.json`에
   - `.serena/`를 `.gitignore`에 넣었다.
   - 새 서버는 다음에 여는 세션부터 보인다.
 - 머지는 하지 않았다. 브랜치는 Codex 시기의 PR #2(`codex/late-actions-balance`)와 같다.
+- **Android 실기기:** 사용자가 SM-S928N(Android 16)을 USB 디버깅으로 연결했다. `adb devices`와 mobile MCP `mobile_list_available_devices` 모두에서 `real`·`online`으로 보인다. 읽기 확인만 했고, 앱 설치·실행은 아직 하지 않았다.
+- **PR #2 Auto-fix:** 켜 두었다. CI 실패·충돌·리뷰 댓글이 생기면 루트 세션이 깨어나 수정한다.
