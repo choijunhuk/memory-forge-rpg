@@ -1,0 +1,35 @@
+{
+  "task_id": "claude-autonomy-tools-followup-20261017",
+  "run_id": "claude-autonomy-tools-followup-20261017-20261017T054757677692Z",
+  "status": "RECEIVED_UNVERIFIED",
+  "requestedEffort": "xhigh",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "changes_verified": false,
+  "raw_output": "ops/ai/local/claude-autonomy-tools-followup-20261017-20261017T054757677692Z*",
+  "billing_verified_at": "2026-10-17T05:01:40.332532+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "codex/claude-mcp-tools-20261017",
+  "base_commit": "2b2d8ca9e5c2471247f47434001e832e0e948a0d",
+  "worktree": "/Users/choi/.codex/worktrees/claude-mcp-tools/Memory_forge",
+  "allowed_files": [
+    ".mcp.json",
+    "AGENTS.md",
+    "CLAUDE.md",
+    "docs/AI_ENVIRONMENT.md",
+    "docs/AI_WORKFLOW.md",
+    "ops/ai/runtime-policy.json",
+    "tools/ai/run_claude.py",
+    "tools/ai/test_handoff.py"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "661da8bf-ab0e-406b-9352-2308a327aee9",
+  "subtype": "success",
+  "is_error": false,
+  "result": "I've built the follow-up into the runner, the tests, the shared policy and the docs. **Nothing was run:** this session only had Read/Glob/Grep/Edit, so every test and every real connection is NOT_RUN. No commits or pushes, and nothing outside the 8 allowed files was touched.\n\n**New runner options (`tools/ai/run_claude.py`)**\n- **`--allow-test NAME`** (repeatable) lets Claude run a test command itself, but only from a fixed list: `node`=`npm test`, `proposals`, `memory-ui`, `late-ui`, `python`=`python3 -m unittest discover -s tests -v`, `docs`, `handoff`, `manifest`.\n  - Only the named commands are allowed, matched exactly. All other shell commands are refused, and there are explicit deny rules for `claude`/`codex`/`npx`, network tools, `security`, `rm`, destructive Git and `npm publish/install`.\n  - The runner records each test call it actually saw as run or not run. If a command outside the list succeeds, the job is marked FAILED.\n  - This is not an OS sandbox: tests run repository code (including files Claude can edit) as the user, and `test:docs` writes its own report file.\n- **Parallel jobs:** a per-worktree lock (`ops/ai/local/worktree-*.lock`) stops two jobs in the same worktree. The single global Unity Editor/desktop control lock stays.\n- **`unity-write`** now allows `execute_code`, which runs arbitrary C# in the Editor, so file scope is not enforced. `unity-read` hides it.\n- **`desktop`** now uses your real 26-tool Peekaboo 4.9.5 list: 21 are allowed for the task's target app or window (`app`, `window`, `menu`, `see`, `image`, `click`, `type`, `drag`, `action`, …). `analyze`, `agent`, `clipboard`, `paste` and `browser` are blocked. The non-existent `list`/`hotkey` are gone.\n- The default run is unchanged: no MCP, no shell, the same command and the same JSON output.\n\n**Policy and docs**\n- `ops/ai/runtime-policy.json` adds `claude_autonomy` (parallel independent jobs; Claude may comment on everything including characters; Codex keeps final character design and decides adoption; approved character expression is preserved; approval boundaries unchanged) and `claude_test_commands`. It also records the live Peekaboo tool list and `execute_code`, and keeps the ImagineArt free-credits-only exception for Codex.\n- `docs/AI_WORKFLOW.md` gets new §14 (MCP profiles), §15 (ImagineArt) and §16 (autonomy and tests, which takes priority). `docs/AI_ENVIRONMENT.md`, `AGENTS.md` and `CLAUDE.md` get matching sections. No existing text was removed.\n- `tools/ai/test_handoff.py` gets new mock tests for the test-command rules and audit, registry contents, the worktree lock, the autonomy policy, and doc consistency. `.mcp.json` is unchanged on purpose: no desktop server for interactive sessions.\n\n**Not verified yet**\n- `python3 -m unittest discover -s tests -v` and `npm run test:handoff`.\n- Whether the CLI accepts exact `Bash(… with spaces …)` allow rules as written.\n- Unity's real tools/list, the `execute_code` call, and Claude actually reaching Unity or the desktop.\n- If your Peekaboo boot created `~/.peekaboo/config.json`, the desktop pre-check will stop with BLOCKED. Clear its AI provider settings without printing them, then retry.\n- `AGENTS.md`, `CLAUDE.md`, `docs/AI_WORKFLOW.md` and `test_handoff.py` are in the checksum manifest, so their checksums now differ from it. I didn't regenerate it.\n\n**Next tests:** run those unit tests, then `--allow-test handoff`, then `--mcp-profile unity-read`. Pass criteria are exit 0, the test recorded in `tests.runs`, and for Unity `mcp.connection_observed=true` with `api_key_source=\"none\"`.",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ]
+}

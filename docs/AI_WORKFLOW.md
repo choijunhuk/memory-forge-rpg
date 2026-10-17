@@ -147,3 +147,34 @@ P1·P2 또는 개별 작업이 끝났다는 이유로 현재 세션의 개발을
 사용자는 Codex가 자신의 기존 Windows ComfyUI를 Mac 터미널의 SSH로 호출해 이미지셋을 만들도록 명시적으로 승인했다. 이는 §5의 로컬 모델 자동 대체 금지에 대한 이 사용자 환경의 허용 경로다. 생성·내용 수정 담당은 계속 Codex이며, ComfyUI 시안이 제작 기준에 미달하면 Codex의 구독 포함 이미지 도구를 사용한다. 새 유료 서비스·API·추가 크레딧·자동 충전은 허용하지 않는다.
 
 전용 ED25519 지문을 확인한 SSH에서 프롬프트를 stdin으로 보내고 PNG를 stdout으로 받는다. `aiimg "프롬프트"`는 Mac의 `~/Downloads/ai-날짜시간.png`를 만들고 검증 후 Preview로 연다. 실패한 임시 파일은 제거하고 기존 결과는 덮어쓰지 않는다. 웹 브라우저·별도 scp를 쓰지 않으며 Windows ComfyUI/OpenWebUI 자동 시작 작업을 다시 활성화하지 않는다. 실제 생성·파일 형식·크기와 시안 품질, Unity 적용 여부는 각각 구분한다. 구체 실행 범위와 독립 검사는 [제작 기록](../art/requests/local-comfy-20261017.md)을 따른다.
+
+## 14. 2026-10-17 Claude 고정 MCP 프로필 — Unity·화면 조작
+
+최신 사용자 지시: 구현·개발 도구 설치와 활용은 공식 Claude Opus CLI가, 이미지 생성·지시·독립 검증·통합은 Codex가 맡는다. Claude의 MCP는 이 절의 고정 프로필로만 연다. 코드·설정·모의 시험은 작성했지만 시험 실행과 Claude 세션의 실제 MCP 연결·조작은 NOT_RUN이다.
+
+- **선택:** `tools/ai/run_claude.py --mcp-profile`은 `none`(기본)·`unity-read`·`unity-write`·`desktop`만 받는다. `none`은 이전과 같은 빈 strict MCP·Read/Glob/Grep/명시 Edit·JSON 결과다. 다른 이름·URL·명령 인자는 실행 전에 거절한다. 서버·허용/금지 도구는 실행기 상수와 [runtime-policy.json](../ops/ai/runtime-policy.json) `claude_mcp_profiles`에 고정하고 `tools/ai/test_handoff.py`가 대조한다. 목록 변경은 반대 AI 리뷰를 거친다.
+- **로드 범위:** 프로필 서버만 `--strict-mcp-config`로 넘기고 `ENABLE_CLAUDEAI_MCP_SERVERS=false`를 둔다. 사용자·프로젝트 `.mcp.json`·claude.ai 클라우드 MCP는 읽지 않고 버전·인증 확인은 빈 MCP로 한다. 구독 인증·계정 일치·과금 UI 증거·Opus/노력·결과 모델 검사·재귀 금지는 모든 프로필에 그대로 적용된다.
+- **권한:** `dontAsk`와 정확한 `--allowedTools`만 자동 허용하고 금지 도구는 `--disallowedTools`로 모델 문맥에서 뺀다. 서버 단위·와일드카드 허용은 쓰지 않는다.
+- **Unity:** 기존 무료 로컬 `http://127.0.0.1:8080/mcp`만 쓴다. `unity-read`는 읽기·진단·MCP 리소스 읽기이며 Codex가 Editor writer인 동안에도 쓸 수 있다. `unity-write`는 Codex가 그 작업에 Editor 쓰기를 넘긴 경우에만 쓰고 실행기가 `ops/ai/local/exclusive-control.lock`을 배타적으로 잡는다. 잠금이 있는 동안 다른 작업·Codex는 같은 Editor를 쓰지 않는다. Editor 쓰기는 worktree가 아니라 Editor가 연 루트 프로젝트에 반영되므로 Codex가 루트 diff·Console·Play를 독립 확인한다. 유료 `asset_gen`, 클라이언트 권한을 우회하는 서버 측 일괄/사용자 도구, 임의 메뉴 실행, 패키지 변경, C#·셰이더 소스 편집 도구는 제외한다(소스는 worktree 편집 경계로).
+- **화면:** Codex 전역 computer-use 명령은 설정된 상대 경로에 실행 파일이 없어 재사용하지 않았다. `desktop`은 MIT `@steipete/peekaboo@4.9.5`를 `npx -y ... mcp`로 띄운다. 같은 잠금을 공유한다(GUI로 Editor를 조작할 수 있으므로). 실행 전 macOS·`npx`·`~/.peekaboo/credentials`/`config.json` 부재(내용 미열람)를 확인하고 AI 공급자·Peekaboo 환경변수와 API 키·토큰류를 자식 환경에서 뺀다. 도구 구성은 §16의 실제 목록 교정을 따른다.
+- **증거:** MCP 작업은 `stream-json`으로 받아 CLI init의 서버 상태·노출 도구, 실제 MCP 호출·오류, 권한 거부, `apiKeySource`를 결과에 남긴다. 프로필 밖 서버·도구, 금지 도구 노출, 화면 호출의 AI 분석 인자, `apiKeySource`가 `none`이 아니면 FAILED다. 서버 연결과 허용 도구 성공 응답이 함께 있어야 `connection_observed=true`이며 이것도 Editor/화면 결과의 독립 확인을 대신하지 않는다.
+- **한계:** CLI 권한은 MCP 도구 이름 단위라 인자(`read_console` clear, `manage_asset` 경로, 캡처 도구의 선택적 AI 인자)를 막지 못하고 사후 감사만 한다. `desktop`은 사용자 GUI 전체를 조작할 수 있어 셸 금지·파일 경계를 GUI로 우회할 수 있으므로 작업 지시에 대상 앱·창을 적고 Codex가 호출 기록을 검토한다. 환경변수 제거·파일 부재 검사는 키체인 등 다른 저장소나 로컬 모델 사용을 막았다는 증명이 아니다. `npx`는 정확한 버전만 고정하고 의존성 무결성은 고정하지 않는다. OS 샌드박스·서버 측 과금 차단이 아니다.
+- **보류:** 실제 도구 목록이 허용 도구 인자로 AI 분석·유료 경로를 노출하면 해당 도구/프로필만 보류하고 Unity 연결과 독립 작업은 계속한다.
+
+## 15. 2026-10-17 ImagineArt 무료 크레딧 예외
+
+사용자는 Codex가 필요할 때 ImagineArt 플러그인을 **무료 크레딧으로만** 쓰도록 명시 허용했다. ImagineArt에만 적용되는 예외로 §5의 '별도 크레딧이 필요한 도구 미실행' 규칙보다 우선한다. 기존 구매·유료 잔액, 자동 충전, 추가 결제는 금지다. 생성 전에 Codex가 무료 잔액과 실제 차감 경로를 구분해 확인하고, 확인할 수 없거나 유료 잔액이 먼저/함께 차감될 수 있으면 해당 생성만 보류한다. 사용 도구·무료 잔액 확인 근거·결과를 `art/provenance.csv`에 남긴다.
+
+이미지 생성·재생성·내용 수정은 계속 Codex 담당이다. Claude MCP 프로필에는 ImagineArt나 다른 이미지 생성 도구를 넣지 않는다. Codex/Claude의 일반 추론은 기존 구독 포함 사용량만 쓰며 §2의 API 크레딧(무료·프로모션 포함) 금지는 추론 경로에 그대로 적용된다. 모든 대화 모델 고정(`gpt-6.1-sol`, `claude-opus-5-5`)과 GitHub Private 정책을 유지한다.
+
+## 16. 2026-10-17 최신 우선 — Claude 자율성·의견·실행 권한
+
+이 절은 §3의 '기본 동시 Claude 작업자 1명'과 §14의 초기 화면 도구 초안에 우선한다. Opus5.5만, 구독 포함 사용량·고정 계정 확인·fallback 없음·재귀 AI 호출 금지는 그대로다.
+
+- **활동량·병렬:** 서로 독립인 구현은 별도 branch/worktree에서 Claude 작업을 병렬로 진행한다. 허용 파일은 작업끼리 겹치지 않게 배정하고, 실행기는 같은 worktree의 두 번째 작업을 `ops/ai/local/worktree-*.lock`으로 거절한다. Unity Editor/화면 제어 잠금은 계속 전역 하나다. Codex는 작업 경계·지시·계획·독립 검증·통합의 품질을 유지하고 이미지 생성·내용 수정을 전담한다.
+- **의견과 자율 구현:** 캐릭터 외형의 최종 디자인은 Codex가 맡지만 Claude는 캐릭터를 포함한 모든 분야에 자유롭게 의견을 낸다. 코드·게임 시스템·UI/UX·스토리·성능·테스트·아키텍처는 승인된 설계 범위에서 Claude가 자율 판단·구현하며, 의견마다 승인을 받거나 같은 내용을 반복 검토하지 않는다. 결과에는 구체적 구현 결함·설계 불일치·실제 제약과 선택 의견을 구분해 적고 Codex가 채택 여부를 판단한다. 선택 의견만으로 통합을 막지 않는다.
+- **승인된 표현 보존:** 이미 승인된 비성적 캐릭터의 나이·존재·외형·서브컬처 표현을 포괄적인 약관 추정만으로 삭제·축소·변경하지 않는다. 구체 조항·실제 심사 결과 같은 근거가 있으면 실제 제약으로 Codex에 올린다. 안전·권한·과금 경계를 우회하라는 뜻이 아니며 가격·확률·재화·영구 자산·나이 정책 변경과 운영 배포의 승인 경계는 그대로다.
+- **시험 명령:** 실행기의 `--allow-test NAME`(반복 가능)은 고정 목록(`node`=`npm test`, `proposals`, `memory-ui`, `late-ui`, `python`=`python3 -m unittest discover -s tests -v`, `docs`, `handoff`, `manifest`)만 받는다. 지정된 명령만 정확한 `Bash(명령)` 규칙으로 허용하고 나머지 셸은 `dontAsk`로 거부되며, 모델/API(`claude`·`codex`·`npx`), 네트워크(`curl`·`wget`·`ssh`·`gh`), 비밀 조회(`security`), 삭제·배포·Git 파괴 명령은 명시 금지 규칙도 둔다. 실제 Bash 호출은 stream으로 `runs`/`not_run`에 기록하고 목록 밖 명령이 성공하면 FAILED다. 시험은 저장소 코드(편집 범위 파일 포함)를 사용자 권한으로 실행하므로 OS 샌드박스가 아니며 `test:docs`는 자체 보고서 파일을 쓴다. Codex가 `git status`와 재실행으로 확인한다. 범용 실행 엔진으로 넓히지 않는다.
+- **화면 도구 교정:** Codex가 provider 환경변수 없이 Peekaboo 4.9.5를 로컬 stdio로 띄워 initialize/tools-list만 확인했다(serverInfo peekaboo-mcp 4.9.5, 추론·화면 조작 없음). `list`·`hotkey`는 없고 `app`/`window`의 list 동작이 발견 경로다. `image`는 AI 입력이 없는 스크린샷, `see` OCR은 로컬 Apple Vision이다. `desktop`은 실제 26개 중 무료 native 21개(앱·창·메뉴·Dock·대화상자·Space·캡처·AX 검사/검증·클릭·입력·키·스크롤·드래그·선택·값 설정·의미 동작·대기)를 작업 대상 앱·창에 한해 허용하고 `analyze`·`agent`(AI 공급자), `clipboard`·`paste`(비밀 가능 클립보드), `browser`(대상 밖 웹 이동)를 금지한다. 도구 설명의 기본 provider 문구는 실제 호출 증거가 아니다. 계정·청구·비밀·키체인·터미널을 GUI로 우회 조작하지 않는다.
+- **실제 노출 기준 보강(2026-10-17):** 첫 실제 `unity-read` init에 허용 목록 밖 같은 서버 도구 17개(`generate_image`·`generate_model`·`generate_audio`·`import_model` 등 포함)가 남았다. 이 이름들은 두 Unity 프로필에서 정확한 deny로 제외하고, 같은 서버의 미허용 도구가 문맥에 노출되면 기록만 하지 않고 FAILED로 처리한다. 새 도구가 필요하면 무료 여부와 쓰기 성격을 확인해 별도로 배정한다. 정확한 `Bash(명령)` 규칙 밖의 읽기 전용 셸이 CLI에서 자동 허용될 수 있음을 관찰했으므로 실행기 감사 결과로 판정한다. 상세 기록은 [AI_ENVIRONMENT.md](AI_ENVIRONMENT.md)다.
+- **Unity `execute_code`:** 무료 Editor C# method-body 도구를 `unity-write`에서만 허용한다(설치·검수·실행 확인용). 임의 코드 실행이므로 파일 범위를 OS 수준으로 강제한다고 주장하지 않는다. 기존 Editor·파일 보존, 유료 asset/AI 생성·다른 모델 호출 금지를 유지한다. 실제 Unity tools/list와 CLI 노출·도구 호출은 다음 실험에서 검증하며 설정만으로 연결됐다고 쓰지 않는다.

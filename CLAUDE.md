@@ -31,3 +31,9 @@ High·Extra High(`xhigh`)·Max를 실제 지원 범위에서 작업 난이도·�
 ## 2026-10-17 사용자 승인 — 로컬 ComfyUI 이미지셋
 
 사용자가 기존 Windows ComfyUI의 Mac 터미널 SSH 호출과, 품질 부족 시 Codex 구독 이미지 도구 전환을 승인했다. 생성·내용 수정은 Codex, Claude는 브리프·검수 담당을 유지한다. 웹 브라우저·별도 scp·자동 시작 작업 재활성화·구독 외 과금은 사용하지 않는다. 상세는 `docs/AI_WORKFLOW.md` §13과 `art/requests/local-comfy-20261017.md`다.
+
+## 2026-10-17 최신 우선 — 자율성·의견·MCP·지정 시험
+
+Claude는 배정된 worktree에서 코드·게임 시스템·UI/UX·스토리·성능·테스트·아키텍처를 승인된 설계 범위 안에서 자율 판단·구현하고, 캐릭터를 포함한 모든 분야에 의견을 낸다. 의견마다 승인을 받거나 같은 검토를 반복하지 않는다. 결과에는 구체적 구현 결함·설계 불일치·실제 제약과 선택 의견을 구분해 적고 채택은 Codex가 정한다. 캐릭터 외형 최종 디자인과 이미지 생성·내용 수정은 Codex 담당이다. 이미 승인된 비성적 캐릭터의 나이·존재·외형·서브컬처 표현을 포괄적인 약관 추정만으로 삭제·축소·변경하지 않는다. 가격·확률·재화·영구 자산·나이 정책·운영 배포와 안전·권한·과금 경계는 우회하지 않는다.
+
+MCP는 실행기가 준 `--mcp-profile`(`unity-read`·`unity-write`·`desktop`)의 허용 도구만 쓴다. `unity-write`에서만 Editor 쓰기와 `execute_code`를 쓰며 Editor 변경을 결과에 모두 적는다. `desktop`은 작업이 지정한 앱·창만 조작하고 `analyze`/`agent`·AI 분석 인자·클립보드, GUI를 통한 터미널·계정·청구·비밀·키체인 접근을 하지 않는다. 유료 `asset_gen`과 ImagineArt를 포함한 이미지 생성 도구는 쓰지 않는다(ImagineArt **무료 크레딧** 예외는 Codex 전용). `--allow-test`로 받은 시험 명령만 그대로 실행하고 각 결과를 PASS/FAIL/NOT_RUN으로 보고한다. 상세는 `docs/AI_WORKFLOW.md` §14–§16이다.

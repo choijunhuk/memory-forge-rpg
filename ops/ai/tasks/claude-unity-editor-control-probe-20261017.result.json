@@ -1,0 +1,166 @@
+{
+  "task_id": "claude-unity-editor-control-probe-20261017",
+  "run_id": "claude-unity-editor-control-probe-20261017-20261017T063636307870Z",
+  "status": "RECEIVED_UNVERIFIED",
+  "requestedEffort": "high",
+  "requestedModel": "claude-opus-5-5",
+  "mcp_profile": "unity-write",
+  "process_exit": 0,
+  "changes_verified": false,
+  "raw_output": "ops/ai/local/claude-unity-editor-control-probe-20261017-20261017T063636307870Z*",
+  "billing_verified_at": "2026-10-17T05:01:40.332532+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools plus fixed MCP tool names; MCP actions reach the Unity Editor project or macOS GUI outside the worktree; not an OS sandbox; managed policy still applies",
+  "branch": "codex/claude-mcp-tools-20261017",
+  "base_commit": "2b2d8ca9e5c2471247f47434001e832e0e948a0d",
+  "worktree": "/Users/choi/.codex/worktrees/claude-mcp-tools/Memory_forge",
+  "allowed_files": [],
+  "mcp": {
+    "servers": [
+      "unityMCP"
+    ],
+    "allowed_tools": [
+      "ListMcpResourcesTool",
+      "ReadMcpResourceTool",
+      "mcp__unityMCP__set_active_instance",
+      "mcp__unityMCP__read_console",
+      "mcp__unityMCP__find_gameobjects",
+      "mcp__unityMCP__get_test_job",
+      "mcp__unityMCP__get_sha",
+      "mcp__unityMCP__validate_script",
+      "mcp__unityMCP__manage_editor",
+      "mcp__unityMCP__manage_scene",
+      "mcp__unityMCP__manage_gameobject",
+      "mcp__unityMCP__manage_components",
+      "mcp__unityMCP__manage_prefabs",
+      "mcp__unityMCP__manage_asset",
+      "mcp__unityMCP__manage_material",
+      "mcp__unityMCP__manage_texture",
+      "mcp__unityMCP__manage_scriptable_object",
+      "mcp__unityMCP__manage_animation",
+      "mcp__unityMCP__manage_ui",
+      "mcp__unityMCP__manage_vfx",
+      "mcp__unityMCP__refresh_unity",
+      "mcp__unityMCP__run_tests",
+      "mcp__unityMCP__manage_build",
+      "mcp__unityMCP__execute_code"
+    ],
+    "denied_tools": [
+      "mcp__unityMCP__asset_gen",
+      "mcp__unityMCP__batch_execute",
+      "mcp__unityMCP__execute_custom_tool",
+      "mcp__unityMCP__execute_menu_item",
+      "mcp__unityMCP__manage_packages",
+      "mcp__unityMCP__manage_script",
+      "mcp__unityMCP__create_script",
+      "mcp__unityMCP__delete_script",
+      "mcp__unityMCP__apply_text_edits",
+      "mcp__unityMCP__script_apply_edits",
+      "mcp__unityMCP__manage_shader",
+      "mcp__unityMCP__generate_image",
+      "mcp__unityMCP__generate_model",
+      "mcp__unityMCP__generate_audio",
+      "mcp__unityMCP__import_model",
+      "mcp__unityMCP__import_model_file",
+      "mcp__unityMCP__blender_bridge",
+      "mcp__unityMCP__debug_request_context",
+      "mcp__unityMCP__find_in_file",
+      "mcp__unityMCP__manage_camera",
+      "mcp__unityMCP__manage_graphics",
+      "mcp__unityMCP__manage_physics",
+      "mcp__unityMCP__manage_probuilder",
+      "mcp__unityMCP__manage_profiler",
+      "mcp__unityMCP__manage_script_capabilities",
+      "mcp__unityMCP__manage_tools",
+      "mcp__unityMCP__unity_docs",
+      "mcp__unityMCP__unity_reflect"
+    ],
+    "exclusive_lock": "ops/ai/local/exclusive-control.lock",
+    "connection_observed": true,
+    "preflight": "local Unity MCP port listening",
+    "observed": {
+      "servers": {
+        "unityMCP": "connected"
+      },
+      "exposed_tools": [
+        "mcp__unityMCP__execute_code",
+        "mcp__unityMCP__find_gameobjects",
+        "mcp__unityMCP__get_sha",
+        "mcp__unityMCP__get_test_job",
+        "mcp__unityMCP__manage_animation",
+        "mcp__unityMCP__manage_asset",
+        "mcp__unityMCP__manage_build",
+        "mcp__unityMCP__manage_components",
+        "mcp__unityMCP__manage_editor",
+        "mcp__unityMCP__manage_gameobject",
+        "mcp__unityMCP__manage_material",
+        "mcp__unityMCP__manage_prefabs",
+        "mcp__unityMCP__manage_scene",
+        "mcp__unityMCP__manage_scriptable_object",
+        "mcp__unityMCP__manage_texture",
+        "mcp__unityMCP__manage_ui",
+        "mcp__unityMCP__manage_vfx",
+        "mcp__unityMCP__read_console",
+        "mcp__unityMCP__refresh_unity",
+        "mcp__unityMCP__run_tests",
+        "mcp__unityMCP__set_active_instance",
+        "mcp__unityMCP__validate_script"
+      ],
+      "exposed_not_allowed": [],
+      "calls": [
+        {
+          "tool": "mcp__unityMCP__execute_code",
+          "is_error": false
+        },
+        {
+          "tool": "mcp__unityMCP__manage_editor",
+          "is_error": false
+        },
+        {
+          "tool": "mcp__unityMCP__execute_code",
+          "is_error": false
+        },
+        {
+          "tool": "mcp__unityMCP__manage_editor",
+          "is_error": false
+        },
+        {
+          "tool": "mcp__unityMCP__execute_code",
+          "is_error": false
+        },
+        {
+          "tool": "mcp__unityMCP__manage_editor",
+          "is_error": false
+        },
+        {
+          "tool": "mcp__unityMCP__execute_code",
+          "is_error": false
+        },
+        {
+          "tool": "mcp__unityMCP__manage_editor",
+          "is_error": false
+        },
+        {
+          "tool": "mcp__unityMCP__execute_code",
+          "is_error": false
+        },
+        {
+          "tool": "mcp__unityMCP__read_console",
+          "is_error": false
+        }
+      ],
+      "permission_denials": [],
+      "api_key_source": "none",
+      "transport_connected": true
+    }
+  },
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "71bbcd5c-6cdf-41d5-b37e-538628940366",
+  "subtype": "success",
+  "is_error": false,
+  "result": "Every step passed. I could play, pause, resume and stop the real Unity Editor through Unity MCP, and it is back in its starting state. After each command I read the actual state back with `execute_code` instead of trusting the tool's \"accepted\" reply.\n\n| Step | Result | State read back |\n|---|---|---|\n| 1. Editor state | PASS | Unity 6000.0.46f1, not batch mode, active scene `Assets/Scenes/MemoryForgeServerPractice.unity`, `is_playing=false`, `is_paused=false`, ready for tools. Matched what you expected. |\n| 2. Read flags directly | PASS | `isPlaying=False`, `isPaused=False`, `isBatchMode=False`, same scene path |\n| 3a. Play | PASS | `isPlaying=True`, `isPaused=False` |\n| 3b. Pause | PASS | `isPlaying=True`, `isPaused=True` |\n| 3c. Resume | PASS | `isPlaying=True`, `isPaused=False` (resumed by sending `pause` a second time) |\n| 3d. Stop | PASS | `isPlaying=False`, `isPaused=False`, not mid-transition, same scene, scene has no unsaved changes |\n| 4. Console errors (5 most recent) | PASS | 0 error entries. I did not clear the Console. |\n\n**Changes:**\n- **Editor:** only the Play, Pause, Resume and Stop toggles above; the Editor is back where it started. Nothing else was opened, saved or modified: no scenes, prefabs, assets, packages or imports.\n- **Files:** none created or modified in this worktree; no code files were touched.\n\n**Not covered:** this only shows that Editor control works. Battle progression, Android, builds and Play Mode tests were not run (NOT_RUN).\n\n**Blocked:** nothing.\n\n**session_id:** this session can't see its own ID. Codex needs to take it from the CLI session metadata.\n\n**Next:** Codex can release the Unity write lock and give the Editor the next Unity task.",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ]
+}

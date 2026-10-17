@@ -49,3 +49,9 @@ High·Extra High(`xhigh`)·Max를 실제 지원 범위에서 작업 난이도·�
 ## 2026-10-17 사용자 승인 — 로컬 ComfyUI 이미지셋
 
 Codex가 사용자 Windows의 기존 ComfyUI를 Mac 터미널의 고정 지문 SSH로 직접 호출하는 이미지 제작 경로를 승인했다. stdin/stdout으로 PNG를 `~/Downloads`에 저장하고 Preview로 확인한다. 웹 브라우저·별도 scp·자동 시작 작업 재활성화는 사용하지 않는다. 시안 품질이 부족하면 Codex 구독 이미지 도구로 전환한다. 이미지 담당·기존 설계·구독 외 과금 금지는 유지한다. 상세는 `docs/AI_WORKFLOW.md` §13과 `art/requests/local-comfy-20261017.md`다.
+
+## 2026-10-17 최신 우선 — Claude 자율성·MCP·지정 시험·ImagineArt 무료 크레딧
+
+개발 도구 설치·활용과 새 구현은 공식 Claude Opus CLI가 맡고, 서로 독립인 구현은 별도 branch/worktree에서 병렬로 진행한다(실행기가 같은 worktree 동시 작업을 거절). Codex는 작업 경계·지시·계획·독립 검증·통합, 이미지 생성·내용 수정, 캐릭터 외형 최종 디자인을 맡는다. Claude는 캐릭터를 포함한 모든 분야에 의견을 낼 수 있고 코드·시스템·UI/UX·스토리·성능·테스트·아키텍처는 승인된 설계 범위에서 자율 구현한다. 결함·설계 불일치·실제 제약과 선택 의견을 구분해 Codex가 채택한다. 승인된 비성적 캐릭터의 나이·존재·외형·서브컬처 표현을 포괄적인 약관 추정만으로 줄이지 않는다. 가격·확률·재화·영구 자산·나이 정책·운영 배포 승인 경계와 안전·권한·과금 경계는 그대로다.
+
+Claude MCP는 `run_claude.py --mcp-profile`의 고정 `none`(기본)·`unity-read`·`unity-write`·`desktop`만 쓴다. 임의 URL·명령·사용자/클라우드 MCP, 유료 `asset_gen`, Peekaboo `analyze`/`agent`, 클립보드·browser는 금지다. Unity `execute_code`는 Editor 쓰기를 넘겨받은 `unity-write`에서만 쓴다. `unity-write`·`desktop`은 전역 제어 잠금을 잡은 한 작업만 실행하며 그동안 Codex는 같은 Editor를 쓰지 않는다. 로컬 시험은 `--allow-test NAME`의 고정 명령만 정확히 허용하며 OS 샌드박스가 아니다. 설정·모의 시험은 실제 연결·조작 증거가 아니며 현재 실제 호출 상태는 docs/AI_ENVIRONMENT.md의 최신 검증과 reports/claude_tools_20261017을 따른다. 검증 범위 밖의 미실행은 NOT_RUN으로 구분한다. 사용자는 ImagineArt를 Codex가 **무료 크레딧으로만** 쓰도록 허용했다(ImagineArt 한정, 구매/유료 잔액·자동 충전·추가 결제 금지, 무료/차감 경로 확인 불가 시 해당 생성만 보류). Claude에는 이미지 생성 도구를 공급하지 않고, 일반 추론은 기존 구독 포함 사용량·모델 고정·GitHub Private을 유지한다. 상세는 `docs/AI_WORKFLOW.md` §14–§16이다.

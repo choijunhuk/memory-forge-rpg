@@ -1,0 +1,143 @@
+{
+  "task_id": "claude-live-tools-readcheck-20261017",
+  "run_id": "claude-live-tools-readcheck-20261017-20261017T060451900837Z",
+  "status": "RECEIVED_UNVERIFIED",
+  "requestedEffort": "high",
+  "requestedModel": "claude-opus-5-5",
+  "mcp_profile": "unity-read",
+  "process_exit": 0,
+  "changes_verified": false,
+  "raw_output": "ops/ai/local/claude-live-tools-readcheck-20261017-20261017T060451900837Z*",
+  "billing_verified_at": "2026-10-17T05:01:40.332532+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools plus fixed MCP tool names; MCP actions reach the Unity Editor project or macOS GUI outside the worktree plus exact named test commands that run repository code as the user; not an OS sandbox; managed policy still applies",
+  "branch": "codex/claude-mcp-tools-20261017",
+  "base_commit": "2b2d8ca9e5c2471247f47434001e832e0e948a0d",
+  "worktree": "/Users/choi/.codex/worktrees/claude-mcp-tools/Memory_forge",
+  "allowed_files": [],
+  "tests": {
+    "allowed": [
+      "npm run test:handoff"
+    ],
+    "runs": [
+      {
+        "command": "npm run test:handoff",
+        "is_error": false
+      }
+    ],
+    "not_run": []
+  },
+  "mcp": {
+    "servers": [
+      "unityMCP"
+    ],
+    "allowed_tools": [
+      "ListMcpResourcesTool",
+      "ReadMcpResourceTool",
+      "mcp__unityMCP__set_active_instance",
+      "mcp__unityMCP__read_console",
+      "mcp__unityMCP__find_gameobjects",
+      "mcp__unityMCP__get_test_job",
+      "mcp__unityMCP__get_sha",
+      "mcp__unityMCP__validate_script"
+    ],
+    "denied_tools": [
+      "mcp__unityMCP__manage_editor",
+      "mcp__unityMCP__manage_scene",
+      "mcp__unityMCP__manage_gameobject",
+      "mcp__unityMCP__manage_components",
+      "mcp__unityMCP__manage_prefabs",
+      "mcp__unityMCP__manage_asset",
+      "mcp__unityMCP__manage_material",
+      "mcp__unityMCP__manage_texture",
+      "mcp__unityMCP__manage_scriptable_object",
+      "mcp__unityMCP__manage_animation",
+      "mcp__unityMCP__manage_ui",
+      "mcp__unityMCP__manage_vfx",
+      "mcp__unityMCP__refresh_unity",
+      "mcp__unityMCP__run_tests",
+      "mcp__unityMCP__manage_build",
+      "mcp__unityMCP__execute_code",
+      "mcp__unityMCP__asset_gen",
+      "mcp__unityMCP__batch_execute",
+      "mcp__unityMCP__execute_custom_tool",
+      "mcp__unityMCP__execute_menu_item",
+      "mcp__unityMCP__manage_packages",
+      "mcp__unityMCP__manage_script",
+      "mcp__unityMCP__create_script",
+      "mcp__unityMCP__delete_script",
+      "mcp__unityMCP__apply_text_edits",
+      "mcp__unityMCP__script_apply_edits",
+      "mcp__unityMCP__manage_shader"
+    ],
+    "exclusive_lock": null,
+    "connection_observed": true,
+    "preflight": "local Unity MCP port listening",
+    "observed": {
+      "servers": {
+        "unityMCP": "connected"
+      },
+      "exposed_tools": [
+        "mcp__unityMCP__blender_bridge",
+        "mcp__unityMCP__debug_request_context",
+        "mcp__unityMCP__find_gameobjects",
+        "mcp__unityMCP__find_in_file",
+        "mcp__unityMCP__generate_audio",
+        "mcp__unityMCP__generate_image",
+        "mcp__unityMCP__generate_model",
+        "mcp__unityMCP__get_sha",
+        "mcp__unityMCP__get_test_job",
+        "mcp__unityMCP__import_model",
+        "mcp__unityMCP__import_model_file",
+        "mcp__unityMCP__manage_camera",
+        "mcp__unityMCP__manage_graphics",
+        "mcp__unityMCP__manage_physics",
+        "mcp__unityMCP__manage_probuilder",
+        "mcp__unityMCP__manage_profiler",
+        "mcp__unityMCP__manage_script_capabilities",
+        "mcp__unityMCP__manage_tools",
+        "mcp__unityMCP__read_console",
+        "mcp__unityMCP__set_active_instance",
+        "mcp__unityMCP__unity_docs",
+        "mcp__unityMCP__unity_reflect",
+        "mcp__unityMCP__validate_script"
+      ],
+      "exposed_not_allowed": [
+        "mcp__unityMCP__blender_bridge",
+        "mcp__unityMCP__debug_request_context",
+        "mcp__unityMCP__find_in_file",
+        "mcp__unityMCP__generate_audio",
+        "mcp__unityMCP__generate_image",
+        "mcp__unityMCP__generate_model",
+        "mcp__unityMCP__import_model",
+        "mcp__unityMCP__import_model_file",
+        "mcp__unityMCP__manage_camera",
+        "mcp__unityMCP__manage_graphics",
+        "mcp__unityMCP__manage_physics",
+        "mcp__unityMCP__manage_probuilder",
+        "mcp__unityMCP__manage_profiler",
+        "mcp__unityMCP__manage_script_capabilities",
+        "mcp__unityMCP__manage_tools",
+        "mcp__unityMCP__unity_docs",
+        "mcp__unityMCP__unity_reflect"
+      ],
+      "calls": [
+        {
+          "tool": "mcp__unityMCP__read_console",
+          "is_error": false
+        }
+      ],
+      "permission_denials": [],
+      "api_key_source": "none"
+    }
+  },
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "ab266f26-8e4e-49d9-9745-cc4047c562de",
+  "subtype": "success",
+  "is_error": false,
+  "result": "세 항목 모두 실제로 실행했고, 실패하거나 거부된 호출은 없었습니다. 코드·Console·Editor·씬은 변경하지 않았습니다.\n\n| # | 실행한 도구 | 판정 | 결과 |\n|---|---|---|---|\n| 1 | Bash `npm run test:handoff` (1회, 인자 추가 없음) | **PASS** | 31개 시험 실행, 31개 통과(`OK`). 결과에 영향 없는 DeprecationWarning(SWIG/`fitz`)만 나왔습니다. |\n| 2 | ReadMcpResourceTool `mcpforunity://editor/state` | **PASS** | 인스턴스 `MemoryForgeUnity@4034a4e2fe236d6e`, Unity `6000.0.46f1`, OSXEditor, non-batch(`is_batch_mode:false`), Play 상태 아님(playing/paused/changing 모두 false). 활성 씬 `Assets/Scenes/MemoryForgeServerPractice.unity`, 컴파일 중 아님, 도구 사용 가능(`ready_for_tools:true`). |\n| 3 | `mcp__unityMCP__read_console` (get, types=[error], count=5) | **PASS** | 오류 항목 1건: \"An infinite import loop has been detected. The following Assets were imported multiple times, but no changes…\" |\n\n**한계**\n- 3항의 무한 임포트 루프 오류는 대상 에셋 목록이 메시지에서 잘려 있습니다. 원인을 찾으려면 스택트레이스나 상세 형식으로 다시 읽어야 하는데, 이번 작업 범위 밖이라 하지 않았습니다. Editor 쓰기 권한이 있는 Codex의 확인이 필요합니다.\n- `assets.external_changes_dirty:true`로, Unity 밖에서 바뀐 파일이 아직 Editor에 반영되지 않았습니다. 새로고침은 하지 않았습니다.\n- 이번에 확인한 것은 MCP 읽기 연결과 handoff 시험까지입니다. Unity Play 시험이나 실기기 검증은 아닙니다.\n\n**다음 작업:** Codex가 임포트 루프 대상 에셋을 확인하고, 미반영 외부 변경을 새로고침할지 판단해야 합니다.",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ]
+}

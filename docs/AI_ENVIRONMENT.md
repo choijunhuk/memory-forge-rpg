@@ -24,7 +24,7 @@ Codex 핵심 전투·예약·카드/부품·기억 저장·경제·인증·서�
 1. 신선한 계정 UI 확인 기록에서 claude.ai 구독, Usage credits OFF, 자동 충전 OFF를 검사한다. 현재 구현은 24시간 이내 확인과 화면 이메일/CLI 계정의 로컬 SHA-256 일치를 요구한다. 식별자·지문은 로컬에만 두며 결과에는 일치 여부만 남긴다. 이것을 서버 청구 강제 차단 장치라고 부르지 않는다.
 2. 같은 저장소의 별도 worktree·별도 브랜치와 허용 파일을 검사한다. 자식 프로세스 환경에서 API·프록시·클라우드·모델 덮어쓰기 경로를 제외하고 전역 키는 변경하지 않는다.
 3. `--restricted --setting-sources ''`와 검사한 프로젝트 설정으로 공식 CLI 버전과 `auth status`를 비추론 확인한다. claude.ai/firstParty의 Pro 또는 Max 구독 인증만 받는다. `--bare`·토큰 추출·SDK 재사용·재귀 호출은 금지한다. CLI 파일 도구 범위와 자격 파일 거부를 적용하지만 OS샌드박스로 부르지 않는다. 관리형 정책은 별도 적용된다.
-4. 명시 Opus, `--effort high|max`, 구조화 JSON 결과를 사용한다. 기본 도구는 읽기·검색이며 편집은 명시 파일에만 허용한다. 현재 범위 실행기는 임의 쉘·중첩 AI·MCP를 열지 않는다.
+4. 명시 Opus, `--effort high|max`, 구조화 JSON 결과를 사용한다. 기본 도구는 읽기·검색이며 편집은 명시 파일에만 허용한다. 기본(`--mcp-profile none`, `--allow-test` 없음) 실행은 임의 쉘·중첩 AI·MCP를 열지 않는다. MCP와 지정 시험 명령은 아래 2026-10-17 절의 고정 opt-in으로만 열린다.
 5. 작업 ID·run ID·요청 모델·요청 노력·실제 종료 코드·반환 세션 ID·`modelUsage` 모델 키를 결과에 기록한다. Opus 외 모델이나 성공 조건 누락이면 거부한다. 반환 성공도 `RECEIVED_UNVERIFIED`이며 diff·시험·독립 검토 후에 통합한다.
 6. 시간 초과·한도·실패는 체크포인트로 남긴다. 자동 유료 우회나 중복 재실행을 하지 않는다. 차단된 작업 외의 독립 개발은 현재 세션에서 계속한다.
 
@@ -109,3 +109,43 @@ UnityMCP의 실제 MemoryForgeUnity@4034a4e2fe236d6e /6000.0.46f1 Editor에 새C
 ## 2026-10-17 미확정 요청 보존 — 실제 실행 경계
 
 [원문 보존 컴포넌트](../reports/practice_command_outbox_20261017/root_acceptance.md)는 공식OpusMax로 시작했고, Codex의 실제Mono잠금반증 뒤 같은세션xhigh 구현/시험/수정·High한줄보강으로 회수했다. 원래중단FAILED는그대로이고과금/모델우회가아니다. [실제CLI모델·노력기록](../reports/practice_command_outbox_20261017/actual_cli_metadata.json)과구독인증/계정일치·유효creditsOFF/autoreloadOFF증거를구분한다. CodexGPT-6.1SolMax의독립리뷰·실행과두번째좁은승인을완료했으며Root저장/HTTP25·새파일0600Mac/Linux·실제Mono전체Play182/Edit3을확인했다. 전체클라이언트전송/UI/기기복구·전원장애가아니며기존설계/수치/이미지Codex담당/Private정책을유지한다.
+
+
+## 2026-10-17 Claude 실행기 opt-in — MCP 프로필·지정 시험, 실제 연결 NOT_RUN
+
+계약은 [AI_WORKFLOW.md §14·§16](AI_WORKFLOW.md), 고정값은 [run_claude.py](../tools/ai/run_claude.py) 상수와 [runtime-policy.json](../ops/ai/runtime-policy.json)의 `claude_mcp_profiles`·`claude_test_commands`·`claude_autonomy`다. [test_handoff.py](../tools/ai/test_handoff.py)의 모의 시험이 기본 동작 보존, 고정 구성·허용/금지, 잠금, 사전 검사, 스트림 감사, 과금·계정·모델·재귀 차단 유지, 공유 설정 일치를 확인한다. 이 시험과 기존 [test_ai_runner.py](../tests/test_ai_runner.py)는 작성 세션의 도구 제한(Read/Glob/Grep/Edit)으로 NOT_RUN이다.
+
+| 인자 | 고정 범위 | 잠금 / 실행 전 검사 |
+|---|---|---|
+| `--mcp-profile none` (기본) | MCP 없음, JSON 결과 — 이전과 같은 명령 | worktree 잠금 |
+| `--mcp-profile unity-read` | `unityMCP` → `http://127.0.0.1:8080/mcp`, 읽기·진단 6개 + MCP 리소스 읽기 | worktree 잠금 / 로컬 포트 수신 |
+| `--mcp-profile unity-write` | 같은 서버, 읽기 + Editor 쓰기 15개 + `execute_code` | + 전역 제어 잠금 / 로컬 포트 수신 |
+| `--mcp-profile desktop` | `peekaboo` → `npx -y @steipete/peekaboo@4.9.5 mcp`, 실제 26개 중 21개 허용·`analyze`/`agent`/`clipboard`/`paste`/`browser` 금지 | + 전역 제어 잠금 / macOS·`npx`·Peekaboo 키/설정 파일 부재 |
+| `--allow-test NAME` | `node`·`proposals`·`memory-ui`·`late-ui`·`python`·`docs`·`handoff`·`manifest` 중 지정분만 정확한 `Bash(명령)` | — |
+
+- 유료 `asset_gen`, 서버 측 일괄/사용자 도구·임의 메뉴·패키지 변경·C#/셰이더 소스 편집 도구는 모든 Claude 프로필에서 제외한다. ImagineArt를 포함한 이미지 생성 도구는 Claude에 공급하지 않으며 ImagineArt **무료 크레딧** 예외는 Codex 전용이다([§15](AI_WORKFLOW.md)).
+- `.mcp.json`은 대화형 세션용 Unity 서버 하나를 유지하고 desktop 서버를 넣지 않는다(대화형 세션에 화면 조작을 암묵적으로 열지 않기 위해). 대화형 세션의 도구 승인은 이 실행기 보장 밖이다. 사용자별 절대경로·비밀값은 저장소에 없고 `npx`는 PATH로 찾으며 desktop만 첫 다운로드를 위해 `MCP_TIMEOUT=120000`을 둔다.
+- MCP·시험 작업은 `stream-json`으로 받아 CLI 자체의 init·호출 기록을 결과 `mcp`/`tests`에 남긴다. 원시 stream(`ops/ai/local/`)에는 화면 캡처가 들어갈 수 있으므로 공개 보고서에 복사하지 않는다. 비정상 종료로 남은 잠금은 run_id·pid를 확인한 뒤 Codex가 수동으로 정리한다.
+- Peekaboo 실제 도구 목록은 Codex의 provider 환경변수 없는 로컬 stdio initialize/tools-list 결과다. Claude 세션 노출·화면 호출, Unity 실제 tools/list·`execute_code` 호출, 허용 규칙 문법(`Bash(… 공백 …)` 포함)의 CLI 적용은 모두 NOT_RUN이다. Codex의 부팅이 `~/.peekaboo/config.json`을 만들었다면 desktop 사전 검사가 BLOCKED로 멈추며, 내용을 출력하지 않고 AI 공급자 설정을 정리한 뒤 다시 시험한다.
+
+### 최초 실제 실행과 노출 경계 보강 — 2026-10-17
+
+- 첫 실제 CLI 실행(세션 `ab266f26-8e4e-49d9-9745-cc4047c562de`, Opus5.5 High, `apiKeySource=none`, 권한 거부0)에서 Claude가 직접 Bash로 `npm run test:handoff` 31/31을 실행했고, `unity-read`로 Unity state 리소스와 `read_console`만 호출했다. AI·이미지·과금 호출은 없었다. 이것은 전송·읽기 호출 관찰이며 Editor/화면 기능 수용이 아니다.
+- 같은 init에서 허용 목록 밖 같은 서버 도구 17개가 문맥에 남았다: `blender_bridge`, `debug_request_context`, `find_in_file`, `generate_audio`, `generate_image`, `generate_model`, `import_model`, `import_model_file`, `manage_camera`, `manage_graphics`, `manage_physics`, `manage_probuilder`, `manage_profiler`, `manage_script_capabilities`, `manage_tools`, `unity_docs`, `unity_reflect`. `asset_gen` 하나만 막아서는 설치본의 생성·가져오기 도구가 빠지지 않았다. 원래 결과의 노출 기록은 그대로 둔다.
+- 보강: 위 이름을 두 Unity 프로필에서 정확한 deny로 제외했다(생성·가져오기 6개는 이미지 Codex 담당·유료 공급자 경계, 나머지 11개는 미배정 — 필요하면 무료 여부와 쓰기 성격으로 따로 배정). 와일드카드 허용은 없다. 감사도 같은 서버의 미허용 도구 노출(`exposed_not_allowed`)을 기록만 하지 않고 FAILED로 처리한다. 결과의 `transport_connected`(init 서버 상태)와 `connection_observed`(허용 도구의 오류 없는 응답)는 각각 CLI 관찰이며 Editor/화면 효과의 독립 확인을 대신하지 않는다.
+- 이 보강 작업 세션에서 CLI가 정확한 시험 규칙 밖의 읽기 전용 `git status`/`git log`/`grep`을 자동 허용한 것을 관찰했다. 따라서 `dontAsk`+정확한 `Bash(명령)` 규칙만으로 셸이 지정 시험으로 한정된다고 보지 않는다. 실행기 감사는 그런 성공 호출을 목록 밖 셸로 FAILED 처리한다. 보강 후 `unity-read` 재probe, `unity-write`·`execute_code`·desktop native probe는 NOT_RUN이다.
+
+### 다음 실제 연결 시험 (NOT_RUN)
+
+1. `python3 -m unittest discover -s tests -v`와 `npm run test:handoff`(PDF 의존성 venv)로 실행기 시험을 돌린다.
+2. 지정 시험: 작은 작업에 `--allow-test handoff`를 주고 실행한다. 통과 기준은 exit0·`RECEIVED_UNVERIFIED`, `tests.runs`에 `npm run test:handoff` 기록, 목록 밖 명령 0, `permission_denials` 확인이다.
+3. Unity: Editor·MCP 서버를 켠 뒤 인스턴스 선택·Console 오류 조회만 하는 작업을 `--mcp-profile unity-read`로 실행한다. 기준은 `mcp.observed.servers.unityMCP="connected"`, `mcp.connection_observed=true`, `api_key_source="none"`, 금지 도구 미노출이다. `mcp.observed.exposed_tools`·`exposed_not_allowed`와 서버 tools/list 원문을 허용/금지 목록과 대조하고 차이는 리뷰된 변경으로 반영한다. `unity-write`·`execute_code`는 Codex가 Editor 쓰기를 넘긴 작업에서만 실행하고 루트 Unity diff·Console·Play를 Codex가 확인한다.
+4. 화면: 호스트 앱의 화면 기록·손쉬운 사용 권한을 사용자가 허용한 뒤 `permissions`·`app`(list)·지정 창 `see` 한 번만 하는 작업을 `--mcp-profile desktop`으로 실행한다. 같은 기준에 더해 AI 인자 0건과 잠금 해제를 확인한다.
+
+## 2026-10-17 최종 실제 운용 확인 — 위 NOT_RUN은 작성 당시 이력
+
+[수용 기록](../reports/claude_tools_20261017/README.md)·[원래 CLI 결과](../reports/claude_tools_20261017/actual_cli_metadata.json): Codex가 fresh Python57·handoff31을 독립 실행했고, Claude도 지정 Bash로 같은31/57을 직접 실행했다. 실행기의 정확한 Bash 허용 규칙과 별개로 CLI는 일부 읽기 `git/grep` 묶음을 자동 허용했으며 감사 FAILED 원본과 실제 거절을 보존했다. CLI 권한은 OS 격리나 사전 과금 강제 차단이 아니다.
+
+수정 후 **unity-write 실제 연결과 Play→Pause→Resume→Stop**, 각 단계 C# 상태 재조회, 원래 씬/정지/dirty=false 복구·Console0오류를 확인했다. init의 미허용 노출0개·apiKeySource none이며 Codex가 별도 조회로 재검증했다. 무료 Peekaboo4.9.5는 실제 권한3종/Unity 창 캡처에 성공했다. fresh snapshot을 쓴 native 좌표 클릭2회는 runtime-host canonical-result 오류로 미확인이며 키 입력은 실행하지 않았다. 해당 포인터 경로만 보류하고 실제 Unity 조작은 전용 MCP로 수행한다. 설정을 연결 성공으로 세거나 native 캡처를 마우스 조작 성공으로 세지 않는다.
+
+저장 기본값은 GPT-6.1 Sol High / Opus5.5 High, 실제 Claude Max·xhigh·High 요청·모델 반환·종료는 개별 기록을 따른다. 첫 Max 시간 종료·셸 감사 FAILED를 성공으로 바꾸지 않았다. 구독 계정 일치·credits/자동 충전 OFF 증거, 이미지 Codex 전담·비공개 원격을 유지했다. ImagineArt는 도구/무료 차감 경로가 확인되지 않아 미사용이며 별도 유료 fallback은 없다.

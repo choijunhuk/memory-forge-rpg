@@ -1,0 +1,29 @@
+{
+  "task_id": "claude-mcp-profile-20261017",
+  "run_id": "claude-mcp-profile-20261017-20261017T051519793132Z",
+  "status": "TIMED_OUT",
+  "requestedEffort": "max",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": null,
+  "changes_verified": false,
+  "raw_output": "ops/ai/local/claude-mcp-profile-20261017-20261017T051519793132Z*",
+  "billing_verified_at": "2026-10-17T05:01:40.332532+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "codex/claude-mcp-tools-20261017",
+  "base_commit": "2b2d8ca9e5c2471247f47434001e832e0e948a0d",
+  "worktree": "/Users/choi/.codex/worktrees/claude-mcp-tools/Memory_forge",
+  "allowed_files": [
+    ".mcp.json",
+    "AGENTS.md",
+    "CLAUDE.md",
+    "docs/AI_ENVIRONMENT.md",
+    "docs/AI_WORKFLOW.md",
+    "ops/ai/runtime-policy.json",
+    "tools/ai/run_claude.py",
+    "tools/ai/test_handoff.py"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "blocking_reason": "CLI timeout; local checkpoint saved; no retry"
+}

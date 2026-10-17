@@ -1,5 +1,5 @@
 {
-  "version": "2026-10-15-claude-primary-autonomous-effort",
+  "version": "2026-10-17-claude-autonomy-mcp-tests-imagineart-free-credits",
   "models": {
     "codex": "gpt-6.1-sol",
     "claude": "claude-opus-5-5"
@@ -31,6 +31,7 @@
       "image generation and content edits"
     ],
     "native_codex_agents": "finish already-started bounded tasks; prefer Claude for new implementation and analysis",
+    "development_tool_install_and_use": "Claude Opus via official subscription CLI (user direction 2026-10-17); Codex directs, independently verifies and integrates",
     "allocation_basis": "latest user-reported included allowance and reset window; no fixed token percentage enforcement",
     "quality_and_cross_review_unchanged": true,
     "enforcement": "task dispatch; not a provider quota-transfer setting"
@@ -48,7 +49,18 @@
     "browser_allowed_for_local_generation": false,
     "separate_scp_allowed": false,
     "enable_windows_autostart_tasks": false,
-    "new_paid_api_or_credit_routes_allowed": false
+    "new_paid_api_or_credit_routes_allowed": false,
+    "imagineart": {
+      "user_authorized_on": "2026-10-17",
+      "operator": "Codex",
+      "scope": "explicit ImagineArt-only exception, used when needed",
+      "allowed_balance": "free_credits_only",
+      "purchased_or_paid_balance_allowed": false,
+      "auto_recharge_allowed": false,
+      "additional_payment_allowed": false,
+      "hold_when_free_balance_or_deduction_unverified": true,
+      "claude_tool_exposure": false
+    }
   },
   "claude_invocation": "official CLI, subscription auth + verified account usage controls before inference",
   "unity": {
@@ -60,6 +72,376 @@
     "telemetry": false,
     "paid_asset_generation": false,
     "single_writer": true
+  },
+  "claude_mcp_profiles": {
+    "selection": "explicit tools/ai/run_claude.py --mcp-profile; unknown profiles, URLs and commands are rejected",
+    "default": "none",
+    "loader": "--strict-mcp-config with only the profile servers and ENABLE_CLAUDEAI_MCP_SERVERS=false; user, project .mcp.json and claude.ai cloud MCP are not loaded; version/auth checks use an empty MCP config",
+    "permissions": "dontAsk with exact allowedTools; denied tools are removed from the model context; matching is per tool name, never per argument",
+    "exclusive_control_lock": "ops/ai/local/exclusive-control.lock",
+    "evidence": "MCP jobs use stream-json; CLI init servers/tools, MCP calls/errors, permission denials and apiKeySource are recorded; supplied configuration is not a connection proof",
+    "fail_closed_audit": [
+      "server or tool outside the profile",
+      "forbidden tool in the model context",
+      "AI analysis option in a desktop call",
+      "apiKeySource other than none",
+      "same-server tool outside the allowlist in the model context"
+    ],
+    "status": {
+      "code_config_and_mock_tests": "written 2026-10-17",
+      "tests": "initial authoring NOT_RUN preserved in task results; current Codex/Claude handoff31 and Python57 executed; scope and original FAILED are in reports/claude_tools_20261017",
+      "peekaboo_tools_list": "Codex booted the free npm @steipete/peekaboo@4.9.5 mcp over local stdio without provider env; serverInfo peekaboo-mcp 4.9.5; initialize and tools/list only, no inference or screen action",
+      "unity_tools_list": "Codex actual server tools/list: 48 tools, all classified in unity-read and unity-write; reports/claude_tools_20261017/live_tool_classification.json",
+      "unity_profile_connection": "first live read 2026-10-17: session ab266f26-8e4e-49d9-9745-cc4047c562de, Opus5.5 High, apiKeySource none, 0 permission denials, Unity state resource + read_console only; before the exact-deny fix",
+      "claude_bash_tests": "first live run 2026-10-17: npm run test:handoff 31/31 by Claude's direct Bash, as reported by Codex with the Unity read probe",
+      "unity_write_probe": "verified actual Play/Pause/Resume/Stop + C# state readbacks, original stopped/clean scene restored, Console0; session71bbcd5c-6cdf-41d5-b37e-538628940366; unallowed exposed0; apiKeySource none",
+      "desktop_native_probe": "capture and AX verified; exact-window coordinate click2 attempts unverified due runtime-host canonical-result error; typing NOT_RUN; pointer route held",
+      "desktop_profile_connection": "verified local Peekaboo4.9.5 permissions3/capture; session97555deb-0a11-4859-a9ce-6a355b0a5565; unallowed exposed0; apiKeySource none",
+      "current_evidence": "reports/claude_tools_20261017/README.md; per-run raw statuses are preserved in actual_cli_metadata.json"
+    },
+    "codex_computer_use_reuse": "not reused: the configured project-relative SkyComputerUseClient executable was missing",
+    "profiles": {
+      "none": {
+        "servers": {},
+        "builtin_mcp_tools": [],
+        "allowed_tools": [],
+        "denied_tools": [],
+        "exclusive_control_lock": false
+      },
+      "unity-read": {
+        "servers": {
+          "unityMCP": {
+            "type": "http",
+            "url": "http://127.0.0.1:8080/mcp"
+          }
+        },
+        "builtin_mcp_tools": [
+          "ListMcpResourcesTool",
+          "ReadMcpResourceTool"
+        ],
+        "allowed_tools": [
+          "set_active_instance",
+          "read_console",
+          "find_gameobjects",
+          "get_test_job",
+          "get_sha",
+          "validate_script"
+        ],
+        "denied_tools": [
+          "manage_editor",
+          "manage_scene",
+          "manage_gameobject",
+          "manage_components",
+          "manage_prefabs",
+          "manage_asset",
+          "manage_material",
+          "manage_texture",
+          "manage_scriptable_object",
+          "manage_animation",
+          "manage_ui",
+          "manage_vfx",
+          "refresh_unity",
+          "run_tests",
+          "manage_build",
+          "execute_code",
+          "asset_gen",
+          "batch_execute",
+          "execute_custom_tool",
+          "execute_menu_item",
+          "manage_packages",
+          "manage_script",
+          "create_script",
+          "delete_script",
+          "apply_text_edits",
+          "script_apply_edits",
+          "manage_shader",
+          "generate_image",
+          "generate_model",
+          "generate_audio",
+          "import_model",
+          "import_model_file",
+          "blender_bridge",
+          "debug_request_context",
+          "find_in_file",
+          "manage_camera",
+          "manage_graphics",
+          "manage_physics",
+          "manage_probuilder",
+          "manage_profiler",
+          "manage_script_capabilities",
+          "manage_tools",
+          "unity_docs",
+          "unity_reflect"
+        ],
+        "exclusive_control_lock": false,
+        "preflight": "TCP listening check of the fixed local endpoint only",
+        "observed_exposed_not_allowed_20261017": [
+          "blender_bridge",
+          "debug_request_context",
+          "find_in_file",
+          "generate_audio",
+          "generate_image",
+          "generate_model",
+          "import_model",
+          "import_model_file",
+          "manage_camera",
+          "manage_graphics",
+          "manage_physics",
+          "manage_probuilder",
+          "manage_profiler",
+          "manage_script_capabilities",
+          "manage_tools",
+          "unity_docs",
+          "unity_reflect"
+        ],
+        "observed_note": "exposed in the first live init before the exact-deny fix; now denied in both Unity profiles, and any further same-server tool outside the allowlist fails the job"
+      },
+      "unity-write": {
+        "servers": {
+          "unityMCP": {
+            "type": "http",
+            "url": "http://127.0.0.1:8080/mcp"
+          }
+        },
+        "builtin_mcp_tools": [
+          "ListMcpResourcesTool",
+          "ReadMcpResourceTool"
+        ],
+        "allowed_tools": [
+          "set_active_instance",
+          "read_console",
+          "find_gameobjects",
+          "get_test_job",
+          "get_sha",
+          "validate_script",
+          "manage_editor",
+          "manage_scene",
+          "manage_gameobject",
+          "manage_components",
+          "manage_prefabs",
+          "manage_asset",
+          "manage_material",
+          "manage_texture",
+          "manage_scriptable_object",
+          "manage_animation",
+          "manage_ui",
+          "manage_vfx",
+          "refresh_unity",
+          "run_tests",
+          "manage_build",
+          "execute_code"
+        ],
+        "denied_tools": [
+          "asset_gen",
+          "batch_execute",
+          "execute_custom_tool",
+          "execute_menu_item",
+          "manage_packages",
+          "manage_script",
+          "create_script",
+          "delete_script",
+          "apply_text_edits",
+          "script_apply_edits",
+          "manage_shader",
+          "generate_image",
+          "generate_model",
+          "generate_audio",
+          "import_model",
+          "import_model_file",
+          "blender_bridge",
+          "debug_request_context",
+          "find_in_file",
+          "manage_camera",
+          "manage_graphics",
+          "manage_physics",
+          "manage_probuilder",
+          "manage_profiler",
+          "manage_script_capabilities",
+          "manage_tools",
+          "unity_docs",
+          "unity_reflect"
+        ],
+        "exclusive_control_lock": true,
+        "preflight": "TCP listening check of the fixed local endpoint only",
+        "writes_land_in": "the Editor-open root Unity project, outside the Claude worktree; Codex independently reviews the root diff, Console and Play",
+        "execute_code": "free Editor C# method-body tool for install, inspection and verification by the write owner; arbitrary code, so file scope is not enforced at OS level; existing Editor/files preserved, no paid or AI generation or other model calls"
+      },
+      "desktop": {
+        "servers": {
+          "peekaboo": {
+            "type": "stdio",
+            "command": "npx",
+            "args": [
+              "-y",
+              "@steipete/peekaboo@4.9.5",
+              "mcp"
+            ]
+          }
+        },
+        "builtin_mcp_tools": [],
+        "allowed_tools": [
+          "permissions",
+          "app",
+          "window",
+          "menu",
+          "dock",
+          "dialog",
+          "space",
+          "image",
+          "see",
+          "capture",
+          "inspect_ui",
+          "verify_state",
+          "click",
+          "type",
+          "press",
+          "scroll",
+          "drag",
+          "select_text",
+          "set_value",
+          "action",
+          "sleep"
+        ],
+        "denied_tools": [
+          "analyze",
+          "agent",
+          "clipboard",
+          "paste",
+          "browser"
+        ],
+        "denied_reasons": {
+          "analyze": "AI provider call",
+          "agent": "AI provider call",
+          "clipboard": "clipboard contents may hold secrets",
+          "paste": "pastes clipboard contents; use type for task text",
+          "browser": "web navigation outside the named target window"
+        },
+        "observed_tools": [
+          "menu",
+          "analyze",
+          "app",
+          "permissions",
+          "select_text",
+          "dock",
+          "sleep",
+          "image",
+          "click",
+          "type",
+          "press",
+          "window",
+          "agent",
+          "clipboard",
+          "paste",
+          "browser",
+          "dialog",
+          "verify_state",
+          "drag",
+          "scroll",
+          "inspect_ui",
+          "action",
+          "space",
+          "set_value",
+          "see",
+          "capture"
+        ],
+        "observed_notes": "no list or hotkey tool; app(action=list) and window(action=list) are discovery; image is screenshot-only without AI input; see OCR uses local Apple Vision; provider names in tool descriptions are not call evidence",
+        "target_scope": "native app/window/menu/semantic actions only for the task's named target; no GUI route to terminals, account, billing, credential, keychain or security views",
+        "exclusive_control_lock": true,
+        "package_license": "MIT; exact version and license checked by Codex on the official npm registry 2026-10-17",
+        "preflight": "macOS, npx on PATH, ~/.peekaboo credentials and config.json absent (existence only, contents not read)",
+        "ai_option_audit": [
+          "question",
+          "analyze",
+          "prompt",
+          "provider",
+          "provider_config",
+          "model"
+        ]
+      }
+    }
+  },
+  "claude_autonomy": {
+    "user_direction_on": "2026-10-17",
+    "parallel_independent_jobs": true,
+    "parallel_rule": "independent implementations run in separate branches/worktrees with non-overlapping allowed files; the runner refuses a second job in the same worktree; one Unity Editor/desktop control lock stays global",
+    "codex_keeps": [
+      "task boundaries and direction",
+      "planning",
+      "independent verification",
+      "integration",
+      "image generation and content edits",
+      "final character visual design"
+    ],
+    "character_final_visual_design_owner": "Codex",
+    "claude_may_comment_on_all_fields_including_characters": true,
+    "claude_autonomous_within_approved_design": [
+      "code",
+      "game systems",
+      "UI/UX",
+      "story",
+      "performance",
+      "tests",
+      "architecture"
+    ],
+    "no_per_opinion_approval_or_repeated_review": true,
+    "feedback_classes": [
+      "implementation_defect",
+      "design_mismatch",
+      "real_constraint",
+      "optional_opinion"
+    ],
+    "adoption_decision": "Codex decides adoption; optional opinions never block integration by themselves",
+    "approved_character_expression": "approved non-sexual character age, existence, appearance and subculture expression are not removed, reduced or changed on generic terms-of-service speculation; a concrete cited constraint goes to Codex as real_constraint",
+    "approval_still_required": [
+      "price",
+      "probability",
+      "currency_totals",
+      "permanent_assets",
+      "age_policy",
+      "production_deploy",
+      "paid_services_and_real_payments"
+    ],
+    "safety_permission_billing_boundaries_unchanged": true
+  },
+  "claude_test_commands": {
+    "selection": "explicit tools/ai/run_claude.py --allow-test NAME per job; repeat for each named check",
+    "default": [],
+    "registry": {
+      "node": "npm test",
+      "proposals": "npm run test:proposals",
+      "memory-ui": "npm run test:memory-ui",
+      "late-ui": "npm run test:late-ui",
+      "python": "python3 -m unittest discover -s tests -v",
+      "docs": "npm run test:docs",
+      "handoff": "npm run test:handoff",
+      "manifest": "npm run verify:manifest"
+    },
+    "permission": "Bash is added to --tools only with exact Bash(command) allow rules; dontAsk denies every other shell command",
+    "denied_shell_rules": [
+      "Bash(claude:*)",
+      "Bash(codex:*)",
+      "Bash(npx:*)",
+      "Bash(curl:*)",
+      "Bash(wget:*)",
+      "Bash(ssh:*)",
+      "Bash(scp:*)",
+      "Bash(security:*)",
+      "Bash(gh:*)",
+      "Bash(rm:*)",
+      "Bash(git push:*)",
+      "Bash(git reset:*)",
+      "Bash(git clean:*)",
+      "Bash(git checkout:*)",
+      "Bash(git rebase:*)",
+      "Bash(git stash:*)",
+      "Bash(git branch:*)",
+      "Bash(git remote:*)",
+      "Bash(npm publish:*)",
+      "Bash(npm install:*)"
+    ],
+    "evidence": "stream-json Bash calls are recorded as runs/not_run; a successful shell command outside the registry entries of the job fails the job",
+    "os_sandbox": false,
+    "limits": "tests execute repository code (including files in the job's edit scope) as the user with the scrubbed environment; test:docs writes its report file; Codex reviews git status and re-runs checks before integration"
   },
   "workflow": [
     "requirements",

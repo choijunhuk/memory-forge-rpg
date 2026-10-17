@@ -1,0 +1,5 @@
+[
+  "stale committed report is refused",
+  "fresh failures printed; passing reports excluded; workflow command strings guarded",
+  "missing individual report does not mask the original job failure"
+]
