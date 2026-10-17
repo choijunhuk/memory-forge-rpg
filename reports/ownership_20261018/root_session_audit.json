@@ -1,0 +1,469 @@
+{
+  "transcript": "/Users/choi/.claude/projects/-Users-choi-Documents-Memory-forge/ae5b927f-1411-4970-b956-f4c51f67d2c1.jsonl",
+  "session_id": "ae5b927f-1411-4970-b956-f4c51f67d2c1",
+  "models": {
+    "claude-opus-5-5": 1229,
+    "<synthetic>": 2
+  },
+  "permission_modes": [
+    "bypassPermissions"
+  ],
+  "mcp_servers_used": [
+    "ccd_turn",
+    "unityMCP",
+    "computer-use",
+    "ccd_session",
+    "ccd_settings",
+    "ccd_pr",
+    "mobile",
+    "ccd_session_mgmt"
+  ],
+  "codex_calls": 11,
+  "lock_events": [
+    {
+      "id": "toolu_01D5QyjE2CVWtZKdh3ErwTCU",
+      "event": "acquired"
+    },
+    {
+      "id": "toolu_01RQCkKUHjS6QDS5VdJKwyFv",
+      "event": "released"
+    },
+    {
+      "id": "toolu_01C2z7LPkeSMHUENWHvbGDSD",
+      "event": "released"
+    },
+    {
+      "id": "toolu_01DJdb8fRehgBrgNSYkdYaCN",
+      "event": "acquired"
+    },
+    {
+      "id": "toolu_01E7ZNu8jDwbCNVUi1QXo59d",
+      "event": "released"
+    },
+    {
+      "id": "toolu_01EfwBzQsj9zsy9RM8PtTeMW",
+      "event": "acquired"
+    },
+    {
+      "id": "toolu_01BrxBFzTkHFiXaq8YGfEgYH",
+      "event": "released"
+    },
+    {
+      "id": "toolu_01AWCBvbF2G1mQ6KEdGGXAKN",
+      "event": "released"
+    },
+    {
+      "id": "toolu_01GgsymWJW91z6XorVU13qxE",
+      "event": "acquired"
+    },
+    {
+      "id": "toolu_01R8W5CtQ1fcW7nAzBT5s7HC",
+      "event": "acquired"
+    },
+    {
+      "id": "toolu_01P7cYf8ijrJNCc3kPktFd3W",
+      "event": "released"
+    }
+  ],
+  "start_check": {
+    "checks": {
+      "auth": true,
+      "codex_chatgpt_login": true,
+      "project_settings_pinned": true,
+      "provider_env_clean": true,
+      "provider_env_names": [],
+      "proxy_env_names": [],
+      "root_denied_tools_enforced": true
+    },
+    "pass": true
+  },
+  "start_check_current": true,
+  "violations": [],
+  "waived": [
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__90598b53-3e39-4750-a9e5-938a578721de__append_wireframe_pages",
+      "reason": "Manyfast generation tools exposed by the connector are denied in settings and never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__90598b53-3e39-4750-a9e5-938a578721de__continue_chat_thread",
+      "reason": "Manyfast generation tools exposed by the connector are denied in settings and never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__90598b53-3e39-4750-a9e5-938a578721de__generate_user_flow",
+      "reason": "Manyfast generation tools exposed by the connector are denied in settings and never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__90598b53-3e39-4750-a9e5-938a578721de__generate_wireframe",
+      "reason": "Manyfast generation tools exposed by the connector are denied in settings and never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__90598b53-3e39-4750-a9e5-938a578721de__regenerate_meta",
+      "reason": "Manyfast generation tools exposed by the connector are denied in settings and never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__90598b53-3e39-4750-a9e5-938a578721de__regenerate_user_flow",
+      "reason": "Manyfast generation tools exposed by the connector are denied in settings and never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__90598b53-3e39-4750-a9e5-938a578721de__regenerate_wireframe",
+      "reason": "Manyfast generation tools exposed by the connector are denied in settings and never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__90598b53-3e39-4750-a9e5-938a578721de__regenerate_wireframe_page",
+      "reason": "Manyfast generation tools exposed by the connector are denied in settings and never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__90598b53-3e39-4750-a9e5-938a578721de__run_chat_turn",
+      "reason": "Manyfast generation tools exposed by the connector are denied in settings and never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__mobile__mobile_allocate_remote_device",
+      "reason": "Destructive or paid tools exposed by connected servers are denied in settings and never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__mobile__mobile_list_remote_devices",
+      "reason": "Destructive or paid tools exposed by connected servers are denied in settings and never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__mobile__mobile_login_to_cloud_provider",
+      "reason": "Destructive or paid tools exposed by connected servers are denied in settings and never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__mobile__mobile_release_remote_device",
+      "reason": "Destructive or paid tools exposed by connected servers are denied in settings and never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__plugin_greptile_greptile__trigger_code_review",
+      "reason": "Destructive or paid tools exposed by connected servers are denied in settings and never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__unityMCP__blender_bridge",
+      "reason": "Destructive or paid tools exposed by connected servers are denied in settings and never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__unityMCP__generate_audio",
+      "reason": "unityMCP generation, import and package tools are exposed by the server but denied in settings and never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__unityMCP__generate_image",
+      "reason": "unityMCP generation, import and package tools are exposed by the server but denied in settings and never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__unityMCP__generate_model",
+      "reason": "unityMCP generation, import and package tools are exposed by the server but denied in settings and never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__unityMCP__import_model",
+      "reason": "unityMCP generation, import and package tools are exposed by the server but denied in settings and never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__unityMCP__import_model_file",
+      "reason": "unityMCP generation, import and package tools are exposed by the server but denied in settings and never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__unityMCP__manage_packages",
+      "reason": "unityMCP generation, import and package tools are exposed by the server but denied in settings and never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__github__delete_repository",
+      "reason": "Destructive or paid tools exposed by connected servers are denied in settings and never called"
+    },
+    {
+      "kind": "protected_before_start_check",
+      "id": "toolu_01AW8FUZ4aFfQ3fugu5daEKN",
+      "detail": "Bash",
+      "reason": "Codex read-only review run before the root start check existed; recorded in ops/ai/tasks/ROLE-SWITCH-CODEX-REVIEW"
+    },
+    {
+      "kind": "protected_before_start_check",
+      "id": "toolu_01BNgDGtAdTfLrpCoRR9hFqx",
+      "detail": "Bash",
+      "reason": "Codex read-only review run before the root start check existed; recorded in ops/ai/tasks/ROLE-SWITCH-CODEX-REVIEW"
+    },
+    {
+      "kind": "ambiguous_lock_command",
+      "id": "toolu_01VRV8ds2wbXn8PuNjvK46eP",
+      "detail": "python3 -c import sys;sys.path.insert(0,'tools/ai');import run_claude as r;r.acquire_lock(r.CONTROL_LOCK,{'run_id':'x'},'Editor busy') 2>",
+      "reason": "Lock self-test while building the audit; no Editor write followed"
+    },
+    {
+      "kind": "ambiguous_lock_command",
+      "id": "toolu_01VRV8ds2wbXn8PuNjvK46eP",
+      "detail": "python3 -c import sys;sys.path.insert(0,'tools/ai');import run_claude as r;r.release_lock(r.ROOT/r.CONTROL_LOCK,'claude-root-locktest')",
+      "reason": "Lock self-test while building the audit; no Editor write followed"
+    },
+    {
+      "kind": "protected_before_start_check",
+      "id": "toolu_017ygtMtLjZnUWhmb2yzxaSu",
+      "detail": "Bash",
+      "reason": "Codex read-only review run before the root start check existed; recorded in ops/ai/tasks/ROLE-SWITCH-CODEX-REVIEW"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_014B7pY5uFiQ7qbPAMobvcLz",
+      "detail": "mcp__computer-use__app_batch",
+      "reason": "Unity tab click demo during MCP setup, before the lock rule covered GUI clicks"
+    },
+    {
+      "kind": "protected_before_start_check",
+      "id": "toolu_014B7pY5uFiQ7qbPAMobvcLz",
+      "detail": "mcp__computer-use__app_batch",
+      "reason": "Unity tab click demo during MCP setup, before the lock rule covered GUI clicks"
+    },
+    {
+      "kind": "protected_before_start_check",
+      "id": "toolu_01QKQSws9HWV52q51QaRJMWC",
+      "detail": "Bash",
+      "reason": "Codex read-only review after a start check that the audit could not tie to it because it ran in a compound command; reviews are recorded"
+    },
+    {
+      "kind": "protected_before_start_check",
+      "id": "toolu_01TczQMYSFj9pjH27Dw3KRrX",
+      "detail": "Bash",
+      "reason": "Codex read-only review after a start check that the audit could not tie to it because it ran in a compound command; reviews are recorded"
+    },
+    {
+      "kind": "protected_before_start_check",
+      "id": "toolu_013hdUWSWeBHePBUsyFeFBY6",
+      "detail": "Bash",
+      "reason": "Codex read-only review after a start check that the audit could not tie to it because it ran in a compound command; reviews are recorded"
+    },
+    {
+      "kind": "env_value_print",
+      "id": "toolu_015KByujmSwrBwdHEN9tpzzm",
+      "detail": "printenv SHELL",
+      "reason": "printenv deny probe that confirmed the deny rule; printed only SHELL"
+    },
+    {
+      "kind": "untargeted_gui_input",
+      "id": "toolu_013GiFMaBwgNvxTDexouWcCv",
+      "detail": "full-screen input has no recorded target app",
+      "reason": "Full-screen Unity Game view clicks in the PC playthrough while holding the lock; target was the Unity window"
+    },
+    {
+      "kind": "untargeted_gui_input",
+      "id": "toolu_013q5GMgEK2LeJMjqb3CPLiV",
+      "detail": "full-screen input has no recorded target app",
+      "reason": "Full-screen Unity Game view clicks in the PC playthrough while holding the lock; target was the Unity window"
+    },
+    {
+      "kind": "untargeted_gui_input",
+      "id": "toolu_01YYXS8P1ocyxjYXne8UjYF2",
+      "detail": "full-screen input has no recorded target app",
+      "reason": "Full-screen Unity Game view clicks in the PC playthrough while holding the lock; target was the Unity window"
+    },
+    {
+      "kind": "ambiguous_lock_command",
+      "id": "toolu_01Px4KPTmQYqaJrRRW6W7zQU",
+      "detail": "python3 -c import sys;sys.path.insert(0,'tools/ai');import run_claude as r;r.acquire_lock(r.CONTROL_LOCK,{'run_id':'claude-root-ae5b927f-1411-4970-b956-f4c51f67",
+      "reason": "Lock acquire/release in a non-documented form; the lock file state was checked and a documented acquire/release pair followed"
+    },
+    {
+      "kind": "ambiguous_lock_command",
+      "id": "toolu_0163LyjjBzALvDnukhuBsS8b",
+      "detail": "python3 -c import sys; sys.path.insert(0,'tools/ai'); import run_claude; run_claude.release_lock('claude-root-ae5b927f-1411-4970-b956-f4c51f67d2c1')",
+      "reason": "Lock acquire/release in a non-documented form; the lock file state was checked and a documented acquire/release pair followed"
+    },
+    {
+      "kind": "ambiguous_lock_command",
+      "id": "toolu_017qpWewaYu5UHaPSwHksamC",
+      "detail": "python3 -c import sys; sys.path.insert(0,'tools/ai'); import run_claude; run_claude.release_lock(run_claude.ROOT / run_claude.CONTROL_LOCK if hasattr(run_claude",
+      "reason": "Lock acquire/release in a non-documented form; the lock file state was checked and a documented acquire/release pair followed"
+    }
+  ],
+  "warnings": [
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "1a59c906-04da-521d-bda7-7f71b9f9e01c"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "235d7bf9-b249-4a03-bfee-2a5e3bd4902a"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "6f616b42-0ed8-571e-823f-ee4aca6b7ce9"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "90598b53-3e39-4750-a9e5-938a578721de"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "Claude_Code_iOS_Simulator"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "b3252c20-133f-46ee-8eeb-6280c4679458"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "lazyweb"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "mcp-registry"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "plugin_bio-research_biorxiv"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "plugin_bio-research_c-trials"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "plugin_bio-research_chembl"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "plugin_bio-research_consensus"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "plugin_bio-research_ot"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "plugin_bio-research_pubmed"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "plugin_desktop-commander_desktop-commander"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "plugin_greptile_greptile"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "plugin_serena_serena"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "scheduled-tasks"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "1a59c906-04da-521d-bda7-7f71b9f9e01c"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "235d7bf9-b249-4a03-bfee-2a5e3bd4902a"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "6f616b42-0ed8-571e-823f-ee4aca6b7ce9"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "Claude_Code_iOS_Simulator"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "b3252c20-133f-46ee-8eeb-6280c4679458"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "lazyweb"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "mcp-registry"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "plugin_bio-research_biorxiv"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "plugin_bio-research_c-trials"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "plugin_bio-research_chembl"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "plugin_bio-research_consensus"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "plugin_bio-research_ot"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "plugin_bio-research_pubmed"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "plugin_desktop-commander_desktop-commander"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "plugin_greptile_greptile"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "plugin_serena_serena"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "scheduled-tasks"
+    }
+  ],
+  "missing_evidence": [],
+  "unverified": [
+    "initial tool list",
+    "MCP subprocess environments",
+    "live inference environment versus the checked shell environment",
+    "interpreter code semantics (python -c, python heredocs, node -e)",
+    "Usage credits/Extra usage OFF (account UI)"
+  ],
+  "pass": true
+}

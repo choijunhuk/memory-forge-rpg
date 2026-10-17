@@ -1,5 +1,5 @@
 {
-  "version": "2026-10-17-claude-root-codex-image-design-review",
+  "version": "2026-10-18-creative-originals-codex-implementation-claude",
   "models": {
     "codex": "gpt-6.1-sol",
     "claude": "claude-opus-5-5"
@@ -26,13 +26,18 @@
     "effective_after_commit": "0623d61",
     "root": "Claude Opus root session: task selection, planning, implementation, analysis, tests, Unity Editor single writer, integration, commit/push/PR/CI, acceptance records, adoption of review feedback",
     "codex_responsibilities": [
+      "creative originals under art/: character, boss and enemy design, outfits and skins",
       "image generation and content edits",
       "final character visual design",
-      "read-only independent code review"
+      "story, world, dialogue, relationships and voice scripts with acting direction",
+      "expressions, poses, gestures and lobby interactions",
+      "character motion (idle, move, attack, hit, victory, ultimate), rigs, keyframes and animation clips",
+      "per-character staging: storyboards, camera, Timeline, VFX and character visual prefabs",
+      "read-only independent code review and visual-fidelity review of implemented screens"
     ],
     "codex_must_not": [
       "task dispatch, direction or planning",
-      "implementation",
+      "system implementation: runtime code, UI, players, data plumbing",
       "integration, commits or pushes",
       "Unity Editor writes",
       "calling Claude"
@@ -141,7 +146,39 @@
       "Bash(/usr/bin/env:*)",
       "Bash(claude --bare:*)"
     ],
-    "root_mcp_setup": "reports/mcp_setup_20261017/README.md: serena (PyPI serena-agent==1.7.0, .NET 10 from ~/.dotnet in server env only) and context7 (@upstash/context7-mcp@4.1.1, no API key; public library queries only) at local scope; plugin serena and desktop-commander disabled for this project; .serena/ ignored"
+    "root_mcp_setup": "reports/mcp_setup_20261017/README.md: serena (PyPI serena-agent==1.7.0, .NET 10 from ~/.dotnet in server env only) and context7 (@upstash/context7-mcp@4.1.1, no API key; public library queries only) at local scope; plugin serena and desktop-commander disabled for this project; .serena/ ignored",
+    "creative_ownership": {
+      "user_direction_on": "2026-10-18",
+      "doc": "docs/AI_WORKFLOW.md section 18; OWNERSHIP.md",
+      "codex_writes_only": "art/<folder> per run (codex exec -s workspace-write -C art/<folder>)",
+      "claude_owns": [
+        "UI/UX, menus, layout, input, accessibility",
+        "assigned systems: battle, expedition, growth, save, account, server",
+        "generic animation, dialogue and staging players, state transitions, event wiring",
+        "Addressables, loading, caching, import, optimisation",
+        "tests, error handling, builds, technical quality checks"
+      ],
+      "claude_must_not_change": [
+        "outfit, body, expression, character age",
+        "dialogue, relationships, speech style, scene emotion",
+        "core intent of poses, motion, camera and staging timing",
+        "expressive purpose of per-character physics, shaders and VFX"
+      ],
+      "claude_fixes_first": [
+        "long lines: wrapping, paging, layout",
+        "character hidden by UI: UI placement and display",
+        "awkward motion joins: blending and transition conditions"
+      ],
+      "change_requests": "meaning-changing cuts, gesture swaps, crops or camera changes go to Codex via art/requests/",
+      "issue_classes": {
+        "technical_defect": "Claude fixes keeping creative intent",
+        "creative_taste": "record as a suggestion, never replace the original",
+        "real_constraint": "record the asset, scene and concrete reason; hold only that work; no silent softening or bypass via another model"
+      },
+      "minors_no_sexualised_staging": true,
+      "adult_charm_as_real_scenes": true,
+      "imported_copies_checked_by": "tools/check_art_copies.py"
+    }
   },
   "billing": "existing_subscription_included_allowance_only",
   "api_auth_allowed": false,
@@ -473,9 +510,14 @@
     "parallel_independent_jobs": true,
     "parallel_rule": "independent implementations run in separate branches/worktrees with non-overlapping allowed files; the runner refuses a second job in the same worktree; one Unity Editor/desktop control lock stays global",
     "codex_keeps": [
+      "creative originals under art/: character, boss and enemy design, outfits and skins",
       "image generation and content edits",
       "final character visual design",
-      "read-only independent code review"
+      "story, world, dialogue, relationships and voice scripts with acting direction",
+      "expressions, poses, gestures and lobby interactions",
+      "character motion (idle, move, attack, hit, victory, ultimate), rigs, keyframes and animation clips",
+      "per-character staging: storyboards, camera, Timeline, VFX and character visual prefabs",
+      "read-only independent code review and visual-fidelity review of implemented screens"
     ],
     "character_final_visual_design_owner": "Codex",
     "claude_may_comment_on_all_fields_including_characters": true,

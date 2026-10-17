@@ -1,6 +1,10 @@
 # Claude 작업자 계약 — ALL-IN-ONE
 
-`AGENTS.md`, `docs/CURRENT.md`, `docs/AI_WORKFLOW.md`, `docs/START_CLAUDE.md`를 읽는다. Codex가 공식 CLI로 작업을 배정한다. 기본 담당은 UI/UX·콘텐츠·서사·아트 브리프·리소스 적용·교차 검토다.
+`AGENTS.md`, `docs/CURRENT.md`, `docs/AI_WORKFLOW.md`, `docs/START_CLAUDE.md`를 읽는다. Codex가 공식 CLI로 작업을 배정한다. (전환 전 이력) 현재 담당은 아래 2026-10-18·2026-10-17 절과 `OWNERSHIP.md`를 따른다.
+
+## 2026-10-18 최신 우선 — 창작 원본은 Codex, 공통 구현은 Claude
+
+사용자 지시(2026-10-18): Codex는 캐릭터·보스·적 디자인과 스킨, 이미지 생성·내용 수정, 세계관·스토리·대사·관계, 표정·포즈·제스처·로비 상호작용, 캐릭터별 모션·리깅·Animation Clip·연출 콘티·Timeline·VFX·시각 프리팹, 음성 대본을 `art/` 아래 원본으로 만들고, 구현된 화면이 원본 의도대로 보이는지 읽기 전용으로 리뷰한다. Claude 루트는 UI/UX·입력·접근성, 시스템, 범용 재생기·상태 전환, 임포트·로딩·최적화, 시험·빌드를 맡는다. Codex 원본의 의상·나이·대사·감정·모션 의도는 기술 이유로 바꾸지 않고 변경 요청으로 남긴다. 성인 캐릭터의 매력은 실제 장면·표정·모션으로 기획하고, 미성년 캐릭터에는 성적 연출을 하지 않는다. 파일별 수정 권한은 `OWNERSHIP.md`, 상세는 `docs/AI_WORKFLOW.md` §18이다. §17의 루트 운영·잠금·감사·리뷰 계약과 구독 전용·모델 고정·승인 경계·GitHub Private은 그대로다. 이 절은 아래 절들의 담당 서술에 우선한다.
 
 ## 2026-10-17 최신 우선 — Claude 루트
 

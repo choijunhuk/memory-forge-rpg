@@ -361,9 +361,17 @@ class ClaudeMcpProfileTests(unittest.TestCase):
   self.assertEqual(autonomy['feedback_classes'],['implementation_defect','design_mismatch','real_constraint','optional_opinion'])
  def test_claude_root_and_codex_image_design_review_routing(self):
   policy=json.loads((ROOT/'ops/ai/runtime-policy.json').read_text());route=policy['work_routing']
-  duties=['image generation and content edits','final character visual design','read-only independent code review']
+  duties=['creative originals under art/: character, boss and enemy design, outfits and skins','image generation and content edits','final character visual design',
+   'story, world, dialogue, relationships and voice scripts with acting direction','expressions, poses, gestures and lobby interactions',
+   'character motion (idle, move, attack, hit, victory, ultimate), rigs, keyframes and animation clips',
+   'per-character staging: storyboards, camera, Timeline, VFX and character visual prefabs',
+   'read-only independent code review and visual-fidelity review of implemented screens']
   self.assertEqual((route['codex_responsibilities'],policy['claude_autonomy']['codex_keeps']),(duties,duties))
-  self.assertEqual(route['codex_must_not'],['task dispatch, direction or planning','implementation','integration, commits or pushes','Unity Editor writes','calling Claude'])
+  self.assertEqual(route['codex_must_not'],['task dispatch, direction or planning','system implementation: runtime code, UI, players, data plumbing','integration, commits or pushes','Unity Editor writes','calling Claude'])
+  creative=route['creative_ownership'];self.assertIn('art/<folder>',creative['codex_writes_only']);self.assertIs(creative['minors_no_sexualised_staging'],True)
+  self.assertEqual(set(creative['issue_classes']),{'technical_defect','creative_taste','real_constraint'});self.assertTrue((ROOT/creative['imported_copies_checked_by']).exists())
+  self.assertIn('## 18. 2026-10-18 최신 우선',(ROOT/'docs/AI_WORKFLOW.md').read_text())
+  for r in ['AGENTS.md','CLAUDE.md','docs/START_CLAUDE.md','README.md']: self.assertIn('OWNERSHIP.md',(ROOT/r).read_text(),r)
   self.assertTrue(route['root'].startswith('Claude Opus root session'));self.assertIn('Unity Editor single writer',route['root'])
   self.assertEqual(policy['unity']['writer'],'Claude root session');self.assertIs(policy['unity']['single_writer'],True)
   self.assertIn('Claude calls the official Codex CLI',route['invocation_direction']);self.assertIn('Codex never calls Claude',route['invocation_direction'])

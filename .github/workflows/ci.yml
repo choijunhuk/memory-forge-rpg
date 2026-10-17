@@ -47,4 +47,5 @@ jobs:
       - run: node tools/review/balance_causes.mjs reports/paired_balance_late.json reports/paired_balance_causes.json
       - run: npm run test:late-ui
       - run: python3 tools/check_integrated_release.py
+      - run: python3 tools/check_art_copies.py
       - run: npm run test:handoff
