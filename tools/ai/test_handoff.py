@@ -370,7 +370,8 @@ class ClaudeMcpProfileTests(unittest.TestCase):
   self.assertLessEqual({'server','save_and_memory','economy','auth','migration','netcode','core_rules'},set(route['codex_review_required_before_integration']))
   self.assertIn('read-only',route['codex_review']);self.assertIn('sensitive paths hold',route['codex_review_unavailable'])
   self.assertLessEqual({'mcp__unityMCP__'+t for t in ('generate_image','generate_model','generate_audio','import_model','import_model_file','asset_gen')},set(route['root_denied_tools']))
-  self.assertEqual(set(route['root_session_controls']),{'session','start_checks','tool_restriction','unity_lock','codex_calls','audit'})
+  self.assertEqual(set(route['root_session_controls']),{'session','start_checks','tool_restriction','permission_mode_tradeoff','unity_lock','codex_calls','audit'})
+  self.assertLessEqual({'Read(~/.codex/auth.json)','Read(~/.claude/.credentials.json)','Bash(printenv:*)','Bash(security find-generic-password:*)'},set(route['root_denied_permissions']))
   self.assertIn("r.acquire_lock(r.CONTROL_LOCK",(ROOT/'docs/AI_WORKFLOW.md').read_text());self.assertEqual(RUNNER.CONTROL_LOCK,'ops/ai/local/exclusive-control.lock')
   self.assertIn('## 17. 2026-10-17 최신 우선 — Claude 루트',(ROOT/'docs/AI_WORKFLOW.md').read_text())
   for r in ['AGENTS.md','CLAUDE.md','docs/START_CLAUDE.md','README.md']:

@@ -26,11 +26,11 @@
 | `tools/ai/test_handoff.py` | 33/33 OK. 실행 환경은 scratch venv이고 `tools/ai/requirements.txt`와 `tools/audit/requirements-docs.txt`를 설치했다 |
 | `npm run test:docs` | OK |
 | `audit_root_session.py --start-check` | pass. 인증 claude.ai/firstParty, 공급자 환경 깨끗함, 설정 고정, deny 적용, Codex ChatGPT 로그인 |
-| 루트 세션 감사 | [root_session_audit.json](root_session_audit.json): pass. 위반 0, 예외 16, Codex 호출 6건, 권한 모드 `bypassPermissions` |
+| 루트 세션 감사 | [root_session_audit.json](root_session_audit.json): pass. 위반 0, 예외 17, Codex 호출 6건, 권한 모드 `bypassPermissions` |
 | deny 실효 | 적용 직후 생성 도구 6개가 실제 세션의 도구 목록에서 빠진 것을 관찰했다 |
 | Unity | MCP 읽기(editor state, Console 오류 0)를 확인했다. computer-use로 Unity 탭 클릭이 됨을 확인했고 원래 상태로 되돌렸다 |
 
-## 예외 16건의 사유
+## 예외 17건의 사유
 
 모두 감사 규칙이 생기기 전이거나 더 엄격해지기 전의 이력이며, 각 사유는 감사 보고서에 그대로 있다.
 
@@ -40,6 +40,7 @@
   - 3건은 복합 명령으로 돌린 시작 확인(결과는 pass) 뒤에 실행했다. "단독 명령만 인정" 규칙은 그 뒤에 추가됐다.
 - **잠금 보조 함수 자체 시험 1건:** 소유자 `claude-root-locktest`로 한 명령 안에서 획득, 재획득 거부, 해제를 했다. Editor 쓰기는 없었다.
 - **Unity 클릭 시연 1건:** Project 탭을 눌렀다가 Console 탭으로 되돌렸다. 프로젝트 변경은 없다.
+- **deny 확인 1건:** 해롭지 않은 변수로 `printenv SHELL`을 시도했다. 실행 전에 permissions.deny로 거부됐고 아무것도 출력되지 않았다.
 
 ## Codex 독립 리뷰 (읽기 전용, gpt-6.1-sol, high)
 
@@ -57,6 +58,13 @@
   - 작은따옴표 안 치환과 Grep 검색어 오탐 2건
 
 thread ID와 사용량은 `ops/ai/tasks/ROLE-SWITCH-CODEX-REVIEW.result.json`에 있다.
+
+## 보안 리뷰 후속 (자동 보안 리뷰 지적)
+
+- **지적:** `bypassPermissions` 루트 세션에서는 Bash가 실행 전에 제한되지 않고, 감사는 사후 확인뿐이다.
+- **보강:** `root_denied_permissions`를 `.claude/settings.local.json`의 deny에 추가했다. 대상은 자격 증명 파일 읽기, `security find-*-password`·`dump-keychain`, `printenv`, `claude --bare`이며, 시작 확인이 적용 여부를 검사한다.
+- **실측:** bypass 모드에서도 `printenv SHELL`이 실행 전에 거부됐다.
+- **남는 위험:** 접두어 deny는 복합·간접 형태로 우회될 수 있다. 권한 모드는 사용자가 정한다. `default`·`acceptEdits` 모드나 OS 샌드박스가 더 강하다는 점을 §17과 `permission_mode_tradeoff`에 적었다. 시작 확인은 모드 때문에 실패시키지 않는다.
 
 ## 감사 미검증 (수용을 막지 않음)
 

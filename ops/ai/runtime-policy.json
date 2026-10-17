@@ -57,10 +57,11 @@
     "root_session_controls": {
       "session": "official Claude Code subscription session opened at the repository root (Desktop or interactive CLI); AI_ENVIRONMENT account match and Usage credits/Extra usage/auto-recharge OFF checks",
       "start_checks": "python3 tools/ai/audit_root_session.py --start-check at session start and after account, environment or settings changes: claude auth status claude.ai/firstParty; no ANTHROPIC/OPENAI/CODEX/AWS/GOOGLE/GEMINI/AZURE/VERTEX API key or auth token env, no CLAUDE_CODE_USE_BEDROCK/VERTEX/FOUNDRY or OPENAI_BASE_URL; ANTHROPIC_BASE_URL absent or anthropic.com; project settings pins; deny list enforced; codex ChatGPT login; names/types only; stop inference on failure",
-      "tool_restriction": "root_denied_tools enforced through untracked .claude/settings.local.json permissions.deny (the legacy runner rejects extra keys in .claude/settings.json), which also allows mcp__unityMCP; deny wins over allow and applies in every permission mode (default, acceptEdits, auto, bypassPermissions; the audit records the mode); only root_allowed_mcp_servers may be called; recreate the local file on another machine; plus repository hard rails",
+      "tool_restriction": "root_denied_tools and root_denied_permissions enforced before execution through untracked .claude/settings.local.json permissions.deny (the legacy runner rejects extra keys in .claude/settings.json), which also allows mcp__unityMCP; deny wins over allow and applies in every permission mode; the PreToolUse merge-gate hook blocks force-push to main; only root_allowed_mcp_servers may be called; recreate the local file on another machine; plus repository hard rails",
       "unity_lock": "acquire ops/ai/local/exclusive-control.lock through run_claude.acquire_lock with run_id claude-root-<session_id> before any Editor write, including computer-use clicks or typing in the Unity window; do not write if held; release only its own lock through run_claude.release_lock; a stale lock is removed only after checking the Editor",
       "codex_calls": "only when codex login status is ChatGPT and no OpenAI/Codex API key or base URL env; reviews via codex exec -s read-only -m gpt-6.1-sol with explicit model_reasoning_effort",
-      "audit": "tools/ai/audit_root_session.py before each commit or acceptance (see root_session_audit); exit 1 blocks; acceptance records the root session_id, audit result, Unity lock events and Codex thread id/model/effort/exit; raw JSONL stays local"
+      "audit": "tools/ai/audit_root_session.py before each commit or acceptance (see root_session_audit); exit 1 blocks; acceptance records the root session_id, audit result, Unity lock events and Codex thread id/model/effort/exit; raw JSONL stays local",
+      "permission_mode_tradeoff": "the permission mode is the user's choice (default, acceptEdits, auto or bypassPermissions); in bypassPermissions other Bash commands run without a prompt, so prefix deny rules (bypassable by compound or indirect forms) and the retrospective audit are the only guards; default or acceptEdits, or an OS sandbox, is stronger; the audit records the mode"
     },
     "root_denied_tools": [
       "mcp__unityMCP__generate_image",
@@ -106,7 +107,17 @@
       "warnings": "exposed-but-unused servers outside the allowlist, proxy env names and a lock still held; reviewed but not blocking",
       "limits": "unverified and listed in every report: initial tool list, MCP subprocess environments, live inference environment versus the checked shell environment, interpreter code semantics (python -c, python heredocs, node -e), Usage credits/Extra usage OFF (account UI); acceptance records them as audit-unverified without blocking",
       "nature": "bounded retrospective evidence against accidental policy breaks; not launch enforcement, not equivalent to the legacy runner's sanitized launch, and not proof against a session that sets out to evade it"
-    }
+    },
+    "root_denied_permissions": [
+      "Read(~/.codex/auth.json)",
+      "Read(~/.claude/.credentials.json)",
+      "Read(~/Library/Keychains/**)",
+      "Bash(security find-generic-password:*)",
+      "Bash(security find-internet-password:*)",
+      "Bash(security dump-keychain:*)",
+      "Bash(printenv:*)",
+      "Bash(claude --bare:*)"
+    ]
   },
   "billing": "existing_subscription_included_allowance_only",
   "api_auth_allowed": false,

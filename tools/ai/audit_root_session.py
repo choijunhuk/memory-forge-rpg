@@ -87,7 +87,8 @@ def start_check(env=None, run=subprocess.run, pol=None):
         deny = json.loads((ROOT / '.claude/settings.local.json').read_text(encoding='utf-8'))['permissions']['deny']
     except (OSError, ValueError, KeyError, TypeError):
         deny = []
-    c['root_denied_tools_enforced'] = isinstance(deny, list) and set(route['root_denied_tools']) <= {d for d in deny if isinstance(d, str)}
+    required = set(route['root_denied_tools']) | set(route.get('root_denied_permissions', []))
+    c['root_denied_tools_enforced'] = isinstance(deny, list) and required <= {d for d in deny if isinstance(d, str)}
     try:
         out = run(['codex', 'login', 'status'], capture_output=True, text=True, timeout=30)
         said = (out.stdout or '') + '\n' + (out.stderr or '')
