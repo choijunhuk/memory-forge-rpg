@@ -1,47 +1,49 @@
-# HANDOFF — A(선명한 셀) 성인 6명 전체 재제작 완료
+# HANDOFF — style-A 원본 보정 완료 / Unity 반영 전
 
-2026-10-18 / Codex 창작 원본 / **자산은 모두 `draft`** — 사용자 승인은 그림체 A에 대한 결정이며 개별 자산·Unity 수용 승인을 뜻하지 않는다.
+2026-10-18 / Codex 창작 원본 / **전부 `draft`**. 스타일 A 승인은 개별 그림·새 원본의 Unity 수용 승인이 아니다.
 
-**6명·18장면·215박자의 참조 그림 전체를 A로 다시 제작하고 연결했다. 고유 PNG 128개 / 이미지 매핑 130개 / 미제작·미선택 이미지 0개다.** 구성은 전신 포즈 84개, 불투명 장면 배경 8개, 독립 512×512 RGBA 표정 36개다. 원래 참조 114개를 모두 교체하고 연속성을 위한 B 전용 포즈 14개를 추가했다. A 전원 → B/C → 표정 순으로 제작했다.
+[style-A 시각 리뷰](../requests/moments-visual-review-20261018-styleA.md)에서 Codex에게 배정한 원본 지적에 대응했다. **새 선택 PNG 25개: 에일라 18개 렌더링 보정 + 루미 B 전용 연기 7개.** 현행 전체는 6명·18장면·215박자, **고유 PNG 135개 / 이미지 매핑 137개**다(전신 91·배경 8·표정 36). 미선택 후보는 이력으로 남겼다.
 
-[STYLE-GUIDE.md](STYLE-GUIDE.md)가 이후 제작 기준이다. [선택 파일·해시·생성 기록 인덱스](production-style-a-20261018/selected-assets.json)와 [경로 목록](production-style-a-20261018/accepted-assets.json)이 현재 선택을 정의한다. 이전 PNG/APNG와 미채택 A 후보는 이력으로 보존하며 현행 6 JSON·모션 프레임에서 과거 PNG 참조는 0개다. 이전 인계·JSON·README·검증은 [before/](production-style-a-20261018/before/)에 있다. 캐릭터별 예전 README도 이력으로 표시했다.
+현행 선택의 기준은 [selected-assets.json](production-source-polish-20261018/selected-assets.json), [accepted-assets.json](production-source-polish-20261018/accepted-assets.json), 6개 캐릭터 `moments.json`이다. 이전 전체 재제작의 선택 인덱스는 당시 이력이다. [이번 변경 목록](production-source-polish-20261018/changes.json) / [이전 인계·6 JSON·검증 스냅샷](production-source-polish-20261018/before/) / [전후 비교](production-source-polish-20261018/before-after-summary.png).
 
-| 인물 / 유지 나이 | 매핑 / 고유 PNG | A/B/C 원본 | 표정 512² |
-|---|---:|---|---:|
-| 세라 / 24 | 15 / 15 | 완료 | 6/6 |
-| 라비엔 / 28 | 24 / 23 | 완료 | 6/6 |
-| 하린 / 26 | 22 / 22 | 완료 | 6/6 |
-| 에일라 / 23 | 26 / 25 | 완료 | 6/6 |
-| 시온 / 27 | 24 / 24 | 완료 | 6/6 |
-| 루미 / 22 | 19 / 19 | 완료 | 6/6 |
+## 지적별 결과
 
-라비엔의 기존 `fig_bond_resolve` 별칭은 A 마지막 빈손 그림을 유지하되 B 끝은 새 `fig_bond_end`로 분리했다. 에일라 C 마지막 wait는 원래처럼 새 돌아봄 그림을 정지 재사용한다. 중복 복사로 수량을 부풀리지 않았다. 표정은 neutral/happy/annoyed/surprised/worried/determined이며 등록된 이미지/앵커를 교체했다. 새 portrait overlay나 게임 UI는 추가하지 않았다.
+| 지적 | 원본에서 한 일 | 수용 범위 |
+|---|---|---|
+| `design_mismatch` 루미 B 마지막 헬멧 수 | 새 `fig_bond_end`에 별개 외곽·파란 바이저를 가진 **헬멧 두 개를 같은 팔로 지지**하고 반대 손바닥은 비워 내민다. B 21–22박자에만 선택했다. 로비의 한 헬멧 `fig_soft`는 그대로다. | 자체 원본 검수 PASS. 새 Unity 캡처는 NOT_RUN. |
+| `optional_opinion` 에일라의 장식/하이라이트 밀도 | A/B/C의 선택 전신 18개를 함께 보정했다. 땋은 머리의 큰 명암, 낮춘 자수 대비, 절제한 반복 반짝임, 더 단순한 가구 명암으로 얼굴·손을 먼저 읽게 했다. 의상 재단·열린 등/어깨·트임·성인 실루엣과 장식의 정체성은 유지한다. | 자체 미술 판단으로 개선. 취향 문제의 보편적 해결·사용자 개별 승인을 주장하지 않는다. |
+| `optional_opinion` 반복되는 포즈와 연기 | 루미 B에 장비 정리 중 멈춤, 앞서 걷다 돌아봄, 보폭 맞추기, 함께 웃음, 바람에 머리 누르기, 발끝을 드는 도착, 두 헬멧의 귀로 초대를 각각 배정했다. | PNG 키포즈 7개 / figure 선택 11박자 변경. 실제 보행 애니메이션 완성이 아니다. |
 
-## Round-3 원본 지적 해결
+[지적별 기록](production-source-polish-20261018/findings-resolution.json) / [루미 연기 합성](production-source-polish-20261018/lumi-acting-final-review.png) / [도착 수정·마지막 합성](production-source-polish-20261018/lumi-arrival-ending-review.png) / [에일라 페이지 흐름](production-source-polish-20261018/aila-bond-final-review.png) / [보관 포즈 최종 알파 수정](production-source-polish-20261018/aila-store-fix-review.png).
 
-- **하린 B 공개 시점:** 6–10박자는 빈 천만 보이는 `fig_worry`다. 11–14박자에 봉제 고양이를 손에 들어 공개하고, 15–20박자는 새 `fig_cat_placed`로 천 위에 내려놓는다. 21–32박자와 마지막 맨손/벗은 장갑 상태에도 같은 인형이 남는다. 기존 둥근 남회색/흰색 봉제 고양이의 파란 구슬 눈·분홍 발바닥·금색 별 목걸이·접힌 귀를 소품 전용 참조로 고정했다. 방패는 화면 왼쪽, 같은 의자·직사각 탁자·천·물잔·도구를 유지한다. [연속 합성](production-style-a-20261018/harin-bond-corrected.png), [최종 알파 수정본 합성](production-style-a-20261018/scene-final-corrections-preview.png).
-- **에일라 B 쓰기/페이지/등불:** 3박자부터 같은 은색 등불을 탁자 위 고정 위치에 둔다. 빈 종이 가져오기(9–10) → 펜 대기(13–14) → 실제 펜촉/종이 접촉(15–16) → 작성한 페이지 제시(17–18) → 반환받은 페이지(19–20) → 서랍 보관(21)을 전용 그림으로 배정했다. 컵이나 등불을 들고 쓰는 모순을 제거했고 대사는 보존했다. [쓰기/제시 검수](production-style-a-20261018/aila-writing-verdict.json), [가구/보관 합성](production-style-a-20261018/aila-bond-review.png).
-- **라비엔 B 가구:** 같은 전경 타원형 책상·붉은 의자·서류철·종이·펜을 유지한다. 마지막은 같은 가구 옆에 빈손으로 서며 폴더는 책상에 남는다. A 마지막의 빈 의자·빈손·옆 탁자 폴더도 유지했다.
-- **시온 B/C:** B의 감정/손동작 8포즈에 같은 독서대를 유지한다. 책으로 입가를 가리는 포즈의 중복 책을 제거했다. C에는 책 없이 장검을 유지하고, 마지막은 새 안경 포즈에서 빈손만 내려 검 폭을 보존했다. [B 연속 합성](production-style-a-20261018/sion-bond-review.png)의 hidden v01은 중복 책 발견용 이력이며, 선택한 v02는 [수정 합성](production-style-a-20261018/bond-other-corrections.png)에 있다.
-- **투명도 잔여물:** 새 하린 B 걱정과 시온 C 마지막을 포함한 선택 전신 84개는 네 빈 모서리 alpha가 모두 0이다. 밝은/어두운 바탕에서도 검수했다. 표정은 기존 의상 하단 크롭을 보존하며 실제 빈 윗모서리 alpha=0, RGBA 여백을 확인했다. 배경 8개는 장면 공간을 유지하는 불투명 그림이다.
+루미의 새 figure 선택은 **B 9·11·13–17·19–22박자**다. 도착은 `fig_bond_arrive` **v02**, 마지막은 `fig_bond_end` **v01**. 이전에는 루미에게 한 개, 화면 밖 동행자에게 한 개가 있으며, 돌려받은 뒤에만 루미 그림에 두 개가 보인다. 새 얼굴/몸/손 앵커 7세트를 원본에서 측정했다. [STYLE-GUIDE.md](STYLE-GUIDE.md)에 이 소품 연속성과 에일라의 강조 순서를 덧붙였다.
 
-## 검증 결과 — 원본 범위 PASS
+에일라는 쓰기 **v03**, 보관 **v03**, 나머지 전신은 **v02**다. C의 기존 wait→turn 별칭을 유지했다. 페이지 가져오기→펜 대기→펜촉/종이 접촉→작성한 페이지 제시→반환→보관, 탁자 위 은색 등불·찻잔·가구 상태를 보존했다. 6개 독립 표정은 이미 절제된 셀 명암으로 읽혀 검토 후 유지했다. 다른 4명, 기존 배경 8개와 표정 36개는 수정하지 않았다.
 
-[VALIDATION.json](VALIDATION.json) / [최종 정적 검사](production-style-a-20261018/verification-final.json) / [독립 데이터 일관성 검사](production-style-a-20261018/consistency-final.json) / [장면 시각 판정](production-style-a-20261018/all-scenes-visual-verdict.json) / [표정 시각 판정](production-style-a-20261018/expression-final-verdict.json).
+## 검증 — 원본 범위 PASS
 
-- 6 JSON 파싱·18장면·215박자·130개 매핑·고유 PNG 128개의 경로/디코드/규격/알파/SHA256, beat·stage·asset·anchor·motion-frame 참조 검사. 모든 장면 image 자산 121항목이 실재 선택 파일로 `ready`, 이미지 todo 0. 음성 18항목은 원래 `todo` 유지.
-- 대사·화자·tone·gaze·hold·input·trigger·stage·why·intent·모션 구조 불변. 세라 `check_time`의 5프레임을 같은 순서·반복·fps로 새 파일에 연결했다. 6명 idle도 새 A 파일이다.
-- 기존 PNG/APNG **124개 SHA256 불변**. 입력 당시 존재했던 그림을 삭제하거나 덮어쓰지 않았다.
-- 표정 36개 전부 정확히 512×512 RGBA, 인물별 6개의 해시가 각각 다르다. [세라](production-style-a-20261018/expressions-review-sera.png) · [라비엔](production-style-a-20261018/expressions-review-ravien.png) · [하린](production-style-a-20261018/expressions-review-harin.png) · [에일라](production-style-a-20261018/expressions-review-aila.png) · [시온](production-style-a-20261018/expressions-review-sion.png) · [루미](production-style-a-20261018/expressions-review-lumi.png).
-- 구도가 달라진 B 얼굴/손과 표정 얼굴 앵커는 새 원본을 보고 정규화 좌표로 보정했다. [anchor-updates.json](production-style-a-20261018/anchor-updates.json). 실제 재생 카메라 수용과 구별한다.
-- 자체 시각 점수는 장면/표정 각각 94/100이며 자동 측정·외부 리뷰·사용자 개별 승인 점수가 아니다. 미채택 원인과 교정은 회차별 verdict에 보존했다.
+[VALIDATION.json](VALIDATION.json) / [재현 가능한 검사](production-source-polish-20261018/verify.py) / [이번 전체 결과](production-source-polish-20261018/verification.json).
 
-## 제작 경로와 남은 수용 범위
+- 6 JSON·18장면·215박자, 137개 이미지 매핑·135개 고유 PNG의 경로/디코드/해시/참조 검사. 선택 경로와 수용 인덱스가 정확히 일치하며 이미지 미선택·누락 0.
+- 새 선택 25개 전부 **1024×1536 RGBA**, 네 정확한 빈 모서리 alpha=0. 윗 48×48 모서리 패치 최대 alpha≤1/255, 밝은/어두운 바탕 시각 검수. RGBA 형식만으로 PASS를 주지 않았다.
+- **대사·화자·tone·gaze·hold·camera·input·trigger·stage·why·intent·모션 구조 불변.** 루미 B의 figure 선택과 자산 목록, 새 앵커, 에일라 이미지 경로만 변경했다. 로비/승리의 루미 장면 데이터와 한 헬멧 공용 그림은 불변이다.
+- 작업 전 존재한 PNG/APNG **353개 SHA256 불변**. 이전 그림을 덮어쓰거나 삭제하지 않았다. 허용한 6개 기존 원본/문서 외에 다른 기존 소스 파일 변경 0.
+- 자체 visual-verdict: 에일라 92/100, 루미 94/100. 자동 품질 측정·외부 리뷰·사용자 승인 점수가 아니다.
+- 첫 검사에서 도구 훅이 갱신하는 `.omc/.../pre-tool-advisory-throttle.json`을 발견했다. [초기 실패](production-source-polish-20261018/verification-initial.json)를 보존하고 정확히 그 훅 상태 파일만 별도 보고했다. 소스/이미지 검사는 유지했다.
+- 배포 매니페스트는 시작 때부터 **423항목 중 기존 불일치 32개로 FAIL**이었다. [사전 기록](production-source-polish-20261018/manifest-precheck.json). 배포 매니페스트를 재생성하지 않았다.
 
-생성/내용 수정은 **내장 구독 `image_gen`만** 사용했다. API·별도 유료 서비스·ComfyUI·ImagineArt·Claude 호출은 없었다. 전체 프롬프트·입력 참조·원본 캐시·선택 경로·최종 선택 상태는 [records/](production-style-a-20261018/records/). 도구가 공개하지 않는 백엔드 모델·seed는 추정하지 않았다. 표정은 [고해상 원본](production-style-a-20261018/expression-hires/)을 `sips -z 512 512`로 비생성형 축소했다. Swift 합성판은 검수용이며 PNG 내용을 다시 그리지 않는다.
+## 제작 기록과 미채택
 
-에일라 반환 페이지의 첫 생성 1건은 출력 안전 검사에서 거절됐다. 기존 페이지 제시 그림에서 손·종이만 편집한 재시도는 성공했고, 의상·나이·설계를 바꾸거나 다른 공급자로 우회하지 않았다. [도구 제약 기록](production-style-a-20261018/tool-constraints.json)에 미해결 항목은 없다.
+**내장 구독 `image_gen`만 사용**했다. [28개 생성 / 25개 선택 / 3개 미채택](production-source-polish-20261018/generation-records.json), 전체 프롬프트·입력·캐시 경로·선택 상태는 [records/](production-source-polish-20261018/records/)에 있다. 백엔드 모델·seed는 도구에 노출되지 않아 추정하지 않았다. 이미지 내용 수정/알파 재시도도 같은 도구로 했다. Swift 합성은 검수용이며 원본 픽셀을 편집하지 않는다.
 
-**이번 요청의 미제작 PNG: 0개.** 전신은 1024×1536, 배경은 1672×941, 표정은 512×512다. 배경은 정식 2560×1440 레이어 마스터보다 낮다. 작은 장식/자수/기계 내부 선의 픽셀 동일성, 레이어 PSD·리그·중간 동작·AnimationClip·Timeline·음성은 이번 PNG 완료의 보장 범위가 아니다.
+미채택: 에일라 쓰기 v02는 강조 정리가 부족해 v03으로, 루미 도착 v01은 발끝 동작이 약해 v02로, 에일라 보관 v02는 빈 모서리 alpha 1/255로 v03으로 교체했다. 미채택 파일도 보존했으며 현행 JSON은 가리키지 않는다. 검사를 느슨하게 바꾸어 통과시키지 않았다.
 
-**NOT_RUN:** Unity 임포트·실제 재생·전환 중 가림·입력/idle 복귀·다른 화면비·기기 수용·Claude 독립 리뷰·게임 코드 시험/lint/typecheck/build. 실제 라이브 수용은 새 원본의 바이트 보존 임포트와 재생 캡처로 별도 확인해야 한다. 프로젝트 수정 범위는 **art/moments/**이며 게임 코드·Unity·커밋·push·Claude 호출은 없다. 작업 전 배포 매니페스트는 423항목 중 기존 변경 32개로 FAIL이었고 재생성하지 않았다.
+## 남은 수용과 다음 단계
+
+**NOT_RUN:** 새 원본의 Unity 바이트 보존 임포트·실제 재생/캡처·전환 중 가림·앵커 카메라·입력/idle 복귀·다른 화면비·실기기·음성·리깅·중간 동작·AnimationClip/Timeline·Claude 독립 리뷰·게임 코드 시험/lint/typecheck/build.
+
+기존 리뷰의 106개 캡처와 134개 source/import 일치는 **이전 원본에 대한 증거**다. 이번 새 25 PNG와 변경 JSON의 임포트·재생 증거로 재사용하지 않는다. 소스 원본만 확인했으므로 새 구현 verdict를 발행하지 않는다. 장면 전체의 환경 경쟁과 “AI 일러스트 느낌”이 전부 해결됐다고도 선언하지 않는다.
+
+다음 구현 담당 작업은 변경된 **에일라/루미 JSON 2개와 선택 PNG 25개**를 내용 변경 없이 임포트하고, 루미 B 21–22의 두 헬멧·초대 손, 새 B 연기, 에일라 쓰기/페이지/보관/마지막 초대를 재캡처하는 것이다. 선택 인덱스의 해시로 대조한 뒤 새 장면을 다시 시각 검수한다. 이번 세션에서는 Claude를 호출하지 않았다.
+
+**프로젝트 변경은 `art/moments/` 안에만 있다. 게임 코드·Unity·커밋·push·Claude 호출·API/별도 유료 서비스 사용은 없다.** 바뀐 기존 파일: `aila/moments.json`, `lumi/moments.json`, `STYLE-GUIDE.md`, `README.md`, `HANDOFF.md`, `VALIDATION.json`. 새 PNG·기록·검증은 이 폴더 안에 있으며 기존 전체 재제작 인계는 `before/HANDOFF.md`에 보존했다.

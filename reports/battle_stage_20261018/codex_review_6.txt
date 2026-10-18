@@ -1,0 +1,7 @@
+**FIXED** — The round-2 item is resolved: [LobbyMomentCapturePlayModeTests.cs:83](/Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Tests/PlayMode/LobbyMomentCapturePlayModeTests.cs:83) calls `Object.Destroy(texture)` after `Release()` inside `finally`. [ExpeditionUiCapturePlayModeTests.cs:195](/Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionUiCapturePlayModeTests.cs:195) also contains the added destruction.
+
+**Newly identified defect — MEDIUM, implementation_defect:** [ExpeditionUiCapturePlayModeTests.cs:193](/Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionUiCapturePlayModeTests.cs:193): `Capture` has no `try/finally`. If `File.WriteAllBytes` throws, canvas restoration and all cleanup at lines 194–195 are skipped, leaving the camera and textures alive. This predates the added line. Protect restoration and destruction with `finally`, as the lobby helper does.
+
+Scoped tracked `git diff --check`: **PASS**. Unity tests: **NOT_RUN**. No files edited.
+
+**Final verdict: REQUEST CHANGES.**

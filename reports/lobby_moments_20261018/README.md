@@ -29,3 +29,9 @@
 ## 리뷰
 
 Codex 읽기 전용 리뷰 5회([기록](../../ops/ai/tasks/LOBBY-MOMENTS-CODEX-REVIEW.result.json)): 결함 11 → 6 → 3 → 1 → **NO_BLOCKING_DEFECT**. 2차에서 실제 재생 캡처를 원본과 비교한 시각 검토는 "의도한 포즈·표정·대사·구도가 보인다"였다. 3차는 슬롯 규칙(새 그림은 프레임 시퀀스만 끝내고 트랙은 잇는다)이 세라 장면의 의도와 맞다고 확인했다. 보류한 선택 의견: 움직이는 카메라 기준점 시험(1차 #12).
+
+## fix5 임포트 (2026-10-19)
+
+Codex fix5(루미 인연 B의 헬멧 두 개 끝 포즈, 에일라 정제 스프라이트 18장)를 `tools/import_moments.py aila lumi`로 바이트 그대로 가져왔다. 열린 Editor에서 `execute_code` 없이 찍도록 Explicit 시험 `LobbyMomentCapturePlayModeTests.CaptureMomentScenes`(출력 폴더는 `Temp/moment_shots.txt`)를 추가했고, 실제 로비 재생으로 두 캐릭터 6장면 134장을 찍었다. `fix5/`에는 각 장면의 시작·끝과 검토가 짚은 장면만 960×540으로 남겼다(`captured.txt`가 전체 목록).
+
+Codex 읽기 전용 시각 검토(`fix5/codex_visual_review.txt`): **NO_BLOCKING_DEFECT**. 루미 끝 장면의 헬멧 두 개와 비어 있는 손 확인, 에일라 쓰기·보여 주기·돌려놓기·서랍 포즈와 등불 위치 확인, 구현 결함 없음. 선택 의견: 에일라의 금장식과 방이 아직 시선을 조금 나눈다(원본 연출 취향).

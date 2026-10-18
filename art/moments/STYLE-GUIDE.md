@@ -38,6 +38,8 @@
 - 에일라 B: 같은 은색 등불은 탁자의 같은 위치에 내려둔다. 글쓰기 박자에는 펜 끝/종이/손의 접촉을 보여 주고, 페이지 제시 박자에는 실제로 종이를 들어 상대에게 보여 준다. 해당 박자에 컵/등불을 대신 들지 않는다.
 - 라비엔 B: 전경 책상·의자·옆 탁자의 형태/방향/위치 고정. 폴더를 내려놓은 뒤는 빈손. A의 마지막 의자·빈손 상태를 지킨다.
 - 시온 B: 같은 독서대·책·메모를 감정 변화 중에도 유지. C에는 책을 새로 넣지 않고 동일한 폭의 장검·안경 제스처 유지.
+- 루미 B: 동행자가 자기 헬멧을 들고 있는 동안 루미 그림에는 한 개만 보인다. 21–22박자에는 돌려받은 것까지 **서로 구별되는 헬멧 두 개를 한 팔에** 끼우고 반대 손바닥을 비워 내민다. B 전용 `fig_bond_end`를 쓰며 로비의 한 헬멧 `fig_soft`를 전역 교체하지 않는다. 걷기·보폭 맞추기·바람에 머리 누르기·도착의 발끝 들기는 각각 실제 동작에 맞는 B 포즈를 쓴다.
+- 에일라 렌더링: 기존 자수·금장·종·별 장식과 의상 재단은 보존한다. 땋은 머리는 묶음별 큰 명암, 자수는 옷감에 가까운 저대비 색, 금장은 반복적인 흰 반짝점보다 무광 색면으로 정리한다. 얼굴·시선과 펜/종이 등 의미 있는 손 접촉이 장식·가구보다 먼저 읽히게 한다. [원본 보정 기록](production-source-polish-20261018/PLAN.md).
 - A의 초대용 의자는 얼굴·손·사용 가능한 좌판이 함께 보인다. 원본에 없는 새 환경을 투명 인물 자산에 붙이지 않는다.
 
 ## 투명도·규격·준비 상태
@@ -53,4 +55,4 @@
 
 > Redraw in Memory Forge direction A, clear cel: controlled crisp line art, emphatic upper eyelids, individual adult face, tiny symbolic nose and short mouth, matte skin with broad one-step cel shadows, grouped hair locks and broad highlight bands, tailored costume color planes, restrained material-specific reflections, neutral key light. Preserve this character's age, identity, exact current outfit construction, props, pose and scene intent. Fully transparent empty canvas; actual alpha, no backdrop, glow halo, floor, cast shadow, checkerboard, text or watermark. The style reference controls rendering only; the scene reference controls design and composition.
 
-각 생성의 전체 프롬프트·입력 참조·출력·검수는 `production-style-a-20261018/records/`에 기록한다. 자체 원본 검수와 Unity·기기·외부 리뷰의 통과를 구별한다.
+최초 전체 재제작의 프롬프트·입력 참조·출력은 `production-style-a-20261018/records/`, 후속 원본 보정은 `production-source-polish-20261018/records/`에 기록한다. 자체 원본 검수와 Unity·기기·외부 리뷰의 통과를 구별한다.

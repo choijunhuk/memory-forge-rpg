@@ -1,0 +1,13 @@
+1. **HIGH · implementation_defect — Nested attacks are omitted from threat totals.** [MemoryForgeExpeditionClient.cs:1404](/Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:1404) returns zero for `expose`, although `IntentText` follows its `Then` attack. For `b_bell`’s `expose → atk(52)`, at difficulty 100 without statuses, the intent displays attack 52 while the rail displays **적 공격 없음**. Count nested attacks using the same current/next status semantics.
+
+2. **MEDIUM · implementation_defect — Compressed rail headers can truncate threat text.** [MemoryForgeExpeditionClient.cs:1423](/Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:1423) compresses header widths alongside reservation sockets but keeps threat text at a minimum 14px inside a 22-unit row. Long named reservations reduce the available width below the text’s minimum width; `적 공격 없음` then wraps and truncates. The shipped-font metric check produced approximately 56–61 units of room versus 69 required. Preserve sufficient header width when compressing sockets.
+
+3. **MEDIUM · implementation_defect — Capture failures can leave rendering state and objects behind.** [LobbyMomentCapturePlayModeTests.cs:73](/Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Tests/PlayMode/LobbyMomentCapturePlayModeTests.cs:73) writes before restoring the canvas and destroying its unparented camera. A screenshot-write failure skips that cleanup; a subsequent report-write failure at line 55 also skips destroying the lobby host. Use unconditional cleanup and restore the previous `RenderTexture.active` rather than assigning null.
+
+The ‘지금’ drop retains `DragPlay → ConfirmCard` and the chosen target. Chip measurement/drawing widths remain consistent. No additional reduced-motion regression found.
+
+`git diff --check`: **PASS**. Unity/phone tests: **NOT_RUN**. Additional independent review lanes were unavailable under the repository’s model restriction. No files edited.
+
+**Verdict: REQUEST CHANGES**
+
+

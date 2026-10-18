@@ -1394,22 +1394,32 @@ namespace MemoryForge.Client
             string Caption((string Group, string Kind, string? Uid) c) => (c.Group == "next" ? "다음" : "다다음") + "  "
                 + (c.Kind == "card" ? run!.BattleEffectiveCard(c.Uid!).Name : c.Kind == "empty" ? "빈 칸" : c.Kind == "sealed" ? "봉인" : "-");
             float Socket((string Group, string Kind, string? Uid) c) => Math.Max(96, TextWidth(Caption(c), 17) + 44); // the kit socket's caps take 19 each
-            string Head(string group) => (group == "next" ? "다음 턴 " : "다다음 턴 ") + cells.Count(c => c.Group == group && c.Kind == "card") + "/"
+            string Head(string group) => group == "now" ? "지금" : (group == "next" ? "다음 턴 " : "다다음 턴 ") + cells.Count(c => c.Group == group && c.Kind == "card") + "/"
                 + cells.Count(c => c.Group == group && (c.Kind == "card" || c.Kind == "empty"));
-            string[] groups = { "next", "after" };
+            // The threat each time meets: the living enemies' attack totals this turn (as their "이번" intent shows it) and next turn
+            // (their "다음" intent); the turn after is not known yet.
+            // An exposing move counts the attack it leads into, as its intent text shows it.
+            int Attack(EnemyMoveDef? m, BattleEnemyState e, bool next) =>
+                m == null ? 0 : m.Type == "expose" ? Attack(m.Then, e, next) : m.Type != "atk" && m.Type != "atkdebuff" ? 0
+                : MemoryForgeBattleClient.IntentDamage(m.Damage ?? 0, b.DifficultyDamage, next ? 0 : e.Status.Strength, next ? 0 : e.Status.Weak, rules.WeakBps) * Math.Max(1, m.Hits ?? 1);
+            int Threat(bool next) => b.Enemies.Where(e => e.Alive).Sum(e => Attack(next ? e.Next : e.Intent, e, next));
+            string? ThreatText(string group) => group == "after" ? null : Threat(group == "next") is int t && t > 0 ? "적 공격 " + t : "적 공격 없음";
+            float HeadWidth(string group) => Math.Max(TextWidth(Head(group), 16), ThreatText(group) is string d ? TextWidth(d, 14) : 0) + 12;
+            string[] groups = { "now", "next", "after" };
             const float gap = 6, h = 58, socket = 42, lead = 42;
-            float content = lead + groups.Sum(g => TextWidth(Head(g), 16) + 10 + cells.Where(c => c.Group == g).Sum(c => Socket(c) + gap) + 16);
-            // It never scrolls (on a phone the header's touch band reaches over it): past its room every socket narrows alike and its
-            // caption shrinks to fit (best fit), so every word stays whole.
-            float shown = Math.Min(right - left, content), x0 = left + (right - left - shown) / 2, squeeze = content > shown ? (shown - lead - 10) / (content - lead) : 1;
+            float heads = lead + groups.Sum(g => HeadWidth(g) + 16), sockets = cells.Sum(c => Socket(c) + gap), content = heads + sockets;
+            // It never scrolls (on a phone the header's touch band reaches over it): past its room only the sockets narrow, alike, and
+            // their captions shrink to fit (best fit); the time labels and threats keep their measured width, so every word stays whole.
+            float shown = Math.Min(right - left, content), x0 = left + (right - left - shown) / 2, squeeze = content > shown ? Math.Max(0.3f, (shown - heads - 10) / sockets) : 1;
             var rail = Plate(frame!, "Timeline", x0, TopBandY, shown, h, Alpha(Background, 0.82f), Alpha(Memory, 0.35f), 1, true);
             Clock(rail, "Clock", 14, (h - 22) / 2, 22, Memory);
             RectTransform host = Box(rail, "TimelineSlots", lead, 0, shown - lead, h, Color.clear);
             float x = 0;
             foreach (string group in groups)
             {
-                float start = x, head = (TextWidth(Head(group), 16) + 10) * squeeze;
-                Label(host, Head(group), x, 0, head, h, 16, Memory, FontStyle.Normal, TextAnchor.MiddleLeft);
+                float start = x, head = HeadWidth(group); string? threat = ThreatText(group);
+                Label(host, Head(group), x, threat == null ? 0 : 6, head, threat == null ? h : 24, 16, group == "now" ? Brass : Memory, FontStyle.Normal, TextAnchor.MiddleLeft);
+                if (threat != null) Label(host, threat, x, 30, head, 22, 14, threat.EndsWith("없음") ? Muted : Danger, FontStyle.Normal, TextAnchor.MiddleLeft);
                 x += head;
                 foreach (var cell in cells.Where(c => c.Group == group))
                 {
@@ -1427,14 +1437,15 @@ namespace MemoryForge.Client
                     if (cell.Kind == "card") Sheen(box, w, socket, 0.1f);
                     x += w + gap * squeeze;
                 }
+                // Each time's rectangle is where a dragged card is dropped for it: 지금 plays now on the chosen target, the others reserve.
                 railZones[group] = Box(host, "RailZone:" + group, start - 6, 3, x - start + 4, h - 6, Color.clear);
-                x += 16 * squeeze;
+                x += 16;
             }
         }
 
         // The party on the stage's left on a diagonal (the front member lowest, nearest the enemies). Each member is its own ultimate
-        // button (Ult:<id>, the whole column): its SD over a floor shadow, a name pill edged in its attribute's colour, and the gauge,
-        // which becomes a glowing brass 필살기 pill once full. At their feet ("PartyStatus", where a party hit flashes) the shared HP bar
+        // button (Ult:<id>, the whole column): its SD over a floor shadow, a name pill edged in its attribute's colour, and the gauge as a
+        // ring in that colour, which becomes a glowing brass 필살기 pill once full. At their feet ("PartyStatus", where a party hit flashes) the shared HP bar
         // (PartyHp) with the block gem at its left, and the party's counter, debt, echo and statuses as chips.
         void PartyStage(BattleState b, BattleRules rules)
         {
@@ -1477,8 +1488,12 @@ namespace MemoryForge.Client
                 }
                 else
                 {
-                    Bar(face, "Gauge", 8, height - 32, column - 20, 8, actor.Gauge, rules.GaugeMax, Brass);
-                    Label(face, Attribute(actor.Attr) + " " + actor.Gauge + "/" + rules.GaugeMax, 2, height - 22, column - 8, 22, 14, Muted, FontStyle.Normal, TextAnchor.MiddleCenter);
+                    // The gauge as a ring that fills clockwise from the top, the attribute and numbers beside it.
+                    Deco(face, "GaugeTrack", Pill(3), 6, height - 33, 30, 30, Alpha(Line, 0.95f));
+                    var ring = Deco(face, "Gauge", Pill(3), 6, height - 33, 30, 30, tone).GetComponent<Image>();
+                    ring.type = Image.Type.Filled; ring.fillMethod = Image.FillMethod.Radial360; ring.fillOrigin = (int)Image.Origin360.Top; ring.fillClockwise = true;
+                    ring.fillAmount = rules.GaugeMax > 0 ? Mathf.Clamp01((float)actor.Gauge / rules.GaugeMax) : 0;
+                    Label(face, Attribute(actor.Attr) + " " + actor.Gauge + "/" + rules.GaugeMax, 40, height - 33, column - 48, 30, 14, Muted, FontStyle.Normal, TextAnchor.MiddleLeft);
                 }
             }
         }
@@ -1639,12 +1654,23 @@ namespace MemoryForge.Client
                 float w = Math.Min(right - x, ChipWidth(text, height, size));
                 if (any && cx + w > right) { cx = x; cy += height + gap; }
                 var chip = Plate(parent, name, cx, cy, w, height, fill, edge, 1, true);
-                Label(chip, text, 0, 0, w, height, size, ink, FontStyle.Normal, TextAnchor.MiddleCenter);
+                var glyph = StatusIcon(text); float lead = glyph != null ? height * 0.8f : 0;
+                if (glyph != null) Picture(chip, "StatusIcon", glyph, height * 0.3f, height * 0.1f, height * 0.8f, height * 0.8f, Color.white);
+                Label(chip, text, lead, 0, w - lead, height, size, ink, FontStyle.Normal, TextAnchor.MiddleCenter);
                 cx += w + gap; any = true;
             }
             return any ? cy - y + height : 0;
         }
-        float ChipWidth(string text, float height, int size) => TextWidth(text, size) + height * 0.8f + 6;
+        float ChipWidth(string text, float height, int size) => TextWidth(text, size) + height * 0.8f + 6 + (StatusIcon(text) != null ? height * 0.8f : 0);
+        // Codex's status glyph for a status chip (by the word Core's text starts with), drawn before the words; none for other chips.
+        static readonly (string Prefix, string Icon)[] StatusIcons = { ("파티 약화 ", "ui_status_weak"), ("취약 ", "ui_status_vulnerable"), ("약화 ", "ui_status_weak"),
+            ("표식 ", "ui_status_mark"), ("화상 ", "ui_status_burn"), ("힘 ", "ui_status_strength"), ("반사 ", "ui_status_reflect"), ("방어 ", "ui_status_block"),
+            ("반격", "ui_status_counter"), ("부채 ", "ui_status_debt"), ("잔향 ", "ui_status_echo") };
+        Sprite? StatusIcon(string text)
+        {
+            foreach (var (prefix, icon) in StatusIcons) if (text.StartsWith(prefix, StringComparison.Ordinal)) return Kit(icon);
+            return null;
+        }
         // The height Chips would use for these words in this width (nothing drawn).
         float ChipsHeight(IEnumerable<(string Text, Color, Color, Color?)> words, float width, float height, int size, float gap = 6)
         {

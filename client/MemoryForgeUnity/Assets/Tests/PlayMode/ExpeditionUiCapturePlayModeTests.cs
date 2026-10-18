@@ -182,17 +182,25 @@ namespace MemoryForge.Client.Tests
             var texture = new RenderTexture(width, height, 24);
             var camera = new GameObject("ExpeditionShotCamera").AddComponent<Camera>();
             camera.targetTexture = texture; camera.clearFlags = CameraClearFlags.SolidColor; camera.backgroundColor = Color.black; camera.orthographic = true;
-            var canvas = host.GetComponentsInChildren<Canvas>().First(x => x.name == MemoryForgeExpeditionClient.OwnedCanvas);
-            canvas.renderMode = RenderMode.ScreenSpaceCamera; canvas.worldCamera = camera;
-            // The scaler takes the camera's size and the client redraws at that scale (a new canvas, presented by the same camera).
-            yield return null; yield return null; yield return null;
-            canvas = host.GetComponentsInChildren<Canvas>().First(x => x.name == MemoryForgeExpeditionClient.OwnedCanvas);
-            Canvas.ForceUpdateCanvases(); camera.Render();
-            var image = new Texture2D(width, height, TextureFormat.RGB24, false);
-            RenderTexture.active = texture; image.ReadPixels(new Rect(0, 0, width, height), 0, 0); image.Apply(); RenderTexture.active = null;
-            File.WriteAllBytes(path, image.EncodeToPNG());
-            if (canvas != null) { canvas.renderMode = RenderMode.ScreenSpaceOverlay; canvas.worldCamera = null; }
-            Object.Destroy(camera.gameObject); Object.Destroy(image); texture.Release();
+            var image = new Texture2D(width, height, TextureFormat.RGB24, false); var before = RenderTexture.active; Canvas? canvas = null;
+            try
+            {
+                canvas = host.GetComponentsInChildren<Canvas>().First(x => x.name == MemoryForgeExpeditionClient.OwnedCanvas);
+                canvas.renderMode = RenderMode.ScreenSpaceCamera; canvas.worldCamera = camera;
+                // The scaler takes the camera's size and the client redraws at that scale (a new canvas, presented by the same camera).
+                yield return null; yield return null; yield return null;
+                canvas = host.GetComponentsInChildren<Canvas>().First(x => x.name == MemoryForgeExpeditionClient.OwnedCanvas);
+                Canvas.ForceUpdateCanvases(); camera.Render();
+                RenderTexture.active = texture; image.ReadPixels(new Rect(0, 0, width, height), 0, 0); image.Apply();
+                File.WriteAllBytes(path, image.EncodeToPNG());
+            }
+            finally
+            {
+                // A failed write leaves no camera, texture or camera-drawn canvas behind.
+                RenderTexture.active = before;
+                if (canvas != null) { canvas.renderMode = RenderMode.ScreenSpaceOverlay; canvas.worldCamera = null; }
+                Object.Destroy(camera.gameObject); Object.Destroy(image); texture.Release(); Object.Destroy(texture);
+            }
             yield return null; yield return null; yield return null; // back to the overlay scale
         }
 

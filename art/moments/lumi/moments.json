@@ -21,7 +21,14 @@
     "fig_victory_land": "moments/lumi/images/char_lumi_fig_victory_land_styleA_v01.png",
     "fig_victory_turn": "moments/lumi/images/char_lumi_fig_victory_turn_styleA_v01.png",
     "fig_victory_grin": "moments/lumi/images/char_lumi_fig_victory_grin_styleA_v01.png",
-    "fig_victory_wait": "moments/lumi/images/char_lumi_fig_victory_wait_styleA_v02.png"
+    "fig_victory_wait": "moments/lumi/images/char_lumi_fig_victory_wait_styleA_v02.png",
+    "fig_bond_gear": "moments/lumi/images/char_lumi_fig_bond_gear_styleA_v01.png",
+    "fig_bond_walk": "moments/lumi/images/char_lumi_fig_bond_walk_styleA_v01.png",
+    "fig_bond_match": "moments/lumi/images/char_lumi_fig_bond_match_styleA_v01.png",
+    "fig_bond_laugh": "moments/lumi/images/char_lumi_fig_bond_laugh_styleA_v01.png",
+    "fig_bond_wind": "moments/lumi/images/char_lumi_fig_bond_wind_styleA_v01.png",
+    "fig_bond_arrive": "moments/lumi/images/char_lumi_fig_bond_arrive_styleA_v02.png",
+    "fig_bond_end": "moments/lumi/images/char_lumi_fig_bond_end_styleA_v01.png"
   },
   "anchors": {
     "fig_neutral": {
@@ -226,6 +233,104 @@
       "face": [
         0.54,
         0.45
+      ]
+    },
+    "fig_bond_gear": {
+      "face": [
+        0.48,
+        0.12
+      ],
+      "body": [
+        0.52,
+        0.5
+      ],
+      "hands": [
+        0.84,
+        0.43
+      ]
+    },
+    "fig_bond_walk": {
+      "face": [
+        0.57,
+        0.11
+      ],
+      "body": [
+        0.53,
+        0.5
+      ],
+      "hands": [
+        0.79,
+        0.41
+      ]
+    },
+    "fig_bond_match": {
+      "face": [
+        0.47,
+        0.12
+      ],
+      "body": [
+        0.52,
+        0.5
+      ],
+      "hands": [
+        0.27,
+        0.49
+      ]
+    },
+    "fig_bond_laugh": {
+      "face": [
+        0.48,
+        0.115
+      ],
+      "body": [
+        0.5,
+        0.5
+      ],
+      "hands": [
+        0.48,
+        0.2
+      ]
+    },
+    "fig_bond_wind": {
+      "face": [
+        0.49,
+        0.1
+      ],
+      "body": [
+        0.51,
+        0.5
+      ],
+      "hands": [
+        0.38,
+        0.09
+      ]
+    },
+    "fig_bond_arrive": {
+      "face": [
+        0.46,
+        0.12
+      ],
+      "body": [
+        0.49,
+        0.5
+      ],
+      "hands": [
+        0.2,
+        0.49
+      ]
+    },
+    "fig_bond_end": {
+      "face": [
+        0.48,
+        0.105
+      ],
+      "body": [
+        0.48,
+        0.5
+      ],
+      "hands": [
+        0.28,
+        0.36
       ]
     }
   },
@@ -475,6 +580,41 @@
           "key": "voice_lumi_bond_recording",
           "type": "voice",
           "status": "todo"
+        },
+        {
+          "key": "fig_bond_gear",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_bond_walk",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_bond_match",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_bond_laugh",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_bond_wind",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_bond_arrive",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_bond_end",
+          "type": "image",
+          "status": "ready"
         }
       ],
       "input": {
@@ -617,7 +757,7 @@
           "hold": 1.0
         },
         {
-          "figure": "fig_action2",
+          "figure": "fig_bond_gear",
           "gaze": "down",
           "camera": {
             "shot": "medium",
@@ -649,7 +789,7 @@
           "hold": 1.0
         },
         {
-          "figure": "fig_neutral",
+          "figure": "fig_bond_walk",
           "gaze": "side",
           "camera": {
             "shot": "medium",
@@ -681,7 +821,7 @@
           "hold": 1.0
         },
         {
-          "figure": "fig_worried",
+          "figure": "fig_bond_match",
           "gaze": "player",
           "camera": {
             "shot": "medium",
@@ -697,7 +837,7 @@
           "hold": 0.8
         },
         {
-          "figure": "fig_determined",
+          "figure": "fig_bond_match",
           "gaze": "player",
           "camera": {
             "shot": "bust",
@@ -713,7 +853,7 @@
           "hold": 1.0
         },
         {
-          "figure": "fig_happy",
+          "figure": "fig_bond_laugh",
           "gaze": "down",
           "camera": {
             "shot": "medium",
@@ -729,7 +869,7 @@
           "hold": 0.8
         },
         {
-          "figure": "fig_happy",
+          "figure": "fig_bond_laugh",
           "gaze": "player",
           "camera": {
             "shot": "bust",
@@ -745,7 +885,7 @@
           "hold": 1.0
         },
         {
-          "figure": "fig_action1",
+          "figure": "fig_bond_wind",
           "gaze": "player",
           "camera": {
             "shot": "medium",
@@ -777,7 +917,7 @@
           "hold": 1.0
         },
         {
-          "figure": "fig_neutral",
+          "figure": "fig_bond_arrive",
           "gaze": "down",
           "camera": {
             "shot": "medium",
@@ -793,7 +933,7 @@
           "hold": 0.8
         },
         {
-          "figure": "fig_happy",
+          "figure": "fig_bond_arrive",
           "gaze": "player",
           "camera": {
             "shot": "bust",
@@ -809,7 +949,7 @@
           "hold": 1.0
         },
         {
-          "figure": "fig_soft",
+          "figure": "fig_bond_end",
           "gaze": "player",
           "camera": {
             "shot": "full",
@@ -825,7 +965,7 @@
           "hold": 0.8
         },
         {
-          "figure": "fig_soft",
+          "figure": "fig_bond_end",
           "gaze": "player",
           "camera": {
             "shot": "medium",

@@ -1,0 +1,13 @@
+1. **FIXED — Nested attack totals.** [MemoryForgeExpeditionClient.cs:1402](/Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:1402) recursively follows `expose.Then`, preserving current-turn strength/weak and next-turn base-damage semantics.
+
+2. **FIXED — Threat-header compression.** [MemoryForgeExpeditionClient.cs:1407](/Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:1407) measures both label and threat widths; line 1420 retains that width while sockets compress.
+
+3. **NOT_FIXED — Capture cleanup is incomplete (MEDIUM, implementation_defect).** [LobbyMomentCapturePlayModeTests.cs:83](/Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Tests/PlayMode/LobbyMomentCapturePlayModeTests.cs:83) calls `texture.Release()` but never `Object.Destroy(texture)`. Each capture leaves its RenderTexture object undestroyed: `Release()` frees hardware resources only. [Unity documentation](https://docs.unity3d.com/6000.0/Documentation/ScriptReference/RenderTexture.Release.html). The previous active target and overlay canvas are restored in `finally`; camera/image destruction and report-failure host cleanup at line 55 are corrected. Add texture destruction to finish this item.
+
+No additional concrete defects identified beyond that residual cleanup defect.
+
+Scoped tracked `git diff --check`: **PASS**. Unity tests: **NOT_RUN**. Additional independent review lanes unavailable under the repository’s model restriction. No files edited.
+
+**Verdict: REQUEST CHANGES**
+
+
