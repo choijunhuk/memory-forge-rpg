@@ -1,0 +1,245 @@
+{
+  "checked_at_utc": "2026-10-18T06:23:27.967234+00:00",
+  "status": "PASS",
+  "selected_pngs": 6,
+  "archived_pngs": 12,
+  "comparison_size": [
+    3360,
+    3660
+  ],
+  "png_crc_and_zlib_checks": 19,
+  "selected_and_original_full_decode": "8 input images decoded and drawn by AppKit/ImageIO during successful sheet export",
+  "json_parse_checks": 21,
+  "markdown_local_links": "PASS",
+  "input_fingerprints_unchanged_during_sheet_assembly": 12,
+  "artifacts_manifest": "ARTIFACT-MANIFEST.json",
+  "visual_review": {
+    "candidate_score": 91,
+    "comparison_score": 93,
+    "threshold": 90,
+    "scope": "self-review for style-selection candidates only"
+  },
+  "errors": [],
+  "images": [
+    {
+      "path": "COMPARISON.png",
+      "width": 3360,
+      "height": 3660,
+      "bit_depth": 8,
+      "color_type": 6,
+      "bytes": 12561901,
+      "sha256": "3525301c960551bd92618a771ef1ded28f522fc6bb3f257663af35cee1144fca",
+      "chunk_crc": "PASS",
+      "idat_decompression": "PASS"
+    },
+    {
+      "path": "individuals/a_harin_v03.png",
+      "width": 1024,
+      "height": 1536,
+      "bit_depth": 8,
+      "color_type": 2,
+      "bytes": 2035358,
+      "sha256": "c9d655676efd47169ccb241bc017580fee5eb8ee8b919ccb92a187c63b50a397",
+      "chunk_crc": "PASS",
+      "idat_decompression": "PASS"
+    },
+    {
+      "path": "individuals/a_sera_v03.png",
+      "width": 1024,
+      "height": 1536,
+      "bit_depth": 8,
+      "color_type": 2,
+      "bytes": 2053863,
+      "sha256": "3294a4a09951201d38360a6bf749e38166d4a234581d9948547d388b358aa3dc",
+      "chunk_crc": "PASS",
+      "idat_decompression": "PASS"
+    },
+    {
+      "path": "individuals/b_harin_v03.png",
+      "width": 1024,
+      "height": 1536,
+      "bit_depth": 8,
+      "color_type": 2,
+      "bytes": 2228662,
+      "sha256": "c4bdda8d807ba91d8b925c665916084e0f1185b74cd10fec747e836040a93a5d",
+      "chunk_crc": "PASS",
+      "idat_decompression": "PASS"
+    },
+    {
+      "path": "individuals/b_sera_v03.png",
+      "width": 1024,
+      "height": 1536,
+      "bit_depth": 8,
+      "color_type": 2,
+      "bytes": 2064587,
+      "sha256": "655ce4c44bfda0140ed099b9ca25ef91a1bfa899ec349c4831b315d3a725627e",
+      "chunk_crc": "PASS",
+      "idat_decompression": "PASS"
+    },
+    {
+      "path": "individuals/c_harin_v03.png",
+      "width": 1024,
+      "height": 1536,
+      "bit_depth": 8,
+      "color_type": 2,
+      "bytes": 2418311,
+      "sha256": "4a0ef46bbed6bac1d8a94e5072d9ee4d191c75421b71da584cc88ff289bac88d",
+      "chunk_crc": "PASS",
+      "idat_decompression": "PASS"
+    },
+    {
+      "path": "individuals/c_sera_v03.png",
+      "width": 1024,
+      "height": 1536,
+      "bit_depth": 8,
+      "color_type": 2,
+      "bytes": 2155960,
+      "sha256": "6bc45ebb36d9501d04d9c503e3a3adc1515989a09498df72da3d1e76728427df",
+      "chunk_crc": "PASS",
+      "idat_decompression": "PASS"
+    },
+    {
+      "path": "iterations/round1/a_harin_v01.png",
+      "width": 1024,
+      "height": 1536,
+      "bit_depth": 8,
+      "color_type": 6,
+      "bytes": 2270606,
+      "sha256": "c74cf5db8cb6096c3ae9c4a06412d6803a736ffaa7acd9030dc159699c9a23ff",
+      "chunk_crc": "PASS",
+      "idat_decompression": "PASS"
+    },
+    {
+      "path": "iterations/round1/a_sera_v01.png",
+      "width": 1024,
+      "height": 1536,
+      "bit_depth": 8,
+      "color_type": 6,
+      "bytes": 2118156,
+      "sha256": "15a3d161b80ce3d25f821efd80c39e37210f519f42a6d12a592ac0a5e4f696bb",
+      "chunk_crc": "PASS",
+      "idat_decompression": "PASS"
+    },
+    {
+      "path": "iterations/round1/b_harin_v01.png",
+      "width": 1024,
+      "height": 1536,
+      "bit_depth": 8,
+      "color_type": 6,
+      "bytes": 2413434,
+      "sha256": "df91e2c29d537ccec3ab6ecdd22ac2617d4d7ee962397f8c1ec5c4570ca4e85f",
+      "chunk_crc": "PASS",
+      "idat_decompression": "PASS"
+    },
+    {
+      "path": "iterations/round1/b_sera_v01.png",
+      "width": 1024,
+      "height": 1536,
+      "bit_depth": 8,
+      "color_type": 6,
+      "bytes": 2201073,
+      "sha256": "78afe1d7155123d8720021c612bc58a4afd287ce9d9f5f8c9eb5ef792ef9995b",
+      "chunk_crc": "PASS",
+      "idat_decompression": "PASS"
+    },
+    {
+      "path": "iterations/round1/c_harin_v01.png",
+      "width": 1024,
+      "height": 1536,
+      "bit_depth": 8,
+      "color_type": 6,
+      "bytes": 2489377,
+      "sha256": "3ea8c76468c19a8c7af0d74e98559b6528d61a8ee40bac6d36a0555b5ac122d1",
+      "chunk_crc": "PASS",
+      "idat_decompression": "PASS"
+    },
+    {
+      "path": "iterations/round1/c_sera_v01.png",
+      "width": 1024,
+      "height": 1536,
+      "bit_depth": 8,
+      "color_type": 6,
+      "bytes": 2255700,
+      "sha256": "6a0a9a8c0ed4140997e0cb54b905c033f765711769720d5e376ede331c9c23ac",
+      "chunk_crc": "PASS",
+      "idat_decompression": "PASS"
+    },
+    {
+      "path": "iterations/round2/a_harin_v02.png",
+      "width": 1024,
+      "height": 1536,
+      "bit_depth": 8,
+      "color_type": 2,
+      "bytes": 1785983,
+      "sha256": "f071c2f95e6c39313fa2e8b4b68968ef3d24a080a82146668f053df2cd016a25",
+      "chunk_crc": "PASS",
+      "idat_decompression": "PASS"
+    },
+    {
+      "path": "iterations/round2/a_sera_v02.png",
+      "width": 1024,
+      "height": 1536,
+      "bit_depth": 8,
+      "color_type": 2,
+      "bytes": 1652141,
+      "sha256": "b3c30d0af31ecbc1f0715d53dd71abe52e7b97821e1b983e33d0449dd5fba2a8",
+      "chunk_crc": "PASS",
+      "idat_decompression": "PASS"
+    },
+    {
+      "path": "iterations/round2/b_harin_v02.png",
+      "width": 1024,
+      "height": 1536,
+      "bit_depth": 8,
+      "color_type": 2,
+      "bytes": 2000144,
+      "sha256": "26514c049e2cb1ac83c9436b60b2e2d5bf6fd45d3ecbc6c2d502fd85bc47c7af",
+      "chunk_crc": "PASS",
+      "idat_decompression": "PASS"
+    },
+    {
+      "path": "iterations/round2/b_sera_v02.png",
+      "width": 1024,
+      "height": 1536,
+      "bit_depth": 8,
+      "color_type": 2,
+      "bytes": 1808628,
+      "sha256": "38c613a7afbef3048c09ded120061cb4d6ce8556ac86845ee53db4546afbc579",
+      "chunk_crc": "PASS",
+      "idat_decompression": "PASS"
+    },
+    {
+      "path": "iterations/round2/c_harin_v02.png",
+      "width": 1024,
+      "height": 1536,
+      "bit_depth": 8,
+      "color_type": 2,
+      "bytes": 2070981,
+      "sha256": "82751f0eaba99e3bdf0bb4b9924d8218148bf1308b27e9bc1226b78a23c929f8",
+      "chunk_crc": "PASS",
+      "idat_decompression": "PASS"
+    },
+    {
+      "path": "iterations/round2/c_sera_v02.png",
+      "width": 1024,
+      "height": 1536,
+      "bit_depth": 8,
+      "color_type": 2,
+      "bytes": 1903516,
+      "sha256": "f1b23bf68b68132dff98784967df14897603f89ac3a1975d5450fcce6c493fab",
+      "chunk_crc": "PASS",
+      "idat_decompression": "PASS"
+    }
+  ],
+  "not_run": [
+    "user approval",
+    "whole-roster production",
+    "Unity import/playback",
+    "game tests/build",
+    "device acceptance",
+    "Claude review"
+  ],
+  "scope": "all task-owned artifacts are within this directory; built-in image-tool managed caches remain at their automatic location",
+  "image_checks_at_utc": "2026-10-18T06:21:55.622023+00:00",
+  "first_validation_note": "First link pass ran before its own VALIDATION.json existed; checked again after writing the report. PNG CRC/decompression checks passed on first pass and images were unchanged."
+}
