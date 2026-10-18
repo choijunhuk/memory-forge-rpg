@@ -14,7 +14,7 @@ using Object = UnityEngine.Object;
 namespace MemoryForge.Client.Tests
 {
     // Report screenshots of the expedition practice screens (reports/expedition_ui_20261018). Run by name with MF_EXPEDITION_SHOTS set
-    // to the output folder. Real practices are driven through the client's public commands only (no injected Run state); the driver
+    // to the output folder (or, in an open Editor, that folder written in Temp/expedition_shots.txt). Real practices are driven through the client's public commands only (no injected Run state); the driver
     // passes turns in a seed-summoning fight until five enemies stand, so the crowded layout is a reachable state, not a mock. Each
     // capture renders the owned canvas through a camera into a texture of the given size, then restores the overlay canvas.
     public class ExpeditionUiCapturePlayModeTests
@@ -25,7 +25,9 @@ namespace MemoryForge.Client.Tests
         [UnityTest, Timeout(900000), Explicit("writes report screenshots; run by name with MF_EXPEDITION_SHOTS")] // whole expeditions on 14 seeds
         public IEnumerator CaptureExpeditionScreens()
         {
-            string? dir = Environment.GetEnvironmentVariable("MF_EXPEDITION_SHOTS");
+            // In an open Editor (whose environment is fixed at launch) the folder can instead be the one line of Temp/expedition_shots.txt.
+            string named = Path.Combine(Application.dataPath, "../Temp/expedition_shots.txt");
+            string? dir = Environment.GetEnvironmentVariable("MF_EXPEDITION_SHOTS") is string set && set.Length != 0 ? set : File.Exists(named) ? File.ReadAllText(named).Trim() : null;
             if (string.IsNullOrEmpty(dir)) Assert.Ignore("MF_EXPEDITION_SHOTS is not set");
             Directory.CreateDirectory(dir!);
             var taken = new HashSet<string>();

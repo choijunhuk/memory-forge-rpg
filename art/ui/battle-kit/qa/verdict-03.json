@@ -1,0 +1,8 @@
+{
+  "score": 94,
+  "verdict": "pass",
+  "category_match": true,
+  "differences": ["This is an asset proof; the stage layout and live localized labels remain the implementer's work.", "AI-generated end-turn state variants retain minor engraved-edge differences."],
+  "suggestions": ["Check final label contrast, portrait masks and dense enemy encounters after byte-copy import.", "Keep the simple icon silhouettes at 24/32px and use the declared slice caps."],
+  "reasoning": "The final kit follows the navy/brass/teal reference, preserves blank label regions and transparent holes, and its seven attack silhouettes progress visibly. Clean-edge and slice-cap export checks pass."
+}

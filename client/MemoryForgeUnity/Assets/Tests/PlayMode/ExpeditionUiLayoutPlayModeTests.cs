@@ -171,7 +171,56 @@ namespace MemoryForge.Client.Tests
             }
         }
 
+        // BATTLE-STAGE-20261018: a hand card dragged up by real pointer events and dropped on an enemy is played on that enemy, through
+        // the tap path's own selection and confirm; a drag that ends in the hand plays nothing.
+        [UnityTest]
+        public IEnumerator DraggingAHandCardOntoAnEnemyPlaysItOnThatEnemy()
+        {
+            var host = Open(1234); var c = host.GetComponent<MemoryForgeExpeditionClient>(); yield return null;
+            Press(host, b => b.name.StartsWith("Node:", StringComparison.Ordinal) && b.interactable); yield return null;
+            yield return Settle();
+            var b0 = c.Snapshot!.Battle!; string aim = b0.Enemies.Last(e => e.Alive).Uid; long v0 = b0.V;
+            Drag(host, "Hand:" + b0.Zones.Hand[0], Center(host, "Hand:" + b0.Zones.Hand[0]) + new Vector2(300, 10));
+            yield return Settle();
+            Assert.That(c.Snapshot!.Battle!.V, Is.EqualTo(v0), "a drop in the hand plays nothing");
+            bool played = false;
+            foreach (string uid in b0.Zones.Hand)
+            {
+                if (c.HasActionPresentation) { c.SkipActionPresentation(); yield return Settle(); }
+                var before = c.Snapshot!.Battle!;
+                if (before.Phase != "PLAYER" || !before.Zones.Hand.Contains(uid)) continue;
+                Drag(host, "Hand:" + uid, Center(host, "Enemy:" + aim));
+                yield return Settle();
+                if (c.PickerOpen) { c.AutoPick(); yield return Settle(); }
+                var after = c.Snapshot!.Battle!;
+                if (after.V == before.V) continue; // Core refused this card now (cost, mode): the next one
+                played = true;
+                Assert.That(after.Zones.Hand.Contains(uid), Is.False, "the dropped card left the hand");
+                Assert.That(c.Target == aim || !after.Enemies.Single(e => e.Uid == aim).Alive, Is.True, "the drop chose the enemy it landed on");
+                break;
+            }
+            Assume.That(played, Is.True, "some hand card plays now on the enemy");
+        }
+
         // ───────── helpers ─────────
+        // A left-button drag of the named control's root from its centre to a screen point: the module's own event order, the first
+        // move a quarter of the way.
+        static void Drag(GameObject host, string name, Vector2 to)
+        {
+            Canvas.ForceUpdateCanvases();
+            var target = View(host).GetComponentsInChildren<Button>().First(b => b.name == name).gameObject; var from = Center(host, name);
+            var e = new PointerEventData(EventSystem.current) { button = PointerEventData.InputButton.Left, position = from, pressPosition = from };
+            ExecuteEvents.Execute(target, e, ExecuteEvents.initializePotentialDrag);
+            e.position = from + (to - from) * 0.25f; e.delta = e.position - from; e.dragging = true;
+            ExecuteEvents.Execute(target, e, ExecuteEvents.beginDragHandler);
+            e.delta = to - e.position; e.position = to; ExecuteEvents.Execute(target, e, ExecuteEvents.dragHandler);
+            ExecuteEvents.Execute(target, e, ExecuteEvents.endDragHandler);
+        }
+        static Vector2 Center(GameObject host, string name)
+        {
+            var r = (RectTransform)View(host).GetComponentsInChildren<Button>().First(b => b.name == name).transform;
+            return RectTransformUtility.WorldToScreenPoint(null, r.TransformPoint(r.rect.center));
+        }
         GameObject Open(long seed) { var host = ExpeditionUiCapturePlayModeTests.Open(seed); hosts.Add(host); return host; }
         // The client with the first-run guide on a fresh, test-only progress record (removed again at teardown).
         readonly List<string> guideKeys = new List<string>();

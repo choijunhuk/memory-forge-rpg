@@ -109,6 +109,32 @@ namespace MemoryForge.Client
             }
             if (rect != null) Object.Destroy(rect.gameObject);
         }
+
+        // Scales a centre-pivoted decoration from `from` back to 1 (a hit number popping in); halted, it is at once at 1.
+        public static IEnumerator Punch(RectTransform rect, float from, float duration, System.Func<bool>? stop = null)
+        {
+            for (float t = 0; t < duration && !Halted(stop); t += Time.unscaledDeltaTime)
+            {
+                if (rect == null) yield break;
+                rect.localScale = Vector3.one * Mathf.Lerp(from, 1f, EaseOut(t / duration));
+                yield return null;
+            }
+            if (rect != null) rect.localScale = Vector3.one;
+        }
+
+        // Grows a centre-pivoted decoration from `from` to `to` while fading it out, then removes it (a hit's burst).
+        public static IEnumerator Burst(RectTransform rect, float from, float to, float duration, System.Func<bool>? stop = null)
+        {
+            if (rect == null) yield break;
+            var group = rect.gameObject.AddComponent<CanvasGroup>(); group.blocksRaycasts = false; group.interactable = false;
+            for (float t = 0; t < duration && !Halted(stop); t += Time.unscaledDeltaTime)
+            {
+                if (rect == null) yield break;
+                float u = EaseOut(t / duration); rect.localScale = Vector3.one * Mathf.Lerp(from, to, u); group.alpha = 1 - u;
+                yield return null;
+            }
+            if (rect != null) Object.Destroy(rect.gameObject);
+        }
     }
 
     // A breathing alpha on a decoration (an edge or a marker) that shows what can be pressed next; still at full alpha whenever motion

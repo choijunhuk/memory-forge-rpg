@@ -1,0 +1,8 @@
+{
+  "score": 88,
+  "verdict": "revise",
+  "category_match": true,
+  "differences": ["The generated clock dial exports have 1 to 4 nonzero-alpha pixels touching the canvas edge.", "Exact straight-alpha byte comparison flags at most one RGB rounding unit during the compositor cap check, while alpha is unchanged."],
+  "suggestions": ["Add symmetric transparent export padding to generated sprites without modifying their originals.", "Require unchanged cap alpha and a premultiplied RGB tolerance of one channel unit; retain the measured maximum."],
+  "reasoning": "The icon silhouettes remain distinct at 24/32px and the borders preserve stage space, but clean export margins need one correction."
+}

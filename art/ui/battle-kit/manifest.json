@@ -1,0 +1,2424 @@
+{
+  "schema": "memory-forge-ui-art/1",
+  "created": "2026-10-18",
+  "production_final": false,
+  "scope": "local art only",
+  "border_order": "LTRB in source pixels; Unity Sprite.border uses L B R T",
+  "assets": [
+    {
+      "id": "ui_badge_intent_attack",
+      "file": "assets/ui_badge_intent_attack.png",
+      "source": "sources/ui_badge_intent_attack.svg",
+      "width": 128,
+      "height": 128,
+      "slot": "의도 받침 · attack",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "숫자 안전 rect [38,80,52,24]. stage-first에서는 받침 없이 ui_intent_* 추천.",
+      "method": "vector",
+      "sha256": "450ac7619bb91a51a60a360b3b33b1a96a569176d4b3e38f518e67257bd06bbe"
+    },
+    {
+      "id": "ui_badge_intent_defend",
+      "file": "assets/ui_badge_intent_defend.png",
+      "source": "sources/ui_badge_intent_defend.svg",
+      "width": 128,
+      "height": 128,
+      "slot": "의도 받침 · defend",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "숫자 안전 rect [38,80,52,24]. stage-first에서는 받침 없이 ui_intent_* 추천.",
+      "method": "vector",
+      "sha256": "6215caa1a5c9740208ee8c5afec6b3060ce66e2f1f6f60de650e8fde310ad02e"
+    },
+    {
+      "id": "ui_badge_intent_special",
+      "file": "assets/ui_badge_intent_special.png",
+      "source": "sources/ui_badge_intent_special.svg",
+      "width": 128,
+      "height": 128,
+      "slot": "의도 받침 · special",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "숫자 안전 rect [38,80,52,24]. stage-first에서는 받침 없이 ui_intent_* 추천.",
+      "method": "vector",
+      "sha256": "f35c24268d37b160d4b5e4d541431f0126f80454994b647b762ba8e22b123f51"
+    },
+    {
+      "id": "ui_banner_turn_enemy",
+      "file": "assets/ui_banner_turn_enemy.png",
+      "source": "sources/ui_banner_turn_enemy.svg",
+      "width": 1600,
+      "height": 200,
+      "slot": "턴 전환 띠 · enemy",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "게임 글자 안전 rect [440,56,720,88]. 이동/번쩍임은 아트 수용 범위 밖.",
+      "method": "vector",
+      "sha256": "d727694dc302c342f032a700e4730f93c496d0fc0e34b424ae082de407b2cbb6"
+    },
+    {
+      "id": "ui_banner_turn_player",
+      "file": "assets/ui_banner_turn_player.png",
+      "source": "sources/ui_banner_turn_player.svg",
+      "width": 1600,
+      "height": 200,
+      "slot": "턴 전환 띠 · player",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "게임 글자 안전 rect [440,56,720,88]. 이동/번쩍임은 아트 수용 범위 밖.",
+      "method": "vector",
+      "sha256": "cf0b62f5ed58a3a47fa7acde4a18f6df2a19c1b2ab534cb17dca25bb18655dac"
+    },
+    {
+      "id": "ui_button_endturn",
+      "file": "assets/ui_button_endturn.png",
+      "source": "originals/ui_button_endturn_generated.png",
+      "width": 300,
+      "height": 300,
+      "slot": "턴 종료 버튼 · 기본",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "이미지 안 숫자/바늘 없음; 글자 안전 원 중심(150,150), r83.",
+      "method": "subscription-imagegen; mechanical downsample",
+      "sha256": "0c18a3b98d2d1eec1cfea273c4fc4a9a008f23b1172afaee76d94a73c701aa64"
+    },
+    {
+      "id": "ui_button_endturn_disabled",
+      "file": "assets/ui_button_endturn_disabled.png",
+      "source": "originals/ui_button_endturn_disabled_generated.png",
+      "width": 300,
+      "height": 300,
+      "slot": "턴 종료 버튼 · 비활성",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "게임의 활성 조건/비활성 이유가 결정. 그림만으로 판정하지 않음.",
+      "method": "subscription-imagegen; mechanical downsample",
+      "sha256": "4ca9567d2f364322b75abe069e2742f1391bb52bc25b1eca28062b910a8210c3"
+    },
+    {
+      "id": "ui_button_endturn_pressed",
+      "file": "assets/ui_button_endturn_pressed.png",
+      "source": "originals/ui_button_endturn_pressed_generated.png",
+      "width": 300,
+      "height": 300,
+      "slot": "턴 종료 버튼 · 눌림",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "동일 참조로 생성한 상태 변형. 생성형 미세 윤곽 차이는 존재.",
+      "method": "subscription-imagegen; mechanical downsample",
+      "sha256": "4e16e5d564e7ac6cefe082ff7d14d08ab4b9aea7ba78037cca07120943739ab0"
+    },
+    {
+      "id": "ui_button_pill_brass",
+      "file": "assets/ui_button_pill_brass.png",
+      "source": "sources/ui_button_pill_brass.svg",
+      "width": 512,
+      "height": 128,
+      "slot": "가로 버튼 · brass/normal",
+      "border_lbrt": [
+        68,
+        0,
+        68,
+        0
+      ],
+      "border_ltrb": [
+        68,
+        0,
+        68,
+        0
+      ],
+      "notes": "높이 고정 비율. 글자 영역 [76,28,360,72].",
+      "method": "vector",
+      "sha256": "1089e47c347a258af4682d1ae16472219970555112b4676fb5a323035f35c8e6"
+    },
+    {
+      "id": "ui_button_pill_brass_pressed",
+      "file": "assets/ui_button_pill_brass_pressed.png",
+      "source": "sources/ui_button_pill_brass_pressed.svg",
+      "width": 512,
+      "height": 128,
+      "slot": "가로 버튼 · brass/pressed",
+      "border_lbrt": [
+        68,
+        0,
+        68,
+        0
+      ],
+      "border_ltrb": [
+        68,
+        0,
+        68,
+        0
+      ],
+      "notes": "높이 고정 비율. 글자 영역 [76,28,360,72].",
+      "method": "vector",
+      "sha256": "1985a9109761013840ac4f97e617f57ed28c819e7659cb0a53e2a724ae14c976"
+    },
+    {
+      "id": "ui_button_pill_ink",
+      "file": "assets/ui_button_pill_ink.png",
+      "source": "sources/ui_button_pill_ink.svg",
+      "width": 512,
+      "height": 128,
+      "slot": "가로 버튼 · ink/normal",
+      "border_lbrt": [
+        68,
+        0,
+        68,
+        0
+      ],
+      "border_ltrb": [
+        68,
+        0,
+        68,
+        0
+      ],
+      "notes": "높이 고정 비율. 글자 영역 [76,28,360,72].",
+      "method": "vector",
+      "sha256": "84feac4d9e274f6c65dc3166131696a6fec6c8b8e09e2e865fa475f307d52340"
+    },
+    {
+      "id": "ui_button_pill_ink_pressed",
+      "file": "assets/ui_button_pill_ink_pressed.png",
+      "source": "sources/ui_button_pill_ink_pressed.svg",
+      "width": 512,
+      "height": 128,
+      "slot": "가로 버튼 · ink/pressed",
+      "border_lbrt": [
+        68,
+        0,
+        68,
+        0
+      ],
+      "border_ltrb": [
+        68,
+        0,
+        68,
+        0
+      ],
+      "notes": "높이 고정 비율. 글자 영역 [76,28,360,72].",
+      "method": "vector",
+      "sha256": "e3bb9c95baf14c9f245b69c16ffed53144d14c80d72b93f51b8c905857355653"
+    },
+    {
+      "id": "ui_card_border_common",
+      "file": "assets/ui_card_border_common.png",
+      "source": "sources/ui_card_border_common.svg",
+      "width": 360,
+      "height": 520,
+      "slot": "가변 비율 카드 테두리 · common",
+      "border_lbrt": [
+        36,
+        36,
+        36,
+        36
+      ],
+      "border_ltrb": [
+        36,
+        36,
+        36,
+        36
+      ],
+      "notes": "중앙 완전 투명; 별도 ui_card_face_plate 아래 영역 배치. 최소 72×72.",
+      "method": "vector",
+      "sha256": "e5157f836fd0b1f951edc6cf9dd3be30b9f1fee723e3f2536cd6946b5a2e2f7b"
+    },
+    {
+      "id": "ui_card_border_flame",
+      "file": "assets/ui_card_border_flame.png",
+      "source": "sources/ui_card_border_flame.svg",
+      "width": 360,
+      "height": 520,
+      "slot": "가변 비율 카드 테두리 · flame",
+      "border_lbrt": [
+        36,
+        36,
+        36,
+        36
+      ],
+      "border_ltrb": [
+        36,
+        36,
+        36,
+        36
+      ],
+      "notes": "중앙 완전 투명; 별도 ui_card_face_plate 아래 영역 배치. 최소 72×72.",
+      "method": "vector",
+      "sha256": "b5c2df5afdfbd7d73c69196aab4524e88dfa98e67a26b026263c68e6c9bc367a"
+    },
+    {
+      "id": "ui_card_border_frost",
+      "file": "assets/ui_card_border_frost.png",
+      "source": "sources/ui_card_border_frost.svg",
+      "width": 360,
+      "height": 520,
+      "slot": "가변 비율 카드 테두리 · frost",
+      "border_lbrt": [
+        36,
+        36,
+        36,
+        36
+      ],
+      "border_ltrb": [
+        36,
+        36,
+        36,
+        36
+      ],
+      "notes": "중앙 완전 투명; 별도 ui_card_face_plate 아래 영역 배치. 최소 72×72.",
+      "method": "vector",
+      "sha256": "111b36765cfdf91c01c4b3df70df50d9c783feab20e97a430316871f622a7edd"
+    },
+    {
+      "id": "ui_card_border_void",
+      "file": "assets/ui_card_border_void.png",
+      "source": "sources/ui_card_border_void.svg",
+      "width": 360,
+      "height": 520,
+      "slot": "가변 비율 카드 테두리 · void",
+      "border_lbrt": [
+        36,
+        36,
+        36,
+        36
+      ],
+      "border_ltrb": [
+        36,
+        36,
+        36,
+        36
+      ],
+      "notes": "중앙 완전 투명; 별도 ui_card_face_plate 아래 영역 배치. 최소 72×72.",
+      "method": "vector",
+      "sha256": "fbd157924d41574c3c76a45f8d1cc30ba205fd3b612fbffae0b0b21e3455d0c5"
+    },
+    {
+      "id": "ui_card_border_volt",
+      "file": "assets/ui_card_border_volt.png",
+      "source": "sources/ui_card_border_volt.svg",
+      "width": 360,
+      "height": 520,
+      "slot": "가변 비율 카드 테두리 · volt",
+      "border_lbrt": [
+        36,
+        36,
+        36,
+        36
+      ],
+      "border_ltrb": [
+        36,
+        36,
+        36,
+        36
+      ],
+      "notes": "중앙 완전 투명; 별도 ui_card_face_plate 아래 영역 배치. 최소 72×72.",
+      "method": "vector",
+      "sha256": "858cad4181a93fb21a862b5f107833a997003e104ff6c59c758d147c79b7a3f3"
+    },
+    {
+      "id": "ui_card_face_plate",
+      "file": "assets/ui_card_face_plate.png",
+      "source": "sources/ui_card_face_plate.svg",
+      "width": 256,
+      "height": 256,
+      "slot": "넓거나 긴 카드의 독립 이름/효과 판",
+      "border_lbrt": [
+        12,
+        12,
+        12,
+        12
+      ],
+      "border_ltrb": [
+        12,
+        12,
+        12,
+        12
+      ],
+      "notes": "중앙 반투명 표현은 게임 alpha로 조절; 프레임과 분리해서 art aperture 비율 유지.",
+      "method": "vector",
+      "sha256": "07cc82b0fcb42c0e0c8a343cc7a21d8f5171b33d2218deac5360a8b1c00f1ab4"
+    },
+    {
+      "id": "ui_card_frame_common",
+      "file": "assets/ui_card_frame_common.png",
+      "source": "sources/ui_card_frame_common.svg",
+      "width": 360,
+      "height": 520,
+      "slot": "손패·보상 카드 완성 틀 · common",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "고정 비율 Simple; 그림 alpha 창 [28,30,304,186], 이름 [40,242,280,42], 효과 [40,315,280,160]. 184×266 권장.",
+      "method": "vector",
+      "sha256": "6ea62837efb5bb4ef61ab836eee3e2a8a9a6cc7a98bbf6e3665ace8dc44cb097"
+    },
+    {
+      "id": "ui_card_frame_flame",
+      "file": "assets/ui_card_frame_flame.png",
+      "source": "sources/ui_card_frame_flame.svg",
+      "width": 360,
+      "height": 520,
+      "slot": "손패·보상 카드 완성 틀 · flame",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "고정 비율 Simple; 그림 alpha 창 [28,30,304,186], 이름 [40,242,280,42], 효과 [40,315,280,160]. 184×266 권장.",
+      "method": "vector",
+      "sha256": "ba9c07f3fb401aa20dcabeb507152796aa3ffb52a1f0ab2b6c03472fef744c01"
+    },
+    {
+      "id": "ui_card_frame_frost",
+      "file": "assets/ui_card_frame_frost.png",
+      "source": "sources/ui_card_frame_frost.svg",
+      "width": 360,
+      "height": 520,
+      "slot": "손패·보상 카드 완성 틀 · frost",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "고정 비율 Simple; 그림 alpha 창 [28,30,304,186], 이름 [40,242,280,42], 효과 [40,315,280,160]. 184×266 권장.",
+      "method": "vector",
+      "sha256": "e29ff064383c3ce73f07d0b0ad5c226619af55e4cc975e34afd1ed15ea07dea2"
+    },
+    {
+      "id": "ui_card_frame_void",
+      "file": "assets/ui_card_frame_void.png",
+      "source": "sources/ui_card_frame_void.svg",
+      "width": 360,
+      "height": 520,
+      "slot": "손패·보상 카드 완성 틀 · void",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "고정 비율 Simple; 그림 alpha 창 [28,30,304,186], 이름 [40,242,280,42], 효과 [40,315,280,160]. 184×266 권장.",
+      "method": "vector",
+      "sha256": "124c1e6fd64c2b9df86c148b309aa5c96a4d4f2a90418f5db6ef83a368d38f5a"
+    },
+    {
+      "id": "ui_card_frame_volt",
+      "file": "assets/ui_card_frame_volt.png",
+      "source": "sources/ui_card_frame_volt.svg",
+      "width": 360,
+      "height": 520,
+      "slot": "손패·보상 카드 완성 틀 · volt",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "고정 비율 Simple; 그림 alpha 창 [28,30,304,186], 이름 [40,242,280,42], 효과 [40,315,280,160]. 184×266 권장.",
+      "method": "vector",
+      "sha256": "154a8f7a792b2f55faf5290506607d2ab5d3b8b19ab358db6f4c3f72f435efb4"
+    },
+    {
+      "id": "ui_cutin_plate",
+      "file": "assets/ui_cutin_plate.png",
+      "source": "sources/ui_cutin_plate.svg",
+      "width": 1600,
+      "height": 420,
+      "slot": "필살기 공통 대각선 컷인 판",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "캐릭터는 별도 기존 원본을 얹음. 투명 가장자리, 중앙 navy 반투명; 개인 모션/캐릭터 내용 없음.",
+      "method": "vector",
+      "sha256": "0be2ed21c654ed8275ab1564d948c36057bf633a7f5e47570cca6c5db203dbe5"
+    },
+    {
+      "id": "ui_drag_arrow_body_normal",
+      "file": "assets/ui_drag_arrow_body_normal.png",
+      "source": "sources/ui_drag_arrow_body_normal.svg",
+      "width": 32,
+      "height": 64,
+      "slot": "카드 끌기 몸통 · normal",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "세로 tile. 상하 가장자리의 연속 alpha는 의도적. 굴곡 경로는 게임이 배치.",
+      "method": "vector",
+      "sha256": "d3aca7eac270af6df78a0e589ea02db58ec8326945d8db1298f65885e4628443"
+    },
+    {
+      "id": "ui_drag_arrow_body_target",
+      "file": "assets/ui_drag_arrow_body_target.png",
+      "source": "sources/ui_drag_arrow_body_target.svg",
+      "width": 32,
+      "height": 64,
+      "slot": "카드 끌기 몸통 · target",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "세로 tile. 상하 가장자리의 연속 alpha는 의도적. 굴곡 경로는 게임이 배치.",
+      "method": "vector",
+      "sha256": "ecf0169bd589507524ae7df18e03ce6ab9340682c8ebe2f2ec9cad07267e06a0"
+    },
+    {
+      "id": "ui_drag_arrow_head_normal",
+      "file": "assets/ui_drag_arrow_head_normal.png",
+      "source": "sources/ui_drag_arrow_head_normal.svg",
+      "width": 96,
+      "height": 96,
+      "slot": "카드 끌기 화살촉 · normal",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "전방 -Y; pivot(.5,.5), 연결 anchor(.5,.68).",
+      "method": "vector",
+      "sha256": "479537f62993cf95ac7df1d0876c6dafeefe1be63982faa4a86b93f34ba6f70a"
+    },
+    {
+      "id": "ui_drag_arrow_head_target",
+      "file": "assets/ui_drag_arrow_head_target.png",
+      "source": "sources/ui_drag_arrow_head_target.svg",
+      "width": 96,
+      "height": 96,
+      "slot": "카드 끌기 화살촉 · target",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "전방 -Y; pivot(.5,.5), 연결 anchor(.5,.68).",
+      "method": "vector",
+      "sha256": "df22a5bd99452961fbab168e80a9e20b5c1e1d46397317c316129c17bb621817"
+    },
+    {
+      "id": "ui_gem_ap",
+      "file": "assets/ui_gem_ap.png",
+      "source": "originals/ui_gem_ap_generated.png",
+      "width": 200,
+      "height": 200,
+      "slot": "행동력 보석",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "1254px 생성 원본을 200px로 축소; 숫자 안전 rect [76,69,48,66].",
+      "method": "subscription-imagegen; mechanical downsample",
+      "sha256": "e0b0723743968f5b468081d863c544d33ebd41d498a50ab065ce089eafe97f79"
+    },
+    {
+      "id": "ui_gem_cost",
+      "file": "assets/ui_gem_cost.png",
+      "source": "sources/ui_gem_cost.svg",
+      "width": 96,
+      "height": 96,
+      "slot": "카드 비용 보석",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "숫자 안전 rect [28,27,40,42].",
+      "method": "vector",
+      "sha256": "5c14f61da0dda5e2af39f42c675dd0f689708da661da91c365e9ce5be6a4b699"
+    },
+    {
+      "id": "ui_hit_blunt_01",
+      "file": "assets/ui_hit_blunt_01.png",
+      "source": "sources/ui_hit_blunt_01.svg",
+      "width": 256,
+      "height": 256,
+      "slot": "타격 blunt · 프레임 1/6",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "중심 pivot(.5,.5); 순서 01→06, 60ms/장 제안(콘티 제안만). reduced-motion에서는 생략.",
+      "method": "vector",
+      "sha256": "05ba053a7a435f81ea2762816221135b83f9c75ed35289a7ad7ce5be04b45eeb"
+    },
+    {
+      "id": "ui_hit_blunt_02",
+      "file": "assets/ui_hit_blunt_02.png",
+      "source": "sources/ui_hit_blunt_02.svg",
+      "width": 256,
+      "height": 256,
+      "slot": "타격 blunt · 프레임 2/6",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "중심 pivot(.5,.5); 순서 01→06, 60ms/장 제안(콘티 제안만). reduced-motion에서는 생략.",
+      "method": "vector",
+      "sha256": "f2c2bc43372e8744d3a90ea7c75c0aae46080d207ee792b55ce1fb48a5592959"
+    },
+    {
+      "id": "ui_hit_blunt_03",
+      "file": "assets/ui_hit_blunt_03.png",
+      "source": "sources/ui_hit_blunt_03.svg",
+      "width": 256,
+      "height": 256,
+      "slot": "타격 blunt · 프레임 3/6",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "중심 pivot(.5,.5); 순서 01→06, 60ms/장 제안(콘티 제안만). reduced-motion에서는 생략.",
+      "method": "vector",
+      "sha256": "8f308b64401c45e384f3119473756af1f9efb2d2fb07946ecd9f6139b82c2a43"
+    },
+    {
+      "id": "ui_hit_blunt_04",
+      "file": "assets/ui_hit_blunt_04.png",
+      "source": "sources/ui_hit_blunt_04.svg",
+      "width": 256,
+      "height": 256,
+      "slot": "타격 blunt · 프레임 4/6",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "중심 pivot(.5,.5); 순서 01→06, 60ms/장 제안(콘티 제안만). reduced-motion에서는 생략.",
+      "method": "vector",
+      "sha256": "737cf688f7d41578726d0976819b688522d4c6d6b973d5624ee3a5e0f3b2904c"
+    },
+    {
+      "id": "ui_hit_blunt_05",
+      "file": "assets/ui_hit_blunt_05.png",
+      "source": "sources/ui_hit_blunt_05.svg",
+      "width": 256,
+      "height": 256,
+      "slot": "타격 blunt · 프레임 5/6",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "중심 pivot(.5,.5); 순서 01→06, 60ms/장 제안(콘티 제안만). reduced-motion에서는 생략.",
+      "method": "vector",
+      "sha256": "18426a6f1df6ecb31712e87caa3c435292c2cbd9ce45d260473c43f182ff45d5"
+    },
+    {
+      "id": "ui_hit_blunt_06",
+      "file": "assets/ui_hit_blunt_06.png",
+      "source": "sources/ui_hit_blunt_06.svg",
+      "width": 256,
+      "height": 256,
+      "slot": "타격 blunt · 프레임 6/6",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "중심 pivot(.5,.5); 순서 01→06, 60ms/장 제안(콘티 제안만). reduced-motion에서는 생략.",
+      "method": "vector",
+      "sha256": "af0eb9124efa9681accf29e9ffbdbc02a239255a0dff5031249361510a8dd1e6"
+    },
+    {
+      "id": "ui_hit_pierce_01",
+      "file": "assets/ui_hit_pierce_01.png",
+      "source": "sources/ui_hit_pierce_01.svg",
+      "width": 256,
+      "height": 256,
+      "slot": "타격 pierce · 프레임 1/6",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "중심 pivot(.5,.5); 순서 01→06, 60ms/장 제안(콘티 제안만). reduced-motion에서는 생략.",
+      "method": "vector",
+      "sha256": "f4a3a94b7358ee3e129d26796d1497e6c5374837de76d46c6059243db82ac464"
+    },
+    {
+      "id": "ui_hit_pierce_02",
+      "file": "assets/ui_hit_pierce_02.png",
+      "source": "sources/ui_hit_pierce_02.svg",
+      "width": 256,
+      "height": 256,
+      "slot": "타격 pierce · 프레임 2/6",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "중심 pivot(.5,.5); 순서 01→06, 60ms/장 제안(콘티 제안만). reduced-motion에서는 생략.",
+      "method": "vector",
+      "sha256": "cfb6ca9ae04e03a74a4471d3ee06776b273dae4276c9d13b2f14fcef23d9096a"
+    },
+    {
+      "id": "ui_hit_pierce_03",
+      "file": "assets/ui_hit_pierce_03.png",
+      "source": "sources/ui_hit_pierce_03.svg",
+      "width": 256,
+      "height": 256,
+      "slot": "타격 pierce · 프레임 3/6",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "중심 pivot(.5,.5); 순서 01→06, 60ms/장 제안(콘티 제안만). reduced-motion에서는 생략.",
+      "method": "vector",
+      "sha256": "9ecc58dc93de0e6697e67f6e4278d9c86a113ff8692cf6e1a13a8e698fd02056"
+    },
+    {
+      "id": "ui_hit_pierce_04",
+      "file": "assets/ui_hit_pierce_04.png",
+      "source": "sources/ui_hit_pierce_04.svg",
+      "width": 256,
+      "height": 256,
+      "slot": "타격 pierce · 프레임 4/6",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "중심 pivot(.5,.5); 순서 01→06, 60ms/장 제안(콘티 제안만). reduced-motion에서는 생략.",
+      "method": "vector",
+      "sha256": "9030934e468b1733ad35110065de54464a1d479333d584ffc9612e13516be22a"
+    },
+    {
+      "id": "ui_hit_pierce_05",
+      "file": "assets/ui_hit_pierce_05.png",
+      "source": "sources/ui_hit_pierce_05.svg",
+      "width": 256,
+      "height": 256,
+      "slot": "타격 pierce · 프레임 5/6",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "중심 pivot(.5,.5); 순서 01→06, 60ms/장 제안(콘티 제안만). reduced-motion에서는 생략.",
+      "method": "vector",
+      "sha256": "12f1ee19ccfc99ea935b972da721c0f7a04c9db8f71b0c64ca660fb63eb240e2"
+    },
+    {
+      "id": "ui_hit_pierce_06",
+      "file": "assets/ui_hit_pierce_06.png",
+      "source": "sources/ui_hit_pierce_06.svg",
+      "width": 256,
+      "height": 256,
+      "slot": "타격 pierce · 프레임 6/6",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "중심 pivot(.5,.5); 순서 01→06, 60ms/장 제안(콘티 제안만). reduced-motion에서는 생략.",
+      "method": "vector",
+      "sha256": "fbd4f6c1b303087b2b09230692a8413f7ddfe9552ee6d704a55c9c6540b4c76a"
+    },
+    {
+      "id": "ui_hit_slash_01",
+      "file": "assets/ui_hit_slash_01.png",
+      "source": "sources/ui_hit_slash_01.svg",
+      "width": 256,
+      "height": 256,
+      "slot": "타격 slash · 프레임 1/6",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "중심 pivot(.5,.5); 순서 01→06, 60ms/장 제안(콘티 제안만). reduced-motion에서는 생략.",
+      "method": "vector",
+      "sha256": "5b6beba94b26c471fd669fd3ab1761adf15ea2a2e097f26ee190adc8e032cda6"
+    },
+    {
+      "id": "ui_hit_slash_02",
+      "file": "assets/ui_hit_slash_02.png",
+      "source": "sources/ui_hit_slash_02.svg",
+      "width": 256,
+      "height": 256,
+      "slot": "타격 slash · 프레임 2/6",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "중심 pivot(.5,.5); 순서 01→06, 60ms/장 제안(콘티 제안만). reduced-motion에서는 생략.",
+      "method": "vector",
+      "sha256": "1e34377723389daea6f4eb913aad0d4bf789da21126365da1c215b5a788cf754"
+    },
+    {
+      "id": "ui_hit_slash_03",
+      "file": "assets/ui_hit_slash_03.png",
+      "source": "sources/ui_hit_slash_03.svg",
+      "width": 256,
+      "height": 256,
+      "slot": "타격 slash · 프레임 3/6",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "중심 pivot(.5,.5); 순서 01→06, 60ms/장 제안(콘티 제안만). reduced-motion에서는 생략.",
+      "method": "vector",
+      "sha256": "939ebbffabda01f55afbd89e729f77ae23a219c6e93b74ce2c1466b4a450ad59"
+    },
+    {
+      "id": "ui_hit_slash_04",
+      "file": "assets/ui_hit_slash_04.png",
+      "source": "sources/ui_hit_slash_04.svg",
+      "width": 256,
+      "height": 256,
+      "slot": "타격 slash · 프레임 4/6",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "중심 pivot(.5,.5); 순서 01→06, 60ms/장 제안(콘티 제안만). reduced-motion에서는 생략.",
+      "method": "vector",
+      "sha256": "0682ea9ad5acf9374acf773a25d2544bfbb653623fce521047f1911e081dac8c"
+    },
+    {
+      "id": "ui_hit_slash_05",
+      "file": "assets/ui_hit_slash_05.png",
+      "source": "sources/ui_hit_slash_05.svg",
+      "width": 256,
+      "height": 256,
+      "slot": "타격 slash · 프레임 5/6",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "중심 pivot(.5,.5); 순서 01→06, 60ms/장 제안(콘티 제안만). reduced-motion에서는 생략.",
+      "method": "vector",
+      "sha256": "1a03d2a9686368107ad8812fae4fdfbb708bfcbab2e56f2e13f9cdfb2ece9b09"
+    },
+    {
+      "id": "ui_hit_slash_06",
+      "file": "assets/ui_hit_slash_06.png",
+      "source": "sources/ui_hit_slash_06.svg",
+      "width": 256,
+      "height": 256,
+      "slot": "타격 slash · 프레임 6/6",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "중심 pivot(.5,.5); 순서 01→06, 60ms/장 제안(콘티 제안만). reduced-motion에서는 생략.",
+      "method": "vector",
+      "sha256": "26eb448ab96f8f5b3d4afc54299e880db92bebaa5cbc08c04da1f96dd754eec8"
+    },
+    {
+      "id": "ui_hp_frame_enemy",
+      "file": "assets/ui_hp_frame_enemy.png",
+      "source": "sources/ui_hp_frame_enemy.svg",
+      "width": 256,
+      "height": 40,
+      "slot": "enemy 체력 막대 가장자리",
+      "border_lbrt": [
+        20,
+        0,
+        20,
+        0
+      ],
+      "border_ltrb": [
+        20,
+        0,
+        20,
+        0
+      ],
+      "notes": "가로 slice만; 높이 40→20 균등 축소. fill rect [20,14,216,12].",
+      "method": "vector",
+      "sha256": "98d9e89009375a9789a7fede13fe3571c7acf3561915f45c8e373f471b8e7aa1"
+    },
+    {
+      "id": "ui_hp_frame_party",
+      "file": "assets/ui_hp_frame_party.png",
+      "source": "sources/ui_hp_frame_party.svg",
+      "width": 256,
+      "height": 40,
+      "slot": "party 체력 막대 가장자리",
+      "border_lbrt": [
+        20,
+        0,
+        20,
+        0
+      ],
+      "border_ltrb": [
+        20,
+        0,
+        20,
+        0
+      ],
+      "notes": "가로 slice만; 높이 40→20 균등 축소. fill rect [20,14,216,12].",
+      "method": "vector",
+      "sha256": "b28db5e8d8d99c662c5f671ab63faba26a4d0de0fbc6a36edff1a0fd23c83ffb"
+    },
+    {
+      "id": "ui_intent_attack_01",
+      "file": "assets/ui_intent_attack_01.png",
+      "source": "sources/ui_intent_attack_01.svg",
+      "width": 128,
+      "height": 128,
+      "slot": "현재/다음 공격 의도 · 시각 단계 1",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "피해량→단계 매핑은 게임의 기존 정책을 사용. 새 수치 규칙 없음.",
+      "method": "vector",
+      "sha256": "e46fae69a1009e1de9eda134143681798810b7713b27488e7317653614418bc7"
+    },
+    {
+      "id": "ui_intent_attack_02",
+      "file": "assets/ui_intent_attack_02.png",
+      "source": "sources/ui_intent_attack_02.svg",
+      "width": 128,
+      "height": 128,
+      "slot": "현재/다음 공격 의도 · 시각 단계 2",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "피해량→단계 매핑은 게임의 기존 정책을 사용. 새 수치 규칙 없음.",
+      "method": "vector",
+      "sha256": "e38174d30f84c1e5bae43625b49b6bbc355cc100e8d6df1006b4722ecc469263"
+    },
+    {
+      "id": "ui_intent_attack_03",
+      "file": "assets/ui_intent_attack_03.png",
+      "source": "sources/ui_intent_attack_03.svg",
+      "width": 128,
+      "height": 128,
+      "slot": "현재/다음 공격 의도 · 시각 단계 3",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "피해량→단계 매핑은 게임의 기존 정책을 사용. 새 수치 규칙 없음.",
+      "method": "vector",
+      "sha256": "c23ed1a7821ec48d47093732f1a9884da5d29a838d04581c4d5c5c3b133086e9"
+    },
+    {
+      "id": "ui_intent_attack_04",
+      "file": "assets/ui_intent_attack_04.png",
+      "source": "sources/ui_intent_attack_04.svg",
+      "width": 128,
+      "height": 128,
+      "slot": "현재/다음 공격 의도 · 시각 단계 4",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "피해량→단계 매핑은 게임의 기존 정책을 사용. 새 수치 규칙 없음.",
+      "method": "vector",
+      "sha256": "7c376b9a46ba0c87041de38d410b2814c3878f847724200e4afb5dfad9ae0cf9"
+    },
+    {
+      "id": "ui_intent_attack_05",
+      "file": "assets/ui_intent_attack_05.png",
+      "source": "sources/ui_intent_attack_05.svg",
+      "width": 128,
+      "height": 128,
+      "slot": "현재/다음 공격 의도 · 시각 단계 5",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "피해량→단계 매핑은 게임의 기존 정책을 사용. 새 수치 규칙 없음.",
+      "method": "vector",
+      "sha256": "06e1dcd8c7ea6ed6a5f2a1852e1e89b9bf4e59a2e7d3e53a630fd837487cdd96"
+    },
+    {
+      "id": "ui_intent_attack_06",
+      "file": "assets/ui_intent_attack_06.png",
+      "source": "sources/ui_intent_attack_06.svg",
+      "width": 128,
+      "height": 128,
+      "slot": "현재/다음 공격 의도 · 시각 단계 6",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "피해량→단계 매핑은 게임의 기존 정책을 사용. 새 수치 규칙 없음.",
+      "method": "vector",
+      "sha256": "e26e4c67d00b9bf4da24b63ad5d47abda0dfbed96cfc4b859a8b7a6a01579b96"
+    },
+    {
+      "id": "ui_intent_attack_07",
+      "file": "assets/ui_intent_attack_07.png",
+      "source": "sources/ui_intent_attack_07.svg",
+      "width": 128,
+      "height": 128,
+      "slot": "현재/다음 공격 의도 · 시각 단계 7",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "피해량→단계 매핑은 게임의 기존 정책을 사용. 새 수치 규칙 없음.",
+      "method": "vector",
+      "sha256": "021452796edf81343f23bedd3068b0d2f0795e5290aa8ab63a89a1c5aa181d51"
+    },
+    {
+      "id": "ui_intent_attack_debuff",
+      "file": "assets/ui_intent_attack_debuff.png",
+      "source": "sources/ui_intent_attack_debuff.svg",
+      "width": 128,
+      "height": 128,
+      "slot": "적 머리 위 의도 · attack_debuff",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "",
+      "method": "vector",
+      "sha256": "8d342c17dce3c71057de57749c55f167b0a5e62e8452dd319daaa0e349915283"
+    },
+    {
+      "id": "ui_intent_charge",
+      "file": "assets/ui_intent_charge.png",
+      "source": "sources/ui_intent_charge.svg",
+      "width": 128,
+      "height": 128,
+      "slot": "적 머리 위 의도 · charge",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "",
+      "method": "vector",
+      "sha256": "0bbc43ac2c228c2727a66b219b75dead0e14685204ddfc38e2dcc07770d1dc02"
+    },
+    {
+      "id": "ui_intent_curse",
+      "file": "assets/ui_intent_curse.png",
+      "source": "sources/ui_intent_curse.svg",
+      "width": 128,
+      "height": 128,
+      "slot": "적 머리 위 의도 · curse",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "",
+      "method": "vector",
+      "sha256": "903ba88b882b2c0dc6d67d411b1a4521309a93818356ead9f8fe399ea7994703"
+    },
+    {
+      "id": "ui_intent_debuff",
+      "file": "assets/ui_intent_debuff.png",
+      "source": "sources/ui_intent_debuff.svg",
+      "width": 128,
+      "height": 128,
+      "slot": "적 머리 위 의도 · debuff",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "",
+      "method": "vector",
+      "sha256": "e7191ef022b4d7e7e59384981000858aa3432fb1e9124f36dc5e1afb3723e23c"
+    },
+    {
+      "id": "ui_intent_defend",
+      "file": "assets/ui_intent_defend.png",
+      "source": "sources/ui_intent_defend.svg",
+      "width": 128,
+      "height": 128,
+      "slot": "적 머리 위 의도 · defend",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "",
+      "method": "vector",
+      "sha256": "aead7572859c394cd2a3a5f4c43ca7071b1e0eeb9880e1869ffb2b877124fec8"
+    },
+    {
+      "id": "ui_intent_defend_all",
+      "file": "assets/ui_intent_defend_all.png",
+      "source": "sources/ui_intent_defend_all.svg",
+      "width": 128,
+      "height": 128,
+      "slot": "적 머리 위 의도 · defend_all",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "",
+      "method": "vector",
+      "sha256": "fd4ea873f19d6e7f7d1b59671277219b28281826bfa3dbc13cdfea3d501184e9"
+    },
+    {
+      "id": "ui_intent_expose",
+      "file": "assets/ui_intent_expose.png",
+      "source": "sources/ui_intent_expose.svg",
+      "width": 128,
+      "height": 128,
+      "slot": "적 머리 위 의도 · expose",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "",
+      "method": "vector",
+      "sha256": "d3f67a75670ec33834a7797c408001918e4ad779d013b90f39798e998e83e921"
+    },
+    {
+      "id": "ui_intent_heal",
+      "file": "assets/ui_intent_heal.png",
+      "source": "sources/ui_intent_heal.svg",
+      "width": 128,
+      "height": 128,
+      "slot": "적 머리 위 의도 · heal",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "",
+      "method": "vector",
+      "sha256": "c5e8bafb92a20054bca4e00d26cefb8f9de7bdc6ea85e73ffca81e16ff153b3e"
+    },
+    {
+      "id": "ui_intent_reflect",
+      "file": "assets/ui_intent_reflect.png",
+      "source": "sources/ui_intent_reflect.svg",
+      "width": 128,
+      "height": 128,
+      "slot": "적 머리 위 의도 · reflect",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "",
+      "method": "vector",
+      "sha256": "ebfed550585abeea96e1af650e616eb4b1adad9d427be7311ef8196f87d513f9"
+    },
+    {
+      "id": "ui_intent_strength",
+      "file": "assets/ui_intent_strength.png",
+      "source": "sources/ui_intent_strength.svg",
+      "width": 128,
+      "height": 128,
+      "slot": "적 머리 위 의도 · strength",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "",
+      "method": "vector",
+      "sha256": "4de611e665b40b27668287344e34ff61cea87be81a6aa617c272b11ddb51a5ec"
+    },
+    {
+      "id": "ui_intent_summon",
+      "file": "assets/ui_intent_summon.png",
+      "source": "sources/ui_intent_summon.svg",
+      "width": 128,
+      "height": 128,
+      "slot": "적 머리 위 의도 · summon",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "",
+      "method": "vector",
+      "sha256": "dc417bd79d28fc78f0c252fa98dc92829af4fd426b0fb409eb986a4c48192ae9"
+    },
+    {
+      "id": "ui_intent_unknown",
+      "file": "assets/ui_intent_unknown.png",
+      "source": "sources/ui_intent_unknown.svg",
+      "width": 128,
+      "height": 128,
+      "slot": "적 머리 위 의도 · unknown",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "",
+      "method": "vector",
+      "sha256": "1fc320856adff77c20cd8650ba01e124e24f25e8241eb8b02d83f5f0567a27e6"
+    },
+    {
+      "id": "ui_node_medal_current",
+      "file": "assets/ui_node_medal_current.png",
+      "source": "sources/ui_node_medal_current.svg",
+      "width": 256,
+      "height": 256,
+      "slot": "지도 노드 테두리 · current",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "중앙 r88 완전 alpha. 현재=4마름모, 가능=3갈매기, 지나감=체크.",
+      "method": "vector",
+      "sha256": "93c5b1e109670cb10d8446ab0ce7dac7a3103503efec5566f72505481a4b9c19"
+    },
+    {
+      "id": "ui_node_medal_reachable",
+      "file": "assets/ui_node_medal_reachable.png",
+      "source": "sources/ui_node_medal_reachable.svg",
+      "width": 256,
+      "height": 256,
+      "slot": "지도 노드 테두리 · reachable",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "중앙 r88 완전 alpha. 현재=4마름모, 가능=3갈매기, 지나감=체크.",
+      "method": "vector",
+      "sha256": "3c836f1a176bd90ea7ec06b06aa97e229ae3f4aa0b232069326bf6cfe78a7c67"
+    },
+    {
+      "id": "ui_node_medal_visited",
+      "file": "assets/ui_node_medal_visited.png",
+      "source": "sources/ui_node_medal_visited.svg",
+      "width": 256,
+      "height": 256,
+      "slot": "지도 노드 테두리 · visited",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "중앙 r88 완전 alpha. 현재=4마름모, 가능=3갈매기, 지나감=체크.",
+      "method": "vector",
+      "sha256": "4070a1b4a17d27c6f1ac5e88d59e8acc55d478e9c8ac6aa1879df0d663865984"
+    },
+    {
+      "id": "ui_panel_frame",
+      "file": "assets/ui_panel_frame.png",
+      "source": "sources/ui_panel_frame.svg",
+      "width": 256,
+      "height": 256,
+      "slot": "반투명 패널의 별도 장식 경계",
+      "border_lbrt": [
+        40,
+        40,
+        40,
+        40
+      ],
+      "border_ltrb": [
+        40,
+        40,
+        40,
+        40
+      ],
+      "notes": "중앙 완전 투명. 판 배경은 ui_card_face_plate 또는 게임의 #141c31.",
+      "method": "vector",
+      "sha256": "65096d46a35864874f224a20785f6a767667dc2ab074420efde8c4de2f220000"
+    },
+    {
+      "id": "ui_part_circuit",
+      "file": "assets/ui_part_circuit.png",
+      "source": "sources/ui_part_circuit.svg",
+      "width": 128,
+      "height": 128,
+      "slot": "부품 슬롯 종류 · circuit",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "슬롯 종류 그림이며 개별 부품의 효과/등급을 뜻하지 않음.",
+      "method": "vector",
+      "sha256": "b91d55c2b02a6cc344dece7400efbb791523b5eb7443c2357b1817919c6b8cd9"
+    },
+    {
+      "id": "ui_part_engraving",
+      "file": "assets/ui_part_engraving.png",
+      "source": "sources/ui_part_engraving.svg",
+      "width": 128,
+      "height": 128,
+      "slot": "부품 슬롯 종류 · engraving",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "슬롯 종류 그림이며 개별 부품의 효과/등급을 뜻하지 않음.",
+      "method": "vector",
+      "sha256": "374d0a96eeb0473fe6010512a6f948214a7208237be192b62c3e7f5dc4c939b7"
+    },
+    {
+      "id": "ui_pile_discard",
+      "file": "assets/ui_pile_discard.png",
+      "source": "sources/ui_pile_discard.svg",
+      "width": 160,
+      "height": 160,
+      "slot": "카드 더미 · discard",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "숫자는 아이콘 바깥 별도 배지.",
+      "method": "vector",
+      "sha256": "d52b8d39ffb72db84bcb202b6648ae7c384cbe04be0056c6aa21c9ff3bbde192"
+    },
+    {
+      "id": "ui_pile_draw",
+      "file": "assets/ui_pile_draw.png",
+      "source": "sources/ui_pile_draw.svg",
+      "width": 160,
+      "height": 160,
+      "slot": "카드 더미 · draw",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "숫자는 아이콘 바깥 별도 배지.",
+      "method": "vector",
+      "sha256": "68ead8c6ce19c7adbfd4311958650fabd52026db123c60187a221e525b8f6c98"
+    },
+    {
+      "id": "ui_portrait_frame",
+      "file": "assets/ui_portrait_frame.png",
+      "source": "sources/ui_portrait_frame.svg",
+      "width": 200,
+      "height": 240,
+      "slot": "저장·일반 파티 세로 초상 · normal",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "투명 중앙; 초상 crop mask는 게임에서 제공. battle은 원형 링 사용.",
+      "method": "vector",
+      "sha256": "7c707f651ef44d8c4213b105cd74baea68d619a75f806cf926f1e28da4d05a5d"
+    },
+    {
+      "id": "ui_portrait_frame_ready",
+      "file": "assets/ui_portrait_frame_ready.png",
+      "source": "sources/ui_portrait_frame_ready.svg",
+      "width": 200,
+      "height": 240,
+      "slot": "저장·일반 파티 세로 초상 · ready",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "투명 중앙; 초상 crop mask는 게임에서 제공. battle은 원형 링 사용.",
+      "method": "vector",
+      "sha256": "4058f7695b602360de8a3fb550601d8f3053273ba9a02131f5d97e29ac049ed8"
+    },
+    {
+      "id": "ui_portrait_ring",
+      "file": "assets/ui_portrait_ring.png",
+      "source": "sources/ui_portrait_ring.svg",
+      "width": 160,
+      "height": 160,
+      "slot": "파티 초상 원형 틀 · 기본",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "중앙 alpha 구멍 r60. 게이지는 r68의 별도 게임 렌더; 이 PNG에는 채움 없음.",
+      "method": "vector",
+      "sha256": "b7b5b6ad4994862f2f79f2851647528f49c9a3893701c0b97648d32505929a39"
+    },
+    {
+      "id": "ui_portrait_ring_ready",
+      "file": "assets/ui_portrait_ring_ready.png",
+      "source": "sources/ui_portrait_ring_ready.svg",
+      "width": 160,
+      "height": 160,
+      "slot": "파티 초상 원형 틀 · 필살기 준비",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "정지 상태에도 4개 추가 금빛 갈매기 표시로 구분.",
+      "method": "vector",
+      "sha256": "6f723014c7278d2b4e75c5c1619c4053dd1ccf4a2d03c2c905e7dc2c79e9f7f2"
+    },
+    {
+      "id": "ui_rail_after_empty",
+      "file": "assets/ui_rail_after_empty.png",
+      "source": "sources/ui_rail_after_empty.svg",
+      "width": 320,
+      "height": 96,
+      "slot": "예약 레일 · after/empty",
+      "border_lbrt": [
+        44,
+        0,
+        44,
+        0
+      ],
+      "border_ltrb": [
+        44,
+        0,
+        44,
+        0
+      ],
+      "notes": "내용 안전 rect [48,14,224,68]. 가로만 stretch, 원본 높이는 균등 축소. now=1, next=2, after=3 마름모.",
+      "method": "vector",
+      "sha256": "86f9ad7046c6f49fbd3ee460a20c0560a6198cfe1dc4adb3bcdfac5d6100b2bb"
+    },
+    {
+      "id": "ui_rail_after_reserved",
+      "file": "assets/ui_rail_after_reserved.png",
+      "source": "sources/ui_rail_after_reserved.svg",
+      "width": 320,
+      "height": 96,
+      "slot": "예약 레일 · after/reserved",
+      "border_lbrt": [
+        44,
+        0,
+        44,
+        0
+      ],
+      "border_ltrb": [
+        44,
+        0,
+        44,
+        0
+      ],
+      "notes": "내용 안전 rect [48,14,224,68]. 가로만 stretch, 원본 높이는 균등 축소. now=1, next=2, after=3 마름모.",
+      "method": "vector",
+      "sha256": "de46e28b0e0b78dd264acf07c280e3288e2f2773e3bd8c9a74fc7b02f2494c75"
+    },
+    {
+      "id": "ui_rail_after_sealed",
+      "file": "assets/ui_rail_after_sealed.png",
+      "source": "sources/ui_rail_after_sealed.svg",
+      "width": 320,
+      "height": 96,
+      "slot": "예약 레일 · after/sealed",
+      "border_lbrt": [
+        44,
+        0,
+        44,
+        0
+      ],
+      "border_ltrb": [
+        44,
+        0,
+        44,
+        0
+      ],
+      "notes": "내용 안전 rect [48,14,224,68]. 가로만 stretch, 원본 높이는 균등 축소. now=1, next=2, after=3 마름모.",
+      "method": "vector",
+      "sha256": "9c72ec69505616762f9b328abd531c07580bd9e732211415e815d7ec0a0eb865"
+    },
+    {
+      "id": "ui_rail_next_empty",
+      "file": "assets/ui_rail_next_empty.png",
+      "source": "sources/ui_rail_next_empty.svg",
+      "width": 320,
+      "height": 96,
+      "slot": "예약 레일 · next/empty",
+      "border_lbrt": [
+        44,
+        0,
+        44,
+        0
+      ],
+      "border_ltrb": [
+        44,
+        0,
+        44,
+        0
+      ],
+      "notes": "내용 안전 rect [48,14,224,68]. 가로만 stretch, 원본 높이는 균등 축소. now=1, next=2, after=3 마름모.",
+      "method": "vector",
+      "sha256": "04440d8542e8fbb62dce6497daf6442596319395387cbd4ba8c7c4ee84ba14f6"
+    },
+    {
+      "id": "ui_rail_next_reserved",
+      "file": "assets/ui_rail_next_reserved.png",
+      "source": "sources/ui_rail_next_reserved.svg",
+      "width": 320,
+      "height": 96,
+      "slot": "예약 레일 · next/reserved",
+      "border_lbrt": [
+        44,
+        0,
+        44,
+        0
+      ],
+      "border_ltrb": [
+        44,
+        0,
+        44,
+        0
+      ],
+      "notes": "내용 안전 rect [48,14,224,68]. 가로만 stretch, 원본 높이는 균등 축소. now=1, next=2, after=3 마름모.",
+      "method": "vector",
+      "sha256": "51f8c11359769176df5922524abe55120f815b538c799a415af58da07a4ace26"
+    },
+    {
+      "id": "ui_rail_next_sealed",
+      "file": "assets/ui_rail_next_sealed.png",
+      "source": "sources/ui_rail_next_sealed.svg",
+      "width": 320,
+      "height": 96,
+      "slot": "예약 레일 · next/sealed",
+      "border_lbrt": [
+        44,
+        0,
+        44,
+        0
+      ],
+      "border_ltrb": [
+        44,
+        0,
+        44,
+        0
+      ],
+      "notes": "내용 안전 rect [48,14,224,68]. 가로만 stretch, 원본 높이는 균등 축소. now=1, next=2, after=3 마름모.",
+      "method": "vector",
+      "sha256": "41a411aba0ea5132647b2863b38fc138af97d7d6043729a6cd2f74b4c348edeb"
+    },
+    {
+      "id": "ui_rail_now_empty",
+      "file": "assets/ui_rail_now_empty.png",
+      "source": "sources/ui_rail_now_empty.svg",
+      "width": 320,
+      "height": 96,
+      "slot": "예약 레일 · now/empty",
+      "border_lbrt": [
+        44,
+        0,
+        44,
+        0
+      ],
+      "border_ltrb": [
+        44,
+        0,
+        44,
+        0
+      ],
+      "notes": "내용 안전 rect [48,14,224,68]. 가로만 stretch, 원본 높이는 균등 축소. now=1, next=2, after=3 마름모.",
+      "method": "vector",
+      "sha256": "277caa0eb2e9608f18a55d9d616929e6459fb6b6c24a721f47546d26d1751905"
+    },
+    {
+      "id": "ui_rail_now_reserved",
+      "file": "assets/ui_rail_now_reserved.png",
+      "source": "sources/ui_rail_now_reserved.svg",
+      "width": 320,
+      "height": 96,
+      "slot": "예약 레일 · now/reserved",
+      "border_lbrt": [
+        44,
+        0,
+        44,
+        0
+      ],
+      "border_ltrb": [
+        44,
+        0,
+        44,
+        0
+      ],
+      "notes": "내용 안전 rect [48,14,224,68]. 가로만 stretch, 원본 높이는 균등 축소. now=1, next=2, after=3 마름모.",
+      "method": "vector",
+      "sha256": "8b7f71fc5074408eaf15d8401dc86a70e98a168524ec878fa0340855a26cff7d"
+    },
+    {
+      "id": "ui_rail_now_sealed",
+      "file": "assets/ui_rail_now_sealed.png",
+      "source": "sources/ui_rail_now_sealed.svg",
+      "width": 320,
+      "height": 96,
+      "slot": "예약 레일 · now/sealed",
+      "border_lbrt": [
+        44,
+        0,
+        44,
+        0
+      ],
+      "border_ltrb": [
+        44,
+        0,
+        44,
+        0
+      ],
+      "notes": "내용 안전 rect [48,14,224,68]. 가로만 stretch, 원본 높이는 균등 축소. now=1, next=2, after=3 마름모.",
+      "method": "vector",
+      "sha256": "60b28d2d67751f6b5764ab12de4147bf7571885c3d3ec8351b54e0c4d61042b7"
+    },
+    {
+      "id": "ui_ribbon_title",
+      "file": "assets/ui_ribbon_title.png",
+      "source": "sources/ui_ribbon_title.svg",
+      "width": 512,
+      "height": 96,
+      "slot": "지도/적/장소 이름 리본",
+      "border_lbrt": [
+        48,
+        0,
+        48,
+        0
+      ],
+      "border_ltrb": [
+        48,
+        0,
+        48,
+        0
+      ],
+      "notes": "글자 안전 rect [56,22,400,52].",
+      "method": "vector",
+      "sha256": "14226b207f5f3ede60c18fd232f86d4f0322fbd05909dd8706cf17bc15262063"
+    },
+    {
+      "id": "ui_shield_block",
+      "file": "assets/ui_shield_block.png",
+      "source": "sources/ui_shield_block.svg",
+      "width": 64,
+      "height": 64,
+      "slot": "HP 왼쪽 방어 수치 받침",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "숫자 안전 영역 x24..40, y18..34; 초상/파티별 HP 의미를 새로 만들지 않음.",
+      "method": "vector",
+      "sha256": "5f7d07e58a794eaf3fcb322f010a6735cdad0d85b1b2c14d8e4fc0f615125165"
+    },
+    {
+      "id": "ui_status_block",
+      "file": "assets/ui_status_block.png",
+      "source": "sources/ui_status_block.svg",
+      "width": 64,
+      "height": 64,
+      "slot": "상태 칩 · block",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "",
+      "method": "vector",
+      "sha256": "5f7d07e58a794eaf3fcb322f010a6735cdad0d85b1b2c14d8e4fc0f615125165"
+    },
+    {
+      "id": "ui_status_burn",
+      "file": "assets/ui_status_burn.png",
+      "source": "sources/ui_status_burn.svg",
+      "width": 64,
+      "height": 64,
+      "slot": "상태 칩 · burn",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "",
+      "method": "vector",
+      "sha256": "33103c0ff96a7efbc51cfbb92bd43ff7528c5e61e0e38e20ba4a28d8cba81d70"
+    },
+    {
+      "id": "ui_status_counter",
+      "file": "assets/ui_status_counter.png",
+      "source": "sources/ui_status_counter.svg",
+      "width": 64,
+      "height": 64,
+      "slot": "상태 칩 · counter",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "",
+      "method": "vector",
+      "sha256": "9e60b7f9592e18db4fbc622876942f5aac0c71767819c0ca86e3322e284cf296"
+    },
+    {
+      "id": "ui_status_debt",
+      "file": "assets/ui_status_debt.png",
+      "source": "sources/ui_status_debt.svg",
+      "width": 64,
+      "height": 64,
+      "slot": "상태 칩 · debt",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "",
+      "method": "vector",
+      "sha256": "fb246b8821ed88f90f1d37d8d280b8bba8bc318857e084dc6e788ede170773c0"
+    },
+    {
+      "id": "ui_status_echo",
+      "file": "assets/ui_status_echo.png",
+      "source": "sources/ui_status_echo.svg",
+      "width": 64,
+      "height": 64,
+      "slot": "상태 칩 · echo",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "",
+      "method": "vector",
+      "sha256": "750bb7540e35885d6059c53942cde4af578bf38c5cbc28a6ad818c4e8e4058b9"
+    },
+    {
+      "id": "ui_status_mark",
+      "file": "assets/ui_status_mark.png",
+      "source": "sources/ui_status_mark.svg",
+      "width": 64,
+      "height": 64,
+      "slot": "상태 칩 · mark",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "",
+      "method": "vector",
+      "sha256": "de9e1db149caeed12351b025751bb2dc556c12b9b9977eab13a79aa0ed7c4c16"
+    },
+    {
+      "id": "ui_status_reflect",
+      "file": "assets/ui_status_reflect.png",
+      "source": "sources/ui_status_reflect.svg",
+      "width": 64,
+      "height": 64,
+      "slot": "상태 칩 · reflect",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "",
+      "method": "vector",
+      "sha256": "30f92cf7b2f3f4cf5ef4d0c3ced02cda813a33b31f18453228b523b2a381fa0f"
+    },
+    {
+      "id": "ui_status_strength",
+      "file": "assets/ui_status_strength.png",
+      "source": "sources/ui_status_strength.svg",
+      "width": 64,
+      "height": 64,
+      "slot": "상태 칩 · strength",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "",
+      "method": "vector",
+      "sha256": "031d9ef854f3794f065c9cfd5bfd84024da3626fed464174acddd99b98f22a28"
+    },
+    {
+      "id": "ui_status_vulnerable",
+      "file": "assets/ui_status_vulnerable.png",
+      "source": "sources/ui_status_vulnerable.svg",
+      "width": 64,
+      "height": 64,
+      "slot": "상태 칩 · vulnerable",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "",
+      "method": "vector",
+      "sha256": "e23c820b2f8aff3c472f606c69da06399f0633ebe2cc6a325f7af5f6b2e0099b"
+    },
+    {
+      "id": "ui_status_weak",
+      "file": "assets/ui_status_weak.png",
+      "source": "sources/ui_status_weak.svg",
+      "width": 64,
+      "height": 64,
+      "slot": "상태 칩 · weak",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "",
+      "method": "vector",
+      "sha256": "d8cf59392df9ba8a1d747b3ae445707b5b5c90eacfd4b2477ec5bd3fa94cac54"
+    },
+    {
+      "id": "ui_timeline_slot_empty",
+      "file": "assets/ui_timeline_slot_empty.png",
+      "source": "sources/ui_timeline_slot_empty.svg",
+      "width": 128,
+      "height": 128,
+      "slot": "구형 작은 시간표 칸 · empty",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "stage-first 가로 레일은 ui_rail_* 사용.",
+      "method": "vector",
+      "sha256": "e403b0a602ccce2891163e48fe654ee42a389627e4746f85f1405e28a7502bee"
+    },
+    {
+      "id": "ui_timeline_slot_reserved",
+      "file": "assets/ui_timeline_slot_reserved.png",
+      "source": "sources/ui_timeline_slot_reserved.svg",
+      "width": 128,
+      "height": 128,
+      "slot": "구형 작은 시간표 칸 · reserved",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "stage-first 가로 레일은 ui_rail_* 사용.",
+      "method": "vector",
+      "sha256": "24d759d97b22545db0a5282856c0e90d32561ee3b2db3eaadf170ab3f16864f7"
+    },
+    {
+      "id": "ui_timeline_slot_sealed",
+      "file": "assets/ui_timeline_slot_sealed.png",
+      "source": "sources/ui_timeline_slot_sealed.svg",
+      "width": 128,
+      "height": 128,
+      "slot": "구형 작은 시간표 칸 · sealed",
+      "border_lbrt": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "border_ltrb": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "stage-first 가로 레일은 ui_rail_* 사용.",
+      "method": "vector",
+      "sha256": "1a47ae3b2795e08a8222e62b6acb78db6976f163bb29db43e88d8aa63bda5bf6"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "score": 87,
+  "verdict": "revise",
+  "category_match": true,
+  "differences": ["The card accent hues are not yet identical to the earlier ico_attribute_* originals; the volt accent is purple while the existing volt glyph is yellow."],
+  "suggestions": ["Use exact existing attribute colours: volt #ffd84d, flame #ff7a3d, frost #7cc8ff, void #b68cff. Keep these accents confined to card edges."],
+  "reasoning": "Transparent export margins and slice checks now pass. The attribute binding needs this palette correction before handoff."
+}

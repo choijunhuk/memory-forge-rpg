@@ -1,0 +1,45 @@
+**REQUEST CHANGES.** Found two high-severity defects and five medium-severity defects. No files were edited. All four working files match the supplied diff exactly.
+
+1. **HIGH — HP artwork covers the live fill and damage trail.**  
+   [MemoryForgeExpeditionClient.cs:1599](/Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:1599) appends `BarFrame` above the existing fill. Both HP PNGs have an opaque navy center; sampled center pixels are `(13,19,34,255)`. Consequently, the frame conceals the central portion of both party/enemy gauges and their drain feedback. The fill also occupies the whole track instead of the kit’s specified inner rectangle `[20,14,216,12]`.  
+   **Failure scenario:** damage an enemy; its numeric HP changes, but the frame obscures the meaningful colored gauge. Put the artwork behind the live bars and map their geometry to the documented inner rectangle.
+
+2. **HIGH — Drops outside the battle frame can spend a card.**  
+   [MemoryForgeExpeditionClient.cs:2552](/Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:2552) checks only the pointer’s **Y coordinate** before allowing the fallback play. It never bounds X.  
+   **Failure scenario:** on a wide phone, drag a targetless card into a side letterbox while remaining vertically level with the stage; releasing plays it. With one living enemy, the same fallback supplies that enemy without calling `Shown`, even when its slot failed the preceding mask check. Require a bounded stage rectangle before applying either fallback.
+
+3. **MEDIUM — A drag can also trigger the card’s click.**  
+   [MemoryForgeExpeditionClient.cs:2601](/Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:2601) never clears `PointerEventData.eligibleForClick`. Because `Button` and `CardDrag` occupy the same GameObject, the installed uGUI module does not perform its usual cancellation for different press/drag owners. It dispatches the click before `OnEndDrag`.  
+   **Failure scenario:** scroll the hand sideways and release over the originating card. `SelectCard` runs, clears the selected mode, rebuilds the view and resets the hand’s scroll position. Cancel click eligibility once a drag begins. The new test manually dispatches drag callbacks and therefore misses this release ordering.
+
+4. **MEDIUM — Phone header hit areas overlap the reservation scroll.**  
+   [MemoryForgeExpeditionClient.cs:1397](/Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:1397) places `TimelineSlots` at Y=84–142, while the header and pacing buttons’ phone hit areas extend down to Y=105/120/130 at [line 1842](/Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:1842).  
+   **Failure scenario:** reserve enough named cards to make the rail horizontally scrollable. Its viewport intersects unrelated header/pacing controls, violating the test’s foreign-scroll contract and stealing part of their advertised 48dp areas. Separate the rail from the header touch band.
+
+5. **MEDIUM — Fanning clips the cards’ mode labels.**  
+   [MemoryForgeExpeditionClient.cs:1691](/Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:1691) lowers and rotates unselected faces inside a viewport sized for their untransformed height.  
+   **Failure scenario:** with five cards, an outer 184-wide card is lowered 20 units and tilted 5°. Its mode-label rectangle reaches approximately Y=182 inside the phone viewport ending at Y=172; desktop geometry similarly reaches Y=222 inside a 212-high viewport. The label is partly masked. Reserve transformed bounds or reposition the fan’s informational content. `AssertWhole` checks text generation, so it cannot detect this ancestor-mask clipping.
+
+6. **MEDIUM — Right/middle-button drags can play cards.**  
+   [MemoryForgeExpeditionClient.cs:2604](/Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:2604) accepts upward drags without checking `e.button`. Unlike the forwarded `ScrollRect` handlers, it accepts non-left buttons.  
+   **Failure scenario:** right-drag a playable card onto an enemy and release; `DragPlay` commits it although ordinary button activation accepts only left clicks. Apply the same button guard throughout the drag lifecycle.
+
+7. **MEDIUM — Drag previews required by the spec are absent.**  
+   [MemoryForgeExpeditionClient.cs:2507](/Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:2507) draws an arrow and generic zone highlight but never obtains a forecast.  
+   **Failure scenario:** hold a damage card over an enemy or reservation lane: neither predicted HP loss nor reservation contents appear before release. The spec explicitly requires both. Query Core’s existing forecast API for the candidate request.
+
+Additional **spec compliance gaps** remain:
+
+- [Stage bounds, line 1368](/Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:1368) allocate only **42.4%** of desktop height, or **38.7%** at touch=130, versus the specified majority-stage layout.
+- [Rail groups, line 1391](/Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:1391) omit “now” and the aligned future enemy threats.
+- [Party gauge, line 1470](/Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:1470) remains a linear bar rather than the specified portrait gauge ring.
+
+An **integration issue outside the supplied diff** also needs correction: the inspected [HP texture metadata](/Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Resources/Art/UI/battle/ui_hp_frame_party.png.meta:12) enables mipmaps and uses trilinear filtering, contrary to the kit’s bilinear/no-mipmap instructions. Runtime LBRT borders, `Sliced` assignments and sideways scaling otherwise appear consistent.
+
+No direct Run mutation or new combat rule was found: `DragPlay` reaches the existing `ConfirmCard` command path. View replacement cancels an aiming drag through `OnDisable`. Banner, Burst, Punch, Flipbook, DrainLater and Lunge have reduced-motion stop checks; the arrow has no timed animation.
+
+**Optional opinion:** after correctness fixes, shorten the remaining intent prose to the specified icon/number hierarchy.
+
+Validation was read-only source inspection, installed-uGUI event tracing, geometry calculations and PNG sampling. **Unity PlayMode, visual playback and physical-phone acceptance: NOT_RUN.** Additional reviewer/architect lanes were unavailable under the repository’s fixed-model constraint; this is not a two-lane approval.
+
+

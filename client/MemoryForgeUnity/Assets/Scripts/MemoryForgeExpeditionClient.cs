@@ -242,13 +242,14 @@ namespace MemoryForge.Client
         readonly HashSet<string> sheetsBefore = new HashSet<string>(StringComparer.Ordinal), sheetsDrawn = new HashSet<string>(StringComparer.Ordinal);
         readonly Dictionary<string, RectTransform> enemyArt = new Dictionary<string, RectTransform>(StringComparer.Ordinal), enemyRoots = new Dictionary<string, RectTransform>(StringComparer.Ordinal),
             enemyBars = new Dictionary<string, RectTransform>(StringComparer.Ordinal), handFaces = new Dictionary<string, RectTransform>(StringComparer.Ordinal),
-            ultRects = new Dictionary<string, RectTransform>(StringComparer.Ordinal);
+            ultRects = new Dictionary<string, RectTransform>(StringComparer.Ordinal), railZones = new Dictionary<string, RectTransform>(StringComparer.Ordinal),
+            partyArt = new Dictionary<string, RectTransform>(StringComparer.Ordinal); // railZones: the rail's drop zones; partyArt: each member's SD
         RectTransform? partyPanel, partyBar, partyStatus; // partyStatus: the party HP strip, where a party hit shows (it holds no control)
         string? lastScreen, seenBattle;
-        int seenHp = -1;
+        int seenHp = -1, seenTurn = -1;
         readonly Dictionary<string, (int Hp, int Block)> seenEnemies = new Dictionary<string, (int, int)>(StringComparer.Ordinal);
         readonly HashSet<string> seenHand = new HashSet<string>(StringComparer.Ordinal);
-        (string Name, Vector2 From, string? Target, string Mode)? flight, launched; // launched: a sent play's origin; flight: one that committed
+        (string Name, Vector2 From, string? Target, string Mode, string? Owner)? flight, launched; // launched: a sent play's origin; flight: one that committed
         const string PracticeNote = "연습용 탐사 · 진행과 기억은 이 세션에만 있어요. 앱을 닫으면 사라져요.";
 
         void OnEnable()
@@ -402,13 +403,13 @@ namespace MemoryForge.Client
             var args = new List<KeyValuePair<string, BattleArgument>> { Pair("uid", uid), Pair("mode", mode), Pair("target", aim),
                 new KeyValuePair<string, BattleArgument>("picks", BattleArgument.Array((picks ?? new string[0]).Select(BattleArgument.String))) };
             string name = BattleCardName(uid);
-            Launch(handFaces, uid, name, mode, aim);
+            Launch(handFaces, uid, name, mode, aim, CardOwner(uid));
             return SendBattle("play", BattleArgument.Object(args), mode == "now" ? name + " 사용" : name + " 예약");
         }
         public bool EndTurn() => SendBattle("end", null, "적의 행동과 예약 해결을 마쳤어요.");
         public bool UseUltimate(string actor)
         {
-            Launch(ultRects, actor, "필살기", "now", target);
+            Launch(ultRects, actor, "필살기", "now", target, actor);
             return SendBattle("ult", BattleArgument.Object(new[] { Pair("actor", actor), Pair("target", target) }), "필살기를 사용했어요.");
         }
         // The sheet's own pick, auto and cancel are its explicit owners: they pass the recovery/summary gate (Barred) only, never the
@@ -555,7 +556,10 @@ namespace MemoryForge.Client
                 else OpenActionPresentation(rows, kind == "ult", s.Phase != "BATTLE");
             }
             flight = ok && response != null && kind != "end" ? launched : null; launched = null; // only a committed play or ultimate flies
-            Render(); return ok;
+            Render();
+            // §14.3: a reservation row's 0.3 s counts from the moment the summary is on screen, not from before its redraw.
+            if (ok && kind == "end" && turnSummary != null && summaryRevealAt > 0) summaryRevealAt = Time.realtimeSinceStartup + ReservedRevealSeconds;
+            return ok;
         }
 
         public bool TakeCard(string id) => Do(() => run!.TakeCard(id), "카드를 덱에 넣었어요.");
@@ -1166,7 +1170,7 @@ namespace MemoryForge.Client
             letterbox.anchorMin = Vector2.zero; letterbox.anchorMax = Vector2.one; letterbox.offsetMin = letterbox.offsetMax = Vector2.zero;
             frame = Box(canvasRoot, "ExpeditionFrame", 0, 0, 1600, 900, Background);
             frame.anchorMin = frame.anchorMax = new Vector2(0.5f, 0.5f); frame.pivot = new Vector2(0.5f, 0.5f); frame.anchoredPosition = Vector2.zero;
-            enemyArt.Clear(); enemyRoots.Clear(); enemyBars.Clear(); handFaces.Clear(); ultRects.Clear(); partyPanel = null; partyBar = null; partyStatus = null;
+            enemyArt.Clear(); enemyRoots.Clear(); enemyBars.Clear(); handFaces.Clear(); ultRects.Clear(); railZones.Clear(); partyArt.Clear(); partyPanel = null; partyBar = null; partyStatus = null;
             string screen = "recovery";
             if (recovery != null) RecoveryView(); // before the header and every normal view: the failed Run may not be renderable
             else
@@ -1217,7 +1221,7 @@ namespace MemoryForge.Client
             float dim = screen == "BATTLE" ? 0.12f : screen == "MAP" ? 0.32f : screen == "VICTORY" || screen == "DEFEAT" || screen == "result" ? 0.58f : 0.46f;
             Box(frame!, "Scrim", 0, 0, 1600, 900, Alpha(Background, dim));
             Deco(frame!, "HeaderShade", Fade(false), 0, 0, 1600, 170, Alpha(Background, 0.9f));
-            if (screen == "BATTLE") Deco(frame!, "ScrimLow", Fade(true), 0, 420, 1600, 480, Alpha(Background, 0.95f));
+            if (screen == "BATTLE") Deco(frame!, "ScrimLow", Fade(true), 0, ActionsTop - 160, 1600, 1060 - ActionsTop, Alpha(Background, 0.95f));
             else Deco(frame!, "FloorShade", Fade(true), 0, 620, 1600, 280, Alpha(Background, 0.75f));
         }
 
@@ -1239,8 +1243,11 @@ namespace MemoryForge.Client
             var medal = Gem(frame!, "HeaderMedal", 20, 12, 62, Hex("1b2540"), Alpha(Brass, 0.95f));
             Icon(medal, "Glyph", "ico_node_forge", 15, 15, 32, 32, Brass);
             Strong(Label(frame!, "기억 공방", 92, 18, 176, 48, 34, Brass, FontStyle.Bold));
-            Label(frame!, "탐사 연습 · " + string.Join("·", ReferenceParty.Select(CharacterName)) + " 기준 파티", 272, 16, 640, 30, 21, Ink);
-            Label(frame!, Location(s) + "  ·  " + PhaseName(s), 272, 46, 640, 28, 18, Muted);
+            if (s.Phase != "BATTLE") // in battle the place moves to the top band and pace/skip take this room (ActionStrip)
+            {
+                Label(frame!, "탐사 연습 · " + string.Join("·", ReferenceParty.Select(CharacterName)) + " 기준 파티", 272, 16, 640, 30, 21, Ink);
+                Label(frame!, Location(s) + "  ·  " + PhaseName(s), 272, 46, 640, 28, 18, Muted);
+            }
             // On a phone their touch areas reach from the top of the frame down (never above it), over the status strip's text.
             float reach = Math.Max(minTouch, 72);
             Button(frame!, "DeckButton", "덱 " + s.Deck.Count + "장" + (s.PartsFound.Count != 0 ? " · 부품 " + s.PartsFound.Count : ""), 930, 18, 240, 54, () => Open(Sheet.Deck), Line, 22, hit: Band(930, 0, 240, reach));
@@ -1327,6 +1334,14 @@ namespace MemoryForge.Client
         }
 
         // ───────── battle ─────────
+        // BATTLE-STAGE-20261018 (reports/battle_ui_research_20261018/README.md): the stage takes the middle of the screen and the
+        // information sits on the bodies, not on panels. Top band: the place (left), the reservation rail 다음 턴 | 다다음 턴 (centre),
+        // the piles and coins (right), with the committed action's rows on a strip under it. Stage: the party on the left on a diagonal,
+        // each member its own ultimate button with its gauge, the shared HP bar and the party's statuses at their feet; the enemies on
+        // the right, each with its intent over its head and its name, HP, crack, weak points and statuses at its feet. Bottom: the card
+        // row (forecast, modes, confirm) over the fanned hand, the action-point gem at its left and the end-turn dial at its right. A
+        // hand card can also be dragged up: dropped on an enemy (or, for a card without a target, anywhere on the stage) it plays now,
+        // dropped on the rail's 다음 턴 or 다다음 턴 it reserves, through the same selection and confirm a tap takes (DragPlay).
         void BattleView(RunState s)
         {
             var b = s.Battle!; var rules = data!.Memory.Battle.Rules;
@@ -1336,146 +1351,147 @@ namespace MemoryForge.Client
             // Corner brackets mark every living enemy while the chosen card still needs a target.
             bool aiming = b.Phase == "PLAYER" && prepared == null && selectedCard != null && target == null && run!.BattleNeedsTarget(selectedCard) != null;
 
-            // The HUD: the shared party HP on a framed plate with its gem (left); the turn, the party's statuses, the piles and coins as
-            // chips (middle); the action points on a brass gem plate (right).
-            var top = Frame(frame!, "PartyStatus", 24, 86, 600, 72); partyStatus = top;
-            Gem(top, "HpGem", 10, 8, 56, Memory, Hex("1d6b63"));
-            Strong(Label(top, "파티 체력  " + b.Hp + " / " + b.MaxHp, 78, 2, 500, 38, 27, Ink, FontStyle.Bold));
-            partyBar = Bar(top, "PartyHp", 78, 44, 502, 16, b.Hp, b.MaxHp, Memory);
-            var stats = new List<(string, Color, Color, Color?)> { (b.Turn + "턴", Background, Brass, null) };
-            foreach (string stat in new[] { "방어 " + b.Block, "반격 " + b.Counter, "부채 " + b.Debts.Sum(d => d.N), "잔향 " + b.Echo + "/" + b.EchoMax })
-                stats.Add((stat, Ink, Alpha(Background, 0.86f), LineEdge));
+            Grow(Label(frame!, Location(s) + " · " + PhaseName(s), 32, TopBandY + 2, 330, 56, 15, Muted));
             var piles = new List<(string, Color, Color, Color?)>();
-            foreach (string pile in new[] { "뽑을 " + b.Zones.Draw.Count, "버림 " + b.Zones.Discard.Count, "소멸 " + b.Zones.Exhaust.Count, "동전 " + s.Coins })
-                piles.Add((pile, Muted, Alpha(Background, 0.8f), null));
-            string party = MemoryForgeBattleClient.PartyStatusText(b); // each of the party's statuses as its own brass chip, in Core's order
-            if (party.Length != 0) foreach (string buff in party.Split(new[] { " · " }, StringSplitOptions.None)) piles.Add((buff, Brass, Alpha(Brass, 0.14f), Alpha(Brass, 0.6f)));
-            // Between the HP and AP plates, above the stage (y 162): the stats on one row and the piles and statuses on the next; when
-            // they do not fit (many statuses at once) every chip flows over three compact rows instead, so none ever reaches the stage.
-            const float chipsLeft = 636, chipsRight = 1222;
-            if (ChipsWidth(stats, 30, 17) <= chipsRight - chipsLeft && ChipsWidth(piles, 28, 16) <= chipsRight - chipsLeft)
-            { Chips(frame!, "Status", stats, chipsLeft, 88, chipsRight, 30, 17); Chips(frame!, "Pile", piles, chipsLeft, 124, chipsRight, 28, 16); }
-            else Chips(frame!, "Status", stats.Concat(piles), chipsLeft, 87, chipsRight, 22, 14, 3);
-            var ap = Frame(frame!, "ApChip", 1228, 86, 340, 72, Alpha(Brass, 0.8f), new Color(0.13f, 0.11f, 0.07f, 0.94f));
-            Deco(ap, "ApGlow", Halo, -16, -16, 104, 104, Alpha(Brass, 0.5f));
-            Gem(ap, "ApGem", 10, 8, 56, Brass, Hex("7a5a22"));
-            Strong(Label(ap, "행동력  " + b.Ap, 80, 4, 252, 64, 36, Brass, FontStyle.Bold, TextAnchor.MiddleLeft));
-
-            // The party stands on the stage's left (no panel): each member's SD over a floor shadow, a name pill edged in the attribute's
-            // colour, the attribute and gauge, and the ultimate (Ult:<id>), which keeps a whole column's height below its gauge as its
-            // touch area on a phone.
-            var actors = Box(frame!, "Party", 32, 162, PartyWidth(b), 296, Color.clear); partyPanel = actors;
-            Deco(actors, "Floor", Halo, -40, 150, PartyWidth(b) + 80, 120, Alpha(Memory, 0.13f));
-            float column = (PartyWidth(b) - 16) / Math.Max(1, b.Actors.Count);
-            for (int i = 0; i < b.Actors.Count; i++)
-            {
-                var actor = b.Actors[i]; float x = 8 + i * column; bool ready = actor.Gauge >= rules.GaugeMax; var tone = AttributeColor(actor.Attr);
-                Picture(actors, "Portrait:" + actor.Id, Art("Characters/char_" + actor.Id + "_sd"), x - 2, -6, column + 4, 128, Color.white);
-                var plate = Plate(actors, "NamePlate", x + 4, 120, column - 8, 30, Alpha(Background, 0.9f), Alpha(tone, 0.85f), 1, true);
-                Icon(plate, "Attribute", "ico_attribute_" + actor.Attr, 8, 6, 18, 18, tone);
-                Label(plate, actor.Name, 22, 0, column - 34, 30, 20, Ink, FontStyle.Normal, TextAnchor.MiddleCenter);
-                Label(actors, Attribute(actor.Attr) + " " + actor.Gauge + "/" + rules.GaugeMax, x, 154, column, 22, 15, ready ? Brass : Muted, FontStyle.Normal, TextAnchor.MiddleCenter);
-                Bar(actors, "Gauge", x + 8, 180, column - 16, 8, actor.Gauge, rules.GaugeMax, Brass);
-                var ult = Gate(Button(actors, "Ult:" + actor.Id, ready ? "필살기" : "충전 중", x + 4, 198, column - 8, 60, () => UseUltimate(actor.Id), ready ? Brass : Line, 20,
-                    hit: Band(x + 1, 162, column - 2, Math.Max(130, minTouch))), ready && b.Phase == "PLAYER");
-                ultRects[actor.Id] = Inner(ult);
-                if (ready && ult.interactable) Breathe(Glow(Inner(ult), Brass));
-            }
-            EnemyStage(b, rules, aiming);
-
-            // The memory timeline: a clock mark and its counts, then one socket per time slot (next, then after) in Core's order.
-            var timeline = Plate(frame!, "Timeline", 32, 464, 1536, 58, Alpha(Background, 0.74f), Alpha(Memory, 0.3f), 1, true);
-            var cells = MemoryForgeBattleClient.TimelineCells(b, rules);
-            Clock(timeline, "Clock", 16, 5, 24, Memory);
-            Label(timeline, "기억 시간표", 46, 2, 156, 30, 22, Memory, FontStyle.Bold);
-            int Filled(string group) => cells.Count(c => c.Group == group && c.Kind == "card");
-            int Room(string group) => cells.Count(c => c.Group == group && (c.Kind == "card" || c.Kind == "empty"));
-            Label(timeline, "다음 " + Filled("next") + "/" + Room("next") + "  ·  다다음 " + Filled("after") + "/" + Room("after"), 16, 30, 184, 24, 16, Muted);
-            int split = cells.FindIndex(c => c.Group == "after");
-            float slot = Math.Max(118, Math.Min(204, (1312f - 16 - 8 * Math.Max(0, cells.Count - 1)) / Math.Max(1, cells.Count)));
-            float slotsWidth = cells.Count * (slot + 8) + 16;
-            RectTransform slots = slotsWidth > 1316 ? Scroll(timeline, "TimelineSlots", 204, 0, 1316, 58, slotsWidth, 58, Color.clear) : Box(timeline, "TimelineSlots", 204, 0, 1316, 58, Color.clear);
-            for (int i = 0; i < cells.Count; i++)
-            {
-                var cell = cells[i];
-                string text = (cell.Group == "next" ? "다음" : "다다음") + "  " + (cell.Kind == "card" ? run!.BattleEffectiveCard(cell.Uid!).Name
-                    : cell.Kind == "empty" ? "빈 칸" : cell.Kind == "sealed" ? "봉인" : "-");
-                Color fill = cell.Kind == "card" ? Alpha(Memory, 0.24f) : cell.Kind == "sealed" ? Alpha(Danger, 0.16f) : Alpha(Background, cell.Kind == "none" ? 0.35f : 0.85f);
-                Color? edge = cell.Kind == "card" ? Memory : cell.Kind == "sealed" ? Danger : cell.Kind == "empty" ? Alpha(Memory, 0.38f) : (Color?)null;
-                var box = Plate(slots, "ReservationSlot", i * (slot + 8) + (split >= 0 && i >= split ? 16 : 0), 5, slot, 48, fill, edge, cell.Kind == "card" ? 2 : 1);
-                Label(box, text, 8, 2, slot - 16, 44, 19, cell.Kind == "card" ? Ink : cell.Kind == "sealed" ? Danger : Muted, cell.Kind == "card" ? FontStyle.Bold : FontStyle.Normal, TextAnchor.MiddleCenter);
-                if (cell.Kind == "card") Sheen(box, slot, 48, 0.1f);
-            }
-
+            foreach (string pile in new[] { "뽑을 " + b.Zones.Draw.Count, "버림 " + b.Zones.Discard.Count, "소멸 " + b.Zones.Exhaust.Count })
+                piles.Add((pile, Ink, Alpha(Background, 0.86f), LineEdge));
+            piles.Add(("동전 " + s.Coins, Brass, Alpha(Background, 0.86f), Alpha(Brass, 0.6f)));
+            Chips(frame!, "Pile", piles, 1568 - Math.Min(ChipsWidth(piles, 28, 16), 330), TopBandY + 2, 1568, 28, 16);
+            Rail(b, rules, 376, 1226);
             ActionStrip();
-            var actions = Frame(frame!, "CardActions", 32, 576, 1536, 100);
-            string hint = "카드를 고르고 방식을 정한 뒤 사용을 확정하세요. 고르는 동안에는 아무것도 쓰지 않아요."; var hintColor = Muted;
-            var intent = prepared;
-            if (intent != null)
-            {
-                // The waiting intent's own request: its frozen card, mode, target and picks (unmade picks are Core's automatic choice).
-                var forecast = run!.BattleForecast(intent.Uid, intent.Mode, intent.Target, intent.Picks);
-                hint = ForecastLine(forecast, forecast.Error == null && intent.Picks.Count < intent.Requests.Sum(r => r.Count)); hintColor = ForecastColor(forecast);
-            }
-            else if (selectedCard != null && selectedMode != null && b.Phase == "PLAYER")
-            {
-                // The exact request ConfirmCard leads to; a pick card's unmade picks are Core's automatic choice. Recomputed on Render only.
-                var forecast = run!.BattleForecast(selectedCard, selectedMode, target);
-                bool auto = forecast.Error == null && ChoiceRequests(run.BattleEffectiveCard(selectedCard), selectedMode, data!.Memory.Battle).Count != 0;
-                hint = ForecastLine(forecast, auto); hintColor = ForecastColor(forecast);
-            }
-            TrackNotice(Label(actions, notice.Length != 0 ? notice : hint, 18, 4, 1498, 30, 21, notice.Length != 0 ? (LastError == null ? Muted : Danger) : hintColor), hint, hintColor);
-            if (intent != null) PreparedControls(actions, b, intent);
-            else if (selectedCard != null && b.Phase == "PLAYER")
-            {
-                string uid = selectedCard; var def = run!.BattleEffectiveCard(uid);
-                Deco(actions, "Pointer", Diamond, 16, 59, 16, 16, Memory);
-                Strong(Label(actions, def.Name + " → " + (b.Enemies.FirstOrDefault(e => e.Uid == target)?.Name ?? (run.BattleNeedsTarget(uid) == null ? "파티" : "적 선택")), 40, 38, 318, 56, 23, Ink, FontStyle.Bold, TextAnchor.MiddleLeft));
-                Button(actions, "CardInfoButton", "카드 설명", InfoRect.x, InfoRect.y, InfoRect.width, InfoRect.height, () => ShowHandCardInfo(uid), Line, 21, hit: CardRow(InfoRect.x, InfoRect.width));
-                int i = 0;
-                foreach (string mode in run.BattleAllowedModes(uid))
-                {
-                    string? error = run.BattleCheck(uid, mode, target);
-                    string caption = ModeName(mode) + " · 비용 " + run.BattleCostOf(uid, mode) + "\n" + (error == null ? ModeTiming(mode) : ErrorText(error));
-                    bool chosen = selectedMode == mode;
-                    Button(actions, "Mode:" + mode, caption, 532 + i++ * 262, 38, 250, 56, () => SelectMode(mode), chosen ? (mode == "now" ? Brass : Memory) : Line, 18,
-                        chosen ? (Color?)null : mode == "now" ? Alpha(Brass, 0.7f) : Alpha(Memory, 0.7f), chosen ? 0 : 1, CardRow(532 + (i - 1) * 262, 250))
-                        .interactable = error == null || error == "BAD_TARGET" || error == "FIXED_MARK_REQUIRED";
-                }
-                string? reason = selectedMode == null ? "MODE" : run.BattleCheck(uid, selectedMode, target);
-                bool plain = reason == null && ChoiceRequests(def, selectedMode!, data!.Memory.Battle).Count == 0;
-                string confirm = reason == null ? (plain ? ConfirmCaption(actionRows != null) : "카드 고르기")
-                    : reason == "MODE" ? "방식 선택" : reason == "BAD_TARGET" || reason == "FIXED_MARK_REQUIRED" ? "대상 선택" : ErrorText(reason);
-                // Not gated by the display: during one it confirms the single unsent intent (or opens its sheet) and spends nothing.
-                var button = Button(actions, "ConfirmCard", confirm, ConfirmRect.x, ConfirmRect.y, ConfirmRect.width, ConfirmRect.height, () => ConfirmCard(), reason == null ? Brass : Line, 22,
-                    hit: CardRow(ConfirmRect.x, ConfirmRect.width));
-                button.interactable = reason == null;
-                if (plain) confirmCaption = button.GetComponentInChildren<Text>();
-                if (reason == null && actionRows == null) Breathe(Glow(Inner(button), Alpha(Brass, 0.8f))); // ready: the next step glows
-            }
-
+            PartyStage(b, rules);
+            EnemyStage(b, rules, aiming);
+            CardActions(b);
             HandDock(b);
+            ApGem(b);
             EndTurnDial(b);
         }
-        // The party panel is wide enough for one 48dp ultimate per member (344 off phones); the enemy band takes the rest.
-        float PartyWidth(BattleState b) => Math.Max(344, 16 + Math.Max(1, b.Actors.Count) * (minTouch + 4));
-        // The ordinary card text and confirm rectangles; a waiting intent swaps them (see PreparedControls).
-        static readonly Rect InfoRect = new Rect(370, 38, 150, 56), ConfirmRect = new Rect(1318, 38, 200, 56);
-        // The card row's touch band in CardActions coordinates (the panel sits at frame y 576), and the strip's in its own (y 528).
-        Rect? CardRow(float x, float width) => Band(x, BandSplit - 576, width, minTouch);
-        Rect? PaceRow(float x, float width) => Band(x, BandSplit - minTouch - 528, width, minTouch);
-        // The bottom-right exit's hit area: below every scrolling panel (they end at y 788), so it never takes a tap meant for one.
+        // The battle's bands (frame units, y down). On a phone the card row's controls grow to 48dp and the hand starts lower, so the
+        // stage gives up the height; every other band keeps its place.
+        const float TopBandY = 84, HandLeft = 136, HandRight = 1370;
+        // The action strip's band: under the top band off phones; on a phone below the header's touch band and 48dp tall (pace and skip).
+        float StripTop => minTouch > 0 ? Math.Max(150, Math.Max(72, minTouch) + 2) : 150;
+        float StripHeight => Math.Max(42, minTouch);
+        float StageTop => StripTop + StripHeight + 6;
+        float HandTop => minTouch > 0 ? 720 : 680;
+        float ControlsHeight => Math.Max(56, minTouch);
+        float ActionsTop => HandTop - 4 - 34 - ControlsHeight;
+        float StageBottom => ActionsTop - 6;
+        // The card row's controls: a 56-unit face centred in its touch band (34 units below the row's top, under the forecast line).
+        float ControlY => 34 + (ControlsHeight - 56) / 2;
+        Rect InfoRect => new Rect(370, ControlY, 150, 56);
+        Rect ConfirmRect => new Rect(1318, ControlY, 200, 56);
+        Rect? CardRow(float x, float width) => Band(x, 34, width, ControlsHeight);
+        // The party is wide enough for one 48dp ultimate per member (440 off phones); the enemy band takes the rest.
+        float PartyWidth(BattleState b) => Math.Max(440, 8 + Math.Max(1, b.Actors.Count) * (minTouch + 4));
 
+        // The reservation rail (Timeline): a clock mark, then each time group, 다음 턴 and 다다음 턴, as its label with its counts and its
+        // sockets (ReservationSlot) in Core's order, each socket sized to its words. A reserved card's socket is lit with its name, a
+        // sealed one is red. Each group's rectangle is also where a dragged card is dropped to reserve it for that time (railZones).
+        void Rail(BattleState b, BattleRules rules, float left, float right)
+        {
+            var cells = MemoryForgeBattleClient.TimelineCells(b, rules);
+            string Caption((string Group, string Kind, string? Uid) c) => (c.Group == "next" ? "다음" : "다다음") + "  "
+                + (c.Kind == "card" ? run!.BattleEffectiveCard(c.Uid!).Name : c.Kind == "empty" ? "빈 칸" : c.Kind == "sealed" ? "봉인" : "-");
+            float Socket((string Group, string Kind, string? Uid) c) => Math.Max(96, TextWidth(Caption(c), 17) + 44); // the kit socket's caps take 19 each
+            string Head(string group) => (group == "next" ? "다음 턴 " : "다다음 턴 ") + cells.Count(c => c.Group == group && c.Kind == "card") + "/"
+                + cells.Count(c => c.Group == group && (c.Kind == "card" || c.Kind == "empty"));
+            string[] groups = { "next", "after" };
+            const float gap = 6, h = 58, socket = 42, lead = 42;
+            float content = lead + groups.Sum(g => TextWidth(Head(g), 16) + 10 + cells.Where(c => c.Group == g).Sum(c => Socket(c) + gap) + 16);
+            // It never scrolls (on a phone the header's touch band reaches over it): past its room every socket narrows alike and its
+            // caption shrinks to fit (best fit), so every word stays whole.
+            float shown = Math.Min(right - left, content), x0 = left + (right - left - shown) / 2, squeeze = content > shown ? (shown - lead - 10) / (content - lead) : 1;
+            var rail = Plate(frame!, "Timeline", x0, TopBandY, shown, h, Alpha(Background, 0.82f), Alpha(Memory, 0.35f), 1, true);
+            Clock(rail, "Clock", 14, (h - 22) / 2, 22, Memory);
+            RectTransform host = Box(rail, "TimelineSlots", lead, 0, shown - lead, h, Color.clear);
+            float x = 0;
+            foreach (string group in groups)
+            {
+                float start = x, head = (TextWidth(Head(group), 16) + 10) * squeeze;
+                Label(host, Head(group), x, 0, head, h, 16, Memory, FontStyle.Normal, TextAnchor.MiddleLeft);
+                x += head;
+                foreach (var cell in cells.Where(c => c.Group == group))
+                {
+                    float w = Socket(cell) * squeeze;
+                    Color fill = cell.Kind == "card" ? Alpha(Memory, 0.26f) : cell.Kind == "sealed" ? Alpha(Danger, 0.16f) : Alpha(Background, cell.Kind == "none" ? 0.35f : 0.85f);
+                    Color? edge = cell.Kind == "card" ? Memory : cell.Kind == "sealed" ? Danger : cell.Kind == "empty" ? Alpha(Memory, 0.38f) : Alpha(Line, 0.7f);
+                    var box = Plate(host, "ReservationSlot", x, (h - socket) / 2, w, socket, fill, edge, cell.Kind == "card" ? 2 : 1, true);
+                    var skin = Kit("ui_rail_" + group + "_" + (cell.Kind == "card" ? "reserved" : cell.Kind == "sealed" ? "sealed" : "empty"), new Vector4(44, 0, 44, 0));
+                    if (skin != null)
+                    {
+                        var image = box.GetComponent<Image>(); Sideways(image, skin, 96, socket); image.color = cell.Kind == "none" ? new Color(1, 1, 1, 0.4f) : Color.white;
+                        var ring = box.Find("Edge"); if (ring != null) Destroy(ring.gameObject);
+                    }
+                    Label(box, Caption(cell), 20, 0, w - 40, socket, 17, cell.Kind == "card" ? Ink : cell.Kind == "sealed" ? Danger : Muted, FontStyle.Normal, TextAnchor.MiddleCenter);
+                    if (cell.Kind == "card") Sheen(box, w, socket, 0.1f);
+                    x += w + gap * squeeze;
+                }
+                railZones[group] = Box(host, "RailZone:" + group, start - 6, 3, x - start + 4, h - 6, Color.clear);
+                x += 16 * squeeze;
+            }
+        }
 
-        // Enemy slots in Core's order across the stage band, all of one width, so a defeat changes no slot: a defeated enemy keeps its
-        // slot with its name, HP 0 and 처치, and every surviving target stays where it was (only a summon, which adds an enemy, re-lays
-        // the band). A wide slot puts the sprite beside its data, a narrow one above it; the data panel grows to its measured text and
-        // the sprite takes what is left, so names, intents and statuses are never cut. When even 196-unit slots do not fit, it scrolls.
+        // The party on the stage's left on a diagonal (the front member lowest, nearest the enemies). Each member is its own ultimate
+        // button (Ult:<id>, the whole column): its SD over a floor shadow, a name pill edged in its attribute's colour, and the gauge,
+        // which becomes a glowing brass 필살기 pill once full. At their feet ("PartyStatus", where a party hit flashes) the shared HP bar
+        // (PartyHp) with the block gem at its left, and the party's counter, debt, echo and statuses as chips.
+        void PartyStage(BattleState b, BattleRules rules)
+        {
+            float width = PartyWidth(b); int n = Math.Max(1, b.Actors.Count);
+            var stats = new List<(string, Color, Color, Color?)>();
+            if (b.Block > 0) stats.Add(("방어 " + b.Block, Ink, Alpha(Hex("5b8bd6"), 0.3f), Hex("5b8bd6")));
+            if (b.Counter != 0) stats.Add(("반격 " + b.Counter, Ink, Alpha(Background, 0.86f), LineEdge));
+            int debt = b.Debts.Sum(d => d.N);
+            if (debt != 0) stats.Add(("부채 " + debt, Danger, Alpha(Background, 0.86f), Alpha(Danger, 0.6f)));
+            stats.Add(("잔향 " + b.Echo + "/" + b.EchoMax, Memory, Alpha(Background, 0.86f), Alpha(Memory, 0.5f)));
+            string party = MemoryForgeBattleClient.PartyStatusText(b); // each of the party's statuses as its own brass chip, in Core's order
+            if (party.Length != 0) foreach (string buff in party.Split(new[] { " · " }, StringSplitOptions.None)) stats.Add((buff, Brass, Alpha(Brass, 0.14f), Alpha(Brass, 0.6f)));
+            float infoHeight = 36 + ChipsHeight(stats, width - 8, 26, 15, 4) + 4;
+            var info = Box(frame!, "PartyStatus", 32, StageBottom - infoHeight, width, infoHeight, Color.clear); partyStatus = info;
+            var gem = Shield(info, 0, 0, 36, b.Block > 0 ? Color.white : new Color(1, 1, 1, 0.45f));
+            Strong(Label(gem, b.Block.ToString(), 0, 0, 36, 34, 16, Ink, FontStyle.Normal, TextAnchor.MiddleCenter));
+            partyBar = HpBar(info, "PartyHp", "ui_hp_frame_party", 40, 0, width - 40, 34, b.Hp, b.MaxHp, Memory);
+            Strong(Label(info, "파티 체력 " + b.Hp + " / " + b.MaxHp, 40, 3, width - 40, 26, 16, Ink, FontStyle.Normal, TextAnchor.MiddleCenter));
+            Chips(info, "Status", stats, 4, 36, width - 4, 26, 15, 4);
+
+            float height = StageBottom - infoHeight - 4 - StageTop, column = (width - 8) / n;
+            var actors = Box(frame!, "Party", 32, StageTop, width, height, Color.clear); partyPanel = actors;
+            Deco(actors, "Floor", Halo, -40, height - 100, width + 80, 120, Alpha(Memory, 0.13f));
+            for (int i = 0; i < b.Actors.Count; i++)
+            {
+                var actor = b.Actors[i]; float x = 4 + i * column; bool ready = actor.Gauge >= rules.GaugeMax; var tone = AttributeColor(actor.Attr);
+                var ult = Gate(Button(actors, "Ult:" + actor.Id, "", x, 0, column - 4, height, () => UseUltimate(actor.Id), Color.clear), ready && b.Phase == "PLAYER");
+                var face = Inner(ult); ultRects[actor.Id] = face;
+                const float caption = 66; float lift = (n - 1 - i) * 24; // back members stand higher
+                var sd = Picture(face, "Portrait:" + actor.Id, Art("Characters/char_" + actor.Id + "_sd"), -column * 0.18f, lift, column * 1.36f, height - caption - lift, Color.white);
+                if (sd != null) partyArt[actor.Id] = sd.rectTransform;
+                var plate = Plate(face, "NamePlate", 2, height - caption, column - 8, 30, Alpha(Background, 0.9f), Alpha(tone, 0.85f), 1, true);
+                Icon(plate, "Attribute", "ico_attribute_" + actor.Attr, 8, 6, 18, 18, tone);
+                Label(plate, actor.Name, 24, 0, column - 40, 30, 18, Ink, FontStyle.Normal, TextAnchor.MiddleCenter);
+                if (ready)
+                {
+                    var pill = Plate(face, "UltReady", 2, height - 32, column - 8, 30, Brass, Alpha(Color.white, 0.4f), 1, true);
+                    Strong(Label(pill, "필살기", 0, 0, column - 8, 30, 18, Background, FontStyle.Normal, TextAnchor.MiddleCenter));
+                    if (ult.interactable) Breathe(Glow(pill, Brass));
+                }
+                else
+                {
+                    Bar(face, "Gauge", 8, height - 32, column - 20, 8, actor.Gauge, rules.GaugeMax, Brass);
+                    Label(face, Attribute(actor.Attr) + " " + actor.Gauge + "/" + rules.GaugeMax, 2, height - 22, column - 8, 22, 14, Muted, FontStyle.Normal, TextAnchor.MiddleCenter);
+                }
+            }
+        }
+
+        // Enemy slots in Core's order across the stage's right, all of one width, so a defeat changes no slot: a defeated enemy keeps its
+        // slot with its name, HP 0 and 처치, and every surviving target stays where it was (only a summon, which adds an enemy, re-lays the
+        // band). When even 196-unit slots do not fit, the band scrolls.
         void EnemyStage(BattleState b, BattleRules rules, bool aiming)
         {
-            float left = 32 + PartyWidth(b) + 16, band = 1568 - left; const float top = 162, height = 296, gap = 12, narrowest = 196;
+            float left = 32 + PartyWidth(b) + 20, band = 1568 - left, top = StageTop, height = StageBottom - StageTop; const float gap = 12, narrowest = 196;
             int count = b.Enemies.Count;
-            float width = count == 0 ? 0 : Math.Min(560, (band - gap * Math.Max(0, count - 1)) / count);
+            float widest = b.Enemies.Any(e => e.Tier == "boss") ? 480 : 360;
+            float width = count == 0 ? 0 : Math.Min(widest, (band - gap * Math.Max(0, count - 1)) / count);
             Transform host = frame!; float x = left, y = top;
             if (count != 0 && width < narrowest)
             {
@@ -1489,10 +1505,11 @@ namespace MemoryForge.Client
                 x += width + gap;
             }
         }
-        // An enemy stands on the stage: its painting over a floor shadow (a teal ring under the chosen target) and, beside it on a wide
-        // slot or below it on a narrow one, a nameplate ("Info") with the name and its chips, HP and bar, crack pips, weak points,
-        // status chips and the intent badge. The nameplate grows to its measured text and the painting takes what is left, so names,
-        // intents and statuses are never cut.
+        // An enemy stands on the stage: over its head the intent ("이번" this turn, large; "다음" smaller and dim), its painting over a floor
+        // shadow (a teal ring under the chosen target), and at its feet the nameplate ("Info"): the name, with Core's tier and the
+        // selection as chips in the name row's reserved room (over the painting when the slot is too narrow), the HP bar with its numbers
+        // and the block gem, the crack and its pips, the weak points and Core's statuses. Every part is measured; the painting takes what
+        // is left (never less than 76), and a nameplate taller than its room scrolls while the intent over the head stays wholly in view.
         void EnemySlot(Transform host, BattleEnemyState enemy, BattleState b, BattleRules rules, float x, float y, float w, float h, bool aiming)
         {
             bool selected = target == enemy.Uid && enemy.Alive;
@@ -1511,65 +1528,62 @@ namespace MemoryForge.Client
                 Label(tag, "처치", 0, 0, 72, 28, 17, Danger, FontStyle.Bold, TextAnchor.MiddleCenter);
                 return;
             }
-            bool wide = w >= 380;
-            float infoX = wide ? Mathf.Round(w * (w >= 480 ? 0.38f : 0.4f)) : 0, infoW = w - infoX, pad = 12, inner = infoW - 2 * pad;
-            bool compact = inner < 260;
-            if (!wide) { pad = 10; inner = infoW - 2 * pad; }
-            int nameSize = !wide ? 20 : compact ? 21 : 24, bodySize = !wide ? 17 : compact ? 18 : 20, intentSize = !wide ? 17 : compact ? 18 : 20;
-            var info = Plate(root, "Info", infoX, 0, infoW, h, new Color(0.05f, 0.07f, 0.13f, 0.86f), selected ? Memory : Alpha(tier, 0.45f), selected ? 3 : 1);
-            Box(info, "TierLine", 10, 0, infoW - 20, 3, Alpha(tier, 0.9f)); // the plate's crest in the tier's colour
-            // Core's tier and the selection as badges: on a wide slot in the name row's reserved room, on a narrow one along the slot's
-            // top over the painting (the nameplate never rises into that row), so a badge never covers the name.
-            float chips = 0; Transform badges = wide ? info : root; float badgeRight = wide ? infoW - pad : w - 4, badgeY = wide ? 10 : 4;
-            if (selected) { chips += 60; var chip = Plate(badges, "Selected", badgeRight - 56, badgeY, 56, 28, Memory, null, 1, true); Label(chip, "선택", 0, 0, 56, 28, 17, Background, FontStyle.Bold, TextAnchor.MiddleCenter); }
-            if (enemy.Tier == "boss" || enemy.Tier == "elite")
+            const float pad = 10; float inner = w - 2 * pad;
+            // Over the head: the exact two-line intent (this turn, then the next) on a brass-edged badge.
+            var intentBox = Plate(root, "Intent", 2, 0, w - 4, 48, new Color(0.11f, 0.09f, 0.05f, 0.9f), Alpha(Brass, 0.75f), 1);
+            var move = enemy.Intent; int hits = Math.Max(1, move?.Hits ?? 1);
+            int total = move == null ? 0 : MemoryForgeBattleClient.IntentDamage(move.Damage ?? 0, b.DifficultyDamage, enemy.Status.Strength, enemy.Status.Weak, rules.WeakBps) * hits;
+            if (Picture(intentBox, "IntentMark", Kit(IntentIcon(move, total)), 2, 4, 40, 40, Color.white) == null) Deco(intentBox, "IntentMark", Diamond, 8, 12, 22, 22, Brass);
+            float lines = Grow(Strong(Label(intentBox, "이번  " + MemoryForgeBattleClient.IntentText(enemy.Intent, enemy.Status, b.DifficultyDamage, rules.WeakBps, true)
+                + "\n다음  " + MemoryForgeBattleClient.IntentText(enemy.Next, enemy.Status, b.DifficultyDamage, rules.WeakBps, false), 44, 6, w - 4 - 52, 40, w >= 260 ? 20 : 17, Brass)));
+            float intentHeight = lines + 12; intentBox.sizeDelta = new Vector2(w - 4, intentHeight);
+            // Core's tier and the selection as chips: in the name row's room when it leaves the name 120 units, else over the painting.
+            float chips = (selected ? 60 : 0) + (enemy.Tier == "boss" ? 62 : enemy.Tier == "elite" ? 78 : 0);
+            bool roomy = inner - chips >= 120;
+            var info = Plate(root, "Info", 0, h - 100, w, 100, new Color(0.05f, 0.07f, 0.13f, 0.84f), selected ? Memory : Alpha(tier, 0.45f), selected ? 3 : 1);
+            Box(info, "TierLine", 10, 0, w - 20, 3, Alpha(tier, 0.9f)); // the plate's crest in the tier's colour
+            float cy = 8;
+            cy += Grow(Strong(Label(info, enemy.Name, pad, cy, inner - (roomy ? chips : 0), 28, 20, Ink, FontStyle.Bold))) + 2;
+            // The HP bar with its numbers on it, the block gem at its left.
+            float barX = pad;
+            if (enemy.Block > 0)
             {
-                float tw = enemy.Tier == "boss" ? 58 : 74; chips += tw + 4;
-                var badge = Plate(badges, "Tier", badgeRight - chips + 4, badgeY, tw, 28, Alpha(Background, 0.9f), tier, 1, true);
-                Label(badge, enemy.Tier == "boss" ? "보스" : "엘리트", 0, 0, tw, 28, 17, tier, FontStyle.Bold, TextAnchor.MiddleCenter);
+                var shield = Shield(info, pad - 2, cy - 6, 32);
+                Strong(Label(shield, enemy.Block.ToString(), 0, 0, 32, 30, 15, Ink, FontStyle.Normal, TextAnchor.MiddleCenter)); barX += 32;
             }
-            float cy = wide ? 10 : 8;
-            cy += Grow(Strong(Label(info, enemy.Name, pad, cy, inner - (wide ? chips : 0), 30, nameSize, Ink, FontStyle.Bold)));
-            cy += Grow(Label(info, "체력 " + enemy.Hp + " / " + enemy.MaxHp + (enemy.Block > 0 ? "  방어 " + enemy.Block : ""), pad, cy, inner, 24, bodySize, Ink)) + 2;
-            enemyBars[enemy.Uid] = Bar(info, "Hp", pad, cy, inner, 12, enemy.Hp, enemy.MaxHp, Danger); cy += 18;
-            float crack = Grow(Label(info, "균열 " + enemy.Brk + "/" + enemy.BrkMax, pad, cy, 108, 22, bodySize - 1, Memory));
-            float pip = enemy.BrkMax > 0 ? Math.Min(16, (inner - 112 - 3 * (enemy.BrkMax - 1)) / enemy.BrkMax) : 0;
+            enemyBars[enemy.Uid] = HpBar(info, "Hp", "ui_hp_frame_enemy", barX, cy - 4, pad + inner - barX, 30, enemy.Hp, enemy.MaxHp, Danger);
+            Strong(Label(info, enemy.Hp + " / " + enemy.MaxHp, barX, cy - 2, pad + inner - barX, 24, 15, Ink, FontStyle.Normal, TextAnchor.MiddleCenter));
+            cy += 28;
+            float crack = Grow(Label(info, "균열 " + enemy.Brk + "/" + enemy.BrkMax, pad, cy, 92, 22, 15, Memory));
+            float pip = enemy.BrkMax > 0 ? Math.Min(12, (Math.Min(inner, 300) - 96 - 3 * (enemy.BrkMax - 1)) / enemy.BrkMax) : 0, pips = pip >= 4 ? enemy.BrkMax * (pip + 3) : 0;
             if (pip >= 4) // the crack pips beside the number: lit while the value remains (Core counts it down to a break)
-                for (int k = 0; k < enemy.BrkMax; k++) Deco(info, "CrackPip", Diamond, pad + 112 + k * (pip + 3), cy + crack / 2 - pip / 2, pip, pip, k < enemy.Brk ? Memory : Alpha(Line, 0.95f));
-            cy += crack + 2;
-            float wx = pad;
-            if (wide) foreach (string weak in enemy.Weak) { if (Icon(info, "Weak", "ico_attribute_" + weak, wx, cy + 1, 22, 22, AttributeColor(weak)) != null) wx += 26; }
-            cy += Grow(Label(info, "약점 " + string.Join("·", enemy.Weak.Select(Attribute)), wx, cy, inner - (wx - pad), 24, bodySize - 1, Ink)) + 2;
-            // Core's statuses as brass chips: inside a wide nameplate; on a narrow slot over the painting, just above the nameplate.
+                for (int k = 0; k < enemy.BrkMax; k++) Deco(info, "CrackPip", Diamond, pad + 96 + k * (pip + 3), cy + crack / 2 - pip / 2, pip, pip, k < enemy.Brk ? Memory : Alpha(Line, 0.95f));
+            // On a wide plate the weak points follow on the crack's row when their words fit there; otherwise on their own row.
+            string weakText = "약점 " + string.Join("·", enemy.Weak.Select(Attribute));
+            float after = pad + 96 + pips + 14, room = pad + inner - after - enemy.Weak.Count * 22;
+            bool sameRow = room > 0 && TextWidth(weakText, 15) <= room;
+            if (!sameRow) cy += crack;
+            float wx = sameRow ? after : pad;
+            foreach (string weak in enemy.Weak) if (Icon(info, "Weak", "ico_attribute_" + weak, wx, cy + 1, 20, 20, AttributeColor(weak)) != null) wx += 22;
+            cy += Math.Max(sameRow ? crack : 0, Grow(Label(info, weakText, wx, cy, pad + inner - wx, 22, 15, Ink))) + 2;
+            // Core's statuses as brass chips.
             string status = MemoryForgeBattleClient.StatusText(enemy, rules);
             var statuses = status.Length == 0 ? new List<(string, Color, Color, Color?)>()
                 : status.Split(new[] { " · " }, StringSplitOptions.None).Select(word => (word, Brass, new Color(0.11f, 0.09f, 0.05f, 0.92f), (Color?)Alpha(Brass, 0.7f))).ToList();
-            if (wide && statuses.Count != 0) cy += Chips(info, "Status", statuses, pad, cy + 2, pad + inner, 26, bodySize - 3) + 6;
-            // The intent badge: a brass diamond mark beside the exact two-line intent text.
-            var intentBox = Plate(info, "Intent", pad - 4, cy + 2, inner + 8, 40, new Color(0.11f, 0.09f, 0.05f, 0.92f), Alpha(Brass, 0.7f));
-            Deco(intentBox, "IntentMark", Diamond, 8, 10, 20, 20, Brass);
-            float ih = Grow(Label(intentBox, "이번  " + MemoryForgeBattleClient.IntentText(enemy.Intent, enemy.Status, b.DifficultyDamage, rules.WeakBps, true)
-                + "\n다음  " + MemoryForgeBattleClient.IntentText(enemy.Next, enemy.Status, b.DifficultyDamage, rules.WeakBps, false), 34, 6, inner - 36, 40, intentSize, Brass));
-            intentBox.sizeDelta = new Vector2(inner + 8, ih + 12);
-            float details = cy + 2, intentHeight = ih + 12, tail = wide ? 10 : 6, needed = details + intentHeight + tail, plate = h;
-            if (!wide)
+            if (statuses.Count != 0) cy += Chips(info, "Status", statuses, pad, cy + 2, pad + inner, 24, 14, 4) + 4;
+            float needed = cy + 6, plate = Math.Min(needed, Math.Max(60, h - intentHeight - 4 - 76));
+            info.anchoredPosition = new Vector2(0, -(h - plate)); info.sizeDelta = new Vector2(w, plate);
+            // The painting's feet stand a little behind the nameplate (drawn over it), so the figure keeps more height.
+            Standing(root, enemy.Uid, sprite, 6, intentHeight + 4, w - 12, h - plate - intentHeight + 14, selected, tier);
+            Transform badges = roomy ? info : root; float badgeRight = w - (roomy ? pad : 6), badgeY = roomy ? 8 : intentHeight + 6, used = 0;
+            if (selected) { used += 60; var chip = Plate(badges, "Selected", badgeRight - 56, badgeY, 56, 28, Memory, null, 1, true); Label(chip, "선택", 0, 0, 56, 28, 17, Background, FontStyle.Bold, TextAnchor.MiddleCenter); }
+            if (enemy.Tier == "boss" || enemy.Tier == "elite")
             {
-                // The painting always keeps its room at the top (at least 76, more when the badge row and the status chips over it need
-                // it); the nameplate sits below it with its whole text.
-                float statusHeight = ChipsHeight(statuses, w - 12, 26, bodySize - 3), art = Math.Max(76, 34 + (statusHeight > 0 ? statusHeight + 8 : 0) + 40);
-                plate = Math.Min(h - art, needed); var rect = info;
-                rect.anchoredPosition = new Vector2(0, -(h - plate)); rect.sizeDelta = new Vector2(w, plate);
-                Standing(root, enemy.Uid, sprite, 6, 2, w - 12, h - plate - 6, selected, tier);
-                if (statuses.Count != 0) Chips(root, "Status", statuses, 6, h - plate - 4 - statusHeight, w - 6, 26, bodySize - 3);
+                float tw = enemy.Tier == "boss" ? 58 : 74; used += tw + 4;
+                var badge = Plate(badges, "Tier", badgeRight - used + 4, badgeY, tw, 28, Alpha(Background, 0.9f), tier, 1, true);
+                Label(badge, enemy.Tier == "boss" ? "보스" : "엘리트", 0, 0, tw, 28, 17, tier, FontStyle.Bold, TextAnchor.MiddleCenter);
             }
-            else Standing(root, enemy.Uid, sprite, 4, 8, infoX - 12, h - 16, selected, tier);
-            // The intent is what the turn is planned on: when the nameplate needs more than it has, the intent badge stays pinned at its
-            // bottom, always in view, and only the details above it scroll.
-            if (needed > plate)
-            {
-                intentBox.anchoredPosition = new Vector2(pad - 4, -(plate - tail - intentHeight));
-                Overflow(info, details + 4, plate - tail - intentHeight - 4, intentBox);
-            }
+            if (needed > plate) Overflow(info, needed, plate, info);
             if (selected || aiming) Brackets(root, w, h, selected ? Memory : Ink, !selected);
         }
         // An enemy's painting standing in its box: a soft aura of its tier behind it, a floor shadow (a teal ring when it is the target)
@@ -1580,6 +1594,22 @@ namespace MemoryForge.Client
             var floor = Deco(root, "Floor", Halo, x + w * 0.1f, y + h - 30, w * 0.8f, 36, selected ? Alpha(Memory, 0.75f) : new Color(0, 0, 0, 0.6f)); floor.SetSiblingIndex(2);
             var art = Picture(root, "Art", sprite, x, y, w, h, Color.white);
             if (art != null) { art.rectTransform.SetSiblingIndex(3); enemyArt[uid] = art.rectTransform; }
+        }
+        // The kit's block shield (a blue gem without it), a decoration the block number is written on.
+        RectTransform Shield(Transform parent, float x, float y, float size, Color? tint = null)
+        {
+            var art = Picture(parent, "BlockGem", Kit("ui_shield_block"), x, y, size, size, tint ?? Color.white);
+            return art != null ? art.rectTransform : Gem(parent, "BlockGem", x, y, size, Hex("5b8bd6"), Hex("1c2a48"));
+        }
+        // An HP bar on the kit's frame: the frame behind, the track and fill in its inner rectangle ([20,14,216,12] of 256×40, scaled to the
+        // given height); the procedural bar alone, centred in that height, without the art. Returns the fill (a hit drains behind it).
+        RectTransform HpBar(Transform parent, string name, string frameId, float x, float y, float width, float height, int value, int max, Color color)
+        {
+            var art = Kit(frameId, new Vector4(20, 0, 20, 0));
+            if (art == null) return Bar(parent, name, x, y + (height - 20) / 2, width, 20, value, max, color);
+            float k = height / 40f;
+            Sideways(Box(parent, name + "Frame", x, y, width, height, Color.white).GetComponent<Image>(), art, 40, height);
+            return Bar(parent, name, x + 20 * k, y + 14 * k, width - 40 * k, 12 * k, value, max, color);
         }
         // A nameplate whose measured details are taller than their room keeps every line: its children (all but its edge and the
         // pinned intent badge) move into a vertical scroll of the given height at its top.
@@ -1638,13 +1668,17 @@ namespace MemoryForge.Client
 
         // The hand: one card per hand uid in order, each wide enough for its whole effect text (Core's BattleText.Card of the battle's
         // effective definition) or, past the widest card, pointing to 카드 설명 instead of cutting it. A card is a frame in its owner's
-        // attribute colour: the owner's art window, the cost gem, a name plate, the effect and a mode chip. The button's own hit
-        // rectangle never moves; its face ("Card") is the part that deals in, lifts when selected and sinks while pressed.
+        // attribute colour: the owner's art window, the cost gem, a name plate, the effect and a mode chip. The cards fan out about the
+        // hand's centre (tilted and lowered towards the ends, a short hand centred); the chosen one stands straight and lifted. The
+        // button's own hit rectangle never moves or turns, so neighbours never share a press; its face ("Card") is the part that deals
+        // in, tilts, lifts and sinks while pressed. Dragged up, a card is played on its drop (CardDrag); sideways drags scroll the hand.
         void HandDock(BattleState b)
         {
-            // A shorter dock on a phone (the touch bands above it) gives a thinner art window before it takes from the effect text.
-            float height = 892 - DockTop, cardHeight = height - 16, band = cardHeight >= 180 ? 50 : 32, nameTop = band + 6, textTop = nameTop + 34,
-                tagTop = cardHeight - 30, textHeight = tagTop - 2 - textTop; // 208/192/50/56/90/162/70 off phones
+            // A shorter dock on a phone gives a thinner art window before it takes from the effect text.
+            // The dock reaches the frame's bottom and the cards leave room under them for the fan's drop and tilt, so no fanned face is
+            // ever cut by the dock's mask.
+            float height = 900 - HandTop, cardHeight = height - 16 - FanDrop - 8, band = cardHeight >= 170 ? 50 : 32, nameTop = band + 6, textTop = nameTop + 34,
+                tagTop = cardHeight - 30, textHeight = tagTop - 2 - textTop; // 220/186/50/56/90/156/64 off phones
             var plan = new List<(string Uid, BattleCardDef Def, string Text, float Width, bool Fits)>();
             float[] widths = { 184f, 236f, 300f };
             foreach (string uid in b.Zones.Hand)
@@ -1656,25 +1690,38 @@ namespace MemoryForge.Client
                 if (!fits) width = widths.FirstOrDefault(w => TextHeight(LongEffect, 15, w - 20) <= textHeight) is float pointer && pointer > 0 ? pointer : widths[widths.Length - 1];
                 plan.Add((uid, def, text, width, fits));
             }
-            float content = plan.Sum(p => p.Width + 12);
-            var dock = Scroll(frame!, "Hand", 32, DockTop, 1308, height, content, height, Color.clear);
-            float x = 0;
+            const float gap = 10;
+            float content = plan.Sum(p => p.Width + gap), view = HandRight - HandLeft;
+            var dock = Scroll(frame!, "Hand", HandLeft, HandTop, view, height, content, height, Color.clear);
+            var scroll = dock.parent.GetComponent<ScrollRect>();
+            float x = Math.Max(0, (view - content) / 2), mid = (plan.Count - 1) / 2f; int index = 0;
             foreach (var (uid, def, text, width, fits) in plan)
             {
                 bool selected = uid == selectedCard;
                 var modes = run!.BattleAllowedModes(uid); string first = modes.FirstOrDefault() ?? "now";
                 bool poor = modes.Count != 0 && modes.All(m => run.BattleCheck(uid, m, target) == "AP_LOW"); // Core's own refusal, not a local rule
-                var button = Button(dock, "Hand:" + uid, "", x, 2, width, height - 4, () => SelectCard(uid), Color.clear);
+                // The root covers the dock's whole height: a face dealing in or fanned low never leaves its own press area.
+                var button = Button(dock, "Hand:" + uid, "", x, 0, width, height, () => SelectCard(uid), Color.clear);
                 var tone = OwnerColor(def.Owner);
-                var face = Plate(button.transform, "Card", 0, selected ? 0 : 12, width, cardHeight, selected ? Hex("1b2848") : Hex("121a2e"), selected ? Memory : Alpha(tone, 0.9f), selected ? 3 : 2);
+                float offset = index++ - mid, arc = selected ? 0 : Math.Min(FanDrop, Math.Abs(offset) * 4), tilt = selected ? 0 : Mathf.Clamp(-offset * 2.5f, -5, 5);
+                var face = Plate(button.transform, "Card", 0, (selected ? 2 : 14) + arc, width, cardHeight, selected ? Hex("1b2848") : Hex("121a2e"), selected ? Memory : Alpha(tone, 0.9f), selected ? 3 : 2);
+                if (tilt != 0) Tilt(face, tilt);
+                var border = Kit("ui_card_border_" + (characterAttrs.TryGetValue(def.Owner, out var attr) ? attr : "common"), new Vector4(36, 36, 36, 36));
+                if (border != null && face.Find("Edge") is RectTransform rim)
+                {
+                    var line = rim.GetComponent<Image>(); line.sprite = border; line.type = Image.Type.Sliced; line.pixelsPerUnitMultiplier = 3; line.color = selected ? Hex("bff4ec") : Color.white;
+                }
                 button.targetGraphic = face.GetComponent<Image>();
                 button.GetComponent<UiPress>()?.Bind(face, () => Calm);
+                if (Application.isPlaying) button.gameObject.AddComponent<CardDrag>().Bind(this, uid, scroll);
                 if (selected) Glow(face, Alpha(Memory, 0.55f));
                 handFaces[uid] = face;
                 OwnerBand(face, def.Owner, width, band);
                 Deco(face, "BandFade", Fade(true), 3, band - 14, width - 6, 18, selected ? Hex("1b2848") : Hex("121a2e"));
-                var cost = Gem(face, "Cost", 6, 6, 38, poor ? Hex("4a5677") : Brass, poor ? Hex("262e45") : Hex("7a5a22"));
-                Strong(Label(cost, run.BattleCostOf(uid, first).ToString(), 0, 0, 38, 38, 24, poor ? Danger : Background, FontStyle.Bold, TextAnchor.MiddleCenter));
+                var costArt = Picture(face, "Cost", Kit("ui_gem_cost"), 2, 2, 46, 46, poor ? new Color(0.5f, 0.5f, 0.58f) : Color.white);
+                var cost = costArt != null ? costArt.rectTransform : Gem(face, "Cost", 6, 6, 38, poor ? Hex("4a5677") : Brass, poor ? Hex("262e45") : Hex("7a5a22"));
+                float gemSide = cost.sizeDelta.x;
+                Strong(Label(cost, run.BattleCostOf(uid, first).ToString(), 0, 0, gemSide, gemSide, 24, poor ? Danger : costArt != null ? Ink : Background, FontStyle.Bold, TextAnchor.MiddleCenter));
                 if (selected) { var chip = Plate(face, "Selected", width - 60, 8, 52, 28, Memory, null, 1, true); Label(chip, "선택", 0, 0, 52, 28, 17, Background, FontStyle.Bold, TextAnchor.MiddleCenter); }
                 Plate(face, "NamePlate", 3, nameTop - 2, width - 6, 34, Alpha(Background, 0.7f));
                 Strong(Label(face, def.Name + (b.Cards.TryGetValue(uid, out var instance) && instance.Plus ? "+" : ""), 10, nameTop, width - 20, 32, 22, Ink, FontStyle.Bold));
@@ -1683,8 +1730,15 @@ namespace MemoryForge.Client
                 string tag = !modes.Contains("now") ? "예약 전용" : modes.Count > 1 ? "즉시 · 예약" : "즉시 사용";
                 var tagChip = Plate(face, "Modes", 8, tagTop + 1, Math.Min(width - 16, TextWidth(tag, 15) + 26), 26, Alpha(Memory, 0.16f), null, 1, true);
                 Label(tagChip, tag, 0, 0, tagChip.sizeDelta.x, 26, 15, Memory, FontStyle.Normal, TextAnchor.MiddleCenter);
-                x += width + 12;
+                x += width + gap;
             }
+        }
+        const float FanDrop = 12; // the outermost card's drop; a 5° tilt lowers a 184-wide card's corner by 8 more, inside the dock's last 8
+        // Turns a top-left-pivoted face by `angle` degrees about its bottom centre (a fanned card); the result is its layout position.
+        static void Tilt(RectTransform face, float angle)
+        {
+            var size = face.sizeDelta; var foot = new Vector3(size.x / 2, -size.y, 0); var turn = Quaternion.Euler(0, 0, angle);
+            face.localRotation = turn; face.anchoredPosition += (Vector2)(foot - turn * foot);
         }
         // The owner's approved cut-in as the card's art window (decorative: it does not depict the card's effect); other party members
         // show their SD's face; common, curse and weapon cards keep a plain window with the word.
@@ -1702,9 +1756,20 @@ namespace MemoryForge.Client
         // glows while there is nothing left to pay for, the turn's natural next step.
         void EndTurnDial(BattleState b)
         {
-            float w = 216, h = 892 - DockTop, d = Math.Min(w, h) - 6, cx = 1352 + w / 2, cy = DockTop + h / 2;
-            var end = Gate(Button(frame!, "EndTurn", "", cx - d / 2, cy - d / 2, d, d, () => EndTurn(), Color.clear, 32, hit: new Rect(1352, DockTop, w, h)), b.Phase == "PLAYER");
-            var face = Inner(end); var disc = face.GetComponent<Image>(); disc.sprite = Pill(0); disc.type = Image.Type.Simple; disc.color = Hex("8a6a2c");
+            float left = HandRight + 6, w = 1568 - left, h = 892 - HandTop, d = Math.Min(w, h) - 6, cx = left + w / 2, cy = HandTop + h / 2;
+            var end = Gate(Button(frame!, "EndTurn", "", cx - d / 2, cy - d / 2, d, d, () => EndTurn(), Color.clear, 32, hit: new Rect(left, HandTop, w, 900 - HandTop)), b.Phase == "PLAYER");
+            var face = Inner(end); var disc = face.GetComponent<Image>(); var kit = Kit("ui_button_endturn");
+            if (kit != null)
+            {
+                // The kit dial with its own pressed and disabled faces (swapped by the button); the label sits in its centre circle.
+                disc.sprite = kit; disc.type = Image.Type.Simple; disc.color = Color.white;
+                end.transition = Selectable.Transition.SpriteSwap;
+                end.spriteState = new SpriteState { pressedSprite = Kit("ui_button_endturn_pressed"), disabledSprite = Kit("ui_button_endturn_disabled"), highlightedSprite = kit, selectedSprite = kit };
+                Strong(Label(face, b.Phase == "PLAYER" ? "턴 종료\n" + b.Turn + "턴" : "전투 종료", d * 0.2f, d * 0.26f, d * 0.6f, d * 0.48f, 24, Ink, FontStyle.Bold, TextAnchor.MiddleCenter));
+                if (end.interactable && b.Ap == 0) Breathe(Glow(face, Brass));
+                return;
+            }
+            disc.sprite = Pill(0); disc.type = Image.Type.Simple; disc.color = Hex("8a6a2c");
             Deco(face, "Dial", Pill(0), d * 0.06f, d * 0.06f, d * 0.88f, d * 0.88f, Brass);
             Deco(face, "Inner", Pill(4), d * 0.14f, d * 0.14f, d * 0.72f, d * 0.72f, Alpha(Hex("5a4318"), 0.7f));
             for (int k = 0; k < 12; k++)
@@ -1715,26 +1780,89 @@ namespace MemoryForge.Client
                 tick.localRotation = Quaternion.Euler(0, 0, -k * 30);
             }
             Deco(face, "Gloss", Pill(0), d * 0.24f, d * 0.1f, d * 0.52f, d * 0.24f, new Color(1, 1, 1, 0.24f));
-            Strong(Label(face, b.Phase == "PLAYER" ? "턴 종료\n" + b.Turn + "턴" : "전투 종료", d * 0.12f, d * 0.2f, d * 0.76f, d * 0.6f, 28, Background, FontStyle.Bold, TextAnchor.MiddleCenter));
+            Strong(Label(face, b.Phase == "PLAYER" ? "턴 종료\n" + b.Turn + "턴" : "전투 종료", d * 0.12f, d * 0.2f, d * 0.76f, d * 0.6f, 26, Background, FontStyle.Bold, TextAnchor.MiddleCenter));
             if (end.interactable && b.Ap == 0) Breathe(Glow(face, Brass));
         }
-        // §14.3 행동 연출 (provisional text, no final VFX/audio): the committed action's rows step in here, apart from the action line,
-        // so the next card's forecast stays readable while they play. Pace and skip change only this strip.
+        // The action points on a big brass gem at the hand's left (decoration: Core's number), dimmed at 0.
+        void ApGem(BattleState b)
+        {
+            const float d = 104, x = 18; float y = HandTop + Math.Max(4, (892 - HandTop - d - 24) / 2);
+            Deco(frame!, "ApGlow", Halo, x - 22, y - 22, d + 44, d + 44, Alpha(Brass, b.Ap > 0 ? 0.5f : 0.15f));
+            var art = Picture(frame!, "ApGem", Kit("ui_gem_ap"), x - 8, y - 8, d + 16, d + 16, b.Ap > 0 ? Color.white : new Color(0.55f, 0.55f, 0.6f));
+            var gem = art != null ? art.rectTransform : Gem(frame!, "ApGem", x, y, d, b.Ap > 0 ? Brass : Hex("6b5a3a"), Hex("7a5a22"));
+            float side = gem.sizeDelta.x;
+            Strong(Label(gem, b.Ap.ToString(), 0, 0, side, side, 50, art != null ? Ink : Background, FontStyle.Bold, TextAnchor.MiddleCenter));
+            Strong(Label(frame!, "행동력  " + b.Ap, x - 8, y + d, d + 16, 24, 16, Brass, FontStyle.Normal, TextAnchor.MiddleCenter));
+        }
+        // The card row over the hand: the forecast (or the last command's notice) of exactly the request the confirm sends, then the
+        // chosen card and its target, 카드 설명, one button per mode Core allows (cost and timing, or Core's refusal) and the confirm; a
+        // waiting intent shows its own request and cancel instead (PreparedControls). On a phone the controls' touch band is 48dp tall.
+        void CardActions(BattleState b)
+        {
+            var actions = Plate(frame!, "CardActions", 32, ActionsTop, 1536, 34 + ControlsHeight, Alpha(Background, 0.8f), Alpha(Memory, 0.28f), 1);
+            Sheen(actions, 1536, 34 + ControlsHeight, 0.05f);
+            string hint = "카드를 적에게 끌어 놓으면 바로 쓰고, 위 시간표에 놓으면 예약해요. 눌러서 방식을 고른 뒤 확정해도 돼요."; var hintColor = Muted;
+            var intent = prepared;
+            if (intent != null)
+            {
+                // The waiting intent's own request: its frozen card, mode, target and picks (unmade picks are Core's automatic choice).
+                var forecast = run!.BattleForecast(intent.Uid, intent.Mode, intent.Target, intent.Picks);
+                hint = ForecastLine(forecast, forecast.Error == null && intent.Picks.Count < intent.Requests.Sum(r => r.Count)); hintColor = ForecastColor(forecast);
+            }
+            else if (selectedCard != null && selectedMode != null && b.Phase == "PLAYER")
+            {
+                // The exact request ConfirmCard leads to; a pick card's unmade picks are Core's automatic choice. Recomputed on Render only.
+                var forecast = run!.BattleForecast(selectedCard, selectedMode, target);
+                bool auto = forecast.Error == null && ChoiceRequests(run.BattleEffectiveCard(selectedCard), selectedMode, data!.Memory.Battle).Count != 0;
+                hint = ForecastLine(forecast, auto); hintColor = ForecastColor(forecast);
+            }
+            TrackNotice(Label(actions, notice.Length != 0 ? notice : hint, 18, 4, 1498, 30, 20, notice.Length != 0 ? (LastError == null ? Muted : Danger) : hintColor), hint, hintColor);
+            float y = ControlY;
+            if (intent != null) PreparedControls(actions, b, intent);
+            else if (selectedCard != null && b.Phase == "PLAYER")
+            {
+                string uid = selectedCard; var def = run!.BattleEffectiveCard(uid);
+                Deco(actions, "Pointer", Diamond, 16, y + 21, 16, 16, Memory);
+                Strong(Label(actions, def.Name + " → " + (b.Enemies.FirstOrDefault(e => e.Uid == target)?.Name ?? (run.BattleNeedsTarget(uid) == null ? "파티" : "적 선택")), 40, y, 318, 56, 23, Ink, FontStyle.Bold, TextAnchor.MiddleLeft));
+                Button(actions, "CardInfoButton", "카드 설명", InfoRect.x, InfoRect.y, InfoRect.width, InfoRect.height, () => ShowHandCardInfo(uid), Line, 21, hit: CardRow(InfoRect.x, InfoRect.width));
+                int i = 0;
+                foreach (string mode in run.BattleAllowedModes(uid))
+                {
+                    string? error = run.BattleCheck(uid, mode, target);
+                    string caption = ModeName(mode) + " · 비용 " + run.BattleCostOf(uid, mode) + "\n" + (error == null ? ModeTiming(mode) : ErrorText(error));
+                    bool chosen = selectedMode == mode;
+                    Button(actions, "Mode:" + mode, caption, 532 + i++ * 262, y, 250, 56, () => SelectMode(mode), chosen ? (mode == "now" ? Brass : Memory) : Line, 18,
+                        chosen ? (Color?)null : mode == "now" ? Alpha(Brass, 0.7f) : Alpha(Memory, 0.7f), chosen ? 0 : 1, CardRow(532 + (i - 1) * 262, 250))
+                        .interactable = error == null || error == "BAD_TARGET" || error == "FIXED_MARK_REQUIRED";
+                }
+                string? reason = selectedMode == null ? "MODE" : run.BattleCheck(uid, selectedMode, target);
+                bool plain = reason == null && ChoiceRequests(def, selectedMode!, data!.Memory.Battle).Count == 0;
+                string confirm = reason == null ? (plain ? ConfirmCaption(actionRows != null) : "카드 고르기")
+                    : reason == "MODE" ? "방식 선택" : reason == "BAD_TARGET" || reason == "FIXED_MARK_REQUIRED" ? "대상 선택" : ErrorText(reason);
+                // Not gated by the display: during one it confirms the single unsent intent (or opens its sheet) and spends nothing.
+                var button = Button(actions, "ConfirmCard", confirm, ConfirmRect.x, ConfirmRect.y, ConfirmRect.width, ConfirmRect.height, () => ConfirmCard(), reason == null ? Brass : Line, 22,
+                    hit: CardRow(ConfirmRect.x, ConfirmRect.width));
+                button.interactable = reason == null;
+                if (plain) confirmCaption = button.GetComponentInChildren<Text>();
+                if (reason == null && actionRows == null) Breathe(Glow(Inner(button), Alpha(Brass, 0.8f))); // ready: the next step glows
+            }
+        }
+        // §14.3 행동 연출 (provisional text, no final VFX/audio): the committed action's rows step in on a strip under the top band, apart
+        // from the card row, so the next card's forecast stays readable while they play. Pace and skip sit at the strip's right end
+        // (the header's left belongs to the first-run guide); on a phone each is 48dp both ways inside the strip's own band.
         void ActionStrip()
         {
-            var strip = Plate(frame!, "ActionPresentation", 32, 528, 1536, 42, Alpha(Background, 0.8f), Alpha(Memory, 0.3f), 1, true);
+            float band = StripTop, tall = StripHeight, y = band + (tall - 42) / 2;
+            var strip = Plate(frame!, "ActionPresentation", 32, y, 1536, 42, Alpha(Background, 0.8f), Alpha(Memory, 0.3f), 1, true);
+            float skip = Math.Max(112, minTouch), slow = Math.Max(150, minTouch), pace = Math.Max(100, minTouch);
+            float skipX = 1562 - skip, slowX = skipX - 8 - slow, doubleX = slowX - 6 - pace, normalX = doubleX - 6 - pace, faceY = band + (tall - 38) / 2;
             actionStatus = Label(strip, "", 20, 3, 222, 36, 18, Memory, FontStyle.Bold);
-            // On a phone these share the battle's two touch bands with the card controls below (BandSplit): this one reaches up over the
-            // timeline, which holds no control, the card row's down to the hand, so neither steals from the other. They are laid out from
-            // the right, each at least 48dp wide; the row text takes the rest.
-            float skip = Math.Max(112, minTouch), slow = Math.Max(150, minTouch), pace = Math.Max(110, minTouch), right = 1522;
-            float skipX = right - skip, slowX = skipX - 6 - slow, doubleX = slowX - 6 - pace, normalX = doubleX - 6 - pace;
-            actionText = Label(strip, "", 248, 0, normalX - 10 - 248, 42, 16, Ink);
-            Plate(strip, "PaceGroup", normalX - 3, 0, slowX + slow - normalX + 6, 42, Alpha(Background, 0.9f), LineEdge, 1, true);
-            PaceButton(strip, ActionPacing.Normal, normalX, 2, pace, 38, 18, PaceRow(normalX, pace));
-            PaceButton(strip, ActionPacing.Double, doubleX, 2, pace, 38, 18, PaceRow(doubleX, pace));
-            PaceButton(strip, ActionPacing.Reduced, slowX, 2, slow, 38, 18, PaceRow(slowX, slow));
-            actionSkip = Button(strip, "SkipActionPresentation", "건너뛰기", skipX, 2, skip, 38, () => SkipActionPresentation(), Line, 18, hit: PaceRow(skipX, skip));
+            actionText = Label(strip, "", 248, 0, normalX - 32 - 10 - 248, 42, 16, Ink);
+            Plate(frame!, "PaceGroup", normalX - 3, faceY - 2, slowX + slow - normalX + 6, 42, Alpha(Background, 0.9f), LineEdge, 1, true);
+            PaceButton(frame!, ActionPacing.Normal, normalX, faceY, pace, 38, 17, Band(normalX, band, pace, tall));
+            PaceButton(frame!, ActionPacing.Double, doubleX, faceY, pace, 38, 17, Band(doubleX, band, pace, tall));
+            PaceButton(frame!, ActionPacing.Reduced, slowX, faceY, slow, 38, 17, Band(slowX, band, slow, tall));
+            actionSkip = Button(frame!, "SkipActionPresentation", "건너뛰기", skipX, faceY, skip, 38, () => SkipActionPresentation(), Line, 17, hit: Band(skipX, band, skip, tall));
             actionAll = false; RefreshActionPresentation();
         }
         // The waiting intent in place of the selection controls: its frozen card and target, its card text, a 1/1 waiting label kept apart
@@ -1745,9 +1873,9 @@ namespace MemoryForge.Client
         void PreparedControls(RectTransform actions, BattleState b, PreparedPlay intent)
         {
             string aim = b.Enemies.FirstOrDefault(e => e.Uid == intent.Target)?.Name ?? (intent.Target == null ? "파티" : "대상");
-            Label(actions, BattleCardName(intent.Uid) + " → " + aim, 18, 38, 340, 56, 23, Ink, FontStyle.Bold, TextAnchor.MiddleLeft);
+            Label(actions, BattleCardName(intent.Uid) + " → " + aim, 18, ControlY, 340, 56, 23, Ink, FontStyle.Bold, TextAnchor.MiddleLeft);
             Button(actions, "CancelPreparedIntent", "대기 취소", InfoRect.x, InfoRect.y, InfoRect.width, InfoRect.height, () => CancelPreparedIntent(), Line, 22, hit: CardRow(InfoRect.x, InfoRect.width));
-            var waiting = Plate(actions, "PreparedIntent", 532, 38, 774, 56, Alpha(Brass, 0.12f), Alpha(Brass, 0.6f));
+            var waiting = Plate(actions, "PreparedIntent", 532, ControlY, 774, 56, Alpha(Brass, 0.12f), Alpha(Brass, 0.6f));
             Label(waiting, PreparedText(intent), 10, 2, 754, 52, 18, Brass);
             if (b.Zones.Hand.Contains(intent.Uid)) Button(actions, "CardInfoButton", "카드 설명", ConfirmRect.x, ConfirmRect.y, ConfirmRect.width, ConfirmRect.height, () => ShowHandCardInfo(intent.Uid), Line, 21,
                 hit: CardRow(ConfirmRect.x, ConfirmRect.width));
@@ -2182,10 +2310,11 @@ namespace MemoryForge.Client
         }
 
         // ───────── motion (decoration only: never moves a control, never reaches the Run) ─────────
-        // Per Render: a fade when the screen changes kind, and in a battle the public differences since the last uncovered view: hit
-        // numbers and a short shake/flash on an enemy's art, the party panel's hit or heal, an HP bar's lost part draining away, new hand
-        // cards dealing in and the played card flying to its target or the timeline. While a turn summary or a battle's last action covers
-        // the view, nothing is compared, so the numbers appear when it closes. Reduced motion: instant, no flash, shake or flight.
+        // Per Render: a fade when the screen changes kind, and in a battle the public differences since the last uncovered view: a turn
+        // banner, hit numbers sized by the damage over a white burst, a shake of the enemy's art (and of the backdrop on a heavy hit), the
+        // party panel's hit or heal, an HP bar's lost part holding a moment and then draining away, new hand cards dealing in, the played
+        // card flying to its target or the rail and its owner stepping forward. While a turn summary or a battle's last action covers the
+        // view, nothing is compared, so the numbers appear when it closes. Reduced motion: instant, no banner, burst, shake or flight.
         bool Calm => MemoryForgeUiMotion.Reduced || actionPace == ActionPacing.Reduced;
         bool Still() => Calm; // checked every frame by a running motion, so switching to 동작 줄이기 settles it at once
         void Animate(string screen)
@@ -2201,18 +2330,24 @@ namespace MemoryForge.Client
             string key = s.RunId + "@" + s.Position;
             if (key != seenBattle)
             {
-                seenBattle = key; seenEnemies.Clear(); seenHand.Clear(); seenHp = b.Hp;
+                seenBattle = key; seenEnemies.Clear(); seenHand.Clear(); seenHp = b.Hp; seenTurn = b.Turn;
                 foreach (var e in b.Enemies) seenEnemies[e.Uid] = (e.Hp, e.Block);
-                if (!Calm) foreach (var art in enemyArt.Values) StartCoroutine(MemoryForgeUiMotion.SlideIn(art, new Vector2(60, 0), 0.35f, Still));
+                if (!Calm)
+                {
+                    foreach (var art in enemyArt.Values) StartCoroutine(MemoryForgeUiMotion.SlideIn(art, new Vector2(60, 0), 0.35f, Still));
+                    foreach (var art in partyArt.Values) StartCoroutine(MemoryForgeUiMotion.SlideIn(art, new Vector2(-60, 0), 0.35f, Still));
+                }
+                Banner(s.BattleType == "boss" ? "보스 전투" : s.BattleType == "elite" ? "엘리트 전투" : "전투 시작", Danger);
             }
             if (turnSummary != null || (actionRows != null && actionTerminal)) return;
+            if (b.Turn != seenTurn) { seenTurn = b.Turn; if (b.Phase == "PLAYER") Banner(b.Turn + "턴 · 내 차례", Brass); }
             foreach (var e in b.Enemies)
             {
                 if (!seenEnemies.TryGetValue(e.Uid, out var seen))
                 { if (!Calm && enemyArt.TryGetValue(e.Uid, out var arrived)) StartCoroutine(MemoryForgeUiMotion.SlideIn(arrived, new Vector2(0, 40), 0.3f, Still)); }
                 else
                 {
-                    if (e.Hp < seen.Hp) Hit(e.Uid, "-" + (seen.Hp - e.Hp), Danger, seen.Hp, e.MaxHp);
+                    if (e.Hp < seen.Hp) Hit(e.Uid, seen.Hp - e.Hp, seen.Hp, e.MaxHp);
                     else if (e.Hp > seen.Hp) Pop(Anchor(e.Uid), "+" + (e.Hp - seen.Hp), Memory);
                     if (e.Block > seen.Block) Pop(Anchor(e.Uid), "+" + (e.Block - seen.Block) + " 방어", Ink, 34);
                 }
@@ -2220,15 +2355,16 @@ namespace MemoryForge.Client
             }
             if (partyStatus != null && partyBar != null && seenHp >= 0 && b.Hp != seenHp)
             {
-                Pop(partyBar, (b.Hp < seenHp ? "-" : "+") + Math.Abs(b.Hp - seenHp), b.Hp < seenHp ? Danger : Memory);
-                if (b.Hp < seenHp) { Flash(partyStatus); Drain(partyBar, seenHp, b.MaxHp); }
+                int change = Math.Abs(b.Hp - seenHp);
+                Pop(partyBar, (b.Hp < seenHp ? "-" : "+") + change, b.Hp < seenHp ? Danger : Memory, 46, b.Hp < seenHp ? change : 0);
+                if (b.Hp < seenHp) { Flash(partyStatus); Drain(partyBar, seenHp, b.MaxHp); foreach (var art in partyArt.Values) if (!Calm) StartCoroutine(MemoryForgeUiMotion.Shake(art, change < 10 ? 8 : 16, 0.3f, Still)); }
             }
             seenHp = b.Hp;
             bool first = seenHand.Count == 0; int order = 0;
             foreach (string uid in b.Zones.Hand)
                 if (!seenHand.Contains(uid) && handFaces.TryGetValue(uid, out var face) && !Calm) StartCoroutine(Deal(face, first ? order++ * 0.05f : 0));
             seenHand.Clear(); seenHand.UnionWith(b.Zones.Hand);
-            if (flight != null) { Fly(flight.Value); flight = null; }
+            if (flight != null) { Fly(flight.Value); Lunge(flight.Value.Owner); flight = null; }
         }
         IEnumerator Deal(RectTransform face, float delay)
         {
@@ -2237,12 +2373,20 @@ namespace MemoryForge.Client
             StartCoroutine(MemoryForgeUiMotion.Fade(group, 0, 1, 0.2f, Still));
             yield return MemoryForgeUiMotion.SlideIn(face, new Vector2(0, -70), 0.26f, Still);
         }
-        void Hit(string uid, string text, Color color, int before, int max)
+        // A hit on an enemy, scaled by its size (StS-style tiers at 5 and 20): the number, a burst and a red tint on the art, a shake that
+        // grows with the damage (the backdrop too from 20) and the bar's lost part.
+        void Hit(string uid, int amount, int before, int max)
         {
             enemyArt.TryGetValue(uid, out var art);
-            Pop(Anchor(uid), text, color);
+            Pop(Anchor(uid), "-" + amount, Danger, 46, amount);
             if (Calm) return;
-            if (art != null) { StartCoroutine(MemoryForgeUiMotion.Shake(art, 10, 0.3f, Still)); var image = art.GetComponent<Image>(); if (image != null) StartCoroutine(Tint(image, new Color(1f, 0.45f, 0.4f, image.color.a))); }
+            if (art != null)
+            {
+                StartCoroutine(MemoryForgeUiMotion.Shake(art, amount < 5 ? 8 : amount < 20 ? 16 : 26, amount < 20 ? 0.3f : 0.45f, Still));
+                var image = art.GetComponent<Image>(); if (image != null) StartCoroutine(Tint(image, new Color(1f, 0.42f, 0.38f, image.color.a)));
+                Spark(art, amount);
+            }
+            if (amount >= 20 && frame != null && frame.Find("Backdrop/Art") is RectTransform stage) StartCoroutine(MemoryForgeUiMotion.Shake(stage, 10, 0.35f, Still));
             if (enemyBars.TryGetValue(uid, out var bar)) Drain(bar, before, max);
         }
         RectTransform? Anchor(string uid) => enemyArt.TryGetValue(uid, out var art) ? art : enemyRoots.TryGetValue(uid, out var root) ? root : null;
@@ -2252,37 +2396,90 @@ namespace MemoryForge.Client
             for (float t = 0; t < 0.3f && !Calm; t += Time.unscaledDeltaTime) { if (image == null) yield break; image.color = Color.Lerp(hit, rest, t / 0.3f); yield return null; }
             if (image != null) image.color = rest;
         }
+        // A white burst over a struck painting, larger for a bigger hit.
+        void Spark(RectTransform art, int amount)
+        {
+            if (frame == null) return;
+            float size = 120 + Math.Min(160, amount * 6); var at = FramePoint(art);
+            var burst = Deco(frame, "HitSpark", Halo, at.x - size / 2, at.y - size / 2, size, size, new Color(1f, 0.97f, 0.9f, 0.85f));
+            burst.pivot = new Vector2(0.5f, 0.5f); burst.anchoredPosition += new Vector2(size / 2, -size / 2);
+            StartCoroutine(MemoryForgeUiMotion.Burst(burst, 0.5f, 1.4f, 0.28f, Still));
+            var frames = Enumerable.Range(1, 6).Select(k => Kit("ui_hit_slash_0" + k)).ToArray();
+            if (frames.Any(f => f == null)) return;
+            float slash = 200 + Math.Min(120, amount * 4);
+            var image = Deco(frame, "HitSlash", frames[0]!, at.x - slash / 2, at.y - slash / 2, slash, slash, Color.white).GetComponent<Image>();
+            StartCoroutine(Flipbook(image, frames!, 0.06f));
+        }
+        // Steps an image through its frames, then removes it; with reduced motion it goes at once.
+        IEnumerator Flipbook(Image image, Sprite[] frames, float step)
+        {
+            for (int k = 0; k < frames.Length && !Calm; k++)
+            {
+                if (image == null) yield break;
+                image.sprite = frames[k];
+                for (float t = 0; t < step && !Calm; t += Time.unscaledDeltaTime) yield return null;
+            }
+            if (image != null) Destroy(image.gameObject);
+        }
         void Flash(RectTransform panel)
         {
             if (Calm) return;
             var flash = Box(panel, "HitFlash", 0, 0, panel.sizeDelta.x, panel.sizeDelta.y, new Color(1f, 0.35f, 0.3f, 0.35f));
             StartCoroutine(MemoryForgeUiMotion.Fade(flash.gameObject.AddComponent<CanvasGroup>(), 1, 0, 0.35f, Still));
         }
-        // The lost part of a bar (its old value) shown behind the new fill and drained away.
+        // The lost part of a bar (its old value) shown behind the new fill: it holds a moment, so the size of the hit reads, then drains.
         void Drain(RectTransform fill, int before, int max)
         {
             if (Calm || max <= 0) return;
             var back = (RectTransform)fill.parent; float width = back.sizeDelta.x;
             var ghost = Box(back, "Lost", 0, 0, width * Mathf.Clamp01((float)before / max), back.sizeDelta.y, new Color(1f, 0.85f, 0.6f, 0.75f));
             ghost.SetSiblingIndex(0);
-            StartCoroutine(MemoryForgeUiMotion.Resize(ghost, fill.sizeDelta.x, 0.45f, Still));
+            StartCoroutine(DrainLater(ghost, fill.sizeDelta.x));
         }
-        // A number rising from the middle of an element (the enemy's art, the party panel); with reduced motion it stays still, then goes.
-        void Pop(RectTransform? anchor, string text, Color color, float rise = 46)
+        IEnumerator DrainLater(RectTransform ghost, float width)
+        {
+            for (float t = 0; t < 0.4f && !Calm; t += Time.unscaledDeltaTime) { if (ghost == null) yield break; yield return null; }
+            if (ghost != null) yield return MemoryForgeUiMotion.Resize(ghost, width, 0.5f, Still);
+        }
+        // A number rising from the middle of an element (the enemy's art, the party panel), popping in larger for a bigger hit; with
+        // reduced motion it stays still at its size, then goes.
+        void Pop(RectTransform? anchor, string text, Color color, float rise = 46, int amount = 0)
         {
             if (anchor == null || frame == null) return;
-            var at = FramePoint(anchor);
-            var label = Label(frame, text, at.x - 120, at.y - 30, 240, 60, 40, color, FontStyle.Bold, TextAnchor.MiddleCenter);
+            var at = FramePoint(anchor); int size = 40 + Math.Min(24, amount);
+            var label = Label(frame, text, at.x - 150, at.y - 45, 300, 90, size, color, FontStyle.Bold, TextAnchor.MiddleCenter);
             label.name = "HitNumber"; label.resizeTextForBestFit = false;
             var shadow = label.gameObject.AddComponent<Outline>(); shadow.effectColor = new Color(0, 0, 0, 0.8f); shadow.effectDistance = new Vector2(2, -2);
+            var r = label.rectTransform; r.pivot = new Vector2(0.5f, 0.5f); r.anchoredPosition += new Vector2(150, -45);
             StartCoroutine(MemoryForgeUiMotion.Rise(label, rise, 0.9f, Still));
+            if (!Calm) StartCoroutine(MemoryForgeUiMotion.Punch(r, 1.7f, 0.2f, Still));
         }
-        // The played card's ghost (decoration) from its hand slot to the enemy it hit, the timeline (reservations) or the party panel.
-        void Fly((string Name, Vector2 From, string? Target, string Mode) shot)
+        // A band across the stage saying what begins (the battle, a player turn); it fades in and out and takes no input.
+        void Banner(string text, Color tone)
         {
             if (Calm || frame == null) return;
-            Vector2 to = shot.Mode != "now" ? new Vector2(860, 492) : shot.Target != null && enemyArt.TryGetValue(shot.Target, out var aim) ? FramePoint(aim)
-                : partyPanel != null ? FramePoint(partyPanel) : new Vector2(800, 300);
+            var art = Kit(tone == Danger ? "ui_banner_turn_enemy" : "ui_banner_turn_player");
+            var band = Box(frame, "TurnBanner", 0, art != null ? 262 : 316, 1600, art != null ? 200 : 92, art != null ? Color.white : Alpha(Background, 0.8f));
+            if (art != null) band.GetComponent<Image>().sprite = art;
+            else { Box(band, "Line", 0, 0, 1600, 3, Alpha(tone, 0.9f)); Box(band, "Line", 0, 89, 1600, 3, Alpha(tone, 0.9f)); }
+            var label = Strong(Label(band, text, 0, 0, 1600, art != null ? 200 : 92, 42, tone, FontStyle.Bold, TextAnchor.MiddleCenter)); label.resizeTextForBestFit = false;
+            StartCoroutine(ShowBanner(band, label.rectTransform));
+        }
+        IEnumerator ShowBanner(RectTransform band, RectTransform words)
+        {
+            var group = band.gameObject.AddComponent<CanvasGroup>(); group.blocksRaycasts = false; group.interactable = false;
+            StartCoroutine(MemoryForgeUiMotion.SlideIn(words, new Vector2(120, 0), 0.3f, Still));
+            yield return MemoryForgeUiMotion.Fade(group, 0, 1, 0.16f, Still);
+            for (float t = 0; t < 0.55f && !Calm; t += Time.unscaledDeltaTime) { if (band == null) yield break; yield return null; }
+            if (band != null) yield return MemoryForgeUiMotion.Fade(group, 1, 0, 0.3f, Still);
+            if (band != null) Destroy(band.gameObject);
+        }
+        // The played card's ghost (decoration) from its hand slot to the enemy it hit, the rail group it was reserved in or the party.
+        void Fly((string Name, Vector2 From, string? Target, string Mode, string? Owner) shot)
+        {
+            if (Calm || frame == null) return;
+            Vector2 to = shot.Mode != "now" ? (railZones.TryGetValue(shot.Mode, out var zone) ? FramePoint(zone) : new Vector2(800, 113))
+                : shot.Target != null && enemyArt.TryGetValue(shot.Target, out var aim) ? FramePoint(aim) : partyPanel != null ? FramePoint(partyPanel) : new Vector2(800, 300);
             var ghost = Plate(frame, "PlayedCard", shot.From.x - 80, shot.From.y - 90, 160, 180, Panel, Memory, 2);
             Label(ghost, shot.Name, 10, 70, 140, 40, 22, Ink, FontStyle.Bold, TextAnchor.MiddleCenter);
             // Under every panel and control (just above the stage scrim): it shows over the painted stage only and never hides a
@@ -2291,16 +2488,176 @@ namespace MemoryForge.Client
             if (under != null) ghost.SetSiblingIndex(under.GetSiblingIndex() + 1);
             StartCoroutine(MemoryForgeUiMotion.Fly(ghost, to - new Vector2(80, 90), 0.36f, Still));
         }
+        // The member whose card or ultimate committed steps towards the enemies and back.
+        void Lunge(string? owner)
+        {
+            if (Calm || owner == null || !partyArt.TryGetValue(owner, out var art) || art == null) return;
+            StartCoroutine(MemoryForgeUiMotion.SlideIn(art, new Vector2(48, 0), 0.32f, Still));
+        }
         // A rect's centre in the frame's top-left coordinates (the space Box and Label place in).
         Vector2 FramePoint(RectTransform r)
         {
             var local = frame!.InverseTransformPoint(r.TransformPoint(r.rect.center));
             return new Vector2(local.x + 800, 450 - local.y);
         }
-        // Remembers where a play or an ultimate leaves from (its card face or Ult button), so the view after it commits can fly its ghost.
-        void Launch(Dictionary<string, RectTransform> from, string key, string name, string mode, string? aim)
+        // Remembers where a play or an ultimate leaves from (its card face or Ult button) and whose it is, so the view after it commits
+        // can fly its ghost and step its owner forward.
+        void Launch(Dictionary<string, RectTransform> from, string key, string name, string mode, string? aim, string? owner)
         {
-            launched = frame != null && from.TryGetValue(key, out var origin) && origin != null ? (name, FramePoint(origin), aim, mode) : null;
+            launched = frame != null && from.TryGetValue(key, out var origin) && origin != null ? (name, FramePoint(origin), aim, mode, owner) : null;
+        }
+        string? CardOwner(string uid)
+        {
+            try { return run?.BattleEffectiveCard(uid).Owner; } catch (RuleException) { return null; }
+        }
+
+        // ───────── card drag (BATTLE-STAGE-20261018) ─────────
+        // A drag only draws: an arrow from the card to the pointer and a light on the zone a drop there asks for. The drop goes through
+        // DragPlay, the tap path's own selection and confirm. None of it takes a raycast.
+        RectTransform? dragLayer; string? dragUid;
+        bool BeginCardDrag(string uid)
+        {
+            var b = run?.State.Battle;
+            if (frame == null || b == null || b.Phase != "PLAYER" || Locked() || prepared != null || !b.Zones.Hand.Contains(uid) || !handFaces.ContainsKey(uid)) return false;
+            dragUid = uid; return true;
+        }
+        void CardDragTo(Vector2 screen, Camera? eye)
+        {
+            if (dragLayer != null) Destroy(dragLayer.gameObject);
+            dragLayer = null;
+            if (frame == null || dragUid == null || !handFaces.TryGetValue(dragUid, out var face) || face == null) return;
+            dragLayer = Box(frame, "DragArrow", 0, 0, 1600, 900, Color.clear);
+            var (mode, aim, zone) = DropTarget(dragUid, screen, eye);
+            Color color = mode == null ? Alpha(Ink, 0.7f) : mode == "now" ? Danger : Memory;
+            if (zone != null) { var r = FrameRect(zone); Plate(dragLayer, "DropHot", r.x - 6, r.y - 6, r.width + 12, r.height + 12, Alpha(color, 0.12f), color, 3); }
+            if (mode != null) DragForecast(dragUid, mode, aim, ScreenToFrame(screen, eye));
+            Vector2 from = FramePoint(face) - new Vector2(0, face.rect.height / 2), to = ScreenToFrame(screen, eye);
+            var bend = (from + to) / 2 + new Vector2(0, -Math.Min(160, Vector2.Distance(from, to) * 0.3f));
+            const int dots = 14;
+            string state = mode == null ? "normal" : "target";
+            Sprite? body = Kit("ui_drag_arrow_body_" + state), head = Kit("ui_drag_arrow_head_" + state);
+            Vector2 Point(float t) => (1 - t) * (1 - t) * from + 2 * (1 - t) * t * bend + t * t * to;
+            for (int k = 1; k <= dots; k++)
+            {
+                float t = k / (float)dots, size = k == dots ? 26 : 8 + 8 * t; var p = Point(t);
+                if (body == null || head == null) { Deco(dragLayer, "ArrowDot", k == dots ? Diamond : Pill(0), p.x - size / 2, p.y - size / 2, size, size, color); continue; }
+                // The kit's segments follow the curve (art forward is up), the head at its end; frame y runs down, so the turn flips.
+                var along = Point(t) - Point(t - 1f / dots); float turn = Mathf.Atan2(-along.y, along.x) * Mathf.Rad2Deg - 90;
+                float w = k == dots ? 52 : 12 + 8 * t, h2 = k == dots ? 52 : Math.Max(12, along.magnitude + 4);
+                var piece = Deco(dragLayer, k == dots ? "ArrowHead" : "ArrowBody", k == dots ? head : body, p.x - w / 2, p.y - h2 / 2, w, h2, Color.white);
+                piece.pivot = new Vector2(0.5f, 0.5f); piece.anchoredPosition += new Vector2(w / 2, -h2 / 2); piece.localRotation = Quaternion.Euler(0, 0, turn);
+            }
+        }
+        // While a drag would send a request: Core's forecast of exactly that request beside the pointer and, on the last enemy standing,
+        // the HP it would take off as a white part of its bar. Computed once per card, mode and target while the drag stays over them.
+        (string Key, BattlePlayForecast? Forecast) dragForecast;
+        void DragForecast(string uid, string mode, string? aim, Vector2 at)
+        {
+            if (dragLayer == null || run == null) return;
+            string key = uid + "|" + mode + "|" + aim;
+            if (dragForecast.Key != key)
+            {
+                BattlePlayForecast? made; try { made = run.BattleForecast(uid, mode, aim ?? target); } catch (RuleException) { made = null; }
+                dragForecast = (key, made);
+            }
+            var f = dragForecast.Forecast; if (f == null) return;
+            string text = ForecastText(f); float w = Math.Min(560, TextWidth(text, 18) + 28);
+            var tip = Plate(dragLayer, "DragForecast", Mathf.Clamp(at.x - w / 2, 8, 1592 - w), Math.Max(8, at.y - 86), w, 40, Alpha(Background, 0.94f), ForecastColor(f), 2, true);
+            Label(tip, text, 14, 0, w - 28, 40, 18, ForecastColor(f), FontStyle.Normal, TextAnchor.MiddleCenter);
+            // Core's EnemyHpLoss is the sum over every enemy, so the bar shows it only when the target is the one enemy left standing.
+            var e = aim == null ? null : run.State.Battle?.Enemies.FirstOrDefault(x => x.Uid == aim);
+            if (run.State.Battle?.Enemies.Count(x => x.Alive) != 1) e = null;
+            if (e != null && f.Error == null && f.EnemyHpLoss > 0 && e.MaxHp > 0 && enemyBars.TryGetValue(e.Uid, out var fill) && fill != null)
+            {
+                var track = FrameRect((RectTransform)fill.parent); float now = track.width * e.Hp / e.MaxHp, after = track.width * Math.Max(0, e.Hp - f.EnemyHpLoss) / e.MaxHp;
+                Box(dragLayer, "ForecastLoss", track.x + after, track.y, now - after, track.height, new Color(1, 1, 1, 0.85f));
+            }
+        }
+        void EndCardDrag(string uid, Vector2 screen, Camera? eye, bool drop)
+        {
+            dragForecast = default;
+            if (dragLayer != null) Destroy(dragLayer.gameObject);
+            dragLayer = null; bool ours = dragUid == uid; dragUid = null;
+            if (!drop || !ours) return;
+            var (mode, aim, _) = DropTarget(uid, screen, eye);
+            if (mode != null) DragPlay(uid, mode, aim);
+        }
+        // What a drop at this screen point asks for, and the zone it lights: a living enemy's slot (where it is shown) plays now on it,
+        // a rail group reserves for that time, and the rest of the stage plays now a card that needs no target (or, with one enemy left,
+        // on that one). The card row and the hand ask for nothing.
+        (string? Mode, string? Aim, RectTransform? Zone) DropTarget(string uid, Vector2 screen, Camera? eye)
+        {
+            var b = run?.State.Battle; if (frame == null || b == null) return (null, null, null);
+            foreach (var e in b.Enemies)
+                if (e.Alive && enemyRoots.TryGetValue(e.Uid, out var slot) && slot != null && Shown(slot, screen, eye)) return ("now", e.Uid, slot);
+            foreach (var pair in railZones)
+                if (pair.Value != null && Shown(pair.Value, screen, eye)) return (pair.Key, null, pair.Value);
+            var at = ScreenToFrame(screen, eye);
+            if (at.x >= 32 && at.x <= 1568 && at.y >= StageTop && at.y < ActionsTop && partyPanel != null) // the stage itself, never a letterbox
+            {
+                if (run!.BattleNeedsTarget(uid) == null) return ("now", null, partyPanel);
+                var alive = b.Enemies.Where(e => e.Alive).ToList();
+                if (alive.Count == 1 && enemyRoots.TryGetValue(alive[0].Uid, out var only) && only != null && Shown(only, RectTransformUtility.WorldToScreenPoint(eye, only.TransformPoint(only.rect.center)), eye))
+                    return ("now", alive[0].Uid, only);
+            }
+            return (null, null, null);
+        }
+        // Inside the rect and every mask above it (a slot scrolled out of the stage band is not a target).
+        static bool Shown(RectTransform r, Vector2 screen, Camera? eye) =>
+            RectTransformUtility.RectangleContainsScreenPoint(r, screen, eye) && r.GetComponentsInParent<RectMask2D>().All(m => RectTransformUtility.RectangleContainsScreenPoint(m.rectTransform, screen, eye));
+        /// <summary>Plays or reserves a hand card as a drop asks (mode "now" with an optional enemy, or "next"/"after"): selects the
+        /// card, its target and the mode, then confirms exactly like the card row's confirm (the same checks, pick sheet and
+        /// player-action display rules). A mode Core does not allow for the card leaves it selected with a notice instead. True only
+        /// when the play was committed.</summary>
+        public bool DragPlay(string uid, string mode, string? aim)
+        {
+            if (Locked() || run == null) return false;
+            selectedCard = uid; if (aim != null) target = aim; ClearIntentNotice();
+            bool allowed; try { allowed = run.BattleAllowedModes(uid).Contains(mode); } catch (RuleException) { allowed = false; }
+            if (!allowed)
+            {
+                selectedMode = null; notice = mode == "now" ? "이 카드는 바로 쓸 수 없어요. 시간표에 놓아 예약하세요." : "이 카드는 예약할 수 없어요. 적에게 놓아 바로 쓰세요.";
+                noticeUntil = Time.realtimeSinceStartup + 2.6f; Render(); return false;
+            }
+            selectedMode = mode;
+            if (ConfirmCard()) return true;
+            if (picker == null) Render();
+            return false;
+        }
+        Vector2 ScreenToFrame(Vector2 screen, Camera? eye)
+        {
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(frame!, screen, eye, out var local);
+            return new Vector2(local.x + 800, 450 - local.y);
+        }
+        // A rect's bounds in the frame's top-left coordinates.
+        Rect FrameRect(RectTransform r)
+        {
+            var corners = new Vector3[4]; r.GetWorldCorners(corners);
+            Vector3 a = frame!.InverseTransformPoint(corners[0]), c = frame.InverseTransformPoint(corners[2]);
+            return Rect.MinMaxRect(Math.Min(a.x, c.x) + 800, 450 - Math.Max(a.y, c.y), Math.Max(a.x, c.x) + 800, 450 - Math.Min(a.y, c.y));
+        }
+        // A hand card's drag: upward, it aims and plays on release; otherwise every drag event goes on to the hand's own scroll, so
+        // sideways drags still scroll it. A view replaced mid-drag (its card disabled) drops nothing.
+        sealed class CardDrag : MonoBehaviour, IInitializePotentialDragHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
+        {
+            MemoryForgeExpeditionClient? owner; string uid = ""; ScrollRect? scroll; bool aiming;
+            public void Bind(MemoryForgeExpeditionClient client, string card, ScrollRect? hand) { owner = client; uid = card; scroll = hand; }
+            public void OnInitializePotentialDrag(PointerEventData e) { if (scroll != null) scroll.OnInitializePotentialDrag(e); }
+            public void OnBeginDrag(PointerEventData e)
+            {
+                e.eligibleForClick = false; // a drag never also presses the card (the module keeps a click when press and drag share an object)
+                // Any upward drag aims, unless the hand scrolls and the drag runs mostly sideways (more than twice as wide as tall).
+                var moved = e.position - e.pressPosition; bool sideways = scroll != null && scroll.horizontal && Mathf.Abs(moved.x) > moved.y * 2;
+                aiming = e.button == PointerEventData.InputButton.Left && moved.y > 0 && !sideways && owner != null && owner.BeginCardDrag(uid);
+                if (aiming) owner!.CardDragTo(e.position, e.pressEventCamera); else if (scroll != null) scroll.OnBeginDrag(e);
+            }
+            public void OnDrag(PointerEventData e) { if (aiming) owner!.CardDragTo(e.position, e.pressEventCamera); else if (scroll != null) scroll.OnDrag(e); }
+            public void OnEndDrag(PointerEventData e)
+            {
+                if (aiming) { aiming = false; owner!.EndCardDrag(uid, e.position, e.pressEventCamera, true); }
+                else if (scroll != null) scroll.OnEndDrag(e);
+            }
+            void OnDisable() { if (aiming && owner != null) owner.EndCardDrag(uid, Vector2.zero, null, false); aiming = false; }
         }
 
         // ───────── overlay sheets ─────────
@@ -2609,7 +2966,7 @@ namespace MemoryForge.Client
             previous.gameObject.SetActive(false);
             if (Application.isPlaying) Destroy(previous.gameObject); else DestroyImmediate(previous.gameObject);
             canvasRoot = null; frame = null; noticeLabel = null; summaryText = null; summaryStatus = null; summaryContent = null; summaryScroll = null;
-            actionText = null; actionStatus = null; actionSkip = null; confirmCaption = null; actionOverlay = null; actionGated.Clear(); paceButtons.Clear();
+            actionText = null; actionStatus = null; actionSkip = null; confirmCaption = null; actionOverlay = null; dragLayer = null; dragUid = null; actionGated.Clear(); paceButtons.Clear();
         }
         RectTransform Box(Transform parent, string name, float x, float y, float width, float height, Color color)
         {
@@ -2782,10 +3139,6 @@ namespace MemoryForge.Client
         float ExitTop => 900 - Math.Max(108, minTouch);
         float PanelBottom => ExitTop - 4;
         Rect ProceedHit => new Rect(1288, ExitTop, 280, 900 - ExitTop);
-        // The battle's two control bands between the stage (ends y 458) and the hand: pace/skip above BandSplit, the card row below it,
-        // each minTouch tall; the hand and 턴 종료 start below both.
-        float BandSplit => Math.Max(568, 460 + minTouch);
-        float DockTop => Math.Max(684, BandSplit + minTouch + 2);
         // Units of the 1600×900 frame that make 48dp on this screen: a phone's density over the frame's aspect-fit pixel scale. 0 off
         // phones (a mouse needs no finger-size targets), so desktop and test layouts are unchanged; TouchOverride lets a test act as one.
         public static float? TouchOverride;
@@ -2839,6 +3192,50 @@ namespace MemoryForge.Client
             if (texture == null && !optional) Debug.LogWarning("[MemoryForge] Missing art Resources/Art/" + path + "; its panel and every text stay.");
             var sprite = texture == null ? null : Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f), 100f);
             sprites[path] = sprite; return sprite;
+        }
+        // Codex's battle UI kit (art/ui/battle-kit/assets, byte copies in Resources/Art/UI/battle): a sprite, 9-sliced when a border
+        // (source pixels: left, bottom, right, top) is given; null when the file is missing, so the procedural shape stays in its place.
+        Sprite? Kit(string id, Vector4? border = null)
+        {
+            string key = "UI/battle/" + id + (border.HasValue ? "|sliced" : "");
+            if (sprites.TryGetValue(key, out var cached)) return cached;
+            var texture = KitTexture(id);
+            if (texture == null) Debug.LogWarning("[MemoryForge] Missing UI kit art Resources/Art/UI/battle/" + id + "; the procedural shape stays.");
+            var sprite = texture == null ? null : Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f), 100f, 0, SpriteMeshType.FullRect, border ?? Vector4.zero);
+            sprites[key] = sprite; return sprite;
+        }
+        // The kit's textures, loaded as one folder on first use and shared by every client (a later draw never waits on a single load,
+        // so a command's redraw stays as quick as before); loaded again only when one was unloaded meanwhile.
+        static readonly Dictionary<string, Texture2D> kitTextures = new Dictionary<string, Texture2D>(StringComparer.Ordinal);
+        static bool kitLoaded;
+        static Texture2D? KitTexture(string id)
+        {
+            if (kitTextures.TryGetValue(id, out var known)) { if (known != null) return known; kitLoaded = false; }
+            if (!kitLoaded) { kitLoaded = true; kitTextures.Clear(); foreach (var t in Resources.LoadAll<Texture2D>("Art/UI/battle")) kitTextures[t.name] = t; }
+            return kitTextures.TryGetValue(id, out var texture) && texture != null ? texture : null;
+        }
+        // A kit piece stretched sideways only (rail sockets, bar frames): sliced with its caps scaled to the drawn height.
+        static void Sideways(Image image, Sprite sprite, float sourceHeight, float height)
+        { image.sprite = sprite; image.type = Image.Type.Sliced; image.pixelsPerUnitMultiplier = sourceHeight / Math.Max(1, height); }
+        // The kit's intent glyph for a move: an attack by its shown total in seven tiers (StS's steps of 5 up to 30), the rest by type.
+        static string IntentIcon(EnemyMoveDef? move, int total)
+        {
+            switch (move?.Type)
+            {
+                case "atk": return "ui_intent_attack_0" + (1 + Math.Min(6, Math.Max(0, total) / 5));
+                case "atkdebuff": return "ui_intent_attack_debuff";
+                case "def": return "ui_intent_defend";
+                case "buff": return "ui_intent_strength";
+                case "debuff": return "ui_intent_debuff";
+                case "charge": return "ui_intent_charge";
+                case "summon": return "ui_intent_summon";
+                case "heal": return "ui_intent_heal";
+                case "insert": return "ui_intent_curse";
+                case "reflect": return "ui_intent_reflect";
+                case "expose": return "ui_intent_expose";
+                case "blockAll": return "ui_intent_defend_all";
+                default: return "ui_intent_unknown";
+            }
         }
         // Procedural shapes (white, tinted by Image.color), each made once per session; until Codex's UI kit (art/requests/
         // ui-skin-kit-20261018.md) arrives they carry every frame: a rounded panel (corner 14 px) or its ring, a pill (9-sliced, half-
