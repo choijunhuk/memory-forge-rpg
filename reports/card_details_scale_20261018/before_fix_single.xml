@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Failed(Child)" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-18 06:10:59Z" end-time="2026-10-18 06:10:59Z" duration="0.401592">
+  <test-suite type="TestSuite" id="1382" name="Memory Forge" fullname="Memory Forge" runstate="Runnable" testcasecount="338" result="Failed" site="Child" start-time="2026-10-18 06:10:59Z" end-time="2026-10-18 06:10:59Z" duration="0.401592" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1374" name="MemoryForge.PlayModeTests.dll" fullname="/Users/choi/Documents/Memory_forge/.claude/worktrees/jolly-murdock-26c48b/client/MemoryForgeUnity/Library/ScriptAssemblies/MemoryForge.PlayModeTests.dll" runstate="Runnable" testcasecount="338" result="Failed" site="Child" start-time="2026-10-18 06:10:59Z" end-time="2026-10-18 06:10:59Z" duration="0.391233" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="25578" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="1375" name="MemoryForge" fullname="MemoryForge" runstate="Runnable" testcasecount="338" result="Failed" site="Child" start-time="2026-10-18 06:10:59Z" end-time="2026-10-18 06:10:59Z" duration="0.388482" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="1377" name="Client" fullname="MemoryForge.Client" runstate="Runnable" testcasecount="268" result="Failed" site="Child" start-time="2026-10-18 06:10:59Z" end-time="2026-10-18 06:10:59Z" duration="0.385370" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestSuite" id="1378" name="Tests" fullname="MemoryForge.Client.Tests" runstate="Runnable" testcasecount="268" result="Failed" site="Child" start-time="2026-10-18 06:10:59Z" end-time="2026-10-18 06:10:59Z" duration="0.383137" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="TestFixture" id="1221" name="PracticeServerSessionPlayModeTests" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" testcasecount="134" result="Failed" site="Child" start-time="2026-10-18 06:10:59Z" end-time="2026-10-18 06:10:59Z" duration="0.380403" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="1228" name="CardDetailsShowTheCurrentServerTextWhollyScrollableReadOnlyAndCloseWhenStale" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.CardDetailsShowTheCurrentServerTextWhollyScrollableReadOnlyAndCloseWhenStale" methodname="CardDetailsShowTheCurrentServerTextWhollyScrollableReadOnlyAndCloseWhenStale" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="881000463" result="Failed" start-time="2026-10-18 06:10:59Z" end-time="2026-10-18 06:10:59Z" duration="0.370134" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  the label is as tall as its wrapped text
+  Expected: greater than or equal to 1508.04907f
+  But was:  1482.0f
+]]></message>
+                  <stack-trace><![CDATA[at MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests+<CardDetailsShowTheCurrentServerTextWhollyScrollableReadOnlyAndCloseWhenStale>d__7.MoveNext () [0x003b6] in /Users/choi/Documents/Memory_forge/.claude/worktrees/jolly-murdock-26c48b/client/MemoryForgeUnity/Assets/Tests/PlayMode/PracticeServerBattleControlsPlayModeTests.cs:335
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@388540dd9ce6/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+                <output><![CDATA[<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: [TestRunnerNoThrottle] Restored Interaction Mode after test run.
+Saving results to: /Users/choi/Library/Application Support/DefaultCompany/Memory Forge/TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

@@ -1315,6 +1315,9 @@ namespace MemoryForge.Client
             var canvas = canvasObject.GetComponent<Canvas>(); canvas.renderMode = RenderMode.ScreenSpaceOverlay; canvas.sortingOrder = 10;
             var scaler = canvasObject.GetComponent<CanvasScaler>(); scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
             scaler.referenceResolution = new Vector2(1600, 900); scaler.matchWidthOrHeight = 0.5f;
+            // The scaler's OnEnable already applied its default constant scale 1 and it re-applies only before the next canvas render, so
+            // re-enable it now: text measured while building (Flow's wrapped heights) must use the scale it is drawn at.
+            scaler.enabled = false; scaler.enabled = true;
             canvasRoot = canvasObject.GetComponent<RectTransform>();
             if (factory == null)
             {

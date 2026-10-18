@@ -1,0 +1,881 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="134" result="Passed" total="134" passed="134" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-18 06:12:34Z" end-time="2026-10-18 06:12:51Z" duration="17.2535557">
+  <test-suite type="TestSuite" id="1382" name="Memory Forge" fullname="Memory Forge" runstate="Runnable" testcasecount="338" result="Passed" start-time="2026-10-18 06:12:34Z" end-time="2026-10-18 06:12:51Z" duration="17.253556" total="134" passed="134" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1374" name="MemoryForge.PlayModeTests.dll" fullname="/Users/choi/Documents/Memory_forge/.claude/worktrees/jolly-murdock-26c48b/client/MemoryForgeUnity/Library/ScriptAssemblies/MemoryForge.PlayModeTests.dll" runstate="Runnable" testcasecount="338" result="Passed" start-time="2026-10-18 06:12:34Z" end-time="2026-10-18 06:12:51Z" duration="17.246693" total="134" passed="134" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="28516" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1375" name="MemoryForge" fullname="MemoryForge" runstate="Runnable" testcasecount="338" result="Passed" start-time="2026-10-18 06:12:34Z" end-time="2026-10-18 06:12:51Z" duration="17.243509" total="134" passed="134" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1377" name="Client" fullname="MemoryForge.Client" runstate="Runnable" testcasecount="268" result="Passed" start-time="2026-10-18 06:12:34Z" end-time="2026-10-18 06:12:51Z" duration="17.240144" total="134" passed="134" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1378" name="Tests" fullname="MemoryForge.Client.Tests" runstate="Runnable" testcasecount="268" result="Passed" start-time="2026-10-18 06:12:34Z" end-time="2026-10-18 06:12:51Z" duration="17.237566" total="134" passed="134" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1221" name="PracticeServerSessionPlayModeTests" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" testcasecount="134" result="Passed" start-time="2026-10-18 06:12:34Z" end-time="2026-10-18 06:12:51Z" duration="17.234382" total="134" passed="134" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1352" name="ACoreRefusalChangesNothingShownAndTheShopRemovalSendsOnlyTheConfirmedKey" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.ACoreRefusalChangesNothingShownAndTheShopRemovalSendsOnlyTheConfirmedKey" methodname="ACoreRefusalChangesNothingShownAndTheShopRemovalSendsOnlyTheConfirmedKey" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="963216017" result="Passed" start-time="2026-10-18 06:12:34Z" end-time="2026-10-18 06:12:35Z" duration="0.321400" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1231" name="ACoreRefusalOfAPartChangesNothingShownAndOnlyAFreshPreviewReopensSaving" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.ACoreRefusalOfAPartChangesNothingShownAndOnlyAFreshPreviewReopensSaving" methodname="ACoreRefusalOfAPartChangesNothingShownAndOnlyAFreshPreviewReopensSaving" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1173631645" result="Passed" start-time="2026-10-18 06:12:35Z" end-time="2026-10-18 06:12:35Z" duration="0.150129" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1235" name="ADefeatKeepsTheSavedDeckAndOnlyTheServersOneChangeVerdictClosesSaving" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.ADefeatKeepsTheSavedDeckAndOnlyTheServersOneChangeVerdictClosesSaving" methodname="ADefeatKeepsTheSavedDeckAndOnlyTheServersOneChangeVerdictClosesSaving" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="241047324" result="Passed" start-time="2026-10-18 06:12:35Z" end-time="2026-10-18 06:12:35Z" duration="0.151527" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1237" name="ADelayedPreviewOfAnOlderSelectionOrContextNeverEnablesSaving" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.ADelayedPreviewOfAnOlderSelectionOrContextNeverEnablesSaving" methodname="ADelayedPreviewOfAnOlderSelectionOrContextNeverEnablesSaving" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="611120313" result="Passed" start-time="2026-10-18 06:12:35Z" end-time="2026-10-18 06:12:35Z" duration="0.189312" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1287" name="ADoneRunSaveSendsTheContextMemoryVersionAndACoreRefusalClearsIt" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.ADoneRunSaveSendsTheContextMemoryVersionAndACoreRefusalClearsIt" methodname="ADoneRunSaveSendsTheContextMemoryVersionAndACoreRefusalClearsIt" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="364238097" result="Passed" start-time="2026-10-18 06:12:35Z" end-time="2026-10-18 06:12:35Z" duration="0.008760" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1248" name="AFailedReReadAfterACommitKeepsTheLastGoodSnapshotButBlocksNewMutations" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.AFailedReReadAfterACommitKeepsTheLastGoodSnapshotButBlocksNewMutations" methodname="AFailedReReadAfterACommitKeepsTheLastGoodSnapshotButBlocksNewMutations" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1967747264" result="Passed" start-time="2026-10-18 06:12:35Z" end-time="2026-10-18 06:12:35Z" duration="0.008029" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1355" name="AForgeVariationSendsTheChosenCardThenOnlyAPublishedPartAndNeverReRolls" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.AForgeVariationSendsTheChosenCardThenOnlyAPublishedPartAndNeverReRolls" methodname="AForgeVariationSendsTheChosenCardThenOnlyAPublishedPartAndNeverReRolls" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="787596827" result="Passed" start-time="2026-10-18 06:12:35Z" end-time="2026-10-18 06:12:35Z" duration="0.051976" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1286" name="AFutureVersionRefusalStaysPendingEvenAfterALaterReadCatchesUp" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.AFutureVersionRefusalStaysPendingEvenAfterALaterReadCatchesUp" methodname="AFutureVersionRefusalStaysPendingEvenAfterALaterReadCatchesUp" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="128768793" result="Passed" start-time="2026-10-18 06:12:35Z" end-time="2026-10-18 06:12:35Z" duration="0.008636" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1239" name="AnAssignmentDropsTheSelectionAndPreviewAndSendsOnlyTheExistingCommand" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.AnAssignmentDropsTheSelectionAndPreviewAndSendsOnlyTheExistingCommand" methodname="AnAssignmentDropsTheSelectionAndPreviewAndSendsOnlyTheExistingCommand" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="79645163" result="Passed" start-time="2026-10-18 06:12:35Z" end-time="2026-10-18 06:12:35Z" duration="0.190917" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1356" name="AnEventChoiceIsSentOnceAsItsIndexAndAMadeChoiceIsNeverChosenAgain" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.AnEventChoiceIsSentOnceAsItsIndexAndAMadeChoiceIsNeverChosenAgain" methodname="AnEventChoiceIsSentOnceAsItsIndexAndAMadeChoiceIsNeverChosenAgain" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1575572728" result="Passed" start-time="2026-10-18 06:12:35Z" end-time="2026-10-18 06:12:35Z" duration="0.052679" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1357" name="AnEventRemovalAsksItsAuthoredCountAndNeverSendsACanceledOrOutdatedSelection" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.AnEventRemovalAsksItsAuthoredCountAndNeverSendsACanceledOrOutdatedSelection" methodname="AnEventRemovalAsksItsAuthoredCountAndNeverSendsACanceledOrOutdatedSelection" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="51640403" result="Passed" start-time="2026-10-18 06:12:35Z" end-time="2026-10-18 06:12:35Z" duration="0.069466" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1229" name="AnOwnedPartGoesOntoAPublishedCardOnceAndOnlyTheServersRebuiltSaveIsShown" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.AnOwnedPartGoesOntoAPublishedCardOnceAndOnlyTheServersRebuiltSaveIsShown" methodname="AnOwnedPartGoesOntoAPublishedCardOnceAndOnlyTheServersRebuiltSaveIsShown" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="879360817" result="Passed" start-time="2026-10-18 06:12:35Z" end-time="2026-10-18 06:12:36Z" duration="0.206523" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1358" name="AnUncertainEventCopyLocksEveryCommandShowsNoCopyAndRetriesTheExactBytes" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.AnUncertainEventCopyLocksEveryCommandShowsNoCopyAndRetriesTheExactBytes" methodname="AnUncertainEventCopyLocksEveryCommandShowsNoCopyAndRetriesTheExactBytes" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="730730303" result="Passed" start-time="2026-10-18 06:12:36Z" end-time="2026-10-18 06:12:36Z" duration="0.046794" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1233" name="AnUncertainPartSendLocksTheSaveAndItsExactRetryNeverUsesTheSecondCopy" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.AnUncertainPartSendLocksTheSaveAndItsExactRetryNeverUsesTheSecondCopy" methodname="AnUncertainPartSendLocksTheSaveAndItsExactRetryNeverUsesTheSecondCopy" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1244432837" result="Passed" start-time="2026-10-18 06:12:36Z" end-time="2026-10-18 06:12:36Z" duration="0.133469" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1238" name="AnUncertainSaveLocksEverythingShowsNoGainAndRetriesTheExactBytes" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.AnUncertainSaveLocksEverythingShowsNoGainAndRetriesTheExactBytes" methodname="AnUncertainSaveLocksEverythingShowsNoGainAndRetriesTheExactBytes" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="342644946" result="Passed" start-time="2026-10-18 06:12:36Z" end-time="2026-10-18 06:12:36Z" duration="0.094449" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1353" name="AnUncertainServiceSendLocksEveryCommandShowsNoGainAndRetriesTheExactBytes" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.AnUncertainServiceSendLocksEveryCommandShowsNoGainAndRetriesTheExactBytes" methodname="AnUncertainServiceSendLocksEveryCommandShowsNoGainAndRetriesTheExactBytes" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="650706080" result="Passed" start-time="2026-10-18 06:12:36Z" end-time="2026-10-18 06:12:36Z" duration="0.040242" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1224" name="AnUncertainUltimateIsSentOnceShowsNoGaugeChangeAndItsExactRetryNeverSpendsTwice" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.AnUncertainUltimateIsSentOnceShowsNoGaugeChangeAndItsExactRetryNeverSpendsTwice" methodname="AnUncertainUltimateIsSentOnceShowsNoGaugeChangeAndItsExactRetryNeverSpendsTwice" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1460541073" result="Passed" start-time="2026-10-18 06:12:36Z" end-time="2026-10-18 06:12:36Z" duration="0.109054" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1247" name="AnUnreadCommittedReplyIsRetriedByteForByteByANewSessionWithoutReplayOrRollback" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.AnUnreadCommittedReplyIsRetriedByteForByteByANewSessionWithoutReplayOrRollback" methodname="AnUnreadCommittedReplyIsRetriedByteForByteByANewSessionWithoutReplayOrRollback" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1010341050" result="Passed" start-time="2026-10-18 06:12:36Z" end-time="2026-10-18 06:12:36Z" duration="0.013132" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1227" name="APreparedCardSurvivesPaceChangesAndOpenDetailsAndGoesOutUnchangedThroughTheExistingDispatch" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.APreparedCardSurvivesPaceChangesAndOpenDetailsAndGoesOutUnchangedThroughTheExistingDispatch" methodname="APreparedCardSurvivesPaceChangesAndOpenDetailsAndGoesOutUnchangedThroughTheExistingDispatch" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1944359348" result="Passed" start-time="2026-10-18 06:12:36Z" end-time="2026-10-18 06:12:37Z" duration="0.835843" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1315" name="APreviewIsAskedOnlyOnTheShownSaveScreenOfAServerThatStillShowsIt" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.APreviewIsAskedOnlyOnTheShownSaveScreenOfAServerThatStillShowsIt" methodname="APreviewIsAskedOnlyOnTheShownSaveScreenOfAServerThatStillShowsIt" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="863596" result="Passed" start-time="2026-10-18 06:12:37Z" end-time="2026-10-18 06:12:37Z" duration="0.016468" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1350" name="APreviewKeepsTheSelectionItWasAskedForAgainstLaterCallerChangesAndNewerSelections" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.APreviewKeepsTheSelectionItWasAskedForAgainstLaterCallerChangesAndNewerSelections" methodname="APreviewKeepsTheSelectionItWasAskedForAgainstLaterCallerChangesAndNewerSelections" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1964387686" result="Passed" start-time="2026-10-18 06:12:37Z" end-time="2026-10-18 06:12:37Z" duration="0.006065" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1316" name="APreviewLeavesAnUnresolvedSaveExactlyPendingAndNeverUnblocksANewOne" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.APreviewLeavesAnUnresolvedSaveExactlyPendingAndNeverUnblocksANewOne" methodname="APreviewLeavesAnUnresolvedSaveExactlyPendingAndNeverUnblocksANewOne" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="818820586" result="Passed" start-time="2026-10-18 06:12:37Z" end-time="2026-10-18 06:12:37Z" duration="0.008392" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1314" name="APreviewVerdictOrRefusalIsTheServersAndChangesNothing" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.APreviewVerdictOrRefusalIsTheServersAndChangesNothing" methodname="APreviewVerdictOrRefusalIsTheServersAndChangesNothing" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="957274613" result="Passed" start-time="2026-10-18 06:12:37Z" end-time="2026-10-18 06:12:37Z" duration="0.011817" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1222" name="AReadyUltimateSendsOnlyItsActorAndASelectedTargetFromThePublishedGaugeInTheLivePlayerPhase" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.AReadyUltimateSendsOnlyItsActorAndASelectedTargetFromThePublishedGaugeInTheLivePlayerPhase" methodname="AReadyUltimateSendsOnlyItsActorAndASelectedTargetFromThePublishedGaugeInTheLivePlayerPhase" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="887409988" result="Passed" start-time="2026-10-18 06:12:37Z" end-time="2026-10-18 06:12:39Z" duration="1.719012" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1354" name="ARefusedHealChangesNothingAndADeckSelectionIsNeverReusedAfterCancelProgressOrReconnect" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.ARefusedHealChangesNothingAndADeckSelectionIsNeverReusedAfterCancelProgressOrReconnect" methodname="ARefusedHealChangesNothingAndADeckSelectionIsNeverReusedAfterCancelProgressOrReconnect" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="2018799928" result="Passed" start-time="2026-10-18 06:12:39Z" end-time="2026-10-18 06:12:39Z" duration="0.083424" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1223" name="AServerBadTargetRefusalOfAnUltimateShowsNoGainAndKeepsTheGauge" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.AServerBadTargetRefusalOfAnUltimateShowsNoGainAndKeepsTheGauge" methodname="AServerBadTargetRefusalOfAnUltimateShowsNoGainAndKeepsTheGauge" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="2115018148" result="Passed" start-time="2026-10-18 06:12:39Z" end-time="2026-10-18 06:12:39Z" duration="0.046972" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1351" name="AShopBuyIsSentOnceWhileHeldAndOnlyTheCommittedServerStateIsShown" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.AShopBuyIsSentOnceWhileHeldAndOnlyTheCommittedServerStateIsShown" methodname="AShopBuyIsSentOnceWhileHeldAndOnlyTheCommittedServerStateIsShown" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1542442493" result="Passed" start-time="2026-10-18 06:12:39Z" end-time="2026-10-18 06:12:39Z" duration="0.052731" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1234" name="AVictorySaveSendsExactlyTheFreshlyPreviewedSelectionOnceAndShowsOnlyTheConfirmedMemory" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.AVictorySaveSendsExactlyTheFreshlyPreviewedSelectionOnceAndShowsOnlyTheConfirmedMemory" methodname="AVictorySaveSendsExactlyTheFreshlyPreviewedSelectionOnceAndShowsOnlyTheConfirmedMemory" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="350101102" result="Passed" start-time="2026-10-18 06:12:39Z" end-time="2026-10-18 06:12:39Z" duration="0.310293" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1264" name="CancellationTimeoutAndDisposeDuringAHeldPostKeepItPending" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.CancellationTimeoutAndDisposeDuringAHeldPostKeepItPending" methodname="CancellationTimeoutAndDisposeDuringAHeldPostKeepItPending" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1446247512" result="Passed" start-time="2026-10-18 06:12:39Z" end-time="2026-10-18 06:12:40Z" duration="1.011233" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1236" name="CapacityAndDomainRefusalsKeepSavingClosedAndChangeNothing" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.CapacityAndDomainRefusalsKeepSavingClosedAndChangeNothing" methodname="CapacityAndDomainRefusalsKeepSavingClosedAndChangeNothing" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="928281074" result="Passed" start-time="2026-10-18 06:12:40Z" end-time="2026-10-18 06:12:40Z" duration="0.146027" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1228" name="CardDetailsShowTheCurrentServerTextWhollyScrollableReadOnlyAndCloseWhenStale" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.CardDetailsShowTheCurrentServerTextWhollyScrollableReadOnlyAndCloseWhenStale" methodname="CardDetailsShowTheCurrentServerTextWhollyScrollableReadOnlyAndCloseWhenStale" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1677590663" result="Passed" start-time="2026-10-18 06:12:40Z" end-time="2026-10-18 06:12:41Z" duration="0.253864" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1288" name="ConfirmNotCommittedClearsOnlyTheExactCurrentRequest" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.ConfirmNotCommittedClearsOnlyTheExactCurrentRequest" methodname="ConfirmNotCommittedClearsOnlyTheExactCurrentRequest" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="989496236" result="Passed" start-time="2026-10-18 06:12:41Z" end-time="2026-10-18 06:12:41Z" duration="0.003085" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1232" name="EachApplicationUsesOneCopyReplacesOnlyItsSlotAndRefundsNothing" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.EachApplicationUsesOneCopyReplacesOnlyItsSlotAndRefundsNothing" methodname="EachApplicationUsesOneCopyReplacesOnlyItsSlotAndRefundsNothing" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="179024270" result="Passed" start-time="2026-10-18 06:12:41Z" end-time="2026-10-18 06:12:41Z" duration="0.165543" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1241" name="EveryChangeRowStaysReachableInsideOneScroll" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.EveryChangeRowStaysReachableInsideOneScroll" methodname="EveryChangeRowStaysReachableInsideOneScroll" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1426131058" result="Passed" start-time="2026-10-18 06:12:41Z" end-time="2026-10-18 06:12:41Z" duration="0.062264" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1226" name="EveryPaceIsDisplayOnlyAndNoPaceContinuesATurnBarrierByItself" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.EveryPaceIsDisplayOnlyAndNoPaceContinuesATurnBarrierByItself" methodname="EveryPaceIsDisplayOnlyAndNoPaceContinuesATurnBarrierByItself" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="832276917" result="Passed" start-time="2026-10-18 06:12:41Z" end-time="2026-10-18 06:12:49Z" duration="8.311251" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-suite type="ParameterizedMethod" id="1301" name="HiddenBattleContainersPrivateNamesAndMissingContextAreRefused" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.HiddenBattleContainersPrivateNamesAndMissingContextAreRefused" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" testcasecount="11" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.010363" total="11" passed="11" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1290" name="HiddenBattleContainersPrivateNamesAndMissingContextAreRefused(&quot;battle-zones&quot;,&quot;RESPONSE_PRIVATE_FIELD&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.HiddenBattleContainersPrivateNamesAndMissingContextAreRefused(&quot;battle-zones&quot;,&quot;RESPONSE_PRIVATE_FIELD&quot;)" methodname="HiddenBattleContainersPrivateNamesAndMissingContextAreRefused" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1191560187" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.001412" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1291" name="HiddenBattleContainersPrivateNamesAndMissingContextAreRefused(&quot;battle-cards&quot;,&quot;RESPONSE_PRIVATE_FIELD&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.HiddenBattleContainersPrivateNamesAndMissingContextAreRefused(&quot;battle-cards&quot;,&quot;RESPONSE_PRIVATE_FIELD&quot;)" methodname="HiddenBattleContainersPrivateNamesAndMissingContextAreRefused" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="102083474" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.000656" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1292" name="HiddenBattleContainersPrivateNamesAndMissingContextAreRefused(&quot;pile-list&quot;,&quot;RESPONSE_INVALID&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.HiddenBattleContainersPrivateNamesAndMissingContextAreRefused(&quot;pile-list&quot;,&quot;RESPONSE_INVALID&quot;)" methodname="HiddenBattleContainersPrivateNamesAndMissingContextAreRefused" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1541289719" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.000680" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1293" name="HiddenBattleContainersPrivateNamesAndMissingContextAreRefused(&quot;no-piles&quot;,&quot;RESPONSE_INVALID&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.HiddenBattleContainersPrivateNamesAndMissingContextAreRefused(&quot;no-piles&quot;,&quot;RESPONSE_INVALID&quot;)" methodname="HiddenBattleContainersPrivateNamesAndMissingContextAreRefused" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="834582475" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.000573" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1294" name="HiddenBattleContainersPrivateNamesAndMissingContextAreRefused(&quot;enemy-pattern&quot;,&quot;RESPONSE_PRIVATE_FIELD&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.HiddenBattleContainersPrivateNamesAndMissingContextAreRefused(&quot;enemy-pattern&quot;,&quot;RESPONSE_PRIVATE_FIELD&quot;)" methodname="HiddenBattleContainersPrivateNamesAndMissingContextAreRefused" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1067092231" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.000653" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1295" name="HiddenBattleContainersPrivateNamesAndMissingContextAreRefused(&quot;nested-RNG&quot;,&quot;RESPONSE_PRIVATE_FIELD&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.HiddenBattleContainersPrivateNamesAndMissingContextAreRefused(&quot;nested-RNG&quot;,&quot;RESPONSE_PRIVATE_FIELD&quot;)" methodname="HiddenBattleContainersPrivateNamesAndMissingContextAreRefused" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="670179636" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.000719" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1296" name="HiddenBattleContainersPrivateNamesAndMissingContextAreRefused(&quot;state-seed&quot;,&quot;RESPONSE_PRIVATE_FIELD&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.HiddenBattleContainersPrivateNamesAndMissingContextAreRefused(&quot;state-seed&quot;,&quot;RESPONSE_PRIVATE_FIELD&quot;)" methodname="HiddenBattleContainersPrivateNamesAndMissingContextAreRefused" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="4078073" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.000639" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1297" name="HiddenBattleContainersPrivateNamesAndMissingContextAreRefused(&quot;no-position&quot;,&quot;RESPONSE_INVALID&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.HiddenBattleContainersPrivateNamesAndMissingContextAreRefused(&quot;no-position&quot;,&quot;RESPONSE_INVALID&quot;)" methodname="HiddenBattleContainersPrivateNamesAndMissingContextAreRefused" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1323617555" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.000590" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1298" name="HiddenBattleContainersPrivateNamesAndMissingContextAreRefused(&quot;battle-v-text&quot;,&quot;RESPONSE_INVALID&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.HiddenBattleContainersPrivateNamesAndMissingContextAreRefused(&quot;battle-v-text&quot;,&quot;RESPONSE_INVALID&quot;)" methodname="HiddenBattleContainersPrivateNamesAndMissingContextAreRefused" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="839718363" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.000541" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1299" name="HiddenBattleContainersPrivateNamesAndMissingContextAreRefused(&quot;state-version&quot;,&quot;RESPONSE_MISMATCH&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.HiddenBattleContainersPrivateNamesAndMissingContextAreRefused(&quot;state-version&quot;,&quot;RESPONSE_MISMATCH&quot;)" methodname="HiddenBattleContainersPrivateNamesAndMissingContextAreRefused" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1404220356" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.000586" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1300" name="HiddenBattleContainersPrivateNamesAndMissingContextAreRefused(&quot;other-run&quot;,&quot;RESPONSE_MISMATCH&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.HiddenBattleContainersPrivateNamesAndMissingContextAreRefused(&quot;other-run&quot;,&quot;RESPONSE_MISMATCH&quot;)" methodname="HiddenBattleContainersPrivateNamesAndMissingContextAreRefused" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1369337928" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.000518" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-suite type="ParameterizedMethod" id="1349" name="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" testcasecount="32" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.123958" total="32" passed="32" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1317" name="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;duplicate-member&quot;,&quot;RESPONSE_INVALID&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;duplicate-member&quot;,&quot;RESPONSE_INVALID&quot;)" methodname="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1145601917" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.005262" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1318" name="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;trailing&quot;,&quot;RESPONSE_INVALID&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;trailing&quot;,&quot;RESPONSE_INVALID&quot;)" methodname="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1452475047" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.003067" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1319" name="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;private-member&quot;,&quot;RESPONSE_PRIVATE_FIELD&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;private-member&quot;,&quot;RESPONSE_PRIVATE_FIELD&quot;)" methodname="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="2051522920" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.003017" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1320" name="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;private-spec-member&quot;,&quot;RESPONSE_PRIVATE_FIELD&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;private-spec-member&quot;,&quot;RESPONSE_PRIVATE_FIELD&quot;)" methodname="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="2104984139" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.003055" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1321" name="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;fraction&quot;,&quot;RESPONSE_INVALID&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;fraction&quot;,&quot;RESPONSE_INVALID&quot;)" methodname="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="899028630" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.005064" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1322" name="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;negative&quot;,&quot;RESPONSE_INVALID&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;negative&quot;,&quot;RESPONSE_INVALID&quot;)" methodname="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="810960345" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.003213" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1323" name="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;beyond-int32&quot;,&quot;RESPONSE_INVALID&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;beyond-int32&quot;,&quot;RESPONSE_INVALID&quot;)" methodname="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="707374898" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.006095" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1324" name="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;number-text&quot;,&quot;RESPONSE_INVALID&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;number-text&quot;,&quot;RESPONSE_INVALID&quot;)" methodname="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="72432662" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.003279" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1325" name="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;no-memory&quot;,&quot;RESPONSE_INVALID&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;no-memory&quot;,&quot;RESPONSE_INVALID&quot;)" methodname="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="2124427617" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.002867" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1326" name="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;no-used&quot;,&quot;RESPONSE_INVALID&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;no-used&quot;,&quot;RESPONSE_INVALID&quot;)" methodname="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1784372538" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.004195" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1327" name="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;no-error&quot;,&quot;RESPONSE_INVALID&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;no-error&quot;,&quot;RESPONSE_INVALID&quot;)" methodname="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1349608679" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.004753" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1328" name="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;no-capacities&quot;,&quot;RESPONSE_INVALID&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;no-capacities&quot;,&quot;RESPONSE_INVALID&quot;)" methodname="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1925735731" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.003200" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1329" name="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;error-number&quot;,&quot;RESPONSE_INVALID&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;error-number&quot;,&quot;RESPONSE_INVALID&quot;)" methodname="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="888380470" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.003457" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1330" name="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;error-prose&quot;,&quot;RESPONSE_INVALID&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;error-prose&quot;,&quot;RESPONSE_INVALID&quot;)" methodname="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1273585089" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.002960" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1331" name="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;deck-object&quot;,&quot;RESPONSE_INVALID&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;deck-object&quot;,&quot;RESPONSE_INVALID&quot;)" methodname="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="240997351" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.003366" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1332" name="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;row-null&quot;,&quot;RESPONSE_INVALID&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;row-null&quot;,&quot;RESPONSE_INVALID&quot;)" methodname="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1556666368" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.003091" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1333" name="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;row-no-key&quot;,&quot;RESPONSE_INVALID&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;row-no-key&quot;,&quot;RESPONSE_INVALID&quot;)" methodname="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="473570442" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.003055" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1334" name="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;row-empty-key&quot;,&quot;RESPONSE_INVALID&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;row-empty-key&quot;,&quot;RESPONSE_INVALID&quot;)" methodname="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="2001337524" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.003934" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1335" name="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;row-repeated-key&quot;,&quot;RESPONSE_INVALID&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;row-repeated-key&quot;,&quot;RESPONSE_INVALID&quot;)" methodname="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="2400987" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.009668" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1336" name="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;row-no-id&quot;,&quot;RESPONSE_INVALID&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;row-no-id&quot;,&quot;RESPONSE_INVALID&quot;)" methodname="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1002088272" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.012336" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1337" name="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;row-run-member&quot;,&quot;RESPONSE_INVALID&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;row-run-member&quot;,&quot;RESPONSE_INVALID&quot;)" methodname="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="569118474" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.002746" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1338" name="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;row-plus-number&quot;,&quot;RESPONSE_INVALID&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;row-plus-number&quot;,&quot;RESPONSE_INVALID&quot;)" methodname="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="2060835966" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.002905" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1339" name="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;row-mods-list&quot;,&quot;RESPONSE_INVALID&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;row-mods-list&quot;,&quot;RESPONSE_INVALID&quot;)" methodname="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="164397930" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.002784" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1340" name="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;row-mods-slot&quot;,&quot;RESPONSE_INVALID&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;row-mods-slot&quot;,&quot;RESPONSE_INVALID&quot;)" methodname="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="67822405" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.002642" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1341" name="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;used-missing-deck&quot;,&quot;RESPONSE_INVALID&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;used-missing-deck&quot;,&quot;RESPONSE_INVALID&quot;)" methodname="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1553839683" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.002317" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1342" name="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;capacities-missing-deck&quot;,&quot;RESPONSE_INVALID&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;capacities-missing-deck&quot;,&quot;RESPONSE_INVALID&quot;)" methodname="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="278096320" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.002196" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1343" name="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;capacities-empty&quot;,&quot;RESPONSE_INVALID&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;capacities-empty&quot;,&quot;RESPONSE_INVALID&quot;)" methodname="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="543626172" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.002348" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1344" name="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;capacities-foreign-deck&quot;,&quot;RESPONSE_INVALID&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;capacities-foreign-deck&quot;,&quot;RESPONSE_INVALID&quot;)" methodname="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="331642381" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.002204" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1345" name="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;preview-array&quot;,&quot;RESPONSE_INVALID&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;preview-array&quot;,&quot;RESPONSE_INVALID&quot;)" methodname="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1760711927" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.002314" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1346" name="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;version-text&quot;,&quot;RESPONSE_INVALID&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;version-text&quot;,&quot;RESPONSE_INVALID&quot;)" methodname="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="815205260" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.002781" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1347" name="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;other-run&quot;,&quot;RESPONSE_MISMATCH&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;other-run&quot;,&quot;RESPONSE_MISMATCH&quot;)" methodname="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1935850254" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.002629" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1348" name="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;other-version&quot;,&quot;RESPONSE_MISMATCH&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole(&quot;other-version&quot;,&quot;RESPONSE_MISMATCH&quot;)" methodname="MalformedPrivateOrForeignPreviewRepliesAreRefusedWhole" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1505191008" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.002493" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-suite type="ParameterizedMethod" id="1310" name="NonStrictReplyTextIsRefused" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.NonStrictReplyTextIsRefused" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" testcasecount="8" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.006586" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1302" name="NonStrictReplyTextIsRefused(&quot;duplicate&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.NonStrictReplyTextIsRefused(&quot;duplicate&quot;)" methodname="NonStrictReplyTextIsRefused" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1709560644" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.000898" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1303" name="NonStrictReplyTextIsRefused(&quot;trailing&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.NonStrictReplyTextIsRefused(&quot;trailing&quot;)" methodname="NonStrictReplyTextIsRefused" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="497568862" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.000573" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1304" name="NonStrictReplyTextIsRefused(&quot;comment&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.NonStrictReplyTextIsRefused(&quot;comment&quot;)" methodname="NonStrictReplyTextIsRefused" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1155057810" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.000516" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1305" name="NonStrictReplyTextIsRefused(&quot;bom&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.NonStrictReplyTextIsRefused(&quot;bom&quot;)" methodname="NonStrictReplyTextIsRefused" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1157985362" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.001701" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1306" name="NonStrictReplyTextIsRefused(&quot;nan&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.NonStrictReplyTextIsRefused(&quot;nan&quot;)" methodname="NonStrictReplyTextIsRefused" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1132377869" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.000455" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1307" name="NonStrictReplyTextIsRefused(&quot;lone-surrogate&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.NonStrictReplyTextIsRefused(&quot;lone-surrogate&quot;)" methodname="NonStrictReplyTextIsRefused" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="950596799" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.000405" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1308" name="NonStrictReplyTextIsRefused(&quot;array&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.NonStrictReplyTextIsRefused(&quot;array&quot;)" methodname="NonStrictReplyTextIsRefused" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1219301084" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.000587" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1309" name="NonStrictReplyTextIsRefused(&quot;empty&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.NonStrictReplyTextIsRefused(&quot;empty&quot;)" methodname="NonStrictReplyTextIsRefused" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="58528610" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.000406" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-case id="1245" name="OneOperationKeepsTheCredentialItCapturedWhileTheCallbackRotates" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.OneOperationKeepsTheCredentialItCapturedWhileTheCallbackRotates" methodname="OneOperationKeepsTheCredentialItCapturedWhileTheCallbackRotates" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="2062482813" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.007260" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-suite type="ParameterizedMethod" id="1285" name="OnlyProvenVersionedRefusalsClearTheRequest" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.OnlyProvenVersionedRefusalsClearTheRequest" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" testcasecount="20" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.053145" total="20" passed="20" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1265" name="OnlyProvenVersionedRefusalsClearTheRequest(&quot;commands&quot;,409,&quot;STALE_VERSION&quot;,&quot;same&quot;,1,True)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.OnlyProvenVersionedRefusalsClearTheRequest(&quot;commands&quot;,409,&quot;STALE_VERSION&quot;,&quot;same&quot;,1,True)" methodname="OnlyProvenVersionedRefusalsClearTheRequest" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1935957978" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.003889" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1266" name="OnlyProvenVersionedRefusalsClearTheRequest(&quot;commands&quot;,409,&quot;STALE_VERSION&quot;,&quot;same&quot;,0,True)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.OnlyProvenVersionedRefusalsClearTheRequest(&quot;commands&quot;,409,&quot;STALE_VERSION&quot;,&quot;same&quot;,0,True)" methodname="OnlyProvenVersionedRefusalsClearTheRequest" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="2041301781" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.003115" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1267" name="OnlyProvenVersionedRefusalsClearTheRequest(&quot;commands&quot;,422,&quot;SLOT_FULL&quot;,&quot;same&quot;,0,True)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.OnlyProvenVersionedRefusalsClearTheRequest(&quot;commands&quot;,422,&quot;SLOT_FULL&quot;,&quot;same&quot;,0,True)" methodname="OnlyProvenVersionedRefusalsClearTheRequest" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="218322343" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.003355" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1268" name="OnlyProvenVersionedRefusalsClearTheRequest(&quot;commit&quot;,422,&quot;COMMAND_REJECTED&quot;,&quot;same&quot;,0,True)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.OnlyProvenVersionedRefusalsClearTheRequest(&quot;commit&quot;,422,&quot;COMMAND_REJECTED&quot;,&quot;same&quot;,0,True)" methodname="OnlyProvenVersionedRefusalsClearTheRequest" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="578025917" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.003212" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1269" name="OnlyProvenVersionedRefusalsClearTheRequest(&quot;commit&quot;,409,&quot;STALE_VERSION&quot;,&quot;same&quot;,2,True)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.OnlyProvenVersionedRefusalsClearTheRequest(&quot;commit&quot;,409,&quot;STALE_VERSION&quot;,&quot;same&quot;,2,True)" methodname="OnlyProvenVersionedRefusalsClearTheRequest" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="688069487" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.003344" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1270" name="OnlyProvenVersionedRefusalsClearTheRequest(&quot;commands&quot;,409,&quot;STALE_VERSION&quot;,&quot;same&quot;,-1,False)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.OnlyProvenVersionedRefusalsClearTheRequest(&quot;commands&quot;,409,&quot;STALE_VERSION&quot;,&quot;same&quot;,-1,False)" methodname="OnlyProvenVersionedRefusalsClearTheRequest" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="122880639" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.002221" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1271" name="OnlyProvenVersionedRefusalsClearTheRequest(&quot;commands&quot;,422,&quot;SLOT_FULL&quot;,&quot;same&quot;,-2,False)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.OnlyProvenVersionedRefusalsClearTheRequest(&quot;commands&quot;,422,&quot;SLOT_FULL&quot;,&quot;same&quot;,-2,False)" methodname="OnlyProvenVersionedRefusalsClearTheRequest" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1480918492" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.001908" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1272" name="OnlyProvenVersionedRefusalsClearTheRequest(&quot;commands&quot;,422,&quot;SLOT_FULL&quot;,&quot;other&quot;,0,False)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.OnlyProvenVersionedRefusalsClearTheRequest(&quot;commands&quot;,422,&quot;SLOT_FULL&quot;,&quot;other&quot;,0,False)" methodname="OnlyProvenVersionedRefusalsClearTheRequest" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="281051378" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.001941" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1273" name="OnlyProvenVersionedRefusalsClearTheRequest(&quot;commands&quot;,409,&quot;STALE_VERSION&quot;,&quot;none&quot;,0,False)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.OnlyProvenVersionedRefusalsClearTheRequest(&quot;commands&quot;,409,&quot;STALE_VERSION&quot;,&quot;none&quot;,0,False)" methodname="OnlyProvenVersionedRefusalsClearTheRequest" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="103009504" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.001978" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1274" name="OnlyProvenVersionedRefusalsClearTheRequest(&quot;commands&quot;,400,&quot;INVALID_ARGS&quot;,&quot;same&quot;,0,False)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.OnlyProvenVersionedRefusalsClearTheRequest(&quot;commands&quot;,400,&quot;INVALID_ARGS&quot;,&quot;same&quot;,0,False)" methodname="OnlyProvenVersionedRefusalsClearTheRequest" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1230954034" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.002039" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1275" name="OnlyProvenVersionedRefusalsClearTheRequest(&quot;commands&quot;,404,&quot;RUN_NOT_FOUND&quot;,&quot;same&quot;,0,False)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.OnlyProvenVersionedRefusalsClearTheRequest(&quot;commands&quot;,404,&quot;RUN_NOT_FOUND&quot;,&quot;same&quot;,0,False)" methodname="OnlyProvenVersionedRefusalsClearTheRequest" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1967182124" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.002265" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1276" name="OnlyProvenVersionedRefusalsClearTheRequest(&quot;commands&quot;,507,&quot;STORE_TOO_LARGE&quot;,&quot;same&quot;,0,False)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.OnlyProvenVersionedRefusalsClearTheRequest(&quot;commands&quot;,507,&quot;STORE_TOO_LARGE&quot;,&quot;same&quot;,0,False)" methodname="OnlyProvenVersionedRefusalsClearTheRequest" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1221060044" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.002532" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1277" name="OnlyProvenVersionedRefusalsClearTheRequest(&quot;commands&quot;,409,&quot;IDEMPOTENCY_CONFLICT&quot;,&quot;same&quot;,0,False)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.OnlyProvenVersionedRefusalsClearTheRequest(&quot;commands&quot;,409,&quot;IDEMPOTENCY_CONFLICT&quot;,&quot;same&quot;,0,False)" methodname="OnlyProvenVersionedRefusalsClearTheRequest" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="500508235" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.002500" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1278" name="OnlyProvenVersionedRefusalsClearTheRequest(&quot;commands&quot;,409,&quot;STORE_FIXTURE_MISMATCH&quot;,&quot;same&quot;,0,False)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.OnlyProvenVersionedRefusalsClearTheRequest(&quot;commands&quot;,409,&quot;STORE_FIXTURE_MISMATCH&quot;,&quot;same&quot;,0,False)" methodname="OnlyProvenVersionedRefusalsClearTheRequest" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="532357654" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.002516" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1279" name="OnlyProvenVersionedRefusalsClearTheRequest(&quot;commands&quot;,403,&quot;HOST_NOT_ALLOWED&quot;,&quot;same&quot;,0,False)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.OnlyProvenVersionedRefusalsClearTheRequest(&quot;commands&quot;,403,&quot;HOST_NOT_ALLOWED&quot;,&quot;same&quot;,0,False)" methodname="OnlyProvenVersionedRefusalsClearTheRequest" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="896439450" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.002311" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1280" name="OnlyProvenVersionedRefusalsClearTheRequest(&quot;commands&quot;,418,&quot;TEAPOT&quot;,&quot;same&quot;,0,False)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.OnlyProvenVersionedRefusalsClearTheRequest(&quot;commands&quot;,418,&quot;TEAPOT&quot;,&quot;same&quot;,0,False)" methodname="OnlyProvenVersionedRefusalsClearTheRequest" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="817531353" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.002331" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1281" name="OnlyProvenVersionedRefusalsClearTheRequest(&quot;create&quot;,400,&quot;INVALID_REQUEST&quot;,&quot;same&quot;,0,False)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.OnlyProvenVersionedRefusalsClearTheRequest(&quot;create&quot;,400,&quot;INVALID_REQUEST&quot;,&quot;same&quot;,0,False)" methodname="OnlyProvenVersionedRefusalsClearTheRequest" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1621306644" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.002718" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1282" name="OnlyProvenVersionedRefusalsClearTheRequest(&quot;create&quot;,409,&quot;RUN_ACTIVE&quot;,&quot;same&quot;,0,False)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.OnlyProvenVersionedRefusalsClearTheRequest(&quot;create&quot;,409,&quot;RUN_ACTIVE&quot;,&quot;same&quot;,0,False)" methodname="OnlyProvenVersionedRefusalsClearTheRequest" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1850785248" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.002582" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1283" name="OnlyProvenVersionedRefusalsClearTheRequest(&quot;create&quot;,422,&quot;COMMAND_REJECTED&quot;,&quot;same&quot;,0,False)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.OnlyProvenVersionedRefusalsClearTheRequest(&quot;create&quot;,422,&quot;COMMAND_REJECTED&quot;,&quot;same&quot;,0,False)" methodname="OnlyProvenVersionedRefusalsClearTheRequest" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="273695114" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.002170" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1284" name="OnlyProvenVersionedRefusalsClearTheRequest(&quot;create&quot;,507,&quot;STORE_TOO_LARGE&quot;,&quot;none&quot;,0,False)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.OnlyProvenVersionedRefusalsClearTheRequest(&quot;create&quot;,507,&quot;STORE_TOO_LARGE&quot;,&quot;none&quot;,0,False)" methodname="OnlyProvenVersionedRefusalsClearTheRequest" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1423334172" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.002033" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-case id="1244" name="PreflightFailuresStageNothingAndPostNothing" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.PreflightFailuresStageNothingAndPostNothing" methodname="PreflightFailuresStageNothingAndPostNothing" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="271701656" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.004821" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1311" name="PublicLookalikesParseAndTheCompleteReplyIsKept" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.PublicLookalikesParseAndTheCompleteReplyIsKept" methodname="PublicLookalikesParseAndTheCompleteReplyIsKept" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1401547054" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.001383" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1243" name="RefreshReadsTheOwnerFirstThenTheCurrentRunAsDetachedCompletePublicJson" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.RefreshReadsTheOwnerFirstThenTheCurrentRunAsDetachedCompletePublicJson" methodname="RefreshReadsTheOwnerFirstThenTheCurrentRunAsDetachedCompletePublicJson" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="704224843" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.002863" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1360" name="ReturningFromTheArchiveShowsTheServersSaveStateWhichStaysALaterUnit" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.ReturningFromTheArchiveShowsTheServersSaveStateWhichStaysALaterUnit" methodname="ReturningFromTheArchiveShowsTheServersSaveStateWhichStaysALaterUnit" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1998851422" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.050625" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1289" name="SnapshotsAreCoherentMonotonicAndAdoptOnlyANewerRun" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.SnapshotsAreCoherentMonotonicAndAdoptOnlyANewerRun" methodname="SnapshotsAreCoherentMonotonicAndAdoptOnlyANewerRun" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="98376151" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.011042" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1246" name="StagesBeforeTheHeldPostSendsTheCopiedOrderedArgsAndRefusesASecondCall" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.StagesBeforeTheHeldPostSendsTheCopiedOrderedArgsAndRefusesASecondCall" methodname="StagesBeforeTheHeldPostSendsTheCopiedOrderedArgsAndRefusesASecondCall" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1825145371" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.006863" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1359" name="TheArchiveSendsOnlyItsExistingChoicesOnceAndIsNotChosenAgainAfterContinuing" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.TheArchiveSendsOnlyItsExistingChoicesOnceAndIsNotChosenAgainAfterContinuing" methodname="TheArchiveSendsOnlyItsExistingChoicesOnceAndIsNotChosenAgainAfterContinuing" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="547875525" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.033418" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1312" name="TheBattleQueryIsPureAndBoundToItsContextAndExactRequest" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.TheBattleQueryIsPureAndBoundToItsContextAndExactRequest" methodname="TheBattleQueryIsPureAndBoundToItsContextAndExactRequest" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="238206779" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.008138" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1313" name="TheMemoryPreviewIsPureAndKeepsTheFullServerReplyOfExactlyItsSelection" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.TheMemoryPreviewIsPureAndKeepsTheFullServerReplyOfExactlyItsSelection" methodname="TheMemoryPreviewIsPureAndKeepsTheFullServerReplyOfExactlyItsSelection" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="249429275" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:49Z" duration="0.005455" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1240" name="TheSaveAndDoneScreensComeBackOnlyFromTheServerAfterLeavingAndRefreshing" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.TheSaveAndDoneScreensComeBackOnlyFromTheServerAfterLeavingAndRefreshing" methodname="TheSaveAndDoneScreensComeBackOnlyFromTheServerAfterLeavingAndRefreshing" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1536586642" result="Passed" start-time="2026-10-18 06:12:49Z" end-time="2026-10-18 06:12:50Z" duration="0.159614" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1242" name="TheSaveListKeepsItsScrollThroughSelectionAndPreviewRedrawsUntilTheContextChanges" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.TheSaveListKeepsItsScrollThroughSelectionAndPreviewRedrawsUntilTheContextChanges" methodname="TheSaveListKeepsItsScrollThroughSelectionAndPreviewRedrawsUntilTheContextChanges" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1110728267" result="Passed" start-time="2026-10-18 06:12:50Z" end-time="2026-10-18 06:12:50Z" duration="0.174071" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1225" name="UltimateCardAndCounterRowsCarryTheirOwnTagsAndTheUltimateDisplayIsTitledWithItsActor" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.UltimateCardAndCounterRowsCarryTheirOwnTagsAndTheUltimateDisplayIsTitledWithItsActor" methodname="UltimateCardAndCounterRowsCarryTheirOwnTagsAndTheUltimateDisplayIsTitledWithItsActor" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1738586356" result="Passed" start-time="2026-10-18 06:12:50Z" end-time="2026-10-18 06:12:51Z" duration="1.378088" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-suite type="ParameterizedMethod" id="1263" name="UncertainEndsKeepTheExactRequestPending" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.UncertainEndsKeepTheExactRequestPending" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" testcasecount="14" result="Passed" start-time="2026-10-18 06:12:51Z" end-time="2026-10-18 06:12:51Z" duration="0.078940" total="14" passed="14" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1249" name="UncertainEndsKeepTheExactRequestPending(&quot;drop&quot;,&quot;NETWORK_FAILED&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.UncertainEndsKeepTheExactRequestPending(&quot;drop&quot;,&quot;NETWORK_FAILED&quot;)" methodname="UncertainEndsKeepTheExactRequestPending" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="78579083" result="Passed" start-time="2026-10-18 06:12:51Z" end-time="2026-10-18 06:12:51Z" duration="0.008089" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1250" name="UncertainEndsKeepTheExactRequestPending(&quot;truncate&quot;,&quot;RESPONSE_TRUNCATED&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.UncertainEndsKeepTheExactRequestPending(&quot;truncate&quot;,&quot;RESPONSE_TRUNCATED&quot;)" methodname="UncertainEndsKeepTheExactRequestPending" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="209990558" result="Passed" start-time="2026-10-18 06:12:51Z" end-time="2026-10-18 06:12:51Z" duration="0.006963" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1251" name="UncertainEndsKeepTheExactRequestPending(&quot;no-length&quot;,&quot;RESPONSE_INVALID&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.UncertainEndsKeepTheExactRequestPending(&quot;no-length&quot;,&quot;RESPONSE_INVALID&quot;)" methodname="UncertainEndsKeepTheExactRequestPending" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1378041062" result="Passed" start-time="2026-10-18 06:12:51Z" end-time="2026-10-18 06:12:51Z" duration="0.004919" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1252" name="UncertainEndsKeepTheExactRequestPending(&quot;text-plain&quot;,&quot;RESPONSE_INVALID&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.UncertainEndsKeepTheExactRequestPending(&quot;text-plain&quot;,&quot;RESPONSE_INVALID&quot;)" methodname="UncertainEndsKeepTheExactRequestPending" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="104574812" result="Passed" start-time="2026-10-18 06:12:51Z" end-time="2026-10-18 06:12:51Z" duration="0.005011" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1253" name="UncertainEndsKeepTheExactRequestPending(&quot;503-commit-unknown&quot;,&quot;STORE_COMMIT_UNKNOWN&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.UncertainEndsKeepTheExactRequestPending(&quot;503-commit-unknown&quot;,&quot;STORE_COMMIT_UNKNOWN&quot;)" methodname="UncertainEndsKeepTheExactRequestPending" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="755905421" result="Passed" start-time="2026-10-18 06:12:51Z" end-time="2026-10-18 06:12:51Z" duration="0.005312" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1254" name="UncertainEndsKeepTheExactRequestPending(&quot;503-busy&quot;,&quot;ACCOUNT_BUSY&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.UncertainEndsKeepTheExactRequestPending(&quot;503-busy&quot;,&quot;ACCOUNT_BUSY&quot;)" methodname="UncertainEndsKeepTheExactRequestPending" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1936031710" result="Passed" start-time="2026-10-18 06:12:51Z" end-time="2026-10-18 06:12:51Z" duration="0.005142" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1255" name="UncertainEndsKeepTheExactRequestPending(&quot;500-corrupt&quot;,&quot;STORE_CORRUPT&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.UncertainEndsKeepTheExactRequestPending(&quot;500-corrupt&quot;,&quot;STORE_CORRUPT&quot;)" methodname="UncertainEndsKeepTheExactRequestPending" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1361077241" result="Passed" start-time="2026-10-18 06:12:51Z" end-time="2026-10-18 06:12:51Z" duration="0.005304" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1256" name="UncertainEndsKeepTheExactRequestPending(&quot;401&quot;,&quot;UNAUTHORIZED&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.UncertainEndsKeepTheExactRequestPending(&quot;401&quot;,&quot;UNAUTHORIZED&quot;)" methodname="UncertainEndsKeepTheExactRequestPending" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1822920208" result="Passed" start-time="2026-10-18 06:12:51Z" end-time="2026-10-18 06:12:51Z" duration="0.004568" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1257" name="UncertainEndsKeepTheExactRequestPending(&quot;409-idempotency&quot;,&quot;IDEMPOTENCY_CONFLICT&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.UncertainEndsKeepTheExactRequestPending(&quot;409-idempotency&quot;,&quot;IDEMPOTENCY_CONFLICT&quot;)" methodname="UncertainEndsKeepTheExactRequestPending" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1731204133" result="Passed" start-time="2026-10-18 06:12:51Z" end-time="2026-10-18 06:12:51Z" duration="0.005440" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1258" name="UncertainEndsKeepTheExactRequestPending(&quot;409-binding&quot;,&quot;STORE_IMPLEMENTATION_MISMATCH&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.UncertainEndsKeepTheExactRequestPending(&quot;409-binding&quot;,&quot;STORE_IMPLEMENTATION_MISMATCH&quot;)" methodname="UncertainEndsKeepTheExactRequestPending" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="501182861" result="Passed" start-time="2026-10-18 06:12:51Z" end-time="2026-10-18 06:12:51Z" duration="0.005086" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1259" name="UncertainEndsKeepTheExactRequestPending(&quot;400-unsafe-code&quot;,&quot;RESPONSE_INVALID&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.UncertainEndsKeepTheExactRequestPending(&quot;400-unsafe-code&quot;,&quot;RESPONSE_INVALID&quot;)" methodname="UncertainEndsKeepTheExactRequestPending" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="345133045" result="Passed" start-time="2026-10-18 06:12:51Z" end-time="2026-10-18 06:12:51Z" duration="0.004908" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1260" name="UncertainEndsKeepTheExactRequestPending(&quot;200-wrong-version&quot;,&quot;RESPONSE_MISMATCH&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.UncertainEndsKeepTheExactRequestPending(&quot;200-wrong-version&quot;,&quot;RESPONSE_MISMATCH&quot;)" methodname="UncertainEndsKeepTheExactRequestPending" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="342100036" result="Passed" start-time="2026-10-18 06:12:51Z" end-time="2026-10-18 06:12:51Z" duration="0.004812" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1261" name="UncertainEndsKeepTheExactRequestPending(&quot;200-other-run&quot;,&quot;RESPONSE_MISMATCH&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.UncertainEndsKeepTheExactRequestPending(&quot;200-other-run&quot;,&quot;RESPONSE_MISMATCH&quot;)" methodname="UncertainEndsKeepTheExactRequestPending" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1670758639" result="Passed" start-time="2026-10-18 06:12:51Z" end-time="2026-10-18 06:12:51Z" duration="0.005915" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1262" name="UncertainEndsKeepTheExactRequestPending(&quot;200-hidden-battle&quot;,&quot;RESPONSE_PRIVATE_FIELD&quot;)" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.UncertainEndsKeepTheExactRequestPending(&quot;200-hidden-battle&quot;,&quot;RESPONSE_PRIVATE_FIELD&quot;)" methodname="UncertainEndsKeepTheExactRequestPending" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="967496451" result="Passed" start-time="2026-10-18 06:12:51Z" end-time="2026-10-18 06:12:51Z" duration="0.005181" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-case id="1230" name="UnownedMissingOrWeaponChoicesAreRefusedLocallyAndTheSheetKeepsNoChoiceAcrossCancelRefreshOrLeave" fullname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.UnownedMissingOrWeaponChoicesAreRefusedLocallyAndTheSheetKeepsNoChoiceAcrossCancelRefreshOrLeave" methodname="UnownedMissingOrWeaponChoicesAreRefusedLocallyAndTheSheetKeepsNoChoiceAcrossCancelRefreshOrLeave" classname="MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests" runstate="Runnable" seed="1803149261" result="Passed" start-time="2026-10-18 06:12:51Z" end-time="2026-10-18 06:12:51Z" duration="0.205892" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: [TestRunnerNoThrottle] Restored Interaction Mode after test run.
+Saving results to: /Users/choi/Library/Application Support/DefaultCompany/Memory Forge/TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>
