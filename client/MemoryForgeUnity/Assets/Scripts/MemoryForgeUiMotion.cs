@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace MemoryForge.Client
 {
@@ -20,10 +21,13 @@ namespace MemoryForge.Client
 
         public static float EaseOut(float u) => 1 - (1 - u) * (1 - u) * (1 - u);
 
-        public static IEnumerator Fade(CanvasGroup group, float from, float to, float duration)
+        // Every motion below also stops at once, in its final pose, when `stop` turns true mid-way (a caller's own reduced-motion setting,
+        // e.g. the practice's 동작 줄이기, switched on while it runs) or when Reduced is switched on.
+        static bool Halted(System.Func<bool>? stop) => Reduced || (stop != null && stop());
+
+        public static IEnumerator Fade(CanvasGroup group, float from, float to, float duration, System.Func<bool>? stop = null)
         {
-            if (Reduced) duration = 0;
-            for (float t = 0; t < duration; t += Time.unscaledDeltaTime)
+            for (float t = 0; t < duration && !Halted(stop); t += Time.unscaledDeltaTime)
             {
                 if (group == null) yield break;
                 group.alpha = Mathf.Lerp(from, to, EaseOut(t / duration));
@@ -33,17 +37,93 @@ namespace MemoryForge.Client
         }
 
         // Slides from an offset back to the layout position.
-        public static IEnumerator SlideIn(RectTransform rect, Vector2 offset, float duration)
+        public static IEnumerator SlideIn(RectTransform rect, Vector2 offset, float duration, System.Func<bool>? stop = null)
         {
-            if (rect == null || Reduced) yield break;
+            if (rect == null) yield break;
             var home = rect.anchoredPosition;
-            for (float t = 0; t < duration; t += Time.unscaledDeltaTime)
+            for (float t = 0; t < duration && !Halted(stop); t += Time.unscaledDeltaTime)
             {
                 if (rect == null) yield break;
                 rect.anchoredPosition = home + offset * (1 - EaseOut(t / duration));
                 yield return null;
             }
             if (rect != null) rect.anchoredPosition = home;
+        }
+
+        // A short horizontal shake around the layout position (decoration: callers only shake art, never a control).
+        public static IEnumerator Shake(RectTransform rect, float amplitude, float duration, System.Func<bool>? stop = null)
+        {
+            if (rect == null) yield break;
+            var home = rect.anchoredPosition;
+            for (float t = 0; t < duration && !Halted(stop); t += Time.unscaledDeltaTime)
+            {
+                if (rect == null) yield break;
+                rect.anchoredPosition = home + new Vector2(Mathf.Sin(t * 90f) * amplitude * (1 - t / duration), 0);
+                yield return null;
+            }
+            if (rect != null) rect.anchoredPosition = home;
+        }
+
+        // A label that rises by `rise` and fades out, then removes itself. Halted, it stands still at its start for the same time.
+        public static IEnumerator Rise(Graphic label, float rise, float duration, System.Func<bool>? stop = null)
+        {
+            if (label == null) yield break;
+            var rect = label.rectTransform; var home = rect.anchoredPosition; var color = label.color;
+            for (float t = 0; t < duration; t += Time.unscaledDeltaTime)
+            {
+                if (label == null) yield break;
+                float u = t / duration; bool still = Halted(stop);
+                rect.anchoredPosition = home + new Vector2(0, still ? 0 : rise * EaseOut(u));
+                label.color = new Color(color.r, color.g, color.b, color.a * (still || u < 0.6f ? 1 : 1 - (u - 0.6f) / 0.4f));
+                yield return null;
+            }
+            if (label != null) Object.Destroy(label.gameObject);
+        }
+
+        // Eases a rect's width to `width` and then removes it (a bar's drained part).
+        public static IEnumerator Resize(RectTransform rect, float width, float duration, System.Func<bool>? stop = null)
+        {
+            if (rect == null) yield break;
+            float from = rect.sizeDelta.x;
+            for (float t = 0; t < duration && !Halted(stop); t += Time.unscaledDeltaTime)
+            {
+                if (rect == null) yield break;
+                rect.sizeDelta = new Vector2(Mathf.Lerp(from, width, EaseOut(t / duration)), rect.sizeDelta.y);
+                yield return null;
+            }
+            if (rect != null) Object.Destroy(rect.gameObject);
+        }
+
+        // Moves a decoration to `to` (anchored position in its parent's top-left space, y down) while shrinking and fading, then removes it.
+        public static IEnumerator Fly(RectTransform rect, Vector2 to, float duration, System.Func<bool>? stop = null)
+        {
+            if (rect == null) yield break;
+            var group = rect.gameObject.AddComponent<CanvasGroup>(); group.blocksRaycasts = false; group.interactable = false;
+            var from = rect.anchoredPosition; var target = new Vector2(to.x, -to.y);
+            for (float t = 0; t < duration && !Halted(stop); t += Time.unscaledDeltaTime)
+            {
+                if (rect == null) yield break;
+                float u = EaseOut(t / duration);
+                rect.anchoredPosition = Vector2.Lerp(from, target, u); rect.localScale = Vector3.one * Mathf.Lerp(1f, 0.45f, u); group.alpha = 1 - u * u;
+                yield return null;
+            }
+            if (rect != null) Object.Destroy(rect.gameObject);
+        }
+    }
+
+    // A breathing alpha on a decoration (an edge or a marker) that shows what can be pressed next; still at full alpha whenever motion
+    // is reduced (globally, or by the caller's own setting).
+    public sealed class UiPulse : MonoBehaviour
+    {
+        Outline? edge; Graphic? graphic; System.Func<bool>? still; Color rest;
+        public void Bind(Outline target, System.Func<bool> calm) { edge = target; rest = target.effectColor; still = calm; }
+        public void Bind(Graphic target, System.Func<bool> calm) { graphic = target; rest = target.color; still = calm; }
+        void Update()
+        {
+            float k = MemoryForgeUiMotion.Reduced || (still != null && still()) ? 1f : 0.45f + 0.55f * (0.5f + 0.5f * Mathf.Cos(Time.unscaledTime * Mathf.PI * 2f / 1.4f));
+            var color = new Color(rest.r, rest.g, rest.b, rest.a * k);
+            if (edge != null) edge.effectColor = color;
+            if (graphic != null) graphic.color = color;
         }
     }
 

@@ -252,13 +252,20 @@ namespace MemoryForge.Client
             text.raycastTarget = false; text.supportRichText = true; text.resizeTextForBestFit = false;
             text.horizontalOverflow = HorizontalWrapMode.Wrap; text.verticalOverflow = VerticalWrapMode.Overflow; return text;
         }
+        // On a phone the press area grows to 48dp (the client's TouchUnits): the root is then a transparent hit area from the top edge of
+        // the frame down (never above it) and the drawn button its child "Face". It reaches only over header text, never a practice
+        // control (those start at x 930 in the header and y 162 below it).
         void CoachButton(RectTransform panel, string name, string caption, float x, Action click, Color back, Color ink)
         {
-            var r = Box(panel, name, x, -(PanelHeight - ButtonHeight) / 2, ButtonWidth, ButtonHeight, back);
+            float touch = MemoryForgeExpeditionClient.TouchUnits(), faceTop = (PanelHeight - ButtonHeight) / 2;
+            bool grown = touch > ButtonHeight;
+            float width = Math.Max(ButtonWidth, touch), height = grown ? Math.Max(touch, PanelY + faceTop + ButtonHeight) : ButtonHeight;
+            var r = grown ? Box(panel, name, x - (width - ButtonWidth) / 2, PanelY, width, height, Color.clear) : Box(panel, name, x, -faceTop, ButtonWidth, ButtonHeight, back);
             var image = r.GetComponent<Image>(); image.raycastTarget = true;
-            var button = r.gameObject.AddComponent<Button>(); button.targetGraphic = image;
+            var face = grown ? Box(r, "Face", (width - ButtonWidth) / 2, -(PanelY + faceTop), ButtonWidth, ButtonHeight, back) : r;
+            var button = r.gameObject.AddComponent<Button>(); button.targetGraphic = face.GetComponent<Image>();
             button.onClick.AddListener(() => { if (button != null && button.IsActive()) click(); });
-            Label(r, caption, 4, 4, ButtonWidth - 8, ButtonHeight - 8, FontSize, ink, TextAnchor.MiddleCenter);
+            Label(face, caption, 4, 4, ButtonWidth - 8, ButtonHeight - 8, FontSize, ink, TextAnchor.MiddleCenter);
         }
         static Color Hex(string hex) { ColorUtility.TryParseHtmlString("#" + hex, out var color); return color; }
     }
