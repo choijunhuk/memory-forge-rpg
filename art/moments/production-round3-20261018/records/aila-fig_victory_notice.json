@@ -1,0 +1,28 @@
+{
+  "c": "aila",
+  "key": "fig_victory_notice",
+  "path": "aila/images/char_aila_moment_victory_notice_v01.png",
+  "refs": [
+    "/Users/choi/Documents/Memory_forge/art/moments/aila/images/char_aila_moment_soft_v02.png"
+  ],
+  "pose": "Aila age23, preserve exact reference face/violet eyes/lavender silver braid/frost embroidered openback lavender white robe/detached wide sleeves/slit and heels. ONE silver bell lantern only, frame and bells SILVER. NO book, ledger, tea cup, desk, chair or extra handheld prop. She has stopped halfway through turning away and looks directly back at viewer. Lantern lowered stable at HER LEFT HIP, left hand gripping handle. Empty right hand makes a small one-finger 'one more thing' gesture near shoulder, fingers natural and clear of face. Softly parted lips and warm purposeful eyes, gentle initiative without wink. Grounded full-body pose.",
+  "prompt": "Use case: identity-preserve. Locked character design reference. Make ONE new non-explicit narrative RPG key-pose, 1024x1536 full length transparent PNG. Preserve adult identity, age, hairstyle, face, exact costume/colors and painterly anime cel style. All head, fingers, shoes and important props inside canvas. No scene background, haze, labels, panels, other people or erotic posing. Character acting and prop contact are the focus. Acting: Aila age23, preserve exact reference face/violet eyes/lavender silver braid/frost embroidered openback lavender white robe/detached wide sleeves/slit and heels. ONE silver bell lantern only, frame and bells SILVER. NO book, ledger, tea cup, desk, chair or extra handheld prop. She has stopped halfway through turning away and looks directly back at viewer. Lantern lowered stable at HER LEFT HIP, left hand gripping handle. Empty right hand makes a small one-finger 'one more thing' gesture near shoulder, fingers natural and clear of face. Softly parted lips and warm purposeful eyes, gentle initiative without wink. Grounded full-body pose.",
+  "source": "/Users/choi/.codex/generated_images/01a14d20-ffd5-7e81-9e47-85c1c8415e11/exec-9879f760-95de-4dcd-b623-2b7eaeb00ecd.png",
+  "tool": "Codex built-in image_gen; subscription-included; no API fallback",
+  "review": "pass",
+  "previous_attempt": null,
+  "score": 92,
+  "review_notes": "Inspected rendered output: approved adult design; safe settled weapon/lantern grip, head/hands and footwear visible, no accidental book/cup/helmet in victory. Source key-pose only.",
+  "backend_model": "not exposed by tool",
+  "selected": true,
+  "sha256": "97468041a307ac305f5e4412af4b196b430f6d2f89e083caa7e91593e8f0bd75",
+  "size": [
+    1024,
+    1536
+  ],
+  "mode": "RGBA",
+  "alpha_extrema": [
+    0,
+    254
+  ]
+}

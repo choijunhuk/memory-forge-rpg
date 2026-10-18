@@ -1,0 +1,12 @@
+{
+  "score": 87,
+  "verdict": "revise",
+  "category_match": true,
+  "differences": [
+    "Sion B hidden-mouth pose keeps an extra open book on the lectern while holding the same story book over her mouth."
+  ],
+  "suggestions": [
+    "Remove only the duplicate book on lectern; keep the held book, personal memo and persistent furniture."
+  ],
+  "reasoning": "The lectern now persists throughout B and emotions/gestures read correctly, but the duplicated book breaks the single-prop state."
+}

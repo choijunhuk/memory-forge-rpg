@@ -1,0 +1,23 @@
+{
+  "character": "ravien",
+  "key": "fig_stamp",
+  "old_path": "moments/ravien/images/char_ravien_stamp_focused_v01.png",
+  "target": "ravien/images/char_ravien_fig_stamp_styleA_v01.png",
+  "master": "ravien/images/char_ravien_fig_default_styleA_v01.png",
+  "background": false,
+  "beats": [
+    "서류철을 팔에 받친 라비엔이 도장을 한 번 누른다. 도장 자국을 확인하고 서류에서 손을 뗀다."
+  ],
+  "args": {
+    "prompt": "Use case: style-transfer. Production transparent full-body sprite for Memory Forge. REDRAW rather than merely recolor. Direction A CLEAR CEL, exactly the rendering grammar of the last reference: crisp controlled ink contours, emphatic upper eyelids, tiny symbolic nose and short mouth, matte skin with large flat light areas and one hard-edged shadow step, large grouped hair locks with broad flat highlight bands, costume tailoring and flat color planes before details, restrained gold/metal highlights. NO photoreal/3D nose, glossy lips, airbrush skin, tiny sparkling hair strands or painterly gradients. First reference controls exact character identity, adult age, outfit structure, props, pose, composition and framing; last reference is STYLE ONLY and must not transfer its clothing/face. Preserve all outfit cutouts and existing adult silhouette. Keep original full body and equipment inside a 1024x1536 portrait with a little clear margin. GENUINELY TRANSPARENT empty canvas alpha=0 around the subject including corners, no colored backdrop, vignette, aura, halo, floor, cast shadow, checkerboard, text or watermark. Remove ALL inherited background haze.\nThe SECOND reference is this SAME character already redrawn in A: match its face and rendering while using FIRST reference for pose/furniture/props. 28-year-old Ravien pressing the hand stamp onto paper at the narrow desk on screen left, burgundy folder supported in other arm, focused downcast gaze.\nPreserve intent of these authored beats without putting text into the image: 서류철을 팔에 받친 라비엔이 도장을 한 번 누른다. 도장 자국을 확인하고 서류에서 손을 뗀다.",
+    "referenced_image_paths": [
+      "/Users/choi/Documents/Memory_forge/art/moments/ravien/images/char_ravien_stamp_focused_v01.png",
+      "/Users/choi/Documents/Memory_forge/art/moments/ravien/images/char_ravien_fig_default_styleA_v01.png"
+    ],
+    "transparent_background": true
+  },
+  "cache_path": "/Users/choi/.codex/generated_images/01a14db0-4150-7f01-9240-82aaa185dd28/exec-72a5b717-0678-45c4-b4a8-955de21cb7eb.png",
+  "status": "history_unselected",
+  "generation_status": "generated_pending_review",
+  "selected": false
+}

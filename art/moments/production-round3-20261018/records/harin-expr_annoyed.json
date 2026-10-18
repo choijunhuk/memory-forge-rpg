@@ -1,0 +1,30 @@
+{
+  "c": "harin",
+  "key": "expr_annoyed",
+  "path": "harin/images/char_harin_expression_annoyed_v01.png",
+  "refs": [
+    "/Users/choi/Documents/Memory_forge/art/moments/harin/images/char_harin_expression_neutral_v01.png"
+  ],
+  "common": "Use case: identity-preserve. Edit target is the supplied NEUTRAL master portrait, one adult dialogue expression. Keep EXACT same square canvas/framing, head angle/tilt, face proportions, iris colors, hairstyle, glasses/scar/ornaments, costume, lighting and true transparent alpha. Intended final 512x512. Change ONLY eyes/eyebrows/mouth and natural cheek muscles. No hands, props, extra face, text or panels. ",
+  "pose": "Harin, adult age26. Short NAVY bob, gray-blue eyes, scar ABOVE HER LEFT eyebrow, strong adult facial structure, white/navy/brass frost armor collar and broad athletic shoulders. Stoic presence. Expression ANNOYED: Firm straight lips and a brief sideways unimpressed stare, brows drawn slightly; no puffed cheeks.",
+  "prompt": "Use case: identity-preserve. Edit target is the supplied NEUTRAL master portrait, one adult dialogue expression. Keep EXACT same square canvas/framing, head angle/tilt, face proportions, iris colors, hairstyle, glasses/scar/ornaments, costume, lighting and true transparent alpha. Intended final 512x512. Change ONLY eyes/eyebrows/mouth and natural cheek muscles. No hands, props, extra face, text or panels. Harin, adult age26. Short NAVY bob, gray-blue eyes, scar ABOVE HER LEFT eyebrow, strong adult facial structure, white/navy/brass frost armor collar and broad athletic shoulders. Stoic presence. Expression ANNOYED: Firm straight lips and a brief sideways unimpressed stare, brows drawn slightly; no puffed cheeks.",
+  "source": "/Users/choi/.codex/generated_images/01a14d20-ffd5-7e81-9e47-85c1c8415e11/exec-3be180c9-26a4-43ee-90d9-5ad049cf95a7.png",
+  "tool": "Codex built-in image_gen; subscription-included; no API fallback",
+  "review": "pass",
+  "previous_attempt": null,
+  "score": 94,
+  "review_notes": "Rendered output inspected beside its neutral master. Six readable adult expressions, stable face/eye/hair/glasses/scar/costume identity and framing. Only non-generative final resize remains.",
+  "backend_model": "not exposed by tool",
+  "selected": true,
+  "sha256": "552e269d47004b66c5b040c5d77b5c385132f9adf124b4535720c028968bc299",
+  "size": [
+    512,
+    512
+  ],
+  "mode": "RGBA",
+  "alpha_extrema": [
+    0,
+    255
+  ],
+  "postprocess": "sips -z 512 512; non-generative downsample only, alpha retained"
+}

@@ -1,0 +1,413 @@
+{
+  "status": "PASS",
+  "scope": "Round 3 creative-source file/data verification only; fresh Unity import/playback/visual acceptance NOT_RUN.",
+  "characters": [
+    {
+      "character": "sera",
+      "age_unchanged": 24,
+      "moments_sha256": "fc5397961e65550cc5b2abeb3bb29c285bc211eba5a75158306b174fa52bbce3",
+      "mapped_images": 15,
+      "unique_pngs": 15,
+      "ready_pngs": 15,
+      "todo_pngs": 0,
+      "expressions_512": 6,
+      "bond_characters_including_spaces": 2378,
+      "idle_figure": "fig_smile",
+      "scene_images": [
+        {
+          "scene": "sera_lobby_01",
+          "missing_image_keys": []
+        },
+        {
+          "scene": "sera_bond_01",
+          "missing_image_keys": []
+        },
+        {
+          "scene": "sera_victory_01",
+          "missing_image_keys": []
+        }
+      ]
+    },
+    {
+      "character": "ravien",
+      "age_unchanged": 28,
+      "moments_sha256": "4d714191009fa570934a34eab8d0a781825ed8d200adf1b857a7f971d97bbd46",
+      "mapped_images": 23,
+      "unique_pngs": 22,
+      "ready_pngs": 23,
+      "todo_pngs": 0,
+      "expressions_512": 6,
+      "bond_characters_including_spaces": 2673,
+      "idle_figure": "fig_lobby_end",
+      "scene_images": [
+        {
+          "scene": "ravien_lobby_01",
+          "missing_image_keys": []
+        },
+        {
+          "scene": "ravien_bond_01",
+          "missing_image_keys": []
+        },
+        {
+          "scene": "ravien_victory_01",
+          "missing_image_keys": []
+        }
+      ]
+    },
+    {
+      "character": "harin",
+      "age_unchanged": 26,
+      "moments_sha256": "ec2779bdfab21d7169416091e3c3f4b972d2f7f4c06ee6891b2d87d098d3f8f6",
+      "mapped_images": 21,
+      "unique_pngs": 21,
+      "ready_pngs": 21,
+      "todo_pngs": 0,
+      "expressions_512": 6,
+      "bond_characters_including_spaces": 2603,
+      "idle_figure": "fig_lobby_soft",
+      "scene_images": [
+        {
+          "scene": "harin_lobby_01",
+          "missing_image_keys": []
+        },
+        {
+          "scene": "harin_bond_01",
+          "missing_image_keys": []
+        },
+        {
+          "scene": "harin_victory_01",
+          "missing_image_keys": []
+        }
+      ]
+    },
+    {
+      "character": "aila",
+      "age_unchanged": 23,
+      "moments_sha256": "b5bdd0237648b13deb5b2d065b8fa38137de01b3736e1a8185a1ddf46e45d0d5",
+      "mapped_images": 19,
+      "unique_pngs": 18,
+      "ready_pngs": 19,
+      "todo_pngs": 0,
+      "expressions_512": 6,
+      "bond_characters_including_spaces": 2509,
+      "idle_figure": "fig_happy",
+      "scene_images": [
+        {
+          "scene": "aila_lobby_01",
+          "missing_image_keys": []
+        },
+        {
+          "scene": "aila_bond_01",
+          "missing_image_keys": []
+        },
+        {
+          "scene": "aila_victory_01",
+          "missing_image_keys": []
+        }
+      ]
+    },
+    {
+      "character": "sion",
+      "age_unchanged": 27,
+      "moments_sha256": "befe63c46e235db4e1c2d54ec3865ecb12ae3f18a7939114f72e1dec41f97b02",
+      "mapped_images": 19,
+      "unique_pngs": 19,
+      "ready_pngs": 19,
+      "todo_pngs": 0,
+      "expressions_512": 6,
+      "bond_characters_including_spaces": 2575,
+      "idle_figure": "fig_soft",
+      "scene_images": [
+        {
+          "scene": "sion_lobby_01",
+          "missing_image_keys": []
+        },
+        {
+          "scene": "sion_bond_01",
+          "missing_image_keys": []
+        },
+        {
+          "scene": "sion_victory_01",
+          "missing_image_keys": []
+        }
+      ]
+    },
+    {
+      "character": "lumi",
+      "age_unchanged": 22,
+      "moments_sha256": "054e27dbefe8acff5cd34ceedec2fdd862fb2e11c3575b8a335307e0edf59bc3",
+      "mapped_images": 19,
+      "unique_pngs": 19,
+      "ready_pngs": 19,
+      "todo_pngs": 0,
+      "expressions_512": 6,
+      "bond_characters_including_spaces": 2597,
+      "idle_figure": "fig_neutral",
+      "scene_images": [
+        {
+          "scene": "lumi_lobby_01",
+          "missing_image_keys": []
+        },
+        {
+          "scene": "lumi_bond_01",
+          "missing_image_keys": []
+        },
+        {
+          "scene": "lumi_victory_01",
+          "missing_image_keys": []
+        }
+      ]
+    }
+  ],
+  "totals": {
+    "scenes": 18,
+    "beats": 215,
+    "mapped_pngs": 116,
+    "ready_pngs": 116,
+    "todo_pngs": 0,
+    "unique_pngs": 114,
+    "expressions_512": 36,
+    "fully_image_backed_scenes": [
+      "sera_lobby_01",
+      "sera_bond_01",
+      "sera_victory_01",
+      "ravien_lobby_01",
+      "ravien_bond_01",
+      "ravien_victory_01",
+      "harin_lobby_01",
+      "harin_bond_01",
+      "harin_victory_01",
+      "aila_lobby_01",
+      "aila_bond_01",
+      "aila_victory_01",
+      "sion_lobby_01",
+      "sion_bond_01",
+      "sion_victory_01",
+      "lumi_lobby_01",
+      "lumi_bond_01",
+      "lumi_victory_01"
+    ],
+    "new_selected_files": 72,
+    "new_scene_pose_background_files": 36,
+    "new_expression_files": 36,
+    "new_unselected_candidates": 2,
+    "motion_data": 16
+  },
+  "checks": [
+    "All mapped PNGs exist, decode, and have safe art-relative paths.",
+    "Scene figure/background/motion/overlay/idle references and anchor bounds are valid.",
+    "All 36 expression PNGs are 512x512 RGBA; six unique files per adult.",
+    "All current image readiness entries match existing PNG files; voice remains todo.",
+    "All scene text, speaker, tone, gaze, hold, input, trigger, stage, why, intent and motion data reconstruct the exact six baseline JSON bytes after only the allowed art mappings/anchors/assignments/assets/camera changes are reverted.",
+    "All 50 pre-existing image/animation files retain SHA256.",
+    "Six complete bond scripts remain within 2000-3000 Unicode characters including spaces."
+  ],
+  "round3": {
+    "input_hashes": "production-round3-20261018/input-hashes.json",
+    "baseline_reconstruction": [
+      {
+        "character": "sera",
+        "protected_fields_reconstruct_baseline_sha256": "faac3579ba6bdff2942931aaf629f779eac003bc99cd0444d1972430cd9fa965",
+        "pass": true
+      },
+      {
+        "character": "ravien",
+        "protected_fields_reconstruct_baseline_sha256": "fa9802ce5685b304051ab60c559eb554e5fd3e19a47309aae7887cf707a942c1",
+        "pass": true
+      },
+      {
+        "character": "harin",
+        "protected_fields_reconstruct_baseline_sha256": "0252cecb3a81fac4cce880487fa0ada1a99ff0129eb8168e40c14283ee0fbbdd",
+        "pass": true
+      },
+      {
+        "character": "aila",
+        "protected_fields_reconstruct_baseline_sha256": "d965d77d33a86c437f958b175a803e41370a5345905fae18da399d966018c779",
+        "pass": true
+      },
+      {
+        "character": "sion",
+        "protected_fields_reconstruct_baseline_sha256": "716f958b157449201f128235b89c4ce0928d219a9850bf578c541893e5e4989b",
+        "pass": true
+      },
+      {
+        "character": "lumi",
+        "protected_fields_reconstruct_baseline_sha256": "ba1d86d78b725f35678143b24a005e6c1eb141c1a3858a21af6fc10f35f054b6",
+        "pass": true
+      }
+    ],
+    "beat_assignment_camera_differences": [
+      {
+        "scene": "ravien_lobby_01",
+        "beat_1_based": 5,
+        "field": "figure",
+        "before": "fig_offer",
+        "after": "fig_lobby_wait"
+      },
+      {
+        "scene": "ravien_lobby_01",
+        "beat_1_based": 6,
+        "field": "figure",
+        "before": "fig_lobby_soft",
+        "after": "fig_lobby_wait"
+      },
+      {
+        "scene": "ravien_lobby_01",
+        "beat_1_based": 7,
+        "field": "figure",
+        "before": "fig_default",
+        "after": "fig_lobby_end"
+      },
+      {
+        "scene": "ravien_lobby_01",
+        "beat_1_based": 7,
+        "field": "camera",
+        "before": {
+          "shot": "medium",
+          "focus": "face",
+          "move": "pull_out",
+          "duration": 0.6
+        },
+        "after": {
+          "shot": "full",
+          "focus": "face",
+          "move": "pull_out",
+          "duration": 0.6
+        }
+      },
+      {
+        "scene": "ravien_bond_01",
+        "beat_1_based": 25,
+        "field": "figure",
+        "before": "fig_resolve",
+        "after": "fig_bond_resolve"
+      },
+      {
+        "scene": "ravien_bond_01",
+        "beat_1_based": 26,
+        "field": "figure",
+        "before": "fig_resolve",
+        "after": "fig_bond_resolve"
+      },
+      {
+        "scene": "ravien_bond_01",
+        "beat_1_based": 27,
+        "field": "figure",
+        "before": "fig_resolve",
+        "after": "fig_bond_resolve"
+      },
+      {
+        "scene": "ravien_bond_01",
+        "beat_1_based": 28,
+        "field": "figure",
+        "before": "fig_resolve",
+        "after": "fig_bond_resolve"
+      },
+      {
+        "scene": "ravien_bond_01",
+        "beat_1_based": 29,
+        "field": "figure",
+        "before": "fig_resolve",
+        "after": "fig_bond_resolve"
+      },
+      {
+        "scene": "ravien_bond_01",
+        "beat_1_based": 30,
+        "field": "figure",
+        "before": "fig_resolve",
+        "after": "fig_bond_resolve"
+      },
+      {
+        "scene": "ravien_bond_01",
+        "beat_1_based": 31,
+        "field": "figure",
+        "before": "fig_resolve",
+        "after": "fig_bond_resolve"
+      },
+      {
+        "scene": "ravien_bond_01",
+        "beat_1_based": 32,
+        "field": "figure",
+        "before": "fig_resolve",
+        "after": "fig_bond_resolve"
+      },
+      {
+        "scene": "ravien_bond_01",
+        "beat_1_based": 33,
+        "field": "figure",
+        "before": "fig_resolve",
+        "after": "fig_bond_resolve"
+      },
+      {
+        "scene": "aila_lobby_01",
+        "beat_1_based": 4,
+        "field": "camera",
+        "before": {
+          "shot": "bust",
+          "focus": "face",
+          "move": "push_in",
+          "duration": 0.55
+        },
+        "after": {
+          "shot": "full",
+          "focus": "face",
+          "move": "none",
+          "duration": 0
+        }
+      },
+      {
+        "scene": "aila_lobby_01",
+        "beat_1_based": 5,
+        "field": "figure",
+        "before": "fig_soft",
+        "after": "fig_happy"
+      },
+      {
+        "scene": "aila_lobby_01",
+        "beat_1_based": 5,
+        "field": "camera",
+        "before": {
+          "shot": "medium",
+          "focus": "body",
+          "move": "none",
+          "duration": 0
+        },
+        "after": {
+          "shot": "full",
+          "focus": "face",
+          "move": "none",
+          "duration": 0
+        }
+      }
+    ],
+    "selected_assets": "production-round3-20261018/selected-assets.json",
+    "records": "production-round3-20261018/records/",
+    "visual_review": "production-round3-20261018/final-verdict.json",
+    "previous_validation": "production-round3-20261018/before/VALIDATION.json"
+  },
+  "not_run": [
+    "New Unity import / live playback / transitions / face-and-chair / dialogue clearance / idle return / repeated taps / hold / skip / other aspect ratios / device / accessibility acceptance.",
+    "Claude independent review and calls (user excluded).",
+    "Game-code tests, lint, typecheck and build (no game code changed).",
+    "New articulated rigs, in-between frames, voice, layered PSD, AnimationClip, Timeline or VFX production."
+  ],
+  "real_constraint": [
+    "Aila independent final C wait candidate was rejected by image output moderation; the accepted lowered-lantern return-look PNG is intentionally reused as the held final wait.",
+    "Standalone scene poses retain furniture, ornament and prop-detail variations; continuous action and layered art remain unproduced.",
+    "Background native output is 1672x941, below section 15.3 full-master 2560x1440; no fake detail or layered master claimed."
+  ],
+  "preexisting_release_manifest_check": {
+    "status": "FAIL",
+    "release": "0.8.1-aio.2",
+    "entries": 423,
+    "preexisting_changed_entries": 32,
+    "manifest_regenerated": false
+  },
+  "apng": {
+    "path": "sera/char_sera_lobby_check_time_v01.apng",
+    "unchanged_from_pass1": true,
+    "decoded_frames": 5,
+    "duration_ms": 2500,
+    "sha256": "f969203b01b1b2c154d779da78ff110d9b1a56d2bcda0489cb7cd1c7747ff20f"
+  }
+}

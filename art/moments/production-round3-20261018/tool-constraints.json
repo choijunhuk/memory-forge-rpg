@@ -1,0 +1,35 @@
+{
+  "initial_batch": {
+    "request_id": "75437f6a-fca4-4c5b-9437-a43008ec6081",
+    "category": "sexual",
+    "stage": "output",
+    "attribution": "One of six independent jobs; aggregate rejected before individual outcomes were retained. Ravien ending PNG was recovered and inspected. Other unreturned outcomes were not counted."
+  },
+  "asset_events": [
+    {
+      "character": "aila",
+      "key": "fig_victory_wait",
+      "attempt": "current",
+      "error": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID 9e6b4c79-23e2-45ee-9ce0-391e8c896a54. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
+      "current_selected": false,
+      "resolution": "Accepted return-look pose reused for final wait"
+    },
+    {
+      "character": "aila",
+      "key": "fig_worried",
+      "attempt": "previous",
+      "error": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID db227ead-e8fa-4270-a7dc-b26cc3924894. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
+      "current_selected": true,
+      "resolution": "Targeted edit of accepted narrative pose completed without changing design"
+    },
+    {
+      "character": "ravien",
+      "key": "fig_bond_turn",
+      "attempt": "previous",
+      "error": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID 62358752-49a8-4957-85f9-27ec9a35fe2c. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
+      "current_selected": true,
+      "resolution": "Targeted edit of accepted narrative pose completed without changing design"
+    }
+  ],
+  "fallback": "none; subscription built-in only"
+}

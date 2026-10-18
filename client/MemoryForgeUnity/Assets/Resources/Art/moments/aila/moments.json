@@ -3,25 +3,32 @@
   "character": "aila",
   "status": "draft",
   "images": {
-    "fig_neutral": "moments/aila/images/char_aila_moment_neutral_v02.png",
-    "fig_action1": "moments/aila/images/char_aila_moment_action1_v02.png",
-    "fig_action2": "moments/aila/images/char_aila_moment_action2_v02.png",
-    "fig_happy": "moments/aila/images/char_aila_moment_happy_v02.png",
-    "fig_worried": "moments/aila/images/char_aila_moment_worried_v01.png",
-    "fig_surprised": "moments/aila/images/char_aila_moment_surprised_v01.png",
-    "fig_determined": "moments/aila/images/char_aila_moment_determined_v01.png",
-    "fig_soft": "moments/aila/images/char_aila_moment_soft_v02.png",
-    "expr_neutral": "moments/aila/images/char_aila_expression_neutral_v01.png",
-    "expr_happy": "moments/aila/images/char_aila_expression_happy_v01.png",
-    "expr_annoyed": "moments/aila/images/char_aila_expression_annoyed_v01.png",
-    "expr_surprised": "moments/aila/images/char_aila_expression_surprised_v01.png",
-    "expr_worried": "moments/aila/images/char_aila_expression_worried_v01.png",
-    "expr_determined": "moments/aila/images/char_aila_expression_determined_v01.png",
-    "bg": "moments/aila/images/char_aila_background_archive_evening_v01.png",
-    "fig_victory_check": "moments/aila/images/char_aila_moment_victory_check_v01.png",
-    "fig_victory_turn": "moments/aila/images/char_aila_moment_victory_turn_v01.png",
-    "fig_victory_notice": "moments/aila/images/char_aila_moment_victory_notice_v01.png",
-    "fig_victory_wait": "moments/aila/images/char_aila_moment_victory_wait_v01.png"
+    "fig_neutral": "moments/aila/images/char_aila_fig_neutral_styleA_v01.png",
+    "fig_action1": "moments/aila/images/char_aila_fig_action1_styleA_v01.png",
+    "fig_action2": "moments/aila/images/char_aila_fig_action2_styleA_v01.png",
+    "fig_happy": "moments/aila/images/char_aila_fig_happy_styleA_v01.png",
+    "fig_worried": "moments/aila/images/char_aila_fig_worried_styleA_v01.png",
+    "fig_surprised": "moments/aila/images/char_aila_fig_surprised_styleA_v01.png",
+    "fig_determined": "moments/aila/images/char_aila_fig_determined_styleA_v01.png",
+    "fig_soft": "moments/aila/images/char_aila_fig_soft_styleA_v01.png",
+    "expr_neutral": "moments/aila/images/char_aila_expr_neutral_styleA_v01.png",
+    "expr_happy": "moments/aila/images/char_aila_expr_happy_styleA_v01.png",
+    "expr_annoyed": "moments/aila/images/char_aila_expr_annoyed_styleA_v01.png",
+    "expr_surprised": "moments/aila/images/char_aila_expr_surprised_styleA_v01.png",
+    "expr_worried": "moments/aila/images/char_aila_expr_worried_styleA_v01.png",
+    "expr_determined": "moments/aila/images/char_aila_expr_determined_styleA_v01.png",
+    "bg": "moments/aila/images/char_aila_bg_styleA_v01.png",
+    "fig_victory_check": "moments/aila/images/char_aila_fig_victory_check_styleA_v01.png",
+    "fig_victory_turn": "moments/aila/images/char_aila_fig_victory_turn_styleA_v01.png",
+    "fig_victory_notice": "moments/aila/images/char_aila_fig_victory_notice_styleA_v01.png",
+    "fig_victory_wait": "moments/aila/images/char_aila_fig_victory_turn_styleA_v01.png",
+    "fig_bond_table": "moments/aila/images/char_aila_fig_bond_table_styleA_v01.png",
+    "fig_bond_paper": "moments/aila/images/char_aila_fig_bond_paper_styleA_v01.png",
+    "fig_bond_hover": "moments/aila/images/char_aila_fig_bond_hover_styleA_v01.png",
+    "fig_bond_write": "moments/aila/images/char_aila_fig_bond_write_styleA_v01.png",
+    "fig_bond_present": "moments/aila/images/char_aila_fig_bond_present_styleA_v01.png",
+    "fig_bond_return": "moments/aila/images/char_aila_fig_bond_return_styleA_v01.png",
+    "fig_bond_store": "moments/aila/images/char_aila_fig_bond_store_styleA_v01.png"
   },
   "anchors": {
     "fig_neutral": {
@@ -82,8 +89,8 @@
     },
     "fig_worried": {
       "face": [
-        0.5,
-        0.17
+        0.51,
+        0.105
       ],
       "body": [
         0.5,
@@ -96,8 +103,8 @@
     },
     "fig_surprised": {
       "face": [
-        0.5,
-        0.17
+        0.51,
+        0.105
       ],
       "body": [
         0.5,
@@ -110,8 +117,8 @@
     },
     "fig_determined": {
       "face": [
-        0.5,
-        0.17
+        0.51,
+        0.105
       ],
       "body": [
         0.5,
@@ -138,8 +145,8 @@
     },
     "fig_victory_check": {
       "face": [
-        0.5,
-        0.17
+        0.54,
+        0.105
       ],
       "body": [
         0.5,
@@ -152,8 +159,8 @@
     },
     "fig_victory_turn": {
       "face": [
-        0.5,
-        0.17
+        0.59,
+        0.105
       ],
       "body": [
         0.5,
@@ -166,8 +173,8 @@
     },
     "fig_victory_notice": {
       "face": [
-        0.5,
-        0.17
+        0.53,
+        0.105
       ],
       "body": [
         0.5,
@@ -180,8 +187,8 @@
     },
     "fig_victory_wait": {
       "face": [
-        0.5,
-        0.17
+        0.59,
+        0.105
       ],
       "body": [
         0.5,
@@ -190,6 +197,140 @@
       "hands": [
         0.48,
         0.55
+      ]
+    },
+    "expr_neutral": {
+      "face": [
+        0.53,
+        0.43
+      ]
+    },
+    "expr_happy": {
+      "face": [
+        0.53,
+        0.43
+      ]
+    },
+    "expr_annoyed": {
+      "face": [
+        0.53,
+        0.43
+      ]
+    },
+    "expr_surprised": {
+      "face": [
+        0.53,
+        0.43
+      ]
+    },
+    "expr_worried": {
+      "face": [
+        0.53,
+        0.43
+      ]
+    },
+    "expr_determined": {
+      "face": [
+        0.53,
+        0.43
+      ]
+    },
+    "fig_bond_table": {
+      "face": [
+        0.51,
+        0.105
+      ],
+      "hands": [
+        0.32,
+        0.38
+      ],
+      "body": [
+        0.5,
+        0.5
+      ]
+    },
+    "fig_bond_paper": {
+      "face": [
+        0.51,
+        0.105
+      ],
+      "hands": [
+        0.68,
+        0.45
+      ],
+      "body": [
+        0.5,
+        0.5
+      ]
+    },
+    "fig_bond_hover": {
+      "face": [
+        0.52,
+        0.105
+      ],
+      "hands": [
+        0.73,
+        0.445
+      ],
+      "body": [
+        0.5,
+        0.5
+      ]
+    },
+    "fig_bond_write": {
+      "face": [
+        0.59,
+        0.115
+      ],
+      "hands": [
+        0.73,
+        0.445
+      ],
+      "body": [
+        0.5,
+        0.5
+      ]
+    },
+    "fig_bond_present": {
+      "face": [
+        0.52,
+        0.105
+      ],
+      "hands": [
+        0.7,
+        0.25
+      ],
+      "body": [
+        0.5,
+        0.5
+      ]
+    },
+    "fig_bond_return": {
+      "face": [
+        0.51,
+        0.105
+      ],
+      "hands": [
+        0.7,
+        0.36
+      ],
+      "body": [
+        0.5,
+        0.5
+      ]
+    },
+    "fig_bond_store": {
+      "face": [
+        0.51,
+        0.105
+      ],
+      "hands": [
+        0.69,
+        0.5
+      ],
+      "body": [
+        0.5,
+        0.5
       ]
     }
   },
@@ -343,10 +484,10 @@
           "figure": "fig_happy",
           "gaze": "player",
           "camera": {
-            "shot": "bust",
+            "shot": "full",
             "focus": "face",
-            "move": "push_in",
-            "duration": 0.55
+            "move": "none",
+            "duration": 0
           },
           "line": {
             "speaker": "aila",
@@ -357,11 +498,11 @@
           "motion": "stage_settle"
         },
         {
-          "figure": "fig_soft",
+          "figure": "fig_happy",
           "gaze": "player",
           "camera": {
-            "shot": "medium",
-            "focus": "body",
+            "shot": "full",
+            "focus": "face",
             "move": "none",
             "duration": 0
           },
@@ -403,7 +544,7 @@
         {
           "key": "fig_determined",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_happy",
@@ -423,12 +564,12 @@
         {
           "key": "fig_surprised",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_worried",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "stage_settle",
@@ -439,6 +580,41 @@
           "key": "voice_aila_bond_recording",
           "type": "voice",
           "status": "todo"
+        },
+        {
+          "key": "fig_bond_hover",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_bond_paper",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_bond_present",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_bond_return",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_bond_store",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_bond_table",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_bond_write",
+          "type": "image",
+          "status": "ready"
         }
       ],
       "input": {
@@ -485,7 +661,7 @@
           "hold": 1.0
         },
         {
-          "figure": "fig_action2",
+          "figure": "fig_bond_table",
           "gaze": "side",
           "camera": {
             "shot": "medium",
@@ -501,7 +677,7 @@
           "hold": 0.8
         },
         {
-          "figure": "fig_happy",
+          "figure": "fig_bond_table",
           "gaze": "player",
           "camera": {
             "shot": "bust",
@@ -581,7 +757,7 @@
           "hold": 1.0
         },
         {
-          "figure": "fig_action1",
+          "figure": "fig_bond_paper",
           "gaze": "down",
           "camera": {
             "shot": "medium",
@@ -597,7 +773,7 @@
           "hold": 0.8
         },
         {
-          "figure": "fig_soft",
+          "figure": "fig_bond_paper",
           "gaze": "player",
           "camera": {
             "shot": "bust",
@@ -629,7 +805,7 @@
           "hold": 0.8
         },
         {
-          "figure": "fig_happy",
+          "figure": "fig_bond_table",
           "gaze": "player",
           "camera": {
             "shot": "bust",
@@ -645,7 +821,7 @@
           "hold": 1.0
         },
         {
-          "figure": "fig_action2",
+          "figure": "fig_bond_hover",
           "gaze": "player",
           "camera": {
             "shot": "medium",
@@ -661,7 +837,7 @@
           "hold": 0.8
         },
         {
-          "figure": "fig_determined",
+          "figure": "fig_bond_hover",
           "gaze": "player",
           "camera": {
             "shot": "bust",
@@ -677,7 +853,7 @@
           "hold": 1.0
         },
         {
-          "figure": "fig_soft",
+          "figure": "fig_bond_write",
           "gaze": "down",
           "camera": {
             "shot": "medium",
@@ -693,7 +869,7 @@
           "hold": 0.8
         },
         {
-          "figure": "fig_surprised",
+          "figure": "fig_bond_write",
           "gaze": "player",
           "camera": {
             "shot": "bust",
@@ -709,7 +885,7 @@
           "hold": 1.0
         },
         {
-          "figure": "fig_worried",
+          "figure": "fig_bond_present",
           "gaze": "player",
           "camera": {
             "shot": "medium",
@@ -725,7 +901,7 @@
           "hold": 0.8
         },
         {
-          "figure": "fig_soft",
+          "figure": "fig_bond_present",
           "gaze": "player",
           "camera": {
             "shot": "bust",
@@ -741,7 +917,7 @@
           "hold": 1.0
         },
         {
-          "figure": "fig_soft",
+          "figure": "fig_bond_return",
           "gaze": "down",
           "camera": {
             "shot": "medium",
@@ -757,7 +933,7 @@
           "hold": 0.8
         },
         {
-          "figure": "fig_determined",
+          "figure": "fig_bond_return",
           "gaze": "player",
           "camera": {
             "shot": "bust",
@@ -773,7 +949,7 @@
           "hold": 1.0
         },
         {
-          "figure": "fig_action2",
+          "figure": "fig_bond_store",
           "gaze": "player",
           "camera": {
             "shot": "full",
@@ -826,22 +1002,22 @@
         {
           "key": "fig_victory_check",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_victory_turn",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_victory_notice",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_victory_wait",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "stage_settle",
@@ -933,5 +1109,5 @@
       ]
     }
   ],
-  "idle_figure": "fig_soft"
+  "idle_figure": "fig_happy"
 }

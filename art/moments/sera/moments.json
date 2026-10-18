@@ -3,21 +3,21 @@
   "character": "sera",
   "status": "draft",
   "images": {
-    "fig_scope": "moments/sera/images/char_sera_lobby_scope_v02.png",
-    "fig_watch": "moments/sera/images/char_sera_lobby_watch_v02.png",
-    "fig_smile": "moments/sera/images/char_sera_lobby_smile_v01.png",
-    "fig_bond_notes": "moments/sera/images/char_sera_bond_notes_v01.png",
-    "fig_bond_listen": "moments/sera/images/char_sera_bond_listen_v01.png",
-    "fig_bond_offer": "moments/sera/images/char_sera_bond_offer_v01.png",
-    "fig_victory_scope": "moments/sera/images/char_sera_victory_scope_v01.png",
-    "fig_victory_turn": "moments/sera/images/char_sera_victory_turn_v01.png",
-    "bg_tower": "moments/sera/images/bg_sera_clocktower_evening_v01.png",
-    "expr_neutral": "moments/sera/images/char_sera_expr_neutral_v01.png",
-    "expr_happy": "moments/sera/images/char_sera_expr_happy_v01.png",
-    "expr_annoyed": "moments/sera/images/char_sera_expr_annoyed_v01.png",
-    "expr_surprised": "moments/sera/images/char_sera_expr_surprised_v01.png",
-    "expr_worried": "moments/sera/images/char_sera_expr_worried_v01.png",
-    "expr_determined": "moments/sera/images/char_sera_expr_determined_v01.png"
+    "fig_scope": "moments/sera/images/char_sera_fig_scope_styleA_v01.png",
+    "fig_watch": "moments/sera/images/char_sera_fig_watch_styleA_v01.png",
+    "fig_smile": "moments/sera/images/char_sera_fig_smile_styleA_v01.png",
+    "fig_bond_notes": "moments/sera/images/char_sera_fig_bond_notes_styleA_v01.png",
+    "fig_bond_listen": "moments/sera/images/char_sera_fig_bond_listen_styleA_v01.png",
+    "fig_bond_offer": "moments/sera/images/char_sera_fig_bond_offer_styleA_v01.png",
+    "fig_victory_scope": "moments/sera/images/char_sera_fig_victory_scope_styleA_v01.png",
+    "fig_victory_turn": "moments/sera/images/char_sera_fig_victory_turn_styleA_v01.png",
+    "bg_tower": "moments/sera/images/char_sera_bg_tower_styleA_v01.png",
+    "expr_neutral": "moments/sera/images/char_sera_expr_neutral_styleA_v01.png",
+    "expr_happy": "moments/sera/images/char_sera_expr_happy_styleA_v01.png",
+    "expr_annoyed": "moments/sera/images/char_sera_expr_annoyed_styleA_v01.png",
+    "expr_surprised": "moments/sera/images/char_sera_expr_surprised_styleA_v01.png",
+    "expr_worried": "moments/sera/images/char_sera_expr_worried_styleA_v01.png",
+    "expr_determined": "moments/sera/images/char_sera_expr_determined_styleA_v01.png"
   },
   "anchors": {
     "fig_scope": {
@@ -119,16 +119,52 @@
         0.52,
         0.5
       ]
+    },
+    "expr_neutral": {
+      "face": [
+        0.56,
+        0.4
+      ]
+    },
+    "expr_happy": {
+      "face": [
+        0.56,
+        0.4
+      ]
+    },
+    "expr_annoyed": {
+      "face": [
+        0.56,
+        0.4
+      ]
+    },
+    "expr_surprised": {
+      "face": [
+        0.56,
+        0.4
+      ]
+    },
+    "expr_worried": {
+      "face": [
+        0.56,
+        0.4
+      ]
+    },
+    "expr_determined": {
+      "face": [
+        0.56,
+        0.4
+      ]
     }
   },
   "motions": {
     "check_time": {
       "frames": [
-        "moments/sera/images/char_sera_lobby_scope_v02.png",
-        "moments/sera/images/char_sera_lobby_scope_v02.png",
-        "moments/sera/images/char_sera_lobby_watch_v02.png",
-        "moments/sera/images/char_sera_lobby_watch_v02.png",
-        "moments/sera/images/char_sera_lobby_smile_v01.png"
+        "moments/sera/images/char_sera_fig_scope_styleA_v01.png",
+        "moments/sera/images/char_sera_fig_scope_styleA_v01.png",
+        "moments/sera/images/char_sera_fig_watch_styleA_v01.png",
+        "moments/sera/images/char_sera_fig_watch_styleA_v01.png",
+        "moments/sera/images/char_sera_fig_smile_styleA_v01.png"
       ],
       "fps": 2,
       "loop": false

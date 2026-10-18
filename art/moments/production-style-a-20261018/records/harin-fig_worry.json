@@ -1,0 +1,18 @@
+{
+  "character": "harin",
+  "key": "fig_worry",
+  "old_path": "moments/harin/images/char_harin_seated_worried_v02.png",
+  "target": "harin/images/char_harin_fig_worry_styleA_v01.png",
+  "args": {
+    "prompt": "Use case: style-transfer. Production transparent full-body sprite for Memory Forge. REDRAW rather than merely recolor. Direction A CLEAR CEL, exactly the rendering grammar of the last reference: crisp controlled ink contours, emphatic upper eyelids, tiny symbolic nose and short mouth, matte skin with large flat light areas and one hard-edged shadow step, large grouped hair locks with broad flat highlight bands, costume tailoring and flat color planes before details, restrained gold/metal highlights. NO photoreal/3D nose, glossy lips, airbrush skin, tiny sparkling hair strands or painterly gradients. First reference controls exact character identity, adult age, outfit structure, props, pose, composition and framing; last reference is STYLE ONLY and must not transfer its clothing/face. Preserve all outfit cutouts and existing adult silhouette. Keep original full body and equipment inside a 1024x1536 portrait with a little clear margin. GENUINELY TRANSPARENT empty canvas alpha=0 around the subject including corners, no colored backdrop, vignette, aura, halo, floor, cast shadow, checkerboard, text or watermark. Remove ALL inherited background haze.\nThe SECOND reference is the approved SAME-CHARACTER A master; match its clear-cel face and rendering. Explicit continuity corrections below override incorrect first-reference furniture/prop placements.\n26-year-old Harin, strong adult seated on a plain dark-brown wooden ladder-back chair. Correct the OLD source continuity: large white/brass/blue shield is now ALWAYS standing at SCREEN LEFT of chair. A compact RECTANGULAR dark-wood four-legged table at SCREEN RIGHT beside her knee has a navy runner with gold star, a folded plain cream cloth, a water glass and a small tool at the far edge. Exact same objects/layout will persist in later B poses. The plush cat is COMPLETELY HIDDEN IN HIP POUCH, absolutely NO cat or toy on table/cloth/hands in this pre-reveal beat. Gloved fingers finishing folding the EMPTY cloth, worried awkward downward glance, hesitant mouth. White high-waist battle trousers, shoulder/waist-cut frost armor and navy one-sided cape unchanged. Use A master for costume, identity and shield design; the old source is only a seated-pose reference. No live kitten. Full chair, shield, tabletop, feet inside canvas.",
+    "referenced_image_paths": [
+      "/Users/choi/Documents/Memory_forge/art/moments/harin/images/char_harin_seated_worried_v02.png",
+      "/Users/choi/Documents/Memory_forge/art/moments/harin/images/char_harin_fig_glove_styleA_v01.png"
+    ],
+    "transparent_background": true
+  },
+  "cache_path": "/Users/choi/.codex/generated_images/01a14db0-4150-7f01-9240-82aaa185dd28/exec-249c4c3c-3535-4dfa-839c-d3272e75eb4a.png",
+  "status": "history_unselected",
+  "generation_status": "generated_pending_review",
+  "selected": false
+}

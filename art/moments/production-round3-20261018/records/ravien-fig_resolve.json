@@ -1,0 +1,28 @@
+{
+  "c": "ravien",
+  "key": "fig_resolve",
+  "path": "ravien/images/char_ravien_stand_determined_v01.png",
+  "refs": [
+    "/Users/choi/Documents/Memory_forge/art/moments/ravien/images/char_ravien_stand_neutral_v01.png"
+  ],
+  "pose": "Ravien age28, standing three-quarter front, one half-step aside leaving companion space at left. CLOSED red folder tucked at left flank under forearm; empty right long-gloved hand relaxed down open. Direct green eyes, quiet decisive expression with faint smile at eye corners; hair/costume settled. No furniture, pen, stamps or magic. Preserve exact reference design; full head through both heels.",
+  "prompt": "Use case: identity-preserve. Locked character design reference. Make ONE new non-explicit narrative RPG key-pose, 1024x1536 full length transparent PNG. Preserve adult identity, age, hairstyle, face, exact costume/colors and painterly anime cel style. All head, fingers, shoes and important props inside canvas. No scene background, haze, labels, panels, other people or erotic posing. Character acting and prop contact are the focus. Acting: Ravien age28, standing three-quarter front, one half-step aside leaving companion space at left. CLOSED red folder tucked at left flank under forearm; empty right long-gloved hand relaxed down open. Direct green eyes, quiet decisive expression with faint smile at eye corners; hair/costume settled. No furniture, pen, stamps or magic. Preserve exact reference design; full head through both heels.",
+  "source": "/Users/choi/.codex/generated_images/01a14d20-ffd5-7e81-9e47-85c1c8415e11/exec-4c1aca55-a576-432f-849a-40dc8e6c4169.png",
+  "tool": "Codex built-in image_gen; subscription-included; no API fallback",
+  "review": "pass",
+  "previous_attempt": null,
+  "score": 92,
+  "review_notes": "Rendered output compared with reference: adult design preserved, clear pose/prop contact and face; B determined poses use narrative props, no unintended weapons. Static pose cuts and small furniture variations remain.",
+  "backend_model": "not exposed by tool",
+  "selected": true,
+  "sha256": "9dd08e8185fe2f424c83e2f9ad0e7bcd1a473307fe1f528be3ae0c81590b82a1",
+  "size": [
+    1024,
+    1536
+  ],
+  "mode": "RGBA",
+  "alpha_extrema": [
+    0,
+    254
+  ]
+}

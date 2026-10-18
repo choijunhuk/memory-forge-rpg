@@ -1,0 +1,30 @@
+{
+  "c": "sera",
+  "key": "expr_neutral",
+  "path": "sera/images/char_sera_expr_neutral_v01.png",
+  "refs": [
+    "/Users/choi/Documents/Memory_forge/art/moments/sera/images/char_sera_lobby_smile_v01.png"
+  ],
+  "common": "Use case: identity-preserve. Asset: ONE dialogue expression portrait on actual transparent alpha, SQUARE canvas, intended final 512x512. Head and upper shoulders only; no full body, hands, props, panels or text. Locked identity from reference. Same premium anime cel painting, soft neutral warm lighting from upper-left, eye-level fixed front-three-quarter view with face turned only 10 degrees to viewer's left, both eyes fully visible. Center face, eyes around y.43, entire crown/hair ornaments in frame with 6% transparent margin, crop at upper chest/collar. This sets the master framing for six matching expressions; preserve face proportions, hair and costume rather than redesigning. ",
+  "pose": "Sera, adult age24. Silver-white long hair, AMBER gold eyes, brass clock/star hair ornament, navy longcoat collar and black high-neck fitted suit. Calm precise presence. Expression NEUTRAL: relaxed brows, open attentive eyes, lips naturally closed without smile or frown, no blush, no wink. Natural adult face, not chibi.",
+  "prompt": "Use case: identity-preserve. Asset: ONE dialogue expression portrait on actual transparent alpha, SQUARE canvas, intended final 512x512. Head and upper shoulders only; no full body, hands, props, panels or text. Locked identity from reference. Same premium anime cel painting, soft neutral warm lighting from upper-left, eye-level fixed front-three-quarter view with face turned only 10 degrees to viewer's left, both eyes fully visible. Center face, eyes around y.43, entire crown/hair ornaments in frame with 6% transparent margin, crop at upper chest/collar. This sets the master framing for six matching expressions; preserve face proportions, hair and costume rather than redesigning. Sera, adult age24. Silver-white long hair, AMBER gold eyes, brass clock/star hair ornament, navy longcoat collar and black high-neck fitted suit. Calm precise presence. Expression NEUTRAL: relaxed brows, open attentive eyes, lips naturally closed without smile or frown, no blush, no wink. Natural adult face, not chibi.",
+  "source": "/Users/choi/.codex/generated_images/01a14d20-ffd5-7e81-9e47-85c1c8415e11/exec-69a854fb-c7e3-4aa9-9231-049a4092b219.png",
+  "tool": "Codex built-in image_gen; subscription-included; no API fallback",
+  "review": "pass",
+  "previous_attempt": null,
+  "score": 94,
+  "review_notes": "Rendered output inspected beside its neutral master. Six readable adult expressions, stable face/eye/hair/glasses/scar/costume identity and framing. Only non-generative final resize remains.",
+  "backend_model": "not exposed by tool",
+  "selected": true,
+  "sha256": "2e5fa003499c0e5b203f96b80a63b6191bc5bcbfae8e0dfedcf429cab70dba1f",
+  "size": [
+    512,
+    512
+  ],
+  "mode": "RGBA",
+  "alpha_extrema": [
+    0,
+    255
+  ],
+  "postprocess": "sips -z 512 512; non-generative downsample only, alpha retained"
+}

@@ -1,0 +1,138 @@
+{
+  "harin": {
+    "fig_cat_placed": {
+      "source_key": "fig_cat",
+      "beats": [
+        15,
+        16,
+        17,
+        18,
+        19,
+        20
+      ],
+      "intent": "Same plush now on folded cloth, hands released; canonical shield/chair/table remain."
+    }
+  },
+  "ravien": {
+    "fig_bond_end": {
+      "source_key": "fig_bond_resolve",
+      "beats": [
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33
+      ],
+      "intent": "Standing empty-handed by same chair, foreground desk remains with closed folder and blank sheet."
+    }
+  },
+  "aila": {
+    "fig_bond_table": {
+      "source_key": "fig_worried",
+      "beats": [
+        3,
+        4,
+        12
+      ],
+      "intent": "Lantern resting center of same desk; two tea cups; invitation, relaxed face."
+    },
+    "fig_bond_paper": {
+      "source_key": "fig_worried",
+      "beats": [
+        9,
+        10
+      ],
+      "intent": "Pulling blank sheet toward herself, no cup held; lantern stays on desk."
+    },
+    "fig_bond_hover": {
+      "source_key": "fig_determined",
+      "beats": [
+        13,
+        14
+      ],
+      "intent": "Pen hovering over sheet, other hand tucks loose hair; lantern stays on desk."
+    },
+    "fig_bond_write": {
+      "source_key": "fig_determined",
+      "beats": [
+        15,
+        16
+      ],
+      "intent": "Pen tip contacts sheet, other hand steadies paper; lantern stays on desk."
+    },
+    "fig_bond_present": {
+      "source_key": "fig_worried",
+      "beats": [
+        17,
+        18
+      ],
+      "intent": "Actually holds and presents the written page toward player; lantern stays on desk."
+    },
+    "fig_bond_return": {
+      "source_key": "fig_soft",
+      "beats": [
+        19,
+        20
+      ],
+      "intent": "Receives returned written sheet, holding edge carefully above desk; lantern stays on desk."
+    },
+    "fig_bond_store": {
+      "source_key": "fig_worried",
+      "beats": [
+        21
+      ],
+      "intent": "Slides written page into same lower drawer; lantern stays on desk."
+    }
+  },
+  "sion": {
+    "fig_bond_neutral": {
+      "source_key": "fig_neutral",
+      "beats": [
+        1,
+        2,
+        21
+      ],
+      "intent": "Same lectern persists while she holds book and pauses page turn."
+    },
+    "fig_bond_adjust": {
+      "source_key": "fig_action2",
+      "beats": [
+        7
+      ],
+      "intent": "Same lectern persists during empty-hand glasses adjustment."
+    },
+    "fig_bond_soft": {
+      "source_key": "fig_soft",
+      "beats": [
+        8,
+        13,
+        14,
+        17,
+        18,
+        22
+      ],
+      "intent": "Same lectern persists, book placed on it, personal note visible; softened gaze."
+    },
+    "fig_bond_page": {
+      "source_key": "fig_action1",
+      "beats": [
+        9,
+        10,
+        19
+      ],
+      "intent": "Same lectern persists, personal note slips between pages."
+    },
+    "fig_bond_hidden": {
+      "source_key": "fig_happy",
+      "beats": [
+        11,
+        12
+      ],
+      "intent": "Same lectern persists while book conceals mouth; eyes visible."
+    }
+  }
+}

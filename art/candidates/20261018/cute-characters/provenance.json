@@ -1,0 +1,75 @@
+{
+  "schema": "memory-forge/cute-character-provenance/1",
+  "date": "2026-10-18",
+  "billing_route": "built-in image generation; no API or external provider called",
+  "billing_dashboard_verified": false,
+  "images": [
+    {
+      "character": "yuri",
+      "file": "yuri-cute-board-v1.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 2744645,
+      "sha256": "74e7bf2ad686e1c7acfd4eb184adba87c7c504e3408c60f1d5fdd5d057d3e1ed",
+      "tool": "image_gen.imagegen",
+      "mode": "built-in generation",
+      "source_cache": "/Users/choi/.codex/generated_images/01a14e24-50ed-78c3-bde3-b4fc4584de91/exec-6dcc8092-aca0-4bbb-8357-379a6c59f7dd.png",
+      "reference_images": [],
+      "status": "selected_candidate"
+    },
+    {
+      "character": "rien",
+      "file": "rien-cute-board-v1.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 2592132,
+      "sha256": "00ebe35ec87c30ba93dd767b830c269fcd5a6165be3e261fe74386d741c5b793",
+      "tool": "image_gen.imagegen",
+      "mode": "built-in generation",
+      "source_cache": "/Users/choi/.codex/generated_images/01a14e24-50ed-78c3-bde3-b4fc4584de91/exec-f90bee12-1ad5-4cae-b631-59dd4dd5dc5f.png",
+      "reference_images": [],
+      "status": "superseded_prop_continuity_error"
+    },
+    {
+      "character": "kaya",
+      "file": "kaya-cute-board-v1.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 2522325,
+      "sha256": "c5648c552927ca9616e6377532bf819ec31ec9d3e611ac4288828600154fc828",
+      "tool": "image_gen.imagegen",
+      "mode": "built-in generation",
+      "source_cache": "/Users/choi/.codex/generated_images/01a14e24-50ed-78c3-bde3-b4fc4584de91/exec-20ecfabd-e21d-402d-8021-17f0a8306ead.png",
+      "reference_images": [],
+      "status": "selected_candidate"
+    },
+    {
+      "character": "rien",
+      "file": "rien-cute-board-v2.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 2393660,
+      "sha256": "f48fdcf30664cd844d93d80420d07cefa646097e1bb1fd300cac878139e0a827",
+      "tool": "image_gen.imagegen",
+      "mode": "built-in precise-object-edit",
+      "source_cache": "/Users/choi/.codex/generated_images/01a14e24-50ed-78c3-bde3-b4fc4584de91/exec-68008539-0fd4-4093-ae27-40f54cc525c2.png",
+      "reference_images": [
+        "rien-cute-board-v1.png"
+      ],
+      "edit_prompt": "RIEN_EDIT_PROMPT.txt",
+      "status": "selected_candidate"
+    }
+  ],
+  "selected": {
+    "yuri": "yuri-cute-board-v1.png",
+    "rien": "rien-cute-board-v2.png",
+    "kaya": "kaya-cute-board-v1.png"
+  },
+  "review": {
+    "method": "creator visual inspection against text brief; no external reference comparison",
+    "status": "pass_as_concept_candidates",
+    "game_integration": "NOT_RUN; outside scope",
+    "independent_claude_review": "NOT_RUN; user prohibited Claude calls",
+    "source_cache_policy": "Tool-managed defaults retained. User deliverables copied into current directory."
+  }
+}

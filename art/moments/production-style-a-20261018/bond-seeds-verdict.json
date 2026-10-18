@@ -1,0 +1,12 @@
+{
+  "score": 89,
+  "verdict": "revise",
+  "category_match": true,
+  "differences": [
+    "Ravien and Harin canonical B masters each retain alpha=1 at one empty bottom corner."
+  ],
+  "suggestions": [
+    "Produce alpha-only v02 corrections; use the verified furniture layouts for B pose variants."
+  ],
+  "reasoning": "The canonical B layouts now solve shield/table direction, hidden plush timing, stable desk lantern and persistent lectern. Only two strict corner-alpha checks require corrections."
+}

@@ -1,0 +1,1369 @@
+{
+  "format": "memory-forge-moments/1",
+  "character": "ravien",
+  "status": "draft",
+  "images": {
+    "fig_default": "moments/ravien/images/char_ravien_stand_neutral_v01.png",
+    "fig_stamp": "moments/ravien/images/char_ravien_stamp_focused_v01.png",
+    "fig_turn": "moments/ravien/images/char_ravien_paper_turn_playful_v01.png",
+    "fig_offer": "moments/ravien/images/char_ravien_chair_offer_happy_v01.png",
+    "fig_lobby_soft": "moments/ravien/images/char_ravien_stand_soft_v01.png",
+    "fig_bond_turn": "moments/ravien/images/char_ravien_seated_playful_v01.png",
+    "fig_waver": "moments/ravien/images/char_ravien_seated_surprised_v01.png",
+    "fig_soft": "moments/ravien/images/char_ravien_seated_worried_v01.png",
+    "fig_resolve": "moments/ravien/images/char_ravien_stand_determined_v01.png",
+    "fig_annoyed": "moments/ravien/images/char_ravien_stand_annoyed_v01.png",
+    "fig_seal": "moments/ravien/images/char_ravien_battle_seal_determined_v01.png",
+    "fig_victory": "moments/ravien/images/char_ravien_seal_return_relaxed_v01.png",
+    "bg_room": "moments/ravien/images/char_ravien_background_workshop_evening_v01.png",
+    "bg_victory": "moments/ravien/images/char_ravien_background_quiet_afterbattle_v01.png",
+    "fig_lobby_wait": "moments/ravien/images/char_ravien_chair_wait_folder_v01.png",
+    "fig_lobby_end": "moments/ravien/images/char_ravien_chair_wait_emptyhands_v01.png",
+    "fig_bond_resolve": "moments/ravien/images/char_ravien_chair_wait_emptyhands_v01.png",
+    "expr_neutral": "moments/ravien/images/char_ravien_expression_neutral_v01.png",
+    "expr_happy": "moments/ravien/images/char_ravien_expression_happy_v01.png",
+    "expr_annoyed": "moments/ravien/images/char_ravien_expression_annoyed_v01.png",
+    "expr_surprised": "moments/ravien/images/char_ravien_expression_surprised_v01.png",
+    "expr_worried": "moments/ravien/images/char_ravien_expression_worried_v01.png",
+    "expr_determined": "moments/ravien/images/char_ravien_expression_determined_v01.png"
+  },
+  "anchors": {
+    "fig_default": {
+      "face": [
+        0.5,
+        0.105
+      ],
+      "hands": [
+        0.63,
+        0.48
+      ],
+      "body": [
+        0.5,
+        0.5
+      ]
+    },
+    "fig_stamp": {
+      "face": [
+        0.54,
+        0.105
+      ],
+      "hands": [
+        0.2,
+        0.43
+      ],
+      "body": [
+        0.54,
+        0.5
+      ]
+    },
+    "fig_turn": {
+      "face": [
+        0.5,
+        0.105
+      ],
+      "hands": [
+        0.7,
+        0.26
+      ],
+      "body": [
+        0.5,
+        0.5
+      ]
+    },
+    "fig_offer": {
+      "face": [
+        0.7,
+        0.105
+      ],
+      "hands": [
+        0.26,
+        0.41
+      ],
+      "body": [
+        0.7,
+        0.5
+      ]
+    },
+    "fig_lobby_soft": {
+      "face": [
+        0.51,
+        0.105
+      ],
+      "hands": [
+        0.66,
+        0.37
+      ],
+      "body": [
+        0.51,
+        0.5
+      ]
+    },
+    "fig_bond_turn": {
+      "face": [
+        0.51,
+        0.105
+      ],
+      "hands": [
+        0.49,
+        0.51
+      ],
+      "body": [
+        0.51,
+        0.5
+      ]
+    },
+    "fig_waver": {
+      "face": [
+        0.51,
+        0.105
+      ],
+      "hands": [
+        0.49,
+        0.51
+      ],
+      "body": [
+        0.51,
+        0.5
+      ]
+    },
+    "fig_soft": {
+      "face": [
+        0.46,
+        0.105
+      ],
+      "hands": [
+        0.49,
+        0.51
+      ],
+      "body": [
+        0.46,
+        0.5
+      ]
+    },
+    "fig_resolve": {
+      "face": [
+        0.51,
+        0.105
+      ],
+      "hands": [
+        0.49,
+        0.51
+      ],
+      "body": [
+        0.51,
+        0.5
+      ]
+    },
+    "fig_annoyed": {
+      "face": [
+        0.5,
+        0.105
+      ],
+      "hands": [
+        0.47,
+        0.36
+      ],
+      "body": [
+        0.5,
+        0.5
+      ]
+    },
+    "fig_seal": {
+      "face": [
+        0.51,
+        0.105
+      ],
+      "hands": [
+        0.49,
+        0.51
+      ],
+      "body": [
+        0.51,
+        0.5
+      ]
+    },
+    "fig_victory": {
+      "face": [
+        0.51,
+        0.105
+      ],
+      "hands": [
+        0.49,
+        0.51
+      ],
+      "body": [
+        0.51,
+        0.5
+      ]
+    },
+    "fig_lobby_wait": {
+      "face": [
+        0.7,
+        0.105
+      ],
+      "hands": [
+        0.72,
+        0.43
+      ],
+      "body": [
+        0.7,
+        0.5
+      ]
+    },
+    "fig_lobby_end": {
+      "face": [
+        0.67,
+        0.105
+      ],
+      "hands": [
+        0.68,
+        0.47
+      ],
+      "body": [
+        0.67,
+        0.5
+      ]
+    },
+    "fig_bond_resolve": {
+      "face": [
+        0.67,
+        0.105
+      ],
+      "hands": [
+        0.68,
+        0.47
+      ],
+      "body": [
+        0.67,
+        0.5
+      ]
+    },
+    "expr_neutral": {
+      "face": [
+        0.58,
+        0.36
+      ]
+    },
+    "expr_happy": {
+      "face": [
+        0.58,
+        0.36
+      ]
+    },
+    "expr_annoyed": {
+      "face": [
+        0.58,
+        0.36
+      ]
+    },
+    "expr_surprised": {
+      "face": [
+        0.58,
+        0.36
+      ]
+    },
+    "expr_worried": {
+      "face": [
+        0.58,
+        0.36
+      ]
+    },
+    "expr_determined": {
+      "face": [
+        0.58,
+        0.36
+      ]
+    }
+  },
+  "motions": {
+    "settle": {
+      "tracks": {
+        "figure": [
+          {
+            "t": 0,
+            "x": 0,
+            "y": 0,
+            "rot": 0,
+            "scale": 1,
+            "alpha": 1
+          },
+          {
+            "t": 0.35,
+            "x": 0,
+            "y": -5,
+            "rot": -0.35,
+            "scale": 1,
+            "alpha": 1
+          },
+          {
+            "t": 0.8,
+            "x": 0,
+            "y": 0,
+            "rot": 0,
+            "scale": 1,
+            "alpha": 1
+          }
+        ]
+      },
+      "loop": false,
+      "ease": "inOut"
+    },
+    "turn_to_player": {
+      "tracks": {
+        "figure": [
+          {
+            "t": 0,
+            "x": 0,
+            "y": 0,
+            "rot": 0,
+            "scale": 1,
+            "alpha": 1
+          },
+          {
+            "t": 0.65,
+            "x": -20,
+            "y": 0,
+            "rot": -0.7,
+            "scale": 1.015,
+            "alpha": 1
+          },
+          {
+            "t": 1.25,
+            "x": 0,
+            "y": 0,
+            "rot": 0,
+            "scale": 1,
+            "alpha": 1
+          }
+        ]
+      },
+      "loop": false,
+      "ease": "inOut"
+    },
+    "pause_near": {
+      "tracks": {
+        "figure": [
+          {
+            "t": 0,
+            "x": 0,
+            "y": 0,
+            "rot": 0,
+            "scale": 1,
+            "alpha": 1
+          },
+          {
+            "t": 0.55,
+            "x": -14,
+            "y": 0,
+            "rot": 0,
+            "scale": 1.02,
+            "alpha": 1
+          },
+          {
+            "t": 1.55,
+            "x": -14,
+            "y": 0,
+            "rot": 0,
+            "scale": 1.02,
+            "alpha": 1
+          },
+          {
+            "t": 2.1,
+            "x": 0,
+            "y": 0,
+            "rot": 0,
+            "scale": 1,
+            "alpha": 1
+          }
+        ]
+      },
+      "loop": false,
+      "ease": "inOut"
+    },
+    "step_clear": {
+      "tracks": {
+        "figure": [
+          {
+            "t": 0,
+            "x": 0,
+            "y": 0,
+            "rot": 0,
+            "scale": 1,
+            "alpha": 1
+          },
+          {
+            "t": 0.65,
+            "x": 38,
+            "y": 0,
+            "rot": 0.4,
+            "scale": 1,
+            "alpha": 1
+          },
+          {
+            "t": 1.1,
+            "x": 38,
+            "y": 0,
+            "rot": 0,
+            "scale": 1,
+            "alpha": 1
+          },
+          {
+            "t": 1.6,
+            "x": 0,
+            "y": 0,
+            "rot": 0,
+            "scale": 1,
+            "alpha": 1
+          }
+        ]
+      },
+      "loop": false,
+      "ease": "inOut"
+    }
+  },
+  "scenes": [
+    {
+      "id": "ravien_lobby_01",
+      "kind": "lobby",
+      "title": "닫힌 서류철, 비워 둔 옆자리",
+      "trigger": {
+        "on": "tap",
+        "note": "로비 캐릭터 탭. 반복 입력은 현재 대사 완성/다음 박자만 진행하며 새 장면을 겹쳐 시작하지 않는다."
+      },
+      "why": "끝난 업무를 핑계로 대화를 더 만들기보다 옆자리를 실제로 비워 두고 함께 머물고 싶다는 뜻을 밝힌다.",
+      "intent": "28세 라비엔의 영리한 여유와 존댓말 속 장난을 유지한다. 사람을 거래 대상으로 만들지 않고, 능숙한 말투가 솔직한 개인적 초대로 바뀌는 틈이 매력이다. 깊은 네크라인의 검은 베스트·트임 펜슬 스커트·가터 스타킹·느슨한 붉은 넥타이·긴 검은 장갑과 와인빛 긴 머리·초록 눈·175cm 성인 실루엣을 보존한다. 카메라는 얼굴과 장갑 손짓을 중심으로 하고 가슴·다리만 따로 크롭하지 않는다.",
+      "assets": [
+        {
+          "key": "bg_room",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_default",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_lobby_soft",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_offer",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_stamp",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_turn",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "pause_near",
+          "type": "motion",
+          "status": "ready"
+        },
+        {
+          "key": "settle",
+          "type": "motion",
+          "status": "ready"
+        },
+        {
+          "key": "turn_to_player",
+          "type": "motion",
+          "status": "ready"
+        },
+        {
+          "key": "voice_ravien_lobby_01",
+          "type": "voice",
+          "status": "todo"
+        },
+        {
+          "key": "fig_annoyed",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_lobby_wait",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_lobby_end",
+          "type": "image",
+          "status": "ready"
+        }
+      ],
+      "input": {
+        "skippable": true,
+        "advance": "tap",
+        "repeatable": true,
+        "cooldown_s": 0
+      },
+      "stage": {
+        "background": "bg_room",
+        "music": "silence"
+      },
+      "beats": [
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": null,
+            "text": "서류철을 팔에 받친 라비엔이 도장을 한 번 누른다. 도장 자국을 확인하고 서류에서 손을 뗀다.",
+            "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
+          },
+          "figure": "fig_stamp",
+          "gaze": "down",
+          "camera": {
+            "shot": "full",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          },
+          "motion": "settle"
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": "ravien",
+            "text": "끝났어요. 여기까지는요.",
+            "tone": "짧고 명료하게 마감. 다음 말을 미리 웃으며 예고하지 않는다."
+          },
+          "figure": "fig_default",
+          "gaze": "player",
+          "camera": {
+            "shot": "medium",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": null,
+            "text": "종이 끝을 손끝으로 반 바퀴 돌려 서류철 안으로 넣는다. 종이를 내려놓고서야 고개를 든다. 초록 눈이 공방장을 붙든다.",
+            "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
+          },
+          "figure": "fig_turn",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          },
+          "motion": "turn_to_player"
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": "ravien",
+            "text": "공방장님이 바로 나가시면, 제가 이 의자를 괜히 꺼내 놓은 셈인데.",
+            "tone": "낮게 장난치되 옆자리를 가리키는 동안 마지막 음절은 분명하게."
+          },
+          "figure": "fig_offer",
+          "gaze": "side",
+          "camera": {
+            "shot": "full",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 1.0,
+          "line": {
+            "speaker": null,
+            "text": "손끝으로 옆 의자를 가리킨 뒤 손을 내린다. 비워 둔 자리를 사이에 두고 공방장의 대답을 기다린다.",
+            "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
+          },
+          "figure": "fig_lobby_wait",
+          "gaze": "player",
+          "camera": {
+            "shot": "full",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          },
+          "motion": "pause_near"
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": "ravien",
+            "text": "아직 앉아 있을 시간은 있죠? 이번엔 서류 얘기 안 할게요.",
+            "tone": "마지막 질문은 장난기를 덜고 개인적인 기대를 드러낸다."
+          },
+          "figure": "fig_lobby_wait",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": null,
+            "text": "라비엔은 몸을 제자리로 돌리고 서류철을 닫아 둔다. 옆 의자는 비워 둔 채, 닫힌 서류철에는 손을 대지 않고 공방장에게 시선을 둔다.",
+            "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
+          },
+          "figure": "fig_lobby_end",
+          "gaze": "player",
+          "camera": {
+            "shot": "full",
+            "focus": "face",
+            "move": "pull_out",
+            "duration": 0.6
+          }
+        }
+      ]
+    },
+    {
+      "id": "ravien_bond_01",
+      "kind": "bond",
+      "title": "서명 없는 약속",
+      "trigger": {
+        "on": "event",
+        "note": "기존 인연 에피소드 목록에서 해당 제목을 선택. 새 해금 수치·정책은 정하지 않는다."
+      },
+      "why": "기존 인연 에피소드의 제목 아래, 개인적 호의가 부담이나 담보 없이 받아들여지는 저녁 한 장면을 끝까지 경험한다.",
+      "intent": "28세 라비엔의 영리한 여유와 존댓말 속 장난을 유지한다. 사람을 거래 대상으로 만들지 않고, 능숙한 말투가 솔직한 개인적 초대로 바뀌는 틈이 매력이다. 깊은 네크라인의 검은 베스트·트임 펜슬 스커트·가터 스타킹·느슨한 붉은 넥타이·긴 검은 장갑과 와인빛 긴 머리·초록 눈·175cm 성인 실루엣을 보존한다. 카메라는 얼굴과 장갑 손짓을 중심으로 하고 가슴·다리만 따로 크롭하지 않는다.",
+      "assets": [
+        {
+          "key": "bg_room",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_bond_turn",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_soft",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_waver",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "pause_near",
+          "type": "motion",
+          "status": "ready"
+        },
+        {
+          "key": "voice_ravien_bond_01",
+          "type": "voice",
+          "status": "todo"
+        },
+        {
+          "key": "fig_bond_resolve",
+          "type": "image",
+          "status": "ready"
+        }
+      ],
+      "input": {
+        "skippable": true,
+        "advance": "tap",
+        "repeatable": true,
+        "cooldown_s": 0
+      },
+      "stage": {
+        "background": "bg_room",
+        "music": "silence"
+      },
+      "beats": [
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": null,
+            "text": "서류를 정리한 뒤에도 라비엔은 일어나지 않았다. 붉은 넥타이 옆에서 저울 펜던트가 멎는다. 그녀는 빈 종이 앞에서 펜을 멈추고 공방장을 올려다본다.",
+            "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
+          },
+          "figure": "fig_waver",
+          "gaze": "down",
+          "camera": {
+            "shot": "full",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": "ravien",
+            "text": "조금만 도와주실래요? 어려운 일은 아니에요. 제가 말을 끝낼 때까지, 그 의자에 있어 주시면 돼요.",
+            "tone": "낮고 느긋한 존댓말. 말끝을 흘려 유혹하기보다 상대의 응답을 듣는다."
+          },
+          "figure": "fig_waver",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": null,
+            "text": "공방장은 건너편에 앉는다. 의자 끄는 소리가 끝난 뒤 라비엔이 종이를 맞춘다. 평소라면 그 사이에 조건을 세 개쯤 늘어놓았을 사람이다.",
+            "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
+          },
+          "figure": "fig_waver",
+          "gaze": "side",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": "ravien",
+            "text": "이상하죠. 누군가의 부탁은 한 문장으로 정리하는데, 제 부탁은 제목부터 안 써지네요. 아직 종이는 보지 마세요. 정말 아무것도 없으니까.",
+            "tone": "낮고 느긋한 존댓말. 말끝을 흘려 유혹하기보다 상대의 응답을 듣는다."
+          },
+          "figure": "fig_waver",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": null,
+            "text": "공방장이 종이를 돌려놓으려 손을 뻗는다. 장갑 낀 손끝이 종이 귀에 먼저 닿는다. 라비엔은 붙들지 않고, 놓기 전에 하고 싶은 말을 찾는다.",
+            "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
+          },
+          "figure": "fig_waver",
+          "gaze": "side",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": "ravien",
+            "text": "돌려놓기 전에요. 오늘 일이 끝나면 저와 잠깐 걸어 주시겠어요? 길드는 들르지 않고요. 확인받을 서류도, 돌아오는 길에 맡길 심부름도 없어요.",
+            "tone": "낮고 느긋한 존댓말. 말끝을 흘려 유혹하기보다 상대의 응답을 듣는다."
+          },
+          "figure": "fig_bond_turn",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": null,
+            "text": "목적지가 어디냐는 물음에 그녀의 초록 눈이 잠깐 옆으로 움직인다. 창밖에는 저녁빛이 아직 남아 있다. 라비엔은 항구 쪽을 가리키려던 손을 거두고, 종이 한 귀를 손끝으로 천천히 돌린다.",
+            "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
+          },
+          "figure": "fig_bond_turn",
+          "gaze": "down",
+          "camera": {
+            "shot": "medium",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": "ravien",
+            "text": "그걸 먼저 정해야 초대가 되는 걸까요? 저는 그냥…… 당신이 오늘 뭘 보고 싶었는지 듣고 싶었어요. 거래소에서 듣는 대답 말고요.",
+            "tone": "낮고 느긋한 존댓말. 말끝을 흘려 유혹하기보다 상대의 응답을 듣는다."
+          },
+          "figure": "fig_bond_turn",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": null,
+            "text": "공방장은 걸으면서 정해도 된다고 답한다. 라비엔의 입가에는 익숙한 웃음이 돌아오지만, 눈은 종이 위에 남는다. 대답을 얻었는데도 바로 정리하지 못하는 표정이 오히려 더 선명하다.",
+            "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
+          },
+          "figure": "fig_bond_turn",
+          "gaze": "side",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": "ravien",
+            "text": "좋아요. 그럼 조건은 하나. 제가 쓸데없이 일 얘기를 꺼내면 말려 주세요. ……이런 것도 조건이라고 붙이고 있네요, 벌써.",
+            "tone": "낮고 느긋한 존댓말. 말끝을 흘려 유혹하기보다 상대의 응답을 듣는다."
+          },
+          "figure": "fig_bond_turn",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": null,
+            "text": "공방장이 조용히 웃자 그녀도 따라 웃는다. 이번 웃음은 상대의 반응을 살피기 위한 것이 아니다. 펜을 쥔 손이 느슨해지고, 검은 장갑 위로 길게 떨어진 머리카락이 손등을 스친다.",
+            "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
+          },
+          "figure": "fig_bond_turn",
+          "gaze": "side",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": "ravien",
+            "text": "웃어도 돼요. 저도 좀 우스우니까. 잘하는 방식으로 말하면 쉬울 줄 알았는데, 당신한테는 오히려 빙빙 돌게 되네요.",
+            "tone": "낮고 느긋한 존댓말. 말끝을 흘려 유혹하기보다 상대의 응답을 듣는다."
+          },
+          "figure": "fig_soft",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": null,
+            "text": "공방장은 기다린다. 라비엔은 그 기다림을 바라본다. 아무도 침묵의 빈칸을 먼저 채우지 않는 동안, 준비해 둔 능숙한 문장들이 하나씩 필요 없어졌다.",
+            "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
+          },
+          "figure": "fig_soft",
+          "gaze": "down",
+          "camera": {
+            "shot": "medium",
+            "focus": "face",
+            "move": "push_in",
+            "duration": 0.6
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": "ravien",
+            "text": "실은 조금 더 앉아 있고 싶었어요. 당신이 일어날 때마다 다음 얘기를 만들어 낸 건, 아직 정리할 일이 남아서가 아니라.",
+            "tone": "낮고 느긋한 존댓말. 말끝을 흘려 유혹하기보다 상대의 응답을 듣는다."
+          },
+          "figure": "fig_soft",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": null,
+            "text": "그녀는 문장을 끝내지 않고 숨을 고른다. 공방장은 의자를 조금 돌려, 책상 대신 그녀를 향해 앉는다. 그 작은 움직임을 확인한 라비엔이 처음으로 종이에서 손을 뗀다.",
+            "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
+          },
+          "figure": "fig_soft",
+          "gaze": "side",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          },
+          "motion": "pause_near"
+        },
+        {
+          "hold": 0.8,
+          "line": {
+            "speaker": "ravien",
+            "text": "네. 지금처럼요. 저를 보고 있어 주는 게 좋았어요. 이렇게 말하면 너무 단순할까 봐, 괜히 그럴듯한 이유를 붙였네요.",
+            "tone": "낮고 느긋한 존댓말. 말끝을 흘려 유혹하기보다 상대의 응답을 듣는다."
+          },
+          "figure": "fig_soft",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": null,
+            "text": "저울 펜던트를 만지던 손이 멈춘다. 붉은 넥타이의 매듭은 원래처럼 느슨하고, 드러난 목선 위로 저녁빛이 옅게 걸린다. 그녀는 대답을 서두르지 않고 공방장의 눈을 보며 다음 말을 고른다.",
+            "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
+          },
+          "figure": "fig_soft",
+          "gaze": "side",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": "ravien",
+            "text": "물론 제가 조용히 있을 거라는 기대는 하지 마세요. 걷다가도 꽤 귀찮게 물어볼 거예요. 좋아하는 길이라든가, 제일 먼저 눈에 들어온 것이라든가.",
+            "tone": "낮고 느긋한 존댓말. 말끝을 흘려 유혹하기보다 상대의 응답을 듣는다."
+          },
+          "figure": "fig_soft",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": null,
+            "text": "공방장이 라비엔에게도 같은 질문을 하겠다고 하자, 그녀는 한쪽 눈썹을 올린다. 방금까지 붙잡고 있던 펜을 내려놓는다. 손바닥이 빈 채로 책상 위에 놓이자, 협상보다 어려운 차례가 온다.",
+            "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
+          },
+          "figure": "fig_soft",
+          "gaze": "down",
+          "camera": {
+            "shot": "medium",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": "ravien",
+            "text": "저한테 먼저 보인 건요? 창문도 아니고, 길도 아니고…… 의자가 아직 비어 있다는 거요. 당신이 앉아 주면 좋겠다고 생각했죠.",
+            "tone": "낮고 느긋한 존댓말. 말끝을 흘려 유혹하기보다 상대의 응답을 듣는다."
+          },
+          "figure": "fig_soft",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": null,
+            "text": "말을 마친 뒤 그녀는 웃음으로 얼버무리지 않는다. 공방장이 시선을 피하지 않자, 오히려 라비엔 쪽에서 먼저 눈을 내린다. 손끝으로 종이를 다시 만지려다가, 이번에는 그대로 무릎에 내려놓는다.",
+            "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
+          },
+          "figure": "fig_soft",
+          "gaze": "side",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "push_in",
+            "duration": 0.6
+          }
+        },
+        {
+          "hold": 0.8,
+          "line": {
+            "speaker": "ravien",
+            "text": "이 대답은 좀 오래 기억해 두셔도 돼요. 나중에 제가 또 능청을 부리면, 오늘은 먼저 솔직했잖아요, 하고 알려 주세요.",
+            "tone": "낮고 느긋한 존댓말. 말끝을 흘려 유혹하기보다 상대의 응답을 듣는다."
+          },
+          "figure": "fig_soft",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": null,
+            "text": "밖으로 나가기 전 공방장이 빈 종이를 어떻게 할지 묻는다. 라비엔은 종이를 들어 빛에 비춰 본다. 서명도 인장도 없는 면이 환하게 비친다. 무엇을 증명하는 물건으로 만들 필요는 없었다.",
+            "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
+          },
+          "figure": "fig_soft",
+          "gaze": "side",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": "ravien",
+            "text": "그냥 여기에 둘까요. 다음번에도 제 부탁이 길어지면, 이걸 보고 처음부터 다시 말하면 되니까. 서명하지 않아도 기억할 수 있는 말로.",
+            "tone": "낮고 느긋한 존댓말. 말끝을 흘려 유혹하기보다 상대의 응답을 듣는다."
+          },
+          "figure": "fig_soft",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": null,
+            "text": "그녀는 빈 종이를 책상 한편에 놓고 서류철을 완전히 닫는다. 이어 공방장의 의자 뒤에 서서 손을 내밀려다가 멈춘다. 대신 문 옆으로 먼저 가, 나란히 설 만큼의 자리를 남긴다.",
+            "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
+          },
+          "figure": "fig_bond_resolve",
+          "gaze": "down",
+          "camera": {
+            "shot": "medium",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": "ravien",
+            "text": "아, 한 가지는 분명히 해야겠어요. 오늘 같이 걷자는 말, 당신이 제가 심심해 보였기 때문에 받아 준 건 아니었으면 좋겠어요.",
+            "tone": "낮고 느긋한 존댓말. 말끝을 흘려 유혹하기보다 상대의 응답을 듣는다."
+          },
+          "figure": "fig_bond_resolve",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": null,
+            "text": "공방장은 함께 가고 싶어서 남았다는 뜻을 전한다. 라비엔이 고개를 조금 기울인다. 계산이 맞았을 때의 미소와 닮았지만, 이번에는 확인한 뒤에도 그 표정을 거두지 못한다.",
+            "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
+          },
+          "figure": "fig_bond_resolve",
+          "gaze": "side",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          },
+          "motion": "pause_near"
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": "ravien",
+            "text": "……그 대답을 듣고 싶었네요. 제가 질문을 잘하는 사람인 줄 알았는데, 중요한 건 마지막까지 아껴 버리네.",
+            "tone": "낮고 느긋한 존댓말. 말끝을 흘려 유혹하기보다 상대의 응답을 듣는다."
+          },
+          "figure": "fig_bond_resolve",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": null,
+            "text": "공방장이 문을 열자 저녁 바람이 들어온다. 와인빛 머리 끝과 스커트 옆선이 작게 흔들린다. 그녀는 장갑 끝을 한 번 당겨 정리하고, 책상 쪽을 돌아보지 않은 채 공방장 곁으로 발을 옮긴다.",
+            "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
+          },
+          "figure": "fig_bond_resolve",
+          "gaze": "side",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.8,
+          "line": {
+            "speaker": "ravien",
+            "text": "가요. 어디로 갈지는 같이 정하고. 돌아와서 오늘을 뭐라고 부를지도, 그때 생각하죠.",
+            "tone": "낮고 느긋한 존댓말. 말끝을 흘려 유혹하기보다 상대의 응답을 듣는다."
+          },
+          "figure": "fig_bond_resolve",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": null,
+            "text": "문 앞에서 라비엔은 공방장이 나란히 설 때까지 기다린다. 공방장이 곁으로 오자 손잡이를 함께 바라본다. 다음 걸음을 옮기기 전, 그녀가 먼저 옆을 본다.",
+            "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
+          },
+          "figure": "fig_bond_resolve",
+          "gaze": "down",
+          "camera": {
+            "shot": "medium",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.8,
+          "line": {
+            "speaker": "ravien",
+            "text": "다음에는 종이부터 꺼내지 않을게요. 당신이랑 더 있고 싶어요. ……이 정도면 되겠죠?",
+            "tone": "낮고 느긋한 존댓말. 말끝을 흘려 유혹하기보다 상대의 응답을 듣는다."
+          },
+          "figure": "fig_bond_resolve",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": null,
+            "text": "공방장의 대답을 듣는 동안 라비엔의 눈가가 부드러워진다. 그녀는 이제 새로운 조건을 찾지 않는다. 두 사람은 나란히 문으로 향한다. 책상 위 빈 종이는 어떤 약속도 대신하지 않은 채 남는다.",
+            "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
+          },
+          "figure": "fig_bond_resolve",
+          "gaze": "side",
+          "camera": {
+            "shot": "full",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "ravien_victory_01",
+      "kind": "victory",
+      "title": "정산 뒤에 남은 시선",
+      "trigger": {
+        "on": "event",
+        "note": "기존 승리 이벤트에서 재생하는 연출 초안. 전투 판정·보상·시간 수치는 변경하지 않는다."
+      },
+      "why": "전투를 끝낸 유능한 동료가 공방장을 정면으로 돌아보고, 보호나 정산 이후에도 함께 서고 싶은 마음을 드러낸다.",
+      "intent": "28세 라비엔의 영리한 여유와 존댓말 속 장난을 유지한다. 사람을 거래 대상으로 만들지 않고, 능숙한 말투가 솔직한 개인적 초대로 바뀌는 틈이 매력이다. 깊은 네크라인의 검은 베스트·트임 펜슬 스커트·가터 스타킹·느슨한 붉은 넥타이·긴 검은 장갑과 와인빛 긴 머리·초록 눈·175cm 성인 실루엣을 보존한다. 카메라는 얼굴과 장갑 손짓을 중심으로 하고 가슴·다리만 따로 크롭하지 않는다.",
+      "assets": [
+        {
+          "key": "bg_victory",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_resolve",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_seal",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_turn",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_victory",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "settle",
+          "type": "motion",
+          "status": "ready"
+        },
+        {
+          "key": "step_clear",
+          "type": "motion",
+          "status": "ready"
+        },
+        {
+          "key": "voice_ravien_victory_01",
+          "type": "voice",
+          "status": "todo"
+        }
+      ],
+      "input": {
+        "skippable": true,
+        "advance": "tap",
+        "repeatable": true,
+        "cooldown_s": 0
+      },
+      "stage": {
+        "background": "bg_victory",
+        "music": "silence"
+      },
+      "beats": [
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": null,
+            "text": "불타던 봉인이 잦아든다. 라비엔은 계약서를 세로로 접어 들고, 들려 있던 인장을 천천히 회수한다.",
+            "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
+          },
+          "figure": "fig_seal",
+          "gaze": "down",
+          "camera": {
+            "shot": "full",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          },
+          "motion": "settle"
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": "ravien",
+            "text": "정산 완료.",
+            "tone": "기존 승리 대사를 담백하게. 흥분보다 정리하는 자신감."
+          },
+          "figure": "fig_victory",
+          "gaze": "player",
+          "camera": {
+            "shot": "medium",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": null,
+            "text": "서류의 불빛이 꺼진 뒤 시선만 공방장에게 남는다. 그녀는 나란히 설 빈자리를 만들며 반걸음 옆으로 물러선다.",
+            "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
+          },
+          "figure": "fig_victory",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          },
+          "motion": "step_clear"
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": "ravien",
+            "text": "잘 봤어요? 제가 돌아본 건, 싸움이 끝나서만은 아닌데.",
+            "tone": "첫 문장은 가벼운 확인, 뒤 문장은 눈맞춤을 유지하며 한 단계 사적으로."
+          },
+          "figure": "fig_turn",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 1.0,
+          "line": {
+            "speaker": null,
+            "text": "라비엔은 서류철을 옆구리에 끼우고 열린 손을 편하게 내린다. 눈가에 옅은 웃음을 남긴 채 공방장의 대답을 기다린다.",
+            "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
+          },
+          "figure": "fig_resolve",
+          "gaze": "player",
+          "camera": {
+            "shot": "medium",
+            "focus": "face",
+            "move": "pull_out",
+            "duration": 0.6
+          }
+        }
+      ]
+    }
+  ],
+  "idle_figure": "fig_lobby_end"
+}

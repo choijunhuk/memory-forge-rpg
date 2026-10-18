@@ -1,4 +1,14 @@
+> 이전 제작 이력: 현재 A 스타일 원본·준비 상태는 [HANDOFF](../HANDOFF.md)와 [STYLE-GUIDE](../STYLE-GUIDE.md)를 따른다. 아래의 과거 파일·수량·검증은 당시 기록이다.
+
 # 하린 캐릭터 모먼트 창작 원본 — draft
+
+## 최신 — round 3 원본 제작 (2026-10-18)
+
+A/B/C 이미지 누락 0, 독립 표정 6/6(512×512 RGBA). 이미지 매핑 21개 / 고유 파일 21개. **draft 유지, Unity 신규 수용 NOT_RUN.**
+
+B의 고양이는 봉제 인형이다. 살아 있는 새끼 고양이처럼 읽힌 걱정 v01은 미채택으로 남기고, 봉제 인형 기준의 걱정 v02를 선택했다. 끝은 맨손으로 벗어 둔 두 장갑을 무릎 위에 포갠 실제 `fig_rest`다. C는 전방 방패→옆길 열기와 열린 손을 구별한다.
+
+전체 대사·연기 톤·hold·모션·gaze·input·intent는 baseline 그대로다. 표정은 아직 별도 대화 portrait 슬롯에 연결하지 않았다. 현재 파일 목록·해시는 [선택 자산](../production-round3-20261018/selected-assets.json), 검사/한계는 [HANDOFF](../HANDOFF.md)를 따른다. 아래 최초·2차 패스의 제작 이력과 관절/음성 미완료 설명은 유지하되 현재 ready 수량은 이 절이 우선한다.
 
 ## Unity 시각 리뷰 보정 — 2026-10-18 (finding 4)
 
@@ -15,13 +25,13 @@ A/B/C 세 장면의 표시 내레이션을 문장별로 점검했다. `speaker: 
 
 새 Unity 재생은 NOT_RUN이다. 비표시 지시의 문서화는 해당 동작의 리그·중간 프레임·음성이 구현되었다는 뜻이 아니다.
 
-## 2차 패스 현재 상태 — 2026-10-18
+## 이미지 준비 상태 — 3차 패스 갱신 — 2026-10-18
 
-로비 A가 선언한 이미지 전부와 모든 박자의 그림·배경 파일이 실제로 존재한다. `idle_figure: fig_lobby_soft`를 지정했다. 현재 그림 키 **8개 ready**: `fig_default`, `fig_glove`, `fig_lobby_cat`, `fig_hide`, `fig_cough`, `fig_lobby_soft`, `fig_resolve`, `bg_room`. 모두 창작 `draft`이며 Unity 신규 재생 수용·사용자 승인은 별도다.
+A/B/C가 선언한 그림과 배경이 모두 존재한다. `idle_figure: fig_lobby_soft`. 현재 이미지 매핑 21개, 고유 PNG 21개(512×512 독립 표정 6개 포함)가 실제 파일을 가리킨다. 모두 창작 draft이며 Unity 신규 재생 수용·사용자 승인은 별도다.
 
 Codex 내장 구독 이미지 도구로 기준 전신과 행동별 투명 PNG를 제작했다. 공방 배경은 기존 프로젝트 `bg_zone1_event_workshop_v02.png`의 바이트 복사본이다. 얼굴·손 앵커는 선택 그림을 보고 정규화 좌표를 보정했다. 좌표는 자체 시각 측정이며 Unity 카메라 수용 증거가 아니다.
 
-B/C에서 같은 키를 참조하는 곳은 파일 존재에 따라 ready로 갱신했지만, 장면 전체 그림은 아직 미완성이다. 나머지 그림은 todo이며 대사·hold·입력·의도는 보존했다. 포즈 컷 사이 장식·손·소품 위치 변동과 의자/테이블의 출입이 남아 있다. 관절 리그·연속 동작·음성은 만들지 않았다. 정확한 현황은 `moments.json`·상위 `VALIDATION.json`, 프롬프트·참조·원본 해시는 `../production-20261018/generation-records.json`을 따른다.
+B/C를 포함한 모든 장면 이미지가 준비되었다. 대사·hold·입력·의도는 그대로다. 포즈 사이 소품·가구·장식의 미세한 생성 변동과 연속 동작의 빈칸은 남아 있다. 현재 파일/ready 검증은 상위 VALIDATION.json의 round3, 프롬프트·참조·해시는 ../production-round3-20261018/records/를 따른다.
 
 
 요구 기준: `art/requests/character-moments-20261018.md`, `docs/MOMENTS_FORMAT.md`, `docs/AI_WORKFLOW.md` §18, `OWNERSHIP.md`, `docs/design_v0.8.1.md` §9.3·§15.3, `content/character_notes.mjs`, `art/briefs/characters_v0.8.json`·`prompts_v0.8.1.json`.
@@ -59,27 +69,27 @@ A/B/C 세 장면의 대사·지문·시선·카메라·음성 디렉션과 슬�
 
 ## 예정 이미지 전체
 
-아래는 art/ 기준 상대 경로다. 상태는 2차 패스의 실제 파일 기준이며 아직 없는 그림만 todo다. 임시 기본 시트나 다른 캐릭터를 대신 표시하지 않는다. 현행 기본 시트와 동일한 얼굴·의상을 유지하고 전신은 같은 피벗/투명 여백으로 그린다. 배경과 소품 위치를 포함한 전체 구도는 기본 1920×1080 무대에서 검수한다.
+아래는 art/ 기준 상대 경로다. 상태는 3차 패스의 실제 파일 기준이다. 임시 기본 시트나 다른 캐릭터를 대신 표시하지 않는다. 현행 기본 시트와 동일한 얼굴·의상을 유지하고 전신은 같은 피벗/투명 여백으로 그린다. 배경과 소품 위치를 포함한 전체 구도는 기본 1920×1080 무대에서 검수한다.
 
 | 키 | 예정 경로 | 상태 | 그림 지시 |
 |---|---|---|---|
 | `fig_default` | `moments/harin/images/char_harin_stand_neutral_v01.png` | ready | 방패를 문 옆에 세운 기본복 전신, 무표정 |
 | `fig_glove` | `moments/harin/images/char_harin_glove_determined_v01.png` | ready | 장갑 손목끈을 정리하는 핵심 포즈, 결의 |
 | `fig_lobby_cat` | `moments/harin/images/char_harin_pocket_reveal_soft_v01.png` | ready | 장갑을 낀 채 주머니에서 고양이 귀를 다시 보여 주는 선 포즈, 조심스러운 호의 |
-| `fig_guard` | `moments/harin/images/char_harin_shield_guard_determined_v01.png` | todo | 전방을 방패로 막고 발을 고정한 승리 직전 포즈, 결의 |
+| `fig_guard` | `moments/harin/images/char_harin_shield_guard_determined_v01.png` | ready | 전방을 방패로 막고 발을 고정한 승리 직전 포즈, 결의 |
 | `fig_hide` | `moments/harin/images/char_harin_pocket_surprised_v01.png` | ready | 주머니 인형 귀를 손으로 덮는 핵심 포즈, 놀람 |
 | `fig_cough` | `moments/harin/images/char_harin_cough_annoyed_v01.png` | ready | 주머니에서 손을 떼고 헛기침하는 핵심 포즈, 짜증 |
-| `fig_worry` | `moments/harin/images/char_harin_seated_worried_v01.png` | todo | 주머니 위에서 손을 멈추고 앉은 포즈, 걱정 |
-| `fig_cat` | `moments/harin/images/char_harin_cat_offer_happy_v01.png` | todo | 접힌 천 위에 고양이를 앉히는 핵심 포즈, 희미한 즐거움 |
-| `fig_soft` | `moments/harin/images/char_harin_seated_happy_v01.png` | todo | 장갑 낀 손을 무릎 위에 두고 눈맞춤하는 앉은 포즈, 서툰 미소 |
+| `fig_worry` | `moments/harin/images/char_harin_seated_worried_v02.png` | ready | 주머니 위에서 손을 멈추고 앉은 포즈, 걱정 |
+| `fig_cat` | `moments/harin/images/char_harin_cat_offer_happy_v01.png` | ready | 접힌 천 위에 고양이를 앉히는 핵심 포즈, 희미한 즐거움 |
+| `fig_soft` | `moments/harin/images/char_harin_seated_happy_v01.png` | ready | 장갑 낀 손을 무릎 위에 두고 눈맞춤하는 앉은 포즈, 서툰 미소 |
 | `fig_lobby_soft` | `moments/harin/images/char_harin_stand_soft_v01.png` | ready | 장갑을 낀 채 공방장에게 눈을 돌리는 선 포즈, 서툰 미소 |
-| `fig_rest` | `moments/harin/images/char_harin_seated_unguarded_v01.png` | todo | 두 장갑을 벗어 무릎 위에 포갠 앉은 포즈, 편한 미소 |
+| `fig_rest` | `moments/harin/images/char_harin_seated_unguarded_v01.png` | ready | 두 장갑을 벗어 무릎 위에 포갠 앉은 포즈, 편한 미소 |
 | `fig_resolve` | `moments/harin/images/char_harin_stand_determined_v01.png` | ready | 다시 곧게 서지만 어깨를 푼 포즈, 결의 |
-| `fig_victory` | `moments/harin/images/char_harin_shield_open_relief_v01.png` | todo | 큰 방패를 바깥쪽으로 치우고 손을 내미는 승리 포즈, 안도 |
+| `fig_victory` | `moments/harin/images/char_harin_shield_open_relief_v01.png` | ready | 큰 방패를 바깥쪽으로 치우고 손을 내미는 승리 포즈, 안도 |
 | `bg_room` | `moments/harin/images/char_harin_background_workshop_evening_v01.png` | ready | 문 옆 방패와 테이블의 고양이를 함께 읽을 수 있는 공방 배경 |
-| `bg_victory` | `moments/harin/images/char_harin_background_quiet_afterbattle_v01.png` | todo | 적이나 보상을 표시하지 않는 전투 후 무대 배경 |
+| `bg_victory` | `moments/harin/images/char_harin_background_quiet_afterbattle_v01.png` | ready | 적이나 보상을 표시하지 않는 전투 후 무대 배경 |
 
-표정 6종 향후 커버리지: 무표정(fig_default), 즐거움(fig_cat/fig_soft), 짜증(fig_cough), 놀람(fig_hide), 걱정(fig_worry), 결의(fig_glove/fig_resolve). 표정은 포즈와 함께 그릴 전신 변형이며 512×512 독립 표정 6장 제작은 향후다. §15.3의 512×512 독립 표정과 로비 3동작·부위분리 원본/리그는 **아직 미완성**이다. 이 목록은 그 제작을 위한 대응표이며 완료 수량이 아니다. 소품은 해당 전신 포즈/배경에 그려 넣는 계획이므로 독립 prop 슬롯 그림을 만들어 놓았다고 주장하지 않는다.
+§15.3의 독립 512×512 표정 6개는 expr_neutral/expr_happy/expr_annoyed/expr_surprised/expr_worried/expr_determined로 제작·등록했다. 전신 포즈 변형과 별개의 PNG다. 로비 3동작의 연속 관절/프레임·부위분리 PSD·리그는 아직 미완성이다. 소품 단독 레이어도 제작하지 않았다.
 
 ## 입력과 보존할 의도
 
@@ -87,8 +97,8 @@ A/B/C 세 장면의 대사·지문·시선·카메라·음성 디렉션과 슬�
 
 26세 하린의 강인한 전위 실루엣과 무뚝뚝한 반말, 칭찬과 사적인 초대 앞에서만 망설이는 배려를 보존한다. 180cm 탄탄한 체형·짧은 남색 머리·회청색 눈·왼쪽 눈썹 위 흉터·어깨와 허리선이 드러나는 서리빛 경량 갑주·한쪽 긴 망토·하이웨이스트 전투 바지·대형 방패를 바꾸지 않는다. 귀여운 취향은 유아화 장치가 아니며 상사처럼 명령하거나 일방적인 보호로 관계를 끝내지 않는다. 얼굴·손·방패를 연결하고 노출 부위만 잘라 보여 주지 않는다.
 
-## 검증과 미완료 — 2차 패스
+## 검증과 미완료 — 3차 패스
 
 A의 선언 이미지·박자·배경 참조, idle 파일, PNG 디코드·투명 알파, 모션 내부 참조와 JSON 형식을 검사했다. 전체 대사·타이밍·입력·의도는 변경 전 바이트 재구성 해시로 보존을 확인했다. 자체 시각 검수는 상위 `production-20261018/visual-verdict-*.json`, 현재 검사 결과는 상위 `VALIDATION.json`을 따른다.
 
-미완료: B/C의 남은 todo 그림, 독립 표정 세트, 관절 리그·연속 프레임·녹음·PSD·AnimationClip·Timeline·VFX. NOT_RUN: 이번 신규 그림의 Unity 임포트/재생·기기·스킵/연타/대기 복귀·접근성 수용, Claude 리뷰, 게임 코드 시험·빌드. 포즈 컷의 소품 출입·장식 위치 변동과 카메라 앵커는 실제 화면에서 추가 검수가 필요하다.
+미완료: 관절 리그·연속 프레임·녹음·PSD·AnimationClip·Timeline·VFX. NOT_RUN: 이번 신규 그림의 Unity 임포트/재생·기기·스킵/연타/대기 복귀·접근성 수용, Claude 리뷰, 게임 코드 시험·빌드. 포즈 컷의 소품 출입·장식 위치 변동과 카메라 앵커는 실제 화면에서 추가 검수가 필요하다.

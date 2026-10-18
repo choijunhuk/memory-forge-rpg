@@ -1,0 +1,17 @@
+{
+  "character": "sera",
+  "key": "fig_bond_offer",
+  "target": "sera/images/char_sera_fig_bond_offer_styleA_v01.png",
+  "args": {
+    "prompt": "Use case: style-transfer. Production transparent full-body sprite for Memory Forge. REDRAW rather than merely recolor. Direction A CLEAR CEL, exactly the rendering grammar of the last reference: crisp controlled ink contours, emphatic upper eyelids, tiny symbolic nose and short mouth, matte skin with large flat light areas and one hard-edged shadow step, large grouped hair locks with broad flat highlight bands, costume tailoring and flat color planes before details, restrained gold/metal highlights. NO photoreal/3D nose, glossy lips, airbrush skin, tiny sparkling hair strands or painterly gradients. First reference controls exact character identity, adult age, outfit structure, props, pose, composition and framing; last reference is STYLE ONLY and must not transfer its clothing/face. Preserve all outfit cutouts and existing adult silhouette. Keep original full body and equipment inside a 1024x1536 portrait with a little clear margin. GENUINELY TRANSPARENT empty canvas alpha=0 around the subject including corners, no colored backdrop, vignette, aura, halo, floor, cast shadow, checkerboard, text or watermark. Remove ALL inherited background haze.\nThe second reference is SAME character in clear cel A and controls face/rendering. Seated on SAME pale stone bench as original, crossed legs and coat unchanged; presents open little notebook at chest showing the TWO CUP SKETCHES as source, restrained dry warm smile to player. No new props.",
+    "referenced_image_paths": [
+      "/Users/choi/Documents/Memory_forge/art/moments/sera/images/char_sera_bond_offer_v01.png",
+      "/Users/choi/Documents/Memory_forge/art/moments/sera/images/char_sera_fig_scope_styleA_v01.png"
+    ],
+    "transparent_background": true
+  },
+  "cache_path": "/Users/choi/.codex/generated_images/01a14db0-4150-7f01-9240-82aaa185dd28/exec-c1aa4805-321a-4262-ab2f-a93e37aa3d37.png",
+  "status": "ready",
+  "generation_status": "generated_pending_review",
+  "selected": true
+}

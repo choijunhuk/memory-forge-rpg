@@ -1,0 +1,27 @@
+{
+  "c": "harin",
+  "key": "fig_cat",
+  "path": "harin/images/char_harin_cat_offer_happy_v01.png",
+  "refs": [
+    "/Users/choi/Documents/Memory_forge/art/moments/harin/images/char_harin_stand_neutral_v01.png"
+  ],
+  "pose": "Age26 Harin seated on a sturdy chair at a small wooden table, boots planted, broad athletic shoulders. Her two gloved hands carefully finish placing a tiny dark-gray stuffed CAT with one folded ear on a folded clean cloth on tabletop. Cat clearly a soft TOY, not a live animal. One fingertip gently straightens its ear. She looks up toward viewer with serious tenderness and the beginnings of a shy smile. Shield separately upright behind left side, one navy cape. White light armor, exposed shoulders/waist and opaque white combat trousers unchanged; scar above HER LEFT eyebrow.",
+  "prompt": "Use case: identity-preserve. Locked character design reference. Make ONE new non-explicit narrative RPG key-pose, 1024x1536 full length transparent PNG. Preserve adult identity, age, hairstyle, face, exact costume/colors and painterly anime cel style. All head, fingers, shoes and important props inside canvas. No scene background, haze, labels, panels, other people or erotic posing. Character acting and prop contact are the focus. Acting: Age26 Harin seated on a sturdy chair at a small wooden table, boots planted, broad athletic shoulders. Her two gloved hands carefully finish placing a tiny dark-gray stuffed CAT with one folded ear on a folded clean cloth on tabletop. Cat clearly a soft TOY, not a live animal. One fingertip gently straightens its ear. She looks up toward viewer with serious tenderness and the beginnings of a shy smile. Shield separately upright behind left side, one navy cape. White light armor, exposed shoulders/waist and opaque white combat trousers unchanged; scar above HER LEFT eyebrow.",
+  "source": "/Users/choi/.codex/generated_images/01a14d20-ffd5-7e81-9e47-85c1c8415e11/exec-14b0528e-60e7-4e71-b7c7-da1150019b8e.png",
+  "tool": "Codex built-in image_gen; subscription-included; no API fallback",
+  "review": "pass",
+  "score": 93,
+  "review_notes": "Rendered output inspected: adult identity and costume match; seated support, empty/resting hands or toy-cat contact are clear. Static key-pose only. Furniture and toy styling vary between standalone poses and require screen review.",
+  "backend_model": "not exposed by tool",
+  "selected": true,
+  "sha256": "77f64c79b7d9df76847e255692e7065a58dac13d9331a70cfd2eb9ba3a093999",
+  "size": [
+    1024,
+    1536
+  ],
+  "mode": "RGBA",
+  "alpha_extrema": [
+    0,
+    254
+  ]
+}

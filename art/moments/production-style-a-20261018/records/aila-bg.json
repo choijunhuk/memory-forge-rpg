@@ -1,0 +1,20 @@
+{
+  "character": "aila",
+  "key": "bg",
+  "old_path": "moments/aila/images/char_aila_background_archive_evening_v01.png",
+  "target": "aila/images/char_aila_bg_styleA_v01.png",
+  "master": "aila/images/char_aila_fig_neutral_styleA_v01.png",
+  "background": true,
+  "beats": [],
+  "args": {
+    "prompt": "Use case: style-transfer. Redraw the supplied Memory Forge environment background in clear cel illustration direction A. Preserve exact environment, layout, major architecture, furniture, viewpoint, evening/lamplight time, palette and scene intent from reference. Crisp controlled line drawing and large hard-edged color/shadow planes, selectively simplified material detail; no photorealistic CGI, glossy wet plastic, painterly airbrush or random ornaments. Widescreen 16:9 landscape, around 1536x864 or larger. It is an OPAQUE stage background with full scenery to every edge. NO CHARACTERS, no people, no faces, no human silhouettes, no text, logos or watermark. Do not turn this into a portrait. Keep clear center stage for overlaid character sprites.",
+    "referenced_image_paths": [
+      "/Users/choi/Documents/Memory_forge/art/moments/aila/images/char_aila_background_archive_evening_v01.png"
+    ],
+    "transparent_background": false
+  },
+  "cache_path": "/Users/choi/.codex/generated_images/01a14db0-4150-7f01-9240-82aaa185dd28/exec-e089d66d-e063-49cc-8636-b5fd28ae58d1.png",
+  "status": "ready",
+  "generation_status": "generated_pending_review",
+  "selected": true
+}

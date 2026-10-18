@@ -1,0 +1,13 @@
+{
+  "score": 89,
+  "verdict": "revise",
+  "category_match": true,
+  "differences": [
+    "Ravien soft standing and Lumi final victory-wait each have alpha 1 in one empty corner; other generated C sprites have zero-alpha corners."
+  ],
+  "suggestions": [
+    "Apply alpha-only correction to those two sprites.",
+    "Create Sion final wait by lowering the empty glasses hand in her inspected new glasses sprite, preserving the wide sword."
+  ],
+  "reasoning": "C poses preserve signature weapons, adult identity and scene intentions in A style. Sion's three existing new C frames have clean empty corners and no book."
+}

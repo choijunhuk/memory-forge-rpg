@@ -1,0 +1,20 @@
+{
+  "character": "sera",
+  "key": "bg_tower",
+  "old_path": "moments/sera/images/bg_sera_clocktower_evening_v01.png",
+  "target": "sera/images/char_sera_bg_tower_styleA_v01.png",
+  "master": "sera/images/char_sera_fig_scope_styleA_v01.png",
+  "background": true,
+  "beats": [],
+  "args": {
+    "prompt": "Use case: style-transfer. Redraw the supplied Memory Forge environment background in clear cel illustration direction A. Preserve exact environment, layout, major architecture, furniture, viewpoint, evening/lamplight time, palette and scene intent from reference. Crisp controlled line drawing and large hard-edged color/shadow planes, selectively simplified material detail; no photorealistic CGI, glossy wet plastic, painterly airbrush or random ornaments. Widescreen 16:9 landscape, around 1536x864 or larger. It is an OPAQUE stage background with full scenery to every edge. NO CHARACTERS, no people, no faces, no human silhouettes, no text, logos or watermark. Do not turn this into a portrait. Keep clear center stage for overlaid character sprites.",
+    "referenced_image_paths": [
+      "/Users/choi/Documents/Memory_forge/art/moments/sera/images/bg_sera_clocktower_evening_v01.png"
+    ],
+    "transparent_background": false
+  },
+  "cache_path": "/Users/choi/.codex/generated_images/01a14db0-4150-7f01-9240-82aaa185dd28/exec-ee8aa3bc-d0a4-4f00-85de-34693bc29576.png",
+  "status": "ready",
+  "generation_status": "generated_pending_review",
+  "selected": true
+}

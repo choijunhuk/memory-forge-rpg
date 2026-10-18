@@ -1,0 +1,18 @@
+{
+  "character": "ravien",
+  "key": "fig_waver",
+  "old_path": "moments/ravien/images/char_ravien_seated_surprised_v01.png",
+  "target": "ravien/images/char_ravien_fig_waver_styleA_v01.png",
+  "args": {
+    "prompt": "Use case: style-transfer. Production transparent full-body sprite for Memory Forge. REDRAW rather than merely recolor. Direction A CLEAR CEL, exactly the rendering grammar of the last reference: crisp controlled ink contours, emphatic upper eyelids, tiny symbolic nose and short mouth, matte skin with large flat light areas and one hard-edged shadow step, large grouped hair locks with broad flat highlight bands, costume tailoring and flat color planes before details, restrained gold/metal highlights. NO photoreal/3D nose, glossy lips, airbrush skin, tiny sparkling hair strands or painterly gradients. First reference controls exact character identity, adult age, outfit structure, props, pose, composition and framing; last reference is STYLE ONLY and must not transfer its clothing/face. Preserve all outfit cutouts and existing adult silhouette. Keep original full body and equipment inside a 1024x1536 portrait with a little clear margin. GENUINELY TRANSPARENT empty canvas alpha=0 around the subject including corners, no colored backdrop, vignette, aura, halo, floor, cast shadow, checkerboard, text or watermark. Remove ALL inherited background haze.\nThe SECOND reference is the approved SAME-CHARACTER A master; match its clear-cel face and rendering. Explicit continuity corrections below override incorrect first-reference furniture/prop placements.\n28-year-old Ravien seated on the SAME burgundy upholstered gold-framed chair behind the SAME oval dark-wood foreground writing desk as FIRST reference. Keep desk spanning lower foreground, cream blank paper and closed burgundy folder on desktop; pen poised hesitantly in gloved hand; other hand at paper corner. Vulnerable slightly raised inner brows, green eyes to player. Same adult black vest dress, red tie, long gloves and stockings. This is CANONICAL B furniture: do not replace the foreground desk with a side table, chair/table positions must be stable in later variants.",
+    "referenced_image_paths": [
+      "/Users/choi/Documents/Memory_forge/art/moments/ravien/images/char_ravien_seated_surprised_v01.png",
+      "/Users/choi/Documents/Memory_forge/art/moments/ravien/images/char_ravien_fig_default_styleA_v01.png"
+    ],
+    "transparent_background": true
+  },
+  "cache_path": "/Users/choi/.codex/generated_images/01a14db0-4150-7f01-9240-82aaa185dd28/exec-e7668583-8601-47f3-b395-58c0b8451836.png",
+  "status": "history_unselected",
+  "generation_status": "generated_pending_review",
+  "selected": false
+}

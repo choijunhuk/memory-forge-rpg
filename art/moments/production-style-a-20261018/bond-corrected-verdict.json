@@ -1,0 +1,12 @@
+{
+  "score": 89,
+  "verdict": "revise",
+  "category_match": true,
+  "differences": [
+    "Harin final rest and Ravien B ending retain alpha1 at one empty bottom corner after otherwise successful continuity corrections."
+  ],
+  "suggestions": [
+    "Apply alpha-only v03 correction, keeping solved plush/glove/furniture/empty-hand states unchanged."
+  ],
+  "reasoning": "Plush identity and all five Harin B states are coherent; Ravien keeps the foreground writing desk/chair and empty-handed ending; Aila returned-page and Sion single-book correction are successful. Only strict corner-alpha acceptance remains."
+}

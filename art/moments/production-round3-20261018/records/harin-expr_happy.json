@@ -1,0 +1,30 @@
+{
+  "c": "harin",
+  "key": "expr_happy",
+  "path": "harin/images/char_harin_expression_happy_v01.png",
+  "refs": [
+    "/Users/choi/Documents/Memory_forge/art/moments/harin/images/char_harin_expression_neutral_v01.png"
+  ],
+  "common": "Use case: identity-preserve. Edit target is the supplied NEUTRAL master portrait, one adult dialogue expression. Keep EXACT same square canvas/framing, head angle/tilt, face proportions, iris colors, hairstyle, glasses/scar/ornaments, costume, lighting and true transparent alpha. Intended final 512x512. Change ONLY eyes/eyebrows/mouth and natural cheek muscles. No hands, props, extra face, text or panels. ",
+  "pose": "Harin, adult age26. Short NAVY bob, gray-blue eyes, scar ABOVE HER LEFT eyebrow, strong adult facial structure, white/navy/brass frost armor collar and broad athletic shoulders. Stoic presence. Expression HAPPY: A small awkward closed-mouth smile that arrives a moment late, eyes soft with shy pleasure, retain stoic adult presence.",
+  "prompt": "Use case: identity-preserve. Edit target is the supplied NEUTRAL master portrait, one adult dialogue expression. Keep EXACT same square canvas/framing, head angle/tilt, face proportions, iris colors, hairstyle, glasses/scar/ornaments, costume, lighting and true transparent alpha. Intended final 512x512. Change ONLY eyes/eyebrows/mouth and natural cheek muscles. No hands, props, extra face, text or panels. Harin, adult age26. Short NAVY bob, gray-blue eyes, scar ABOVE HER LEFT eyebrow, strong adult facial structure, white/navy/brass frost armor collar and broad athletic shoulders. Stoic presence. Expression HAPPY: A small awkward closed-mouth smile that arrives a moment late, eyes soft with shy pleasure, retain stoic adult presence.",
+  "source": "/Users/choi/.codex/generated_images/01a14d20-ffd5-7e81-9e47-85c1c8415e11/exec-7b70f84c-a577-48b3-b15c-704f0a2548f4.png",
+  "tool": "Codex built-in image_gen; subscription-included; no API fallback",
+  "review": "pass",
+  "previous_attempt": null,
+  "score": 94,
+  "review_notes": "Rendered output inspected beside its neutral master. Six readable adult expressions, stable face/eye/hair/glasses/scar/costume identity and framing. Only non-generative final resize remains.",
+  "backend_model": "not exposed by tool",
+  "selected": true,
+  "sha256": "5fd24ad97ee8543a577fc27bd8355bb70c22207ddab145790c67a1db48ec0bfe",
+  "size": [
+    512,
+    512
+  ],
+  "mode": "RGBA",
+  "alpha_extrema": [
+    0,
+    255
+  ],
+  "postprocess": "sips -z 512 512; non-generative downsample only, alpha retained"
+}

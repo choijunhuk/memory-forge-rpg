@@ -1,4 +1,14 @@
+> 이전 제작 이력: 현재 A 스타일 원본·준비 상태는 [HANDOFF](../HANDOFF.md)와 [STYLE-GUIDE](../STYLE-GUIDE.md)를 따른다. 아래의 과거 파일·수량·검증은 당시 기록이다.
+
 # 라비엔 캐릭터 모먼트 창작 원본 — draft
+
+## 최신 — round 3 원본 제작 (2026-10-18)
+
+A/B/C 이미지 누락 0, 독립 표정 6/6(512×512 RGBA). 이미지 매핑 23개 / 고유 파일 22개. **draft 유지, Unity 신규 수용 NOT_RUN.**
+
+A 5·6박자는 손을 내린 `fig_lobby_wait`, 7박자와 idle은 두 손이 비고 닫힌 서류철을 보조 탁자에 둔 `fig_lobby_end`다. 같은 빈 의자를 유지한다. 4·5·7박자는 full/face, 6박자는 기존 bust/face다. B 끝의 `fig_bond_resolve`는 `fig_lobby_end`의 실제 PNG를 재사용해 손이 다시 서류철을 쥐지 않는다. C의 `fig_resolve`만 서류철을 옆구리에 낀다.
+
+전체 대사·연기 톤·hold·모션·gaze·input·intent는 baseline 그대로다. 표정은 아직 별도 대화 portrait 슬롯에 연결하지 않았다. 현재 파일 목록·해시는 [선택 자산](../production-round3-20261018/selected-assets.json), 검사/한계는 [HANDOFF](../HANDOFF.md)를 따른다. 아래 최초·2차 패스의 제작 이력과 관절/음성 미완료 설명은 유지하되 현재 ready 수량은 이 절이 우선한다.
 
 ## Unity 시각 리뷰 보정 — 2026-10-18 (finding 4)
 
@@ -8,7 +18,7 @@ A/B/C 세 장면의 표시 내레이션을 문장별로 점검했다. `speaker: 
 |---|---|
 | `ravien_lobby_01` / 1 | 몸 전체는 거의 움직이지 않고 손과 눈의 순서로 업무를 끝낸다. |
 | `ravien_lobby_01` / 3 | 고개가 종이보다 반 박자 늦게 돌아오도록 한다. |
-| `ravien_lobby_01` / 5 | 대답을 재촉하지 않고 자기 자리는 그대로 둔다. 4·5박자는 얼굴·가리키는 손·빈 의자 좌판이 함께 보이는 full/face/none을 유지한다. |
+| `ravien_lobby_01` / 5 | 대답을 재촉하지 않고 자기 자리는 그대로 둔다. 4·5박자는 얼굴·손·빈 의자 좌판이 함께 보이는 full/face/none을 유지한다. |
 | `ravien_lobby_01` / 7 | 응답을 받아도 업무 동작으로 되돌리지 않는다. |
 | `ravien_bond_01` / 17 | 카메라는 얼굴과 손을 함께 두고, 그녀가 말을 고르는 시간을 자르지 않는다. |
 | `ravien_bond_01` / 33 | 나란한 두 사람이 문으로 향하는 데서 장면이 닫힌다. |
@@ -16,15 +26,15 @@ A/B/C 세 장면의 표시 내레이션을 문장별로 점검했다. `speaker: 
 
 새 Unity 재생은 NOT_RUN이다. 비표시 지시의 문서화는 해당 동작의 리그·중간 프레임·음성이 구현되었다는 뜻이 아니다.
 
-**Finding 3 — 의자 권유 구도:** `ravien_lobby_01` 4·5박자는 모두 `full / face / none / 0`이다. 4박자만 넓혔다가 5박자에서 다시 잘라 내지 않는다. 같은 `fig_offer`에서 얼굴·가리키는 장갑 손·빈 의자의 등받이와 좌판이 한 번에 보여야 한다. 6박자 `fig_lobby_soft`로 바뀐 뒤에만 기존 `bust/face` 눈맞춤으로 돌아간다. 그림·앵커는 바꾸지 않았다. Claude에게 따로 배정된 머리 보존·대화창 축소 외에 추가 재생기 기능을 전제로 하지 않는다. 대화창이 의자와 손을 가리지 않는지는 새 임포트·재생 캡처에서 확인해야 한다.
+**의자 권유 구도 — round 2 이후:** 4박자 fig_offer, 5박자 fig_lobby_wait는 모두 full/face/none/0이다. 6박자는 기다리는 fig_lobby_wait의 bust/face, 7박자는 빈 손과 의자·놓인 서류철을 함께 보이는 fig_lobby_end의 full/face/pull_out/0.6이다.
 
-## 2차 패스 현재 상태 — 2026-10-18
+## 이미지 준비 상태 — 3차 패스 갱신 — 2026-10-18
 
-로비 A가 선언한 이미지 전부와 모든 박자의 그림·배경 파일이 실제로 존재한다. `idle_figure: fig_lobby_soft`를 지정했다. 현재 그림 키 **7개 ready**: `fig_default`, `fig_stamp`, `fig_turn`, `fig_offer`, `fig_lobby_soft`, `fig_annoyed`, `bg_room`. 모두 창작 `draft`이며 Unity 신규 재생 수용·사용자 승인은 별도다.
+A/B/C가 선언한 그림과 배경이 모두 존재한다. `idle_figure: fig_lobby_end`. 현재 이미지 매핑 23개, 고유 PNG 22개(512×512 독립 표정 6개 포함)가 실제 파일을 가리킨다. 모두 창작 draft이며 Unity 신규 재생 수용·사용자 승인은 별도다.
 
 Codex 내장 구독 이미지 도구로 기준 전신과 행동별 투명 PNG를 제작했다. 공방 배경은 기존 프로젝트 `bg_zone1_event_workshop_v02.png`의 바이트 복사본이다. 얼굴·손 앵커는 선택 그림을 보고 정규화 좌표를 보정했다. 좌표는 자체 시각 측정이며 Unity 카메라 수용 증거가 아니다.
 
-B/C에서 같은 키를 참조하는 곳은 파일 존재에 따라 ready로 갱신했지만, 장면 전체 그림은 아직 미완성이다. 나머지 그림은 todo이며 대사·hold·입력·의도는 보존했다. 포즈 컷 사이 장식·손·소품 위치 변동과 의자/테이블의 출입이 남아 있다. 관절 리그·연속 동작·음성은 만들지 않았다. 정확한 현황은 `moments.json`·상위 `VALIDATION.json`, 프롬프트·참조·원본 해시는 `../production-20261018/generation-records.json`을 따른다.
+B/C를 포함한 모든 장면 이미지가 준비되었다. 대사·hold·입력·의도는 그대로다. 포즈 사이 소품·가구·장식의 미세한 생성 변동과 연속 동작의 빈칸은 남아 있다. 현재 파일/ready 검증은 상위 VALIDATION.json의 round3, 프롬프트·참조·해시는 ../production-round3-20261018/records/를 따른다.
 
 
 요구 기준: `art/requests/character-moments-20261018.md`, `docs/MOMENTS_FORMAT.md`, `docs/AI_WORKFLOW.md` §18, `OWNERSHIP.md`, `docs/design_v0.8.1.md` §9.3·§15.3, `content/character_notes.mjs`, `art/briefs/characters_v0.8.json`·`prompts_v0.8.1.json`.
@@ -62,7 +72,7 @@ A/B/C 세 장면의 대사·지문·시선·카메라·음성 디렉션과 슬�
 
 ## 예정 이미지 전체
 
-아래는 art/ 기준 상대 경로다. 상태는 2차 패스의 실제 파일 기준이며 아직 없는 그림만 todo다. 임시 기본 시트나 다른 캐릭터를 대신 표시하지 않는다. 현행 기본 시트와 동일한 얼굴·의상을 유지하고 전신은 같은 피벗/투명 여백으로 그린다. 배경과 소품 위치를 포함한 전체 구도는 기본 1920×1080 무대에서 검수한다.
+아래는 art/ 기준 상대 경로다. 상태는 3차 패스의 실제 파일 기준이다. 임시 기본 시트나 다른 캐릭터를 대신 표시하지 않는다. 현행 기본 시트와 동일한 얼굴·의상을 유지하고 전신은 같은 피벗/투명 여백으로 그린다. 배경과 소품 위치를 포함한 전체 구도는 기본 1920×1080 무대에서 검수한다.
 
 | 키 | 예정 경로 | 상태 | 그림 지시 |
 |---|---|---|---|
@@ -71,17 +81,17 @@ A/B/C 세 장면의 대사·지문·시선·카메라·음성 디렉션과 슬�
 | `fig_turn` | `moments/ravien/images/char_ravien_paper_turn_playful_v01.png` | ready | 손끝으로 종이 귀를 돌리는 핵심 포즈, 눈웃음 |
 | `fig_offer` | `moments/ravien/images/char_ravien_chair_offer_happy_v01.png` | ready | 검은 장갑 손끝이 옆 의자를 가리키는 핵심 포즈, 즐거움 |
 | `fig_lobby_soft` | `moments/ravien/images/char_ravien_stand_soft_v01.png` | ready | 옆 의자를 가리킨 뒤 손을 내리고 선 포즈, 기대 |
-| `fig_bond_turn` | `moments/ravien/images/char_ravien_seated_playful_v01.png` | todo | 앉은 채 종이 귀를 돌리고 공방장을 보는 포즈, 장난 |
-| `fig_waver` | `moments/ravien/images/char_ravien_seated_surprised_v01.png` | todo | 펜을 멈추고 눈썹이 잠깐 올라간 앉은 포즈, 놀람 |
-| `fig_soft` | `moments/ravien/images/char_ravien_seated_worried_v01.png` | todo | 종이에서 손을 떼고 질문을 기다리는 포즈, 걱정과 솔직함 |
-| `fig_resolve` | `moments/ravien/images/char_ravien_stand_determined_v01.png` | todo | 닫힌 서류철을 옆구리에 두고 나란히 선 포즈, 결의 |
+| `fig_bond_turn` | `moments/ravien/images/char_ravien_seated_playful_v01.png` | ready | 앉은 채 종이 귀를 돌리고 공방장을 보는 포즈, 장난 |
+| `fig_waver` | `moments/ravien/images/char_ravien_seated_surprised_v01.png` | ready | 펜을 멈추고 눈썹이 잠깐 올라간 앉은 포즈, 놀람 |
+| `fig_soft` | `moments/ravien/images/char_ravien_seated_worried_v01.png` | ready | 종이에서 손을 떼고 질문을 기다리는 포즈, 걱정과 솔직함 |
+| `fig_resolve` | `moments/ravien/images/char_ravien_stand_determined_v01.png` | ready | 닫힌 서류철을 옆구리에 두고 나란히 선 포즈, 결의 |
 | `fig_annoyed` | `moments/ravien/images/char_ravien_stand_annoyed_v01.png` | ready | 눈썹만 좁히고 입을 누른 기본복 전신, 짜증 |
-| `fig_seal` | `moments/ravien/images/char_ravien_battle_seal_determined_v01.png` | todo | 세운 계약서 위 불꽃 봉인에서 인장을 회수하는 선 전투 포즈, 결의 |
-| `fig_victory` | `moments/ravien/images/char_ravien_seal_return_relaxed_v01.png` | todo | 인장을 회수하고 공방장 쪽으로 돌아선 승리 포즈, 여유 |
+| `fig_seal` | `moments/ravien/images/char_ravien_battle_seal_determined_v01.png` | ready | 세운 계약서 위 불꽃 봉인에서 인장을 회수하는 선 전투 포즈, 결의 |
+| `fig_victory` | `moments/ravien/images/char_ravien_seal_return_relaxed_v01.png` | ready | 인장을 회수하고 공방장 쪽으로 돌아선 승리 포즈, 여유 |
 | `bg_room` | `moments/ravien/images/char_ravien_background_workshop_evening_v01.png` | ready | 책상·옆 의자·문이 함께 읽히는 공방 저녁 배경 |
-| `bg_victory` | `moments/ravien/images/char_ravien_background_quiet_afterbattle_v01.png` | todo | 적이나 보상을 표시하지 않는 전투 후 무대 배경 |
+| `bg_victory` | `moments/ravien/images/char_ravien_background_quiet_afterbattle_v01.png` | ready | 적이나 보상을 표시하지 않는 전투 후 무대 배경 |
 
-표정 6종 향후 커버리지: 평정(fig_default), 즐거움(fig_offer), 짜증(fig_annoyed), 놀람(fig_waver), 걱정(fig_soft), 결의(fig_resolve). 짜증은 이번 본문에 억지로 삽입하지 않은 향후 표정 커버리지다. §15.3의 512×512 독립 표정과 로비 3동작·부위분리 원본/리그는 **아직 미완성**이다. 이 목록은 그 제작을 위한 대응표이며 완료 수량이 아니다. 소품은 해당 전신 포즈/배경에 그려 넣는 계획이므로 독립 prop 슬롯 그림을 만들어 놓았다고 주장하지 않는다.
+§15.3의 독립 512×512 표정 6개는 expr_neutral/expr_happy/expr_annoyed/expr_surprised/expr_worried/expr_determined로 제작·등록했다. 전신 포즈 변형과 별개의 PNG다. 로비 3동작의 연속 관절/프레임·부위분리 PSD·리그는 아직 미완성이다. 소품 단독 레이어도 제작하지 않았다.
 
 ## 입력과 보존할 의도
 
@@ -89,8 +99,8 @@ A/B/C 세 장면의 대사·지문·시선·카메라·음성 디렉션과 슬�
 
 28세 라비엔의 영리한 여유와 존댓말 속 장난을 유지한다. 사람을 거래 대상으로 만들지 않고, 능숙한 말투가 솔직한 개인적 초대로 바뀌는 틈이 매력이다. 깊은 네크라인의 검은 베스트·트임 펜슬 스커트·가터 스타킹·느슨한 붉은 넥타이·긴 검은 장갑과 와인빛 긴 머리·초록 눈·175cm 성인 실루엣을 보존한다. 카메라는 얼굴과 장갑 손짓을 중심으로 하고 가슴·다리만 따로 크롭하지 않는다.
 
-## 검증과 미완료 — 2차 패스
+## 검증과 미완료 — 3차 패스
 
 A의 선언 이미지·박자·배경 참조, idle 파일, PNG 디코드·투명 알파, 모션 내부 참조와 JSON 형식을 검사했다. 전체 대사·타이밍·입력·의도는 변경 전 바이트 재구성 해시로 보존을 확인했다. 자체 시각 검수는 상위 `production-20261018/visual-verdict-*.json`, 현재 검사 결과는 상위 `VALIDATION.json`을 따른다.
 
-미완료: B/C의 남은 todo 그림, 독립 표정 세트, 관절 리그·연속 프레임·녹음·PSD·AnimationClip·Timeline·VFX. NOT_RUN: 이번 신규 그림의 Unity 임포트/재생·기기·스킵/연타/대기 복귀·접근성 수용, Claude 리뷰, 게임 코드 시험·빌드. 포즈 컷의 소품 출입·장식 위치 변동과 카메라 앵커는 실제 화면에서 추가 검수가 필요하다.
+미완료: 관절 리그·연속 프레임·녹음·PSD·AnimationClip·Timeline·VFX. NOT_RUN: 이번 신규 그림의 Unity 임포트/재생·기기·스킵/연타/대기 복귀·접근성 수용, Claude 리뷰, 게임 코드 시험·빌드. 포즈 컷의 소품 출입·장식 위치 변동과 카메라 앵커는 실제 화면에서 추가 검수가 필요하다.

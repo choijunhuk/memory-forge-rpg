@@ -1,0 +1,14 @@
+{
+  "score": 81,
+  "verdict": "revise",
+  "category_match": true,
+  "differences": [
+    "Harin's revealed plush changes from button-eyed head to white star-bow toy/pillow, and is missing in final bare-hand rest.",
+    "Ravien B ending draws chair seat in front of the writing desk despite chair back being behind it."
+  ],
+  "suggestions": [
+    "Use original round navy-gray/white cat plush as an explicit prop-only reference for all four revealed states.",
+    "Restore physical desk-in-front/chair-behind depth in Ravien's standing ending."
+  ],
+  "reasoning": "The new style and fixed shield/table sides work, but prop identity and one furniture occlusion still violate the requested continuity."
+}

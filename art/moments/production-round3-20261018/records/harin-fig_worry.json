@@ -1,0 +1,27 @@
+{
+  "c": "harin",
+  "key": "fig_worry",
+  "path": "harin/source/candidates/char_harin_seated_worried_v01.png",
+  "refs": [
+    "/Users/choi/Documents/Memory_forge/art/moments/harin/images/char_harin_stand_neutral_v01.png"
+  ],
+  "pose": "Age 26 Harin seated upright in a sturdy workshop chair at a small wooden table, full seated figure, boots flat planted. Her immense white/navy/brass shield stands separately just behind her at left. Small soft dark-gray toy cat with one folded ear rests on a clean cloth on table. Her gloved hands tentatively guard the cloth edges, shoulders broad and a little tense; gray-blue eyes toward viewer with serious shy concern, no generic smile. Keep athletic adult build, scar above HER LEFT eyebrow, navy bob, exposed shoulders/waist white light armor, opaque combat trousers, single navy cape. Do not make her dainty.",
+  "prompt": "Use case: identity-preserve. Locked character design reference. Make ONE new non-explicit narrative RPG key-pose, 1024x1536 full length transparent PNG. Preserve adult identity, age, hairstyle, face, exact costume/colors and painterly anime cel style. All head, fingers, shoes and important props inside canvas. No scene background, haze, labels, panels, other people or erotic posing. Character acting and prop contact are the focus. Acting: Age 26 Harin seated upright in a sturdy workshop chair at a small wooden table, full seated figure, boots flat planted. Her immense white/navy/brass shield stands separately just behind her at left. Small soft dark-gray toy cat with one folded ear rests on a clean cloth on table. Her gloved hands tentatively guard the cloth edges, shoulders broad and a little tense; gray-blue eyes toward viewer with serious shy concern, no generic smile. Keep athletic adult build, scar above HER LEFT eyebrow, navy bob, exposed shoulders/waist white light armor, opaque combat trousers, single navy cape. Do not make her dainty.",
+  "source": "/Users/choi/.codex/generated_images/01a14d20-ffd5-7e81-9e47-85c1c8415e11/exec-e1c38939-ce8c-4395-8922-470eda7fd0f8.png",
+  "tool": "Codex built-in image_gen; subscription-included; no API fallback",
+  "review": "revise",
+  "score": 82,
+  "review_notes": "Cat reads too much like a live kitten; use the accepted stitched-toy reference for a replacement.",
+  "selected": false,
+  "backend_model": "not exposed by tool",
+  "sha256": "8caff7d21b640b0fbfe203e139dbd25a3855bef3805cecf1f42bf2c78967334e",
+  "size": [
+    1024,
+    1536
+  ],
+  "mode": "RGBA",
+  "alpha_extrema": [
+    0,
+    254
+  ]
+}

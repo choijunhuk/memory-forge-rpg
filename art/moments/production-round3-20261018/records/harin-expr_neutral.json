@@ -1,0 +1,30 @@
+{
+  "c": "harin",
+  "key": "expr_neutral",
+  "path": "harin/images/char_harin_expression_neutral_v01.png",
+  "refs": [
+    "/Users/choi/Documents/Memory_forge/art/moments/harin/images/char_harin_stand_neutral_v01.png"
+  ],
+  "common": "Use case: identity-preserve. Asset: ONE dialogue expression portrait on actual transparent alpha, SQUARE canvas, intended final 512x512. Head and upper shoulders only; no full body, hands, props, panels or text. Locked identity from reference. Same premium anime cel painting, soft neutral warm lighting from upper-left, eye-level fixed front-three-quarter view with face turned only 10 degrees to viewer's left, both eyes fully visible. Center face, eyes around y.43, entire crown/hair ornaments in frame with 6% transparent margin, crop at upper chest/collar. This sets the master framing for six matching expressions; preserve face proportions, hair and costume rather than redesigning. ",
+  "pose": "Harin, adult age26. Short NAVY bob, gray-blue eyes, scar ABOVE HER LEFT eyebrow, strong adult facial structure, white/navy/brass frost armor collar and broad athletic shoulders. Stoic presence. Expression NEUTRAL: relaxed brows, open attentive eyes, lips naturally closed without smile or frown, no blush, no wink. Natural adult face, not chibi.",
+  "prompt": "Use case: identity-preserve. Asset: ONE dialogue expression portrait on actual transparent alpha, SQUARE canvas, intended final 512x512. Head and upper shoulders only; no full body, hands, props, panels or text. Locked identity from reference. Same premium anime cel painting, soft neutral warm lighting from upper-left, eye-level fixed front-three-quarter view with face turned only 10 degrees to viewer's left, both eyes fully visible. Center face, eyes around y.43, entire crown/hair ornaments in frame with 6% transparent margin, crop at upper chest/collar. This sets the master framing for six matching expressions; preserve face proportions, hair and costume rather than redesigning. Harin, adult age26. Short NAVY bob, gray-blue eyes, scar ABOVE HER LEFT eyebrow, strong adult facial structure, white/navy/brass frost armor collar and broad athletic shoulders. Stoic presence. Expression NEUTRAL: relaxed brows, open attentive eyes, lips naturally closed without smile or frown, no blush, no wink. Natural adult face, not chibi.",
+  "source": "/Users/choi/.codex/generated_images/01a14d20-ffd5-7e81-9e47-85c1c8415e11/exec-0ce8ca95-2e90-4364-8afe-4fe4fb4b08e9.png",
+  "tool": "Codex built-in image_gen; subscription-included; no API fallback",
+  "review": "pass",
+  "previous_attempt": null,
+  "score": 94,
+  "review_notes": "Rendered output inspected beside its neutral master. Six readable adult expressions, stable face/eye/hair/glasses/scar/costume identity and framing. Only non-generative final resize remains.",
+  "backend_model": "not exposed by tool",
+  "selected": true,
+  "sha256": "fb461c6f34b4ddd6cd6476a82bd5c297920310dd00492bcb497f81b4e37668a2",
+  "size": [
+    512,
+    512
+  ],
+  "mode": "RGBA",
+  "alpha_extrema": [
+    0,
+    255
+  ],
+  "postprocess": "sips -z 512 512; non-generative downsample only, alpha retained"
+}

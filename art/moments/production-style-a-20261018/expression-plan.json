@@ -1,0 +1,56 @@
+{
+  "sera": {
+    "age": 24,
+    "identity": "Silver-white low ponytail, amber eyes, brass clock hair ornament, navy/gold coat collar over black high-neck bodysuit.",
+    "happy": "Small dry knowing warm smile, restrained amber eye contact.",
+    "annoyed": "Slightly narrowed amber eyes, lowered brows and a firm short mouth.",
+    "surprised": "Subtly widened amber eyes and raised eyebrows, small parted mouth.",
+    "worried": "Inner eyebrows lift slightly, gaze softens downward and mouth becomes a small uneasy line.",
+    "determined": "Steady sharp amber gaze, lowered upper lids and composed firm mouth."
+  },
+  "ravien": {
+    "age": 28,
+    "identity": "Long deep red hair, green eyes, original gold hair chain/earrings and balance pendant, red tie over black sleeveless vest neckline.",
+    "happy": "Clever confident playful smile, subtly lifted brow and warm green eye contact.",
+    "annoyed": "Cool narrowed green eyes, precise lowered brow and firm displeased mouth.",
+    "surprised": "Caught-off-guard raised brows and slightly widened green eyes, small parted mouth.",
+    "worried": "Less guarded inwardly drawn brows, small vulnerable mouth and softened green gaze.",
+    "determined": "Focused intelligent green gaze, composed set mouth and clear resolve."
+  },
+  "harin": {
+    "age": 26,
+    "identity": "Short navy hair, slate-blue eyes, SAME scar above left eyebrow, strong adult jaw/neck, white/navy/gold frost armor collar and single shoulder-cape clasp.",
+    "happy": "Brief shy genuine small smile, eyes and brow relaxing while retaining strong adult composure.",
+    "annoyed": "Direct slate-blue gaze, knitted brows and firm closed mouth.",
+    "surprised": "Raised eyebrows, widened slate-blue eyes and small open mouth, awkward caught expression.",
+    "worried": "Slightly drawn inner brows and a hesitant small frown, awkward sincere concern.",
+    "determined": "Steady strong slate-blue eye contact, lowered brows and a firm calm mouth."
+  },
+  "aila": {
+    "age": 23,
+    "identity": "Long silver-lilac braid, violet eyes, original gold/star ornaments and dangling silver bells, white/lilac robe neckline and detached draping sleeves.",
+    "happy": "Warm self-directed small smile and gently brightened violet eyes.",
+    "annoyed": "Calm firm displeasure, slightly lowered brows and clear direct violet gaze, smile gone.",
+    "surprised": "Raised eyebrows, wider violet eyes and small parted mouth.",
+    "worried": "Inner brows gently drawn up, softened uncertain violet gaze and a small vulnerable mouth.",
+    "determined": "Warm but firm direct violet gaze, composed short mouth and purposeful eyebrows."
+  },
+  "sion": {
+    "age": 27,
+    "identity": "Long black hair, cool gray-violet eyes, SAME fine half-rim glasses, original earrings, white blouse collar, black corset edge and purple/gold coat.",
+    "happy": "Rare tiny upturned mouth corner and softened eyes behind glasses; restrained emotional crack.",
+    "annoyed": "Cool narrow eyes behind unchanged glasses, lowered brows and firm short mouth.",
+    "surprised": "Slightly widened eyes behind unchanged glasses, raised brow and tiny parted mouth.",
+    "worried": "Small involuntary inward brow lift, softened gaze and subtly uneasy closed mouth.",
+    "determined": "Sharp focused cool gaze through unchanged glasses, straight firm mouth and clear intent."
+  },
+  "lumi": {
+    "age": 22,
+    "identity": "Short spiky blonde hair with electric-blue streaks, sky-blue eyes, athletic adult neck/shoulders, original off-shoulder black/yellow circuit jacket and white sport-top neckline.",
+    "happy": "Broad energetic confident adult grin with a little visible upper teeth, bright blue eyes.",
+    "annoyed": "Lowered brows, direct displeased blue gaze and firm short mouth, no childish pout.",
+    "surprised": "Excited widened blue eyes, high eyebrows and open surprised mouth.",
+    "worried": "Inner brows lift with a small uncertain wry mouth, concerned but spirited blue gaze.",
+    "determined": "Bright focused sky-blue gaze, purposeful brows and a confident firm mouth."
+  }
+}

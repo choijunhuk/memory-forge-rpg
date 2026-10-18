@@ -1,0 +1,44 @@
+[
+  {
+    "character": "sera",
+    "mapped_images": 15,
+    "unique_pngs": 15,
+    "expressions": 6,
+    "scene_image_todo": 0
+  },
+  {
+    "character": "ravien",
+    "mapped_images": 23,
+    "unique_pngs": 22,
+    "expressions": 6,
+    "scene_image_todo": 0
+  },
+  {
+    "character": "harin",
+    "mapped_images": 21,
+    "unique_pngs": 21,
+    "expressions": 6,
+    "scene_image_todo": 0
+  },
+  {
+    "character": "aila",
+    "mapped_images": 19,
+    "unique_pngs": 18,
+    "expressions": 6,
+    "scene_image_todo": 0
+  },
+  {
+    "character": "sion",
+    "mapped_images": 19,
+    "unique_pngs": 19,
+    "expressions": 6,
+    "scene_image_todo": 0
+  },
+  {
+    "character": "lumi",
+    "mapped_images": 19,
+    "unique_pngs": 19,
+    "expressions": 6,
+    "scene_image_todo": 0
+  }
+]

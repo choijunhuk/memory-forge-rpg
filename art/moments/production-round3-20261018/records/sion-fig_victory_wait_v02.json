@@ -1,0 +1,29 @@
+{
+  "c": "sion",
+  "key": "fig_victory_wait_v02",
+  "path": "sion/images/char_sion_moment_victory_wait_v02.png",
+  "refs": [
+    "/Users/choi/Documents/Memory_forge/art/moments/sion/images/char_sion_moment_victory_glasses_v01.png"
+  ],
+  "common": "Use case: identity-preserve. Edit target is this Sion age27 victory pose. Preserve the entire full-body 1024x1536 composition, exact GIANT WIDE bookmark sword and its notched tip, hilt, RIGHT-hand grip, face/eyeglasses, costume, hair, boots and actual transparent alpha. ",
+  "pose": "ONLY lower the empty LEFT arm from the glasses so her left hand now rests naturally beside left thigh, fingers relaxed. Eyes still toward viewer, faint closed-mouth private smile, shoulders settled as she waits to return together. Keep the sword and right arm pixel-faithful in shape/width/position; do not replace it with a thin sword. No book, no other props.",
+  "prompt": "Use case: identity-preserve. Edit target is this Sion age27 victory pose. Preserve the entire full-body 1024x1536 composition, exact GIANT WIDE bookmark sword and its notched tip, hilt, RIGHT-hand grip, face/eyeglasses, costume, hair, boots and actual transparent alpha. ONLY lower the empty LEFT arm from the glasses so her left hand now rests naturally beside left thigh, fingers relaxed. Eyes still toward viewer, faint closed-mouth private smile, shoulders settled as she waits to return together. Keep the sword and right arm pixel-faithful in shape/width/position; do not replace it with a thin sword. No book, no other props.",
+  "source": "/Users/choi/.codex/generated_images/01a14d20-ffd5-7e81-9e47-85c1c8415e11/exec-2293f28b-e06d-4c5b-a039-321e8ab8247f.png",
+  "tool": "Codex built-in image_gen; subscription-included; no API fallback",
+  "review": "pass",
+  "previous_attempt": null,
+  "score": 96,
+  "review_notes": "Compared directly with glasses pose: wide notched bookmark blade and grip retained, empty left hand now lowered.",
+  "backend_model": "not exposed by tool",
+  "selected": true,
+  "sha256": "a9dbeb260084c4822e9d1bf477645c272a092368fadce36479c86a0bb2119184",
+  "size": [
+    1024,
+    1536
+  ],
+  "mode": "RGBA",
+  "alpha_extrema": [
+    0,
+    254
+  ]
+}

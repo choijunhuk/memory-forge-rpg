@@ -1,0 +1,20 @@
+{
+  "character": "sion",
+  "key": "fig_victory_turn",
+  "path": "moments/sion/images/char_sion_fig_victory_turn_styleA_v01.png",
+  "status": "ready",
+  "target": "sion/images/char_sion_fig_victory_turn_styleA_v01.png",
+  "old_path": "moments/sion/images/char_sion_moment_victory_turn_v01.png",
+  "background": false,
+  "args": {
+    "prompt": "Use case: style-transfer. Production transparent full-body sprite for Memory Forge. REDRAW rather than merely recolor. Direction A CLEAR CEL, exactly the rendering grammar of the last reference: crisp controlled ink contours, emphatic upper eyelids, tiny symbolic nose and short mouth, matte skin with large flat light areas and one hard-edged shadow step, large grouped hair locks with broad flat highlight bands, costume tailoring and flat color planes before details, restrained gold/metal highlights. NO photoreal/3D nose, glossy lips, airbrush skin, tiny sparkling hair strands or painterly gradients. First reference controls exact character identity, adult age, outfit structure, props, pose, composition and framing; last reference is STYLE ONLY and must not transfer its clothing/face. Preserve all outfit cutouts and existing adult silhouette. Keep original full body and equipment inside a 1024x1536 portrait with a little clear margin. GENUINELY TRANSPARENT empty canvas alpha=0 around the subject including corners, no colored backdrop, vignette, aura, halo, floor, cast shadow, checkerboard, text or watermark. Remove ALL inherited background haze.\nSECOND reference is SAME character already redrawn in direction A; match its identity/rendering while FIRST controls original C pose/props. Clearly adult sion, age 27. SAME broad BOOKMARK LONGSWORD held low diagonal, EMPTY free hand lowered, almost no lingering page scraps, restrained personal side glance to player as source. NO BOOK; preserve blade width.",
+    "referenced_image_paths": [
+      "/Users/choi/Documents/Memory_forge/art/moments/sion/images/char_sion_moment_victory_turn_v01.png",
+      "/Users/choi/Documents/Memory_forge/art/moments/sion/images/char_sion_fig_neutral_styleA_v01.png"
+    ],
+    "transparent_background": true
+  },
+  "cache_path": "/Users/choi/.codex/generated_images/01a14db0-4150-7f01-9240-82aaa185dd28/exec-b7de398e-96e3-47df-bfed-bbccf6a05713.png",
+  "generation_status": "generated_pending_review",
+  "selected": true
+}

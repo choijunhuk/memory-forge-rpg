@@ -1,0 +1,312 @@
+[
+  {
+    "character": "sera",
+    "key": "fig_smile",
+    "old_path": "moments/sera/images/char_sera_lobby_smile_v01.png",
+    "target": "sera/images/char_sera_fig_smile_styleA_v01.png",
+    "master": "sera/images/char_sera_fig_scope_styleA_v01.png",
+    "background": false,
+    "beats": [
+      "시간은 비워 뒀어요. 아직 누구와 보낼지는 안 적었지만.",
+      "…힌트가 더 필요해요?",
+      ""
+    ]
+  },
+  {
+    "character": "sera",
+    "key": "fig_watch",
+    "old_path": "moments/sera/images/char_sera_lobby_watch_v02.png",
+    "target": "sera/images/char_sera_fig_watch_styleA_v01.png",
+    "master": "sera/images/char_sera_fig_scope_styleA_v01.png",
+    "background": false,
+    "beats": []
+  },
+  {
+    "character": "sera",
+    "key": "bg_tower",
+    "old_path": "moments/sera/images/bg_sera_clocktower_evening_v01.png",
+    "target": "sera/images/char_sera_bg_tower_styleA_v01.png",
+    "master": "sera/images/char_sera_fig_scope_styleA_v01.png",
+    "background": true,
+    "beats": []
+  },
+  {
+    "character": "ravien",
+    "key": "fig_stamp",
+    "old_path": "moments/ravien/images/char_ravien_stamp_focused_v01.png",
+    "target": "ravien/images/char_ravien_fig_stamp_styleA_v01.png",
+    "master": "ravien/images/char_ravien_fig_default_styleA_v01.png",
+    "background": false,
+    "beats": [
+      "서류철을 팔에 받친 라비엔이 도장을 한 번 누른다. 도장 자국을 확인하고 서류에서 손을 뗀다."
+    ]
+  },
+  {
+    "character": "ravien",
+    "key": "fig_turn",
+    "old_path": "moments/ravien/images/char_ravien_paper_turn_playful_v01.png",
+    "target": "ravien/images/char_ravien_fig_turn_styleA_v01.png",
+    "master": "ravien/images/char_ravien_fig_default_styleA_v01.png",
+    "background": false,
+    "beats": [
+      "종이 끝을 손끝으로 반 바퀴 돌려 서류철 안으로 넣는다. 종이를 내려놓고서야 고개를 든다. 초록 눈이 공방장을 붙든다."
+    ]
+  },
+  {
+    "character": "ravien",
+    "key": "fig_offer",
+    "old_path": "moments/ravien/images/char_ravien_chair_offer_happy_v01.png",
+    "target": "ravien/images/char_ravien_fig_offer_styleA_v01.png",
+    "master": "ravien/images/char_ravien_fig_default_styleA_v01.png",
+    "background": false,
+    "beats": [
+      "공방장님이 바로 나가시면, 제가 이 의자를 괜히 꺼내 놓은 셈인데."
+    ]
+  },
+  {
+    "character": "ravien",
+    "key": "fig_lobby_wait",
+    "old_path": "moments/ravien/images/char_ravien_chair_wait_folder_v01.png",
+    "target": "ravien/images/char_ravien_fig_lobby_wait_styleA_v01.png",
+    "master": "ravien/images/char_ravien_fig_default_styleA_v01.png",
+    "background": false,
+    "beats": [
+      "손끝으로 옆 의자를 가리킨 뒤 손을 내린다. 비워 둔 자리를 사이에 두고 공방장의 대답을 기다린다.",
+      "아직 앉아 있을 시간은 있죠? 이번엔 서류 얘기 안 할게요."
+    ]
+  },
+  {
+    "character": "ravien",
+    "key": "fig_lobby_end",
+    "old_path": "moments/ravien/images/char_ravien_chair_wait_emptyhands_v01.png",
+    "target": "ravien/images/char_ravien_fig_lobby_end_styleA_v01.png",
+    "master": "ravien/images/char_ravien_fig_default_styleA_v01.png",
+    "background": false,
+    "beats": [
+      "라비엔은 몸을 제자리로 돌리고 서류철을 닫아 둔다. 옆 의자는 비워 둔 채, 닫힌 서류철에는 손을 대지 않고 공방장에게 시선을 둔다."
+    ]
+  },
+  {
+    "character": "ravien",
+    "key": "bg_room",
+    "old_path": "moments/ravien/images/char_ravien_background_workshop_evening_v01.png",
+    "target": "ravien/images/char_ravien_bg_room_styleA_v01.png",
+    "master": "ravien/images/char_ravien_fig_default_styleA_v01.png",
+    "background": true,
+    "beats": []
+  },
+  {
+    "character": "harin",
+    "key": "fig_hide",
+    "old_path": "moments/harin/images/char_harin_pocket_surprised_v01.png",
+    "target": "harin/images/char_harin_fig_hide_styleA_v01.png",
+    "master": "harin/images/char_harin_fig_glove_styleA_v01.png",
+    "background": false,
+    "beats": [
+      "순찰 끝. ……그쪽은 확인 안 해도 된다."
+    ]
+  },
+  {
+    "character": "harin",
+    "key": "fig_cough",
+    "old_path": "moments/harin/images/char_harin_cough_annoyed_v01.png",
+    "target": "harin/images/char_harin_fig_cough_styleA_v01.png",
+    "master": "harin/images/char_harin_fig_glove_styleA_v01.png",
+    "background": false,
+    "beats": [
+      "인형을 손으로 덮었다가 급히 주머니 안으로 밀어 넣는다. 공방장의 눈길을 피한 채 손을 떼고 낮게 헛기침한다."
+    ]
+  },
+  {
+    "character": "harin",
+    "key": "fig_lobby_cat",
+    "old_path": "moments/harin/images/char_harin_pocket_reveal_soft_v01.png",
+    "target": "harin/images/char_harin_fig_lobby_cat_styleA_v01.png",
+    "master": "harin/images/char_harin_fig_glove_styleA_v01.png",
+    "background": false,
+    "beats": [
+      "아니. 봐도 된다. 네가 보는 건…… 괜찮다."
+    ]
+  },
+  {
+    "character": "harin",
+    "key": "fig_lobby_soft",
+    "old_path": "moments/harin/images/char_harin_stand_soft_v01.png",
+    "target": "harin/images/char_harin_fig_lobby_soft_styleA_v01.png",
+    "master": "harin/images/char_harin_fig_glove_styleA_v01.png",
+    "background": false,
+    "beats": [
+      "인형 귀를 다시 조금 내놓고 손을 내린다. 굳은 입매가 아주 짧게 풀린다.",
+      "다음 순찰 전까진 여기 있다. 할 얘기 있으면…… 내 옆에 와서 해라."
+    ]
+  },
+  {
+    "character": "harin",
+    "key": "fig_resolve",
+    "old_path": "moments/harin/images/char_harin_stand_determined_v01.png",
+    "target": "harin/images/char_harin_fig_resolve_styleA_v01.png",
+    "master": "harin/images/char_harin_fig_glove_styleA_v01.png",
+    "background": false,
+    "beats": [
+      "하린은 방패를 확인하고 편한 정면 자세로 돌아온다. 주머니를 다시 가리지 않고 공방장을 향한 자리를 남겨 둔다."
+    ]
+  },
+  {
+    "character": "harin",
+    "key": "bg_room",
+    "old_path": "moments/harin/images/char_harin_background_workshop_evening_v01.png",
+    "target": "harin/images/char_harin_bg_room_styleA_v01.png",
+    "master": "harin/images/char_harin_fig_glove_styleA_v01.png",
+    "background": true,
+    "beats": []
+  },
+  {
+    "character": "aila",
+    "key": "fig_action1",
+    "old_path": "moments/aila/images/char_aila_moment_action1_v02.png",
+    "target": "aila/images/char_aila_fig_action1_styleA_v01.png",
+    "master": "aila/images/char_aila_fig_neutral_styleA_v01.png",
+    "background": false,
+    "beats": [
+      "잠깐만요. 이번에는 기록 때문이 아니에요."
+    ]
+  },
+  {
+    "character": "aila",
+    "key": "fig_action2",
+    "old_path": "moments/aila/images/char_aila_moment_action2_v02.png",
+    "target": "aila/images/char_aila_fig_action2_styleA_v01.png",
+    "master": "aila/images/char_aila_fig_neutral_styleA_v01.png",
+    "background": false,
+    "beats": [
+      "찻잔을 빈 옆자리 앞으로 옮긴다. 손을 거둔 뒤에도 기다리고, 어깨보다 먼저 눈이 공방장에게 돌아간다."
+    ]
+  },
+  {
+    "character": "aila",
+    "key": "fig_happy",
+    "old_path": "moments/aila/images/char_aila_moment_happy_v02.png",
+    "target": "aila/images/char_aila_fig_happy_styleA_v01.png",
+    "master": "aila/images/char_aila_fig_neutral_styleA_v01.png",
+    "background": false,
+    "beats": [
+      "제가 같이 있고 싶어서 불렀어요. 이 자리는 공방장이 앉아 줬으면 해요.",
+      "차가 식는 건 괜찮아요. 대답은 기다릴 수 있으니까."
+    ]
+  },
+  {
+    "character": "aila",
+    "key": "bg",
+    "old_path": "moments/aila/images/char_aila_background_archive_evening_v01.png",
+    "target": "aila/images/char_aila_bg_styleA_v01.png",
+    "master": "aila/images/char_aila_fig_neutral_styleA_v01.png",
+    "background": true,
+    "beats": []
+  },
+  {
+    "character": "sion",
+    "key": "fig_action1",
+    "old_path": "moments/sion/images/char_sion_moment_action1_v01.png",
+    "target": "sion/images/char_sion_fig_action1_styleA_v01.png",
+    "master": "sion/images/char_sion_fig_neutral_styleA_v01.png",
+    "background": false,
+    "beats": [
+      "아까 하신 말, 다시 하실 필요 없습니다."
+    ]
+  },
+  {
+    "character": "sion",
+    "key": "fig_action2",
+    "old_path": "moments/sion/images/char_sion_moment_action2_v01.png",
+    "target": "sion/images/char_sion_fig_action2_styleA_v01.png",
+    "master": "sion/images/char_sion_fig_neutral_styleA_v01.png",
+    "background": false,
+    "beats": [
+      "못 들은 게 아니에요. 들었으니까 다음 줄을 놓친 겁니다."
+    ]
+  },
+  {
+    "character": "sion",
+    "key": "fig_happy",
+    "old_path": "moments/sion/images/char_sion_moment_happy_v01.png",
+    "target": "sion/images/char_sion_fig_happy_styleA_v01.png",
+    "master": "sion/images/char_sion_fig_neutral_styleA_v01.png",
+    "background": false,
+    "beats": [
+      "안경을 바로잡고 책을 입가까지 올린다. 눈만큼은 숨기지 못하고 공방장에게 돌아온다."
+    ]
+  },
+  {
+    "character": "sion",
+    "key": "fig_soft",
+    "old_path": "moments/sion/images/char_sion_moment_soft_v01.png",
+    "target": "sion/images/char_sion_fig_soft_styleA_v01.png",
+    "master": "sion/images/char_sion_fig_neutral_styleA_v01.png",
+    "background": false,
+    "beats": [
+      "앉으세요. 이번에는 읽는 척을 그만하겠습니다."
+    ]
+  },
+  {
+    "character": "sion",
+    "key": "bg",
+    "old_path": "moments/sion/images/char_sion_background_library_lamplight_v01.png",
+    "target": "sion/images/char_sion_bg_styleA_v01.png",
+    "master": "sion/images/char_sion_fig_neutral_styleA_v01.png",
+    "background": true,
+    "beats": []
+  },
+  {
+    "character": "lumi",
+    "key": "fig_action1",
+    "old_path": "moments/lumi/images/char_lumi_moment_action1_v01.png",
+    "target": "lumi/images/char_lumi_fig_action1_styleA_v01.png",
+    "master": "lumi/images/char_lumi_fig_neutral_styleA_v01.png",
+    "background": false,
+    "beats": [
+      "헬멧을 손목 위에서 짧게 돌려 잡는다. 팔에 끼우고 손을 비우자, 뒤따라 흔들리던 재킷 자락도 가라앉는다."
+    ]
+  },
+  {
+    "character": "lumi",
+    "key": "fig_action2",
+    "old_path": "moments/lumi/images/char_lumi_moment_action2_v01.png",
+    "target": "lumi/images/char_lumi_fig_action2_styleA_v01.png",
+    "master": "lumi/images/char_lumi_fig_neutral_styleA_v01.png",
+    "background": false,
+    "beats": [
+      "뒷자리는 비워 뒀는데, 목적지는 같이 정하고 싶어서요."
+    ]
+  },
+  {
+    "character": "lumi",
+    "key": "fig_happy",
+    "old_path": "moments/lumi/images/char_lumi_moment_happy_v01.png",
+    "target": "lumi/images/char_lumi_fig_happy_styleA_v01.png",
+    "master": "lumi/images/char_lumi_fig_neutral_styleA_v01.png",
+    "background": false,
+    "beats": [
+      "걷자고 해도 돼요. 오늘은 공방장 옆에서 속도 맞추는 연습할래요."
+    ]
+  },
+  {
+    "character": "lumi",
+    "key": "fig_soft",
+    "old_path": "moments/lumi/images/char_lumi_moment_soft_v01.png",
+    "target": "lumi/images/char_lumi_fig_soft_styleA_v01.png",
+    "master": "lumi/images/char_lumi_fig_neutral_styleA_v01.png",
+    "background": false,
+    "beats": [
+      "손바닥을 위로 내민 루미는 발을 움직이지 않은 채 공방장의 대답을 기다린다."
+    ]
+  },
+  {
+    "character": "lumi",
+    "key": "bg",
+    "old_path": "moments/lumi/images/char_lumi_background_workshop_street_evening_v01.png",
+    "target": "lumi/images/char_lumi_bg_styleA_v01.png",
+    "master": "lumi/images/char_lumi_fig_neutral_styleA_v01.png",
+    "background": true,
+    "beats": []
+  }
+]

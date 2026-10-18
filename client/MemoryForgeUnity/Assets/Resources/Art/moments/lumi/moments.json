@@ -3,25 +3,25 @@
   "character": "lumi",
   "status": "draft",
   "images": {
-    "fig_neutral": "moments/lumi/images/char_lumi_moment_neutral_v01.png",
-    "fig_action1": "moments/lumi/images/char_lumi_moment_action1_v01.png",
-    "fig_action2": "moments/lumi/images/char_lumi_moment_action2_v01.png",
-    "fig_happy": "moments/lumi/images/char_lumi_moment_happy_v01.png",
-    "fig_worried": "moments/lumi/images/char_lumi_moment_worried_v01.png",
-    "fig_surprised": "moments/lumi/images/char_lumi_moment_surprised_v01.png",
-    "fig_determined": "moments/lumi/images/char_lumi_moment_determined_v01.png",
-    "fig_soft": "moments/lumi/images/char_lumi_moment_soft_v01.png",
-    "expr_neutral": "moments/lumi/images/char_lumi_expression_neutral_v01.png",
-    "expr_happy": "moments/lumi/images/char_lumi_expression_happy_v01.png",
-    "expr_annoyed": "moments/lumi/images/char_lumi_expression_annoyed_v01.png",
-    "expr_surprised": "moments/lumi/images/char_lumi_expression_surprised_v01.png",
-    "expr_worried": "moments/lumi/images/char_lumi_expression_worried_v01.png",
-    "expr_determined": "moments/lumi/images/char_lumi_expression_determined_v01.png",
-    "bg": "moments/lumi/images/char_lumi_background_workshop_street_evening_v01.png",
-    "fig_victory_land": "moments/lumi/images/char_lumi_moment_victory_land_v01.png",
-    "fig_victory_turn": "moments/lumi/images/char_lumi_moment_victory_turn_v01.png",
-    "fig_victory_grin": "moments/lumi/images/char_lumi_moment_victory_grin_v01.png",
-    "fig_victory_wait": "moments/lumi/images/char_lumi_moment_victory_wait_v01.png"
+    "fig_neutral": "moments/lumi/images/char_lumi_fig_neutral_styleA_v01.png",
+    "fig_action1": "moments/lumi/images/char_lumi_fig_action1_styleA_v01.png",
+    "fig_action2": "moments/lumi/images/char_lumi_fig_action2_styleA_v01.png",
+    "fig_happy": "moments/lumi/images/char_lumi_fig_happy_styleA_v01.png",
+    "fig_worried": "moments/lumi/images/char_lumi_fig_worried_styleA_v01.png",
+    "fig_surprised": "moments/lumi/images/char_lumi_fig_surprised_styleA_v01.png",
+    "fig_determined": "moments/lumi/images/char_lumi_fig_determined_styleA_v01.png",
+    "fig_soft": "moments/lumi/images/char_lumi_fig_soft_styleA_v01.png",
+    "expr_neutral": "moments/lumi/images/char_lumi_expr_neutral_styleA_v01.png",
+    "expr_happy": "moments/lumi/images/char_lumi_expr_happy_styleA_v01.png",
+    "expr_annoyed": "moments/lumi/images/char_lumi_expr_annoyed_styleA_v01.png",
+    "expr_surprised": "moments/lumi/images/char_lumi_expr_surprised_styleA_v01.png",
+    "expr_worried": "moments/lumi/images/char_lumi_expr_worried_styleA_v01.png",
+    "expr_determined": "moments/lumi/images/char_lumi_expr_determined_styleA_v01.png",
+    "bg": "moments/lumi/images/char_lumi_bg_styleA_v01.png",
+    "fig_victory_land": "moments/lumi/images/char_lumi_fig_victory_land_styleA_v01.png",
+    "fig_victory_turn": "moments/lumi/images/char_lumi_fig_victory_turn_styleA_v01.png",
+    "fig_victory_grin": "moments/lumi/images/char_lumi_fig_victory_grin_styleA_v01.png",
+    "fig_victory_wait": "moments/lumi/images/char_lumi_fig_victory_wait_styleA_v02.png"
   },
   "anchors": {
     "fig_neutral": {
@@ -82,8 +82,8 @@
     },
     "fig_worried": {
       "face": [
-        0.5,
-        0.17
+        0.66,
+        0.105
       ],
       "body": [
         0.5,
@@ -96,8 +96,8 @@
     },
     "fig_surprised": {
       "face": [
-        0.5,
-        0.17
+        0.51,
+        0.105
       ],
       "body": [
         0.5,
@@ -110,8 +110,8 @@
     },
     "fig_determined": {
       "face": [
-        0.5,
-        0.17
+        0.51,
+        0.105
       ],
       "body": [
         0.5,
@@ -138,8 +138,8 @@
     },
     "fig_victory_land": {
       "face": [
-        0.5,
-        0.17
+        0.51,
+        0.105
       ],
       "body": [
         0.5,
@@ -152,8 +152,8 @@
     },
     "fig_victory_turn": {
       "face": [
-        0.5,
-        0.17
+        0.51,
+        0.105
       ],
       "body": [
         0.5,
@@ -166,8 +166,8 @@
     },
     "fig_victory_grin": {
       "face": [
-        0.5,
-        0.17
+        0.51,
+        0.105
       ],
       "body": [
         0.5,
@@ -180,8 +180,8 @@
     },
     "fig_victory_wait": {
       "face": [
-        0.5,
-        0.17
+        0.68,
+        0.105
       ],
       "body": [
         0.5,
@@ -190,6 +190,42 @@
       "hands": [
         0.48,
         0.55
+      ]
+    },
+    "expr_neutral": {
+      "face": [
+        0.54,
+        0.45
+      ]
+    },
+    "expr_happy": {
+      "face": [
+        0.54,
+        0.45
+      ]
+    },
+    "expr_annoyed": {
+      "face": [
+        0.54,
+        0.45
+      ]
+    },
+    "expr_surprised": {
+      "face": [
+        0.54,
+        0.45
+      ]
+    },
+    "expr_worried": {
+      "face": [
+        0.54,
+        0.45
+      ]
+    },
+    "expr_determined": {
+      "face": [
+        0.54,
+        0.45
       ]
     }
   },
@@ -403,7 +439,7 @@
         {
           "key": "fig_determined",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_happy",
@@ -423,12 +459,12 @@
         {
           "key": "fig_surprised",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_worried",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "stage_settle",
@@ -826,22 +862,22 @@
         {
           "key": "fig_victory_land",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_victory_turn",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_victory_grin",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_victory_wait",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "stage_settle",

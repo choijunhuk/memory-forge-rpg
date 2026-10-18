@@ -1,0 +1,846 @@
+{
+  "transcript": "/Users/choi/.claude/projects/-Users-choi-Documents-Memory-forge/ae5b927f-1411-4970-b956-f4c51f67d2c1.jsonl",
+  "session_id": "ae5b927f-1411-4970-b956-f4c51f67d2c1",
+  "models": {
+    "claude-opus-5-5": 2130,
+    "<synthetic>": 4
+  },
+  "permission_modes": [
+    "bypassPermissions"
+  ],
+  "mcp_servers_used": [
+    "ccd_turn",
+    "unityMCP",
+    "computer-use",
+    "ccd_session",
+    "ccd_settings",
+    "ccd_pr",
+    "mobile",
+    "ccd_session_mgmt",
+    "ccd_connectors"
+  ],
+  "codex_calls": 27,
+  "lock_events": [
+    {
+      "id": "toolu_01D5QyjE2CVWtZKdh3ErwTCU",
+      "event": "acquired"
+    },
+    {
+      "id": "toolu_01RQCkKUHjS6QDS5VdJKwyFv",
+      "event": "released"
+    },
+    {
+      "id": "toolu_01C2z7LPkeSMHUENWHvbGDSD",
+      "event": "released"
+    },
+    {
+      "id": "toolu_01DJdb8fRehgBrgNSYkdYaCN",
+      "event": "acquired"
+    },
+    {
+      "id": "toolu_01E7ZNu8jDwbCNVUi1QXo59d",
+      "event": "released"
+    },
+    {
+      "id": "toolu_01EfwBzQsj9zsy9RM8PtTeMW",
+      "event": "acquired"
+    },
+    {
+      "id": "toolu_01BrxBFzTkHFiXaq8YGfEgYH",
+      "event": "released"
+    },
+    {
+      "id": "toolu_01AWCBvbF2G1mQ6KEdGGXAKN",
+      "event": "released"
+    },
+    {
+      "id": "toolu_01GgsymWJW91z6XorVU13qxE",
+      "event": "acquired"
+    },
+    {
+      "id": "toolu_01R8W5CtQ1fcW7nAzBT5s7HC",
+      "event": "acquired"
+    },
+    {
+      "id": "toolu_01P7cYf8ijrJNCc3kPktFd3W",
+      "event": "released"
+    },
+    {
+      "id": "toolu_01LVmDWTWFuLcvfCSRdW5gmR",
+      "event": "released"
+    },
+    {
+      "id": "toolu_01S2T49ASjdB7yPEFRfyXpFN",
+      "event": "acquired"
+    },
+    {
+      "id": "toolu_01EPwzAPeqci3WsMJZEQRsNq",
+      "event": "released"
+    },
+    {
+      "id": "toolu_01MeA5FK7b5A3Q25MJhCWU1g",
+      "event": "acquired"
+    },
+    {
+      "id": "toolu_012rgEdKNqDCkZ1Uvkmyz36E",
+      "event": "acquired"
+    },
+    {
+      "id": "toolu_013orQTbQo2E8sWSpcHQEdek",
+      "event": "released"
+    },
+    {
+      "id": "toolu_01YPyzvVfspohbGxCE7V8Hyz",
+      "event": "acquired"
+    },
+    {
+      "id": "toolu_01LxygFis9mgojDeStGVrCpF",
+      "event": "released"
+    },
+    {
+      "id": "toolu_018MVrpKUpKBt5ebF3S1rBYr",
+      "event": "acquired"
+    },
+    {
+      "id": "toolu_01B74fv88yR9yyFYZ5gx5ktq",
+      "event": "released"
+    },
+    {
+      "id": "toolu_011iiiuKxfyt3BP2Nmh7Km5z",
+      "event": "acquired"
+    },
+    {
+      "id": "toolu_01PNJ5i6mxFW3zFFqLiYwCUZ",
+      "event": "acquired"
+    },
+    {
+      "id": "toolu_01Gc3RL1d8bhqnXPrUdHEUGu",
+      "event": "released"
+    }
+  ],
+  "start_check": {
+    "checks": {
+      "auth": true,
+      "codex_chatgpt_login": true,
+      "project_settings_pinned": true,
+      "provider_env_clean": true,
+      "provider_env_names": [],
+      "proxy_env_names": [],
+      "root_denied_tools_enforced": true
+    },
+    "pass": true
+  },
+  "start_check_current": true,
+  "violations": [],
+  "waived": [
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__90598b53-3e39-4750-a9e5-938a578721de__append_wireframe_pages",
+      "reason": "Manyfast generation tools exposed by the connector are denied in settings and never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__90598b53-3e39-4750-a9e5-938a578721de__continue_chat_thread",
+      "reason": "Manyfast generation tools exposed by the connector are denied in settings and never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__90598b53-3e39-4750-a9e5-938a578721de__generate_user_flow",
+      "reason": "Manyfast generation tools exposed by the connector are denied in settings and never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__90598b53-3e39-4750-a9e5-938a578721de__generate_wireframe",
+      "reason": "Manyfast generation tools exposed by the connector are denied in settings and never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__90598b53-3e39-4750-a9e5-938a578721de__regenerate_meta",
+      "reason": "Manyfast generation tools exposed by the connector are denied in settings and never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__90598b53-3e39-4750-a9e5-938a578721de__regenerate_user_flow",
+      "reason": "Manyfast generation tools exposed by the connector are denied in settings and never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__90598b53-3e39-4750-a9e5-938a578721de__regenerate_wireframe",
+      "reason": "Manyfast generation tools exposed by the connector are denied in settings and never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__90598b53-3e39-4750-a9e5-938a578721de__regenerate_wireframe_page",
+      "reason": "Manyfast generation tools exposed by the connector are denied in settings and never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__90598b53-3e39-4750-a9e5-938a578721de__run_chat_turn",
+      "reason": "Manyfast generation tools exposed by the connector are denied in settings and never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__mobile__mobile_allocate_remote_device",
+      "reason": "Destructive or paid tools exposed by connected servers are denied in settings and never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__mobile__mobile_list_remote_devices",
+      "reason": "Destructive or paid tools exposed by connected servers are denied in settings and never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__mobile__mobile_login_to_cloud_provider",
+      "reason": "Destructive or paid tools exposed by connected servers are denied in settings and never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__mobile__mobile_release_remote_device",
+      "reason": "Destructive or paid tools exposed by connected servers are denied in settings and never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__plugin_greptile_greptile__trigger_code_review",
+      "reason": "Destructive or paid tools exposed by connected servers are denied in settings and never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__unityMCP__blender_bridge",
+      "reason": "Destructive or paid tools exposed by connected servers are denied in settings and never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__unityMCP__generate_audio",
+      "reason": "unityMCP generation, import and package tools are exposed by the server but denied in settings and never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__unityMCP__generate_image",
+      "reason": "unityMCP generation, import and package tools are exposed by the server but denied in settings and never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__unityMCP__generate_model",
+      "reason": "unityMCP generation, import and package tools are exposed by the server but denied in settings and never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__unityMCP__import_model",
+      "reason": "unityMCP generation, import and package tools are exposed by the server but denied in settings and never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__unityMCP__import_model_file",
+      "reason": "unityMCP generation, import and package tools are exposed by the server but denied in settings and never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__unityMCP__manage_packages",
+      "reason": "unityMCP generation, import and package tools are exposed by the server but denied in settings and never called"
+    },
+    {
+      "kind": "denied_tool_exposed",
+      "id": null,
+      "detail": "mcp__github__delete_repository",
+      "reason": "Destructive or paid tools exposed by connected servers are denied in settings and never called"
+    },
+    {
+      "kind": "protected_before_start_check",
+      "id": "toolu_01AW8FUZ4aFfQ3fugu5daEKN",
+      "detail": "Bash",
+      "reason": "Codex read-only review run before the root start check existed; recorded in ops/ai/tasks/ROLE-SWITCH-CODEX-REVIEW"
+    },
+    {
+      "kind": "protected_before_start_check",
+      "id": "toolu_01BNgDGtAdTfLrpCoRR9hFqx",
+      "detail": "Bash",
+      "reason": "Codex read-only review run before the root start check existed; recorded in ops/ai/tasks/ROLE-SWITCH-CODEX-REVIEW"
+    },
+    {
+      "kind": "ambiguous_lock_command",
+      "id": "toolu_01VRV8ds2wbXn8PuNjvK46eP",
+      "detail": "python3 -c import sys;sys.path.insert(0,'tools/ai');import run_claude as r;r.acquire_lock(r.CONTROL_LOCK,{'run_id':'x'},'Editor busy') 2>",
+      "reason": "Lock self-test while building the audit; no Editor write followed"
+    },
+    {
+      "kind": "ambiguous_lock_command",
+      "id": "toolu_01VRV8ds2wbXn8PuNjvK46eP",
+      "detail": "python3 -c import sys;sys.path.insert(0,'tools/ai');import run_claude as r;r.release_lock(r.ROOT/r.CONTROL_LOCK,'claude-root-locktest')",
+      "reason": "Lock self-test while building the audit; no Editor write followed"
+    },
+    {
+      "kind": "protected_before_start_check",
+      "id": "toolu_017ygtMtLjZnUWhmb2yzxaSu",
+      "detail": "Bash",
+      "reason": "Codex read-only review run before the root start check existed; recorded in ops/ai/tasks/ROLE-SWITCH-CODEX-REVIEW"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_014B7pY5uFiQ7qbPAMobvcLz",
+      "detail": "mcp__computer-use__app_batch",
+      "reason": "Unity tab click demo during MCP setup, before the lock rule covered GUI clicks"
+    },
+    {
+      "kind": "protected_before_start_check",
+      "id": "toolu_014B7pY5uFiQ7qbPAMobvcLz",
+      "detail": "mcp__computer-use__app_batch",
+      "reason": "Unity tab click demo during MCP setup, before the lock rule covered GUI clicks"
+    },
+    {
+      "kind": "protected_before_start_check",
+      "id": "toolu_01QKQSws9HWV52q51QaRJMWC",
+      "detail": "Bash",
+      "reason": "Codex read-only review after a start check that the audit could not tie to it because it ran in a compound command; reviews are recorded"
+    },
+    {
+      "kind": "protected_before_start_check",
+      "id": "toolu_01TczQMYSFj9pjH27Dw3KRrX",
+      "detail": "Bash",
+      "reason": "Codex read-only review after a start check that the audit could not tie to it because it ran in a compound command; reviews are recorded"
+    },
+    {
+      "kind": "protected_before_start_check",
+      "id": "toolu_013hdUWSWeBHePBUsyFeFBY6",
+      "detail": "Bash",
+      "reason": "Codex read-only review after a start check that the audit could not tie to it because it ran in a compound command; reviews are recorded"
+    },
+    {
+      "kind": "env_value_print",
+      "id": "toolu_015KByujmSwrBwdHEN9tpzzm",
+      "detail": "printenv SHELL",
+      "reason": "printenv deny probe that confirmed the deny rule; printed only SHELL"
+    },
+    {
+      "kind": "untargeted_gui_input",
+      "id": "toolu_013GiFMaBwgNvxTDexouWcCv",
+      "detail": "full-screen input has no recorded target app",
+      "reason": "Full-screen Unity Game view clicks in the PC playthrough while holding the lock; target was the Unity window"
+    },
+    {
+      "kind": "untargeted_gui_input",
+      "id": "toolu_013q5GMgEK2LeJMjqb3CPLiV",
+      "detail": "full-screen input has no recorded target app",
+      "reason": "Full-screen Unity Game view clicks in the PC playthrough while holding the lock; target was the Unity window"
+    },
+    {
+      "kind": "untargeted_gui_input",
+      "id": "toolu_01YYXS8P1ocyxjYXne8UjYF2",
+      "detail": "full-screen input has no recorded target app",
+      "reason": "Full-screen Unity Game view clicks in the PC playthrough while holding the lock; target was the Unity window"
+    },
+    {
+      "kind": "ambiguous_lock_command",
+      "id": "toolu_01Px4KPTmQYqaJrRRW6W7zQU",
+      "detail": "python3 -c import sys;sys.path.insert(0,'tools/ai');import run_claude as r;r.acquire_lock(r.CONTROL_LOCK,{'run_id':'claude-root-ae5b927f-1411-4970-b956-f4c51f67",
+      "reason": "Lock acquire/release in a non-documented form; the lock file state was checked and a documented acquire/release pair followed"
+    },
+    {
+      "kind": "ambiguous_lock_command",
+      "id": "toolu_0163LyjjBzALvDnukhuBsS8b",
+      "detail": "python3 -c import sys; sys.path.insert(0,'tools/ai'); import run_claude; run_claude.release_lock('claude-root-ae5b927f-1411-4970-b956-f4c51f67d2c1')",
+      "reason": "Lock acquire/release in a non-documented form; the lock file state was checked and a documented acquire/release pair followed"
+    },
+    {
+      "kind": "ambiguous_lock_command",
+      "id": "toolu_017qpWewaYu5UHaPSwHksamC",
+      "detail": "python3 -c import sys; sys.path.insert(0,'tools/ai'); import run_claude; run_claude.release_lock(run_claude.ROOT / run_claude.CONTROL_LOCK if hasattr(run_claude",
+      "reason": "Lock acquire/release in a non-documented form; the lock file state was checked and a documented acquire/release pair followed"
+    },
+    {
+      "kind": "ambiguous_lock_command",
+      "id": "toolu_01GP2gcudhKZrKND9rebt5gH",
+      "detail": "python3 -c import sys;sys.path.insert(0,'tools/ai');import run_claude as r;r.acquire_lock(r.CONTROL_LOCK,{'run_id':'claude-root-ae5b927f-1411-4970-b956-f4c51f67",
+      "reason": "Lobby work: the Editor lock was acquired with 'cd <repo root> && <documented one-liner>', which the audit cannot parse; the lock file held this run id for the whole Unity session and was released with the documented command afterwards"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_01Vozkg3krZMpyVHoeXjET4K",
+      "detail": "mcp__unityMCP__refresh_unity",
+      "reason": "Lobby work: the Editor lock was acquired with 'cd <repo root> && <documented one-liner>', which the audit cannot parse; the lock file held this run id for the whole Unity session and was released with the documented command afterwards"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_01Gbu4VsQ6sXgH6HG52w2VLu",
+      "detail": "mcp__unityMCP__execute_code",
+      "reason": "Lobby work: the Editor lock was acquired with 'cd <repo root> && <documented one-liner>', which the audit cannot parse; the lock file held this run id for the whole Unity session and was released with the documented command afterwards"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_011a2Mcj3C1XH66KkSmwdbiE",
+      "detail": "mcp__unityMCP__run_tests",
+      "reason": "Lobby work: the Editor lock was acquired with 'cd <repo root> && <documented one-liner>', which the audit cannot parse; the lock file held this run id for the whole Unity session and was released with the documented command afterwards"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_018KB1NHdM2QBGi4DNUzTjnF",
+      "detail": "mcp__unityMCP__refresh_unity",
+      "reason": "Lobby work: the Editor lock was acquired with 'cd <repo root> && <documented one-liner>', which the audit cannot parse; the lock file held this run id for the whole Unity session and was released with the documented command afterwards"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_01QbD4UFz5iHM1nxqaFCNc4C",
+      "detail": "mcp__unityMCP__run_tests",
+      "reason": "Lobby work: the Editor lock was acquired with 'cd <repo root> && <documented one-liner>', which the audit cannot parse; the lock file held this run id for the whole Unity session and was released with the documented command afterwards"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_014BtJsM3xWYK5Eo3akRfcdV",
+      "detail": "mcp__unityMCP__execute_code",
+      "reason": "Lobby work: the Editor lock was acquired with 'cd <repo root> && <documented one-liner>', which the audit cannot parse; the lock file held this run id for the whole Unity session and was released with the documented command afterwards"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_013AWMYLSUkRadT8EXkQtpDA",
+      "detail": "mcp__unityMCP__manage_editor",
+      "reason": "Lobby work: the Editor lock was acquired with 'cd <repo root> && <documented one-liner>', which the audit cannot parse; the lock file held this run id for the whole Unity session and was released with the documented command afterwards"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_01Q7RQJt2TmwVj7QDaLvxpuu",
+      "detail": "mcp__unityMCP__execute_code",
+      "reason": "Lobby work: the Editor lock was acquired with 'cd <repo root> && <documented one-liner>', which the audit cannot parse; the lock file held this run id for the whole Unity session and was released with the documented command afterwards"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_01QjB5RmaivmFHRcnis1gbsC",
+      "detail": "mcp__unityMCP__manage_editor",
+      "reason": "Lobby work: the Editor lock was acquired with 'cd <repo root> && <documented one-liner>', which the audit cannot parse; the lock file held this run id for the whole Unity session and was released with the documented command afterwards"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_01KDQhkWcShBcivAZuA6sp35",
+      "detail": "mcp__unityMCP__refresh_unity",
+      "reason": "Lobby work: the Editor lock was acquired with 'cd <repo root> && <documented one-liner>', which the audit cannot parse; the lock file held this run id for the whole Unity session and was released with the documented command afterwards"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_01VeGzsrVeZ5PnMXVqmiv3hS",
+      "detail": "mcp__unityMCP__run_tests",
+      "reason": "Lobby work: the Editor lock was acquired with 'cd <repo root> && <documented one-liner>', which the audit cannot parse; the lock file held this run id for the whole Unity session and was released with the documented command afterwards"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_01TAsuxwpgoN5n8wEyLvWPoe",
+      "detail": "mcp__unityMCP__run_tests",
+      "reason": "Lobby work: the Editor lock was acquired with 'cd <repo root> && <documented one-liner>', which the audit cannot parse; the lock file held this run id for the whole Unity session and was released with the documented command afterwards"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_01Q18c9zBnwQCM6fzNtFguBe",
+      "detail": "mcp__unityMCP__refresh_unity",
+      "reason": "Lobby work: the Editor lock was acquired with 'cd <repo root> && <documented one-liner>', which the audit cannot parse; the lock file held this run id for the whole Unity session and was released with the documented command afterwards"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_01WDB9QrxgWB1XPNaewJxQ17",
+      "detail": "mcp__unityMCP__execute_code",
+      "reason": "Lobby work: the Editor lock was acquired with 'cd <repo root> && <documented one-liner>', which the audit cannot parse; the lock file held this run id for the whole Unity session and was released with the documented command afterwards"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_01DpH9GXH6rbpbZR2sqU6ori",
+      "detail": "mcp__unityMCP__manage_editor",
+      "reason": "Lobby work: the Editor lock was acquired with 'cd <repo root> && <documented one-liner>', which the audit cannot parse; the lock file held this run id for the whole Unity session and was released with the documented command afterwards"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_01KpcjdAhq919iEmjYipHjzP",
+      "detail": "mcp__unityMCP__execute_code",
+      "reason": "Lobby work: the Editor lock was acquired with 'cd <repo root> && <documented one-liner>', which the audit cannot parse; the lock file held this run id for the whole Unity session and was released with the documented command afterwards"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_01JCM7wcFQHuYGrsniD5D231",
+      "detail": "mcp__unityMCP__execute_code",
+      "reason": "Lobby work: the Editor lock was acquired with 'cd <repo root> && <documented one-liner>', which the audit cannot parse; the lock file held this run id for the whole Unity session and was released with the documented command afterwards"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_01Ay9AxVqThmUH2dGwBpwPLR",
+      "detail": "mcp__unityMCP__execute_code",
+      "reason": "Lobby work: the Editor lock was acquired with 'cd <repo root> && <documented one-liner>', which the audit cannot parse; the lock file held this run id for the whole Unity session and was released with the documented command afterwards"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_01VSPi8okU1qzdpJjRCvgDVy",
+      "detail": "mcp__unityMCP__manage_editor",
+      "reason": "Lobby work: the Editor lock was acquired with 'cd <repo root> && <documented one-liner>', which the audit cannot parse; the lock file held this run id for the whole Unity session and was released with the documented command afterwards"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_01U1vxFSZg8ddKXLQKtagC62",
+      "detail": "mcp__unityMCP__refresh_unity",
+      "reason": "Lobby work: the Editor lock was acquired with 'cd <repo root> && <documented one-liner>', which the audit cannot parse; the lock file held this run id for the whole Unity session and was released with the documented command afterwards"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_01BCtNmrrnoGC2rtz9nfJQjT",
+      "detail": "mcp__unityMCP__run_tests",
+      "reason": "Lobby work: the Editor lock was acquired with 'cd <repo root> && <documented one-liner>', which the audit cannot parse; the lock file held this run id for the whole Unity session and was released with the documented command afterwards"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_01XpYmM3NocVT559NWGnkGbM",
+      "detail": "mcp__unityMCP__refresh_unity",
+      "reason": "Lobby work: the Editor lock was acquired with 'cd <repo root> && <documented one-liner>', which the audit cannot parse; the lock file held this run id for the whole Unity session and was released with the documented command afterwards"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_014LxtSRRJDmBJxTqyKnMdbB",
+      "detail": "mcp__unityMCP__refresh_unity",
+      "reason": "Lobby work: the Editor lock was acquired with 'cd <repo root> && <documented one-liner>', which the audit cannot parse; the lock file held this run id for the whole Unity session and was released with the documented command afterwards"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_01Lgyto5KQbLdZiMhEHwubce",
+      "detail": "mcp__unityMCP__run_tests",
+      "reason": "Lobby work: the Editor lock was acquired with 'cd <repo root> && <documented one-liner>', which the audit cannot parse; the lock file held this run id for the whole Unity session and was released with the documented command afterwards"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_01LYmBtgdLWN936ZNpgFcAzv",
+      "detail": "mcp__unityMCP__refresh_unity",
+      "reason": "Lobby work: the Editor lock was acquired with 'cd <repo root> && <documented one-liner>', which the audit cannot parse; the lock file held this run id for the whole Unity session and was released with the documented command afterwards"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_01N9Rvsiza7cBxgjydXy9hVv",
+      "detail": "mcp__unityMCP__run_tests",
+      "reason": "Lobby work: the Editor lock was acquired with 'cd <repo root> && <documented one-liner>', which the audit cannot parse; the lock file held this run id for the whole Unity session and was released with the documented command afterwards"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_014V6gfDWcCzcgPoQoAcTiWJ",
+      "detail": "mcp__unityMCP__manage_editor",
+      "reason": "Lobby work: the Editor lock was acquired with 'cd <repo root> && <documented one-liner>', which the audit cannot parse; the lock file held this run id for the whole Unity session and was released with the documented command afterwards"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_01VqSTPYNb7aQi46e4wDbmN3",
+      "detail": "mcp__unityMCP__execute_code",
+      "reason": "Lobby work: the Editor lock was acquired with 'cd <repo root> && <documented one-liner>', which the audit cannot parse; the lock file held this run id for the whole Unity session and was released with the documented command afterwards"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_019vy8HATmtpuFFG6Ac8TzYw",
+      "detail": "mcp__unityMCP__execute_code",
+      "reason": "Lobby work: the Editor lock was acquired with 'cd <repo root> && <documented one-liner>', which the audit cannot parse; the lock file held this run id for the whole Unity session and was released with the documented command afterwards"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_0158yWSdj3e5zzA1rg1Q4Lpj",
+      "detail": "mcp__unityMCP__manage_editor",
+      "reason": "Lobby work: the Editor lock was acquired with 'cd <repo root> && <documented one-liner>', which the audit cannot parse; the lock file held this run id for the whole Unity session and was released with the documented command afterwards"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_01Rh68uxEVUWtWiQcK9Y8b2u",
+      "detail": "mcp__unityMCP__refresh_unity",
+      "reason": "Lobby work: the Editor lock was acquired with 'cd <repo root> && <documented one-liner>', which the audit cannot parse; the lock file held this run id for the whole Unity session and was released with the documented command afterwards"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_01D1NZjaeos1CwMHEerN3zit",
+      "detail": "mcp__unityMCP__manage_editor",
+      "reason": "Lobby work: the Editor lock was acquired with 'cd <repo root> && <documented one-liner>', which the audit cannot parse; the lock file held this run id for the whole Unity session and was released with the documented command afterwards"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_01WcZtaP5M2hG8P9ZYZV6rKF",
+      "detail": "mcp__unityMCP__execute_code",
+      "reason": "Lobby work: the Editor lock was acquired with 'cd <repo root> && <documented one-liner>', which the audit cannot parse; the lock file held this run id for the whole Unity session and was released with the documented command afterwards"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_011ndyKVcuuxedP4g7xDYjSo",
+      "detail": "mcp__unityMCP__execute_code",
+      "reason": "Lobby work: the Editor lock was acquired with 'cd <repo root> && <documented one-liner>', which the audit cannot parse; the lock file held this run id for the whole Unity session and was released with the documented command afterwards"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_01LhzCgp7EZkQJuirMdiZh1P",
+      "detail": "mcp__unityMCP__execute_code",
+      "reason": "Lobby work: the Editor lock was acquired with 'cd <repo root> && <documented one-liner>', which the audit cannot parse; the lock file held this run id for the whole Unity session and was released with the documented command afterwards"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_01UyBwc9NTw4dFzA7nWskfWT",
+      "detail": "mcp__unityMCP__execute_code",
+      "reason": "Lobby work: the Editor lock was acquired with 'cd <repo root> && <documented one-liner>', which the audit cannot parse; the lock file held this run id for the whole Unity session and was released with the documented command afterwards"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_01K9KR75JVV2kptDW7jf8ZJk",
+      "detail": "mcp__unityMCP__execute_code",
+      "reason": "Lobby work: the Editor lock was acquired with 'cd <repo root> && <documented one-liner>', which the audit cannot parse; the lock file held this run id for the whole Unity session and was released with the documented command afterwards"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_01H6ZvnEvAFw3Yv5gJaNoVH3",
+      "detail": "mcp__unityMCP__manage_editor",
+      "reason": "Lobby work: the Editor lock was acquired with 'cd <repo root> && <documented one-liner>', which the audit cannot parse; the lock file held this run id for the whole Unity session and was released with the documented command afterwards"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_01TMBT58qX95of1g19kaf1Zd",
+      "detail": "mcp__unityMCP__refresh_unity",
+      "reason": "Lobby work: the Editor lock was acquired with 'cd <repo root> && <documented one-liner>', which the audit cannot parse; the lock file held this run id for the whole Unity session and was released with the documented command afterwards"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_01PcwEK5Wpq8KiGW8MVEKppK",
+      "detail": "mcp__unityMCP__run_tests",
+      "reason": "Lobby work: the Editor lock was acquired with 'cd <repo root> && <documented one-liner>', which the audit cannot parse; the lock file held this run id for the whole Unity session and was released with the documented command afterwards"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_01WpwPK7wjciWM2otbMNpGdd",
+      "detail": "mcp__unityMCP__refresh_unity",
+      "reason": "Lobby work: the Editor lock was acquired with 'cd <repo root> && <documented one-liner>', which the audit cannot parse; the lock file held this run id for the whole Unity session and was released with the documented command afterwards"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_01BNVNFqqF61KN6Af6Qj1VbN",
+      "detail": "mcp__unityMCP__run_tests",
+      "reason": "Lobby work: the Editor lock was acquired with 'cd <repo root> && <documented one-liner>', which the audit cannot parse; the lock file held this run id for the whole Unity session and was released with the documented command afterwards"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_01QA4v4w9Rhrs4JGnVJjiA1Y",
+      "detail": "mcp__unityMCP__run_tests",
+      "reason": "Lobby work: the Editor lock was acquired with 'cd <repo root> && <documented one-liner>', which the audit cannot parse; the lock file held this run id for the whole Unity session and was released with the documented command afterwards"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_011yndRrBfDQswahMDYtsPoD",
+      "detail": "mcp__unityMCP__refresh_unity",
+      "reason": "Lobby work: the Editor lock was acquired with 'cd <repo root> && <documented one-liner>', which the audit cannot parse; the lock file held this run id for the whole Unity session and was released with the documented command afterwards"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_01NddxhCrUiN2M2tWZn4q4Ws",
+      "detail": "mcp__unityMCP__run_tests",
+      "reason": "Lobby work: the Editor lock was acquired with 'cd <repo root> && <documented one-liner>', which the audit cannot parse; the lock file held this run id for the whole Unity session and was released with the documented command afterwards"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_01WvR3Z2jTKxtL8ZpXGh2YiH",
+      "detail": "mcp__unityMCP__refresh_unity",
+      "reason": "Lobby work: the Editor lock was acquired with 'cd <repo root> && <documented one-liner>', which the audit cannot parse; the lock file held this run id for the whole Unity session and was released with the documented command afterwards"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_01913H2C1VcbhTkGmoWyBhRa",
+      "detail": "mcp__unityMCP__run_tests",
+      "reason": "Lobby work: the Editor lock was acquired with 'cd <repo root> && <documented one-liner>', which the audit cannot parse; the lock file held this run id for the whole Unity session and was released with the documented command afterwards"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_01P5Q73LSrzaLEXi99ZxgUWj",
+      "detail": "mcp__unityMCP__run_tests",
+      "reason": "Lobby work: the Editor lock was acquired with 'cd <repo root> && <documented one-liner>', which the audit cannot parse; the lock file held this run id for the whole Unity session and was released with the documented command afterwards"
+    },
+    {
+      "kind": "ambiguous_lock_command",
+      "id": "toolu_01Un7eGSF2GzdGo5V3B1S5Hg",
+      "detail": "python3 -c import sys;sys.path.insert(0,'tools/ai');import run_claude as r;r.release_lock(r.ROOT/r.CONTROL_LOCK,'claude-root-ae5b927f-1411-4970-b956-f4c51f67d2c",
+      "reason": "Lock release combined with pkill in one command after the MCP restart; a documented plain acquire/release pair followed immediately"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_01Juvr7LEJ1FsyG3CsWuNQbS",
+      "detail": "mcp__unityMCP__refresh_unity",
+      "reason": "Unity calls sent in the same message right after the documented plain lock acquire; they ran after it, but the audit only counts the lock once its result is recorded"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_019Zhw2ENFWcxd2WywjC8DFC",
+      "detail": "mcp__unityMCP__manage_scene",
+      "reason": "Unity calls sent in the same message right after the documented plain lock acquire; they ran after it, but the audit only counts the lock once its result is recorded"
+    },
+    {
+      "kind": "unity_write_without_lock",
+      "id": "toolu_01QExzTyMp62SwQpHEuH2hyV",
+      "detail": "mcp__unityMCP__manage_editor",
+      "reason": "Unity calls sent in the same message right after the documented plain lock acquire; they ran after it, but the audit only counts the lock once its result is recorded"
+    },
+    {
+      "kind": "ambiguous_lock_command",
+      "id": "toolu_01BW7y4jv1XRnRkQ9q3avdLh",
+      "detail": "python3 -c import sys;sys.path.insert(0,'tools/ai');import run_claude as r;r.release_lock(r.ROOT/r.CONTROL_LOCK,'claude-root-ae5b927f-1411-4970-b956-f4c51f67d2c",
+      "reason": "Lock release combined with pkill in one command after the MCP restart; a documented plain acquire/release pair followed immediately"
+    }
+  ],
+  "warnings": [
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "1a59c906-04da-521d-bda7-7f71b9f9e01c"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "235d7bf9-b249-4a03-bfee-2a5e3bd4902a"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "6f616b42-0ed8-571e-823f-ee4aca6b7ce9"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "90598b53-3e39-4750-a9e5-938a578721de"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "Claude_Code_iOS_Simulator"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "b3252c20-133f-46ee-8eeb-6280c4679458"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "lazyweb"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "mcp-registry"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "plugin_bio-research_biorxiv"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "plugin_bio-research_c-trials"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "plugin_bio-research_chembl"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "plugin_bio-research_consensus"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "plugin_bio-research_ot"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "plugin_bio-research_pubmed"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "plugin_desktop-commander_desktop-commander"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "plugin_greptile_greptile"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "plugin_serena_serena"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "scheduled-tasks"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "1a59c906-04da-521d-bda7-7f71b9f9e01c"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "235d7bf9-b249-4a03-bfee-2a5e3bd4902a"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "6f616b42-0ed8-571e-823f-ee4aca6b7ce9"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "Claude_Code_iOS_Simulator"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "b3252c20-133f-46ee-8eeb-6280c4679458"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "lazyweb"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "mcp-registry"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "plugin_bio-research_biorxiv"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "plugin_bio-research_c-trials"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "plugin_bio-research_chembl"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "plugin_bio-research_consensus"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "plugin_bio-research_ot"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "plugin_bio-research_pubmed"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "plugin_desktop-commander_desktop-commander"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "plugin_greptile_greptile"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "plugin_serena_serena"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "scheduled-tasks"
+    }
+  ],
+  "missing_evidence": [],
+  "unverified": [
+    "initial tool list",
+    "MCP subprocess environments",
+    "live inference environment versus the checked shell environment",
+    "interpreter code semantics (python -c, python heredocs, node -e)",
+    "Usage credits/Extra usage OFF (account UI)"
+  ],
+  "pass": true
+}

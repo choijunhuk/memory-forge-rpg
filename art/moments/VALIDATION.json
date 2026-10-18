@@ -1,1349 +1,3059 @@
 {
-  "status": "PASS",
-  "scope": "Current creative-source static verification: Unity visual review findings 3 and 4. Post-fix Unity import/playback/visual acceptance NOT_RUN.",
+  "scope": "source art only",
+  "protected_narrative_unchanged": true,
+  "pass": true,
+  "errors": [],
+  "pending": [],
+  "historical_image_changes": [],
   "characters": [
     {
       "character": "sera",
-      "age_unchanged": 24,
-      "moments_sha256": "faac3579ba6bdff2942931aaf629f779eac003bc99cd0444d1972430cd9fa965",
-      "mapped_images": 15,
-      "ready_pngs": 9,
-      "todo_pngs": 6,
-      "bond_characters_including_spaces": 2378,
-      "idle_figure": "fig_smile",
-      "scene_images": [
-        {
-          "scene": "sera_lobby_01",
-          "missing_image_keys": []
-        },
-        {
-          "scene": "sera_bond_01",
-          "missing_image_keys": []
-        },
-        {
-          "scene": "sera_victory_01",
-          "missing_image_keys": []
-        }
-      ],
-      "moments_sha256_before_review_fixes": "faac3579ba6bdff2942931aaf629f779eac003bc99cd0444d1972430cd9fa965",
-      "image_pass2_protected_scene_data_reconstruction": "PASS",
-      "review_fixes_protected_data_reconstruction": "PASS"
+      "scenes": 3,
+      "beats": 32,
+      "image_mappings": 15,
+      "existing_mappings": 15,
+      "ready_mappings": 15
     },
     {
       "character": "ravien",
-      "age_unchanged": 28,
-      "moments_sha256": "fa9802ce5685b304051ab60c559eb554e5fd3e19a47309aae7887cf707a942c1",
-      "mapped_images": 14,
-      "ready_pngs": 7,
-      "todo_pngs": 7,
-      "bond_characters_including_spaces": 2673,
-      "idle_figure": "fig_lobby_soft",
-      "scene_images": [
-        {
-          "scene": "ravien_lobby_01",
-          "missing_image_keys": []
-        },
-        {
-          "scene": "ravien_bond_01",
-          "missing_image_keys": [
-            "fig_bond_turn",
-            "fig_resolve",
-            "fig_soft",
-            "fig_waver"
-          ]
-        },
-        {
-          "scene": "ravien_victory_01",
-          "missing_image_keys": [
-            "bg_victory",
-            "fig_resolve",
-            "fig_seal",
-            "fig_victory"
-          ]
-        }
-      ],
-      "moments_sha256_before_review_fixes": "1ef11367ace8ed1bc02f4d8af967866b5dea06eb52ca332cb16f917a46b831d5",
-      "image_pass2_protected_scene_data_reconstruction": "PASS",
-      "review_fixes_protected_data_reconstruction": "PASS"
+      "scenes": 3,
+      "beats": 45,
+      "image_mappings": 24,
+      "existing_mappings": 24,
+      "ready_mappings": 24
     },
     {
       "character": "harin",
-      "age_unchanged": 26,
-      "moments_sha256": "0252cecb3a81fac4cce880487fa0ada1a99ff0129eb8168e40c14283ee0fbbdd",
-      "mapped_images": 15,
-      "ready_pngs": 8,
-      "todo_pngs": 7,
-      "bond_characters_including_spaces": 2603,
-      "idle_figure": "fig_lobby_soft",
-      "scene_images": [
-        {
-          "scene": "harin_lobby_01",
-          "missing_image_keys": []
-        },
-        {
-          "scene": "harin_bond_01",
-          "missing_image_keys": [
-            "fig_cat",
-            "fig_rest",
-            "fig_soft",
-            "fig_worry"
-          ]
-        },
-        {
-          "scene": "harin_victory_01",
-          "missing_image_keys": [
-            "bg_victory",
-            "fig_guard",
-            "fig_victory"
-          ]
-        }
-      ],
-      "moments_sha256_before_review_fixes": "f2e9ae20244702cb52f02677cf067e61cb3e10c0561e9af9e840e524675a4f28",
-      "image_pass2_protected_scene_data_reconstruction": "PASS",
-      "review_fixes_protected_data_reconstruction": "PASS"
+      "scenes": 3,
+      "beats": 45,
+      "image_mappings": 22,
+      "existing_mappings": 22,
+      "ready_mappings": 22
     },
     {
       "character": "aila",
-      "age_unchanged": 23,
-      "moments_sha256": "d965d77d33a86c437f958b175a803e41370a5345905fae18da399d966018c779",
-      "mapped_images": 19,
-      "ready_pngs": 6,
-      "todo_pngs": 13,
-      "bond_characters_including_spaces": 2509,
-      "idle_figure": "fig_soft",
-      "scene_images": [
-        {
-          "scene": "aila_lobby_01",
-          "missing_image_keys": []
-        },
-        {
-          "scene": "aila_bond_01",
-          "missing_image_keys": [
-            "fig_determined",
-            "fig_surprised",
-            "fig_worried"
-          ]
-        },
-        {
-          "scene": "aila_victory_01",
-          "missing_image_keys": [
-            "fig_victory_check",
-            "fig_victory_turn",
-            "fig_victory_notice",
-            "fig_victory_wait"
-          ]
-        }
-      ],
-      "moments_sha256_before_review_fixes": "fb9d62fe6e8e3c5e17f84691c98dd80243268acf418ea2be95f2d2a3b0cb421a",
-      "image_pass2_protected_scene_data_reconstruction": "PASS",
-      "review_fixes_protected_data_reconstruction": "PASS"
+      "scenes": 3,
+      "beats": 31,
+      "image_mappings": 26,
+      "existing_mappings": 26,
+      "ready_mappings": 26
     },
     {
       "character": "sion",
-      "age_unchanged": 27,
-      "moments_sha256": "716f958b157449201f128235b89c4ce0928d219a9850bf578c541893e5e4989b",
-      "mapped_images": 19,
-      "ready_pngs": 6,
-      "todo_pngs": 13,
-      "bond_characters_including_spaces": 2575,
-      "idle_figure": "fig_soft",
-      "scene_images": [
-        {
-          "scene": "sion_lobby_01",
-          "missing_image_keys": []
-        },
-        {
-          "scene": "sion_bond_01",
-          "missing_image_keys": [
-            "fig_determined",
-            "fig_surprised",
-            "fig_worried"
-          ]
-        },
-        {
-          "scene": "sion_victory_01",
-          "missing_image_keys": [
-            "fig_victory_check",
-            "fig_victory_turn",
-            "fig_victory_glasses",
-            "fig_victory_wait"
-          ]
-        }
-      ],
-      "moments_sha256_before_review_fixes": "490b12d4fb4783709f3d446d9a306bee65a1cc68bf8fd8579f45a8db4f05275a",
-      "image_pass2_protected_scene_data_reconstruction": "PASS",
-      "review_fixes_protected_data_reconstruction": "PASS"
+      "scenes": 3,
+      "beats": 31,
+      "image_mappings": 24,
+      "existing_mappings": 24,
+      "ready_mappings": 24
     },
     {
       "character": "lumi",
-      "age_unchanged": 22,
-      "moments_sha256": "ba1d86d78b725f35678143b24a005e6c1eb141c1a3858a21af6fc10f35f054b6",
-      "mapped_images": 19,
-      "ready_pngs": 6,
-      "todo_pngs": 13,
-      "bond_characters_including_spaces": 2597,
-      "idle_figure": "fig_neutral",
-      "scene_images": [
-        {
-          "scene": "lumi_lobby_01",
-          "missing_image_keys": []
-        },
-        {
-          "scene": "lumi_bond_01",
-          "missing_image_keys": [
-            "fig_determined",
-            "fig_surprised",
-            "fig_worried"
-          ]
-        },
-        {
-          "scene": "lumi_victory_01",
-          "missing_image_keys": [
-            "fig_victory_land",
-            "fig_victory_turn",
-            "fig_victory_grin",
-            "fig_victory_wait"
-          ]
-        }
-      ],
-      "moments_sha256_before_review_fixes": "555538fd012ae269cadaff27a1f1bef8dcb6a04c0a028cae4f8cd983d45768e1",
-      "image_pass2_protected_scene_data_reconstruction": "PASS",
-      "review_fixes_protected_data_reconstruction": "PASS"
+      "scenes": 3,
+      "beats": 31,
+      "image_mappings": 19,
+      "existing_mappings": 19,
+      "ready_mappings": 19
     }
   ],
-  "pngs": [
-    {
-      "character": "sera",
-      "key": "fig_scope",
-      "path": "sera/images/char_sera_lobby_scope_v02.png",
+  "unique_existing_pngs": 128,
+  "images": {
+    "moments/sera/images/char_sera_fig_scope_styleA_v01.png": {
       "size": [
         1024,
         1536
       ],
       "mode": "RGBA",
-      "sha256": "0025e262e4ef2a8c21e680323839ac5791628882832b963b2e669264a03e6100",
+      "sha256": "62d92aef03d0ff7f59368a4fa9f7830571ff570fff4210799a51ce4b0c9afb1b",
       "alpha_extrema": [
         0,
         254
       ],
-      "transparent_pixels": 889804
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.5633773803710938
     },
-    {
-      "character": "sera",
-      "key": "fig_watch",
-      "path": "sera/images/char_sera_lobby_watch_v02.png",
+    "moments/sera/images/char_sera_fig_watch_styleA_v01.png": {
       "size": [
         1024,
         1536
       ],
       "mode": "RGBA",
-      "sha256": "cf476519a0d833fdd8874c6aed6f4d1a2bccbc8d8b07c5e630d1efeff08411b9",
+      "sha256": "1e5122885a330b744f6d2818c74cfa93ca3fd3be4dc2b83ef2f680e5514214a2",
       "alpha_extrema": [
         0,
         254
       ],
-      "transparent_pixels": 872355
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.5521208445231119
     },
-    {
-      "character": "sera",
-      "key": "fig_smile",
-      "path": "sera/images/char_sera_lobby_smile_v01.png",
+    "moments/sera/images/char_sera_fig_smile_styleA_v01.png": {
       "size": [
         1024,
         1536
       ],
       "mode": "RGBA",
-      "sha256": "03f5074681a1bdc7639b39e8cb2c24d6b2146b3aaa6759bcf2eaa98fb2ece236",
+      "sha256": "36188e71c95fa96988be4b4cc677f09d37b18d1281c4b95711931bbd2f1337a5",
       "alpha_extrema": [
         0,
         254
       ],
-      "transparent_pixels": 875143
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.5462919871012369
     },
-    {
-      "character": "sera",
-      "key": "fig_bond_notes",
-      "path": "sera/images/char_sera_bond_notes_v01.png",
+    "moments/sera/images/char_sera_fig_bond_notes_styleA_v01.png": {
       "size": [
         1024,
         1536
       ],
       "mode": "RGBA",
-      "sha256": "36877a722f9de77bbe79797744fd3b7a8c92a59d273fa36b208a37498bcd24f8",
+      "sha256": "4f3673676a9cdc4c918b9cb4c610dc1372f602025dd21e916ffa645e12674aca",
       "alpha_extrema": [
         0,
         254
       ],
-      "transparent_pixels": 943951
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.5946178436279297
     },
-    {
-      "character": "sera",
-      "key": "fig_bond_listen",
-      "path": "sera/images/char_sera_bond_listen_v01.png",
+    "moments/sera/images/char_sera_fig_bond_listen_styleA_v01.png": {
       "size": [
         1024,
         1536
       ],
       "mode": "RGBA",
-      "sha256": "e8d24e4cd5cd19fad036d943065a6691f632b263ac764b62a0be3577fee118dd",
+      "sha256": "c771fe83dbd8e041cf8ce01b53ac71d72cc101d4c0f61ccc71133843947c010e",
       "alpha_extrema": [
         0,
         254
       ],
-      "transparent_pixels": 815234
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.5036214192708334
     },
-    {
-      "character": "sera",
-      "key": "fig_bond_offer",
-      "path": "sera/images/char_sera_bond_offer_v01.png",
+    "moments/sera/images/char_sera_fig_bond_offer_styleA_v01.png": {
       "size": [
         1024,
         1536
       ],
       "mode": "RGBA",
-      "sha256": "69d2738409b0482337b0a54429a2c77676455869ecb010fb62c8ba5cdbf4d474",
+      "sha256": "c12f51685d4a35085fda32063caa6932fb5c1f389888660d10620ad97e102ac9",
       "alpha_extrema": [
         0,
         254
       ],
-      "transparent_pixels": 692543
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.44193458557128906
     },
-    {
-      "character": "sera",
-      "key": "fig_victory_scope",
-      "path": "sera/images/char_sera_victory_scope_v01.png",
+    "moments/sera/images/char_sera_fig_victory_scope_styleA_v01.png": {
       "size": [
         1024,
         1536
       ],
       "mode": "RGBA",
-      "sha256": "a81a2927d83f1ac8d1bc7f4ce7ef69347c3373602c69656ac7f8171996c25feb",
+      "sha256": "ac63321757359001c5657f0c34359aabf41fbf6ea8e1282337bec44125c9ee3c",
       "alpha_extrema": [
         0,
         254
       ],
-      "transparent_pixels": 892263
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.5600910186767578
     },
-    {
-      "character": "sera",
-      "key": "fig_victory_turn",
-      "path": "sera/images/char_sera_victory_turn_v01.png",
+    "moments/sera/images/char_sera_fig_victory_turn_styleA_v01.png": {
       "size": [
         1024,
         1536
       ],
       "mode": "RGBA",
-      "sha256": "9391666104d596d54ec9b8f0b040138eb96bb68b29a1e34da323790163d8b9a0",
+      "sha256": "8a46c99617a10fbfcde786aeef5e1fcd9efe43fefdc03c5568b81b38de94c586",
       "alpha_extrema": [
         0,
         254
       ],
-      "transparent_pixels": 887238
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.5565916697184244
     },
-    {
-      "character": "sera",
-      "key": "bg_tower",
-      "path": "sera/images/bg_sera_clocktower_evening_v01.png",
+    "moments/sera/images/char_sera_bg_tower_styleA_v01.png": {
       "size": [
         1672,
         941
       ],
       "mode": "RGB",
-      "sha256": "ced267fa566216855f1b2513a7f5c5d249ec99dd26e6578cc050424241aba070"
+      "sha256": "f0aed41a81a746d2cd7022fa08f403f6df63dbabb76f563033e576ac36c78dd7"
     },
-    {
-      "character": "ravien",
-      "key": "fig_default",
-      "path": "ravien/images/char_ravien_stand_neutral_v01.png",
+    "moments/sera/images/char_sera_expr_neutral_styleA_v01.png": {
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "sha256": "5949ef1e3eb07fdf2e0f06477570745aeaa8b0883c99024214625becb86d5db7",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        252,
+        252
+      ],
+      "empty_corner_alpha": [
+        0,
+        0
+      ],
+      "transparent_fraction": 0.3288116455078125
+    },
+    "moments/sera/images/char_sera_expr_happy_styleA_v01.png": {
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "sha256": "1eab451affb576adf778743a0634cebd5e37ab6e8c924c5630ce711e5d761b03",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        253,
+        253
+      ],
+      "empty_corner_alpha": [
+        0,
+        0
+      ],
+      "transparent_fraction": 0.32445526123046875
+    },
+    "moments/sera/images/char_sera_expr_annoyed_styleA_v01.png": {
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "sha256": "5be50273e70fa0a0511a413f95a05019a725044b0c6f566653452bfd198b2001",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        252,
+        253
+      ],
+      "empty_corner_alpha": [
+        0,
+        0
+      ],
+      "transparent_fraction": 0.3248176574707031
+    },
+    "moments/sera/images/char_sera_expr_surprised_styleA_v01.png": {
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "sha256": "3e63e37b7659b12cefcd333b1ab835d34c10d4da10b71138529f3f592ce9e7d2",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        253,
+        253
+      ],
+      "empty_corner_alpha": [
+        0,
+        0
+      ],
+      "transparent_fraction": 0.3234596252441406
+    },
+    "moments/sera/images/char_sera_expr_worried_styleA_v01.png": {
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "sha256": "362e1c63389502c04cae6c3dd8d763b8a8c1a597a0fc9783d9977af1cf8cce72",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        252,
+        253
+      ],
+      "empty_corner_alpha": [
+        0,
+        0
+      ],
+      "transparent_fraction": 0.32636260986328125
+    },
+    "moments/sera/images/char_sera_expr_determined_styleA_v01.png": {
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "sha256": "67f7fccf2ab2265450efe50be5758fe49f706d3208970d07d2106be4e7e9beb1",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        252,
+        253
+      ],
+      "empty_corner_alpha": [
+        0,
+        0
+      ],
+      "transparent_fraction": 0.3240547180175781
+    },
+    "moments/ravien/images/char_ravien_fig_default_styleA_v01.png": {
       "size": [
         1024,
         1536
       ],
       "mode": "RGBA",
-      "sha256": "36d32168b79245642ba4db63cbe952c19d452d1dc44485b927197f53784e6367",
+      "sha256": "95e95ca674cc7b3f64d376fdb6b2d006b02315a1e15275cd13ae01e9caa81d66",
       "alpha_extrema": [
         0,
         254
       ],
-      "transparent_pixels": 1134070
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.7092615763346354
     },
-    {
-      "character": "ravien",
-      "key": "fig_stamp",
-      "path": "ravien/images/char_ravien_stamp_focused_v01.png",
+    "moments/ravien/images/char_ravien_fig_stamp_styleA_v02.png": {
       "size": [
         1024,
         1536
       ],
       "mode": "RGBA",
-      "sha256": "7c31332f513b93bed93c2098bba614d7382564ac806295905433803c73b6378a",
+      "sha256": "036698e9c1d95df828fd190c1de5621d0f7a1ffc6eaa260499201202f0a32816",
       "alpha_extrema": [
         0,
         254
       ],
-      "transparent_pixels": 1033153
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.64862060546875
     },
-    {
-      "character": "ravien",
-      "key": "fig_turn",
-      "path": "ravien/images/char_ravien_paper_turn_playful_v01.png",
+    "moments/ravien/images/char_ravien_fig_turn_styleA_v01.png": {
       "size": [
         1024,
         1536
       ],
       "mode": "RGBA",
-      "sha256": "a7dd2bdcaa533aecc7c5dd0252bbf9c7e619d219e1e4e25cc4ba421885a6e7ca",
+      "sha256": "3fe6d8a4f4b8b308b55e410f4d7fc9056ba593c334c955d1eab3518d02ccfdd1",
       "alpha_extrema": [
         0,
         254
       ],
-      "transparent_pixels": 1147711
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.7247289021809896
     },
-    {
-      "character": "ravien",
-      "key": "fig_offer",
-      "path": "ravien/images/char_ravien_chair_offer_happy_v01.png",
+    "moments/ravien/images/char_ravien_fig_offer_styleA_v01.png": {
       "size": [
         1024,
         1536
       ],
       "mode": "RGBA",
-      "sha256": "b31c5dba5a887e81cd02941cfc9bb0e4592d5031632fc3853bb45c7ef2ff3b63",
+      "sha256": "cfde767edc22ac3664b411f4d83abaa50f752702b2cb67dfc0b9f101dd6242b1",
       "alpha_extrema": [
         0,
         254
       ],
-      "transparent_pixels": 865547
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.5403194427490234
     },
-    {
-      "character": "ravien",
-      "key": "fig_lobby_soft",
-      "path": "ravien/images/char_ravien_stand_soft_v01.png",
+    "moments/ravien/images/char_ravien_fig_lobby_soft_styleA_v02.png": {
       "size": [
         1024,
         1536
       ],
       "mode": "RGBA",
-      "sha256": "cc9d6c0d7a5d51c00a1a3aaebcba1a343393791dc4d1936c1159f07250d535cf",
+      "sha256": "dc23a1e4c30c8eb420862d105daff9dc24b57b7d05f66b4988013a3b5ddd94b4",
       "alpha_extrema": [
         0,
         254
       ],
-      "transparent_pixels": 1142070
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.7197386423746744
     },
-    {
-      "character": "ravien",
-      "key": "fig_annoyed",
-      "path": "ravien/images/char_ravien_stand_annoyed_v01.png",
+    "moments/ravien/images/char_ravien_fig_bond_turn_styleA_v01.png": {
       "size": [
         1024,
         1536
       ],
       "mode": "RGBA",
-      "sha256": "2c85c8a6e99a6eccdae34662189b554f7a75a01e20dac727dadcded15a58ac2d",
+      "sha256": "bafdd7b6b2421d86cd0a94af9660288c5e9119c3b466f3f9bca734176fee1ff7",
       "alpha_extrema": [
         0,
         254
       ],
-      "transparent_pixels": 1129993
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.44917933146158856
     },
-    {
-      "character": "ravien",
-      "key": "bg_room",
-      "path": "ravien/images/char_ravien_background_workshop_evening_v01.png",
+    "moments/ravien/images/char_ravien_fig_waver_styleA_v02.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "5372f768f7a04475c32e2897809fbe0c69e16c825be30cd320aa984bb7c3e8be",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.4504076639811198
+    },
+    "moments/ravien/images/char_ravien_fig_soft_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "4553f33ad9411c95e1fcd5f00c6eb1dd00ac018aaaaf89857227bf987c5e6d47",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.4530404408772786
+    },
+    "moments/ravien/images/char_ravien_fig_resolve_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "346c1f66b7559af94f909f3358a315a518e952d0e2da6b936aeb921d2763f6ab",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.6980304718017578
+    },
+    "moments/ravien/images/char_ravien_fig_annoyed_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "c98a998676c9dfa4052393509e57527b28aebc20632d74d8c1fdd193653fbe5b",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.7113978068033854
+    },
+    "moments/ravien/images/char_ravien_fig_seal_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "29b96ea7bf2f2309e3189f877bffa41181e0de6ea8f3ad56e0bb4d78544a38d1",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.7146015167236328
+    },
+    "moments/ravien/images/char_ravien_fig_victory_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "feb855677374173dca0b8e13a8d8b64027246b415ea2dc0a500b2109156f8982",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.6960417429606119
+    },
+    "moments/ravien/images/char_ravien_bg_room_styleA_v01.png": {
       "size": [
         1672,
         941
       ],
       "mode": "RGB",
-      "sha256": "a049b8449d5d04312f05a4c60bb01aa4b770f2cf9394e0b11d4b4fcdb4bf8214"
+      "sha256": "95a2bbcace394adb4e9ef7cb3dc14e9de2af579c27a47a05e4749f9e258f34ce"
     },
-    {
-      "character": "harin",
-      "key": "fig_default",
-      "path": "harin/images/char_harin_stand_neutral_v01.png",
-      "size": [
-        1024,
-        1536
-      ],
-      "mode": "RGBA",
-      "sha256": "bc0d480879c54124365bbc1630a1dda13d2755a075225c7e1927171fd1964cf3",
-      "alpha_extrema": [
-        0,
-        254
-      ],
-      "transparent_pixels": 669985
-    },
-    {
-      "character": "harin",
-      "key": "fig_glove",
-      "path": "harin/images/char_harin_glove_determined_v01.png",
-      "size": [
-        1024,
-        1536
-      ],
-      "mode": "RGBA",
-      "sha256": "9977a4978842b9184bd81ea9d42d037defc3507ab2ddeb409976fdd4ac557e14",
-      "alpha_extrema": [
-        0,
-        254
-      ],
-      "transparent_pixels": 652332
-    },
-    {
-      "character": "harin",
-      "key": "fig_lobby_cat",
-      "path": "harin/images/char_harin_pocket_reveal_soft_v01.png",
-      "size": [
-        1024,
-        1536
-      ],
-      "mode": "RGBA",
-      "sha256": "aa0224ba6a5f7e616932af65451ffe0f987f3f15980bd7922078f0facfd829c4",
-      "alpha_extrema": [
-        0,
-        254
-      ],
-      "transparent_pixels": 646211
-    },
-    {
-      "character": "harin",
-      "key": "fig_hide",
-      "path": "harin/images/char_harin_pocket_surprised_v01.png",
-      "size": [
-        1024,
-        1536
-      ],
-      "mode": "RGBA",
-      "sha256": "041d906435edf1bdc8f47f184ba4989652b5e3783632aec8e37f28b3993fdc1f",
-      "alpha_extrema": [
-        0,
-        254
-      ],
-      "transparent_pixels": 658233
-    },
-    {
-      "character": "harin",
-      "key": "fig_cough",
-      "path": "harin/images/char_harin_cough_annoyed_v01.png",
-      "size": [
-        1024,
-        1536
-      ],
-      "mode": "RGBA",
-      "sha256": "515d23787581c0b6ce3f3aaf71d630291f31f018104d15a796a401a163c3118e",
-      "alpha_extrema": [
-        0,
-        254
-      ],
-      "transparent_pixels": 559232
-    },
-    {
-      "character": "harin",
-      "key": "fig_lobby_soft",
-      "path": "harin/images/char_harin_stand_soft_v01.png",
-      "size": [
-        1024,
-        1536
-      ],
-      "mode": "RGBA",
-      "sha256": "65bd76c8831fa87601720b1bd0c500980fde00cfc200998bd2dc86ed63afd584",
-      "alpha_extrema": [
-        0,
-        254
-      ],
-      "transparent_pixels": 647013
-    },
-    {
-      "character": "harin",
-      "key": "fig_resolve",
-      "path": "harin/images/char_harin_stand_determined_v01.png",
-      "size": [
-        1024,
-        1536
-      ],
-      "mode": "RGBA",
-      "sha256": "a1b89efe43746b4767313ed0495da76c2f9c76b40a3e47a986262578ad8c19fd",
-      "alpha_extrema": [
-        0,
-        254
-      ],
-      "transparent_pixels": 669561
-    },
-    {
-      "character": "harin",
-      "key": "bg_room",
-      "path": "harin/images/char_harin_background_workshop_evening_v01.png",
+    "moments/ravien/images/char_ravien_bg_victory_styleA_v01.png": {
       "size": [
         1672,
         941
       ],
       "mode": "RGB",
-      "sha256": "a049b8449d5d04312f05a4c60bb01aa4b770f2cf9394e0b11d4b4fcdb4bf8214"
+      "sha256": "e86bd0b10440772e9cc49a7817cf4cd1966864c9a7a06c4043125215ac157931"
     },
-    {
-      "character": "aila",
-      "key": "fig_neutral",
-      "path": "aila/images/char_aila_moment_neutral_v02.png",
+    "moments/ravien/images/char_ravien_fig_lobby_wait_styleA_v01.png": {
       "size": [
         1024,
         1536
       ],
       "mode": "RGBA",
-      "sha256": "84d1468e00ecd54ea1372c1315f3680dc18653416029ac272242a67658c74ad1",
+      "sha256": "d22879e927dcf3895ea406b25ed02ff275f1930ede4aa082219da6853756f177",
       "alpha_extrema": [
         0,
         254
       ],
-      "transparent_pixels": 822884
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.5370623270670573
     },
-    {
-      "character": "aila",
-      "key": "fig_action1",
-      "path": "aila/images/char_aila_moment_action1_v02.png",
+    "moments/ravien/images/char_ravien_fig_lobby_end_styleA_v01.png": {
       "size": [
         1024,
         1536
       ],
       "mode": "RGBA",
-      "sha256": "0ca39b9c89a059834c18bf6f4b4727b3ba650a5456603a3147cdd29c23e4e9c7",
+      "sha256": "fda8016eed6ef743440333a07432ff80a0510f32f8eed8961f5d0cf45291b7a2",
       "alpha_extrema": [
         0,
         254
       ],
-      "transparent_pixels": 745325
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.49658775329589844
     },
-    {
-      "character": "aila",
-      "key": "fig_action2",
-      "path": "aila/images/char_aila_moment_action2_v02.png",
+    "moments/ravien/images/char_ravien_expr_neutral_styleA_v01.png": {
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "sha256": "be87c5adfb565adf8758bb049d52dfc4869ac6d54a914ae193339d049224216a",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        252,
+        252
+      ],
+      "empty_corner_alpha": [
+        0,
+        0
+      ],
+      "transparent_fraction": 0.2837371826171875
+    },
+    "moments/ravien/images/char_ravien_expr_happy_styleA_v01.png": {
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "sha256": "a8d4815718771f5bdb2e2da715cab6b8f6740ea7f87ce6c691169692f2131b96",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        253,
+        252
+      ],
+      "empty_corner_alpha": [
+        0,
+        0
+      ],
+      "transparent_fraction": 0.2777900695800781
+    },
+    "moments/ravien/images/char_ravien_expr_annoyed_styleA_v01.png": {
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "sha256": "bd00d2b96e27690eaf8f084ea83b96101e30c2a7bdeed79ae0602f7f019be4e9",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        253,
+        252
+      ],
+      "empty_corner_alpha": [
+        0,
+        0
+      ],
+      "transparent_fraction": 0.2746696472167969
+    },
+    "moments/ravien/images/char_ravien_expr_surprised_styleA_v01.png": {
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "sha256": "390d96911d64dbc34a52eb35d820216077bea8d89304107687813a3402ad2dea",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        253,
+        252
+      ],
+      "empty_corner_alpha": [
+        0,
+        0
+      ],
+      "transparent_fraction": 0.2740440368652344
+    },
+    "moments/ravien/images/char_ravien_expr_worried_styleA_v01.png": {
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "sha256": "96ec865a99ecb307955554c0ef26939f28ac12e4c06bb0336eaf8329b9506409",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        253,
+        252
+      ],
+      "empty_corner_alpha": [
+        0,
+        0
+      ],
+      "transparent_fraction": 0.27878570556640625
+    },
+    "moments/ravien/images/char_ravien_expr_determined_styleA_v01.png": {
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "sha256": "d5550731e2ba3e0c74b3a58a72f16c4f54eaa66cb0a68dd79aa5b4aa058825d0",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        253,
+        252
+      ],
+      "empty_corner_alpha": [
+        0,
+        0
+      ],
+      "transparent_fraction": 0.2792167663574219
+    },
+    "moments/ravien/images/char_ravien_fig_bond_end_styleA_v03.png": {
       "size": [
         1024,
         1536
       ],
       "mode": "RGBA",
-      "sha256": "a408081bc494b4482bea92ee19cca4d435cffc97ff9793e9db5b5b5008dceb43",
+      "sha256": "e4cfdb3052dab6e4bf60f17b879df20d1e97c017188bb3f64aa047b91c1f1396",
       "alpha_extrema": [
         0,
         254
       ],
-      "transparent_pixels": 758036
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.4618581136067708
     },
-    {
-      "character": "aila",
-      "key": "fig_happy",
-      "path": "aila/images/char_aila_moment_happy_v02.png",
+    "moments/harin/images/char_harin_fig_default_styleA_v01.png": {
       "size": [
         1024,
         1536
       ],
       "mode": "RGBA",
-      "sha256": "a455b6dd4f6c10d08a4c1dfeef6e42996587cd25df722239c08bb3fe03bc4b46",
+      "sha256": "67fa2cf49200d60cc5388ab8aa08476b210c9ac77f157d6992ef0408878ff9de",
       "alpha_extrema": [
         0,
         254
       ],
-      "transparent_pixels": 694073
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.4087511698404948
     },
-    {
-      "character": "aila",
-      "key": "fig_soft",
-      "path": "aila/images/char_aila_moment_soft_v02.png",
+    "moments/harin/images/char_harin_fig_glove_styleA_v01.png": {
       "size": [
         1024,
         1536
       ],
       "mode": "RGBA",
-      "sha256": "9a7267fb110261c63fccab90e7c429ab48d0ac6a4b4597d2397ba960077eafa9",
+      "sha256": "c94fc44df10e4058abf16769ad02fe989f54b81ebeab10f52ef1c0d4eb981679",
       "alpha_extrema": [
         0,
         254
       ],
-      "transparent_pixels": 766076
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.4135729471842448
     },
-    {
-      "character": "aila",
-      "key": "bg",
-      "path": "aila/images/char_aila_background_archive_evening_v01.png",
+    "moments/harin/images/char_harin_fig_lobby_cat_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "374ceefe407d04c5f03bc0890e89f3ed0993649c5517473b9abfa73bae3e7b81",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.4081064860026042
+    },
+    "moments/harin/images/char_harin_fig_guard_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "7210238ac62441f4b62af9ef69747ac57ae807284f60f42677204d00af38d138",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.4040660858154297
+    },
+    "moments/harin/images/char_harin_fig_hide_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "80456a8dfa1c93c80b8446987a6b06a2236158d063422cce3865683bacb1025e",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.40422821044921875
+    },
+    "moments/harin/images/char_harin_fig_cough_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "4fa1e1b60901bf1e277a97a0acd8d2c2adc67e138b05ed2449804179eae84556",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.408847173055013
+    },
+    "moments/harin/images/char_harin_fig_worry_styleA_v02.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "ce27e8e97f38bfc3c8d5544b90fa74397667024a7c64b1f1d522ed411916b75b",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.3842150370279948
+    },
+    "moments/harin/images/char_harin_fig_cat_styleA_v02.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "c7f8d68c7a2ed85d571a3339299bdc445b8e11b18777309fd355e44855f20245",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.37781651814778644
+    },
+    "moments/harin/images/char_harin_fig_soft_styleA_v02.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "e588d006876f0fe41556dd18071834524379cca701fb3ed1627fe810ccd8b169",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.37914276123046875
+    },
+    "moments/harin/images/char_harin_fig_lobby_soft_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "b07018958fb67eda7f903a49ac6400f27722268b81a0f8ec78a1c7b1679da7db",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.41137440999348956
+    },
+    "moments/harin/images/char_harin_fig_rest_styleA_v03.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "979f1a33819c9cc91d0d2614a59faea8fac7b83e4369d18948f378db84ce8adc",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.37499109903971356
+    },
+    "moments/harin/images/char_harin_fig_resolve_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "e4ebde17485f95b69154af4d5fd8ebfdee54d6f06198d5af42b14ae3d2d7bcbc",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.4178415934244792
+    },
+    "moments/harin/images/char_harin_fig_victory_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "0f88c2b3fc8f5b510ce78f8e4c403eafebaba58a7dd8d196bfd25ee92f2f3171",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.4311097462972005
+    },
+    "moments/harin/images/char_harin_bg_room_styleA_v01.png": {
       "size": [
         1672,
         941
       ],
       "mode": "RGB",
-      "sha256": "6beabfcd1ca8f597ec2db11afd8cd5bc25efd89c7a535d89cbfc7c03b68a398e"
+      "sha256": "147d03c8024f4588f7c317c22403312d6701d43f9f4099504bc2882404340257"
     },
-    {
-      "character": "sion",
-      "key": "fig_neutral",
-      "path": "sion/images/char_sion_moment_neutral_v01.png",
-      "size": [
-        1024,
-        1536
-      ],
-      "mode": "RGBA",
-      "sha256": "8f1325f20daf44f869c3337bb37f230101cab532028fae27d8411d05f5ba826c",
-      "alpha_extrema": [
-        0,
-        254
-      ],
-      "transparent_pixels": 838275
-    },
-    {
-      "character": "sion",
-      "key": "fig_action1",
-      "path": "sion/images/char_sion_moment_action1_v01.png",
-      "size": [
-        1024,
-        1536
-      ],
-      "mode": "RGBA",
-      "sha256": "abd352b5d984b4718cd3f06bef6b7c7681891c3b5a8baaf0f0d7d38b27cb8b22",
-      "alpha_extrema": [
-        0,
-        254
-      ],
-      "transparent_pixels": 805466
-    },
-    {
-      "character": "sion",
-      "key": "fig_action2",
-      "path": "sion/images/char_sion_moment_action2_v01.png",
-      "size": [
-        1024,
-        1536
-      ],
-      "mode": "RGBA",
-      "sha256": "ef8c114fa46c5033c14b4514c59c0ae7e6144596978b3ff2928389612f46c6a7",
-      "alpha_extrema": [
-        0,
-        254
-      ],
-      "transparent_pixels": 805384
-    },
-    {
-      "character": "sion",
-      "key": "fig_happy",
-      "path": "sion/images/char_sion_moment_happy_v01.png",
-      "size": [
-        1024,
-        1536
-      ],
-      "mode": "RGBA",
-      "sha256": "ae57ba677e543b6023297706e5fed857527af1c0c2164bd128e9b793694fbc38",
-      "alpha_extrema": [
-        0,
-        254
-      ],
-      "transparent_pixels": 823710
-    },
-    {
-      "character": "sion",
-      "key": "fig_soft",
-      "path": "sion/images/char_sion_moment_soft_v01.png",
-      "size": [
-        1024,
-        1536
-      ],
-      "mode": "RGBA",
-      "sha256": "f11353244a43bc528c5d232f567b95c8fb39222f74ca7ba5c0f8fbc162f3b350",
-      "alpha_extrema": [
-        0,
-        254
-      ],
-      "transparent_pixels": 801063
-    },
-    {
-      "character": "sion",
-      "key": "bg",
-      "path": "sion/images/char_sion_background_library_lamplight_v01.png",
+    "moments/harin/images/char_harin_bg_victory_styleA_v01.png": {
       "size": [
         1672,
         941
       ],
       "mode": "RGB",
-      "sha256": "5b79cc835a8cb3160a306ec13e13dc674887b3ab5118bbd382212760e61c6750"
+      "sha256": "ae2a06f6cc7403beef16b9d1f80d46a8a315056fae7f6d547b9c9a8b0688c4aa"
     },
-    {
-      "character": "lumi",
-      "key": "fig_neutral",
-      "path": "lumi/images/char_lumi_moment_neutral_v01.png",
+    "moments/harin/images/char_harin_expr_neutral_styleA_v01.png": {
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "sha256": "07f6a51d8b82cbc83a4be0bb102ec6b1d4180a170bb44ed9a78233667aaec2d5",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        220,
+        253
+      ],
+      "empty_corner_alpha": [
+        0,
+        0
+      ],
+      "transparent_fraction": 0.39806365966796875
+    },
+    "moments/harin/images/char_harin_expr_happy_styleA_v01.png": {
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "sha256": "1a9744d6db06615089d854cf56cbb22fd65f46c7fcc2f44ad75bd2fc7cdbb90e",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        252,
+        252
+      ],
+      "empty_corner_alpha": [
+        0,
+        0
+      ],
+      "transparent_fraction": 0.3929328918457031
+    },
+    "moments/harin/images/char_harin_expr_annoyed_styleA_v01.png": {
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "sha256": "a3ff2eba5920fc7675cb9045f01e36e5a83ab8de405c2a900a278664fcdbbbfc",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        250,
+        252
+      ],
+      "empty_corner_alpha": [
+        0,
+        0
+      ],
+      "transparent_fraction": 0.39340972900390625
+    },
+    "moments/harin/images/char_harin_expr_surprised_styleA_v01.png": {
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "sha256": "7ee8f1b8775d4f31668b4726876dc07db36407b47ec4d375f1935511926cc90f",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        239,
+        251
+      ],
+      "empty_corner_alpha": [
+        0,
+        0
+      ],
+      "transparent_fraction": 0.3903770446777344
+    },
+    "moments/harin/images/char_harin_expr_worried_styleA_v01.png": {
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "sha256": "a63c0330c3c5a19957a4608746168eb2fb041c3b66a17c1024d3f20f760151cf",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        249,
+        253
+      ],
+      "empty_corner_alpha": [
+        0,
+        0
+      ],
+      "transparent_fraction": 0.3891716003417969
+    },
+    "moments/harin/images/char_harin_expr_determined_styleA_v01.png": {
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "sha256": "5bb83f904c649036bfad3dd01d71803c426281817d2915f70443b8f16992136b",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        248,
+        252
+      ],
+      "empty_corner_alpha": [
+        0,
+        0
+      ],
+      "transparent_fraction": 0.3950042724609375
+    },
+    "moments/harin/images/char_harin_fig_cat_placed_styleA_v02.png": {
       "size": [
         1024,
         1536
       ],
       "mode": "RGBA",
-      "sha256": "ee0eb2f06b8498227bd93b3371bd193c35a638c62f30543b585aa8a7e1a651d9",
+      "sha256": "1edf4313e24d8f868adca5c9efa7278637edc4936ea97a367f947b32292582ed",
       "alpha_extrema": [
         0,
         254
       ],
-      "transparent_pixels": 1015792
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.38278643290201825
     },
-    {
-      "character": "lumi",
-      "key": "fig_action1",
-      "path": "lumi/images/char_lumi_moment_action1_v01.png",
+    "moments/aila/images/char_aila_fig_neutral_styleA_v01.png": {
       "size": [
         1024,
         1536
       ],
       "mode": "RGBA",
-      "sha256": "0c995339841469ccea50fb5076722fb86a8fc9f0e816dfe5f7d71b2942b26cf9",
+      "sha256": "4fb0e5e25c1123f7d4c85644f220d1b4a5f2282439d189b6900543cfc0317deb",
       "alpha_extrema": [
         0,
         254
       ],
-      "transparent_pixels": 1042415
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.49496714274088544
     },
-    {
-      "character": "lumi",
-      "key": "fig_action2",
-      "path": "lumi/images/char_lumi_moment_action2_v01.png",
+    "moments/aila/images/char_aila_fig_action1_styleA_v01.png": {
       "size": [
         1024,
         1536
       ],
       "mode": "RGBA",
-      "sha256": "30a55603c9cca90223997307f61de0293eefd987d351ffc3a5c0d94ae3dee963",
+      "sha256": "d5888f89c16b34c446884203a0b7b81c414f68cec684fa881a78ebbb01d1fea2",
       "alpha_extrema": [
         0,
         254
       ],
-      "transparent_pixels": 1051048
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.4719664255777995
     },
-    {
-      "character": "lumi",
-      "key": "fig_happy",
-      "path": "lumi/images/char_lumi_moment_happy_v01.png",
+    "moments/aila/images/char_aila_fig_action2_styleA_v01.png": {
       "size": [
         1024,
         1536
       ],
       "mode": "RGBA",
-      "sha256": "a28b2ea95c984034b3cf5caebf8f0232870359e35a43593d3ece61edbae968e8",
+      "sha256": "a676fc0e1df43b6d1695e14638785d9072b8a72553daf94791851a929cd45c9b",
       "alpha_extrema": [
         0,
         254
       ],
-      "transparent_pixels": 1032129
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.4838905334472656
     },
-    {
-      "character": "lumi",
-      "key": "fig_soft",
-      "path": "lumi/images/char_lumi_moment_soft_v01.png",
+    "moments/aila/images/char_aila_fig_happy_styleA_v01.png": {
       "size": [
         1024,
         1536
       ],
       "mode": "RGBA",
-      "sha256": "6c25868d210f42984db596a352b527829606c7e83c3bbed96fa7b39d8d90816b",
+      "sha256": "afabf7b3664f003398a713f293ef352240983314b6cb85a01502e3ce856ee3fc",
       "alpha_extrema": [
         0,
         254
       ],
-      "transparent_pixels": 1063656
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.4336357116699219
     },
-    {
-      "character": "lumi",
-      "key": "bg",
-      "path": "lumi/images/char_lumi_background_workshop_street_evening_v01.png",
+    "moments/aila/images/char_aila_fig_worried_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "716ec1132a1d23c016b6f05efb6cc6f0235b4d651b87bb20573bf79d66307e58",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.4820810953776042
+    },
+    "moments/aila/images/char_aila_fig_surprised_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "ade9fd68eb818c8038363032a0cf03eb3c000f803c8898cb6afc21b9610b0339",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.4578774770100911
+    },
+    "moments/aila/images/char_aila_fig_determined_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "5d15e8c1832a8aa832860b7edd9e1d1e7d532a03b83e463e9ed9d86cde33dbec",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.4737955729166667
+    },
+    "moments/aila/images/char_aila_fig_soft_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "9b6d4e71d87dd09e8ac62fa9fa2863083168d6fda3fa005b96afc12c2c0aae5f",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.4367669423421224
+    },
+    "moments/aila/images/char_aila_expr_neutral_styleA_v01.png": {
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "sha256": "452776ee0e28b2b6dd3c91f4412d060c1aa3357801b94f5444c5d9b390c7733a",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        209,
+        239
+      ],
+      "empty_corner_alpha": [
+        0,
+        0
+      ],
+      "transparent_fraction": 0.2956809997558594
+    },
+    "moments/aila/images/char_aila_expr_happy_styleA_v01.png": {
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "sha256": "ce395d868f68367e5b0c2655d6f6c0e245f116cb7d07811c5b283eea4626d523",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        252,
+        252
+      ],
+      "empty_corner_alpha": [
+        0,
+        0
+      ],
+      "transparent_fraction": 0.28414154052734375
+    },
+    "moments/aila/images/char_aila_expr_annoyed_styleA_v01.png": {
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "sha256": "5d2d2b35493284ffc96258d2a5327f3fd465cb09b40aad5e5b6e0918a53abd3c",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        252,
+        252
+      ],
+      "empty_corner_alpha": [
+        0,
+        0
+      ],
+      "transparent_fraction": 0.283538818359375
+    },
+    "moments/aila/images/char_aila_expr_surprised_styleA_v01.png": {
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "sha256": "ff49e40d9aeba2fcbf20dc6b84706aad23d370d2b1bc9a5aa30e97710794f9cc",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        252,
+        252
+      ],
+      "empty_corner_alpha": [
+        0,
+        0
+      ],
+      "transparent_fraction": 0.29409027099609375
+    },
+    "moments/aila/images/char_aila_expr_worried_styleA_v01.png": {
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "sha256": "fd437b4ce3e0822318010aa9583bdef9bea803a965646f60ab5a72e2474d6058",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        253,
+        250
+      ],
+      "empty_corner_alpha": [
+        0,
+        0
+      ],
+      "transparent_fraction": 0.2890281677246094
+    },
+    "moments/aila/images/char_aila_expr_determined_styleA_v01.png": {
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "sha256": "90667b7f856fa1d2f6cc6670b8435e2fd973db5e10f7f29f9d8a9dce9b738d2c",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        252,
+        251
+      ],
+      "empty_corner_alpha": [
+        0,
+        0
+      ],
+      "transparent_fraction": 0.2855262756347656
+    },
+    "moments/aila/images/char_aila_bg_styleA_v01.png": {
       "size": [
         1672,
         941
       ],
       "mode": "RGB",
-      "sha256": "732403540d1e46d091da43736e8115d1f7a6e3e8d0342b4f26dded58b19a9c4c"
+      "sha256": "8195759be3d1d33a175eb914b80ed3239ba04bda6ac2dc94edb6e65fd9e8b97e"
+    },
+    "moments/aila/images/char_aila_fig_victory_check_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "fc260c7d5aaced15fa59ba82b0a8979cf29c738008835736135888125ceaa152",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.4459768931070964
+    },
+    "moments/aila/images/char_aila_fig_victory_turn_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "ace0cad3e72540eac867227b769eb362b5db378af48f8ee199b091326b3d02a4",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.42030080159505206
+    },
+    "moments/aila/images/char_aila_fig_victory_notice_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "bd463b9f033f85aebdce80e734f011776df054ddb56cdfec2b0dbdf22956c60e",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.4742514292399089
+    },
+    "moments/aila/images/char_aila_fig_bond_table_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "1bda6935944ca5c79cfd023108172b27f6241abab3e452eabf39d8197b15c262",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.4742895762125651
+    },
+    "moments/aila/images/char_aila_fig_bond_paper_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "980285c19986ce02c6d66bafb5985acd61a21bfbd42b1854e8ee2c88e476c818",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.47620519002278644
+    },
+    "moments/aila/images/char_aila_fig_bond_hover_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "bd9b86abe9991e20e6e7ac1dc1d6dd78748c636ba5f193d7072c89db8c3c98ea",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.4638818105061849
+    },
+    "moments/aila/images/char_aila_fig_bond_write_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "80fb525eafcbd139ed749512bb98331e9e7dfda9b71f29a4436c3b599149ff7e",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.46711095174153644
+    },
+    "moments/aila/images/char_aila_fig_bond_present_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "32ff53a3fc11d7c68c27f2c3cd00e1d2dc7624a0176eba652c5b411e8c539d73",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.4598655700683594
+    },
+    "moments/aila/images/char_aila_fig_bond_return_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "87c7e2cdaa275781261cf611d7e2b2f1bc17024795a4b1e2cb700692b86f5b43",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.4728387196858724
+    },
+    "moments/aila/images/char_aila_fig_bond_store_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "de9fc99ffdd89373dc84bf759f2708edddfd0980ca84eecbe9da53b306185fbb",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.4812672932942708
+    },
+    "moments/sion/images/char_sion_fig_neutral_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "5f6722a090ee4c2a8d44562c288bc7c001e0b89b58d479d2b714551a7d24a880",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.5058676401774088
+    },
+    "moments/sion/images/char_sion_fig_action1_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "556cb45e372d12f011749661d750b98b4ef2c373764ba0361d49797825f8c329",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.5073089599609375
+    },
+    "moments/sion/images/char_sion_fig_action2_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "902880b7b9c0a93216e14443a90650d6886191dda8b7a445f2685914f196936b",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.5004323323567709
+    },
+    "moments/sion/images/char_sion_fig_happy_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "aa721fd21b8beac96a8e610c786712fdb56c3462d71fcf0b6872e75792b7c2b0",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.5164693196614584
+    },
+    "moments/sion/images/char_sion_fig_worried_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "15c06f5a40086d684316e4211ef9a0b278fc6793bf960a36dd68c3dc698bc402",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.4746545155843099
+    },
+    "moments/sion/images/char_sion_fig_surprised_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "725aebe3b37d9a4b59b5e1b7d34c456a4248404caca5e0892aeea487416285ad",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.47713979085286456
+    },
+    "moments/sion/images/char_sion_fig_determined_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "cdbc01a73cdbb702fc416105a12076c1bbc9cdff760ef9e1570b9295afaa0e1c",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.452392578125
+    },
+    "moments/sion/images/char_sion_fig_soft_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "0495aac34d4ea63496d2e78cf683b62da275b81d1a47aa54ce58cab4f1a10789",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.498202641805013
+    },
+    "moments/sion/images/char_sion_expr_neutral_styleA_v01.png": {
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "sha256": "55a71ab92d99b11e4ed928e867e5061cfc12ec44f5fa1d45eea4f64544b6e6bb",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        240,
+        252
+      ],
+      "empty_corner_alpha": [
+        0,
+        0
+      ],
+      "transparent_fraction": 0.3101692199707031
+    },
+    "moments/sion/images/char_sion_expr_happy_styleA_v01.png": {
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "sha256": "349d21583d569a0c45fa9e61c38dac30828ed3a9dd4adc35c358a59b26d7ced1",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        252,
+        252
+      ],
+      "empty_corner_alpha": [
+        0,
+        0
+      ],
+      "transparent_fraction": 0.3041572570800781
+    },
+    "moments/sion/images/char_sion_expr_annoyed_styleA_v01.png": {
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "sha256": "c0219b902be627a63f7331c4ff481000d546e6d0f4d55b3d47deed881f1bbfa5",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        252,
+        252
+      ],
+      "empty_corner_alpha": [
+        0,
+        0
+      ],
+      "transparent_fraction": 0.3041877746582031
+    },
+    "moments/sion/images/char_sion_expr_surprised_styleA_v01.png": {
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "sha256": "5cf9982556bc9b3fe411ad014399443c077e69bb0ac710e52893af86948ba3c5",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        252,
+        253
+      ],
+      "empty_corner_alpha": [
+        0,
+        0
+      ],
+      "transparent_fraction": 0.3002204895019531
+    },
+    "moments/sion/images/char_sion_expr_worried_styleA_v01.png": {
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "sha256": "b27b11c0a7f30f2cd8acbeef34a94d3084441043e6344e755b37a9f75a339033",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        253,
+        253
+      ],
+      "empty_corner_alpha": [
+        0,
+        0
+      ],
+      "transparent_fraction": 0.30268096923828125
+    },
+    "moments/sion/images/char_sion_expr_determined_styleA_v01.png": {
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "sha256": "cc406d6d68a971a9c238f9730a2377b07100326a83e912a4fddd2163d260b4c1",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        250,
+        252
+      ],
+      "empty_corner_alpha": [
+        0,
+        0
+      ],
+      "transparent_fraction": 0.3011283874511719
+    },
+    "moments/sion/images/char_sion_bg_styleA_v01.png": {
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB",
+      "sha256": "7abdcca7d79edc6acaad9fb5b2049eb46f48e1a5f12121787ed25afd73d8b079"
+    },
+    "moments/sion/images/char_sion_fig_victory_check_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "5d250f63650ced697bef50f887e68c8d8b9cc13457921551a2bc84a3d203afbb",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.45154062906901044
+    },
+    "moments/sion/images/char_sion_fig_victory_turn_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "d57de2039a7a97c338da7d9dbc5843f57c0ea14f25e9ebbb16d7f542dc932df8",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.46201451619466144
+    },
+    "moments/sion/images/char_sion_fig_victory_glasses_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "04df3df5f0e81518e0d2ef40a9ddace3aa1a1b098251ff8886649f91fe33aa06",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.4468568166097005
+    },
+    "moments/sion/images/char_sion_fig_victory_wait_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "b4187126047fa3be6a71a6d444f5f29ebfeba96aca2a2588bc69c06ec9ed7dba",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.4565480550130208
+    },
+    "moments/sion/images/char_sion_fig_bond_neutral_styleA_v02.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "eefd91237fa289f3497ba9b443388a76eecaa8fe132736816b0d942b541374e6",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.4509417215983073
+    },
+    "moments/sion/images/char_sion_fig_bond_adjust_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "e177db96ecace0b5191972fc5c733d52f97fb857b5dde3aa1d33595bc4eafa34",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.4495563507080078
+    },
+    "moments/sion/images/char_sion_fig_bond_soft_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "346c82555cd8452715497ebc7bcd6ef42d332feb3b4b223ae27e6bd4e02bc57f",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.4705047607421875
+    },
+    "moments/sion/images/char_sion_fig_bond_page_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "bfce1e01537879cb629e17a74bf197d06ba3c982473e673270daf9eebcd2ef35",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.4602375030517578
+    },
+    "moments/sion/images/char_sion_fig_bond_hidden_styleA_v02.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "41a9a78716cd900da8a57ddb134f3a3018cbc0592391b11f099c7403266e2061",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.46725018819173175
+    },
+    "moments/lumi/images/char_lumi_fig_neutral_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "920dd232fd3721b59c0daad40b9f8116520f4008882bfeaa601a236f6e423811",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.6101347605387369
+    },
+    "moments/lumi/images/char_lumi_fig_action1_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "07075dcc7fa8c376da2e4cef127e7490960a5b537df9956b5d5535284a38c052",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.6658535003662109
+    },
+    "moments/lumi/images/char_lumi_fig_action2_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "1c4289ca2a0fb69a5138e1950c286b841900c145304603dea698acc2a5a5389c",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.6684697469075521
+    },
+    "moments/lumi/images/char_lumi_fig_happy_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "2f9301b881d3fd00149a90b4402902ce90a550bacc2c8162941127104a9207ca",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.6556790669759115
+    },
+    "moments/lumi/images/char_lumi_fig_worried_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "9b96da045e5254c4a447b733d0c934f9e51353068eed173bffb36dd8fd10ec67",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.6874879201253256
+    },
+    "moments/lumi/images/char_lumi_fig_surprised_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "ff0b8cf9955f544fa69e6e97e5a772d82f0935ac973163591228242af27d4601",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.6617546081542969
+    },
+    "moments/lumi/images/char_lumi_fig_determined_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "1e7be0942cfa4da393fd80037eebbabea372c70ef0801381c0da9a3b35a716e6",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.7064469655354818
+    },
+    "moments/lumi/images/char_lumi_fig_soft_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "d4b99d171f33176b8ea4bc0488ad69bbbe18eb01eb78c8c5202c8df28b690d70",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.6757596333821615
+    },
+    "moments/lumi/images/char_lumi_expr_neutral_styleA_v01.png": {
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "sha256": "4db1612196559bea5d957d060b1f540ac3d9f9d680c96c898668b4b07b51e117",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        253,
+        251
+      ],
+      "empty_corner_alpha": [
+        0,
+        0
+      ],
+      "transparent_fraction": 0.3479270935058594
+    },
+    "moments/lumi/images/char_lumi_expr_happy_styleA_v01.png": {
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "sha256": "66e2013663fec3c3f1317ad83c0446bef08cd0d6ba1cee577104a48b043796d1",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        253,
+        252
+      ],
+      "empty_corner_alpha": [
+        0,
+        0
+      ],
+      "transparent_fraction": 0.33819580078125
+    },
+    "moments/lumi/images/char_lumi_expr_annoyed_styleA_v01.png": {
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "sha256": "d71f0ace77f64ea0d1be4ad8d94df3cd5b736b0c736c400aa9419eb142c97f4c",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        253,
+        249
+      ],
+      "empty_corner_alpha": [
+        0,
+        0
+      ],
+      "transparent_fraction": 0.3360557556152344
+    },
+    "moments/lumi/images/char_lumi_expr_surprised_styleA_v01.png": {
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "sha256": "56a0e3bd8324c22a28e183ca050805adaf417bfba98bd8365b041633d75da9e7",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        253,
+        251
+      ],
+      "empty_corner_alpha": [
+        0,
+        0
+      ],
+      "transparent_fraction": 0.3373298645019531
+    },
+    "moments/lumi/images/char_lumi_expr_worried_styleA_v01.png": {
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "sha256": "feb8266c1fee37dfa9e47ba0f32774727db89cdfff262453addbdc907744321c",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        253,
+        250
+      ],
+      "empty_corner_alpha": [
+        0,
+        0
+      ],
+      "transparent_fraction": 0.33951568603515625
+    },
+    "moments/lumi/images/char_lumi_expr_determined_styleA_v01.png": {
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "sha256": "47016f7d65d2768eb540a9e763ef6a41a847ca6c965537256808063d111bd845",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        252,
+        252
+      ],
+      "empty_corner_alpha": [
+        0,
+        0
+      ],
+      "transparent_fraction": 0.3393135070800781
+    },
+    "moments/lumi/images/char_lumi_bg_styleA_v01.png": {
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB",
+      "sha256": "c39fa2b52ea24f5b01ee9a16fed6335687ca33972e45a6a121b593bff7531aa6"
+    },
+    "moments/lumi/images/char_lumi_fig_victory_land_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "08b5b9555ec825d55920e97e0bc80c9ee4a096a1479df5087183427be77eb4bd",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.6364803314208984
+    },
+    "moments/lumi/images/char_lumi_fig_victory_turn_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "ee2c3518c866c7b9b933a99196593bacb0353b793daff30a4255f7511ca375e1",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.6613305409749349
+    },
+    "moments/lumi/images/char_lumi_fig_victory_grin_styleA_v01.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "2d1eb3298c0fa2d073bdc6c0d23b5d3ebc679a02f2605cdf9667fb2cb1f5a33e",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.6312694549560547
+    },
+    "moments/lumi/images/char_lumi_fig_victory_wait_styleA_v02.png": {
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "98fe8bd46a21927fcd5042cccf8b4de6ffc6744d9d702b90f21579472c38bc5a",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "empty_corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent_fraction": 0.6530342102050781
     }
-  ],
-  "totals": {
-    "scenes": 18,
-    "beats": 215,
-    "mapped_pngs": 101,
-    "ready_pngs": 42,
-    "todo_pngs": 59,
-    "fully_image_backed_scenes": [
-      "sera_lobby_01",
-      "sera_bond_01",
-      "sera_victory_01",
-      "ravien_lobby_01",
-      "harin_lobby_01",
-      "aila_lobby_01",
-      "sion_lobby_01",
-      "lumi_lobby_01"
-    ],
-    "new_selected_files": 39,
-    "new_imagegen_calls": 42,
-    "new_unselected_candidates": 5,
-    "existing_background_byte_copies": 2,
-    "motion_data": 16
   },
   "not_run": [
-    "Post-review-fix source import / Unity replay / face, pointing hand and empty-seat composition / dialogue clearance",
-    "New image Unity import / Editor playback / device acceptance / camera and prop alignment",
-    "Idle return, repeated taps, skip and accessibility runtime acceptance",
-    "Claude independent review (user prohibited calls)",
-    "Game code tests / lint / typecheck / build (no game code changed)",
-    "Articulated rig, in-between frame animation, voice, PSD, AnimationClip, Timeline or VFX creation"
-  ],
-  "real_constraint": [],
-  "apng": {
-    "path": "sera/char_sera_lobby_check_time_v01.apng",
-    "unchanged_from_pass1": true,
-    "decoded_frames": 5,
-    "duration_ms": 2500,
-    "sha256": "f969203b01b1b2c154d779da78ff110d9b1a56d2bcda0489cb7cd1c7747ff20f"
-  },
-  "preexisting_release_manifest_check": {
-    "status": "FAIL",
-    "exit_code": 1,
-    "entries": 423,
-    "changed_entries": 32,
-    "timing": "Before source edits; manifest not regenerated",
-    "command": "python3 tools/ai/verify_manifest.py",
-    "reason": "32 pre-existing changed entries out of 423, checked before creative edits. Release manifests were not modified or regenerated."
-  },
-  "external_unity_evidence_reviewed": {
-    "capture": "reports/ui_skin_20261018/sera_lobby_01_4.png",
-    "log": "reports/ui_skin_20261018/sera_lobby_01_log.txt",
-    "read_only": true,
-    "observed": "Existing Sera A watch gesture, smile and first line visible; log shows first line at 4.2/6/8.6 and next at11.5s.",
-    "not_proven": [
-      "New five adults A and Sera B/C runtime playback",
-      "Scene-end idle return, tap/hold waiting and skip races"
-    ]
-  },
-  "image_pass2_evidence_note": "image_pass2_checks, PNG/APNG inspection, generation totals and external_unity_evidence_reviewed are historical image-pass-2 evidence, not rerun claims. Current JSON hashes and bond-script lengths are refreshed; review_fixes_20261018 records this pass.",
-  "image_pass2_checks": [
-    "Existing importer referenced()/clean()/contained() read-only helpers; no importer main/import_one execution",
-    "All six schemas, required scene/beat fields, unique IDs, speakers and internal image/motion/background references",
-    "Every declared image asset ready iff its file exists; six idle figures exist",
-    "All six lobby scenes and Sera B/C have every declared image file",
-    "42 selected PNGs decoded and verified; 36 figure PNGs genuine alpha; six landscape backgrounds",
-    "All six manifests reconstruct exact pre-pass SHA256 after undoing image mapping/status/anchor/idle-only edits; dialogue, timing, input, intent and motion data preserved",
-    "18 scenes / 215 beats; all six bond scripts remain 2000–3000 characters",
-    "Original selected Sera PNG/APNG bytes unchanged; APNG five frames decoded",
-    "All new generation/reuse records verified against saved file hashes"
-  ],
-  "checks": [
-    "All 18 scenes / 215 beats / 102 null-speaker narration passages manually reviewed sentence by sentence",
-    "18 production-direction passages rewritten as player-facing prose; displaced directions retained by scene ID and 1-based beat in five character READMEs",
-    "108 spoken line objects unchanged, including speaker, text and tone",
-    "Exactly 20 changed JSON leaves: 18 null-speaker line.text and Ravien lobby 4/5 camera.shot; undoing only those leaves reconstructs all six exact pre-edit SHA256 hashes",
-    "Existing fields only; no schema additions; image/motion references, ready/file existence, idle figures and all six 2000-3000-character bond scripts checked",
-    "All existing image and animation bytes, age/design intent, hold/input/motion/gaze/line.tone preserved",
-    "Ravien lobby 4/5 both fig_offer full/face/none/0; bust retained only after figure changes to fig_lobby_soft at beat 6"
-  ],
-  "review_fixes_20261018": {
-    "status": "PASS",
-    "scope": "Creative-source static verification only; post-fix Unity visual acceptance NOT_RUN",
-    "reviewed_scenes": 18,
-    "beats": 215,
-    "narration_lines_reviewed": 102,
-    "rewritten_narration_lines": 18,
-    "unchanged_spoken_line_objects": 108,
-    "spoken_line_objects_sha256": "31c8952ba26d439b0456d3c09b22c3d9b209a7d1fdf2c2eb42d53d2137967afe",
-    "changed_json_leaves": 20,
-    "allowed_changes": "18 null-speaker line.text values and Ravien lobby beats 4/5 camera.shot only; exact pre-edit JSON SHA256 reconstructed after undoing these leaves",
-    "no_new_schema_fields": true,
-    "all_existing_image_and_animation_bytes_unchanged": true,
-    "characters": [
-      {
-        "character": "aila",
-        "moments_sha256_before": "fb9d62fe6e8e3c5e17f84691c98dd80243268acf418ea2be95f2d2a3b0cb421a",
-        "moments_sha256_after": "d965d77d33a86c437f958b175a803e41370a5345905fae18da399d966018c779",
-        "bond_characters_including_spaces": 2509,
-        "protected_data_reconstruction": "PASS"
-      },
-      {
-        "character": "harin",
-        "moments_sha256_before": "f2e9ae20244702cb52f02677cf067e61cb3e10c0561e9af9e840e524675a4f28",
-        "moments_sha256_after": "0252cecb3a81fac4cce880487fa0ada1a99ff0129eb8168e40c14283ee0fbbdd",
-        "bond_characters_including_spaces": 2603,
-        "protected_data_reconstruction": "PASS"
-      },
-      {
-        "character": "lumi",
-        "moments_sha256_before": "555538fd012ae269cadaff27a1f1bef8dcb6a04c0a028cae4f8cd983d45768e1",
-        "moments_sha256_after": "ba1d86d78b725f35678143b24a005e6c1eb141c1a3858a21af6fc10f35f054b6",
-        "bond_characters_including_spaces": 2597,
-        "protected_data_reconstruction": "PASS"
-      },
-      {
-        "character": "ravien",
-        "moments_sha256_before": "1ef11367ace8ed1bc02f4d8af967866b5dea06eb52ca332cb16f917a46b831d5",
-        "moments_sha256_after": "fa9802ce5685b304051ab60c559eb554e5fd3e19a47309aae7887cf707a942c1",
-        "bond_characters_including_spaces": 2673,
-        "protected_data_reconstruction": "PASS"
-      },
-      {
-        "character": "sera",
-        "moments_sha256_before": "faac3579ba6bdff2942931aaf629f779eac003bc99cd0444d1972430cd9fa965",
-        "moments_sha256_after": "faac3579ba6bdff2942931aaf629f779eac003bc99cd0444d1972430cd9fa965",
-        "bond_characters_including_spaces": 2378,
-        "protected_data_reconstruction": "PASS"
-      },
-      {
-        "character": "sion",
-        "moments_sha256_before": "490b12d4fb4783709f3d446d9a306bee65a1cc68bf8fd8579f45a8db4f05275a",
-        "moments_sha256_after": "716f958b157449201f128235b89c4ce0928d219a9850bf578c541893e5e4989b",
-        "bond_characters_including_spaces": 2575,
-        "protected_data_reconstruction": "PASS"
-      }
-    ],
-    "scenes": [
-      {
-        "scene": "aila_lobby_01",
-        "beats": 5,
-        "narration_lines_reviewed": 2,
-        "rewritten_narration_beats_1based": [
-          1
-        ],
-        "review": "All narration read sentence by sentence; remaining passages are diegetic action, thought, setting or player response."
-      },
-      {
-        "scene": "aila_bond_01",
-        "beats": 22,
-        "narration_lines_reviewed": 11,
-        "rewritten_narration_beats_1based": [],
-        "review": "All narration read sentence by sentence; remaining passages are diegetic action, thought, setting or player response."
-      },
-      {
-        "scene": "aila_victory_01",
-        "beats": 4,
-        "narration_lines_reviewed": 1,
-        "rewritten_narration_beats_1based": [],
-        "review": "All narration read sentence by sentence; remaining passages are diegetic action, thought, setting or player response."
-      },
-      {
-        "scene": "harin_lobby_01",
-        "beats": 7,
-        "narration_lines_reviewed": 4,
-        "rewritten_narration_beats_1based": [
-          3,
-          5
-        ],
-        "review": "All narration read sentence by sentence; remaining passages are diegetic action, thought, setting or player response."
-      },
-      {
-        "scene": "harin_bond_01",
-        "beats": 33,
-        "narration_lines_reviewed": 17,
-        "rewritten_narration_beats_1based": [
-          33
-        ],
-        "review": "All narration read sentence by sentence; remaining passages are diegetic action, thought, setting or player response."
-      },
-      {
-        "scene": "harin_victory_01",
-        "beats": 5,
-        "narration_lines_reviewed": 3,
-        "rewritten_narration_beats_1based": [
-          1,
-          3,
-          5
-        ],
-        "review": "All narration read sentence by sentence; remaining passages are diegetic action, thought, setting or player response."
-      },
-      {
-        "scene": "lumi_lobby_01",
-        "beats": 5,
-        "narration_lines_reviewed": 2,
-        "rewritten_narration_beats_1based": [
-          2,
-          5
-        ],
-        "review": "All narration read sentence by sentence; remaining passages are diegetic action, thought, setting or player response."
-      },
-      {
-        "scene": "lumi_bond_01",
-        "beats": 22,
-        "narration_lines_reviewed": 11,
-        "rewritten_narration_beats_1based": [],
-        "review": "All narration read sentence by sentence; remaining passages are diegetic action, thought, setting or player response."
-      },
-      {
-        "scene": "lumi_victory_01",
-        "beats": 4,
-        "narration_lines_reviewed": 1,
-        "rewritten_narration_beats_1based": [
-          2
-        ],
-        "review": "All narration read sentence by sentence; remaining passages are diegetic action, thought, setting or player response."
-      },
-      {
-        "scene": "ravien_lobby_01",
-        "beats": 7,
-        "narration_lines_reviewed": 4,
-        "rewritten_narration_beats_1based": [
-          1,
-          3,
-          5,
-          7
-        ],
-        "review": "All narration read sentence by sentence; remaining passages are diegetic action, thought, setting or player response."
-      },
-      {
-        "scene": "ravien_bond_01",
-        "beats": 33,
-        "narration_lines_reviewed": 17,
-        "rewritten_narration_beats_1based": [
-          17,
-          33
-        ],
-        "review": "All narration read sentence by sentence; remaining passages are diegetic action, thought, setting or player response."
-      },
-      {
-        "scene": "ravien_victory_01",
-        "beats": 5,
-        "narration_lines_reviewed": 3,
-        "rewritten_narration_beats_1based": [
-          5
-        ],
-        "review": "All narration read sentence by sentence; remaining passages are diegetic action, thought, setting or player response."
-      },
-      {
-        "scene": "sera_lobby_01",
-        "beats": 5,
-        "narration_lines_reviewed": 0,
-        "rewritten_narration_beats_1based": [],
-        "review": "All narration read sentence by sentence; remaining passages are diegetic action, thought, setting or player response."
-      },
-      {
-        "scene": "sera_bond_01",
-        "beats": 23,
-        "narration_lines_reviewed": 12,
-        "rewritten_narration_beats_1based": [],
-        "review": "All narration read sentence by sentence; remaining passages are diegetic action, thought, setting or player response."
-      },
-      {
-        "scene": "sera_victory_01",
-        "beats": 4,
-        "narration_lines_reviewed": 0,
-        "rewritten_narration_beats_1based": [],
-        "review": "All narration read sentence by sentence; remaining passages are diegetic action, thought, setting or player response."
-      },
-      {
-        "scene": "sion_lobby_01",
-        "beats": 5,
-        "narration_lines_reviewed": 2,
-        "rewritten_narration_beats_1based": [
-          1
-        ],
-        "review": "All narration read sentence by sentence; remaining passages are diegetic action, thought, setting or player response."
-      },
-      {
-        "scene": "sion_bond_01",
-        "beats": 22,
-        "narration_lines_reviewed": 11,
-        "rewritten_narration_beats_1based": [],
-        "review": "All narration read sentence by sentence; remaining passages are diegetic action, thought, setting or player response."
-      },
-      {
-        "scene": "sion_victory_01",
-        "beats": 4,
-        "narration_lines_reviewed": 1,
-        "rewritten_narration_beats_1based": [],
-        "review": "All narration read sentence by sentence; remaining passages are diegetic action, thought, setting or player response."
-      }
-    ],
-    "narration_edits": [
-      {
-        "character": "ravien",
-        "scene": "ravien_lobby_01",
-        "beat_1based": 1,
-        "before": "서류철을 팔에 받친 라비엔이 도장을 한 번 누른다. 몸 전체는 거의 움직이지 않고 손과 눈의 순서로 업무를 끝낸다.",
-        "after": "서류철을 팔에 받친 라비엔이 도장을 한 번 누른다. 도장 자국을 확인하고 서류에서 손을 뗀다.",
-        "non_displayed_direction": "몸 전체는 거의 움직이지 않고 손과 눈의 순서로 업무를 끝낸다.",
-        "direction_location": "ravien/README.md"
-      },
-      {
-        "character": "ravien",
-        "scene": "ravien_lobby_01",
-        "beat_1based": 3,
-        "before": "종이 끝을 손끝으로 반 바퀴 돌려 서류철 안으로 넣는다. 고개가 종이보다 반 박자 늦게 돌아오며 초록 눈이 공방장을 붙든다.",
-        "after": "종이 끝을 손끝으로 반 바퀴 돌려 서류철 안으로 넣는다. 종이를 내려놓고서야 고개를 든다. 초록 눈이 공방장을 붙든다.",
-        "non_displayed_direction": "고개가 종이보다 반 박자 늦게 돌아오도록 한다.",
-        "direction_location": "ravien/README.md"
-      },
-      {
-        "character": "ravien",
-        "scene": "ravien_lobby_01",
-        "beat_1based": 5,
-        "before": "손끝으로 옆 의자를 가리킨 뒤 손을 내린다. 대답을 재촉하지 않고 자기 자리는 그대로 둔다.",
-        "after": "손끝으로 옆 의자를 가리킨 뒤 손을 내린다. 비워 둔 자리를 사이에 두고 공방장의 대답을 기다린다.",
-        "non_displayed_direction": "대답을 재촉하지 않고 자기 자리는 그대로 둔다. 4·5박자는 얼굴·가리키는 손·빈 의자 좌판이 함께 보이는 full/face/none을 유지한다.",
-        "direction_location": "ravien/README.md"
-      },
-      {
-        "character": "ravien",
-        "scene": "ravien_lobby_01",
-        "beat_1based": 7,
-        "before": "라비엔은 몸을 제자리로 돌리고 서류철을 닫아 둔다. 옆 의자는 비워 둔 채, 응답을 받아도 업무 동작으로 되돌리지 않는다.",
-        "after": "라비엔은 몸을 제자리로 돌리고 서류철을 닫아 둔다. 옆 의자는 비워 둔 채, 닫힌 서류철에는 손을 대지 않고 공방장에게 시선을 둔다.",
-        "non_displayed_direction": "응답을 받아도 업무 동작으로 되돌리지 않는다.",
-        "direction_location": "ravien/README.md"
-      },
-      {
-        "character": "ravien",
-        "scene": "ravien_bond_01",
-        "beat_1based": 17,
-        "before": "저울 펜던트를 만지던 손이 멈춘다. 붉은 넥타이의 매듭은 원래처럼 느슨하고, 드러난 목선 위로 저녁빛이 옅게 걸린다. 카메라는 얼굴과 손을 함께 두고, 그녀가 말을 고르는 시간을 자르지 않는다.",
-        "after": "저울 펜던트를 만지던 손이 멈춘다. 붉은 넥타이의 매듭은 원래처럼 느슨하고, 드러난 목선 위로 저녁빛이 옅게 걸린다. 그녀는 대답을 서두르지 않고 공방장의 눈을 보며 다음 말을 고른다.",
-        "non_displayed_direction": "카메라는 얼굴과 손을 함께 두고, 그녀가 말을 고르는 시간을 자르지 않는다.",
-        "direction_location": "ravien/README.md"
-      },
-      {
-        "character": "ravien",
-        "scene": "ravien_bond_01",
-        "beat_1based": 33,
-        "before": "공방장의 대답을 듣는 동안 라비엔의 눈가가 부드러워진다. 그녀는 이제 새로운 조건을 찾지 않는다. 나란한 두 사람이 문으로 향하는 데서 장면이 닫힌다. 책상 위 빈 종이는 어떤 약속도 대신하지 않은 채 남는다.",
-        "after": "공방장의 대답을 듣는 동안 라비엔의 눈가가 부드러워진다. 그녀는 이제 새로운 조건을 찾지 않는다. 두 사람은 나란히 문으로 향한다. 책상 위 빈 종이는 어떤 약속도 대신하지 않은 채 남는다.",
-        "non_displayed_direction": "나란한 두 사람이 문으로 향하는 데서 장면이 닫힌다.",
-        "direction_location": "ravien/README.md"
-      },
-      {
-        "character": "ravien",
-        "scene": "ravien_victory_01",
-        "beat_1based": 5,
-        "before": "라비엔은 서류철을 옆구리에 끼우고 열린 손을 편하게 내린다. 기다리는 눈웃음으로 끝내며 윙크하거나 카메라에 입술을 들이밀지 않는다.",
-        "after": "라비엔은 서류철을 옆구리에 끼우고 열린 손을 편하게 내린다. 눈가에 옅은 웃음을 남긴 채 공방장의 대답을 기다린다.",
-        "non_displayed_direction": "기다리는 눈웃음으로 끝내며 윙크하거나 카메라에 입술을 들이밀지 않는다.",
-        "direction_location": "ravien/README.md"
-      },
-      {
-        "character": "harin",
-        "scene": "harin_lobby_01",
-        "beat_1based": 3,
-        "before": "인형을 손으로 덮었다가 급히 넣는 핵심 포즈로 전환한다. 눈은 공방장을 피하고 손을 뗀 뒤 낮게 헛기침한다.",
-        "after": "인형을 손으로 덮었다가 급히 주머니 안으로 밀어 넣는다. 공방장의 눈길을 피한 채 손을 떼고 낮게 헛기침한다.",
-        "non_displayed_direction": "인형을 손으로 덮었다가 급히 넣는 핵심 포즈로 전환한다. 눈은 공방장을 피하고 손을 뗀 뒤 낮게 헛기침한다.",
-        "direction_location": "harin/README.md"
-      },
-      {
-        "character": "harin",
-        "scene": "harin_lobby_01",
-        "beat_1based": 5,
-        "before": "인형 귀를 다시 조금 내놓고 손을 내린다. 굳은 입매가 아주 짧게 풀린다. 몸을 숙여 어려 보이게 하지 않는다.",
-        "after": "인형 귀를 다시 조금 내놓고 손을 내린다. 굳은 입매가 아주 짧게 풀린다.",
-        "non_displayed_direction": "몸을 숙여 어려 보이게 하지 않는다.",
-        "direction_location": "harin/README.md"
-      },
-      {
-        "character": "harin",
-        "scene": "harin_bond_01",
-        "beat_1based": 33,
-        "before": "하린은 두 장갑을 벗어 무릎 위에 포갠다. 문 옆 방패와 테이블 위 고양이가 같은 화면에 들어온다. 그녀는 둘 중 어느 쪽도 감추지 않고, 공방장과 마주 앉은 채 짧지만 분명한 미소를 짓는다.",
-        "after": "하린은 두 장갑을 벗어 무릎 위에 포갠다. 문 옆에는 방패가, 테이블 위에는 고양이가 놓여 있다. 그녀는 둘 중 어느 쪽도 감추지 않고, 공방장과 마주 앉은 채 짧지만 분명한 미소를 짓는다.",
-        "non_displayed_direction": "문 옆 방패와 테이블 위 고양이가 같은 화면에 들어온다.",
-        "direction_location": "harin/README.md"
-      },
-      {
-        "character": "harin",
-        "scene": "harin_victory_01",
-        "beat_1based": 1,
-        "before": "하린이 방패로 전방을 가린 자세에서 시작한다. 마지막 충격 뒤 발을 옮기지 않고 먼저 어깨의 힘을 풀며 공방장 쪽을 확인한다.",
-        "after": "하린은 방패로 전방을 가리고 서 있다. 마지막 충격 뒤 발을 옮기지 않고 먼저 어깨의 힘을 풀며 공방장 쪽을 확인한다.",
-        "non_displayed_direction": "방패로 전방을 가린 자세에서 시작한다. 마지막 충격 뒤 발을 고정하고 어깨의 힘을 먼저 푼다.",
-        "direction_location": "harin/README.md"
-      },
-      {
-        "character": "harin",
-        "scene": "harin_victory_01",
-        "beat_1based": 3,
-        "before": "방패를 바깥쪽으로 치워 자기 옆의 길을 연다. 열린 손은 잡아끄는 자세가 아니라, 필요하면 잡을 수 있도록 허리 높이에서 멈춘다.",
-        "after": "방패를 바깥쪽으로 치워 자기 옆의 길을 연다. 다른 손은 허리 높이에서 멈춘 채 공방장을 향해 열린다.",
-        "non_displayed_direction": "열린 손은 잡아끄는 자세가 아니라, 필요하면 잡을 수 있도록 허리 높이에서 멈춘다.",
-        "direction_location": "harin/README.md"
-      },
-      {
-        "character": "harin",
-        "scene": "harin_victory_01",
-        "beat_1based": 5,
-        "before": "하린은 손을 천천히 거두고 나란히 걸을 자세로 발끝을 돌린다. 어깨와 허리가 드러나는 기본 갑주 실루엣, 탄탄한 팔과 긴 망토가 전신 구도에서 함께 읽힌다.",
-        "after": "하린은 손을 천천히 거두고 나란히 걸을 자세로 발끝을 돌린다. 어깨와 허리가 드러나는 갑주 위로 긴 망토가 가라앉고, 탄탄한 팔의 긴장이 풀린다.",
-        "non_displayed_direction": "어깨와 허리가 드러나는 기본 갑주 실루엣, 탄탄한 팔과 긴 망토가 전신 구도에서 함께 읽힌다.",
-        "direction_location": "harin/README.md"
-      },
-      {
-        "character": "aila",
-        "scene": "aila_lobby_01",
-        "beat_1based": 1,
-        "before": "에일라는 장부를 덮고 손끝으로 종을 고른다. 등불을 든 팔은 낮게, 열린 등과 서리 자수는 측후면에서 한 번 읽힌다.",
-        "after": "에일라는 장부를 덮고 손끝으로 종을 고른다. 등불을 낮게 든 채 고개를 돌리자, 열린 등과 서리 자수가 저녁빛을 받는다.",
-        "non_displayed_direction": "등불을 든 팔은 낮게, 열린 등과 서리 자수는 측후면에서 한 번 읽힌다.",
-        "direction_location": "aila/README.md"
-      },
-      {
-        "character": "sion",
-        "scene": "sion_lobby_01",
-        "beat_1based": 1,
-        "before": "시온은 페이지 끝을 들어 올린 채 멈춘다. 장검은 무대 밖 안전한 거치 상태이며 코트 사슬만 작게 흔들린다.",
-        "after": "시온은 페이지 끝을 들어 올린 채 멈춘다. 코트 사슬이 작게 흔들리다가 멎는다.",
-        "non_displayed_direction": "장검은 무대 밖 안전한 거치 상태이며 코트 사슬만 작게 흔들린다.",
-        "direction_location": "sion/README.md"
-      },
-      {
-        "character": "lumi",
-        "scene": "lumi_lobby_01",
-        "beat_1based": 2,
-        "before": "헬멧을 손목 위에서 짧게 돌려 잡는다. 팔에 끼우자 빈손이 생기고, 재킷 자락은 한 박자 늦게 멈춘다.",
-        "after": "헬멧을 손목 위에서 짧게 돌려 잡는다. 팔에 끼우고 손을 비우자, 뒤따라 흔들리던 재킷 자락도 가라앉는다.",
-        "non_displayed_direction": "헬멧을 팔에 끼운 뒤 재킷 자락은 한 박자 늦게 멈춘다.",
-        "direction_location": "lumi/README.md"
-      },
-      {
-        "character": "lumi",
-        "scene": "lumi_lobby_01",
-        "beat_1based": 5,
-        "before": "손바닥을 위로 내밀고 기다린다. 발은 움직이지 않는다. 상대의 답을 재촉하는 끌어당김은 없다.",
-        "after": "손바닥을 위로 내민 루미는 발을 움직이지 않은 채 공방장의 대답을 기다린다.",
-        "non_displayed_direction": "발은 움직이지 않는다. 상대의 답을 재촉하는 끌어당김은 없다.",
-        "direction_location": "lumi/README.md"
-      },
-      {
-        "character": "lumi",
-        "scene": "lumi_victory_01",
-        "beat_1based": 2,
-        "before": "양발이 지면을 잡고 단검은 화면 바깥 안전한 방향으로 낮아진다. 뻗친 머리와 재킷 자락의 잔움직임 뒤에 루미가 돌아본다.",
-        "after": "양발이 지면을 딛자 루미가 두 단검을 몸 바깥쪽으로 낮춘다. 뻗친 머리와 재킷 자락이 가라앉은 뒤, 루미가 고개를 돌려 공방장을 본다.",
-        "non_displayed_direction": "양발이 지면을 잡고 단검은 화면 바깥 안전한 방향으로 낮아진다. 뻗친 머리와 재킷 자락의 잔움직임 뒤에 돌아본다.",
-        "direction_location": "lumi/README.md"
-      }
-    ],
-    "deliberately_preserved_narration": [
-      {
-        "scene": "sera_bond_01",
-        "beat_1based": 11,
-        "reason": "An in-world rifle rack is observable setting, unlike an off-stage production direction."
-      },
-      {
-        "scene": "sera_bond_01",
-        "beat_1based": 15,
-        "reason": "Sera refrains from describing a future scene: foresight and relationship, not camera editing."
-      },
-      {
-        "scene": "lumi_bond_01",
-        "beat_1based": 15,
-        "reason": "Half the alley remaining is story distance, not an acting beat or timing instruction."
-      }
-    ],
-    "not_run": [
-      "Unity import and playback",
-      "Post-fix face/hand/empty-seat visual acceptance and dialogue clearance",
-      "Game code tests, lint, typecheck and build",
-      "Claude independent review (calls explicitly prohibited)"
-    ],
-    "preexisting_release_manifest_check": {
-      "status": "FAIL",
-      "exit_code": 1,
-      "entries": 423,
-      "changed_entries": 32,
-      "timing": "Before source edits; manifest not regenerated"
-    },
-    "evidence_reviewed": [
-      "art/requests/moments-visual-review-20261018.md",
-      "reports/lobby_moments_20261018/all_lobby/ravien_3.png",
-      "art/moments/ravien/images/char_ravien_chair_offer_happy_v01.png"
-    ]
-  }
+    "Unity import/playback",
+    "device acceptance",
+    "Claude independent review",
+    "game code tests/build"
+  ]
 }

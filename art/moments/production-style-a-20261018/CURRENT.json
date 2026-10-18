@@ -1,0 +1,11 @@
+{
+  "phase": "complete",
+  "running_cell": null,
+  "completed_at": "2026-10-18T08:15:42.590592+00:00",
+  "accepted_pngs": 128,
+  "target_pngs": 128,
+  "pending": [],
+  "verification": "verification-final.json",
+  "source_root": "art/moments",
+  "game_unity_git_claude": "NOT_RUN"
+}

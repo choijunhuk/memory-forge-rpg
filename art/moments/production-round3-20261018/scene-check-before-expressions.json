@@ -1,0 +1,114 @@
+{
+  "all_scene_images_exist": true,
+  "preserved_dialogue_timing_input_intents": true,
+  "rows": [
+    {
+      "scene": "sera_lobby_01",
+      "image_coverage": "PASS",
+      "missing": [],
+      "beats": 5
+    },
+    {
+      "scene": "sera_bond_01",
+      "image_coverage": "PASS",
+      "missing": [],
+      "beats": 23
+    },
+    {
+      "scene": "sera_victory_01",
+      "image_coverage": "PASS",
+      "missing": [],
+      "beats": 4
+    },
+    {
+      "scene": "ravien_lobby_01",
+      "image_coverage": "PASS",
+      "missing": [],
+      "beats": 7
+    },
+    {
+      "scene": "ravien_bond_01",
+      "image_coverage": "PASS",
+      "missing": [],
+      "beats": 33
+    },
+    {
+      "scene": "ravien_victory_01",
+      "image_coverage": "PASS",
+      "missing": [],
+      "beats": 5
+    },
+    {
+      "scene": "harin_lobby_01",
+      "image_coverage": "PASS",
+      "missing": [],
+      "beats": 7
+    },
+    {
+      "scene": "harin_bond_01",
+      "image_coverage": "PASS",
+      "missing": [],
+      "beats": 33
+    },
+    {
+      "scene": "harin_victory_01",
+      "image_coverage": "PASS",
+      "missing": [],
+      "beats": 5
+    },
+    {
+      "scene": "aila_lobby_01",
+      "image_coverage": "PASS",
+      "missing": [],
+      "beats": 5
+    },
+    {
+      "scene": "aila_bond_01",
+      "image_coverage": "PASS",
+      "missing": [],
+      "beats": 22
+    },
+    {
+      "scene": "aila_victory_01",
+      "image_coverage": "PASS",
+      "missing": [],
+      "beats": 4
+    },
+    {
+      "scene": "sion_lobby_01",
+      "image_coverage": "PASS",
+      "missing": [],
+      "beats": 5
+    },
+    {
+      "scene": "sion_bond_01",
+      "image_coverage": "PASS",
+      "missing": [],
+      "beats": 22
+    },
+    {
+      "scene": "sion_victory_01",
+      "image_coverage": "PASS",
+      "missing": [],
+      "beats": 4
+    },
+    {
+      "scene": "lumi_lobby_01",
+      "image_coverage": "PASS",
+      "missing": [],
+      "beats": 5
+    },
+    {
+      "scene": "lumi_bond_01",
+      "image_coverage": "PASS",
+      "missing": [],
+      "beats": 22
+    },
+    {
+      "scene": "lumi_victory_01",
+      "image_coverage": "PASS",
+      "missing": [],
+      "beats": 4
+    }
+  ]
+}

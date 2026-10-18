@@ -1,0 +1,16 @@
+{
+  "character": "sion",
+  "key": "fig_bond_hidden",
+  "target": "sion/images/char_sion_fig_bond_hidden_styleA_v02.png",
+  "args": {
+    "prompt": "Use case: precise-object-edit. In this clear-cel A sprite of adult Sion age27, correct ONE prop duplication: REMOVE the extra OPEN BOOK from the top of the SCREEN-RIGHT lectern. Leave the lectern's wood/gold top visible with ONLY the small cream personal memo sheet on it. KEEP the purple book she HOLDS OVER HER MOUTH exactly unchanged; only one book total exists in this scene. Preserve her visible eyes above held book, glasses, black hair, face/expression, both hands gripping held book, same approved purple coat/blouse/corset/shorts/boots and gold chains. Keep exact same lectern position, scale and design, full portrait framing. No sword, no new props. Actual RGBA transparency with empty margins/corners exactly alpha0; remove all inherited background haze, no floor or shadow or checkerboard.",
+    "referenced_image_paths": [
+      "/Users/choi/Documents/Memory_forge/art/moments/sion/images/char_sion_fig_bond_hidden_styleA_v01.png"
+    ],
+    "transparent_background": true
+  },
+  "cache_path": "/Users/choi/.codex/generated_images/01a14db0-4150-7f01-9240-82aaa185dd28/exec-0168ca7b-95fd-438f-93de-937be8e235bb.png",
+  "status": "ready",
+  "generation_status": "generated_pending_review",
+  "selected": true
+}

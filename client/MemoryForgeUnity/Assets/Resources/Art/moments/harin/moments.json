@@ -3,21 +3,28 @@
   "character": "harin",
   "status": "draft",
   "images": {
-    "fig_default": "moments/harin/images/char_harin_stand_neutral_v01.png",
-    "fig_glove": "moments/harin/images/char_harin_glove_determined_v01.png",
-    "fig_lobby_cat": "moments/harin/images/char_harin_pocket_reveal_soft_v01.png",
-    "fig_guard": "moments/harin/images/char_harin_shield_guard_determined_v01.png",
-    "fig_hide": "moments/harin/images/char_harin_pocket_surprised_v01.png",
-    "fig_cough": "moments/harin/images/char_harin_cough_annoyed_v01.png",
-    "fig_worry": "moments/harin/images/char_harin_seated_worried_v01.png",
-    "fig_cat": "moments/harin/images/char_harin_cat_offer_happy_v01.png",
-    "fig_soft": "moments/harin/images/char_harin_seated_happy_v01.png",
-    "fig_lobby_soft": "moments/harin/images/char_harin_stand_soft_v01.png",
-    "fig_rest": "moments/harin/images/char_harin_seated_unguarded_v01.png",
-    "fig_resolve": "moments/harin/images/char_harin_stand_determined_v01.png",
-    "fig_victory": "moments/harin/images/char_harin_shield_open_relief_v01.png",
-    "bg_room": "moments/harin/images/char_harin_background_workshop_evening_v01.png",
-    "bg_victory": "moments/harin/images/char_harin_background_quiet_afterbattle_v01.png"
+    "fig_default": "moments/harin/images/char_harin_fig_default_styleA_v01.png",
+    "fig_glove": "moments/harin/images/char_harin_fig_glove_styleA_v01.png",
+    "fig_lobby_cat": "moments/harin/images/char_harin_fig_lobby_cat_styleA_v01.png",
+    "fig_guard": "moments/harin/images/char_harin_fig_guard_styleA_v01.png",
+    "fig_hide": "moments/harin/images/char_harin_fig_hide_styleA_v01.png",
+    "fig_cough": "moments/harin/images/char_harin_fig_cough_styleA_v01.png",
+    "fig_worry": "moments/harin/images/char_harin_fig_worry_styleA_v02.png",
+    "fig_cat": "moments/harin/images/char_harin_fig_cat_styleA_v02.png",
+    "fig_soft": "moments/harin/images/char_harin_fig_soft_styleA_v02.png",
+    "fig_lobby_soft": "moments/harin/images/char_harin_fig_lobby_soft_styleA_v01.png",
+    "fig_rest": "moments/harin/images/char_harin_fig_rest_styleA_v03.png",
+    "fig_resolve": "moments/harin/images/char_harin_fig_resolve_styleA_v01.png",
+    "fig_victory": "moments/harin/images/char_harin_fig_victory_styleA_v01.png",
+    "bg_room": "moments/harin/images/char_harin_bg_room_styleA_v01.png",
+    "bg_victory": "moments/harin/images/char_harin_bg_victory_styleA_v01.png",
+    "expr_neutral": "moments/harin/images/char_harin_expr_neutral_styleA_v01.png",
+    "expr_happy": "moments/harin/images/char_harin_expr_happy_styleA_v01.png",
+    "expr_annoyed": "moments/harin/images/char_harin_expr_annoyed_styleA_v01.png",
+    "expr_surprised": "moments/harin/images/char_harin_expr_surprised_styleA_v01.png",
+    "expr_worried": "moments/harin/images/char_harin_expr_worried_styleA_v01.png",
+    "expr_determined": "moments/harin/images/char_harin_expr_determined_styleA_v01.png",
+    "fig_cat_placed": "moments/harin/images/char_harin_fig_cat_placed_styleA_v02.png"
   },
   "anchors": {
     "fig_default": {
@@ -64,12 +71,16 @@
     },
     "fig_guard": {
       "face": [
-        0.5,
-        0.16
+        0.51,
+        0.1
       ],
       "hands": [
         0.49,
         0.51
+      ],
+      "body": [
+        0.51,
+        0.5
       ]
     },
     "fig_hide": {
@@ -102,32 +113,44 @@
     },
     "fig_worry": {
       "face": [
-        0.5,
-        0.16
+        0.51,
+        0.105
       ],
       "hands": [
-        0.49,
-        0.51
+        0.66,
+        0.415
+      ],
+      "body": [
+        0.51,
+        0.53
       ]
     },
     "fig_cat": {
       "face": [
-        0.5,
-        0.16
+        0.51,
+        0.105
       ],
       "hands": [
-        0.49,
-        0.51
+        0.61,
+        0.325
+      ],
+      "body": [
+        0.51,
+        0.53
       ]
     },
     "fig_soft": {
       "face": [
-        0.5,
-        0.16
+        0.51,
+        0.105
       ],
       "hands": [
-        0.49,
-        0.51
+        0.53,
+        0.485
+      ],
+      "body": [
+        0.51,
+        0.53
       ]
     },
     "fig_lobby_soft": {
@@ -146,12 +169,16 @@
     },
     "fig_rest": {
       "face": [
-        0.5,
-        0.16
+        0.51,
+        0.105
       ],
       "hands": [
-        0.49,
-        0.51
+        0.58,
+        0.46
+      ],
+      "body": [
+        0.51,
+        0.53
       ]
     },
     "fig_resolve": {
@@ -170,12 +197,66 @@
     },
     "fig_victory": {
       "face": [
-        0.5,
-        0.16
+        0.51,
+        0.1
       ],
       "hands": [
         0.49,
         0.51
+      ],
+      "body": [
+        0.51,
+        0.5
+      ]
+    },
+    "expr_neutral": {
+      "face": [
+        0.51,
+        0.44
+      ]
+    },
+    "expr_happy": {
+      "face": [
+        0.51,
+        0.44
+      ]
+    },
+    "expr_annoyed": {
+      "face": [
+        0.51,
+        0.44
+      ]
+    },
+    "expr_surprised": {
+      "face": [
+        0.51,
+        0.44
+      ]
+    },
+    "expr_worried": {
+      "face": [
+        0.51,
+        0.44
+      ]
+    },
+    "expr_determined": {
+      "face": [
+        0.51,
+        0.44
+      ]
+    },
+    "fig_cat_placed": {
+      "face": [
+        0.51,
+        0.105
+      ],
+      "hands": [
+        0.53,
+        0.485
+      ],
+      "body": [
+        0.51,
+        0.53
       ]
     }
   },
@@ -545,7 +626,7 @@
         {
           "key": "fig_cat",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_hide",
@@ -555,17 +636,17 @@
         {
           "key": "fig_rest",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_soft",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_worry",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "pause_near",
@@ -576,6 +657,11 @@
           "key": "voice_harin_bond_01",
           "type": "voice",
           "status": "todo"
+        },
+        {
+          "key": "fig_cat_placed",
+          "type": "image",
+          "status": "ready"
         }
       ],
       "input": {
@@ -820,7 +906,7 @@
             "text": "공방장이 고개를 젓고 웃는다. 놀리는 기색보다 함께 보고 있다는 기색이 짙다. 하린은 인형을 천 위에 앉힌 뒤 두 손을 무릎에 놓는다. 숨길 물건이 사라졌는데도 손을 주머니로 옮기는 버릇이 한 번 남는다.",
             "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
           },
-          "figure": "fig_cat",
+          "figure": "fig_cat_placed",
           "gaze": "side",
           "camera": {
             "shot": "bust",
@@ -837,7 +923,7 @@
             "text": "귀엽다는 말은 이런 데 쓰는 거다. 작고, 둥글고, 어딘가 조금 엉성한 것. ……왜 나를 보고 있지? 인형은 여기 있다.",
             "tone": "낮고 단단한 반말. 소리를 아기처럼 높이지 않고 말 사이에 생각할 숨을 둔다."
           },
-          "figure": "fig_cat",
+          "figure": "fig_cat_placed",
           "gaze": "player",
           "camera": {
             "shot": "bust",
@@ -853,7 +939,7 @@
             "text": "공방장이 하린이 웃는 모습을 보고 있었다고 말한다. 그녀는 즉시 입매를 곧게 편다. 하지만 이미 늦었다는 것을 아는지, 회청색 눈이 잠깐 아래로 향한다. 왼쪽 눈썹 위 흉터가 굳은 표정과 함께 느슨해진다.",
             "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
           },
-          "figure": "fig_cat",
+          "figure": "fig_cat_placed",
           "gaze": "side",
           "camera": {
             "shot": "bust",
@@ -869,7 +955,7 @@
             "text": "웃는 걸 그렇게 오래 볼 일인가. ……싫다는 건 아니다. 다만 준비가 안 돼서.",
             "tone": "낮고 단단한 반말. 소리를 아기처럼 높이지 않고 말 사이에 생각할 숨을 둔다."
           },
-          "figure": "fig_cat",
+          "figure": "fig_cat_placed",
           "gaze": "player",
           "camera": {
             "shot": "bust",
@@ -885,7 +971,7 @@
             "text": "하린은 몸을 일으키려다 의자에 다시 앉는다. 순찰은 끝났고 방패도 내려놓았다. 지금 나가야 하는 이유가 없다는 사실을 확인하는 사이, 공방장이 인형 옆에 자기 손을 편 채 놓는다.",
             "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
           },
-          "figure": "fig_cat",
+          "figure": "fig_cat_placed",
           "gaze": "down",
           "camera": {
             "shot": "medium",
@@ -901,7 +987,7 @@
             "text": "만져 봐도 된다. 귀는 잡아당기지 말고. 아니, 너무 자세히 알려 줬나. 이런 말은 왜 이렇게 잘 나오지.",
             "tone": "낮고 단단한 반말. 소리를 아기처럼 높이지 않고 말 사이에 생각할 숨을 둔다."
           },
-          "figure": "fig_cat",
+          "figure": "fig_cat_placed",
           "gaze": "player",
           "camera": {
             "shot": "bust",
@@ -1135,12 +1221,12 @@
         {
           "key": "bg_victory",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_guard",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_lobby_soft",
@@ -1155,7 +1241,7 @@
         {
           "key": "fig_victory",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "settle",

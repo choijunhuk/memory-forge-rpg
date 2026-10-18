@@ -3,20 +3,30 @@
   "character": "ravien",
   "status": "draft",
   "images": {
-    "fig_default": "moments/ravien/images/char_ravien_stand_neutral_v01.png",
-    "fig_stamp": "moments/ravien/images/char_ravien_stamp_focused_v01.png",
-    "fig_turn": "moments/ravien/images/char_ravien_paper_turn_playful_v01.png",
-    "fig_offer": "moments/ravien/images/char_ravien_chair_offer_happy_v01.png",
-    "fig_lobby_soft": "moments/ravien/images/char_ravien_stand_soft_v01.png",
-    "fig_bond_turn": "moments/ravien/images/char_ravien_seated_playful_v01.png",
-    "fig_waver": "moments/ravien/images/char_ravien_seated_surprised_v01.png",
-    "fig_soft": "moments/ravien/images/char_ravien_seated_worried_v01.png",
-    "fig_resolve": "moments/ravien/images/char_ravien_stand_determined_v01.png",
-    "fig_annoyed": "moments/ravien/images/char_ravien_stand_annoyed_v01.png",
-    "fig_seal": "moments/ravien/images/char_ravien_battle_seal_determined_v01.png",
-    "fig_victory": "moments/ravien/images/char_ravien_seal_return_relaxed_v01.png",
-    "bg_room": "moments/ravien/images/char_ravien_background_workshop_evening_v01.png",
-    "bg_victory": "moments/ravien/images/char_ravien_background_quiet_afterbattle_v01.png"
+    "fig_default": "moments/ravien/images/char_ravien_fig_default_styleA_v01.png",
+    "fig_stamp": "moments/ravien/images/char_ravien_fig_stamp_styleA_v02.png",
+    "fig_turn": "moments/ravien/images/char_ravien_fig_turn_styleA_v01.png",
+    "fig_offer": "moments/ravien/images/char_ravien_fig_offer_styleA_v01.png",
+    "fig_lobby_soft": "moments/ravien/images/char_ravien_fig_lobby_soft_styleA_v02.png",
+    "fig_bond_turn": "moments/ravien/images/char_ravien_fig_bond_turn_styleA_v01.png",
+    "fig_waver": "moments/ravien/images/char_ravien_fig_waver_styleA_v02.png",
+    "fig_soft": "moments/ravien/images/char_ravien_fig_soft_styleA_v01.png",
+    "fig_resolve": "moments/ravien/images/char_ravien_fig_resolve_styleA_v01.png",
+    "fig_annoyed": "moments/ravien/images/char_ravien_fig_annoyed_styleA_v01.png",
+    "fig_seal": "moments/ravien/images/char_ravien_fig_seal_styleA_v01.png",
+    "fig_victory": "moments/ravien/images/char_ravien_fig_victory_styleA_v01.png",
+    "bg_room": "moments/ravien/images/char_ravien_bg_room_styleA_v01.png",
+    "bg_victory": "moments/ravien/images/char_ravien_bg_victory_styleA_v01.png",
+    "fig_lobby_wait": "moments/ravien/images/char_ravien_fig_lobby_wait_styleA_v01.png",
+    "fig_lobby_end": "moments/ravien/images/char_ravien_fig_lobby_end_styleA_v01.png",
+    "fig_bond_resolve": "moments/ravien/images/char_ravien_fig_lobby_end_styleA_v01.png",
+    "expr_neutral": "moments/ravien/images/char_ravien_expr_neutral_styleA_v01.png",
+    "expr_happy": "moments/ravien/images/char_ravien_expr_happy_styleA_v01.png",
+    "expr_annoyed": "moments/ravien/images/char_ravien_expr_annoyed_styleA_v01.png",
+    "expr_surprised": "moments/ravien/images/char_ravien_expr_surprised_styleA_v01.png",
+    "expr_worried": "moments/ravien/images/char_ravien_expr_worried_styleA_v01.png",
+    "expr_determined": "moments/ravien/images/char_ravien_expr_determined_styleA_v01.png",
+    "fig_bond_end": "moments/ravien/images/char_ravien_fig_bond_end_styleA_v03.png"
   },
   "anchors": {
     "fig_default": {
@@ -91,42 +101,58 @@
     },
     "fig_bond_turn": {
       "face": [
-        0.5,
-        0.16
+        0.51,
+        0.105
       ],
       "hands": [
-        0.49,
-        0.51
+        0.53,
+        0.46
+      ],
+      "body": [
+        0.51,
+        0.5
       ]
     },
     "fig_waver": {
       "face": [
-        0.5,
-        0.16
+        0.51,
+        0.105
       ],
       "hands": [
-        0.49,
-        0.51
+        0.53,
+        0.46
+      ],
+      "body": [
+        0.51,
+        0.5
       ]
     },
     "fig_soft": {
       "face": [
-        0.5,
-        0.16
+        0.51,
+        0.105
       ],
       "hands": [
-        0.49,
-        0.51
+        0.53,
+        0.46
+      ],
+      "body": [
+        0.51,
+        0.5
       ]
     },
     "fig_resolve": {
       "face": [
-        0.5,
-        0.16
+        0.51,
+        0.105
       ],
       "hands": [
         0.49,
         0.51
+      ],
+      "body": [
+        0.51,
+        0.5
       ]
     },
     "fig_annoyed": {
@@ -145,22 +171,122 @@
     },
     "fig_seal": {
       "face": [
-        0.5,
-        0.16
+        0.51,
+        0.105
       ],
       "hands": [
         0.49,
         0.51
+      ],
+      "body": [
+        0.51,
+        0.5
       ]
     },
     "fig_victory": {
       "face": [
-        0.5,
-        0.16
+        0.51,
+        0.105
       ],
       "hands": [
         0.49,
         0.51
+      ],
+      "body": [
+        0.51,
+        0.5
+      ]
+    },
+    "fig_lobby_wait": {
+      "face": [
+        0.7,
+        0.105
+      ],
+      "hands": [
+        0.72,
+        0.43
+      ],
+      "body": [
+        0.7,
+        0.5
+      ]
+    },
+    "fig_lobby_end": {
+      "face": [
+        0.67,
+        0.105
+      ],
+      "hands": [
+        0.68,
+        0.47
+      ],
+      "body": [
+        0.67,
+        0.5
+      ]
+    },
+    "fig_bond_resolve": {
+      "face": [
+        0.67,
+        0.105
+      ],
+      "hands": [
+        0.68,
+        0.47
+      ],
+      "body": [
+        0.67,
+        0.5
+      ]
+    },
+    "expr_neutral": {
+      "face": [
+        0.53,
+        0.43
+      ]
+    },
+    "expr_happy": {
+      "face": [
+        0.53,
+        0.43
+      ]
+    },
+    "expr_annoyed": {
+      "face": [
+        0.53,
+        0.43
+      ]
+    },
+    "expr_surprised": {
+      "face": [
+        0.53,
+        0.43
+      ]
+    },
+    "expr_worried": {
+      "face": [
+        0.53,
+        0.43
+      ]
+    },
+    "expr_determined": {
+      "face": [
+        0.53,
+        0.43
+      ]
+    },
+    "fig_bond_end": {
+      "face": [
+        0.71,
+        0.105
+      ],
+      "hands": [
+        0.75,
+        0.52
+      ],
+      "body": [
+        0.71,
+        0.5
       ]
     }
   },
@@ -376,6 +502,16 @@
           "key": "fig_annoyed",
           "type": "image",
           "status": "ready"
+        },
+        {
+          "key": "fig_lobby_wait",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_lobby_end",
+          "type": "image",
+          "status": "ready"
         }
       ],
       "input": {
@@ -462,7 +598,7 @@
             "text": "손끝으로 옆 의자를 가리킨 뒤 손을 내린다. 비워 둔 자리를 사이에 두고 공방장의 대답을 기다린다.",
             "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
           },
-          "figure": "fig_offer",
+          "figure": "fig_lobby_wait",
           "gaze": "player",
           "camera": {
             "shot": "full",
@@ -479,7 +615,7 @@
             "text": "아직 앉아 있을 시간은 있죠? 이번엔 서류 얘기 안 할게요.",
             "tone": "마지막 질문은 장난기를 덜고 개인적인 기대를 드러낸다."
           },
-          "figure": "fig_lobby_soft",
+          "figure": "fig_lobby_wait",
           "gaze": "player",
           "camera": {
             "shot": "bust",
@@ -495,10 +631,10 @@
             "text": "라비엔은 몸을 제자리로 돌리고 서류철을 닫아 둔다. 옆 의자는 비워 둔 채, 닫힌 서류철에는 손을 대지 않고 공방장에게 시선을 둔다.",
             "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
           },
-          "figure": "fig_default",
+          "figure": "fig_lobby_end",
           "gaze": "player",
           "camera": {
-            "shot": "medium",
+            "shot": "full",
             "focus": "face",
             "move": "pull_out",
             "duration": 0.6
@@ -525,22 +661,17 @@
         {
           "key": "fig_bond_turn",
           "type": "image",
-          "status": "todo"
-        },
-        {
-          "key": "fig_resolve",
-          "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_soft",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_waver",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "pause_near",
@@ -551,6 +682,16 @@
           "key": "voice_ravien_bond_01",
           "type": "voice",
           "status": "todo"
+        },
+        {
+          "key": "fig_bond_resolve",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_bond_end",
+          "type": "image",
+          "status": "ready"
         }
       ],
       "input": {
@@ -956,7 +1097,7 @@
             "text": "그녀는 빈 종이를 책상 한편에 놓고 서류철을 완전히 닫는다. 이어 공방장의 의자 뒤에 서서 손을 내밀려다가 멈춘다. 대신 문 옆으로 먼저 가, 나란히 설 만큼의 자리를 남긴다.",
             "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
           },
-          "figure": "fig_resolve",
+          "figure": "fig_bond_end",
           "gaze": "down",
           "camera": {
             "shot": "medium",
@@ -972,7 +1113,7 @@
             "text": "아, 한 가지는 분명히 해야겠어요. 오늘 같이 걷자는 말, 당신이 제가 심심해 보였기 때문에 받아 준 건 아니었으면 좋겠어요.",
             "tone": "낮고 느긋한 존댓말. 말끝을 흘려 유혹하기보다 상대의 응답을 듣는다."
           },
-          "figure": "fig_resolve",
+          "figure": "fig_bond_end",
           "gaze": "player",
           "camera": {
             "shot": "bust",
@@ -988,7 +1129,7 @@
             "text": "공방장은 함께 가고 싶어서 남았다는 뜻을 전한다. 라비엔이 고개를 조금 기울인다. 계산이 맞았을 때의 미소와 닮았지만, 이번에는 확인한 뒤에도 그 표정을 거두지 못한다.",
             "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
           },
-          "figure": "fig_resolve",
+          "figure": "fig_bond_end",
           "gaze": "side",
           "camera": {
             "shot": "bust",
@@ -1005,7 +1146,7 @@
             "text": "……그 대답을 듣고 싶었네요. 제가 질문을 잘하는 사람인 줄 알았는데, 중요한 건 마지막까지 아껴 버리네.",
             "tone": "낮고 느긋한 존댓말. 말끝을 흘려 유혹하기보다 상대의 응답을 듣는다."
           },
-          "figure": "fig_resolve",
+          "figure": "fig_bond_end",
           "gaze": "player",
           "camera": {
             "shot": "bust",
@@ -1021,7 +1162,7 @@
             "text": "공방장이 문을 열자 저녁 바람이 들어온다. 와인빛 머리 끝과 스커트 옆선이 작게 흔들린다. 그녀는 장갑 끝을 한 번 당겨 정리하고, 책상 쪽을 돌아보지 않은 채 공방장 곁으로 발을 옮긴다.",
             "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
           },
-          "figure": "fig_resolve",
+          "figure": "fig_bond_end",
           "gaze": "side",
           "camera": {
             "shot": "bust",
@@ -1037,7 +1178,7 @@
             "text": "가요. 어디로 갈지는 같이 정하고. 돌아와서 오늘을 뭐라고 부를지도, 그때 생각하죠.",
             "tone": "낮고 느긋한 존댓말. 말끝을 흘려 유혹하기보다 상대의 응답을 듣는다."
           },
-          "figure": "fig_resolve",
+          "figure": "fig_bond_end",
           "gaze": "player",
           "camera": {
             "shot": "bust",
@@ -1053,7 +1194,7 @@
             "text": "문 앞에서 라비엔은 공방장이 나란히 설 때까지 기다린다. 공방장이 곁으로 오자 손잡이를 함께 바라본다. 다음 걸음을 옮기기 전, 그녀가 먼저 옆을 본다.",
             "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
           },
-          "figure": "fig_resolve",
+          "figure": "fig_bond_end",
           "gaze": "down",
           "camera": {
             "shot": "medium",
@@ -1069,7 +1210,7 @@
             "text": "다음에는 종이부터 꺼내지 않을게요. 당신이랑 더 있고 싶어요. ……이 정도면 되겠죠?",
             "tone": "낮고 느긋한 존댓말. 말끝을 흘려 유혹하기보다 상대의 응답을 듣는다."
           },
-          "figure": "fig_resolve",
+          "figure": "fig_bond_end",
           "gaze": "player",
           "camera": {
             "shot": "bust",
@@ -1085,7 +1226,7 @@
             "text": "공방장의 대답을 듣는 동안 라비엔의 눈가가 부드러워진다. 그녀는 이제 새로운 조건을 찾지 않는다. 두 사람은 나란히 문으로 향한다. 책상 위 빈 종이는 어떤 약속도 대신하지 않은 채 남는다.",
             "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
           },
-          "figure": "fig_resolve",
+          "figure": "fig_bond_end",
           "gaze": "side",
           "camera": {
             "shot": "full",
@@ -1110,17 +1251,17 @@
         {
           "key": "bg_victory",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_resolve",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_seal",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_turn",
@@ -1130,7 +1271,7 @@
         {
           "key": "fig_victory",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "settle",
@@ -1244,5 +1385,5 @@
       ]
     }
   ],
-  "idle_figure": "fig_lobby_soft"
+  "idle_figure": "fig_lobby_end"
 }

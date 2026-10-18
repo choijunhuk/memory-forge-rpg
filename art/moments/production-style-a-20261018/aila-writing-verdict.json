@@ -1,0 +1,13 @@
+{
+  "score": 94,
+  "verdict": "pass",
+  "category_match": true,
+  "differences": [
+    "Stationery has small decorative ink motifs; dialogue remains in JSON and is not transcribed into art."
+  ],
+  "suggestions": [
+    "Retain this desk/lantern/page identity for the returned-page pose.",
+    "Use measured face/hands anchors for the writing and presentation poses."
+  ],
+  "reasoning": "Aila now visibly hovers a pen, writes with nib contacting paper and other hand stabilizing it, and presents a written page. The same silver lantern stays planted on the desk."
+}

@@ -1,0 +1,14 @@
+{
+  "score": 94,
+  "verdict": "pass",
+  "category_match": true,
+  "differences": [
+    "Neutral masters use character-specific head angles; variants will preserve each master rather than impose a shared identical face."
+  ],
+  "suggestions": [],
+  "reasoning": "All six adult master portraits preserve their identity and recognizable facial motifs.",
+  "next_actions": [
+    "Generate five facial-expression edits per master.",
+    "Downsample accepted square PNGs to 512x512 without changing content."
+  ]
+}

@@ -110,8 +110,8 @@ TextureImporter:
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
-    mipMapMode: 0
-    enableMipMap: 0
+    mipMapMode: 1
+    enableMipMap: 1
     sRGBTexture: 1
     linearTexture: 0
     fadeOut: 0
@@ -139,16 +139,16 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 2
     aniso: 1
-    mipBias: 0
+    mipBias: -0.5
     wrapU: 1
     wrapV: 1
     wrapW: 1
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -177,7 +177,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 2
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -988,7 +988,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -997,7 +997,42 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      enemy_e_lantern_0: -327104101037421061
+      enemy_e_lantern_1: 5790451430270736069
+      enemy_e_lantern_10: -5480297747471554556
+      enemy_e_lantern_11: -5632311343736184785
+      enemy_e_lantern_12: 4166515933800038218
+      enemy_e_lantern_13: -6003939346876598154
+      enemy_e_lantern_14: -4756429835708746534
+      enemy_e_lantern_15: 1636666853993778990
+      enemy_e_lantern_16: -5284219655344666375
+      enemy_e_lantern_17: 5811381604873809096
+      enemy_e_lantern_18: 9015605805597311080
+      enemy_e_lantern_19: 5558511011849089992
+      enemy_e_lantern_2: -2291482791154125481
+      enemy_e_lantern_20: 2647009104603291685
+      enemy_e_lantern_21: -8767698356209305713
+      enemy_e_lantern_22: -2410016275578542490
+      enemy_e_lantern_23: -1934567511742898270
+      enemy_e_lantern_24: 2641413258734207043
+      enemy_e_lantern_25: -4552796385726978331
+      enemy_e_lantern_26: -1052478122785325645
+      enemy_e_lantern_27: 7146656061019627754
+      enemy_e_lantern_28: -5873675162133377351
+      enemy_e_lantern_29: -8237150979582107736
+      enemy_e_lantern_3: 1696778482137632265
+      enemy_e_lantern_30: -8939033177623180310
+      enemy_e_lantern_31: -852403720670151675
+      enemy_e_lantern_32: -7112135116441874670
+      enemy_e_lantern_33: 5242599720099621656
+      enemy_e_lantern_34: -676753298212544805
+      enemy_e_lantern_4: -3882477332568327184
+      enemy_e_lantern_5: 4322187445382708845
+      enemy_e_lantern_6: 6929520833787297678
+      enemy_e_lantern_7: -2051979595252865643
+      enemy_e_lantern_8: -9061436023261319928
+      enemy_e_lantern_9: 2376119212075824073
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

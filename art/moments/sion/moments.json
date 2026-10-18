@@ -3,25 +3,30 @@
   "character": "sion",
   "status": "draft",
   "images": {
-    "fig_neutral": "moments/sion/images/char_sion_moment_neutral_v01.png",
-    "fig_action1": "moments/sion/images/char_sion_moment_action1_v01.png",
-    "fig_action2": "moments/sion/images/char_sion_moment_action2_v01.png",
-    "fig_happy": "moments/sion/images/char_sion_moment_happy_v01.png",
-    "fig_worried": "moments/sion/images/char_sion_moment_worried_v01.png",
-    "fig_surprised": "moments/sion/images/char_sion_moment_surprised_v01.png",
-    "fig_determined": "moments/sion/images/char_sion_moment_determined_v01.png",
-    "fig_soft": "moments/sion/images/char_sion_moment_soft_v01.png",
-    "expr_neutral": "moments/sion/images/char_sion_expression_neutral_v01.png",
-    "expr_happy": "moments/sion/images/char_sion_expression_happy_v01.png",
-    "expr_annoyed": "moments/sion/images/char_sion_expression_annoyed_v01.png",
-    "expr_surprised": "moments/sion/images/char_sion_expression_surprised_v01.png",
-    "expr_worried": "moments/sion/images/char_sion_expression_worried_v01.png",
-    "expr_determined": "moments/sion/images/char_sion_expression_determined_v01.png",
-    "bg": "moments/sion/images/char_sion_background_library_lamplight_v01.png",
-    "fig_victory_check": "moments/sion/images/char_sion_moment_victory_check_v01.png",
-    "fig_victory_turn": "moments/sion/images/char_sion_moment_victory_turn_v01.png",
-    "fig_victory_glasses": "moments/sion/images/char_sion_moment_victory_glasses_v01.png",
-    "fig_victory_wait": "moments/sion/images/char_sion_moment_victory_wait_v01.png"
+    "fig_neutral": "moments/sion/images/char_sion_fig_neutral_styleA_v01.png",
+    "fig_action1": "moments/sion/images/char_sion_fig_action1_styleA_v01.png",
+    "fig_action2": "moments/sion/images/char_sion_fig_action2_styleA_v01.png",
+    "fig_happy": "moments/sion/images/char_sion_fig_happy_styleA_v01.png",
+    "fig_worried": "moments/sion/images/char_sion_fig_worried_styleA_v01.png",
+    "fig_surprised": "moments/sion/images/char_sion_fig_surprised_styleA_v01.png",
+    "fig_determined": "moments/sion/images/char_sion_fig_determined_styleA_v01.png",
+    "fig_soft": "moments/sion/images/char_sion_fig_soft_styleA_v01.png",
+    "expr_neutral": "moments/sion/images/char_sion_expr_neutral_styleA_v01.png",
+    "expr_happy": "moments/sion/images/char_sion_expr_happy_styleA_v01.png",
+    "expr_annoyed": "moments/sion/images/char_sion_expr_annoyed_styleA_v01.png",
+    "expr_surprised": "moments/sion/images/char_sion_expr_surprised_styleA_v01.png",
+    "expr_worried": "moments/sion/images/char_sion_expr_worried_styleA_v01.png",
+    "expr_determined": "moments/sion/images/char_sion_expr_determined_styleA_v01.png",
+    "bg": "moments/sion/images/char_sion_bg_styleA_v01.png",
+    "fig_victory_check": "moments/sion/images/char_sion_fig_victory_check_styleA_v01.png",
+    "fig_victory_turn": "moments/sion/images/char_sion_fig_victory_turn_styleA_v01.png",
+    "fig_victory_glasses": "moments/sion/images/char_sion_fig_victory_glasses_styleA_v01.png",
+    "fig_victory_wait": "moments/sion/images/char_sion_fig_victory_wait_styleA_v01.png",
+    "fig_bond_neutral": "moments/sion/images/char_sion_fig_bond_neutral_styleA_v02.png",
+    "fig_bond_adjust": "moments/sion/images/char_sion_fig_bond_adjust_styleA_v01.png",
+    "fig_bond_soft": "moments/sion/images/char_sion_fig_bond_soft_styleA_v01.png",
+    "fig_bond_page": "moments/sion/images/char_sion_fig_bond_page_styleA_v01.png",
+    "fig_bond_hidden": "moments/sion/images/char_sion_fig_bond_hidden_styleA_v02.png"
   },
   "anchors": {
     "fig_neutral": {
@@ -82,8 +87,8 @@
     },
     "fig_worried": {
       "face": [
-        0.5,
-        0.17
+        0.52,
+        0.105
       ],
       "body": [
         0.5,
@@ -96,8 +101,8 @@
     },
     "fig_surprised": {
       "face": [
-        0.5,
-        0.17
+        0.53,
+        0.105
       ],
       "body": [
         0.5,
@@ -111,7 +116,7 @@
     "fig_determined": {
       "face": [
         0.5,
-        0.17
+        0.105
       ],
       "body": [
         0.5,
@@ -138,8 +143,8 @@
     },
     "fig_victory_check": {
       "face": [
-        0.5,
-        0.17
+        0.51,
+        0.105
       ],
       "body": [
         0.5,
@@ -152,8 +157,8 @@
     },
     "fig_victory_turn": {
       "face": [
-        0.5,
-        0.17
+        0.51,
+        0.105
       ],
       "body": [
         0.5,
@@ -166,8 +171,8 @@
     },
     "fig_victory_glasses": {
       "face": [
-        0.5,
-        0.17
+        0.51,
+        0.105
       ],
       "body": [
         0.5,
@@ -180,8 +185,8 @@
     },
     "fig_victory_wait": {
       "face": [
-        0.5,
-        0.17
+        0.51,
+        0.105
       ],
       "body": [
         0.5,
@@ -190,6 +195,112 @@
       "hands": [
         0.48,
         0.55
+      ]
+    },
+    "expr_neutral": {
+      "face": [
+        0.53,
+        0.43
+      ]
+    },
+    "expr_happy": {
+      "face": [
+        0.53,
+        0.43
+      ]
+    },
+    "expr_annoyed": {
+      "face": [
+        0.53,
+        0.43
+      ]
+    },
+    "expr_surprised": {
+      "face": [
+        0.53,
+        0.43
+      ]
+    },
+    "expr_worried": {
+      "face": [
+        0.53,
+        0.43
+      ]
+    },
+    "expr_determined": {
+      "face": [
+        0.53,
+        0.43
+      ]
+    },
+    "fig_bond_neutral": {
+      "face": [
+        0.52,
+        0.105
+      ],
+      "hands": [
+        0.67,
+        0.265
+      ],
+      "body": [
+        0.5,
+        0.5
+      ]
+    },
+    "fig_bond_adjust": {
+      "face": [
+        0.52,
+        0.105
+      ],
+      "hands": [
+        0.63,
+        0.14
+      ],
+      "body": [
+        0.5,
+        0.5
+      ]
+    },
+    "fig_bond_soft": {
+      "face": [
+        0.52,
+        0.105
+      ],
+      "hands": [
+        0.73,
+        0.42
+      ],
+      "body": [
+        0.5,
+        0.5
+      ]
+    },
+    "fig_bond_page": {
+      "face": [
+        0.52,
+        0.105
+      ],
+      "hands": [
+        0.7,
+        0.42
+      ],
+      "body": [
+        0.5,
+        0.5
+      ]
+    },
+    "fig_bond_hidden": {
+      "face": [
+        0.52,
+        0.105
+      ],
+      "hands": [
+        0.52,
+        0.23
+      ],
+      "body": [
+        0.5,
+        0.5
       ]
     }
   },
@@ -403,7 +514,7 @@
         {
           "key": "fig_determined",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_happy",
@@ -423,12 +534,12 @@
         {
           "key": "fig_surprised",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_worried",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "stage_settle",
@@ -439,6 +550,31 @@
           "key": "voice_sion_bond_recording",
           "type": "voice",
           "status": "todo"
+        },
+        {
+          "key": "fig_bond_adjust",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_bond_hidden",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_bond_neutral",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_bond_page",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_bond_soft",
+          "type": "image",
+          "status": "ready"
         }
       ],
       "input": {
@@ -453,7 +589,7 @@
       },
       "beats": [
         {
-          "figure": "fig_neutral",
+          "figure": "fig_bond_neutral",
           "gaze": "side",
           "camera": {
             "shot": "full",
@@ -469,7 +605,7 @@
           "hold": 0.8
         },
         {
-          "figure": "fig_neutral",
+          "figure": "fig_bond_neutral",
           "gaze": "player",
           "camera": {
             "shot": "bust",
@@ -549,7 +685,7 @@
           "hold": 1.0
         },
         {
-          "figure": "fig_action2",
+          "figure": "fig_bond_adjust",
           "gaze": "player",
           "camera": {
             "shot": "medium",
@@ -565,7 +701,7 @@
           "hold": 0.8
         },
         {
-          "figure": "fig_soft",
+          "figure": "fig_bond_soft",
           "gaze": "player",
           "camera": {
             "shot": "bust",
@@ -581,7 +717,7 @@
           "hold": 1.0
         },
         {
-          "figure": "fig_action1",
+          "figure": "fig_bond_page",
           "gaze": "down",
           "camera": {
             "shot": "medium",
@@ -597,7 +733,7 @@
           "hold": 0.8
         },
         {
-          "figure": "fig_worried",
+          "figure": "fig_bond_page",
           "gaze": "player",
           "camera": {
             "shot": "bust",
@@ -613,7 +749,7 @@
           "hold": 1.0
         },
         {
-          "figure": "fig_happy",
+          "figure": "fig_bond_hidden",
           "gaze": "side",
           "camera": {
             "shot": "medium",
@@ -629,7 +765,7 @@
           "hold": 0.8
         },
         {
-          "figure": "fig_happy",
+          "figure": "fig_bond_hidden",
           "gaze": "player",
           "camera": {
             "shot": "bust",
@@ -645,7 +781,7 @@
           "hold": 1.0
         },
         {
-          "figure": "fig_soft",
+          "figure": "fig_bond_soft",
           "gaze": "player",
           "camera": {
             "shot": "medium",
@@ -661,7 +797,7 @@
           "hold": 0.8
         },
         {
-          "figure": "fig_soft",
+          "figure": "fig_bond_soft",
           "gaze": "player",
           "camera": {
             "shot": "bust",
@@ -709,7 +845,7 @@
           "hold": 1.0
         },
         {
-          "figure": "fig_soft",
+          "figure": "fig_bond_soft",
           "gaze": "player",
           "camera": {
             "shot": "medium",
@@ -725,7 +861,7 @@
           "hold": 0.8
         },
         {
-          "figure": "fig_soft",
+          "figure": "fig_bond_soft",
           "gaze": "player",
           "camera": {
             "shot": "bust",
@@ -741,7 +877,7 @@
           "hold": 1.0
         },
         {
-          "figure": "fig_action1",
+          "figure": "fig_bond_page",
           "gaze": "down",
           "camera": {
             "shot": "medium",
@@ -773,7 +909,7 @@
           "hold": 1.0
         },
         {
-          "figure": "fig_neutral",
+          "figure": "fig_bond_neutral",
           "gaze": "player",
           "camera": {
             "shot": "full",
@@ -789,7 +925,7 @@
           "hold": 0.8
         },
         {
-          "figure": "fig_soft",
+          "figure": "fig_bond_soft",
           "gaze": "player",
           "camera": {
             "shot": "medium",
@@ -826,22 +962,22 @@
         {
           "key": "fig_victory_check",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_victory_turn",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_victory_glasses",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "fig_victory_wait",
           "type": "image",
-          "status": "todo"
+          "status": "ready"
         },
         {
           "key": "stage_settle",

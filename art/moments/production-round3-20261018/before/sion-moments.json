@@ -1,0 +1,937 @@
+{
+  "format": "memory-forge-moments/1",
+  "character": "sion",
+  "status": "draft",
+  "images": {
+    "fig_neutral": "moments/sion/images/char_sion_moment_neutral_v01.png",
+    "fig_action1": "moments/sion/images/char_sion_moment_action1_v01.png",
+    "fig_action2": "moments/sion/images/char_sion_moment_action2_v01.png",
+    "fig_happy": "moments/sion/images/char_sion_moment_happy_v01.png",
+    "fig_worried": "moments/sion/images/char_sion_moment_worried_v01.png",
+    "fig_surprised": "moments/sion/images/char_sion_moment_surprised_v01.png",
+    "fig_determined": "moments/sion/images/char_sion_moment_determined_v01.png",
+    "fig_soft": "moments/sion/images/char_sion_moment_soft_v01.png",
+    "expr_neutral": "moments/sion/images/char_sion_expression_neutral_v01.png",
+    "expr_happy": "moments/sion/images/char_sion_expression_happy_v01.png",
+    "expr_annoyed": "moments/sion/images/char_sion_expression_annoyed_v01.png",
+    "expr_surprised": "moments/sion/images/char_sion_expression_surprised_v01.png",
+    "expr_worried": "moments/sion/images/char_sion_expression_worried_v01.png",
+    "expr_determined": "moments/sion/images/char_sion_expression_determined_v01.png",
+    "bg": "moments/sion/images/char_sion_background_library_lamplight_v01.png",
+    "fig_victory_check": "moments/sion/images/char_sion_moment_victory_check_v01.png",
+    "fig_victory_turn": "moments/sion/images/char_sion_moment_victory_turn_v01.png",
+    "fig_victory_glasses": "moments/sion/images/char_sion_moment_victory_glasses_v01.png",
+    "fig_victory_wait": "moments/sion/images/char_sion_moment_victory_wait_v01.png"
+  },
+  "anchors": {
+    "fig_neutral": {
+      "face": [
+        0.51,
+        0.105
+      ],
+      "body": [
+        0.51,
+        0.5
+      ],
+      "hands": [
+        0.64,
+        0.29
+      ]
+    },
+    "fig_action1": {
+      "face": [
+        0.51,
+        0.105
+      ],
+      "body": [
+        0.51,
+        0.5
+      ],
+      "hands": [
+        0.65,
+        0.29
+      ]
+    },
+    "fig_action2": {
+      "face": [
+        0.51,
+        0.105
+      ],
+      "body": [
+        0.51,
+        0.5
+      ],
+      "hands": [
+        0.61,
+        0.13
+      ]
+    },
+    "fig_happy": {
+      "face": [
+        0.51,
+        0.105
+      ],
+      "body": [
+        0.51,
+        0.5
+      ],
+      "hands": [
+        0.5,
+        0.18
+      ]
+    },
+    "fig_worried": {
+      "face": [
+        0.5,
+        0.17
+      ],
+      "body": [
+        0.5,
+        0.5
+      ],
+      "hands": [
+        0.48,
+        0.55
+      ]
+    },
+    "fig_surprised": {
+      "face": [
+        0.5,
+        0.17
+      ],
+      "body": [
+        0.5,
+        0.5
+      ],
+      "hands": [
+        0.48,
+        0.55
+      ]
+    },
+    "fig_determined": {
+      "face": [
+        0.5,
+        0.17
+      ],
+      "body": [
+        0.5,
+        0.5
+      ],
+      "hands": [
+        0.48,
+        0.55
+      ]
+    },
+    "fig_soft": {
+      "face": [
+        0.51,
+        0.105
+      ],
+      "body": [
+        0.51,
+        0.5
+      ],
+      "hands": [
+        0.73,
+        0.42
+      ]
+    },
+    "fig_victory_check": {
+      "face": [
+        0.5,
+        0.17
+      ],
+      "body": [
+        0.5,
+        0.5
+      ],
+      "hands": [
+        0.48,
+        0.55
+      ]
+    },
+    "fig_victory_turn": {
+      "face": [
+        0.5,
+        0.17
+      ],
+      "body": [
+        0.5,
+        0.5
+      ],
+      "hands": [
+        0.48,
+        0.55
+      ]
+    },
+    "fig_victory_glasses": {
+      "face": [
+        0.5,
+        0.17
+      ],
+      "body": [
+        0.5,
+        0.5
+      ],
+      "hands": [
+        0.48,
+        0.55
+      ]
+    },
+    "fig_victory_wait": {
+      "face": [
+        0.5,
+        0.17
+      ],
+      "body": [
+        0.5,
+        0.5
+      ],
+      "hands": [
+        0.48,
+        0.55
+      ]
+    }
+  },
+  "motions": {
+    "stage_settle": {
+      "tracks": {
+        "figure": [
+          {
+            "t": 0,
+            "x": 0,
+            "y": 0,
+            "rot": 0,
+            "scale": 1,
+            "alpha": 1
+          },
+          {
+            "t": 0.35,
+            "x": 0,
+            "y": -3,
+            "rot": 0,
+            "scale": 1,
+            "alpha": 1
+          },
+          {
+            "t": 0.75,
+            "x": 0,
+            "y": 0,
+            "rot": 0,
+            "scale": 1,
+            "alpha": 1
+          }
+        ]
+      },
+      "loop": false,
+      "ease": "inOut"
+    }
+  },
+  "scenes": [
+    {
+      "id": "sion_lobby_01",
+      "kind": "lobby",
+      "title": "다음 줄을 놓친 이유",
+      "trigger": {
+        "on": "tap",
+        "note": "로비의 캐릭터 선택 후 명시적 반응 재생. 반복 탭으로 신체를 평가하는 분기 없음."
+      },
+      "why": "사소한 칭찬 때문에 같은 페이지를 다시 읽던 마음을 업무 말투로 숨기다 작은 틈을 드러낸다.",
+      "intent": "시작: 페이지를 넘기다가 상대를 알아봄. 핵심: 멈춘 손→안경 조정→책으로 입가만 가림. 끝: 책을 내려 희미한 미소가 보이는 상태로 옆자리를 내준다. 코트·미니스커트·부츠의 간격은 전신 시작 구도에서 유지하고 카메라는 안경 너머 눈에 연결한다.",
+      "assets": [
+        {
+          "key": "bg",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_action1",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_action2",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_happy",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_neutral",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_soft",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "stage_settle",
+          "type": "motion",
+          "status": "ready"
+        },
+        {
+          "key": "voice_sion_short_recording",
+          "type": "voice",
+          "status": "todo"
+        }
+      ],
+      "input": {
+        "skippable": true,
+        "advance": "tap",
+        "repeatable": true,
+        "cooldown_s": 10
+      },
+      "stage": {
+        "background": "bg",
+        "music": "silence"
+      },
+      "beats": [
+        {
+          "figure": "fig_neutral",
+          "gaze": "down",
+          "camera": {
+            "shot": "full",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": null,
+            "text": "시온은 페이지 끝을 들어 올린 채 멈춘다. 코트 사슬이 작게 흔들리다가 멎는다.",
+            "tone": "무성 지문. 책을 펼쳐 든 3/4 정면, 입가 중립, 은회색 눈을 가리지 않는 안경 반사"
+          },
+          "hold": 0.55
+        },
+        {
+          "figure": "fig_action1",
+          "gaze": "side",
+          "camera": {
+            "shot": "medium",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": "sion",
+            "text": "아까 하신 말, 다시 하실 필요 없습니다.",
+            "tone": "낮고 건조하게, 첫 음절 전 0.4초"
+          },
+          "hold": 0.9
+        },
+        {
+          "figure": "fig_action2",
+          "gaze": "away",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": "sion",
+            "text": "못 들은 게 아니에요. 들었으니까 다음 줄을 놓친 겁니다.",
+            "tone": "평소보다 약간 빠르게 변명하다 마지막에 멈춤"
+          },
+          "hold": 0.9
+        },
+        {
+          "figure": "fig_happy",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "push_in",
+            "duration": 0.55
+          },
+          "line": {
+            "speaker": null,
+            "text": "안경을 바로잡고 책을 입가까지 올린다. 눈만큼은 숨기지 못하고 공방장에게 돌아온다.",
+            "tone": "무성 지문. 책으로 입가만 가리고 눈썹이 미세하게 풀린 숨은 미소"
+          },
+          "hold": 0.55
+        },
+        {
+          "figure": "fig_soft",
+          "gaze": "player",
+          "camera": {
+            "shot": "medium",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": "sion",
+            "text": "앉으세요. 이번에는 읽는 척을 그만하겠습니다.",
+            "tone": "건조함 아래 작은 온기, 청유를 단정하게"
+          },
+          "hold": 0.9,
+          "motion": "stage_settle"
+        }
+      ]
+    },
+    {
+      "id": "sion_bond_01",
+      "kind": "bond",
+      "title": "지우지 않은 페이지",
+      "trigger": {
+        "on": "event",
+        "note": "기존 인연 에피소드 「지우지 않은 페이지」를 현재 구현의 해금 상태에서 선택할 때. 새 인연 레벨·소모·보상·해금 정책을 정하지 않는다."
+      },
+      "why": "칭찬을 적은 사소한 메모를 지우지 않고 책갈피로 남기며, 상대가 그 사실을 알아도 좋다는 작은 선택을 한다.",
+      "intent": "기존 인연 3화 제목의 완결 초안. 시작: 같은 페이지를 반복해 읽으며 메모 숨김. 핵심: 칭찬을 받은 자기 반응을 인정하고 떨어진 메모를 함께 정리. 끝: 메모를 책갈피로 남긴 뒤 옆자리에서 다음 장을 같이 읽자고 붙잡음. 최초로 지운 기억·본편 사건의 비밀·기억 삭제의 새 능력 규칙은 다루지 않는다.",
+      "assets": [
+        {
+          "key": "bg",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_action1",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_action2",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_determined",
+          "type": "image",
+          "status": "todo"
+        },
+        {
+          "key": "fig_happy",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_neutral",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_soft",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_surprised",
+          "type": "image",
+          "status": "todo"
+        },
+        {
+          "key": "fig_worried",
+          "type": "image",
+          "status": "todo"
+        },
+        {
+          "key": "stage_settle",
+          "type": "motion",
+          "status": "ready"
+        },
+        {
+          "key": "voice_sion_bond_recording",
+          "type": "voice",
+          "status": "todo"
+        }
+      ],
+      "input": {
+        "skippable": true,
+        "advance": "tap",
+        "repeatable": true,
+        "cooldown_s": 0
+      },
+      "stage": {
+        "background": "bg",
+        "music": "silence"
+      },
+      "beats": [
+        {
+          "figure": "fig_neutral",
+          "gaze": "side",
+          "camera": {
+            "shot": "full",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": null,
+            "text": "책을 덮는 소리가 나야 할 시간에 종이 넘기는 소리만 반복되었다. 시온은 같은 페이지를 세 번째 펼치고 있었다. 반무테 안경 위로 공방장을 보았지만 인사는 하지 않았다. 짙은 보라 코트의 사슬 끝이 책상 모서리에 가볍게 닿았다.",
+            "tone": "무성 지문. 책을 펼쳐 든 3/4 정면, 입가 중립, 은회색 눈을 가리지 않는 안경 반사"
+          },
+          "hold": 0.8
+        },
+        {
+          "figure": "fig_neutral",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": "sion",
+            "text": "그 자리는 비어 있습니다. 용건이 짧아도 앉으세요. 계속 서 있으면 제가 서두르는 것처럼 보이니까. 아니요, 지금 읽는 부분이 어려운 건 아닙니다. 방금 어디까지 읽었는지 확인하고 있었을 뿐이에요.",
+            "tone": "낮고 건조한 중저음. 자기 선택을 또렷이, 명령처럼 누르지 않음."
+          },
+          "hold": 1.0
+        },
+        {
+          "figure": "fig_worried",
+          "gaze": "side",
+          "camera": {
+            "shot": "medium",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": null,
+            "text": "공방장이 의자를 당기자 시온은 책 속에 끼워 둔 작은 종이를 손바닥으로 눌렀다. 완벽하게 정렬된 서류 옆에서 그 종이만 비스듬했다. 끝에는 가느다란 접힌 자국이 있었다. 그녀는 그것을 고치려다 오히려 조금 더 구겼다.",
+            "tone": "무성 지문. 메모를 누른 채 아랫입술에 힘이 들어간 망설임"
+          },
+          "hold": 0.8
+        },
+        {
+          "figure": "fig_worried",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": "sion",
+            "text": "보관할 문서가 있다면 왼쪽에 두세요. 그건 보지 마시고요. 중요한 기록이 아닙니다. 그래서 치우는 중이었어요. 분류가 끝나지 않았을 뿐이지, 제가 무엇을 남겨 두었는지 모르는 건 아닙니다.",
+            "tone": "낮고 건조한 중저음. 상대의 반응을 기다리는 쉼 0.4초, 정면 응시 전 짧은 시선 하강"
+          },
+          "hold": 1.0
+        },
+        {
+          "figure": "fig_worried",
+          "gaze": "down",
+          "camera": {
+            "shot": "medium",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": null,
+            "text": "종이를 치우려던 손이 멈췄다. 짧은 침묵 끝에 시온은 손바닥을 조금 들었다. 종이에는 오늘 나눈 사소한 대화가 몇 줄 적혀 있었다. 공방장이 등을 가린 조명을 옮겨 주며 책을 읽는 표정이 좋다고 했던, 지나가듯 끝난 말이었다.",
+            "tone": "무성 지문. 메모를 누른 채 아랫입술에 힘이 들어간 망설임"
+          },
+          "hold": 0.8
+        },
+        {
+          "figure": "fig_worried",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": "sion",
+            "text": "아까 하신 말입니다. 정확하게는, 내용보다 제가 어떻게 들었는지 적어 뒀어요. 다시 확인할 일이 있을까 해서요. 무슨 사건의 단서라는 뜻은 아닙니다. 모든 메모에 그렇게 거창한 이유가 있어야 합니까?",
+            "tone": "낮고 건조한 중저음. 상대의 반응을 기다리는 쉼 0.4초, 정면 응시 전 짧은 시선 하강"
+          },
+          "hold": 1.0
+        },
+        {
+          "figure": "fig_action2",
+          "gaze": "player",
+          "camera": {
+            "shot": "medium",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": null,
+            "text": "마지막 질문이 생각보다 빨리 나왔다. 시온은 입술을 다물고 안경 다리를 만졌다. 손끝은 렌즈가 아니라 관자놀이를 한 번 더 짚었다. 공방장은 변명이나 놀림을 보태지 않고 책상 위의 조명을 조금 낮췄다. 두 사람의 그림자가 가까워졌다.",
+            "tone": "무성 지문. 안경 다리를 고쳐 잡는 키포즈, 두 눈과 손가락이 겹치지 않음"
+          },
+          "hold": 0.8
+        },
+        {
+          "figure": "fig_soft",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": "sion",
+            "text": "눈이 부셨던 건 아닙니다. 그래도 이쪽이 낫군요. 아까도 이렇게 옮겨 주셨죠. 페이지가 아니라 제 얼굴을 보고 불편한지 물으셨고요. 그 정도는 저도 알아봅니다. 알아본 걸 잊고 싶지 않았던 거고요.",
+            "tone": "낮고 건조한 중저음. 상대의 반응을 기다리는 쉼 0.4초, 입가 2mm의 작은 웃음, 책 없이도 읽힘"
+          },
+          "hold": 1.0
+        },
+        {
+          "figure": "fig_action1",
+          "gaze": "down",
+          "camera": {
+            "shot": "medium",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": null,
+            "text": "그녀는 메모를 책 사이로 밀어 넣었다가 다시 꺼냈다. 문서에 붙일 분류표는 없었다. 종이를 찢거나 지우는 일도 일어나지 않았다. 남길 자리를 고르는 손만 오래 머뭇거렸다. 공방장은 책 가장자리에서 손을 떼고 기다렸다.",
+            "tone": "무성 지문. 페이지 끝을 잡은 손이 멈춘 키포즈, 책은 가슴 아래"
+          },
+          "hold": 0.8
+        },
+        {
+          "figure": "fig_worried",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "push_in",
+            "duration": 0.55
+          },
+          "line": {
+            "speaker": "sion",
+            "text": "남겨 두면 무게가 생깁니다. 사소한 말도요. 다음에 얼굴을 볼 때 생각나겠죠. 그러면 평소처럼 말하지 못할 수도 있고요. 제가 오늘 같은 페이지를 자꾸 펴는 건, 아마 그 문제와 관계가 있을 겁니다.",
+            "tone": "낮고 건조한 중저음. 상대의 반응을 기다리는 쉼 0.4초, 정면 응시 전 짧은 시선 하강"
+          },
+          "hold": 1.0
+        },
+        {
+          "figure": "fig_happy",
+          "gaze": "side",
+          "camera": {
+            "shot": "medium",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": null,
+            "text": "시온은 말을 마치고 책을 세웠다. 가려진 것은 입가뿐이었지만 안경 너머의 눈은 숨길 수 없었다. 공방장과 눈이 마주치자 책 위로 손가락이 조금 올라왔다. 웃음인지 난처함인지 정하기 어려운 표정이 잠깐 그 사이를 지나갔다.",
+            "tone": "무성 지문. 책으로 입가만 가리고 눈썹이 미세하게 풀린 숨은 미소"
+          },
+          "hold": 0.8
+        },
+        {
+          "figure": "fig_happy",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": "sion",
+            "text": "지금 웃으시면 이 책을 더 높이 들 겁니다. 경고는 해 드렸어요. …웃지 않으니까 오히려 더 곤란하군요. 제 말을 끝까지 들으실 생각이죠. 늘 그렇게 기다리는 쪽이 사람을 더 말하게 합니다.",
+            "tone": "낮고 건조한 중저음. 상대의 반응을 기다리는 쉼 0.4초, 입가 2mm의 작은 웃음, 책 없이도 읽힘"
+          },
+          "hold": 1.0
+        },
+        {
+          "figure": "fig_soft",
+          "gaze": "player",
+          "camera": {
+            "shot": "medium",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": null,
+            "text": "공방장이 고개를 끄덕였다. 시온은 책을 천천히 내려놓았다. 코트 소매 아래에서 손등이 드러났고, 메모는 그 앞에 놓였다. 그녀는 문장을 다시 읽지 않았다. 읽은 사람의 반응을 확인하듯 이번에는 공방장의 얼굴을 먼저 살폈다.",
+            "tone": "무성 지문. 책을 내리고 입가의 희미한 미소를 그대로 보이는 정면"
+          },
+          "hold": 0.8
+        },
+        {
+          "figure": "fig_soft",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": "sion",
+            "text": "다시 칭찬해 달라는 뜻은 아닙니다. 같은 말을 확인받으면 편할 줄 알았는데, 그건 아닌 것 같아요. 그때 그렇게 느끼셨다는 사실이면 충분합니다. 다음에는 다른 말을 하셔도 괜찮고요. 제가 좋아할 말만 고르지 마세요.",
+            "tone": "낮고 건조한 중저음. 자기 선택을 또렷이, 명령처럼 누르지 않음."
+          },
+          "hold": 1.0
+        },
+        {
+          "figure": "fig_surprised",
+          "gaze": "down",
+          "camera": {
+            "shot": "medium",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": null,
+            "text": "책상 끝에서 삐져나온 또 다른 메모가 시온의 손목에 걸렸다. 그녀가 급히 붙잡으려다 두 장을 함께 떨어뜨렸다. 공방장은 바닥의 종이를 주워 글이 보이지 않게 뒤집어 건넸다. 시온의 눈썹이 아주 조금 올라갔다가 원래 자리로 돌아왔다.",
+            "tone": "무성 지문. 메모가 떨어진 순간의 작은 눈썹 상승, 과장된 개그 얼굴 금지"
+          },
+          "hold": 0.8
+        },
+        {
+          "figure": "fig_surprised",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": "sion",
+            "text": "읽지 않으셨군요. 고맙습니다. 서류 정리와 개인 메모 정리는 다른 일입니다. 전자가 잘된다고 후자까지 깔끔하리라는 보장은 없어요. 그 점을 발견했다고 너무 만족한 얼굴은 하지 마시고요.",
+            "tone": "낮고 건조한 중저음. 상대의 반응을 기다리는 쉼 0.4초, 냉정한 중립, 반무테 너머 눈 가시"
+          },
+          "hold": 1.0
+        },
+        {
+          "figure": "fig_soft",
+          "gaze": "player",
+          "camera": {
+            "shot": "medium",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": null,
+            "text": "말끝에 옅은 웃음이 섞였다. 이번에는 책이 올라오지 않았다. 시온은 떨어진 두 장을 가지런히 맞추고 오늘의 메모만 따로 뺐다. 나머지를 덮는 손길은 익숙했지만 마지막 한 장 앞에서는 다시 속도가 느려졌다.",
+            "tone": "무성 지문. 책을 내리고 입가의 희미한 미소를 그대로 보이는 정면"
+          },
+          "hold": 0.8
+        },
+        {
+          "figure": "fig_soft",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "push_in",
+            "duration": 0.55
+          },
+          "line": {
+            "speaker": "sion",
+            "text": "책갈피 대신 끼워 두겠습니다. 내용과 상관없는 곳이라고 해도 제가 찾을 수 있어요. 읽다 멈춘 자리니까요. 내일 다시 펼쳤을 때 같은 문장에 조금 더 오래 머무르면, 이유는 묻지 않으셔도 됩니다.",
+            "tone": "낮고 건조한 중저음. 상대의 반응을 기다리는 쉼 0.4초, 입가 2mm의 작은 웃음, 책 없이도 읽힘"
+          },
+          "hold": 1.0
+        },
+        {
+          "figure": "fig_action1",
+          "gaze": "down",
+          "camera": {
+            "shot": "medium",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": null,
+            "text": "메모가 페이지 사이로 들어갔다. 끝부분이 조금 남아 책의 반듯한 선을 깨뜨렸다. 시온은 그것을 밀어 넣지 않았다. 공방장이 그 모서리를 보자 그녀는 시선을 피하지 않고 손가락으로 가볍게 눌렀다. 이제 숨기려는 동작과는 달랐다.",
+            "tone": "무성 지문. 페이지 끝을 잡은 손이 멈춘 키포즈, 책은 가슴 아래"
+          },
+          "hold": 0.8
+        },
+        {
+          "figure": "fig_determined",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": "sion",
+            "text": "이건 보존을 약속하는 거창한 선언이 아닙니다. 오늘 지우지 않기로 했다는 말이에요. 내일의 일은 내일 정하겠죠. 그래도 오늘만큼은 제가 무엇을 남겼는지, 당신도 알고 계셨으면 했습니다.",
+            "tone": "낮고 건조한 중저음. 상대의 반응을 기다리는 쉼 0.4초, 냉정한 중립, 반무테 너머 눈 가시"
+          },
+          "hold": 1.0
+        },
+        {
+          "figure": "fig_neutral",
+          "gaze": "player",
+          "camera": {
+            "shot": "full",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": null,
+            "text": "공방장이 일어서려 하자 시온의 손이 책등을 따라 움직였다. 다음 페이지를 넘기려던 손가락이 멈췄다. 그녀는 시선을 잠깐 내려 의자의 위치를 확인하고 다시 공방장을 보았다. 문을 향하던 걸음을 붙잡는 데에는 책 한 권이면 충분했다.",
+            "tone": "무성 지문. 책을 펼쳐 든 3/4 정면, 입가 중립, 은회색 눈을 가리지 않는 안경 반사"
+          },
+          "hold": 0.8
+        },
+        {
+          "figure": "fig_soft",
+          "gaze": "player",
+          "camera": {
+            "shot": "medium",
+            "focus": "body",
+            "move": "pull_out",
+            "duration": 0.55
+          },
+          "line": {
+            "speaker": "sion",
+            "text": "다음 장을 조금만 읽고 가시겠습니까? 소리 내어 읽으라는 뜻은 아니에요. 각자 읽어도 됩니다. 오늘 제 집중력이 좋지 않은 건 사실인데, 당신이 돌아가면 나아질 것 같지도 않아서요. 옆자리는 아직 비어 있습니다.",
+            "tone": "낮고 건조한 중저음. 자기 선택을 또렷이, 명령처럼 누르지 않음."
+          },
+          "hold": 1.0,
+          "motion": "stage_settle"
+        }
+      ]
+    },
+    {
+      "id": "sion_victory_01",
+      "kind": "victory",
+      "title": "종료 뒤의 확인",
+      "trigger": {
+        "on": "event",
+        "note": "전투 종료 후 승리 연출을 볼 때만. 보상·판정·체력 변화 없음."
+      },
+      "why": "기록 종료라는 공식 문장 뒤에 상대가 무사한지 확인하려는 개인적 감정이 행동보다 늦게 말로 나온다.",
+      "intent": "시작: 책 없이 책갈피 장검만 오른손으로 몸 바깥쪽 낮게 든 전신. 핵심: 종이가 가라앉자 시선이 상대에게 돌아오고 어깨가 풀림, 빈 왼손으로 안경 다리를 만진다. 끝: 왼손을 내리고 검은 낮게 유지하며 상대를 기다림. 책·메모를 갑자기 손에 추가하지 않는다. 마지막 페이지라는 말은 대사의 비유이며 실제 책을 닫는 동작이 아니다. 상처·치유·전투 수치·보상은 추가하지 않는다.",
+      "assets": [
+        {
+          "key": "bg",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_victory_check",
+          "type": "image",
+          "status": "todo"
+        },
+        {
+          "key": "fig_victory_turn",
+          "type": "image",
+          "status": "todo"
+        },
+        {
+          "key": "fig_victory_glasses",
+          "type": "image",
+          "status": "todo"
+        },
+        {
+          "key": "fig_victory_wait",
+          "type": "image",
+          "status": "todo"
+        },
+        {
+          "key": "stage_settle",
+          "type": "motion",
+          "status": "ready"
+        },
+        {
+          "key": "voice_sion_short_recording",
+          "type": "voice",
+          "status": "todo"
+        }
+      ],
+      "input": {
+        "skippable": true,
+        "advance": "tap",
+        "repeatable": true,
+        "cooldown_s": 0
+      },
+      "stage": {
+        "background": "bg",
+        "music": "silence"
+      },
+      "beats": [
+        {
+          "figure": "fig_victory_check",
+          "gaze": "side",
+          "camera": {
+            "shot": "full",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": "sion",
+            "text": "기록 종료.",
+            "tone": "낮고 정리된 전투 종료 발성 포즈: 책갈피 장검을 오른손으로 몸 바깥쪽 낮게 들고 양발 지지, 종이가 가라앉는 중; 손에 책 없음"
+          },
+          "hold": 0.9
+        },
+        {
+          "figure": "fig_victory_turn",
+          "gaze": "player",
+          "camera": {
+            "shot": "medium",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": null,
+            "text": "검을 낮춘 뒤 종이가 가라앉는다. 시온의 눈만 먼저 공방장에게 움직이고, 무사한 모습을 확인한 뒤 어깨가 늦게 내려간다.",
+            "tone": "무성 지문. 장검을 오른쪽 낮게 유지한 채 시선만 공방장에게 돌아오고 어깨 긴장이 풀리는 자세; 책·메모 없음"
+          },
+          "hold": 0.55
+        },
+        {
+          "figure": "fig_victory_glasses",
+          "gaze": "away",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "push_in",
+            "duration": 0.55
+          },
+          "line": {
+            "speaker": "sion",
+            "text": "…아직 한 줄 남았습니다.",
+            "tone": "정정하는 어조, 안경을 만지며 짧은 정적 포즈: 오른손의 장검은 낮은 안전 방향에 고정, 빈 왼손 검지로 안경 다리를 만지며 시선을 잠깐 피함; 책 없음"
+          },
+          "hold": 0.9
+        },
+        {
+          "figure": "fig_victory_wait",
+          "gaze": "player",
+          "camera": {
+            "shot": "medium",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": "sion",
+            "text": "같이 돌아가죠. 그쪽 페이지까지 혼자 닫을 생각은 없습니다.",
+            "tone": "숨을 섞지 않는 낮은 온기, 마지막은 확실히 포즈: 왼손을 내려 몸 옆에 두고 장검은 오른쪽 낮게 유지, 책 없이 희미한 미소를 그대로 보이며 공방장을 기다림"
+          },
+          "hold": 0.9,
+          "motion": "stage_settle"
+        }
+      ]
+    }
+  ],
+  "idle_figure": "fig_soft"
+}
