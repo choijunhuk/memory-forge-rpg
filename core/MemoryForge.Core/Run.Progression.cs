@@ -79,7 +79,7 @@ namespace MemoryForge.Core
         }
         // Actors come from the Run party entries: R0 already overwrote supplied power4/hp/gearBps/skillLv/ultLv with derived
         // values. res/refine/gauge/weaponId are read as source Battle.create reads them (`|| 0`, clamps, truthy weapon).
-        static BattleActorSetup ActorSetup(RunPartyEntry party)
+        internal static BattleActorSetup ActorSetup(RunPartyEntry party)
         {
             string? weapon = OptionalText(MemoryJson.Get(party.Fields, "weaponId"));
             return new BattleActorSetup
@@ -91,7 +91,7 @@ namespace MemoryForge.Core
             };
         }
         // Source deck copy {id, plus, mods, growth || 0, wielder, assigned, from}; the key list is bound after Battle.Create.
-        static BattleCardSpec CardSpec(RunCardSpec card)
+        internal static BattleCardSpec CardSpec(RunCardSpec card)
         {
             object? mods = MemoryJson.Get(card.Fields, "mods");
             return new BattleCardSpec

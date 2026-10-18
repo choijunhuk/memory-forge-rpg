@@ -280,7 +280,7 @@ static class BattleDataLoader
         Fields(json, "rid", "v", "kind", "args");
         return new BattleRequest(O(json, "rid"), json.GetProperty("v").GetInt32(), S(json, "kind"), json.TryGetProperty("args", out var args) ? Argument(args) : null);
     }
-    static BattleArgument Argument(JsonElement json)
+    internal static BattleArgument Argument(JsonElement json)
     {
         switch (json.ValueKind)
         {

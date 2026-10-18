@@ -211,7 +211,7 @@ namespace MemoryForge.Core
     public sealed class BattleEvent
     {
         public string E = "";
-        public int? T, N, Growth, Turn, Ap, Damage, Blocked, Cost, Due, Until, From, To, Index, Hp, Brk;
+        public int? T, N, Growth, Turn, Ap, Damage, Blocked, Cost, Due, Until, From, To, Index, Hp, Brk, Wave, Left;
         public string? Uid, Source, Status, Part, Phase, Id, Card, Mode, Target, Kind, Reserved, Actor;
         public bool? Fizzled, Fallback, Discarded;
         internal BattleEvent Copy() => (BattleEvent)MemberwiseClone();
@@ -232,6 +232,7 @@ namespace MemoryForge.Core
             BattleGraph.Optional(graph, "until", Until); BattleGraph.Optional(graph, "fallback", Fallback);
             BattleGraph.Optional(graph, "from", From); BattleGraph.Optional(graph, "to", To); BattleGraph.Optional(graph, "discarded", Discarded);
             BattleGraph.Optional(graph, "index", Index); BattleGraph.Optional(graph, "hp", Hp); BattleGraph.Optional(graph, "brk", Brk);
+            BattleGraph.Optional(graph, "wave", Wave); BattleGraph.Optional(graph, "left", Left);
             // eatName/delayRes with nothing to act on still report the original explicit null uid.
             if ((E == "eatName" || E == "delayRes") && Uid == null) graph.Add("uid", null);
             return graph;
@@ -275,6 +276,8 @@ namespace MemoryForge.Core
             BattleFlags = new Dictionary<string, object?>(StringComparer.Ordinal), RunFlags = new Dictionary<string, object?>(StringComparer.Ordinal);
         public List<BattleEvent> Log = new List<BattleEvent>(), Events = new List<BattleEvent>();
         public BattleResult? Result;
+        /// <summary>content-modes.js ModeBattle state.mode; absent (null) for every plain Battle.</summary>
+        public BattleMode? Mode;
 
         internal BattleState Copy()
         {
@@ -289,6 +292,7 @@ namespace MemoryForge.Core
             copy.Relics = new List<string>(Relics); copy.TurnFlags = BattleGraph.CopyDictionary(TurnFlags);
             copy.BattleFlags = BattleGraph.CopyDictionary(BattleFlags); copy.RunFlags = BattleGraph.CopyDictionary(RunFlags);
             copy.Log = Log.Select(e => e.Copy()).ToList(); copy.Events = Events.Select(e => e.Copy()).ToList(); copy.Result = Result?.Copy();
+            copy.Mode = Mode?.Copy();
             return copy;
         }
 
@@ -308,6 +312,37 @@ namespace MemoryForge.Core
             "battleFlags", BattleGraph.CopyDictionary(BattleFlags), "runFlags", BattleGraph.CopyDictionary(RunFlags), "handMax", HandMax, "log", Log.Select(e => e.ToJsonGraph()).ToList(),
             "ev", Events.Select(e => e.ToJsonGraph()).ToList(), "result", Result?.ToJsonGraph(), "killedMarked", KilledMarked, "diff", BattleGraph.Object("hp", DifficultyHp, "dmg", DifficultyDamage));
             if (PendingCopies != null) graph.Add("pendingCopies", PendingCopies.Select(p => p.ToJsonGraph()).ToList());
+            if (Mode != null) graph.Add("mode", Mode.ToJsonGraph());
+            return graph;
+        }
+    }
+
+    /// <summary>content-modes.js mode object: the caller's {kind, contentId, tier | difficulty + practice | battle, rule, params, waves}
+    /// plus wave/settled (and rewarded once a weekly boss settles). Waves holds the waves still to come. Rule params are integers.</summary>
+    public sealed class BattleMode
+    {
+        public string? Kind, ContentId, Rule;
+        public int? Tier, Difficulty, Battle;
+        public bool? Practice, Rewarded;
+        public Dictionary<string, int>? Params;
+        public List<List<string>> Waves = new List<List<string>>();
+        public int Wave = 1;
+        public bool Settled;
+        internal BattleMode Copy()
+        {
+            var copy = (BattleMode)MemberwiseClone();
+            copy.Params = Params == null ? null : new Dictionary<string, int>(Params, StringComparer.Ordinal);
+            copy.Waves = Waves.Select(w => new List<string>(w)).ToList(); return copy;
+        }
+        public Dictionary<string, object?> ToJsonGraph()
+        {
+            var graph = BattleGraph.Object();
+            BattleGraph.Optional(graph, "kind", Kind); BattleGraph.Optional(graph, "contentId", ContentId);
+            BattleGraph.Optional(graph, "tier", Tier); BattleGraph.Optional(graph, "difficulty", Difficulty); BattleGraph.Optional(graph, "practice", Practice);
+            BattleGraph.Optional(graph, "battle", Battle);
+            graph.Add("rule", Rule); graph.Add("params", Params?.ToDictionary(p => p.Key, p => (object?)p.Value, StringComparer.Ordinal));
+            graph.Add("waves", Waves.Select(w => new List<string>(w)).ToList()); graph.Add("wave", Wave); graph.Add("settled", Settled);
+            BattleGraph.Optional(graph, "rewarded", Rewarded);
             return graph;
         }
     }

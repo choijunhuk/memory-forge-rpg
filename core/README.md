@@ -54,3 +54,7 @@ M0는 순수 규칙이며 전체Run/원시바이트백업/실계정저장·이�
 `Run.Create`가 현재 legacy/v2의 Stats파생·안정키·출발기억·덱·기본무기·지도/개별난수를 실제 생성하고 `State`/`Available`/`NodeById`가 깊은 사본으로 순수 조회한다. [C#215645검사/2121생성·45130조회](../reports/run_create_20261015/)와 위조90/identity12/typed73, Node286, 실제UnityPlay18/Edit3 및 양방향 검토를 통과했다. 2131JS분모 중5JS고유·5typed진단은 parity와 구분한다.
 
 R0는 fresh생성/조회이며 전체Run진행/전투접합/보상/기억commit/저장복원·계정/서버가 아니다. 객체키는 canonical의미로, 배열은 순서까지 검증하고 own-undefined를 null로 바꾸지 않는다. boss위치available/미래무기타입/타입경계/공유data인덱스의 후속조건은 기록하고 R1도달경로에서 다룬다.
+
+## 콘텐츠 모드 C1
+
+`Battle.CreateMode`(웨이브·균열 규칙 6종, `BattleState.Mode`가 없으면 무동작)와 `ContentModes`(초기화 시계·파티 준비·단계 배율·성장 던전·주간 보스·기록 균열 정산·일일 활동)·`RiftRun`이 `engine/content-modes.js`를 실행한다. [60사례/2838 op·10141검사](../reports/content_modes_csharp_20261018/)와 기존 전체검사·Node357, Codex 읽기 전용 3회(최종 NO_BLOCKING_DEFECT)를 확인했다. 보류 데이터는 C#에서도 `CONTENT_NOT_AUTHORED`이며 서버 트랜잭션·`RiftRun` 저장 복원·Unity UI는 별도다.

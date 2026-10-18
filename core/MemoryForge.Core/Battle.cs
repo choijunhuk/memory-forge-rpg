@@ -356,7 +356,8 @@ namespace MemoryForge.Core
             return (int)value;
         }
         int ScaleVitality(int n) => checked((int)Floor((BigInteger)n * PartyVitality(), 81));
-        int ScaleAttack(int n) => StateNumber(Floor((BigInteger)n * PartyPower(), 160));
+        // rift_debt "모든 피해" adds its bps before the single floor; without it this is floor(n·power4/160).
+        int ScaleAttack(int n) => StateNumber(Floor((BigInteger)n * PartyPower() * ((BigInteger)10000 + RiftDebtRawBps()), 160 * 10000));
         int ScaleEnemy(int n) => StateNumber(Round((BigInteger)n * Or(state.DifficultyDamage, 100), 100));
         void GainBlockRaw(int n, string source)
         {
@@ -404,6 +405,7 @@ namespace MemoryForge.Core
 
         void StartTurn(bool first)
         {
+            RiftInkTurnStart();
             var s = state; var rules = data.Rules;
             RequireSupportedTurnState();
             int due = StateNumber(s.Debts.Where(d => d.Due <= (long)s.Turn + 1).Aggregate(BigInteger.Zero, (total, d) => total + d.N));
@@ -782,6 +784,7 @@ namespace MemoryForge.Core
         bool CheckEnd()
         {
             if (state.Phase == "VICTORY" || state.Phase == "DEFEAT") return true;
+            if (SpawnNextWave()) return false;
             if (state.Hp <= 0) state.Phase = "DEFEAT";
             else if (!state.Enemies.Any(e => e.Alive)) state.Phase = "VICTORY";
             else return false;

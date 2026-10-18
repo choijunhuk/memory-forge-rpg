@@ -99,7 +99,7 @@ namespace MemoryForge.Core
             foreach (var power in state.Powers) if (power.Id == "casefile" && enemy != null && enemy.Status.Mark > 0) add += power.Bps ?? 0;
             if (Has("ember_ring") && enemy != null && enemy.Status.Burn > 0) add += 1000;
             if (context.CreditLedger) add += 2000;
-            return add;
+            return add + RiftDamageBonus(context);
         }
         long EffectLevel(EffectContext context) => context.Actor == null ? 1 : context.IsUlt ? context.Actor.UltLv : context.Instance?.Owner == context.Actor.Id ? context.Actor.SkillLv : 1;
         int CalculateDamage(EffectDef op, EffectContext context, BattleEnemyState enemy)

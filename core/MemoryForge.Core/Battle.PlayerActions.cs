@@ -147,6 +147,7 @@ namespace MemoryForge.Core
                 Emit(new BattleEvent { E = "reserve", Uid = uid, Due = due, Kind = mode });
             }
             CheckEnd();
+            RiftEchoAfterPlay(owner);
         }
         void Ult(string? actorId, string? target, BattleArgument? picks)
         {
@@ -235,6 +236,7 @@ namespace MemoryForge.Core
             if (yuri != null && growth > 0) GainBlockRaw(StateNumber((BigInteger)growth * yuri.Params["perGrowth"]), "yuri");
             foreach (var power in state.Powers) if (power.Id == "greenhouse") GainBlockRaw(power.Block ?? 0, "greenhouse");
             var weapon = PartyWeapon("w_growthHeal"); if (weapon.HasValue) HealParty(weapon.Value.Value, fromWeapon: true);
+            var bloom = RiftRule("rift_bloom"); if (bloom != null) GainBlockRaw(bloom["growthBlock"], "rift");
         }
         void ExhaustCard(string uid)
         {

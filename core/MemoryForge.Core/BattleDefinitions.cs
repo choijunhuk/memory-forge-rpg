@@ -11,6 +11,7 @@ namespace MemoryForge.Core
         public int NextSlots, AfterSlots, NextSlotsMax, AfterSlotsMax, WeakBps;
         public int GaugePerCard, GaugeTurnCap, BreakApBonus, BreakApBonusMaxPerTurn, VulnerableBps, BrokenDamageBps;
         public int UpgradeNumerator = 13, UpgradeDenominator = 10;
+        internal BattleRules Copy() => (BattleRules)MemberwiseClone();
     }
 
     public sealed class PassiveDef
@@ -336,6 +337,44 @@ namespace MemoryForge.Core
             WeaponIndex = Weapons.ToDictionary(x => x.Id, StringComparer.Ordinal);
             PartIndex = Parts.ToDictionary(x => x.Id, StringComparer.Ordinal);
             EnemyIndex = Enemies.ToDictionary(x => x.Id, StringComparer.Ordinal);
+        }
+
+        /// <summary>content-modes.js modeData for rift_break (§11.1): a separate data copy where every enemy break gauge, boss phase
+        /// included, is max(1, Math.round(brk × gaugeBps / 10000)) and the broken bonus is replaced. This instance is never changed.</summary>
+        internal BattleData WithRiftBreak(int gaugeBps, int brokenDamageBps)
+        {
+            // Math.round(x) = floor(x + 1/2) on the exact rational brk·gaugeBps/10000
+            int Up(int brk)
+            {
+                var twice = 2 * (System.Numerics.BigInteger)brk * gaugeBps + 10000;
+                var quotient = System.Numerics.BigInteger.DivRem(twice, 20000, out var remainder);
+                if (remainder.Sign < 0) quotient -= 1;
+                var value = System.Numerics.BigInteger.Max(1, quotient);
+                if (value > int.MaxValue) throw new RuleException("BATTLE_NUMBER_OUT_OF_RANGE");
+                return (int)value;
+            }
+            // a detached deep copy, as the source's JSON clone: changing it never reaches this data
+            var copy = new BattleData
+            {
+                Rules = Rules.Copy(), attributeIds = new HashSet<string>(attributeIds, StringComparer.Ordinal),
+                Characters = Characters.Select(c => new BattleCharacterDef { Id = c.Id, Name = c.Name, Attr = c.Attr, Passive = c.Passive.Copy(), Ult = c.Ult.Copy(), Resonance = c.Resonance.Select(f => f.Copy()).ToList() }).ToList(),
+                Cards = Cards.Select(c => c.Copy()).ToList(), Parts = Parts.Select(p => p.Copy()).ToList(),
+                Weapons = Weapons.Select(w => new BattleWeaponDef { Id = w.Id, Name = w.Name, Type = w.Type, Rarity = w.Rarity, Pool = w.Pool, Card = w.Card, Signature = w.Signature, Passive = w.Passive.Copy() }).ToList(),
+                Relics = Relics.Select(r => new BattleRelicDef { Id = r.Id, Name = r.Name, Rarity = r.Rarity, Text = r.Text }).ToList()
+            };
+            copy.Rules.BrokenDamageBps = brokenDamageBps;
+            foreach (var enemy in Enemies)
+            {
+                var changed = new BattleEnemyDef { Id = enemy.Id, Name = enemy.Name, Tier = enemy.Tier, Hp = enemy.Hp, Brk = Up(enemy.Brk), Weak = new List<string>(enemy.Weak),
+                    Pattern = enemy.Pattern.Select(m => m.Copy()).ToList(), Passive = enemy.Passive?.Copy() };
+                var phase = enemy.PhaseDescriptor();
+                // A phase without brk stays without it, so the engine still rejects it at the boss's first HP 0.
+                if (phase != null) changed.SetPhaseDescriptor(new EnemyPhaseDef { Type = phase.Type, Hp = phase.Hp, Brk = phase.Brk.HasValue ? Up(phase.Brk.Value) : (int?)null,
+                    Weak = phase.Weak == null ? null : new List<string>(phase.Weak), Pattern = phase.Pattern?.Select(m => m.Copy()).ToList() });
+                copy.Enemies.Add(changed);
+            }
+            copy.Index();
+            return copy;
         }
     }
 

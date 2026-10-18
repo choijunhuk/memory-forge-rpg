@@ -60,14 +60,7 @@ namespace MemoryForge.Core
                     if (cost > MemoryV2.CapacityOf(data.Memory, new MemoryCapacityEntry { CharId = cid, Res = party.Res ?? 0, Asc = party.Asc ?? 0 })) throw new RuleException("OVER_CAPACITY");
                 }
             }
-            foreach (var party in s.Party)
-            {
-                data.Memory.Battle.WeaponIndex.TryGetValue(party.WeaponId ?? "", out var weapon);
-                var derived = Stats.Derive(data.Stats, new GrowthEntry { CharId = party.CharId, Level = party.Level, WeaponRarity = weapon?.Rarity,
-                    WeaponLevel = Fallback(party.WeaponLevel, 1), Armor = party.Armor, Accessory = party.Accessory, SkillLv = Fallback(party.SkillLv, 1), UltLv = Fallback(party.UltLv, 1) });
-                party.Power4 = derived.Power4; party.Hp = derived.Hp; party.GearBps = derived.GearBps; party.SkillLv = derived.SkillLv; party.UltLv = derived.UltLv;
-                s.MaxHp = Number((BigInteger)s.MaxHp + derived.Hp);
-            }
+            foreach (var party in s.Party) s.MaxHp = Number((BigInteger)s.MaxHp + Derive(data, party).Hp);
             s.Hp = s.MaxHp; s.HpReference = s.MaxHp;
             foreach (var party in s.Party)
             {
@@ -103,6 +96,15 @@ namespace MemoryForge.Core
             s.Zone = s.Zones.Count == 0 ? (int?)null : s.Zones[0]; s.Map = GenMap(s, s.Zone);
             if (s.MemoryPolicy == "v2" && setup.UseMemory == false) s.PlayBefore = DeckMemorySnapshot(data, s);
             return new Run(data, s);
+        }
+        /// <summary>Source Stats.derive(ix, p) then Object.assign(p, {power4, hp, gearBps, skillLv, ultLv}); shared with content-mode parties.</summary>
+        internal static Derived Derive(RunData data, RunPartyEntry party)
+        {
+            data.Memory.Battle.WeaponIndex.TryGetValue(party.WeaponId ?? "", out var weapon);
+            var derived = Stats.Derive(data.Stats, new GrowthEntry { CharId = party.CharId, Level = party.Level, WeaponRarity = weapon?.Rarity,
+                WeaponLevel = Fallback(party.WeaponLevel, 1), Armor = party.Armor, Accessory = party.Accessory, SkillLv = Fallback(party.SkillLv, 1), UltLv = Fallback(party.UltLv, 1) });
+            party.Power4 = derived.Power4; party.Hp = derived.Hp; party.GearBps = derived.GearBps; party.SkillLv = derived.SkillLv; party.UltLv = derived.UltLv;
+            return derived;
         }
         static int Fallback(int? value, int fallback) => !value.HasValue || value.Value == 0 ? fallback : value.Value;
         static int Number(BigInteger value)
