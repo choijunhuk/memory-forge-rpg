@@ -22,7 +22,7 @@ namespace MemoryForge.Client.Tests
         static readonly string[] Wanted =
             { "map", "battle_two", "battle_five", "boss_b_bell", "boss_b_notary", "boss_b_garden", "reward", "reward_elite", "rest", "forge", "shop", "event", "save_victory", "result" };
 
-        [UnityTest, Explicit("writes report screenshots; run by name with MF_EXPEDITION_SHOTS")]
+        [UnityTest, Timeout(900000), Explicit("writes report screenshots; run by name with MF_EXPEDITION_SHOTS")] // whole expeditions on 14 seeds
         public IEnumerator CaptureExpeditionScreens()
         {
             string? dir = Environment.GetEnvironmentVariable("MF_EXPEDITION_SHOTS");

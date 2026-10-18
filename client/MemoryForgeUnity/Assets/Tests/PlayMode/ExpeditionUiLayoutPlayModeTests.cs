@@ -66,7 +66,12 @@ namespace MemoryForge.Client.Tests
                     bool summary = c.HasTurnSummary && !checkedKinds.Contains("summary"), picks = c.PickerOpen && !checkedKinds.Contains("picks"),
                         last = c.ActionPresentationTerminal && !checkedKinds.Contains("lastAction"), fresh = key != null && !taken.Contains(key);
                     // A frame only where a check is due (the guide draws in LateUpdate) and now and then to let time pass.
-                    if (summary || picks || last || fresh || step % 16 == 0) yield return Settle();
+                    if (summary || picks || last || fresh || step % 16 == 0)
+                    {
+                        yield return Settle();
+                        // On every battle frame looked at (statuses come and go), each living enemy's intent is wholly in view.
+                        if (c.Snapshot!.Phase == "BATTLE" && !c.HasTurnSummary && !c.PickerOpen && !c.CardInfoOpen && !c.ActionPresentationTerminal) AssertIntentsInView(host, "battle step " + step + " of seed " + seed);
+                    }
                     if (summary) { AssertTouch(host, "turn summary"); checkedKinds.Add("summary"); }
                     if (picks) { AssertTouch(host, "pick sheet"); checkedKinds.Add("picks"); }
                     if (last) { AssertTouch(host, "last action sheet"); checkedKinds.Add("lastAction"); }
@@ -321,6 +326,25 @@ namespace MemoryForge.Client.Tests
                     foreach (var chip in chips) Assert.That(chip.Overlaps(nameRect), Is.False, what + ": a chip covers the name of " + enemy.name);
                 }
             }
+        }
+        // The intent is what a turn is planned on: no scroll or mask above an enemy's "이번 … / 다음 …" label (other than the stage band,
+        // which scrolls whole slots into view) hides any part of it.
+        static void AssertIntentsInView(GameObject host, string what)
+        {
+            Canvas.ForceUpdateCanvases(); var corners = new Vector3[4]; int seen = 0;
+            foreach (var enemy in View(host).GetComponentsInChildren<Button>().Where(b => b.name.StartsWith("Enemy:", StringComparison.Ordinal) && b.interactable))
+            {
+                var intent = enemy.GetComponentsInChildren<Text>().FirstOrDefault(t => t.text.StartsWith("이번  ", StringComparison.Ordinal));
+                Assert.That(intent, Is.Not.Null, what + ": " + enemy.name + " shows its intent");
+                var label = WorldRect(intent!.rectTransform, corners); seen++;
+                foreach (var mask in intent.GetComponentsInParent<RectMask2D>().Where(m => m.name != "Enemies")) // the stage band itself scrolls past six enemies
+                {
+                    var view = WorldRect(mask.rectTransform, corners);
+                    Assert.That(label.xMin >= view.xMin - 1 && label.xMax <= view.xMax + 1 && label.yMin >= view.yMin - 1 && label.yMax <= view.yMax + 1, Is.True,
+                        what + ": the intent of " + enemy.name + " " + label + " is partly hidden by " + mask.name + " " + view);
+                }
+            }
+            Assert.That(seen, Is.GreaterThan(0), what + ": a living enemy's intent was checked");
         }
         static Rect WorldRect(RectTransform r, Vector3[] corners) { r.GetWorldCorners(corners); return Rect.MinMaxRect(corners[0].x, corners[0].y, corners[2].x, corners[2].y); }
         static Dictionary<string, Rect> Slots(GameObject host)

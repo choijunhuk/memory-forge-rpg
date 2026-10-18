@@ -127,19 +127,35 @@ namespace MemoryForge.Client
         }
     }
 
-    // Press feedback: the control dips to 95% while held and springs back on release or exit.
+    // Press feedback: the control dips to 95% while held and springs back on release or exit. Bound to a face (a top-left pivoted
+    // child or the button itself), it scales that face about its own centre and puts it back exactly where the layout put it; `calm`
+    // (a caller's own reduced-motion setting) keeps it still like Reduced. The hit area never changes size while held.
     public sealed class UiPress : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerExitHandler
     {
         float target = 1;
+        RectTransform? face; Vector2 home; System.Func<bool>? calm;
+        public void Bind(RectTransform drawn, System.Func<bool> still) { face = drawn; home = drawn.anchoredPosition; calm = still; }
         public void OnPointerDown(PointerEventData _) => target = 0.95f;
         public void OnPointerUp(PointerEventData _) => target = 1;
         public void OnPointerExit(PointerEventData _) => target = 1;
+        // A press cut short (the control disabled or its view hidden mid-press) leaves the face exactly where the layout put it.
+        void OnDisable()
+        {
+            target = 1;
+            var moved = face != null ? face : (RectTransform)transform;
+            moved.localScale = Vector3.one; if (face != null) face.anchoredPosition = home;
+        }
         void Update()
         {
-            if (MemoryForgeUiMotion.Reduced) target = 1;
-            float s = transform.localScale.x;
+            bool still = MemoryForgeUiMotion.Reduced || (calm != null && calm());
+            if (still) target = 1;
+            var moved = face != null ? face : (RectTransform)transform;
+            float s = moved.localScale.x;
             if (Mathf.Abs(s - target) < 0.001f) return;
-            transform.localScale = Vector3.one * Mathf.MoveTowards(s, target, Time.unscaledDeltaTime * 1.6f);
+            s = still ? target : Mathf.MoveTowards(s, target, Time.unscaledDeltaTime * 1.6f); // reduced motion settles at once
+            if (Mathf.Abs(s - target) < 0.001f) s = target;
+            moved.localScale = Vector3.one * s;
+            if (face != null) { var size = face.rect.size; face.anchoredPosition = home + new Vector2(size.x * (1 - s) / 2, -size.y * (1 - s) / 2); }
         }
     }
 
