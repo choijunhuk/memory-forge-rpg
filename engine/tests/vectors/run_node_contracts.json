@@ -1,7 +1,7 @@
 {
   "schema": "mf-run-node-contract-inputs-v1",
   "sourceEngine": "653dfec4959d1ec759142ae8de24b08c6844b1db366a748fb9401829129cd72a",
-  "sourceData": "982f7b5b71632fd0b31ae89cd315648281870c48985f44f2922f984987f6874d",
+  "sourceData": "b6d3543a1d87f0a28e4824e0c1ae45a1eabc676d7abefcd2e57e23b4abc0054a",
   "source": "Actual Create and public commands re-derived from current tools/gen_traces.mjs scenarios after the 2026-10-19 now-play rules change (docs/RULES_NOW_PLAY.md), with their committed/rejected outcomes; no state injection.",
   "cases": {
     "repeatEvent": {
