@@ -88,7 +88,7 @@ test('bulwark retains the authored10 and powers merge their numeric parameters a
   const row = get('edge-bulwark-retention'), begin = row.steps[0].state, played = row.steps[1].state, end = row.steps[2].state;
   assert.equal(begin.block, 8 + 8 + 10); assert.equal(begin.counter, 2);
   const source = data.cards.find(c => c.id === 'harin_bulwark').eff[0]; assert.equal(source.keep, 10);
-  assert.deepEqual(played.powers, [{ id: 'bulwark', keep: source.keep }]); assert.equal(played.ap, 4 - 2); assert.equal(played.actors[0].gauge, 10);
+  assert.deepEqual(played.powers, [{ id: 'bulwark', keep: source.keep }]); assert.equal(played.ap, 4 - 2); assert.equal(played.actors[0].gauge, 20); // gaugePerCard 20 (RULES_NOW_PLAY)
   assert.equal(end.block, 10); assert.equal(end.counter, 0); assert.deepEqual(played.zones.exhaust, ['c1']);
   assert.deepEqual(get('edge-bulwark-stacks').steps[2].state.powers, [{ id: 'bulwark', keep: 20 }]);
 });
@@ -176,9 +176,10 @@ test('damage and healing use independently calculated rounding boundaries and ow
   const pierce = get('edge-pierce-split-rounding').steps.at(-1); assert.equal(pierce.state.enemies[0].hp, 42); assert.equal(pierce.state.enemies[0].block, 6);
 });
 
-test('earned gauge distinguishes the30 basic cap, weapon scaling and bypass gains', () => {
+test('earned gauge distinguishes the50 basic cap, weapon scaling and bypass gains', () => {
   const row = get('edge-gauge-earned-cap-bypass'), four = row.steps[4].state;
-  assert.equal(four.actors[0].gaugeTurn, 30); assert.equal(four.actors[0].gauge, 30 + 4 * 12);
+  // RULES_NOW_PLAY 20 per card ×1.2 weapon, capped at 50 a turn, plus four bypassing engraving gains of 12
+  assert.equal(four.actors[0].gaugeTurn, 50); assert.equal(four.actors[0].gauge, 50 + 4 * 12);
   const last = row.steps.at(-1); assert.equal(last.request.kind, 'ult'); assert.equal(last.state.actors[0].gauge, 0);
   assert.equal(row.steps.at(-2).state.actors[0].gauge, 100); assert.equal(last.state.ap, row.steps.at(-2).state.ap);
 });

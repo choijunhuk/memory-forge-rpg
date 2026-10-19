@@ -109,10 +109,10 @@ test('held is read and cleared on play, and reset when a card is drawn or recall
   assert.equal(b.s.cards[timed].held, true);
   b.do('play', { uid: timed, mode: 'now', target: b.s.enemies[0].uid });
   assert.equal(b.s.cards[timed].held, false);
-  // time_stamp reads ctx.held: +10 per card and +5 because the card had been held
-  assert.equal(b.actor('sera').gauge, 15);
+  // time_stamp reads ctx.held: +20 per card (RULES_NOW_PLAY gauge) and +5 because the card had been held
+  assert.equal(b.actor('sera').gauge, 25);
   b.do('play', { uid: firstOf(b, 'sera_round'), mode: 'now', target: b.s.enemies[0].uid });
-  assert.equal(b.actor('sera').gauge, 25, 'a card that was not held gets no time_stamp bonus');
+  assert.equal(b.actor('sera').gauge, 45, 'a card that was not held gets no time_stamp bonus');
   // drawing resets a stale held flag
   const stale = b.s.zones.discard[0]; b.s.cards[stale].held = true;
   b.s.zones.discard.splice(0, 1); b.s.zones.draw.unshift(stale);
