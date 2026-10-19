@@ -63,6 +63,37 @@ namespace MemoryForge.Client.Tests
             File.WriteAllText(Path.Combine(dir!, "captured.txt"), string.Join("\n", taken.OrderBy(k => k)) + "\nmissing: " + string.Join(", ", Wanted.Where(w => !taken.Contains(w))) + "\n");
         }
 
+        // CARD-HOLD-BACKVIEW-20261019: the first battle with a hand card held, its owner from behind, at phone size. The canvas goes to the
+        // camera first: that switch redraws the view, and a redraw ends a hold.
+        [UnityTest, Explicit("writes a report screenshot; run by name with MF_EXPEDITION_SHOTS")]
+        public IEnumerator CaptureCardHoldBackView()
+        {
+            string? dir = Environment.GetEnvironmentVariable("MF_EXPEDITION_SHOTS");
+            if (string.IsNullOrEmpty(dir)) Assert.Ignore("MF_EXPEDITION_SHOTS is not set");
+            Directory.CreateDirectory(dir!);
+            var host = Open(1234); var client = host.GetComponent<MemoryForgeExpeditionClient>(); yield return null;
+            Click(host, b => b.name.StartsWith("Node:", StringComparison.Ordinal) && b.interactable);
+            yield return Settle();
+            const int width = 2340, height = 1080;
+            var texture = new RenderTexture(width, height, 24); var camera = new GameObject("BackViewShotCamera").AddComponent<Camera>();
+            camera.targetTexture = texture; camera.clearFlags = CameraClearFlags.SolidColor; camera.backgroundColor = Color.black; camera.orthographic = true;
+            var canvas = host.GetComponentsInChildren<Canvas>().First(x => x.name == MemoryForgeExpeditionClient.OwnedCanvas);
+            canvas.renderMode = RenderMode.ScreenSpaceCamera; canvas.worldCamera = camera;
+            yield return null; yield return null; yield return null;
+            string uid = client.Snapshot!.Battle!.Zones.Hand[0];
+            var card = host.GetComponentsInChildren<Button>().First(b => b.name == "Hand:" + uid).gameObject;
+            var press = new UnityEngine.EventSystems.PointerEventData(UnityEngine.EventSystems.EventSystem.current) { button = UnityEngine.EventSystems.PointerEventData.InputButton.Left };
+            UnityEngine.EventSystems.ExecuteEvents.Execute(card, press, UnityEngine.EventSystems.ExecuteEvents.pointerDownHandler);
+            yield return Settle(); // past the 0.2 s hold and the rise
+            Assert.That(host.GetComponentsInChildren<RectTransform>().Any(r => r.name.StartsWith("OwnerBack:", StringComparison.Ordinal)), Is.True, "the owner is shown");
+            var image = new Texture2D(width, height, TextureFormat.RGB24, false); var before = RenderTexture.active;
+            Canvas.ForceUpdateCanvases(); camera.Render();
+            RenderTexture.active = texture; image.ReadPixels(new Rect(0, 0, width, height), 0, 0); image.Apply(); RenderTexture.active = before;
+            File.WriteAllBytes(Path.Combine(dir!, "battle_card_hold_backview.png"), image.EncodeToPNG());
+            UnityEngine.EventSystems.ExecuteEvents.Execute(card, press, UnityEngine.EventSystems.ExecuteEvents.pointerUpHandler);
+            Object.Destroy(camera.gameObject); texture.Release(); Object.Destroy(image); Object.Destroy(host);
+        }
+
         internal static GameObject Open(long seed)
         {
             var host = new GameObject("ExpeditionUiCaptureHost"); host.SetActive(false);

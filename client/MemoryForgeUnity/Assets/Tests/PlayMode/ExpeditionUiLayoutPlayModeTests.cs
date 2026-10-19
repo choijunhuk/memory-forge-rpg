@@ -202,6 +202,191 @@ namespace MemoryForge.Client.Tests
             Assume.That(played, Is.True, "some hand card plays now on the enemy");
         }
 
+        // CARD-HOLD-BACKVIEW-20261019: a hand card held 0.2 s (or aimed) shows its owner from behind at the stage's lower left, never
+        // taking a touch. A tap's first moment shows nothing, and a newer press voids an older press's timer. Letting go (then the
+        // click's redraw), a redraw mid-hold, a drop that plays nothing and a committed play all take it away, the leaving figure
+        // drawn again in each new view. Calm (동작 줄이기): it appears and goes at once.
+        [UnityTest]
+        public IEnumerator HoldingOrAimingAHandCardShowsItsOwnerFromBehind()
+        {
+            var host = Open(1234); var c = host.GetComponent<MemoryForgeExpeditionClient>(); yield return null;
+            Press(host, b => b.name.StartsWith("Node:", StringComparison.Ordinal) && b.interactable); yield return null;
+            yield return Settle();
+            string uid = c.Snapshot!.Battle!.Zones.Hand[0], name = "Hand:" + uid;
+            GameObject Card() => View(host).GetComponentsInChildren<Button>().First(b => b.name == name).gameObject;
+            PointerEventData Pointer() => new PointerEventData(EventSystem.current) { button = PointerEventData.InputButton.Left, position = Center(host, name) };
+
+            var press = Pointer(); ExecuteEvents.Execute(Card(), press, ExecuteEvents.pointerDownHandler);
+            Assert.That(OwnerBack(host), Is.Null, "the first moment of a press shows nothing (a tap stays a tap)");
+            yield return new WaitForSecondsRealtime(0.15f);
+            ExecuteEvents.Execute(Card(), press, ExecuteEvents.pointerUpHandler);
+            press = Pointer(); ExecuteEvents.Execute(Card(), press, ExecuteEvents.pointerDownHandler);
+            yield return new WaitForSecondsRealtime(0.1f);
+            Assert.That(OwnerBack(host), Is.Null, "the first press's timer is void after a newer press");
+            yield return new WaitForSecondsRealtime(0.25f);
+            var shown = OwnerBack(host);
+            Assert.That(shown, Is.Not.Null, "a held card shows its owner");
+            Assert.That(shown!.GetComponent<Image>().raycastTarget, Is.False, "the figure never takes a touch");
+            Assert.That(shown.GetComponent<CanvasGroup>().blocksRaycasts, Is.False);
+            var card = Card();
+            ExecuteEvents.Execute(card, press, ExecuteEvents.pointerUpHandler); ExecuteEvents.Execute(card, press, ExecuteEvents.pointerClickHandler);
+            yield return Settle();
+            Assert.That(OwnerBack(host), Is.Not.Null, "the click's redraw draws the leaving figure again");
+            yield return new WaitForSecondsRealtime(0.4f);
+            Assert.That(OwnerBack(host), Is.Null, "letting go takes it away");
+
+            press = Pointer(); ExecuteEvents.Execute(Card(), press, ExecuteEvents.pointerDownHandler);
+            yield return new WaitForSecondsRealtime(0.3f);
+            Assert.That(OwnerBack(host), Is.Not.Null);
+            c.SelectCard(c.Snapshot!.Battle!.Zones.Hand.Last()); // a redraw the held card never hears a release from
+            yield return new WaitForSecondsRealtime(0.4f);
+            Assert.That(OwnerBack(host), Is.Null, "a redraw mid-hold takes it away");
+
+            // An upward drag aims: the owner shows at once. Dropped back on the card itself, nothing plays and the owner goes.
+            Vector2 from = Center(host, name);
+            var aim = new PointerEventData(EventSystem.current) { button = PointerEventData.InputButton.Left, position = from, pressPosition = from };
+            card = Card(); ExecuteEvents.Execute(card, aim, ExecuteEvents.initializePotentialDrag);
+            aim.position = from + new Vector2(0, 40); aim.delta = new Vector2(0, 40); aim.dragging = true;
+            ExecuteEvents.Execute(card, aim, ExecuteEvents.beginDragHandler);
+            Assert.That(OwnerBack(host), Is.Not.Null, "an aimed card shows its owner at once");
+            long v0 = c.Snapshot!.Battle!.V;
+            aim.position = from; ExecuteEvents.Execute(card, aim, ExecuteEvents.dragHandler); ExecuteEvents.Execute(card, aim, ExecuteEvents.endDragHandler);
+            yield return new WaitForSecondsRealtime(0.4f);
+            Assert.That(c.Snapshot!.Battle!.V, Is.EqualTo(v0), "a drop on the card plays nothing");
+            Assert.That(OwnerBack(host), Is.Null, "a drop that plays nothing takes it away");
+
+            // A committed play: the play's redraw keeps the figure, which then leaves in the new view.
+            string enemy = c.Snapshot!.Battle!.Enemies.Last(e => e.Alive).Uid; bool played = false;
+            foreach (string next in c.Snapshot!.Battle!.Zones.Hand.ToList())
+            {
+                if (c.HasActionPresentation) { c.SkipActionPresentation(); yield return Settle(); }
+                var before = c.Snapshot!.Battle; if (before == null || before.Phase != "PLAYER" || !before.Zones.Hand.Contains(next)) continue;
+                Drag(host, "Hand:" + next, Center(host, "Enemy:" + enemy));
+                if (c.PickerOpen) { c.AutoPick(); yield return new WaitForSecondsRealtime(0.4f); continue; } // a pick sheet's play shows no figure
+                if (c.Snapshot!.Battle?.V == before.V) { yield return new WaitForSecondsRealtime(0.4f); continue; }
+                played = true;
+                Assert.That(OwnerBack(host), Is.Not.Null, "a committed play's redraw draws the leaving owner");
+                yield return new WaitForSecondsRealtime(0.5f);
+                Assert.That(OwnerBack(host), Is.Null, "and it leaves");
+                break;
+            }
+            Assume.That(played, Is.True, "some hand card plays now on the enemy");
+
+            if (c.HasActionPresentation) { c.SkipActionPresentation(); yield return Settle(); }
+            Assume.That(c.Snapshot!.Battle?.Phase, Is.EqualTo("PLAYER"));
+            c.SetActionPace(MemoryForgeExpeditionClient.ActionPacing.Reduced); yield return Settle();
+            uid = c.Snapshot!.Battle!.Zones.Hand[0]; name = "Hand:" + uid;
+            press = Pointer(); ExecuteEvents.Execute(Card(), press, ExecuteEvents.pointerDownHandler);
+            yield return new WaitForSecondsRealtime(0.3f);
+            Assert.That(OwnerBack(host), Is.Not.Null, "calm still shows the owner");
+            ExecuteEvents.Execute(Card(), press, ExecuteEvents.pointerUpHandler);
+            yield return null; yield return null;
+            Assert.That(OwnerBack(host), Is.Null, "calm takes it away at once");
+        }
+        // Two fingers: card A held, then card B (another owner) aimed. B's owner replaces A's, A's late release leaves B's alone, and
+        // B's drop takes B's away.
+        [UnityTest]
+        public IEnumerator ASecondFingersAimShowsThatCardsOwner()
+        {
+            var host = Open(1234); var c = host.GetComponent<MemoryForgeExpeditionClient>(); yield return null;
+            Press(host, b => b.name.StartsWith("Node:", StringComparison.Ordinal) && b.interactable); yield return null;
+            yield return Settle();
+            var hand = c.Snapshot!.Battle!.Zones.Hand.ToList(); var owners = new Dictionary<string, string>();
+            foreach (string uid in hand) // each card's owner, learned by holding it alone
+            {
+                var card = View(host).GetComponentsInChildren<Button>().First(b => b.name == "Hand:" + uid).gameObject;
+                var alone = new PointerEventData(EventSystem.current) { button = PointerEventData.InputButton.Left, position = Center(host, "Hand:" + uid) };
+                ExecuteEvents.Execute(card, alone, ExecuteEvents.pointerDownHandler); yield return new WaitForSecondsRealtime(0.3f);
+                owners[uid] = OwnerBack(host)!.name; ExecuteEvents.Execute(card, alone, ExecuteEvents.pointerUpHandler); yield return new WaitForSecondsRealtime(0.4f);
+            }
+            string a = hand[0]; string? other = hand.FirstOrDefault(u => owners[u] != owners[a]);
+            Assume.That(other, Is.Not.Null, "the hand holds cards of two owners");
+            string b2 = other!;
+            var cardA = View(host).GetComponentsInChildren<Button>().First(b => b.name == "Hand:" + a).gameObject;
+            var cardB = View(host).GetComponentsInChildren<Button>().First(b => b.name == "Hand:" + b2).gameObject;
+            var fingerA = new PointerEventData(EventSystem.current) { button = PointerEventData.InputButton.Left, position = Center(host, "Hand:" + a), pointerId = 0 };
+            ExecuteEvents.Execute(cardA, fingerA, ExecuteEvents.pointerDownHandler); yield return new WaitForSecondsRealtime(0.3f);
+            Assert.That(OwnerBack(host)!.name, Is.EqualTo(owners[a]));
+            Vector2 from = Center(host, "Hand:" + b2);
+            var fingerB = new PointerEventData(EventSystem.current) { button = PointerEventData.InputButton.Left, position = from, pressPosition = from, pointerId = 1 };
+            ExecuteEvents.Execute(cardB, fingerB, ExecuteEvents.initializePotentialDrag);
+            fingerB.position = from + new Vector2(0, 40); fingerB.delta = new Vector2(0, 40); fingerB.dragging = true;
+            ExecuteEvents.Execute(cardB, fingerB, ExecuteEvents.beginDragHandler);
+            yield return null;
+            Assert.That(View(host).GetComponentsInChildren<RectTransform>().Any(r => r.name == owners[b2]), Is.True, "the second finger's card shows its own owner");
+            ExecuteEvents.Execute(cardA, fingerA, ExecuteEvents.pointerUpHandler);
+            yield return new WaitForSecondsRealtime(0.4f);
+            Assert.That(OwnerBack(host)?.name, Is.EqualTo(owners[b2]), "the first finger's late release leaves the aimed card's owner up");
+            fingerB.position = from; ExecuteEvents.Execute(cardB, fingerB, ExecuteEvents.dragHandler); ExecuteEvents.Execute(cardB, fingerB, ExecuteEvents.endDragHandler);
+            yield return new WaitForSecondsRealtime(0.4f);
+            Assert.That(OwnerBack(host), Is.Null, "the aimed card's drop takes it away");
+
+            // Overlapping holds: A shown, B pressed (its timer still running), both let go: nothing stays up.
+            cardA = View(host).GetComponentsInChildren<Button>().First(b => b.name == "Hand:" + a).gameObject;
+            cardB = View(host).GetComponentsInChildren<Button>().First(b => b.name == "Hand:" + b2).gameObject;
+            ExecuteEvents.Execute(cardA, fingerA, ExecuteEvents.pointerDownHandler); yield return new WaitForSecondsRealtime(0.3f);
+            Assert.That(OwnerBack(host)!.name, Is.EqualTo(owners[a]));
+            var pressB = new PointerEventData(EventSystem.current) { button = PointerEventData.InputButton.Left, position = from, pointerId = 1 };
+            ExecuteEvents.Execute(cardB, pressB, ExecuteEvents.pointerDownHandler);
+            ExecuteEvents.Execute(cardA, fingerA, ExecuteEvents.pointerUpHandler); ExecuteEvents.Execute(cardB, pressB, ExecuteEvents.pointerUpHandler);
+            yield return new WaitForSecondsRealtime(0.5f);
+            Assert.That(OwnerBack(host), Is.Null, "letting go of both leaves no figure, and B's voided timer shows none");
+
+            // A aims, B is pressed, A's aim is cancelled: B, still held, shows its own owner.
+            var aimA = new PointerEventData(EventSystem.current) { button = PointerEventData.InputButton.Left, position = Center(host, "Hand:" + a), pressPosition = Center(host, "Hand:" + a), pointerId = 0 };
+            Vector2 fromA = aimA.position;
+            ExecuteEvents.Execute(cardA, aimA, ExecuteEvents.initializePotentialDrag);
+            aimA.position = fromA + new Vector2(0, 40); aimA.delta = new Vector2(0, 40); aimA.dragging = true;
+            ExecuteEvents.Execute(cardA, aimA, ExecuteEvents.beginDragHandler);
+            pressB = new PointerEventData(EventSystem.current) { button = PointerEventData.InputButton.Left, position = from, pointerId = 1 };
+            ExecuteEvents.Execute(cardB, pressB, ExecuteEvents.pointerDownHandler);
+            aimA.position = fromA; ExecuteEvents.Execute(cardA, aimA, ExecuteEvents.dragHandler); ExecuteEvents.Execute(cardA, aimA, ExecuteEvents.endDragHandler);
+            yield return new WaitForSecondsRealtime(0.5f);
+            Assert.That(OwnerBack(host)?.name, Is.EqualTo(owners[b2]), "a cancelled aim leaves another card's pending hold alone");
+            ExecuteEvents.Execute(cardB, pressB, ExecuteEvents.pointerUpHandler);
+            yield return new WaitForSecondsRealtime(0.4f);
+            Assert.That(OwnerBack(host), Is.Null);
+        }
+        // The held owner stands over the stage but under the card row and hand (their text stays readable); another button's
+        // release leaves a left hold up; losing focus lets a still press go (its release never comes while away).
+        [UnityTest]
+        public IEnumerator TheHeldOwnerStaysUnderTheHandIgnoresOtherButtonsAndLetsGoOnFocusLoss()
+        {
+            var host = Open(1234); var c = host.GetComponent<MemoryForgeExpeditionClient>(); yield return null;
+            Press(host, b => b.name.StartsWith("Node:", StringComparison.Ordinal) && b.interactable); yield return null;
+            yield return Settle();
+            string name = "Hand:" + c.Snapshot!.Battle!.Zones.Hand[0];
+            var card = View(host).GetComponentsInChildren<Button>().First(b => b.name == name).gameObject;
+            var press = new PointerEventData(EventSystem.current) { button = PointerEventData.InputButton.Left, position = Center(host, name) };
+            ExecuteEvents.Execute(card, press, ExecuteEvents.pointerDownHandler);
+            yield return new WaitForSecondsRealtime(0.3f);
+            var shown = OwnerBack(host)!;
+            Transform Top(Transform t) { while (t.parent != null && t.parent.name != "ExpeditionFrame") t = t.parent; return t; }
+            var party = View(host).GetComponentsInChildren<RectTransform>().First(r => r.name == "Party" && r.parent.name == "ExpeditionFrame");
+            Assert.That(shown.GetSiblingIndex(), Is.GreaterThan(party.GetSiblingIndex()), "over the stage");
+            Assert.That(shown.GetSiblingIndex(), Is.LessThan(Top(card.transform).GetSiblingIndex()), "under the hand");
+            var right = new PointerEventData(EventSystem.current) { button = PointerEventData.InputButton.Right, position = press.position };
+            ExecuteEvents.Execute(card, right, ExecuteEvents.pointerUpHandler);
+            yield return new WaitForSecondsRealtime(0.4f);
+            Assert.That(OwnerBack(host), Is.Not.Null, "a right-button release leaves a left hold up");
+            var rightDrag = new PointerEventData(EventSystem.current) { button = PointerEventData.InputButton.Right, position = press.position, pressPosition = press.position, pointerId = 5 };
+            ExecuteEvents.Execute(card, rightDrag, ExecuteEvents.initializePotentialDrag);
+            rightDrag.position += new Vector2(0, 40); rightDrag.delta = new Vector2(0, 40); rightDrag.dragging = true;
+            ExecuteEvents.Execute(card, rightDrag, ExecuteEvents.beginDragHandler); ExecuteEvents.Execute(card, rightDrag, ExecuteEvents.endDragHandler);
+            yield return new WaitForSecondsRealtime(0.4f);
+            Assert.That(OwnerBack(host), Is.Not.Null, "a right-button drag leaves a left hold up");
+            // Losing focus with a second card's press still pending: both let go and the pending one never shows.
+            string nameB = "Hand:" + c.Snapshot!.Battle!.Zones.Hand[1];
+            var cardB = View(host).GetComponentsInChildren<Button>().First(b => b.name == nameB).gameObject;
+            ExecuteEvents.Execute(cardB, new PointerEventData(EventSystem.current) { button = PointerEventData.InputButton.Left, position = Center(host, nameB), pointerId = 1 }, ExecuteEvents.pointerDownHandler);
+            host.SendMessage("OnApplicationFocus", false);
+            yield return new WaitForSecondsRealtime(0.5f);
+            Assert.That(OwnerBack(host), Is.Null, "losing focus lets both presses go");
+            host.SendMessage("OnApplicationFocus", true); yield return Settle();
+        }
+        static RectTransform? OwnerBack(GameObject host) =>
+            View(host).GetComponentsInChildren<RectTransform>().FirstOrDefault(r => r.name.StartsWith("OwnerBack:", StringComparison.Ordinal));
+
         // ───────── helpers ─────────
         // A left-button drag of the named control's root from its centre to a screen point: the module's own event order, the first
         // move a quarter of the way.

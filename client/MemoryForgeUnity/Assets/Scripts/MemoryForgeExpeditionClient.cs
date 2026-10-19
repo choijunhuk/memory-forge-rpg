@@ -274,7 +274,14 @@ namespace MemoryForge.Client
         void OnApplicationPause(bool paused) { if (paused) Leave(); else ResumeView(); }
         void OnApplicationFocus(bool focused) { if (focused) ResumeView(); else Leave(); }
         // Leaving the app (focus loss, pause) drops the unsent intent, so nothing is sent unseen, and then the committed display.
-        void Leave() { if (DropPrepared(IntentDropped)) actionDropped = true; DropActionPresentation(); }
+        void Leave()
+        {
+            if (DropPrepared(IntentDropped)) actionDropped = true;
+            DropActionPresentation();
+            // Away, a still press never hears its release: void its timer and take away a held (not aimed) card's owner.
+            if (holdUid != null && holdUid != dragUid) { holdUid = null; holdTicket++; }
+            if (backUid != null && backUid != dragUid) HideOwnerBack(backUid, false);
+        }
         // Resume: an unsent intent still waiting is dropped (never sent on resume), a pick sheet whose opening state is gone (Fresh) is
         // dropped, and the view is redrawn from the actual Run only when one of those happened, a player-action display or intent was
         // dropped while away, or the view is missing. No Run command, replay, restart or server fetch; an open summary stays (it is not stale).
@@ -1361,6 +1368,7 @@ namespace MemoryForge.Client
             ActionStrip();
             PartyStage(b, rules);
             EnemyStage(b, rules, aiming);
+            stageEnd = frame!.childCount; // a held card's owner stands here: over the stage, under the card row, hand and sheets
             CardActions(b);
             HandDock(b);
             ApGem(b);
@@ -2352,6 +2360,7 @@ namespace MemoryForge.Client
                 if (!Calm) StartCoroutine(MemoryForgeUiMotion.Fade(frame.gameObject.AddComponent<CanvasGroup>(), 0f, 1f, 0.24f, Still));
             }
             var s = recovery == null ? run.State : null; var b = s?.Phase == "BATTLE" ? s.Battle : null; // a quarantined Run is never read
+            RedrawOwnerBack(b != null);
             if (s == null || b == null) { seenBattle = null; seenEnemies.Clear(); seenHand.Clear(); flight = null; return; }
             string key = s.RunId + "@" + s.Position;
             if (key != seenBattle)
@@ -2541,11 +2550,15 @@ namespace MemoryForge.Client
         // A drag only draws: an arrow from the card to the pointer and a light on the zone a drop there asks for. The drop goes through
         // DragPlay, the tap path's own selection and confirm. None of it takes a raycast.
         RectTransform? dragLayer; string? dragUid;
-        bool BeginCardDrag(string uid)
+        bool CardInPlay(string uid)
         {
             var b = run?.State.Battle;
-            if (frame == null || b == null || b.Phase != "PLAYER" || Locked() || prepared != null || !b.Zones.Hand.Contains(uid) || !handFaces.ContainsKey(uid)) return false;
-            dragUid = uid; return true;
+            return frame != null && b != null && b.Phase == "PLAYER" && !Locked() && prepared == null && b.Zones.Hand.Contains(uid) && handFaces.ContainsKey(uid);
+        }
+        bool BeginCardDrag(string uid)
+        {
+            if (!CardInPlay(uid)) return false;
+            dragUid = uid; holdUid = uid; holdTicket++; ShowOwnerBack(uid); return true;
         }
         void CardDragTo(Vector2 screen, Camera? eye)
         {
@@ -2604,10 +2617,123 @@ namespace MemoryForge.Client
             dragForecast = default;
             if (dragLayer != null) Destroy(dragLayer.gameObject);
             dragLayer = null; bool ours = dragUid == uid; dragUid = null;
-            if (!drop || !ours) return;
-            var (mode, aim, _) = DropTarget(uid, screen, eye);
-            if (mode != null) DragPlay(uid, mode, aim);
+            if (holdUid == uid) { holdUid = null; holdTicket++; } // another card's pending hold stays
+            bool played = false;
+            if (drop && ours)
+            {
+                var (mode, aim, _) = DropTarget(uid, screen, eye);
+                playingUid = uid; try { played = mode != null && DragPlay(uid, mode, aim); } finally { playingUid = null; }
+            }
+            HideOwnerBack(uid, played); // after the play's redraw, which drew the owner again
         }
+
+        // ───────── the card's owner from behind (CARD-HOLD-BACKVIEW-20261019, art/requests/card-hold-backview-20261019.md) ─────────
+        // While a hand card is held (0.2 s) or aimed, its owner stands at the stage's lower left seen from behind, facing the enemies:
+        // up in 0.18 s and a slow breath while held; on letting go a short push and down after a play, straight down otherwise. The
+        // figure is state, not an object: every redraw draws it again (still up, or still leaving), as `flight` survives a play's
+        // redraw. Calm (동작 줄이기): no motion, the figure just appears and goes. Codex's back-view art (Characters/char_<id>_back_ready,
+        // _back_act) is drawn as it is. A play through the pick sheet leaves as a cancel; the sheet's later commit shows no figure.
+        // ponytail: until that art exists the owner's SD stands in as a dark silhouette; drop the fallback once all ten have art.
+        // backUid: the card whose owner is shown. A newer card (a second finger's aim) replaces it, and only that card takes it away.
+        string? backWho, backUid; (string Who, bool Played, int Ticket)? backLeaving; int backTicket, holdTicket;
+        RectTransform? ownerBack; string? holdUid, playingUid; int stageEnd;
+        void HoldCard(string uid)
+        {
+            if (!CardInPlay(uid)) return;
+            holdUid = uid; StartCoroutine(ShowOwnerBackAfter(uid, ++holdTicket));
+        }
+        IEnumerator ShowOwnerBackAfter(string uid, int ticket)
+        {
+            yield return new WaitForSecondsRealtime(0.2f);
+            if (ticket == holdTicket && holdUid == uid && CardInPlay(uid)) ShowOwnerBack(uid); // a newer press or a release voids it
+        }
+        // A release (or a view replaced mid-press) always takes away its own card's owner; another card's stays. During the card's
+        // own drop, its play's redraw replaces the card: the drop then decides how the owner leaves.
+        void ReleaseCard(string uid)
+        {
+            if (uid == playingUid) return;
+            if (holdUid == uid) { holdUid = null; holdTicket++; }
+            HideOwnerBack(uid, false);
+        }
+        void ShowOwnerBack(string uid)
+        {
+            if (backUid == uid) return;
+            if (backUid != null) HideOwnerBack(backUid, false);
+            string? who = CardOwner(uid); var drawn = who == null ? null : DrawOwnerBack(who);
+            if (drawn == null) return;
+            backWho = who; backUid = uid; backLeaving = null; ownerBack = drawn;
+            if (!Calm) StartCoroutine(OwnerBackUp(drawn, true));
+        }
+        void HideOwnerBack(string uid, bool played)
+        {
+            if (backWho == null || backUid != uid) return;
+            var leave = (backWho, played, ++backTicket); backWho = null; backUid = null; backLeaving = leave;
+            var shown = ownerBack; ownerBack = null;
+            if (shown != null) StartCoroutine(OwnerBackOut(shown, leave)); else backLeaving = null;
+        }
+        // After every redraw (Animate): the figure again in the new view, or nothing once the battle is over.
+        void RedrawOwnerBack(bool battle)
+        {
+            if (!battle) { backWho = null; backUid = null; backLeaving = null; return; }
+            if (backWho != null) { ownerBack = DrawOwnerBack(backWho); if (ownerBack != null && !Calm) StartCoroutine(OwnerBackUp(ownerBack, false)); }
+            else if (backLeaving is { } leave && DrawOwnerBack(leave.Who) is { } again) StartCoroutine(OwnerBackOut(again, leave));
+        }
+        RectTransform? DrawOwnerBack(string who)
+        {
+            if (frame == null) return null;
+            var back = Art("Characters/char_" + who + "_back_ready", true);
+            var art = back ?? Art("Characters/char_" + who + "_sd", true); if (art == null) return null;
+            const float height = 560; float width = height * art.rect.width / art.rect.height;
+            var image = Picture(frame, "OwnerBack:" + who, art, 24, 900 - height + 40, width, height, back != null ? Color.white : new Color(0.05f, 0.06f, 0.1f, 1f))!;
+            image.raycastTarget = false; image.transform.SetSiblingIndex(Math.Min(stageEnd, frame.childCount - 1));
+            if (back == null) { var rim = image.gameObject.AddComponent<Outline>(); rim.effectColor = Alpha(Memory, 0.85f); rim.effectDistance = new Vector2(3, -3); } // a backlit edge
+            var group = image.gameObject.AddComponent<CanvasGroup>(); group.blocksRaycasts = false; group.interactable = false;
+            return image.rectTransform;
+        }
+        IEnumerator OwnerBackUp(RectTransform shown, bool enter)
+        {
+            bool Gone() => ownerBack != shown || Calm;
+            if (enter)
+            {
+                StartCoroutine(MemoryForgeUiMotion.Fade(shown.GetComponent<CanvasGroup>(), 0, 1, 0.18f, Gone));
+                yield return MemoryForgeUiMotion.SlideIn(shown, new Vector2(-60, -140), 0.18f, Gone);
+            }
+            if (shown == null) yield break; // a redraw during the slide draws it again
+            var home = shown.anchoredPosition;
+            for (float t = 0; shown != null && !Gone(); t += Time.unscaledDeltaTime)
+            {
+                shown.anchoredPosition = home + new Vector2(0, 4 * Mathf.Sin(t * Mathf.PI * 2 / 1.6f));
+                yield return null;
+            }
+            if (shown != null && ownerBack == shown) shown.anchoredPosition = home; // calm settles it where it stands
+        }
+        IEnumerator OwnerBackOut(RectTransform shown, (string Who, bool Played, int Ticket) leave)
+        {
+            if (!Calm && leave.Played)
+            {
+                var act = Art("Characters/char_" + leave.Who + "_back_act", true); var image = shown.GetComponent<Image>();
+                if (act != null && image != null) image.sprite = act;
+                yield return MoveBy(shown, null, new Vector2(30, 24), 0.12f, Still); // a short push toward the enemies
+            }
+            if (!Calm && shown != null) yield return MoveBy(shown, shown.GetComponent<CanvasGroup>(), new Vector2(-40, -160), leave.Played ? 0.2f : 0.15f, Still);
+            if (shown == null) yield break; // a redraw cut it short: the redrawn copy finishes leaving
+            Destroy(shown.gameObject);
+            if (backLeaving?.Ticket == leave.Ticket) backLeaving = null;
+        }
+        // Eases a rect by an anchored offset (y up), fading the group out with it when one is given; stopped, it stays where it is.
+        static IEnumerator MoveBy(RectTransform rect, CanvasGroup? fade, Vector2 by, float duration, Func<bool> stop)
+        {
+            if (rect == null) yield break;
+            var from = rect.anchoredPosition; float alpha = fade != null ? fade.alpha : 1;
+            for (float t = 0; t < duration && !stop(); t += Time.unscaledDeltaTime)
+            {
+                if (rect == null) yield break;
+                float u = MemoryForgeUiMotion.EaseOut(t / duration);
+                rect.anchoredPosition = from + by * u; if (fade != null) fade.alpha = alpha * (1 - u);
+                yield return null;
+            }
+        }
+
         // What a drop at this screen point asks for, and the zone it lights: a living enemy's slot (where it is shown) plays now on it,
         // a rail group reserves for that time, and the rest of the stage plays now a card that needs no target (or, with one enemy left,
         // on that one). The card row and the hand ask for nothing.
@@ -2664,26 +2790,41 @@ namespace MemoryForge.Client
         }
         // A hand card's drag: upward, it aims and plays on release; otherwise every drag event goes on to the hand's own scroll, so
         // sideways drags still scroll it. A view replaced mid-drag (its card disabled) drops nothing.
-        sealed class CardDrag : MonoBehaviour, IInitializePotentialDragHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
+        sealed class CardDrag : MonoBehaviour, IInitializePotentialDragHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerDownHandler, IPointerUpHandler
         {
             MemoryForgeExpeditionClient? owner; string uid = ""; ScrollRect? scroll; bool aiming;
             public void Bind(MemoryForgeExpeditionClient client, string card, ScrollRect? hand) { owner = client; uid = card; scroll = hand; }
+            // One left pointer holds the card (its owner shows from behind) and one aims it; every event checks it comes from that
+            // pointer, so another finger or button only scrolls the hand. An aim's release goes through OnEndDrag (sent after OnPointerUp).
+            int holder = int.MinValue, aimer;
+            bool Holds(PointerEventData e) => e.button == PointerEventData.InputButton.Left && e.pointerId == holder;
+            bool Aims(PointerEventData e) => aiming && e.pointerId == aimer;
+            public void OnPointerDown(PointerEventData e) { if (e.button != PointerEventData.InputButton.Left || owner == null) return; holder = e.pointerId; owner.HoldCard(uid); }
+            public void OnPointerUp(PointerEventData e)
+            {
+                if (!Holds(e)) return;
+                holder = int.MinValue; if (!aiming && owner != null) owner.ReleaseCard(uid);
+            }
             public void OnInitializePotentialDrag(PointerEventData e) { if (scroll != null) scroll.OnInitializePotentialDrag(e); }
             public void OnBeginDrag(PointerEventData e)
             {
                 e.eligibleForClick = false; // a drag never also presses the card (the module keeps a click when press and drag share an object)
+                if (aiming) { if (scroll != null) scroll.OnBeginDrag(e); return; } // the card is already aimed by another pointer
                 // Any upward drag aims, unless the hand scrolls and the drag runs mostly sideways (more than twice as wide as tall).
                 var moved = e.position - e.pressPosition; bool sideways = scroll != null && scroll.horizontal && Mathf.Abs(moved.x) > moved.y * 2;
                 aiming = e.button == PointerEventData.InputButton.Left && moved.y > 0 && !sideways && owner != null && owner.BeginCardDrag(uid);
-                if (aiming) owner!.CardDragTo(e.position, e.pressEventCamera); else if (scroll != null) scroll.OnBeginDrag(e);
+                if (aiming) { aimer = e.pointerId; owner!.CardDragTo(e.position, e.pressEventCamera); return; }
+                if (Holds(e)) owner?.ReleaseCard(uid); // the holding finger scrolling the hand is no longer a hold
+                if (scroll != null) scroll.OnBeginDrag(e);
             }
-            public void OnDrag(PointerEventData e) { if (aiming) owner!.CardDragTo(e.position, e.pressEventCamera); else if (scroll != null) scroll.OnDrag(e); }
+            public void OnDrag(PointerEventData e) { if (Aims(e)) owner!.CardDragTo(e.position, e.pressEventCamera); else if (scroll != null) scroll.OnDrag(e); }
             public void OnEndDrag(PointerEventData e)
             {
-                if (aiming) { aiming = false; owner!.EndCardDrag(uid, e.position, e.pressEventCamera, true); }
+                if (Aims(e)) { aiming = false; owner!.EndCardDrag(uid, e.position, e.pressEventCamera, true); }
                 else if (scroll != null) scroll.OnEndDrag(e);
             }
-            void OnDisable() { if (aiming && owner != null) owner.EndCardDrag(uid, Vector2.zero, null, false); aiming = false; }
+            // A view replaced mid-press never sends this card its release: end the aim, or the hold, here.
+            void OnDisable() { if (aiming && owner != null) owner.EndCardDrag(uid, Vector2.zero, null, false); else owner?.ReleaseCard(uid); aiming = false; }
         }
 
         // ───────── overlay sheets ─────────
@@ -2992,7 +3133,7 @@ namespace MemoryForge.Client
             previous.gameObject.SetActive(false);
             if (Application.isPlaying) Destroy(previous.gameObject); else DestroyImmediate(previous.gameObject);
             canvasRoot = null; frame = null; noticeLabel = null; summaryText = null; summaryStatus = null; summaryContent = null; summaryScroll = null;
-            actionText = null; actionStatus = null; actionSkip = null; confirmCaption = null; actionOverlay = null; dragLayer = null; dragUid = null; actionGated.Clear(); paceButtons.Clear();
+            actionText = null; actionStatus = null; actionSkip = null; confirmCaption = null; actionOverlay = null; dragLayer = null; dragUid = null; ownerBack = null; holdUid = null; actionGated.Clear(); paceButtons.Clear();
         }
         RectTransform Box(Transform parent, string name, float x, float y, float width, float height, Color color)
         {
