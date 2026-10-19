@@ -1040,7 +1040,9 @@ namespace MemoryForge.Client
             {
                 if (back == null || caption == null) continue;
                 bool chosen = pace == actionPace;
-                back.color = chosen ? Memory : Line; caption.color = chosen ? Background : Ink;
+                // On the kit's ink pill a tint multiplies the art, so the chosen pace is a light teal wash with light words.
+                if (KitPills) { back.color = chosen ? Color.Lerp(Color.white, Memory, 0.55f) : Color.white; caption.color = chosen ? Memory : Ink; }
+                else { back.color = chosen ? Memory : Line; caption.color = chosen ? Background : Ink; }
                 caption.text = (chosen ? "● " : "") + PaceName(pace);
             }
             if (actionOverlay != null && !open) actionOverlay.SetActive(false);
@@ -1056,6 +1058,7 @@ namespace MemoryForge.Client
                 }
             }
         }
+        bool KitPills => Kit("ui_button_pill_ink", new Vector4(64, 0, 64, 0)) != null;
         static string PaceName(ActionPacing pace) => pace == ActionPacing.Double ? "2배속" : pace == ActionPacing.Reduced ? "동작 줄이기" : "보통";
         // A ready plain confirm during a display prepares the one unsent intent; otherwise it plays.
         static string ConfirmCaption(bool showing) => showing ? "사용 대기" : "사용 확정";
@@ -1259,20 +1262,38 @@ namespace MemoryForge.Client
                 Label(frame!, "탐사 연습 · " + string.Join("·", ReferenceParty.Select(CharacterName)) + " 기준 파티", 272, 16, 640, 30, 21, Ink);
                 Label(frame!, Location(s) + "  ·  " + PhaseName(s), 272, 46, 640, 28, 18, Muted);
             }
-            // On a phone their touch areas reach from the top of the frame down (never above it), over the status strip's text.
-            float reach = Math.Max(minTouch, 72);
-            Button(frame!, "DeckButton", "덱 " + s.Deck.Count + "장" + (s.PartsFound.Count != 0 ? " · 부품 " + s.PartsFound.Count : ""), 930, 18, 240, 54, () => Open(Sheet.Deck), Line, 22, hit: Band(930, 0, 240, reach));
-            Button(frame!, "LogButton", "기록", 1186, 18, 120, 54, () => Open(Sheet.Log), Line, 22, hit: Band(1246 - Math.Max(120, minTouch) / 2, 0, Math.Max(120, minTouch), reach));
-            if (!Finished(s) && s.Phase != "VICTORY" && s.Phase != "DEFEAT") Button(frame!, "AbandonButton", "탐사 포기", 1322, 18, 246, 54, () => Open(Sheet.Abandon), Line, 22, hit: Band(1322, 0, 246, reach));
+            // On a phone their touch areas reach from the top of the frame down (never above it), over the status strip's text. They line
+            // up on the frame's right edge; in a battle they are small pills so the stage keeps the top (KAZENA-BATTLE-20261019).
+            float reach = Math.Max(minTouch, 72); bool fight = s.Phase == "BATTLE";
+            // Each width is already its touch width, so the touch areas tile without overlapping on any phone.
+            float by = fight ? 16 : 18, bh = fight ? 46 : 54, gap = fight ? 10 : 16, aw = Math.Max(fight ? 150 : 246, minTouch), lw = Math.Max(fight ? 100 : 120, minTouch),
+                dw = Math.Max(fight ? 210 : 240, minTouch); int size = fight ? 19 : 22;
+            float ax = 1568 - aw, lx = ax - gap - lw, dx = lx - gap - dw;
+            Button(frame!, "DeckButton", "덱 " + s.Deck.Count + "장" + (s.PartsFound.Count != 0 ? " · 부품 " + s.PartsFound.Count : ""), dx, by, dw, bh, () => Open(Sheet.Deck), Line, size, hit: Band(dx, 0, dw, reach));
+            Button(frame!, "LogButton", "기록", lx, by, lw, bh, () => Open(Sheet.Log), Line, size, hit: Band(lx, 0, lw, reach));
+            if (!Finished(s) && s.Phase != "VICTORY" && s.Phase != "DEFEAT") Button(frame!, "AbandonButton", "탐사 포기", ax, by, aw, bh, () => Open(Sheet.Abandon), Line, size, hit: Band(ax, 0, aw, reach));
         }
-        // In a battle the header's left is the place and the piles, small: the stage is what matters (RULES_NOW_PLAY, 2026-10-19).
+        // In a battle the header's left is the party's one shared HP bar with the block gem at its end and the party's statuses under it
+        // (KAZENA-BATTLE-20261019: one long bar top left, as the reference's party HP); the place is a small line at the right under the
+        // buttons. The piles sit at the hand's two ends (Piles).
         void BattleHeader(RunState s)
         {
-            var b = s.Battle!;
-            Label(frame!, Location(s) + " · " + PhaseName(s), 32, 14, 600, 26, 16, Muted);
-            var piles = new List<(string, Color, Color, Color?)> { ("뽑을 " + b.Zones.Draw.Count, Ink, Alpha(Background, 0.7f), LineEdge), ("버림 " + b.Zones.Discard.Count, Ink, Alpha(Background, 0.7f), LineEdge) };
-            if (b.Zones.Exhaust.Count != 0) piles.Add(("소멸 " + b.Zones.Exhaust.Count, Muted, Alpha(Background, 0.7f), LineEdge));
-            Chips(frame!, "Pile", piles, 32, 44, 640, 26, 15);
+            var b = s.Battle!; const float barWidth = 560;
+            var info = Box(frame!, "PartyStatus", 32, 12, barWidth + 52, 74, Color.clear); partyStatus = info;
+            partyBar = HpBar(info, "PartyHp", "ui_hp_frame_party", 0, 2, barWidth, 38, b.Hp, b.MaxHp, Hex("1f8f7d")); // a deeper teal keeps the numbers legible
+            var hpText = Strong(Label(info, "파티 체력 " + b.Hp + " / " + b.MaxHp, 0, 6, barWidth, 30, 20, Ink, FontStyle.Normal, TextAnchor.MiddleCenter));
+            hpText.gameObject.AddComponent<Outline>().effectColor = new Color(0, 0, 0, 0.6f);
+            var gem = Shield(info, barWidth + 6, 0, 42, b.Block > 0 ? Color.white : new Color(1, 1, 1, 0.45f));
+            Strong(Label(gem, b.Block.ToString(), 0, 0, 42, 40, 17, Ink, FontStyle.Normal, TextAnchor.MiddleCenter));
+            var stats = new List<(string, Color, Color, Color?)>();
+            if (b.Counter != 0) stats.Add(("반격 " + b.Counter, Ink, Alpha(Background, 0.8f), LineEdge));
+            int debt = b.Debts.Sum(d => d.N);
+            if (debt != 0) stats.Add(("부채 " + debt, Danger, Alpha(Background, 0.8f), Alpha(Danger, 0.6f)));
+            if (b.EchoActive) stats.Add(("잔향 " + b.Echo + "/" + b.EchoMax, Memory, Alpha(Background, 0.8f), Alpha(Memory, 0.5f))); // only with Rien
+            string party = MemoryForgeBattleClient.PartyStatusText(b); // each of the party's statuses as its own brass chip, in Core's order
+            if (party.Length != 0) foreach (string buff in party.Split(new[] { " · " }, StringSplitOptions.None)) stats.Add((buff, Brass, Alpha(Brass, 0.14f), Alpha(Brass, 0.6f)));
+            Chips(frame!, "Status", stats, 32, 56, 900, 24, 15, 4);
+            Label(frame!, Location(s) + " · " + PhaseName(s), 940, 68, 628, 22, 15, Muted, FontStyle.Normal, TextAnchor.MiddleRight);
         }
         // Off the battle: the HP on a framed plate with its gem, coins, relics and parts as chips, the relic names and the practice note.
         void RunStatus(RunState s)
@@ -1381,15 +1402,27 @@ namespace MemoryForge.Client
             HandDock(b);
             ApGem(b);
             EndTurnDial(b);
+            Piles(b);
+        }
+        // The draw pile at the hand's left end and the discard pile at its right end, each the kit's stack icon with its count beside it
+        // (KAZENA-BATTLE-20261019); the exhausted count, when there is one, under the draw pile. Decoration: no press.
+        void Piles(BattleState b)
+        {
+            bool phone = minTouch > 0; float icon = phone ? 30 : 44, lx = 22 + icon + 2;
+            Picture(frame!, "DrawPile", Kit("ui_pile_draw"), 22, HandTop - 2, icon, icon, Color.white);
+            Strong(Label(frame!, "뽑을 " + b.Zones.Draw.Count, lx, HandTop + (phone ? 0 : 6), 134 - lx, phone ? 22 : 26, phone ? 14 : 15, Ink, FontStyle.Normal, TextAnchor.MiddleLeft));
+            if (b.Zones.Exhaust.Count != 0) Label(frame!, "소멸 " + b.Zones.Exhaust.Count, lx, HandTop + (phone ? 21 : 28), 134 - lx, 20, 13, Muted, FontStyle.Normal, TextAnchor.MiddleLeft);
+            Picture(frame!, "DiscardPile", Kit("ui_pile_discard"), 1522, HandTop - 2, 44, 44, Color.white);
+            Strong(Label(frame!, "버림 " + b.Zones.Discard.Count, 1448, HandTop + 6, 72, 26, 15, Ink, FontStyle.Normal, TextAnchor.MiddleRight));
         }
         // The battle's bands (frame units, y down). On a phone the card row's controls grow to 48dp and the hand starts lower, so the
         // stage gives up the height; every other band keeps its place.
-        const float TopBandY = 84, HandLeft = 136, HandRight = 1370;
+        const float TopBandY = 100, HandLeft = 136, HandRight = 1370;
         // The action strip's band: under the top band off phones; on a phone below the header's touch band and 48dp tall (pace and skip).
         float StripTop => minTouch > 0 ? Math.Max(150, Math.Max(72, minTouch) + 2) : 150;
         float StripHeight => Math.Max(42, minTouch);
         float StageTop => minTouch > 0 ? Math.Max(TopBandY, Math.Max(72, minTouch) + 6) : TopBandY; // RULES_NOW_PLAY: no rail band
-        float HandTop => minTouch > 0 ? 720 : 680;
+        float HandTop => minTouch > 0 ? 720 : 650; // KAZENA-BATTLE-20261019: larger portrait cards off phones
         float ControlsHeight => Math.Max(56, minTouch);
         float ActionsTop => HandTop - 4 - 34 - ControlsHeight;
         float StageBottom => ActionsTop - 6;
@@ -1466,49 +1499,36 @@ namespace MemoryForge.Client
         void PartyStage(BattleState b, BattleRules rules)
         {
             float width = PartyWidth(b); int n = Math.Max(1, b.Actors.Count);
-            var stats = new List<(string, Color, Color, Color?)>();
-            if (b.Block > 0) stats.Add(("방어 " + b.Block, Ink, Alpha(Hex("5b8bd6"), 0.3f), Hex("5b8bd6")));
-            if (b.Counter != 0) stats.Add(("반격 " + b.Counter, Ink, Alpha(Background, 0.86f), LineEdge));
-            int debt = b.Debts.Sum(d => d.N);
-            if (debt != 0) stats.Add(("부채 " + debt, Danger, Alpha(Background, 0.86f), Alpha(Danger, 0.6f)));
-            if (b.EchoActive) stats.Add(("잔향 " + b.Echo + "/" + b.EchoMax, Memory, Alpha(Background, 0.86f), Alpha(Memory, 0.5f))); // only with Rien
-            string party = MemoryForgeBattleClient.PartyStatusText(b); // each of the party's statuses as its own brass chip, in Core's order
-            if (party.Length != 0) foreach (string buff in party.Split(new[] { " · " }, StringSplitOptions.None)) stats.Add((buff, Brass, Alpha(Brass, 0.14f), Alpha(Brass, 0.6f)));
-            float infoHeight = 36 + ChipsHeight(stats, width - 8, 26, 15, 4) + 4;
-            var info = Box(frame!, "PartyStatus", 32, StageBottom - infoHeight, width, infoHeight, Color.clear); partyStatus = info;
-            var gem = Shield(info, 0, 0, 36, b.Block > 0 ? Color.white : new Color(1, 1, 1, 0.45f));
-            Strong(Label(gem, b.Block.ToString(), 0, 0, 36, 34, 16, Ink, FontStyle.Normal, TextAnchor.MiddleCenter));
-            partyBar = HpBar(info, "PartyHp", "ui_hp_frame_party", 40, 0, width - 40, 34, b.Hp, b.MaxHp, Memory);
-            Strong(Label(info, "파티 체력 " + b.Hp + " / " + b.MaxHp, 40, 3, width - 40, 26, 16, Ink, FontStyle.Normal, TextAnchor.MiddleCenter));
-            Chips(info, "Status", stats, 4, 36, width - 4, 26, 15, 4);
-
-            float height = StageBottom - infoHeight - 4 - StageTop, column = (width - 8) / n;
+            float height = StageBottom - StageTop, column = (width - 8) / n;
             var actors = Box(frame!, "Party", 32, StageTop, width, height, Color.clear); partyPanel = actors;
-            Deco(actors, "Floor", Halo, -40, height - 100, width + 80, 120, Alpha(Memory, 0.13f));
+            Deco(actors, "Floor", Halo, -40, height - 110, width + 80, 130, Alpha(Memory, 0.16f));
             for (int i = 0; i < b.Actors.Count; i++)
             {
                 var actor = b.Actors[i]; float x = 4 + i * column; bool ready = actor.Gauge >= rules.GaugeMax; var tone = AttributeColor(actor.Attr);
                 var ult = Gate(Button(actors, "Ult:" + actor.Id, "", x, 0, column - 4, height, () => UseUltimate(actor.Id), Color.clear), ready && b.Phase == "PLAYER");
                 var face = Inner(ult); ultRects[actor.Id] = face;
                 const float caption = 66; float lift = (n - 1 - i) * 24; // back members stand higher
-                var sd = Picture(face, "Portrait:" + actor.Id, Art("Characters/char_" + actor.Id + "_sd"), -column * 0.18f, lift, column * 1.36f, height - caption - lift, Color.white);
+                float side = Math.Min(column * 1.36f, height - caption - lift); // a square SD whose feet stand on the nameplate, back members higher
+                var sd = Picture(face, "Portrait:" + actor.Id, Art("Characters/char_" + actor.Id + "_sd"), -column * 0.18f, height - caption - side + 8 - lift, column * 1.36f, side, Color.white);
                 if (sd != null) partyArt[actor.Id] = sd.rectTransform;
-                var plate = Plate(face, "NamePlate", 2, height - caption, column - 8, 30, Alpha(Background, 0.9f), Alpha(tone, 0.85f), 1, true);
-                Icon(plate, "Attribute", "ico_attribute_" + actor.Attr, 8, 6, 18, 18, tone);
-                Label(plate, actor.Name, 24, 0, column - 40, 30, 18, Ink, FontStyle.Normal, TextAnchor.MiddleCenter);
+                // The name on the kit's title ribbon, the attribute glyph at its left (KAZENA-BATTLE-20261019).
+                var plate = KitPlate(face, "NamePlate", "ui_ribbon_title", new Vector4(64, 0, 64, 0), 96, 2, height - caption, column - 8, 32, Alpha(Background, 0.9f), Alpha(tone, 0.85f));
+                Icon(plate, "Attribute", "ico_attribute_" + actor.Attr, 14, 7, 18, 18, tone);
+                Strong(Label(plate, actor.Name, 30, 0, column - 52, 32, 18, Ink, FontStyle.Normal, TextAnchor.MiddleCenter));
                 if (ready)
                 {
-                    var pill = Plate(face, "UltReady", 2, height - 32, column - 8, 30, Brass, Alpha(Color.white, 0.4f), 1, true);
-                    Strong(Label(pill, "필살기", 0, 0, column - 8, 30, 18, Background, FontStyle.Normal, TextAnchor.MiddleCenter));
+                    var pill = KitPlate(face, "UltReady", "ui_button_pill_brass", new Vector4(64, 0, 64, 0), 128, 2, height - 32, column - 8, 30, Brass, Alpha(Color.white, 0.4f));
+                    Strong(Label(pill, "필살기", 0, 0, column - 8, 30, 18, Background, FontStyle.Bold, TextAnchor.MiddleCenter));
                     if (ult.interactable) Breathe(Glow(pill, Brass));
                 }
                 else
                 {
-                    // The gauge as a ring that fills clockwise from the top, the attribute and numbers beside it.
-                    Deco(face, "GaugeTrack", Pill(3), 6, height - 33, 30, 30, Alpha(Line, 0.95f));
-                    var ring = Deco(face, "Gauge", Pill(3), 6, height - 33, 30, 30, tone).GetComponent<Image>();
+                    // The gauge as a ring that fills clockwise from the top, set in the kit's portrait ring.
+                    Deco(face, "GaugeTrack", Pill(3), 8, height - 31, 26, 26, Alpha(Line, 0.95f));
+                    var ring = Deco(face, "Gauge", Pill(3), 8, height - 31, 26, 26, tone).GetComponent<Image>();
                     ring.type = Image.Type.Filled; ring.fillMethod = Image.FillMethod.Radial360; ring.fillOrigin = (int)Image.Origin360.Top; ring.fillClockwise = true;
                     ring.fillAmount = rules.GaugeMax > 0 ? Mathf.Clamp01((float)actor.Gauge / rules.GaugeMax) : 0;
+                    Picture(face, "GaugeRing", Kit("ui_portrait_ring"), 2, height - 37, 38, 38, Color.white);
                 }
             }
         }
@@ -1559,18 +1579,25 @@ namespace MemoryForge.Client
                 return;
             }
             const float pad = 10; float inner = w - 2 * pad;
-            // Over the head: the exact two-line intent (this turn, then the next) on a brass-edged badge.
-            var intentBox = Plate(root, "Intent", 2, 0, w - 4, 48, new Color(0.11f, 0.09f, 0.05f, 0.9f), Alpha(Brass, 0.75f), 1);
+            // Over the head (KAZENA-BATTLE-20261019): the kit's intent diamond (sword, shield or special) with the shown attack total in its
+            // slot, and beside it the exact two lines (this turn, then the next) on a light ribbon.
             var move = enemy.Intent; int hits = Math.Max(1, move?.Hits ?? 1);
             int total = move == null ? 0 : MemoryForgeBattleClient.IntentDamage(move.Damage ?? 0, b.DifficultyDamage, enemy.Status.Strength, enemy.Status.Weak, rules.WeakBps) * hits;
-            if (Picture(intentBox, "IntentMark", Kit(IntentIcon(move, total)), 2, 4, 40, 40, Color.white) == null) Deco(intentBox, "IntentMark", Diamond, 8, 12, 22, 22, Brass);
+            string glyph = IntentIcon(move, total);
+            const float badgeSide = 58;
+            var intentBox = Plate(root, "Intent", badgeSide - 6, 4, w - badgeSide + 4, 48, new Color(0.08f, 0.07f, 0.05f, 0.7f), Alpha(Brass, 0.4f), 1);
             float lines = Grow(Strong(Label(intentBox, "이번  " + MemoryForgeBattleClient.IntentText(enemy.Intent, enemy.Status, b.DifficultyDamage, rules.WeakBps, true)
-                + "\n다음  " + MemoryForgeBattleClient.IntentText(enemy.Next, enemy.Status, b.DifficultyDamage, rules.WeakBps, false), 44, 6, w - 4 - 52, 40, w >= 260 ? 20 : 17, Brass)));
-            float intentHeight = lines + 12; intentBox.sizeDelta = new Vector2(w - 4, intentHeight);
+                + "\n다음  " + MemoryForgeBattleClient.IntentText(enemy.Next, enemy.Status, b.DifficultyDamage, rules.WeakBps, false), 12, 4, w - badgeSide - 18, 40, w >= 260 ? 20 : 17, Brass)));
+            intentBox.sizeDelta = new Vector2(w - badgeSide + 4, lines + 8);
+            float intentHeight = Math.Max(badgeSide, lines + 12);
+            var intentBadge = Picture(root, "IntentBadge", Kit(glyph.StartsWith("ui_intent_attack", StringComparison.Ordinal) ? "ui_badge_intent_attack"
+                : glyph.StartsWith("ui_intent_defend", StringComparison.Ordinal) ? "ui_badge_intent_defend" : "ui_badge_intent_special"), 0, 0, badgeSide, badgeSide, Color.white);
+            if (intentBadge == null) { if (Picture(intentBox, "IntentMark", Kit(glyph), 2, 4, 40, 40, Color.white) == null) Deco(root, "IntentMark", Diamond, 8, 12, 22, 22, Brass); }
+            else if (total > 0) Strong(Label(intentBadge.rectTransform, total.ToString(), 7, 31, 44, 24, 15, Ink, FontStyle.Normal, TextAnchor.MiddleCenter)); // room for 3 digits at any canvas scale
             // Core's tier and the selection as chips: in the name row's room when it leaves the name 120 units, else over the painting.
             float chips = (selected ? 60 : 0) + (enemy.Tier == "boss" ? 62 : enemy.Tier == "elite" ? 78 : 0);
             bool roomy = inner - chips >= 120;
-            var info = Plate(root, "Info", 0, h - 100, w, 100, new Color(0.05f, 0.07f, 0.13f, 0.84f), selected ? Memory : Alpha(tier, 0.45f), selected ? 3 : 1);
+            var info = Plate(root, "Info", 0, h - 100, w, 100, Alpha(Background, 0.6f), selected ? Memory : (Color?)null, selected ? 2 : 0);
             Box(info, "TierLine", 10, 0, w - 20, 3, Alpha(tier, 0.9f)); // the plate's crest in the tier's colour
             float cy = 8;
             cy += Grow(Strong(Label(info, enemy.Name, pad, cy, inner - (roomy ? chips : 0), 28, 20, Ink, FontStyle.Bold))) + 2;
@@ -1595,6 +1622,7 @@ namespace MemoryForge.Client
             if (!sameRow) cy += crack;
             float wx = sameRow ? after : pad;
             foreach (string weak in enemy.Weak) if (Icon(info, "Weak", "ico_attribute_" + weak, wx, cy + 1, 20, 20, AttributeColor(weak)) != null) wx += 22;
+            if (!sameRow && TextWidth(weakText, 15) > pad + inner - wx) { cy += 22; wx = pad; } // too long beside the glyphs: one line under them
             cy += Math.Max(sameRow ? crack : 0, Grow(Label(info, weakText, wx, cy, pad + inner - wx, 22, 15, Ink))) + 2;
             // Core's statuses as brass chips.
             string status = MemoryForgeBattleClient.StatusText(enemy, rules);
@@ -1715,28 +1743,27 @@ namespace MemoryForge.Client
         // in, tilts, lifts and sinks while pressed. Dragged up, a card is played on its drop (CardDrag); sideways drags scroll the hand.
         void HandDock(BattleState b)
         {
-            // A shorter dock on a phone gives a thinner art window before it takes from the effect text.
-            // The dock reaches the frame's bottom and the cards leave room under them for the fan's drop and tilt, so no fanned face is
-            // ever cut by the dock's mask.
-            float height = 900 - HandTop, cardHeight = height - 16 - FanDrop - 8, band = cardHeight >= 170 ? 50 : 32, nameTop = band + 6, textTop = nameTop + 34,
-                tagTop = cardHeight - 30, textHeight = tagTop - 2 - textTop; // 220/186/50/56/90/156/64 off phones
-            var plan = new List<(string Uid, BattleCardDef Def, string Text, float Width, bool Fits)>();
-            float[] widths = { 184f, 236f, 300f };
+            // KAZENA-BATTLE-20261019: every card is the same portrait shape (the kit's card frame, 360×520), so the row lines up. The art
+            // window takes the top half down to the frame's divider; the name and the effect sit under it. An effect that does not fit
+            // in three short lines points to 카드 설명 instead of being cut. The dock reaches the frame's bottom and the cards leave room
+            // under them for the fan's drop and tilt, so no fanned face is ever cut by the dock's mask.
+            float height = 900 - HandTop, cardHeight = height - 16 - FanDrop - 8, width = Math.Max(Mathf.Round(cardHeight * 0.72f), Mathf.Ceil(minTouch)), // never under 48dp
+                artHeight = Mathf.Round(cardHeight * 0.46f), nameTop = artHeight + 2, textTop = nameTop + 24, textHeight = cardHeight - textTop - 8;
+            int textSize = cardHeight >= 170 ? 14 : 13;
+            var plan = new List<(string Uid, BattleCardDef Def, string Text, bool Fits)>();
             foreach (string uid in b.Zones.Hand)
             {
                 var def = run!.BattleEffectiveCard(uid); string text = BattleText.Card(def, data!.Memory.Battle);
-                float width = widths.FirstOrDefault(w => TextHeight(text, 15, w - 20) <= textHeight);
-                bool fits = width > 0;
-                // Past the widest card the text is not cut: the card points to 카드 설명 instead, itself measured to fit.
-                if (!fits) width = widths.FirstOrDefault(w => TextHeight(LongEffect, 15, w - 20) <= textHeight) is float pointer && pointer > 0 ? pointer : widths[widths.Length - 1];
-                plan.Add((uid, def, text, width, fits));
+                plan.Add((uid, def, text, TextHeight(text, textSize, width - 16) <= textHeight));
             }
-            const float gap = 10;
-            float content = plan.Sum(p => p.Width + gap), view = HandRight - HandLeft;
+            const float gap = 8;
+            float content = plan.Count * (width + gap), view = HandRight - HandLeft;
+            // The arc the hand sits on: a soft teal glow under the row (the reference's lit curve), drawn before the cards.
+            Deco(frame!, "HandArc", Halo, HandLeft + view * 0.08f, 900 - 46, view * 0.84f, 70, Alpha(Memory, 0.22f));
             var dock = Scroll(frame!, "Hand", HandLeft, HandTop, view, height, content, height, Color.clear);
             var scroll = dock.parent.GetComponent<ScrollRect>();
             float x = Math.Max(0, (view - content) / 2), mid = (plan.Count - 1) / 2f; int index = 0;
-            foreach (var (uid, def, text, width, fits) in plan)
+            foreach (var (uid, def, text, fits) in plan)
             {
                 bool selected = uid == selectedCard;
                 var modes = run!.BattleAllowedModes(uid); string first = modes.FirstOrDefault() ?? "now";
@@ -1745,37 +1772,47 @@ namespace MemoryForge.Client
                 var button = Button(dock, "Hand:" + uid, "", x, 0, width, height, () => SelectCard(uid), Color.clear);
                 var tone = OwnerColor(def.Owner);
                 float offset = index++ - mid, arc = selected ? 0 : Math.Min(FanDrop, Math.Abs(offset) * 4), tilt = selected ? 0 : Mathf.Clamp(-offset * 2.5f, -5, 5);
-                var face = Plate(button.transform, "Card", 0, (selected ? 2 : 14) + arc, width, cardHeight, selected ? Hex("1b2848") : Hex("121a2e"), selected ? Memory : Alpha(tone, 0.9f), selected ? 3 : 2);
+                var face = Plate(button.transform, "Card", 0, (selected ? 2 : 14) + arc, width, cardHeight, Hex("0f1628"), null, 0);
                 if (tilt != 0) Tilt(face, tilt);
-                var border = Kit("ui_card_border_" + (characterAttrs.TryGetValue(def.Owner, out var attr) ? attr : "common"), new Vector4(36, 36, 36, 36));
-                if (border != null && face.Find("Edge") is RectTransform rim)
-                {
-                    var line = rim.GetComponent<Image>(); line.sprite = border; line.type = Image.Type.Sliced; line.pixelsPerUnitMultiplier = 3; line.color = selected ? Hex("bff4ec") : Color.white;
-                }
                 button.targetGraphic = face.GetComponent<Image>();
                 button.GetComponent<UiPress>()?.Bind(face, () => Calm);
                 if (Application.isPlaying) button.gameObject.AddComponent<CardDrag>().Bind(this, uid, scroll);
-                if (selected) Glow(face, Alpha(Memory, 0.55f));
+                if (selected) Glow(face, Alpha(Memory, 0.6f));
                 handFaces[uid] = face;
-                OwnerBand(face, def.Owner, width, band);
-                Deco(face, "BandFade", Fade(true), 3, band - 14, width - 6, 18, selected ? Hex("1b2848") : Hex("121a2e"));
-                var costArt = Picture(face, "Cost", Kit("ui_gem_cost"), 2, 2, 46, 46, poor ? new Color(0.5f, 0.5f, 0.58f) : Color.white);
-                var cost = costArt != null ? costArt.rectTransform : Gem(face, "Cost", 6, 6, 38, poor ? Hex("4a5677") : Brass, poor ? Hex("262e45") : Hex("7a5a22"));
-                float gemSide = cost.sizeDelta.x;
-                Strong(Label(cost, run.BattleCostOf(uid, first).ToString(), 0, 0, gemSide, gemSide, 24, poor ? Danger : costArt != null ? Ink : Background, FontStyle.Bold, TextAnchor.MiddleCenter));
-                if (selected) { var chip = Plate(face, "Selected", width - 60, 8, 52, 28, Memory, null, 1, true); Label(chip, "선택", 0, 0, 52, 28, 17, Background, FontStyle.Bold, TextAnchor.MiddleCenter); }
-                Plate(face, "NamePlate", 3, nameTop - 2, width - 6, 34, Alpha(Background, 0.7f));
-                Strong(Label(face, def.Name + (b.Cards.TryGetValue(uid, out var instance) && instance.Plus ? "+" : ""), 10, nameTop, width - 20, 32, 22, Ink, FontStyle.Bold));
-                var body = Label(face, fits ? text : LongEffect, 10, textTop, width - 20, textHeight, 15, fits ? Ink : Muted);
+                // The kit's frame in the owner's attribute (brass for common cards) is the card's plate; its divider is the art's lower edge.
+                string attr = characterAttrs.TryGetValue(def.Owner, out var a) ? a : "common";
+                var frameArt = Picture(face, "Frame", Kit("ui_card_frame_" + attr), 0, 0, width, cardHeight, selected ? Hex("d8fff8") : Color.white);
+                if (frameArt == null) Plate(face, "Edge", 0, 0, width, cardHeight, Color.clear, selected ? Memory : Alpha(tone, 0.9f), selected ? 3 : 2);
+                else frameArt.preserveAspect = false; // the card and the frame share the portrait shape; fill it exactly
+                var art = Box(face, "ArtWindow", 6, 6, width - 12, artHeight - 6, Color.clear); art.gameObject.AddComponent<RectMask2D>();
+                // A weapon or common card shows the art of the member who holds it (its wielder or assignee), tagged 무기/공용.
+                string painted = def.Owner;
+                if (!characterAttrs.ContainsKey(painted) && b.Cards.TryGetValue(uid, out var held0)) painted = held0.Wielder ?? held0.Assigned ?? painted;
+                OwnerBand(art, painted, width - 6, artHeight - 3);
+                if (painted != def.Owner)
+                {
+                    string kind = OwnerText(def.Owner); float kw = TextWidth(kind, 13) + 26;
+                    var kindTag = Plate(face, "Kind", width - 8 - kw, artHeight - 28, kw, 22, Alpha(Background, 0.85f), Alpha(tone, 0.8f), 1, true);
+                    Label(kindTag, kind, 0, 0, kw, 22, 13, Ink, FontStyle.Normal, TextAnchor.MiddleCenter);
+                }
+                Deco(face, "BandFade", Fade(true), 6, artHeight - 26, width - 12, 22, Alpha(Hex("0f1628"), 0.9f));
+                Strong(Label(face, def.Name + (b.Cards.TryGetValue(uid, out var instance) && instance.Plus ? "+" : ""), 6, nameTop, width - 12, 24, 17, Ink, FontStyle.Bold, TextAnchor.MiddleCenter));
+                var body = Label(face, fits ? text : LongEffect, 8, textTop, width - 16, textHeight, textSize, fits ? Ink : Muted, FontStyle.Normal, TextAnchor.UpperCenter);
                 body.resizeTextForBestFit = false;
-                // RULES_NOW_PLAY: no mode tag (every card is played now). A 보존 card (keyword or part) says so; one kept over a turn end
-                // glows brass.
+                var costArt = Picture(face, "Cost", Kit("ui_gem_cost"), -2, -2, 42, 42, poor ? new Color(0.5f, 0.5f, 0.58f) : Color.white);
+                var cost = costArt != null ? costArt.rectTransform : Gem(face, "Cost", 2, 2, 36, poor ? Hex("4a5677") : Brass, poor ? Hex("262e45") : Hex("7a5a22"));
+                float gemSide = cost.sizeDelta.x;
+                Strong(Label(cost, run.BattleCostOf(uid, first).ToString(), 0, 0, gemSide, gemSide, 22, poor ? Danger : costArt != null ? Ink : Background, FontStyle.Bold, TextAnchor.MiddleCenter));
+                float tagY = 6;
+                if (selected) { var chip = Plate(face, "Selected", width - 48, tagY, 42, 22, Memory, null, 1, true); Label(chip, "선택", 0, 0, 42, 22, 14, Background, FontStyle.Bold, TextAnchor.MiddleCenter); tagY += 26; }
+                // RULES_NOW_PLAY: a 보존 card (keyword or part) says so; one kept over a turn end glows brass.
                 bool held = b.Cards.TryGetValue(uid, out var kept) && kept.Held;
                 if (held || run.BattleRetains(uid))
                 {
                     string tag = held ? "보존 중" : "보존";
-                    var tagChip = Plate(face, "Retain", 8, tagTop + 1, Math.Min(width - 16, TextWidth(tag, 15) + 26), 26, Alpha(Brass, held ? 0.3f : 0.16f), held ? Brass : null, 1, true);
-                    Label(tagChip, tag, 0, 0, tagChip.sizeDelta.x, 26, 15, Brass, FontStyle.Normal, TextAnchor.MiddleCenter);
+                    float tw = Math.Min(width - 12, TextWidth(tag, 13) + 16);
+                    var tagChip = Plate(face, "Retain", width - 6 - tw, tagY, tw, 22, held ? Alpha(Brass, 0.9f) : Alpha(Background, 0.85f), Brass, 1, true);
+                    Label(tagChip, tag, 0, 0, tw, 22, 13, held ? Background : Brass, FontStyle.Normal, TextAnchor.MiddleCenter);
                 }
                 if (held && !selected) Glow(face, Alpha(Brass, 0.45f));
                 x += width + gap;
@@ -1804,7 +1841,7 @@ namespace MemoryForge.Client
         // glows while there is nothing left to pay for, the turn's natural next step.
         void EndTurnDial(BattleState b)
         {
-            float left = HandRight + 6, w = 1568 - left, h = 892 - HandTop, d = Math.Min(w, h) - 6, cx = left + w / 2, cy = HandTop + h / 2;
+            float left = HandRight + 6, w = 1568 - left, h = 892 - HandTop, d = Math.Min(w, h) - 36, cx = left + w / 2, cy = HandTop + h / 2 + 12;
             var end = Gate(Button(frame!, "EndTurn", "", cx - d / 2, cy - d / 2, d, d, () => EndTurn(), Color.clear, 32, hit: new Rect(left, HandTop, w, 900 - HandTop)), b.Phase == "PLAYER");
             var face = Inner(end); var disc = face.GetComponent<Image>(); var kit = Kit("ui_button_endturn");
             if (kit != null)
@@ -1813,7 +1850,7 @@ namespace MemoryForge.Client
                 disc.sprite = kit; disc.type = Image.Type.Simple; disc.color = Color.white;
                 end.transition = Selectable.Transition.SpriteSwap;
                 end.spriteState = new SpriteState { pressedSprite = Kit("ui_button_endturn_pressed"), disabledSprite = Kit("ui_button_endturn_disabled"), highlightedSprite = kit, selectedSprite = kit };
-                Strong(Label(face, b.Phase == "PLAYER" ? "턴 종료\n" + b.Turn + "턴" : "전투 종료", d * 0.2f, d * 0.26f, d * 0.6f, d * 0.48f, 24, Ink, FontStyle.Bold, TextAnchor.MiddleCenter));
+                Strong(Label(face, b.Phase == "PLAYER" ? "턴 종료\n" + b.Turn + "턴" : "전투 종료", d * 0.16f, d * 0.24f, d * 0.68f, d * 0.52f, (int)Math.Min(24, d * 0.15f), Ink, FontStyle.Bold, TextAnchor.MiddleCenter));
                 if (end.interactable && b.Ap == 0) Breathe(Glow(face, Brass));
                 return;
             }
@@ -1834,7 +1871,7 @@ namespace MemoryForge.Client
         // The action points on a big brass gem at the hand's left (decoration: Core's number), dimmed at 0.
         void ApGem(BattleState b)
         {
-            const float d = 104, x = 18; float y = HandTop + Math.Max(4, (892 - HandTop - d - 24) / 2);
+            const float d = 104, x = 18; float y = minTouch > 0 ? HandTop + 46 : HandTop + Math.Max(4, (892 - HandTop - d - 24) / 2); // a phone keeps the pile row above it
             Deco(frame!, "ApGlow", Halo, x - 22, y - 22, d + 44, d + 44, Alpha(Brass, b.Ap > 0 ? 0.5f : 0.15f));
             var art = Picture(frame!, "ApGem", Kit("ui_gem_ap"), x - 8, y - 8, d + 16, d + 16, b.Ap > 0 ? Color.white : new Color(0.55f, 0.55f, 0.6f));
             var gem = art != null ? art.rectTransform : Gem(frame!, "ApGem", x, y, d, b.Ap > 0 ? Brass : Hex("6b5a3a"), Hex("7a5a22"));
@@ -1847,8 +1884,8 @@ namespace MemoryForge.Client
         // waiting intent shows its own request and cancel instead (PreparedControls). On a phone the controls' touch band is 48dp tall.
         void CardActions(BattleState b)
         {
-            var actions = Plate(frame!, "CardActions", 32, ActionsTop, 1536, 34 + ControlsHeight, Alpha(Background, 0.8f), Alpha(Memory, 0.28f), 1);
-            Sheen(actions, 1536, 34 + ControlsHeight, 0.05f);
+            var actions = Plate(frame!, "CardActions", 32, ActionsTop, 1536, 34 + ControlsHeight, Alpha(Background, 0.66f), null, 0);
+            Box(actions, "Rule", 24, 0, 1488, 1, Alpha(Brass, 0.5f));
             string hint = ""; var hintColor = Muted; // RULES_NOW_PLAY: no standing tutorial line (the first-run guide teaches)
             var intent = prepared;
             if (intent != null)
@@ -3169,8 +3206,19 @@ namespace MemoryForge.Client
             var r = Plate(parent, name, x, y, width, height, fill ?? Glass);
             Sheen(r, width, height, 0.05f);
             var ring = Box(r, "Edge", 0, 0, 0, 0, edge ?? Alpha(Brass, 0.55f)); ring.anchorMin = Vector2.zero; ring.anchorMax = Vector2.one; ring.offsetMin = ring.offsetMax = Vector2.zero;
-            var line = ring.GetComponent<Image>(); line.sprite = Ornate; line.type = Image.Type.Sliced; line.pixelsPerUnitMultiplier = 1.4f;
+            var line = ring.GetComponent<Image>(); var kit = Kit("ui_panel_frame", new Vector4(48, 48, 48, 48));
+            if (kit != null) { line.sprite = kit; line.color = Color.white; line.pixelsPerUnitMultiplier = 2f; } else { line.sprite = Ornate; line.pixelsPerUnitMultiplier = 1.4f; }
+            line.type = Image.Type.Sliced;
             ring.SetSiblingIndex(0);
+            return r;
+        }
+        // A plate drawn with a piece of the UI kit (9-sliced; the source height sets the scale), or the procedural pill/plate without it.
+        RectTransform KitPlate(Transform parent, string name, string id, Vector4 border, float sourceHeight, float x, float y, float width, float height, Color fill, Color? edge)
+        {
+            var art = Kit(id, border);
+            if (art == null) return Plate(parent, name, x, y, width, height, fill, edge, 1, height <= 64);
+            var r = Box(parent, name, x, y, width, height, Color.white);
+            var image = r.GetComponent<Image>(); image.sprite = art; image.type = Image.Type.Sliced; image.pixelsPerUnitMultiplier = sourceHeight / Math.Max(1, Math.Min(height, sourceHeight));
             return r;
         }
         // A light from above: white fading downwards over the top of a face (a fill of the same shape, so it follows its corners).
@@ -3285,6 +3333,9 @@ namespace MemoryForge.Client
             Color? rim = edge ?? (fill == Line ? LineEdge : light ? Alpha(Color.white, 0.35f) : (Color?)null);
             bool grown = area.x < x - 0.5f || area.y < y - 0.5f || area.xMax > x + width + 0.5f || area.yMax > y + height + 0.5f;
             RectTransform r, root;
+            // A brass or plain pill wears the kit's brass or ink pill (its own rim and gloss) when the kit is there.
+            var kitPill = pill && edge == null && (fill == Brass || fill == Line) ? Kit(fill == Brass ? "ui_button_pill_brass" : "ui_button_pill_ink", new Vector4(64, 0, 64, 0)) : null;
+            if (kitPill != null) rim = null;
             if (!grown) { root = r = Plate(parent, name, x, y, width, height, fill, rim, edgeWidth, pill); r.GetComponent<Image>().raycastTarget = true; }
             else
             {
@@ -3292,7 +3343,8 @@ namespace MemoryForge.Client
                 r = Plate(root, "Face", x - area.x, y - area.y, width, height, fill, rim, edgeWidth, pill);
                 r.GetComponent<Image>().raycastTarget = false;
             }
-            if (light) Gloss(r, width, height, pill, 0.2f);
+            if (kitPill != null) { var face = r.GetComponent<Image>(); Sideways(face, kitPill, 128, height); face.color = Color.white; }
+            else if (light) Gloss(r, width, height, pill, 0.2f);
             var button = root.gameObject.AddComponent<Button>(); button.targetGraphic = r.GetComponent<Image>();
             if (grown && Application.isPlaying) root.gameObject.AddComponent<UiPress>().Bind(r, () => Calm);
             // Only a live, interactable button acts: a replaced view's button is inactive (RemoveView) until its deferred destroy.

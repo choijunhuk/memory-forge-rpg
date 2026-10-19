@@ -73,6 +73,11 @@ namespace MemoryForge.Client.Tests
                 yield return Shot(host, Path.Combine(dir!, "home_sortie.jpg"));
             }
             finally { Object.Destroy(host); }
+            // The same home at a 144-unit touch size: the menu rows reflow (and scroll if needed) above the note and footer.
+            MemoryForgeExpeditionClient.TouchOverride = 144;
+            var big = new GameObject("LobbyShotsTouch"); var bigLobby = big.AddComponent<MemoryForgeLobbyClient>();
+            try { yield return null; bigLobby.Player!.Stop(); yield return Settle(0.4f); yield return Shot(big, Path.Combine(dir!, "home_touch144.jpg")); }
+            finally { MemoryForgeExpeditionClient.TouchOverride = null; Object.Destroy(big); }
         }
 
         static IEnumerator Settle(float seconds)

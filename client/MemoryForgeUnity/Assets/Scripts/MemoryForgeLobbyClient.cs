@@ -119,26 +119,45 @@ namespace MemoryForge.Client
             var sideGroup = side.gameObject.AddComponent<CanvasGroup>();
             player.Started += _ => { sideGroup.interactable = false; sideGroup.blocksRaycasts = false; FadeMenu(sideGroup, 0f, 0.25f); };
             player.Finished += _ => { idleSince = Time.time; sideGroup.interactable = true; sideGroup.blocksRaycasts = true; FadeMenu(sideGroup, 1f, 0.3f); };
-            Box(side, "MenuShade", 0, 0, 700, 900, new Color(0.03f, 0.05f, 0.1f, 0.55f));
-            var bar = Box(side, "TopBar", 0, 0, 1600, 76, new Color(0.03f, 0.05f, 0.1f, 0.62f));
-            Box(bar, "TopEdge", 0, 74, 1600, 2, new Color(Brass.r, Brass.g, Brass.b, 0.45f));
-            Label(bar, "기억 공방", 36, 12, 260, 52, 34, Brass, FontStyle.Bold);
-            nameText = Label(bar, "", 300, 22, 360, 40, 26, Ink, FontStyle.Bold);
-            Button(bar, "OpenSettings", "설정", 1330, 12, 116, 52, () => Toggle(settingsPanel), Panel, 22);
-            if (!Application.isMobilePlatform) Button(bar, "QuitGame", "종료", 1458, 12, 116, 52, Application.Quit, Panel, 22);
+            // KAZENA-HOME-20261019: no slab and no tile grid. The backdrop stays whole; a dark gradient rises from the left edge and from
+            // the top so the menu reads over it. Top left the title on a ribbon with the companion's name, top right settings and quit;
+            // the left column holds the big 출격 entry and then one row per menu (round icon, title, a line under it), aligned on one edge.
+            Shade(side, "MenuShade", 0, 0, 900, 900, new Color(0.02f, 0.04f, 0.09f, 0.92f), true);
+            Shade(side, "TopShade", 0, 0, 1600, 150, new Color(0.02f, 0.04f, 0.09f, 0.7f), false);
+            var ribbon = Kit(side, "TitleRibbon", "ui_ribbon_title", new Vector4(64, 0, 64, 0), 32, 20, 560, 64, 96);
+            Label(ribbon, "기억 공방", 40, 6, 220, 52, 32, Brass, FontStyle.Bold, TextAnchor.MiddleLeft);
+            Box(ribbon, "TitleMark", 262, 28, 8, 8, Brass).localRotation = Quaternion.Euler(0, 0, 45);
+            nameText = Label(ribbon, "", 284, 10, 250, 44, 24, Ink, FontStyle.Bold, TextAnchor.MiddleLeft);
+            Ornament(side, 40, 96, 600);
+            Button(side, "OpenSettings", "설정", 1312, 24, 124, 52, () => Toggle(settingsPanel), Line, 22);
+            if (!Application.isMobilePlatform) Button(side, "QuitGame", "종료", 1448, 24, 124, 52, Application.Quit, Line, 22);
 
-            // 출격: the big tile; the rest in rows of two and three.
-            var sortie = Tile(side, "StartExpedition", "출격", "1구역 · 종탑 하층 탐사", "ico_node_battle", 40, 120, 620, 176, Brass, () => Toggle(sortiePanel));
+            // 출격: the way into a run, first and largest; then the menus in one column.
+            var sortie = MainEntry(side, "StartExpedition", "출격", "1구역 · 종탑 하층 탐사", "ico_node_battle", 40, 124, 620, 160, () => Toggle(sortiePanel));
             Breathe(sortie);
-            Tile(side, "NextCompanion", "동료", "다음 동료 보기", "ico_node_rest", 40, 316, 302, 124, Memory, () => Show(index + 1));
-            Tile(side, "BondStories", "인연", "인연 이야기 미리보기", "ico_node_event", 358, 316, 302, 124, Memory, () => OpenList("bond"));
-            Tile(side, "Staging", "연출", "등장·승리 연출 미리보기", "ico_node_archive", 40, 456, 302, 124, Memory, () => OpenList("staging"));
-            Tile(side, "MemoryDeck", "기억 덱", "준비 중", "ico_node_forge", 358, 456, 302, 124, Line, null);
-            Tile(side, "Story", "스토리", "준비 중", "ico_node_boss", 40, 596, 198, 110, Line, null);
-            Tile(side, "Challenge", "도전", "준비 중", "ico_node_elite", 251, 596, 198, 110, Line, null);
-            Tile(side, "Recruit", "모집", "준비 중", "ico_node_shop", 462, 596, 198, 110, Line, null);
-            noteText = Label(side, "", 40, 724, 620, 60, 19, Muted);
-            Label(side, "연습 빌드 · 인연 단계와 진행은 아직 저장되지 않아요.", 40, 846, 620, 34, 17, Muted);
+            // Rows are at least 48dp tall. When seven no longer fit under 출격 (a phone) they go two or three to a line, and if even that
+            // is too tall the rows scroll inside their own band, so they never reach the note and footer below it.
+            float tall = Math.Max(64, TouchUnits()), top = 300, room = 790 - top; int perLine = 1;
+            while (perLine < 3 && Math.Ceiling(7.0 / perLine) * (tall + 6) > room) perLine++;
+            float rowWidth = (620 - 6 * (perLine - 1)) / (float)perLine, needed = (float)Math.Ceiling(7.0 / perLine) * (tall + 6);
+            Transform menu = needed > room ? ScrollArea(side, 40, top, 620, room, needed) : Box(side, "Menu", 40, top, 620, room, Color.clear);
+            int slot = 0;
+            foreach (var (name, title, sub, icon, click) in new (string, string, string, string, Action?)[]
+            {
+                ("NextCompanion", "동료", "다음 동료 보기", "ico_node_rest", () => Show(index + 1)),
+                ("BondStories", "인연", "인연 이야기 미리보기", "ico_node_event", () => OpenList("bond")),
+                ("Staging", "연출", "등장·승리 연출 미리보기", "ico_node_archive", () => OpenList("staging")),
+                ("MemoryDeck", "기억 덱", "준비 중", "ico_node_forge", null),
+                ("Story", "스토리", "준비 중", "ico_node_boss", null),
+                ("Challenge", "도전", "준비 중", "ico_node_elite", null),
+                ("Recruit", "모집", "준비 중", "ico_node_shop", null),
+            })
+            {
+                MenuRow(menu, name, title, sub, icon, (slot % perLine) * (rowWidth + 6), slot / perLine * (tall + 6), rowWidth, tall, click);
+                slot++;
+            }
+            noteText = Label(side, "", 40, 796, 620, 32, 17, Muted);
+            Label(side, "연습 빌드 · 인연 단계와 진행은 아직 저장되지 않아요.", 40, 846, 620, 34, 16, Muted);
             BuildSortie();
             BuildSettings();
             listPanel = Box(root, "SceneList", 460, 120, 560, 660, new Color(0.08f, 0.1f, 0.17f, 0.96f));
@@ -160,23 +179,100 @@ namespace MemoryForge.Client
             SceneManager.LoadScene(ExpeditionScene);
         }
 
-        // A home tile: a dark glass panel with a coloured edge and a lit top line, its icon, title and one line under it. A tile with
-        // no action is a system not built yet: dimmed, not a button, so it can never look done.
-        RectTransform Tile(Transform parent, string name, string title, string sub, string icon, float x, float y, float w, float h, Color tone, Action? click)
+        // 출격: a framed glass band (the kit's ornate panel frame) lit brass from the left, its glyph in the kit's ready ring, the title,
+        // the zone under it and a chevron at the right end.
+        RectTransform MainEntry(Transform parent, string name, string title, string sub, string icon, float x, float y, float w, float h, Action click)
+        {
+            var r = (RectTransform)Button(parent, name, "", x, y, w, h, click, Color.clear).transform;
+            Shade(r, "Glow", 0, 0, w, h, new Color(Brass.r * 0.45f, Brass.g * 0.32f, Brass.b * 0.12f, 0.9f), true);
+            Kit(r, "Frame", "ui_panel_frame", new Vector4(48, 48, 48, 48), 0, 0, w, h, 128);
+            var edge = r.gameObject.AddComponent<Outline>(); edge.effectColor = new Color(Brass.r, Brass.g, Brass.b, 0.55f); edge.effectDistance = new Vector2(1, -1);
+            var ring = Kit(r, "Ring", "ui_portrait_ring_ready", Vector4.zero, 24, (h - 108) / 2, 108, 108, 160);
+            Glyph(ring, icon, 26, 26, 56, Brass);
+            Label(r, title, 152, 22, 300, 70, 54, Ink, FontStyle.Bold);
+            Label(r, sub, 154, 96, 400, 34, 21, Brass);
+            Label(r, "›", w - 70, (h - 90) / 2, 50, 90, 72, Brass, FontStyle.Bold, TextAnchor.MiddleCenter);
+            return r;
+        }
+        // A menu row: the glyph in the kit's ring, the title and its line, a fading rule under it. A row with no action is a system
+        // not built yet: dimmed, not a button, with a 준비 중 tag, so it can never look done.
+        void MenuRow(Transform parent, string name, string title, string sub, string icon, float x, float y, float w, float h, Action? click)
         {
             bool live = click != null;
-            RectTransform r;
-            if (live) r = (RectTransform)Button(parent, name, "", x, y, w, h, click!, new Color(0.06f, 0.09f, 0.16f, 0.86f)).transform;
-            else r = Box(parent, name, x, y, w, h, new Color(0.05f, 0.07f, 0.12f, 0.72f));
-            var edge = r.gameObject.AddComponent<Outline>(); edge.effectColor = new Color(tone.r, tone.g, tone.b, live ? 0.85f : 0.35f); edge.effectDistance = new Vector2(2, -2);
-            Box(r, "Crest", 0, 0, w, 4, new Color(tone.r, tone.g, tone.b, live ? 0.9f : 0.3f));
-            float big = h >= 150 ? 76 : h >= 120 ? 54 : 44, pad = h >= 150 ? 26 : 18;
-            var glyph = SpriteAt("Art/UI/" + icon);
-            if (glyph != null) { var g = Box(r, "Icon", pad, (h - big) / 2, big, big, live ? tone : new Color(Muted.r, Muted.g, Muted.b, 0.6f)); g.GetComponent<Image>().sprite = glyph; g.GetComponent<Image>().preserveAspect = true; }
-            float tx = pad + big + 16, tw = w - tx - 12;
-            Label(r, title, tx, h >= 150 ? 30 : 16, tw, h >= 150 ? 64 : 40, h >= 150 ? 48 : 28, live ? Ink : Muted, FontStyle.Bold);
-            Label(r, sub, tx, h >= 150 ? 100 : 58, tw, 34, h >= 150 ? 22 : 17, live ? (tone == Brass ? Brass : Muted) : new Color(Muted.r, Muted.g, Muted.b, 0.7f));
+            RectTransform r = live ? (RectTransform)Button(parent, name, "", x, y, w, h, click!, Color.clear).transform : Box(parent, name, x, y, w, h, Color.clear);
+            if (live) Shade(r, "Glass", 0, 0, w, h, new Color(0.05f, 0.08f, 0.15f, 0.8f), true);
+            var ring = Kit(r, "Ring", "ui_portrait_ring", Vector4.zero, 6, (h - 52) / 2, 52, 52, 160);
+            ring.GetComponent<Image>().color = live ? Color.white : new Color(1, 1, 1, 0.35f);
+            Glyph(ring, icon, 13, 13, 26, live ? Memory : new Color(Muted.r, Muted.g, Muted.b, 0.5f));
+            bool narrow = w < 400; // two to a line on a phone: the line goes under the title
+            Label(r, title, 74, narrow ? h / 2 - 34 : (h - 36) / 2, Math.Min(200, w - 80), 36, 26, live ? Ink : new Color(Muted.r, Muted.g, Muted.b, 0.7f), FontStyle.Bold, TextAnchor.MiddleLeft);
+            float subX = narrow ? 74 : 230, subY = narrow ? h / 2 + 6 : (h - 28) / 2;
+            // A narrow row gives its line the rest of the row's height, so it wraps instead of losing its words.
+            if (live) Label(r, sub, subX, subY, w - subX - 12, narrow ? Math.Max(28, h - subY - 6) : 28, narrow ? 15 : 17, Muted, FontStyle.Normal, narrow ? TextAnchor.UpperLeft : TextAnchor.MiddleLeft);
+            else
+            {
+                var tag = Box(r, "Pending", subX, subY, 84, 26, new Color(Line.r, Line.g, Line.b, 0.55f));
+                Label(tag, sub, 0, 0, 84, 26, 15, Muted, FontStyle.Normal, TextAnchor.MiddleCenter);
+            }
+            Shade(r, "Rule", 0, h - 1, w, 1, new Color(Brass.r, Brass.g, Brass.b, live ? 0.45f : 0.2f), true);
+        }
+        // A vertical scroll band (clamped, masked) and its content, for rows taller than their room.
+        RectTransform ScrollArea(Transform parent, float x, float y, float w, float h, float contentHeight)
+        {
+            var view = Box(parent, "MenuScroll", x, y, w, h, new Color(0, 0, 0, 0.001f)); view.GetComponent<Image>().raycastTarget = true;
+            view.gameObject.AddComponent<RectMask2D>();
+            var content = Box(view, "Content", 0, 0, w, contentHeight, Color.clear);
+            var scroll = view.gameObject.AddComponent<ScrollRect>(); scroll.viewport = view; scroll.content = content; scroll.horizontal = false;
+            scroll.movementType = ScrollRect.MovementType.Clamped;
+            return content;
+        }
+        // A thin double brass rule with a diamond at its start: the title's underline.
+        void Ornament(Transform parent, float x, float y, float w)
+        {
+            Shade(parent, "Ornament", x + 14, y, w - 14, 2, new Color(Brass.r, Brass.g, Brass.b, 0.75f), true);
+            Shade(parent, "Ornament", x + 14, y + 5, (w - 14) * 0.6f, 1, new Color(Brass.r, Brass.g, Brass.b, 0.35f), true);
+            Box(parent, "OrnamentMark", x + 4, y - 3, 8, 8, Brass).localRotation = Quaternion.Euler(0, 0, 45);
+        }
+        // A colour fading out to the right (sideways) or downwards: the menu shade, glows and rules.
+        RectTransform Shade(Transform parent, string name, float x, float y, float w, float h, Color color, bool sideways)
+        {
+            var r = Box(parent, name, x, y, w, h, color);
+            r.GetComponent<Image>().sprite = sideways ? Ramp(true) : Ramp(false);
             return r;
+        }
+        static readonly Dictionary<bool, Sprite> ramps = new Dictionary<bool, Sprite>();
+        static Sprite Ramp(bool sideways)
+        {
+            if (ramps.TryGetValue(sideways, out var cached) && cached != null) return cached;
+            int w = sideways ? 64 : 1, h = sideways ? 1 : 64;
+            var texture = new Texture2D(w, h, TextureFormat.RGBA32, false) { wrapMode = TextureWrapMode.Clamp, filterMode = FilterMode.Bilinear };
+            for (int i = 0; i < 64; i++) { float a = 1 - i / 63f; texture.SetPixel(sideways ? i : 0, sideways ? 0 : 63 - i, new Color(1, 1, 1, a * a * (3 - 2 * a))); }
+            texture.Apply();
+            return ramps[sideways] = Sprite.Create(texture, new Rect(0, 0, w, h), new Vector2(0.5f, 0.5f), 100f);
+        }
+        // A piece of the battle UI kit (Resources/Art/UI/battle), 9-sliced when a border is given; the source height sets the scale.
+        RectTransform Kit(Transform parent, string name, string id, Vector4 border, float x, float y, float w, float h, float sourceHeight)
+        {
+            var r = Box(parent, name, x, y, w, h, Color.white);
+            var image = r.GetComponent<Image>(); var sprite = KitSprite(id, border);
+            if (sprite == null) { image.color = Color.clear; return r; }
+            image.sprite = sprite;
+            if (border != Vector4.zero) { image.type = Image.Type.Sliced; image.pixelsPerUnitMultiplier = sourceHeight / Math.Max(1, Math.Min(h, sourceHeight)); }
+            else image.preserveAspect = true;
+            return r;
+        }
+        Sprite? KitSprite(string id, Vector4 border)
+        {
+            string key = "kit:" + id + border;
+            if (sprites.TryGetValue(key, out var cached)) return cached;
+            var texture = Resources.Load<Texture2D>("Art/UI/battle/" + id);
+            var sprite = texture == null ? null : Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f), 100f, 0, SpriteMeshType.FullRect, border);
+            sprites[key] = sprite; return sprite;
+        }
+        void Glyph(Transform parent, string icon, float x, float y, float size, Color tint)
+        {
+            var glyph = SpriteAt("Art/UI/" + icon); if (glyph == null) return;
+            var g = Box(parent, "Icon", x, y, size, size, tint); g.GetComponent<Image>().sprite = glyph; g.GetComponent<Image>().preserveAspect = true;
         }
         // The 출격 tile breathes its edge so the way into a run is the first thing the eye finds (calm under reduced motion).
         void Breathe(RectTransform tile)
@@ -195,9 +291,10 @@ namespace MemoryForge.Client
         // 출격 준비: the zone, the run's length and the party, then 출발. The practice party is fixed until 편성 is built.
         void BuildSortie()
         {
-            sortiePanel = Box(root, "SortiePanel", 700, 110, 860, 640, new Color(0.05f, 0.07f, 0.13f, 0.96f));
-            var edge = sortiePanel.gameObject.AddComponent<Outline>(); edge.effectColor = new Color(Brass.r, Brass.g, Brass.b, 0.8f); edge.effectDistance = new Vector2(2, -2);
-            Label(sortiePanel, "출격 준비", 32, 22, 500, 52, 36, Brass, FontStyle.Bold);
+            sortiePanel = Box(root, "SortiePanel", 700, 110, 860, 640, new Color(0.04f, 0.06f, 0.11f, 0.95f));
+            Kit(sortiePanel, "Frame", "ui_panel_frame", new Vector4(48, 48, 48, 48), 0, 0, 860, 640, 128);
+            var title = Kit(sortiePanel, "TitleRibbon", "ui_ribbon_title", new Vector4(64, 0, 64, 0), 24, 18, 360, 56, 96);
+            Label(title, "출격 준비", 0, 2, 360, 52, 30, Brass, FontStyle.Bold, TextAnchor.MiddleCenter);
             Button(sortiePanel, "CloseSortie", "닫기", 712, 24, 116, 52, () => sortiePanel.gameObject.SetActive(false), Line, 22);
             var zone = Box(sortiePanel, "Zone", 32, 92, 796, 150, Color.white);
             var map = SpriteAt("Art/Backgrounds/bg_zone1_map");
@@ -209,8 +306,8 @@ namespace MemoryForge.Client
             Button? shortButton = null, regularButton = null;
             void Mark()
             {
-                shortButton!.GetComponent<Image>().color = sortieLength == "short" ? Brass : Panel; shortText!.color = sortieLength == "short" ? Background : Ink;
-                regularButton!.GetComponent<Image>().color = sortieLength == "full" ? Brass : Panel; regularText!.color = sortieLength == "full" ? Background : Ink;
+                Pill(shortButton!.GetComponent<Image>(), sortieLength == "short" ? Brass : Panel, 64); shortText!.color = sortieLength == "short" ? Background : Ink;
+                Pill(regularButton!.GetComponent<Image>(), sortieLength == "full" ? Brass : Panel, 64); regularText!.color = sortieLength == "full" ? Background : Ink;
             }
             shortButton = Button(sortiePanel, "Length:short", "", 32, 302, 390, 64, () => { sortieLength = "short"; Mark(); }, Brass, 22);
             shortText = Label(shortButton.transform, "짧은 탐사 · 1구역 · 약 15분", 6, 5, 378, 54, 22, Background, FontStyle.Normal, TextAnchor.MiddleCenter);
@@ -221,6 +318,7 @@ namespace MemoryForge.Client
             for (int i = 0; i < party.Length; i++)
             {
                 var slot = Box(sortiePanel, "Party:" + party[i], 32 + i * 136, 424, 124, 124, new Color(0.1f, 0.13f, 0.22f, 1f));
+                Kit(slot, "Frame", "ui_portrait_frame", new Vector4(40, 40, 40, 40), 0, 0, 124, 124, 240);
                 var art = SpriteAt("Art/Characters/char_" + party[i] + "_sd");
                 if (art != null) { var face = Box(slot, "Face", 2, 2, 120, 120, Color.white); face.GetComponent<Image>().sprite = art; face.GetComponent<Image>().preserveAspect = true; }
                 Label(slot, companions.FirstOrDefault(c => c.Id == party[i])?.Name ?? party[i], 0, 96, 124, 28, 18, Ink, FontStyle.Bold, TextAnchor.MiddleCenter);
@@ -233,8 +331,9 @@ namespace MemoryForge.Client
         // 설정: reduced motion everywhere; on a PC also the window mode.
         void BuildSettings()
         {
-            settingsPanel = Box(root, "SettingsPanel", 1100, 84, 476, Application.isMobilePlatform ? 196 : 270, new Color(0.05f, 0.07f, 0.13f, 0.96f));
-            var edge = settingsPanel.gameObject.AddComponent<Outline>(); edge.effectColor = new Color(Line.r, Line.g, Line.b, 1f); edge.effectDistance = new Vector2(2, -2);
+            float tall = Application.isMobilePlatform ? 196 : 270;
+            settingsPanel = Box(root, "SettingsPanel", 1100, 88, 476, tall, new Color(0.04f, 0.06f, 0.11f, 0.95f));
+            Kit(settingsPanel, "Frame", "ui_panel_frame", new Vector4(48, 48, 48, 48), 0, 0, 476, tall, 128);
             Label(settingsPanel, "설정", 24, 18, 300, 44, 28, Ink, FontStyle.Bold);
             Text? motionLabel = null;
             var motionToggle = Button(settingsPanel, "ReduceMotion", "", 24, 76, 428, 56, () => { MemoryForgeUiMotion.Reduced = !MemoryForgeUiMotion.Reduced; motionLabel!.text = MotionCaption(); }, Panel, 20);
@@ -395,11 +494,28 @@ namespace MemoryForge.Client
         Button Button(Transform parent, string name, string caption, float x, float y, float width, float height, Action click, Color color, int size = 24)
         {
             var r = Box(parent, name, x, y, width, height, color); var image = r.GetComponent<Image>(); image.raycastTarget = true;
+            Pill(image, color, height);
             var button = r.gameObject.AddComponent<Button>(); button.targetGraphic = image;
             button.onClick.AddListener(() => { if (button != null && button.IsActive() && button.IsInteractable()) click(); });
             var colors = button.colors; colors.highlightedColor = new Color(1.1f, 1.1f, 1.1f); colors.pressedColor = new Color(0.78f, 0.78f, 0.78f); button.colors = colors;
             if (caption.Length != 0) Label(r, caption, 6, 5, width - 12, height - 10, size, color == Brass || color == Memory ? Background : Ink, FontStyle.Normal, TextAnchor.MiddleCenter);
             return button;
+        }
+        // Brass buttons wear the kit's brass pill, dark ones its ink pill (sliced at the ends); clear ones stay invisible hit areas.
+        void Pill(Image image, Color color, float height)
+        {
+            bool brass = color == Brass, ink = color == Line || color == Panel;
+            var sprite = brass || ink ? KitSprite(brass ? "ui_button_pill_brass" : "ui_button_pill_ink", new Vector4(64, 0, 64, 0)) : null;
+            if (sprite == null) return;
+            image.sprite = sprite; image.type = Image.Type.Sliced; image.pixelsPerUnitMultiplier = 128f / Math.Max(1, height); image.color = Color.white;
+        }
+        // 48dp in this canvas's units (ScaleWithScreenSize, 1600×900, match 0.5); 0 off phones. The expedition's touch override applies too.
+        static float TouchUnits()
+        {
+            if (MemoryForgeExpeditionClient.TouchOverride.HasValue) return MemoryForgeExpeditionClient.TouchOverride.Value;
+            if (!Application.isMobilePlatform || Screen.dpi <= 0) return 0;
+            float scale = Mathf.Sqrt(Screen.width / 1600f * (Screen.height / 900f));
+            return scale <= 0 ? 0 : 48f * Screen.dpi / 160f / scale;
         }
         static Color Hex(string hex) { ColorUtility.TryParseHtmlString("#" + hex, out var color); return color; }
     }
