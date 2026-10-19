@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      char_aila_fig_victory_check_styleA_v02_0: -5160983089883066046
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

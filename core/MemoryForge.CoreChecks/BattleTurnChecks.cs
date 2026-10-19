@@ -293,7 +293,7 @@ static class BattleTurnChecks
         Check(first.Block == 26 && first.Counter == 2 && next.Turn == 2 && next.Block == 0 && next.Counter == 0, "independent Harin26/counter2 survive opening then clear on turn2");
         Check(next.Enemies[0].Block == 10 && next.Enemies[0].PatternIndex == 1 && next.Enemies[0].Intent!.Type == "atk" && next.Enemies[0].Intent!.Damage == 25, "independent shelf block10/next atk25 retained");
         Check(At("opening-seed-moss-single").Block == 3 && At("opening-seed-moss-single", 1).Block == 0 && At("opening-seed-moss-single", 1).Cards["c1"].Growth == 1 && Ends("opening-seed-moss-single").All(s => s.Events.All(e => e.E != "grow")), "independent opening moss clears block without repeating growth");
-        Check(At("opening-draw-max-strongest-only").Zones.Hand.Count == 9 && Ends("opening-draw-max-strongest-only").All(s => s.Zones.Hand.Count == 5 && s.TempParts == 3 && s.Events.All(e => e.E != "tune")), "independent first-only draw9/tuning persist as draw5/tempParts3");
+        Check(At("opening-draw-max-strongest-only").Zones.Hand.Count == 9 && Ends("opening-draw-max-strongest-only").All(s => s.Zones.Hand.Count == 6 && s.TempParts == 3 && s.Events.All(e => e.E != "tune")), "independent first-only draw9/tuning persist as draw5+twin_pendulum1/tempParts3");
         Check(At("opening-ap-crown-hourglass").Ap == 4 && At("opening-ap-crown-hourglass", 1).Ap == 5 && actual["edge-carried-ap-once"].Select(s => s.Ap).SequenceEqual(new[] { 6, 5, 5, 5 }), "independent crown/hourglass/carried AP consumption");
         Check(Ends("opening-echo-and-rule-interactions").All(s => s.Echo == 1), "independent recurring echo reset");
 
@@ -315,7 +315,7 @@ static class BattleTurnChecks
         Check(largeAfter.Hp == 84 && largeAfter.Enemies[1].Hp == 360000002 && largeAfter.Enemies[2].Hp == 239999997 && largeAfter.Events[0].Uid == "e17" && largeAfter.Events[0].N == 6, "independent actual end6 follows JS rounded tie and heals moth");
 
         var notebook = At("edge-notebook-continuing", 2);
-        Check(At("edge-notebook-continuing", 1).Enemies[0].Hp == 2 && At("edge-notebook-continuing", 1).Enemies[0].Block == 2 && notebook.Phase == "PLAYER" && notebook.Turn == 3 && notebook.Zones.Hand.Count == 6 && notebook.KilledMarked == 1 && Convert.ToInt64(notebook.RunFlags["coinsBonus"]) == 10 && notebook.Ap == 4, "independent raw burn bypasses block then marked notebook kill draws6/coins10/AP4");
+        Check(At("edge-notebook-continuing", 1).Enemies[0].Hp == 2 && At("edge-notebook-continuing", 1).Enemies[0].Block == 2 && notebook.Phase == "PLAYER" && notebook.Turn == 3 && notebook.Zones.Hand.Count == 7 && notebook.Zones.Hand.Where(u => notebook.Cards[u].Held).Select(u => notebook.Cards[u].Id).SequenceEqual(new[] { "sera_timed" }) && notebook.KilledMarked == 1 && Convert.ToInt64(notebook.RunFlags["coinsBonus"]) == 10 && notebook.Ap == 4, "independent raw burn bypasses block then marked notebook kill draws6+held sera_timed/coins10/AP4");
         Check(!notebook.TurnFlags.ContainsKey("deduction") && notebook.Enemies.All(e => !e.Alive || e.Status.Burn == 0), "independent enemy-phase kill has no Kaya deduction/follow-up burn");
         Check(At("edge-notebook-victory", 2).Phase == "VICTORY" && Convert.ToInt64(At("edge-notebook-victory", 2).RunFlags["coinsBonus"]) == 17, "independent final marked kill accumulates existing7 coins to17");
         Check(At("edge-burn-reflect", 1).Enemies[0].Status.Reflect == 3 && At("edge-burn-reflect", 1).Enemies[0].Hp == 48 && At("edge-burn-reflect", 2).Enemies[0].Status.Reflect == 0 && Ends("edge-burn-reflect").All(s => s.Events.All(e => e.Source != "reflect")), "independent raw burn ignores reflect; reflect clears at own action");
@@ -324,7 +324,7 @@ static class BattleTurnChecks
         Check(At("edge-party-power-rounding", 1).Events.Where(e => e.E == "dmg").Select(e => e.N).SequenceEqual(new int?[] { 2, 2, 4 }), "independent rounded party power then one scale floor");
 
         var insert = At("edge-insert-cycle", 1); var token = insert.Cards["c17"];
-        SameJson("{\"uid\":\"c17\",\"id\":\"smudge\",\"owner\":\"curse\",\"wielder\":null,\"plus\":false,\"mods\":{\"c\":null,\"e\":null},\"temp\":[],\"growth\":0,\"grown\":false,\"used\":0,\"costMod\":0,\"token\":true,\"free\":false,\"assigned\":null,\"from\":null}", token.ToJsonGraph(), "independent full inserted token/uid/defaults");
+        SameJson("{\"uid\":\"c17\",\"id\":\"smudge\",\"owner\":\"curse\",\"wielder\":null,\"plus\":false,\"mods\":{\"c\":null,\"e\":null},\"temp\":[],\"growth\":0,\"grown\":false,\"held\":false,\"used\":0,\"costMod\":0,\"token\":true,\"free\":false,\"assigned\":null,\"from\":null}", token.ToJsonGraph(), "independent full inserted token/uid/defaults");
         Check(insert.Events[0].E == "insert" && insert.Events[0].Card == "smudge" && insert.Events[0].N == 1 && Ends("edge-insert-cycle").Any(s => s.Events.Any(e => e.E == "reshuffle")) && Ends("edge-insert-cycle").Any(s => s.Events.Any(e => e.E == "hpLoss" && e.Source == "smudge")), "independent insertion reaches actual reshuffle/draw/curse loss");
         Check(At("edge-curse-scaled", 1).Events.Where(e => e.E == "hpLoss").Select(e => e.N).SequenceEqual(new int?[] { 3, 3, 3, 3, 3 }), "independent difficulty scales all five smudge losses");
         Check(Ends("edge-penalty-note-inert").All(s => s.Hp == 1 && s.Zones.Exhaust.Count == 0) && Ends("edge-eye-of-rift-cycle").Any(s => s.Events.Any(e => e.Source == "smudge")), "independent penalty note inert; eye-of-rift curse really cycles");
@@ -347,12 +347,12 @@ static class BattleTurnChecks
         foreach (string id in new[] { "circuit-next-fatal", "circuit-envelope-already-used" })
         {
             var end = At("edge-" + id, 1);
-            Check(end.Turn == 2 && end.Phase == "DEFEAT" && end.Zones.Hand.Count == 0, "independent fatal next-turn cost before draw " + id);
+            Check(end.Turn == 2 && end.Phase == "DEFEAT" && end.Zones.Hand.Count == 1 && end.Zones.Hand.Where(u => end.Cards[u].Held).Select(u => end.Cards[u].Id).SequenceEqual(new[] { "sera_timed" }), "independent fatal next-turn cost before draw (only the held 보존 sera_timed) " + id);
             Events(end, "[{\"e\":\"hpLoss\",\"n\":2,\"src\":\"relic\"},{\"e\":\"end\",\"phase\":\"DEFEAT\"}]", "independent no turn/intents event after fatal circuit");
         }
         Check(Ends("edge-circuit-envelope-next").Select(s => (s.Turn, s.Hp, s.Phase)).SequenceEqual(new[] { (2, 1, "PLAYER"), (3, 0, "DEFEAT") }), "independent envelope saves next-turn cost once then later cost defeats");
         var fatal = At("edge-same-hit-defeat-reward", 1);
-        Check(fatal.Phase == "DEFEAT" && fatal.Hp == 0 && fatal.Zones.Hand.Count == 1 && Convert.ToInt64(fatal.RunFlags["coinsBonus"]) == 10, "independent fatal hit preserves counter/notebook reward then defeat priority");
+        Check(fatal.Phase == "DEFEAT" && fatal.Hp == 0 && fatal.Zones.Hand.Count == 2 && fatal.Zones.Hand.Where(u => fatal.Cards[u].Held).Select(u => fatal.Cards[u].Id).SequenceEqual(new[] { "sera_timed" }) && Convert.ToInt64(fatal.RunFlags["coinsBonus"]) == 10, "independent fatal hit preserves counter/notebook reward then defeat priority");
         Events(fatal, "[{\"e\":\"hit\",\"uid\":\"e16\",\"d\":14,\"blocked\":10},{\"e\":\"hpLoss\",\"n\":4,\"src\":\"enemy\"},{\"e\":\"dmg\",\"uid\":\"e16\",\"n\":2,\"blocked\":0,\"src\":\"counter\"},{\"e\":\"kill\",\"uid\":\"e16\",\"id\":\"e_page\"},{\"e\":\"end\",\"phase\":\"DEFEAT\"}]", "independent same-hit complete event order");
         foreach (var (id, hp) in new[] { ("envelope-counter-kill", 1), ("counter-kill-stops-hits", 239) })
         { var end = At("edge-" + id, 1); Check(end.Phase == "VICTORY" && end.Hp == hp && end.Events.Count(e => e.E == "hit") == 1 && end.Events.Count(e => e.E == "end") == 1, "independent counter victory stops remaining hits " + id); }

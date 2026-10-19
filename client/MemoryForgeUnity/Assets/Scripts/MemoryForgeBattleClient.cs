@@ -103,7 +103,7 @@ namespace MemoryForge.Client
             catch (RuleException error)
             { LastError = error.Code; notice = ErrorText(error.Code); noticeUntil = Time.realtimeSinceStartup + 2.6f; Render(); return false; }
             if (success != null) notice = success;
-            if (kind == "end") notice = "적의 행동과 예약 해결을 마쳤습니다.";
+            if (kind == "end") notice = "적의 행동을 마쳤습니다.";
             noticeUntil = Time.realtimeSinceStartup + 2.6f;
             Render(); return true;
         }

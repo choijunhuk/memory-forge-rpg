@@ -15,7 +15,7 @@ const clone = (o) => JSON.parse(JSON.stringify(o));
 
 const PARTY = [{ charId: 'sera', res: 0 }, { charId: 'harin', res: 0 }, { charId: 'nia', res: 0 }];
 function battle({ deck, enemies, party = PARTY, hp = 243, seed = 7, relics = [], difficulty }) {
-  const b = MF.Battle.create(DATA, { party, deck: deck.map((id) => ({ id })), relics, hp, maxHp: 243, seed, enemies, difficulty });
+  const b = MF.Battle.create(DATA, { party, deck: deck.map((c) => (typeof c === 'string' ? { id: c } : c)), relics, hp, maxHp: 243, seed, enemies, difficulty });
   b.do('begin');
   return b;
 }
@@ -64,22 +64,165 @@ test('immediate damage uses printed value at reference power (power4 160)', () =
   assert.equal(b.s.ap, 3);
 });
 
-test('reservation slots: next 2, after 1, SLOT_FULL, resolve at next turn start with rv', () => {
-  const b = battle({ deck: Array(12).fill('sera_round'), enemies: ['e_shelf'] }); // 46 HP, weak flame/void
+// RULES_NOW_PLAY (2026-10-19): the time-reservation mechanic is gone; every card is played now.
+test('every card is played now: next/after modes are rejected with NOT_RESERVABLE and nothing is reserved', () => {
+  assert.ok(DATA.cards.every((c) => c.res === 'n'), 'all authored cards are now-only');
+  // sera_timed / com_capacitor were reserve-only before; they now play now like any other card
+  const b = battle({ deck: ['sera_timed', 'com_capacitor', 'sera_round', 'sera_round', 'sera_round'], enemies: ['e_shelf'] });
   const t = b.s.enemies[0].uid;
-  const h = () => b.s.zones.hand[0];
-  b.do('play', { uid: h(), mode: 'next', target: t });
-  b.do('play', { uid: h(), mode: 'next', target: t });
-  assert.equal(b.freeSlots('next'), 0);
-  assert.equal(b.check(h(), 'next', t), 'SLOT_FULL');
-  b.do('play', { uid: h(), mode: 'after', target: t });
-  assert.equal(b.check(h(), 'after', t), 'SLOT_FULL');
-  const hp0 = b.s.enemies[0].hp; const block0 = b.s.enemies[0].block;
+  for (const u of b.s.zones.hand) {
+    assert.deepEqual(b.allowedModes(u), ['now']);
+    for (const mode of ['next', 'after']) {
+      assert.equal(b.check(u, mode, t), 'NOT_RESERVABLE');
+      const before = JSON.stringify(b.s);
+      assert.throws(() => b.do('play', { uid: u, mode, target: t }), { code: 'NOT_RESERVABLE' });
+      assert.equal(JSON.stringify(b.s), before);
+    }
+  }
+  b.do('play', { uid: firstOf(b, 'sera_timed'), mode: 'now', target: t });
+  b.do('play', { uid: firstOf(b, 'com_capacitor'), mode: 'now' });
+  assert.equal(b.s.ap, 4 - 2 - 1 + 2); // sera_timed cost 2, com_capacitor cost 1 then AP +2
   b.do('end');
-  // two reserved rounds (rv 12 each) resolved at turn 2 start, before the draw
-  const lost = (hp0 + block0) - (b.s.enemies[0].hp + b.s.enemies[0].block);
-  assert.ok(lost >= 24 - block0 - 10, `lost ${lost}`); // enemy may have gained block during its turn
-  assert.equal(b.s.res.length, 1); // the after-next one is still waiting
+  assert.equal(b.s.res.length, 0);
+});
+
+test('retain: the 보존 keyword and the c_delay part keep a card in hand as held; other hand cards are discarded', () => {
+  // a five-card deck is the whole opening hand, so turn 2 can only redraw what turn 1 discarded
+  const b = battle({ deck: ['sera_timed', 'com_capacitor', { id: 'sera_round', mods: { c: 'c_delay' } }, 'sera_round', 'sera_round'], enemies: ['e_shelf'], difficulty: { hp: 400, dmg: 10 } });
+  const kept = b.s.zones.hand.filter((u) => ['sera_timed', 'com_capacitor'].includes(b.s.cards[u].id) || b.s.cards[u].mods.c === 'c_delay');
+  const plain = b.s.zones.hand.filter((u) => !kept.includes(u));
+  assert.equal(kept.length, 3); assert.equal(plain.length, 2);
+  assert.ok(b.s.zones.hand.every((u) => b.s.cards[u].held === false));
+  const r = b.do('end');
+  for (const u of kept) { assert.ok(b.s.zones.hand.includes(u)); assert.equal(b.s.cards[u].held, true); }
+  // the two plain cards went to the discard pile at end of turn and came back only through the turn-2 reshuffle
+  assert.ok(r.ev.some((e) => e.e === 'reshuffle'));
+  for (const u of plain) { assert.ok(b.s.zones.hand.includes(u)); assert.equal(b.s.cards[u].held, false); }
+  assert.equal(b.s.zones.hand.length, 5);
+  b.checkInvariants();
+});
+
+test('held is read and cleared on play, and reset when a card is drawn or recalled', () => {
+  const b = battle({ deck: ['sera_timed', 'sera_round', 'sera_round', 'sera_round', 'sera_round'], enemies: ['e_shelf'], relics: ['time_stamp'], difficulty: { hp: 400, dmg: 10 } });
+  b.do('end');
+  const timed = firstOf(b, 'sera_timed');
+  assert.equal(b.s.cards[timed].held, true);
+  b.do('play', { uid: timed, mode: 'now', target: b.s.enemies[0].uid });
+  assert.equal(b.s.cards[timed].held, false);
+  // time_stamp reads ctx.held: +10 per card and +5 because the card had been held
+  assert.equal(b.actor('sera').gauge, 15);
+  b.do('play', { uid: firstOf(b, 'sera_round'), mode: 'now', target: b.s.enemies[0].uid });
+  assert.equal(b.actor('sera').gauge, 25, 'a card that was not held gets no time_stamp bonus');
+  // drawing resets a stale held flag
+  const stale = b.s.zones.discard[0]; b.s.cards[stale].held = true;
+  b.s.zones.discard.splice(0, 1); b.s.zones.draw.unshift(stale);
+  b.draw(1);
+  assert.ok(b.s.zones.hand.includes(stale)); assert.equal(b.s.cards[stale].held, false);
+  // recall (sera_pull) resets it too
+  const r = battle({ deck: ['sera_pull', 'sera_round', 'sera_round', 'sera_round', 'sera_round'], enemies: ['e_shelf'], difficulty: { hp: 400, dmg: 10 } });
+  const shot = firstOf(r, 'sera_round');
+  r.do('play', { uid: shot, mode: 'now', target: r.s.enemies[0].uid });
+  r.s.cards[shot].held = true;
+  r.do('play', { uid: firstOf(r, 'sera_pull'), mode: 'now', picks: [shot] });
+  assert.ok(r.s.zones.hand.includes(shot)); assert.equal(r.s.cards[shot].held, false);
+});
+
+test('collateral: block v plus debt 1 due next turn; rejected with DEBT_CAP at the cap', () => {
+  const party = [{ charId: 'ravien', res: 0 }, { charId: 'harin', res: 0 }, { charId: 'nia', res: 0 }];
+  const b = battle({ party, deck: Array(10).fill('ravien_collateral'), enemies: ['e_shelf'], difficulty: { hp: 400, dmg: 10 } });
+  const v = DATA.cards.find((c) => c.id === 'ravien_collateral').eff[0].v;
+  b.do('play', { uid: b.s.zones.hand[0], mode: 'now' });
+  assert.equal(b.s.block, b.scaleVit(v));
+  assert.deepEqual(b.s.debts.map((d) => [d.n, d.due]), [[1, 2]]);
+  assert.equal(b.s.sealedUntil, 0, 'no reservation slot is sealed');
+  assert.equal(b.nextTurnAp(), DATA.rules.apPerTurn - 1);
+  while (b.debtTotal() < b.s.debtCap) b.do('play', { uid: b.s.zones.hand[0], mode: 'now' });
+  const u = b.s.zones.hand[0];
+  assert.equal(b.check(u, 'now', null), 'DEBT_CAP');
+  const before = JSON.stringify(b.s);
+  assert.throws(() => b.do('play', { uid: u, mode: 'now' }), { code: 'DEBT_CAP' });
+  assert.equal(JSON.stringify(b.s), before);
+  b.do('end');
+  assert.equal(b.s.ap, DATA.rules.apPerTurn - b.s.debtCap);
+  assert.equal(b.s.debts.length, 0);
+});
+
+test('empty_clock: the first card of the battle costs 1 less in now mode, once', () => {
+  const b = battle({ deck: Array(10).fill('sera_round'), enemies: ['e_shelf'], relics: ['empty_clock'] });
+  const [u1, u2] = b.s.zones.hand;
+  assert.equal(b.costOf(u1, 'now'), 0); // sera_round cost 1 − 1
+  b.do('play', { uid: u1, mode: 'now', target: b.s.enemies[0].uid });
+  assert.equal(b.s.ap, 4);
+  assert.equal(b.s.battleFlags.emptyClockUsed, true);
+  assert.equal(b.costOf(u2, 'now'), 1);
+  b.do('play', { uid: u2, mode: 'now', target: b.s.enemies[0].uid });
+  assert.equal(b.s.ap, 3);
+});
+
+test('draw relics: twin_pendulum and infinite_circuit +1 draw every turn, cracked_hourglass +2 on turn 1 only', () => {
+  const D = DATA.rules.handDraw;
+  const mk = (relic) => battle({ deck: Array(20).fill('sera_round'), enemies: ['e_shelf'], relics: [relic], difficulty: { hp: 400, dmg: 10 } });
+  const twin = mk('twin_pendulum');
+  assert.equal(twin.s.handMax, 9);
+  assert.equal(twin.s.zones.hand.length, D + 1);
+  twin.do('end'); assert.equal(twin.s.zones.hand.length, D + 1);
+  const circuit = mk('infinite_circuit');
+  assert.equal(circuit.s.zones.hand.length, D + 1);
+  assert.equal(circuit.s.hp, 243 - 2);
+  circuit.do('end'); assert.equal(circuit.s.zones.hand.length, D + 1);
+  const glass = mk('cracked_hourglass');
+  assert.deepEqual([glass.s.zones.hand.length, glass.s.ap], [D + 2, DATA.rules.apPerTurn - 1]);
+  glass.do('end');
+  assert.deepEqual([glass.s.zones.hand.length, glass.s.ap], [D, DATA.rules.apPerTurn]);
+  assert.equal(glass.s.slotsBase.after, DATA.rules.slots.after, 'no reservation slot is added');
+});
+
+test('grow: a growth card grows when it resolves now, once per card per battle', () => {
+  const party = [{ charId: 'yuri', res: 0 }, { charId: 'harin', res: 0 }, { charId: 'nia', res: 0 }];
+  const b = battle({ party, deck: ['yuri_cocoon'], enemies: ['e_shelf'], difficulty: { hp: 400, dmg: 10 } });
+  const u = b.s.zones.hand[0];
+  const r1 = b.do('play', { uid: u, mode: 'now' });
+  assert.equal(b.s.cards[u].growth, 1);
+  assert.deepEqual(r1.ev.filter((e) => e.e === 'grow'), [{ e: 'grow', uid: u, growth: 1, src: 'resolve' }]);
+  b.do('end');
+  const r2 = b.do('play', { uid: u, mode: 'now' });
+  assert.equal(b.s.cards[u].growth, 1);
+  assert.ok(r2.ev.every((e) => e.e !== 'grow'));
+  assert.equal(b.s.growthCount, 1);
+});
+
+test('held-keyed bonuses: precision_lens break +1 and w_reservedDmg apply only to a held card', () => {
+  const v = DATA.cards.find((c) => c.id === 'sera_timed').eff[0];
+  const hitTwice = (party, relics) => {
+    const b = battle({ party, deck: Array(5).fill('sera_timed'), enemies: ['b_archivist'], relics, difficulty: { hp: 400, dmg: 10 } });
+    const play = () => { const e = b.s.enemies[0]; const brk = e.brk;
+      const r = b.do('play', { uid: b.s.zones.hand[0], mode: 'now', target: e.uid });
+      return { brk: brk - b.s.enemies[0].brk, n: r.ev.find((x) => x.e === 'dmg' && x.src === 'card').n }; };
+    const fresh = play(); b.do('end'); // the other four sera_timed are 보존 and held on turn 2
+    assert.equal(b.s.cards[b.s.zones.hand[0]].held, true);
+    return [fresh, play()];
+  };
+  // b_archivist is weak to volt: sera_timed (brk 3) breaks 3 normally, 3 + 1 when held with precision_lens
+  const [lensFresh, lensHeld] = hitTwice([{ charId: 'sera', res: 0 }], ['precision_lens']);
+  assert.deepEqual([lensFresh.brk, lensHeld.brk], [v.brk, v.brk + 1]);
+  const scope = DATA.weapons.find((w) => w.id === 'w_sera').passive.values[0];
+  const [wFresh, wHeld] = hitTwice([{ charId: 'sera', res: 0, weaponId: 'w_sera', refine: 1 }], []);
+  assert.deepEqual([wFresh.n, wHeld.n], [v.v, Math.floor(v.v * (10000 + scope) / 10000)]);
+});
+
+test('sera hooks without reservations: r1 draws on any 유리탄 play once per turn, r6 is +50% on the turn after her ultimate', () => {
+  const r1 = battle({ party: [{ charId: 'sera', res: 1 }], deck: Array(12).fill('sera_round'), enemies: ['e_shelf'], difficulty: { hp: 400, dmg: 10 } });
+  const t = r1.s.enemies[0].uid;
+  r1.do('play', { uid: r1.s.zones.hand[0], mode: 'now', target: t });
+  assert.equal(r1.s.zones.hand.length, DATA.rules.handDraw); // −1 played, +1 drawn
+  r1.do('play', { uid: r1.s.zones.hand[0], mode: 'now', target: t });
+  assert.equal(r1.s.zones.hand.length, DATA.rules.handDraw - 1);
+  const r6 = battle({ party: [{ charId: 'sera', res: 6, gauge: 100 }], deck: Array(12).fill('sera_round'), enemies: ['e_shelf'], difficulty: { hp: 400, dmg: 10 } });
+  const hit = () => r6.do('play', { uid: r6.s.zones.hand[0], mode: 'now', target: r6.s.enemies[0].uid }).ev.find((e) => e.e === 'dmg' && e.src === 'card').n;
+  r6.do('ult', { actor: 'sera', target: r6.s.enemies[0].uid });
+  const sameTurn = hit(); r6.do('end'); const nextTurn = hit(); r6.do('end'); const later = hit();
+  assert.deepEqual([sameTurn, nextTurn, later], [8, 12, 8]); // 8, 8 × 1.5, 8
+  assert.equal(r6.s.battleFlags.seraR6Active, 2); // the boost belonged to turn 2 alone (a second ultimate then only arms turn 3)
 });
 
 test('a failing command changes nothing (atomic) and precheck is pure', () => {
@@ -124,7 +267,8 @@ test('break: weakness hits empty the gauge → stun, +25% damage taken, +1 AP ne
   assert.equal(b2.s.apNext, 1);
   const hp = e.hp;
   b2.do('play', { uid: b2.s.zones.hand[0], mode: 'now', target: L.uid });
-  assert.equal(hp - b2.s.enemies[0].hp, 10); // 8 × 1.25
+  // 8 × (1 + 25% sera_foresight, additive) × 1.25 broken = 12.5 → 12; foresight now applies to every Sera attack (RULES_NOW_PLAY)
+  assert.equal(hp - b2.s.enemies[0].hp, Math.floor(8 * (10000 + 2500) * (10000 + DATA.rules.brokenDamageBps) / 10000 / 10000));
 });
 
 test('hand never exceeds the cap; card count is conserved (invariants)', () => {
@@ -147,6 +291,17 @@ test('contracts: loan raises AP now and repays next turn; DEBT_CAP enforced', ()
   while (guard++ < 10) { const x = b.s.zones.hand[0]; if (!x) break; code = b.check(x, 'now', null); if (code) break; b.do('play', { uid: x, mode: 'now' }); }
   assert.ok(['DEBT_CAP', 'LOAN_OVERFLOW', 'AP_LOW', null].includes(code));
   assert.ok(b.debtTotal() <= b.s.debtCap);
+});
+
+test('grow: a winning blow still grows its card (RULES_NOW_PLAY)', () => {
+  const party = [{ charId: 'yuri', res: 0 }, { charId: 'harin', res: 0 }, { charId: 'nia', res: 0 }];
+  const b = battle({ party, deck: ['yuri_sprout'], enemies: ['e_seed'], difficulty: { hp: 1, dmg: 100 } });
+  const u = b.s.zones.hand[0]; const e = b.s.enemies[0];
+  assert.ok(e.hp + e.block <= 6, 'precondition: the sprout kills the only enemy');
+  const r = b.do('play', { uid: u, mode: 'now', target: e.uid });
+  assert.equal(b.s.phase, 'VICTORY');
+  assert.equal(b.s.cards[u].growth, 1);
+  assert.ok(r.ev.some((x) => x.e === 'grow' && x.uid === u));
 });
 
 // ───────── growth stats ─────────
@@ -306,14 +461,14 @@ test('echo-circuit and copy tokens stay cost 0 after the turn they were created'
   const b = battle({ deck: Array(10).fill('sera_phase'), enemies: ['e_shelf'], difficulty: { hp: 400, dmg: 10 } });
   const u = b.s.zones.hand[0]; b.s.cards[u].mods.c = 'c_echo';
   b.s.ap = 9;
-  b.do('play', { uid: u, mode: 'next', target: b.s.enemies[0].uid });
-  b.do('end'); // turn 2: reservation resolves → copy scheduled for turn 3 (no instance yet, cannot be shuffled away)
-  assert.equal((b.s.pendingCopies || []).length, 1);
-  assert.ok(!Object.values(b.s.cards).some((c) => c.echoCopy));
-  b.do('end'); // turn 3: copy is created straight into the hand
+  b.do('play', { uid: u, mode: 'now', target: b.s.enemies[0].uid }); // resolves now → copy scheduled for turn 2
+  assert.deepEqual((b.s.pendingCopies || []).map((x) => [x.id, x.due]), [['sera_phase', 2]]);
+  assert.ok(!Object.values(b.s.cards).some((c) => c.echoCopy), 'no instance yet, so it cannot be shuffled away');
+  b.do('end'); // turn 2: copy is created straight into the hand
   const copy = Object.values(b.s.cards).find((c) => c.echoCopy);
   assert.ok(copy && copy.free, 'copy is a free token');
-  assert.ok(b.s.zones.hand.includes(copy.uid), 'copy in hand on turn 3');
+  assert.equal(copy.mods.c, null, 'the copy carries no circuit');
+  assert.ok(b.s.zones.hand.includes(copy.uid), 'copy in hand on turn 2');
   assert.equal(b.costOf(copy.uid, 'now'), 0);
   b.do('end'); // even if it is discarded and drawn again later it stays free
   assert.equal(b.costOf(copy.uid, 'now'), 0);

@@ -87,22 +87,28 @@ function checkHtml(live, record, label) {
   htmlChecks[record.args.mode === 'now' ? 'now' : 'reserved']++;
 }
 
-test('original-JS regeneration keeps every v1 case/query/command and adds the bounded v2 reserved cases: 91 forecasts / 52 real commands', () => {
+// RULES_NOW_PLAY (2026-10-19): every card is now-only. next/after requests are forecast as NOT_RESERVABLE rejections, the reservation-only
+// cases became now-play cases and the reserved hidden-definition case was dropped (hidden-definition and hidden-hook-rng cover it).
+test('original-JS regeneration keeps the v1 case order with now-play replacements and the appended now cases: 80 forecasts / 50 real commands', () => {
   assert.equal(fixture.schema, 'mf-battle-preview-v2');
   assert.equal(fixture.status, 'JS_ORACLE');
   assert.match(fixture.scope, /original HTML preview current-state reserved resolution/);
   assert.match(fixture.scope, /Unity view, device and server acceptance PENDING/);
-  assert.deepEqual(fixture.cases.map(c => [c.id, c.group]), [['damage-block-targets', 'battle'], ['heal-reservation-slots', 'battle'], ['reflect-defeat', 'battle'],
-    ['overload-self-damage', 'battle'], ['hidden-definition', 'battle'], ['hidden-hook-draw', 'battle'], ['hidden-hook-rng', 'battle'], ['picks-pull', 'battle'], ['run-expedition', 'run'],
-    ['reserved-estimates', 'battle'], ['reserved-hidden-definition-rng', 'battle'], ['reserved-hidden-draw-hook', 'battle']]);
-  assert.deepEqual(fixture.counts, { cases: 12, battleForecasts: 72, battleCommands: 35, runFixedForecasts: 6, runPolicyForecasts: 13, runCommands: 17, forecasts: 91, commands: 52 });
+  assert.deepEqual(fixture.cases.map(c => [c.id, c.group]), [['damage-block-targets', 'battle'], ['heal-now-only-empty-clock', 'battle'], ['reflect-defeat', 'battle'],
+    ['overload-self-damage', 'battle'], ['hidden-definition', 'battle'], ['hidden-hook-draw', 'battle'], ['hidden-hook-rng', 'battle'], ['picks-recall', 'battle'], ['run-expedition', 'run'],
+    ['now-estimates', 'battle'], ['now-hidden-draw-hook', 'battle'], ['held-retain-forecast', 'battle']]);
+  assert.deepEqual(fixture.counts, { cases: 12, battleForecasts: 63, battleCommands: 36, runFixedForecasts: 6, runPolicyForecasts: 11, runCommands: 14, forecasts: 80, commands: 50 });
   const forecasts = fixture.cases.reduce((n, row) => n + row.steps.reduce((m, step) => m + step.forecasts.length, 0), 0);
   const commands = fixture.cases.reduce((n, row) => n + row.steps.filter(step => step.request).length, 0);
-  assert.deepEqual([forecasts, commands], [91, 52]);
-  // The v1 corpus is intact: the first nine cases still hold exactly 70 forecasts and 40 commands.
+  assert.deepEqual([forecasts, commands], [80, 50]);
+  // The first nine positions keep the v1 subjects (two reservation cases rewritten as now plays): 65 forecasts and 37 commands.
   const v1 = fixture.cases.slice(0, 9);
-  assert.deepEqual([v1.reduce((n, row) => n + row.steps.reduce((m, step) => m + step.forecasts.length, 0), 0), v1.reduce((n, row) => n + row.steps.filter(step => step.request).length, 0)], [70, 40]);
-  assert.deepEqual(fixture.coverage.errors, ['AP_LOW', 'BAD_TARGET', 'INVALID_MODE', 'NOT_IN_HAND', 'NOT_RESERVABLE', 'NO_BATTLE', 'OVERLOAD_WOULD_KILL', 'RESERVE_ONLY', 'SLOT_FULL', 'WRONG_PHASE']);
+  assert.deepEqual([v1.reduce((n, row) => n + row.steps.reduce((m, step) => m + step.forecasts.length, 0), 0), v1.reduce((n, row) => n + row.steps.filter(step => step.request).length, 0)], [65, 37]);
+  assert.deepEqual(fixture.coverage.errors, ['AP_LOW', 'BAD_TARGET', 'INVALID_MODE', 'NOT_IN_HAND', 'NOT_RESERVABLE', 'NO_BATTLE', 'OVERLOAD_WOULD_KILL', 'WRONG_PHASE']);
+  assert.ok(fixture.reachability.notCovered.reservationEstimate.startsWith('UNREACHABLE'));
+  const records = fixture.cases.flatMap(row => row.steps.flatMap(step => step.forecasts));
+  assert.ok(records.every(r => r.args.mode === 'now' || r.expected.error !== null), 'no next/after request is accepted');
+  assert.ok(records.filter(r => r.args.mode === 'next' || r.args.mode === 'after').some(r => r.expected.error === 'NOT_RESERVABLE'));
   for (const reason of ['definition', 'rng', 'draw']) assert.ok(fixture.coverage.hidden.includes(reason), `missing a forecast hidden only by ${reason}`);
   assert.deepEqual(Object.keys(fixture.sources), ['data', 'engine', 'memory', 'canonical', 'runCreateDecoder', 'htmlPreview', 'generator']);
   assert.equal(fixture.sources.htmlPreview.path, 'prototype/index.html');
@@ -121,24 +127,18 @@ test('original-JS regeneration keeps every v1 case/query/command and adds the bo
   const walk = value => Array.isArray(value) ? value.some(walk) : value !== null && typeof value === 'object' ? value.pick === 'random' || Object.values(value).some(walk) : false;
   assert.ok(!data.cards.some(card => walk(card.eff) || walk(card.plus ?? null)), 'pick:"random" stays NOT_COVERED only while no authored card has it');
   assert.ok(fixture.reachability.notCovered.definitionPickRandom && fixture.reachability.csharpOnly.lateCommandRejection);
-  // The next/after witness holds at exactly one forecast point: the timed keeper pair of reserved-estimates step 1 (22 against 30).
-  assert.ok(nextAfterDiffers(fixture.cases));
-  const points = fixture.cases.flatMap(row => row.steps.map((step, index) => [row.id, index, step])).filter(([, , step]) => nextAfterDiffers([{ steps: [step] }]));
-  assert.deepEqual(points.map(([id, index, step]) => [id, index, step.forecasts.slice(0, 2).map(f => f.label)]),
-    [['reserved-estimates', 1, ['timed next keeper', 'timed after keeper']]]);
-  // Control: equalising that pair leaves a cross-point lookalike (step 5 'timed next broken keeper' 18 against step 1 after 22) that a
-  // global uid/target comparison still accepts, while the one-point witness rejects it.
-  const lookalike = clone(fixture), [timedNext, timedAfter] = lookalike.cases[9].steps[1].forecasts;
-  Object.assign(timedAfter.expected, { enemyHpLoss: timedNext.expected.enemyHpLoss, enemyDamage: timedNext.expected.enemyDamage });
-  const shown = lookalike.cases.flatMap(row => row.steps.flatMap(step => step.forecasts)).filter(f => f.args.mode !== 'now' && f.expected.error === null && !f.expected.hidden);
-  assert.ok(shown.some(a => shown.some(b => a.args.uid === b.args.uid && a.args.target === b.args.target && a.args.mode !== b.args.mode
-    && a.expected.enemyDamage !== b.expected.enemyDamage)), 'the control keeps a cross-point lookalike');
-  assert.equal(nextAfterDiffers(lookalike.cases), false, 'a cross-point-only lookalike cannot satisfy the one-point witness');
+  // RULES_NOW_PLAY: no visible reserved estimate exists any more, so the one-point next/after witness is false on the real corpus.
+  assert.equal(nextAfterDiffers(fixture.cases), false);
+  // The witness logic itself still holds on synthetic records: a differing next/after pair at one point counts, the same pair split across points does not.
+  const visible = (mode, loss) => ({ args: { uid: 'c1', mode, target: 'e1', picks: [] }, expected: { ...none, mode, enemyHpLoss: loss, enemyDamage: loss } });
+  assert.equal(nextAfterDiffers([{ steps: [{ forecasts: [visible('next', 22), visible('after', 30)] }] }]), true);
+  assert.equal(nextAfterDiffers([{ steps: [{ forecasts: [visible('next', 22)] }, { forecasts: [visible('after', 30)] }] }]), false);
+  assert.equal(nextAfterDiffers([{ steps: [{ forecasts: [visible('next', 22), visible('after', 22)] }] }]), false);
   assert.ok(isDeepStrictEqual(generateCases(), fixture), 'regeneration is deterministic');
 });
 
-test('independent original-source literals: damage, block, heal, self-damage, reflect defeat, reservation estimates, breaks, picks and hidden reasons', () => {
-  const D = 'damage-block-targets', H = 'heal-reservation-slots', R = 'reflect-defeat', O = 'overload-self-damage', F = 'hidden-definition', P = 'picks-pull';
+test('independent original-source literals: damage, block, heal, self-damage, reflect defeat, now-only rejections, breaks, held, picks and hidden reasons', () => {
+  const D = 'damage-block-targets', H = 'heal-now-only-empty-clock', R = 'reflect-defeat', O = 'overload-self-damage', F = 'hidden-definition', P = 'picks-recall';
   // power4 160 / vit 81 / level 1: sera_round 8, harin_shield 8, sera_cover blk5+dmg4, harin_bash 6; e_cog gains block 6 on its first turn.
   expect(D, 'turn1 sera_round cog', 'now', { cost: 1, ...hit(8) });
   expect(D, 'turn1 harin_shield', 'now', { cost: 1, blockDelta: 8 });
@@ -146,27 +146,25 @@ test('independent original-source literals: damage, block, heal, self-damage, re
   expect(D, 'turn2 sera_cover cog block6', 'now', { cost: 1, blockDelta: 5, ...hit(0, 4) });
   expect(D, 'turn2 harin_bash moth', 'now', { cost: 1, ...hit(6) });
   expect(D, 'turn2 sera_cover cog after hit', 'now', { cost: 1, blockDelta: 5, ...hit(4) });
-  // Current-state estimate: sera_round rv12 against the unblocked turn-1 cog.
-  expect(D, 'turn1 sera_round next', 'next', { cost: 1, due: 2, ...hit(12) });
+  // RULES_NOW_PLAY: the removed reserved estimate is now a NOT_RESERVABLE rejection.
+  expect(D, 'turn1 sera_round next', 'next', { error: 'NOT_RESERVABLE' });
   for (const [label, error, mode] of [['created phase', 'WRONG_PHASE', 'now'], ['turn1 missing target', 'BAD_TARGET', 'now'], ['turn1 invalid mode', 'INVALID_MODE', 'later'],
     ['turn1 unknown uid', 'NOT_IN_HAND', 'now'], ['turn2 played card', 'NOT_IN_HAND', 'now']]) expect(D, label, mode, { error });
-  // aila_bell heals 5 at HP150/162; empty_clock -1 only before the first reservation; one base after slot. Each estimate kills the 12-HP page.
-  expect(H, 'heal', 'now', { cost: 1, hpDelta: 5 });
-  expect(H, 'heal again', 'now', { cost: 1, hpDelta: 5 });
-  expect(H, 'page damage', 'now', { cost: 1, ...hit(8) });
-  expect(H, 'first reservation next', 'next', { cost: 1, due: 2, ...hit(12) });
-  expect(H, 'first reservation after', 'after', { cost: 1, due: 3, ...hit(12) });
-  expect(H, 'after-only after', 'after', { cost: 2, due: 3, ...hit(12) });
-  expect(H, 'discounted zero cost after', 'after', { cost: 0, due: 3, ...hit(12) });
-  expect(H, 'clock used next', 'next', { cost: 1, due: 2, ...hit(12) });
-  expect(H, 'reserve-only now', 'now', { error: 'RESERVE_ONLY' });
-  expect(H, 'after-only next', 'next', { error: 'NOT_RESERVABLE' });
-  expect(H, 'after slot full', 'after', { error: 'SLOT_FULL' });
-  // e_mirrorclerk reflects 3 from its first turn; at HP3 the first reflected hit is lethal and stops the second hit (the rv6 estimate too).
+  // aila_bell heals 5 at HP150/162; empty_clock -1 on the first card of the battle in now mode (sera_timed 2 -> 1, sera_round/aila_bell 1 -> 0),
+  // full costs after the discounted sera_round (8) leaves the 12-HP page at 4; next/after are rejected for every card.
+  expect(H, 'heal discounted', 'now', { cost: 0, hpDelta: 5 });
+  expect(H, 'timed now discounted', 'now', { cost: 1, ...hit(12) });
+  expect(H, 'round now discounted zero cost', 'now', { cost: 0, ...hit(8) });
+  expect(H, 'timed next not reservable', 'next', { error: 'NOT_RESERVABLE' });
+  expect(H, 'last after not reservable', 'after', { error: 'NOT_RESERVABLE' });
+  expect(H, 'heal after clock', 'now', { cost: 1, hpDelta: 5 });
+  expect(H, 'timed after clock', 'now', { cost: 2, ...hit(4) });
+  expect(H, 'last after clock', 'now', { cost: 3, ...hit(4) });
+  // e_mirrorclerk reflects 3 from its first turn; at HP3 the first reflected hit is lethal and stops the second hit.
   expect(R, 'turn1 no reflect yet', 'now', { cost: 1, ...hit(8) });
   expect(R, 'reflect lethal multi-hit', 'now', { cost: 1, ...hit(4), hpDelta: -3, defeat: true });
   expect(R, 'reflect lethal single hit', 'now', { cost: 1, ...hit(8), hpDelta: -3, defeat: true });
-  expect(R, 'reflect reservation', 'next', { cost: 1, due: 3, ...hit(6), hpDelta: -3, defeat: true });
+  expect(R, 'reflect reservation', 'next', { error: 'NOT_RESERVABLE' });
   expect(R, 'after defeat', 'now', { error: 'WRONG_PHASE' });
   // HP5/81 is at most 50%: lumi_critical +30% (18 -> 23, 8 -> 10); overdrive's self-damage 5 would leave HP below 1.
   expect(O, 'selfdmg critical damage', 'now', { cost: 1, ...hit(23), hpDelta: -4 });
@@ -179,12 +177,11 @@ test('independent original-source literals: damage, block, heal, self-damage, re
   expect(F, 'nested draw definition', 'now', { cost: 1, hidden: true });
   expect(F, 'nested draw definition after owner change', 'now', { cost: 1, hidden: true });
   expect(F, 'visible control', 'now', { cost: 1, ...hit(8) });
-  expect(F, 'nested draw reserved', 'next', { cost: 1, due: 2, hidden: true });
+  expect(F, 'nested draw reserved', 'next', { error: 'NOT_RESERVABLE' });
   expect(F, 'ap low', 'now', { error: 'AP_LOW' });
   expect('hidden-hook-draw', 'third owner hook draw', 'now', { cost: 1, hidden: true });
-  // The estimate starts before the third owner's play, so unfinished_score never draws in it: nia_wrench rv10 or nia_barrier rv10.
   const reserve = recordOf('hidden-hook-draw', 'third owner reserve'), reserveCard = caseOf('hidden-hook-draw').created.state.cards[reserve.args.uid].id;
-  expect('hidden-hook-draw', 'third owner reserve', 'next', { cost: 1, due: 2, ...(reserveCard === 'nia_wrench' ? hit(10) : { blockDelta: 10 }) });
+  expect('hidden-hook-draw', 'third owner reserve', 'next', { error: 'NOT_RESERVABLE' });
   assert.ok(['nia_wrench', 'nia_barrier'].includes(reserveCard));
   const control = recordOf('hidden-hook-draw', 'earlier owner control').expected;
   assert.ok(control.error === null && !control.hidden && control.cost === 1 && (control.enemyHpLoss > 0 || control.blockDelta > 0), 'an earlier owner stays visible');
@@ -192,50 +189,43 @@ test('independent original-source literals: damage, block, heal, self-damage, re
   expect('hidden-hook-rng', 'harin_shield control', 'now', { cost: 1, blockDelta: 8 });
   expect('hidden-hook-rng', 'after hook harin_shield', 'now', { cost: 1, blockDelta: 8 });
   expect('hidden-hook-rng', 'after hook harin_bash page', 'now', { cost: 1, ...hit(6) });
-  // sera_pull: no pick, the after pick and an invalid pick move sera_timed; picking the next-turn sera_round resolves it now at rv12.
+  // sera_pull (cost 0) returns a discarded card to the hand: default/invalid picks take the highest-cost sera_timed, explicit picks choose; no forecast field changes.
   expect(P, 'pull default', 'now', {});
-  expect(P, 'pull next reservation', 'now', hit(12));
-  expect(P, 'pull after reservation', 'now', {});
+  expect(P, 'pull round pick', 'now', {});
+  expect(P, 'pull timed pick', 'now', {});
   expect(P, 'pull invalid pick', 'now', {});
   for (const [label, mode] of [['map now', 'now'], ['map after with picks', 'after'], ['after battle', 'now']]) expect('run-expedition', label, mode, { error: 'NO_BATTLE' });
   expect('run-expedition', 'run unknown uid', 'now', { error: 'NOT_IN_HAND' });
 
-  // v2: keeper 38 HP/brk4, cog 24 HP/brk4 (both volt-weak). Sera foresight +25% (reserved vs broken) and broken +25% multiply: rv6 -> 9, rv22 -> 34.
-  const E = 'reserved-estimates', X = 'reserved-hidden-definition-rng', K = 'reserved-hidden-draw-hook';
-  expect(E, 'timed next keeper', 'next', { cost: 2, due: 2, ...hit(22) });
-  expect(E, 'timed after keeper', 'after', { cost: 2, due: 3, ...hit(30) });
-  expect(E, 'aim next zero outcome', 'next', { cost: 1, due: 2 });
-  expect(E, 'cover next keeper', 'next', { cost: 1, due: 2, blockDelta: 7, ...hit(6) });
-  expect(E, 'timed next breaks keeper', 'next', { cost: 2, due: 2, ...hit(22), newlyBroken: 1 });
+  // Now cases: keeper 38 HP/brk4, cog 24 HP/brk4 (both volt-weak). round brk1 + double brk1x2 + cover brk1 break the keeper; Sera foresight +25% now applies
+  // to every Sera attack on a broken enemy and multiplies with broken +25%: cover 4 -> 6 (it was 5 without foresight); timed 20 -> 31 is capped by the 18 HP left.
+  const E = 'now-estimates', K = 'now-hidden-draw-hook', W = 'held-retain-forecast';
+  expect(E, 'timed now keeper', 'now', { cost: 2, ...hit(20) });
+  expect(E, 'aim now zero outcome', 'now', { cost: 1 });
+  expect(E, 'cover now keeper', 'now', { cost: 1, blockDelta: 5, ...hit(4) });
+  expect(E, 'timed now breaks keeper', 'now', { cost: 2, ...hit(20), newlyBroken: 1 });
   expect(E, 'cover now breaks keeper', 'now', { cost: 1, blockDelta: 5, ...hit(4), newlyBroken: 1 });
-  expect(E, 'timed next ap low', 'next', { error: 'AP_LOW' });
-  expect(E, 'cover next broken keeper', 'next', { cost: 1, due: 3, blockDelta: 7, ...hit(9) });
-  expect(E, 'cover now broken keeper', 'now', { cost: 1, blockDelta: 5, ...hit(5) });
-  expect(E, 'round next cog block', 'next', { cost: 1, due: 3, ...hit(6, 12) });
+  expect(E, 'timed now ap low', 'now', { error: 'AP_LOW' });
+  expect(E, 'timed now broken keeper', 'now', { cost: 2, ...hit(38 - 8 - 8 - 4) });
+  expect(E, 'cover now broken keeper', 'now', { cost: 1, blockDelta: 5, ...hit(Math.floor(4 * 1.25 * 1.25)) });
   expect(E, 'round now cog block', 'now', { cost: 1, ...hit(2, 8) });
-  expect(E, 'double after cog block', 'after', { cost: 1, due: 4, ...hit(6, 12) });
-  expect(E, 'timed next broken keeper', 'next', { cost: 2, due: 3, ...hit(18) });
-  expect(X, 'scan next draw definition', 'next', { cost: 1, due: 2, hidden: true });
-  expect(X, 'hunt after random definition', 'after', { cost: 1, due: 3, hidden: true });
-  expect(X, 'last after rng hook', 'after', { cost: 3, due: 3, hidden: true });
-  expect(X, 'round next visible control', 'next', { cost: 1, due: 2, ...hit(12) });
-  expect(K, 'crossfire next marked branch', 'next', { cost: 2, due: 2, ...hit(30) });
+  expect(E, 'double now cog block', 'now', { cost: 1, ...hit(2, 8) });
   expect(K, 'crossfire now marked branch', 'now', { cost: 2, ...hit(21) });
-  expect(K, 'timed next marked kill hook', 'next', { cost: 2, due: 2, hidden: true });
+  expect(K, 'timed now marked kill hook', 'now', { cost: 2, hidden: true });
   expect(K, 'round now marked page control', 'now', { cost: 1, ...hit(8) });
+  // sera_timed brk3 does not break the brk4 keeper; kept over the turn end it is held and precision_lens adds +1 (break), damage unchanged.
+  expect(W, 'timed unheld no lens', 'now', { cost: 2, ...hit(20) });
+  expect(W, 'timed held lens breaks', 'now', { cost: 2, ...hit(20), newlyBroken: 1 });
+  assert.deepEqual([caseOf(W).steps[1].after.state.cards.c1.held, caseOf(W).steps[2].after.state.cards.c1.held], [true, false]);
 
   const reasons = (id, label) => recordOf(id, label).hiddenBy;
   assert.deepEqual(reasons(F, 'draw definition'), ['definition']);
   assert.deepEqual(reasons(F, 'random target definition'), ['definition', 'rng']);
   assert.deepEqual(reasons(F, 'nested draw definition'), ['definition']);
   assert.deepEqual(reasons(F, 'nested draw definition after owner change'), ['definition']);
-  assert.deepEqual(reasons(F, 'nested draw reserved'), ['definition']);
   assert.deepEqual(reasons('hidden-hook-draw', 'third owner hook draw'), ['draw']);
   assert.deepEqual(reasons('hidden-hook-rng', 'exhaust hook random damage'), ['rng']);
-  assert.deepEqual(reasons(X, 'scan next draw definition'), ['definition']);
-  assert.deepEqual(reasons(X, 'hunt after random definition'), ['definition', 'rng']);
-  assert.deepEqual(reasons(X, 'last after rng hook'), ['rng']);
-  assert.deepEqual(reasons(K, 'timed next marked kill hook'), ['rng', 'draw']);
+  assert.deepEqual(reasons(K, 'timed now marked kill hook'), ['rng']);
 });
 
 test('every forecast re-derives from independent public replays, matches the original HTML preview() when visible, and every real command reproduces its state', () => {
@@ -282,7 +272,8 @@ test('every forecast re-derives from independent public replays, matches the ori
     history.push(step.request);
   }
   assert.ok(['REWARD', 'DEFEAT'].includes(live.s.phase) && !live.battle, 'the expedition battle actually ended');
-  assert.ok(htmlChecks.now > 0 && htmlChecks.reserved > 0, 'the original HTML preview checked immediate and reserved forecasts');
+  // RULES_NOW_PLAY: no reserved forecast is visible any more, so the HTML reserved branch is never compared.
+  assert.ok(htmlChecks.now > 0 && htmlChecks.reserved === 0, 'the original HTML preview checked immediate forecasts and no reserved one');
 });
 
 test('source pins, strict freshness and tampered fixtures are rejected', () => {
@@ -312,7 +303,7 @@ test('strict shared decoder: exact export round trip, corrupted containers and e
   t.after(() => rmSync(directory, { recursive: true, force: true }));
   const output = join(directory, 'preview.json.gz');
   const summary = exportVectors(output), bytes = readFileSync(output), text = Buffer.from(`${JSON.stringify(fixture)}\n`);
-  assert.deepEqual([summary.forecasts, summary.commands, summary.bytes, summary.sha256], [91, 52, bytes.length, sha256(bytes)]);
+  assert.deepEqual([summary.forecasts, summary.commands, summary.bytes, summary.sha256], [80, 50, bytes.length, sha256(bytes)]);
   assert.ok(gzipSync(text, { level: 9 }).equals(bytes), 'fresh export must be byte identical to this process generation');
   assert.ok(isDeepStrictEqual(decodeVectors(bytes), fixture));
   assert.deepEqual(checkFixture(decodeVectors(bytes)), fixture.counts);
@@ -341,5 +332,5 @@ test('strict shared decoder: exact export round trip, corrupted containers and e
 test('checked-in fixture decodes strictly and equals fresh original-JS regeneration', () => {
   const saved = decodeVectors(readFileSync(fixturePath));
   assert.deepEqual(checkFixture(saved), fixture.counts);
-  assert.deepEqual([saved.schema, saved.counts.forecasts, saved.counts.commands], ['mf-battle-preview-v2', 91, 52]);
+  assert.deepEqual([saved.schema, saved.counts.forecasts, saved.counts.commands], ['mf-battle-preview-v2', 80, 50]);
 });

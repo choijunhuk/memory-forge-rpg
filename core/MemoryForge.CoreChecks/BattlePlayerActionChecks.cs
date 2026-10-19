@@ -18,39 +18,38 @@ static class BattlePlayerActionChecks
         ["data"] = "data/game_data.json", ["engine"] = "engine/rules-core.js", ["memory"] = "proposals/memory_v2.cjs",
         ["canonical"] = "tools/gen_traces.mjs", ["generator"] = "tools/gen_battle_player_action_vectors.mjs", ["fuzzPolicy"] = "engine/tests/fuzz_runs.mjs"
     };
-    static readonly string[] Operations = ("dmg blk heal st buff counter draw discard ap apNext gauge create pull slot loan defer restraint collateral clearDebt selfdmg " +
+    // RULES_NOW_PLAY (2026-10-19): the reservation ops pull/slot are no longer authored (37 ops).
+    static readonly string[] Operations = ("dmg blk heal st buff counter draw discard ap apNext gauge create loan defer restraint collateral clearDebt selfdmg " +
         "grow growPick growLowest growAll copyPick cleanse cleanseOne exhaustPick exhaustHand tune costdown recall power echo nextBoost freeNext breakBonus breakBonusAll if").Split(' ');
-    static readonly string[] EdgeIds = ("edge-bulwark-retention edge-bulwark-stacks edge-pull-after-next edge-pull-immediate-original-kind " +
-        "edge-defer-debt edge-debt-reservation-shared-sequence edge-echo-evolved-lineage edge-copy-pick-lineage " +
-        "edge-yuri-r6-growth-ult edge-lethal-reflect edge-player-same-hit-defeat-reward edge-reserved-void-shard-kill " +
+    static readonly string[] EdgeIds = ("edge-bulwark-retention edge-bulwark-stacks edge-retain-held-end-turn edge-held-reset-recall-draw " +
+        "edge-defer-debt edge-collateral-debt-shared-sequence edge-echo-evolved-lineage edge-copy-pick-lineage " +
+        "edge-yuri-r6-growth-ult edge-lethal-reflect edge-player-same-hit-defeat-reward edge-void-shard-post-resolve-kill " +
         "edge-exhaust-discard-reshuffle-live-zone edge-heal-overflow-rebirth edge-oblivion-exhaust-hooks edge-greenhouse-growth " +
         "edge-blueprint-modded-counter edge-casefile-marked edge-echo-chamber-owner-change edge-next-boost-charge " +
-        "edge-free-next-empty-clock edge-recall-engraving-once edge-gauge-earned-cap-bypass edge-mark-on-lethal-hit " +
-        "edge-ember-ring edge-strongest-party-heal edge-marked-conditional-true edge-intent-attack-conditional-true " +
-        "edge-burning-break-bonus edge-debt-positive-effects edge-debt-break-bonus-all edge-modded-conditional-true " +
-        "edge-target-low-hp-conditional-true edge-killed-this-conditional-true edge-lumi-earned-low-hp-r0 edge-lumi-earned-low-hp-r2 " +
-        "edge-growth-counters-and-picks edge-growth-in-hand-false edge-exhausted-counter edge-counter-scaling " +
-        "edge-block-scaling edge-missing-hp-counter edge-contract-counter-collateral edge-echo-counter-conditional " +
-        "edge-aila_veil-real-debuff edge-aila_cleanse-real-debuff edge-restraint-kept-bonus edge-restraint-broken-penalty " +
-        "edge-yuri-r6-once-recharge edge-growth-cap-once-and-saturation edge-growth-saturation-three edge-sera-r6-follow-up " +
-        "edge-kaya-r6-refund edge-harin-r6-counter-double edge-buff-free-overload-consume edge-ult-reflect-does-not-consume-card-charge " +
-        "edge-volt-first-damage-op edge-first-attack-and-owner-attribution edge-reservation-dead-retarget edge-fixed-target-mark-expiry-fizzle " +
-        "edge-terminal-reservation-conservation edge-envelope-multihit-continues edge-lethal-reflect-aoe-stops-targets edge-lethal-reflect-random-stops-hits " +
-        "edge-score-three-owners edge-silver-needle-real-injury edge-silver-needle-no-revival edge-silver-needle-envelope-survival " +
-        "edge-frost-first-break-once edge-reserved-break-relics edge-foresight-broken-damage edge-vulnerable-weak-and-gear-math " +
+        "edge-free-next-empty-clock edge-empty-clock-first-card edge-recall-engraving-once edge-gauge-earned-cap-bypass " +
+        "edge-mark-on-lethal-hit edge-ember-ring edge-strongest-party-heal edge-marked-conditional-true " +
+        "edge-intent-attack-conditional-true edge-burning-break-bonus edge-debt-positive-effects edge-debt-break-bonus-all " +
+        "edge-modded-conditional-true edge-target-low-hp-conditional-true edge-killed-this-conditional-true edge-lumi-earned-low-hp-r0 " +
+        "edge-lumi-earned-low-hp-r2 edge-growth-counters-and-picks edge-growth-in-hand-false edge-exhausted-counter " +
+        "edge-counter-scaling edge-block-scaling edge-missing-hp-counter edge-contract-counter-collateral " +
+        "edge-echo-counter-conditional edge-aila_veil-real-debuff edge-aila_cleanse-real-debuff edge-restraint-kept-bonus " +
+        "edge-restraint-broken-penalty edge-yuri-r6-once-recharge edge-growth-cap-once-and-saturation edge-growth-saturation-three " +
+        "edge-sera-r6-follow-up edge-growth-on-winning-blow edge-sera-r1-round-draw-once edge-kaya-r6-refund edge-harin-r6-counter-double " +
+        "edge-buff-free-overload-consume edge-ult-reflect-does-not-consume-card-charge edge-volt-first-damage-op edge-first-attack-and-owner-attribution " +
+        "edge-envelope-multihit-continues edge-lethal-reflect-aoe-stops-targets edge-lethal-reflect-random-stops-hits edge-score-three-owners " +
+        "edge-silver-needle-real-injury edge-silver-needle-no-revival edge-silver-needle-envelope-survival edge-frost-first-break-once " +
+        "edge-reserved-break-relics edge-held-time-stamp-weapon edge-foresight-broken-damage edge-vulnerable-weak-and-gear-math " +
         "edge-pierce-split-rounding edge-heal-up-weapon-floor-order edge-party-average-common-attribution edge-buff-max-not-add " +
         "edge-hand-overflow-generated edge-copy-delivery-after-draw-overflow edge-log400-after-real-commands edge-kaya_crossfire-marked-branch " +
         "edge-kaya_ignite-marked-branch edge-close-case-kill-refunds edge-feedback-echo-three edge-contract-seal-real-cap5 " +
         "edge-tuning-fork-real-echo4 edge-forged-lineage-does-not-grow edge-growth-once-below-cap edge-copy-pick-real-grown-root " +
-        "edge-echo-resets-earned-growth-upgrade-mods edge-overheat-block-excludes-exhaust-add edge-pull-multiple-invalid-pick edge-pull-multiple-explicit-pick " +
-        "edge-nia-tune-used-up-r0 edge-nia-tune-used-up-r1 edge-grow-lowest-ordinal-uid edge-selection-definition-cost-before-payable " +
-        "edge-selection-curse-before-cost edge-temporary-extra-slot-resolves-after-reset edge-after-reservations-use-next-bucket edge-collateral-sealed-slot-expiry").Split(' ');
+        "edge-echo-resets-earned-growth-upgrade-mods edge-overheat-block-excludes-exhaust-add edge-nia-tune-used-up-r0 edge-nia-tune-used-up-r1 " +
+        "edge-grow-lowest-ordinal-uid edge-selection-definition-cost-before-payable edge-selection-curse-before-cost").Split(' ');
     static readonly string[] ProtocolIds = ("protocol-created-play-picks-priority protocol-created-ult-picks-priority protocol-invalid-mode-picks-priority protocol-not-in-hand " +
-        "protocol-reserve-only protocol-now-only protocol-after-only protocol-ap-low " +
-        "protocol-bad-target protocol-fixed-mark-required protocol-debt-cap protocol-loan-overflow " +
-        "protocol-not-deferrable protocol-restraint-unavailable protocol-no-empty-slot protocol-reservation-required " +
-        "protocol-pull-destination-full protocol-slot-full protocol-overload-would-kill-earned-hp1 protocol-ult-validation " +
-        "protocol-ult-bad-target protocol-quick-circuit-reserve-only-has-no-mode protocol-receipts-play-replay-order").Split(' ');
+        "protocol-now-only protocol-after-only protocol-ap-low protocol-bad-target " +
+        "protocol-fixed-mark-required protocol-debt-cap protocol-loan-overflow protocol-not-deferrable " +
+        "protocol-restraint-unavailable protocol-collateral-debt-cap protocol-overload-would-kill-earned-hp1 protocol-ult-validation " +
+        "protocol-ult-bad-target protocol-quick-circuit-now-only protocol-receipts-play-replay-order").Split(' ');
     sealed class ActualStep
     {
         public JsonElement Request;
@@ -187,13 +186,14 @@ static class BattlePlayerActionChecks
         foreach (var weapon in source.GetProperty("weapons").EnumerateArray()) for (int r = 1; r <= 5; r++) expected.Add($"weapon-{Text(weapon, "id")}-r{r}", "weapon");
         foreach (var part in source.GetProperty("parts").EnumerateArray()) expected.Add("part-" + Text(part, "id"), "part");
         foreach (var relic in source.GetProperty("relics").EnumerateArray()) expected.Add("relic-" + Text(relic, "id"), "relic");
-        Require(cards.Count == 173 && cards.Sum(c => BaseModes(c).Count) == 378 && expected.Count == 849, "Current full authored action matrix changed");
+        // RULES_NOW_PLAY: every card is res "n", so the 378 reservation-mode pairs became 173 now pairs (644 positive matrix cases).
+        Require(cards.Count == 173 && cards.All(c => Text(c, "res") == "n") && cards.Sum(c => BaseModes(c).Count) == 173 && expected.Count == 644, "Current full authored action matrix changed");
         foreach (var enemy in source.GetProperty("enemies").EnumerateArray()) expected.Add("encounter-" + Text(enemy, "id") + "-player-cycle", "encounter");
         var positiveMatrixIds = expected.Keys.ToHashSet(StringComparer.Ordinal);
         foreach (string id in EdgeIds) expected.Add(id, "edge");
         foreach (string id in ProtocolIds) expected.Add(id, "protocol");
         var rows = fixture.GetProperty("cases").EnumerateArray().ToList(); var ids = rows.Select(r => Text(r, "id")).ToList();
-        Require(expected.Count == 992 && ids.Count == expected.Count && ids.Distinct(StringComparer.Ordinal).Count() == ids.Count && expected.Keys.ToHashSet(StringComparer.Ordinal).SetEquals(ids), "Action case membership missing/duplicate/unknown");
+        Require(expected.Count == 779 && ids.Count == expected.Count && ids.Distinct(StringComparer.Ordinal).Count() == ids.Count && expected.Keys.ToHashSet(StringComparer.Ordinal).SetEquals(ids), "Action case membership missing/duplicate/unknown");
         var coverage = SourceCoverage(source); int requestCount = 0, commits = 0, replays = 0, rejections = 0;
         var witnessed = new Dictionary<string, HashSet<string>>(StringComparer.Ordinal) { ["op"] = new(StringComparer.Ordinal), ["counter"] = new(StringComparer.Ordinal), ["condition"] = new(StringComparer.Ordinal) };
         foreach (var row in rows)
@@ -305,7 +305,7 @@ static class BattlePlayerActionChecks
             foreach (var property in value.EnumerateObject()) Walk(property.Value);
         }
         Walk(source.GetProperty("cards")); Walk(source.GetProperty("characters"));
-        Require(ops.SetEquals(Operations) && counters.Count == 12 && conditions.Count == 20 && fields.Count == 35, "Authored effect/counter/condition/field inventory changed");
+        Require(ops.SetEquals(Operations) && counters.Count == 12 && conditions.Count == 20 && fields.Count == 30, "Authored effect/counter/condition/field inventory changed"); // RULES_NOW_PLAY: rv/ra/rn/next/after removed
         return new(StringComparer.Ordinal) { ["op"] = ops, ["counter"] = counters, ["condition"] = conditions, ["field"] = fields };
     }
     static void ValidateCoverageInventory(JsonElement fixture, JsonElement source, List<JsonElement> rows, Dictionary<string, HashSet<string>> authored)
@@ -330,7 +330,7 @@ static class BattlePlayerActionChecks
             int index = 0;
             foreach (var witness in witnesses.EnumerateArray()) references.Add(new Dictionary<string, object?> { ["caseId"] = Text(row, "id"), ["witnessIndex"] = index++, ["kind"] = Text(witness, "kind"), ["tag"] = Text(witness, "tag"), ["stepIndex"] = witness.GetProperty("stepIndex").GetInt32() });
         }
-        Require(references.Count == 214, "Mandatory independent literal witness inventory changed"); RequireSame(coverage.GetProperty("witnesses"), references, "Observable witness reference inventory differs from actual rows");
+        Require(references.Count == 217, "Mandatory independent literal witness inventory changed"); RequireSame(coverage.GetProperty("witnesses"), references, "Observable witness reference inventory differs from actual rows");
         var effects = new List<object?>();
         void Visit(JsonElement value, string path, string? cardId, string? characterId)
         {
@@ -355,7 +355,7 @@ static class BattlePlayerActionChecks
             var character = characters[i]; string characterId = Text(character, "id");
             Visit(character.GetProperty("ult"), "characters/" + i + "/ult", null, characterId); Visit(character.GetProperty("resonance"), "characters/" + i + "/resonance", null, characterId);
         }
-        Require(effects.Count == 295, "Authored current effect-path inventory changed"); RequireSame(fixture.GetProperty("authoredEffects"), effects, "Authored effect source paths/shape hashes/case links are incomplete");
+        Require(effects.Count == 294, "Authored current effect-path inventory changed"); // RULES_NOW_PLAY: com_anchor lost its slot op RequireSame(fixture.GetProperty("authoredEffects"), effects, "Authored effect source paths/shape hashes/case links are incomplete");
         Require(fixture.GetProperty("reachability").GetProperty("battleOnly").GetBoolean() && Text(fixture.GetProperty("reachability"), "runAcceptance") == "PENDING" && Text(fixture.GetProperty("reachability"), "positiveSilenceUntil").StartsWith("UNREACHABLE:", StringComparison.Ordinal), "Unsupported Run/silence reachability is misrepresented");
     }
     static bool IsGameplayFact(JsonElement fact)
@@ -417,11 +417,11 @@ static class BattlePlayerActionChecks
                 if (kind != "interaction") seen[kind].Add(tag);
             }
         }
-        Check(baseCases == 378 && ultCases == 70 && witnessedFacts > 0, "all378 mandatory base card/mode paths and70 actual character/resonance ultimates plus independent facts");
+        Check(baseCases == 173 && ultCases == 70 && witnessedFacts > 0, "all173 mandatory base card/now paths and70 actual character/resonance ultimates plus independent facts");
         foreach (string kind in new[] { "op", "counter", "condition" }) Check(seen[kind].SetEquals(coverage[kind]), "actual C# observable complete " + kind + " coverage");
         var counts = fixture.GetProperty("counts");
         Check(commands == counts.GetProperty("commands").GetInt32() && committed == counts.GetProperty("committed").GetInt32() && replayed == counts.GetProperty("replayed").GetInt32() && rejected == counts.GetProperty("rejected").GetInt32(), "actual C# request/outcome counts equal complete concrete corpus");
-        Check(commands == 3870 && committed == 3837 && replayed == 1 && rejected == 32 && checkProbes == 1430, "final992-case corpus actually executes3870 requests and1430 pure Check records");
+        Check(commands == 2966 && committed == 2940 && replayed == 1 && rejected == 25 && checkProbes == 1198, "final779-case corpus actually executes2966 requests and1198 pure Check records");
         Console.WriteLine($"BattlePlayerActionCoverage: {actual.Count} actual cases; {baseCases} base pairs; {seen["op"].Count} ops, {seen["counter"].Count} counters, {seen["condition"].Count} condition outcomes; {witnessedFacts} observable facts");
     }
     static void IndependentAssertions(Dictionary<string, ActualCase> actual)
@@ -432,25 +432,40 @@ static class BattlePlayerActionChecks
         Check(bulwark.Before.Block == 26 && bulwark.Before.Counter == 2 && bulwark.State.Events.Single(e => e.E == "play").Cost == 2 && bulwark.State.Powers.Single(p => p.Id == "bulwark").Keep == 10 && bulwark.State.Cards["c1"].Used == 1 && bulwark.State.Zones.Exhaust.SequenceEqual(new[] { "c1" }) && bulwark.State.Actors.Single(a => a.Id == "harin").Gauge == 10, "independent actual bulwark costs2/resolves/exhausts with authored keep10");
         var kept = Ends("edge-bulwark-retention")[0].State;
         Check(kept.Turn == 2 && kept.Block == 10 && kept.Counter == 0, "independent real play→end retains bulwark10 and clears ordinary counter");
-        var pull = Play("edge-pull-after-next", "sera_pull").State; var reservation = pull.Reservations.Single();
-        Check(reservation.Kind == "next" && reservation.Due == 2 && reservation.Order == 1 && reservation.Delayed == null, "independent pull converts after→next/due2 without stale delayed metadata");
-        var pulled = Ends("edge-pull-after-next")[0];
-        Check(pulled.State.Enemies[0].Hp == 34 && pulled.State.Actors.Single(a => a.Id == "sera").Gauge == 20 && pulled.State.Reservations.Count == 0 && pulled.State.Events.Any(e => e.E == "dmg" && e.N == 22 && e.Blocked == 10), "independent converted reservation loses ra30/c_far70% and deals22 against block10");
+        // RULES_NOW_PLAY (2026-10-19): the pull/reservation edges are gone; collateral now books debt1 on the shared loan sequence.
+        var collateral = actual["edge-collateral-debt-shared-sequence"].Steps; var booked = collateral[2].State; var repaidCollateral = collateral[3].State;
+        Check(booked.ReservationSeq == 2 && booked.Debts.Select(d => (d.Id, d.N, d.Due, d.Deferred)).SequenceEqual(new[] { ("d1", 2, 2, false), ("d2", 1, 2, false) }) && booked.Block == 16 && booked.Reservations.Count == 0 && booked.SealedUntil == 0 && collateral[2].State.Events.Any(e => e.E == "loan" && e.N == 1), "independent collateral blocks16 and books debt d2/n1/due2 after loan d1 without sealing a slot");
+        Check(repaidCollateral.Turn == 2 && repaidCollateral.Ap == 4 - 2 - 1 && repaidCollateral.Debts.Count == 0, "independent loan2 + collateral1 repay together next turn (AP1)");
+        var cap = actual["protocol-collateral-debt-cap"].Steps.Last();
+        Check(cap.Outcome == "rejected" && cap.State.Debts.Sum(d => d.N) == cap.State.DebtCap, "independent collateral at the debt cap rejects with DEBT_CAP and books nothing");
+        var retain = actual["edge-retain-held-end-turn"].Steps; var ended = retain[2].State;
+        Check(ended.Turn == 2 && ended.Zones.Hand.Count == 3 + 5 && ended.Zones.Hand.Take(3).SequenceEqual(new[] { "c3", "c2", "c1" }) && ended.Cards.Values.Where(c => c.Held).Select(c => c.Id).OrderBy(id => id, StringComparer.Ordinal).SequenceEqual(new[] { "com_capacitor", "com_slash", "sera_timed" }) && !ended.Cards["c5"].Held, "independent 보존 keyword and c_delay retain keep three held cards ahead of the turn-2 draw; com_guard is discarded");
+        Check(!retain[3].State.Cards["c2"].Held, "independent playing a held card clears held");
+        var reset = actual["edge-held-reset-recall-draw"].Steps.Select(s => s.State.Cards["c1"].Held).ToList();
+        Check(reset.Count == 8 && reset[2] && !reset[3] && !reset[4] && reset[5] && !reset[7], "independent held is set at end turn and cleared by discard, recall and draw");
+        var lens = actual["edge-reserved-break-relics"].Steps;
+        Check(lens[0].State.Enemies[0].Brk - lens[1].State.Enemies[0].Brk == 3 + 1 && lens[2].State.Enemies[0].Brk - lens[3].State.Enemies[0].Brk == 3 + 1 + 1, "independent precision_lens adds break+1 only to the held sera_timed (eye_of_rift +1 both)");
+        var stamp = actual["edge-held-time-stamp-weapon"].Steps;
+        Check(stamp[1].State.Events.Single(e => e.E == "dmg").N == 20 && stamp[3].State.Events.Single(e => e.E == "dmg").N == 20 * 11200 / 10000 && stamp[3].State.Actors[0].Gauge - stamp[2].State.Actors[0].Gauge == 10 + 5, "independent w_reservedDmg +12% and time_stamp gauge+5 apply only to the held card");
+        var clock = actual["edge-empty-clock-first-card"].Steps;
+        Check(clock[1].State.Events.Single(e => e.E == "play").Cost == 0 && clock[2].State.Events.Single(e => e.E == "play").Cost == 1, "independent empty_clock discounts only the first now card of the battle");
         var deferred = Play("edge-defer-debt", "ravien_defer").State; var debt = deferred.Debts.Single();
         Check(deferred.Ap == 6 && debt.Id == "d1" && debt.N == 3 && debt.Due == 3 && debt.Deferred, "independent actual loan/defer debt d1/n3/due3/deferred true/AP6");
         var repaid = Ends("edge-defer-debt");
         Check(repaid[0].State.Turn == 2 && repaid[0].State.Ap == 4 && repaid[1].State.Turn == 3 && repaid[1].State.Ap == 1 && repaid[1].State.Debts.Count == 0 && repaid[1].State.Events.Any(e => e.E == "repay" && e.N == 3), "independent debt persists through turn2 then actual repay3 leaves turn3 AP1");
-        var echo = Ends("edge-echo-evolved-lineage");
-        Check(echo[0].State.Turn == 2 && echo[0].State.Block == 19 && echo[0].State.PendingCopies!.Single().Due == 3, "independent evolved reserved block13+Yuri6 and copy pendingdue3");
-        var delivered = echo[1].State; var copy = delivered.Cards["c3"];
-        Check(delivered.Turn == 3 && delivered.Zones.Hand.SequenceEqual(new[] { "c1", "c3" }) && delivered.PendingCopies != null && delivered.PendingCopies.Count == 0 && delivered.ToJsonGraph().ContainsKey("pendingCopies"), "independent normal draw precedes copy delivery and pendingCopies retains present-empty");
+        // RULES_NOW_PLAY: the echo circuit queues its copy on a now resolution; it is delivered at the next turn start.
+        var echoSteps = actual["edge-echo-evolved-lineage"].Steps; var queued = echoSteps[1].State;
+        Check(queued.Turn == 1 && queued.Block == 9 + 3 * 2 && queued.PendingCopies!.Single().Due == 2, "independent evolved now block9+Yuri6 and copy pending due2");
+        var delivered = echoSteps[2].State; var copy = delivered.Cards["c3"];
+        Check(delivered.Turn == 2 && delivered.Zones.Hand.SequenceEqual(new[] { "c1", "c3" }) && delivered.PendingCopies != null && delivered.PendingCopies.Count == 0 && delivered.ToJsonGraph().ContainsKey("pendingCopies"), "independent normal draw precedes copy delivery and pendingCopies retains present-empty");
         Check(copy.Id == "yuri_cocoon_guard" && copy.From == "yuri_cocoon" && copy.Wielder == null && copy.Token && copy.Free && copy.EchoCopy == true && !copy.Plus && copy.Circuit == null && copy.Edge == null && copy.Growth == 0 && !copy.Grown && copy.Used == 0 && copy.Temp.SequenceEqual(new[] { "echoHalf" }), "independent c_echo delivery resets upgrade/mod/growth metadata and carries explicit lineage/echoHalf/free token");
+        Check(echoSteps[3].State.Events.Single(e => e.E == "play").Cost == 0 && echoSteps[3].State.Zones.Exhaust.SequenceEqual(new[] { "c3" }) && echoSteps[3].State.PendingCopies!.Count == 0, "independent the echo copy itself queues no further copy");
         var growth = actual["edge-yuri-r6-growth-ult"].Steps.Single(s => s.Outcome == "committed" && Text(s.Request, "kind") == "ult").State;
         Check(growth.Block == 24 && growth.GrowthCount == 0 && growth.Actors.Single(a => a.Id == "yuri").Gauge == 0 && growth.Events.Count(e => e.E == "grow") == 4, "independent real YuriR6 ultimate produces four uncapped grows/block24/gauge0");
         var reflected = Play("edge-lethal-reflect", "sera_double").State;
         Check(reflected.Phase == "DEFEAT" && reflected.Hp == 0 && reflected.Enemies[0].Hp == 48 && reflected.Events.Count(e => e.E == "dmg") == 1 && reflected.Events.Any(e => e.E == "dmg" && e.N == 4) && reflected.Events.Any(e => e.E == "hpLoss" && e.N == 3 && e.Source == "reflect") && reflected.Cards["c1"].Used == 1 && reflected.Zones.Discard.Count(c => c == "c1") == 1 && reflected.Events.FindIndex(e => e.E == "end") < reflected.Events.FindIndex(e => e.E == "resolved"), "independent first lethal reflect stops later hits but preserves post-terminal used/discard/resolved");
-        var shard = Ends("edge-reserved-void-shard-kill").Last().State;
-        Check(shard.Phase == "VICTORY" && shard.Turn == 3 && shard.Hp == 57 && shard.Enemies[0].Hp == 0 && shard.Zones.Exhaust.Contains("c1") && shard.Events.Count(e => e.E == "end") == 1 && shard.Events.All(e => e.E != "turn"), "independent reserved45 plus actual exhaust relic3 kills before turn3 normal draw/intents/event");
+        var shard = actual["edge-void-shard-post-resolve-kill"].Steps.Last().State;
+        Check(shard.Phase == "VICTORY" && shard.Turn == 1 && shard.Hp == 81 && shard.Enemies[0].Hp == 0 && shard.Zones.Exhaust.SequenceEqual(new[] { "c1" }) && shard.Events.Where(e => e.E == "dmg").Select(e => (e.Source, e.N)).SequenceEqual(new (string?, int?)[] { ("card", 45), ("relic", 3) }) && shard.Events.Count(e => e.E == "end") == 1 && shard.Events.Last().E == "end" && shard.Events.All(e => e.E != "turn" && e.E != "reshuffle"), "independent now45 plus actual exhaust relic3 kills and ends the battle exactly once");
         var live = Play("edge-exhaust-discard-reshuffle-live-zone", "sion_forget");
         Check(live.Before.Zones.Draw.Count == 0 && live.Before.Zones.Hand.SequenceEqual(new[] { "c1", "c5" }) && live.Before.Zones.Discard.SequenceEqual(new[] { "c3", "c2", "c6", "c4" }), "independent live-discard regression preparation uses actual card commands/order");
         Check(live.State.Phase == "PLAYER" && live.State.Block == 10 && live.State.KilledMarked == 1 && live.State.Zones.Draw.SequenceEqual(new[] { "c6" }) && live.State.Zones.Exhaust.SequenceEqual(new[] { "c3" }) && live.State.Events.Where(e => e.E == "exhaust").Select(e => e.Uid).SequenceEqual(new[] { "c3" }), "independent notebook reshuffle changes the live discard list; only c3 exhausts, c6 remains draw, no false victory");

@@ -24,7 +24,6 @@ namespace MemoryForge.Client.Tests
     {
         const long Seed = 1234;
         const string Barrier = "TURN_SUMMARY_OPEN";
-        const float ReservedSeconds = 0.3f; // §14.3 예약 해결 0.3초/장
         readonly List<GameObject> hosts = new List<GameObject>();
 
         [UnityTearDown]
@@ -65,19 +64,21 @@ namespace MemoryForge.Client.Tests
         }
         static RunSetup Setup(long seed) => MemoryForgeExpeditionClient.PracticeSetup(seed, "short", "practice-1-" + seed, new Dictionary<string, object?>(), 0);
 
-        // Enter the first node, reserve the first opening-hand card legal for the next turn, then end that turn: the actual end resolves
-        // that reservation at the next turn's start, so its summary holds a time-reservation resolution row.
-        IEnumerator ReserveAndEnd(Session s, Reserved result)
+        // RULES_NOW_PLAY: enter the first node, play the first opening-hand card without picks now, then end that turn. No card can be
+        // reserved, so the summary holds no time-reservation row. (It replaced ReserveAndEnd.)
+        IEnumerator PlayAndEnd(Session s, Reserved result)
         {
             yield return Open(s);
             string first = s.Mirror.Available()[0];
             Assert.That(Both(s, () => s.Client.EnterNode(first), EnterCore(s, first)), Is.True);
             var b = s.Mirror.State.Battle!; string enemy = b.Enemies.First(e => e.Alive).Uid;
-            string? uid = b.Zones.Hand.FirstOrDefault(u => s.Mirror.BattleAllowedModes(u).Contains("next") && s.Mirror.BattleCheck(u, "next", enemy) == null);
-            Assert.That(uid, Is.Not.Null, "seed 1234's opening hand offers a next-turn reservation");
+            string? uid = b.Zones.Hand.FirstOrDefault(u => s.Mirror.BattleCheck(u, "now", enemy) == null
+                && MemoryForgeExpeditionClient.ChoiceRequests(s.Mirror.BattleEffectiveCard(u), "now", s.Data.Memory.Battle).Count == 0);
+            Assert.That(uid, Is.Not.Null, "seed 1234's opening hand offers a card without picks");
+            Assert.That(s.Mirror.BattleCheck(uid!, "next", enemy), Is.EqualTo("NOT_RESERVABLE"), "no card can be reserved");
             result.Uid = uid!; result.Name = s.Mirror.BattleEffectiveCard(uid!).Name;
-            s.Client.SelectEnemy(enemy); s.Client.SelectCard(uid!); s.Client.SelectMode("next");
-            Assert.That(Both(s, s.Client.ConfirmCard, BattleCore(s, "play", Play(uid!, "next", enemy))), Is.True);
+            s.Client.SelectEnemy(enemy); s.Client.SelectCard(uid!);
+            Assert.That(Both(s, s.Client.ConfirmCard, BattleCore(s, "play", Play(uid!, "now", enemy))), Is.True);
             FinishAction(s.Client);
             Assert.That(Both(s, s.Client.EndTurn, BattleCore(s, "end", null)), Is.True);
             Assert.That(s.Mirror.State.Battle, Is.Not.Null, "seed 1234's first battle is still running after one end");
@@ -298,49 +299,35 @@ namespace MemoryForge.Client.Tests
             Assert.That(Fingerprint(s.Client.Snapshot!), Is.EqualTo(before));
         }
 
-        // Normal pacing, skip, disable/enable and focus/pause resume of the same committed end give the same committed state, and none
-        // leaves a sticky barrier. Each reservation row appears on the approved 0.3 s step; the timer never reaches the Run.
+        // RULES_NOW_PLAY: with no time-reservation row to step, the summary shows every row at once. The same committed end, reopened,
+        // disabled/enabled or resumed, gives the same rows and state, and none leaves a sticky barrier. (It replaced
+        // ReservationRowsRevealOnTheApprovedTimerAndSkipDisableOrResumeLeaveTheSameCommittedState.)
         [UnityTest]
-        public IEnumerator ReservationRowsRevealOnTheApprovedTimerAndSkipDisableOrResumeLeaveTheSameCommittedState()
+        public IEnumerator TheTurnSummaryShowsAtOnceAndDisableOrResumeLeaveTheSameCommittedState()
         {
-            var a = new Session(); var reserved = new Reserved(); yield return ReserveAndEnd(a, reserved);
-            float opened = Time.realtimeSinceStartup;
-            var rows = a.Client.TurnSummaryRows; int steps = rows.Count(r => r.IsReservedResolution);
-            Assert.That(steps, Is.EqualTo(a.Last!.Events.Count(e => e.E == "resolved" && !string.IsNullOrEmpty(e.Reserved))), "one stepped row per actual time-reservation resolution");
-            var row = rows.Single(r => r.IsReservedResolution && r.Text.StartsWith("예약 해결 · " + reserved.Name + " · 다음 턴 예약", StringComparison.Ordinal));
-            Assert.That(rows[1].Text, Does.Contain("시간 예약 1장 → 0장"), "the summary counts Core's time reservations");
-            Assert.That(a.Client.TurnSummaryFullyShown, Is.False, "the reservation row waits for its 0.3 s step");
+            var a = new Session(); yield return PlayAndEnd(a, new Reserved());
+            var rows = a.Client.TurnSummaryRows;
+            Assert.That(rows.Any(r => r.IsReservedResolution), Is.False, "no time-reservation row");
+            Assert.That(rows.Any(r => r.Text.Contains("시간 예약")), Is.False, "no empty reservation count is printed");
+            Assert.That(a.Client.TurnSummaryFullyShown, Is.True, "nothing waits for a reveal step");
             string committed = Fingerprint(a.Client.Snapshot!);
             yield return null; Canvas.ForceUpdateCanvases();
-            var view = ActiveView(a.Host);
-            while (!a.Client.TurnSummaryFullyShown && Time.realtimeSinceStartup < opened + 5f)
-            {
-                Assert.That(Fingerprint(a.Client.Snapshot!), Is.EqualTo(committed), "the timer never reaches the Run");
-                yield return null;
-            }
-            Assert.That(a.Client.TurnSummaryFullyShown, Is.True, "the reveal finishes on the real timer");
-            Assert.That(Time.realtimeSinceStartup - opened, Is.GreaterThanOrEqualTo(ReservedSeconds * steps - 0.02f), "each reservation row waits its 0.3 s");
-            Assert.That(ActiveView(a.Host), Is.SameAs(view), "reveal steps rewrite labels in place; the view is not rebuilt");
-            Canvas.ForceUpdateCanvases();
-            AssertReadable(view, t => t.Contains("· " + row.Text), "the reservation row");
             Click(ButtonNamed(a.Host, "ContinueTurnSummary"));
             Assert.That(a.Client.HasTurnSummary, Is.False);
             Assert.That(Fingerprint(a.Client.Snapshot!), Is.EqualTo(committed));
 
-            // Skip: every row at once; the same committed end gives the same rows and state.
-            var b = new Session(); yield return ReserveAndEnd(b, new Reserved());
-            yield return null; Canvas.ForceUpdateCanvases();
-            Click(ButtonNamed(b.Host, "SkipTurnSummary"));
-            Assert.That(b.Client.TurnSummaryFullyShown, Is.True, "skip shows every row at once");
+            // The same committed end gives the same rows and state.
+            var b = new Session(); yield return PlayAndEnd(b, new Reserved());
             Assert.That(b.Client.TurnSummaryRows.Select(r => (r.Kind, r.Text, r.Provenance)), Is.EqualTo(rows.Select(r => (r.Kind, r.Text, r.Provenance))));
+            yield return null; Canvas.ForceUpdateCanvases();
             Click(ButtonNamed(b.Host, "ContinueTurnSummary"));
-            Assert.That(Fingerprint(b.Client.Snapshot!), Is.EqualTo(committed), "pacing does not change the committed state");
+            Assert.That(Fingerprint(b.Client.Snapshot!), Is.EqualTo(committed), "the same end commits the same state");
 
             // Disable/enable: the cosmetic summary is dropped, the actual Run redrawn, and the next actual end is accepted.
-            var c = new Session(); yield return ReserveAndEnd(c, new Reserved());
+            var c = new Session(); yield return PlayAndEnd(c, new Reserved());
             c.Host.SetActive(false);
             yield return null;
-            Assert.That(c.Client.HasTurnSummary, Is.False, "disabling drops the cosmetic summary and its timer");
+            Assert.That(c.Client.HasTurnSummary, Is.False, "disabling drops the cosmetic summary");
             c.Host.SetActive(true);
             yield return null;
             SingleView(c.Host);
@@ -350,26 +337,24 @@ namespace MemoryForge.Client.Tests
             Dismiss(c.Client);
 
             // Focus/pause resume: nothing is stale, so the open summary and the view stay; continue then releases the barrier.
-            var d = new Session(); yield return ReserveAndEnd(d, new Reserved());
+            var d = new Session(); yield return PlayAndEnd(d, new Reserved());
             yield return null; Canvas.ForceUpdateCanvases();
             var shown = ActiveView(d.Host);
             d.Host.SendMessage("OnApplicationPause", false); d.Host.SendMessage("OnApplicationFocus", true);
             Assert.That(d.Client.HasTurnSummary, Is.True, "resuming keeps the open summary: it is not stale");
             Assert.That(ActiveView(d.Host), Is.SameAs(shown), "nothing stale, so resuming does not rebuild the view");
             Assert.That(Fingerprint(d.Client.Snapshot!), Is.EqualTo(committed));
-            Assert.That(d.Client.SkipTurnSummary(), Is.True);
             Assert.That(d.Client.ContinueTurnSummary(), Is.True);
             Assert.That(Both(d, d.Client.EndTurn, BattleCore(d, "end", null)), Is.True, "the next actual end is accepted after resume");
             Dismiss(d.Client);
         }
 
-        // A press held on continue while a reservation row is still pending: the reveal rewrites labels only, so the same button, canvas
-        // and EventSystem keep the press, and the release is exactly one continue.
+        // A press held on continue across frames keeps the same button, canvas and EventSystem, and the release is exactly one continue.
+        // (RULES_NOW_PLAY: it was held across reservation reveal steps, which no longer exist.)
         [UnityTest]
-        public IEnumerator AHeldContinueSurvivesTheRevealStepsAndItsReleaseClosesTheSummaryOnce()
+        public IEnumerator AHeldContinueSurvivesFramesAndItsReleaseClosesTheSummaryOnce()
         {
-            var s = new Session(); yield return ReserveAndEnd(s, new Reserved());
-            Assert.That(s.Client.TurnSummaryFullyShown, Is.False);
+            var s = new Session(); yield return PlayAndEnd(s, new Reserved());
             yield return null; Canvas.ForceUpdateCanvases();
             var view = ActiveView(s.Host); var events = EventSystem.current; var cont = ButtonNamed(s.Host, "ContinueTurnSummary");
             Assert.That(events, Is.Not.Null);
@@ -382,13 +367,9 @@ namespace MemoryForge.Client.Tests
             pointer.pointerPress = ExecuteEvents.ExecuteHierarchy(hits[0].gameObject, pointer, ExecuteEvents.pointerDownHandler) ?? ExecuteEvents.GetEventHandler<IPointerClickHandler>(hits[0].gameObject);
             pointer.rawPointerPress = hits[0].gameObject;
             Assert.That(pointer.pointerPress, Is.SameAs(cont.gameObject), "continue takes its own press");
-            Assert.That(s.Client.TurnSummaryFullyShown, Is.False, "the press must start while a reservation row is still pending");
 
-            float deadline = Time.realtimeSinceStartup + 5f;
-            while (!s.Client.TurnSummaryFullyShown && Time.realtimeSinceStartup < deadline) yield return null;
-            yield return null; // a replaced view would linger inactive until the end of its frame
-            Assert.That(s.Client.TurnSummaryFullyShown, Is.True, "the reveal finished during the held press");
-            Assert.That(OwnedViews(s.Host), Is.EqualTo(new[] { view }), "reveal steps must not rebuild the view under a held press");
+            for (int frame = 0; frame < 10; frame++) yield return null;
+            Assert.That(OwnedViews(s.Host), Is.EqualTo(new[] { view }), "nothing rebuilds the view under a held press");
             Assert.That(cont != null && cont.IsActive() && cont.interactable, Is.True, "the held continue is the same live, interactable button");
             Assert.That(EventSystem.current, Is.SameAs(events), "the same EventSystem keeps the press");
             Assert.That(s.Client.HasTurnSummary, Is.True, "a held press alone closes nothing");
@@ -403,45 +384,20 @@ namespace MemoryForge.Client.Tests
             Assert.That(Fingerprint(s.Client.Snapshot!), Is.EqualTo(committed), "continue never reaches the Run");
         }
 
-        // Beneath the open summary the timeline is exactly Core's time-reservation slots: the resolved next-turn card is gone, a card
-        // reserved for the turn after still waits, and no summary row became a reservation.
+        // RULES_NOW_PLAY: beneath the open summary no time-reservation slot is drawn and Core holds no reservation. (It replaced
+        // TimeReservationSlotsBeneathTheSummaryAreOnlyCoresReservations.)
         [UnityTest]
-        public IEnumerator TimeReservationSlotsBeneathTheSummaryAreOnlyCoresReservations()
+        public IEnumerator NoTimeReservationSlotIsDrawnBeneathTheSummary()
         {
-            var s = new Session(); yield return Open(s);
-            string first = s.Mirror.Available()[0];
-            Assert.That(Both(s, () => s.Client.EnterNode(first), EnterCore(s, first)), Is.True);
-            var b = s.Mirror.State.Battle!; string enemy = b.Enemies.First(e => e.Alive).Uid;
-            string? next = b.Zones.Hand.FirstOrDefault(u => s.Mirror.BattleAllowedModes(u).Contains("next") && s.Mirror.BattleCheck(u, "next", enemy) == null);
-            Assert.That(next, Is.Not.Null, "seed 1234's opening hand offers a next-turn reservation");
-            s.Client.SelectEnemy(enemy); s.Client.SelectCard(next!); s.Client.SelectMode("next");
-            Assert.That(Both(s, s.Client.ConfirmCard, BattleCore(s, "play", Play(next!, "next", enemy))), Is.True);
-            FinishAction(s.Client);
-            var hand = s.Mirror.State.Battle!.Zones.Hand;
-            string? later = hand.FirstOrDefault(u => s.Mirror.BattleAllowedModes(u).Contains("after") && s.Mirror.BattleCheck(u, "after", enemy) == null);
-            if (later != null)
-            {
-                s.Client.SelectEnemy(enemy); s.Client.SelectCard(later); s.Client.SelectMode("after");
-                Assert.That(Both(s, s.Client.ConfirmCard, BattleCore(s, "play", Play(later, "after", enemy))), Is.True);
-                FinishAction(s.Client);
-            }
-            int reservedBefore = s.Mirror.State.Battle!.Reservations.Count;
-            Assert.That(Both(s, s.Client.EndTurn, BattleCore(s, "end", null)), Is.True);
+            var s = new Session(); yield return PlayAndEnd(s, new Reserved());
             yield return null; Canvas.ForceUpdateCanvases();
-
-            var live = s.Mirror.State.Battle!; var rules = s.Data.Memory.Battle.Rules;
-            var cells = MemoryForgeBattleClient.TimelineCells(live, rules);
-            var expected = cells.Select(cell => (cell.Group == "next" ? "다음" : "다다음") + "  " + (cell.Kind == "card" ? s.Mirror.BattleEffectiveCard(cell.Uid!).Name
-                : cell.Kind == "empty" ? "빈 칸" : cell.Kind == "sealed" ? "봉인" : "-")).ToList();
-            var drawn = ActiveView(s.Host).GetComponentsInChildren<Image>().Where(i => i.name == "ReservationSlot").Select(i => i.GetComponentInChildren<Text>().text).ToList();
-            Assert.That(drawn, Is.EqualTo(expected), "the timeline beneath the summary is Core's time-reservation slots only");
-            Assert.That(cells.Count(cell => cell.Kind == "card"), Is.EqualTo(live.Reservations.Count));
-            Assert.That(live.Reservations.Select(r => r.Uid), Is.EqualTo(later == null ? new string[0] : new[] { later }), "the next-turn card resolved; only the later one waits");
-            Assert.That(s.Client.TurnSummaryRows.Count(r => r.IsReservedResolution), Is.EqualTo(1), "one actual resolution row");
-            Assert.That(s.Client.TurnSummaryRows[1].Text, Does.Contain("시간 예약 " + reservedBefore + "장 → " + live.Reservations.Count + "장"));
+            var live = s.Mirror.State.Battle!;
+            Assert.That(live.Reservations, Is.Empty, "Core holds no reservation");
+            Assert.That(ActiveView(s.Host).GetComponentsInChildren<Image>().Any(i => i.name == "ReservationSlot"), Is.False, "no reservation slot is drawn");
+            Assert.That(s.Client.TurnSummaryRows.Count(r => r.IsReservedResolution), Is.EqualTo(0));
             Assert.That(s.Client.HasTurnSummary, Is.True);
             Dismiss(s.Client);
-            Assert.That(s.Client.Snapshot!.Battle!.Reservations.Select(r => r.Uid), Is.EqualTo(live.Reservations.Select(r => r.Uid)), "closing the summary adds or removes no reservation");
+            Assert.That(s.Client.Snapshot!.Battle!.Reservations, Is.Empty, "closing the summary adds no reservation");
         }
 
         // No stale pick sheet lies beneath an actual end's summary. P1-CARD-FLOW-PICKER-GUARD: an open sheet is one unsent play, so the end

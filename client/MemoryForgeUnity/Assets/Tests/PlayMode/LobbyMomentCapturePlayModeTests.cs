@@ -7,6 +7,7 @@ using System.Linq;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
+using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
 namespace MemoryForge.Client.Tests
@@ -53,6 +54,25 @@ namespace MemoryForge.Client.Tests
                 }
             }
             finally { try { File.WriteAllLines(Path.Combine(dir, "captured.txt"), log); } finally { Object.Destroy(host); } }
+        }
+
+        // NOW-PLAY-RULES-20261019 report shots: the home with no moment playing, then the sortie panel opened by its real button.
+        [UnityTest, Explicit("writes report screenshots; run by name with MF_EXPEDITION_SHOTS")]
+        public IEnumerator CaptureHomeAndSortie()
+        {
+            string? dir = Environment.GetEnvironmentVariable("MF_EXPEDITION_SHOTS");
+            if (string.IsNullOrEmpty(dir)) { Assert.Ignore("MF_EXPEDITION_SHOTS is not set"); yield break; }
+            Directory.CreateDirectory(dir!);
+            var host = new GameObject("LobbyShots"); var lobby = host.AddComponent<MemoryForgeLobbyClient>();
+            try
+            {
+                yield return null; lobby.Player!.Stop(); yield return Settle(0.4f);
+                yield return Shot(host, Path.Combine(dir!, "home.jpg"));
+                host.GetComponentsInChildren<Button>().First(b => b.name == "StartExpedition").onClick.Invoke();
+                yield return Settle(0.3f);
+                yield return Shot(host, Path.Combine(dir!, "home_sortie.jpg"));
+            }
+            finally { Object.Destroy(host); }
         }
 
         static IEnumerator Settle(float seconds)

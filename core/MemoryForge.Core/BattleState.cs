@@ -86,7 +86,7 @@ namespace MemoryForge.Core
     {
         public string Uid = "", Id = "", Owner = "";
         public string? Wielder, Circuit, Edge, Assigned, From;
-        public bool Plus, Grown, Token, Free;
+        public bool Plus, Grown, Held, Token, Free;
         public bool? EchoCopy;
         public int Growth, Used, CostMod;
         public List<string> Temp = new List<string>();
@@ -99,7 +99,7 @@ namespace MemoryForge.Core
         {
             var graph = BattleGraph.Object("uid", Uid, "id", Id, "owner", Owner, "wielder", Wielder, "plus", Plus,
                 "mods", BattleGraph.Object("c", Circuit, "e", Edge), "temp", new List<string>(Temp), "growth", Growth,
-                "grown", Grown, "used", Used, "costMod", CostMod, "token", Token, "free", Free, "assigned", Assigned, "from", From);
+                "grown", Grown, "held", Held, "used", Used, "costMod", CostMod, "token", Token, "free", Free, "assigned", Assigned, "from", From);
             if (Key != null) graph.Add("key", Key);
             BattleGraph.Optional(graph, "echoCopy", EchoCopy);
             return graph;

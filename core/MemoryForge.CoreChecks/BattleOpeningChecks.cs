@@ -106,7 +106,8 @@ static class BattleOpeningChecks
         Check(actual["aila-partial-overflow"].Hp == 81 && actual["aila-partial-overflow"].Block == 8, "independent partial heal overflow floor((12-1)*.8)=8");
         Check(actual["aila-before-circuit-cost"].Hp == 9, "independent opening heal precedes circuit HP cost");
         var maxDraw = actual["draw-max-strongest-only"];
-        Check(maxDraw.Zones.Hand.Count == 9 && maxDraw.HandMax == 9 && maxDraw.Zones.Discard.Count == 0, "independent authored max opening draw9/strongest weapon once");
+        // RULES_NOW_PLAY: twin_pendulum also draws +1 every turn, so 5 + quick_hands 2 + w_startDraw 2 + 1 = 10 burns one card over its cap 9.
+        Check(maxDraw.Zones.Hand.Count == 9 && maxDraw.HandMax == 9 && maxDraw.Zones.Discard.Count == 1 && maxDraw.Events.Count(e => e.E == "burnCard") == 1, "independent authored max opening draw10 into cap9 burns one/strongest weapon once");
         Check(actual["tuning-only-one-eligible"].TempParts == 1 && actual["tuning-only-curses"].TempParts == 0, "independent tuning excludes curses and duplicate amp");
         Check(actual["seed-no-eligible"].Block == 0 && actual["seed-no-eligible"].Events.All(e => e.E != "grow"), "saturated/evolved seed candidates never grow");
         Check(actual["card-fields-and-lineage"].Cards.Values.All(c => !c.ToJsonGraph().ContainsKey("key")), "Battle.create ignores Run-only deck keys");

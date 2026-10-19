@@ -118,7 +118,7 @@ namespace MemoryForge.Server
             var view = Obj("uid", uid, "id", card.Id, "key", Scalar(Member(card.ToJsonGraph(), "key")), "owner", card.Owner, "wielder", card.Wielder,
                 "assigned", card.Assigned, "from", card.From, "plus", card.Plus, "mods", Obj("c", card.Circuit, "e", card.Edge),
                 "temp", card.Temp.Select(t => (object?)t).ToList(), "growth", card.Growth, "grown", card.Grown, "used", card.Used,
-                "token", card.Token, "free", card.Free, "echoCopy", card.EchoCopy);
+                "token", card.Token, "free", card.Free, "echoCopy", card.EchoCopy, "held", card.Held, "retain", run.BattleRetains(uid));
             List<string> modes;
             try { modes = run.BattleAllowedModes(uid); view["needsTarget"] = run.BattleNeedsTarget(uid); view["cost"] = run.BattleCostOf(uid, "now"); }
             catch (RuleException error) { view["modes"] = new List<object?>(); view["error"] = error.Code; return view; }

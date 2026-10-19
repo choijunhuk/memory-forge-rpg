@@ -58,7 +58,7 @@ function storeArgument(liveStore, spec) {
 test('four bases replay real gen_traces prefixes from a fresh Create to their terminal save, with the candidate scan and provenance recorded', () => {
   assert.deepEqual(fixture.bases.map(b => [b.id, b.memoryPolicy, b.role, b.status]), [['legacy-clear', 'legacy', 'clear', 'COVERED'],
     ['legacy-defeat', 'legacy', 'defeat', 'COVERED'], ['v2-clear', 'v2', 'clear', 'COVERED'], ['v2-defeat', 'v2', 'defeat', 'COVERED']]);
-  assert.deepEqual(['legacy-defeat', 'v2-defeat'].map(id => [base(id).seed, base(id).length]), [[1102, 'full'], [1102, 'full']]);
+  assert.deepEqual(['legacy-defeat', 'v2-defeat'].map(id => [base(id).seed, base(id).length]), [[3561, 'full'], [3561, 'full']]);
   assert.deepEqual([fixture.denominators.bases, fixture.denominators.scenarios, fixture.denominators.plannedOps, fixture.denominators.policies], [4, 15, 88, { legacy: 2, v2: 2 }]);
   assert.deepEqual(Object.values(fixture.sources).map(source => source.path), ['data/game_data.json', 'engine/rules-core.js', 'proposals/memory_v2.cjs',
     'tools/gen_traces.mjs', 'engine/tests/fuzz_runs.mjs', 'tools/gen_run_create_vectors.mjs', 'tools/gen_run_memory_vectors.mjs']);

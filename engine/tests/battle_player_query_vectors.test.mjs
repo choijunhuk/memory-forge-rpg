@@ -42,12 +42,14 @@ function hashState(value) {
   return sha256(JSON.stringify(value, [...keys].sort()));
 }
 
-test('player query oracle covers all 173 base cards and every 378 authored legal mode pair', () => {
+// RULES_NOW_PLAY (2026-10-19): every card is play-now only, so the 173 base cards have exactly 173 legal (card, now) pairs.
+test('player query oracle covers all 173 base cards and each one\'s single legal now mode', () => {
   assert.equal(fixture.schema, 'mf-battle-player-queries-v1');
   assert.equal(fixture.catalog.cards.length, 173);
+  assert.ok(data.cards.every(c => c.res === 'n'));
   const base = fixture.cases.filter(c => c.group === 'card' && c.variant === 'base');
   assert.deepEqual(base.map(c => c.cardId), data.cards.map(c => c.id));
-  assert.equal(base.reduce((count, c) => count + c.createdQueries[0].allowedModes.length, 0), 378);
+  assert.equal(base.reduce((count, c) => count + c.createdQueries[0].allowedModes.length, 0), data.cards.length);
   assert.deepEqual(fixture.cases.filter(c => c.group === 'card' && c.variant === 'plus').map(c => c.cardId), data.cards.map(c => c.id));
   for (const row of base) {
     const definition = data.cards.find(c => c.id === row.cardId);
@@ -73,8 +75,11 @@ test('combat catalog preserves full cards, metadata, 10 ultimates, resonance FX,
   const fx = value => { if (value.eff) walk(value.eff); if (value.list) value.list.forEach(fx); };
   fixture.catalog.cards.forEach(c => walk(c.eff));
   fixture.catalog.characters.forEach(c => { walk(c.ult.eff); c.resonance.forEach(fx); });
-  assert.equal(tags.size, 39);
-  assert.equal(fields.size, 35);
+  // RULES_NOW_PLAY removed the reservation ops slot/pull and the reservation fields rv/ra/rn/next/after from all authored effects
+  assert.equal(tags.size, 37);
+  assert.equal(fields.size, 30);
+  for (const gone of ['slot', 'pull']) assert.ok(!tags.has(gone), gone);
+  for (const gone of ['rv', 'ra', 'rn', 'next', 'after']) assert.ok(!fields.has(gone), gone);
   const inspect = value => {
     if (typeof value === 'number') assert.ok(Number.isSafeInteger(value), 'catalog must not contain fractional rules');
     if (value && typeof value === 'object') Object.values(value).forEach(inspect);
@@ -168,14 +173,16 @@ test('every query reproduces effective definitions and preserves full state, RNG
 
 test('auto upgrade uses ceiling13/10 before resonance modifiers and preserves explicit0/false/absent fields', () => {
   const round = query(byId('card-sera_round-plus'), 'sera_round', true).effective;
-  assert.deepEqual(round.eff, [{ op: 'dmg', v: 11, rv: 16 }]);
+  // rv/ra were removed from data (RULES_NOW_PLAY); only v is upgraded: ceil(8 × 13/10) = 11
+  assert.deepEqual(round.eff, [{ op: 'dmg', v: 11 }]);
   const timed = query(byId('resonance-sera-r4'), 'sera_timed', true).effective;
-  assert.deepEqual(timed.eff, [{ op: 'dmg', v: 21, rv: 29, ra: 39, brk: 5 }]);
+  // sera_timed is now v 20 brk 3: ceil(20 × 13/10) = 26, and Sera r4 adds brk +2 → 5
+  assert.deepEqual(timed.eff, [{ op: 'dmg', v: 26, brk: 5 }]);
   const harin = query(byId('resonance-harin-r1'), 'harin_counter', true).effective;
-  assert.deepEqual(harin.eff, [{ op: 'blk', v: 7, rv: 10 }, { op: 'counter', n: 6 }]);
+  assert.deepEqual(harin.eff, [{ op: 'blk', v: 7 }, { op: 'counter', n: 6 }]);
   assert.equal(query(byId('resonance-kaya-r1'), 'kaya_clue', true).effective.eff[0].n, 4);
   assert.equal(query(byId('resonance-rien-r1'), 'rien_note', true).effective.eff[0].v, 9);
-  assert.deepEqual(query(byId('resonance-aila-r1'), 'aila_bell', true).effective.eff, [{ op: 'heal', v: 9, rv: 12 }]);
+  assert.deepEqual(query(byId('resonance-aila-r1'), 'aila_bell', true).effective.eff, [{ op: 'heal', v: 9 }]);
   assert.equal(query(byId('resonance-nia-r1'), 'nia_tune').effective.uses, 3);
   assert.equal(query(byId('resonance-ravien-r1'), 'ravien_advance').effective.uses, 2);
   const lumi = query(byId('resonance-lumi-r1'), 'lumi_dash', true).effective;
@@ -187,24 +194,28 @@ test('auto upgrade uses ceiling13/10 before resonance modifiers and preserves ex
   assert.equal(query(byId('card-yuri_cocoon_guard-base'), 'yuri_cocoon_guard').effective.pool, false);
 });
 
-test('noReserve leaves reserve-only cards without modes while pure cost queries still return disallowed mode costs', () => {
+// RULES_NOW_PLAY (2026-10-19): c_quick lost noReserve (it is just +20%), there are no reserve-only cards, and empty_clock
+// discounts the first card in now mode too. Pure cost queries still answer every mode and never consume the clock.
+test('c_quick keeps every card playable now and empty_clock discounts the first card in every mode without being consumed by queries', () => {
+  const cost = id => data.cards.find(c => c.id === id).cost;
+  const same = n => ({ now: n, next: n, after: n });
   const quick = byId('part-c_quick');
-  assert.deepEqual(query(quick, 'sera_round').allowedModes, ['now']);
-  assert.deepEqual(query(quick, 'nia_tune').allowedModes, ['now']);
-  assert.deepEqual(query(quick, 'sera_timed').allowedModes, []);
-  assert.deepEqual(query(quick, 'sera_last').allowedModes, []);
-  assert.deepEqual(query(quick, 'sera_last').costs, { now: 3, next: 3, after: 3 });
+  for (const id of ['sera_round', 'nia_tune', 'sera_timed', 'sera_last']) {
+    assert.deepEqual(query(quick, id).allowedModes, ['now'], id);
+    assert.deepEqual(query(quick, id).costs, same(cost(id)), id);
+  }
   const clock = byId('edge-empty-clock-no-reserve');
-  assert.deepEqual(query(clock, 'sera_timed').allowedModes, []);
-  assert.deepEqual(query(clock, 'sera_timed').costs, { now: 2, next: 1, after: 1 });
+  assert.deepEqual(query(clock, 'sera_timed').allowedModes, ['now']);
+  assert.deepEqual(query(clock, 'sera_timed').costs, same(cost('sera_timed') - 1));
   const lite = byId('edge-empty-clock-lite');
-  for (const [id, costs] of [['sera_round', [0, 0, 0]], ['sera_timed', [1, 0, 0]], ['sera_last', [2, 1, 1]], ['nia_tune', [0, 0, 0]]]) {
-    assert.deepEqual(Object.values(query(lite, id).costs), costs);
+  const liteCost = data.parts.find(p => p.id === 'c_lite').fx.cost;
+  for (const id of ['sera_round', 'sera_timed', 'sera_last', 'nia_tune']) {
+    assert.deepEqual(query(lite, id).costs, same(Math.max(0, cost(id) + liteCost - 1)), id);
   }
   assert.ok(!Object.hasOwn(lite.afterQueries.state.battleFlags, 'emptyClockUsed'));
   assert.equal(lite.afterQueries.state.ap, lite.begun.state.ap);
-  assert.deepEqual(byId('edge-unknown-part-ignored').queries[0].allowedModes, ['now', 'next', 'after']);
-  assert.deepEqual(byId('edge-unknown-part-ignored').queries[0].costs, { now: 1, next: 1, after: 1 });
+  assert.deepEqual(byId('edge-unknown-part-ignored').queries[0].allowedModes, ['now']);
+  assert.deepEqual(byId('edge-unknown-part-ignored').queries[0].costs, same(1));
 });
 
 test('target requirements include nested status branches and preserve fixed/all/random distinctions without selecting targets', () => {
@@ -213,9 +224,10 @@ test('target requirements include nested status branches and preserve fixed/all/
     assert.equal(byId(`card-${id}-base`).queries[0].needsTarget, need, id);
   }
   const owner = byId('edge-character-weapon-common-owner');
-  assert.deepEqual(query(owner, 'aila_bell', true).effective.eff, [{ op: 'heal', v: 9, rv: 12 }]);
-  assert.deepEqual(query(owner, 'wc_choir_bell').effective.eff, [{ op: 'heal', v: 4, rv: 6 }]);
-  assert.deepEqual(query(owner, 'com_patch').effective.eff, [{ op: 'heal', v: 6, rv: 8 }]);
+  // rv values were removed from data (RULES_NOW_PLAY); the plus aila_bell is ceil(5 × 13/10) + Aila r1 = 9
+  assert.deepEqual(query(owner, 'aila_bell', true).effective.eff, [{ op: 'heal', v: 9 }]);
+  assert.deepEqual(query(owner, 'wc_choir_bell').effective.eff, [{ op: 'heal', v: 4 }]);
+  assert.deepEqual(query(owner, 'com_patch').effective.eff, [{ op: 'heal', v: 6 }]);
   const instances = Object.values(owner.begun.state.cards);
   assert.deepEqual(instances.map(c => [c.owner, c.wielder, c.assigned]), [['aila', null, null], ['weapon', 'aila', null], ['common', null, 'aila']]);
   const evolved = byId('card-yuri_cocoon_guard-base');

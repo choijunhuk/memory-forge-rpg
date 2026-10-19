@@ -255,6 +255,8 @@ namespace MemoryForge.Client
         void OnEnable()
         {
             if (Resources.Load<TextAsset>(ClientRunContent.ResourcePath) == null || Resources.Load<TextAsset>("MemoryForge/battle-content") == null) return;
+            // HOME-20261019: the length chosen in the home's 출격 준비 (once; a test or scene default stays when nothing was chosen).
+            if (run == null && MemoryForgeLobbyClient.NextLength is string chosen) { Length = chosen; MemoryForgeLobbyClient.NextLength = null; }
             if (run == null) StartPractice(); else Render();
         }
         // Disabling drops only the cosmetic summary, the player-action display and their timers, and the unsent intent (never sent);
@@ -413,7 +415,7 @@ namespace MemoryForge.Client
             Launch(handFaces, uid, name, mode, aim, CardOwner(uid));
             return SendBattle("play", BattleArgument.Object(args), mode == "now" ? name + " 사용" : name + " 예약");
         }
-        public bool EndTurn() => SendBattle("end", null, "적의 행동과 예약 해결을 마쳤어요.");
+        public bool EndTurn() => SendBattle("end", null, "적의 행동을 마쳤어요.");
         public bool UseUltimate(string actor)
         {
             Launch(ultRects, actor, "필살기", "now", target, actor);
@@ -712,7 +714,8 @@ namespace MemoryForge.Client
         public BattlePlayForecast? PlayForecast(string uid, string mode, IReadOnlyList<string>? picks = null) => recovery != null ? null : run?.BattleForecast(uid, mode, target, picks);
         /// <summary>The action line for a forecast: its basis ("예상", or Core's automatic card choice when a pick card's picks stay
         /// unmade), the mode and ForecastText.</summary>
-        public string ForecastLine(BattlePlayForecast f, bool autoPicks) => (autoPicks ? "자동 선택 기준 예상" : "예상") + " · " + ModeName(f.Mode) + " · " + ForecastText(f);
+        // RULES_NOW_PLAY: every card is played now, so the mode is named only for a (refused) reservation request.
+        public string ForecastLine(BattlePlayForecast f, bool autoPicks) => (autoPicks ? "자동 선택 기준 예상" : "예상") + " · " + (f.Mode == "now" ? "" : ModeName(f.Mode) + " · ") + ForecastText(f);
         /// <summary>Error text, else the AP cost and ForecastOutcome.</summary>
         public string ForecastText(BattlePlayForecast f) => f.Error != null ? ErrorText(f.Error) : "행동력 " + f.Cost + " · " + ForecastOutcome(f);
         /// <summary>Only the DTO's own values: error text; for a reservation first its absolute due turn, then Core's estimate labelled
@@ -1247,11 +1250,12 @@ namespace MemoryForge.Client
         // The top bar: the workshop's brass medal and title, the practice and place lines, and the deck, log and abandon pills on the right.
         void Header(RunState s)
         {
-            var medal = Gem(frame!, "HeaderMedal", 20, 12, 62, Hex("1b2540"), Alpha(Brass, 0.95f));
-            Icon(medal, "Glyph", "ico_node_forge", 15, 15, 32, 32, Brass);
-            Strong(Label(frame!, "기억 공방", 92, 18, 176, 48, 34, Brass, FontStyle.Bold));
-            if (s.Phase != "BATTLE") // in battle the place moves to the top band and pace/skip take this room (ActionStrip)
+            if (s.Phase == "BATTLE") BattleHeader(s); // RULES_NOW_PLAY: a battle keeps its top for the stage (no logo, no rail)
+            else
             {
+                var medal = Gem(frame!, "HeaderMedal", 20, 12, 62, Hex("1b2540"), Alpha(Brass, 0.95f));
+                Icon(medal, "Glyph", "ico_node_forge", 15, 15, 32, 32, Brass);
+                Strong(Label(frame!, "기억 공방", 92, 18, 176, 48, 34, Brass, FontStyle.Bold));
                 Label(frame!, "탐사 연습 · " + string.Join("·", ReferenceParty.Select(CharacterName)) + " 기준 파티", 272, 16, 640, 30, 21, Ink);
                 Label(frame!, Location(s) + "  ·  " + PhaseName(s), 272, 46, 640, 28, 18, Muted);
             }
@@ -1260,6 +1264,15 @@ namespace MemoryForge.Client
             Button(frame!, "DeckButton", "덱 " + s.Deck.Count + "장" + (s.PartsFound.Count != 0 ? " · 부품 " + s.PartsFound.Count : ""), 930, 18, 240, 54, () => Open(Sheet.Deck), Line, 22, hit: Band(930, 0, 240, reach));
             Button(frame!, "LogButton", "기록", 1186, 18, 120, 54, () => Open(Sheet.Log), Line, 22, hit: Band(1246 - Math.Max(120, minTouch) / 2, 0, Math.Max(120, minTouch), reach));
             if (!Finished(s) && s.Phase != "VICTORY" && s.Phase != "DEFEAT") Button(frame!, "AbandonButton", "탐사 포기", 1322, 18, 246, 54, () => Open(Sheet.Abandon), Line, 22, hit: Band(1322, 0, 246, reach));
+        }
+        // In a battle the header's left is the place and the piles, small: the stage is what matters (RULES_NOW_PLAY, 2026-10-19).
+        void BattleHeader(RunState s)
+        {
+            var b = s.Battle!;
+            Label(frame!, Location(s) + " · " + PhaseName(s), 32, 14, 600, 26, 16, Muted);
+            var piles = new List<(string, Color, Color, Color?)> { ("뽑을 " + b.Zones.Draw.Count, Ink, Alpha(Background, 0.7f), LineEdge), ("버림 " + b.Zones.Discard.Count, Ink, Alpha(Background, 0.7f), LineEdge) };
+            if (b.Zones.Exhaust.Count != 0) piles.Add(("소멸 " + b.Zones.Exhaust.Count, Muted, Alpha(Background, 0.7f), LineEdge));
+            Chips(frame!, "Pile", piles, 32, 44, 640, 26, 15);
         }
         // Off the battle: the HP on a framed plate with its gem, coins, relics and parts as chips, the relic names and the practice note.
         void RunStatus(RunState s)
@@ -1355,21 +1368,16 @@ namespace MemoryForge.Client
             if (!b.Enemies.Any(e => e.Uid == target && e.Alive)) target = null;
             if (target == null && b.Enemies.Count(e => e.Alive) == 1) target = b.Enemies.First(e => e.Alive).Uid;
             if (!b.Zones.Hand.Contains(selectedCard ?? "")) { selectedCard = b.Zones.Hand.FirstOrDefault(); selectedMode = null; }
+            // RULES_NOW_PLAY: a card has one way to be played, so choosing it is choosing its mode.
+            if (selectedCard != null && selectedMode == null && run!.BattleAllowedModes(selectedCard) is var only && only.Count == 1) selectedMode = only[0];
             // Corner brackets mark every living enemy while the chosen card still needs a target.
             bool aiming = b.Phase == "PLAYER" && prepared == null && selectedCard != null && target == null && run!.BattleNeedsTarget(selectedCard) != null;
 
-            Grow(Label(frame!, Location(s) + " · " + PhaseName(s), 32, TopBandY + 2, 330, 56, 15, Muted));
-            var piles = new List<(string, Color, Color, Color?)>();
-            foreach (string pile in new[] { "뽑을 " + b.Zones.Draw.Count, "버림 " + b.Zones.Discard.Count, "소멸 " + b.Zones.Exhaust.Count })
-                piles.Add((pile, Ink, Alpha(Background, 0.86f), LineEdge));
-            piles.Add(("동전 " + s.Coins, Brass, Alpha(Background, 0.86f), Alpha(Brass, 0.6f)));
-            Chips(frame!, "Pile", piles, 1568 - Math.Min(ChipsWidth(piles, 28, 16), 330), TopBandY + 2, 1568, 28, 16);
-            Rail(b, rules, 376, 1226);
-            ActionStrip();
             PartyStage(b, rules);
             EnemyStage(b, rules, aiming);
             stageEnd = frame!.childCount; // a held card's owner stands here: over the stage, under the card row, hand and sheets
-            CardActions(b);
+            if (actionRows != null) ActionStrip(); // only while a committed action plays, over the stage's top
+            if (selectedCard != null && b.Phase == "PLAYER" || prepared != null || notice.Length != 0) CardActions(b);
             HandDock(b);
             ApGem(b);
             EndTurnDial(b);
@@ -1380,7 +1388,7 @@ namespace MemoryForge.Client
         // The action strip's band: under the top band off phones; on a phone below the header's touch band and 48dp tall (pace and skip).
         float StripTop => minTouch > 0 ? Math.Max(150, Math.Max(72, minTouch) + 2) : 150;
         float StripHeight => Math.Max(42, minTouch);
-        float StageTop => StripTop + StripHeight + 6;
+        float StageTop => minTouch > 0 ? Math.Max(TopBandY, Math.Max(72, minTouch) + 6) : TopBandY; // RULES_NOW_PLAY: no rail band
         float HandTop => minTouch > 0 ? 720 : 680;
         float ControlsHeight => Math.Max(56, minTouch);
         float ActionsTop => HandTop - 4 - 34 - ControlsHeight;
@@ -1463,7 +1471,7 @@ namespace MemoryForge.Client
             if (b.Counter != 0) stats.Add(("반격 " + b.Counter, Ink, Alpha(Background, 0.86f), LineEdge));
             int debt = b.Debts.Sum(d => d.N);
             if (debt != 0) stats.Add(("부채 " + debt, Danger, Alpha(Background, 0.86f), Alpha(Danger, 0.6f)));
-            stats.Add(("잔향 " + b.Echo + "/" + b.EchoMax, Memory, Alpha(Background, 0.86f), Alpha(Memory, 0.5f)));
+            if (b.EchoActive) stats.Add(("잔향 " + b.Echo + "/" + b.EchoMax, Memory, Alpha(Background, 0.86f), Alpha(Memory, 0.5f))); // only with Rien
             string party = MemoryForgeBattleClient.PartyStatusText(b); // each of the party's statuses as its own brass chip, in Core's order
             if (party.Length != 0) foreach (string buff in party.Split(new[] { " · " }, StringSplitOptions.None)) stats.Add((buff, Brass, Alpha(Brass, 0.14f), Alpha(Brass, 0.6f)));
             float infoHeight = 36 + ChipsHeight(stats, width - 8, 26, 15, 4) + 4;
@@ -1501,7 +1509,6 @@ namespace MemoryForge.Client
                     var ring = Deco(face, "Gauge", Pill(3), 6, height - 33, 30, 30, tone).GetComponent<Image>();
                     ring.type = Image.Type.Filled; ring.fillMethod = Image.FillMethod.Radial360; ring.fillOrigin = (int)Image.Origin360.Top; ring.fillClockwise = true;
                     ring.fillAmount = rules.GaugeMax > 0 ? Mathf.Clamp01((float)actor.Gauge / rules.GaugeMax) : 0;
-                    Label(face, Attribute(actor.Attr) + " " + actor.Gauge + "/" + rules.GaugeMax, 40, height - 33, column - 48, 30, 14, Muted, FontStyle.Normal, TextAnchor.MiddleLeft);
                 }
             }
         }
@@ -1761,9 +1768,16 @@ namespace MemoryForge.Client
                 Strong(Label(face, def.Name + (b.Cards.TryGetValue(uid, out var instance) && instance.Plus ? "+" : ""), 10, nameTop, width - 20, 32, 22, Ink, FontStyle.Bold));
                 var body = Label(face, fits ? text : LongEffect, 10, textTop, width - 20, textHeight, 15, fits ? Ink : Muted);
                 body.resizeTextForBestFit = false;
-                string tag = !modes.Contains("now") ? "예약 전용" : modes.Count > 1 ? "즉시 · 예약" : "즉시 사용";
-                var tagChip = Plate(face, "Modes", 8, tagTop + 1, Math.Min(width - 16, TextWidth(tag, 15) + 26), 26, Alpha(Memory, 0.16f), null, 1, true);
-                Label(tagChip, tag, 0, 0, tagChip.sizeDelta.x, 26, 15, Memory, FontStyle.Normal, TextAnchor.MiddleCenter);
+                // RULES_NOW_PLAY: no mode tag (every card is played now). A 보존 card (keyword or part) says so; one kept over a turn end
+                // glows brass.
+                bool held = b.Cards.TryGetValue(uid, out var kept) && kept.Held;
+                if (held || run.BattleRetains(uid))
+                {
+                    string tag = held ? "보존 중" : "보존";
+                    var tagChip = Plate(face, "Retain", 8, tagTop + 1, Math.Min(width - 16, TextWidth(tag, 15) + 26), 26, Alpha(Brass, held ? 0.3f : 0.16f), held ? Brass : null, 1, true);
+                    Label(tagChip, tag, 0, 0, tagChip.sizeDelta.x, 26, 15, Brass, FontStyle.Normal, TextAnchor.MiddleCenter);
+                }
+                if (held && !selected) Glow(face, Alpha(Brass, 0.45f));
                 x += width + gap;
             }
         }
@@ -1835,7 +1849,7 @@ namespace MemoryForge.Client
         {
             var actions = Plate(frame!, "CardActions", 32, ActionsTop, 1536, 34 + ControlsHeight, Alpha(Background, 0.8f), Alpha(Memory, 0.28f), 1);
             Sheen(actions, 1536, 34 + ControlsHeight, 0.05f);
-            string hint = "카드를 적에게 끌어 놓으면 바로 쓰고, 위 시간표에 놓으면 예약해요. 눌러서 방식을 고른 뒤 확정해도 돼요."; var hintColor = Muted;
+            string hint = ""; var hintColor = Muted; // RULES_NOW_PLAY: no standing tutorial line (the first-run guide teaches)
             var intent = prepared;
             if (intent != null)
             {
@@ -1859,16 +1873,7 @@ namespace MemoryForge.Client
                 Deco(actions, "Pointer", Diamond, 16, y + 21, 16, 16, Memory);
                 Strong(Label(actions, def.Name + " → " + (b.Enemies.FirstOrDefault(e => e.Uid == target)?.Name ?? (run.BattleNeedsTarget(uid) == null ? "파티" : "적 선택")), 40, y, 318, 56, 23, Ink, FontStyle.Bold, TextAnchor.MiddleLeft));
                 Button(actions, "CardInfoButton", "카드 설명", InfoRect.x, InfoRect.y, InfoRect.width, InfoRect.height, () => ShowHandCardInfo(uid), Line, 21, hit: CardRow(InfoRect.x, InfoRect.width));
-                int i = 0;
-                foreach (string mode in run.BattleAllowedModes(uid))
-                {
-                    string? error = run.BattleCheck(uid, mode, target);
-                    string caption = ModeName(mode) + " · 비용 " + run.BattleCostOf(uid, mode) + "\n" + (error == null ? ModeTiming(mode) : ErrorText(error));
-                    bool chosen = selectedMode == mode;
-                    Button(actions, "Mode:" + mode, caption, 532 + i++ * 262, y, 250, 56, () => SelectMode(mode), chosen ? (mode == "now" ? Brass : Memory) : Line, 18,
-                        chosen ? (Color?)null : mode == "now" ? Alpha(Brass, 0.7f) : Alpha(Memory, 0.7f), chosen ? 0 : 1, CardRow(532 + (i - 1) * 262, 250))
-                        .interactable = error == null || error == "BAD_TARGET" || error == "FIXED_MARK_REQUIRED";
-                }
+                // RULES_NOW_PLAY: one way to play a card, so no mode buttons; the cost sits on the card and in the forecast.
                 string? reason = selectedMode == null ? "MODE" : run.BattleCheck(uid, selectedMode, target);
                 bool plain = reason == null && ChoiceRequests(def, selectedMode!, data!.Memory.Battle).Count == 0;
                 string confirm = reason == null ? (plain ? ConfirmCaption(actionRows != null) : "카드 고르기")

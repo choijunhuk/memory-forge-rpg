@@ -100,48 +100,40 @@ namespace MemoryForge.Client
                 Text = "지도의 밝은 칸이 지금 갈 수 있는 곳이에요. 들어간 칸은 되돌릴 수 없어요. 칸 하나를 눌러 들어가 보세요.",
                 Show = c => c.Run?.Phase == "MAP" && !c.Client.ShowingResult && !c.Covered, Done = (c, m) => Left(c, "MAP")
             },
-            // ① 프롤로그 1전투: 카드 지금 사용만(행동력·손패 설명)
+            // ① 프롤로그 1전투: 카드 사용(행동력·손패 설명). RULES_NOW_PLAY (2026-10-19): a card is only ever played now, so there is no mode step.
             new OnboardingStep
             {
                 Id = "battle.hand", Lesson = 1, Core = true, Targets = new[] { "Hand" },
-                Text = "아래 손패가 이번 턴에 쓸 카드예요. 카드에 적힌 행동력만큼 오른쪽 위 행동력이 줄어요. 카드 하나를 눌러 보세요.",
-                Show = c => c.PlayerTurn && c.Client.SelectedMode == null,
+                Text = "아래 손패가 이번 턴에 쓸 카드예요. 카드에 적힌 행동력만큼 왼쪽 아래 행동력이 줄어요. 카드를 적에게 끌어 놓거나, 눌러서 골라 보세요.",
+                Show = c => c.PlayerTurn && !c.HandClicked,
                 // A real press: the client auto-selects a card on its own (a new turn, a played card), so a changed selection is no proof.
-                Done = (c, m) => c.HandClicked || c.Client.SelectedMode != null
+                Done = (c, m) => c.HandClicked || Played(c, m)
             },
             new OnboardingStep
             {
-                Id = "battle.mode", Lesson = 1, Core = true, After = new[] { "battle.hand" }, Targets = new[] { "Mode:now" }, AltTargets = new[] { "Hand" },
-                Text = "쓰는 방식을 골라요. '즉시'는 이번 턴에 바로 해결되고, 버튼에 비용이 적혀 있어요. '즉시'를 눌러 보세요.",
-                Alt = "이 카드는 지금 바로 쓸 수 없어요. 손패에서 '즉시 사용'이나 '즉시 · 예약'이라고 적힌 다른 카드를 눌러 보세요.",
-                Show = c => c.PlayerTurn && c.Client.SelectedCard != null, UseAlt = c => c.Client.SelectedMode != "now" && c.Ready("Mode:now") == null,
-                Done = (c, m) => c.Client.SelectedMode == "now"
-            },
-            new OnboardingStep
-            {
-                Id = "battle.target", Lesson = 1, After = new[] { "battle.mode" }, Targets = new[] { "Enemy:*" },
+                Id = "battle.target", Lesson = 1, After = new[] { "battle.hand" }, Targets = new[] { "Enemy:*" },
                 Text = "이 카드는 맞힐 적을 골라야 해요. 위의 적 칸을 누르면 테두리가 생기고 그 적이 대상이 돼요. 적 하나를 눌러 보세요.",
-                Show = c => c.PlayerTurn && c.Client.SelectedMode != null && c.Client.Target == null && c.Caption("ConfirmCard") == "대상 선택",
+                Show = c => c.PlayerTurn && c.Client.SelectedCard != null && c.Client.Target == null && c.Caption("ConfirmCard") == "대상 선택",
                 Done = (c, m) => c.Client.Target != null
             },
             new OnboardingStep
             {
-                Id = "battle.confirm", Lesson = 1, Core = true, After = new[] { "battle.mode" }, Targets = new[] { "ConfirmCard" }, CaptionOf = "ConfirmCard",
-                AltTargets = new[] { "Mode:*" },
-                Text = "고르기만 해서는 아무것도 쓰지 않아요. 행동 안내 줄의 예상을 확인하고 '{0}' 버튼을 눌러 보세요.",
-                Alt = "확정 버튼에 적힌 것부터 해요. 방식이나 대상을 고르면 확정 버튼이 '사용 확정'으로 바뀌어요.",
+                Id = "battle.confirm", Lesson = 1, Core = true, After = new[] { "battle.hand" }, Targets = new[] { "ConfirmCard" }, CaptionOf = "ConfirmCard",
+                AltTargets = new[] { "Hand" },
+                Text = "고르기만 해서는 아무것도 쓰지 않아요. 카드 줄의 예상을 확인하고 '{0}' 버튼을 눌러 보세요.",
+                Alt = "확정 버튼에 적힌 것부터 해요. 대상을 고르면 확정 버튼이 '사용 확정'으로 바뀌어요.",
                 Show = c => c.PlayerTurn && c.Client.SelectedCard != null, UseAlt = c => c.Ready("ConfirmCard") == null, Done = Played
             },
             new OnboardingStep
             {
                 Id = "battle.endturn", Lesson = 1, Core = true, After = new[] { "battle.confirm" }, Targets = new[] { "EndTurn" },
-                Text = "더 쓸 카드가 없으면 '턴 종료'를 눌러요. 적들이 '이번'에 적힌 행동을 하고 새 턴이 시작돼요.",
+                Text = "더 쓸 카드가 없으면 '턴 종료'를 눌러요. 남은 손패는 버려지고, 적들이 '이번'에 적힌 행동을 한 뒤 새 턴이 시작돼요.",
                 Show = CanEndTurn, Done = TurnPassed
             },
             new OnboardingStep
             {
                 Id = "battle.summary", Lesson = 1, Core = true, After = new[] { "battle.endturn" }, Targets = new[] { "ContinueTurnSummary" },
-                Text = "적의 행동과 예약 해결 결과가 차례로 적혀요. 다 읽었으면 '계속'을 눌러 다음 턴을 시작해요.",
+                Text = "적의 행동 결과가 차례로 적혀요. 다 읽었으면 '계속'을 눌러 다음 턴을 시작해요.",
                 Show = c => c.Client.HasTurnSummary, Done = (c, m) => !c.Client.HasTurnSummary
             },
             new OnboardingStep
@@ -150,7 +142,7 @@ namespace MemoryForge.Client
                 Text = "이겼어요. 보상 카드는 한 장만 덱에 넣을 수 있고, '카드 설명 보기'로 먼저 읽을 수 있어요. 다 골랐으면 '{0}' 버튼을 눌러요.",
                 Show = c => c.Run?.Phase == "REWARD" && !c.Covered, Done = (c, m) => Left(c, "REWARD")
             },
-            // ② 2전투: 다음 턴 예약 + 적 의도 2개 보기
+            // ② 2전투: 적 의도 2개 보기 + 보존
             new OnboardingStep
             {
                 Id = "battle.intent", Lesson = 2, Needs = 1, Core = true, Ack = true, Targets = new[] { "Enemy:*" },
@@ -159,26 +151,9 @@ namespace MemoryForge.Client
             },
             new OnboardingStep
             {
-                Id = "reserve.next", Lesson = 2, Needs = 1, Core = true, After = new[] { "battle.intent" }, Targets = new[] { "Mode:next" }, AltTargets = new[] { "Hand" },
-                Text = "'다음 턴'으로 쓰면 행동력은 지금 내고, 카드는 다음 턴이 시작될 때 해결돼요. '다음 턴' 버튼을 눌러 보세요.",
-                Alt = "손패에서 '즉시 · 예약'이나 '예약 전용'이라고 적힌 카드를 누르면 '다음 턴' 예약 버튼이 나와요.",
-                Show = c => c.PlayerTurn && c.Client.SelectedCard != null, UseAlt = c => c.Client.SelectedMode != "next" && c.Ready("Mode:next") == null,
-                Done = (c, m) => c.Client.SelectedMode == "next"
-            },
-            new OnboardingStep
-            {
-                Id = "reserve.confirm", Lesson = 2, Needs = 1, Core = true, After = new[] { "reserve.next" }, Targets = new[] { "ConfirmCard" }, CaptionOf = "ConfirmCard",
-                AltTargets = new[] { "Mode:next", "Hand" },
-                Text = "예약도 '{0}' 버튼을 눌러야 아래 기억 시간표 칸에 들어가요. 눌러 보세요.",
-                Alt = "예약하려면 카드를 고른 뒤 '다음 턴' 버튼을 먼저 눌러요. 그다음 확정하면 기억 시간표에 들어가요.",
-                Show = c => c.PlayerTurn && c.Client.SelectedCard != null, UseAlt = c => c.Client.SelectedMode != "next" || c.Ready("ConfirmCard") == null,
-                Done = (c, m) => Reserved(c, m, "next")
-            },
-            new OnboardingStep
-            {
-                Id = "reserve.timeline", Lesson = 2, Needs = 1, Core = true, After = new[] { "reserve.confirm" }, Targets = new[] { "Timeline", "EndTurn" },
-                Text = "예약이 기억 시간표에 들어갔어요. '턴 종료'를 누르면 다음 턴이 시작될 때 자동으로 해결돼요. 눌러 보세요.",
-                Show = c => CanEndTurn(c) && c.Battle!.Reservations.Any(r => r.Kind == "next"), Done = TurnPassed
+                Id = "battle.retain", Lesson = 2, Needs = 1, Core = true, Ack = true, After = new[] { "battle.intent" }, Targets = new[] { "Hand" },
+                Text = "'보존'이 적힌 카드는 턴이 끝나도 손에 남아요. 큰 카드는 남겨 두었다가 적에게 균열이 걸렸을 때 쓰세요. 나머지 카드는 턴이 끝나면 버려져요.",
+                Show = c => c.PlayerTurn
             },
             // ③ 3전투: 약점·균열 + 필살기
             new OnboardingStep
@@ -189,27 +164,20 @@ namespace MemoryForge.Client
             },
             new OnboardingStep
             {
-                Id = "battle.ult", Lesson = 3, Needs = 2, Core = true, After = new[] { "battle.break" }, Targets = new[] { "Ult:*" },
+                // RULES_NOW_PLAY: battles are shorter and a gauge may not fill in a short run, so the ultimate tip shows when the first one
+                // does but does not hold back lesson 3 (and with it the boss lesson).
+                Id = "battle.ult", Lesson = 3, Needs = 2, Core = false, After = new[] { "battle.break" }, Targets = new[] { "Ult:*" },
                 Text = "캐릭터 게이지가 가득 차면 '필살기'를 쓸 수 있어요. 대상이 필요하면 먼저 적을 골라요. '필살기'를 눌러 보세요.",
                 Show = c => CanEndTurn(c) && c.Ready("Ult:*") != null,
                 Done = (c, m) => Committed(c, m, BattleDigestKind.UltimateDamage)
                     || (c.Battle != null && c.BattleKey == m.Battle && c.Battle.Actors.Any(a => m.ReadyGauges.TryGetValue(a.Id, out int gauge) && a.Gauge < gauge))
             },
-            // ④ 보스: 다다음 턴 예약 + 균열 타이밍 맞추기
+            // ④ 보스: 균열 타이밍 + 보존해 둔 카드
             new OnboardingStep
             {
-                Id = "boss.timing", Lesson = 4, Needs = 3, OwnBattle = true, Core = true, Ack = true, Targets = new[] { "Enemy:*", "Timeline" },
-                Text = "보스전이에요. 균열이 걸린 다음 턴이 시작될 때 예약이 해결되면 늘어난 피해를 온전히 받아요. 균열 수치를 보고 시점을 맞춰 보세요.",
+                Id = "boss.timing", Lesson = 4, Needs = 3, OwnBattle = true, Core = true, Ack = true, Targets = new[] { "Enemy:*", "Hand" },
+                Text = "보스전이에요. 균열이 걸린 적은 받는 피해가 25% 늘어요. 보존해 둔 큰 카드를 그 턴에 쓰면 가장 크게 들어가요.",
                 Show = c => c.PlayerTurn && Boss(c)
-            },
-            new OnboardingStep
-            {
-                Id = "boss.after", Lesson = 4, Needs = 3, OwnBattle = true, After = new[] { "boss.timing" }, Targets = new[] { "Mode:after", "ConfirmCard" }, AltTargets = new[] { "Hand" },
-                CaptionOf = "ConfirmCard",
-                Text = "'다다음 턴'은 두 턴 뒤가 시작될 때 해결돼요. 균열 타이밍에 맞춰 '다다음 턴'을 고르고 '{0}' 버튼으로 예약해 보세요.",
-                Alt = "손패의 카드를 눌러 '다다음 턴' 버튼이 있는지 확인해 보세요. 두 턴 뒤에 해결되는 예약이에요.",
-                Show = c => c.PlayerTurn && Boss(c) && c.Client.SelectedCard != null, UseAlt = c => c.Client.SelectedMode != "after" && c.Ready("Mode:after") == null,
-                Done = (c, m) => Reserved(c, m, "after")
             },
             // ⑥ (in the practice the forge is on the first zone's map): 공방(변주) 소개
             new OnboardingStep

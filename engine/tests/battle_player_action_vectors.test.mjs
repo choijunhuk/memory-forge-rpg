@@ -16,11 +16,13 @@ const fixture = () => generated ||= generateCases();
 const clone = value => JSON.parse(JSON.stringify(value));
 const get = id => { const row = fixture().cases.find(c => c.id === id); assert.ok(row, id); return row; };
 
-test('every authored card and all378 base legal modes really resolve without a fizzle', () => {
+// RULES_NOW_PLAY (2026-10-19): every card is played now only, so the 378 reservation-mode pairs became 173 now pairs.
+test('every authored card and all173 base legal now modes really resolve without a fizzle', () => {
   const base = fixture().cases.filter(c => c.group === 'card');
+  assert.ok(data.cards.every(c => c.res === 'n'));
   const expected = data.cards.flatMap(c => ({ y: ['now', 'next', 'after'], n: ['now'], o: ['next', 'after'], after: ['after'] }[c.res])
     .map(mode => `${c.id}:${mode}`));
-  assert.equal(expected.length, 378);
+  assert.equal(expected.length, 173); assert.equal(expected.length, data.cards.length);
   assert.deepEqual(base.map(c => `${c.main.cardId}:${c.main.mode}`), expected);
   for (const row of base) {
     assert.equal(row.mainOutcome.fizzled, false, row.id);
@@ -32,7 +34,7 @@ test('every authored card and all378 base legal modes really resolve without a f
 test('whole fixture is complete only with exact case inventory, provenance and independently replayable requests', () => {
   const f = fixture(); assert.equal(f.schema, 'mf-battle-player-actions-v1'); assert.equal(f.status, 'COMPLETE_CURRENT_SOURCE_A1');
   assert.equal(f.dataVersion, data.meta.version); assert.equal(new Set(f.cases.map(c => c.id)).size, f.cases.length);
-  assert.equal(f.counts.cases, f.cases.length); assert.equal(f.coverage.baseModePairs.length, 378);
+  assert.equal(f.counts.cases, f.cases.length); assert.equal(f.coverage.baseModePairs.length, 173);
   for (const source of Object.values(f.sources)) {
     const bytes = readFileSync(new URL(`../../${source.path}`, import.meta.url));
     assert.equal(createHash('sha256').update(bytes).digest('hex'), source.sha256);
@@ -91,23 +93,45 @@ test('bulwark retains the authored10 and powers merge their numeric parameters a
   assert.deepEqual(get('edge-bulwark-stacks').steps[2].state.powers, [{ id: 'bulwark', keep: 20 }]);
 });
 
-test('pull converts after into next values and debt deferral shares the reservation sequence', () => {
-  const pull = get('edge-pull-after-next');
-  assert.deepEqual(pull.steps[2].state.res.map(r => [r.due, r.kind]), [[2, 'next']]);
-  assert.equal(pull.steps[3].response.ev.find(e => e.e === 'dmg').n, 22); assert.equal(pull.steps[3].state.enemies[0].hp, 46 - (22 - 10));
+test('debt deferral repays later and collateral debt1 shares the loan sequence, due next turn', () => {
   const defer = get('edge-defer-debt'); assert.deepEqual(defer.steps[2].state.debts, [{ id: 'd1', n: 3, due: 3, deferred: true }]);
   assert.equal(defer.steps[3].state.ap, 4); assert.equal(defer.steps[4].state.ap, 1);
-  const shared = get('edge-debt-reservation-shared-sequence').steps.at(-1).state; assert.equal(shared.res[0].order, 2); assert.equal(shared.debts[0].id, 'd1');
+  const collateral = data.cards.find(c => c.id === 'ravien_collateral').eff[0]; assert.equal(collateral.op, 'collateral');
+  const shared = get('edge-collateral-debt-shared-sequence'), played = shared.steps[2].state, next = shared.steps[3].state;
+  assert.equal(played.resSeq, 2); assert.deepEqual(played.debts.map(d => [d.id, d.n, d.due]), [['d1', 2, 2], ['d2', 1, 2]]);
+  assert.equal(played.block, collateral.v); assert.deepEqual(played.res, []); assert.equal(played.sealedUntil, 0);
+  assert.equal(next.turn, 2); assert.equal(next.ap, 4 - 2 - 1); assert.deepEqual(next.debts, []);
+  const cap = get('protocol-collateral-debt-cap').steps.at(-1); assert.equal(cap.errorCode, 'DEBT_CAP'); assert.equal(cap.state.debts.reduce((n, d) => n + d.n, 0), data.rules.debtCap);
+});
+
+test('retain keeps 보존 cards as held, play/recall/draw clear held, and held keys the reworked relic and weapon bonuses', () => {
+  const retain = get('edge-retain-held-end-turn'), ended = retain.steps[2].state;
+  const held = Object.values(ended.cards).filter(c => c.held).map(c => c.id).sort(); assert.deepEqual(held, ['com_capacitor', 'com_slash', 'sera_timed']);
+  assert.deepEqual(ended.zones.hand.slice(0, 3).map(u => ended.cards[u].id).sort(), held); assert.equal(ended.zones.hand.length, 3 + data.rules.handDraw);
+  const capUid = ended.zones.hand.find(u => ended.cards[u].id === 'com_capacitor'); assert.equal(retain.steps[3].state.cards[capUid].held, false);
+  const reset = get('edge-held-reset-recall-draw'), timed = reset.steps[1].state.zones.hand.find(u => reset.steps[1].state.cards[u].id === 'sera_timed');
+  const flags = reset.steps.map(s => s.state.cards[timed].held);
+  assert.deepEqual(reset.steps.map(s => s.request.kind), ['begin', 'play', 'end', 'play', 'play', 'end', 'play', 'end']);
+  assert.deepEqual([flags[2], flags[4], flags[5], flags[7]], [true, false, true, false]);
+  const relics = get('edge-reserved-break-relics').steps;
+  assert.equal(relics[0].state.enemies[0].brk - relics[1].state.enemies[0].brk, 3 + 1); assert.equal(relics[2].state.enemies[0].brk - relics[3].state.enemies[0].brk, 3 + 1 + 1);
+  const stamp = get('edge-held-time-stamp-weapon').steps, bonus = data.weapons.find(w => w.id === 'w_sera').passive.values[0];
+  const timedV = data.cards.find(c => c.id === 'sera_timed').eff[0].v;
+  assert.equal(stamp[1].response.ev.find(e => e.e === 'dmg').n, timedV); assert.equal(stamp[3].response.ev.find(e => e.e === 'dmg').n, Math.floor(timedV * (10000 + bonus) / 10000));
+  assert.equal(stamp[3].state.actors[0].gauge - stamp[2].state.actors[0].gauge, data.rules.gaugePerCard + 5);
+  const clock = get('edge-empty-clock-first-card').steps; assert.deepEqual(clock.slice(1).map(s => s.response.ev[0].cost), [0, 1]);
 });
 
 test('echo delivery and copyPick deliberately preserve different metadata and free lifetimes', () => {
-  const echo = get('edge-echo-evolved-lineage'), at2 = echo.steps[2].state, at3 = echo.steps[3].state;
-  assert.equal(at2.block, 13 + 3 * 2); assert.deepEqual(at3.pendingCopies, []);
-  const ec = Object.values(at3.cards).find(c => c.echoCopy); assert.deepEqual(ec.temp, ['echoHalf']); assert.deepEqual(ec.mods, { c: null, e: null }); assert.equal(ec.plus, false);
-  assert.equal(echo.steps[4].request.args.uid, ec.uid); assert.equal(echo.steps[4].response.ev[0].cost, 0); assert.deepEqual(echo.steps[4].state.zones.exhaust, [ec.uid]);
+  // RULES_NOW_PLAY: the echo circuit queues its copy on a now resolution (block v9 + evolved growth3 x2), delivered at the next turn start.
+  const echo = get('edge-echo-evolved-lineage'), at1 = echo.steps[1].state, at2 = echo.steps[2].state;
+  assert.equal(at1.block, 9 + 3 * 2); assert.deepEqual(at1.pendingCopies.map(p => p.due), [2]); assert.deepEqual(at2.pendingCopies, []);
+  const ec = Object.values(at2.cards).find(c => c.echoCopy); assert.deepEqual(ec.temp, ['echoHalf']); assert.deepEqual(ec.mods, { c: null, e: null }); assert.equal(ec.plus, false);
+  assert.equal(echo.steps[3].request.args.uid, ec.uid); assert.equal(echo.steps[3].response.ev[0].cost, 0); assert.deepEqual(echo.steps[3].state.zones.exhaust, [ec.uid]);
+  assert.deepEqual(echo.steps[3].state.pendingCopies, []);
   const picked = get('edge-copy-pick-lineage').steps[1].state, pc = Object.values(picked.cards).find(c => c.echoCopy);
   assert.equal(pc.plus, true); assert.deepEqual(pc.mods, { c: null, e: 'e_guard' }); assert.deepEqual(pc.temp, []); assert.equal(pc.from, 'yuri_cocoon'); assert.equal(pc.free, true);
-  assert.equal(get('edge-copy-pick-lineage').steps.at(-1).state.block, 17 + 4 + 6);
+  assert.equal(get('edge-copy-pick-lineage').steps.at(-1).state.block, Math.ceil(9 * 13 / 10) + 4 + 6);
 });
 
 test('growth operations count successful card growth once while ults use the separate uncapped path', () => {
@@ -121,13 +145,13 @@ test('growth operations count successful card growth once while ults use the sep
 
 test('growth-once remains observable below cap and grown copy mechanisms deliberately diverge', () => {
   const once = get('edge-growth-once-below-cap').steps.at(-1).state;
-  assert.equal(once.growthCount, 1); assert.equal(once.growthCap, 3); assert.equal(once.cards.c1.growth, 1); assert.equal(once.block, 8 + 2);
+  assert.equal(once.growthCount, 1); assert.equal(once.growthCap, 3); assert.equal(once.cards.c1.growth, 1); assert.equal(once.block, 6 + 2);
   const picked = get('edge-copy-pick-real-grown-root'), createdCopy = picked.steps[3].state.cards.c6;
   assert.equal(createdCopy.growth, 2); assert.equal(createdCopy.plus, true); assert.deepEqual(createdCopy.mods, { c: null, e: 'e_guard' });
-  const resolvedCopy = picked.steps.at(-1).state; assert.equal(resolvedCopy.cards.c6.growth, 3); assert.equal(resolvedCopy.cards.c4.growth, 2); assert.equal(resolvedCopy.block, 11 + 3 + 4 + 6);
-  const echo = get('edge-echo-resets-earned-growth-upgrade-mods'), delivered = echo.steps[5].state;
+  const resolvedCopy = picked.steps.at(-1).state; assert.equal(resolvedCopy.cards.c6.growth, 3); assert.equal(resolvedCopy.cards.c4.growth, 2); assert.equal(resolvedCopy.block, 2 * 3 + Math.ceil(6 * 13 / 10) + 3 + 4 + 6); // same-turn now play keeps the two dew moss blocks
+  const echo = get('edge-echo-resets-earned-growth-upgrade-mods'), delivered = echo.steps[4].state;
   assert.equal(delivered.cards.c3.growth, 3); assert.equal(delivered.cards.c3.plus, true); assert.equal(delivered.cards.c5.growth, 0); assert.equal(delivered.cards.c5.plus, false); assert.deepEqual(delivered.cards.c5.mods, { c: null, e: null });
-  assert.equal(echo.steps.at(-1).request.v, 7); assert.equal(echo.steps.at(-1).response.ev[0].cost, 0); assert.equal(echo.steps.at(-1).state.block, 3);
+  assert.equal(echo.steps.at(-1).request.v, 6); assert.equal(echo.steps.at(-1).response.ev[0].cost, 0); assert.equal(echo.steps.at(-1).state.block, 3);
 });
 
 test('temporary overheat, actual use limits, definition-cost picks and ordinal UIDs stay distinct', () => {
@@ -141,19 +165,10 @@ test('temporary overheat, actual use limits, definition-cost picks and ordinal U
   const ordinal = get('edge-grow-lowest-ordinal-uid').steps[1].state; assert.equal(ordinal.cards.c1.growth, 1); assert.equal(ordinal.cards.c10.growth, 1); assert.equal(ordinal.cards.c2.growth, 0);
 });
 
-test('absolute due buckets, temporary slot reset and collateral expiry retain all reservations', () => {
-  const temp = get('edge-temporary-extra-slot-resolves-after-reset').steps.at(-1).state;
-  assert.equal(temp.slotsTemp.next, 0); assert.deepEqual(temp.res, []); assert.equal(temp.cards.c2.used + temp.cards.c3.used + temp.cards.c4.used, 3);
-  const absolute = get('edge-after-reservations-use-next-bucket'), rejection = absolute.steps.find(s => s.errorCode === 'SLOT_FULL');
-  assert.equal(rejection.state.turn, 2); assert.deepEqual(rejection.state.res.map(r => r.due), [3, 3]);
-  const expiry = get('edge-collateral-sealed-slot-expiry').steps.at(-1).state; assert.equal(expiry.turn, 3); assert.equal(expiry.sealedUntil, 2); assert.equal(expiry.res.length, 2);
-  const explicit = get('edge-pull-multiple-explicit-pick').steps.at(-1).state; assert.deepEqual(explicit.res.map(r => [r.uid, r.kind, r.due]), [['c1', 'after', 3]]);
-  const invalid = get('edge-pull-multiple-invalid-pick').steps.at(-1).state; assert.deepEqual(invalid.res.map(r => r.kind), ['next', 'next']);
-});
-
 test('damage and healing use independently calculated rounding boundaries and ownership', () => {
   const hit = get('edge-vulnerable-weak-and-gear-math').steps.at(-1).response.ev.find(e => e.e === 'dmg');
-  const expected = Number(29n * 177n * 11200n * 16734n * 12500n / (160n * 10000n * 10000n * 10000n)); assert.equal(expected, 75); assert.equal(hit.n, expected);
+  // RULES_NOW_PLAY: sera_timed is v20 now (ceil20*13/10=26) and c_quick's +20% replaces the removed delay +40%.
+  const expected = Number(26n * 177n * 11200n * 14734n * 12500n / (160n * 10000n * 10000n * 10000n)); assert.equal(expected, 59); assert.equal(hit.n, expected);
   const heal = get('edge-heal-up-weapon-floor-order').steps.at(-1).state;
   const base = Number(10n * 83n * 10800n / (81n * 10000n)); assert.equal(base, 11);
   assert.equal(heal.block, Math.floor(Math.floor(base * 1.5) * 1.125)); assert.equal(heal.block, 18);
@@ -178,12 +193,12 @@ test('lethal card damage preserves same-hit rewards and always performs afterRes
   assert.equal(get('edge-silver-needle-no-revival').steps.at(-1).state.hp, 0); assert.equal(get('edge-silver-needle-envelope-survival').steps.at(-1).state.hp, 4);
 });
 
-test('post-resolution void shard terminal returns every other due/future card exactly once', () => {
-  const row = get('edge-reserved-void-shard-kill'), step = row.steps.at(-1);
-  assert.equal(step.state.phase, 'VICTORY'); assert.equal(step.state.hp, 57); assert.equal(step.state.turn, 3);
+test('post-resolution void shard terminal ends a now play exactly once', () => {
+  const row = get('edge-void-shard-post-resolve-kill'), step = row.steps.at(-1);
+  assert.equal(step.state.phase, 'VICTORY'); assert.equal(step.state.hp, 81); assert.equal(step.state.turn, 1);
   assert.deepEqual(step.response.ev.filter(e => e.e === 'dmg').map(e => [e.src, e.n]), [['card', 45], ['relic', 3]]);
   assert.ok(!step.response.ev.some(e => e.e === 'turn' || e.e === 'reshuffle')); assert.equal(step.response.ev.filter(e => e.e === 'end').length, 1);
-  const all = get('edge-terminal-reservation-conservation').steps.at(-1).state; assert.deepEqual(all.res, []); assert.deepEqual(all.zones.exhaust, ['c1']); assert.deepEqual(all.zones.discard, ['c3', 'c2']);
+  assert.equal(step.response.ev.at(-1).e, 'end'); assert.deepEqual(step.state.zones.exhaust, ['c1']);
 });
 
 test('exhaust re-reads the live discard zone after marked-kill notebook reshuffle', () => {
@@ -218,8 +233,9 @@ test('the original base0 conflict and genuinely un-authored states stay explicit
 });
 
 test('each authored effect source path is lossless and its declared execution cases exist', () => {
-  const f = fixture(), ids = new Set(f.cases.map(c => c.id)); assert.equal(f.coverage.effectFields.length, 35);
-  assert.equal(f.authoredEffects.length, 295);
+  // RULES_NOW_PLAY: rv/ra/rn/next/after fields and com_anchor's slot op were removed from authored effects.
+  const f = fixture(), ids = new Set(f.cases.map(c => c.id)); assert.equal(f.coverage.effectFields.length, 30);
+  assert.equal(f.authoredEffects.length, 294);
   for (const e of f.authoredEffects) {
     assert.ok(e.source.startsWith('data/game_data.json#/')); let raw = data;
     for (const key of e.source.split('#/')[1].split('/')) raw = raw[key];
@@ -262,7 +278,7 @@ test('atomic export is deterministic and real filesystem failures preserve exist
   } finally { rmSync(dir, { recursive: true, force: true }); }
 });
 
-test('all39 authored ops,12 counters and both branches of10 authored conditions have literal committed witnesses', () => {
+test('all37 authored ops,12 counters and both branches of10 authored conditions have literal committed witnesses', () => {
   const ops = new Set(), counters = new Set(), conditions = new Set();
   const visit = value => {
     if (!value || typeof value !== 'object') return;
@@ -272,7 +288,7 @@ test('all39 authored ops,12 counters and both branches of10 authored conditions 
     for (const child of Object.values(value)) visit(child);
   };
   visit(data.cards); visit(data.characters.map(c => ({ ult: c.ult, resonance: c.resonance })));
-  assert.equal(ops.size, 39); assert.equal(counters.size, 12); assert.equal(conditions.size, 10);
+  assert.equal(ops.size, 37); assert.equal(counters.size, 12); assert.equal(conditions.size, 10); assert.ok(!ops.has('pull') && !ops.has('slot'));
   const expected = { op: [...ops], counter: [...counters], condition: [...conditions].flatMap(c => [`${c}:false`, `${c}:true`]) };
   const observed = { op: new Set(), counter: new Set(), condition: new Set() };
   for (const row of fixture().cases) for (const w of row.witnesses || []) {

@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      char_aila_fig_bond_hover_styleA_v02_0: -4702500062099232231
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

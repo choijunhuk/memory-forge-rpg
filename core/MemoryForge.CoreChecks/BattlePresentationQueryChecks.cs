@@ -35,7 +35,7 @@ static class BattlePresentationQueryChecks
         checks = failures = commands = queries = 0;
         foreach (var (name, scenario) in new (string, Action<string>)[]
         {
-            ("temp/seal/expiry board", TempSealAndExpiry), ("delayed reservations", DelayKeepsKindAndExactDue), ("enemy seal", EnemySeal),
+            ("temp slots/expiry board", TempSlotsAndExpiry), ("delayed reservations", DelayKeepsKindAndExactDue), ("enemy seal", EnemySeal),
             ("hand-source gate", HandSourceGate), ("tune/curse/recall", TuneCurseRecall), ("costdown/FreeNext", CostdownFreeNext),
             ("growth/evolution/cap", GrowthEvolutionCap), ("ordered multi-request picks", OrderedPicks), ("static policy", StaticPolicy)
         })
@@ -77,7 +77,6 @@ static class BattlePresentationQueryChecks
         Card("t_multi", 0, "n", new EffectDef { Op = "discard", N = 2 }, new EffectDef { Op = "exhaustPick", From = "discard", N = 1 }, new EffectDef { Op = "pull" });
         Card("t_free1", 0, "n", new EffectDef { Op = "freeNext", N = 1 }); Card("t_free2", 0, "n", new EffectDef { Op = "freeNext", N = 2 });
         Card("t_slot", 0, "n", new EffectDef { Op = "slot", Next = 1, After = 1 });
-        Card("t_seal", 0, "n", new EffectDef { Op = "collateral", V = 1 });
         void Enemy(string id, params string[] moves) => data.Enemies.Add(new BattleEnemyDef { Id = id, Name = "시험 적", Tier = "normal", Hp = 500, Brk = 50,
             Weak = new List<string> { "frost" }, Pattern = moves.Select(m => new EnemyMoveDef { Type = m }).ToList() });
         Enemy("t_dummy", "charge"); Enemy("t_delay", "delayRes"); Enemy("t_sealer", "sealSlot", "charge");
@@ -237,37 +236,44 @@ static class BattlePresentationQueryChecks
     static readonly (string, string, int, bool, string, string?, bool) CopyRequest = ("사본을 만들 성장 카드", "hand", 1, true, "copyPick", null, true);
 
     // ───────── reservation board ─────────
-    static void TempSealAndExpiry(string root)
+    // RULES_NOW_PLAY (2026-10-19): collateral is block + debt 1 and seals nothing, so this board no longer plays a seal card. The seal
+    // itself (a sealed next column, its expiry and reapplication) is covered by the EnemySeal scenario through the t_sealer enemy's sealSlot.
+    // Rules used for every literal: next base 2 / max 3, after base 1 / max 2, Cap = min(Max, Base + Temp), minus 1 on next while
+    // SealedUntil >= Turn; slot temp is clamped to Max - Base; Used counts reservations due exactly on the column's Due (Turn + 1 / + 2);
+    // AP 4 per turn; t_plain costs 1, t_slot and t_cheap 0; the TEST-ONLY hand draw 10 draws the whole six-card deck.
+    static void TempSlotsAndExpiry(string root)
     {
-        var s = Open(root, "t_dummy", C("t_plain"), C("t_plain"), C("t_plain"), C("t_plain"), C("t_slot"), C("t_seal"));
-        // Turn 0 (CREATED): SealedUntil 0 >= Turn 0 already holds, so the next column is one short before the first turn.
+        var s = Open(root, "t_dummy", C("t_plain"), C("t_plain"), C("t_plain"), C("t_plain"), C("t_slot"), C("t_cheap"));
+        // Turn 0 (CREATED): SealedUntil 0 >= Turn 0 already holds, so the next column is one short (min(3, 2) - 1 = 1) before the first turn.
         var created = Slots(s, 0, 0, "created");
         Column(created.Next, "next", 1, 2, 0, 3, 1, 0, true, "created (turn-0 seal predicate)"); Column(created.After, "after", 2, 1, 0, 2, 1, 0, false, "created");
         Begin(s);
+        // Turn 1: SealedUntil 0 < 1, so the base columns are open: next 2, after 1.
         var opened = Slots(s, 1, 0, "turn 1 opening");
         Column(opened.Next, "next", 2, 2, 0, 3, 2, 0, false, "turn 1 opening"); Column(opened.After, "after", 3, 1, 0, 2, 1, 0, false, "turn 1 opening");
-        Play(s, "c5", "now"); // slot next +1, after +1
+        Play(s, "c5", "now"); // slot next +1 (clamped to 3 - 2 = 1), after +1 (clamped to 2 - 1 = 1)
         var widened = Slots(s, 1, 0, "turn 1 temp slots");
         Column(widened.Next, "next", 2, 2, 1, 3, 3, 0, false, "turn 1 temp slots"); Column(widened.After, "after", 3, 1, 1, 2, 2, 0, false, "turn 1 temp slots");
-        Play(s, "c6", "now"); // collateral: SealedUntil = Turn + 1
-        var sealedNow = Slots(s, 1, 2, "turn 1 collateral");
-        Column(sealedNow.Next, "next", 2, 2, 1, 3, 2, 0, true, "turn 1 collateral"); Column(sealedNow.After, "after", 3, 1, 1, 2, 2, 0, false, "turn 1 collateral");
-        Play(s, "c1", "next"); Play(s, "c2", "next");
-        Rejects(s, "c3", "next", "SLOT_FULL", "turn 1 next used 2 of cap 2");
+        // Fill the widened next column (AP 4 - 1 - 1 - 0 = 2 left), then the fourth next reservation is refused although AP remains.
+        Play(s, "c1", "next"); Play(s, "c2", "next"); Play(s, "c6", "next");
+        Rejects(s, "c3", "next", "SLOT_FULL", "turn 1 next used 3 of widened cap 3");
+        // The widened after column takes two (AP 2 - 1 - 1 = 0): one more than its base 1.
         Play(s, "c3", "after"); Play(s, "c4", "after");
-        var full = Slots(s, 1, 2, "turn 1 full", ("c1", 2, 1, "next", null), ("c2", 2, 2, "next", null), ("c3", 3, 3, "after", null), ("c4", 3, 4, "after", null));
-        Column(full.Next, "next", 2, 2, 1, 3, 2, 2, true, "turn 1 full"); Column(full.After, "after", 3, 1, 1, 2, 2, 2, false, "turn 1 full");
+        var full = Slots(s, 1, 0, "turn 1 full", ("c1", 2, 1, "next", null), ("c2", 2, 2, "next", null), ("c6", 2, 3, "next", null), ("c3", 3, 4, "after", null), ("c4", 3, 5, "after", null));
+        Column(full.Next, "next", 2, 2, 1, 3, 3, 3, false, "turn 1 full"); Column(full.After, "after", 3, 1, 1, 2, 2, 2, false, "turn 1 full");
         End(s);
-        // Temp slots expired, the seal still holds through Turn 2, and both after reservations are now due next turn, kind kept: Used 2 > Cap 1.
-        var carried = Slots(s, 2, 2, "turn 2", ("c3", 3, 3, "after", null), ("c4", 3, 4, "after", null));
-        Column(carried.Next, "next", 3, 2, 0, 3, 1, 2, true, "turn 2 expired temp + held seal"); Column(carried.After, "after", 4, 1, 0, 2, 1, 0, false, "turn 2");
-        Rejects(s, "c1", "next", "SLOT_FULL", "turn 2 next used 2 over cap 1");
+        // Turn 2: c1/c2/c6 (due 2) resolved at turn start and the temp slots expired. Both after reservations are now due next turn, kind
+        // kept, and fill the base next column exactly (Used 2 = Cap 2): the slots they were made with no longer exist.
+        var carried = Slots(s, 2, 0, "turn 2", ("c3", 3, 4, "after", null), ("c4", 3, 5, "after", null));
+        Column(carried.Next, "next", 3, 2, 0, 3, 2, 2, false, "turn 2 expired temp + carried after reservations"); Column(carried.After, "after", 4, 1, 0, 2, 1, 0, false, "turn 2");
+        Rejects(s, "c1", "next", "SLOT_FULL", "turn 2 carried after reservations fill next used 2 of cap 2");
         Play(s, "c1", "after");
         End(s);
-        var expired = Slots(s, 3, 2, "turn 3", ("c1", 4, 5, "after", null));
-        Column(expired.Next, "next", 4, 2, 0, 3, 2, 1, false, "turn 3 seal expired"); Column(expired.After, "after", 5, 1, 0, 2, 1, 0, false, "turn 3");
+        // Turn 3: c3/c4 (due 3) resolved; the turn-2 after reservation c1 (due 4) now counts in the next column.
+        var expired = Slots(s, 3, 0, "turn 3", ("c1", 4, 6, "after", null));
+        Column(expired.Next, "next", 4, 2, 0, 3, 2, 1, false, "turn 3 carried after reservation"); Column(expired.After, "after", 5, 1, 0, 2, 1, 0, false, "turn 3");
         Check(typeof(BattleSlotColumn).GetField("Due")?.FieldType == typeof(long), "STATIC_BOUND: column Due is a long, so Turn + 2 cannot wrap at Int32.MaxValue (runtime case NOT_COVERED)");
-        Receipts(s, "board temp/seal/expiry");
+        Receipts(s, "board temp slots/expiry");
     }
 
     static void DelayKeepsKindAndExactDue(string root)

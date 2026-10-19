@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      ui_hit_blunt_03_0: 4624777789571412979
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

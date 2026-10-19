@@ -23,7 +23,7 @@ const originalData = JSON.stringify(data);
 const clone = value => JSON.parse(JSON.stringify(value));
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
 const schema = 'mf-battle-preview-v2';
-const scope = 'Fresh Battle.create/command and Run.create/enter/battleCmd replays; each play forecast is the original JS check() code, one independent fresh-candidate play and, for next/after, the original HTML preview current-state reserved resolution on another fresh replay; C# Battle.Forecast/Run.BattleForecast comparison only. Unity view, device and server acceptance PENDING';
+const scope = 'Fresh Battle.create/command and Run.create/enter/battleCmd replays; each play forecast is the original JS check() code and one independent fresh-candidate play. Under RULES_NOW_PLAY (2026-10-19) every next/after request is rejected by check() with NOT_RESERVABLE, so the original HTML preview current-state reserved resolution is kept in the oracle but never reached; C# Battle.Forecast/Run.BattleForecast comparison only. Unity view, device and server acceptance PENDING';
 export const fixturePath = join(root, 'engine/tests/vectors/battle_preview_vectors.json.gz');
 const fields = ['error', 'mode', 'cost', 'due', 'hidden', 'enemyHpLoss', 'blockDelta', 'hpDelta', 'defeat', 'enemyDamage', 'newlyBroken'];
 const contract = {
@@ -33,10 +33,11 @@ const contract = {
   hidden: 'tgt rand, pick random or draw anywhere in the effective if/then/else, or the resolution (now: the real play; next/after: the estimate) changed the RNG or the draw pile; every outcome field keeps its default. hiddenBy lists definition/rng/draw as oracle metadata only',
   outcome: 'enemyHpLoss sums max(0, hp before - hp after) per enemy; enemyDamage sums max(0, (hp+block) before - (hp+block) after) as the HTML preview dmg; newlyBroken counts enemies whose brokenUntil turned truthy from falsy as the HTML preview brokeN; blockDelta and hpDelta are signed party changes; defeat is phase DEFEAT',
   replay: 'Battle cases: fresh Battle.create(setup) and the recorded requests. Run case: fresh Run.create(setup), enter, then Run.battleCmd. Recorded states are comparison data only',
-  transition: 'v1 -> v2: two appended fields (enemyDamage, newlyBroken) and current-state next/after estimates; v1 cases, queries and commands are kept and three reserved cases are appended after the expedition',
+  transition: 'v1 -> v2: two appended fields (enemyDamage, newlyBroken) and current-state next/after estimates. RULES_NOW_PLAY (2026-10-19): every card is played now only; reservation-only cases became now-play cases (heal-now-only-empty-clock, picks-recall, now-estimates, now-hidden-draw-hook), the reserved hidden-definition case was dropped (covered by hidden-definition and hidden-hook-rng), and held-retain-forecast was appended',
 };
 const reachability = {
-  notCovered: { definitionPickRandom: 'No authored card effect has pick "random" (only the Nia resonance battleStart tune, never a card play); the rule branch is kept for parity with the accepted practice view' },
+  notCovered: { definitionPickRandom: 'No authored card effect has pick "random" (only the Nia resonance battleStart tune, never a card play); the rule branch is kept for parity with the accepted practice view',
+    reservationEstimate: 'UNREACHABLE under RULES_NOW_PLAY (2026-10-19): every authored card is now-only, so check() rejects next/after with NOT_RESERVABLE before any reserved estimate' },
   csharpOnly: { lateCommandRejection: 'Every authored play that passes check() commits; the C# consumer probes a local-definition fault instead',
     estimateRejection: 'No authored reservation estimate raises a RuleError; the C# consumer probes a local-definition fault that only the current-state resolution reaches' },
 };
@@ -245,16 +246,14 @@ export function generateCases() {
           q('turn2 harin_bash moth', 'c4', 'now', enemy(b, 'e_moth'))], request: b => play('c1', 'now', enemy(b, 'e_cog')) },
         { forecasts: b => [q('turn2 played card', 'c1', 'now', enemy(b, 'e_cog')), q('turn2 sera_cover cog after hit', 'c2', 'now', enemy(b, 'e_cog'))] },
       ]),
-    battleCase('heal-reservation-slots', 'Healing, reserve-only and after-only modes, empty_clock reservation cost and due turns, after-slot capacity',
+    battleCase('heal-now-only-empty-clock', 'Healing, now-only modes (next/after rejected), the empty_clock discount on the first card of the battle in now mode, then full costs',
       { party: [{ charId: 'aila' }, { charId: 'sera' }], deck: [{ id: 'aila_bell' }, { id: 'sera_timed' }, { id: 'sera_last' }, { id: 'sera_round' }],
         hp: 150, maxHp: 162, seed: 12, enemies: ['e_page'], relics: ['empty_clock'] }, [
         { request: begin },
-        { forecasts: b => [q('heal', 'c1'), q('reserve-only now', 'c2', 'now', enemy(b, 'e_page')), q('first reservation next', 'c2', 'next', enemy(b, 'e_page')),
-          q('first reservation after', 'c2', 'after', enemy(b, 'e_page')), q('after-only next', 'c3', 'next', enemy(b, 'e_page')),
-          q('after-only after', 'c3', 'after', enemy(b, 'e_page')), q('discounted zero cost after', 'c4', 'after', enemy(b, 'e_page'))],
-          request: b => play('c2', 'after', enemy(b, 'e_page')) },
-        { forecasts: b => [q('after slot full', 'c3', 'after', enemy(b, 'e_page')), q('clock used next', 'c4', 'next', enemy(b, 'e_page')),
-          q('page damage', 'c4', 'now', enemy(b, 'e_page')), q('heal again', 'c1')] },
+        { forecasts: b => [q('heal discounted', 'c1'), q('timed now discounted', 'c2', 'now', enemy(b, 'e_page')), q('timed next not reservable', 'c2', 'next', enemy(b, 'e_page')),
+          q('last after not reservable', 'c3', 'after', enemy(b, 'e_page')), q('round now discounted zero cost', 'c4', 'now', enemy(b, 'e_page'))],
+          request: b => play('c4', 'now', enemy(b, 'e_page')) },
+        { forecasts: b => [q('heal after clock', 'c1'), q('timed after clock', 'c2', 'now', enemy(b, 'e_page')), q('last after clock', 'c3', 'now', enemy(b, 'e_page'))] },
       ]),
     battleCase('reflect-defeat', 'A reflected hit ends the battle in defeat and stops later hits; the terminal phase rejects further plays',
       { party: [{ charId: 'sera' }], deck: [{ id: 'sera_double' }, { id: 'sera_round' }], hp: 3, maxHp: 81, seed: 13, enemies: ['e_mirrorclerk'], relics: [] }, [
@@ -296,47 +295,44 @@ export function generateCases() {
         { forecasts: () => [q('exhaust hook random damage', 'c1'), q('harin_shield control', 'c2')], request: () => play('c1') },
         { forecasts: b => [q('after hook harin_shield', 'c2'), q('after hook harin_bash page', 'c3', 'now', enemy(b, 'e_page'))] },
       ]),
-    battleCase('picks-pull', 'Caller picks choose whether sera_pull resolves a next-turn reservation now (visible damage) or moves one (no outcome)',
-      { party: [{ charId: 'sera' }], deck: [{ id: 'sera_round' }, { id: 'sera_timed' }, { id: 'sera_pull' }], hp: 81, maxHp: 81, seed: 18, enemies: ['e_cog'], relics: [] }, [
+    battleCase('picks-recall', 'Caller picks choose which discarded card sera_pull returns to the hand; the hand change is not a forecast field, so every pick forecasts a zero outcome',
+      { party: [{ charId: 'sera' }], deck: [{ id: 'sera_round' }, { id: 'sera_timed' }, { id: 'sera_pull' }], hp: 81, maxHp: 81, seed: 18, enemies: ['e_keeper'], relics: [] }, [
         { request: begin },
-        { request: b => play('c1', 'next', enemy(b, 'e_cog')) },
-        { request: b => play('c2', 'after', enemy(b, 'e_cog')) },
-        { forecasts: () => [q('pull default', 'c3'), q('pull next reservation', 'c3', 'now', null, ['c1']), q('pull after reservation', 'c3', 'now', null, ['c2']),
+        { request: b => play('c1', 'now', enemy(b, 'e_keeper')) },
+        { request: b => play('c2', 'now', enemy(b, 'e_keeper')) },
+        { forecasts: () => [q('pull default', 'c3'), q('pull round pick', 'c3', 'now', null, ['c1']), q('pull timed pick', 'c3', 'now', null, ['c2']),
           q('pull invalid pick', 'c3', 'now', null, ['c99'])], request: () => play('c3', 'now', null, ['c1']) },
       ]),
     runCase(),
-    // v2 reserved cases, appended after the expedition so every v1 case keeps its index.
-    battleCase('reserved-estimates', 'Current-state next/after estimates: distinct rv/ra values, block in the estimate, a newly broken enemy, the broken bonus with Sera foresight on an already broken enemy, enemy block absorbing damage, a zero outcome and an AP rejection',
+    // v2 cases appended after the expedition; RULES_NOW_PLAY turned the reserved estimates into now plays.
+    battleCase('now-estimates', 'Now plays: a newly broken enemy, the broken bonus with Sera foresight (all Sera attacks) on an already broken enemy, enemy block absorbing damage, a zero outcome and an AP rejection',
       { party: [{ charId: 'sera' }], deck: [{ id: 'sera_round' }, { id: 'sera_double' }, { id: 'sera_cover' }, { id: 'sera_timed' }, { id: 'sera_aim' }],
         hp: 81, maxHp: 81, seed: 19, enemies: ['e_keeper', 'e_cog'], relics: [] }, [
         { request: begin },
-        { forecasts: b => [q('timed next keeper', 'c4', 'next', enemy(b, 'e_keeper')), q('timed after keeper', 'c4', 'after', enemy(b, 'e_keeper')),
-          q('aim next zero outcome', 'c5', 'next'), q('cover next keeper', 'c3', 'next', enemy(b, 'e_keeper'))], request: b => play('c1', 'now', enemy(b, 'e_keeper')) },
-        { forecasts: b => [q('timed next breaks keeper', 'c4', 'next', enemy(b, 'e_keeper'))], request: b => play('c2', 'now', enemy(b, 'e_keeper')) },
+        { forecasts: b => [q('timed now keeper', 'c4', 'now', enemy(b, 'e_keeper')), q('aim now zero outcome', 'c5'), q('cover now keeper', 'c3', 'now', enemy(b, 'e_keeper'))],
+          request: b => play('c1', 'now', enemy(b, 'e_keeper')) },
+        { forecasts: b => [q('timed now breaks keeper', 'c4', 'now', enemy(b, 'e_keeper'))], request: b => play('c2', 'now', enemy(b, 'e_keeper')) },
         { forecasts: b => [q('cover now breaks keeper', 'c3', 'now', enemy(b, 'e_keeper'))], request: b => play('c3', 'now', enemy(b, 'e_keeper')) },
-        { forecasts: b => [q('timed next ap low', 'c4', 'next', enemy(b, 'e_keeper'))], request: end },
-        { forecasts: b => [q('cover next broken keeper', 'c3', 'next', enemy(b, 'e_keeper')), q('cover now broken keeper', 'c3', 'now', enemy(b, 'e_keeper')),
-          q('round next cog block', 'c1', 'next', enemy(b, 'e_cog')), q('round now cog block', 'c1', 'now', enemy(b, 'e_cog')),
-          q('double after cog block', 'c2', 'after', enemy(b, 'e_cog')), q('timed next broken keeper', 'c4', 'next', enemy(b, 'e_keeper'))],
-          request: b => play('c4', 'next', enemy(b, 'e_keeper')) },
+        { forecasts: b => [q('timed now ap low', 'c4', 'now', enemy(b, 'e_keeper'))], request: end },
+        { forecasts: b => [q('timed now broken keeper', 'c4', 'now', enemy(b, 'e_keeper')), q('cover now broken keeper', 'c3', 'now', enemy(b, 'e_keeper')),
+          q('round now cog block', 'c1', 'now', enemy(b, 'e_cog')), q('double now cog block', 'c2', 'now', enemy(b, 'e_cog'))],
+          request: b => play('c4', 'now', enemy(b, 'e_keeper')) },
       ]),
-    battleCase('reserved-hidden-definition-rng', 'Reserved draw and random-target definitions stay hidden; a reserved exhaust under void_shard is hidden by its RNG hook; a plain reservation stays visible',
-      { party: [{ charId: 'nia' }, { charId: 'sera' }, { charId: 'yuri' }], deck: [{ id: 'nia_scan' }, { id: 'yuri_root_hunt' }, { id: 'sera_last' }, { id: 'sera_round' }],
-        hp: 243, maxHp: 243, seed: 20, enemies: ['e_mirrorclerk'], relics: ['void_shard'] }, [
-        { request: begin },
-        { forecasts: b => [q('scan next draw definition', 'c1', 'next', enemy(b, 'e_mirrorclerk')), q('hunt after random definition', 'c2', 'after'),
-          q('last after rng hook', 'c3', 'after', enemy(b, 'e_mirrorclerk')), q('round next visible control', 'c4', 'next', enemy(b, 'e_mirrorclerk'))],
-          request: b => play('c3', 'after', enemy(b, 'e_mirrorclerk')) },
-      ]),
-    battleCase('reserved-hidden-draw-hook', 'A reserved estimate that kills a marked enemy draws through detective_notebook and stays hidden; the marked conditional branch differs between now and next',
+    battleCase('now-hidden-draw-hook', 'A now kill of a marked enemy draws through detective_notebook and stays hidden; the marked conditional branch and a plain control stay visible',
       { party: [{ charId: 'kaya' }, { charId: 'sera' }], deck: [{ id: 'kaya_clue' }, { id: 'kaya_clue' }, { id: 'kaya_crossfire' }, { id: 'sera_timed' }, { id: 'sera_round' }],
         hp: 162, maxHp: 162, seed: 21, enemies: ['e_page', 'e_keeper'], relics: ['detective_notebook'] }, [
         { request: begin },
         { request: b => play('c1', 'now', enemy(b, 'e_page')) },
         { request: b => play('c2', 'now', enemy(b, 'e_keeper')) },
-        { forecasts: b => [q('crossfire next marked branch', 'c3', 'next', enemy(b, 'e_keeper')), q('crossfire now marked branch', 'c3', 'now', enemy(b, 'e_keeper')),
-          q('timed next marked kill hook', 'c4', 'next', enemy(b, 'e_page')), q('round now marked page control', 'c5', 'now', enemy(b, 'e_page'))],
-          request: b => play('c4', 'next', enemy(b, 'e_page')) },
+        { forecasts: b => [q('crossfire now marked branch', 'c3', 'now', enemy(b, 'e_keeper')), q('timed now marked kill hook', 'c4', 'now', enemy(b, 'e_page')),
+          q('round now marked page control', 'c5', 'now', enemy(b, 'e_page'))],
+          request: b => play('c4', 'now', enemy(b, 'e_page')) },
+      ]),
+    battleCase('held-retain-forecast', 'A 보존 card kept over a real turn end is held, and its forecast includes the held-only precision_lens break +1',
+      { party: [{ charId: 'sera' }], deck: [{ id: 'sera_timed' }, { id: 'sera_round' }], hp: 81, maxHp: 81, seed: 22, enemies: ['e_keeper'], relics: ['precision_lens'] }, [
+        { request: begin },
+        { forecasts: b => [q('timed unheld no lens', 'c1', 'now', enemy(b, 'e_keeper'))], request: end },
+        { forecasts: b => [q('timed held lens breaks', 'c1', 'now', enemy(b, 'e_keeper'))], request: b => play('c1', 'now', enemy(b, 'e_keeper')) },
       ]),
   ];
   assert.equal(JSON.stringify(data), originalData, 'The preview oracle changed original source data');
@@ -348,25 +344,25 @@ export function generateCases() {
   const records = cases.flatMap(row => row.steps.flatMap(step => step.forecasts));
   const errors = [...new Set(records.map(r => r.expected.error).filter(code => code !== null))].sort();
   const hidden = [...new Set(records.filter(r => r.expected.hidden).map(r => r.hiddenBy.join('+')))].sort();
-  assert.deepEqual(errors, ['AP_LOW', 'BAD_TARGET', 'INVALID_MODE', 'NOT_IN_HAND', 'NOT_RESERVABLE', 'NO_BATTLE', 'OVERLOAD_WOULD_KILL', 'RESERVE_ONLY', 'SLOT_FULL', 'WRONG_PHASE'],
+  assert.deepEqual(errors, ['AP_LOW', 'BAD_TARGET', 'INVALID_MODE', 'NOT_IN_HAND', 'NOT_RESERVABLE', 'NO_BATTLE', 'OVERLOAD_WOULD_KILL', 'WRONG_PHASE'],
     'Preview error-code coverage changed');
   for (const reason of ['definition', 'rng', 'draw']) assert.ok(hidden.includes(reason), `Preview lacks a forecast hidden only by ${reason}`);
   assert.ok(records.some(r => r.expected.defeat) && records.some(r => r.expected.hpDelta > 0) && records.some(r => r.expected.hpDelta < 0)
     && records.some(r => r.expected.blockDelta > 0) && records.some(r => r.expected.enemyHpLoss > 0), 'Preview lacks a visible outcome kind');
-  for (const mode of ['next', 'after']) assert.ok(records.some(r => r.expected.error === null && r.expected.mode === mode), `Preview lacks ${mode} timing`);
-  // v2 witnesses: the restored current-state reservation estimates and the two appended fields are actually exercised.
-  const reserved = records.filter(r => r.expected.mode !== 'now' && r.expected.error === null), visible = reserved.filter(r => !r.expected.hidden);
+  // RULES_NOW_PLAY: next/after requests are still forecast, and inside a battle every one is rejected before any reserved estimate.
+  for (const mode of ['next', 'after']) assert.ok(records.some(r => r.expected.mode === mode && r.expected.error === 'NOT_RESERVABLE'), `Preview lacks a rejected ${mode} request`);
+  assert.ok(records.every(r => r.expected.mode === 'now' || ['NOT_RESERVABLE', 'NO_BATTLE', 'INVALID_MODE'].includes(r.expected.error)), 'A reservation forecast was accepted');
+  assert.ok(!nextAfterDiffers(cases), 'A reserved estimate became reachable');
+  const now = records.filter(r => r.expected.mode === 'now' && r.expected.error === null), visible = now.filter(r => !r.expected.hidden);
   const numbers = e => e.enemyHpLoss || e.blockDelta || e.hpDelta || e.defeat || e.enemyDamage || e.newlyBroken;
+  const held = cases.find(c => c.id === 'held-retain-forecast').steps, [unheld] = held[1].forecasts, [kept] = held[2].forecasts;
   for (const [ok, what] of [
-    [visible.some(r => numbers(r.expected)), 'a visible reserved estimate'], [visible.some(r => !numbers(r.expected)), 'a zero reserved estimate'],
-    [visible.some(r => r.expected.newlyBroken > 0), 'a reserved estimate breaking an enemy'], [visible.some(r => r.expected.defeat), 'a reserved estimate ending in defeat'],
-    [visible.some(r => r.expected.enemyDamage > r.expected.enemyHpLoss), 'reserved damage absorbed by enemy block'],
-    [records.some(r => r.expected.mode === 'now' && r.expected.enemyDamage > r.expected.enemyHpLoss), 'immediate damage absorbed by enemy block'],
-    [records.some(r => r.expected.mode === 'now' && r.expected.newlyBroken > 0), 'an immediate play breaking an enemy'],
-    [reserved.some(r => r.expected.hidden && r.hiddenBy.includes('definition')), 'a reserved estimate hidden by its definition'],
-    [reserved.some(r => r.expected.hidden && !r.hiddenBy.includes('definition')), 'a reserved estimate hidden only by a hook'],
-    [records.some(r => r.expected.mode !== 'now' && r.expected.error !== null), 'a rejected reservation'],
-    [nextAfterDiffers(cases), 'distinct next/after estimates of one request at one forecast point'],
+    [visible.some(r => numbers(r.expected)), 'a visible now estimate'], [visible.some(r => !numbers(r.expected)), 'a zero now outcome'],
+    [visible.some(r => r.expected.newlyBroken > 0), 'a now play breaking an enemy'], [visible.some(r => r.expected.defeat), 'a now play ending in defeat'],
+    [visible.some(r => r.expected.enemyDamage > r.expected.enemyHpLoss), 'immediate damage absorbed by enemy block'],
+    [now.some(r => r.expected.hidden && r.hiddenBy.includes('definition')), 'a now forecast hidden by its definition'],
+    [now.some(r => r.expected.hidden && !r.hiddenBy.includes('definition')), 'a now forecast hidden only by a hook'],
+    [unheld.expected.newlyBroken === 0 && kept.expected.newlyBroken === 1 && unheld.expected.enemyHpLoss === kept.expected.enemyHpLoss, 'a held forecast whose precision_lens break differs from the unheld one'],
   ]) assert.ok(ok, `Preview lacks ${what}`);
   for (const r of records) assert.ok(r.expected.enemyDamage >= r.expected.enemyHpLoss, `${r.label}: enemy damage below enemy HP loss`);
   assert.ok(!data.cards.some(card => JSON.stringify([card.eff, card.plus ?? null]).includes('"pick":"random"')), 'An authored pick:"random" card now exists; cover it');
@@ -377,8 +373,8 @@ export function generateCases() {
   const counts = { cases: cases.length, battleForecasts: forecastCount(battles), battleCommands: commandCount(battles),
     runFixedForecasts: forecastCount([run]) - runPolicyForecasts, runPolicyForecasts, runCommands: commandCount([run]),
     forecasts: forecastCount(cases), commands: commandCount(cases) };
-  // v1 9 cases/51 battle forecasts/23 battle commands + v2 reserved cases 13+4+4 forecasts and 6+2+4 commands.
-  assert.deepEqual([counts.cases, counts.battleForecasts, counts.battleCommands, counts.runFixedForecasts], [12, 72, 35, 6], 'Preview fixed denominators changed');
+  // Now-play corpus: 8 battle cases 48 forecasts/23 commands + now-estimates 10/6, now-hidden-draw-hook 3/4, held-retain-forecast 2/3.
+  assert.deepEqual([counts.cases, counts.battleForecasts, counts.battleCommands, counts.runFixedForecasts], [12, 63, 36, 6], 'Preview fixed denominators changed');
   assert.ok(counts.runPolicyForecasts >= 1 && counts.runCommands > counts.runPolicyForecasts, 'Run policy did not play and finish its battle');
   assert.deepEqual(sources(), loadedSources, 'Preview sources changed during generation; rerun exporter');
   return { schema, scope, status: 'JS_ORACLE', dataVersion: data.meta.version, sources: clone(loadedSources), fields: [...fields], contract: clone(contract),

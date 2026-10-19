@@ -172,7 +172,9 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      char_lumi_fig_bond_gear_styleA_v01_0: -5223319234679934990
+      char_lumi_fig_bond_gear_styleA_v01_1: 8426492166350978591
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

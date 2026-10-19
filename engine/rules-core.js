@@ -104,7 +104,7 @@
   const TGT_NAME = { one: '', same: '그 적에게 ', all: '모든 적에게 ', rand: '무작위 적에게 ', fixed: '표식 적에게 ' };
   const COND_TEXT = (c) => ({
     marked: '대상에게 표식이 있으면', burning: '대상이 화상 상태면', broken: '대상이 균열 상태면', debt: '부채가 있으면',
-    modded: '이 카드에 개조가 있으면', reserved: '예약으로 해결되면', intentAttack: '대상이 공격할 예정이면',
+    modded: '이 카드에 개조가 있으면', reserved: '보존했던 카드면', held: '보존했던 카드면', intentAttack: '대상이 공격할 예정이면',
     echo: `잔향 ${c.n} 이상이면`, hpBelow: `파티 체력 ${c.pct}% 이하면`, targetHpBelow: `대상 체력 ${c.pct}% 이하면`,
     growthInHand: `손에 성장 카드가 ${c.n}장 이상이면`, exhaustedAtLeast: `소멸한 카드가 ${c.n}장 이상이면`, killedThis: '이 카드로 적을 처치하면',
   }[c.c] || c.c);
@@ -118,7 +118,7 @@
     echochamber: () => '이번 전투 동안 잔향이 3이 되면 카드 1장 뽑기(턴당 1회)',
   };
   const BUFF_TEXT = {
-    charge: (o) => `다음 공격 카드 피해 +${o.n / 100}%`, seraLock: (o) => `세라의 예약 공격 피해 +${o.n / 100}%`,
+    charge: (o) => `다음 공격 카드 피해 +${o.n / 100}%`, seraLock: (o) => `세라의 카드 공격 피해 +${o.n / 100}%`,
     healUp: (o) => `다음 회복 +${o.n / 100}%`, lumiRush: (o) => `이번 턴 루미의 공격 피해 +${o.n / 100}%`,
     counterDouble: () => '반격 피해 2배', overloadFree: () => '이번 턴 과부하 체력 대가 0',
   };
@@ -164,8 +164,8 @@
       case 'growAll': return '모든 성장 카드 성장 +1';
       case 'loan': return `행동력 +${op.n}, 다음 턴 행동력 -${op.n}(부채 ${op.n})`;
       case 'defer': return '다음 턴 부채 1개를 1턴 미루고 금액 +1(재유예 불가)';
-      case 'restraint': return '이번 턴 카드를 3장 이하로 쓰면 다음 턴 첫 예약 피해·방어 +30%. 4장째에 위약: 다음 턴 드로우 -1';
-      case 'collateral': return `다음 턴 예약 칸 1개 봉인(다음 내 턴 종료까지), 방어 ${op.v}`;
+      case 'restraint': return '이번 턴 카드를 3장 이하로 쓰면 다음 턴 첫 피해·방어 카드 +30%. 4장째에 위약: 다음 턴 드로우 -1';
+      case 'collateral': return `방어 ${op.v}, 다음 턴 행동력 -1(부채 1)`;
       case 'selfdmg': return `과부하 ${op.v}`;
       case 'cleanse': return '해로운 효과 모두 제거';
       case 'cleanseOne': return `${ST_NAME[op.s] || op.s} 제거`;
@@ -189,8 +189,7 @@
   function cardText(def, ix) {
     const parts = def.eff.map((op) => opText(op, ix)).filter(Boolean);
     const kw = [];
-    if (def.res === 'o') kw.push('예약 전용'); else if (def.res === 'after') kw.push('다다음 턴 예약 전용');
-    else if (def.res === 'n' && !(def.kw || []).includes('contract')) kw.push('즉시 전용');
+    if ((def.kw || []).includes('retain')) kw.push('보존'); // RULES_NOW_PLAY: every card is played now, so no mode label
     if ((def.kw || []).includes('contract')) kw.push('계약');
     if (def.growth) kw.push('성장');
     if ((def.kw || []).includes('exhaust')) kw.push('소멸');
@@ -237,7 +236,7 @@
     const uid = `c${state.seq}`;
     state.cards[uid] = {
       uid, id: spec.id, owner: def.owner, wielder: spec.wielder || null, plus: !!spec.plus,
-      mods: { c: spec.mods?.c || null, e: spec.mods?.e || null }, temp: [], growth: spec.growth || 0, grown: false,
+      mods: { c: spec.mods?.c || null, e: spec.mods?.e || null }, temp: [], growth: spec.growth || 0, grown: false, held: false,
       used: 0, costMod: 0, token: !!extra.token, free: !!extra.free, assigned: spec.assigned || null, from: spec.from || null,
     };
     return uid;
@@ -279,9 +278,7 @@
       if (s.actors.some((a) => a.id === 'rien')) { s.echoActive = true; s.echoMax = s.actors.find((a) => a.id === 'rien').passive.params.max; }
       if (s.relics.includes('tuning_fork')) { s.echoMax += 1; s.echoStart = Math.max(s.echoStart, 1); }
       if (s.relics.includes('contract_seal')) s.debtCap += 1;
-      if (s.relics.includes('cracked_hourglass')) s.slotsBase.after = Math.min(R.slots.afterMax, s.slotsBase.after + 1);
-      if (s.relics.includes('twin_pendulum')) { s.slotsBase.next = Math.min(R.slots.nextMax, s.slotsBase.next + 1); s.handMax = 9; }
-      if (s.relics.includes('infinite_circuit')) s.slotsBase.next = Math.min(R.slots.nextMax, s.slotsBase.next + 1);
+      if (s.relics.includes('twin_pendulum')) s.handMax = 9; // RULES_NOW_PLAY: its slot became a draw (startTurn)
       // deck
       for (const spec of setup.deck) {
         const uid = makeInst(s, ix, spec);
@@ -382,6 +379,8 @@
       return { ...base, eff, uses };
     }
     partsOf(inst) { return [inst.mods.c, inst.mods.e, ...inst.temp].filter(Boolean).map((p) => this.ix.parts[p]).filter(Boolean); }
+    // RULES_NOW_PLAY: a card with the 보존 keyword, or a part granting it, stays in hand at the end of the turn.
+    retains(inst) { return (this.effDef(inst).kw || []).includes('retain') || this.partsOf(inst).some((p) => p.fx.retain); }
     isModded(inst) { return this.partsOf(inst).length > 0; }
 
     costOf(uid, mode) {
@@ -390,7 +389,7 @@
       let cost = def.cost + inst.costMod;
       for (const p of this.partsOf(inst)) if (p.fx.cost) cost += p.fx.cost;
       if (def.costIf && this.cond(def.costIf.cond, { inst })) cost += def.costIf.delta;
-      if (mode !== 'now' && this.has('empty_clock') && !s.battleFlags.emptyClockUsed) cost -= 1;
+      if (this.has('empty_clock') && !s.battleFlags.emptyClockUsed) cost -= 1;
       if (mode !== 'now' && s.silenceUntil > 0 && s.silenceUntil >= s.turn) cost += 1;
       if (s.freeNext > 0) cost = 0;
       return Math.max(0, cost);
@@ -500,6 +499,8 @@
       const s = this.s; const R = this.ix.rules;
       const ap = this.nextTurnAp();
       s.turn += 1; s.phase = 'RESOLVING';
+      // Sera r6: the turn after her ultimate is boosted as a whole; a second ultimate that turn only sets up the next one.
+      if (s.battleFlags.seraR6Turn === s.turn) s.battleFlags.seraR6Active = s.turn;
       // v0.7.1: battle-start effects belong to turn 1; clear only at subsequent turn boundaries.
       if (!first) {
         const keep = s.powers.filter((p) => p.id === 'bulwark').reduce((m, p) => Math.max(m, p.keep), 0);
@@ -528,13 +529,15 @@
         this.resolveCard(r.uid, { reserved: r.kind, target: r.target, picks: [] });
         if (this.isOver() || this.checkEnd()) { for (const rest of dueRes.slice(i + 1)) s.zones.discard.push(rest.uid); return; }
       }
-      s.battleFlags.seraR6Turn = 0;
       // turn-start effects
       for (const p of s.powers) if (p.id === 'rebirth') this.healParty(p.heal, null);
       // draw
       let n = R.handDraw - s.drawPenalty; s.drawPenalty = 0;
+      if (this.has('twin_pendulum')) n += 1;
+      if (this.has('infinite_circuit')) n += 1;
       if (first) {
         if (this.has('quick_hands')) n += 2;
+        if (this.has('cracked_hourglass')) n += 2;
         const sd = this.partyWeapon('w_startDraw'); if (sd) n += sd.value;
       }
       this.draw(Math.max(0, n));
@@ -565,7 +568,10 @@
       s.restraint.active = false;
       // hand cleanup
       for (const uid of [...s.zones.hand]) if (s.cards[uid].id === 'smudge') this.loseHp(this.scaleEnemy(2), 'smudge');
-      s.zones.discard.push(...s.zones.hand); s.zones.hand = [];
+      // RULES_NOW_PLAY: 보존 cards stay in hand and become held; the rest are discarded
+      const kept = s.zones.hand.filter((u) => this.retains(s.cards[u]));
+      for (const u of s.zones.hand) s.cards[u].held = kept.includes(u);
+      s.zones.discard.push(...s.zones.hand.filter((u) => !kept.includes(u))); s.zones.hand = kept;
       if (this.checkEnd()) return;
       if (s.pst.weak > 0) s.pst.weak -= 1;
       if (s.silenceUntil <= s.turn) s.silenceUntil = 0;
@@ -742,8 +748,9 @@
       // commit
       s.ap -= cost;
       if (s.freeNext > 0) s.freeNext -= 1;
-      if (mode !== 'now' && this.has('empty_clock') && !s.battleFlags.emptyClockUsed) s.battleFlags.emptyClockUsed = true;
+      if (this.has('empty_clock') && !s.battleFlags.emptyClockUsed) s.battleFlags.emptyClockUsed = true;
       s.zones.hand.splice(s.zones.hand.indexOf(uid), 1);
+      const held = inst.held; inst.held = false;
       s.played += 1;
       const oc = this.ownerChar(inst);
       if (oc) {
@@ -756,7 +763,7 @@
       if (s.restraint.active && s.played >= 4) { s.restraint.active = false; s.drawPenalty += 1; this.ev('restraintBroken'); }
       this.ev('play', { uid, id: inst.id, mode, cost, target });
       if (mode === 'now') {
-        this.resolveCard(uid, { reserved: null, target, picks });
+        this.resolveCard(uid, { reserved: null, held, target, picks });
       } else {
         s.resSeq += 1;
         s.res.push({ uid, due: s.turn + (mode === 'next' ? 1 : 2), order: s.resSeq, target, kind: mode });
@@ -774,7 +781,7 @@
         }
         if (op.op === 'defer') { if (!s.debts.some((d) => d.due === s.turn + 1 && !d.deferred)) throw new RuleError('NOT_DEFERRABLE'); if (this.debtTotal() + 1 > s.debtCap) throw new RuleError('DEBT_CAP'); }
         if (op.op === 'restraint' && (s.played >= 3 || s.restraint.usedTurn === s.turn)) throw new RuleError('RESTRAINT_UNAVAILABLE');
-        if (op.op === 'collateral' && (s.sealedUntil >= s.turn || this.freeSlots('next') <= 0)) throw new RuleError('NO_EMPTY_SLOT');
+        if (op.op === 'collateral' && this.debtTotal() + 1 > s.debtCap) throw new RuleError('DEBT_CAP');
         if (op.op === 'pull' && !s.res.length) throw new RuleError('RESERVATION_REQUIRED');
         if (op.op === 'pull') {
           const r = this.pickReservation(picks);
@@ -831,7 +838,7 @@
       const inst = s.cards[uid]; const def = this.effDef(inst);
       const oc = this.ownerChar(inst);
       const actor = oc ? this.actor(oc) : null;
-      const ctx = { inst, def, actor, attr: this.attrOf(inst), reserved: opts.reserved, target: opts.target, lastTarget: opts.target,
+      const ctx = { inst, def, actor, attr: this.attrOf(inst), reserved: opts.reserved, held: !!opts.held, target: opts.target, lastTarget: opts.target,
         picks: [...(opts.picks || [])], isUlt: false, killed: false, lastCount: 0, restraintBps: 0, boostBps: 0, chargeTaken: false, firstDmg: true };
       // fixed-target validation at resolution: dead or unmarked target fizzles (no refund)
       const hasFixed = JSON.stringify(def.eff).includes('"tgt":"fixed"');
@@ -842,14 +849,21 @@
         const t = this.enemy(opts.target);
         if (!t || !t.alive) { const alt = this.alive()[0]; ctx.target = alt ? alt.uid : null; ctx.lastTarget = ctx.target; }
       }
-      // restraint bonus: first reserved damage/block card on the bonus turn
-      if (opts.reserved && s.bonus.avail && s.bonus.turn === s.turn && def.eff.some((o) => o.op === 'dmg' || o.op === 'blk')) { ctx.restraintBps = 3000; s.bonus.avail = false; }
+      // restraint bonus: first damage/block card on the bonus turn
+      if (s.bonus.avail && s.bonus.turn === s.turn && def.eff.some((o) => o.op === 'dmg' || o.op === 'blk')) { ctx.restraintBps = 3000; s.bonus.avail = false; }
       // rien duet boost: next card of a different character
-      if (s.nextBoost && oc && oc !== s.nextBoost.from && !opts.reserved) { ctx.boostBps = s.nextBoost.bps; s.nextBoost = null; }
+      if (s.nextBoost && oc && oc !== s.nextBoost.from) { ctx.boostBps = s.nextBoost.bps; s.nextBoost = null; }
       // ultimate gauge
       if (actor) this.gainGauge(actor, this.ix.rules.gaugePerCard);
-      if (actor && opts.reserved && this.has('time_stamp')) this.gainGauge(actor, 5, true);
-      for (const op of def.eff) { this.execOp(op, ctx); if (this.isOver() || this.checkEnd()) break; }
+      if (actor && ctx.held && this.has('time_stamp')) this.gainGauge(actor, 5, true);
+      for (let i = 0; i < def.eff.length; i++) {
+        this.execOp(def.eff[i], ctx);
+        if (this.isOver() || this.checkEnd()) {
+          // RULES_NOW_PLAY: growth comes with every resolution, so a winning blow still grows its card.
+          if (s.phase === 'VICTORY') for (const rest of def.eff.slice(i + 1)) if (rest.op === 'grow') this.execOp(rest, ctx);
+          break;
+        }
+      }
       if (!this.isOver()) {
         // engraving / circuit after-effects
         for (const p of this.partsOf(inst)) {
@@ -858,11 +872,11 @@
           if (p.fx.gauge && actor) this.gainGauge(actor, p.fx.gauge, true);
           // echo circuit: the copy is created at the start of the NEXT turn (no card instance exists until then,
           // so it can never be shuffled into the draw pile)
-          if (p.fx.echoCopy && opts.reserved) { s.pendingCopies = s.pendingCopies || []; s.pendingCopies.push({ id: inst.id, wielder: inst.wielder, from: inst.from, due: s.turn + 1 }); }
+          if (p.fx.echoCopy && !inst.echoCopy) { s.pendingCopies = s.pendingCopies || []; s.pendingCopies.push({ id: inst.id, wielder: inst.wielder, from: inst.from, due: s.turn + 1 }); }
         }
         // character passives tied to resolution
         if (this.isGrowthInst(inst)) this.onGrowthCardResolved(inst);
-        if (opts.reserved && inst.id === 'sera_round' && this.hasHook('sera', 'sera_r1') && !s.turnFlags.seraR1) { s.turnFlags.seraR1 = true; this.draw(1); }
+        if (inst.id === 'sera_round' && this.hasHook('sera', 'sera_r1') && !s.turnFlags.seraR1) { s.turnFlags.seraR1 = true; this.draw(1); }
       }
       this.afterResolve(inst, def, ctx, false);
     }
@@ -918,7 +932,7 @@
     exhaustCard(uid) {
       const s = this.s;
       for (const z of ['hand', 'discard', 'draw']) { const i = s.zones[z].indexOf(uid); if (i >= 0) s.zones[z].splice(i, 1); }
-      s.zones.exhaust.push(uid);
+      s.zones.exhaust.push(uid); s.cards[uid].held = false;
       s.exhausted += 1;
       this.ev('exhaust', { uid });
       for (const p of s.powers) if (p.id === 'oblivion') this.gainBlockRaw(p.blk, 'oblivion');
@@ -963,7 +977,7 @@
         case 'broken': return !!t && t.brokenUntil > 0;
         case 'debt': return this.debtTotal() > 0;
         case 'modded': return !!ctx.inst && this.isModded(ctx.inst);
-        case 'reserved': return !!ctx.reserved;
+        case 'reserved': case 'held': return !!ctx.held;
         case 'intentAttack': return !!t && t.intent && ENEMY_ATTACK_MOVES.has(t.intent.t);
         case 'echo': return s.echo >= c.n;
         case 'hpBelow': return s.hp * 100 <= s.maxHp * c.pct;
@@ -1008,7 +1022,7 @@
         // weapon (wielder-scope) bonuses
         const wid = oc;
         if (wid) {
-          const rd = this.weaponPassive(wid, 'w_reservedDmg'); if (rd && ctx.reserved) add += rd.value;
+          const rd = this.weaponPassive(wid, 'w_reservedDmg'); if (rd && ctx.held) add += rd.value;
           const md = this.weaponPassive(wid, 'w_markedDmg'); if (md && enemy && enemy.st.mark > 0) add += md.value;
           const lh = this.weaponPassive(wid, 'w_lowHpDmg'); if (lh && s.hp * 2 <= s.maxHp) add += lh.value;
           const bd = this.weaponPassive(wid, 'w_brokenDmg') || this.weaponPassive(wid, 'w_breakDmg'); if (bd && enemy && enemy.brokenUntil) add += bd.value;
@@ -1020,10 +1034,10 @@
       if (ctx.actor && ctx.actor.gearBps) add += ctx.actor.gearBps; // accessory (장신구)
       add += (ctx.restraintBps || 0) + (ctx.boostBps || 0);
       if (ctx.chargeBps) add += ctx.chargeBps;
-      if (oc === 'sera' && ctx.reserved) {
+      if (oc === 'sera' && ctx.inst) {
         const p = this.passiveOf('sera_foresight'); if (p && enemy && enemy.brokenUntil) add += p.bps;
         const lock = this.buff('seraLock'); if (lock) add += lock.n;
-        if (s.battleFlags.seraR6Turn && s.battleFlags.seraR6Turn === s.turn && s.phase === 'RESOLVING') add += 5000;
+        if (s.battleFlags.seraR6Active === s.turn) add += 5000;
       }
       if (oc === 'ravien') { const p = this.passiveOf('ravien_credit'); if (p && this.debtTotal() > 0) add += p.bps; }
       if (oc === 'sion') { const p = this.passiveOf('sion_shelf'); if (p) add += Math.min(p.maxBps, p.perBps * (s.exhausted + s.exhaustStart)); }
@@ -1189,7 +1203,7 @@
     brkFor(op, ctx, enemy) {
       let brk = op.brk ?? 1;
       if (ctx.inst) for (const p of this.partsOf(ctx.inst)) if (p.fx.brk) brk += p.fx.brk;
-      if (ctx.reserved && this.has('precision_lens')) brk += 1;
+      if (ctx.held && this.has('precision_lens')) brk += 1;
       if (this.has('eye_of_rift')) brk += 1;
       if (ctx.attr === 'frost' && this.has('frost_crystal') && !this.s.turnFlags.frostCrystal && enemy && enemy.weak.includes('frost')) { this.s.turnFlags.frostCrystal = true; brk += 1; }
       return brk;
@@ -1272,7 +1286,7 @@
           for (let k = 0; k < op.n && s.zones.hand.length; k++) {
             const uid = this.takePick(ctx, s.zones.hand, (u) => true, 'lowestValue');
             if (!uid) break;
-            s.zones.hand.splice(s.zones.hand.indexOf(uid), 1); s.zones.discard.push(uid);
+            s.zones.hand.splice(s.zones.hand.indexOf(uid), 1); s.zones.discard.push(uid); s.cards[uid].held = false;
           }
           break;
         }
@@ -1311,7 +1325,7 @@
         }
         case 'grow': {
           const inst = ctx.inst;
-          if (ctx.reserved) this.applyGrowth(inst, 1, { source: 'reserve', capped: true, once: true });
+          if (inst) this.applyGrowth(inst, 1, { source: 'resolve', capped: true, once: true });
           break;
         }
         case 'growPick': {
@@ -1341,7 +1355,11 @@
           break;
         }
         case 'restraint': s.restraint = { active: true, usedTurn: s.turn }; break;
-        case 'collateral': s.sealedUntil = s.turn + 1; this.gainBlockRaw(op.v, 'collateral'); break;
+        case 'collateral': {
+          this.gainBlockRaw(op.v, 'collateral'); s.resSeq += 1;
+          s.debts.push({ id: `d${s.resSeq}`, n: 1, due: s.turn + 1, deferred: false });
+          this.ev('loan', { n: 1 }); break;
+        }
         case 'selfdmg': {
           const cost = this.overloadCost(op.v, false);
           if (cost > 0) {
@@ -1380,7 +1398,7 @@
         case 'recall': {
           if (s.zones.hand.length >= s.handMax) break;
           const uid = this.takePick(ctx, s.zones.discard, (u) => this.ix.cards[s.cards[u].id].rar !== 'C', 'highestCost');
-          if (uid) { s.zones.discard.splice(s.zones.discard.indexOf(uid), 1); s.zones.hand.push(uid); }
+          if (uid) { s.zones.discard.splice(s.zones.discard.indexOf(uid), 1); s.cards[uid].held = false; s.zones.hand.push(uid); }
           break;
         }
         case 'copyPick': {
@@ -1459,7 +1477,7 @@
           Rng.shuffle(s.rng, s.zones.draw);
           this.ev('reshuffle');
         }
-        const uid = s.zones.draw.shift();
+        const uid = s.zones.draw.shift(); s.cards[uid].held = false;
         if (s.zones.hand.length < s.handMax) s.zones.hand.push(uid); else { s.zones.discard.push(uid); this.ev('burnCard', { uid }); }
       }
     }

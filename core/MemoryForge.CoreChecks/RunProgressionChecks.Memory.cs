@@ -19,9 +19,9 @@ static partial class RunProgressionChecks
     const string MemoryScope = "Actual public Run memoryChanges/previewMemory/commitMemory on fresh Creates and on four real gen_traces terminal saves replayed from a fresh Run.create: complete JS Run/store points, arguments, returns and errors. C# Run memory replay 0; account storage, disk, server, Unity and device acceptance PENDING";
     const string NoOverCapacity = "No party character on the selected clear base has a full change set above its capacity; nothing is injected to force OVER_CAPACITY";
     const string NoSecondChange = "The defeat base has fewer than two memory changes; nothing is injected to force DEFEAT_KEEP_ONE";
-    // Measured current-source denominators: 88 planned ops = 85 executed (26 returned, 59 rejected of which 3 native boundaries) + 3 NOT_COVERED;
-    // 15 scenarios open 2 fresh Creates and 13 terminal saves.
-    const int MemoryPlanned = 88, MemoryCovered = 85, MemoryReturned = 26, MemoryRejected = 59, MemoryNativeOps = 3, MemoryUncovered = 3,
+    // Measured current-source denominators (RULES_NOW_PLAY regeneration, defeat base 3561 full with 8 changes): 88 planned ops = 88 executed
+    // (27 returned, 61 rejected of which 3 native boundaries) + 0 NOT_COVERED; 15 scenarios open 2 fresh Creates and 13 terminal saves.
+    const int MemoryPlanned = 88, MemoryCovered = 88, MemoryReturned = 27, MemoryRejected = 61, MemoryNativeOps = 3, MemoryUncovered = 0,
         MemoryScenarioCount = 15, MemoryFreshScenarios = 2, MemorySaveScenarios = 13;
     // Exact allowlist in source order (the generator's seven slots), compared before any file is hashed.
     static readonly (string Key, string Path)[] MemorySources = { ("data", "data/game_data.json"), ("engine", "engine/rules-core.js"), ("memory", "proposals/memory_v2.cjs"),
@@ -45,13 +45,14 @@ static partial class RunProgressionChecks
     static readonly (long Seed, string Length)[] MemoryClearCandidates = { (1000, "short"), (1000, "full"), (1001, "full"), (1002, "full") };
     static readonly (string Id, string Policy, string Role, (long Seed, string Length)[] Candidates)[] MemoryBasePlan =
     {
-        ("legacy-clear", "legacy", "clear", MemoryClearCandidates), ("legacy-defeat", "legacy", "defeat", new[] { (1102L, "full") }),
-        ("v2-clear", "v2", "clear", MemoryClearCandidates), ("v2-defeat", "v2", "defeat", new[] { (1102L, "full") }),
+        // RULES_NOW_PLAY (2026-10-19): seed 1102 full now clears, so the defeat input is 3561 full.
+        ("legacy-clear", "legacy", "clear", MemoryClearCandidates), ("legacy-defeat", "legacy", "defeat", new[] { (3561L, "full") }),
+        ("v2-clear", "v2", "clear", MemoryClearCandidates), ("v2-defeat", "v2", "defeat", new[] { (3561L, "full") }),
     };
     static readonly Dictionary<string, object?> MemoryDenominators = O("bases", 4L, "scenarios", 15L, "plannedOps", 88L, "policies", O("legacy", 2L, "v2", 2L),
         "candidates", MemoryBasePlan.ToDictionary(b => b.Id, b => (object?)b.Candidates.Select(c => (object?)O("seed", c.Seed, "length", c.Length)).ToList(), StringComparer.Ordinal));
-    static readonly Dictionary<string, object?> MemoryTotals = O("bases", 4L, "coveredBases", 4L, "scenarios", 15L, "coveredScenarios", 15L, "ops", 88L, "returned", 26L, "rejected", 59L,
-        "notCovered", 3L, "csharpMemoryReplay", 0L);
+    static readonly Dictionary<string, object?> MemoryTotals = O("bases", 4L, "coveredBases", 4L, "scenarios", 15L, "coveredScenarios", 15L, "ops", 88L, "returned", 27L, "rejected", 61L,
+        "notCovered", 0L, "csharpMemoryReplay", 0L);
     // The trace's own public Run surface minus its final memory commit (gen_run_memory prefixMethods).
     static readonly HashSet<string> MemoryPrefixMethods = new(new[] { "enter", "evolve", "takeCard", "skipCard", "takeRelic", "takePart", "applyFoundPart", "proceed", "rest",
         "forgeOffer", "forgeApply", "forgeRemove", "buy", "eventChoose", "archive" }, StringComparer.Ordinal);
@@ -233,7 +234,7 @@ static partial class RunProgressionChecks
         int uncovered = ops.Count(o => Text(o, "status") == "NOT_COVERED"), returned = ops.Count(o => Text(o, "status") == "COVERED" && Text(o, "outcome") == "returned");
         int rejected = ops.Count - uncovered - returned;
         Check(ops.Count == MemoryPlanned && ops.Count - uncovered == MemoryCovered && returned == MemoryReturned && rejected == MemoryRejected && uncovered == MemoryUncovered,
-            "fixture records 88 planned ops: 85 covered (26 returned, 59 rejected) and 3 NOT_COVERED (" + I(ops.Count) + "/" + I(returned) + "/" + I(rejected) + "/" + I(uncovered) + ")");
+            "fixture records " + I(MemoryPlanned) + " planned ops: " + I(MemoryCovered) + " covered (" + I(MemoryReturned) + " returned, " + I(MemoryRejected) + " rejected) and " + I(MemoryUncovered) + " NOT_COVERED (" + I(ops.Count) + "/" + I(returned) + "/" + I(rejected) + "/" + I(uncovered) + ")");
         memoryFixtureSummary = $"strict one-member gzip/fatal UTF-8/unique keys; exact schema/status {MemoryStatus}/scope/7 allowlisted source pins/contract/denominators; native diagnostics provenance Node {node} only; "
             + $"4 fixed bases ({string.Join(", ", bases.Select(b => b.Id + " seed" + I(b.Seed) + "-" + b.Length + " " + b.Phase))}; {I(bases.Sum(b => Items(b.Row.GetProperty("prefix"), b.Id).Count))} prefix envelopes; candidate scans validated), "
             + $"15 fixed scenarios, {I(ops.Count)} planned ops ({I(ops.Count - uncovered)} covered: {I(returned)} returned/{I(rejected)} rejected; {I(uncovered)} NOT_COVERED with source reasons); "
@@ -248,8 +249,8 @@ static partial class RunProgressionChecks
             }
         }
         Check(memoryAttempted == MemoryCovered && memoryMatched == MemoryCovered && memoryReturned == MemoryReturned && memoryRejected == MemoryRejected && memoryNative == MemoryNativeOps,
-            "actual C# public memory calls matched all 85 executed ops (26 returned, 59 rejected incl. 3 native-boundary) from fresh Creates");
-        Check(memoryNotCovered == MemoryUncovered && memoryReasons == MemoryUncovered, "the 3 NOT_COVERED ops stay uncovered and each source reason holds under actual C# public queries");
+            "actual C# public memory calls matched all " + I(MemoryCovered) + " executed ops (" + I(MemoryReturned) + " returned, " + I(MemoryRejected) + " rejected incl. " + I(MemoryNativeOps) + " native-boundary) from fresh Creates");
+        Check(memoryNotCovered == MemoryUncovered && memoryReasons == MemoryUncovered, "the " + I(MemoryUncovered) + " NOT_COVERED ops stay uncovered and each source reason holds under actual C# public queries");
         Check(memoryCompleted == MemoryScenarioCount && memoryFresh == MemoryFreshScenarios && memorySaves == MemorySaveScenarios, "all 15 scenarios complete from 2 fresh-Create and 13 terminal-save openings");
         Check(RunCreateChecks.DataPrint(data) == definitions, "public memory replay preserves source definitions");
         Section("run memory fixture corruption", () => MemoryFixtureProbes(fixture, root, version, characters, bases, scenarios, data, definitions));
@@ -518,7 +519,7 @@ static partial class RunProgressionChecks
         string? drift = MemoryV2DataLoader.Difference(recorded, recomputed);
         Check(drift == null, "run memory coverage/count summary equals the recomputation from every recorded op" + (drift == null ? "" : ": " + drift));
         string? totals = MemoryV2DataLoader.Difference(MemoryTotals, Get(recorded, "totals"));
-        Check(totals == null, "run memory totals are the measured 4 bases/15 scenarios/88 planned ops (26 returned, 59 rejected, 3 NOT_COVERED)/C# replay 0" + (totals == null ? "" : ": " + totals));
+        Check(totals == null, "run memory totals are the measured 4 bases/15 scenarios/88 planned ops (27 returned, 61 rejected, 0 NOT_COVERED)/C# replay 0" + (totals == null ? "" : ": " + totals));
     }
 
     static Dictionary<string, object?> MemoryPoint(JsonElement point, string label)
@@ -774,7 +775,7 @@ static partial class RunProgressionChecks
         }
         var coverage = fixture.GetProperty("coverage");
         Control("coverage recomputation", () => ValidateMemoryCoverage(coverage, bases, scenarios));
-        MemoryProbe("coverage claims one more returned op", () => ValidateMemoryCoverage(Element(Edit(coverage, "totals", Edit(coverage.GetProperty("totals"), "returned", 27L))), bases, scenarios));
+        MemoryProbe("coverage claims one more returned op", () => ValidateMemoryCoverage(Element(Edit(coverage, "totals", Edit(coverage.GetProperty("totals"), "returned", (long)MemoryReturned + 1))), bases, scenarios));
 
         // Self-consistent forgeries: every hash/reference naming the edit is recomputed, so structure accepts it and only actual C# execution can
         // reject it, after matching every earlier op and exactly at the forged one.

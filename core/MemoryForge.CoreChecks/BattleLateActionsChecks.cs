@@ -23,30 +23,30 @@ static class BattleLateActionsChecks
     static readonly string[] Behaviors = { "apDrain", "sealSlot", "delayRes", "silence", "eatName", "phase" };
     static readonly string[] Candidates = ("e_debtwraith e_scaleknight e_sealgolem e_ratpack e_overdue e_collector e_notarytwin b_usurer e_choir e_stagerg e_shadowlamp " +
         "e_ghostguest e_prompter e_baton e_primadonna b_overture e_springguard e_pendulum e_rustgear e_timeshard e_echo e_archbell b_nameless").Split(' ');
-    // Fixed denominators measured by Root from this producer: 23 duels (149) + 23 encounter groups (151) + 34 boundaries (166) + 1 protocol (7).
-    static readonly (string Key, int Value)[] Counts = { ("cases", 81), ("commands", 473), ("committed", 445), ("replayed", 2), ("rejected", 26) };
-    static readonly (string Key, int Value)[] Coverage = { ("candidates", 23), ("encounters", 23), ("edges", 34), ("protocols", 1) };
-    static readonly string[] Errors = { "AP_LOW", "SLOT_FULL", "NO_EMPTY_SLOT", "WRONG_PHASE", "INVALID_ENEMY_MOVE", "IDEMPOTENCY_CONFLICT", "STALE_VERSION" };
+    // Fixed denominators measured from this producer (RULES_NOW_PLAY regeneration: five reservation-only seal/delay edges dropped, the rest replay
+    // as now plays): 23 duels + 23 encounter groups + 29 boundaries + 1 protocol = 76 cases / 437 commands.
+    static readonly (string Key, int Value)[] Counts = { ("cases", 76), ("commands", 437), ("committed", 415), ("replayed", 2), ("rejected", 20) };
+    static readonly (string Key, int Value)[] Coverage = { ("candidates", 23), ("encounters", 23), ("edges", 29), ("protocols", 1) };
+    // RULES_NOW_PLAY: no slot exists any more, so SLOT_FULL and NO_EMPTY_SLOT are unreachable.
+    static readonly string[] Errors = { "AP_LOW", "WRONG_PHASE", "INVALID_ENEMY_MOVE", "IDEMPOTENCY_CONFLICT", "STALE_VERSION" };
     // Boundary cases in producer order: dataset, exact enemy list, request count and real rejections.
     static readonly (string Id, string Dataset, string Enemies, int Commands, int Rejected)[] Edges =
     {
         ("drain-debt-clamp", "boundary", "t_drain", 6, 1), ("silence-free-next", "candidate", "e_choir e_choir", 10, 0),
-        ("silence-free-instance", "candidate", "e_choir", 10, 1), ("seal-protected-turn", "candidate", "e_sealgolem", 10, 1),
-        ("seal-fallback-full", "candidate", "e_timeshard", 7, 1), ("seal-already-sealed", "candidate", "e_sealgolem", 7, 2),
-        ("seal-two-sealers", "candidate", "e_sealgolem e_timeshard", 5, 0), ("delay-original-kind", "candidate", "e_prompter", 6, 0),
-        ("delay-overflow-discard", "candidate", "e_prompter", 6, 0), ("delay-outside-board", "candidate", "e_prompter e_prompter", 4, 0),
-        ("delay-pull-clears", "candidate", "e_prompter", 5, 0), ("delay-seal-capacity", "candidate", "e_sealgolem e_prompter", 6, 1),
-        ("eat-token-priority", "candidate", "e_overdue e_echo", 5, 0), ("eat-empty-discard", "candidate", "e_echo", 5, 0),
-        ("eat-exhaust-hooks", "candidate", "e_echo", 4, 0), ("nameless-kill-hooks", "candidate", "b_nameless", 6, 1),
-        ("nameless-multihit", "candidate", "b_nameless", 3, 1), ("nameless-phase2-cycles", "candidate", "b_nameless", 14, 0),
-        ("phase-counter-multihit", "boundary", "t_phase_multihit", 4, 0), ("phase-reflect-defeat", "boundary", "t_phase_reflect", 4, 1),
-        ("phase-invalid-bad-t", "boundary", "t_phase_bad_t", 3, 1), ("phase-invalid-bad-hp", "boundary", "t_phase_bad_hp", 3, 1),
-        ("phase-invalid-zero-brk", "boundary", "t_phase_zero_brk", 3, 1), ("phase-invalid-dup-weak", "boundary", "t_phase_dup_weak", 3, 1),
-        ("phase-invalid-unknown-weak", "boundary", "t_phase_unknown_weak", 3, 1), ("phase-invalid-empty-weak", "boundary", "t_phase_empty_weak", 3, 1),
-        ("phase-invalid-missing-weak", "boundary", "t_phase_missing_weak", 3, 1), ("phase-invalid-empty-pattern", "boundary", "t_phase_empty_pattern", 3, 1),
-        ("phase-invalid-nested-phase", "boundary", "t_phase_nested_phase", 3, 1), ("phase-invalid-not-boss", "boundary", "t_phase_not_boss", 3, 1),
-        ("move-invalid-drain-negative", "boundary", "t_bad_drain_negative", 2, 1), ("move-invalid-drain-missing", "boundary", "t_bad_drain_missing", 2, 1),
-        ("move-invalid-silence-count", "boundary", "t_bad_silence", 2, 1), ("late-terminal-defeat", "boundary", "e_choir e_collector e_sealgolem e_echo t_smasher", 3, 1)
+        ("silence-free-instance", "candidate", "e_choir", 8, 0), ("seal-no-reservation", "candidate", "e_sealgolem", 8, 0),
+        ("seal-after-collateral-debt", "candidate", "e_sealgolem", 5, 0), ("seal-two-sealers", "candidate", "e_sealgolem e_timeshard", 5, 0),
+        ("delay-no-reservation", "candidate", "e_prompter", 6, 0), ("eat-token-priority", "candidate", "e_overdue e_echo", 5, 0),
+        ("eat-empty-discard", "candidate", "e_echo", 3, 0), ("eat-exhaust-hooks", "candidate", "e_echo", 4, 0),
+        ("nameless-kill-hooks", "candidate", "b_nameless", 6, 1), ("nameless-multihit", "candidate", "b_nameless", 3, 1),
+        ("nameless-phase2-cycles", "candidate", "b_nameless", 14, 0), ("phase-counter-multihit", "boundary", "t_phase_multihit", 4, 0),
+        ("phase-reflect-defeat", "boundary", "t_phase_reflect", 4, 1), ("phase-invalid-bad-t", "boundary", "t_phase_bad_t", 3, 1),
+        ("phase-invalid-bad-hp", "boundary", "t_phase_bad_hp", 3, 1), ("phase-invalid-zero-brk", "boundary", "t_phase_zero_brk", 3, 1),
+        ("phase-invalid-dup-weak", "boundary", "t_phase_dup_weak", 3, 1), ("phase-invalid-unknown-weak", "boundary", "t_phase_unknown_weak", 3, 1),
+        ("phase-invalid-empty-weak", "boundary", "t_phase_empty_weak", 3, 1), ("phase-invalid-missing-weak", "boundary", "t_phase_missing_weak", 3, 1),
+        ("phase-invalid-empty-pattern", "boundary", "t_phase_empty_pattern", 3, 1), ("phase-invalid-nested-phase", "boundary", "t_phase_nested_phase", 3, 1),
+        ("phase-invalid-not-boss", "boundary", "t_phase_not_boss", 3, 1), ("move-invalid-drain-negative", "boundary", "t_bad_drain_negative", 2, 1),
+        ("move-invalid-drain-missing", "boundary", "t_bad_drain_missing", 2, 1), ("move-invalid-silence-count", "boundary", "t_bad_silence", 2, 1),
+        ("late-terminal-defeat", "boundary", "e_choir e_collector e_sealgolem e_echo t_smasher", 3, 1)
     };
     static readonly (string Edge, string Code)[] InvalidPhases = { ("phase-invalid-bad-t", "INVALID_ENEMY_MOVE"), ("phase-invalid-bad-hp", "INVALID_ENEMY_MOVE"),
         ("phase-invalid-zero-brk", "INVALID_ENEMY_MOVE"), ("phase-invalid-dup-weak", "INVALID_ENEMY_MOVE"), ("phase-invalid-unknown-weak", "INVALID_ENEMY_MOVE"),
@@ -177,8 +177,8 @@ static class BattleLateActionsChecks
                 string id = Text(row, "id"); actual.Add(id, Replay(row, sets[Text(row, "dataset")], id));
             }
             Check(sets.All(p => DefinitionPrint(p.Value) == prints[p.Key]), "every replay leaves the typed candidate and boundary definitions unchanged");
-            Check(actual.Count == 81 && requests == 473 && committed == 445 && replayed == 2 && rejected == 26,
-                "exactly 81 cases / 473 actual C# requests: 445 commits, 2 receipt replays, 26 real rejections");
+            Check(actual.Count == 76 && requests == 437 && committed == 415 && replayed == 2 && rejected == 20,
+                "exactly 76 cases / 437 actual C# requests: 415 commits, 2 receipt replays, 20 real rejections");
             IndependentAssertions(actual);
             LocalProbes(root, overlay, boundary);
             FixtureRejections(fixture, content.RootElement, root);
@@ -329,7 +329,6 @@ static class BattleLateActionsChecks
         int? Cost(string edge, int step) => Of(edge, step, "play").First().Cost;
         string Played(string edge, int step) => Of(edge, step, "play").First().Uid ?? "";
         (int?, bool?)[] Seals(string edge, int step) => Of(edge, step, "sealSlot").Select(e => (e.Until, e.Fallback)).ToArray();
-        (string?, int?, int?, string?, bool?)[] Delays(string edge, int step) => Of(edge, step, "delayRes").Select(e => (e.Uid, e.From, e.To, e.Kind, e.Discarded)).ToArray();
 
         // apDrain: loan AP6; drain1 + due debt2 -> AP1; drain6 clamps AP0 (a 1-cost play is AP_LOW); the drain is consumed once -> AP4.
         var drained = S("drain-debt-clamp", 2);
@@ -337,48 +336,37 @@ static class BattleLateActionsChecks
             && drained.Turn == 2 && drained.ApDrainNext == 0 && drained.Debts.Count == 0 && Of("drain-debt-clamp", 2, "apDrain").Select(e => e.N).SequenceEqual(new int?[] { 1 })
             && Of("drain-debt-clamp", 2, "repay").Select(e => e.N).SequenceEqual(new int?[] { 2 }) && Of("drain-debt-clamp", 3, "apDrain").Select(e => e.N).SequenceEqual(new int?[] { 6 })
             && S("drain-debt-clamp", 5).ApDrainNext == 0, "independent apDrain apart from debt, one-time consumption and clamp");
-        // silence: +1 on next/after, non-stacking, freeNext and free instances stay 0, expiry after the silenced turn, then reapplication.
-        Check(new[] { 2, 4, 5, 7, 9 }.Select(i => Cost("silence-free-next", i)).SequenceEqual(new int?[] { 2, 0, 0, 1, 2 })
+        // silence: non-stacking, expiry after the silenced turn, then reapplication. RULES_NOW_PLAY makes every play now, so its next/after
+        // surcharge never applies, while freeNext and free instances stay 0.
+        Check(new[] { 2, 4, 5, 7, 9 }.Select(i => Cost("silence-free-next", i)).SequenceEqual(new int?[] { 1, 0, 0, 1, 1 })
             && new[] { 1, 6, 8 }.Select(i => S("silence-free-next", i).SilenceUntil).SequenceEqual(new[] { 2, 0, 4 })
             && Of("silence-free-next", 1, "silence").Select(e => e.Until).SequenceEqual(new int?[] { 2, 2 }) && S("silence-free-next", 3).FreeNext == 2 && S("silence-free-next", 5).FreeNext == 0,
-            "independent silence +1 non-stacking, freeNext precedence, expiry and reapplication");
+            "independent silence non-stacking, no surcharge on now plays, freeNext precedence, expiry and reapplication");
         string copy = Played("silence-free-instance", 3); var copied = S("silence-free-instance", 3).Cards[copy];
-        Check(new[] { 1, 3, 4, 5, 7, 9 }.Select(i => Cost("silence-free-instance", i)).SequenceEqual(new int?[] { 1, 0, 2, 1, 1, 1 }) && Code("silence-free-instance", 6) == "AP_LOW"
-            && copied.Free && copied.Token && copied.EchoCopy == true && S("silence-free-instance", 8).Zones.Exhaust.Contains(copy) && S("silence-free-instance", 8).SilenceUntil == 0,
-            "independent free copy costs 0 under silence; the surcharge alone makes the 1-cost reservation AP_LOW while now costs 1");
-        // sealSlot: the following player turn's next column; existing seal or full column -> enemy block 10.
-        Check(Seals("seal-protected-turn", 3).SequenceEqual(new (int?, bool?)[] { (2, false) }) && S("seal-protected-turn", 3).SealedUntil == 2 && Code("seal-protected-turn", 5) == "SLOT_FULL"
-            && Seals("seal-protected-turn", 9).SequenceEqual(new (int?, bool?)[] { (4, false) }) && S("seal-protected-turn", 9).SealedUntil == 4,
-            "independent seal of the protected turn; earlier-due reservations never block a new seal");
-        Check(S("seal-fallback-full", 0).Ap == 3 && Seals("seal-fallback-full", 3).SequenceEqual(new (int?, bool?)[] { (0, true) }) && S("seal-fallback-full", 3).Enemies[0].Block == 10
-            && S("seal-fallback-full", 3).SealedUntil == 0 && Code("seal-fallback-full", 4) == "SLOT_FULL", "independent full base column falls back to enemy block 10");
-        Check(S("seal-already-sealed", 1).SealedUntil == 2 && Seals("seal-already-sealed", 2).SequenceEqual(new (int?, bool?)[] { (2, true) }) && S("seal-already-sealed", 2).Enemies[0].Block == 10
-            && Code("seal-already-sealed", 4) == "SLOT_FULL" && Code("seal-already-sealed", 5) == "NO_EMPTY_SLOT", "independent existing collateral seal falls back; collateral then has no empty slot");
+        Check(new[] { 1, 3, 4, 5, 6 }.Select(i => Cost("silence-free-instance", i)).SequenceEqual(new int?[] { 1, 0, 1, 1, 1 })
+            && S("silence-free-instance", 2).SilenceUntil == 2 && S("silence-free-instance", 7).SilenceUntil == 0
+            && copied.Free && copied.Token && copied.EchoCopy == true && S("silence-free-instance", 7).Zones.Exhaust.Contains(copy),
+            "independent free copy costs 0 and now plays pay their authored cost under silence");
+        // sealSlot: the following player turn's next column; an existing seal gives block 10. With no reservation it seals nothing a now play uses.
+        Check(Seals("seal-no-reservation", 3).SequenceEqual(new (int?, bool?)[] { (2, false) }) && Seals("seal-no-reservation", 7).SequenceEqual(new (int?, bool?)[] { (4, false) })
+            && Cost("seal-no-reservation", 4) == 1 && S("seal-no-reservation", 3).Reservations.Count == 0 && S("seal-no-reservation", 3).Enemies[0].Block == 0,
+            "independent seal of the following turn changes no now-play cost and holds no reservation");
+        var booked = S("seal-after-collateral-debt", 1);
+        Check(booked.SealedUntil == 0 && booked.Debts.Select(d => (d.N, d.Due)).SequenceEqual(new[] { (1, 2) }) && Seals("seal-after-collateral-debt", 2).SequenceEqual(new (int?, bool?)[] { (2, false) })
+            && S("seal-after-collateral-debt", 2).Ap == 3 && S("seal-after-collateral-debt", 2).Enemies[0].Block == 0,
+            "independent collateral books debt1 instead of a seal, so the enemy seal is not a fallback and the debt repays next turn (AP3)");
         Check(Seals("seal-two-sealers", 1).SequenceEqual(new (int?, bool?)[] { (2, false), (2, true) }) && S("seal-two-sealers", 1).Enemies.Select(e => e.Block).SequenceEqual(new[] { 0, 10 }),
             "independent second same-phase sealer gains block 10");
-        // delayRes: newest only, original kind kept, overflow discarded without refund/resolution, pull clears the marker.
-        string timed = Played("delay-original-kind", 2); var held = S("delay-original-kind", 3).Reservations.SingleOrDefault(r => r.Uid == timed);
-        Check(Delays("delay-original-kind", 3).SequenceEqual(new (string?, int?, int?, string?, bool?)[] { (timed, 2, 3, "next", false) }) && held != null && held.Due == 3 && held.Kind == "next" && held.Delayed == true
-            && Of("delay-original-kind", 4, "dmg").Where(e => e.Card == "sera_timed").Select(e => e.N).SequenceEqual(new int?[] { 22 })
-            && Of("delay-original-kind", 4, "resolved").Any(e => e.Uid == timed && e.Reserved == "next"), "independent delayed sera_timed keeps kind next: rv22, not ra30");
-        string overflow = Played("delay-overflow-discard", 3); var lost = S("delay-overflow-discard", 4);
-        Check(Delays("delay-overflow-discard", 4).SequenceEqual(new (string?, int?, int?, string?, bool?)[] { (overflow, 2, 3, "next", true) }) && lost.Reservations.Count == 2
-            && lost.Reservations.All(r => r.Uid != overflow) && lost.Cards[overflow].Used == 0 && lost.Ap == 4 && !lost.Events.Any(e => e.E == "resolved" && e.Uid == overflow),
-            "independent overflow discard: no refund, no resolution, the card stays conserved and unused");
-        string twice = Played("delay-outside-board", 1);
-        Check(Delays("delay-outside-board", 2).SequenceEqual(new (string?, int?, int?, string?, bool?)[] { (twice, 3, 4, "after", false), (twice, 4, 5, "after", true) })
-            && S("delay-outside-board", 2).Reservations.Count == 0, "independent second delay beyond the two-turn board discards");
-        string pulled = Played("delay-pull-clears", 1); var delayed = S("delay-pull-clears", 2).Reservations; var cleared = S("delay-pull-clears", 3).Reservations;
-        Check(delayed.Count == 1 && delayed[0].Uid == pulled && delayed[0].Due == 4 && delayed[0].Kind == "after" && delayed[0].Delayed == true
-            && cleared.Count == 1 && cleared[0].Due == 3 && cleared[0].Kind == "next" && cleared[0].Delayed == null && !cleared[0].ToJsonGraph().ContainsKey("delayed")
-            && Of("delay-pull-clears", 3, "pull").Any(e => e.Uid == pulled && e.Due == 3), "independent pull applies its own kind rule and removes the enemy-delay marker");
-        string sealedOut = Played("delay-seal-capacity", 2);
-        Check(S("delay-seal-capacity", 3).SealedUntil == 2 && Delays("delay-seal-capacity", 3).SequenceEqual(new (string?, int?, int?, string?, bool?)[] { (sealedOut, 2, 3, "next", true) })
-            && Code("delay-seal-capacity", 4) == "SLOT_FULL", "independent same-phase seal reduces the delay destination capacity");
-        // eatName: tokens first through the replayed RNG; empty discard -> explicit null uid and no RNG; normal exhaust hooks only.
-        var nothing = Of("eat-empty-discard", 3, "eatName");
+        // delayRes with no reservation: a null event and no state change; the now-played sera_timed already resolved at its authored v20.
+        var noDelay = Of("delay-no-reservation", 3, "delayRes");
+        Check(noDelay.Count == 1 && noDelay[0].Uid == null && noDelay[0].ToJsonGraph().TryGetValue("uid", out var noUid) && noUid == null && noDelay[0].Discarded == false
+            && S("delay-no-reservation", 3).Reservations.Count == 0 && Of("delay-no-reservation", 2, "dmg").Select(e => e.N).SequenceEqual(new int?[] { 20 }),
+            "independent delayRes without a reservation emits a null-uid event and the now card resolved at v20");
+        // eatName: tokens first through the replayed RNG; empty discard (an all-보존 hand discards nothing) -> explicit null uid and no RNG.
+        var nothing = Of("eat-empty-discard", 1, "eatName");
         Check(nothing.Count == 1 && nothing[0].Uid == null && nothing[0].ToJsonGraph().TryGetValue("uid", out var none) && none == null
-            && S("eat-empty-discard", 3).Rng.SequenceEqual(S("eat-empty-discard", 2).Rng) && S("eat-empty-discard", 3).Exhausted == 0, "independent empty eatName: null uid, RNG untouched");
+            && S("eat-empty-discard", 1).Rng.SequenceEqual(S("eat-empty-discard", 0).Rng) && S("eat-empty-discard", 1).Exhausted == 0 && S("eat-empty-discard", 1).Zones.Hand.Count == 2,
+            "independent empty eatName: null uid, RNG untouched, the retained hand stays");
         var eaten = Enumerable.Range(1, 4).SelectMany(i => Of("eat-token-priority", i, "eatName").Select(e => S("eat-token-priority", i).Cards[e.Uid ?? ""])).ToList();
         Check(eaten.Count == 2 && eaten.All(c => c.Token && c.Id == "penalty_note") && S("eat-token-priority", 4).Exhausted == 2, "independent eatName takes the inserted penalty-note tokens first");
         var hooks = S("eat-exhaust-hooks", 2).Events;
@@ -432,9 +420,10 @@ static class BattleLateActionsChecks
                 && late.All(moves.Contains), "independent two full alive cycles of candidate " + id + " with every late move executed");
         }
         var all = actual.Values.SelectMany(list => list.Where(s => s.Outcome == "committed").SelectMany(s => s.State.Events)).ToList();
-        Check(Behaviors.All(b => all.Any(e => e.E == b)) && all.Any(e => e.E == "delayRes" && e.Discarded == true) && all.Any(e => e.E == "delayRes" && e.Discarded == false && e.Uid != null)
+        // RULES_NOW_PLAY: with no reservation a delayRes can neither move nor discard one, so only its null-uid outcome is reachable (and no other).
+        Check(Behaviors.All(b => all.Any(e => e.E == b)) && all.Where(e => e.E == "delayRes").All(e => e.Uid == null && e.Discarded == false)
             && all.Any(e => e.E == "delayRes" && e.Uid == null) && all.Any(e => e.E == "sealSlot" && e.Fallback == true) && all.Any(e => e.E == "sealSlot" && e.Fallback == false)
-            && all.Any(e => e.E == "eatName" && e.Uid == null) && all.Any(e => e.E == "eatName" && e.Uid != null), "all six behaviors and both outcomes of every branching behavior actually ran in C#");
+            && all.Any(e => e.E == "eatName" && e.Uid == null) && all.Any(e => e.E == "eatName" && e.Uid != null), "all six behaviors and both outcomes of every reachable branching behavior actually ran in C#");
     }
 
     // ───────── C#-only local probes (typed limits outside the shared oracle) ─────────

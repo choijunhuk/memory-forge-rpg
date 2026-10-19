@@ -142,10 +142,10 @@ static class BattleDataLoader
     }
     static BattlePartFx PartFx(JsonElement json)
     {
-        Fields(json, "addBps", "allBps", "resBps", "immBps", "afterBps", "cost", "brk", "pierce", "extraBlock", "drawOnce", "gauge", "markOnHit", "burnOnHit", "weakOnHit", "echoCopy", "exhaust", "noReserve");
+        Fields(json, "addBps", "allBps", "resBps", "immBps", "afterBps", "cost", "brk", "pierce", "extraBlock", "drawOnce", "gauge", "markOnHit", "burnOnHit", "weakOnHit", "echoCopy", "exhaust", "noReserve", "retain");
         return new BattlePartFx { AddBps = NI(json, "addBps"), AllBps = NI(json, "allBps"), ResBps = NI(json, "resBps"), ImmBps = NI(json, "immBps"), AfterBps = NI(json, "afterBps"),
             Cost = NI(json, "cost"), Brk = NI(json, "brk"), Pierce = NI(json, "pierce"), ExtraBlock = NI(json, "extraBlock"), DrawOnce = NI(json, "drawOnce"), Gauge = NI(json, "gauge"),
-            MarkOnHit = NI(json, "markOnHit"), BurnOnHit = NI(json, "burnOnHit"), WeakOnHit = NI(json, "weakOnHit"), EchoCopy = NI(json, "echoCopy"), Exhaust = NB(json, "exhaust"), NoReserve = NB(json, "noReserve") };
+            MarkOnHit = NI(json, "markOnHit"), BurnOnHit = NI(json, "burnOnHit"), WeakOnHit = NI(json, "weakOnHit"), EchoCopy = NI(json, "echoCopy"), Exhaust = NB(json, "exhaust"), NoReserve = NB(json, "noReserve"), Retain = NB(json, "retain") };
     }
 
     static ResonanceFx Fx(JsonElement json)

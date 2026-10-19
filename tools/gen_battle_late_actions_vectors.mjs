@@ -169,24 +169,25 @@ export function generateCases() {
       end();
       assert.deepEqual([battle.s.turn, battle.s.ap, battle.s.apDrainNext], [4, 4, 0]);
     });
-  // silence: +1 on next/after only, non-stacking, freeNext wins, expiry after the silenced turn, then reapplication.
+  // silence: +1 on next/after only, non-stacking, expiry after the silenced turn, then reapplication. RULES_NOW_PLAY: every card is played now,
+  // so the surcharge never applies; freeNext still zeroes now costs.
   edge('silence-free-next', 'candidate', smallSetup([{ charId: 'rien', gauge: 100 }, { charId: 'harin' }], shields(3), ['e_choir', 'e_choir']),
     ({ battle, command, play, end, cost }) => {
       command('begin');
       end();
       assert.equal(battle.s.silenceUntil, 2);
-      play('harin_shield', 'next'); assert.equal(cost(), 2);
+      play('harin_shield'); assert.equal(cost(), 1);
       command('ult', { actor: 'rien', target: null, picks: [] }); assert.equal(battle.s.freeNext, 2);
-      play('harin_shield', 'next'); assert.equal(cost(), 0);
-      play('harin_shield', 'after'); assert.equal(cost(), 0);
+      play('harin_shield'); assert.equal(cost(), 0);
+      play('harin_shield'); assert.equal(cost(), 0);
       end();
       assert.equal(battle.s.silenceUntil, 0);
-      play('harin_shield', 'next'); assert.equal(cost(), 1);
+      play('harin_shield'); assert.equal(cost(), 1);
       end();
       assert.equal(battle.s.silenceUntil, 4);
-      play('harin_shield', 'next'); assert.equal(cost(), 2);
+      play('harin_shield'); assert.equal(cost(), 1);
     });
-  // silence: a free instance stays free; the surcharge alone can make a reservation AP_LOW while the same card is playable now.
+  // silence: a free instance stays free and silenced now plays keep their printed cost.
   edge('silence-free-instance', 'candidate', smallSetup([{ charId: 'yuri' }, { charId: 'harin' }], ['yuri_metamorph', 'yuri_cocoon', 'harin_shield'], ['e_choir']),
     ({ battle, command, play, end, cost }) => {
       command('begin');
@@ -195,50 +196,37 @@ export function generateCases() {
       assert.ok(copy && battle.s.cards[copy].token && battle.s.cards[copy].echoCopy, 'copyPick must create a free token copy');
       end();
       assert.equal(battle.s.silenceUntil, 2);
-      command('play', { uid: copy, mode: 'next', target: null, picks: [] }); assert.equal(cost(), 0);
-      play('yuri_cocoon', 'next'); assert.equal(cost(), 2);
+      command('play', { uid: copy, mode: 'now', target: null, picks: [] }); assert.equal(cost(), 0);
+      play('yuri_cocoon'); assert.equal(cost(), 1);
       play('yuri_metamorph'); assert.equal(cost(), 1);
-      play('harin_shield', 'after', 'AP_LOW');
       play('harin_shield'); assert.equal(cost(), 1);
       end();
       assert.equal(battle.s.silenceUntil, 0);
-      play('harin_shield', 'next'); assert.equal(cost(), 1);
     });
-  // sealSlot: the following player turn's next column; reservations due before it never block a new seal.
-  edge('seal-protected-turn', 'candidate', smallSetup([{ charId: 'harin' }, { charId: 'sera' }], shields(5), ['e_sealgolem']),
-    ({ battle, command, play, end, events }) => {
+  // sealSlot with nothing to seal (RULES_NOW_PLAY: no reservation exists): it still marks the following player turn and gains no block;
+  // now plays keep their cost while sealed.
+  edge('seal-no-reservation', 'candidate', smallSetup([{ charId: 'harin' }, { charId: 'sera' }], shields(5), ['e_sealgolem']),
+    ({ battle, command, play, end, events, cost }) => {
       command('begin');
-      play('harin_shield', 'next'); play('harin_shield', 'next');
+      play('harin_shield'); play('harin_shield');
       end();
-      assert.deepEqual([battle.s.sealedUntil, battle.slotCapacity('next'), events('sealSlot')[0].fallback], [2, 1, false]);
-      play('harin_shield', 'next'); play('harin_shield', 'next', 'SLOT_FULL'); play('harin_shield', 'after');
+      assert.deepEqual([battle.s.sealedUntil, battle.s.res.length, events('sealSlot')[0].fallback, battle.alive()[0].block], [2, 0, false, 0]);
+      play('harin_shield'); assert.equal(cost(), 1);
       end();
-      assert.equal(battle.slotCapacity('next'), 2);
-      play('harin_shield', 'next');
+      play('harin_shield');
       end();
       assert.deepEqual([battle.s.sealedUntil, events('sealSlot')[0].fallback, battle.alive()[0].block], [4, false, 0]);
     });
-  // sealSlot: a full future base column gives enemy block 10 instead.
-  edge('seal-fallback-full', 'candidate', smallSetup([{ charId: 'harin' }, { charId: 'sera' }], shields(5), ['e_timeshard'], { relics: ['cracked_hourglass'] }),
-    ({ battle, command, play, end, events }) => {
-      command('begin');
-      play('harin_shield', 'after'); play('harin_shield', 'after');
-      end();
-      assert.deepEqual(events('sealSlot'), [{ e: 'sealSlot', uid: battle.alive()[0].uid, until: 0, fallback: true }]);
-      assert.deepEqual([battle.alive()[0].block, battle.s.sealedUntil], [10, 0]);
-      play('harin_shield', 'next', 'SLOT_FULL'); play('harin_shield');
-      end();
-    });
-  // sealSlot: an existing seal of that turn (player collateral) also falls back; collateral then has no empty slot.
-  edge('seal-already-sealed', 'candidate', smallSetup([{ charId: 'ravien' }, { charId: 'harin' }], ['ravien_collateral', ...shields(2)], ['e_sealgolem']),
+  // RULES_NOW_PLAY: collateral no longer seals (it is block + debt 1), so a later enemy seal is an ordinary one, not a fallback.
+  edge('seal-after-collateral-debt', 'candidate', smallSetup([{ charId: 'ravien' }, { charId: 'harin' }], ['ravien_collateral', ...shields(2)], ['e_sealgolem']),
     ({ battle, command, play, end, events }) => {
       command('begin');
       play('ravien_collateral');
-      assert.equal(battle.s.sealedUntil, 2);
+      assert.deepEqual([battle.s.sealedUntil, battle.debtTotal()], [0, 1]);
       end();
-      assert.deepEqual(events('sealSlot'), [{ e: 'sealSlot', uid: battle.alive()[0].uid, until: 2, fallback: true }]);
-      assert.equal(battle.alive()[0].block, 10);
-      play('harin_shield', 'next'); play('harin_shield', 'next', 'SLOT_FULL'); play('ravien_collateral', 'now', 'NO_EMPTY_SLOT');
+      assert.deepEqual(events('sealSlot'), [{ e: 'sealSlot', uid: battle.alive()[0].uid, until: 2, fallback: false }]);
+      assert.deepEqual([battle.alive()[0].block, battle.s.ap, battle.debtTotal()], [0, 3, 0]);
+      play('harin_shield');
       end();
     });
   edge('seal-two-sealers', 'candidate', baseSetup(['e_sealgolem', 'e_timeshard']), ({ battle, command, end, events }) => {
@@ -249,64 +237,17 @@ export function generateCases() {
     for (let i = 0; i < 3; i++) end();
     assert.equal(battle.s.phase, 'PLAYER');
   });
-  // delayRes: the newest reservation keeps its original kind (rv 22, not ra 30) when it resolves a turn later.
-  edge('delay-original-kind', 'candidate', smallSetup([{ charId: 'sera' }, { charId: 'harin' }], ['sera_timed', ...shields(4)], ['e_prompter']),
+  // delayRes with no reservation (RULES_NOW_PLAY): a null event, no state change; the now-played card resolved once at its own value.
+  edge('delay-no-reservation', 'candidate', smallSetup([{ charId: 'sera' }, { charId: 'harin' }], ['sera_timed', ...shields(4)], ['e_prompter']),
     ({ battle, command, play, end, events }) => {
       command('begin');
-      play('harin_shield', 'next');
-      const timed = play('sera_timed', 'next');
+      play('harin_shield');
+      const timed = play('sera_timed');
       end();
-      assert.deepEqual(events('delayRes'), [{ e: 'delayRes', uid: timed, from: 2, to: 3, kind: 'next', discarded: false }]);
-      assert.deepEqual(clone(battle.s.res.find(r => r.uid === timed)), { uid: timed, due: 3, order: 2, target: battle.alive()[0].uid, kind: 'next', delayed: true });
+      assert.deepEqual(events('delayRes'), [{ e: 'delayRes', uid: null, discarded: false }]);
+      assert.deepEqual([battle.s.res.length, battle.s.cards[timed].used], [0, 1]);
       end();
-      assert.deepEqual(events('dmg').filter(e => e.card === 'sera_timed').map(e => e.n), [22]);
-      end();
-    });
-  // delayRes: no room at the new turn discards the reservation without refund or resolution.
-  edge('delay-overflow-discard', 'candidate', smallSetup([{ charId: 'harin' }, { charId: 'sera' }], shields(5), ['e_prompter'], { relics: ['cracked_hourglass'] }),
-    ({ battle, command, play, end, events }) => {
-      command('begin');
-      play('harin_shield', 'after'); play('harin_shield', 'after');
-      const newest = play('harin_shield', 'next');
-      assert.equal(battle.s.ap, 0);
-      end();
-      assert.deepEqual(events('delayRes'), [{ e: 'delayRes', uid: newest, from: 2, to: 3, kind: 'next', discarded: true }]);
-      assert.deepEqual([battle.s.res.length, battle.s.cards[newest].used, battle.s.ap], [2, 0, 4]);
-      assert.ok(!events('resolved').some(e => e.uid === newest));
-      end();
-    });
-  // delayRes: a second delay beyond the two-turn board discards the already delayed after reservation.
-  edge('delay-outside-board', 'candidate', smallSetup([{ charId: 'harin' }, { charId: 'sera' }], shields(5), ['e_prompter', 'e_prompter']),
-    ({ battle, command, play, end, events }) => {
-      command('begin');
-      const uid = play('harin_shield', 'after');
-      end();
-      assert.deepEqual(events('delayRes'), [{ e: 'delayRes', uid, from: 3, to: 4, kind: 'after', discarded: false },
-        { e: 'delayRes', uid, from: 4, to: 5, kind: 'after', discarded: true }]);
-      assert.equal(battle.s.res.length, 0);
-      end();
-    });
-  // delayRes then player pull: the pull rule changes the kind and clears the enemy-delay marker.
-  edge('delay-pull-clears', 'candidate', smallSetup([{ charId: 'sera' }, { charId: 'harin' }], ['sera_pull', ...shields(4)], ['e_prompter']),
-    ({ battle, command, play, end }) => {
-      command('begin');
-      const uid = play('harin_shield', 'after');
-      end();
-      assert.deepEqual(clone(battle.s.res), [{ uid, due: 4, order: 1, target: null, kind: 'after', delayed: true }]);
-      play('sera_pull', 'now', null, { picks: [uid] });
-      assert.deepEqual(clone(battle.s.res), [{ uid, due: 3, order: 1, target: null, kind: 'next' }]);
-      end();
-    });
-  // delayRes after a same-phase seal: the sealed column has one fewer slot, so the delayed reservation is discarded.
-  edge('delay-seal-capacity', 'candidate', smallSetup([{ charId: 'harin' }, { charId: 'sera' }], shields(5), ['e_sealgolem', 'e_prompter']),
-    ({ battle, command, play, end, events }) => {
-      command('begin');
-      play('harin_shield', 'after');
-      const newest = play('harin_shield', 'next');
-      end();
-      assert.equal(battle.s.sealedUntil, 2);
-      assert.deepEqual(events('delayRes'), [{ e: 'delayRes', uid: newest, from: 2, to: 3, kind: 'next', discarded: true }]);
-      play('harin_shield', 'next', 'SLOT_FULL');
+      assert.deepEqual(events('dmg').filter(e => e.card === 'sera_timed').map(e => e.n), []);
       end();
     });
   // eatName: discard tokens first (the overdue penalty note), through the replayed RNG.
@@ -318,15 +259,14 @@ export function generateCases() {
     }
     assert.equal(battle.s.exhausted, 2);
   });
-  // eatName: an empty discard reports a null uid and draws no RNG.
-  edge('eat-empty-discard', 'candidate', smallSetup([{ charId: 'harin' }, { charId: 'sera' }], shields(2), ['e_echo'], { relics: ['cracked_hourglass'] }),
-    ({ battle, command, play, end, events }) => {
+  // eatName: an empty discard reports a null uid and draws no RNG (RULES_NOW_PLAY: an all-보존 hand stays in hand, so nothing is discarded).
+  edge('eat-empty-discard', 'candidate', smallSetup([{ charId: 'harin' }, { charId: 'sera' }], ['sera_timed', 'sera_last'], ['e_echo']),
+    ({ battle, command, end, events }) => {
       command('begin');
-      play('harin_shield', 'after'); play('harin_shield', 'after');
       const rng = clone(battle.s.rng);
       end();
       assert.deepEqual(events('eatName'), [{ e: 'eatName', uid: null }]);
-      assert.deepEqual([battle.s.rng, battle.s.exhausted], [rng, 0]);
+      assert.deepEqual([battle.s.rng, battle.s.exhausted, battle.s.zones.discard.length, battle.s.zones.hand.length], [rng, 0, 0, 2]);
       end();
     });
   // eatName: the normal exhaust hooks run (oblivion block, void shard RNG damage); oblivion ink gives AP only in a player phase.

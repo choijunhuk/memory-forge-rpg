@@ -79,7 +79,7 @@ namespace MemoryForge.Core
         BigInteger RiftDamageBonus(EffectContext context)
         {
             BigInteger add = 0;
-            var reserve = RiftRule("rift_reserve"); if (reserve != null) add += context.Reserved != null ? reserve["reservedBps"] : reserve["immediateBps"];
+            var reserve = RiftRule("rift_reserve"); if (reserve != null) add += context.Held ? reserve["reservedBps"] : reserve["immediateBps"]; // RULES_NOW_PLAY: held cards take the reserved bonus
             var ink = RiftRule("rift_ink"); if (ink != null) add += ink["perExhaustBps"] * CounterValue("exhausted", context);
             return add + RiftDebtRawBps();
         }

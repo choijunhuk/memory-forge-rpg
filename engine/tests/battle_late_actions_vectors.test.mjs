@@ -68,8 +68,9 @@ test('the overlay is the unchanged candidate proposal, test-local enemies stay s
 });
 
 test('all 23 candidate patterns run two full cycles alive and all 23 candidate encounter groups run', () => {
-  assert.deepEqual(fixture.counts, { cases: 81, commands: 473, committed: 445, replayed: 2, rejected: 26 });
-  assert.deepEqual(fixture.coverage, { candidates: 23, encounters: 23, edges: 34, protocols: 1 });
+  // RULES_NOW_PLAY (2026-10-19): five reservation-only seal/delay edges were dropped and the rest replay as now plays.
+  assert.deepEqual(fixture.counts, { cases: 76, commands: 437, committed: 415, replayed: 2, rejected: 20 });
+  assert.deepEqual(fixture.coverage, { candidates: 23, encounters: 23, edges: 29, protocols: 1 });
   for (const enemy of candidates.enemies) {
     const row = byId(`duel-${enemy.id}`), last = row.steps.at(-1).state;
     assert.equal(row.dataset, 'candidate');
@@ -127,7 +128,7 @@ test('every checkpoint is reproduced by fresh creation and the recorded real com
       compare(battle, step, `${row.id}:${index}`);
     }
   }
-  assert.deepEqual({ commands, committed, replayed, rejected }, { commands: 473, committed: 445, replayed: 2, rejected: 26 });
+  assert.deepEqual({ commands, committed, replayed, rejected }, { commands: 437, committed: 415, replayed: 2, rejected: 20 });
 });
 
 test('the six behaviors keep the exact original rules at their boundaries', () => {
@@ -138,40 +139,32 @@ test('the six behaviors keep the exact original rules at their boundaries', () =
   assert.equal(drain.steps[4].errorCode, 'AP_LOW');
   assert.deepEqual([of(drain, 2, 'apDrain').map(e => e.n), of(drain, 2, 'repay').map(e => e.n), of(drain, 3, 'apDrain').map(e => e.n)], [[1], [2], [6]]);
   assert.deepEqual([after(drain, 2).apDrainNext, after(drain, 2).debts, after(drain, 5).apDrainNext], [0, [], 0]);
-  // silence: +1 non-stacking for next/after, freeNext and free instances stay 0, expiry, reapplication.
+  // silence: non-stacking, expiry, reapplication; RULES_NOW_PLAY makes every play now, so its next/after surcharge never applies,
+  // while freeNext and free instances stay 0.
   const free = edge('silence-free-next');
-  assert.deepEqual([2, 4, 5, 7, 9].map(i => cost(free, i)), [2, 0, 0, 1, 2]);
+  assert.deepEqual([2, 4, 5, 7, 9].map(i => cost(free, i)), [1, 0, 0, 1, 1]);
   assert.deepEqual([1, 6, 8].map(i => after(free, i).silenceUntil), [2, 0, 4]);
   assert.deepEqual(of(free, 1, 'silence').map(e => e.until), [2, 2]);
   const copy = edge('silence-free-instance');
-  assert.deepEqual([1, 3, 4, 5, 7, 9].map(i => cost(copy, i)), [1, 0, 2, 1, 1, 1]);
-  assert.equal(copy.steps[6].errorCode, 'AP_LOW');
+  assert.deepEqual([1, 3, 4, 5, 6].map(i => cost(copy, i)), [1, 0, 1, 1, 1]);
+  assert.deepEqual([after(copy, 2).silenceUntil, after(copy, 7).silenceUntil], [2, 0]);
   const copied = of(copy, 3, 'play')[0].uid;
-  assert.ok(after(copy, 3).cards[copied].free && after(copy, 3).cards[copied].echoCopy && after(copy, 8).zones.exhaust.includes(copied));
-  // sealSlot: the following player turn's next column; an existing seal or a full column gives block 10.
+  assert.ok(after(copy, 3).cards[copied].free && after(copy, 3).cards[copied].echoCopy && after(copy, 7).zones.exhaust.includes(copied));
+  // sealSlot: the following player turn's next column; an existing seal gives block 10. With no reservation it seals nothing a now play uses.
   const seals = (row, i) => of(row, i, 'sealSlot').map(({ until, fallback }) => [until, fallback]);
-  const protectedTurn = edge('seal-protected-turn');
-  assert.deepEqual([seals(protectedTurn, 3), seals(protectedTurn, 9), protectedTurn.steps[5].errorCode], [[[2, false]], [[4, false]], 'SLOT_FULL']);
-  assert.deepEqual([seals(edge('seal-fallback-full'), 3), after(edge('seal-fallback-full'), 3).enemies[0].block], [[[0, true]], 10]);
-  assert.deepEqual(seals(edge('seal-already-sealed'), 2), [[2, true]]);
-  assert.deepEqual(edge('seal-already-sealed').steps.map(s => s.errorCode).filter(Boolean), ['SLOT_FULL', 'NO_EMPTY_SLOT']);
+  const sealed = edge('seal-no-reservation');
+  assert.deepEqual([seals(sealed, 3), seals(sealed, 7), cost(sealed, 4), after(sealed, 3).res, after(sealed, 3).enemies[0].block], [[[2, false]], [[4, false]], 1, [], 0]);
+  const collateral = edge('seal-after-collateral-debt');
+  assert.deepEqual([after(collateral, 1).sealedUntil, after(collateral, 1).debts.map(d => [d.n, d.due]), seals(collateral, 2), after(collateral, 2).ap, after(collateral, 2).enemies[0].block],
+    [0, [[1, 2]], [[2, false]], 3, 0]);
   assert.deepEqual([seals(edge('seal-two-sealers'), 1), after(edge('seal-two-sealers'), 1).enemies.map(e => e.block)], [[[2, false], [2, true]], [0, 10]]);
-  // delayRes: newest only, original kind kept, overflow discarded without refund or resolution, pull clears the marker.
-  const delays = (row, i) => of(row, i, 'delayRes').map(({ from, to, kind, discarded }) => [from, to, kind, discarded]);
-  const kind = edge('delay-original-kind');
-  assert.deepEqual(delays(kind, 3), [[2, 3, 'next', false]]);
-  assert.deepEqual(of(kind, 4, 'dmg').filter(e => e.card === 'sera_timed').map(e => e.n), [22]);
-  const overflow = edge('delay-overflow-discard'), lost = of(overflow, 3, 'play')[0].uid;
-  assert.deepEqual([delays(overflow, 4), after(overflow, 4).res.length, after(overflow, 4).cards[lost].used, after(overflow, 4).ap], [[[2, 3, 'next', true]], 2, 0, 4]);
-  assert.ok(!of(overflow, 4, 'resolved').some(e => e.uid === lost));
-  assert.deepEqual(delays(edge('delay-outside-board'), 2), [[3, 4, 'after', false], [4, 5, 'after', true]]);
-  const pull = edge('delay-pull-clears');
-  assert.deepEqual(after(pull, 2).res.map(r => [r.due, r.kind, r.delayed]), [[4, 'after', true]]);
-  assert.deepEqual(after(pull, 3).res.map(r => [r.due, r.kind, Object.hasOwn(r, 'delayed')]), [[3, 'next', false]]);
-  assert.deepEqual([after(edge('delay-seal-capacity'), 3).sealedUntil, delays(edge('delay-seal-capacity'), 3)], [2, [[2, 3, 'next', true]]]);
-  // eatName: tokens first, explicit null uid and no RNG on an empty discard, normal exhaust hooks only.
+  // delayRes with no reservation: a null event and no state change; the now-played card already resolved at its authored value.
+  const delay = edge('delay-no-reservation');
+  assert.deepEqual([of(delay, 3, 'delayRes'), after(delay, 3).res], [[{ e: 'delayRes', uid: null, discarded: false }], []]);
+  assert.deepEqual(of(delay, 2, 'dmg').map(e => e.n), [data.cards.find(c => c.id === 'sera_timed').eff[0].v]);
+  // eatName: tokens first, explicit null uid and no RNG on an empty discard (an all-보존 hand discards nothing), normal exhaust hooks only.
   const empty = edge('eat-empty-discard');
-  assert.deepEqual([of(empty, 3, 'eatName'), after(empty, 3).rng], [[{ e: 'eatName', uid: null }], after(empty, 2).rng]);
+  assert.deepEqual([of(empty, 1, 'eatName'), after(empty, 1).rng, after(empty, 1).zones.hand.length], [[{ e: 'eatName', uid: null }], after(empty, 0).rng, 2]);
   const tokens = edge('eat-token-priority');
   const eaten = tokens.steps.flatMap(s => s.response.ev.filter(e => e.e === 'eatName').map(e => s.state.cards[e.uid]));
   assert.ok(eaten.length === 2 && eaten.every(c => c.token && c.id === 'penalty_note'));
@@ -228,7 +221,7 @@ test('exports pass only the existing strict single-member decoder, are byte dete
   t.after(() => rmSync(dir, { recursive: true, force: true }));
   const path = join(dir, 'late.json.gz');
   const summary = exportVectors(path), bytes = readFileSync(path);
-  assert.deepEqual([summary.cases, summary.commands, summary.sha256], [81, 473, sha256(bytes)]);
+  assert.deepEqual([summary.cases, summary.commands, summary.sha256], [76, 437, sha256(bytes)]);
   assert.deepEqual(decodeVectors(bytes), fixture);
   const empty = gzipSync(Buffer.alloc(0), { level: 9 }), crc = Buffer.from(bytes);
   crc[crc.length - 8] ^= 1;

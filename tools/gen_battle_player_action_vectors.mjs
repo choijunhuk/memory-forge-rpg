@@ -148,8 +148,7 @@ function cardCase(card, mode, options = {}) {
   const required = [];
   if (needsFixed) required.push('kaya_tracking');
   if (card.id === 'ravien_defer') required.push('ravien_advance');
-  if (card.id === 'sera_pull') required.push('sera_round');
-  if (['sion_forget', 'nia_rebuild', 'com_recall'].includes(card.id)) required.push('sera_reload');
+  if (['sion_forget', 'nia_rebuild', 'com_recall', 'sera_pull'].includes(card.id)) required.push('sera_reload');
   if (['yuri_dew', 'yuri_metamorph', 'wc_yuri', 'yuri_tend', 'yuri_worldtree'].includes(card.id)) required.push('yuri_cocoon', 'yuri_sprout');
   const party = partyFor(card, actorExtra), wielder = card.owner === 'weapon' ? party[0].charId : undefined;
   const main = spec(card.id, { plus, ...(wielder ? { wielder } : {}), ...cardExtra });
@@ -158,7 +157,6 @@ function cardCase(card, mode, options = {}) {
   return record(id, initial, { group, main: { cardId: card.id, mode, plus }, ...metadata, ...(actorExtra.res === undefined ? {} : { resonance: actorExtra.res }) }, ({ battle, play, flush, row }) => {
     if (needsFixed) play('kaya_tracking');
     if (card.id === 'ravien_defer') play('ravien_advance');
-    if (card.id === 'sera_pull') play('sera_round', 'after');
     if (required.includes('sera_reload')) {
       const spare = battle.s.zones.hand.find(uid => ![card.id, ...required].includes(battle.s.cards[uid].id));
       assert.ok(spare, `${id}: no legal spare for discard preparation`);
@@ -212,8 +210,8 @@ function weaponCase(weapon, refine) {
   const needed = [weapon.card], deck = [spec(weapon.card, { wielder: owner.id })];
   const add = (id, extra = {}) => { deck.push(spec(id, extra)); needed.push(id); };
   const pid = weapon.passive.id;
-  const reserveWeapon = pid === 'w_reservedDmg' && baseModes(ix.cards[weapon.card]).includes('next');
-  if (pid === 'w_reservedDmg' && !reserveWeapon) add('sera_round');
+  // RULES_NOW_PLAY: w_reservedDmg keys on a held card, so the wielder keeps a 보존 card over one real turn end.
+  if (pid === 'w_reservedDmg') add('sera_timed');
   if (pid === 'w_growthHeal') { add('lumi_dash'); add('yuri_cocoon'); add('yuri_sprout'); }
   if (pid === 'w_debtDmg') { add('ravien_advance'); add('ravien_strike'); }
   if (pid === 'w_markedDmg') { add('kaya_clue'); add('kaya_verdict'); }
@@ -234,19 +232,19 @@ function weaponCase(weapon, refine) {
       }, {}, { group: 'weapon', weaponId: weapon.id, refine, inputDomain: 'Normal soloHP81; low HP is produced by real overloads and enemy attack' });
   }
   const enemies = ['w_brokenDmg', 'w_breakDmg'].includes(pid) ? ['e_moth'] : ['b_archivist'];
-  return scenario(`weapon-${weapon.id}-r${refine}`, party, fillDeck(deck), needed, ({ play, flush }) => {
+  return scenario(`weapon-${weapon.id}-r${refine}`, party, fillDeck(deck), needed, ({ play, command, flush }) => {
     if (pid === 'w_growthHeal') play('lumi_dash');
     if (pid === 'w_debtDmg') play('ravien_advance');
     if (pid === 'w_markedDmg') play('kaya_clue');
     if (['w_brokenDmg', 'w_breakDmg'].includes(pid)) play('com_breaker');
-    play(weapon.card, reserveWeapon ? 'next' : 'now');
-    if (pid === 'w_reservedDmg' && !reserveWeapon) play('sera_round', 'next');
-    if (pid === 'w_growthHeal') play('yuri_cocoon', 'next');
+    play(weapon.card);
+    if (pid === 'w_reservedDmg') { command('end'); play('sera_timed'); }
+    if (pid === 'w_growthHeal') play('yuri_cocoon');
     if (pid === 'w_debtDmg') play('ravien_strike');
     if (pid === 'w_markedDmg') play('kaya_verdict');
     if (pid === 'w_healUp') play('aila_overflow');
-    if (pid === 'w_blockUp') play('nia_barrier', 'next');
-    if (pid === 'w_none') play({ ranged: 'sera_last', melee: 'sion_lastpage', device: 'nia_masterwork', ritual: 'yuri_canopy' }[weapon.type], 'after');
+    if (pid === 'w_blockUp') play('nia_barrier');
+    if (pid === 'w_none') play({ ranged: 'sera_last', melee: 'sion_lastpage', device: 'nia_masterwork', ritual: 'yuri_canopy' }[weapon.type]);
     flush();
   }, { enemies }, { group: 'weapon', weaponId: weapon.id, refine });
 }
@@ -277,41 +275,52 @@ function edgeBuilders() {
     w('interaction', 'power-additive', [fact('after', ['powers'], [{ id: 'bulwark', keep: 20 }])]);
     command('end'); w('interaction', 'stacked-keep20', [fact('after', ['block'], 0)]);
   }, { enemies: ['e_seed'] });
-  add('edge-pull-after-next', [{ charId: 'sera' }], [spec('sera_timed', { mods: { c: 'c_far' } }), 'sera_pull'], ['sera_timed', 'sera_pull'], ({ battle, play, command, w, event }) => {
-    const uid = play('sera_timed', 'after'); play('sera_pull');
-    w('op', 'pull', [fact('after', ['res'], [{ uid, due: 2, order: 1, target: battle.alive()[0].uid, kind: 'next' }])]);
-    command('end'); event('interaction', 'pull-next-value22', { e: 'dmg', src: 'card', n: 22, blocked: 10 });
-    w('interaction', 'pull-loses-after-bonus', [fact('after', ['enemies', 0, 'hp'], 34), fact('after', ['actors', 0, 'gauge'], 20)]);
-  }, { enemies: ['e_shelf'] });
-  add('edge-pull-immediate-original-kind', normal('sera'), ['sera_timed', 'sera_pull'], ['sera_timed', 'sera_pull'], ({ play, w, event }) => {
-    play('sera_timed', 'next'); play('sera_pull');
-    event('interaction', 'immediate-pull-next22', { e: 'dmg', src: 'card', n: 22 });
-    w('interaction', 'pull-detaches-before-resolve', [fact('after', ['res', 'length'], 0), fact('after', ['turn'], 1)]);
-  });
+  // RULES_NOW_PLAY: 보존 cards (keyword or c_delay) stay in hand as held; everything else is discarded at the real turn end.
+  add('edge-retain-held-end-turn', normal('sera'), ['sera_timed', 'com_capacitor', spec('com_slash', { mods: { c: 'c_delay' } }), 'sera_round', 'com_guard', 'com_patch', 'com_sort', 'com_tactics'],
+    ['sera_timed', 'com_capacitor', 'com_slash', 'sera_round', 'com_guard'], ({ battle, find, play, command, w }) => {
+      const timed = find('sera_timed'), cap = find('com_capacitor'), slash = find('com_slash'), guard = find('com_guard');
+      const round = play('sera_round'); const kept = battle.s.zones.hand.filter(u => [timed, cap, slash].includes(u)); command('end');
+      w('interaction', 'retain-keyword-and-part-held', [fact('before', ['cards', timed, 'held'], false), fact('after', ['cards', timed, 'held'], true), fact('after', ['cards', cap, 'held'], true),
+        fact('after', ['cards', slash, 'held'], true), fact('after', ['cards', guard, 'held'], false), fact('after', ['cards', round, 'held'], false), fact('after', ['zones', 'hand', 0], kept[0]),
+        fact('after', ['zones', 'hand', 1], kept[1]), fact('after', ['zones', 'hand', 2], kept[2]), fact('after', ['zones', 'hand', 'length'], 8), fact('after', ['turn'], 2)]);
+      play('com_capacitor');
+      w('interaction', 'play-clears-held', [fact('after', ['cards', cap, 'held'], false), fact('after', ['ap'], 5), fact('after', ['cards', timed, 'held'], true)]);
+    });
+  add('edge-held-reset-recall-draw', normal('sera'), ['sera_timed', 'sera_reload', 'sera_reload', 'com_recall', 'com_guard'], ['sera_timed', 'sera_reload', 'sera_reload', 'com_recall', 'com_guard'], ({ battle, find, play, command, w }) => {
+    const timed = find('sera_timed'); play('com_guard'); command('end');
+    w('interaction', 'held-after-turn-end', [fact('after', ['cards', timed, 'held'], true)]);
+    play('sera_reload', 'now', { picks: [timed] }); play('com_recall', 'now', { picks: [timed] });
+    w('interaction', 'recall-returns-unheld', [fact('before', ['zones', 'discard', 0], timed), fact('after', ['cards', timed, 'held'], false), fact('after', ['zones', 'hand', battle.s.zones.hand.length - 1], timed)]);
+    command('end');
+    w('interaction', 'recall-unheld-is-held-again-at-turn-end', [fact('after', ['cards', timed, 'held'], true), fact('after', ['zones', 'hand', 0], timed)]);
+    play('sera_reload', 'now', { picks: [timed] }); assert.ok(battle.s.zones.discard.includes(timed)); command('end');
+    w('interaction', 'draw-returns-unheld', [fact('after', ['cards', timed, 'held'], false), fact('after', ['zones', 'hand', 'length'], 5), fact('after', ['zones', 'draw'], [])]);
+  }, { enemies: ['e_seed'] });
   add('edge-defer-debt', [{ charId: 'ravien' }], ['ravien_advance', 'ravien_defer'], ['ravien_advance', 'ravien_defer'], ({ play, command, w }) => {
     play('ravien_advance'); w('op', 'loan', [fact('before', ['ap'], 4), fact('after', ['ap'], 6), fact('after', ['debts'], [{ id: 'd1', n: 2, due: 2, deferred: false }])]);
     play('ravien_defer'); w('op', 'defer', [fact('after', ['debts'], [{ id: 'd1', n: 3, due: 3, deferred: true }])]);
     command('end'); w('interaction', 'defer-no-early-repay', [fact('after', ['ap'], 4)]);
     command('end'); w('interaction', 'defer-repay3', [fact('after', ['ap'], 1), fact('after', ['debts'], [])]);
   }, { enemies: ['e_seed'] });
-  add('edge-debt-reservation-shared-sequence', normal('ravien'), ['ravien_advance', 'ravien_defer', 'sera_round'], ['ravien_advance', 'ravien_defer', 'sera_round'], ({ play, w }) => {
-    play('ravien_advance'); const uid = play('sera_round', 'next'); play('ravien_defer');
-    w('interaction', 'shared-resSeq', [fact('after', ['resSeq'], 2), fact('after', ['res', 0, 'uid'], uid), fact('after', ['res', 0, 'order'], 2), fact('after', ['debts', 0, 'id'], 'd1')]);
-  });
+  add('edge-collateral-debt-shared-sequence', normal('ravien'), ['ravien_advance', 'ravien_collateral'], ['ravien_advance', 'ravien_collateral'], ({ play, command, w }) => {
+    play('ravien_advance'); play('ravien_collateral');
+    w('interaction', 'collateral-debt1-shares-loan-sequence', [fact('after', ['resSeq'], 2), fact('after', ['debts'], [{ id: 'd1', n: 2, due: 2, deferred: false }, { id: 'd2', n: 1, due: 2, deferred: false }]), fact('after', ['block'], 16), fact('after', ['ap'], 6)]);
+    command('end'); w('interaction', 'collateral-debt-repaid-next-turn', [fact('after', ['ap'], 1), fact('after', ['debts'], []), fact('after', ['turn'], 2)]);
+  }, { enemies: ['e_seed'] });
   add('edge-echo-evolved-lineage', [{ charId: 'yuri' }], [spec('yuri_cocoon_guard', { mods: { c: 'c_echo' } })], ['yuri_cocoon_guard'], ({ battle, play, command, w }) => {
-    const uid = play('yuri_cocoon_guard', 'next'); command('end');
-    w('interaction', 'evolved-reserved-block19', [fact('after', ['block'], 19), fact('after', ['pendingCopies'], [{ id: 'yuri_cocoon_guard', wielder: null, from: 'yuri_cocoon', due: 3 }]), fact('after', ['cards', uid, 'growth'], 0)]);
+    const uid = play('yuri_cocoon_guard');
+    w('interaction', 'evolved-now-queues-echo-copy', [fact('after', ['block'], 15), fact('after', ['pendingCopies'], [{ id: 'yuri_cocoon_guard', wielder: null, from: 'yuri_cocoon', due: 2 }]), fact('after', ['cards', uid, 'growth'], 0)]);
     command('end'); const copy = battle.s.zones.hand.find(u => battle.s.cards[u].echoCopy);
     w('interaction', 'echo-copy-default-metadata', [fact('after', ['pendingCopies'], []), fact('after', ['cards', copy, 'temp'], ['echoHalf']), fact('after', ['cards', copy, 'free'], true), fact('after', ['cards', copy, 'plus'], false), fact('after', ['cards', copy, 'mods'], { c: null, e: null }), fact('after', ['cards', copy, 'from'], 'yuri_cocoon')]);
     command('play', { uid: copy, mode: 'now', target: null, picks: [] });
-    w('interaction', 'echo-half-and-exhaust', [fact('after', ['block'], 10), fact('after', ['zones', 'exhaust'], [copy]), fact('after', ['ap'], 4)]);
+    w('interaction', 'echo-half-and-exhaust', [fact('after', ['block'], 10), fact('after', ['zones', 'exhaust'], [copy]), fact('after', ['ap'], 4), fact('after', ['pendingCopies'], [])]);
   }, { enemies: ['e_seed'] });
   add('edge-copy-pick-lineage', normal('yuri'), ['yuri_metamorph', spec('yuri_cocoon_guard', { plus: true, mods: { e: 'e_guard' } })], ['yuri_metamorph', 'yuri_cocoon_guard'], ({ battle, find, play, command, w }) => {
     const original = find('yuri_cocoon_guard'); play('yuri_metamorph', 'now', { picks: [original] });
     const copy = battle.s.zones.hand.find(u => battle.s.cards[u].echoCopy);
     w('op', 'copyPick', [fact('after', ['cards', copy, 'plus'], true), fact('after', ['cards', copy, 'mods'], { c: null, e: 'e_guard' }), fact('after', ['cards', copy, 'temp'], []), fact('after', ['cards', copy, 'from'], 'yuri_cocoon'), fact('after', ['cards', copy, 'growth'], 0), fact('after', ['cards', copy, 'free'], true)]);
-    command('play', { uid: copy, mode: 'after', target: null, picks: [] }); command('end'); command('end');
-    w('interaction', 'copy-pick-full-value', [fact('after', ['block'], 27), fact('after', ['zones', 'exhaust'], [copy])]);
+    command('play', { uid: copy, mode: 'now', target: null, picks: [] });
+    w('interaction', 'copy-pick-full-value', [fact('after', ['block'], 22), fact('after', ['zones', 'exhaust'], [copy])]);
   }, { enemies: ['e_seed'] });
   add('edge-yuri-r6-growth-ult', [{ charId: 'yuri', res: 6, gauge: 100 }], ['yuri_cocoon', 'yuri_sprout', spec('yuri_cocoon_guard')], [], ({ command, w, event }) => {
     command('ult', { actor: 'yuri', picks: [] });
@@ -327,10 +336,10 @@ function edgeBuilders() {
     command('end'); const uid = play('sera_round');
     w('interaction', 'same-hit-defeat-reward', [fact('after', ['phase'], 'DEFEAT'), fact('after', ['hp'], 0), fact('after', ['killedMarked'], 1), fact('after', ['runFlags', 'coinsBonus'], 10), fact('after', ['cards', uid, 'used'], 1)]);
   }, { hp: 1, maxHp: 243, enemies: ['e_mirrorclerk'], difficulty: { hp: 1, dmg: 100 }, relics: ['detective_notebook'] }, { inputDomain: 'Explicit initial HP1 and difficulty HP1%, normal max243; terminal precedence only' });
-  add('edge-reserved-void-shard-kill', [{ charId: 'sera' }], ['sera_last'], ['sera_last'], ({ play, command, w, event }) => {
-    play('sera_last', 'after'); command('end'); command('end');
-    event('interaction', 'reserved-last45', { e: 'dmg', src: 'card', n: 45 }); event('interaction', 'void-final3', { e: 'dmg', src: 'relic', n: 3 });
-    w('interaction', 'post-resolve-victory', [fact('after', ['phase'], 'VICTORY'), fact('after', ['turn'], 3), fact('after', ['hp'], 57)]);
+  add('edge-void-shard-post-resolve-kill', [{ charId: 'sera' }], ['sera_last'], ['sera_last'], ({ play, w, event }) => {
+    play('sera_last');
+    event('interaction', 'now-last45', { e: 'dmg', src: 'card', n: 45 }); event('interaction', 'void-final3', { e: 'dmg', src: 'relic', n: 3 });
+    w('interaction', 'post-resolve-victory', [fact('after', ['phase'], 'VICTORY'), fact('after', ['turn'], 1), fact('after', ['hp'], 81)]);
   }, { enemies: ['e_mirrorclerk'], difficulty: { hp: 88, dmg: 100 }, relics: ['void_shard'] }, { inputDomain: 'Authored difficulty HP88%; enemy starts46, no runtime HP edit' });
   out.push(['edge-exhaust-discard-reshuffle-live-zone', () => record('edge-exhaust-discard-reshuffle-live-zone', setup([{ charId: 'sion' }, { charId: 'kaya', res: 4 }, { charId: 'nia' }], ['sion_forget', 'com_sort', 'kaya_clue', 'kaya_clue', 'kaya_clue', 'kaya_clue'].map(id => spec(id)), { seed: 1, enemies: ['e_seed', 'e_seed'], difficulty: { hp: 50 }, relics: ['void_shard', 'detective_notebook'] }), { group: 'edge', inputDomain: 'Actual supported enemy difficulty HP50%; original partyHP243' }, ({ command, w }) => {
     command('play', { uid: 'c2', mode: 'now', picks: ['c3'] }); command('play', { uid: 'c6', mode: 'now', target: 'e7' }); command('play', { uid: 'c4', mode: 'now', target: 'e8' });
@@ -349,9 +358,9 @@ function edgeBuilders() {
     event('interaction', 'void-exhaust-rng-damage', { e: 'dmg', n: 3, src: 'relic' });
   }, { relics: ['void_shard', 'oblivion_ink'] });
   add('edge-greenhouse-growth', [{ charId: 'yuri', weaponId: 'w_yuri', refine: 1 }, { charId: 'sera' }, { charId: 'kaya' }], ['yuri_greenhouse', 'yuri_cocoon'], ['yuri_greenhouse', 'yuri_cocoon'], ({ play, command, w }) => {
-    play('yuri_greenhouse'); const uid = play('yuri_cocoon', 'next'); command('end');
-    w('op', 'grow', [fact('after', ['cards', uid, 'growth'], 1), fact('after', ['cards', uid, 'grown'], true), fact('after', ['growthCount'], 1)]);
-    w('interaction', 'moss-yuri-greenhouse', [fact('after', ['block'], 16)]);
+    play('yuri_greenhouse'); const uid = play('yuri_cocoon');
+    w('op', 'grow', [fact('before', ['cards', uid, 'growth'], 0), fact('after', ['cards', uid, 'growth'], 1), fact('after', ['cards', uid, 'grown'], true), fact('after', ['growthCount'], 1)]);
+    w('interaction', 'moss-yuri-greenhouse', [fact('after', ['block'], 14)]);
   }, { enemies: ['e_seed'], relics: ['symbiotic_moss'] });
   add('edge-blueprint-modded-counter', [{ charId: 'nia' }, { charId: 'sera' }, { charId: 'kaya' }], ['nia_blueprint', 'nia_tune', 'nia_masterwork'], ['nia_blueprint', 'nia_tune', 'nia_masterwork'], ({ find, play, w, event }) => {
     play('nia_blueprint'); const uid = find('nia_masterwork'); play('nia_tune', 'now', { picks: [uid] });
@@ -371,8 +380,12 @@ function edgeBuilders() {
   });
   add('edge-free-next-empty-clock', [{ charId: 'rien', gauge: 100 }, { charId: 'sera' }, { charId: 'nia' }], ['sera_last', 'sera_round', 'sera_cover'], ['sera_last', 'sera_round', 'sera_cover'], ({ command, play, w }) => {
     command('ult', { actor: 'rien' }); w('op', 'freeNext', [fact('after', ['freeNext'], 2), fact('after', ['echo'], 3), fact('after', ['ap'], 4)]);
-    play('sera_last', 'after'); play('sera_round', 'next'); play('sera_cover', 'next');
+    play('sera_last'); play('sera_round'); play('sera_cover');
     w('interaction', 'free-consumes-first-clock', [fact('after', ['ap'], 3), fact('after', ['freeNext'], 0), fact('after', ['battleFlags', 'emptyClockUsed'], true)]);
+  }, { relics: ['empty_clock'] });
+  add('edge-empty-clock-first-card', normal('sera'), ['sera_round', 'sera_cover'], ['sera_round', 'sera_cover'], ({ play, w }) => {
+    play('sera_round'); w('interaction', 'first-now-card-costs-one-less', [fact('before', ['ap'], 4), fact('after', ['ap'], 4), fact('response', ['ev', 0, 'cost'], 0), fact('after', ['battleFlags', 'emptyClockUsed'], true)]);
+    play('sera_cover'); w('interaction', 'second-card-full-cost', [fact('after', ['ap'], 3), fact('response', ['ev', 0, 'cost'], 1)]);
   }, { relics: ['empty_clock'] });
   add('edge-recall-engraving-once', normal('sera'), [spec('sera_round', { mods: { e: 'e_recall' } }), 'com_recall', 'com_guard', 'com_slash', 'com_patch', 'com_sort', 'com_tactics', 'com_focus'], ['sera_round', 'com_recall'], ({ play, w }) => {
     const uid = play('sera_round'); w('interaction', 'engraving-first-draw', [fact('after', ['zones', 'draw', 'length'], 2)]);
@@ -456,7 +469,7 @@ function edgeBuilders() {
     w('counter', 'missingHp10', [fact('before', ['hp'], 231), fact('before', ['zones', 'draw', 'length'], 2), fact('after', ['zones', 'draw', 'length'], 1)]);
   });
   add('edge-contract-counter-collateral', normal('ravien'), fillDeck(['ravien_advance', 'ravien_collateral', 'ravien_goldscale']), ['ravien_advance', 'ravien_collateral', 'ravien_goldscale'], ({ play, w }) => {
-    play('ravien_advance'); play('ravien_collateral'); w('op', 'collateral', [fact('after', ['sealedUntil'], 2), fact('after', ['block'], 16)]);
+    play('ravien_advance'); play('ravien_collateral'); w('op', 'collateral', [fact('after', ['debts', 1], { id: 'd2', n: 1, due: 2, deferred: false }), fact('after', ['sealedUntil'], 0), fact('after', ['block'], 16)]);
     play('ravien_goldscale'); w('counter', 'contracts', [fact('after', ['contracts'], 2), fact('before', ['zones', 'draw', 'length'], 3), fact('after', ['zones', 'draw', 'length'], 1)]);
   });
   add('edge-echo-counter-conditional', [{ charId: 'rien' }, { charId: 'sera' }, { charId: 'nia' }], fillDeck(['rien_amplify', 'rien_chord', 'rien_rest']), ['rien_amplify', 'rien_chord', 'rien_rest'], ({ play, event, w }) => {
@@ -467,9 +480,10 @@ function edgeBuilders() {
     command('end'); w('interaction', 'enemy-produced-weak', [fact('after', ['pst', 'weak'], 1)]); play(cleanse);
     w('op', cleanse === 'aila_veil' ? 'cleanseOne' : 'cleanse', [fact('after', ['pst', 'weak'], 0), fact('after', ['block'], cleanse === 'aila_veil' ? 7 : 8)]);
   }, { enemies: ['e_lantern'] });
-  add('edge-restraint-kept-bonus', normal('ravien'), ['ravien_restraint', 'sera_round'], ['ravien_restraint', 'sera_round'], ({ play, command, w, event }) => {
-    play('ravien_restraint'); w('op', 'restraint', [fact('after', ['restraint', 'active'], true)]); play('sera_round', 'next'); command('end');
-    event('interaction', 'restraint30percent', { e: 'dmg', src: 'card', n: 15 }); w('interaction', 'bonus-consumed', [fact('after', ['bonus', 'avail'], false)]);
+  add('edge-restraint-kept-bonus', normal('ravien'), ['ravien_restraint', 'sera_timed', 'sera_round'], ['ravien_restraint', 'sera_timed', 'sera_round'], ({ play, command, w, event }) => {
+    play('ravien_restraint'); w('op', 'restraint', [fact('after', ['restraint', 'active'], true)]); play('sera_round'); command('end');
+    w('interaction', 'bonus-turn-armed', [fact('after', ['bonus'], { avail: true, turn: 2 })]);
+    play('sera_timed'); event('interaction', 'restraint30percent', { e: 'dmg', src: 'card', n: 26 }); w('interaction', 'bonus-consumed', [fact('after', ['bonus', 'avail'], false)]);
   });
   add('edge-restraint-broken-penalty', [{ charId: 'ravien' }, { charId: 'rien' }, { charId: 'sera' }], ['ravien_restraint', 'rien_note', 'rien_note', 'rien_note'], ['ravien_restraint', 'rien_note', 'rien_note', 'rien_note'], ({ play, command, w }) => {
     play('ravien_restraint'); for (let n = 0; n < 3; n++) play('rien_note');
@@ -487,13 +501,13 @@ function edgeBuilders() {
     w('interaction', 'no-second-grow-all', [fact('after', ['cards', 'c1', 'growth'], 3), fact('after', ['cards', 'c2', 'growth'], 2), fact('after', ['cards', 'c3', 'growth'], 2), fact('after', ['growthCount'], 0)]);
   }, { enemies: ['e_seed'], relics: ['symbiotic_moss'] }, { inputDomain: 'First supported gauge100; second gauge100 is earned by actual rally commands' });
   add('edge-growth-cap-once-and-saturation', normal('yuri'), ['yuri_cocoon', 'yuri_root', 'yuri_seedvault', 'yuri_dew', 'yuri_dew'], ['yuri_cocoon', 'yuri_root', 'yuri_seedvault'], ({ battle, play, command, find, w }) => {
-    const cocoon = play('yuri_cocoon', 'next'); const root = play('yuri_root', 'next'); command('end');
-    w('interaction', 'two-reserve-growths', [fact('after', ['growthCount'], 2), fact('after', ['cards', cocoon, 'growth'], 1), fact('after', ['cards', root, 'growth'], 1)]);
-    play('yuri_seedvault', 'next'); command('end');
+    const cocoon = play('yuri_cocoon'); const root = play('yuri_root');
+    w('interaction', 'two-now-growths', [fact('after', ['growthCount'], 2), fact('after', ['cards', cocoon, 'growth'], 1), fact('after', ['cards', root, 'growth'], 1)]);
+    play('yuri_seedvault');
     w('interaction', 'party-growth-cap3', [fact('after', ['growthCount'], 3)]);
     const before = battle.s.cards[cocoon].growth; assert.equal(before, 1);
     if (!find('yuri_cocoon')) command('end');
-    play('yuri_cocoon', 'next'); command('end');
+    play('yuri_cocoon');
     w('interaction', 'grown-once-no-second-increment', [fact('after', ['cards', cocoon, 'growth'], 1), fact('after', ['growthCount'], 3)]);
   }, { enemies: ['e_seed'], relics: ['symbiotic_moss'] });
   add('edge-growth-saturation-three', [{ charId: 'yuri', gauge: 100 }, { charId: 'sera' }, { charId: 'kaya' }], ['yuri_cocoon', ...Array(7).fill('com_rally')], [], ({ battle, command, play, w }) => {
@@ -505,10 +519,22 @@ function edgeBuilders() {
       w('interaction', `uncapped-ult-growth-${use + 1}`, [fact('after', ['cards', 'c1', 'growth'], Math.min(3, use + 1)), fact('after', ['growthCount'], 0)]);
     }
   }, { enemies: ['e_seed'], relics: ['symbiotic_moss'] }, { inputDomain: 'First supported gauge100; all later ult gauges earned, original HP243' });
-  add('edge-sera-r6-follow-up', [{ charId: 'sera', res: 6, gauge: 100 }, { charId: 'nia' }, { charId: 'kaya' }], ['sera_round'], ['sera_round'], ({ command, play, w, event }) => {
-    command('ult', { actor: 'sera' }); play('sera_round', 'next'); command('end');
-    event('interaction', 'sera-r6-due19', { e: 'dmg', src: 'card', n: 19 }); w('interaction', 'sera-r6-cleared-after-due', [fact('after', ['battleFlags', 'seraR6Turn'], 0)]);
+  add('edge-sera-r6-follow-up', [{ charId: 'sera', res: 6, gauge: 100 }, { charId: 'nia' }, { charId: 'kaya' }], ['sera_round', 'sera_timed'], ['sera_round', 'sera_timed'], ({ command, play, w, event }) => {
+    command('ult', { actor: 'sera' }); w('interaction', 'sera-r6-armed-for-next-turn', [fact('after', ['battleFlags', 'seraR6Turn'], 2)]);
+    play('sera_round'); event('interaction', 'sera-r6-not-on-ult-turn', { e: 'dmg', src: 'card', n: 8 });
+    command('end'); w('interaction', 'sera-r6-kept-into-its-turn', [fact('after', ['battleFlags', 'seraR6Turn'], 2), fact('after', ['battleFlags', 'seraR6Active'], 2), fact('after', ['turn'], 2)]);
+    play('sera_timed'); event('interaction', 'sera-r6-next-turn-attack50', { e: 'dmg', src: 'card', n: 32 });
+    command('end'); w('interaction', 'sera-r6-ends-with-its-turn', [fact('after', ['turn'], 3), fact('after', ['battleFlags', 'seraR6Active'], 2)]);
   }, {}, { inputDomain: 'Explicit supported gauge100' });
+  // RULES_NOW_PLAY: a winning blow still grows its card (the trailing grow runs after the lethal hit).
+  add('edge-growth-on-winning-blow', [{ charId: 'yuri' }, { charId: 'harin' }, { charId: 'nia' }], ['yuri_sprout'], ['yuri_sprout'], ({ play, w }) => {
+    const uid = play('yuri_sprout');
+    w('interaction', 'grow-on-victory', [fact('after', ['phase'], 'VICTORY'), fact('after', ['cards', uid, 'growth'], 1), fact('after', ['growthCount'], 1)]);
+  }, { enemies: ['e_seed'], difficulty: { hp: 1, dmg: 100 } }, { inputDomain: 'Explicit difficulty HP1%; one lethal sprout' });
+  add('edge-sera-r1-round-draw-once', [{ charId: 'sera', res: 1 }, { charId: 'nia' }, { charId: 'kaya' }], fillDeck(['sera_round', 'sera_round']), ['sera_round', 'sera_round'], ({ play, w }) => {
+    play('sera_round'); w('interaction', 'sera-r1-round-now-draws1', [fact('before', ['zones', 'draw', 'length'], 3), fact('after', ['zones', 'draw', 'length'], 2), fact('after', ['turnFlags', 'seraR1'], true)]);
+    play('sera_round'); w('interaction', 'sera-r1-once-per-turn', [fact('after', ['zones', 'draw', 'length'], 2)]);
+  });
   add('edge-kaya-r6-refund', [{ charId: 'kaya', res: 6, gauge: 100 }, { charId: 'sera' }, { charId: 'nia' }], ['com_guard'], [], ({ command, w }) => {
     command('ult', { actor: 'kaya' }); w('interaction', 'kaya-r6-refund50', [fact('after', ['actors', 0, 'gauge'], 50), fact('after', ['killedMarked'], 1)]);
   }, { enemies: ['e_seed', 'b_archivist'] }, { inputDomain: 'Explicit supported gauge100' });
@@ -535,20 +561,6 @@ function edgeBuilders() {
     play('wc_hunter_rifle'); event('interaction', 'weapon-no-character-skill-level', { e: 'dmg', n: 8, src: 'card' });
     play('sera_round'); event('interaction', 'character-skill-level', { e: 'dmg', n: 10, src: 'card' }); w('interaction', 'battle-first-atk-flag', [fact('after', ['firstAtkDone'], true)]);
   }, {}, { inputDomain: 'Explicit supported skillLv9 numeric domain; no HP or card numbers changed' });
-  add('edge-reservation-dead-retarget', normal('sera'), ['sera_round', 'sera_double'], ['sera_round', 'sera_double'], ({ battle, play, command, w, event }) => {
-    const target = battle.alive()[0].uid; play('sera_round', 'next', { target }); play('sera_double', 'now', { target }); command('end');
-    event('interaction', 'ordinary-reservation-retarget', { e: 'dmg', card: 'sera_round', uid: battle.s.enemies[1].uid, n: 12, src: 'card' });
-    w('interaction', 'dead-target-did-not-fizzle', [fact('after', ['cards', 'c1', 'used'], 1)]);
-  }, { enemies: ['e_seed', 'b_archivist'] });
-  add('edge-fixed-target-mark-expiry-fizzle', normal('kaya'), ['kaya_clue', 'kaya_deduce'], ['kaya_clue', 'kaya_deduce'], ({ play, command, w, event }) => {
-    play('kaya_clue'); const uid = play('kaya_deduce', 'after'); command('end'); command('end');
-    event('interaction', 'fixed-mark-expired', { e: 'fizzle', uid });
-    event('interaction', 'expected-fixed-target-fizzle', { e: 'resolved', uid, fizzled: true }); w('interaction', 'fizzle-still-cleans-up', [fact('after', ['cards', uid, 'used'], 1)]);
-  }, {}, { expectedFizzle: true, denominator: 'Negative resolution behavior; never used as positive base-mode coverage' });
-  add('edge-terminal-reservation-conservation', [{ charId: 'sera' }], ['sera_last', 'sera_round', 'sera_cover'], ['sera_last', 'sera_round', 'sera_cover'], ({ play, command, w }) => {
-    const last = play('sera_last', 'after'); command('end'); const current = play('sera_round', 'next'); const future = play('sera_cover', 'after'); command('end');
-    w('interaction', 'terminal-due-future-conservation', [fact('after', ['phase'], 'VICTORY'), fact('after', ['res'], []), fact('after', ['zones', 'exhaust'], [last]), fact('after', ['zones', 'discard'], [future, current])]);
-  }, { enemies: ['e_mirrorclerk'], difficulty: { hp: 88, dmg: 100 }, relics: ['void_shard'] }, { inputDomain: 'Supported HP88% enemy difficulty for exact45+3 post-resolve kill' });
   add('edge-envelope-multihit-continues', [{ charId: 'sera' }], ['sera_double'], ['sera_double'], ({ command, play, w }) => {
     command('end'); play('sera_double'); w('interaction', 'envelope-only-first-hit-survival', [fact('after', ['phase'], 'DEFEAT'), fact('after', ['hp'], 0), fact('after', ['runFlags', 'envelopeUsed'], true), fact('after', ['enemies', 0, 'hp'], 44)]);
   }, { hp: 2, maxHp: 81, enemies: ['e_mirrorclerk'], relics: ['memory_envelope'] }, { inputDomain: 'Explicit initialHP2/max81 terminal boundary' });
@@ -572,17 +584,25 @@ function edgeBuilders() {
     play('harin_glacier'); w('interaction', 'frost-crystal-first-plus1', [fact('after', ['enemies', 0, 'brk'], 7)]); play('harin_glacier');
     w('interaction', 'frost-crystal-no-second-plus1', [fact('after', ['enemies', 0, 'brk'], 5)]);
   }, { enemies: ['b_bell'], relics: ['frost_crystal'] });
-  add('edge-reserved-break-relics', normal('sera'), ['sera_timed'], ['sera_timed'], ({ play, command, w }) => {
-    play('sera_timed', 'next'); command('end'); w('interaction', 'precision-eye-break5', [fact('after', ['enemies', 0, 'brk'], 7), fact('after', ['cards', 'c1', 'used'], 1)]);
+  add('edge-reserved-break-relics', normal('sera'), ['sera_timed', 'sera_timed'], ['sera_timed', 'sera_timed'], ({ find, play, command, w }) => {
+    const first = play('sera_timed'); w('interaction', 'unheld-eye-only-break4', [fact('before', ['enemies', 0, 'brk'], 12), fact('after', ['enemies', 0, 'brk'], 8), fact('after', ['cards', first, 'used'], 1)]);
+    const held = find('sera_timed'); command('end'); w('interaction', 'second-copy-held', [fact('after', ['cards', held, 'held'], true)]);
+    play('sera_timed'); w('interaction', 'held-precision-eye-break5', [fact('after', ['enemies', 0, 'brk'], 3), fact('after', ['cards', held, 'used'], 1)]);
   }, { relics: ['precision_lens', 'eye_of_rift'] });
+  add('edge-held-time-stamp-weapon', [{ charId: 'sera', weaponId: 'w_sera', refine: 1 }, { charId: 'nia' }, { charId: 'kaya' }], ['sera_timed', 'sera_timed'], ['sera_timed', 'sera_timed'], ({ find, play, command, w, event }) => {
+    play('sera_timed'); event('interaction', 'unheld-no-reserved-weapon-bonus', { e: 'dmg', src: 'card', n: 20 }); w('interaction', 'unheld-gauge10', [fact('after', ['actors', 0, 'gauge'], 10)]);
+    const held = find('sera_timed'); command('end');
+    play('sera_timed'); event('interaction', 'held-reserved-weapon12', { e: 'dmg', src: 'card', n: 22 });
+    w('interaction', 'held-time-stamp-gauge5', [fact('before', ['cards', held, 'held'], true), fact('after', ['actors', 0, 'gauge'], 25)]);
+  }, { relics: ['time_stamp'] });
   add('edge-foresight-broken-damage', [{ charId: 'sera', res: 2 }, { charId: 'nia' }, { charId: 'kaya' }], ['com_breaker', 'com_breaker', 'sera_timed'], ['com_breaker', 'com_breaker', 'sera_timed'], ({ play, command, event, w }) => {
-    play('com_breaker'); play('com_breaker'); play('sera_timed', 'next'); command('end');
-    event('interaction', 'foresight40-times-broken25', { e: 'dmg', src: 'card', card: 'sera_timed', n: 38 }); w('interaction', 'stunned-skip-before-due', [fact('after', ['enemies', 0, 'stunned'], false)]);
+    play('com_breaker'); play('com_breaker'); play('sera_timed');
+    event('interaction', 'foresight40-times-broken25', { e: 'dmg', src: 'card', card: 'sera_timed', n: 35 }); w('interaction', 'now-attack-while-stunned', [fact('after', ['enemies', 0, 'stunned'], true)]);
   }, { enemies: ['e_mirrorclerk'] });
-  add('edge-vulnerable-weak-and-gear-math', [{ charId: 'sera', power4: 177, skillLv: 4, gearBps: 1234 }, { charId: 'nia' }, { charId: 'kaya' }], ['com_pin', spec('sera_timed', { plus: true, mods: { c: 'c_delay' } })], ['com_pin', 'sera_timed'], ({ play, command, event }) => {
-    play('com_pin'); play('sera_timed', 'next'); command('end');
-    // ceil22*13/10=29; delay40% + gear12.34% + Nia15%; floor(29*177/160*1.12*1.6734*1.25)=75.
-    event('interaction', 'single-division-damage75', { e: 'dmg', src: 'card', n: 75 });
+  add('edge-vulnerable-weak-and-gear-math', [{ charId: 'sera', power4: 177, skillLv: 4, gearBps: 1234 }, { charId: 'nia' }, { charId: 'kaya' }], ['com_pin', spec('sera_timed', { plus: true, mods: { c: 'c_quick' } })], ['com_pin', 'sera_timed'], ({ play, event }) => {
+    play('com_pin'); play('sera_timed');
+    // ceil20*13/10=26; quick20% + gear12.34% + Nia15%; floor(26*177/160*1.12*1.4734*1.25)=59.
+    event('interaction', 'single-division-damage59', { e: 'dmg', src: 'card', n: 59 });
   }, {}, { inputDomain: 'Supported power4=177/skillLv4/gear1234 setup arithmetic; original HP243' });
   add('edge-pierce-split-rounding', normal('sera'), [spec('sera_round', { mods: { e: 'e_pierce' } })], ['sera_round'], ({ command, play, w, event }) => {
     command('end'); play('sera_round'); event('interaction', 'pierce-half4-normal4', { e: 'dmg', n: 8, blocked: 4, src: 'card' }); w('interaction', 'pierce-hp4-block6', [fact('after', ['enemies', 0, 'hp'], 42), fact('after', ['enemies', 0, 'block'], 6)]);
@@ -611,8 +631,10 @@ function edgeBuilders() {
     assert.ok(drone); command('play', { uid: drone, mode: 'now' });
     w('interaction', 'create-overflow-to-discard', [fact('after', ['zones', 'hand', 'length'], 10), fact('after', ['seq'], 23), fact('after', ['cards', 'c23', 'token'], true), fact('after', ['zones', 'discard', 4], 'c23')]);
   }, {}, { inputDomain: 'Supported NiaR6/gauge100; hand generated by actual ult/cards, no hand injection' });
-  add('edge-copy-delivery-after-draw-overflow', [{ charId: 'sera' }, { charId: 'nia' }, { charId: 'kaya' }], [spec('sera_round', { mods: { c: 'c_echo' } }), spec('nia_fieldlab', { plus: true }), spec('nia_fieldlab', { plus: true }), ...Array(11).fill('com_guard')], ['sera_round', 'nia_fieldlab', 'nia_fieldlab'], ({ battle, play, command, w, event }) => {
-    play('sera_round', 'next'); play('nia_fieldlab', 'after'); play('nia_fieldlab', 'after'); command('end'); command('end');
+  // Six held 보존 capacitors plus the normal five-card draw fill the hand before the echo copy arrives.
+  add('edge-copy-delivery-after-draw-overflow', [{ charId: 'sera' }, { charId: 'nia' }, { charId: 'kaya' }], [spec('sera_round', { mods: { c: 'c_echo' } }), ...Array(13).fill('com_capacitor')], ['sera_round'], ({ battle, play, command, w, event }) => {
+    play('sera_round'); w('interaction', 'hourglass-first-turn-draw7', [fact('before', ['zones', 'hand', 'length'], 7), fact('after', ['zones', 'hand', 'length'], 6), fact('after', ['pendingCopies', 0, 'due'], 2)]);
+    command('end');
     event('interaction', 'copy-after-normal-draw', { e: 'echoCopy', uid: 'c16' });
     w('interaction', 'copy-overflow-to-discard', [fact('after', ['zones', 'hand', 'length'], 10), fact('after', ['cards', 'c16', 'free'], true), fact('after', ['zones', 'discard', battle.s.zones.discard.length - 1], 'c16')]);
   }, { relics: ['cracked_hourglass'] });
@@ -638,22 +660,22 @@ function edgeBuilders() {
     play('rien_amplify'); play('rien_note'); play('rien_chord'); event('interaction', 'fork-echo4-chord18', { e: 'dmg', src: 'card', n: 18 }); w('interaction', 'echo-max4', [fact('after', ['echo'], 4)]);
   }, { relics: ['tuning_fork'] });
   add('edge-forged-lineage-does-not-grow', normal('yuri'), [spec('sera_round', { from: 'yuri_cocoon' }), 'yuri_mutual'], ['sera_round', 'yuri_mutual'], ({ play, command, event, w }) => {
-    play('sera_round', 'next'); command('end'); w('interaction', 'unrelated-from-not-growth', [fact('after', ['growthCount'], 0), fact('after', ['cards', 'c1', 'growth'], 0), fact('after', ['block'], 0)]);
+    play('sera_round'); w('interaction', 'unrelated-from-not-growth', [fact('after', ['growthCount'], 0), fact('after', ['cards', 'c1', 'growth'], 0), fact('after', ['block'], 0)]);
     play('yuri_mutual'); event('interaction', 'forged-from-no-effective-growth3', { e: 'dmg', src: 'card', n: 7 });
   });
   add('edge-growth-once-below-cap', normal('yuri'), ['yuri_cocoon'], ['yuri_cocoon'], ({ play, command, w }) => {
-    const uid = play('yuri_cocoon', 'next'); command('end'); play('yuri_cocoon', 'next'); command('end');
-    w('interaction', 'once-check-independent-of-cap', [fact('after', ['growthCount'], 1), fact('after', ['cards', uid, 'growth'], 1), fact('after', ['cards', uid, 'grown'], true), fact('after', ['block'], 10)]);
+    const uid = play('yuri_cocoon'); command('end'); play('yuri_cocoon');
+    w('interaction', 'once-check-independent-of-cap', [fact('after', ['growthCount'], 1), fact('after', ['cards', uid, 'growth'], 1), fact('after', ['cards', uid, 'grown'], true), fact('after', ['block'], 8)]);
   }, { enemies: ['e_seed'], relics: ['symbiotic_moss'] });
   add('edge-copy-pick-real-grown-root', normal('yuri'), ['yuri_dew', 'yuri_dew', 'yuri_metamorph', spec('yuri_cocoon', { plus: true, mods: { e: 'e_guard' } })], ['yuri_dew', 'yuri_dew', 'yuri_metamorph', 'yuri_cocoon'], ({ battle, find, play, command, w }) => {
     const original = find('yuri_cocoon'); const dew1 = play('yuri_dew', 'now', { picks: [original] }); const dew2 = play('yuri_dew', 'now', { picks: [original] }); play('yuri_metamorph', 'now', { picks: [original] });
     const copy = battle.s.zones.hand.find(u => battle.s.cards[u].echoCopy);
     w('interaction', 'copy-preserves-earned-growth2', [fact('after', ['cards', copy, 'growth'], 2), fact('after', ['cards', copy, 'plus'], true), fact('after', ['cards', copy, 'mods'], { c: null, e: 'e_guard' })]);
-    command('play', { uid: copy, mode: 'next', target: null }); command('end');
-    w('interaction', 'copy-can-grow-then-exhaust', [fact('after', ['cards', copy, 'growth'], 3), fact('after', ['cards', original, 'growth'], 2), fact('after', ['growthCount'], 3), fact('after', ['block'], 24), fact('after', ['zones', 'exhaust'], [dew1, dew2, copy])]);
+    command('play', { uid: copy, mode: 'now', target: null });
+    w('interaction', 'copy-can-grow-then-exhaust', [fact('after', ['cards', copy, 'growth'], 3), fact('after', ['cards', original, 'growth'], 2), fact('after', ['growthCount'], 3), fact('after', ['block'], 27), fact('after', ['zones', 'exhaust'], [dew1, dew2, copy])]);
   }, { enemies: ['e_seed'], relics: ['symbiotic_moss'] });
   add('edge-echo-resets-earned-growth-upgrade-mods', normal('yuri'), ['yuri_dew', 'yuri_dew', spec('yuri_cocoon', { plus: true, mods: { c: 'c_echo', e: 'e_guard' } })], ['yuri_dew', 'yuri_dew', 'yuri_cocoon'], ({ battle, find, play, command, w }) => {
-    const original = find('yuri_cocoon'); const dew1 = play('yuri_dew', 'now', { picks: [original] }); const dew2 = play('yuri_dew', 'now', { picks: [original] }); play('yuri_cocoon', 'next'); command('end'); command('end');
+    const original = find('yuri_cocoon'); const dew1 = play('yuri_dew', 'now', { picks: [original] }); const dew2 = play('yuri_dew', 'now', { picks: [original] }); play('yuri_cocoon'); command('end');
     const copy = battle.s.zones.hand.find(u => battle.s.cards[u].echoCopy);
     w('interaction', 'echo-defaults-differ-from-grown-original', [fact('after', ['cards', original, 'growth'], 3), fact('after', ['cards', original, 'plus'], true), fact('after', ['cards', copy, 'growth'], 0), fact('after', ['cards', copy, 'grown'], false), fact('after', ['cards', copy, 'used'], 0), fact('after', ['cards', copy, 'plus'], false), fact('after', ['cards', copy, 'mods'], { c: null, e: null })]);
     command('end'); command('play', { uid: copy, mode: 'now', target: null });
@@ -663,11 +685,6 @@ function edgeBuilders() {
     const uid = find('sera_cover'); play('nia_overclock', 'now', { picks: [uid] }); play('nia_tune', 'now', { picks: [uid] }); play('sera_cover');
     event('interaction', 'block-amp30-handi15-only', { e: 'block', n: 7, src: 'card' }); event('interaction', 'damage-overheat50-amp30-handi15', { e: 'dmg', n: 7, src: 'card' });
     w('interaction', 'temp-order-and-exhaust', [fact('after', ['cards', uid, 'temp'], ['overheat', 'amp']), fact('after', ['zones', 'exhaust'], [uid])]);
-  });
-  for (const validPick of [false, true]) add(`edge-pull-multiple-${validPick ? 'explicit' : 'invalid'}-pick`, normal('sera'), ['sera_round', 'sera_cover', 'sera_pull'], ['sera_round', 'sera_cover', 'sera_pull'], ({ battle, play, w, event }) => {
-    const after = play('sera_round', 'after'), next = play('sera_cover', 'next'); play('sera_pull', 'now', { picks: [validPick ? next : 'missing'] });
-    if (validPick) { event('interaction', 'explicit-next-pull-resolves-immediately', { e: 'dmg', card: 'sera_cover', n: 6, src: 'card' }); w('interaction', 'unpicked-after-remains', [fact('after', ['res', 0, 'uid'], after), fact('after', ['res', 0, 'due'], 3)]); }
-    else w('interaction', 'invalid-pick-falls-back-to-after', [fact('after', ['res', 0, 'uid'], after), fact('after', ['res', 0, 'kind'], 'next'), fact('after', ['res', 0, 'due'], 2), fact('after', ['res', 1, 'uid'], next)]);
   });
   for (const res of [0, 1]) add(`edge-nia-tune-used-up-r${res}`, [{ charId: 'nia', res }, { charId: 'sera' }, { charId: 'kaya' }], ['nia_tune', ...Array(res ? 2 : 1).fill('com_recall')], ['nia_tune', ...Array(res ? 2 : 1).fill('com_recall')], ({ find, play, w }) => {
     const uid = find('nia_tune'); play('nia_tune'); for (let n = 0; n < (res ? 2 : 1); n++) { play('com_recall', 'now', { picks: [uid] }); play('nia_tune'); }
@@ -682,22 +699,6 @@ function edgeBuilders() {
   });
   add('edge-selection-curse-before-cost', normal('sion'), ['sion_erase', 'smudge', 'com_focus'], ['sion_erase', 'smudge', 'com_focus'], ({ play, w }) => {
     play('sion_erase'); w('interaction', 'curse-priority-over-zero-cost', [fact('after', ['zones', 'exhaust'], ['c2']), fact('after', ['cards', 'c3', 'used'], 0)]);
-  });
-  add('edge-temporary-extra-slot-resolves-after-reset', [{ charId: 'sera' }, { charId: 'nia' }, { charId: 'kaya' }], ['sera_calc', 'sera_round', 'sera_cover', 'nia_wrench'], ['sera_calc', 'sera_round', 'sera_cover', 'nia_wrench'], ({ play, command, w }) => {
-    play('sera_calc'); play('sera_round', 'next'); play('sera_cover', 'next'); play('nia_wrench', 'next');
-    w('interaction', 'three-real-next-reservations', [fact('after', ['res', 'length'], 3), fact('after', ['ap'], 0)]); command('end');
-    w('interaction', 'slot-temp-reset-does-not-drop-dues', [fact('after', ['res'], []), fact('after', ['slotsTemp', 'next'], 0), fact('after', ['cards', 'c2', 'used'], 1), fact('after', ['cards', 'c3', 'used'], 1), fact('after', ['cards', 'c4', 'used'], 1)]);
-  });
-  add('edge-after-reservations-use-next-bucket', [{ charId: 'sera' }, { charId: 'nia' }, { charId: 'kaya' }], ['sera_round', 'sera_cover', 'nia_wrench', 'sera_calc'], ['sera_round', 'sera_cover', 'nia_wrench', 'sera_calc'], ({ find, play, command, w }) => {
-    play('sera_round', 'after'); play('sera_cover', 'after'); command('end'); command('play', { uid: find('nia_wrench'), mode: 'next' }, 'SLOT_FULL');
-    play('sera_calc'); play('nia_wrench', 'next'); w('interaction', 'after-old-due-and-new-next-share-capacity', [fact('after', ['res', 'length'], 3), fact('after', ['res', 0, 'due'], 3), fact('after', ['res', 2, 'due'], 3)]);
-    command('end'); w('interaction', 'all-three-same-due-resolve', [fact('after', ['res'], []), fact('after', ['cards', 'c1', 'used'], 1), fact('after', ['cards', 'c2', 'used'], 1), fact('after', ['cards', 'c3', 'used'], 1)]);
-  }, { relics: ['cracked_hourglass'] });
-  add('edge-collateral-sealed-slot-expiry', [{ charId: 'ravien' }, { charId: 'sera' }, { charId: 'nia' }], ['ravien_collateral', 'sera_round', 'sera_cover'], ['ravien_collateral', 'sera_round', 'sera_cover'], ({ find, play, command, w }) => {
-    play('ravien_collateral'); play('sera_round', 'next'); command('end'); play('sera_round', 'next');
-    command('play', { uid: find('sera_cover'), mode: 'next' }, 'SLOT_FULL'); command('end');
-    play('sera_round', 'next'); play('sera_cover', 'next');
-    w('interaction', 'sealed-until2-expires-on-turn3', [fact('after', ['turn'], 3), fact('after', ['sealedUntil'], 2), fact('after', ['res', 'length'], 2)]);
   });
   for (const enemy of data.enemies) add(`encounter-${enemy.id}-player-cycle`, normal('sera'), ['com_guard'], ['com_guard'], ({ battle, play, command }) => {
     play('com_guard'); for (let n = 0; n < enemy.pattern.length * 2 && !battle.isOver(); n++) command('end');
@@ -718,12 +719,11 @@ function protocolBuilders() {
   });
   for (const [label, deck, card, mode, error] of [
     ['not-in-hand', ['sera_round'], 'missing', 'now', 'NOT_IN_HAND'],
-    ['reserve-only', ['sera_timed'], 'sera_timed', 'now', 'RESERVE_ONLY'],
     ['now-only', ['sera_pull'], 'sera_pull', 'next', 'NOT_RESERVABLE'],
     ['after-only', ['sera_last'], 'sera_last', 'next', 'NOT_RESERVABLE'],
   ]) add(`protocol-${label}`, deck, deck, ({ find, command }) => command('play', { uid: find(card) || 'missing', mode }, error));
   add('protocol-ap-low', ['sera_last', 'sera_timed'], ['sera_last', 'sera_timed'], ({ play, find, command }) => {
-    play('sera_last', 'after'); command('play', { uid: find('sera_timed'), mode: 'next' }, 'AP_LOW');
+    play('sera_last'); command('play', { uid: find('sera_timed'), mode: 'now' }, 'AP_LOW');
   });
   add('protocol-bad-target', ['sera_round'], ['sera_round'], ({ play, find, command }) => {
     command('play', { uid: find('sera_round'), mode: 'now', target: 'missing' }, 'BAD_TARGET'); play('sera_round');
@@ -739,16 +739,10 @@ function protocolBuilders() {
   add('protocol-restraint-unavailable', ['rien_note', 'rien_note', 'rien_note', 'ravien_restraint'], ['rien_note', 'rien_note', 'rien_note', 'ravien_restraint'], ({ play, find, command }) => {
     for (let n = 0; n < 3; n++) play('rien_note'); command('play', { uid: find('ravien_restraint'), mode: 'now' }, 'RESTRAINT_UNAVAILABLE');
   }, {}, [{ charId: 'rien' }, { charId: 'ravien' }, { charId: 'sera' }]);
-  add('protocol-no-empty-slot', ['ravien_collateral', 'ravien_collateral'], ['ravien_collateral', 'ravien_collateral'], ({ play, find, command }) => {
-    play('ravien_collateral'); command('play', { uid: find('ravien_collateral'), mode: 'now' }, 'NO_EMPTY_SLOT');
-  });
-  add('protocol-reservation-required', ['sera_pull'], ['sera_pull'], ({ find, command }) => command('play', { uid: find('sera_pull'), mode: 'now' }, 'RESERVATION_REQUIRED'));
-  add('protocol-pull-destination-full', ['sera_round', 'sera_cover', 'nia_wrench', 'sera_pull'], ['sera_round', 'sera_cover', 'nia_wrench', 'sera_pull'], ({ play, find, command }) => {
-    play('sera_round', 'after'); play('sera_cover', 'next'); play('nia_wrench', 'next'); command('play', { uid: find('sera_pull'), mode: 'now' }, 'PULL_DESTINATION_FULL');
-  });
-  add('protocol-slot-full', ['sera_round', 'sera_cover', 'nia_wrench'], ['sera_round', 'sera_cover', 'nia_wrench'], ({ play, find, command }) => {
-    play('sera_round', 'next'); play('sera_cover', 'next'); command('play', { uid: find('nia_wrench'), mode: 'next' }, 'SLOT_FULL');
-  });
+  // RULES_NOW_PLAY: collateral's future cost is a debt 1, so its rejection is the shared DEBT_CAP (cap4: loan2 + collateral1 + collateral1).
+  add('protocol-collateral-debt-cap', ['ravien_advance', 'ravien_collateral', 'ravien_collateral', 'ravien_collateral'], ['ravien_advance', 'ravien_collateral', 'ravien_collateral', 'ravien_collateral'], ({ play, find, command }) => {
+    play('ravien_advance'); play('ravien_collateral'); play('ravien_collateral'); command('play', { uid: find('ravien_collateral'), mode: 'now' }, 'DEBT_CAP');
+  }, {}, standardParty({ charId: 'ravien' }));
   add('protocol-overload-would-kill-earned-hp1', [...Array(8).fill('lumi_overdrive'), 'lumi_dash'], ['lumi_overdrive'], ({ battle, find, play, command }) => {
     for (let n = 0; battle.s.hp > 1; n++) {
       assert.ok(n < 80, 'overload real sequence bound'); if (find('lumi_overdrive')) play('lumi_overdrive'); else command('end');
@@ -760,8 +754,9 @@ function protocolBuilders() {
     command('ult', { actor: 'missing', picks: true }, 'UNKNOWN_ACTOR'); command('ult', { actor: 'sera', picks: true }, 'ULT_NOT_READY');
   });
   add('protocol-ult-bad-target', ['sera_round'], ['sera_round'], ({ command }) => command('ult', { actor: 'sera', target: 'missing' }, 'BAD_TARGET'), {}, [{ charId: 'sera', gauge: 100 }]);
-  add('protocol-quick-circuit-reserve-only-has-no-mode', [spec('sera_timed', { mods: { c: 'c_quick' } })], ['sera_timed'], ({ find, command }) => {
-    const uid = find('sera_timed'); command('play', { uid, mode: 'now' }, 'RESERVE_ONLY'); command('play', { uid, mode: 'next' }, 'NOT_RESERVABLE'); command('play', { uid, mode: 'after' }, 'NOT_RESERVABLE');
+  add('protocol-quick-circuit-now-only', [spec('sera_timed', { mods: { c: 'c_quick' } })], ['sera_timed'], ({ find, command }) => {
+    const uid = find('sera_timed'); command('play', { uid, mode: 'next' }, 'NOT_RESERVABLE'); command('play', { uid, mode: 'after' }, 'NOT_RESERVABLE');
+    command('play', { uid, mode: 'now', target: null, picks: [] });
   });
   add('protocol-receipts-play-replay-order', ['sera_round'], ['sera_round'], ({ battle, command, row }) => {
     const request = { rid: '__proto__', v: battle.s.v, kind: 'play', args: { uid: 'c1', mode: 'now', target: battle.alive()[0].uid, picks: [] } };
@@ -790,7 +785,6 @@ function matrixWitnesses(cases) {
   proof('card-lumi_overdrive-now', 'op', 'ap', [fact('before', ['ap'], 4), fact('after', ['ap'], 6)]);
   proof('card-com_rally-now', 'op', 'gauge', [fact('after', ['actors', 0, 'gauge'], 15), fact('after', ['actors', 1, 'gauge'], 15), fact('after', ['actors', 2, 'gauge'], 15)]);
   proof('card-nia_drone-now', 'op', 'create', [fact('before', ['seq'], 9), fact('after', ['seq'], 11), fact('after', ['cards', 'c10', 'token'], true), fact('after', ['cards', 'c11', 'id'], 'nia_drone_shot'), fact('after', ['zones', 'hand', 'length'], 6)]);
-  proof('card-sera_calc-now', 'op', 'slot', [fact('before', ['slotsTemp', 'next'], 0), fact('after', ['slotsTemp', 'next'], 1)]);
   proof('part-overheat', 'op', 'costdown', [fact('after', ['cards', 'c1', 'costMod'], -1), fact('after', ['cards', 'c1', 'temp'], ['overheat'])], 1);
   proof('ult-sion-r0', 'op', 'exhaustHand', [fact('before', ['zones', 'hand', 'length'], 5), fact('after', ['zones', 'hand', 'length'], 0), fact('after', ['exhausted'], 5), fact('response', ['ev', 6, 'n'], 8), fact('response', ['ev', 'length'], 11)]);
   proof('ult-ravien-r0', 'op', 'clearDebt', [fact('before', ['debts', 0, 'n'], 2), fact('after', ['debts'], []), fact('response', ['ev', 1, 'n'], 18), fact('response', ['ev', 2, 'n'], 6)]);
@@ -830,8 +824,8 @@ function inventory(cases) {
   assert.deepEqual(unique('op', 'tag'), sortedOps, 'Every authored op needs positive literal evidence');
   assert.deepEqual(unique('counter', 'tag'), sortedCounters, 'Every authored scaling counter needs nonzero literal evidence');
   assert.deepEqual(unique('condition', 'tag'), sortedConditions.flatMap(c => [`${c}:false`, `${c}:true`]).sort(), 'Every authored condition needs both reachable branches');
-  assert.equal(sortedOps.length, 39); assert.equal(sortedCounters.length, 12); assert.equal(sortedConditions.length, 10);
-  assert.equal(fields.size, 35, 'Authored effect field inventory changed');
+  assert.equal(sortedOps.length, 37); assert.equal(sortedCounters.length, 12); assert.equal(sortedConditions.length, 10);
+  assert.equal(fields.size, 30, 'Authored effect field inventory changed');
   const set = group => cases.filter(c => c.group === group);
   const coverage = {
     cards: data.cards.map(c => c.id), baseModePairs: set('card').map(c => `${c.main.cardId}:${c.main.mode}`), plusCards: set('plus').map(c => c.main.cardId),
@@ -863,7 +857,7 @@ export function generateCases() {
     try { cases.push(cardCase(card, baseModes(card).at(-1), { plus: true, group: 'plus' })); }
     catch (error) { failures.push({ id: `plus-${card.id}`, code: error.code || error.name, message: error.message }); }
   }
-  const resCard = { sera: ['sera_timed', 'after'], nia: ['nia_tune', 'now'], yuri: ['yuri_cocoon', 'next'], ravien: ['ravien_advance', 'now'],
+  const resCard = { sera: ['sera_timed', 'now'], nia: ['nia_tune', 'now'], yuri: ['yuri_cocoon', 'now'], ravien: ['ravien_advance', 'now'],
     harin: ['harin_counter', 'now'], rien: ['rien_note', 'now'], aila: ['aila_bell', 'now'], sion: ['sion_erase', 'now'], kaya: ['kaya_clue', 'now'], lumi: ['lumi_dash', 'now'] };
   for (const character of data.characters) for (let res = 0; res <= 6; res++) {
     const [id, mode] = resCard[character.id];
@@ -880,14 +874,13 @@ export function generateCases() {
     try {
       if (part.slot === 'temp') cases.push(temporaryPartCase(part.id));
       else {
-        const mode = part.id === 'c_echo' || part.id === 'c_delay' ? 'next' : part.id === 'c_far' ? 'after' : 'now';
-        cases.push(cardCase(ix.cards.sera_round, mode, { group: 'part', id: `part-${part.id}`, metadata: { partId: part.id },
+        cases.push(cardCase(ix.cards.sera_round, 'now', { group: 'part', id: `part-${part.id}`, metadata: { partId: part.id },
           cardExtra: { mods: { [part.slot === 'circuit' ? 'c' : 'e']: part.id } } }));
       }
     } catch (error) { failures.push({ id: `part-${part.id}`, code: error.code || error.name, message: error.message }); }
   }
   for (const relic of data.relics) {
-    try { cases.push(cardCase(ix.cards.sera_round, 'next', { group: 'relic', id: `relic-${relic.id}`, metadata: { relicId: relic.id }, setup: { relics: [relic.id] } })); }
+    try { cases.push(cardCase(ix.cards.sera_round, 'now', { group: 'relic', id: `relic-${relic.id}`, metadata: { relicId: relic.id }, setup: { relics: [relic.id] } })); }
     catch (error) { failures.push({ id: `relic-${relic.id}`, code: error.code || error.name, message: error.message }); }
   }
   for (const [id, build] of [...edgeBuilders(), ...protocolBuilders()]) {
@@ -910,7 +903,7 @@ export function generateCases() {
     reachability: { positiveSilenceUntil: 'UNREACHABLE: none of the20 live enemy definitions produces silence',
       battleOnly: true, runAcceptance: 'PENDING', setupGauge100: 'Explicit supported inputs labeled per case; earned recharge and ult use are separate cases',
       runOnlyRelics: ['virtue_of_refusal', 'forge_ember', 'old_compass', 'lucky_coin'],
-      notAuthored: ['costIf', 'explicit plus.eff', 'broken/reserved/exhaustedAtLeast conditions', 'proposal-only enemy moves and phase definitions'],
+      notAuthored: ['costIf', 'explicit plus.eff', 'broken/reserved/held/exhaustedAtLeast conditions', 'proposal-only enemy moves and phase definitions'],
       evolvedSetup: 'Persistent-deck id/from inputs do not assert Run.evolve eligibility',
       notes: 'No state, hand, mark, HP or definitions are injected after Create; all preparation uses concrete commands' },
     coverage, authoredEffects, counts, cases };

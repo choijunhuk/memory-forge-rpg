@@ -27,7 +27,8 @@ namespace MemoryForge.Client.Tests
                 ["com_recall"] = new[] { ("recall", (string?)null) }, ["yuri_dew"] = new[] { ("growPick", (string?)null) }, ["wc_yuri"] = new[] { ("growPick", (string?)null) },
                 ["yuri_metamorph"] = new[] { ("copyPick", (string?)null) }, ["sion_erase"] = new[] { ("exhaustPick", (string?)null) }, ["sion_forget"] = new[] { ("exhaustPick", (string?)null) },
                 ["com_salvage"] = new[] { ("exhaustPick", (string?)null) }, ["wc_sion"] = new[] { ("exhaustPick", (string?)null) }, ["sera_reload"] = new[] { ("discard", (string?)null) },
-                ["com_sort"] = new[] { ("discard", (string?)null) }, ["sera_pull"] = new[] { ("pull", (string?)null) }
+                // RULES_NOW_PLAY (2026-10-19): sera_pull (시간 당기기) no longer pulls a reservation; it returns a discard card (recall).
+                ["com_sort"] = new[] { ("discard", (string?)null) }, ["sera_pull"] = new[] { ("recall", (string?)null) }
             };
             foreach (var pair in expected)
                 Assert.That(MemoryForgeExpeditionClient.ChoiceRules(defs[pair.Key], "now").Select(r => (r.Op, r.Part)), Is.EqualTo(pair.Value), pair.Key);
@@ -83,7 +84,7 @@ namespace MemoryForge.Client.Tests
         }
 
         // costdown(one): Core's actual current cost decides (a cost-0 definition and a real cost -1 circuit, c_lite, are not offered; a
-        // reserve-only card with cost above 0 is). Core would replace an ineligible pick, and takes an offered one as asked.
+        // 보존 card with cost above 0 is). Core would replace an ineligible pick, and takes an offered one as asked.
         [Test]
         public void CostdownOffersOnlyHandCardsWhoseActualCurrentCostIsAboveZero()
         {
@@ -94,7 +95,7 @@ namespace MemoryForge.Client.Tests
             Assert.That(s.Zones.Hand.Count, Is.EqualTo(5), "precondition: the whole deck is the hand");
             string overclock = Uid(s, "nia_overclock"), tune = Uid(s, "nia_tune"), round = Uid(s, "sera_round"), timed = Uid(s, "sera_timed"), slash = Uid(s, "com_slash");
             Assert.That(new[] { battle.CostOf(tune, "now"), battle.CostOf(round, "now"), battle.CostOf(timed, "now"), battle.CostOf(slash, "now") }, Is.EqualTo(new[] { 0, 0, 2, 1 }),
-                "Core's current costs: a cost-0 definition, sera_round (cost 1) with the real cost -1 circuit, a reserve-only cost 2, a cost 1");
+                "Core's current costs: a cost-0 definition, sera_round (cost 1) with the real cost -1 circuit, the 보존 sera_timed cost 2, a cost 1");
             Assert.That(defs["sera_round"].Cost, Is.EqualTo(1), "the circuit, not the definition, makes sera_round cost 0");
             var request = Request(content, "nia_overclock"); var rule = Rule(content, "nia_overclock");
             Func<string, bool, int> cost = (u, without) => without ? battle.CostOfWithoutNextFree(u, "now") : battle.CostOf(u, "now");
@@ -285,14 +286,16 @@ namespace MemoryForge.Client.Tests
                 Assert.That(Assert.Throws<RuleException>(() => b.CostOfWithoutNextFree("absent"))!.Code, Is.EqualTo("UNKNOWN_CARD_INSTANCE"));
                 Assert.That(Fingerprint(b), Is.EqualTo(before), "all queries preserve full state/log/events/RNG and every receipt");
             }
-            Check(0, new[] { 1, 1, 0, 0, 2 }, new[] { 0, 0, 0, 0, 1 });
+            // RULES_NOW_PLAY (2026-10-19): empty_clock takes 1 off the battle's first card in every mode (it was next/after only) and is
+            // consumed by that first play even when FreeNext makes it free. Authored costs 1, 1, 1 + c_lite -1 = 0, 0, 2; floor 0.
+            Check(0, new[] { 0, 0, 0, 0, 1 }, new[] { 0, 0, 0, 0, 1 });
             Commit(b, "ult", BattleArgument.Object(new[] { Pair("actor", "rien"), Pair("target", null) }));
-            Check(2, new[] { 1, 1, 0, 0, 2 }, new[] { 0, 0, 0, 0, 1 });
-            Commit(b, "play", Play(ids[2], "now", b.State.Enemies[0].Uid));
-            Check(1, new[] { 1, 1, 0, 0, 2 }, new[] { 0, 0, 0, 0, 1 });
+            Check(2, new[] { 0, 0, 0, 0, 1 }, new[] { 0, 0, 0, 0, 1 });
+            Commit(b, "play", Play(ids[2], "now", b.State.Enemies[0].Uid)); // the first card: empty_clock is used up
+            Check(1, new[] { 1, 1, 0, 0, 2 }, new[] { 1, 1, 0, 0, 2 });
             Commit(b, "play", Play(ids[0], "now", null, new[] { ids[1] }));
             Assert.That(b.State.Cards[ids[1]].CostMod, Is.EqualTo(-1));
-            Check(0, new[] { 1, 0, 0, 0, 2 }, new[] { 0, 0, 0, 0, 1 });
+            Check(0, new[] { 1, 0, 0, 0, 2 }, new[] { 1, 0, 0, 0, 2 });
         }
 
         // Explicitly TEST-LOCAL definitions cover unauthored conditional/overflow branches. They never change Resources or live state.
@@ -305,11 +308,12 @@ namespace MemoryForge.Client.Tests
             var b = Begin(data, 39, new[] { "rien", "nia", "sera" }, new[] {
                 new BattleCardSpec { Id = "sera_round", Circuit = "c_lite" }, Spec("com_guard") }, new[] { "empty_clock" }, "rien");
             string uid = Uid(b.State, "sera_round"), before = Fingerprint(b);
-            Assert.That((b.CostOf(uid), b.CostOfWithoutNextFree(uid)), Is.EqualTo((2, 2)));
+            // 1 + c_lite -1 + modded 2 = 2, minus the unused empty_clock 1 in every mode (RULES_NOW_PLAY: it was next/after only).
+            Assert.That((b.CostOf(uid), b.CostOfWithoutNextFree(uid)), Is.EqualTo((1, 1)));
             Assert.That((b.CostOf(uid, "next"), b.CostOfWithoutNextFree(uid, "after")), Is.EqualTo((1, 1)));
             Assert.That(Fingerprint(b), Is.EqualTo(before));
             Commit(b, "ult", BattleArgument.Object(new[] { Pair("actor", "rien"), Pair("target", null) })); before = Fingerprint(b);
-            Assert.That((b.CostOf(uid), b.CostOfWithoutNextFree(uid)), Is.EqualTo((0, 2)));
+            Assert.That((b.CostOf(uid), b.CostOfWithoutNextFree(uid)), Is.EqualTo((0, 1)));
             Assert.That(Fingerprint(b), Is.EqualTo(before));
 
             var overflow = ClientBattleContent.Load().Battle;

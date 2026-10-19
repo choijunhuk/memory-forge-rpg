@@ -298,6 +298,10 @@ sealed partial class ServerChecks
         var served = view.Json.GetProperty("state").GetProperty("battle");
         Check(I(view.Json, "version") == version && I(served, "v") == cb.V && I(served, "turn") == cb.Turn && A(served, "hand").Select(c => S(c, "uid")).SequenceEqual(cb.Zones.Hand),
             "precondition: the oracle is the served battle" + label);
+        // RULES_NOW_PLAY: each served hand card carries the oracle's held (kept over a turn end) and retain (stays at the next end) flags.
+        foreach (var card in A(served, "hand"))
+            Check(card.GetProperty("held").GetBoolean() == cb.Cards[S(card, "uid")!].Held && card.GetProperty("retain").GetBoolean() == core.BattleRetains(S(card, "uid")!),
+                "the served hand card's held and retain flags are the oracle's" + label);
         SameSlots(served.GetProperty("slots"), core, cb, "the run view's computed slots" + label);
 
         string? target = cb.Enemies.FirstOrDefault(e => e.Alive)?.Uid;

@@ -64,8 +64,8 @@ namespace MemoryForge.Client.Tests
             Debug.Log($"BattleLateActionsPlayMode: {checks - failures.Count}/{checks} checks; {creates} actual Battle.Create, {requests} actual requests " +
                 $"({committed} committed, {replayed} replayed, {rejected} rejected), {points} compared checkpoints");
             Assert.That(failures, Is.Empty, "late-action Mono parity failures (first " + failures.Count + "):\n" + string.Join("\n", failures.Take(20)));
-            Assert.That(new[] { creates, requests, committed, replayed, rejected }, Is.EqualTo(new[] { 81, 473, 445, 2, 26 }),
-                "all 81 fresh creations and 473 recorded requests must actually execute in Mono");
+            Assert.That(new[] { creates, requests, committed, replayed, rejected }, Is.EqualTo(new[] { 76, 437, 415, 2, 20 }),
+                "all 76 fresh creations and 437 recorded requests must actually execute in Mono"); // RULES_NOW_PLAY: five reservation-only cases left the corpus
         }
 
         // ───────── one recorded case through the real public Core API ─────────
@@ -149,12 +149,12 @@ namespace MemoryForge.Client.Tests
                 Assert.That((string?)record["path"], Is.EqualTo(Sources[i, 1]), "substituted source path " + Sources[i, 0]);
                 Assert.That((string?)record["sha256"], Is.EqualTo(Sha(File.ReadAllBytes(Path.Combine(repo, Sources[i, 1])))), "stale source " + Sources[i, 0]);
             }
-            Assert.That(CanonicalState.Serialize(Graph(fixture["counts"])), Is.EqualTo("{\"cases\":81,\"commands\":473,\"committed\":445,\"rejected\":26,\"replayed\":2}"), "fixed denominators");
-            Assert.That(CanonicalState.Serialize(Graph(fixture["coverage"])), Is.EqualTo("{\"candidates\":23,\"edges\":34,\"encounters\":23,\"protocols\":1}"), "fixed coverage");
+            Assert.That(CanonicalState.Serialize(Graph(fixture["counts"])), Is.EqualTo("{\"cases\":76,\"commands\":437,\"committed\":415,\"rejected\":20,\"replayed\":2}"), "fixed denominators");
+            Assert.That(CanonicalState.Serialize(Graph(fixture["coverage"])), Is.EqualTo("{\"candidates\":23,\"edges\":29,\"encounters\":23,\"protocols\":1}"), "fixed coverage");
             Assert.That(Arr(fixture["behaviors"], "behaviors").Select(b => (string?)b), Is.EqualTo(Behaviors));
             Assert.That((string?)fixture["overlay"]?["provenance"]?["status"], Is.EqualTo("candidate-only"));
             Assert.That(new[] { Arr(fixture["overlay"]?["enemies"], "overlay").Count, Arr(fixture["boundaryEnemies"], "boundary").Count, Arr(fixture["cases"], "cases").Count },
-                Is.EqualTo(new[] { 23, 17, 81 }));
+                Is.EqualTo(new[] { 23, 17, 76 }));
             Assert.That(Arr(fixture["boundaryEnemies"], "boundary").All(e => Str(e["id"], "boundary id").StartsWith("t_", StringComparison.Ordinal)), Is.True, "test-local IDs stay separate");
         }
 

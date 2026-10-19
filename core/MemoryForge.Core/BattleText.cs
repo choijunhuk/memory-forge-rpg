@@ -32,8 +32,7 @@ namespace MemoryForge.Core
             var parts = card.Effects.Select(e => Op(e, data)).Where(t => t.Length > 0).ToList();
             var keywords = card.Keywords ?? new List<string>();
             var kw = new List<string>();
-            if (card.Reservation == "o") kw.Add("예약 전용"); else if (card.Reservation == "after") kw.Add("다다음 턴 예약 전용");
-            else if (card.Reservation == "n" && !keywords.Contains("contract")) kw.Add("즉시 전용");
+            if (keywords.Contains("retain")) kw.Add("보존"); // RULES_NOW_PLAY: every card is played now, so no mode label
             if (keywords.Contains("contract")) kw.Add("계약");
             if (card.Growth == true) kw.Add("성장");
             if (keywords.Contains("exhaust")) kw.Add("소멸");
@@ -86,8 +85,8 @@ namespace MemoryForge.Core
                 case "growAll": return "모든 성장 카드 성장 +1";
                 case "loan": return $"행동력 +{Int(op.N)}, 다음 턴 행동력 -{Int(op.N)}(부채 {Int(op.N)})";
                 case "defer": return "다음 턴 부채 1개를 1턴 미루고 금액 +1(재유예 불가)";
-                case "restraint": return "이번 턴 카드를 3장 이하로 쓰면 다음 턴 첫 예약 피해·방어 +30%. 4장째에 위약: 다음 턴 드로우 -1";
-                case "collateral": return $"다음 턴 예약 칸 1개 봉인(다음 내 턴 종료까지), 방어 {Int(op.V)}";
+                case "restraint": return "이번 턴 카드를 3장 이하로 쓰면 다음 턴 첫 피해·방어 카드 +30%. 4장째에 위약: 다음 턴 드로우 -1";
+                case "collateral": return $"방어 {Int(op.V)}, 다음 턴 행동력 -1(부채 1)";
                 case "selfdmg": return $"과부하 {Int(op.V)}";
                 case "cleanse": return "해로운 효과 모두 제거";
                 case "cleanseOne": return $"{Lookup(StatusName, op.Status) ?? Text(op.Status)} 제거";
@@ -130,7 +129,8 @@ namespace MemoryForge.Core
                 case "broken": return "대상이 균열 상태면";
                 case "debt": return "부채가 있으면";
                 case "modded": return "이 카드에 개조가 있으면";
-                case "reserved": return "예약으로 해결되면";
+                case "reserved": return "보존했던 카드면";
+                case "held": return "보존했던 카드면";
                 case "intentAttack": return "대상이 공격할 예정이면";
                 case "echo": return $"잔향 {Int(c.N)} 이상이면";
                 case "hpBelow": return $"파티 체력 {Int(c.Pct)}% 이하면";
@@ -147,7 +147,7 @@ namespace MemoryForge.Core
             switch (op.Status)
             {
                 case "charge": return $"다음 공격 카드 피해 +{Hundredth(op.N)}%";
-                case "seraLock": return $"세라의 예약 공격 피해 +{Hundredth(op.N)}%";
+                case "seraLock": return $"세라의 카드 공격 피해 +{Hundredth(op.N)}%";
                 case "healUp": return $"다음 회복 +{Hundredth(op.N)}%";
                 case "lumiRush": return $"이번 턴 루미의 공격 피해 +{Hundredth(op.N)}%";
                 case "counterDouble": return "반격 피해 2배";

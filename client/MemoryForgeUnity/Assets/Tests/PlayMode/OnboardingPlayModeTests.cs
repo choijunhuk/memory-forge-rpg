@@ -98,8 +98,9 @@ namespace MemoryForge.Client.Tests
                 yield return null;
             }
             Assert.That(client.Snapshot!.Phase, Is.EqualTo("REWARD"), "following the coach, then repeating what it taught, wins the first battle");
-            Assert.That(seen.Where(s => s != "battle.target"), Is.EqualTo(new[] { "map", "battle.hand", "battle.mode", "battle.confirm", "battle.endturn", "battle.summary" }),
-                "lesson 1 runs in §14.5 order (a target choice may come between mode and confirm) and no later lesson starts in the same battle");
+            // RULES_NOW_PLAY: the mode step is gone; a card is chosen and confirmed.
+            Assert.That(seen.Where(s => s != "battle.target"), Is.EqualTo(new[] { "map", "battle.hand", "battle.confirm", "battle.endturn", "battle.summary" }),
+                "lesson 1 runs in §14.5 order (a target choice may come between card and confirm) and no later lesson starts in the same battle");
             Assert.That(driver.Plays, Is.GreaterThan(0));
 
             // The winning play's result sheet (or the last turn result) covers the reward screen; the coach waits under it and returns
@@ -118,10 +119,11 @@ namespace MemoryForge.Client.Tests
             Assert.That(client.Snapshot!.Phase, Is.EqualTo("MAP"));
             Assert.That(coach.CurrentStep, Is.Null, "a done map step never shows again");
             var stored = PlayerPrefs.GetString(key + ".done").Split(',');
-            Assert.That(stored, Is.SupersetOf(new[] { "map", "battle.hand", "battle.mode", "battle.confirm", "battle.endturn", "battle.summary", "reward" }));
+            Assert.That(stored, Is.SupersetOf(new[] { "map", "battle.hand", "battle.confirm", "battle.endturn", "battle.summary", "reward" }));
             Assert.That(coach.Completed, Is.EquivalentTo(stored));
 
-            // The next battle opens lesson 2 (§14.5 ②) with the intent explanation; acknowledging it moves to the reservation.
+            // The next battle opens lesson 2 (§14.5 ②) with the intent explanation; acknowledging it moves to 보존 (RULES_NOW_PLAY:
+            // it replaced the reservation lesson).
             string firstBattle = client.Snapshot.RunId + "@" + client.Snapshot.Position;
             for (int guard = 0; guard < 200 && !(client.Snapshot!.Phase == "BATTLE" && client.Snapshot.RunId + "@" + client.Snapshot.Position != firstBattle); guard++)
             {
@@ -135,37 +137,19 @@ namespace MemoryForge.Client.Tests
             Click(ButtonNamed(o.Host, MemoryForgeOnboarding.NextName));
             yield return null;
             Assert.That(coach.Completed, Does.Contain("battle.intent"));
-            Assert.That(coach.CurrentStep, Is.EqualTo("reserve.next"));
-
-            // Follow the coach to the reservation confirm, then end the turn instead: no reservation was made, so the confirm step must
-            // stay open and guide again on the next turn (Codex review P1).
-            for (int guard = 0; guard < 60 && coach.CurrentStep != "reserve.confirm"; guard++) { PressCoach(o, driver); yield return null; }
-            Assert.That(coach.CurrentStep, Is.EqualTo("reserve.confirm"));
-            var before = client.Snapshot!.Battle!.Reservations.Select(r => r.Uid).ToList();
-            Click(ButtonNamed(o.Host, "EndTurn"));
+            Assert.That(coach.CurrentStep, Is.EqualTo("battle.retain"));
+            Assert.That(coach.Highlighted.All(r => r.name == "Hand" || r.name.StartsWith("Hand:", StringComparison.Ordinal)), Is.True, "the 보존 step points at the hand");
+            Click(ButtonNamed(o.Host, MemoryForgeOnboarding.NextName));
             yield return null;
-            Click(ButtonNamed(o.Host, "ContinueTurnSummary"));
-            yield return null;
-            Assert.That(client.Snapshot!.Battle!.Reservations.Any(r => !before.Contains(r.Uid)), Is.False);
-            Assert.That(coach.Completed, Does.Not.Contain("reserve.confirm"), "ending the turn is not a reservation");
-            Assert.That(coach.CurrentStep, Is.EqualTo("reserve.confirm"), "the confirm step guides again on the next turn");
-
-            // Following the coach now registers a real reservation and resolves it through the turn end (lesson 2 finished).
-            for (int guard = 0; guard < 120 && !coach.Completed.Contains("reserve.timeline") && client.Snapshot!.Phase == "BATTLE"; guard++)
-            {
-                if (coach.CurrentStep != null) PressCoach(o, driver);
-                else if (client.HasActionPresentation) Click(ButtonNamed(o.Host, "SkipActionPresentation"));
-                else if (client.HasTurnSummary) Click(ButtonNamed(o.Host, "ContinueTurnSummary"));
-                else driver.Practice(o);
-                yield return null;
-            }
-            Assert.That(coach.Completed, Is.SupersetOf(new[] { "battle.intent", "reserve.next", "reserve.confirm", "reserve.timeline" }), "lesson 2 by the real buttons");
+            Assert.That(coach.Completed, Is.SupersetOf(new[] { "battle.intent", "battle.retain" }), "lesson 2 by the real buttons");
 
             // On to the end of the expedition with the original numbers: lessons 3 (break, ultimate) and 4 (boss) open in later battles
             // and the first memory save closes it.
-            var lessons = new List<string>();
+            var lessons = new List<string>(); int gaugeMax = ClientBattleContent.Load().Battle.Rules.GaugeMax; bool ultReady = false;
             for (int guard = 0; guard < 8000 && !client.ShowingResult; guard++)
             {
+                var live = client.Snapshot?.Battle;
+                if (coach.Completed.Contains("battle.break") && live != null && live.Phase == "PLAYER" && live.Actors.Any(a => a.Gauge >= gaugeMax)) ultReady = true;
                 string? step = coach.CurrentStep;
                 if (step != null && !lessons.Contains(step)) { lessons.Add(step); AssertThreeLines(View(o.Host), step); }
                 if (step == "forge") PressCoachProceed(o);
@@ -175,13 +159,19 @@ namespace MemoryForge.Client.Tests
             }
             Assert.That(client.ShowingResult, Is.True, "the expedition ends at its result screen; lessons seen: " + string.Join(",", lessons));
             Assert.That(lessons, Does.Contain("save"));
-            Assert.That(coach.Completed, Is.SupersetOf(new[] { "battle.break", "battle.ult", "save" }), "lesson 3 and the first save by the real buttons; seen: " + string.Join(",", lessons));
-            Assert.That(lessons.IndexOf("battle.break"), Is.LessThan(lessons.IndexOf("battle.ult")));
+            Assert.That(coach.Completed, Is.SupersetOf(new[] { "battle.break", "save" }), "lesson 3 and the first save by the real buttons; seen: " + string.Join(",", lessons));
+            // RULES_NOW_PLAY: the ultimate tip is not part of finishing lesson 3; it must show and be done once a gauge fills after the break step.
+            if (ultReady)
+            {
+                Assert.That(coach.Completed, Does.Contain("battle.ult"), "a ready ultimate after the break step shows the ultimate tip; seen: " + string.Join(",", lessons));
+                Assert.That(lessons.IndexOf("battle.break"), Is.LessThan(lessons.IndexOf("battle.ult")));
+            }
+            else Assert.That(lessons, Does.Not.Contain("battle.ult"), "no gauge filled, so the ultimate tip had nothing to point at");
             Assert.That(Get(client.Snapshot!.Result, "outcome"), Is.EqualTo("clear"), "seed 1234's short expedition is cleared by following the guide");
-            Assert.That(coach.Completed, Is.SupersetOf(new[] { "boss.timing", "boss.after" }), "the boss lesson by the real buttons; seen: " + string.Join(",", lessons));
-            Assert.That(lessons.IndexOf("battle.ult"), Is.LessThan(lessons.IndexOf("boss.timing")), "§14.5 order: ③ before ④");
+            Assert.That(coach.Completed, Is.SupersetOf(new[] { "boss.timing" }), "the boss lesson by the real buttons; seen: " + string.Join(",", lessons));
+            Assert.That(lessons.IndexOf("battle.break"), Is.LessThan(lessons.IndexOf("boss.timing")), "§14.5 order: ③ before ④");
             TestContext.WriteLine("onboarding run: outcome=" + Get(client.Snapshot.Result, "outcome") + " battles=" + client.Snapshot.Statistics.Battles
-                + " plays=" + driver.Plays + " steps=" + string.Join(",", lessons));
+                + " plays=" + driver.Plays + " ultReady=" + ultReady + " steps=" + string.Join(",", lessons));
         }
         static object? Get(object? node, string key) => node is IDictionary<string, object?> map && map.TryGetValue(key, out var value) ? value : null;
 
@@ -372,7 +362,7 @@ namespace MemoryForge.Client.Tests
             if (string.IsNullOrEmpty(dir)) Assert.Ignore("MF_ONBOARDING_SHOTS is not set");
             var o = new Opening(); yield return Open(o, NewKey());
             var client = o.Client; var coach = o.Coach; var driver = new Driver(); var shot = new List<string>();
-            for (int guard = 0; guard < 1200 && !(coach.CurrentStep == "reserve.next"); guard++)
+            for (int guard = 0; guard < 1200 && !(coach.CurrentStep == "battle.retain"); guard++)
             {
                 string? step = coach.CurrentStep;
                 if (step != null && !shot.Contains(step)) { shot.Add(step); yield return Capture(o.Host, System.IO.Path.Combine(dir!, (shot.Count).ToString("00") + "_" + step + ".png")); }
@@ -448,8 +438,6 @@ namespace MemoryForge.Client.Tests
                 if (confirm != null) { Click(confirm); Plays++; return; }
                 var caption = o.Host.GetComponentsInChildren<Button>().FirstOrDefault(x => x.name == "ConfirmCard")?.GetComponentInChildren<Text>()?.text;
                 if (caption == "대상 선택") { Click(o.Host.GetComponentsInChildren<Button>().First(x => x.name.StartsWith("Enemy:", StringComparison.Ordinal) && x.IsInteractable())); return; }
-                var mode = Usable(o.Host, "Mode:now");
-                if (mode != null && c.SelectedMode != "now") { Click(mode); return; }
                 if (NextHandCard(o)) return;
                 Click(ButtonNamed(o.Host, "EndTurn"));
             }

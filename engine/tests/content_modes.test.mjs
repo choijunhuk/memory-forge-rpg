@@ -301,16 +301,25 @@ function pair(rule, setup) {
 }
 const bossSetup = (party, deck) => ({ party: party.map((charId) => ({ charId })), deck: deck.map((id) => ({ id })), hp: 300, maxHp: 300, seed: 11, enemies: ['b_archivist'] });
 
-test('rift_reserve: reserved damage +30%, immediate damage −10%', () => {
-  const { plain, ruled } = pair('rift_reserve', bossSetup(['sera'], ['sera_round']));
+// RULES_NOW_PLAY (2026-10-19): reservations are gone; rift_reserve now keys on ctx.held (a 보존 card kept from an earlier turn).
+test('rift_reserve: held card damage +30%, every other card hit −10%', () => {
+  const { plain, ruled, params } = pair('rift_reserve', bossSetup(['sera'], Array(10).fill('sera_timed')));
   const e = ruled.s.enemies[0];
-  assert.equal(ruled.dmgBonusBps({ reserved: 'next' }, e) - plain.dmgBonusBps({ reserved: 'next' }, e), 3000);
-  assert.equal(ruled.dmgBonusBps({ reserved: 'after' }, e) - plain.dmgBonusBps({ reserved: 'after' }, e), 3000);
-  assert.equal(ruled.dmgBonusBps({ reserved: null }, e) - plain.dmgBonusBps({ reserved: null }, e), -1000);
+  const diff = (ctx) => ruled.dmgBonusBps(ctx, e) - plain.dmgBonusBps(ctx, e);
+  assert.equal(diff({ held: true }), params.reservedBps);
+  assert.equal(diff({ held: false }), params.immediateBps);
+  assert.equal(diff({ reserved: 'next' }), params.immediateBps, 'a legacy reservation kind no longer earns the bonus');
+  assert.deepEqual([params.reservedBps, params.immediateBps], [3000, -1000]);
   plain.do('begin'); ruled.do('begin');
-  const play = (b) => { const uid = b.s.zones.hand[0]; b.do('play', { uid, mode: 'now', target: b.s.enemies[0].uid }); return b.s.enemies[0].maxHp - b.s.enemies[0].hp; };
-  const [p, r] = [play(plain), play(ruled)];
-  assert.ok(r < p, `immediate hit ${r} < ${p}`);
+  const v = DATA.cards.find((c) => c.id === 'sera_timed').eff[0].v;
+  const hit = (b) => { const uid = b.s.zones.hand[0]; const held = b.s.cards[uid].held;
+    const r = b.do('play', { uid, mode: 'now', target: b.s.enemies[0].uid });
+    return [held, r.ev.find((x) => x.e === 'dmg' && x.src === 'card').n]; };
+  // turn 1: a fresh (not held) sera_timed
+  assert.deepEqual([hit(plain), hit(ruled)], [[false, v], [false, Math.floor(v * (10000 + params.immediateBps) / 10000)]]);
+  // turn 2: the other four sera_timed stayed in hand (보존) and are held
+  plain.do('end'); ruled.do('end');
+  assert.deepEqual([hit(plain), hit(ruled)], [[true, v], [true, Math.floor(v * (10000 + params.reservedBps) / 10000)]]);
 });
 
 test('rift_break: break gauge ×1.5 (rounded) for every enemy and phase, broken bonus +50% instead of +25%', () => {

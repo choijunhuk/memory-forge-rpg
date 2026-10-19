@@ -190,7 +190,8 @@ static class BattlePlayerQueryChecks
             records += row.GetProperty("createdQueries").GetArrayLength() + row.GetProperty("queries").GetArrayLength();
             Require(HashText(row.GetProperty("definitionsBeforeHash")) == catalogHash && HashText(row.GetProperty("definitionsAfterHash")) == catalogHash, "Definition mutation/stale hash in query fixture");
         }
-        Require(cards.Count == 173 && modePairs == 378 && expected.Count == 702, "Current complete A0 inventory changed");
+        // RULES_NOW_PLAY (2026-10-19): every card is res "n", so the 173 base cards have exactly 173 legal (card, now) pairs.
+        Require(cards.Count == 173 && cards.All(c => Text(c, "res") == "n") && modePairs == cards.Count && expected.Count == 702, "Current complete A0 inventory changed");
         var coverage = fixture.GetProperty("coverage");
         foreach (var (key, count) in new[] { ("cards", cards.Count), ("baseModePairs", modePairs), ("characterResonances", characters.Count * 7), ("weaponRefinements", weapons.Count * 5), ("relics", relics.Count), ("partDefinitions", parts.Count), ("permanentPartCases", permanent.Count), ("beginTempPartCases", 1) })
             Require(coverage.GetProperty(key).GetInt32() == count, "Query coverage mismatch " + key);
@@ -305,21 +306,21 @@ static class BattlePlayerQueryChecks
         string Uid(Battle battle, string card, bool plus = false) => battle.State.Cards.Values.Single(c => c.Id == card && c.Plus == plus).Uid;
         BattleCardDef Card(Battle battle, string card, bool plus = false) => battle.EffectiveCard(Uid(battle, card, plus));
         var battle = Start("card-sera_round-plus"); var definition = Card(battle, "sera_round", true);
-        Check(definition.Effects[0].V == 11 && definition.Effects[0].Rv == 16, "independent ceiling13/10 upgrade8→11/12→16");
+        Check(definition.Effects[0].V == 11 && definition.Effects[0].Rv == null, "independent ceiling13/10 upgrade8→11 (rv removed from data)");
         battle = Start("resonance-sera-r4"); definition = Card(battle, "sera_timed", true);
-        Check(definition.Effects[0].V == 21 && definition.Effects[0].Rv == 29 && definition.Effects[0].Ra == 39 && definition.Effects[0].Brk == 5, "independent automatic upgrade precedes SeraR4 break+2");
+        Check(definition.Effects[0].V == 26 && definition.Effects[0].Rv == null && definition.Effects[0].Ra == null && definition.Effects[0].Brk == 5, "independent automatic upgrade20→26 precedes SeraR4 break3+2");
         battle = Start("resonance-harin-r1"); definition = Card(battle, "harin_counter", true);
-        Check(definition.Effects[0].V == 7 && definition.Effects[0].Rv == 10 && definition.Effects[1].N == 6, "independent upgraded counterceil3.9=4 then resonance+2=6");
+        Check(definition.Effects[0].V == 7 && definition.Effects[0].Rv == null && definition.Effects[1].N == 6, "independent upgraded counterceil3.9=4 then resonance+2=6");
         battle = Start("resonance-kaya-r1"); Check(Card(battle, "kaya_clue", true).Effects[0].N == 4, "independent status upgrade+1 precedes Kaya+1");
         battle = Start("resonance-rien-r1"); Check(Card(battle, "rien_note", true).Effects[0].V == 9, "independent Rienceil5.2=6 then+3=9");
         battle = Start("resonance-aila-r1"); definition = Card(battle, "aila_bell", true);
-        Check(definition.Effects[0].V == 9 && definition.Effects[0].Rv == 12, "independent Aila upgraded heal7/10 then+2=9/12");
+        Check(definition.Effects[0].V == 9 && definition.Effects[0].Rv == null, "independent Aila upgraded heal7 then+2=9");
         battle = Start("resonance-nia-r1"); Check(Card(battle, "nia_tune").Uses == 3 && Card(battle, "nia_tune", true).Uses == 3, "independent Nia uses2+1 for both upgrade variants");
         battle = Start("resonance-ravien-r1"); Check(Card(battle, "ravien_advance", true).Uses == 2 && battle.AllowedModes(Uid(battle, "ravien_advance", true)).SequenceEqual(new[] { "now" }), "independent contract uses1+1 remains immediate only");
         battle = Start("resonance-sion-r1"); Check(Card(battle, "sion_erase", true).Effects[1].N == 2, "independent draw resonance adds1 without automatic draw upgrade");
         battle = Start("resonance-lumi-r1"); Check(Card(battle, "lumi_dash", true).Effects[0].V == 1 && Card(battle, "lumi_dash", true).Effects[1].V == 10, "independent selfdmg3-2=1 while damage7 upgrades to10");
         battle = Start("card-sera_double-plus"); definition = Card(battle, "sera_double", true);
-        Check(definition.Effects[0].V == 6 && definition.Effects[0].Rv == 8 && definition.Effects[1].Then![0].V == 6 && definition.Effects[1].Then![0].Rv == 8 && definition.Effects[1].Else!.Count == 0 && definition.Effects[1].ToJsonGraph().ContainsKey("else"), "independent recursive upgrade preserves explicit empty else");
+        Check(definition.Effects[0].V == 6 && definition.Effects[0].Rv == null && definition.Effects[1].Then![0].V == 6 && definition.Effects[1].Then![0].Rv == null && definition.Effects[1].Else!.Count == 0 && definition.Effects[1].ToJsonGraph().ContainsKey("else"), "independent recursive upgrade preserves explicit empty else");
         var zeroCard = data.Cards.Single(c => c.Effects.Any(e => e.Hits == 0)); battle = Start("card-" + zeroCard.Id + "-plus");
         Check(Card(battle, zeroCard.Id, true).Effects.Any(e => e.Hits == 0 && e.ToJsonGraph().ContainsKey("hits")), "independent authored hits0 stays present and zero");
         battle = Start("card-sion_forget-base"); definition = Card(battle, "sion_forget");
@@ -329,11 +330,12 @@ static class BattlePlayerQueryChecks
         Check(!data.Cards.Single(c => c.Id == "sera_round").ToJsonGraph().ContainsKey("uses") && !data.Cards.Single(c => c.Id == "sera_round").ToJsonGraph().ContainsKey("plus"), "independent absent optional uses/plus remain absent");
 
         battle = Start("edge-empty-clock-no-reserve");
-        Check(battle.AllowedModes(Uid(battle, "sera_round")).SequenceEqual(new[] { "now" }) && battle.AllowedModes(Uid(battle, "sera_timed")).Count == 0 && battle.AllowedModes(Uid(battle, "sera_last")).Count == 0, "independent noReserve retains now for y but removes all o/after-only modes");
-        Check(battle.CostOf(Uid(battle, "sera_timed"), "now") == 2 && battle.CostOf(Uid(battle, "sera_timed"), "next") == 1 && battle.CostOf(Uid(battle, "sera_timed"), "after") == 1, "independent pure cost query does not enforce allowed-mode precheck");
+        // RULES_NOW_PLAY: c_quick lost noReserve, no card is reserve-only, and empty_clock discounts the first card in every mode.
+        Check(new[] { "sera_round", "sera_timed", "sera_last", "nia_tune" }.All(id => battle.AllowedModes(Uid(battle, id)).SequenceEqual(new[] { "now" })), "independent c_quick keeps every card playable now");
+        Check(new[] { "now", "next", "after" }.All(mode => battle.CostOf(Uid(battle, "sera_timed"), mode) == 1), "independent empty_clock discounts sera_timed2→1 in every mode; pure cost query does not enforce allowed-mode precheck");
         battle = Start("edge-empty-clock-lite");
-        Check(battle.CostOf(Uid(battle, "sera_timed")) == 1 && battle.CostOf(Uid(battle, "sera_timed"), "next") == 0 && battle.CostOf(Uid(battle, "sera_timed"), "after") == 0 && battle.CostOf(Uid(battle, "sera_round"), "after") == 0, "independent lite and unused clock discount then clamp at0");
-        battle = Start("edge-unknown-part-ignored"); Check(battle.CostOf("c1") == 1 && battle.AllowedModes("c1").SequenceEqual(new[] { "now", "next", "after" }), "independent source ignores unknown setup part IDs");
+        Check(new[] { "now", "next", "after" }.All(mode => battle.CostOf(Uid(battle, "sera_timed"), mode) == 0 && battle.CostOf(Uid(battle, "sera_round"), mode) == 0 && battle.CostOf(Uid(battle, "sera_last"), mode) == 1), "independent lite and unused clock discount then clamp at0");
+        battle = Start("edge-unknown-part-ignored"); Check(battle.CostOf("c1") == 1 && battle.AllowedModes("c1").SequenceEqual(new[] { "now" }), "independent source ignores unknown setup part IDs");
         battle = Start("edge-character-weapon-common-owner");
         Check(Card(battle, "aila_bell", true).Effects[0].V == 9 && Full(Card(battle, "wc_choir_bell").ToJsonGraph()) == Full(data.Cards.Single(c => c.Id == "wc_choir_bell").ToJsonGraph()) && Full(Card(battle, "com_patch").ToJsonGraph()) == Full(data.Cards.Single(c => c.Id == "com_patch").ToJsonGraph()), "independent weapon wielder/common assigned metadata do not apply Aila's owned-card resonance");
         battle = Start("temp-amp-begin"); Check(battle.State.TempParts == 1 && battle.State.Cards.Values.Sum(c => c.Temp.Count(p => p == "amp")) == 1, "independent actual Nia begin produces one temporary amp");

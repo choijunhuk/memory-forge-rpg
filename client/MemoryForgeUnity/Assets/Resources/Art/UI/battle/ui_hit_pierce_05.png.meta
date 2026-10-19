@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      ui_hit_pierce_05_0: -775297838594309197
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

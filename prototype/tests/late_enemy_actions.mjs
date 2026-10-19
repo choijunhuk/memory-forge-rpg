@@ -155,75 +155,10 @@ test('candidate Nameless phase two displays its new weakness and pattern in deta
   } finally { await context.close(); }
 });
 
-test('candidate delayed reservation is labeled from its explicit delayed flag', async () => {
-  const ck = fixture(['e_prompter'], { mutate: b => {
-    b.do('play', { uid: b.s.zones.hand[0], mode: 'next' });
-    b.do('end');
-  } });
-  const { page, context, errors } = await open(ck);
-  try {
-    await shot(page, 'candidate-delayed-reservation');
-    assert.equal((await state(page)).res[0].delayed, true);
-    assert.match(await page.locator('.slot.filled').first().innerText(), /지연됨/);
-    await page.locator('.slot.filled').first().click();
-    assert.match(await page.locator('.modal').innerText(), /시간 지연으로 만기가 3턴.*위력은 다음 턴 예약 기준 그대로/s);
-    await clean(page, errors);
-  } finally { await context.close(); }
-});
-
-test('ordinary after reservation entering the next column has no false delay marker', async () => {
-  const ck = fixture(['e_collector'], { mutate: b => {
-    b.alive()[0].pi = 1; // candidate collector charge, no delay during rollover
-    b.do('play', { uid: b.s.zones.hand[0], mode: 'after' });
-    b.do('end');
-  } });
-  const { page, context, errors } = await open(ck);
-  try {
-    await shot(page, 'candidate-ordinary-after-rollover');
-    assert.equal((await state(page)).res[0].delayed, undefined);
-    assert.equal(await page.locator('.slot.filled').count(), 1);
-    assert.doesNotMatch(await page.locator('.slot.filled').innerText(), /지연됨/);
-    await clean(page, errors);
-  } finally { await context.close(); }
-});
-
-test('candidate overfilled delay shows discard and no AP refund in battle log', async () => {
-  const ck = fixture(['e_prompter'], { relics: ['cracked_hourglass'], mutate: b => {
-    for (let i = 0; i < 2; i++) b.do('play', { uid: b.s.zones.hand[0], mode: 'after' });
-    b.do('play', { uid: b.s.zones.hand[0], mode: 'next' });
-    b.do('end');
-  } });
-  const { page, context, errors } = await open(ck);
-  try {
-    await page.locator('[data-act="toggleLog"]').click();
-    await shot(page, 'candidate-delay-overflow');
-    assert.match(await page.locator('.log').innerText(), /시간 지연.*버린 더미.*돌려받지 못함/);
-    await clean(page, errors);
-  } finally { await context.close(); }
-});
-
-test('candidate overfilled delay warns before end turn that the card will be discarded without refund', async () => {
-  const ck = fixture(['e_prompter'], { relics: ['cracked_hourglass'], mutate: b => {
-    for (let i = 0; i < 2; i++) b.do('play', { uid: b.s.zones.hand[0], mode: 'after' });
-    b.do('play', { uid: b.s.zones.hand[0], mode: 'next' });
-  } });
-  const { page, context, errors } = await open(ck);
-  try {
-    await shot(page, 'candidate-delay-warning-before');
-    assert.match(await page.locator('.battle').innerText(), /현재 기준 버림 · 행동력 환급 없음/);
-    await page.locator('[data-act="endTurn"]').click();
-    await page.locator('[data-act="toggleLog"]').click();
-    await shot(page, 'candidate-delay-warning-after');
-    assert.match(await page.locator('.log').innerText(), /시간 지연.*버린 더미.*돌려받지 못함/);
-    await clean(page, errors);
-  } finally { await context.close(); }
-});
-
 test('crowded candidate battle stays usable at desktop, mobile, and 130 percent text', async () => {
   const ck = fixture(['e_collector', 'e_choir', 'e_timeshard', 'e_prompter', 'e_echo'],
     { deck: Array(30).fill('harin_shield'), relics: ['infinite_circuit', 'cracked_hourglass'], mutate: b => {
-      b.s.ap = 9; // fixture setup: fill all five paid reservation slots on one turn
-      for (let i = 0; i < 5; i++) b.do('play', { uid: b.s.zones.hand[0], mode: i < 3 ? 'next' : 'after' });
+      // fixture setup: a full ten-card hand against five enemies (RULES_NOW_PLAY: no reservation slots to fill)
       while (b.s.zones.hand.length < 10) b.s.zones.hand.push(b.s.zones.draw.pop());
       b.checkInvariants();
     } });
@@ -234,7 +169,6 @@ test('crowded candidate battle stays usable at desktop, mobile, and 130 percent 
       await shot(page, `candidate-crowded-${name}`);
       assert.equal(await page.locator('.enemy').count(), 5);
       assert.equal(await page.locator('.hand .card').count(), 10);
-      assert.equal(await page.locator('.slot.filled').count(), 5);
       for (const sel of ['[data-act="endTurn"]', '[data-act="toggleLog"]', '.hand .card']) {
         const item = page.locator(sel).first();
         assert.equal(await item.isVisible(), true, `${name}: ${sel} hidden`);
@@ -242,7 +176,7 @@ test('crowded candidate battle stays usable at desktop, mobile, and 130 percent 
         const box = await item.boundingBox();
         assert.ok(box && box.width > 0 && box.x >= -1 && box.x + box.width <= opts.width + 1, `${name}: ${sel} clipped`);
       }
-      for (const sel of ['.enemy', '.slot.filled']) {
+      for (const sel of ['.enemy']) {
         const items = page.locator(sel);
         for (let i = 0; i < 5; i++) {
           const item = items.nth(i);

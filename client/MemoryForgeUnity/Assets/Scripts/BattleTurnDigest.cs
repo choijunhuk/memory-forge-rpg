@@ -96,7 +96,8 @@ namespace MemoryForge.Client
             Pair(parts, "방어", before?.Block, after?.Block, false);
             Pair(parts, "행동력", before?.Ap, after?.Ap, false);
             var from = before?.Reservations; var to = after?.Reservations;
-            if (from != null && to != null) parts.Add("시간 예약 " + Present(from) + "장 → " + Present(to) + "장");
+            // RULES_NOW_PLAY: the player makes no reservation, so an empty count is not news.
+            if (from != null && to != null && (from.Count != 0 || to.Count != 0)) parts.Add("시간 예약 " + Present(from) + "장 → " + Present(to) + "장");
             return Row(BattleDigestKind.Summary, parts.Count == 0 ? "파티 상태 정보 없음" : string.Join(" · ", parts));
         }
         // Final public state of each enemy that changed, appeared or fell; unchanged ones add nothing. Needs both projections.

@@ -156,7 +156,7 @@
     // rift_reserve / rift_ink / rift_debt: additive bonuses on party card and ultimate damage
     dmgBonusBps(ctx, enemy) {
       let add = super.dmgBonusBps(ctx, enemy);
-      const rs = this.rule('rift_reserve'); if (rs) add += ctx.reserved ? rs.reservedBps : rs.immediateBps;
+      const rs = this.rule('rift_reserve'); if (rs) add += ctx.held ? rs.reservedBps : rs.immediateBps; // RULES_NOW_PLAY: held cards take the reserved bonus
       const ink = this.rule('rift_ink'); if (ink) add += ink.perExhaustBps * this.counterVal('exhausted', ctx);
       const debt = this.rule('rift_debt'); if (debt && this.debtTotal() > 0) add += debt.debtDamageBps;
       return add;

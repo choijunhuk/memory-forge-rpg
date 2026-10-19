@@ -172,7 +172,9 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      char_aila_fig_happy_styleA_v02_0: 3514470645536054503
+      char_aila_fig_happy_styleA_v02_1: 3056035384360193246
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

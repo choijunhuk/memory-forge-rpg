@@ -28,11 +28,12 @@ const MAX = Number.MAX_SAFE_INTEGER;
 // Fixed ordered gen_traces inputs. A clear base stops at the first candidate that also reaches OVER_CAPACITY naturally, else takes
 // the first meeting its role; every scanned candidate is recorded. Nothing is restored from trace snapshots.
 const clearCandidates = [[1000, 'short'], [1000, 'full'], [1001, 'full'], [1002, 'full']];
+// docs/RULES_NOW_PLAY.md (2026-10-19): seed 1102 full now clears, so the defeat input is 3561 full (a real DEFEAT save with 8 changes).
 const basePlan = [
   { id: 'legacy-clear', memoryPolicy: 'legacy', role: 'clear', candidates: clearCandidates },
-  { id: 'legacy-defeat', memoryPolicy: 'legacy', role: 'defeat', candidates: [[1102, 'full']] },
+  { id: 'legacy-defeat', memoryPolicy: 'legacy', role: 'defeat', candidates: [[3561, 'full']] },
   { id: 'v2-clear', memoryPolicy: 'v2', role: 'clear', candidates: clearCandidates },
-  { id: 'v2-defeat', memoryPolicy: 'v2', role: 'defeat', candidates: [[1102, 'full']] },
+  { id: 'v2-defeat', memoryPolicy: 'v2', role: 'defeat', candidates: [[3561, 'full']] },
 ];
 const selectionRules = {
   clear: 'Scan in order and stop at the first VICTORY save that also has a natural OVER_CAPACITY selection (one character\'s full change set); else take the first VICTORY save with a committable selection (legacy: in-capacity greedy keep of at least one change; v2: a jointly previewable pair of change IDs)',

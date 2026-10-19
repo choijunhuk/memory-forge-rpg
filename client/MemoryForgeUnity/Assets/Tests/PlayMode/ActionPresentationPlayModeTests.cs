@@ -142,8 +142,8 @@ namespace MemoryForge.Client.Tests
             string? next = b.Zones.Hand.FirstOrDefault(u => Plain(s, u, target));
             Assert.That(next, Is.Not.Null, "seed 1234's first play leaves another immediate card without picks");
             Click(ButtonNamed(s.Host, "Enemy:" + target)); yield return null; Canvas.ForceUpdateCanvases();
+            // RULES_NOW_PLAY: there is no mode button; a card's only mode, now, is chosen with the card.
             Click(ButtonNamed(s.Host, "Hand:" + next)); yield return null; Canvas.ForceUpdateCanvases();
-            Click(ButtonNamed(s.Host, "Mode:now")); yield return null; Canvas.ForceUpdateCanvases();
             Assert.That(client.HasActionPresentation, Is.True, "the selection was made during the display");
             Assert.That(client.LastError, Is.Null);
             Assert.That(new[] { client.SelectedCard, client.SelectedMode, client.Target }, Is.EqualTo(new[] { next, "now", target }));
@@ -235,9 +235,11 @@ namespace MemoryForge.Client.Tests
                 Assert.That(client.SetActionPace(pace), Is.False, "choosing the chosen pace again is inert");
                 Assert.That(client.ActionPace, Is.EqualTo(pace));
                 yield return null; Canvas.ForceUpdateCanvases();
-                AssertReadable(ActiveView(s.Host), t => t == "● " + PaceName(pace), "the chosen pace is marked by text, not color alone");
                 var (card, enemy) = PlainChoice(s);
                 PlayPlain(s, card, enemy);
+                // The pace buttons sit on the action strip, which the battle screen draws only while a committed action plays.
+                Canvas.ForceUpdateCanvases();
+                AssertReadable(ActiveView(s.Host), t => t == "● " + PaceName(pace), "the chosen pace is marked by text, not color alone");
                 float opened = Time.realtimeSinceStartup;
                 var rows = client.ActionPresentationRows;
                 Assert.That(rows.Count, Is.GreaterThan(1), "a played card has more than its play event");
@@ -382,21 +384,30 @@ namespace MemoryForge.Client.Tests
         [UnityTest]
         public IEnumerator AnActualUltimateIsPresentedAsItsOwnCommittedEvents()
         {
-            var s = new Session(); yield return Open(s);
-            var client = s.Client; var found = new Found(); var rules = s.Data.Memory.Battle.Rules;
-            for (int steps = 0; steps < 4000; steps++)
+            // RULES_NOW_PLAY: battles are shorter, so seed 1234's short run fills no gauge; the next seeds are tried in order, each
+            // practice destroyed before the next opens, until one fills a gauge by actual commands.
+            var s = new Session(); var found = new Found();
+            foreach (long seed in new long[] { Seed, 1, 2, 3, 4, 5, 6, 7, 8 })
             {
-                var state = s.Mirror.State;
-                if (state.Phase == "VICTORY" || state.Phase == "DEFEAT") break;
-                if (state.Phase == "BATTLE" && state.Battle != null && state.Battle.Phase == "PLAYER")
+                if (s.Host != null) { hosts.Remove(s.Host); Object.Destroy(s.Host); yield return null; s = new Session(); }
+                yield return Open(s, seed);
+                var rules = s.Data.Memory.Battle.Rules;
+                for (int steps = 0; steps < 4000; steps++)
                 {
-                    var ready = state.Battle.Actors.FirstOrDefault(a => a.Gauge >= rules.GaugeMax);
-                    if (ready != null) { found.Actor = ready.Id; found.Enemy = state.Battle.Enemies.First(e => e.Alive).Uid; break; }
+                    var state = s.Mirror.State;
+                    if (state.Phase == "VICTORY" || state.Phase == "DEFEAT") break;
+                    if (state.Phase == "BATTLE" && state.Battle != null && state.Battle.Phase == "PLAYER")
+                    {
+                        var ready = state.Battle.Actors.FirstOrDefault(a => a.Gauge >= rules.GaugeMax);
+                        if (ready != null) { found.Actor = ready.Id; found.Enemy = state.Battle.Enemies.First(e => e.Alive).Uid; break; }
+                    }
+                    if (Step(s, state)) FinishAction(s.Client);
+                    if (steps % 8 == 7) yield return null;
                 }
-                if (Step(s, state)) FinishAction(client);
-                if (steps % 8 == 7) yield return null;
+                if (found.Actor != null) break;
             }
-            Assert.That(found.Actor, Is.Not.Null, "an actor's gauge must fill within the bounded actual commands");
+            Assert.That(found.Actor, Is.Not.Null, "an actor's gauge must fill within the bounded actual commands of seeds 1234, 1-8");
+            var client = s.Client;
             client.SelectEnemy(found.Enemy!);
             yield return null; Canvas.ForceUpdateCanvases();
             Click(ButtonNamed(s.Host, "Ult:" + found.Actor));

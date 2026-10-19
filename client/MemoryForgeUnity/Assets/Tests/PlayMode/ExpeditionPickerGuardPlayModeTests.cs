@@ -473,10 +473,10 @@ namespace MemoryForge.Client.Tests
             var content = ClientBattleContent.Load().Battle;
             var defs = content.Cards.ToDictionary(c => c.Id, StringComparer.Ordinal);
             (string Label, string From, int Count, bool GrowthOnly) Request(string id) => MemoryForgeExpeditionClient.ChoiceRequests(defs[id], "now", content).Single();
-            var tune = Request("nia_tune"); var grow = Request("yuri_dew"); var copy = Request("yuri_metamorph"); var forget = Request("sion_forget"); var pull = Request("sera_pull");
+            var tune = Request("nia_tune"); var grow = Request("yuri_dew"); var copy = Request("yuri_metamorph"); var forget = Request("sion_forget"); var recall = Request("sera_pull"); // RULES_NOW_PLAY: 시간 당기기 returns a discard card
             Assert.That(new[] { (tune.From, tune.Count, tune.GrowthOnly), (grow.From, grow.Count, grow.GrowthOnly), (copy.From, copy.Count, copy.GrowthOnly),
-                (forget.From, forget.Count, forget.GrowthOnly), (pull.From, pull.Count, pull.GrowthOnly) },
-                Is.EqualTo(new[] { ("hand", 1, false), ("hand", 1, true), ("hand", 1, true), ("discard", 2, false), ("res", 1, false) }), "the real definitions' requests");
+                (forget.From, forget.Count, forget.GrowthOnly), (recall.From, recall.Count, recall.GrowthOnly) },
+                Is.EqualTo(new[] { ("hand", 1, false), ("hand", 1, true), ("hand", 1, true), ("discard", 2, false), ("discard", 1, false) }), "the real definitions' requests");
             List<string> Offer(BattleState b, string source, (string Label, string From, int Count, bool GrowthOnly) request, params string[] picked) =>
                 MemoryForgeExpeditionClient.PickCandidates(b, source, request, picked, defs);
 
@@ -495,7 +495,7 @@ namespace MemoryForge.Client.Tests
             Assert.That(Offer(first, source, tune, hand1[1]), Is.EqualTo(hand1.Skip(2).ToList()), "a picked card is not offered again");
             Assert.That(Offer(first, source, tune, hand1[1], hand1[2]), Is.EqualTo(hand1.Skip(3).ToList()));
             Assert.That(Offer(first, source, tune).Intersect(draw1), Is.Empty, "draw-pile cards are out of zone");
-            Assert.That((Offer(first, source, forget).Count, Offer(first, source, pull).Count), Is.EqualTo((0, 0)), "empty discard and reservation zones offer nothing");
+            Assert.That((Offer(first, source, forget).Count, Offer(first, source, recall).Count), Is.EqualTo((0, 0)), "an empty discard pile offers nothing");
             var grown = Offer(first, "c1", grow);
             Assert.That(grown.All(u => hand1.Contains(u) && growth.Contains(u)), Is.True, "only growth cards of the hand");
             Assert.That(Offer(first, "c1", copy), Is.EqualTo(grown), "copyPick uses the same growth filter");
@@ -512,16 +512,10 @@ namespace MemoryForge.Client.Tests
             Assert.That(Offer(second, hand2[0], forget).Intersect(hand2), Is.Empty, "hand cards are out of the discard zone");
             Assert.That(grown.Concat(Offer(second, "c1", grow)).OrderBy(u => u, StringComparer.Ordinal), Is.EqualTo(growth), "over both hands the growth filter offered exactly the growth cards");
 
-            // A next-turn reservation: pull offers exactly the reserved card, which has left every hand request.
-            string enemy = second.Enemies.First(e => e.Alive).Uid;
-            string? reserved = hand2.FirstOrDefault(u => battle.Check(u, "next", enemy) == null);
-            Assert.That(reserved, Is.Not.Null, "precondition: a reservable card in the second hand");
-            Commit(battle, "play", Play(reserved!, "next", enemy));
-            var third = battle.State;
-            Assert.That(third.Reservations.Select(r => r.Uid), Is.EqualTo(new[] { reserved }));
-            Assert.That(Offer(third, "c1", pull), Is.EqualTo(new[] { reserved }));
-            Assert.That(Offer(third, "c1", pull, reserved!), Is.Empty, "a picked reservation is not offered again");
-            Assert.That(Offer(third, third.Zones.Hand[0], tune), Does.Not.Contain(reserved), "a reserved card is no longer a hand candidate");
+            // sera_pull's single recall offers the same discard pile in order, and a picked card is not offered again (RULES_NOW_PLAY:
+            // it used to pull a reservation, a zone the rules no longer have).
+            Assert.That(Offer(second, hand2[0], recall), Is.EqualTo(discard), "sera_pull offers the discard pile in order");
+            Assert.That(Offer(second, hand2[0], recall, discard[0]), Is.EqualTo(discard.Skip(1).ToList()), "a picked discard card is not offered again");
         }
 
         // ───────── drivers: one public command per call, mirrored on the Core Run ─────────

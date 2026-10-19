@@ -40,43 +40,18 @@ test('AP forecast includes the visible drain once and excludes a stunned enemy',
   b.do('end');
   assert.equal(b.s.ap, 1);
 });
-test('delay preview is pure and matches the actual discard decision', () => {
+// RULES_NOW_PLAY (2026-10-19): played cards resolve now, so there is never a reservation for delayRes to preview.
+test('delay preview is pure and matches the actual no-op decision once every card resolves now', () => {
   const b = battle(); b.do('begin');
   assert.equal(b.previewDelay(), null);
-  const uid = b.s.zones.hand[0]; b.do('play', { uid, mode: 'next', target: b.alive()[0].uid });
-  b.s.sealedUntil = 2;
-  b.s.slotsBase.next = 1;
+  const uid = b.s.zones.hand[0]; b.do('play', { uid, mode: 'now', target: b.alive()[0].uid });
   const before = clone(b.s);
-  const preview = b.previewDelay();
-  assert.deepEqual(preview, { uid, from: 2, to: 3, kind: 'next', discarded: true });
+  assert.equal(b.previewDelay(), null);
   assert.deepEqual(b.s, before);
   b.enemyMove(b.alive()[0], { t: 'delayRes' });
-  assert.deepEqual(b.s.ev.at(-1), { e: 'delayRes', ...preview });
-  assert.ok(b.s.zones.discard.includes(uid));
-});
-test('an ordinary after reservation is not marked as enemy-delayed when its column rolls forward', () => {
-  const b = battle(); b.do('begin');
-  const uid = b.s.zones.hand[0]; b.do('play', { uid, mode: 'after', target: b.alive()[0].uid });
-  b.do('end');
-  const r = b.s.res.find(x => x.uid === uid);
-  assert.equal(r.due, b.s.turn + 1);
-  assert.equal(r.kind, 'after');
-  assert.ok(!r.delayed);
-});
-test('successful enemy delay carries an explicit marker independently of the value kind', () => {
-  const b = battle(); b.do('begin');
-  const uid = b.s.zones.hand[0]; b.do('play', { uid, mode: 'next', target: b.alive()[0].uid });
-  b.enemyMove(b.alive()[0], { t: 'delayRes' });
-  assert.equal(b.s.res[0].delayed, true);
-  assert.equal(b.s.res[0].kind, 'next');
-});
-test('player pull clears the enemy-delay label when it changes the reservation power kind', () => {
-  const b = battle(); b.do('begin');
-  const uid = b.s.zones.hand[0]; b.do('play', { uid, mode: 'after', target: b.alive()[0].uid });
-  b.enemyMove(b.alive()[0], { t: 'delayRes' });
-  b.execOp({ op: 'pull' }, { picks: [uid] });
-  assert.equal(b.s.res[0].kind, 'next');
-  assert.equal(b.s.res[0].delayed, undefined);
+  assert.deepEqual(b.s.ev.at(-1), { e: 'delayRes', uid: null, discarded: false });
+  assert.deepEqual(b.s.zones, before.zones);
+  assert.equal(b.s.zones.discard.filter(u => u === uid).length, 1);
 });
 test('a malformed phase discriminator cannot leave a living zero-HP boss', () => {
   const b = battle({ hp: 1, phase: { t: 'charge', hp: 10, brk: 2, weak: ['volt'], pattern: [{ t: 'charge' }] } }); b.do('begin');

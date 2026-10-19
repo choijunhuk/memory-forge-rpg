@@ -13,6 +13,9 @@ namespace MemoryForge.Core
         /// <summary>Battle.AllowedModes of a live card instance (a fresh list). NO_BATTLE outside battle.</summary>
         public List<string> BattleAllowedModes(string uid) => LiveBattle().AllowedModes(uid);
 
+        /// <summary>Battle.Retains of a live card instance: it stays in hand at the end of the turn. NO_BATTLE outside battle.</summary>
+        public bool BattleRetains(string uid) => LiveBattle().Retains(uid);
+
         /// <summary>Battle.CostOf of a live card instance for a mode. NO_BATTLE outside battle.</summary>
         public int BattleCostOf(string uid, string mode = "now") => LiveBattle().CostOf(uid, mode);
 

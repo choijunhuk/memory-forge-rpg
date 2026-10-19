@@ -7,7 +7,7 @@ namespace MemoryForge.Core
 {
     public sealed partial class Battle
     {
-        bool Test(EffectConditionDef condition, EffectContext context, string? target = null) => Condition(condition, context.Instance, context.Reserved, target ?? context.LastTarget, context.Killed);
+        bool Test(EffectConditionDef condition, EffectContext context, string? target = null) => Condition(condition, context.Instance, context.Held, target ?? context.LastTarget, context.Killed);
         int Value(EffectDef op, EffectContext context) => context.Reserved == "after" ? op.Ra ?? op.Rv ?? op.V ?? 0 : context.Reserved == "next" ? op.Rv ?? op.V ?? 0 : op.V ?? 0;
         int ReservedNumber(EffectDef op, EffectContext context) => context.Reserved != null ? op.Rn ?? op.N ?? 0 : op.N ?? 0;
         BigInteger CounterValue(string per, EffectContext context)
@@ -70,7 +70,7 @@ namespace MemoryForge.Core
                 if (!string.IsNullOrEmpty(instance.From) && HasHook("yuri", "yuri_r4") && instance.Owner == "yuri") add += 1500;
                 if (owner != null)
                 {
-                    if (context.Reserved != null) add += WeaponPassive(owner, "w_reservedDmg")?.Value ?? 0;
+                    if (context.Held) add += WeaponPassive(owner, "w_reservedDmg")?.Value ?? 0;
                     if (enemy != null && enemy.Status.Mark > 0) add += WeaponPassive(owner, "w_markedDmg")?.Value ?? 0;
                     if ((BigInteger)state.Hp * 2 <= state.MaxHp) add += WeaponPassive(owner, "w_lowHpDmg")?.Value ?? 0;
                     if (enemy != null && enemy.BrokenUntil != 0) add += (WeaponPassive(owner, "w_brokenDmg") ?? WeaponPassive(owner, "w_breakDmg"))?.Value ?? 0;
@@ -80,11 +80,11 @@ namespace MemoryForge.Core
             }
             if (DebtTotal() > 0) add += PartyWeapon("w_debtDmg")?.Value ?? 0;
             add += (BigInteger)(context.Actor?.GearBps ?? 0) + context.RestraintBps + context.BoostBps + context.ChargeBps;
-            if (owner == "sera" && context.Reserved != null)
+            if (owner == "sera" && context.Instance != null)
             {
                 if (enemy != null && enemy.BrokenUntil != 0) add += PassiveOf("sera_foresight")?.Params["bps"] ?? 0;
                 add += Buff("seraLock")?.N ?? 0;
-                if (state.BattleFlags.TryGetValue("seraR6Turn", out var turn) && (turn is int t && t == state.Turn || turn is long n && n == state.Turn) && state.Phase == "RESOLVING") add += 5000;
+                if (IsTurnFlag(state.BattleFlags, "seraR6Active", state.Turn)) add += 5000;
             }
             if (owner == "ravien" && DebtTotal() > 0) add += PassiveOf("ravien_credit")?.Params["bps"] ?? 0;
             if (owner == "sion")
@@ -159,7 +159,7 @@ namespace MemoryForge.Core
         {
             BigInteger amount = op.Brk ?? 1;
             if (context.Instance != null) foreach (var part in PartsOf(context.Instance)) amount += part.Fx.Brk ?? 0;
-            if (context.Reserved != null && Has("precision_lens")) amount++;
+            if (context.Held && Has("precision_lens")) amount++;
             if (Has("eye_of_rift")) amount++;
             if (context.Attr == "frost" && Has("frost_crystal") && !Flag(state.TurnFlags, "frostCrystal") && enemy.Weak.Contains("frost")) { state.TurnFlags["frostCrystal"] = true; amount++; }
             return StateNumber(amount);
@@ -230,7 +230,7 @@ namespace MemoryForge.Core
                 case "counter": s.Counter = checked(s.Counter + ReservedNumber(op, context)); break;
                 case "draw": Draw(StateNumber(Scaled(ReservedNumber(op, context), op.Scale, context))); break;
                 case "discard":
-                    for (int k = 0; k < op.N!.Value && s.Zones.Hand.Count != 0; k++) { var uid = TakePick(context, s.Zones.Hand, _ => true, "lowestValue"); if (uid == null) break; s.Zones.Hand.Remove(uid); s.Zones.Discard.Add(uid); } break;
+                    for (int k = 0; k < op.N!.Value && s.Zones.Hand.Count != 0; k++) { var uid = TakePick(context, s.Zones.Hand, _ => true, "lowestValue"); if (uid == null) break; s.Zones.Hand.Remove(uid); s.Zones.Discard.Add(uid); s.Cards[uid].Held = false; } break;
                 case "ap": s.Ap = StateNumber(BigInteger.Min(data.Rules.ApMax, (BigInteger)s.Ap + op.N!.Value)); break;
                 case "apNext": s.ApNext = checked(s.ApNext + op.N!.Value); break;
                 case "gauge": foreach (var actor in op.Who == "all" ? s.Actors : context.Actor == null ? new List<BattleActorState>() : new List<BattleActorState> { context.Actor }) GainGauge(actor, op.N!.Value, true); break;
@@ -253,7 +253,7 @@ namespace MemoryForge.Core
                 case "slot":
                     s.SlotsTemp.Next = StateNumber(BigInteger.Max(0, BigInteger.Min((BigInteger)data.Rules.NextSlotsMax - s.SlotsBase.Next, (BigInteger)s.SlotsTemp.Next + (op.Next ?? 0))));
                     s.SlotsTemp.After = StateNumber(BigInteger.Max(0, BigInteger.Min((BigInteger)data.Rules.AfterSlotsMax - s.SlotsBase.After, (BigInteger)s.SlotsTemp.After + (op.After ?? 0)))); break;
-                case "grow": if (context.Reserved != null) ApplyGrowth(context.Instance, 1, "reserve", true, true); break;
+                case "grow": if (context.Instance != null) ApplyGrowth(context.Instance, 1, "resolve", true, true); break;
                 case "growPick":
                     if (s.GrowthCount >= s.GrowthCap) break;
                     var growthUid = TakePick(context, s.Zones.Hand, uid => data.CardIndex[s.Cards[uid].Id].Growth == true && s.Cards[uid].Growth < 3, "first");
@@ -269,7 +269,9 @@ namespace MemoryForge.Core
                     var debt = s.Debts.FirstOrDefault(d => d.Due == (long)s.Turn + 1 && !d.Deferred);
                     if (debt != null) { debt.Due = checked(debt.Due + 1); debt.N = checked(debt.N + 1); debt.Deferred = true; Emit(new BattleEvent { E = "defer", Id = debt.Id }); } break;
                 case "restraint": s.RestraintActive = true; s.RestraintUsedTurn = s.Turn; break;
-                case "collateral": s.SealedUntil = checked(s.Turn + 1); GainBlockRaw(op.V!.Value, "collateral"); break;
+                case "collateral":
+                    GainBlockRaw(op.V!.Value, "collateral"); s.ReservationSeq = checked(s.ReservationSeq + 1);
+                    s.Debts.Add(new BattleDebt { Id = "d" + s.ReservationSeq, N = 1, Due = checked(s.Turn + 1), Deferred = false }); Emit(new BattleEvent { E = "loan", N = 1 }); break;
                 case "selfdmg":
                     int cost = OverloadCost(op.V!.Value, false); if (cost > 0) { LoseHp(cost, "overload"); if (Has("lightning_rod")) GainBlockRaw(StateNumber(Floor(cost, 2)), "rod"); } break;
                 case "cleanse": context.LastCount = s.Weak > 0 ? 1 : 0; s.Weak = 0; break;
@@ -289,7 +291,7 @@ namespace MemoryForge.Core
                     else { var uid = TakePick(context, s.Zones.Hand, u => CostOf(u, "now") > 0, "highestCost"); if (uid != null) { s.Cards[uid].CostMod = checked(s.Cards[uid].CostMod - op.N!.Value); context.LastPicked = uid; } } break;
                 case "recall":
                     if (s.Zones.Hand.Count >= s.HandMax) break;
-                    var recall = TakePick(context, s.Zones.Discard, uid => data.CardIndex[s.Cards[uid].Id].Rarity != "C", "highestCost"); if (recall != null) { s.Zones.Discard.Remove(recall); s.Zones.Hand.Add(recall); } break;
+                    var recall = TakePick(context, s.Zones.Discard, uid => data.CardIndex[s.Cards[uid].Id].Rarity != "C", "highestCost"); if (recall != null) { s.Zones.Discard.Remove(recall); s.Cards[recall].Held = false; s.Zones.Hand.Add(recall); } break;
                 case "copyPick":
                     var sourceUid = TakePick(context, s.Zones.Hand, uid => IsGrowthInstance(s.Cards[uid]), "first");
                     if (sourceUid != null && s.Zones.Hand.Count < s.HandMax)

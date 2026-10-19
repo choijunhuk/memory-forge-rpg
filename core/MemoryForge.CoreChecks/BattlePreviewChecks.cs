@@ -16,28 +16,29 @@ using ExpeditionRun = MemoryForge.Core.Run;
 static class BattlePreviewChecks
 {
     const string Schema = "mf-battle-preview-v2", Status = "JS_ORACLE";
-    const string Scope = "Fresh Battle.create/command and Run.create/enter/battleCmd replays; each play forecast is the original JS check() code, one independent fresh-candidate play and, for next/after, the original HTML preview current-state reserved resolution on another fresh replay; C# Battle.Forecast/Run.BattleForecast comparison only. Unity view, device and server acceptance PENDING";
+    const string Scope = "Fresh Battle.create/command and Run.create/enter/battleCmd replays; each play forecast is the original JS check() code and one independent fresh-candidate play. Under RULES_NOW_PLAY (2026-10-19) every next/after request is rejected by check() with NOT_RESERVABLE, so the original HTML preview current-state reserved resolution is kept in the oracle but never reached; C# Battle.Forecast/Run.BattleForecast comparison only. Unity view, device and server acceptance PENDING";
     // Exact allowlist in source order, compared before any file is hashed: a fixture can never steer the host to read another path.
     static readonly (string Key, string Path)[] Sources = { ("data", "data/game_data.json"), ("engine", "engine/rules-core.js"), ("memory", "proposals/memory_v2.cjs"),
         ("canonical", "tools/gen_traces.mjs"), ("runCreateDecoder", "tools/gen_run_create_vectors.mjs"), ("htmlPreview", "prototype/index.html"), ("generator", "tools/gen_battle_preview_vectors.mjs") };
     static readonly string[] Fields = { "error", "mode", "cost", "due", "hidden", "enemyHpLoss", "blockDelta", "hpDelta", "defeat", "enemyDamage", "newlyBroken" };
     static readonly string[] Reasons = { "definition", "rng", "draw" };
-    static readonly string[] Errors = { "AP_LOW", "BAD_TARGET", "INVALID_MODE", "NOT_IN_HAND", "NOT_RESERVABLE", "NO_BATTLE", "OVERLOAD_WOULD_KILL", "RESERVE_ONLY", "SLOT_FULL", "WRONG_PHASE" };
-    // v1 cases keep their order, queries and commands; the v2 reserved cases follow the expedition so its index stays 8.
+    // RULES_NOW_PLAY (2026-10-19): no card is reserve-only and no slot exists, so RESERVE_ONLY/SLOT_FULL are unreachable.
+    static readonly string[] Errors = { "AP_LOW", "BAD_TARGET", "INVALID_MODE", "NOT_IN_HAND", "NOT_RESERVABLE", "NO_BATTLE", "OVERLOAD_WOULD_KILL", "WRONG_PHASE" };
+    // The v1 positions keep their subjects (two reservation cases rewritten as now plays); the now cases follow the expedition so its index stays 8.
     static readonly (string Id, string Group, int Forecasts, int Commands)[] Plan =
     {
-        ("damage-block-targets", "battle", 12, 3), ("heal-reservation-slots", "battle", 11, 2), ("reflect-defeat", "battle", 5, 3), ("overload-self-damage", "battle", 5, 2),
-        ("hidden-definition", "battle", 7, 3), ("hidden-hook-draw", "battle", 3, 4), ("hidden-hook-rng", "battle", 4, 2), ("picks-pull", "battle", 4, 4), ("run-expedition", "run", 19, 17),
-        ("reserved-estimates", "battle", 13, 6), ("reserved-hidden-definition-rng", "battle", 4, 2), ("reserved-hidden-draw-hook", "battle", 4, 4)
+        ("damage-block-targets", "battle", 12, 3), ("heal-now-only-empty-clock", "battle", 8, 2), ("reflect-defeat", "battle", 5, 3), ("overload-self-damage", "battle", 5, 2),
+        ("hidden-definition", "battle", 7, 3), ("hidden-hook-draw", "battle", 3, 4), ("hidden-hook-rng", "battle", 4, 2), ("picks-recall", "battle", 4, 4), ("run-expedition", "run", 17, 14),
+        ("now-estimates", "battle", 10, 6), ("now-hidden-draw-hook", "battle", 3, 4), ("held-retain-forecast", "battle", 2, 3)
     };
-    // Fixed denominators: 11 authored battles 72 forecasts/35 commands (v1 51/23 + v2 21/12); the expedition 6 fixed probes + 13 policy
-    // forecasts over 17 Run commands (measured); 85 v1 + 46 v2 receipt probes.
-    static readonly (string Key, int Value)[] Counts = { ("cases", 12), ("battleForecasts", 72), ("battleCommands", 35), ("runFixedForecasts", 6), ("runPolicyForecasts", 13),
-        ("runCommands", 17), ("forecasts", 91), ("commands", 52) };
-    const int ReceiptProbes = 131;
-    // Behaviours the v2 corpus must contain, derived here from the records alone.
-    static readonly string[] Witnesses = { "reserved:visible", "reserved:zero", "reserved:broken", "reserved:defeat", "reserved:absorbed", "reserved:hidden:definition",
-        "reserved:hidden:hook", "reserved:error", "reserved:next-after-differ", "now:absorbed", "now:broken" };
+    // Fixed denominators (RULES_NOW_PLAY regeneration): 11 authored battles 63 forecasts/36 commands; the expedition 6 fixed probes + 11 policy
+    // forecasts over 14 Run commands (measured).
+    static readonly (string Key, int Value)[] Counts = { ("cases", 12), ("battleForecasts", 63), ("battleCommands", 36), ("runFixedForecasts", 6), ("runPolicyForecasts", 11),
+        ("runCommands", 14), ("forecasts", 80), ("commands", 50) };
+    const int ReceiptProbes = 135; // measured on the RULES_NOW_PLAY regeneration (was 131 = 85 v1 + 46 v2)
+    // Behaviours the corpus must contain, derived here from the records alone. RULES_NOW_PLAY: every next/after request is a NOT_RESERVABLE
+    // rejection, so the only reserved witness is reserved:error and no visible/hidden reserved estimate (nor a next/after pair) may exist.
+    static readonly string[] Witnesses = { "reserved:error", "now:absorbed", "now:broken" };
     const string ExpeditionSetup = "{\"party\":[{\"charId\":\"sera\"},{\"charId\":\"harin\"},{\"charId\":\"nia\"}],\"seed\":4242,\"length\":\"short\",\"memoryPolicy\":\"v2\",\"memory\":{},"
         + "\"relics\":[],\"difficulty\":{\"hp\":100,\"dmg\":100},\"zones\":[1],\"runId\":\"preview-run\",\"memoryVersion\":0,\"useMemory\":true}";
     const string PolicyLabel = "run policy play ";
@@ -66,7 +67,7 @@ static class BattlePreviewChecks
                 Check(Full(Catalog(data)) == definitions, Text(row, "id") + " original combat definitions unchanged by every forecast and command");
             }
             Check(Full(Catalog(runData.Memory.Battle)) == runDefinitions, "actual Run-owned card/character/weapon/part/relic definitions remain unchanged");
-            Check(forecasts == 91 && commands == 52 && receiptProbes == ReceiptProbes, "exactly 91 actual C# forecasts (each repeated after caller mutation), 52 real commands and 131 receipt probes");
+            Check(forecasts == 80 && commands == 50 && receiptProbes == ReceiptProbes, "exactly 80 actual C# forecasts (each repeated after caller mutation), 50 real commands and " + ReceiptProbes + " receipt probes");
             IndependentAssertions();
             LateRejection(root);
             FixtureRejections(fixture, content.RootElement, root);
@@ -243,60 +244,52 @@ static class BattlePreviewChecks
     }
     static void IndependentAssertions()
     {
-        const string D = "damage-block-targets/", H = "heal-reservation-slots/", R = "reflect-defeat/", O = "overload-self-damage/", F = "hidden-definition/", P = "picks-pull/";
+        const string D = "damage-block-targets/", H = "heal-now-only-empty-clock/", R = "reflect-defeat/", O = "overload-self-damage/", F = "hidden-definition/", P = "picks-recall/";
         // power4 160/vit 81/level 1: sera_round 8, harin_shield 8, sera_cover blk5+dmg4, harin_bash 6; e_cog def b6 on its first enemy turn.
         Expect(D + "turn1 sera_round cog", null, "now", 1, loss: 8); Expect(D + "turn1 harin_shield", null, "now", 1, block: 8);
         Expect(D + "turn2 sera_round cog block6", null, "now", 1, loss: 2, damage: 8); Expect(D + "turn2 sera_cover cog block6", null, "now", 1, block: 5, damage: 4);
         Expect(D + "turn2 harin_bash moth", null, "now", 1, loss: 6); Expect(D + "turn2 sera_cover cog after hit", null, "now", 1, loss: 4, block: 5);
-        // Current-state estimate: sera_round rv12 against the unblocked turn-1 cog.
-        Expect(D + "turn1 sera_round next", null, "next", 1, due: 2, loss: 12);
+        // RULES_NOW_PLAY: the removed reserved estimate is now a NOT_RESERVABLE rejection.
+        Expect(D + "turn1 sera_round next", "NOT_RESERVABLE", "next", 0);
         foreach (var (label, code, mode) in new[] { ("created phase", "WRONG_PHASE", "now"), ("turn1 missing target", "BAD_TARGET", "now"), ("turn1 invalid mode", "INVALID_MODE", "later"),
             ("turn1 unknown uid", "NOT_IN_HAND", "now"), ("turn2 played card", "NOT_IN_HAND", "now") }) Expect(D + label, code, mode, 0);
-        // aila_bell heal5 at HP150/162; empty_clock -1 only before the first reservation; base after slot 1. Every estimate kills the 12-HP page.
-        Expect(H + "heal", null, "now", 1, hp: 5); Expect(H + "heal again", null, "now", 1, hp: 5); Expect(H + "page damage", null, "now", 1, loss: 8);
-        Expect(H + "first reservation next", null, "next", 1, due: 2, loss: 12); Expect(H + "first reservation after", null, "after", 1, due: 3, loss: 12);
-        Expect(H + "after-only after", null, "after", 2, due: 3, loss: 12); Expect(H + "discounted zero cost after", null, "after", 0, due: 3, loss: 12);
-        Expect(H + "clock used next", null, "next", 1, due: 2, loss: 12);
-        Expect(H + "reserve-only now", "RESERVE_ONLY", "now", 0); Expect(H + "after-only next", "NOT_RESERVABLE", "next", 0); Expect(H + "after slot full", "SLOT_FULL", "after", 0);
+        // aila_bell heal5 at HP150/162; empty_clock -1 on the first now card of the battle (sera_timed 2→1, sera_round/aila_bell 1→0); full costs after
+        // the discounted sera_round (8) leaves the 12-HP page at 4; next/after are rejected for every card.
+        Expect(H + "heal discounted", null, "now", 0, hp: 5); Expect(H + "timed now discounted", null, "now", 1, loss: 12); Expect(H + "round now discounted zero cost", null, "now", 0, loss: 8);
+        Expect(H + "timed next not reservable", "NOT_RESERVABLE", "next", 0); Expect(H + "last after not reservable", "NOT_RESERVABLE", "after", 0);
+        Expect(H + "heal after clock", null, "now", 1, hp: 5); Expect(H + "timed after clock", null, "now", 2, loss: 4); Expect(H + "last after clock", null, "now", 3, loss: 4);
         // e_mirrorclerk reflect3 from its first turn; HP3: the first reflected hit is lethal and stops later hits (the estimate at rv6 too).
         Expect(R + "turn1 no reflect yet", null, "now", 1, loss: 8); Expect(R + "reflect lethal multi-hit", null, "now", 1, loss: 4, hp: -3, defeat: true);
-        Expect(R + "reflect lethal single hit", null, "now", 1, loss: 8, hp: -3, defeat: true); Expect(R + "reflect reservation", null, "next", 1, due: 3, loss: 6, hp: -3, defeat: true);
+        Expect(R + "reflect lethal single hit", null, "now", 1, loss: 8, hp: -3, defeat: true); Expect(R + "reflect reservation", "NOT_RESERVABLE", "next", 0);
         Expect(R + "after defeat", "WRONG_PHASE", "now", 0);
         // HP5/81 <= 50%: lumi_critical +30% (18 -> 23, 8 -> 10); overdrive self-damage 5 would leave HP below 1.
         Expect(O + "selfdmg critical damage", null, "now", 1, loss: 23, hp: -4); Expect(O + "critical jab", null, "now", 1, loss: 10); Expect(O + "hp1 critical jab", null, "now", 1, loss: 10);
         Expect(O + "overload would kill", "OVERLOAD_WOULD_KILL", "now", 0); Expect(O + "hp1 overload would kill", "OVERLOAD_WOULD_KILL", "now", 0);
         Expect(F + "draw definition", null, "now", 0, hidden: true); Expect(F + "random target definition", null, "now", 3, hidden: true);
         Expect(F + "nested draw definition", null, "now", 1, hidden: true); Expect(F + "nested draw definition after owner change", null, "now", 1, hidden: true);
-        Expect(F + "visible control", null, "now", 1, loss: 8); Expect(F + "nested draw reserved", null, "next", 1, due: 2, hidden: true); Expect(F + "ap low", "AP_LOW", "now", 0);
+        Expect(F + "visible control", null, "now", 1, loss: 8); Expect(F + "nested draw reserved", "NOT_RESERVABLE", "next", 0); Expect(F + "ap low", "AP_LOW", "now", 0);
         Expect("hidden-hook-draw/third owner hook draw", null, "now", 1, hidden: true);
-        // The estimate starts before the third owner's play, so unfinished_score never draws in it: nia_wrench rv10 or nia_barrier rv10.
-        Check(Actual.TryGetValue("hidden-hook-draw/third owner reserve", out var reserve) && reserve["error"] == null && !(bool)reserve["hidden"]! && (int)reserve["cost"]! == 1
-            && Equals(reserve["due"], 2) && (int)reserve["hpDelta"]! == 0 && (int)reserve["newlyBroken"]! == 0
-            && ((int)reserve["enemyHpLoss"]! == 10 && (int)reserve["enemyDamage"]! == 10 && (int)reserve["blockDelta"]! == 0
-                || (int)reserve["enemyHpLoss"]! == 0 && (int)reserve["enemyDamage"]! == 0 && (int)reserve["blockDelta"]! == 10),
-            "independent: the third owner's reservation estimate stays visible without the play-time hook draw");
+        Expect("hidden-hook-draw/third owner reserve", "NOT_RESERVABLE", "next", 0); // RULES_NOW_PLAY: no reservation estimate
         Check(Actual.TryGetValue("hidden-hook-draw/earlier owner control", out var control) && control["error"] == null && !(bool)control["hidden"]! && (int)control["cost"]! == 1
             && ((int)control["enemyHpLoss"]! > 0 || (int)control["blockDelta"]! > 0), "independent: an earlier owner's card stays visible while the third owner's hook draw hides");
         Expect("hidden-hook-rng/exhaust hook random damage", null, "now", 3, hidden: true); Expect("hidden-hook-rng/harin_shield control", null, "now", 1, block: 8);
         Expect("hidden-hook-rng/after hook harin_shield", null, "now", 1, block: 8); Expect("hidden-hook-rng/after hook harin_bash page", null, "now", 1, loss: 6);
-        // sera_pull: no pick/after pick/invalid pick move sera_timed; picking the next-turn sera_round resolves it now at rv12.
-        Expect(P + "pull default", null, "now", 0); Expect(P + "pull next reservation", null, "now", 0, loss: 12); Expect(P + "pull after reservation", null, "now", 0); Expect(P + "pull invalid pick", null, "now", 0);
+        // sera_pull (cost 0) returns a discarded card to the hand: default/invalid picks take the highest-cost sera_timed, explicit picks choose; no forecast field changes.
+        Expect(P + "pull default", null, "now", 0); Expect(P + "pull round pick", null, "now", 0); Expect(P + "pull timed pick", null, "now", 0); Expect(P + "pull invalid pick", null, "now", 0);
         Expect("run-expedition/map now", "NO_BATTLE", "now", 0); Expect("run-expedition/map after with picks", "NO_BATTLE", "after", 0);
         Expect("run-expedition/after battle", "NO_BATTLE", "now", 0); Expect("run-expedition/run unknown uid", "NOT_IN_HAND", "now", 0);
 
-        // v2 reserved estimates. Keeper 38 HP/brk4, cog 24 HP/brk4 (both volt-weak); Sera foresight +25% and broken +25% stack multiplicatively.
-        const string E = "reserved-estimates/", X = "reserved-hidden-definition-rng/", K = "reserved-hidden-draw-hook/";
-        Expect(E + "timed next keeper", null, "next", 2, due: 2, loss: 22); Expect(E + "timed after keeper", null, "after", 2, due: 3, loss: 30);
-        Expect(E + "aim next zero outcome", null, "next", 1, due: 2); Expect(E + "cover next keeper", null, "next", 1, due: 2, loss: 6, block: 7);
-        Expect(E + "timed next breaks keeper", null, "next", 2, due: 2, loss: 22, broken: 1); Expect(E + "cover now breaks keeper", null, "now", 1, loss: 4, block: 5, broken: 1);
-        Expect(E + "timed next ap low", "AP_LOW", "next", 0);
-        Expect(E + "cover next broken keeper", null, "next", 1, due: 3, loss: 9, block: 7); Expect(E + "cover now broken keeper", null, "now", 1, loss: 5, block: 5);
-        Expect(E + "round next cog block", null, "next", 1, due: 3, loss: 6, damage: 12); Expect(E + "round now cog block", null, "now", 1, loss: 2, damage: 8);
-        Expect(E + "double after cog block", null, "after", 1, due: 4, loss: 6, damage: 12); Expect(E + "timed next broken keeper", null, "next", 2, due: 3, loss: 18);
-        Expect(X + "scan next draw definition", null, "next", 1, due: 2, hidden: true); Expect(X + "hunt after random definition", null, "after", 1, due: 3, hidden: true);
-        Expect(X + "last after rng hook", null, "after", 3, due: 3, hidden: true); Expect(X + "round next visible control", null, "next", 1, due: 2, loss: 12);
-        Expect(K + "crossfire next marked branch", null, "next", 2, due: 2, loss: 30); Expect(K + "crossfire now marked branch", null, "now", 2, loss: 21);
-        Expect(K + "timed next marked kill hook", null, "next", 2, due: 2, hidden: true); Expect(K + "round now marked page control", null, "now", 1, loss: 8);
+        // Now cases: keeper 38 HP/brk4, cog 24 HP/brk4 (both volt-weak). Sera foresight +25% now applies to every Sera attack on a broken enemy and
+        // multiplies with broken +25%: cover 4 → 6; timed 20 → 31 is capped by the 18 HP left.
+        const string E = "now-estimates/", K = "now-hidden-draw-hook/", W = "held-retain-forecast/";
+        Expect(E + "timed now keeper", null, "now", 2, loss: 20); Expect(E + "aim now zero outcome", null, "now", 1); Expect(E + "cover now keeper", null, "now", 1, loss: 4, block: 5);
+        Expect(E + "timed now breaks keeper", null, "now", 2, loss: 20, broken: 1); Expect(E + "cover now breaks keeper", null, "now", 1, loss: 4, block: 5, broken: 1);
+        Expect(E + "timed now ap low", "AP_LOW", "now", 0); Expect(E + "timed now broken keeper", null, "now", 2, loss: 38 - 8 - 8 - 4);
+        Expect(E + "cover now broken keeper", null, "now", 1, loss: 4 * 125 * 125 / 10000, block: 5);
+        Expect(E + "round now cog block", null, "now", 1, loss: 2, damage: 8); Expect(E + "double now cog block", null, "now", 1, loss: 2, damage: 8);
+        Expect(K + "crossfire now marked branch", null, "now", 2, loss: 21); Expect(K + "timed now marked kill hook", null, "now", 2, hidden: true); Expect(K + "round now marked page control", null, "now", 1, loss: 8);
+        // sera_timed brk3 does not break the brk4 keeper; kept over the turn end it is held and precision_lens adds break+1, damage unchanged.
+        Expect(W + "timed unheld no lens", null, "now", 2, loss: 20); Expect(W + "timed held lens breaks", null, "now", 2, loss: 20, broken: 1);
     }
 
     // C#-only: authored plays that pass Check always commit, so a negative local-definition fault after real Create/begin shows the late path.
@@ -321,23 +314,18 @@ static class BattlePreviewChecks
         var response = battle.Command(play);
         Check(response.V == 2 && battle.State.Block == 8, "the failed request ID stays free and the corrected real play gains exactly the forecast block");
 
-        // C#-only estimate rejection: the reservation itself is legal and pays/schedules fine; only its current-state resolution reaches
-        // the faulty effect (rv11 block + Int32.MaxValue overflows). The forecast reports that code and leaves everything unchanged.
+        // RULES_NOW_PLAY: the C#-only estimate rejection is unreachable through the public API: every authored card is now-only, so a next
+        // request is rejected by Check with NOT_RESERVABLE before any current-state estimate runs, and the real reservation rejects atomically.
         data = BattleDataLoader.Load(root); effects = data.Cards.Single(c => c.Id == "harin_shield").Effects;
         battle = Battle.Create(data, setup); battle.Command(new BattleRequest("estimate-begin", 0, "begin"));
         var reserve = BattleDataLoader.Request("{\"rid\":\"estimate-reserve\",\"v\":1,\"kind\":\"play\",\"args\":{\"uid\":\"c1\",\"mode\":\"next\",\"target\":null,\"picks\":[]}}");
         effects.Add(new EffectDef { Op = "blk", V = int.MaxValue });
         before = Full(battle.State.ToJsonGraph()); faulty = Full(Catalog(data));
-        Check(battle.Check("c1", "next") == null, "C#-only estimate rejection: Check passes for the reservation");
-        SameGraph(Rejected("next"), Project(battle.Forecast("c1", "next")), "C#-only estimate rejection: the forecast returns the estimate's code with default fields");
-        Check(Full(battle.State.ToJsonGraph()) == before && Full(Catalog(data)) == faulty, "C#-only estimate rejection leaves live state and the local definitions unchanged");
+        Check(battle.Check("c1", "next") == "NOT_RESERVABLE", "now-only: Check rejects the reservation before the faulty effect could run");
+        SameGraph(new Dictionary<string, object?>(Rejected("next"), StringComparer.Ordinal) { ["error"] = "NOT_RESERVABLE" }, Project(battle.Forecast("c1", "next")), "now-only: the forecast returns NOT_RESERVABLE with default fields");
+        Check(Full(battle.State.ToJsonGraph()) == before && Full(Catalog(data)) == faulty, "now-only reservation forecast leaves live state and the local definitions unchanged");
+        Check(Throws(() => battle.Command(reserve), "NOT_RESERVABLE") && Full(battle.State.ToJsonGraph()) == before, "now-only: the real reservation rejects with NOT_RESERVABLE atomically");
         effects.RemoveAt(effects.Count - 1);
-        var estimate = battle.Forecast("c1", "next");
-        Check(estimate.Error == null && estimate.Cost == 1 && estimate.Due == 2 && estimate.BlockDelta == 11 && !estimate.Hidden && estimate.EnemyHpLoss == 0 && estimate.EnemyDamage == 0
-            && estimate.NewlyBroken == 0 && estimate.HpDelta == 0 && !estimate.Defeat, "corrected definition estimates the reserved rv11 block without poisoned state");
-        response = battle.Command(reserve);
-        Check(response.V == 2 && battle.State.Block == 0 && battle.State.Reservations.Count == 1 && battle.State.Reservations[0].Due == 2 && battle.State.Ap == 3,
-            "the real reservation pays its cost and schedules due2 without resolving the estimated block");
     }
     static Dictionary<string, object?> Rejected(string mode) => new(StringComparer.Ordinal)
     {
@@ -364,7 +352,9 @@ static class BattlePreviewChecks
         Require(contract.EnumerateObject().All(p => p.Value.ValueKind == JsonValueKind.String && p.Value.GetString()!.Length != 0), "Preview contract text missing");
         var reach = fixture.GetProperty("reachability");
         RequireKeys(reach, new[] { "notCovered", "csharpOnly" }, "Preview reachability categories");
-        RequireKeys(reach.GetProperty("notCovered"), new[] { "definitionPickRandom" }, "Preview NOT_COVERED category hidden or changed");
+        // RULES_NOW_PLAY: the reserved estimate is declared UNREACHABLE (every next/after request is NOT_RESERVABLE before any estimate).
+        RequireKeys(reach.GetProperty("notCovered"), new[] { "definitionPickRandom", "reservationEstimate" }, "Preview NOT_COVERED category hidden or changed");
+        Require(Text(reach.GetProperty("notCovered"), "reservationEstimate").StartsWith("UNREACHABLE", StringComparison.Ordinal), "Preview reservation estimate is no longer declared unreachable");
         RequireKeys(reach.GetProperty("csharpOnly"), new[] { "lateCommandRejection", "estimateRejection" }, "Preview C#-only category hidden or changed");
         Require(!AuthoredPickRandom(source), "An authored pick:\"random\" card exists; the NOT_COVERED claim is stale");
         var rows = Items(fixture.GetProperty("cases"), "Preview cases");
@@ -602,22 +592,19 @@ static class BattlePreviewChecks
         { var bad = Fresh(); O(Forecast(bad, 0, 1, 1)["expected"])["enemyDamage"] = 7L; Reject(bad, "enemy damage below enemy HP loss"); }
         { var bad = Fresh(); O(Forecast(bad, 0, 0, 0)["expected"])["newlyBroken"] = 1L; Reject(bad, "rejected forecast with a newly broken enemy"); }
         {
+            // RULES_NOW_PLAY: the break witness lives on now plays only; removing every now break must be rejected.
             var bad = Fresh();
             foreach (var row in L(bad["cases"])) foreach (var step in L(O(row)["steps"])) foreach (var record in L(O(step)["forecasts"]))
-                if (O(O(record)["args"])["mode"] as string != "now") O(O(record)["expected"])["newlyBroken"] = 0L;
-            Reject(bad, "every reserved break witness removed");
+                if (O(O(record)["args"])["mode"] as string == "now") O(O(record)["expected"])["newlyBroken"] = 0L;
+            Reject(bad, "every now break witness removed");
         }
         {
-            // Cross-point lookalike: equalising the one-point timed next/after keeper pair (reserved-estimates step 1) leaves only pairs from
-            // different steps (e.g. step 5 'timed next broken keeper' 18 against step 1 after 22), which must not satisfy the witness.
-            var bad = Fresh(); var pair = L(Step(bad, 9, 1)["forecasts"]);
-            var next = O(O(pair[0])["expected"]); var after = O(O(pair[1])["expected"]);
-            Require(O(pair[0])["label"] as string == "timed next keeper" && O(pair[1])["label"] as string == "timed after keeper", "lookalike control locates the timed keeper pair");
-            after["enemyHpLoss"] = next["enemyHpLoss"]; after["enemyDamage"] = next["enemyDamage"];
-            using var json = JsonDocument.Parse(JsonSerializer.Serialize(bad)); string? reason = null;
-            try { ValidateFixture(json.RootElement, source, root); } catch (InvalidDataException error) { reason = error.Message; }
-            Check(reason != null && reason.Contains("reserved:next-after-differ", StringComparison.Ordinal),
-                "fixture tamper rejected: a cross-point-only next/after lookalike cannot satisfy the one-point witness");
+            // RULES_NOW_PLAY: a visible reserved estimate cannot exist any more; forging one from a NOT_RESERVABLE rejection must be rejected.
+            var bad = Fresh();
+            var record = L(bad["cases"]).SelectMany(row => L(O(row)["steps"])).SelectMany(step => L(O(step)["forecasts"])).Select(O)
+                .First(r => O(r["args"])["mode"] as string == "next" && O(r["expected"])["error"] as string == "NOT_RESERVABLE");
+            var forged = O(record["expected"]); forged["error"] = null; forged["cost"] = 1L; forged["due"] = 2L;
+            Reject(bad, "forged visible reserved estimate");
         }
         { var bad = Fresh(); O(O(bad["reachability"])["csharpOnly"]).Remove("estimateRejection"); Reject(bad, "hidden C#-only estimate category"); }
         { var bad = Fresh(); O(bad["contract"]).Remove("transition"); Reject(bad, "missing v1 to v2 transition note"); }

@@ -85,49 +85,26 @@ test('two same-phase sealSlot enemies make the second gain block 10', () => {
   assert.equal(b.s.enemies[1].block, 10);
 });
 
-test('sealSlot ignores reservations due before the protected following-player turn', () => {
-  const b = battle({ t: 'sealSlot' });
-  for (let i = 0; i < b.s.slotsBase.next; i++) b.do('play', { uid: first(b, 'harin_shield'), mode: 'next' });
-  b.do('end');
-  assert.equal(b.s.sealedUntil, b.s.turn);
-  assert.equal(b.alive()[0].block, 0);
-});
-
-test('sealSlot gains enemy block 10 when future base slots are full', () => {
-  const b = battle({ t: 'sealSlot' }, { relics: ['cracked_hourglass'] });
-  for (let i = 0; i < 2; i++) b.do('play', { uid: first(b, 'harin_shield'), mode: 'after' });
-  b.do('end');
-  assert.equal(b.alive()[0].block, 10);
-  assert.equal(b.s.sealedUntil, 0);
-});
-
-test('delayRes shifts the newest reservation due date while preserving its power kind', () => {
-  const b = battle({ t: 'delayRes' });
-  const u1 = first(b, 'harin_shield');
-  b.do('play', { uid: u1, mode: 'next' });
-  const u2 = first(b, 'harin_shield');
-  b.do('play', { uid: u2, mode: 'next' });
-  const originals = clone(b.s.res);
-  b.do('end');
-  const held = b.s.res.find((r) => r.uid === u2);
-  assert.equal(held?.due, originals[1].due + 1);
-  assert.equal(held?.kind, originals[1].kind);
-  assert.equal(b.s.cards[u2].used, 0);
-  assert.equal(b.s.res.some((r) => r.uid === u1), false);
-});
-
-test('delayRes discards an overflowing reservation without refund or losing its card', () => {
-  const b = battle({ t: 'delayRes' }, { relics: ['cracked_hourglass'] });
-  for (let i = 0; i < 2; i++) b.do('play', { uid: first(b, 'harin_shield'), mode: 'after' });
-  const newest = first(b, 'harin_shield');
-  b.do('play', { uid: newest, mode: 'next' });
-  const ap = b.s.ap;
+// RULES_NOW_PLAY (2026-10-19): players can no longer create reservations, so sealSlot/delayRes have nothing
+// to act on. The retained (held) hand card is the only thing that survives a turn; enemy delay moves leave it alone.
+test('sealSlot and delayRes leave a held 보존 card in hand, held and playable now', () => {
+  const b = battle([{ t: 'sealSlot' }, { t: 'delayRes' }], { deck: ['sera_timed', ...Array(9).fill('harin_shield')] });
+  const timed = first(b, 'sera_timed');
+  assert.ok(timed, 'seed 91 opens with sera_timed in hand');
+  b.do('end'); // enemy sealSlot
+  assert.equal(b.s.cards[timed].held, true);
+  const zones = clone(b.s.zones); const rng = clone(b.s.rng);
   b.enemyMove(b.alive()[0], { t: 'delayRes' });
-  assert.ok(b.s.zones.discard.includes(newest));
-  assert.equal(b.s.res.some((r) => r.uid === newest), false);
+  assert.deepEqual(b.s.zones, zones);
+  assert.deepEqual(b.s.rng, rng);
+  assert.deepEqual(b.s.ev.at(-1), { e: 'delayRes', uid: null, discarded: false });
+  b.do('end'); // enemy delayRes
+  assert.ok(b.s.zones.hand.includes(timed));
+  assert.equal(b.s.cards[timed].held, true);
+  assert.equal(b.s.res.length, 0);
+  b.do('play', { uid: timed, mode: 'now', target: b.alive()[0].uid });
+  assert.equal(b.s.cards[timed].held, false);
   assert.equal(new Set(cardLocations(b)).size, Object.keys(b.s.cards).length);
-  assert.equal(b.s.ev.some((e) => e.uid === newest && /delay|discard|fizzle/i.test(e.e)), true);
-  assert.equal(b.s.ap, ap);
 });
 
 test('delayRes with no reservation leaves RNG and card zones unchanged', () => {
@@ -137,18 +114,6 @@ test('delayRes with no reservation leaves RNG and card zones unchanged', () => {
   b.enemyMove(b.alive()[0], { t: 'delayRes' });
   assert.deepEqual(b.s.rng, rng);
   assert.deepEqual(b.s.zones, zones);
-});
-
-test('delayRes discards a reservation shifted outside the two-turn board', () => {
-  const b = battle({ t: 'charge' });
-  const uid = first(b, 'harin_shield');
-  b.do('play', { uid, mode: 'after' });
-  b.enemyMove(b.alive()[0], { t: 'delayRes' });
-  assert.equal(b.s.res[0].due, b.s.turn + 3);
-  b.enemyMove(b.alive()[0], { t: 'delayRes' });
-  assert.equal(b.s.res.length, 0);
-  assert.ok(b.s.zones.discard.includes(uid));
-  assert.equal(new Set(cardLocations(b)).size, Object.keys(b.s.cards).length);
 });
 
 test('eatName exhausts a discard token before a normal card', () => {

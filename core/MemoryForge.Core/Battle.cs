@@ -54,9 +54,7 @@ namespace MemoryForge.Core
             if (rien != null) { s.EchoActive = true; s.EchoMax = rien.Passive.Params["max"]; }
             if (s.Relics.Contains("tuning_fork")) { s.EchoMax++; s.EchoStart = Math.Max(s.EchoStart, 1); }
             if (s.Relics.Contains("contract_seal")) s.DebtCap++;
-            if (s.Relics.Contains("cracked_hourglass")) s.SlotsBase.After = Math.Min(rules.AfterSlotsMax, s.SlotsBase.After + 1);
-            if (s.Relics.Contains("twin_pendulum")) { s.SlotsBase.Next = Math.Min(rules.NextSlotsMax, s.SlotsBase.Next + 1); s.HandMax = 9; }
-            if (s.Relics.Contains("infinite_circuit")) s.SlotsBase.Next = Math.Min(rules.NextSlotsMax, s.SlotsBase.Next + 1);
+            if (s.Relics.Contains("twin_pendulum")) s.HandMax = 9; // RULES_NOW_PLAY: its slot became a turn-start draw (StartTurn)
             foreach (var spec in setup.Deck) s.Zones.Draw.Add(MakeCard(s, data, spec));
             if (s.Relics.Contains("eye_of_rift")) s.Zones.Draw.Add(MakeCard(s, data, new BattleCardSpec { Id = "smudge" }, true));
             foreach (string id in setup.Enemies) AddEnemy(s, data, id);
@@ -184,7 +182,7 @@ namespace MemoryForge.Core
                 foreach (var part in PartsOf(instance)) if (part.Fx.Cost.HasValue) cost += part.Fx.Cost.Value;
                 if (definition.CostIf != null && Condition(definition.CostIf.Condition, instance)) cost += definition.CostIf.Delta;
                 state.BattleFlags.TryGetValue("emptyClockUsed", out var clockUsed);
-                if (mode != "now" && Has("empty_clock") && !BattleGraph.Truthy(clockUsed)) cost--;
+                if (Has("empty_clock") && !BattleGraph.Truthy(clockUsed)) cost--;
                 if (mode != "now" && state.SilenceUntil > 0 && state.SilenceUntil >= state.Turn) cost++;
                 if (nextFree && state.FreeNext > 0) cost = 0;
                 return StateNumber(BigInteger.Max(0, cost));
@@ -286,12 +284,16 @@ namespace MemoryForge.Core
             if (modifier.Prop == "draw" && effect.Op == "draw") effect.N = AddModifier(effect.N, add);
             if (modifier.Prop == "selfdmg" && effect.Op == "selfdmg" && effect.V.HasValue) effect.V = StateNumber(BigInteger.Max(0, (BigInteger)effect.V.Value + add));
         }
+        // RULES_NOW_PLAY: a card with the 보존 keyword, or a part granting it, stays in hand at the end of the turn.
+        bool Retains(BattleCardState instance) => EffectiveDefinition(instance).Keywords.Contains("retain") || PartsOf(instance).Any(p => p.Fx.Retain == true);
+        /// <summary>Whether a live card instance stays in hand at the end of the turn (보존 keyword or a part granting it).</summary>
+        public bool Retains(string uid) => !string.IsNullOrEmpty(uid) && state.Cards.TryGetValue(uid, out var card) ? Retains(card) : throw new RuleException("UNKNOWN_CARD_INSTANCE");
         bool IsGrowthInstance(BattleCardState instance)
         {
             if (data.CardIndex[instance.Id].Growth == true) return true;
             return instance.From != null && data.CardIndex.TryGetValue(instance.From, out var root) && root.Growth == true && root.Evolutions?.Contains(instance.Id) == true;
         }
-        bool Condition(EffectConditionDef condition, BattleCardState? instance = null, string? reserved = null, string? lastTarget = null, bool killed = false)
+        bool Condition(EffectConditionDef condition, BattleCardState? instance = null, bool held = false, string? lastTarget = null, bool killed = false)
         {
             var target = lastTarget == null ? null : state.Enemies.FirstOrDefault(e => e.Uid == lastTarget);
             switch (condition.Condition)
@@ -301,7 +303,7 @@ namespace MemoryForge.Core
                 case "broken": return target != null && target.BrokenUntil > 0;
                 case "debt": return state.Debts.Aggregate(BigInteger.Zero, (sum, debt) => sum + debt.N) > 0;
                 case "modded": return instance != null && PartsOf(instance).Count != 0;
-                case "reserved": return !string.IsNullOrEmpty(reserved);
+                case "reserved": case "held": return held; // RULES_NOW_PLAY: both mean "a card that was retained"
                 case "intentAttack": return target?.Intent != null && (target.Intent.Type == "atk" || target.Intent.Type == "atkdebuff" || target.Intent.Type == "expose");
                 case "echo": return state.Echo >= condition.N;
                 case "hpBelow": return (BigInteger)state.Hp * 100 <= (BigInteger)state.MaxHp * condition.Pct!.Value;
@@ -314,6 +316,8 @@ namespace MemoryForge.Core
         }
 
         bool Has(string relic) => state.Relics.Contains(relic);
+        // JS flags[key] === turn: only a stored integer equal to the turn matches (absent never does).
+        static bool IsTurnFlag(Dictionary<string, object?> flags, string key, int turn) => flags.TryGetValue(key, out var value) && (value is int i && i == turn || value is long n && n == turn);
         int Below(int bound) { int value = rng.Below(bound); state.Rng = rng.State; return value; }
         void Shuffle(List<string> cards)
         {
@@ -412,6 +416,8 @@ namespace MemoryForge.Core
             // Original nextTurnAp outside a player phase: due debt and the enemy AP drain are subtracted separately, then clamped once.
             int ap = StateNumber(BigInteger.Max(0, BigInteger.Min(rules.ApMax, (BigInteger)rules.ApPerTurn + s.ApNext + (Has("chrono_crown") ? 1 : 0) - (s.Turn == 0 && Has("cracked_hourglass") ? 1 : 0) - due - s.ApDrainNext)));
             s.Turn = checked(s.Turn + 1); s.Phase = "RESOLVING";
+            // Sera r6: the turn after her ultimate is boosted as a whole; a second ultimate that turn only sets up the next one.
+            if (IsTurnFlag(s.BattleFlags, "seraR6Turn", s.Turn)) s.BattleFlags["seraR6Active"] = s.Turn;
             if (!first) { s.Block = Math.Min(s.Block, s.Powers.Where(p => p.Id == "bulwark").Select(p => p.Keep ?? 0).DefaultIfEmpty(0).Max()); s.Counter = 0; }
             s.Buffs = s.Buffs.Where(b => b.Until >= s.Turn).ToList();
             s.Played = 0; s.LastOwner = null; s.OwnersThisTurn.Clear(); s.Contracts = 0; s.FreeNext = 0; s.NextBoost = null;
@@ -429,10 +435,11 @@ namespace MemoryForge.Core
                 var r = dueReservations[i]; ResolveCard(r.Uid, r.Kind, r.Target, new List<string>());
                 if (IsOver() || CheckEnd()) { foreach (var rest in dueReservations.Skip(i + 1)) s.Zones.Discard.Add(rest.Uid); return; }
             }
-            s.BattleFlags["seraR6Turn"] = 0;
             foreach (var power in s.Powers) if (power.Id == "rebirth") HealParty(power.Heal ?? 0);
             int count = checked(rules.HandDraw - s.DrawPenalty); s.DrawPenalty = 0;
-            if (first) { if (Has("quick_hands")) count = checked(count + 2); var draw = PartyWeapon("w_startDraw"); if (draw.HasValue) count = checked(count + draw.Value.Value); }
+            if (Has("twin_pendulum")) count = checked(count + 1);
+            if (Has("infinite_circuit")) count = checked(count + 1);
+            if (first) { if (Has("quick_hands")) count = checked(count + 2); if (Has("cracked_hourglass")) count = checked(count + 2); var draw = PartyWeapon("w_startDraw"); if (draw.HasValue) count = checked(count + draw.Value.Value); }
             Draw(Math.Max(0, count)); DeliverCopies();
             if (first)
             {
@@ -475,7 +482,10 @@ namespace MemoryForge.Core
             else if (s.BonusTurn <= s.Turn) s.BonusAvailable = false;
             s.RestraintActive = false;
             foreach (string uid in s.Zones.Hand.ToList()) if (s.Cards[uid].Id == "smudge") LoseHp(ScaleEnemy(2), "smudge");
-            s.Zones.Discard.AddRange(s.Zones.Hand); s.Zones.Hand.Clear();
+            // RULES_NOW_PLAY: 보존 cards stay in hand and become held; the rest are discarded in hand order.
+            var kept = s.Zones.Hand.Where(uid => Retains(s.Cards[uid])).ToList();
+            foreach (string uid in s.Zones.Hand) s.Cards[uid].Held = kept.Contains(uid);
+            s.Zones.Discard.AddRange(s.Zones.Hand.Where(uid => !kept.Contains(uid))); s.Zones.Hand = kept;
             if (CheckEnd()) return;
             if (s.Weak > 0) s.Weak--;
             if (s.SilenceUntil <= s.Turn) s.SilenceUntil = 0;
@@ -759,7 +769,7 @@ namespace MemoryForge.Core
                     zones.Draw = zones.Discard; zones.Discard = new List<string>(); Shuffle(zones.Draw);
                     Emit(new BattleEvent { E = "reshuffle" });
                 }
-                string uid = zones.Draw[0]; zones.Draw.RemoveAt(0);
+                string uid = zones.Draw[0]; zones.Draw.RemoveAt(0); state.Cards[uid].Held = false;
                 if (zones.Hand.Count < state.HandMax) zones.Hand.Add(uid);
                 else { zones.Discard.Add(uid); Emit(new BattleEvent { E = "burnCard", Uid = uid }); }
             }

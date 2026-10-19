@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      char_aila_fig_worried_styleA_v02_0: 4472677824470400908
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

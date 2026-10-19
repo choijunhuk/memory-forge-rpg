@@ -62,15 +62,15 @@ function enteredNode(run, step) {
   if (['battle', 'elite', 'boss'].includes(node.type)) assert.deepEqual([run.s.phase, run.battle.s.phase], ['BATTLE', 'PLAYER']);
 }
 
-test('immutable witnesses: frozen original data, three real full runs, self-consistent recorded outcomes', () => {
+test('immutable witnesses: frozen current data, three real full runs, self-consistent recorded outcomes', () => {
   assert.equal(vectors.schema, 'mf-run-node-contract-inputs-v1');
   assert.equal(createHash('sha256').update(dataBytes).digest('hex'), vectors.sourceData);
   const runs = Object.fromEntries(Object.entries(vectors.cases).map(([name, c]) => [name, [c.setup.seed, c.setup.length, c.setup.memoryPolicy, c.prefix.length > 0]]));
-  assert.deepEqual(runs, { repeatEvent: [1000, 'full', 'legacy', true], nextApLifetime: [1036, 'full', 'legacy', true], secondShopRemoval: [1020, 'full', 'legacy', true] });
+  assert.deepEqual(runs, { repeatEvent: [4211, 'full', 'legacy', true], nextApLifetime: [3084, 'full', 'legacy', true], secondShopRemoval: [1386, 'full', 'legacy', true] });
   for (const c of Object.values(vectors.cases)) for (const step of c.prefix) assert.equal(step.outcome === 'committed', step.errorCode === null);
 });
 
-test('seed1036: ev_rift AP+2 reaches only the next battle first turn and afterBattle no longer refunds it', () => {
+test('seed3084: ev_rift AP+2 reaches only the next battle first turn and afterBattle no longer refunds it', () => {
   const c = vectors.cases.nextApLifetime;
   const bonus = data.events.find(ev => ev.id === 'ev_rift').choices[0].fx.nextApBonus;
   const [first, victory, second] = c.observations;
@@ -105,17 +105,17 @@ test('seed1036: ev_rift AP+2 reaches only the next battle first turn and afterBa
   assert.deepEqual([one.phase, one.battle.turn, one.battle.ap, one.flags.nextApBonus], [first.phase, first.battleTurn, first.ap, first.runBonus]);
   assert.equal(one.battle.ap, base + bonus);
 
-  // Victory: the original merged the Battle copy's 2 back here (observed runBonus 2); the Run flag now stays consumed.
+  // Victory: the pre-fix engine merged the Battle copy's 2 back here; the Run flag now stays consumed.
   const won = seen[victory.at];
   assert.equal(won.phase, victory.phase);
   assert.equal(won.flags.nextApBonus, 0, 'afterBattle refunded the consumed event AP bonus');
 
-  // The next battle starts at the plain base AP (the original observed AP7 again).
+  // The next battle starts at the plain base AP (the pre-fix engine repeated base + 2).
   const two = seen[second.at];
   assert.deepEqual([two.phase, two.battle.turn, two.flags.nextApBonus], [second.phase, second.battleTurn, second.runBonus]);
   assert.equal(two.battle.ap, base, 'a later battle repeated the one-shot event AP bonus');
 
-  // Root cause: no Battle copy carries the bonus (the original copied 2); unrelated persistent flags are untouched.
+  // Root cause: no Battle copy carries the bonus (the pre-fix engine copied 2); unrelated persistent flags are untouched.
   assert.deepEqual(one.battle.flags, { ...before, nextApBonus: 0 });
   assert.deepEqual(one.flags, { ...before, nextApBonus: 0 });
   assert.equal(won.firstBattleFlags.nextApBonus, 0);
@@ -127,10 +127,10 @@ test('seed1036: ev_rift AP+2 reaches only the next battle first turn and afterBa
   assert.equal(seen[firstEnd].battle.turn, 2);
 });
 
-test('seed1020: a shop sells its single card removal once; a second public removal is NOT_FOR_SALE with no mutation', () => {
+test('seed1386: a shop sells its single card removal once; a second public removal is NOT_FOR_SALE with no mutation', () => {
   const c = vectors.cases.secondShopRemoval;
   const last = c.prefix.length - 1;
-  assert.deepEqual(c.prefix[last].command, { scope: 'run', kind: 'buy', args: ['remove', null, 'k5'] });
+  assert.deepEqual(c.prefix[last].command, { scope: 'run', kind: 'buy', args: ['remove', null, 'k4'] });
   assert.deepEqual(c.attempt, { scope: 'run', kind: 'buy', args: ['remove', null, 'k1'] });
   const run = replay('secondShopRemoval', { upto: last });
   const shop = run.s.pending;
@@ -139,7 +139,7 @@ test('seed1020: a shop sells its single card removal once; a second public remov
   const coins = run.s.coins, deck = keys(run.s.deck);
   assert.equal(attempt(run, c.prefix[last].command), null);
   assert.deepEqual([run.s.coins, run.s.runFlags.removals, shop.removeCost], [coins - 50, 1, null]);
-  assert.deepEqual(keys(run.s.deck), deck.filter(key => key !== 'k5'));
+  assert.deepEqual(keys(run.s.deck), deck.filter(key => key !== 'k4'));
   assert.deepEqual({ coins: run.s.coins, deck: run.s.deck.length, removeCost: shop.removeCost, removals: run.s.runFlags.removals }, c.observed);
 
   // The second request names a real removable card, so only the used service can refuse it (the original removed it for 0 coins).
@@ -159,24 +159,24 @@ test('seed1020: a shop sells its single card removal once; a second public remov
   assert.equal(run.makeShop().removeCost, 75);
 });
 
-test('seed1000: a resolved ev_archive rejects reselection with BAD_CHOICE before effects or RNG; phase order kept', () => {
+test('seed4211: a resolved ev_archive rejects reselection with BAD_CHOICE before effects or RNG; phase order kept', () => {
   const c = vectors.cases.repeatEvent;
   const last = c.prefix.length - 1;
   assert.deepEqual(c.prefix[last].command, c.attempt);
-  assert.deepEqual(c.attempt, { scope: 'run', kind: 'eventChoose', args: [0, 'k2'] });
+  assert.deepEqual(c.attempt, { scope: 'run', kind: 'eventChoose', args: [0, 'k16'] });
   const run = replay('repeatEvent', { upto: last });
   assert.deepEqual([run.s.phase, run.s.pending.id, run.s.pending.done], ['EVENT', 'ev_archive', undefined]);
   const maxHp = run.s.maxHp, deck = clone(run.s.deck);
-  assert.ok(deck.some(card => card.key === 'k2' && !card.weapon));
+  assert.ok(deck.some(card => card.key === 'k16' && !card.weapon));
 
-  // Normal first selection with one key (§7.7 정리한다): maxHp -5 at reference party HP, k2 plus one auto-picked card.
+  // Normal first selection with one key (§7.7 정리한다): maxHp -5 at reference party HP, k16 plus one auto-picked card.
   assert.equal(attempt(run, c.prefix[last].command), null);
   assert.equal(run.s.maxHp, maxHp - 5);
   assert.equal(run.s.deck.length, deck.length - 2);
-  assert.ok(!run.s.deck.some(card => card.key === 'k2'));
+  assert.ok(!run.s.deck.some(card => card.key === 'k16'));
   assert.equal(run.s.deck.filter(card => card.weapon).length, deck.filter(card => card.weapon).length);
   assert.deepEqual([run.s.pending.done, run.s.pending.choice], [true, 0]);
-  assert.deepEqual([run.s.hp, run.s.maxHp, run.s.coins, run.s.deck.length], [149, 238, 138, 19]); // witnessed after the first selection
+  assert.deepEqual([run.s.hp, run.s.maxHp, run.s.coins, run.s.deck.length], [161, 238, 148, 19]); // witnessed after the first selection
 
   // Reselection must not apply maxHp 238 -> 233 and two more removals (nor any other choice) again.
   rejects(run, () => dispatch(run, c.attempt), 'BAD_CHOICE');
@@ -189,7 +189,7 @@ test('seed1000: a resolved ev_archive rejects reselection with BAD_CHOICE before
   rejects(run, () => dispatch(run, c.attempt), 'WRONG_PHASE');
 });
 
-test('seed1000: a key-array first ev_archive choice removes exactly the chosen cards, once', () => {
+test('seed4211: a key-array first ev_archive choice removes exactly the chosen cards, once', () => {
   const c = vectors.cases.repeatEvent;
   const run = replay('repeatEvent', { upto: c.prefix.length - 1 });
   const deck = keys(run.s.deck), maxHp = run.s.maxHp;
@@ -217,15 +217,15 @@ test('every witnessed event resolves once; rejected reselections leave all later
   }
 });
 
-test('continuation witnesses: separate real full runs recorded on engine 3ad, self-consistent outcomes', () => {
+test('continuation witnesses: separate real full runs recorded on engine 653d, self-consistent outcomes', () => {
   const { sourceEngine, ...runs } = vectors.continuations;
-  assert.equal(sourceEngine, '3ad9751b24e514199b05c804a8d4eb4d2e6b7cf0069cd9393b4988fe77a3e0f2');
+  assert.equal(sourceEngine, '653dfec4959d1ec759142ae8de24b08c6844b1db366a748fb9401829129cd72a');
   const shape = Object.fromEntries(Object.entries(runs).map(([name, c]) => [name, [c.setup.seed, c.setup.length, c.setup.memoryPolicy, c.prefix.length]]));
-  assert.deepEqual(shape, { nextEvent: [1000, 'full', 'legacy', 119], openingDefeat: [1102, 'full', 'legacy', 221] });
+  assert.deepEqual(shape, { nextEvent: [4211, 'full', 'legacy', 79], openingDefeat: [3561, 'full', 'legacy', 213] });
   for (const c of Object.values(runs)) for (const step of c.prefix) assert.equal(step.outcome === 'committed', step.errorCode === null);
 });
 
-test('seed1102: a battle that ends inside begin finishes the run once through the defeat save, after the node entry', () => {
+test('seed3561: a battle that ends inside begin finishes the run once through the defeat save, after the node entry', () => {
   const c = vectors.continuations.openingDefeat, obs = c.observations;
   const last = c.prefix.length - 1, enter = c.prefix[last].command;
   assert.deepEqual(enter, { scope: 'run', kind: 'enter', args: [obs.lastNode] });
@@ -286,10 +286,10 @@ test('seed1102: a battle that ends inside begin finishes the run once through th
   assert.deepEqual([run.s.phase, run.s.pending], ['DONE', { type: 'done' }]);
 });
 
-test('seed1000 continuation: repeats of a done ev_archive change nothing, and the next ev_promise still commits once', () => {
+test('seed4211 continuation: repeats of a done ev_archive change nothing, and the next ev_promise still commits once', () => {
   const c = vectors.continuations.nextEvent;
   const [archive, promise] = c.observations;
-  assert.deepEqual([c.prefix.length, archive.at, archive.event, promise.at, promise.event], [119, 96, 'ev_archive', 118, 'ev_promise']);
+  assert.deepEqual([c.prefix.length, archive.at, archive.event, promise.at, promise.event], [79, 62, 'ev_archive', 78, 'ev_promise']);
   for (const o of c.observations) assert.deepEqual([c.prefix[o.at].command.kind, c.prefix[o.at].command.args[0], c.prefix[o.at - 1].command.kind], ['eventChoose', o.choice, 'enter']);
   const plain = replay('nextEvent', { from: vectors.continuations });
   let repeated = 0;
@@ -312,16 +312,16 @@ test('seed1000 continuation: repeats of a done ev_archive change nothing, and th
   assert.equal(JSON.stringify(run.s), JSON.stringify(plain.s), 'rejected repeats changed the continuation');
 });
 
-test('seed2654 packet: each newly earned ev_rift +2 reaches only its next battle; the battles between keep the base AP', () => {
+test('seed2992 packet: each newly earned ev_rift +2 reaches only its next battle; the battles between keep the base AP', () => {
   const c = vectors.reearnedRift, [first, second] = c.observations;
-  assert.equal(c.sourceEngine, 'dae99192bfa137762c1c863efda8207b3851e3a6e7ecf2ff029bed3585a33ab4');
-  assert.deepEqual([c.setup.seed, c.setup.length, c.setup.memoryPolicy, c.setup.relics, c.prefix.length], [2654, 'full', 'legacy', [], 1525]);
+  assert.equal(c.sourceEngine, '653dfec4959d1ec759142ae8de24b08c6844b1db366a748fb9401829129cd72a');
+  assert.deepEqual([c.setup.seed, c.setup.length, c.setup.memoryPolicy, c.setup.relics, c.prefix.length], [2992, 'full', 'legacy', [], 289]);
   for (const step of c.prefix) assert.equal(step.outcome === 'committed', step.errorCode === null);
-  // Independent base: original rules.apPerTurn; ev_rift choice 0 is the only nextApBonus source in the original data.
+  // Independent base: rules.apPerTurn; ev_rift choice 0 is the only nextApBonus source in the current data.
   const bonus = data.events.find(ev => ev.id === 'ev_rift').choices[0].fx.nextApBonus, base = data.rules.apPerTurn;
   assert.deepEqual([bonus, base], [2, 4]);
   assert.deepEqual(data.events.flatMap(ev => ev.choices.filter(ch => ch.fx?.nextApBonus).map(() => ev.id)), ['ev_rift']);
-  assert.deepEqual(c.observations.map(o => [o.at, o.event, o.choice, o.beforeBonus, o.afterBonus]), [[78, 'ev_rift', 0, 0, bonus], [1519, 'ev_rift', 0, 0, bonus]]);
+  assert.deepEqual(c.observations.map(o => [o.at, o.event, o.choice, o.beforeBonus, o.afterBonus]), [[63, 'ev_rift', 0, 0, bonus], [282, 'ev_rift', 0, 0, bonus]]);
 
   const plain = replay('reearnedRift', { from: vectors });
   const battles = [], resolved = [], bonusChanges = [];
@@ -352,7 +352,7 @@ test('seed2654 packet: each newly earned ev_rift +2 reaches only its next battle
   // Two distinct pendings from two node entries, each resolved once.
   assert.equal(resolved.length, 2);
   assert.ok(resolved[0] < first.at && first.at < resolved[1] && resolved[1] < second.at);
-  // Over all 1525 commands the Run flag rises only at the two choices and is spent only by the next battle entry (never refunded).
+  // Over all 289 commands the Run flag rises only at the two choices and is spent only by the next battle entry (never refunded).
   const nextBattle = at => battles.find(b => b.at > at).at;
   assert.deepEqual(bonusChanges, [[first.at, 0, bonus], [nextBattle(first.at), bonus, 0], [second.at, 0, bonus], [nextBattle(second.at), bonus, 0]]);
   // Every battle entered after each event is witnessed in order; only the first after each event gets the +2 (AP6), the rest AP4.
@@ -362,15 +362,15 @@ test('seed2654 packet: each newly earned ev_rift +2 reaches only its next battle
     assert.deepEqual([b.phase, b.turn, b.ap, b.apNext, b.runBonus, b.copiedBonus], ['BATTLE', 1, base + (k === 0 ? bonus : 0), 0, 0, 0], `battle at ${b.at}`);
     assert.ok(!b.relics.includes('chrono_crown') && !b.relics.includes('cracked_hourglass'));
   });
-  assert.deepEqual([afterFirst.length, afterSecond.length], [9, 1]);
+  assert.deepEqual([afterFirst.length, afterSecond.length], [6, 1]);
   // The rejected repeats left no trace: the complete Run JSON (RNG, log, pending, battle) equals the plain replay.
   assert.equal(JSON.stringify(run.s), JSON.stringify(plain.s), 'rejected repeats changed the packet');
 });
 
-// The corpus generator's own policy plays seed 1102 into the same opening defeat; only its legitimate options differ.
-for (const memoryPolicy of ['legacy', 'v2']) test(`seed1102 generated ${memoryPolicy} trace: the opening defeat finishes through its save to DONE`, () => {
+// The corpus generator's own policy plays seed 3561 into the same opening defeat; only its legitimate options differ.
+for (const memoryPolicy of ['legacy', 'v2']) test(`seed3561 generated ${memoryPolicy} trace: the opening defeat finishes through its save to DONE`, () => {
   const c = vectors.continuations.openingDefeat, obs = c.observations;
-  const trace = generateScenario({ seed: 1102, length: 'full', memoryPolicy });
+  const trace = generateScenario({ seed: 3561, length: 'full', memoryPolicy });
   assert.equal(trace.sources.data.sha256, vectors.sourceData);
   assert.deepEqual(replayScenario(trace).finalState, trace.finalState);
   assert.equal(trace.summary.outcome, 'defeat');
@@ -444,7 +444,7 @@ for (const memoryPolicy of ['legacy', 'v2']) test(`seed1102 generated ${memoryPo
   assert.equal(hash(state), trace.finalStateHash);
 });
 
-test('seed1102: a fixed boss that throws inside startBattle writes no entry log, as in the original order', () => {
+test('seed3561: a fixed boss that throws inside startBattle writes no entry log, as in the original order', () => {
   const c = vectors.continuations.openingDefeat;
   const at = c.prefix.findIndex(step => step.command.kind === 'enter' && step.command.args[0] === 'z1boss');
   // Legitimate setup only: Run.create keeps opaque fixed-boss ids, and 'missing' is not an authored enemy.

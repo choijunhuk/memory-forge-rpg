@@ -189,43 +189,34 @@ namespace MemoryForge.Client.Tests
             }
         }
 
+        // RULES_NOW_PLAY: no card can be reserved. The end of the turn keeps only 보존 cards in hand (marked held) and discards the rest;
+        // the reset still rebuilds one owned view. (It replaced ReservationResolvesOnTheNextTurnAndResetRebuildsOneOwnedView.)
         [UnityTest]
-        public IEnumerator ReservationResolvesOnTheNextTurnAndResetRebuildsOneOwnedView()
+        public IEnumerator EndTurnKeepsOnlyRetainedCardsAndResetRebuildsOneOwnedView()
         {
             var opening = new Opening();
-            yield return OpenWithCard("next", (running, uid) => true, opening);
+            yield return OpenWithCard("now", (running, uid) => true, opening);
             Assert.That(opening.Failure, Is.Null, opening.Failure ?? "");
             var host = opening.Host!; var client = opening.Client!; var running = opening.Running!; string uid = opening.Card;
             string beginning = Fingerprint(client.Snapshot!);
+            Assert.That(running.Check(uid, "next", opening.Target), Is.EqualTo("NOT_RESERVABLE"), "no card can be reserved");
 
-            client.SelectEnemy(opening.Target);
-            client.SelectCard(uid);
-            var before = client.Snapshot!;
-            int cost = running.CostOf(uid, "next");
-            string name = running.EffectiveCard(uid).Name;
-            client.PlayCard(uid, "next");
-            Assert.That(client.LastError, Is.Null);
-            var reserved = client.Snapshot!;
-            Assert.That(reserved.V, Is.EqualTo(before.V + 1));
-            Assert.That(reserved.Ap, Is.EqualTo(before.Ap - cost));
-            Assert.That(reserved.Zones.Hand.Concat(reserved.Zones.Draw).Concat(reserved.Zones.Discard).Concat(reserved.Zones.Exhaust), Does.Not.Contain(uid));
-            var row = reserved.Reservations.Single(r => r.Uid == uid);
-            Assert.That(row.Kind, Is.EqualTo("next"));
-            Assert.That(row.Due, Is.EqualTo(reserved.Turn + 1));
-            Assert.That(reserved.Cards[uid].Used, Is.EqualTo(before.Cards[uid].Used), "a reserved card must not resolve before its turn");
-            Assert.That(reserved.Events.Any(e => e.E == "reserve" && e.Uid == uid && e.Kind == "next"), Is.True);
-            Canvas.ForceUpdateCanvases();
-            AssertReadable(ActiveView(host), t => t.StartsWith("다음 ", StringComparison.Ordinal) && t.EndsWith(name, StringComparison.Ordinal), "next-turn reservation slot");
-
+            var before = client.Snapshot!; var hand = before.Zones.Hand.ToList();
+            bool Retain(string card) => running.EffectiveCard(card).Keywords.Contains("retain");
             client.EndTurn();
             Assert.That(client.LastError, Is.Null);
             var next = client.Snapshot!;
-            Assert.That(next.V, Is.EqualTo(reserved.V + 1));
-            Assert.That(next.Turn, Is.EqualTo(reserved.Turn + 1));
-            Assert.That(next.Phase, Is.EqualTo("PLAYER").Or.EqualTo("VICTORY"));
-            Assert.That(next.Reservations.Any(r => r.Uid == uid), Is.False);
-            Assert.That(next.Cards[uid].Used, Is.EqualTo(reserved.Cards[uid].Used + 1));
-            Assert.That(next.Log.Any(e => e.E == "resolved" && e.Uid == uid && e.Reserved == "next"), Is.True);
+            Assert.That(next.V, Is.EqualTo(before.V + 1));
+            Assert.That(next.Turn, Is.EqualTo(before.Turn + 1));
+            Assert.That(next.Phase, Is.EqualTo("PLAYER"));
+            foreach (string card in hand)
+            {
+                Assert.That(next.Cards[card].Held, Is.EqualTo(Retain(card)), card + ": only a 보존 card is held");
+                if (Retain(card)) Assert.That(next.Zones.Hand, Does.Contain(card), card + ": a 보존 card stays in hand");
+            }
+            // With at least a new hand's worth in the draw pile nothing was reshuffled, so every other card is in the discard pile.
+            if (before.Zones.Draw.Count >= next.Zones.Hand.Count)
+                Assert.That(next.Zones.Discard, Is.SupersetOf(hand.Where(card => !Retain(card))), "the rest of the hand is discarded");
             if (next.Phase == "PLAYER") Assert.That(next.Events.Any(e => e.E == "turn" && e.Turn == next.Turn), Is.True);
 
             client.StartPracticeBattle(); // the "다시 시작" handler
@@ -297,43 +288,37 @@ namespace MemoryForge.Client.Tests
             yield return null;
         }
 
+        // RULES_NOW_PLAY: Sera's ultimate draws a card instead of opening a next-turn slot, and collateral borrows one AP from the next
+        // turn instead of sealing its slot, so the timeline holds no player reservation. (It replaced
+        // TimelineKeepsEveryReservationAfterSeraUltimateAndLabelsSealedSlots.)
         [Test]
-        public void TimelineKeepsEveryReservationAfterSeraUltimateAndLabelsSealedSlots()
+        public void SeraUltimateDrawsACardAndCollateralBorrowsInsteadOfSealingASlot()
         {
             var data = ClientBattleContent.Load().Battle; var rules = data.Rules;
-            // Source evidence: Sera's authored ultimate grants one temporary next-turn slot.
-            Assert.That(data.Characters.Single(c => c.Id == "sera").Ult.Effects.Any(e => e.Op == "slot" && e.Next == 1), Is.True);
+            var effects = data.Characters.Single(c => c.Id == "sera").Ult.Effects;
+            Assert.That((effects.Any(e => e.Op == "slot"), effects.Any(e => e.Op == "draw" && e.N == 1)), Is.EqualTo((false, true)), "source: the ultimate draws one card");
 
-            // Independent Core battles from legitimate BattleSetup inputs (projection evidence, not the fixed UI practice flow).
+            // Independent Core battles from legitimate BattleSetup inputs.
             var ult = Battle.Create(data, new BattleSetup { Party = { new BattleActorSetup { CharId = "sera", Gauge = rules.GaugeMax } },
-                Deck = Enumerable.Repeat("sera_round", 5).Select(id => new BattleCardSpec { Id = id }).ToList(),
+                Deck = Enumerable.Repeat("sera_round", 8).Select(id => new BattleCardSpec { Id = id }).ToList(),
                 Enemies = { "e_shelf" }, Hp = 243, MaxHp = 243, Seed = 1 });
             Send(ult, "begin");
-            string enemy = ult.State.Enemies[0].Uid;
+            string enemy = ult.State.Enemies[0].Uid; int hand = ult.State.Zones.Hand.Count;
+            Assert.That(ult.State.Zones.Draw, Is.Not.Empty, "precondition: a card is left to draw");
             Send(ult, "ult", ("actor", "sera"), ("target", enemy));
-            Assert.That(ult.State.SlotsTemp.Next, Is.EqualTo(1));
-            foreach (string uid in ult.State.Zones.Hand.Take(3).ToList()) Send(ult, "play", ("uid", uid), ("mode", "next"), ("target", enemy));
-            var s = ult.State;
-            var reserved = s.Reservations.Where(r => r.Due == s.Turn + 1).OrderBy(r => r.Order).Select(r => r.Uid).ToList();
-            Assert.That(reserved.Count, Is.EqualTo(3), "Core accepted a third next-turn reservation");
-            var cells = MemoryForgeBattleClient.TimelineCells(s, rules);
-            Assert.That(cells.Where(c => c.Group == "next" && c.Kind == "card").Select(c => c.Uid), Is.EqualTo(reserved), "every next-turn reservation, in order");
-            Assert.That(cells.Where(c => c.Kind == "card").Select(c => c.Uid), Is.EquivalentTo(s.Reservations.Select(r => r.Uid)));
-            Assert.That(cells.Where(c => c.Group == "after").Select(c => c.Kind),
-                Is.EqualTo(Enumerable.Repeat("empty", rules.AfterSlots).Concat(Enumerable.Repeat("none", rules.AfterSlotsMax - rules.AfterSlots))));
+            Assert.That((ult.State.SlotsTemp.Next, ult.State.Zones.Hand.Count), Is.EqualTo((0, hand + 1)), "the ultimate drew one card and opened no slot");
+            Assert.That(ult.Check(ult.State.Zones.Hand[0], "next", enemy), Is.EqualTo("NOT_RESERVABLE"));
+            Assert.That(MemoryForgeBattleClient.TimelineCells(ult.State, rules).Any(c => c.Kind == "card" || c.Kind == "sealed"), Is.False, "no player reservation");
 
-            var seal = Battle.Create(data, new BattleSetup { Party = { new BattleActorSetup { CharId = "ravien" } },
+            var loan = Battle.Create(data, new BattleSetup { Party = { new BattleActorSetup { CharId = "ravien" } },
                 Deck = new[] { "ravien_collateral", "com_guard", "com_guard", "com_guard", "com_guard" }.Select(id => new BattleCardSpec { Id = id }).ToList(),
                 Enemies = { "e_shelf" }, Hp = 243, MaxHp = 243, Seed = 1 });
-            Send(seal, "begin");
-            Send(seal, "play", ("uid", seal.State.Zones.Hand.Single(uid => seal.State.Cards[uid].Id == "ravien_collateral")), ("mode", "now"));
-            Assert.That(seal.State.SealedUntil, Is.GreaterThanOrEqualTo(seal.State.Turn));
-            var guards = seal.State.Zones.Hand.Where(uid => seal.State.Cards[uid].Id == "com_guard").ToList();
-            Send(seal, "play", ("uid", guards[0]), ("mode", "next"));
-            Assert.That(seal.Check(guards[1], "next"), Is.EqualTo("SLOT_FULL"), "Core: the sealed next-turn slot is really unavailable");
-            var next = MemoryForgeBattleClient.TimelineCells(seal.State, rules).Where(c => c.Group == "next").ToList();
-            Assert.That(next.Select(c => c.Kind), Is.EqualTo(new[] { "card", "sealed" }.Concat(Enumerable.Repeat("none", rules.NextSlotsMax - 2))));
-            Assert.That(next[0].Uid, Is.EqualTo(guards[0]));
+            Send(loan, "begin");
+            Send(loan, "play", ("uid", loan.State.Zones.Hand.Single(uid => loan.State.Cards[uid].Id == "ravien_collateral")), ("mode", "now"));
+            var s = loan.State;
+            Assert.That(s.SealedUntil, Is.LessThan(s.Turn), "collateral seals no slot");
+            Assert.That(s.Debts.Select(d => (d.N, d.Due, d.Deferred)), Is.EqualTo(new[] { (1, s.Turn + 1, false) }), "it borrows one AP from the next turn");
+            Assert.That(MemoryForgeBattleClient.TimelineCells(s, rules).Any(c => c.Kind == "card" || c.Kind == "sealed"), Is.False, "no sealed slot is drawn");
         }
 
         [UnityTest]

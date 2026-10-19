@@ -44,26 +44,29 @@ test('fatal reflect stops the next card hit before it kills a marked enemy for c
   assert.deepEqual(b.s, before);
 });
 
-test('reserved fatal reflect stops later hits and returns every pending reservation once', () => {
+// RULES_NOW_PLAY (2026-10-19): the card carried into a later turn is a held 보존 card (c_delay) played now, not a reservation.
+test('held fatal reflect stops later hits, leaves the other held cards untouched and replays idempotently', () => {
   const b = battle();
+  for (const uid of b.s.zones.hand) b.s.cards[uid].mods.c = 'c_delay';
+  const [uid, ...others] = b.s.zones.hand;
+  b.do('end');
+  assert.ok([uid, ...others].every(u => b.s.cards[u].held && b.s.zones.hand.includes(u)));
   const enemy = b.alive()[0]; enemy.hp = 7; enemy.st.mark = 1;
-  const [uid, due, future] = b.s.zones.hand;
-  b.do('play', { uid, mode: 'next', target: enemy.uid });
-  b.do('play', { uid: due, mode: 'next', target: enemy.uid });
-  b.do('play', { uid: future, mode: 'after', target: enemy.uid });
-  const req = { rid: 'resolve-fatal-reflect', v: b.s.v, kind: 'end', args: {} };
+  const req = { rid: 'held-fatal-reflect', v: b.s.v, kind: 'play', args: { uid, mode: 'now', target: enemy.uid } };
   const response = b.command(req);
   assert.equal(response.v, req.v + 1);
   assert.equal(response.phase, 'DEFEAT');
-  assert.equal(b.s.enemies[0].hp, 1);
+  assert.equal(b.s.enemies[0].hp, 3);
   assert.equal(b.s.enemies[0].alive, true);
   assert.equal(b.s.ev.filter(e => e.e === 'dmg').length, 1);
   assert.equal(b.s.runFlags.coinsBonus || 0, 0);
   assert.equal(b.s.res.length, 0);
   assertConserved(b, uid);
-  for (const pending of [due, future]) {
-    assert.equal(b.s.zones.discard.filter(u => u === pending).length, 1);
-    assert.equal(b.s.cards[pending].used, 0);
+  assert.equal(b.s.cards[uid].held, false);
+  for (const other of others) {
+    assert.equal(b.s.zones.hand.filter(u => u === other).length, 1);
+    assert.equal(b.s.cards[other].used, 0);
+    assert.equal(b.s.cards[other].held, true);
   }
   const before = structuredClone(b.s);
   assert.deepEqual(b.command(structuredClone(req)), response);

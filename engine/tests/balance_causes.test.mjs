@@ -56,7 +56,13 @@ test('independent aggregation and signed contributors reconcile all failed metri
 
 test('analysis rejects altered target bounds and assessment results with unchanged source hashes', async t => {
   const report = runProbe({ requestedN: 1, groups: group, data: base, maxTurns: 10 });
-  assert.equal(report.assessment.failedMetrics, 5);
+  // RULES_NOW_PLAY: the random policy can no longer spend plays on next/after reservations, so on e_hound it now
+  // finishes as fast as greedy/planner and its HP loss also falls under the 4% floor. Every turns/hpLossPct metric
+  // fails (below band); random winPct is the only passing metric, so the tamper cases below still have failures to hide.
+  const passing = Object.entries(report.assessment.metrics).flatMap(([row, metrics]) =>
+    Object.entries(metrics).filter(([, m]) => m.status === 'pass').map(([name]) => `${row} ${name}`));
+  assert.deepEqual(passing, ['1/normal/random winPct']);
+  assert.equal(report.assessment.failedMetrics, 6);
   const cases = [
     ['weakened target bands', corrupted => {
       for (const metrics of Object.values(corrupted.assessment.metrics)) for (const metric of Object.values(metrics)) {

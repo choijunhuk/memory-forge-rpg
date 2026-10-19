@@ -93,7 +93,7 @@ export function generateCases() {
   add('brazier-before-kaya', setup([{ charId: 'kaya', res: 6 }], { seed: 0, relics: ['pocket_brazier'], enemies: ['e_moth', 'e_cog', 'e_smudge'] }));
   add('brazier-kaya-uint-max', setup([{ charId: 'kaya', res: 4 }], { seed: 0xffffffff, relics: ['pocket_brazier'], enemies: ['e_moth', 'e_cog', 'e_smudge'] }));
 
-  // Authored draw max is 5 + 2 + strongest 2 = 9, exactly twin_pendulum's cap; no fresh-opening overflow exists.
+  // Authored draw max is 5 + twin_pendulum 1 + quick_hands 2 + strongest 2 = 10 against twin_pendulum's cap 9 (RULES_NOW_PLAY: its slot became a draw), so the strongest opening burns one card.
   add('draw-max-strongest-only', setup([{ charId: 'nia', res: 6, weaponId: 'w_clock_core', refine: 5 },
     { charId: 'ravien', res: 6, weaponId: 'w_clock_core', refine: 4 }, { charId: 'harin', res: 6 }],
   { relics: ['quick_hands', 'twin_pendulum', 'memory_anvil'] }));

@@ -103,16 +103,21 @@ test('real short/full Run commands replay every committed and rejected state has
   }
 });
 
-test('seed 1135 skips a real reserve-only card disabled by c_quick and completes the run', t => {
-  const emptyModes = [];
+// docs/RULES_NOW_PLAY.md: no card is reserve-only and c_quick no longer disables reservation, so every offer is exactly ['now'].
+test('seed 1187 offers c_quick and retained (held) cards only now, plays every card now and completes the run', t => {
+  const offered = [];
   const allowedModes = MF.Battle.prototype.allowedModes;
   t.mock.method(MF.Battle.prototype, 'allowedModes', function(uid) {
-    const modes = allowedModes.call(this, uid);
-    if (!modes.length) emptyModes.push({ id: this.s.cards[uid].id, circuit: this.s.cards[uid].mods.c });
+    const modes = allowedModes.call(this, uid), inst = this.s.cards[uid];
+    offered.push({ id: inst.id, circuit: inst.mods.c, held: inst.held, modes: modes.join('|') });
     return modes;
   });
-  const trace = generateScenario({ seed: 1135, length: 'short' });
-  assert.ok(emptyModes.some(card => card.id === 'com_overwatch' && card.circuit === 'c_quick'));
+  const trace = generateScenario({ seed: 1187, length: 'short' });
+  assert.deepEqual([...new Set(offered.map(card => card.modes))], ['now']);
+  assert.ok(offered.some(card => card.id === 'sera_round' && card.circuit === 'c_quick'));
+  // sera_timed (formerly reserve-only) is a 보존 card: kept in hand across an end of turn, then offered again as held.
+  assert.ok(offered.some(card => card.id === 'sera_timed' && card.held === true));
+  assert.deepEqual([...new Set(trace.commands.filter(step => step.command.kind === 'play').map(step => step.command.args.mode))], ['now']);
   assert.equal(trace.finalState.run.phase, 'DONE');
   assert.deepEqual(replayScenario(trace).finalState, trace.finalState);
 });

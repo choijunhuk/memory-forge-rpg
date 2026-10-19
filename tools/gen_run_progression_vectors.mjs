@@ -1,5 +1,5 @@
 // R1a §7/8/16.2/20.9 P1-1: actual Run.create → enter → Battle → rewards → node services → archive → defeat/clear → memory,
-// recorded as complete JS states, returns, errors and pure queries for five fixed gen_traces scenarios.
+// recorded as complete JS states, returns, errors and pure queries for seven fixed gen_traces scenarios.
 // JS_ORACLE_ONLY: no C# Run command has replayed it. The 1000-trace hash corpus and the R0 factory matrix stay separate evidence.
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
@@ -19,17 +19,21 @@ const clone = value => JSON.parse(JSON.stringify(value));
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
 const schema = 'mf-run-progression-v1';
 const status = 'JS_ORACLE_ONLY';
-const scope = 'Actual Run.create and the recorded public Run/battle commands of five fixed gen_traces scenarios: complete JS states, returns, errors and pure queries. C# Run command replay 0; restoration, abandonment, persistence, server, Unity and device acceptance PENDING';
+const scope = 'Actual Run.create and the recorded public Run/battle commands of seven fixed gen_traces scenarios: complete JS states, returns, errors and pure queries. C# Run command replay 0; restoration, abandonment, persistence, server, Unity and device acceptance PENDING';
 const isMain = process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 export const fixturePath = join(root, 'engine/tests/vectors/run_progression_vectors.json.gz');
 
 // Fixed real generator inputs. Roles are asserted against actual observations; nothing is restored from trace snapshots.
+// Since the 2026-10-19 now-play rules (docs/RULES_NOW_PLAY.md) seed 1102 no longer ends a battle inside begin and seed 2654 earns
+// ev_rift once: begin-defeat moved to 3561 and earned-ap-bonus to 2992 (two earned/consumed gains); 1102 stays as full exploration.
 const plan = [
   { id: 'seed1000-short-legacy', seed: 1000, length: 'short', memoryPolicy: 'legacy', role: 'ordinary-exploration' },
   { id: 'seed1000-full-legacy', seed: 1000, length: 'full', memoryPolicy: 'legacy', role: 'ordinary-exploration' },
-  { id: 'seed1102-full-legacy', seed: 1102, length: 'full', memoryPolicy: 'legacy', role: 'begin-defeat' },
-  { id: 'seed1102-full-v2', seed: 1102, length: 'full', memoryPolicy: 'v2', role: 'begin-defeat' },
-  { id: 'seed2654-full-legacy', seed: 2654, length: 'full', memoryPolicy: 'legacy', role: 'earned-ap-bonus' },
+  { id: 'seed1102-full-legacy', seed: 1102, length: 'full', memoryPolicy: 'legacy', role: 'ordinary-exploration' },
+  { id: 'seed1102-full-v2', seed: 1102, length: 'full', memoryPolicy: 'v2', role: 'ordinary-exploration' },
+  { id: 'seed3561-full-legacy', seed: 3561, length: 'full', memoryPolicy: 'legacy', role: 'begin-defeat' },
+  { id: 'seed3561-full-v2', seed: 3561, length: 'full', memoryPolicy: 'v2', role: 'begin-defeat' },
+  { id: 'seed2992-full-legacy', seed: 2992, length: 'full', memoryPolicy: 'legacy', role: 'earned-ap-bonus' },
 ];
 // The public Run surface gen_traces dispatches; its dispatcher is not exported and the canonical source hash pins it.
 const runMethods = new Set(['enter', 'evolve', 'takeCard', 'skipCard', 'takeRelic', 'takePart', 'applyFoundPart',
@@ -276,7 +280,7 @@ export function exportVectors(output = fixturePath) {
 if (isMain) {
   const args = process.argv.slice(2);
   if (args.length > 1 || (args.length && !['--check', '--help'].includes(args[0]))) throw new Error('Usage: node tools/gen_run_progression_vectors.mjs [--check|--help]');
-  if (args[0] === '--help') console.log('Export the actual five-scenario Run command full-state JS oracle (R1a), or --check strict source/gzip/JSON and fresh replay of every record. JS_ORACLE_ONLY: C# Run command replay remains 0.');
+  if (args[0] === '--help') console.log('Export the actual seven-scenario Run command full-state JS oracle (R1a), or --check strict source/gzip/JSON and fresh replay of every record. JS_ORACLE_ONLY: C# Run command replay remains 0.');
   else if (args[0] === '--check') console.log(JSON.stringify({ checked: fixturePath, ...checkFixture(decodeVectors(readFileSync(fixturePath))) }));
   else console.log(JSON.stringify({ output: fixturePath, ...exportVectors() }, null, 2));
 }

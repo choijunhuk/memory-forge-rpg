@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      char_aila_fig_victory_turn_styleA_v02_0: 1920400037514543123
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

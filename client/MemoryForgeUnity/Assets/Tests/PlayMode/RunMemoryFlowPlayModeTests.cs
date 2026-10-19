@@ -125,7 +125,8 @@ namespace MemoryForge.PlayModeTests
                 Assert.That(Hash(restarted, store), Is.EqualTo((string)source["reload"]!), "restart uses actual C# saved memory"); saved++;
                 Assert.That(JToken.DeepEquals(Transcript(restarted), source["reloadTranscript"]), Is.True, "restart log/event state");
             }
-            Assert.That(commands, Is.EqualTo(592)); Assert.That(saved, Is.EqualTo(3)); Assert.That(queries, Is.EqualTo(4));
+            // RULES_NOW_PLAY (2026-10-19): the regenerated reference runs 768 actual commands (reports/run_memory_core_20261016/unity_full_run_reference.json).
+            Assert.That(commands, Is.EqualTo(768)); Assert.That(saved, Is.EqualTo(3)); Assert.That(queries, Is.EqualTo(4));
         }
     }
 }

@@ -136,7 +136,8 @@ test('ordinary turn two clears opening block/counter without repeating start rew
   const draw = byId('opening-draw-max-strongest-only');
   assert.equal(draw.steps[0].state.zones.hand.length, 9);
   assert.equal(draw.steps[0].state.tempParts, 3);
-  assert.ok(ends(draw).every(s => s.state.zones.hand.length === 5 && s.state.tempParts === 3));
+  // RULES_NOW_PLAY: twin_pendulum's slot became +1 draw every turn, so ordinary turns draw handDraw + 1
+  assert.ok(ends(draw).every(s => s.state.zones.hand.length === data.rules.handDraw + 1 && s.state.tempParts === 3));
   assert.ok(ends(draw).every(s => s.response.ev.every(e => e.e !== 'tune')));
   assert.deepEqual(byId('edge-carried-ap-once').steps.map(s => s.state.ap), [6, 5, 5, 5]);
   assert.ok(ends(byId('opening-echo-and-rule-interactions')).every(s => s.state.echo === 1));
@@ -192,7 +193,9 @@ test('burn bypasses seed block and raw damage does not apply reflect, card multi
   const state = notebook[1].state;
   assert.equal(state.phase, 'PLAYER');
   assert.equal(state.turn, 3);
-  assert.equal(state.zones.hand.length, 6);
+  // handDraw 5 + 1 notebook draw for the marked kill + sera_timed, which is 보존 and stayed in hand (held) from turn 2
+  assert.equal(state.zones.hand.length, data.rules.handDraw + 1 + 1);
+  assert.deepEqual(state.zones.hand.filter(uid => state.cards[uid].held).map(uid => state.cards[uid].id), ['sera_timed']);
   assert.equal(state.killedMarked, 1);
   assert.equal(state.runFlags.coinsBonus, 10);
   assert.equal(state.ap, 4);
@@ -218,7 +221,7 @@ test('curse insertion creates conserved tokens and actual reshuffle/draw/cleanup
   const inserted = Object.values(ends(row)[0].state.cards).filter(c => c.token);
   assert.equal(inserted.length, 1);
   assert.deepEqual(inserted[0], { uid: 'c17', id: 'smudge', owner: 'curse', wielder: null, plus: false,
-    mods: { c: null, e: null }, temp: [], growth: 0, grown: false, used: 0, costMod: 0, token: true, free: false, assigned: null, from: null });
+    mods: { c: null, e: null }, temp: [], growth: 0, grown: false, held: false, used: 0, costMod: 0, token: true, free: false, assigned: null, from: null });
   assert.deepEqual(ends(row)[0].response.ev[0], { e: 'insert', card: 'smudge', n: 1 });
   assert.ok(ends(row).some(s => s.response.ev.some(e => e.e === 'reshuffle')));
   assert.ok(ends(row).some(s => s.response.ev.some(e => e.e === 'hpLoss' && e.src === 'smudge')));
@@ -284,7 +287,8 @@ test('multi-hit death, envelope, curse cleanup and next-turn circuit stop at the
     const end = ends(byId(`edge-${id}`))[0];
     assert.equal(end.state.turn, 2);
     assert.equal(end.state.phase, 'DEFEAT');
-    assert.equal(end.state.zones.hand.length, 0);
+    // the circuit cost ends turn-2 startup before drawing: only the 보존 sera_timed held from turn 1 is in hand
+    assert.deepEqual(end.state.zones.hand.map(uid => [end.state.cards[uid].id, end.state.cards[uid].held]), [['sera_timed', true]]);
     assert.deepEqual(end.response.ev, [{ e: 'hpLoss', n: 2, src: 'relic' }, { e: 'end', phase: 'DEFEAT' }]);
   }
   const circuit = ends(byId('edge-circuit-envelope-next'));
@@ -296,7 +300,9 @@ test('a fatal hit keeps its own counter and marked reward, then defeat wins whil
   const end = ends(byId('edge-same-hit-defeat-reward'))[0];
   assert.equal(end.state.phase, 'DEFEAT');
   assert.equal(end.state.hp, 0);
-  assert.equal(end.state.zones.hand.length, 1);
+  // the 보존 sera_timed stays in hand (held) through cleanup; the marked kill's notebook draw adds the second card
+  assert.equal(end.state.zones.hand.length, 2);
+  assert.deepEqual(end.state.zones.hand.filter(uid => end.state.cards[uid].held).map(uid => end.state.cards[uid].id), ['sera_timed']);
   assert.equal(end.state.runFlags.coinsBonus, 10);
   assert.deepEqual(end.response.ev, [
     { e: 'hit', uid: 'e16', d: 14, blocked: 10 }, { e: 'hpLoss', n: 4, src: 'enemy' },

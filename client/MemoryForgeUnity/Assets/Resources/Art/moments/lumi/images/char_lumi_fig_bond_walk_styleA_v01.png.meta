@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      char_lumi_fig_bond_walk_styleA_v01_0: 7132199519448480777
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

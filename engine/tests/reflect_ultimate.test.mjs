@@ -26,14 +26,17 @@ for (const charId of ['sera', 'lumi']) test(`${charId} ultimate damage does not 
   assert.equal(b.s.ev.some(event => event.e === 'hpLoss' && event.src === 'reflect'), false);
 });
 
-test('immediate and reserved card hits still trigger the unchanged reflect value', () => {
+// RULES_NOW_PLAY (2026-10-19): the reserved half became a held 보존 card (c_delay) played now on the next turn.
+test('immediate and held card hits still trigger the unchanged reflect value', () => {
   const immediate = mirrorBattle(); immediate.do('end');
   immediate.do('play', { uid: immediate.s.zones.hand[0], mode: 'now', target: immediate.alive()[0].uid });
   assert.equal(immediate.s.hp, 240);
   assert.ok(immediate.s.ev.some(event => event.e === 'hpLoss' && event.src === 'reflect' && event.n === 3));
-  const reserved = mirrorBattle();
-  reserved.do('play', { uid: reserved.s.zones.hand[0], mode: 'next', target: reserved.alive()[0].uid });
-  reserved.do('end');
-  assert.equal(reserved.s.hp, 240);
-  assert.ok(reserved.s.ev.some(event => event.e === 'hpLoss' && event.src === 'reflect' && event.n === 3));
+  const held = mirrorBattle();
+  const uid = held.s.zones.hand[0]; held.s.cards[uid].mods.c = 'c_delay';
+  held.do('end');
+  assert.equal(held.s.cards[uid].held, true);
+  held.do('play', { uid, mode: 'now', target: held.alive()[0].uid });
+  assert.equal(held.s.hp, 240);
+  assert.ok(held.s.ev.some(event => event.e === 'hpLoss' && event.src === 'reflect' && event.n === 3));
 });

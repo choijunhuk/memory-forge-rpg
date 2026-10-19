@@ -16,7 +16,7 @@ namespace MemoryForge.Core
             internal string? Reserved, Target, LastTarget, LastPicked;
             internal List<string> Picks = new List<string>();
             internal BattleArgument? RawPicks;
-            internal bool IsUlt, Killed, FirstDamage, CreditLedger;
+            internal bool IsUlt, Killed, FirstDamage, CreditLedger, Held;
             internal int LastCount, RestraintBps, BoostBps, ChargeBps, FlatBonus;
         }
         static bool Flag(Dictionary<string, object?> flags, string key) => flags.TryGetValue(key, out var value) && BattleGraph.Truthy(value);
@@ -101,7 +101,7 @@ namespace MemoryForge.Core
                     if ((BigInteger)DebtTotal() + 1 > state.DebtCap) throw new RuleException("DEBT_CAP");
                 }
                 if (op.Op == "restraint" && (state.Played >= 3 || state.RestraintUsedTurn == state.Turn)) throw new RuleException("RESTRAINT_UNAVAILABLE");
-                if (op.Op == "collateral" && (state.SealedUntil >= state.Turn || FreeSlots("next") <= 0)) throw new RuleException("NO_EMPTY_SLOT");
+                if (op.Op == "collateral" && (BigInteger)DebtTotal() + 1 > state.DebtCap) throw new RuleException("DEBT_CAP");
                 if (op.Op == "pull")
                 {
                     if (state.Reservations.Count == 0) throw new RuleException("RESERVATION_REQUIRED");
@@ -126,8 +126,10 @@ namespace MemoryForge.Core
             target = Precheck(uid, mode, target, ReservationPicks(picks));
             var instance = state.Cards[uid]; var definition = EffectiveCard(uid); int cost = CostOf(uid, mode);
             state.Ap = checked(state.Ap - cost); if (state.FreeNext > 0) state.FreeNext--;
-            if (mode != "now" && Has("empty_clock") && !Flag(state.BattleFlags, "emptyClockUsed")) state.BattleFlags["emptyClockUsed"] = true;
-            state.Zones.Hand.Remove(uid); state.Played = checked(state.Played + 1);
+            if (Has("empty_clock") && !Flag(state.BattleFlags, "emptyClockUsed")) state.BattleFlags["emptyClockUsed"] = true;
+            state.Zones.Hand.Remove(uid);
+            bool held = instance.Held; instance.Held = false;
+            state.Played = checked(state.Played + 1);
             string? owner = OwnerCharacter(instance);
             if (owner != null)
             {
@@ -139,7 +141,7 @@ namespace MemoryForge.Core
             if (state.RestraintActive && state.Played >= 4) { state.RestraintActive = false; state.DrawPenalty = checked(state.DrawPenalty + 1); Emit(new BattleEvent { E = "restraintBroken" }); }
             Emit(new BattleEvent { E = "play", Uid = uid, Id = instance.Id, Mode = mode, Cost = cost, Target = target });
             // JS spreads immediate-play picks only when entering resolution, after precheck/commit.
-            if (mode == "now") ResolveCard(uid, null, target, ArgumentPicks(picks));
+            if (mode == "now") ResolveCard(uid, null, target, ArgumentPicks(picks), held);
             else
             {
                 state.ReservationSeq = checked(state.ReservationSeq + 1); int due = checked(state.Turn + (mode == "next" ? 1 : 2));
@@ -173,21 +175,30 @@ namespace MemoryForge.Core
             if (HasHook(actor.Id, "kaya_r6") && context.Killed) actor.Gauge = StateNumber(BigInteger.Min(data.Rules.GaugeMax, (BigInteger)actor.Gauge + 50));
             CheckEnd();
         }
-        void ResolveCard(string uid, string? reserved, string? target, IReadOnlyList<string> picks)
+        void ResolveCard(string uid, string? reserved, string? target, IReadOnlyList<string> picks, bool held = false)
         {
             var instance = state.Cards[uid]; var definition = EffectiveCard(uid); string? owner = OwnerCharacter(instance); var actor = Actor(owner);
-            var context = new EffectContext { Instance = instance, Definition = definition, Actor = actor, Attr = AttrOf(instance), Reserved = reserved, Target = target, LastTarget = target, Picks = new List<string>(picks), FirstDamage = true };
+            var context = new EffectContext { Instance = instance, Definition = definition, Actor = actor, Attr = AttrOf(instance), Reserved = reserved, Held = held, Target = target, LastTarget = target, Picks = new List<string>(picks), FirstDamage = true };
             bool HasFixed(IEnumerable<EffectDef> effects) => effects.Any(o => o.Target == "fixed" || o.Then != null && HasFixed(o.Then) || o.Else != null && HasFixed(o.Else));
             if (HasFixed(definition.Effects))
             {
                 var enemy = Enemy(target); if (enemy == null || !enemy.Alive || enemy.Status.Mark <= 0) { Emit(new BattleEvent { E = "fizzle", Uid = uid }); AfterResolve(instance, definition, context, true); return; }
             }
             else if (reserved != null && !string.IsNullOrEmpty(target) && Enemy(target)?.Alive != true) { context.Target = state.Enemies.FirstOrDefault(e => e.Alive)?.Uid; context.LastTarget = context.Target; }
-            if (reserved != null && state.BonusAvailable && state.BonusTurn == state.Turn && definition.Effects.Any(o => o.Op == "dmg" || o.Op == "blk")) { context.RestraintBps = 3000; state.BonusAvailable = false; }
-            if (state.NextBoost != null && owner != null && owner != state.NextBoost.From && reserved == null) { context.BoostBps = state.NextBoost.Bps; state.NextBoost = null; }
+            if (state.BonusAvailable && state.BonusTurn == state.Turn && definition.Effects.Any(o => o.Op == "dmg" || o.Op == "blk")) { context.RestraintBps = 3000; state.BonusAvailable = false; }
+            if (state.NextBoost != null && owner != null && owner != state.NextBoost.From) { context.BoostBps = state.NextBoost.Bps; state.NextBoost = null; }
             if (actor != null) GainGauge(actor, data.Rules.GaugePerCard);
-            if (actor != null && reserved != null && Has("time_stamp")) GainGauge(actor, 5, true);
-            foreach (var op in definition.Effects) { ExecuteOp(op, context); if (IsOver() || CheckEnd()) break; }
+            if (actor != null && context.Held && Has("time_stamp")) GainGauge(actor, 5, true);
+            for (int i = 0; i < definition.Effects.Count; i++)
+            {
+                ExecuteOp(definition.Effects[i], context);
+                if (IsOver() || CheckEnd())
+                {
+                    // RULES_NOW_PLAY: growth comes with every resolution, so a winning blow still grows its card.
+                    if (state.Phase == "VICTORY") foreach (var rest in definition.Effects.Skip(i + 1)) if (rest.Op == "grow") ExecuteOp(rest, context);
+                    break;
+                }
+            }
             if (!IsOver())
             {
                 foreach (var part in PartsOf(instance))
@@ -195,14 +206,14 @@ namespace MemoryForge.Core
                     if (part.Fx.ExtraBlock.GetValueOrDefault() != 0) GainBlockRaw(part.Fx.ExtraBlock!.Value, "part");
                     if (part.Fx.DrawOnce.GetValueOrDefault() != 0 && !Flag(state.TurnFlags, "recall_" + uid)) { state.TurnFlags["recall_" + uid] = true; Draw(part.Fx.DrawOnce!.Value); }
                     if (part.Fx.Gauge.GetValueOrDefault() != 0 && actor != null) GainGauge(actor, part.Fx.Gauge!.Value, true);
-                    if (part.Fx.EchoCopy.GetValueOrDefault() != 0 && reserved != null)
+                    if (part.Fx.EchoCopy.GetValueOrDefault() != 0 && instance.EchoCopy != true)
                     {
                         state.PendingCopies = state.PendingCopies ?? new List<BattlePendingCopy>();
                         state.PendingCopies.Add(new BattlePendingCopy { Id = instance.Id, Wielder = instance.Wielder, From = instance.From, Due = checked(state.Turn + 1) });
                     }
                 }
                 if (IsGrowthInstance(instance)) OnGrowthResolved(instance);
-                if (reserved != null && instance.Id == "sera_round" && HasHook("sera", "sera_r1") && !Flag(state.TurnFlags, "seraR1")) { state.TurnFlags["seraR1"] = true; Draw(1); }
+                if (instance.Id == "sera_round" && HasHook("sera", "sera_r1") && !Flag(state.TurnFlags, "seraR1")) { state.TurnFlags["seraR1"] = true; Draw(1); }
             }
             AfterResolve(instance, definition, context, false);
         }
@@ -240,7 +251,7 @@ namespace MemoryForge.Core
         }
         void ExhaustCard(string uid)
         {
-            state.Zones.Hand.Remove(uid); state.Zones.Discard.Remove(uid); state.Zones.Draw.Remove(uid); state.Zones.Exhaust.Add(uid); state.Exhausted = checked(state.Exhausted + 1);
+            state.Zones.Hand.Remove(uid); state.Zones.Discard.Remove(uid); state.Zones.Draw.Remove(uid); state.Zones.Exhaust.Add(uid); state.Cards[uid].Held = false; state.Exhausted = checked(state.Exhausted + 1);
             Emit(new BattleEvent { E = "exhaust", Uid = uid });
             foreach (var power in state.Powers) if (power.Id == "oblivion") GainBlockRaw(power.Block ?? 0, "oblivion");
             var weapon = PartyWeapon("w_exhaustGuard"); if (weapon.HasValue) GainBlockRaw(weapon.Value.Value, "weapon");

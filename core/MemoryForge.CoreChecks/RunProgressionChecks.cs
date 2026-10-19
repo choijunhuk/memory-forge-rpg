@@ -17,12 +17,12 @@ using ExpeditionRun = MemoryForge.Core.Run;
 static partial class RunProgressionChecks
 {
     const string Schema = "mf-run-progression-v1", Status = "JS_ORACLE_ONLY", TraceSchema = "mf-run-traces-v1";
-    const string Scope = "Actual Run.create and the recorded public Run/battle commands of five fixed gen_traces scenarios: complete JS states, returns, errors and pure queries. C# Run command replay 0; restoration, abandonment, persistence, server, Unity and device acceptance PENDING";
+    const string Scope = "Actual Run.create and the recorded public Run/battle commands of seven fixed gen_traces scenarios: complete JS states, returns, errors and pure queries. C# Run command replay 0; restoration, abandonment, persistence, server, Unity and device acceptance PENDING";
     // Independent literals from the unchanged sources: all commands through each terminal commit, battle attempts and battle commits among them,
     // committed/rejected attempts, the recorded pure queries inside those prefixes including each Create boundary, and the JS-only suffix.
-    const int PrefixAttempts = 2684, PrefixBattle = 2474, PrefixBattleCommitted = 1162, PrefixQueries = 1074, PrefixCommitted = 1370, PrefixRejected = 1314, Suffix = 0;
+    const int PrefixAttempts = 1899, PrefixBattle = 1563, PrefixBattleCommitted = 1165, PrefixQueries = 1400, PrefixCommitted = 1501, PrefixRejected = 398, Suffix = 0;
     // Committed legacy forgeOffer attempts: each return gets one value/ownership probe (the five full-state cases never call forgeOffer).
-    const long LegacyAttempts = 273504, LegacyOfferReturns = 567;
+    const long LegacyAttempts = 227145, LegacyOfferReturns = 571; // RULES_NOW_PLAY regeneration of the 1000-trace corpus (growth on a winning blow)
     // Exact allowlist in source order, compared before any file is hashed: a fixture can never steer the host to read another path.
     static readonly (string Key, string Path)[] Sources = { ("data", "data/game_data.json"), ("engine", "engine/rules-core.js"), ("memory", "proposals/memory_v2.cjs"),
         ("canonical", "tools/gen_traces.mjs"), ("fuzzPolicy", "engine/tests/fuzz_runs.mjs"), ("runCreateDecoder", "tools/gen_run_create_vectors.mjs"), ("generator", "tools/gen_run_progression_vectors.mjs") };
@@ -35,16 +35,20 @@ static partial class RunProgressionChecks
         "runtimeOnly", "Battle receipts live outside Run.s and are not captured; battle responses are recorded as results",
         "reload", "gen_traces saveMemory rebuild check recorded as Run.create only: saved memory, seed+99, v2 reload runId and committed store version",
         "separate", "The existing 1000-trace hash corpus and the R0 factory/query matrix are separate evidence; this fixture does not claim full C# replay");
-    static readonly Dictionary<string, object?> Denominators = O("cases", 5L, "seeds", L(1000L, 1102L, 2654L), "policies", O("legacy", 4L, "v2", 1L), "lengths", O("short", 1L, "full", 4L));
-    static readonly Dictionary<string, object?> Totals = O("cases", 5L, "attempted", 2684L, "committed", 1370L, "rejected", 1314L, "queries", 1074L, "csharpCommandReplay", 0L);
+    // RULES_NOW_PLAY (2026-10-19): seed 1102 no longer ends a battle in begin (begin-defeat moved to 3561) and 2654 earns ev_rift once
+    // (earned-ap-bonus moved to 2992); 1102 stays as full exploration.
+    static readonly Dictionary<string, object?> Denominators = O("cases", 7L, "seeds", L(1000L, 1102L, 3561L, 2992L), "policies", O("legacy", 5L, "v2", 2L), "lengths", O("short", 1L, "full", 6L));
+    static readonly Dictionary<string, object?> Totals = O("cases", 7L, "attempted", 1899L, "committed", 1501L, "rejected", 398L, "queries", 1400L, "csharpCommandReplay", 0L);
     // Per case before Stop: attempts, battle attempts, battle commits, pure queries (Create included), committed and rejected attempts.
     static readonly (string Id, long Seed, string Length, string Policy, string Role, int Prefix, int Battle, int BattleCommitted, int Queries, int Committed, int Rejected, string Stop)[] Plan =
     {
-        ("seed1000-short-legacy", 1000, "short", "legacy", "ordinary-exploration", 148, 119, 87, 111, 116, 32, "DONE"),
-        ("seed1000-full-legacy", 1000, "full", "legacy", "ordinary-exploration", 246, 209, 136, 154, 173, 73, "DONE"),
-        ("seed1102-full-legacy", 1102, "full", "legacy", "begin-defeat", 222, 178, 130, 171, 174, 48, "DONE"),
-        ("seed1102-full-v2", 1102, "full", "v2", "begin-defeat", 222, 178, 130, 171, 174, 48, "DONE"),
-        ("seed2654-full-legacy", 2654, "full", "legacy", "earned-ap-bonus", 1846, 1790, 679, 467, 733, 1113, "DONE"),
+        ("seed1000-short-legacy", 1000, "short", "legacy", "ordinary-exploration", 194, 165, 114, 123, 143, 51, "DONE"),
+        ("seed1000-full-legacy", 1000, "full", "legacy", "ordinary-exploration", 378, 323, 225, 250, 280, 98, "DONE"),
+        ("seed1102-full-legacy", 1102, "full", "legacy", "ordinary-exploration", 287, 228, 169, 231, 228, 59, "DONE"),
+        ("seed1102-full-v2", 1102, "full", "v2", "ordinary-exploration", 287, 228, 169, 231, 228, 59, "DONE"),
+        ("seed3561-full-legacy", 3561, "full", "legacy", "begin-defeat", 214, 175, 156, 173, 195, 19, "DONE"),
+        ("seed3561-full-v2", 3561, "full", "v2", "begin-defeat", 214, 175, 156, 173, 195, 19, "DONE"),
+        ("seed2992-full-legacy", 2992, "full", "legacy", "earned-ap-bonus", 325, 269, 176, 219, 232, 93, "DONE"),
     };
     // R1a commands plus the R1c actual terminal saving; commitMemory alone still stops a case before it is attempted. Assign is not in the
     // gen_traces vocabulary, so this corpus neither calls nor counts it.
@@ -53,9 +57,9 @@ static partial class RunProgressionChecks
     static readonly HashSet<string> Pending = new(StringComparer.Ordinal);
     static readonly Dictionary<string, long> LegacyMethods = new(StringComparer.Ordinal)
     {
-        ["enter"] = 9149, ["play"] = 213175, ["end"] = 24087, ["takeCard"] = 4905, ["proceed"] = 8971, ["takePart"] = 1166, ["eventChoose"] = 540,
-        ["skipCard"] = 1574, ["applyFoundPart"] = 1093, ["forgeRemove"] = 357, ["takeRelic"] = 1545, ["ult"] = 1961, ["forgeOffer"] = 567,
-        ["forgeApply"] = 567, ["rest"] = 598, ["buy"] = 1413, ["evolve"] = 561, ["archive"] = 275, ["commitMemory"] = 1000
+        ["enter"] = 9667, ["play"] = 163969, ["end"] = 23393, ["takeCard"] = 5197, ["proceed"] = 9610, ["takePart"] = 1278, ["eventChoose"] = 590,
+        ["skipCard"] = 1734, ["applyFoundPart"] = 1228, ["forgeRemove"] = 378, ["takeRelic"] = 1745, ["ult"] = 2797, ["forgeOffer"] = 571,
+        ["forgeApply"] = 571, ["rest"] = 663, ["buy"] = 1519, ["evolve"] = 938, ["archive"] = 297, ["commitMemory"] = 1000
     };
     static readonly string[] TopFields = { "schema", "status", "scope", "dataVersion", "sources", "contract", "denominators", "coverage", "cases" };
     static readonly string[] CaseFields = { "id", "seed", "length", "memoryPolicy", "role", "trace", "created", "steps", "reload" };
@@ -193,13 +197,13 @@ static partial class RunProgressionChecks
         string version = Text(content.RootElement.GetProperty("meta"), "version");
         ValidateHeader(fixture, root, version);
         var rows = Items(fixture.GetProperty("cases"), "Run-progression cases");
-        Require(rows.Count == Plan.Length, "Run-progression case count differs from the five fixed identities");
+        Require(rows.Count == Plan.Length, "Run-progression case count differs from the seven fixed identities");
         var coverage = new Coverage(); var cases = new List<Case>();
         for (int i = 0; i < rows.Count; i++) cases.Add(ValidateCase(rows[i], i, coverage));
         var recorded = Graph(fixture.GetProperty("coverage"));
         string? drift = MemoryV2DataLoader.Difference(recorded, coverage.ToGraph());
         Check(drift == null, "fixture coverage/count summary equals the recomputation from all recorded steps" + (drift == null ? "" : ": " + drift));
-        Check(MemoryV2DataLoader.Difference(Totals, Get(recorded, "totals")) == null, "fixture totals are the measured 5 cases/2684 attempts (1370 committed, 1314 rejected)/1074 queries/C# replay 0");
+        Check(MemoryV2DataLoader.Difference(Totals, Get(recorded, "totals")) == null, "fixture totals are the measured 7 cases/1899 attempts (1501 committed, 398 rejected)/1400 queries/C# replay 0");
         foreach (var plan in Plan)
         {
             Func<object?, bool> mine = e => Get(e, "caseId") as string == plan.Id;
@@ -212,7 +216,7 @@ static partial class RunProgressionChecks
         int prefix = cases.Sum(c => c.Prefix), battle = cases.Sum(c => c.Battle); suffix = cases.Sum(c => c.Steps.Count - c.Prefix); prefixQueries = cases.Sum(c => c.PrefixQueries);
         Check(prefix == PrefixAttempts && battle == PrefixBattle && cases.Sum(c => c.BattleCommitted) == PrefixBattleCommitted && prefixQueries == PrefixQueries
             && cases.Sum(c => c.Committed) == PrefixCommitted && cases.Sum(c => c.Rejected) == PrefixRejected,
-            "source prefixes total 2684 attempts (2474 battle, 1162 battle commits; 1370 committed, 1314 rejected) and 1074 queries through terminal commitMemory");
+            "source prefixes total 1899 attempts (1563 battle, 1165 battle commits; 1501 committed, 398 rejected) and 1400 queries through terminal commitMemory");
         Check(suffix == Suffix && cases.All(c => c.Steps.Count == c.Prefix), "all five source cases execute every command, including commitMemory; JS-only suffix 0");
         fixtureSummary = $"strict one-member gzip/fatal UTF-8/unique keys; exact schema/status {Status}/scope/7 allowlisted source pins/contract/denominators; 5 fixed cases; all {I(cases.Sum(c => c.Steps.Count))} records integrity-checked "
             + $"({I(hashedPoints)} points hashed; coverage recomputed); source prefixes {I(prefix)} attempts ({I(battle)} battle), {I(prefixQueries)} queries; JS-only suffix {I(suffix)} — oracle structure only, not C# execution";
@@ -223,9 +227,9 @@ static partial class RunProgressionChecks
         }
         Check(attempted == PrefixAttempts && matched == PrefixAttempts && matchedBattle == PrefixBattle && matchedBattleCommitted == PrefixBattleCommitted
             && matchedCommitted == PrefixCommitted && matchedRejected == PrefixRejected,
-            "actual C# commands incl. R1c actual terminal saving from fresh Create matched all 2684 complete attempts (1370 committed, 1314 rejected; 2474 battle attempts, 1162 battle commits)");
+            "actual C# commands incl. R1c actual terminal saving from fresh Create matched all 1899 complete attempts (1501 committed, 398 rejected; 1563 battle attempts, 1165 battle commits)");
         Check(askedQueries == PrefixQueries, "every recorded pure query inside the supported prefixes was asked of the C# Run (" + I(askedQueries) + "/" + I(PrefixQueries) + ")");
-        Check(completedCases == 5 && actualReloads == 5, "all five actual full source cases save and restart from their own returned memory");
+        Check(completedCases == Plan.Length && actualReloads == Plan.Length, "all seven actual full source cases save and restart from their own returned memory");
         Section("progression fixture corruption", () => FixtureProbes(fixture, root, version, cases, data, definitions));
     }
 
@@ -825,7 +829,7 @@ static partial class RunProgressionChecks
         Check(stats.Scenarios == 1000 && stats.Short == 700 && stats.Full == 300 && stats.Hashes == 2000 && legacyScenarios == 1000,
             "legacy corpus: strict one-member gzip JSONL, five current source pins, 1000 sequential scenarios (700 short, 300 full) with verified snapshot hashes");
         Check(Same(legacyDenominators, LegacyMethods) && legacyDenominators.Values.Sum() == LegacyAttempts,
-            "source complete trace denominators including commitMemory: 273504 attempts with the literal per-method counts (" + Join(legacyDenominators) + ")");
+            "source complete trace denominators including commitMemory: " + I(LegacyAttempts) + " attempts with the literal per-method counts (" + Join(legacyDenominators) + ")");
         Check(legacyMatched == LegacyAttempts && Same(legacyExecuted, LegacyMethods) && legacyPrefixes == 1000,
             "actual C# Create + public commands incl. R1c actual terminal saving matched every supported attempt of all 1000 legacy prefixes (outcome, RuleError code, canonical context hash)");
         Check(legacyOfferProbes == LegacyOfferReturns, "every committed legacy forgeOffer return equals the hash-checked live pending.offers and stays a detached copy ("

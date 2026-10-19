@@ -98,7 +98,8 @@ test('each vector retains complete real CREATED and committed snapshots, events,
       assert.ok(!Object.hasOwn(enemy, 'phaseIndex'));
       assert.ok(!Object.hasOwn(enemy, 'pattern'));
     }
-    for (const card of Object.values(vector.createdState.cards)) assert.equal(Object.keys(card).length, 15);
+    // 16 = the former 15 card fields + held (RULES_NOW_PLAY 보존 flag, false on creation)
+    for (const card of Object.values(vector.createdState.cards)) { assert.equal(Object.keys(card).length, 16); assert.equal(card.held, false); }
     assert.deepEqual(battle.command(clone(vector.request)), vector.response, `${vector.id}: response/events`);
     assert.deepEqual(battle.s, vector.finalState, `${vector.id}: final snapshot`);
     assert.equal(hashState(battle.s), vector.finalStateHash, `${vector.id}: final hash`);
@@ -139,8 +140,13 @@ test('real opening edges cover seeds, strongest weapons, tuning, growth eligibil
   const maximumDraw = byId('draw-max-strongest-only');
   assert.equal(maximumDraw.finalState.handMax, 9);
   assert.equal(maximumDraw.finalState.zones.hand.length, 9);
-  assert.equal(maximumDraw.response.ev.filter(e => e.e === 'burnCard').length, 0);
-  assert.equal(maximumDraw.finalState.zones.discard.length, 0, 'fresh authored opening draw has no overflow');
+  // RULES_NOW_PLAY: twin_pendulum also draws +1 every turn, so the strongest authored opening draw is
+  // handDraw 5 + quick_hands 2 + strongest w_startDraw 2 + twin_pendulum 1 = 10, one over its own cap of 9
+  const startDraw = data.weapons.find(w => w.id === 'w_clock_core').passive.values[4];
+  const overflow = data.rules.handDraw + 2 + startDraw + 1 - maximumDraw.finalState.handMax;
+  assert.equal(overflow, 1);
+  assert.equal(maximumDraw.response.ev.filter(e => e.e === 'burnCard').length, overflow);
+  assert.equal(maximumDraw.finalState.zones.discard.length, overflow, 'the overflowing draw is burned to the discard pile');
   assert.equal(byId('tuning-only-one-eligible').finalState.tempParts, 1);
   assert.equal(byId('tuning-only-curses').finalState.tempParts, 0);
   assert.ok(byId('seed-no-eligible').response.ev.every(e => e.e !== 'grow' && e.src !== 'moss'));

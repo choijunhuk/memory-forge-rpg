@@ -106,7 +106,8 @@ const bump = key => { witness[key] = (witness[key] || 0) + 1; };
 function instrument() {
   const P = CM.ModeBattle.prototype; const saved = { dmgBonusBps: P.dmgBonusBps, scaleAtk: P.scaleAtk, startTurn: P.startTurn, onGrowthCardResolved: P.onGrowthCardResolved, play: P.play, checkEnd: P.checkEnd };
   P.dmgBonusBps = function (ctx, enemy) {
-    if (this.rule('rift_reserve')) bump(ctx.isUlt ? 'reserveUlt' : ctx.reserved ? 'reserveReserved' : 'reserveImmediate');
+    // RULES_NOW_PLAY: rift_reserve's reserved bonus now keys on a held (보존) card, so its witness is reserveHeld.
+    if (this.rule('rift_reserve')) bump(ctx.isUlt ? 'reserveUlt' : ctx.held ? 'reserveHeld' : 'reserveImmediate');
     if (this.rule('rift_ink') && this.counterVal('exhausted', ctx) > 0) bump('inkExhausted');
     if (this.rule('rift_debt') && this.debtTotal() > 0) bump('debtCardBonus');
     return saved.dmgBonusBps.call(this, ctx, enemy);
@@ -622,7 +623,7 @@ export function generateCases() {
 
   const ids = cases.map(c => c.id);
   assert.equal(new Set(ids).size, ids.length, 'Duplicate content-mode case id');
-  for (const key of ['reserveReserved', 'reserveImmediate', 'reserveUlt', 'inkExhausted', 'debtCardBonus', 'debtRaw', 'inkInsert', 'bloomBlock', 'echoChainCleared', 'waveSpawn'])
+  for (const key of ['reserveHeld', 'reserveImmediate', 'reserveUlt', 'inkExhausted', 'debtCardBonus', 'debtRaw', 'inkInsert', 'bloomBlock', 'echoChainCleared', 'waveSpawn'])
     assert.ok(witness[key] > 0, `Missing content-mode witness ${key}`);
   const events = new Set(cases.flatMap(c => c.ops.flatMap(o => o.result && o.result.response ? o.result.response.ev.map(e => e.e) : [])));
   for (const e of ['wave', 'riftEcho', 'insert', 'phase', 'break']) assert.ok(events.has(e), `Missing content-mode event ${e}`);

@@ -59,10 +59,10 @@ namespace MemoryForge.Client.Tests
             Card("t_multi", 0, "n", new EffectDef { Op = "discard", N = 2 }, new EffectDef { Op = "exhaustPick", From = "discard", N = 1 }, new EffectDef { Op = "pull" });
             Card("t_free1", 0, "n", new EffectDef { Op = "freeNext", N = 1 }); Card("t_free2", 0, "n", new EffectDef { Op = "freeNext", N = 2 });
             Card("t_slot", 0, "n", new EffectDef { Op = "slot", Next = 1, After = 1 });
-            Card("t_seal", 0, "n", new EffectDef { Op = "collateral", V = 1 });
-            void Enemy(string id, string move) => data.Enemies.Add(new BattleEnemyDef { Id = id, Name = "시험 적", Tier = "normal", Hp = 500, Brk = 50,
-                Weak = new List<string> { "frost" }, Pattern = new List<EnemyMoveDef> { new EnemyMoveDef { Type = move } } });
-            Enemy("t_dummy", "charge"); Enemy("t_delay", "delayRes");
+            // RULES_NOW_PLAY (2026-10-19): collateral is block + debt 1 and seals nothing, so no test card seals; the enemy t_sealer does.
+            void Enemy(string id, params string[] moves) => data.Enemies.Add(new BattleEnemyDef { Id = id, Name = "시험 적", Tier = "normal", Hp = 500, Brk = 50,
+                Weak = new List<string> { "frost" }, Pattern = moves.Select(m => new EnemyMoveDef { Type = m }).ToList() });
+            Enemy("t_dummy", "charge"); Enemy("t_delay", "delayRes"); Enemy("t_sealer", "sealSlot", "charge");
             data.Index(); return data;
         }
         static BattleCardSpec C(string id, int growth = 0, string? from = null) => new BattleCardSpec { Id = id, Growth = growth, From = from };
@@ -201,33 +201,53 @@ namespace MemoryForge.Client.Tests
         }
 
         // ───────── reservation board ─────────
+        // RULES_NOW_PLAY (2026-10-19): the live content has no reservable card any more (every card is res 'n'), so this board runs only on
+        // the TEST-ONLY "y" cards above, against Core's still-present reservation code (removed in phase 2). Collateral no longer seals, so
+        // the seal (a sealed next column, its expiry and its reapplication) comes from the t_sealer enemy's sealSlot, as in CoreChecks'
+        // EnemySeal. Rules used for every literal: next base 2 / max 3, after base 1 / max 2, Cap = min(Max, Base + Temp), minus 1 on next
+        // while SealedUntil >= Turn; slot temp is clamped to Max - Base; AP 4 per turn; t_plain costs 1, t_slot and t_cheap 0.
         [Test]
         public void ReservationBoardFollowsCoreCapacityThroughTempSealExpiryAndDelay()
         {
             Assert.That(Application.isPlaying, Is.True, "must run inside actual PlayMode");
-            var s = Open("t_dummy", C("t_plain"), C("t_plain"), C("t_plain"), C("t_plain"), C("t_slot"), C("t_seal"));
+            var s = Open("t_dummy", C("t_plain"), C("t_plain"), C("t_plain"), C("t_plain"), C("t_slot"), C("t_cheap"));
             var created = Slots(s, 0, 0, "created");
             Column(created.Next, "next", 1, 2, 0, 3, 1, 0, true, "created (SealedUntil 0 >= Turn 0)"); Column(created.After, "after", 2, 1, 0, 2, 1, 0, false, "created");
             Begin(s);
             Column(Slots(s, 1, 0, "turn 1").Next, "next", 2, 2, 0, 3, 2, 0, false, "turn 1");
-            Play(s, "c5", "now"); Play(s, "c6", "now"); // temp +1/+1, then collateral seals through turn 2
-            var sealedNow = Slots(s, 1, 2, "turn 1 temp + collateral");
-            Column(sealedNow.Next, "next", 2, 2, 1, 3, 2, 0, true, "turn 1 temp + collateral"); Column(sealedNow.After, "after", 3, 1, 1, 2, 2, 0, false, "turn 1 temp + collateral");
-            Play(s, "c1", "next"); Play(s, "c2", "next");
-            Rejects(s, "c3", "next", "SLOT_FULL", "turn 1 next used 2 of cap 2");
-            Play(s, "c3", "after"); Play(s, "c4", "after");
-            var full = Slots(s, 1, 2, "turn 1 full", ("c1", 2, 1, "next", null), ("c2", 2, 2, "next", null), ("c3", 3, 3, "after", null), ("c4", 3, 4, "after", null));
-            Column(full.Next, "next", 2, 2, 1, 3, 2, 2, true, "turn 1 full"); Column(full.After, "after", 3, 1, 1, 2, 2, 2, false, "turn 1 full");
+            Play(s, "c5", "now"); // temp next +1 (clamped to 3 - 2), after +1 (clamped to 2 - 1)
+            var widened = Slots(s, 1, 0, "turn 1 temp slots");
+            Column(widened.Next, "next", 2, 2, 1, 3, 3, 0, false, "turn 1 temp slots"); Column(widened.After, "after", 3, 1, 1, 2, 2, 0, false, "turn 1 temp slots");
+            Play(s, "c1", "next"); Play(s, "c2", "next"); Play(s, "c6", "next"); // AP 4 - 1 - 1 - 0 = 2 left
+            Rejects(s, "c3", "next", "SLOT_FULL", "turn 1 next used 3 of widened cap 3");
+            Play(s, "c3", "after"); Play(s, "c4", "after"); // AP 0
+            var full = Slots(s, 1, 0, "turn 1 full", ("c1", 2, 1, "next", null), ("c2", 2, 2, "next", null), ("c6", 2, 3, "next", null), ("c3", 3, 4, "after", null), ("c4", 3, 5, "after", null));
+            Column(full.Next, "next", 2, 2, 1, 3, 3, 3, false, "turn 1 full"); Column(full.After, "after", 3, 1, 1, 2, 2, 2, false, "turn 1 full");
             End(s);
-            var carried = Slots(s, 2, 2, "turn 2", ("c3", 3, 3, "after", null), ("c4", 3, 4, "after", null));
-            Column(carried.Next, "next", 3, 2, 0, 3, 1, 2, true, "turn 2: temp expired, seal held, used 2 > cap 1, kind after kept");
+            // c1/c2/c6 resolved at turn-2 start and the temp slots expired; both after reservations are due next turn, kind kept: Used 2 = Cap 2.
+            var carried = Slots(s, 2, 0, "turn 2", ("c3", 3, 4, "after", null), ("c4", 3, 5, "after", null));
+            Column(carried.Next, "next", 3, 2, 0, 3, 2, 2, false, "turn 2: temp expired, carried after reservations fill next, kind after kept");
             Column(carried.After, "after", 4, 1, 0, 2, 1, 0, false, "turn 2");
-            Rejects(s, "c1", "next", "SLOT_FULL", "turn 2 next over-full");
+            Rejects(s, "c1", "next", "SLOT_FULL", "turn 2 next used 2 of cap 2");
             Play(s, "c1", "after");
             End(s);
-            var expired = Slots(s, 3, 2, "turn 3", ("c1", 4, 5, "after", null));
-            Column(expired.Next, "next", 4, 2, 0, 3, 2, 1, false, "turn 3 seal expired"); Column(expired.After, "after", 5, 1, 0, 2, 1, 0, false, "turn 3");
+            var expired = Slots(s, 3, 0, "turn 3", ("c1", 4, 6, "after", null));
+            Column(expired.Next, "next", 4, 2, 0, 3, 2, 1, false, "turn 3 carried after reservation"); Column(expired.After, "after", 5, 1, 0, 2, 1, 0, false, "turn 3");
             ReceiptsReplay(s);
+
+            // The seal: the enemy's sealSlot seals the following player turn's next column, it expires after that turn and is reapplied.
+            var e = Open("t_sealer", C("t_plain"));
+            Begin(e);
+            Column(Slots(e, 1, 0, "enemy seal turn 1").Next, "next", 2, 2, 0, 3, 2, 0, false, "enemy seal turn 1");
+            End(e); // sealSlot
+            Column(Slots(e, 2, 2, "enemy seal turn 2").Next, "next", 3, 2, 0, 3, 1, 0, true, "enemy seal turn 2");
+            Play(e, "c1", "next");
+            Column(Slots(e, 2, 2, "enemy seal turn 2 used", ("c1", 3, 1, "next", null)).Next, "next", 3, 2, 0, 3, 1, 1, true, "enemy seal turn 2 used");
+            End(e); // charge
+            Column(Slots(e, 3, 2, "enemy seal turn 3").Next, "next", 4, 2, 0, 3, 2, 0, false, "enemy seal turn 3 expired");
+            End(e); // sealSlot again
+            Column(Slots(e, 4, 4, "enemy seal turn 4").Next, "next", 5, 2, 0, 3, 1, 0, true, "enemy seal turn 4 reapplied");
+            ReceiptsReplay(e);
 
             var d = Open("t_delay", C("t_plain"), C("t_plain"), C("t_plain"));
             Begin(d); Play(d, "c1", "next"); Play(d, "c2", "after"); End(d);

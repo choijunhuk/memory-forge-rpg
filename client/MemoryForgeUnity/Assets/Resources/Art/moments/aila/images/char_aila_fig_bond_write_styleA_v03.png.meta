@@ -247,7 +247,12 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      char_aila_fig_bond_write_styleA_v03_0: 5237414449369770893
+      char_aila_fig_bond_write_styleA_v03_1: 5601510497678453589
+      char_aila_fig_bond_write_styleA_v03_2: 5955797395418419215
+      char_aila_fig_bond_write_styleA_v03_3: -7962217736090356350
+      char_aila_fig_bond_write_styleA_v03_4: -8646916326570190404
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

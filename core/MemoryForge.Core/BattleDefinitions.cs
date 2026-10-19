@@ -231,7 +231,7 @@ namespace MemoryForge.Core
     public sealed class BattlePartFx
     {
         public int? AddBps, AllBps, ResBps, ImmBps, AfterBps, Cost, Brk, Pierce, ExtraBlock, DrawOnce, Gauge, MarkOnHit, BurnOnHit, WeakOnHit, EchoCopy;
-        public bool? Exhaust, NoReserve;
+        public bool? Exhaust, NoReserve, Retain;
         internal BattlePartFx Copy() => (BattlePartFx)MemberwiseClone();
         public Dictionary<string, object?> ToJsonGraph()
         {
@@ -241,7 +241,8 @@ namespace MemoryForge.Core
             BattleGraph.Optional(graph, "brk", Brk); BattleGraph.Optional(graph, "pierce", Pierce); BattleGraph.Optional(graph, "extraBlock", ExtraBlock);
             BattleGraph.Optional(graph, "drawOnce", DrawOnce); BattleGraph.Optional(graph, "gauge", Gauge); BattleGraph.Optional(graph, "markOnHit", MarkOnHit);
             BattleGraph.Optional(graph, "burnOnHit", BurnOnHit); BattleGraph.Optional(graph, "weakOnHit", WeakOnHit); BattleGraph.Optional(graph, "echoCopy", EchoCopy);
-            BattleGraph.Optional(graph, "exhaust", Exhaust); BattleGraph.Optional(graph, "noReserve", NoReserve); return graph;
+            BattleGraph.Optional(graph, "exhaust", Exhaust); BattleGraph.Optional(graph, "noReserve", NoReserve);
+            BattleGraph.Optional(graph, "retain", Retain); return graph;
         }
     }
     public sealed class BattlePartDef

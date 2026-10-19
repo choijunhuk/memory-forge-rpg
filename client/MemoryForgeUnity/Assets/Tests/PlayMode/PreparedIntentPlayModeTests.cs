@@ -111,8 +111,6 @@ namespace MemoryForge.Client.Tests
         }
         // Witnesses, each asked of the mirror's live state right after the first play.
         static string? NextPlain(Session s, string enemy) => s.Mirror.State.Battle!.Zones.Hand.FirstOrDefault(u => Plain(s, u, enemy));
-        static string? NextReservation(Session s, string enemy) =>
-            s.Mirror.State.Battle!.Zones.Hand.FirstOrDefault(u => s.Mirror.BattleAllowedModes(u).Contains("next") && s.Mirror.BattleCheck(u, "next", enemy) == null);
         // The reference kit's nia_tune (one hand card to pick), playable now with at least one other hand card Core's precheck accepts as its pick.
         // P1-CARD-FLOW-EFFECT-CANDIDATES: that card must also be one the tune effect itself takes (no amp yet, rarity not C), since the sheet
         // now offers only those.
@@ -167,11 +165,11 @@ namespace MemoryForge.Client.Tests
             var found = new Found(); yield return PlayThenFind(s, found, NextPlain, "an immediate card without picks after a plain play");
             var client = s.Client; string next = found.Card!, target = found.Enemy!;
             var b = s.Mirror.State.Battle!; string name = s.Mirror.BattleEffectiveCard(next).Name;
-            string committed = Fingerprint(client.Snapshot!), store = StorePrint(client); var cells = ExpectedCells(s);
+            string committed = Fingerprint(client.Snapshot!), store = StorePrint(client);
             yield return null; Canvas.ForceUpdateCanvases();
             Click(ButtonNamed(s.Host, "Enemy:" + target)); yield return null; Canvas.ForceUpdateCanvases();
             Click(ButtonNamed(s.Host, "Hand:" + next)); yield return null; Canvas.ForceUpdateCanvases();
-            Click(ButtonNamed(s.Host, "Mode:now")); yield return null; Canvas.ForceUpdateCanvases();
+            // RULES_NOW_PLAY: no mode button; the card's only mode, now, is chosen with the card.
             var confirm = ButtonNamed(s.Host, "ConfirmCard");
             Assert.That((client.HasActionPresentation, confirm.interactable, confirm.GetComponentInChildren<Text>().text), Is.EqualTo((true, true, "사용 대기")),
                 "during the display a ready plain confirm says it prepares");
@@ -192,7 +190,7 @@ namespace MemoryForge.Client.Tests
             Assert.That(cancel.interactable, Is.True, "cancel is available during the display");
             var names = view.GetComponentsInChildren<Button>().Select(x => x.name).ToList();
             Assert.That(names.Contains("ConfirmCard") || names.Any(n => n.StartsWith("Mode:", StringComparison.Ordinal)), Is.False, "the waiting intent replaces the confirm and the modes");
-            Assert.That(DrawnCells(s.Host), Is.EqualTo(cells), "the timeline is Core's slots only");
+            Assert.That(DrawnCells(s.Host), Is.Empty, "RULES_NOW_PLAY: no time-reservation timeline is drawn");
             Assert.That(ButtonNamed(s.Host, "EndTurn").interactable, Is.False);
 
             // A second confirm, a changed selection and every command are refused before the Run.
@@ -372,50 +370,42 @@ namespace MemoryForge.Client.Tests
             Assert.That(client.HasPreparedIntent, Is.False);
         }
 
-        // No spent card and no non-living target stays selected, and a request Core refuses now is refused with Core's own precheck code
-        // without becoming an intent. A waiting next-turn request takes no time-reservation slot; its label says the slot is taken only
-        // when sent; once dispatched the actual reservation appears on the timeline.
+        // No spent card and no non-living target stays selected, and a request Core refuses now (an unknown mode, or RULES_NOW_PLAY's
+        // refused reservation) is refused with Core's own precheck code without becoming an intent. A plain request then waits and is
+        // sent once by the next Update. (It replaced NoSpentCardOrRefusedRequestBecomesAnIntentAndANextRequestTakesNoSlotUntilSent.)
         [UnityTest]
-        public IEnumerator NoSpentCardOrRefusedRequestBecomesAnIntentAndANextRequestTakesNoSlotUntilSent()
+        public IEnumerator NoSpentCardOrRefusedRequestBecomesAnIntentAndAPlainRequestIsSentOnce()
         {
             var s = new Session(); yield return Open(s);
-            var found = new Found(); yield return PlayThenFind(s, found, NextReservation, "a next-turn reservation after a plain play");
-            var client = s.Client; string spent = found.First!, reserve = found.Card!, target = found.Enemy!;
-            string committed = Fingerprint(client.Snapshot!), store = StorePrint(client); var cells = ExpectedCells(s);
-            int reserved = s.Mirror.State.Battle!.Reservations.Count;
-            string name = s.Mirror.BattleEffectiveCard(reserve).Name;
+            var found = new Found(); yield return PlayThenFind(s, found, NextPlain, "a second plain card after a plain play");
+            var client = s.Client; string spent = found.First!, card = found.Card!, target = found.Enemy!;
+            string committed = Fingerprint(client.Snapshot!), store = StorePrint(client);
 
             Assert.That(ActiveView(s.Host).GetComponentsInChildren<Button>().Any(x => x.name == "Hand:" + spent), Is.False, "the spent card is not drawn");
             client.SelectCard(spent);
             Assert.That(client.SelectedCard, Is.Not.EqualTo(spent), "a spent card never stays selected");
             client.SelectEnemy("e-not-living");
             Assert.That(client.Target == null || s.Mirror.State.Battle!.Enemies.Any(e => e.Uid == client.Target && e.Alive), Is.True, "a non-living target never stays selected");
-            client.SelectEnemy(target); client.SelectCard(reserve); client.SelectMode("test-unknown-mode");
-            string? refused = s.Mirror.BattleCheck(reserve, "test-unknown-mode", target);
-            Assert.That(refused, Is.Not.Null, "Core's precheck refuses an unknown mode");
-            Assert.That(client.ConfirmCard(), Is.False);
-            Assert.That((client.LastError, client.HasPreparedIntent), Is.EqualTo((refused, false)), "the refusal is Core's own code and nothing waits");
-            Assert.That((Fingerprint(client.Snapshot!), StorePrint(client)), Is.EqualTo((committed, store)));
+            foreach (string mode in new[] { "test-unknown-mode", "next", "after" })
+            {
+                client.SelectEnemy(target); client.SelectCard(card); client.SelectMode(mode);
+                string? refused = s.Mirror.BattleCheck(card, mode, target);
+                Assert.That(refused, Is.Not.Null, "Core's precheck refuses " + mode);
+                if (mode != "test-unknown-mode") Assert.That(refused, Is.EqualTo("NOT_RESERVABLE"), mode);
+                Assert.That(client.ConfirmCard(), Is.False);
+                Assert.That((client.LastError, client.HasPreparedIntent), Is.EqualTo((refused, false)), mode + ": the refusal is Core's own code and nothing waits");
+                Assert.That((Fingerprint(client.Snapshot!), StorePrint(client)), Is.EqualTo((committed, store)), mode);
+            }
 
-            Prepare(s, reserve, "next", target);
-            Assert.That(client.Snapshot!.Battle!.Reservations.Count, Is.EqualTo(reserved), "a waiting next request occupies no slot");
+            Prepare(s, card, "now", target);
             Assert.That((Fingerprint(client.Snapshot!), StorePrint(client)), Is.EqualTo((committed, store)));
-            yield return null; Canvas.ForceUpdateCanvases();
-            Assert.That(DrawnCells(s.Host), Is.EqualTo(cells), "the timeline shows only Core's slots while it waits");
-            AssertReadable(ActiveView(s.Host), t => t == WaitLabel("다음 턴 예약 요청 · 시간표 칸은 보낼 때 차지해요"), "the waiting label says the slot is taken only when sent");
             if (client.HasActionPresentation) Assert.That(client.SkipActionPresentation(), Is.True);
             Assert.That((client.HasPreparedIntent, Fingerprint(client.Snapshot!)), Is.EqualTo((true, committed)), "only the next Update sends it");
             yield return null; // the dispatch
-            MirrorOf(s, BattleCore(s, "play", Play(reserve, "next", target)));
+            MirrorOf(s, BattleCore(s, "play", Play(card, "now", target)));
             Assert.That(client.HasPreparedIntent, Is.False);
-            var sent = s.Mirror.State.Battle!;
-            Assert.That(sent.Reservations.Count, Is.EqualTo(reserved + 1), "the sent next request takes its slot now");
-            Assert.That(sent.Reservations.Any(r => r.Uid == reserve), Is.True);
-            Assert.That(client.ActionPresentationRows.Any(r => r.Kind == BattleDigestKind.ReservationPlayed), Is.True, "its own display is a reservation result");
-            Canvas.ForceUpdateCanvases();
-            var drawn = DrawnCells(s.Host);
-            Assert.That(drawn, Is.EqualTo(ExpectedCells(s)), "the timeline shows the actual reservation");
-            Assert.That(drawn.Count(t => t.EndsWith(name, StringComparison.Ordinal)), Is.GreaterThanOrEqualTo(1));
+            Assert.That(s.Mirror.State.Battle == null || s.Mirror.State.Battle.Reservations.Count == 0, Is.True, "nothing was reserved");
+            Assert.That(client.ActionPresentationRows.Any(r => r.Kind == BattleDigestKind.CardPlayed), Is.True, "its own display is a card result");
         }
 
         // A choice card confirmed during the display first opens its pure sheet (which keeps its own lock); its explicit final pick or auto
@@ -850,12 +840,6 @@ namespace MemoryForge.Client.Tests
 
         // ───────── expected text and rows (independent copies of the documented strings and the digest's kinds) ─────────
         static string WaitLabel(string request) => "미전송 사용 대기 1/1 · " + request + "\n결과 표시가 끝나면 이 요청 하나만 보내요 · 바꾸려면 먼저 대기 취소";
-        static List<string> ExpectedCells(Session s)
-        {
-            var live = s.Mirror.State.Battle!; var rules = s.Data.Memory.Battle.Rules;
-            return MemoryForgeBattleClient.TimelineCells(live, rules).Select(cell => (cell.Group == "next" ? "다음" : "다다음") + "  " + (cell.Kind == "card" ? s.Mirror.BattleEffectiveCard(cell.Uid!).Name
-                : cell.Kind == "empty" ? "빈 칸" : cell.Kind == "sealed" ? "봉인" : "-")).ToList();
-        }
         static List<string> DrawnCells(GameObject host) =>
             ActiveView(host).GetComponentsInChildren<Image>().Where(i => i.name == "ReservationSlot").Select(i => i.GetComponentInChildren<Text>().text).ToList();
         // One row per actual Core event in Core's order, each of the kind its event names, then only enemy results; no summary framing.
