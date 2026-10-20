@@ -305,6 +305,30 @@ namespace MemoryForge.Client.Tests
         }
 
         [UnityTest]
+        public IEnumerator UnderNowPlayACardWithOnlyTheNowModeShowsItsCostWithoutAModeStepAndThereIsNoEmptyReservationBoard()
+        {
+            // The live content's shape since docs/RULES_NOW_PLAY.md: one published mode (now) and no reservations.
+            var nowOnly = ControlCard("h1", "strike", "enemy");
+            nowOnly["modes"] = new JArray("now"); nowOnly["costs"] = new JObject { ["now"] = 1 }; nowOnly["blocked"] = new JObject { ["now"] = JValue.CreateNull() };
+            ControlRun(new JArray(nowOnly, ControlCard("h2", "guard", null)));
+            post = ControlServer(request => PlayCommitted(ArgOf(request, "uid")!, ArgOf(request, "target")));
+            var view = View();
+            yield return Settled(view);
+            Assert.That(view.GetComponentsInChildren<Transform>(true).Any(t => t.name == "Reservations"), Is.False, "no reservation, no board");
+            Assert.That(view.SelectCard("h1"), Is.True);
+            yield return Until(() => view.QueryView?.Uid == "h1" && !view.Busy, "the card's query is current");
+            yield return null;
+            Assert.That(view.SelectedMode, Is.EqualTo("now"));
+            Assert.That(DrawnButton(view, "Mode:now"), Is.Null, "a single now mode has no mode step");
+            Assert.That(Unbuttoned(view), Does.Contain("행동력 1"), "its cost stays on the action panel");
+            // A server that still publishes a reservation mode keeps the mode buttons.
+            Assert.That(view.SelectCard("h2"), Is.True);
+            yield return Until(() => view.QueryView?.Uid == "h2" && !view.Busy, "the second card's query is current");
+            yield return null;
+            Assert.That(DrawnButton(view, "Mode:next"), Is.Not.Null);
+        }
+
+        [UnityTest]
         public IEnumerator CardDetailsShowTheCurrentServerTextWhollyScrollableReadOnlyAndCloseWhenStale()
         {
             string body = string.Join("\n", Enumerable.Range(1, 40).Select(i => "효과 " + i + ": 대상에게 피해를 주고 다음 턴 예약 한 칸을 앞당겨요.")) + "\n마지막 줄 끝";

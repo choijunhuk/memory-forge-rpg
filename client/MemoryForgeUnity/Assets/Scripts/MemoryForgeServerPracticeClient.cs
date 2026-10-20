@@ -1964,14 +1964,18 @@ namespace MemoryForge.Client
                 if (uid == target) Label(box.transform, "대상", 12, 210, width - 36, 30, 19, Background, FontStyle.Bold);
             }
 
-            // Time reservations: the server's cap/used/sealed/due per column and every public reservation.
-            var slots = b["slots"] as JObject;
-            var board = Box(frame!, "Reservations", 32, 370, 1000, 112, Panel);
-            Label(board, "기억 시간표", 16, 8, 200, 30, 22, Memory, FontStyle.Bold);
-            Label(board, SlotText("다음 턴", slots?["next"] as JObject) + "\n" + SlotText("다다음 턴", slots?["after"] as JObject), 16, 40, 420, 64, 18, Ink);
+            // Time reservations: the server's cap/used/sealed/due per column and every public reservation. Under the now-play rules
+            // (docs/RULES_NOW_PLAY.md) the live content reserves nothing, so the board shows only when the server publishes a reservation.
             var reserved = ((b["reservations"] as JArray) ?? new JArray()).OfType<JObject>()
                 .Select(r => CardName(Str(r["id"])) + " (" + Int(r["due"]) + "턴)").ToList();
-            Label(board, reserved.Count == 0 ? "예약된 카드 없음" : string.Join(" · ", reserved), 450, 10, 534, 94, 18, reserved.Count == 0 ? Muted : Ink);
+            if (reserved.Count > 0)
+            {
+                var slots = b["slots"] as JObject;
+                var board = Box(frame!, "Reservations", 32, 370, 1000, 112, Panel);
+                Label(board, "기억 시간표", 16, 8, 200, 30, 22, Memory, FontStyle.Bold);
+                Label(board, SlotText("다음 턴", slots?["next"] as JObject) + "\n" + SlotText("다다음 턴", slots?["after"] as JObject), 16, 40, 420, 64, 18, Ink);
+                Label(board, string.Join(" · ", reserved), 450, 10, 534, 94, 18, Ink);
+            }
 
             // Ordinary action presentation strip (text only; the next selection stays open): its title, the display pace and skip.
             var strip = Box(frame!, "Presentation", 1048, 370, 520, 112, Panel);
@@ -2055,13 +2059,17 @@ namespace MemoryForge.Client
                 Label(panel, Str(source?["text"]) ?? (busy || queryWanted ? "카드 설명을 불러오는 중…" : ""), 18, 48, 760, 64, 18, Muted);
                 Label(panel, view == null ? "예상을 확인하는 중…" : ForecastText(view), 18, 116, 760, 44, 19, view?.ForecastError != null ? Danger : Memory);
                 var modes = (card["modes"] as JArray)?.Select(Str).OfType<string>().ToList() ?? new List<string>();
+                // Under the now-play rules a card's only published mode is now: no mode step, its cost and verdict as a plain line,
+                // like the expedition screen. Mode buttons come back only when the server publishes a reservation mode.
+                bool onlyNow = modes.Count == 1 && modes[0] == "now";
                 for (int i = 0; i < modes.Count; i++)
                 {
                     string mode = modes[i];
                     // blocked[mode] is Core's check of the DEFAULT request only (auto target, no manual picks): shown, never enforced here.
                     string? blocked = Str((card["blocked"] as JObject)?[mode]);
-                    string caption = ModeName(mode) + " · 행동력 " + (Int((card["costs"] as JObject)?[mode])?.ToString() ?? "-") + (blocked != null ? "\n기본 요청: " + ErrorText(blocked) : "");
-                    var button = Button(panel, "Mode:" + mode, caption, 790 + i * 132, 14, 124, 92, () => SelectMode(mode), mode == selectedMode ? Brass : Line, 16);
+                    string cost = "행동력 " + (Int((card["costs"] as JObject)?[mode])?.ToString() ?? "-") + (blocked != null ? "\n기본 요청: " + ErrorText(blocked) : "");
+                    if (onlyNow) { Label(panel, cost, 790, 20, 380, 60, 19, blocked != null ? Danger : Ink); break; }
+                    var button = Button(panel, "Mode:" + mode, ModeName(mode) + " · " + cost, 790 + i * 132, 14, 124, 92, () => SelectMode(mode), mode == selectedMode ? Brass : Line, 16);
                     button.interactable = !SelectionLocked();
                 }
                 if (modes.Count == 0) Label(panel, ErrorText(Str(card["error"]) ?? ""), 790, 20, 380, 60, 18, Danger);
