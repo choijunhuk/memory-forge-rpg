@@ -30,6 +30,10 @@ public static class MemoryForgeAndroidBuild
         // The client lays out one fixed 1600x900 frame (FitView); the project still allows portrait, which shrinks it.
         PlayerSettings.defaultInterfaceOrientation = UIOrientation.LandscapeLeft;
         EditorUserBuildSettings.buildAppBundle = false;
+        // Gradle packages the APK in place, so entries a smaller build no longer has stay behind as dead bytes (a 149 MB build
+        // came out as a 628 MB file after a big one). Removing its previous output makes it write a fresh file; nothing else is reused from it.
+        var gradleApk = Path.Combine("Library/Bee/Android/Prj", mono ? "Mono2x" : "IL2CPP", "Gradle/launcher/build/outputs/apk");
+        if (Directory.Exists(gradleApk)) Directory.Delete(gradleApk, true);
 
         var report = BuildPipeline.BuildPlayer(new BuildPlayerOptions
         {

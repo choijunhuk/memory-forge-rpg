@@ -34,7 +34,32 @@ public sealed class MemoryForgeArtImport : AssetPostprocessor
             importer.mipmapEnabled = false;
             importer.filterMode = FilterMode.Bilinear;
         }
+        // Android: the automatic format needs sizes in multiples of 4, and many originals are 1254×1254, so they fell back to
+        // uncompressed RGBA32 with mipmaps (about 8 MB each; the dev APK reached 620 MB). ASTC takes any size: 4×4 blocks for the UI
+        // kit's crisp edges and small icons, 6×6 for the paintings.
+        var android = importer.GetPlatformTextureSettings("Android");
+        android.overridden = true; android.maxTextureSize = 2048; android.compressionQuality = 100;
+        android.format = assetPath.StartsWith(ArtRoot + "UI/") ? TextureImporterFormat.ASTC_4x4 : TextureImporterFormat.ASTC_6x6;
+        importer.SetPlatformTextureSettings(android);
+        // Android still shipped RGBA32: Unity skips every block format (ASTC and ETC2 alike) for a mipmapped texture whose sides are
+        // not powers of two (measured 2026-10-20: 1254² with mipmaps → RGBA32, without → ASTC 6×6; 1254² scaled to 1024² with mipmaps →
+        // ASTC 6×6). So on Android only: an NPOT square, which includes the 1254² portraits drawn at 64 px, is imported at the nearest
+        // power of two and keeps its mipmaps (a Sprite import ignores that scaling, so it comes in as a plain texture, which is how the
+        // client loads every art file anyway); any other NPOT shape is drawn near its own size (backgrounds about 1:1, moment figures
+        // about 0.6×) and drops its mipmaps. Texture imports are kept per platform, so PC keeps the full-size mipmapped picture.
+        if (EditorUserBuildSettings.activeBuildTarget == BuildTarget.Android && importer.mipmapEnabled)
+        {
+            importer.GetSourceTextureWidthAndHeight(out int width, out int height);
+            if (!Mathf.IsPowerOfTwo(width) || !Mathf.IsPowerOfTwo(height))
+            {
+                if (width == height) { importer.textureType = TextureImporterType.Default; importer.npotScale = TextureImporterNPOTScale.ToNearest; }
+                else importer.mipmapEnabled = false;
+            }
+        }
     }
+
+    // Raised when the settings above change, so Unity imports every art texture again with them.
+    public override uint GetVersion() => 3;
 
     static readonly string[] SlicedKit = { "ui_rail_", "ui_hp_frame_", "ui_card_border_", "ui_button_pill_", "ui_panel_frame", "ui_card_face_plate", "ui_ribbon_title" };
 }
