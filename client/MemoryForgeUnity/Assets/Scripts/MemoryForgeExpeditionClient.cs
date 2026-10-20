@@ -2929,19 +2929,22 @@ namespace MemoryForge.Client
         // sideways drags still scroll it. A view replaced mid-drag (its card disabled) drops nothing.
         sealed class CardDrag : MonoBehaviour, IInitializePotentialDragHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerDownHandler, IPointerUpHandler
         {
-            MemoryForgeExpeditionClient? owner; string uid = ""; ScrollRect? scroll; bool aiming; int press;
+            MemoryForgeExpeditionClient? owner; string uid = ""; ScrollRect? scroll; bool aiming;
+            readonly Dictionary<int, int> presses = new Dictionary<int, int>(); // each pointer's own press ticket, for its release
             public void Bind(MemoryForgeExpeditionClient client, string card, ScrollRect? hand) { owner = client; uid = card; scroll = hand; }
             // One left pointer holds the card (its owner shows from behind) and one aims it; every event checks it comes from that
             // pointer, so another finger or button only scrolls the hand. An aim's release goes through OnEndDrag (sent after OnPointerUp).
             int holder = int.MinValue, aimer;
             bool Holds(PointerEventData e) => e.button == PointerEventData.InputButton.Left && e.pointerId == holder;
             bool Aims(PointerEventData e) => aiming && e.pointerId == aimer;
-            public void OnPointerDown(PointerEventData e) { if (e.button != PointerEventData.InputButton.Left || owner == null) return; holder = e.pointerId; press = owner.HoldCard(uid); }
+            public void OnPointerDown(PointerEventData e) { if (e.button != PointerEventData.InputButton.Left || owner == null) return; holder = e.pointerId; presses[e.pointerId] = owner.HoldCard(uid); }
             public void OnPointerUp(PointerEventData e)
             {
+                // A press that showed its details taps nothing on its own release, even after another finger pressed this card since.
+                if (e.button == PointerEventData.InputButton.Left && presses.TryGetValue(e.pointerId, out int press))
+                { presses.Remove(e.pointerId); if (owner != null && owner.TakeLongPress(press)) e.eligibleForClick = false; }
                 if (!Holds(e)) return;
                 holder = int.MinValue;
-                if (owner != null && owner.TakeLongPress(press)) e.eligibleForClick = false; // this press showed its details: no tap
                 if (!aiming && owner != null) owner.ReleaseCard(uid);
             }
             public void OnInitializePotentialDrag(PointerEventData e) { if (scroll != null) scroll.OnInitializePotentialDrag(e); }

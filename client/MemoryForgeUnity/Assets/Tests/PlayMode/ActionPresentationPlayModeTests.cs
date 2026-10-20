@@ -114,16 +114,22 @@ namespace MemoryForge.Client.Tests
                 Assert.That(lit, Is.EqualTo(expected.ContainsKey(e.Uid)), e.Uid + " lit exactly when the forecast takes its HP");
                 if (lit) Assert.That(slot.GetComponentsInChildren<Text>().Any(t => t.text == e.Hp + " → " + Math.Max(0, e.Hp - expected[e.Uid]) + " / " + e.MaxHp), Is.True, e.Uid + " numbers");
             }
-            client.SelectCard(card!); // a second press clears the choice: no forecast, nothing lit
+            // Played, the card leaves the hand and nothing is chosen any more: no forecast, nothing lit.
+            Assert.That(Both(s, client.ConfirmCard, BattleCore(s, "play", Play(card!, "now", enemy))), Is.True);
+            FinishAction(client);
             yield return null;
-            if (client.SelectedCard == null)
-                Assert.That(ActiveView(s.Host).GetComponentsInChildren<RectTransform>().Any(r => r.name == "HpPreview"), Is.False, "no chosen card, nothing lit");
+            Assert.That(s.Mirror.State.Battle!.Zones.Hand.Contains(card!) && client.SelectedMode != null, Is.False, "the played card is no longer a request to forecast");
+            Assert.That(ActiveView(s.Host).GetComponentsInChildren<RectTransform>().Any(r => r.name == "HpPreview"), Is.False, "nothing to forecast, nothing lit");
         }
 
         // An ultimate shows the battle kit's cut-in (plate, no touch) while motion is on, and none under reduced motion (kit README).
         [UnityTest]
         public IEnumerator AnUltimateShowsTheKitCutInUnlessMotionIsReduced()
         {
+            bool savedReduced = MemoryForgeUiMotion.Reduced; // the global preference is the player's: fixed off here, restored after
+            MemoryForgeUiMotion.Reduced = false;
+            try
+            {
             foreach (bool calm in new[] { false, true })
             {
                 var s = new Session(); yield return OpenBattle(s);
@@ -159,6 +165,8 @@ namespace MemoryForge.Client.Tests
                 if (client.HasActionPresentation) FinishAction(client);
                 yield return null;
             }
+            }
+            finally { MemoryForgeUiMotion.Reduced = savedReduced; }
         }
 
         // The committed play is shown in the strip at once over the actual current view; the next card, mode and target are prepared by

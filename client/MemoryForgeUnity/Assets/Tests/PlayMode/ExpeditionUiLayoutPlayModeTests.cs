@@ -344,6 +344,19 @@ namespace MemoryForge.Client.Tests
             Assert.That(first.eligibleForClick, Is.False, "another finger's press does not give A's release its tap back");
             ExecuteEvents.Execute(cardB, second, ExecuteEvents.pointerUpHandler);
             yield return Settle();
+
+            // Two fingers on the same card: the first peeks, a second presses that card, then the first lets go: still no tap.
+            card = Card(); var one = new PointerEventData(EventSystem.current) { button = PointerEventData.InputButton.Left, position = Center(host, name), pointerId = 2 };
+            ExecuteEvents.Execute(card, one, ExecuteEvents.pointerDownHandler); one.eligibleForClick = true;
+            yield return new WaitForSecondsRealtime(0.65f);
+            Assert.That(Peek(), Is.Not.Null, "the first finger peeks");
+            var two = new PointerEventData(EventSystem.current) { button = PointerEventData.InputButton.Left, position = Center(host, name), pointerId = 3 };
+            ExecuteEvents.Execute(card, two, ExecuteEvents.pointerDownHandler); two.eligibleForClick = true;
+            ExecuteEvents.Execute(card, one, ExecuteEvents.pointerUpHandler);
+            Assert.That(one.eligibleForClick, Is.False, "the second finger on the same card does not give the first release its tap back");
+            Assert.That(c.SelectedCard, Is.EqualTo(selected), "nothing was chosen");
+            ExecuteEvents.Execute(card, two, ExecuteEvents.pointerUpHandler);
+            yield return Settle();
         }
         // Two fingers: card A held, then card B (another owner) aimed. B's owner replaces A's, A's late release leaves B's alone, and
         // B's drop takes B's away.

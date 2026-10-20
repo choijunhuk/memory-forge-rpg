@@ -70,6 +70,7 @@ static class BattlePreviewChecks
             Check(forecasts == 80 && commands == 50 && receiptProbes == ReceiptProbes, "exactly 80 actual C# forecasts (each repeated after caller mutation), 50 real commands and " + ReceiptProbes + " receipt probes");
             IndependentAssertions();
             LateRejection(root);
+            MultiEnemySplit(root);
             FixtureRejections(fixture, content.RootElement, root);
         }
         catch (Exception error) { Check(false, "fixture/execution: " + error); }
@@ -304,6 +305,33 @@ static class BattlePreviewChecks
         Expect(K + "crossfire now marked branch", null, "now", 2, loss: 21); Expect(K + "timed now marked kill hook", null, "now", 2, hidden: true); Expect(K + "round now marked page control", null, "now", 1, loss: 8);
         // sera_timed brk3 does not break the brk4 keeper; kept over the turn end it is held and precision_lens adds break+1, damage unchanged.
         Expect(W + "timed unheld no lens", null, "now", 2, loss: 20); Expect(W + "timed held lens breaks", null, "now", 2, loss: 20, broken: 1);
+    }
+
+    // C#-only: no fixture forecast damages more than one enemy, so the authored all-enemy sera_flash against three enemies of different HP
+    // checks the per-enemy split: one entry per damaged enemy in battle order, each equal to that enemy's HP loss in a separate real play
+    // of the same battle (the 6-HP seed's loss is capped by its kill), summing to the total; the returned list is detached.
+    static void MultiEnemySplit(string root)
+    {
+        var data = BattleDataLoader.Load(root);
+        Battle Begun()
+        {
+            var created = Battle.Create(data, new BattleSetup { Party = new List<BattleActorSetup> { new() { CharId = "sera" } },
+                Deck = new List<BattleCardSpec> { new() { Id = "sera_flash" } }, Enemies = new List<string> { "e_page", "e_seed", "e_smudge" }, Hp = 81, MaxHp = 81, Seed = 0 });
+            created.Command(new BattleRequest("split-begin", 0, "begin"));
+            return created;
+        }
+        var battle = Begun(); var real = Begun();
+        string before = Full(battle.State.ToJsonGraph());
+        var forecast = battle.Forecast("c1");
+        var hp = real.State.Enemies.ToDictionary(e => e.Uid, e => e.Hp);
+        real.Command(BattleDataLoader.Request("{\"rid\":\"split-play\",\"v\":1,\"kind\":\"play\",\"args\":{\"uid\":\"c1\",\"mode\":\"now\",\"target\":null,\"picks\":[]}}"));
+        var expected = battle.State.Enemies.Select(e => (e.Uid, HpLoss: hp[e.Uid] - (real.State.Enemies.FirstOrDefault(a => a.Uid == e.Uid)?.Hp ?? 0))).Where(e => e.HpLoss > 0).ToList();
+        var split = Split(forecast);
+        Check(forecast.Error == null && !forecast.Hidden && expected.Count == 3 && split.SequenceEqual(expected) && split.Sum(e => (long)e.HpLoss) == forecast.EnemyHpLoss,
+            "C#-only all-enemy split: three entries in battle order, each the enemy's real HP loss, summing to the forecast total");
+        Check(expected.Select(e => e.HpLoss).Distinct().Count() > 1 && expected.Any(e => e.HpLoss == hp[e.Uid]), "C#-only all-enemy split: the losses differ and the killed seed's is capped at its HP");
+        Mutate(forecast);
+        Check(Split(battle.Forecast("c1")).SequenceEqual(expected) && Full(battle.State.ToJsonGraph()) == before, "C#-only all-enemy split: detached from the returned list and the live state");
     }
 
     // C#-only: authored plays that pass Check always commit, so a negative local-definition fault after real Create/begin shows the late path.
