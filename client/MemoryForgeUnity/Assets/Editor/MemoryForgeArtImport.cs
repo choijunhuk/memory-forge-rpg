@@ -34,7 +34,17 @@ public sealed class MemoryForgeArtImport : AssetPostprocessor
             importer.mipmapEnabled = false;
             importer.filterMode = FilterMode.Bilinear;
         }
+        // Android: the automatic format needs sizes in multiples of 4, and many originals are 1254×1254, so they fell back to
+        // uncompressed RGBA32 with mipmaps (about 8 MB each; the dev APK reached 620 MB). ASTC takes any size: 4×4 blocks for the UI
+        // kit's crisp edges and small icons, 6×6 for the paintings.
+        var android = importer.GetPlatformTextureSettings("Android");
+        android.overridden = true; android.maxTextureSize = 2048; android.compressionQuality = 100;
+        android.format = assetPath.StartsWith(ArtRoot + "UI/") ? TextureImporterFormat.ASTC_4x4 : TextureImporterFormat.ASTC_6x6;
+        importer.SetPlatformTextureSettings(android);
     }
+
+    // Raised when the settings above change, so Unity imports every art texture again with them.
+    public override uint GetVersion() => 2;
 
     static readonly string[] SlicedKit = { "ui_rail_", "ui_hp_frame_", "ui_card_border_", "ui_button_pill_", "ui_panel_frame", "ui_card_face_plate", "ui_ribbon_title" };
 }
