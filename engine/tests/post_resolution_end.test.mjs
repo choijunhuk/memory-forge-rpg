@@ -44,7 +44,7 @@ test('post-resolution void shard victory ends the battle inside the play command
   assert.deepEqual(response.ev.filter(e => e.e === 'dmg').map(e => e.src), ['card', 'relic']);
   assert.deepEqual(b.s.zones.exhaust, [uid]);
   assert.equal(b.s.cards[uid].held, false);
-  assert.equal(b.actor('sera').gauge, 10, 'only the resolved card grants gauge');
+  assert.equal(b.actor('sera').gauge, 20, 'only the resolved card grants gauge'); // gaugePerCard 20
   assertConserved(b);
 });
 

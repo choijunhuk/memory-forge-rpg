@@ -20,9 +20,9 @@ static partial class RunProgressionChecks
     const string Scope = "Actual Run.create and the recorded public Run/battle commands of seven fixed gen_traces scenarios: complete JS states, returns, errors and pure queries. C# Run command replay 0; restoration, abandonment, persistence, server, Unity and device acceptance PENDING";
     // Independent literals from the unchanged sources: all commands through each terminal commit, battle attempts and battle commits among them,
     // committed/rejected attempts, the recorded pure queries inside those prefixes including each Create boundary, and the JS-only suffix.
-    const int PrefixAttempts = 1899, PrefixBattle = 1563, PrefixBattleCommitted = 1165, PrefixQueries = 1400, PrefixCommitted = 1501, PrefixRejected = 398, Suffix = 0;
+    const int PrefixAttempts = 1621, PrefixBattle = 1302, PrefixBattleCommitted = 978, PrefixQueries = 1261, PrefixCommitted = 1291, PrefixRejected = 330, Suffix = 0;
     // Committed legacy forgeOffer attempts: each return gets one value/ownership probe (the five full-state cases never call forgeOffer).
-    const long LegacyAttempts = 227145, LegacyOfferReturns = 571; // RULES_NOW_PLAY regeneration of the 1000-trace corpus (growth on a winning blow)
+    const long LegacyAttempts = 202224, LegacyOfferReturns = 595; // RULES_NOW_PLAY §7 gauge 20/50 regeneration of the 1000-trace corpus
     // Exact allowlist in source order, compared before any file is hashed: a fixture can never steer the host to read another path.
     static readonly (string Key, string Path)[] Sources = { ("data", "data/game_data.json"), ("engine", "engine/rules-core.js"), ("memory", "proposals/memory_v2.cjs"),
         ("canonical", "tools/gen_traces.mjs"), ("fuzzPolicy", "engine/tests/fuzz_runs.mjs"), ("runCreateDecoder", "tools/gen_run_create_vectors.mjs"), ("generator", "tools/gen_run_progression_vectors.mjs") };
@@ -36,19 +36,20 @@ static partial class RunProgressionChecks
         "reload", "gen_traces saveMemory rebuild check recorded as Run.create only: saved memory, seed+99, v2 reload runId and committed store version",
         "separate", "The existing 1000-trace hash corpus and the R0 factory/query matrix are separate evidence; this fixture does not claim full C# replay");
     // RULES_NOW_PLAY (2026-10-19): seed 1102 no longer ends a battle in begin (begin-defeat moved to 3561) and 2654 earns ev_rift once
-    // (earned-ap-bonus moved to 2992); 1102 stays as full exploration.
-    static readonly Dictionary<string, object?> Denominators = O("cases", 7L, "seeds", L(1000L, 1102L, 3561L, 2992L), "policies", O("legacy", 5L, "v2", 2L), "lengths", O("short", 1L, "full", 6L));
-    static readonly Dictionary<string, object?> Totals = O("cases", 7L, "attempted", 1899L, "committed", 1501L, "rejected", 398L, "queries", 1400L, "csharpCommandReplay", 0L);
+    // (earned-ap-bonus moved to 2992); 1102 stays as full exploration. Gauge 20/50 (§7, 2026-10-20): 3561 no longer ends a battle in begin
+    // and 2992 earns ev_rift once, so begin-defeat moved to 4488 and earned-ap-bonus to 5748.
+    static readonly Dictionary<string, object?> Denominators = O("cases", 7L, "seeds", L(1000L, 1102L, 4488L, 5748L), "policies", O("legacy", 5L, "v2", 2L), "lengths", O("short", 1L, "full", 6L));
+    static readonly Dictionary<string, object?> Totals = O("cases", 7L, "attempted", 1621L, "committed", 1291L, "rejected", 330L, "queries", 1261L, "csharpCommandReplay", 0L);
     // Per case before Stop: attempts, battle attempts, battle commits, pure queries (Create included), committed and rejected attempts.
     static readonly (string Id, long Seed, string Length, string Policy, string Role, int Prefix, int Battle, int BattleCommitted, int Queries, int Committed, int Rejected, string Stop)[] Plan =
     {
-        ("seed1000-short-legacy", 1000, "short", "legacy", "ordinary-exploration", 194, 165, 114, 123, 143, 51, "DONE"),
-        ("seed1000-full-legacy", 1000, "full", "legacy", "ordinary-exploration", 378, 323, 225, 250, 280, 98, "DONE"),
-        ("seed1102-full-legacy", 1102, "full", "legacy", "ordinary-exploration", 287, 228, 169, 231, 228, 59, "DONE"),
-        ("seed1102-full-v2", 1102, "full", "v2", "ordinary-exploration", 287, 228, 169, 231, 228, 59, "DONE"),
-        ("seed3561-full-legacy", 3561, "full", "legacy", "begin-defeat", 214, 175, 156, 173, 195, 19, "DONE"),
-        ("seed3561-full-v2", 3561, "full", "v2", "begin-defeat", 214, 175, 156, 173, 195, 19, "DONE"),
-        ("seed2992-full-legacy", 2992, "full", "legacy", "earned-ap-bonus", 325, 269, 176, 219, 232, 93, "DONE"),
+        ("seed1000-short-legacy", 1000, "short", "legacy", "ordinary-exploration", 160, 132, 105, 115, 133, 27, "DONE"),
+        ("seed1000-full-legacy", 1000, "full", "legacy", "ordinary-exploration", 161, 132, 105, 117, 134, 27, "DONE"),
+        ("seed1102-full-legacy", 1102, "full", "legacy", "ordinary-exploration", 253, 194, 162, 226, 220, 33, "DONE"),
+        ("seed1102-full-v2", 1102, "full", "v2", "ordinary-exploration", 253, 194, 162, 226, 220, 33, "DONE"),
+        ("seed4488-full-legacy", 4488, "full", "legacy", "begin-defeat", 280, 236, 151, 188, 193, 87, "DONE"),
+        ("seed4488-full-v2", 4488, "full", "v2", "begin-defeat", 280, 236, 151, 188, 193, 87, "DONE"),
+        ("seed5748-full-legacy", 5748, "full", "legacy", "earned-ap-bonus", 234, 178, 142, 201, 198, 36, "DONE"),
     };
     // R1a commands plus the R1c actual terminal saving; commitMemory alone still stops a case before it is attempted. Assign is not in the
     // gen_traces vocabulary, so this corpus neither calls nor counts it.
@@ -57,9 +58,9 @@ static partial class RunProgressionChecks
     static readonly HashSet<string> Pending = new(StringComparer.Ordinal);
     static readonly Dictionary<string, long> LegacyMethods = new(StringComparer.Ordinal)
     {
-        ["enter"] = 9667, ["play"] = 163969, ["end"] = 23393, ["takeCard"] = 5197, ["proceed"] = 9610, ["takePart"] = 1278, ["eventChoose"] = 590,
-        ["skipCard"] = 1734, ["applyFoundPart"] = 1228, ["forgeRemove"] = 378, ["takeRelic"] = 1745, ["ult"] = 2797, ["forgeOffer"] = 571,
-        ["forgeApply"] = 571, ["rest"] = 663, ["buy"] = 1519, ["evolve"] = 938, ["archive"] = 297, ["commitMemory"] = 1000
+        ["enter"] = 9622, ["play"] = 138590, ["end"] = 19519, ["takeCard"] = 5166, ["proceed"] = 9601, ["takePart"] = 1272, ["eventChoose"] = 584,
+        ["skipCard"] = 1730, ["applyFoundPart"] = 1224, ["forgeRemove"] = 390, ["takeRelic"] = 1750, ["ult"] = 7095, ["forgeOffer"] = 595,
+        ["forgeApply"] = 595, ["rest"] = 663, ["buy"] = 1524, ["evolve"] = 1005, ["archive"] = 299, ["commitMemory"] = 1000
     };
     static readonly string[] TopFields = { "schema", "status", "scope", "dataVersion", "sources", "contract", "denominators", "coverage", "cases" };
     static readonly string[] CaseFields = { "id", "seed", "length", "memoryPolicy", "role", "trace", "created", "steps", "reload" };

@@ -26,14 +26,16 @@ export const fixturePath = join(root, 'engine/tests/vectors/run_progression_vect
 // Fixed real generator inputs. Roles are asserted against actual observations; nothing is restored from trace snapshots.
 // Since the 2026-10-19 now-play rules (docs/RULES_NOW_PLAY.md) seed 1102 no longer ends a battle inside begin and seed 2654 earns
 // ev_rift once: begin-defeat moved to 3561 and earned-ap-bonus to 2992 (two earned/consumed gains); 1102 stays as full exploration.
+// RULES_NOW_PLAY gauge 20/50 (2026-10-20): 3561 no longer ends a battle inside begin and 2992 earns ev_rift once; begin-defeat moved
+// to 4488 (infinite_circuit at turn start, as before) and earned-ap-bonus to 5748 (two gains, five base-AP battles between, no AP relic).
 const plan = [
   { id: 'seed1000-short-legacy', seed: 1000, length: 'short', memoryPolicy: 'legacy', role: 'ordinary-exploration' },
   { id: 'seed1000-full-legacy', seed: 1000, length: 'full', memoryPolicy: 'legacy', role: 'ordinary-exploration' },
   { id: 'seed1102-full-legacy', seed: 1102, length: 'full', memoryPolicy: 'legacy', role: 'ordinary-exploration' },
   { id: 'seed1102-full-v2', seed: 1102, length: 'full', memoryPolicy: 'v2', role: 'ordinary-exploration' },
-  { id: 'seed3561-full-legacy', seed: 3561, length: 'full', memoryPolicy: 'legacy', role: 'begin-defeat' },
-  { id: 'seed3561-full-v2', seed: 3561, length: 'full', memoryPolicy: 'v2', role: 'begin-defeat' },
-  { id: 'seed2992-full-legacy', seed: 2992, length: 'full', memoryPolicy: 'legacy', role: 'earned-ap-bonus' },
+  { id: 'seed4488-full-legacy', seed: 4488, length: 'full', memoryPolicy: 'legacy', role: 'begin-defeat' },
+  { id: 'seed4488-full-v2', seed: 4488, length: 'full', memoryPolicy: 'v2', role: 'begin-defeat' },
+  { id: 'seed5748-full-legacy', seed: 5748, length: 'full', memoryPolicy: 'legacy', role: 'earned-ap-bonus' },
 ];
 // The public Run surface gen_traces dispatches; its dispatcher is not exported and the canonical source hash pins it.
 const runMethods = new Set(['enter', 'evolve', 'takeCard', 'skipCard', 'takeRelic', 'takePart', 'applyFoundPart',

@@ -1,8 +1,8 @@
 {
   "schema": "mf-run-node-contract-inputs-v1",
   "sourceEngine": "653dfec4959d1ec759142ae8de24b08c6844b1db366a748fb9401829129cd72a",
-  "sourceData": "982f7b5b71632fd0b31ae89cd315648281870c48985f44f2922f984987f6874d",
-  "source": "Actual Create and public commands re-derived from current tools/gen_traces.mjs scenarios after the 2026-10-19 now-play rules change (docs/RULES_NOW_PLAY.md), with their committed/rejected outcomes; no state injection.",
+  "sourceData": "b6d3543a1d87f0a28e4824e0c1ae45a1eabc676d7abefcd2e57e23b4abc0054a",
+  "source": "Actual Create and public commands re-derived from current tools/gen_traces.mjs scenarios after the 2026-10-19 now-play rules change (docs/RULES_NOW_PLAY.md; openingDefeat moved to seed 4488 after the §7 gauge 20/50 change), with their committed/rejected outcomes; no state injection.",
   "cases": {
     "repeatEvent": {
       "setup": {
@@ -6399,25 +6399,25 @@
       "setup": {
         "party": [
           {
-            "charId": "kaya",
+            "charId": "sion",
             "res": 3,
-            "weaponId": "w_hunter_rifle",
-            "refine": 5
+            "weaponId": "w_frost_blade",
+            "refine": 2
           },
           {
-            "charId": "sera",
+            "charId": "ravien",
             "res": 5,
             "weaponId": null,
             "refine": 1
           },
           {
-            "charId": "nia",
-            "res": 0,
-            "weaponId": "w_pocket_engine",
-            "refine": 5
+            "charId": "kaya",
+            "res": 3,
+            "weaponId": null,
+            "refine": 1
           }
         ],
-        "seed": 3561,
+        "seed": 4488,
         "length": "full",
         "memoryPolicy": "legacy",
         "memory": {},
@@ -6450,10 +6450,12 @@
             "v": 1,
             "kind": "play",
             "args": {
-              "uid": "c7",
+              "uid": "c11",
               "mode": "now",
               "target": "e19",
-              "picks": []
+              "picks": [
+                "c8"
+              ]
             }
           },
           "outcome": "committed",
@@ -6466,7 +6468,7 @@
             "v": 2,
             "kind": "play",
             "args": {
-              "uid": "c15",
+              "uid": "c8",
               "mode": "now",
               "target": "e19",
               "picks": []
@@ -6482,10 +6484,12 @@
             "v": 3,
             "kind": "play",
             "args": {
-              "uid": "c2",
+              "uid": "c13",
               "mode": "now",
-              "target": "e19",
-              "picks": []
+              "target": "e20",
+              "picks": [
+                "c6"
+              ]
             }
           },
           "outcome": "committed",
@@ -6498,12 +6502,10 @@
             "v": 4,
             "kind": "play",
             "args": {
-              "uid": "c5",
+              "uid": "c7",
               "mode": "now",
-              "target": "e19",
-              "picks": [
-                "c3"
-              ]
+              "target": "e20",
+              "picks": []
             }
           },
           "outcome": "committed",
@@ -6516,11 +6518,38 @@
             "v": 5,
             "kind": "play",
             "args": {
-              "uid": "c17",
+              "uid": "c6",
+              "mode": "now",
+              "target": "e20",
+              "picks": []
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r6-end",
+            "v": 6,
+            "kind": "end",
+            "args": {}
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r7-play",
+            "v": 7,
+            "kind": "play",
+            "args": {
+              "uid": "c16",
               "mode": "now",
               "target": "e19",
               "picks": [
-                "c3"
+                "c15"
               ]
             }
           },
@@ -6530,11 +6559,171 @@
         {
           "command": {
             "scope": "battle",
-            "rid": "r6-play",
-            "v": 6,
+            "rid": "r8-play",
+            "v": 8,
+            "kind": "play",
+            "args": {
+              "uid": "c12",
+              "mode": "now",
+              "target": "e19",
+              "picks": [
+                "c15"
+              ]
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r9-play",
+            "v": 9,
+            "kind": "play",
+            "args": {
+              "uid": "c1",
+              "mode": "now",
+              "target": "e19",
+              "picks": [
+                "c14"
+              ]
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "AP_LOW"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r9-end",
+            "v": 9,
+            "kind": "end",
+            "args": {}
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r10-play",
+            "v": 10,
+            "kind": "play",
+            "args": {
+              "uid": "c5",
+              "mode": "now",
+              "target": "e19",
+              "picks": []
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r11-play",
+            "v": 11,
             "kind": "play",
             "args": {
               "uid": "c3",
+              "mode": "now",
+              "target": "e19",
+              "picks": [
+                "c9"
+              ]
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r12-play",
+            "v": 12,
+            "kind": "play",
+            "args": {
+              "uid": "c2",
+              "mode": "now",
+              "target": "e19",
+              "picks": []
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r13-play",
+            "v": 13,
+            "kind": "play",
+            "args": {
+              "uid": "c17",
+              "mode": "now",
+              "target": "e19",
+              "picks": [
+                "c4"
+              ]
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r14-play",
+            "v": 14,
+            "kind": "play",
+            "args": {
+              "uid": "c4",
+              "mode": "now",
+              "target": "e19",
+              "picks": []
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r15-end",
+            "v": 15,
+            "kind": "end",
+            "args": {}
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r16-play",
+            "v": 16,
+            "kind": "play",
+            "args": {
+              "uid": "c11",
+              "mode": "now",
+              "target": "e19",
+              "picks": [
+                "c10"
+              ]
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r17-play",
+            "v": 17,
+            "kind": "play",
+            "args": {
+              "uid": "c1",
               "mode": "now",
               "target": "e19",
               "picks": []
@@ -6546,8 +6735,10 @@
         {
           "command": {
             "scope": "run",
-            "kind": "skipCard",
-            "args": []
+            "kind": "takeCard",
+            "args": [
+              "sion_cut"
+            ]
           },
           "outcome": "committed",
           "errorCode": null
@@ -6579,9 +6770,9 @@
             "v": 1,
             "kind": "play",
             "args": {
-              "uid": "c5",
+              "uid": "c1",
               "mode": "now",
-              "target": "e19",
+              "target": "e21",
               "picks": []
             }
           },
@@ -6595,7 +6786,7 @@
             "v": 2,
             "kind": "play",
             "args": {
-              "uid": "c8",
+              "uid": "c13",
               "mode": "now",
               "target": "e20",
               "picks": [
@@ -6613,11 +6804,11 @@
             "v": 3,
             "kind": "play",
             "args": {
-              "uid": "c4",
+              "uid": "c7",
               "mode": "now",
-              "target": "e20",
+              "target": "e21",
               "picks": [
-                "c7"
+                "c3"
               ]
             }
           },
@@ -6631,40 +6822,38 @@
             "v": 4,
             "kind": "play",
             "args": {
-              "uid": "c7",
+              "uid": "c4",
               "mode": "now",
-              "target": "e20",
-              "picks": [
-                "c13"
-              ]
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r5-end",
-            "v": 5,
-            "kind": "end",
-            "args": {}
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r6-play",
-            "v": 6,
-            "kind": "play",
-            "args": {
-              "uid": "c16",
-              "mode": "now",
-              "target": "e19",
+              "target": "e21",
               "picks": []
             }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c3",
+              "mode": "now",
+              "target": "e20",
+              "picks": []
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r6-end",
+            "v": 6,
+            "kind": "end",
+            "args": {}
           },
           "outcome": "committed",
           "errorCode": null
@@ -6678,8 +6867,10 @@
             "args": {
               "uid": "c9",
               "mode": "now",
-              "target": "e19",
-              "picks": []
+              "target": "e20",
+              "picks": [
+                "c15"
+              ]
             }
           },
           "outcome": "committed",
@@ -6692,12 +6883,10 @@
             "v": 8,
             "kind": "play",
             "args": {
-              "uid": "c17",
+              "uid": "c8",
               "mode": "now",
-              "target": "e19",
-              "picks": [
-                "c6"
-              ]
+              "target": "e20",
+              "picks": []
             }
           },
           "outcome": "committed",
@@ -6710,9 +6899,232 @@
             "v": 9,
             "kind": "play",
             "args": {
+              "uid": "c15",
+              "mode": "now",
+              "target": "e20",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "FIXED_MARK_REQUIRED"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r9-play",
+            "v": 9,
+            "kind": "play",
+            "args": {
+              "uid": "c5",
+              "mode": "now",
+              "target": "e20",
+              "picks": [
+                "c10"
+              ]
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r10-end",
+            "v": 10,
+            "kind": "end",
+            "args": {}
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r11-play",
+            "v": 11,
+            "kind": "play",
+            "args": {
               "uid": "c18",
               "mode": "now",
-              "target": "e19",
+              "target": "e20",
+              "picks": []
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "run",
+            "kind": "takeCard",
+            "args": [
+              "ravien_bigloan"
+            ]
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "run",
+            "kind": "proceed",
+            "args": []
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "run",
+            "kind": "enter",
+            "args": [
+              "z1f2n1"
+            ]
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r1-play",
+            "v": 1,
+            "kind": "play",
+            "args": {
+              "uid": "c3",
+              "mode": "now",
+              "target": "e23",
+              "picks": [
+                "c6"
+              ]
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r2-play",
+            "v": 2,
+            "kind": "play",
+            "args": {
+              "uid": "c6",
+              "mode": "now",
+              "target": "e21",
+              "picks": [
+                "c2"
+              ]
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r3-play",
+            "v": 3,
+            "kind": "play",
+            "args": {
+              "uid": "c2",
+              "mode": "now",
+              "target": "e21",
+              "picks": [
+                "c18"
+              ]
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r4-play",
+            "v": 4,
+            "kind": "play",
+            "args": {
+              "uid": "c20",
+              "mode": "now",
+              "target": "e23",
+              "picks": [
+                "c8"
+              ]
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c8",
+              "mode": "now",
+              "target": "e23",
+              "picks": []
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r6-play",
+            "v": 6,
+            "kind": "play",
+            "args": {
+              "uid": "c17",
+              "mode": "now",
+              "target": "e23",
+              "picks": []
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r7-end",
+            "v": 7,
+            "kind": "end",
+            "args": {}
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r8-play",
+            "v": 8,
+            "kind": "play",
+            "args": {
+              "uid": "c14",
+              "mode": "now",
+              "target": "e23",
+              "picks": []
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r9-play",
+            "v": 9,
+            "kind": "play",
+            "args": {
+              "uid": "c5",
+              "mode": "now",
+              "target": "e23",
               "picks": []
             }
           },
@@ -6739,8 +7151,10 @@
             "args": {
               "uid": "c12",
               "mode": "now",
-              "target": "e19",
-              "picks": []
+              "target": "e22",
+              "picks": [
+                "c9"
+              ]
             }
           },
           "outcome": "committed",
@@ -6753,10 +7167,12 @@
             "v": 12,
             "kind": "play",
             "args": {
-              "uid": "c14",
+              "uid": "c10",
               "mode": "now",
-              "target": "e19",
-              "picks": []
+              "target": "e23",
+              "picks": [
+                "c11"
+              ]
             }
           },
           "outcome": "committed",
@@ -6769,9 +7185,9 @@
             "v": 13,
             "kind": "play",
             "args": {
-              "uid": "c2",
+              "uid": "c11",
               "mode": "now",
-              "target": "e19",
+              "target": "e23",
               "picks": []
             }
           },
@@ -6785,479 +7201,83 @@
             "v": 14,
             "kind": "play",
             "args": {
-              "uid": "c3",
-              "mode": "now",
-              "target": "e19",
-              "picks": [
-                "c10"
-              ]
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "run",
-            "kind": "takeCard",
-            "args": [
-              "nia_barrier"
-            ]
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "run",
-            "kind": "proceed",
-            "args": []
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "run",
-            "kind": "enter",
-            "args": [
-              "z1f2n0"
-            ]
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r1-play",
-            "v": 1,
-            "kind": "play",
-            "args": {
-              "uid": "c7",
-              "mode": "now",
-              "target": "e20",
-              "picks": []
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r2-play",
-            "v": 2,
-            "kind": "play",
-            "args": {
-              "uid": "c18",
-              "mode": "now",
-              "target": "e20",
-              "picks": [
-                "c2"
-              ]
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r3-play",
-            "v": 3,
-            "kind": "play",
-            "args": {
-              "uid": "c15",
-              "mode": "now",
-              "target": "e20",
-              "picks": []
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r4-play",
-            "v": 4,
-            "kind": "play",
-            "args": {
-              "uid": "c2",
-              "mode": "now",
-              "target": "e20",
-              "picks": []
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r5-play",
-            "v": 5,
-            "kind": "play",
-            "args": {
-              "uid": "c10",
-              "mode": "now",
-              "target": "e20",
-              "picks": [
-                "c8"
-              ]
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "run",
-            "kind": "takeCard",
-            "args": [
-              "com_patch"
-            ]
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "run",
-            "kind": "proceed",
-            "args": []
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "run",
-            "kind": "enter",
-            "args": [
-              "z1f3n0"
-            ]
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "run",
-            "kind": "rest",
-            "args": [
-              "heal"
-            ]
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "run",
-            "kind": "proceed",
-            "args": []
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "run",
-            "kind": "enter",
-            "args": [
-              "z1f4n0"
-            ]
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r1-play",
-            "v": 1,
-            "kind": "play",
-            "args": {
-              "uid": "c10",
-              "mode": "now",
-              "target": "e21",
-              "picks": [
-                "c1"
-              ]
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r2-play",
-            "v": 2,
-            "kind": "play",
-            "args": {
-              "uid": "c5",
-              "mode": "now",
-              "target": "e21",
-              "picks": []
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r3-play",
-            "v": 3,
-            "kind": "play",
-            "args": {
-              "uid": "c8",
-              "mode": "now",
-              "target": "e21",
-              "picks": [
-                "c1"
-              ]
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r4-play",
-            "v": 4,
-            "kind": "play",
-            "args": {
-              "uid": "c1",
-              "mode": "now",
-              "target": "e21",
-              "picks": [
-                "c20"
-              ]
-            }
-          },
-          "outcome": "rejected",
-          "errorCode": "AP_LOW"
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r4-end",
-            "v": 4,
-            "kind": "end",
-            "args": {}
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r5-play",
-            "v": 5,
-            "kind": "play",
-            "args": {
-              "uid": "c14",
-              "mode": "now",
-              "target": "e21",
-              "picks": [
-                "c7"
-              ]
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r6-play",
-            "v": 6,
-            "kind": "play",
-            "args": {
-              "uid": "c12",
-              "mode": "now",
-              "target": "e21",
-              "picks": []
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r7-play",
-            "v": 7,
-            "kind": "play",
-            "args": {
-              "uid": "c7",
-              "mode": "now",
-              "target": "e21",
-              "picks": [
-                "c6"
-              ]
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r8-play",
-            "v": 8,
-            "kind": "play",
-            "args": {
               "uid": "c19",
               "mode": "now",
-              "target": "e21",
-              "picks": [
-                "c2"
-              ]
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r9-end",
-            "v": 9,
-            "kind": "end",
-            "args": {}
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r10-play",
-            "v": 10,
-            "kind": "play",
-            "args": {
-              "uid": "c15",
-              "mode": "now",
-              "target": "e21",
-              "picks": [
-                "c4"
-              ]
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r11-play",
-            "v": 11,
-            "kind": "play",
-            "args": {
-              "uid": "c3",
-              "mode": "now",
-              "target": "e21",
+              "target": "e23",
               "picks": []
             }
           },
-          "outcome": "rejected",
-          "errorCode": "FIXED_MARK_REQUIRED"
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r11-play",
-            "v": 11,
-            "kind": "play",
-            "args": {
-              "uid": "c16",
-              "mode": "now",
-              "target": "e21",
-              "picks": [
-                "c4"
-              ]
-            }
-          },
           "outcome": "committed",
           "errorCode": null
         },
         {
           "command": {
             "scope": "battle",
-            "rid": "r12-play",
-            "v": 12,
+            "rid": "r15-play",
+            "v": 15,
             "kind": "play",
             "args": {
               "uid": "c9",
               "mode": "now",
               "target": "e21",
-              "picks": []
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r13-play",
-            "v": 13,
-            "kind": "play",
-            "args": {
-              "uid": "c17",
-              "mode": "now",
-              "target": "e21",
-              "picks": []
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r14-play",
-            "v": 14,
-            "kind": "play",
-            "args": {
-              "uid": "c3",
-              "mode": "now",
-              "target": "e21",
-              "picks": []
+              "picks": [
+                "c16"
+              ]
             }
           },
           "outcome": "rejected",
-          "errorCode": "FIXED_MARK_REQUIRED"
+          "errorCode": "RESTRAINT_UNAVAILABLE"
         },
         {
           "command": {
             "scope": "battle",
-            "rid": "r14-play",
-            "v": 14,
+            "rid": "r15-play",
+            "v": 15,
             "kind": "play",
             "args": {
-              "uid": "c4",
+              "uid": "c9",
               "mode": "now",
               "target": "e21",
-              "picks": []
+              "picks": [
+                "c16"
+              ]
             }
           },
-          "outcome": "committed",
-          "errorCode": null
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
         },
         {
           "command": {
             "scope": "battle",
-            "rid": "r15-end",
+            "rid": "r15-play",
             "v": 15,
-            "kind": "end",
-            "args": {}
+            "kind": "play",
+            "args": {
+              "uid": "c9",
+              "mode": "now",
+              "target": "e22",
+              "picks": [
+                "c16"
+              ]
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r15-play",
+            "v": 15,
+            "kind": "play",
+            "args": {
+              "uid": "c16",
+              "mode": "now",
+              "target": "e22",
+              "picks": [
+                "c9"
+              ]
+            }
           },
           "outcome": "committed",
           "errorCode": null
@@ -7269,11 +7289,358 @@
             "v": 16,
             "kind": "play",
             "args": {
-              "uid": "c13",
+              "uid": "c9",
+              "mode": "now",
+              "target": "e22",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r16-play",
+            "v": 16,
+            "kind": "play",
+            "args": {
+              "uid": "c9",
               "mode": "now",
               "target": "e21",
               "picks": []
             }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r16-play",
+            "v": 16,
+            "kind": "play",
+            "args": {
+              "uid": "c9",
+              "mode": "now",
+              "target": "e21",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r16-play",
+            "v": 16,
+            "kind": "play",
+            "args": {
+              "uid": "c9",
+              "mode": "now",
+              "target": "e22",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r16-play",
+            "v": 16,
+            "kind": "play",
+            "args": {
+              "uid": "c9",
+              "mode": "now",
+              "target": "e22",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r16-play",
+            "v": 16,
+            "kind": "play",
+            "args": {
+              "uid": "c9",
+              "mode": "now",
+              "target": "e22",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r16-play",
+            "v": 16,
+            "kind": "play",
+            "args": {
+              "uid": "c9",
+              "mode": "now",
+              "target": "e21",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r16-play",
+            "v": 16,
+            "kind": "play",
+            "args": {
+              "uid": "c9",
+              "mode": "now",
+              "target": "e22",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r16-play",
+            "v": 16,
+            "kind": "play",
+            "args": {
+              "uid": "c9",
+              "mode": "now",
+              "target": "e22",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r16-play",
+            "v": 16,
+            "kind": "play",
+            "args": {
+              "uid": "c9",
+              "mode": "now",
+              "target": "e22",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r16-play",
+            "v": 16,
+            "kind": "play",
+            "args": {
+              "uid": "c9",
+              "mode": "now",
+              "target": "e22",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r16-play",
+            "v": 16,
+            "kind": "play",
+            "args": {
+              "uid": "c9",
+              "mode": "now",
+              "target": "e21",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r16-play",
+            "v": 16,
+            "kind": "play",
+            "args": {
+              "uid": "c9",
+              "mode": "now",
+              "target": "e21",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r16-play",
+            "v": 16,
+            "kind": "play",
+            "args": {
+              "uid": "c9",
+              "mode": "now",
+              "target": "e22",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r16-play",
+            "v": 16,
+            "kind": "play",
+            "args": {
+              "uid": "c9",
+              "mode": "now",
+              "target": "e22",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r16-play",
+            "v": 16,
+            "kind": "play",
+            "args": {
+              "uid": "c9",
+              "mode": "now",
+              "target": "e22",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r16-play",
+            "v": 16,
+            "kind": "play",
+            "args": {
+              "uid": "c9",
+              "mode": "now",
+              "target": "e22",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r16-play",
+            "v": 16,
+            "kind": "play",
+            "args": {
+              "uid": "c9",
+              "mode": "now",
+              "target": "e22",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r16-play",
+            "v": 16,
+            "kind": "play",
+            "args": {
+              "uid": "c9",
+              "mode": "now",
+              "target": "e21",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r16-play",
+            "v": 16,
+            "kind": "play",
+            "args": {
+              "uid": "c9",
+              "mode": "now",
+              "target": "e22",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r16-play",
+            "v": 16,
+            "kind": "play",
+            "args": {
+              "uid": "c9",
+              "mode": "now",
+              "target": "e22",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r16-play",
+            "v": 16,
+            "kind": "play",
+            "args": {
+              "uid": "c9",
+              "mode": "now",
+              "target": "e21",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r16-end",
+            "v": 16,
+            "kind": "end",
+            "args": {}
           },
           "outcome": "committed",
           "errorCode": null
@@ -7285,9 +7652,9 @@
             "v": 17,
             "kind": "play",
             "args": {
-              "uid": "c11",
+              "uid": "c3",
               "mode": "now",
-              "target": "e21",
+              "target": "e22",
               "picks": []
             }
           },
@@ -7301,11 +7668,11 @@
             "v": 18,
             "kind": "play",
             "args": {
-              "uid": "c20",
+              "uid": "c13",
               "mode": "now",
               "target": "e21",
               "picks": [
-                "c18"
+                "c15"
               ]
             }
           },
@@ -7319,16 +7686,32 @@
             "v": 19,
             "kind": "play",
             "args": {
-              "uid": "c4",
+              "uid": "c6",
               "mode": "now",
-              "target": "e21",
+              "target": "e22",
               "picks": [
-                "c18"
+                "c15"
               ]
             }
           },
           "outcome": "committed",
           "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r20-play",
+            "v": 20,
+            "kind": "play",
+            "args": {
+              "uid": "c15",
+              "mode": "now",
+              "target": "e22",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "AP_LOW"
         },
         {
           "command": {
@@ -7343,14 +7726,147 @@
         },
         {
           "command": {
+            "scope": "run",
+            "kind": "takeCard",
+            "args": [
+              "ravien_strike"
+            ]
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "run",
+            "kind": "proceed",
+            "args": []
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "run",
+            "kind": "enter",
+            "args": [
+              "z1f3n2"
+            ]
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "run",
+            "kind": "rest",
+            "args": [
+              "upgrade",
+              "k1"
+            ]
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "run",
+            "kind": "proceed",
+            "args": []
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "run",
+            "kind": "enter",
+            "args": [
+              "z1f4n1"
+            ]
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
             "scope": "battle",
-            "rid": "r21-play",
-            "v": 21,
+            "rid": "r1-play",
+            "v": 1,
             "kind": "play",
             "args": {
-              "uid": "c12",
+              "uid": "c1",
               "mode": "now",
-              "target": "e21",
+              "target": "e22",
+              "picks": [
+                "c15"
+              ]
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r2-play",
+            "v": 2,
+            "kind": "play",
+            "args": {
+              "uid": "c21",
+              "mode": "now",
+              "target": "e22",
+              "picks": [
+                "c7"
+              ]
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r3-play",
+            "v": 3,
+            "kind": "play",
+            "args": {
+              "uid": "c15",
+              "mode": "now",
+              "target": "e22",
+              "picks": [
+                "c16"
+              ]
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "FIXED_MARK_REQUIRED"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r3-play",
+            "v": 3,
+            "kind": "play",
+            "args": {
+              "uid": "c15",
+              "mode": "now",
+              "target": "e22",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "FIXED_MARK_REQUIRED"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r3-play",
+            "v": 3,
+            "kind": "play",
+            "args": {
+              "uid": "c16",
+              "mode": "now",
+              "target": "e22",
               "picks": []
             }
           },
@@ -7360,13 +7876,444 @@
         {
           "command": {
             "scope": "battle",
-            "rid": "r22-play",
-            "v": 22,
+            "rid": "r4-play",
+            "v": 4,
             "kind": "play",
             "args": {
-              "uid": "c10",
+              "uid": "c7",
               "mode": "now",
-              "target": "e21",
+              "target": "e22",
+              "picks": [
+                "c15"
+              ]
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c15",
+              "mode": "now",
+              "target": "e22",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "FIXED_MARK_REQUIRED"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c15",
+              "mode": "now",
+              "target": "e22",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "FIXED_MARK_REQUIRED"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c15",
+              "mode": "now",
+              "target": "e22",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "FIXED_MARK_REQUIRED"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c15",
+              "mode": "now",
+              "target": "e22",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "FIXED_MARK_REQUIRED"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c15",
+              "mode": "now",
+              "target": "e22",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "FIXED_MARK_REQUIRED"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c15",
+              "mode": "now",
+              "target": "e22",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "FIXED_MARK_REQUIRED"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c15",
+              "mode": "now",
+              "target": "e22",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "FIXED_MARK_REQUIRED"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c15",
+              "mode": "now",
+              "target": "e22",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "FIXED_MARK_REQUIRED"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c15",
+              "mode": "now",
+              "target": "e22",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "FIXED_MARK_REQUIRED"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c15",
+              "mode": "now",
+              "target": "e22",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "FIXED_MARK_REQUIRED"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c15",
+              "mode": "now",
+              "target": "e22",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "FIXED_MARK_REQUIRED"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c15",
+              "mode": "now",
+              "target": "e22",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "FIXED_MARK_REQUIRED"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c15",
+              "mode": "now",
+              "target": "e22",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "FIXED_MARK_REQUIRED"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c15",
+              "mode": "now",
+              "target": "e22",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "FIXED_MARK_REQUIRED"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c15",
+              "mode": "now",
+              "target": "e22",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "FIXED_MARK_REQUIRED"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c15",
+              "mode": "now",
+              "target": "e22",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "FIXED_MARK_REQUIRED"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c15",
+              "mode": "now",
+              "target": "e22",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "FIXED_MARK_REQUIRED"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c15",
+              "mode": "now",
+              "target": "e22",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "FIXED_MARK_REQUIRED"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c15",
+              "mode": "now",
+              "target": "e22",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "FIXED_MARK_REQUIRED"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c15",
+              "mode": "now",
+              "target": "e22",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "FIXED_MARK_REQUIRED"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c15",
+              "mode": "now",
+              "target": "e22",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "FIXED_MARK_REQUIRED"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c15",
+              "mode": "now",
+              "target": "e22",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "FIXED_MARK_REQUIRED"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c15",
+              "mode": "now",
+              "target": "e22",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "FIXED_MARK_REQUIRED"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c15",
+              "mode": "now",
+              "target": "e22",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "FIXED_MARK_REQUIRED"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-end",
+            "v": 5,
+            "kind": "end",
+            "args": {}
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r6-play",
+            "v": 6,
+            "kind": "play",
+            "args": {
+              "uid": "c2",
+              "mode": "now",
+              "target": "e22",
+              "picks": [
+                "c13"
+              ]
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r7-play",
+            "v": 7,
+            "kind": "play",
+            "args": {
+              "uid": "c18",
+              "mode": "now",
+              "target": "e22",
               "picks": []
             }
           },
@@ -7378,7 +8325,7 @@
             "scope": "run",
             "kind": "takeCard",
             "args": [
-              "nia_overclock"
+              "sion_index"
             ]
           },
           "outcome": "committed",
@@ -7387,9 +8334,19 @@
         {
           "command": {
             "scope": "run",
-            "kind": "takeRelic",
+            "kind": "takePart",
+            "args": []
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "run",
+            "kind": "applyFoundPart",
             "args": [
-              "unfinished_score"
+              "c_delay",
+              "k19"
             ]
           },
           "outcome": "committed",
@@ -7417,11 +8374,600 @@
         },
         {
           "command": {
+            "scope": "battle",
+            "rid": "r1-play",
+            "v": 1,
+            "kind": "play",
+            "args": {
+              "uid": "c14",
+              "mode": "now",
+              "target": "e23",
+              "picks": [
+                "c9"
+              ]
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r2-play",
+            "v": 2,
+            "kind": "play",
+            "args": {
+              "uid": "c3",
+              "mode": "now",
+              "target": "e24",
+              "picks": []
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r3-play",
+            "v": 3,
+            "kind": "play",
+            "args": {
+              "uid": "c7",
+              "mode": "now",
+              "target": "e24",
+              "picks": [
+                "c9"
+              ]
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r4-play",
+            "v": 4,
+            "kind": "play",
+            "args": {
+              "uid": "c15",
+              "mode": "now",
+              "target": "e23",
+              "picks": []
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c9",
+              "mode": "now",
+              "target": "e23",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c9",
+              "mode": "now",
+              "target": "e24",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c9",
+              "mode": "now",
+              "target": "e24",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c9",
+              "mode": "now",
+              "target": "e24",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c9",
+              "mode": "now",
+              "target": "e24",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c9",
+              "mode": "now",
+              "target": "e24",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c9",
+              "mode": "now",
+              "target": "e24",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c9",
+              "mode": "now",
+              "target": "e23",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c9",
+              "mode": "now",
+              "target": "e24",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c9",
+              "mode": "now",
+              "target": "e23",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c9",
+              "mode": "now",
+              "target": "e23",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c9",
+              "mode": "now",
+              "target": "e24",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c9",
+              "mode": "now",
+              "target": "e23",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c9",
+              "mode": "now",
+              "target": "e23",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c9",
+              "mode": "now",
+              "target": "e23",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c9",
+              "mode": "now",
+              "target": "e23",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c9",
+              "mode": "now",
+              "target": "e24",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c9",
+              "mode": "now",
+              "target": "e23",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c9",
+              "mode": "now",
+              "target": "e24",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c9",
+              "mode": "now",
+              "target": "e24",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c9",
+              "mode": "now",
+              "target": "e23",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c9",
+              "mode": "now",
+              "target": "e23",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c9",
+              "mode": "now",
+              "target": "e23",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c9",
+              "mode": "now",
+              "target": "e23",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c9",
+              "mode": "now",
+              "target": "e24",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c9",
+              "mode": "now",
+              "target": "e23",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-end",
+            "v": 5,
+            "kind": "end",
+            "args": {}
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r6-play",
+            "v": 6,
+            "kind": "play",
+            "args": {
+              "uid": "c6",
+              "mode": "now",
+              "target": "e23",
+              "picks": []
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r7-play",
+            "v": 7,
+            "kind": "play",
+            "args": {
+              "uid": "c1",
+              "mode": "now",
+              "target": "e24",
+              "picks": []
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r8-end",
+            "v": 8,
+            "kind": "end",
+            "args": {}
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r9-play",
+            "v": 9,
+            "kind": "play",
+            "args": {
+              "uid": "c19",
+              "mode": "now",
+              "target": "e24",
+              "picks": [
+                "c8"
+              ]
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r10-play",
+            "v": 10,
+            "kind": "play",
+            "args": {
+              "uid": "c12",
+              "mode": "now",
+              "target": "e23",
+              "picks": []
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r11-play",
+            "v": 11,
+            "kind": "play",
+            "args": {
+              "uid": "c8",
+              "mode": "now",
+              "target": "e23",
+              "picks": [
+                "c4"
+              ]
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
             "scope": "run",
-            "kind": "eventChoose",
+            "kind": "takeCard",
             "args": [
-              1,
-              "k16"
+              "com_overwatch"
             ]
           },
           "outcome": "committed",
@@ -7441,7 +8987,7 @@
             "scope": "run",
             "kind": "enter",
             "args": [
-              "z1f6n1"
+              "z1f6n2"
             ]
           },
           "outcome": "committed",
@@ -7450,13 +8996,50 @@
         {
           "command": {
             "scope": "run",
-            "kind": "forgeRemove",
+            "kind": "buy",
             "args": [
-              "k17"
+              "cards",
+              "ravien_seal"
             ]
           },
           "outcome": "committed",
           "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "run",
+            "kind": "buy",
+            "args": [
+              "cards",
+              "ravien_interest"
+            ]
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "run",
+            "kind": "buy",
+            "args": [
+              "parts",
+              "e_chill"
+            ]
+          },
+          "outcome": "rejected",
+          "errorCode": "COINS_LOW"
+        },
+        {
+          "command": {
+            "scope": "run",
+            "kind": "buy",
+            "args": [
+              "relics",
+              "bronze_cog"
+            ]
+          },
+          "outcome": "rejected",
+          "errorCode": "COINS_LOW"
         },
         {
           "command": {
@@ -7485,12 +9068,10 @@
             "v": 1,
             "kind": "play",
             "args": {
-              "uid": "c13",
+              "uid": "c21",
               "mode": "now",
-              "target": "e21",
-              "picks": [
-                "c16"
-              ]
+              "target": "e26",
+              "picks": []
             }
           },
           "outcome": "committed",
@@ -7503,11 +9084,11 @@
             "v": 2,
             "kind": "play",
             "args": {
-              "uid": "c16",
+              "uid": "c13",
               "mode": "now",
-              "target": "e21",
+              "target": "e26",
               "picks": [
-                "c18"
+                "c23"
               ]
             }
           },
@@ -7523,7 +9104,7 @@
             "args": {
               "uid": "c9",
               "mode": "now",
-              "target": "e21",
+              "target": "e26",
               "picks": []
             }
           },
@@ -7537,12 +9118,10 @@
             "v": 4,
             "kind": "play",
             "args": {
-              "uid": "c15",
+              "uid": "c23",
               "mode": "now",
-              "target": "e21",
-              "picks": [
-                "c10"
-              ]
+              "target": "e26",
+              "picks": []
             }
           },
           "outcome": "committed",
@@ -7555,12 +9134,10 @@
             "v": 5,
             "kind": "play",
             "args": {
-              "uid": "c18",
+              "uid": "c14",
               "mode": "now",
-              "target": "e21",
-              "picks": [
-                "c10"
-              ]
+              "target": "e26",
+              "picks": []
             }
           },
           "outcome": "committed",
@@ -7584,10 +9161,12 @@
             "v": 7,
             "kind": "play",
             "args": {
-              "uid": "c10",
+              "uid": "c4",
               "mode": "now",
-              "target": "e21",
-              "picks": []
+              "target": "e26",
+              "picks": [
+                "c10"
+              ]
             }
           },
           "outcome": "committed",
@@ -7600,11 +9179,11 @@
             "v": 8,
             "kind": "play",
             "args": {
-              "uid": "c2",
+              "uid": "c10",
               "mode": "now",
-              "target": "e21",
+              "target": "e26",
               "picks": [
-                "c8"
+                "c20"
               ]
             }
           },
@@ -7618,12 +9197,10 @@
             "v": 9,
             "kind": "play",
             "args": {
-              "uid": "c3",
+              "uid": "c20",
               "mode": "now",
-              "target": "e21",
-              "picks": [
-                "c11"
-              ]
+              "target": "e26",
+              "picks": []
             }
           },
           "outcome": "committed",
@@ -7636,9 +9213,9 @@
             "v": 10,
             "kind": "play",
             "args": {
-              "uid": "c8",
+              "uid": "c22",
               "mode": "now",
-              "target": "e21",
+              "target": "e26",
               "picks": []
             }
           },
@@ -7648,10 +9225,15 @@
         {
           "command": {
             "scope": "battle",
-            "rid": "r11-end",
+            "rid": "r11-play",
             "v": 11,
-            "kind": "end",
-            "args": {}
+            "kind": "play",
+            "args": {
+              "uid": "c16",
+              "mode": "now",
+              "target": "e26",
+              "picks": []
+            }
           },
           "outcome": "committed",
           "errorCode": null
@@ -7663,9 +9245,9 @@
             "v": 12,
             "kind": "play",
             "args": {
-              "uid": "c5",
+              "uid": "c12",
               "mode": "now",
-              "target": "e21",
+              "target": "e26",
               "picks": []
             }
           },
@@ -7675,15 +9257,10 @@
         {
           "command": {
             "scope": "battle",
-            "rid": "r13-play",
+            "rid": "r13-end",
             "v": 13,
-            "kind": "play",
-            "args": {
-              "uid": "c19",
-              "mode": "now",
-              "target": "e21",
-              "picks": []
-            }
+            "kind": "end",
+            "args": {}
           },
           "outcome": "committed",
           "errorCode": null
@@ -7695,11 +9272,24 @@
             "v": 14,
             "kind": "play",
             "args": {
-              "uid": "c12",
+              "uid": "c3",
               "mode": "now",
-              "target": "e21",
-              "picks": []
+              "target": "e26",
+              "picks": [
+                "c25"
+              ]
             }
+          },
+          "outcome": "rejected",
+          "errorCode": "AP_LOW"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r14-end",
+            "v": 14,
+            "kind": "end",
+            "args": {}
           },
           "outcome": "committed",
           "errorCode": null
@@ -7711,12 +9301,10 @@
             "v": 15,
             "kind": "play",
             "args": {
-              "uid": "c20",
+              "uid": "c5",
               "mode": "now",
-              "target": "e21",
-              "picks": [
-                "c6"
-              ]
+              "target": "e26",
+              "picks": []
             }
           },
           "outcome": "committed",
@@ -7725,10 +9313,15 @@
         {
           "command": {
             "scope": "battle",
-            "rid": "r16-end",
+            "rid": "r16-play",
             "v": 16,
-            "kind": "end",
-            "args": {}
+            "kind": "play",
+            "args": {
+              "uid": "c17",
+              "mode": "now",
+              "target": "e26",
+              "picks": []
+            }
           },
           "outcome": "committed",
           "errorCode": null
@@ -7740,12 +9333,10 @@
             "v": 17,
             "kind": "play",
             "args": {
-              "uid": "c18",
+              "uid": "c11",
               "mode": "now",
-              "target": "e21",
-              "picks": [
-                "c14"
-              ]
+              "target": "e26",
+              "picks": []
             }
           },
           "outcome": "committed",
@@ -7758,9 +9349,9 @@
             "v": 18,
             "kind": "play",
             "args": {
-              "uid": "c17",
+              "uid": "c1",
               "mode": "now",
-              "target": "e21",
+              "target": "e26",
               "picks": []
             }
           },
@@ -7770,17 +9361,10 @@
         {
           "command": {
             "scope": "battle",
-            "rid": "r19-play",
+            "rid": "r19-end",
             "v": 19,
-            "kind": "play",
-            "args": {
-              "uid": "c7",
-              "mode": "now",
-              "target": "e21",
-              "picks": [
-                "c14"
-              ]
-            }
+            "kind": "end",
+            "args": {}
           },
           "outcome": "committed",
           "errorCode": null
@@ -7792,9 +9376,9 @@
             "v": 20,
             "kind": "play",
             "args": {
-              "uid": "c14",
+              "uid": "c10",
               "mode": "now",
-              "target": "e21",
+              "target": "e26",
               "picks": []
             }
           },
@@ -7804,10 +9388,13 @@
         {
           "command": {
             "scope": "battle",
-            "rid": "r21-end",
+            "rid": "r21-ult",
             "v": 21,
-            "kind": "end",
-            "args": {}
+            "kind": "ult",
+            "args": {
+              "actor": "ravien",
+              "target": "e26"
+            }
           },
           "outcome": "committed",
           "errorCode": null
@@ -7819,9 +9406,9 @@
             "v": 22,
             "kind": "play",
             "args": {
-              "uid": "c10",
+              "uid": "c7",
               "mode": "now",
-              "target": "e21",
+              "target": "e26",
               "picks": []
             }
           },
@@ -7835,9 +9422,9 @@
             "v": 23,
             "kind": "play",
             "args": {
-              "uid": "c16",
+              "uid": "c6",
               "mode": "now",
-              "target": "e21",
+              "target": "e26",
               "picks": []
             }
           },
@@ -7851,9 +9438,9 @@
             "v": 24,
             "kind": "play",
             "args": {
-              "uid": "c11",
+              "uid": "c18",
               "mode": "now",
-              "target": "e21",
+              "target": "e26",
               "picks": []
             }
           },
@@ -7863,8 +9450,38 @@
         {
           "command": {
             "scope": "battle",
-            "rid": "r25-end",
+            "rid": "r25-play",
             "v": 25,
+            "kind": "play",
+            "args": {
+              "uid": "c2",
+              "mode": "now",
+              "target": "e26",
+              "picks": []
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r26-ult",
+            "v": 26,
+            "kind": "ult",
+            "args": {
+              "actor": "sion",
+              "target": "e26"
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r27-end",
+            "v": 27,
             "kind": "end",
             "args": {}
           },
@@ -7874,15 +9491,31 @@
         {
           "command": {
             "scope": "battle",
-            "rid": "r26-play",
-            "v": 26,
+            "rid": "r28-play",
+            "v": 28,
             "kind": "play",
             "args": {
-              "uid": "c6",
+              "uid": "c1",
               "mode": "now",
-              "target": "e21",
+              "target": "e26",
+              "picks": []
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r29-play",
+            "v": 29,
+            "kind": "play",
+            "args": {
+              "uid": "c22",
+              "mode": "now",
+              "target": "e26",
               "picks": [
-                "c5"
+                "c17"
               ]
             }
           },
@@ -7891,9 +9524,167 @@
         },
         {
           "command": {
+            "scope": "battle",
+            "rid": "r30-end",
+            "v": 30,
+            "kind": "end",
+            "args": {}
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r31-play",
+            "v": 31,
+            "kind": "play",
+            "args": {
+              "uid": "c25",
+              "mode": "now",
+              "target": "e26",
+              "picks": [
+                "c11"
+              ]
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r32-play",
+            "v": 32,
+            "kind": "play",
+            "args": {
+              "uid": "c11",
+              "mode": "now",
+              "target": "e26",
+              "picks": [
+                "c13"
+              ]
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r33-play",
+            "v": 33,
+            "kind": "play",
+            "args": {
+              "uid": "c12",
+              "mode": "now",
+              "target": "e26",
+              "picks": [
+                "c15"
+              ]
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r34-play",
+            "v": 34,
+            "kind": "play",
+            "args": {
+              "uid": "c15",
+              "mode": "now",
+              "target": "e26",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "FIXED_MARK_REQUIRED"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r34-play",
+            "v": 34,
+            "kind": "play",
+            "args": {
+              "uid": "c13",
+              "mode": "now",
+              "target": "e26",
+              "picks": [
+                "c15"
+              ]
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r35-end",
+            "v": 35,
+            "kind": "end",
+            "args": {}
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r36-ult",
+            "v": 36,
+            "kind": "ult",
+            "args": {
+              "actor": "kaya",
+              "target": "e26"
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r37-play",
+            "v": 37,
+            "kind": "play",
+            "args": {
+              "uid": "c3",
+              "mode": "now",
+              "target": "e26",
+              "picks": []
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r38-play",
+            "v": 38,
+            "kind": "play",
+            "args": {
+              "uid": "c6",
+              "mode": "now",
+              "target": "e26",
+              "picks": []
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
             "scope": "run",
-            "kind": "skipCard",
-            "args": []
+            "kind": "takeCard",
+            "args": [
+              "sion_burnbook"
+            ]
           },
           "outcome": "committed",
           "errorCode": null
@@ -7934,7 +9725,7 @@
             "scope": "run",
             "kind": "enter",
             "args": [
-              "z2f0n2"
+              "z2f0n1"
             ]
           },
           "outcome": "committed",
@@ -7949,10 +9740,8 @@
             "args": {
               "uid": "c11",
               "mode": "now",
-              "target": "e22",
-              "picks": [
-                "c15"
-              ]
+              "target": "e27",
+              "picks": []
             }
           },
           "outcome": "committed",
@@ -7965,249 +9754,9 @@
             "v": 2,
             "kind": "play",
             "args": {
-              "uid": "c3",
+              "uid": "c23",
               "mode": "now",
-              "target": "e22",
-              "picks": [
-                "c5"
-              ]
-            }
-          },
-          "outcome": "rejected",
-          "errorCode": "FIXED_MARK_REQUIRED"
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r2-play",
-            "v": 2,
-            "kind": "play",
-            "args": {
-              "uid": "c15",
-              "mode": "now",
-              "target": "e22",
-              "picks": []
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r3-play",
-            "v": 3,
-            "kind": "play",
-            "args": {
-              "uid": "c17",
-              "mode": "now",
-              "target": "e22",
-              "picks": [
-                "c1"
-              ]
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r4-play",
-            "v": 4,
-            "kind": "play",
-            "args": {
-              "uid": "c5",
-              "mode": "now",
-              "target": "e21",
-              "picks": []
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r5-play",
-            "v": 5,
-            "kind": "play",
-            "args": {
-              "uid": "c3",
-              "mode": "now",
-              "target": "e22",
-              "picks": [
-                "c9"
-              ]
-            }
-          },
-          "outcome": "rejected",
-          "errorCode": "FIXED_MARK_REQUIRED"
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r5-play",
-            "v": 5,
-            "kind": "play",
-            "args": {
-              "uid": "c1",
-              "mode": "now",
-              "target": "e21",
-              "picks": [
-                "c3"
-              ]
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r6-end",
-            "v": 6,
-            "kind": "end",
-            "args": {}
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r7-play",
-            "v": 7,
-            "kind": "play",
-            "args": {
-              "uid": "c4",
-              "mode": "now",
-              "target": "e22",
-              "picks": [
-                "c16"
-              ]
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r8-play",
-            "v": 8,
-            "kind": "play",
-            "args": {
-              "uid": "c16",
-              "mode": "now",
-              "target": "e21",
-              "picks": []
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r9-play",
-            "v": 9,
-            "kind": "play",
-            "args": {
-              "uid": "c6",
-              "mode": "now",
-              "target": "e21",
-              "picks": []
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r10-play",
-            "v": 10,
-            "kind": "play",
-            "args": {
-              "uid": "c7",
-              "mode": "now",
-              "target": "e22",
-              "picks": []
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r11-play",
-            "v": 11,
-            "kind": "play",
-            "args": {
-              "uid": "c13",
-              "mode": "now",
-              "target": "e21",
-              "picks": []
-            }
-          },
-          "outcome": "rejected",
-          "errorCode": "AP_LOW"
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r11-end",
-            "v": 11,
-            "kind": "end",
-            "args": {}
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r12-play",
-            "v": 12,
-            "kind": "play",
-            "args": {
-              "uid": "c8",
-              "mode": "now",
-              "target": "e21",
-              "picks": []
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r13-play",
-            "v": 13,
-            "kind": "play",
-            "args": {
-              "uid": "c19",
-              "mode": "now",
-              "target": "e21",
-              "picks": []
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r14-play",
-            "v": 14,
-            "kind": "play",
-            "args": {
-              "uid": "c10",
-              "mode": "now",
-              "target": "e21",
+              "target": "e27",
               "picks": [
                 "c20"
               ]
@@ -8219,221 +9768,15 @@
         {
           "command": {
             "scope": "battle",
-            "rid": "r15-play",
-            "v": 15,
-            "kind": "play",
-            "args": {
-              "uid": "c6",
-              "mode": "now",
-              "target": "e22",
-              "picks": []
-            }
-          },
-          "outcome": "rejected",
-          "errorCode": "AP_LOW"
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r15-end",
-            "v": 15,
-            "kind": "end",
-            "args": {}
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r16-play",
-            "v": 16,
-            "kind": "play",
-            "args": {
-              "uid": "c9",
-              "mode": "now",
-              "target": "e22",
-              "picks": []
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r17-play",
-            "v": 17,
-            "kind": "play",
-            "args": {
-              "uid": "c18",
-              "mode": "now",
-              "target": "e22",
-              "picks": []
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r18-play",
-            "v": 18,
-            "kind": "play",
-            "args": {
-              "uid": "c2",
-              "mode": "now",
-              "target": "e22",
-              "picks": []
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r19-play",
-            "v": 19,
-            "kind": "play",
-            "args": {
-              "uid": "c15",
-              "mode": "now",
-              "target": "e22",
-              "picks": []
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r20-play",
-            "v": 20,
-            "kind": "play",
-            "args": {
-              "uid": "c5",
-              "mode": "now",
-              "target": "e22",
-              "picks": []
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r21-play",
-            "v": 21,
-            "kind": "play",
-            "args": {
-              "uid": "c11",
-              "mode": "now",
-              "target": "e22",
-              "picks": []
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r22-play",
-            "v": 22,
-            "kind": "play",
-            "args": {
-              "uid": "c12",
-              "mode": "now",
-              "target": "e22",
-              "picks": []
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "run",
-            "kind": "takeCard",
-            "args": [
-              "kaya_interrogate"
-            ]
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "run",
-            "kind": "proceed",
-            "args": []
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "run",
-            "kind": "enter",
-            "args": [
-              "z2f1n2"
-            ]
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r1-play",
-            "v": 1,
-            "kind": "play",
-            "args": {
-              "uid": "c11",
-              "mode": "now",
-              "target": "e23",
-              "picks": [
-                "c16"
-              ]
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r2-play",
-            "v": 2,
-            "kind": "play",
-            "args": {
-              "uid": "c1",
-              "mode": "now",
-              "target": "e23",
-              "picks": [
-                "c19"
-              ]
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
             "rid": "r3-play",
             "v": 3,
             "kind": "play",
             "args": {
-              "uid": "c19",
+              "uid": "c20",
               "mode": "now",
-              "target": "e23",
+              "target": "e27",
               "picks": [
-                "c15"
+                "c6"
               ]
             }
           },
@@ -8447,11 +9790,11 @@
             "v": 4,
             "kind": "play",
             "args": {
-              "uid": "c15",
+              "uid": "c8",
               "mode": "now",
-              "target": "e22",
+              "target": "e28",
               "picks": [
-                "c16"
+                "c6"
               ]
             }
           },
@@ -8467,41 +9810,7 @@
             "args": {
               "uid": "c3",
               "mode": "now",
-              "target": "e23",
-              "picks": [
-                "c16"
-              ]
-            }
-          },
-          "outcome": "rejected",
-          "errorCode": "FIXED_MARK_REQUIRED"
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r5-play",
-            "v": 5,
-            "kind": "play",
-            "args": {
-              "uid": "c3",
-              "mode": "now",
-              "target": "e23",
-              "picks": []
-            }
-          },
-          "outcome": "rejected",
-          "errorCode": "FIXED_MARK_REQUIRED"
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r5-play",
-            "v": 5,
-            "kind": "play",
-            "args": {
-              "uid": "c16",
-              "mode": "now",
-              "target": "e22",
+              "target": "e27",
               "picks": []
             }
           },
@@ -8515,9 +9824,9 @@
             "v": 6,
             "kind": "play",
             "args": {
-              "uid": "c2",
+              "uid": "c6",
               "mode": "now",
-              "target": "e22",
+              "target": "e27",
               "picks": []
             }
           },
@@ -8542,11 +9851,11 @@
             "v": 8,
             "kind": "play",
             "args": {
-              "uid": "c20",
+              "uid": "c10",
               "mode": "now",
-              "target": "e23",
+              "target": "e27",
               "picks": [
-                "c6"
+                "c7"
               ]
             }
           },
@@ -8560,12 +9869,606 @@
             "v": 9,
             "kind": "play",
             "args": {
+              "uid": "c24",
+              "mode": "now",
+              "target": "e27",
+              "picks": []
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r10-end",
+            "v": 10,
+            "kind": "end",
+            "args": {}
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r11-play",
+            "v": 11,
+            "kind": "play",
+            "args": {
+              "uid": "c1",
+              "mode": "now",
+              "target": "e27",
+              "picks": []
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r12-play",
+            "v": 12,
+            "kind": "play",
+            "args": {
+              "uid": "c4",
+              "mode": "now",
+              "target": "e27",
+              "picks": [
+                "c26"
+              ]
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r13-play",
+            "v": 13,
+            "kind": "play",
+            "args": {
+              "uid": "c9",
+              "mode": "now",
+              "target": "e28",
+              "picks": [
+                "c17"
+              ]
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r14-ult",
+            "v": 14,
+            "kind": "ult",
+            "args": {
+              "actor": "ravien",
+              "target": "e28"
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "run",
+            "kind": "skipCard",
+            "args": []
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "run",
+            "kind": "takePart",
+            "args": []
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "run",
+            "kind": "proceed",
+            "args": []
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "run",
+            "kind": "enter",
+            "args": [
+              "z2f1n1"
+            ]
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r1-play",
+            "v": 1,
+            "kind": "play",
+            "args": {
+              "uid": "c3",
+              "mode": "now",
+              "target": "e27",
+              "picks": []
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r2-play",
+            "v": 2,
+            "kind": "play",
+            "args": {
+              "uid": "c18",
+              "mode": "now",
+              "target": "e27",
+              "picks": []
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r3-play",
+            "v": 3,
+            "kind": "play",
+            "args": {
+              "uid": "c1",
+              "mode": "now",
+              "target": "e27",
+              "picks": [
+                "c17"
+              ]
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r4-play",
+            "v": 4,
+            "kind": "play",
+            "args": {
+              "uid": "c11",
+              "mode": "now",
+              "target": "e27",
+              "picks": []
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-end",
+            "v": 5,
+            "kind": "end",
+            "args": {}
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r6-play",
+            "v": 6,
+            "kind": "play",
+            "args": {
+              "uid": "c20",
+              "mode": "now",
+              "target": "e27",
+              "picks": []
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r7-play",
+            "v": 7,
+            "kind": "play",
+            "args": {
+              "uid": "c13",
+              "mode": "now",
+              "target": "e27",
+              "picks": [
+                "c9"
+              ]
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r8-play",
+            "v": 8,
+            "kind": "play",
+            "args": {
+              "uid": "c7",
+              "mode": "now",
+              "target": "e27",
+              "picks": [
+                "c9"
+              ]
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r9-play",
+            "v": 9,
+            "kind": "play",
+            "args": {
+              "uid": "c9",
+              "mode": "now",
+              "target": "e27",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "RESTRAINT_UNAVAILABLE"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r9-play",
+            "v": 9,
+            "kind": "play",
+            "args": {
+              "uid": "c26",
+              "mode": "now",
+              "target": "e27",
+              "picks": [
+                "c8"
+              ]
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r10-end",
+            "v": 10,
+            "kind": "end",
+            "args": {}
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r11-play",
+            "v": 11,
+            "kind": "play",
+            "args": {
+              "uid": "c15",
+              "mode": "now",
+              "target": "e27",
+              "picks": [
+                "c4"
+              ]
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "AP_LOW"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r11-end",
+            "v": 11,
+            "kind": "end",
+            "args": {}
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r12-play",
+            "v": 12,
+            "kind": "play",
+            "args": {
+              "uid": "c22",
+              "mode": "now",
+              "target": "e27",
+              "picks": [
+                "c6"
+              ]
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r13-play",
+            "v": 13,
+            "kind": "play",
+            "args": {
+              "uid": "c16",
+              "mode": "now",
+              "target": "e27",
+              "picks": []
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r14-play",
+            "v": 14,
+            "kind": "play",
+            "args": {
+              "uid": "c14",
+              "mode": "now",
+              "target": "e27",
+              "picks": [
+                "c23"
+              ]
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r15-play",
+            "v": 15,
+            "kind": "play",
+            "args": {
               "uid": "c6",
               "mode": "now",
-              "target": "e22",
+              "target": "e27",
+              "picks": []
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r16-ult",
+            "v": 16,
+            "kind": "ult",
+            "args": {
+              "actor": "sion",
+              "target": "e27"
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "run",
+            "kind": "takeCard",
+            "args": [
+              "kaya_tracking"
+            ]
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "run",
+            "kind": "proceed",
+            "args": []
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "run",
+            "kind": "enter",
+            "args": [
+              "z2f2n1"
+            ]
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r1-play",
+            "v": 1,
+            "kind": "play",
+            "args": {
+              "uid": "c3",
+              "mode": "now",
+              "target": "e29",
               "picks": [
-                "c10"
+                "c18"
               ]
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r2-play",
+            "v": 2,
+            "kind": "play",
+            "args": {
+              "uid": "c14",
+              "mode": "now",
+              "target": "e28",
+              "picks": []
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r3-play",
+            "v": 3,
+            "kind": "play",
+            "args": {
+              "uid": "c1",
+              "mode": "now",
+              "target": "e28",
+              "picks": []
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r4-play",
+            "v": 4,
+            "kind": "play",
+            "args": {
+              "uid": "c18",
+              "mode": "now",
+              "target": "e29",
+              "picks": [
+                "c4"
+              ]
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r5-play",
+            "v": 5,
+            "kind": "play",
+            "args": {
+              "uid": "c12",
+              "mode": "now",
+              "target": "e29",
+              "picks": [
+                "c4"
+              ]
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r6-play",
+            "v": 6,
+            "kind": "play",
+            "args": {
+              "uid": "c4",
+              "mode": "now",
+              "target": "e28",
+              "picks": []
+            }
+          },
+          "outcome": "rejected",
+          "errorCode": "AP_LOW"
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r6-end",
+            "v": 6,
+            "kind": "end",
+            "args": {}
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r7-play",
+            "v": 7,
+            "kind": "play",
+            "args": {
+              "uid": "c7",
+              "mode": "now",
+              "target": "e29",
+              "picks": [
+                "c24"
+              ]
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r8-play",
+            "v": 8,
+            "kind": "play",
+            "args": {
+              "uid": "c17",
+              "mode": "now",
+              "target": "e28",
+              "picks": [
+                "c24"
+              ]
+            }
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "battle",
+            "rid": "r9-play",
+            "v": 9,
+            "kind": "play",
+            "args": {
+              "uid": "c24",
+              "mode": "now",
+              "target": "e28",
+              "picks": []
             }
           },
           "outcome": "committed",
@@ -8578,9 +10481,9 @@
             "v": 10,
             "kind": "play",
             "args": {
-              "uid": "c9",
+              "uid": "c16",
               "mode": "now",
-              "target": "e23",
+              "target": "e28",
               "picks": []
             }
           },
@@ -8594,12 +10497,10 @@
             "v": 11,
             "kind": "play",
             "args": {
-              "uid": "c18",
+              "uid": "c23",
               "mode": "now",
-              "target": "e22",
-              "picks": [
-                "c7"
-              ]
+              "target": "e28",
+              "picks": []
             }
           },
           "outcome": "committed",
@@ -8612,9 +10513,9 @@
             "v": 12,
             "kind": "play",
             "args": {
-              "uid": "c14",
+              "uid": "c19",
               "mode": "now",
-              "target": "e22",
+              "target": "e29",
               "picks": []
             }
           },
@@ -8639,10 +10540,12 @@
             "v": 14,
             "kind": "play",
             "args": {
-              "uid": "c17",
+              "uid": "c20",
               "mode": "now",
-              "target": "e22",
-              "picks": []
+              "target": "e29",
+              "picks": [
+                "c26"
+              ]
             }
           },
           "outcome": "committed",
@@ -8655,903 +10558,9 @@
             "v": 15,
             "kind": "play",
             "args": {
-              "uid": "c12",
-              "mode": "now",
-              "target": "e22",
-              "picks": []
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r16-play",
-            "v": 16,
-            "kind": "play",
-            "args": {
-              "uid": "c5",
-              "mode": "now",
-              "target": "e22",
-              "picks": []
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r17-play",
-            "v": 17,
-            "kind": "play",
-            "args": {
-              "uid": "c10",
-              "mode": "now",
-              "target": "e22",
-              "picks": [
-                "c13"
-              ]
-            }
-          },
-          "outcome": "rejected",
-          "errorCode": "AP_LOW"
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r17-play",
-            "v": 17,
-            "kind": "play",
-            "args": {
-              "uid": "c21",
-              "mode": "now",
-              "target": "e22",
-              "picks": [
-                "c10"
-              ]
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r18-end",
-            "v": 18,
-            "kind": "end",
-            "args": {}
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r19-play",
-            "v": 19,
-            "kind": "play",
-            "args": {
-              "uid": "c17",
-              "mode": "now",
-              "target": "e23",
-              "picks": [
-                "c14"
-              ]
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r20-play",
-            "v": 20,
-            "kind": "play",
-            "args": {
-              "uid": "c5",
-              "mode": "now",
-              "target": "e23",
-              "picks": []
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r21-play",
-            "v": 21,
-            "kind": "play",
-            "args": {
-              "uid": "c7",
-              "mode": "now",
-              "target": "e23",
-              "picks": [
-                "c14"
-              ]
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r22-play",
-            "v": 22,
-            "kind": "play",
-            "args": {
-              "uid": "c20",
-              "mode": "now",
-              "target": "e22",
-              "picks": []
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r23-ult",
-            "v": 23,
-            "kind": "ult",
-            "args": {
-              "actor": "nia",
-              "target": "e22"
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r24-play",
-            "v": 24,
-            "kind": "play",
-            "args": {
-              "uid": "c18",
-              "mode": "now",
-              "target": "e23",
-              "picks": []
-            }
-          },
-          "outcome": "rejected",
-          "errorCode": "AP_LOW"
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r24-end",
-            "v": 24,
-            "kind": "end",
-            "args": {}
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r25-play",
-            "v": 25,
-            "kind": "play",
-            "args": {
-              "uid": "c10",
-              "mode": "now",
-              "target": "e22",
-              "picks": []
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r26-play",
-            "v": 26,
-            "kind": "play",
-            "args": {
-              "uid": "c1",
-              "mode": "now",
-              "target": "e23",
-              "picks": [
-                "c3"
-              ]
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r27-play",
-            "v": 27,
-            "kind": "play",
-            "args": {
-              "uid": "c9",
-              "mode": "now",
-              "target": "e23",
-              "picks": []
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r28-end",
-            "v": 28,
-            "kind": "end",
-            "args": {}
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r29-play",
-            "v": 29,
-            "kind": "play",
-            "args": {
-              "uid": "c8",
-              "mode": "now",
-              "target": "e23",
-              "picks": []
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r30-play",
-            "v": 30,
-            "kind": "play",
-            "args": {
-              "uid": "c18",
-              "mode": "now",
-              "target": "e23",
-              "picks": [
-                "c21"
-              ]
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r31-play",
-            "v": 31,
-            "kind": "play",
-            "args": {
-              "uid": "c14",
-              "mode": "now",
-              "target": "e23",
-              "picks": []
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r32-play",
-            "v": 32,
-            "kind": "play",
-            "args": {
-              "uid": "c21",
-              "mode": "now",
-              "target": "e23",
-              "picks": []
-            }
-          },
-          "outcome": "rejected",
-          "errorCode": "FIXED_MARK_REQUIRED"
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r32-play",
-            "v": 32,
-            "kind": "play",
-            "args": {
-              "uid": "c7",
-              "mode": "now",
-              "target": "e23",
-              "picks": [
-                "c5"
-              ]
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r33-play",
-            "v": 33,
-            "kind": "play",
-            "args": {
-              "uid": "c5",
-              "mode": "now",
-              "target": "e23",
-              "picks": [
-                "c21"
-              ]
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r34-end",
-            "v": 34,
-            "kind": "end",
-            "args": {}
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r35-play",
-            "v": 35,
-            "kind": "play",
-            "args": {
-              "uid": "c15",
-              "mode": "now",
-              "target": "e23",
-              "picks": []
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r36-play",
-            "v": 36,
-            "kind": "play",
-            "args": {
-              "uid": "c16",
-              "mode": "now",
-              "target": "e23",
-              "picks": [
-                "c17"
-              ]
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r37-play",
-            "v": 37,
-            "kind": "play",
-            "args": {
-              "uid": "c17",
-              "mode": "now",
-              "target": "e23",
-              "picks": [
-                "c13"
-              ]
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r38-play",
-            "v": 38,
-            "kind": "play",
-            "args": {
-              "uid": "c18",
-              "mode": "now",
-              "target": "e23",
-              "picks": []
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r39-play",
-            "v": 39,
-            "kind": "play",
-            "args": {
-              "uid": "c12",
-              "mode": "now",
-              "target": "e23",
-              "picks": [
-                "c3"
-              ]
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r40-end",
-            "v": 40,
-            "kind": "end",
-            "args": {}
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r41-play",
-            "v": 41,
-            "kind": "play",
-            "args": {
-              "uid": "c21",
-              "mode": "now",
-              "target": "e23",
-              "picks": [
-                "c14"
-              ]
-            }
-          },
-          "outcome": "rejected",
-          "errorCode": "FIXED_MARK_REQUIRED"
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r41-play",
-            "v": 41,
-            "kind": "play",
-            "args": {
-              "uid": "c9",
-              "mode": "now",
-              "target": "e23",
-              "picks": []
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r42-play",
-            "v": 42,
-            "kind": "play",
-            "args": {
-              "uid": "c11",
-              "mode": "now",
-              "target": "e23",
-              "picks": [
-                "c8"
-              ]
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r43-play",
-            "v": 43,
-            "kind": "play",
-            "args": {
-              "uid": "c14",
-              "mode": "now",
-              "target": "e23",
-              "picks": []
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r44-play",
-            "v": 44,
-            "kind": "play",
-            "args": {
-              "uid": "c21",
-              "mode": "now",
-              "target": "e23",
-              "picks": []
-            }
-          },
-          "outcome": "rejected",
-          "errorCode": "FIXED_MARK_REQUIRED"
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r44-play",
-            "v": 44,
-            "kind": "play",
-            "args": {
-              "uid": "c4",
-              "mode": "now",
-              "target": "e23",
-              "picks": [
-                "c8"
-              ]
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r45-play",
-            "v": 45,
-            "kind": "play",
-            "args": {
-              "uid": "c21",
-              "mode": "now",
-              "target": "e23",
-              "picks": [
-                "c1"
-              ]
-            }
-          },
-          "outcome": "rejected",
-          "errorCode": "FIXED_MARK_REQUIRED"
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r45-play",
-            "v": 45,
-            "kind": "play",
-            "args": {
-              "uid": "c21",
-              "mode": "now",
-              "target": "e23",
-              "picks": []
-            }
-          },
-          "outcome": "rejected",
-          "errorCode": "FIXED_MARK_REQUIRED"
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r45-play",
-            "v": 45,
-            "kind": "play",
-            "args": {
-              "uid": "c1",
-              "mode": "now",
-              "target": "e23",
-              "picks": []
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "run",
-            "kind": "takeCard",
-            "args": [
-              "nia_tune"
-            ]
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "run",
-            "kind": "applyFoundPart",
-            "args": [
-              "c_delay",
-              "k3"
-            ]
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "run",
-            "kind": "proceed",
-            "args": []
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "run",
-            "kind": "enter",
-            "args": [
-              "z2f2n2"
-            ]
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r1-play",
-            "v": 1,
-            "kind": "play",
-            "args": {
               "uid": "c2",
               "mode": "now",
-              "target": "e23",
-              "picks": [
-                "c19"
-              ]
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r2-play",
-            "v": 2,
-            "kind": "play",
-            "args": {
-              "uid": "c17",
-              "mode": "now",
-              "target": "e23",
-              "picks": []
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r3-play",
-            "v": 3,
-            "kind": "play",
-            "args": {
-              "uid": "c9",
-              "mode": "now",
-              "target": "e24",
-              "picks": []
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r4-play",
-            "v": 4,
-            "kind": "play",
-            "args": {
-              "uid": "c22",
-              "mode": "now",
-              "target": "e24",
-              "picks": []
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r5-play",
-            "v": 5,
-            "kind": "play",
-            "args": {
-              "uid": "c14",
-              "mode": "now",
-              "target": "e24",
-              "picks": [
-                "c15"
-              ]
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r6-play",
-            "v": 6,
-            "kind": "play",
-            "args": {
-              "uid": "c19",
-              "mode": "now",
-              "target": "e23",
-              "picks": []
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r7-end",
-            "v": 7,
-            "kind": "end",
-            "args": {}
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r8-play",
-            "v": 8,
-            "kind": "play",
-            "args": {
-              "uid": "c11",
-              "mode": "now",
-              "target": "e23",
-              "picks": [
-                "c12"
-              ]
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r9-play",
-            "v": 9,
-            "kind": "play",
-            "args": {
-              "uid": "c21",
-              "mode": "now",
-              "target": "e23",
-              "picks": [
-                "c18"
-              ]
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r10-play",
-            "v": 10,
-            "kind": "play",
-            "args": {
-              "uid": "c16",
-              "mode": "now",
-              "target": "e24",
-              "picks": []
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r11-play",
-            "v": 11,
-            "kind": "play",
-            "args": {
-              "uid": "c18",
-              "mode": "now",
-              "target": "e24",
-              "picks": []
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r12-play",
-            "v": 12,
-            "kind": "play",
-            "args": {
-              "uid": "c12",
-              "mode": "now",
-              "target": "e24",
-              "picks": []
-            }
-          },
-          "outcome": "rejected",
-          "errorCode": "AP_LOW"
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r12-play",
-            "v": 12,
-            "kind": "play",
-            "args": {
-              "uid": "c3",
-              "mode": "now",
-              "target": "e23",
-              "picks": []
-            }
-          },
-          "outcome": "rejected",
-          "errorCode": "AP_LOW"
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r12-end",
-            "v": 12,
-            "kind": "end",
-            "args": {}
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r13-play",
-            "v": 13,
-            "kind": "play",
-            "args": {
-              "uid": "c10",
-              "mode": "now",
-              "target": "e23",
-              "picks": [
-                "c8"
-              ]
-            }
-          },
-          "outcome": "committed",
-          "errorCode": null
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r14-play",
-            "v": 14,
-            "kind": "play",
-            "args": {
-              "uid": "c13",
-              "mode": "now",
-              "target": "e24",
+              "target": "e29",
               "picks": [
                 "c6"
               ]
@@ -9563,15 +10572,15 @@
         {
           "command": {
             "scope": "battle",
-            "rid": "r15-play",
-            "v": 15,
+            "rid": "r16-play",
+            "v": 16,
             "kind": "play",
             "args": {
-              "uid": "c7",
+              "uid": "c10",
               "mode": "now",
-              "target": "e23",
+              "target": "e28",
               "picks": [
-                "c3"
+                "c8"
               ]
             }
           },
@@ -9581,32 +10590,12 @@
         {
           "command": {
             "scope": "battle",
-            "rid": "r16-play",
-            "v": 16,
-            "kind": "play",
+            "rid": "r17-ult",
+            "v": 17,
+            "kind": "ult",
             "args": {
-              "uid": "c3",
-              "mode": "now",
-              "target": "e24",
-              "picks": [
-                "c8"
-              ]
-            }
-          },
-          "outcome": "rejected",
-          "errorCode": "FIXED_MARK_REQUIRED"
-        },
-        {
-          "command": {
-            "scope": "battle",
-            "rid": "r16-play",
-            "v": 16,
-            "kind": "play",
-            "args": {
-              "uid": "c13",
-              "mode": "now",
-              "target": "e24",
-              "picks": []
+              "actor": "ravien",
+              "target": "e29"
             }
           },
           "outcome": "committed",
@@ -9615,9 +10604,19 @@
         {
           "command": {
             "scope": "run",
-            "kind": "takeCard",
+            "kind": "skipCard",
+            "args": []
+          },
+          "outcome": "committed",
+          "errorCode": null
+        },
+        {
+          "command": {
+            "scope": "run",
+            "kind": "applyFoundPart",
             "args": [
-              "sera_pull"
+              "e_pierce",
+              "k21"
             ]
           },
           "outcome": "committed",
@@ -9637,7 +10636,7 @@
             "scope": "run",
             "kind": "enter",
             "args": [
-              "z2f3n2"
+              "z2f3n1"
             ]
           },
           "outcome": "committed",
@@ -9649,7 +10648,7 @@
         "initialBattleHpLoss": 2,
         "source": "infinite_circuit",
         "terminalPhase": "DEFEAT",
-        "lastNode": "z2f3n2"
+        "lastNode": "z2f3n1"
       }
     }
   },

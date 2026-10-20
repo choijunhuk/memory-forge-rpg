@@ -40,9 +40,9 @@ test('seven fixed gen_traces inputs replay from a fresh Create through actual co
   assert.deepEqual(fixture.cases.map(c => [c.id, c.seed, c.length, c.memoryPolicy]), [
     ['seed1000-short-legacy', 1000, 'short', 'legacy'], ['seed1000-full-legacy', 1000, 'full', 'legacy'],
     ['seed1102-full-legacy', 1102, 'full', 'legacy'], ['seed1102-full-v2', 1102, 'full', 'v2'],
-    ['seed3561-full-legacy', 3561, 'full', 'legacy'], ['seed3561-full-v2', 3561, 'full', 'v2'], ['seed2992-full-legacy', 2992, 'full', 'legacy'],
+    ['seed4488-full-legacy', 4488, 'full', 'legacy'], ['seed4488-full-v2', 4488, 'full', 'v2'], ['seed5748-full-legacy', 5748, 'full', 'legacy'],
   ]);
-  assert.deepEqual(fixture.denominators, { cases: 7, seeds: [1000, 1102, 3561, 2992], policies: { legacy: 5, v2: 2 }, lengths: { short: 1, full: 6 } });
+  assert.deepEqual(fixture.denominators, { cases: 7, seeds: [1000, 1102, 4488, 5748], policies: { legacy: 5, v2: 2 }, lengths: { short: 1, full: 6 } });
   assert.deepEqual(Object.values(fixture.sources).map(source => source.path), ['data/game_data.json', 'engine/rules-core.js', 'proposals/memory_v2.cjs',
     'tools/gen_traces.mjs', 'engine/tests/fuzz_runs.mjs', 'tools/gen_run_create_vectors.mjs', 'tools/gen_run_progression_vectors.mjs']);
   for (const source of Object.values(fixture.sources)) assert.equal(source.sha256, sha256(readFileSync(new URL(`../../${source.path}`, import.meta.url))), source.path);
@@ -108,7 +108,7 @@ test('seven fixed gen_traces inputs replay from a fresh Create through actual co
 
 test('a newly earned AP bonus reaches only the next battle first turn, and begin-defeat closes through the normal finalizer', () => {
   const { apPerTurn, apMax } = data.rules, rift = data.events.find(e => e.id === 'ev_rift');
-  const observed = { beginEndedBattles: [], apBonusEarned: [], apBonusConsumed: [] }, rerun = 'seed2992-full-legacy', rerunStarts = [];
+  const observed = { beginEndedBattles: [], apBonusEarned: [], apBonusConsumed: [] }, rerun = 'seed5748-full-legacy', rerunStarts = [];
   for (const c of fixture.cases) for (const { step, before, after } of walk(c)) {
     if (step.outcome !== 'committed') continue;
     const { kind, args } = step.command, b = before.run, a = after.run, where = `${c.id}#${step.index}`;
@@ -129,7 +129,7 @@ test('a newly earned AP bonus reaches only the next battle first turn, and begin
     if (b.runFlags.nextApBonus) observed.apBonusConsumed.push({ caseId: c.id, step: step.index, carried: b.runFlags.nextApBonus, firstTurnAp: a.battle ? a.battle.ap : null });
     if (a.phase !== 'BATTLE') observed.beginEndedBattles.push({ caseId: c.id, step: step.index, nodeId: node.id, type: node.type, phase: a.phase });
   }
-  // Seed 2992 earns the bonus twice in the same Run, each from zero. Each gain is spent on the very next battle's
+  // Seed 5748 earns the bonus twice in the same Run, each from zero. Each gain is spent on the very next battle's
   // first turn (base 4 + 2 = 6), and the five real battles between them start at the base 4 (no refund or accumulation).
   assert.deepEqual([apPerTurn, rift.choices[0].fx.nextApBonus], [4, 2], 'original §5 base AP and §7.7 ev_rift bonus');
   const mine = list => list.filter(e => e.caseId === rerun);
@@ -143,7 +143,7 @@ test('a newly earned AP bonus reaches only the next battle first turn, and begin
   assert.deepEqual(rerunStarts.find(s => s.step > earned[1].step), { step: consumed[1].step, carried: 2, ap: 6, relics: 0 }, `${rerun}: second gain spent by the next battle`);
   assert.deepEqual(observed, fixture.coverage.events);
 
-  for (const id of ['seed3561-full-legacy', 'seed3561-full-v2']) {
+  for (const id of ['seed4488-full-legacy', 'seed4488-full-v2']) {
     const c = row(id), hits = observed.beginEndedBattles.filter(e => e.caseId === id);
     assert.equal(hits.length, 1, `${id}: exactly one battle ends during begin`);
     const index = hits[0].step, { step, before, after } = [...walk(c)][index], node = nodeOf(before.run, step.command.args[0]);

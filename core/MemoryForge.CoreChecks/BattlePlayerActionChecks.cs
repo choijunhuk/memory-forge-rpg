@@ -429,7 +429,8 @@ static class BattlePlayerActionChecks
         ActualStep Play(string id, string card) => actual[id].Steps.Single(s => s.Outcome == "committed" && Text(s.Request, "kind") == "play" && s.Response != null && Array(s.Response["ev"]).Cast<Dictionary<string, object?>>().Any(e => e["e"] is "play" && e["id"] is string cardId && cardId == card));
         List<ActualStep> Ends(string id) => actual[id].Steps.Where(s => s.Outcome == "committed" && Text(s.Request, "kind") == "end").ToList();
         var bulwark = Play("edge-bulwark-retention", "harin_bulwark");
-        Check(bulwark.Before.Block == 26 && bulwark.Before.Counter == 2 && bulwark.State.Events.Single(e => e.E == "play").Cost == 2 && bulwark.State.Powers.Single(p => p.Id == "bulwark").Keep == 10 && bulwark.State.Cards["c1"].Used == 1 && bulwark.State.Zones.Exhaust.SequenceEqual(new[] { "c1" }) && bulwark.State.Actors.Single(a => a.Id == "harin").Gauge == 10, "independent actual bulwark costs2/resolves/exhausts with authored keep10");
+        // Gauge literals below are gaugePerCard 20 (docs/RULES_NOW_PLAY.md §7, was 10).
+        Check(bulwark.Before.Block == 26 && bulwark.Before.Counter == 2 && bulwark.State.Events.Single(e => e.E == "play").Cost == 2 && bulwark.State.Powers.Single(p => p.Id == "bulwark").Keep == 10 && bulwark.State.Cards["c1"].Used == 1 && bulwark.State.Zones.Exhaust.SequenceEqual(new[] { "c1" }) && bulwark.State.Actors.Single(a => a.Id == "harin").Gauge == 20, "independent actual bulwark costs2/resolves/exhausts with authored keep10");
         var kept = Ends("edge-bulwark-retention")[0].State;
         Check(kept.Turn == 2 && kept.Block == 10 && kept.Counter == 0, "independent real play→end retains bulwark10 and clears ordinary counter");
         // RULES_NOW_PLAY (2026-10-19): the pull/reservation edges are gone; collateral now books debt1 on the shared loan sequence.
@@ -446,7 +447,7 @@ static class BattlePlayerActionChecks
         var lens = actual["edge-reserved-break-relics"].Steps;
         Check(lens[0].State.Enemies[0].Brk - lens[1].State.Enemies[0].Brk == 3 + 1 && lens[2].State.Enemies[0].Brk - lens[3].State.Enemies[0].Brk == 3 + 1 + 1, "independent precision_lens adds break+1 only to the held sera_timed (eye_of_rift +1 both)");
         var stamp = actual["edge-held-time-stamp-weapon"].Steps;
-        Check(stamp[1].State.Events.Single(e => e.E == "dmg").N == 20 && stamp[3].State.Events.Single(e => e.E == "dmg").N == 20 * 11200 / 10000 && stamp[3].State.Actors[0].Gauge - stamp[2].State.Actors[0].Gauge == 10 + 5, "independent w_reservedDmg +12% and time_stamp gauge+5 apply only to the held card");
+        Check(stamp[1].State.Events.Single(e => e.E == "dmg").N == 20 && stamp[3].State.Events.Single(e => e.E == "dmg").N == 20 * 11200 / 10000 && stamp[3].State.Actors[0].Gauge - stamp[2].State.Actors[0].Gauge == 20 + 5, "independent w_reservedDmg +12% and time_stamp gauge+5 apply only to the held card");
         var clock = actual["edge-empty-clock-first-card"].Steps;
         Check(clock[1].State.Events.Single(e => e.E == "play").Cost == 0 && clock[2].State.Events.Single(e => e.E == "play").Cost == 1, "independent empty_clock discounts only the first now card of the battle");
         var deferred = Play("edge-defer-debt", "ravien_defer").State; var debt = deferred.Debts.Single();

@@ -19,7 +19,7 @@ const data = {
   rules: {
     apPerTurn: 4, apMax: 9, handDraw: 5, handMax: 10,
     slots: { next: 2, after: 1, nextMax: 3, afterMax: 2, totalMax: 5 },
-    debtCap: 4, growthCapPerBattle: 3, gaugeMax: 100, gaugePerCard: 10, gaugeTurnCap: 30,
+    debtCap: 4, growthCapPerBattle: 3, gaugeMax: 100, gaugePerCard: 20, gaugeTurnCap: 50, // RULES_NOW_PLAY: ultimates as often as before
     breakApBonus: 1, breakApBonusMaxPerTurn: 2, brokenDamageBps: 2500, vulnerableBps: 2500, weakBps: 2500,
     upgradeMult: 1.3, capacityBase: 6,
     memoryCost: { addB: 1, addA: 2, addS: 3, addCommon: 1, upgrade: 1, partCommon: 1, partRare: 2, evolution: 2, remove: 1 },

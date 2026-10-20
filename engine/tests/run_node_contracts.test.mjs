@@ -221,11 +221,11 @@ test('continuation witnesses: separate real full runs recorded on engine 653d, s
   const { sourceEngine, ...runs } = vectors.continuations;
   assert.equal(sourceEngine, '653dfec4959d1ec759142ae8de24b08c6844b1db366a748fb9401829129cd72a');
   const shape = Object.fromEntries(Object.entries(runs).map(([name, c]) => [name, [c.setup.seed, c.setup.length, c.setup.memoryPolicy, c.prefix.length]]));
-  assert.deepEqual(shape, { nextEvent: [4211, 'full', 'legacy', 79], openingDefeat: [3561, 'full', 'legacy', 213] });
+  assert.deepEqual(shape, { nextEvent: [4211, 'full', 'legacy', 79], openingDefeat: [4488, 'full', 'legacy', 279] });
   for (const c of Object.values(runs)) for (const step of c.prefix) assert.equal(step.outcome === 'committed', step.errorCode === null);
 });
 
-test('seed3561: a battle that ends inside begin finishes the run once through the defeat save, after the node entry', () => {
+test('seed4488: a battle that ends inside begin finishes the run once through the defeat save, after the node entry', () => {
   const c = vectors.continuations.openingDefeat, obs = c.observations;
   const last = c.prefix.length - 1, enter = c.prefix[last].command;
   assert.deepEqual(enter, { scope: 'run', kind: 'enter', args: [obs.lastNode] });
@@ -367,10 +367,10 @@ test('seed2992 packet: each newly earned ev_rift +2 reaches only its next battle
   assert.equal(JSON.stringify(run.s), JSON.stringify(plain.s), 'rejected repeats changed the packet');
 });
 
-// The corpus generator's own policy plays seed 3561 into the same opening defeat; only its legitimate options differ.
-for (const memoryPolicy of ['legacy', 'v2']) test(`seed3561 generated ${memoryPolicy} trace: the opening defeat finishes through its save to DONE`, () => {
+// The corpus generator's own policy plays seed 4488 into the same opening defeat; only its legitimate options differ.
+for (const memoryPolicy of ['legacy', 'v2']) test(`seed4488 generated ${memoryPolicy} trace: the opening defeat finishes through its save to DONE`, () => {
   const c = vectors.continuations.openingDefeat, obs = c.observations;
-  const trace = generateScenario({ seed: 3561, length: 'full', memoryPolicy });
+  const trace = generateScenario({ seed: 4488, length: 'full', memoryPolicy });
   assert.equal(trace.sources.data.sha256, vectors.sourceData);
   assert.deepEqual(replayScenario(trace).finalState, trace.finalState);
   assert.equal(trace.summary.outcome, 'defeat');
@@ -444,7 +444,7 @@ for (const memoryPolicy of ['legacy', 'v2']) test(`seed3561 generated ${memoryPo
   assert.equal(hash(state), trace.finalStateHash);
 });
 
-test('seed3561: a fixed boss that throws inside startBattle writes no entry log, as in the original order', () => {
+test('seed4488: a fixed boss that throws inside startBattle writes no entry log, as in the original order', () => {
   const c = vectors.continuations.openingDefeat;
   const at = c.prefix.findIndex(step => step.command.kind === 'enter' && step.command.args[0] === 'z1boss');
   // Legitimate setup only: Run.create keeps opaque fixed-boss ids, and 'missing' is not an authored enemy.

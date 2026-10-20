@@ -394,7 +394,8 @@ function edgeBuilders() {
   });
   add('edge-gauge-earned-cap-bypass', [{ charId: 'nia', weaponId: 'w_pocket_engine', refine: 5 }, { charId: 'sera' }, { charId: 'kaya' }], [0, 1, 2, 3].map(() => spec('nia_tune', { mods: { e: 'e_gauge' } })).concat([spec('com_rally')]), ['nia_tune', 'nia_tune', 'nia_tune', 'nia_tune', 'com_rally'], ({ battle, play, command, w }) => {
     for (let n = 0; n < 4; n++) play('nia_tune');
-    w('interaction', 'basic-gauge-cap30-bypass48', [fact('after', ['actors', 0, 'gaugeTurn'], 30), fact('after', ['actors', 0, 'gauge'], 78)]);
+    // RULES_NOW_PLAY gauge (20 per card ×1.2 weapon, turn cap 50): 24 + 24 + 2 + 0 capped, plus 4 × 12 bypassing engraving gains.
+    w('interaction', 'basic-gauge-cap50-bypass48', [fact('after', ['actors', 0, 'gaugeTurn'], 50), fact('after', ['actors', 0, 'gauge'], 98)]);
     play('com_rally'); command('end'); play('com_rally');
     w('interaction', 'earned-gauge100', [fact('after', ['actors', 0, 'gauge'], 100)]);
     command('ult', { actor: 'nia' }); w('interaction', 'earned-ult-spends100', [fact('after', ['actors', 0, 'gauge'], 0), fact('after', ['actors', 0, 'gaugeTurn'], 0)]);
@@ -590,10 +591,10 @@ function edgeBuilders() {
     play('sera_timed'); w('interaction', 'held-precision-eye-break5', [fact('after', ['enemies', 0, 'brk'], 3), fact('after', ['cards', held, 'used'], 1)]);
   }, { relics: ['precision_lens', 'eye_of_rift'] });
   add('edge-held-time-stamp-weapon', [{ charId: 'sera', weaponId: 'w_sera', refine: 1 }, { charId: 'nia' }, { charId: 'kaya' }], ['sera_timed', 'sera_timed'], ['sera_timed', 'sera_timed'], ({ find, play, command, w, event }) => {
-    play('sera_timed'); event('interaction', 'unheld-no-reserved-weapon-bonus', { e: 'dmg', src: 'card', n: 20 }); w('interaction', 'unheld-gauge10', [fact('after', ['actors', 0, 'gauge'], 10)]);
+    play('sera_timed'); event('interaction', 'unheld-no-reserved-weapon-bonus', { e: 'dmg', src: 'card', n: 20 }); w('interaction', 'unheld-gauge20', [fact('after', ['actors', 0, 'gauge'], 20)]);
     const held = find('sera_timed'); command('end');
     play('sera_timed'); event('interaction', 'held-reserved-weapon12', { e: 'dmg', src: 'card', n: 22 });
-    w('interaction', 'held-time-stamp-gauge5', [fact('before', ['cards', held, 'held'], true), fact('after', ['actors', 0, 'gauge'], 25)]);
+    w('interaction', 'held-time-stamp-gauge5', [fact('before', ['cards', held, 'held'], true), fact('after', ['actors', 0, 'gauge'], 45)]); // 20 + 20 + time stamp 5
   }, { relics: ['time_stamp'] });
   add('edge-foresight-broken-damage', [{ charId: 'sera', res: 2 }, { charId: 'nia' }, { charId: 'kaya' }], ['com_breaker', 'com_breaker', 'sera_timed'], ['com_breaker', 'com_breaker', 'sera_timed'], ({ play, command, event, w }) => {
     play('com_breaker'); play('com_breaker'); play('sera_timed');
