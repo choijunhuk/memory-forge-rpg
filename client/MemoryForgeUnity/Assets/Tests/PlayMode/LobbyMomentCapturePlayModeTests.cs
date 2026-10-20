@@ -58,6 +58,27 @@ namespace MemoryForge.Client.Tests
 
         // NOW-PLAY-RULES-20261019 report shots: the home with no moment playing, then the sortie panel opened by its real button.
         [UnityTest, Explicit("writes report screenshots; run by name with MF_EXPEDITION_SHOTS")]
+        public IEnumerator CaptureHomeCatalogueAndDetails()
+        {
+            string? dir = Environment.GetEnvironmentVariable("MF_EXPEDITION_SHOTS");
+            if (string.IsNullOrEmpty(dir)) { Assert.Ignore("MF_EXPEDITION_SHOTS is not set"); yield break; }
+            Directory.CreateDirectory(dir!);
+            var host = new GameObject("LobbyShots"); var lobby = host.AddComponent<MemoryForgeLobbyClient>();
+            try
+            {
+                yield return null; lobby.Player!.Stop(); yield return Settle(0.5f);
+                yield return Shot(host, Path.Combine(dir!, "home.jpg"));
+                host.GetComponentsInChildren<Button>().Single(b => b.name == "OpenCompanions").onClick.Invoke();
+                yield return Settle(0.3f); yield return Shot(host, Path.Combine(dir!, "companions.jpg"));
+                host.GetComponentsInChildren<Button>().Single(b => b.name == "Companion:sera").onClick.Invoke();
+                yield return Settle(0.3f); yield return Shot(host, Path.Combine(dir!, "companion-skills.jpg"));
+                host.GetComponentsInChildren<Button>().Single(b => b.name == "ShowCompanionCards").onClick.Invoke();
+                yield return Settle(0.3f); yield return Shot(host, Path.Combine(dir!, "companion-cards.jpg"));
+            }
+            finally { Object.Destroy(host); }
+        }
+
+        [UnityTest, Explicit("writes report screenshots; run by name with MF_EXPEDITION_SHOTS")]
         public IEnumerator CaptureHomeAndSortie()
         {
             string? dir = Environment.GetEnvironmentVariable("MF_EXPEDITION_SHOTS");
@@ -96,7 +117,11 @@ namespace MemoryForge.Client.Tests
             {
                 canvas.renderMode = RenderMode.ScreenSpaceCamera; canvas.worldCamera = camera;
                 yield return null;
-                Canvas.ForceUpdateCanvases(); camera.Render();
+                Canvas.ForceUpdateCanvases();
+                // Capture the authored frame; Screen.safeArea still describes the Editor Game view, not this render target.
+                var frame = host.GetComponentsInChildren<RectTransform>().FirstOrDefault(r => r.name == "LobbyFrame");
+                if (frame != null) { frame.localScale = Vector3.one; frame.anchoredPosition = Vector2.zero; }
+                camera.Render();
                 RenderTexture.active = texture; image.ReadPixels(new Rect(0, 0, 1600, 900), 0, 0); image.Apply();
                 File.WriteAllBytes(path, image.EncodeToJPG(86));
             }

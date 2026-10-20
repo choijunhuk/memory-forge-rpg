@@ -1,0 +1,28 @@
+{
+  "device": "Galaxy S24 Ultra SM-S928N",
+  "package": "com.memoryforge.rpg.dev",
+  "apk_sha256": "052222fd574b91e2218b40d6006932f51451bbd08e354109e29013466055227d",
+  "apk_bytes": 130172561,
+  "installed_sha256_matched": true,
+  "scenes": [
+    "home",
+    "catalogue",
+    "Harin skills",
+    "Harin starting unique cards",
+    "Harin selected as home representative",
+    "expedition preparation long selection",
+    "expedition preparation short selection",
+    "short expedition map entered",
+    "first local battle entered",
+    "Sera attack preview24→16 at target",
+    "single-finger long-press peek while held"
+  ],
+  "invalid_cast_exceptions": 0,
+  "unity_error_lines": 0,
+  "limits": [
+    "not a full expedition playthrough",
+    "human visual acceptance not supplied",
+    "server screen tested in Unity/HTTP suites, not real account on phone",
+    "ultimate cut-in and two-finger physical input not exercised on this phone run"
+  ]
+}

@@ -340,6 +340,102 @@ namespace MemoryForge.Client.Tests
         }
 
         [UnityTest]
+        public IEnumerator HomeCatalogueShowsContentAndReturnsFromDetailsWithoutChangingThePracticeParty()
+        {
+            var host = new GameObject("Lobby"); hosts.Add(host);
+            var lobby = host.AddComponent<MemoryForgeLobbyClient>();
+            yield return null; lobby.Player!.Stop(); yield return null;
+            var open = host.GetComponentsInChildren<Button>().FirstOrDefault(b => b.name == "OpenCompanions");
+            Assert.That(open, Is.Not.Null, "home needs a real companion catalogue entry");
+            open!.onClick.Invoke(); yield return null;
+            var roster = host.GetComponentsInChildren<RectTransform>().First(r => r.name == "RosterPanel");
+            var content = ClientBattleContent.Load();
+            var cards = roster.GetComponentsInChildren<Button>().Where(b => b.name.StartsWith("Companion:")).ToList();
+            Assert.That(cards.Count, Is.EqualTo(content.Battle.Characters.Count));
+            var sera = cards.Single(b => b.name == "Companion:sera");
+            sera.onClick.Invoke(); yield return null;
+            var detail = host.GetComponentsInChildren<RectTransform>().First(r => r.name == "CompanionDetails");
+            var text = string.Join("\n", detail.GetComponentsInChildren<Text>().Select(t => t.text));
+            var definition = content.Battle.Characters.Single(c => c.Id == "sera");
+            StringAssert.Contains(definition.Name, text);
+            StringAssert.Contains(definition.Passive.Name, text);
+            StringAssert.Contains(definition.Passive.Text, text);
+            StringAssert.Contains(definition.Ult.Name, text);
+            detail.GetComponentsInChildren<Button>().Single(b => b.name == "ShowCompanionCards").onClick.Invoke();
+            yield return null;
+            text = string.Join("\n", detail.GetComponentsInChildren<Text>().Select(t => t.text));
+            foreach (var card in content.Battle.Cards.Where(c => c.Owner == "sera" && c.Start == true))
+                StringAssert.Contains(card.Name, text);
+            detail.GetComponentsInChildren<Button>().Single(b => b.name == "BackToRoster").onClick.Invoke();
+            yield return null;
+            roster.GetComponentsInChildren<Button>().Single(b => b.name == "FilterParty").onClick.Invoke();
+            yield return null;
+            Assert.That(roster.GetComponentsInChildren<Button>().Count(b => b.name.StartsWith("Companion:")), Is.EqualTo(3));
+            roster.GetComponentsInChildren<Button>().Single(b => b.name == "FilterAll").onClick.Invoke();
+            yield return null;
+            roster.GetComponentsInChildren<Button>().Single(b => b.name == "Companion:yuri").onClick.Invoke();
+            yield return null;
+            Assert.That(detail.GetComponentsInChildren<Button>().Single(b => b.name == "UseAsLobby").interactable, Is.False);
+            StringAssert.Contains("그림 준비 중", string.Join("\n", detail.GetComponentsInChildren<Text>().Select(t => t.text)));
+            detail.GetComponentsInChildren<Button>().Single(b => b.name == "BackToRoster").onClick.Invoke();
+            yield return null;
+            roster.GetComponentsInChildren<Button>().Single(b => b.name == "Companion:harin").onClick.Invoke();
+            yield return null;
+            detail.GetComponentsInChildren<Button>().Single(b => b.name == "UseAsLobby").onClick.Invoke();
+            yield return null; lobby.Player.Stop();
+            Assert.That(lobby.Current!.Id, Is.EqualTo("harin"), "a non-default representative must actually replace Sera");
+            Assert.That(roster.gameObject.activeSelf, Is.False);
+            Assert.That(detail.gameObject.activeSelf, Is.False);
+            host.GetComponentsInChildren<Button>().Single(b => b.name == "StartExpedition").onClick.Invoke();
+            yield return null;
+            var party = host.GetComponentsInChildren<RectTransform>().Where(r => r.name.StartsWith("Party:")).Select(r => r.name).ToArray();
+            CollectionAssert.AreEquivalent(new[] { "Party:sera", "Party:harin", "Party:nia" }, party);
+        }
+
+        [UnityTest]
+        public IEnumerator HomeModalsBlockUnderlyingControlsAndLengthSelectionRestoresItsUnselectedArt()
+        {
+            var host = new GameObject("Lobby"); hosts.Add(host);
+            var lobby = host.AddComponent<MemoryForgeLobbyClient>();
+            yield return null; lobby.Player!.Stop(); yield return null;
+            var home = host.GetComponentsInChildren<Button>().Single(b => b.name == "StartExpedition");
+            home.onClick.Invoke(); yield return null;
+            Assert.That(home.IsInteractable(), Is.False, "a modal must also block keyboard selection on the home");
+            var panel = host.GetComponentsInChildren<RectTransform>().Single(r => r.name == "SortiePanel");
+            Assert.That(host.GetComponentsInChildren<Image>().Any(i => i.name == "ModalShield" && i.raycastTarget), Is.True);
+            var shortButton = panel.GetComponentsInChildren<Button>().Single(b => b.name == "Length:short");
+            var longButton = panel.GetComponentsInChildren<Button>().Single(b => b.name == "Length:full");
+            var selected = shortButton.GetComponent<Image>().sprite;
+            longButton.onClick.Invoke(); yield return null;
+            Assert.That(shortButton.GetComponent<Image>().sprite, Is.Not.EqualTo(selected), "the previous brass selection is removed");
+            Assert.That(longButton.GetComponent<Image>().sprite, Is.EqualTo(selected));
+            shortButton.onClick.Invoke(); yield return null;
+            Assert.That(longButton.GetComponent<Image>().sprite, Is.Not.EqualTo(selected));
+            panel.GetComponentsInChildren<Button>().Single(b => b.name == "CloseSortie").onClick.Invoke(); yield return null;
+            Assert.That(home.IsInteractable(), Is.True);
+        }
+
+        [UnityTest]
+        public IEnumerator MissingHomeContentShowsRecoveryAndStopsTheUpdateLoop()
+        {
+            var host = new GameObject("Lobby"); host.SetActive(false); hosts.Add(host);
+            var lobby = host.AddComponent<MemoryForgeLobbyClient>();
+            var flags = System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance;
+            typeof(MemoryForgeLobbyClient).GetField("contentLoader", flags)!.SetValue(lobby,
+                new System.Func<ClientBattleContent>(() => throw new System.IO.InvalidDataException("content fixture failed")));
+            host.SetActive(true); yield return null;
+            Assert.That(lobby.enabled, Is.False, "failed loading must not produce per-frame null exceptions");
+            Assert.That(host.GetComponentsInChildren<Button>().Single(b => b.name == "StartExpedition").IsInteractable(), Is.False);
+            Assert.That(host.GetComponentsInChildren<Button>().Any(b => b.name == "ReloadContent"), Is.True);
+            StringAssert.Contains("게임 데이터를 불러오지 못했어요", string.Join("\n", host.GetComponentsInChildren<Text>().Select(t => t.text)));
+            var shield = host.GetComponentsInChildren<Button>().Single(b => b.name == "ModalShield");
+            shield.onClick.Invoke(); yield return null;
+            Assert.That(shield.interactable, Is.False);
+            Assert.That(host.GetComponentsInChildren<Button>().Single(b => b.name == "StartExpedition").IsInteractable(), Is.False);
+            Assert.That(host.GetComponentsInChildren<RectTransform>().Any(r => r.name == "ContentUnavailable"), Is.True);
+        }
+
+        [UnityTest]
         public IEnumerator LobbyListsCompanionsWithArtAndCyclesThem()
         {
             var host = new GameObject("Lobby"); hosts.Add(host);
