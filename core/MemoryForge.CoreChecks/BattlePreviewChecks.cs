@@ -156,13 +156,19 @@ static class BattlePreviewChecks
         var supplied = args.GetProperty("picks").EnumerateArray().Select(p => (string)BattleDataLoader.Graph(p)!).ToList(); var picks = supplied.ToList();
         string before = print();
         var first = forecast(uid, mode, target, picks); forecasts++;
-        var result = Project(first);
+        var result = Project(first); var split = Split(first);
         Same(record.GetProperty("expected"), result, where + " all eleven fields equal the original JS forecast");
+        // The per-enemy split (C#-only, for the client's per-enemy preview) adds up to the JS-pinned total; Consistency checks each enemy.
+        Check(first.Error != null || first.Hidden ? split.Count == 0
+            : split.All(e => e.HpLoss > 0) && split.Select(e => e.Uid).Distinct().Count() == split.Count && split.Sum(e => (long)e.HpLoss) == first.EnemyHpLoss,
+            where + " per-enemy HP losses split the enemy HP loss (positive, one per enemy; none when rejected or hidden)");
+        Splits[result] = split;
         Check(print() == before, where + " forecast leaves complete live state/RNG/log/events/version/public view unchanged");
         Check(picks.SequenceEqual(supplied), where + " forecast neither consumes nor reorders the caller's picks");
         Mutate(first); picks.Reverse(); picks.Add("caller-mutation");
         var again = forecast(uid, mode, target, supplied);
         SameGraph(result, Project(again), where + " repeated forecast after returned-object and caller-picks mutation is identical");
+        Check(Split(again).SequenceEqual(split), where + " repeated per-enemy losses are identical after mutating the returned list");
         if (supplied.Count == 0) SameGraph(result, Project(forecast(uid, mode, target, null)), where + " omitted picks equal empty picks");
         Check(print() == before, where + " repeated and error forecasts still leave the live state unchanged");
         if (again.Hidden)
@@ -193,6 +199,9 @@ static class BattlePreviewChecks
             return;
         }
         long loss = before.Enemies.Sum(e => (long)Math.Max(0, e.Hp - (after.Enemies.FirstOrDefault(a => a.Uid == e.Uid)?.Hp ?? 0)));
+        if (Splits.TryGetValue(result, out var split))
+            Check(split.SequenceEqual(before.Enemies.Select(e => (e.Uid, HpLoss: Math.Max(0, e.Hp - (after.Enemies.FirstOrDefault(a => a.Uid == e.Uid)?.Hp ?? 0)))).Where(e => e.HpLoss > 0)),
+                label + " per-enemy forecast losses equal each enemy's real HP loss, in the battle's enemy order");
         long damage = before.Enemies.Sum(e => after.Enemies.FirstOrDefault(x => x.Uid == e.Uid) is BattleEnemyState now ? Math.Max(0L, (long)e.Hp + e.Block - ((long)now.Hp + now.Block)) : 0L);
         int broken = after.Enemies.Count(a => a.BrokenUntil != 0 && before.Enemies.Any(e => e.Uid == a.Uid && e.BrokenUntil == 0));
         Check(loss == (int)result["enemyHpLoss"]! && after.Block - before.Block == (int)result["blockDelta"]! && after.Hp - before.Hp == (int)result["hpDelta"]!
@@ -225,7 +234,12 @@ static class BattlePreviewChecks
     {
         f.Error = "caller-mutation"; f.Mode = "caller-mutation"; f.Cost = -1; f.Due = -1; f.Hidden = !f.Hidden;
         f.EnemyHpLoss = -1; f.BlockDelta = int.MinValue; f.HpDelta = int.MaxValue; f.Defeat = !f.Defeat; f.EnemyDamage = -1; f.NewlyBroken = -1;
+        foreach (var e in f.EnemyHpLosses) { e.Uid = "caller-mutation"; e.HpLoss = -1; }
+        f.EnemyHpLosses.Add(new BattleEnemyHpLoss { Uid = "caller-mutation", HpLoss = -1 });
     }
+    static List<(string Uid, int HpLoss)> Split(BattlePlayForecast f) => f.EnemyHpLosses.Select(e => (e.Uid, e.HpLoss)).ToList();
+    // Each probed forecast's per-enemy split, by its projected result (reference identity), for Consistency against the real play.
+    static readonly Dictionary<Dictionary<string, object?>, List<(string Uid, int HpLoss)>> Splits = new(ReferenceEqualityComparer.Instance);
     // Independent of Core: the accepted practice-view rule (random target/pick or draw anywhere in if/then/else).
     static bool HiddenDefinition(IEnumerable<EffectDef> effects) => effects.Any(e => e.Target == "rand" || e.Pick == "random" || e.Op == "draw"
         || e.Then != null && HiddenDefinition(e.Then) || e.Else != null && HiddenDefinition(e.Else));

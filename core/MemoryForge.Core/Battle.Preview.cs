@@ -26,7 +26,10 @@ namespace MemoryForge.Core
     /// reservation, its estimated resolution) ends the battle in defeat.</para>
     /// <para>Hidden: the outcome depends on a draw or a random choice. Either the effective definition has tgt "rand", pick "random" or a
     /// draw anywhere in if/then/else, or the resolution moved the RNG or the draw pile through a relic/passive hook (now: the real play;
-    /// next/after: the estimate). Every outcome field then keeps its default, so no draw order or random result is revealed.</para></summary>
+    /// next/after: the estimate). Every outcome field then keeps its default, so no draw order or random result is revealed.</para>
+    /// <para>EnemyHpLosses splits EnemyHpLoss per enemy for the client's per-enemy preview: one entry for each enemy that loses HP, in the
+    /// battle's enemy order, summing to EnemyHpLoss; empty with an error or a hidden outcome. The JS oracle pins the total; CoreChecks
+    /// recomputes each entry from the real play.</para></summary>
     public sealed class BattlePlayForecast
     {
         public string? Error;
@@ -37,6 +40,14 @@ namespace MemoryForge.Core
         public int EnemyHpLoss, BlockDelta, HpDelta;
         public bool Defeat;
         public int EnemyDamage, NewlyBroken;
+        public List<BattleEnemyHpLoss> EnemyHpLosses = new List<BattleEnemyHpLoss>();
+    }
+
+    /// <summary>The HP one enemy loses in a forecast (BattlePlayForecast.EnemyHpLosses).</summary>
+    public sealed class BattleEnemyHpLoss
+    {
+        public string Uid = "";
+        public int HpLoss;
     }
 
     public sealed partial class Battle
@@ -71,7 +82,9 @@ namespace MemoryForge.Core
                 foreach (var enemy in state.Enemies)
                 {
                     var now = after.Enemies.FirstOrDefault(e => e.Uid == enemy.Uid);
-                    loss += Math.Max(0, enemy.Hp - (now?.Hp ?? 0));
+                    long lost = Math.Max(0, enemy.Hp - (now?.Hp ?? 0));
+                    loss += lost;
+                    if (lost > 0) forecast.EnemyHpLosses.Add(new BattleEnemyHpLoss { Uid = enemy.Uid, HpLoss = StateNumber(lost) });
                     if (now != null) damage += Math.Max(0L, (long)enemy.Hp + enemy.Block - ((long)now.Hp + now.Block));
                 }
                 forecast.EnemyHpLoss = StateNumber(loss); forecast.EnemyDamage = StateNumber(damage);
