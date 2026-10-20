@@ -1,5 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
+using System.Linq;
+using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
@@ -30,8 +34,7 @@ public static class MemoryForgeAndroidBuild
         // The client lays out one fixed 1600x900 frame (FitView); the project still allows portrait, which shrinks it.
         PlayerSettings.defaultInterfaceOrientation = UIOrientation.LandscapeLeft;
         EditorUserBuildSettings.buildAppBundle = false;
-        // Gradle packages the APK in place, so entries a smaller build no longer has stay behind as dead bytes (a 149 MB build
-        // came out as a 628 MB file after a big one). Removing its previous output makes it write a fresh file; nothing else is reused from it.
+        // Gradle can retain old split assets with incompatible object IDs. Removing only previous APK outputs forces fresh packaging.
         var gradleApk = Path.Combine("Library/Bee/Android/Prj", mono ? "Mono2x" : "IL2CPP", "Gradle/launcher/build/outputs/apk");
         if (Directory.Exists(gradleApk)) Directory.Delete(gradleApk, true);
 
@@ -44,8 +47,28 @@ public static class MemoryForgeAndroidBuild
             options = BuildOptions.Development,
         });
         var s = report.summary;
+        if (s.result == BuildResult.Succeeded) ValidateApk(output);
         Debug.Log($"MF_ANDROID_BUILD result={s.result} backend={backend} arch={PlayerSettings.Android.targetArchitectures} " +
                   $"bytes={s.totalSize} seconds={s.totalTime.TotalSeconds:F0} errors={s.totalErrors} warnings={s.totalWarnings} path={output}");
         if (s.result != BuildResult.Succeeded) EditorApplication.Exit(1);
+    }
+
+    public static void ValidateApk(string path)
+    {
+        using (var apk = ZipFile.OpenRead(path))
+        {
+            var names = new HashSet<string>(apk.Entries.Select(entry => entry.FullName), StringComparer.Ordinal);
+            var splits = apk.Entries.Select(entry => Regex.Match(entry.FullName, @"\A(assets/bin/Data/.+)\.split([0-9]+)\z"))
+                .Where(match => match.Success).GroupBy(match => match.Groups[1].Value);
+            foreach (var file in splits)
+            {
+                if (names.Contains(file.Key))
+                    throw new InvalidDataException($"APK contains both whole and split Unity data: {file.Key}");
+                var count = file.Count();
+                for (int index = 0; index < count; index++)
+                    if (!names.Contains(file.Key + ".split" + index))
+                        throw new InvalidDataException($"APK split sequence must start at zero without gaps: {file.Key}");
+            }
+        }
     }
 }
