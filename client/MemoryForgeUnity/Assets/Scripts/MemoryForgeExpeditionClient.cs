@@ -3567,7 +3567,7 @@ namespace MemoryForge.Client
         static readonly Dictionary<string, Sprite> shapes = new Dictionary<string, Sprite>(StringComparer.Ordinal);
         // Ring widths are kept to half pixels, so every size of panel or pill shares a handful of textures.
         static Sprite Rounded(float ring) { float w = Mathf.Round(ring * 2) / 2; return Shape("r" + w, 48, 48, 14, (x, y) => Corner(x, y, 48, 14, w)); }
-        static Sprite Pill(float ring) { float w = Mathf.Round(ring * 2) / 2; return Shape("p" + w, 64, 64, 31, (x, y) => Corner(x, y, 64, 32, w)); }
+        internal static Sprite Pill(float ring) { float w = Mathf.Round(ring * 2) / 2; return Shape("p" + w, 64, 64, 31, (x, y) => Corner(x, y, 64, 32, w)); }
         static Sprite Diamond => Shape("d", 64, 64, 0, (x, y) => (32 - Math.Abs(x - 32) - Math.Abs(y - 32)) * 0.7f + 0.5f);
         static Sprite Halo => Shape("g", 64, 64, 0, (x, y) => { float d = Mathf.Clamp01(Mathf.Sqrt((x - 32) * (x - 32) + (y - 32) * (y - 32)) / 32); return (1 - d) * (1 - d); });
         // A rounded ring with a diamond on each corner: the framed panels' edge.

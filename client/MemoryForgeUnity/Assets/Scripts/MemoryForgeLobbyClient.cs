@@ -152,8 +152,9 @@ namespace MemoryForge.Client
             Label(side, "기억 공방", 56, 30, 480, 64, 42, Ink, FontStyle.Bold);
             Label(side, "종탑 아래, 당신의 동료들이 기다리는 곳", 58, 96, 620, 36, 20, Muted);
             Ornament(side, 58, 144, 310);
-            Button(side, "OpenSettings", "설정", 1396, 24, 148, 112, () => Toggle(settingsPanel), Line, 22);
-            if (!Application.isMobilePlatform) Button(side, "QuitGame", "종료", 1228, 24, 148, 112, Application.Quit, Line, 22);
+            float utilitySize = Math.Max(96, TouchUnits());
+            UtilityButton(side, "OpenSettings", "설정", 1544 - utilitySize, utilitySize, () => Toggle(settingsPanel), true);
+            if (!Application.isMobilePlatform) UtilityButton(side, "QuitGame", "종료", 1520 - utilitySize * 2, utilitySize, Application.Quit, false);
 
             var destination = Box(side, "ExpeditionDestination", 1096, 228, 448, 386, Panel);
             var map = SpriteAt("Art/Backgrounds/bg_zone1_map");
@@ -214,6 +215,27 @@ namespace MemoryForge.Client
             leaving = true; veil.blocksRaycasts = true; player.Stop();
             yield return MemoryForgeUiMotion.Fade(veil, 0, 1, 0.3f);
             SceneManager.LoadScene(ExpeditionScene);
+        }
+
+        void UtilityButton(Transform parent, string name, string caption, float x, float size, Action click, bool settings)
+        {
+            var button = Button(parent, name, "", x, 24, size, size + 36, click, Color.clear);
+            var face = Box(button.transform, "Face", 0, 0, size, size, Hex("111b2a"));
+            face.GetComponent<Image>().sprite = MemoryForgeExpeditionClient.Pill(0);
+            button.targetGraphic = face.GetComponent<Image>();
+            Kit(button.transform, "BrassRim", "ui_portrait_ring", Vector4.zero, 0, 0, size, size, 160);
+            if (settings) Glyph(button.transform, "ico_node_forge", (size - 44) / 2, (size - 44) / 2, 44, Ink);
+            else
+            {
+                var icon = Box(button.transform, "Power", (size - 44) / 2, (size - 44) / 2, 44, 44, Color.clear);
+                var arc = Box(icon, "Arc", 0, 0, 44, 44, Ink);
+                arc.pivot = new Vector2(0.5f, 0.5f); arc.anchoredPosition = new Vector2(22, -22); arc.localRotation = Quaternion.Euler(0, 0, -32.4f);
+                var image = arc.GetComponent<Image>(); image.sprite = MemoryForgeExpeditionClient.Pill(3);
+                image.type = Image.Type.Filled; image.fillMethod = Image.FillMethod.Radial360;
+                image.fillOrigin = (int)Image.Origin360.Top; image.fillClockwise = true; image.fillAmount = 0.82f;
+                Box(icon, "Stem", 20, -2, 4, 24, Ink);
+            }
+            Label(button.transform, caption, -8, size + 4, size + 16, 30, 19, Ink, FontStyle.Normal, TextAnchor.MiddleCenter);
         }
 
         // 출격: a framed glass band (the kit's ornate panel frame) lit brass from the left, its glyph in the kit's ready ring, the title,

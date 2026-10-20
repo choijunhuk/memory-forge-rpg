@@ -39,6 +39,14 @@
       "requestedEffort": "high",
       "process_exit": 0,
       "billing_account_matched": true
+    },
+    {
+      "task_id": "UTILITY-BUTTON-REVIEW-20261021",
+      "session_id": "9ad28090-625b-40df-89de-09839f15faac",
+      "requestedModel": "claude-opus-5-5",
+      "requestedEffort": "high",
+      "process_exit": 0,
+      "billing_account_matched": true
     }
   ],
   "review_sequence": [
@@ -47,5 +55,6 @@
     "APPROVE: actual Start-loader failure and disabled recovery shield verified"
   ],
   "actual_unity_lifecycle_regression": "PASS19/19 including real Start-loader fault and final two capture tests",
-  "native_codex_audit": "Claude JSONL root auditor does not audit Codex native actions; no such claim"
+  "native_codex_audit": "Claude JSONL root auditor does not audit Codex native actions; no such claim",
+  "utility_review": "APPROVE; optional arc-sign issue aligned and recaptured"
 }

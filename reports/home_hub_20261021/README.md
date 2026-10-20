@@ -48,3 +48,9 @@ The final IL2CPP ARM64 development APK was built with the packaging guard, insta
 These are agent-operated device smoke checks, not a user's visual acceptance or a complete expedition playthrough. Account-owned roster, editable party, the three missing imported portraits and balance-stage2 remain separate.
 
 The short expedition map and first battle were also entered on the phone. Selecting Sera's attack showed the target HP24→16 with the correct highlighted segment; a real1300ms held touch displayed the long-press peek. The run retained0 InvalidCastException and0 Unity error lines. Ultimate cut-in and simultaneous two-finger input remain automated-suite evidence, not a claim of physical-phone acceptance.
+
+## User follow-up: utility controls
+
+The user rejected the plain exit/settings controls. They now use filled dark circular faces, the existing brass portrait rim, a gear/power icon and a small Korean label. The existing cached circle/ring shape is reused; no new asset, dependency or action was introduced. The review approved behavior and flagged the power-gap direction, which was aligned in the final capture. Targeted lifecycle/navigation/capture19/19 and final icon capture1/1 passed. The full353-test result above precedes this presentation-only adjustment; it is not represented as a second full run.
+
+The circular-control APK was rebuilt and installed; installed bytes again match its SHA256. Fresh launch and icon→settings→close were checked on the phone with0 Unity error lines. The prior complete navigation/HP-preview/held-peek receipt is preserved under `previous_accepted_apk` rather than attributed to this later APK.
