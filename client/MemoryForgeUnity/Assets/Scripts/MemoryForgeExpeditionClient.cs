@@ -421,7 +421,9 @@ namespace MemoryForge.Client
         public bool UseUltimate(string actor)
         {
             Launch(ultRects, actor, UltimateFlight, "now", target, actor);
-            return SendBattle("ult", BattleArgument.Object(new[] { Pair("actor", actor), Pair("target", target) }), "필살기를 사용했어요.");
+            bool ok = SendBattle("ult", BattleArgument.Object(new[] { Pair("actor", actor), Pair("target", target) }), "필살기를 사용했어요.");
+            if (ok) CutIn(actor); // after its redraw, so an ultimate that ends the battle shows it too
+            return ok;
         }
         // The sheet's own pick, auto and cancel are its explicit owners: they pass the recovery/summary gate (Barred) only, never the
         // sheet lock of Blocked.
@@ -1546,6 +1548,7 @@ namespace MemoryForge.Client
         // band). When even 196-unit slots do not fit, the band scrolls.
         void EnemyStage(BattleState b, BattleRules rules, bool aiming)
         {
+            FillPreviewLosses(b);
             float left = 32 + PartyWidth(b) + 20, band = 1568 - left, top = StageTop, height = StageBottom - StageTop; const float gap = 12, narrowest = 196;
             int count = b.Enemies.Count;
             float widest = b.Enemies.Any(e => e.Tier == "boss") ? 480 : 360;
@@ -1616,8 +1619,11 @@ namespace MemoryForge.Client
                 var shield = Shield(info, pad - 2, cy - 6, 32);
                 Strong(Label(shield, enemy.Block.ToString(), 0, 0, 32, 30, 15, Ink, FontStyle.Normal, TextAnchor.MiddleCenter)); barX += 32;
             }
-            enemyBars[enemy.Uid] = HpBar(info, "Hp", "ui_hp_frame_enemy", barX, cy - 4, pad + inner - barX, 30, enemy.Hp, enemy.MaxHp, Danger);
-            Strong(Label(info, enemy.Hp + " / " + enemy.MaxHp, barX, cy - 2, pad + inner - barX, 24, 15, Ink, FontStyle.Normal, TextAnchor.MiddleCenter));
+            var fill = enemyBars[enemy.Uid] = HpBar(info, "Hp", "ui_hp_frame_enemy", barX, cy - 4, pad + inner - barX, 30, enemy.Hp, enemy.MaxHp, Danger);
+            previewLosses.TryGetValue(enemy.Uid, out int taking);
+            if (taking > 0) PreviewLoss(fill, enemy.Hp, enemy.MaxHp, taking);
+            Strong(Label(info, (taking > 0 ? enemy.Hp + " → " + Math.Max(0, enemy.Hp - taking) : enemy.Hp.ToString()) + " / " + enemy.MaxHp,
+                barX, cy - 2, pad + inner - barX, 24, 15, Ink, FontStyle.Normal, TextAnchor.MiddleCenter));
             cy += 28;
             float crack = Grow(Label(info, "균열 " + enemy.Brk + "/" + enemy.BrkMax, pad, cy, 92, 22, 15, Memory));
             float pip = enemy.BrkMax > 0 ? Math.Min(12, (Math.Min(inner, 300) - 96 - 3 * (enemy.BrkMax - 1)) / enemy.BrkMax) : 0, pips = pip >= 4 ? enemy.BrkMax * (pip + 3) : 0;
@@ -1669,6 +1675,26 @@ namespace MemoryForge.Client
         }
         // An HP bar on the kit's frame: the frame behind, the track and fill in its inner rectangle ([20,14,216,12] of 256×40, scaled to the
         // given height); the procedural bar alone, centred in that height, without the art. Returns the fill (a hit drains behind it).
+        // Core's forecast of the card row's request (a waiting intent's, else the chosen card's), split per enemy
+        // (BattlePlayForecast.EnemyHpLosses): each enemy's HP bar lights the part that request takes. Nothing with an error or a hidden
+        // outcome (a draw or a random choice is never revealed). Recomputed on Render only, like the forecast line.
+        readonly Dictionary<string, int> previewLosses = new Dictionary<string, int>(StringComparer.Ordinal);
+        void FillPreviewLosses(BattleState b)
+        {
+            previewLosses.Clear();
+            var intent = prepared;
+            var f = intent != null ? run!.BattleForecast(intent.Uid, intent.Mode, intent.Target, intent.Picks)
+                : selectedCard != null && selectedMode != null && b.Phase == "PLAYER" ? run!.BattleForecast(selectedCard, selectedMode, target) : null;
+            if (f == null || f.Error != null || f.Hidden) return;
+            foreach (var loss in f.EnemyHpLosses) previewLosses[loss.Uid] = loss.HpLoss;
+        }
+        // The HP the forecast takes, lit over the bar's fill from what remains up to the current HP.
+        void PreviewLoss(RectTransform fill, int hp, int max, int taking)
+        {
+            var back = (RectTransform)fill.parent; float w = back.sizeDelta.x, k = max > 0 ? w / max : 0;
+            float from = k * Math.Max(0, hp - taking), to = k * Math.Min(hp, max);
+            if (to > from) Plate(back, "HpPreview", from, 0, to - from, back.sizeDelta.y, new Color(1, 1, 1, 0.55f), null, 1, true);
+        }
         RectTransform HpBar(Transform parent, string name, string frameId, float x, float y, float width, float height, int value, int max, Color color)
         {
             var art = Kit(frameId, new Vector4(20, 0, 20, 0));
@@ -2449,7 +2475,7 @@ namespace MemoryForge.Client
             foreach (string uid in b.Zones.Hand)
                 if (!seenHand.Contains(uid) && handFaces.TryGetValue(uid, out var face) && !Calm) StartCoroutine(Deal(face, first ? order++ * 0.05f : 0));
             seenHand.Clear(); seenHand.UnionWith(b.Zones.Hand);
-            if (flight != null) { if (flight.Value.Name == UltimateFlight) CutIn(flight.Value.Owner); Fly(flight.Value); Lunge(flight.Value.Owner); flight = null; }
+            if (flight != null) { Fly(flight.Value); Lunge(flight.Value.Owner); flight = null; }
         }
         IEnumerator Deal(RectTransform face, float delay)
         {
@@ -2716,18 +2742,21 @@ namespace MemoryForge.Client
         // backUid: the card whose owner is shown. A newer card (a second finger's aim) replaces it, and only that card takes it away.
         string? backWho, backUid; (string Who, bool Played, int Ticket)? backLeaving; int backTicket, holdTicket;
         RectTransform? ownerBack; string? holdUid, playingUid; int stageEnd;
-        void HoldCard(string uid)
+        // Returns the press's ticket (0: not a hold); its release asks TakeLongPress with it.
+        int HoldCard(string uid)
         {
-            if (!CardInPlay(uid)) return;
-            longPressUid = null; HidePeek(); // a stale long press (its card redrawn before the release) never swallows this one
+            if (!CardInPlay(uid)) return 0;
+            HidePeek();
             holdUid = uid; int ticket = ++holdTicket; StartCoroutine(ShowOwnerBackAfter(uid, ticket));
             if (!Showing) StartCoroutine(PeekAfter(uid, ticket));
+            return ticket;
         }
         // A long press (still held after 0.5 s, not dragged) lays the card's whole current text (as 카드 설명 shows it) over the stage
         // while it is held, without a redraw, so the owner's figure and the hand stay as they are. Letting go of that card, a drag, a new
-        // press, focus loss or a redraw takes it away, and that release taps nothing. A press made while an action's display or a turn
-        // summary is showing is the held next-card press (its release chooses the card once that display ends), so it never peeks.
-        const float LongPressSeconds = 0.5f; string? longPressUid, peekUid; RectTransform? peek;
+        // press, focus loss or a redraw takes it away, and that press's own release taps nothing (kept per press, so another finger's
+        // press in between cannot give it its tap back). A press made while an action's display or a turn summary is showing is the
+        // held next-card press (its release chooses the card once that display ends), so it never peeks.
+        const float LongPressSeconds = 0.5f; string? peekUid; RectTransform? peek; readonly HashSet<int> peekedPresses = new HashSet<int>();
         bool Showing => actionRows != null || turnSummary != null;
         IEnumerator PeekAfter(string uid, int ticket)
         {
@@ -2740,7 +2769,7 @@ namespace MemoryForge.Client
             Label(peek, info.Facts, 24, 64, 792, 34, 19, Muted);
             Label(peek, info.Text, 24, 108, 792, 302, 22, Ink);
             foreach (var graphic in peek.GetComponentsInChildren<Graphic>()) graphic.raycastTarget = false; // it never takes a touch
-            peekUid = uid; longPressUid = uid;
+            peekUid = uid; peekedPresses.Add(ticket);
         }
         void HidePeek(string? uid = null)
         {
@@ -2748,7 +2777,7 @@ namespace MemoryForge.Client
             if (peek != null) Destroy(peek.gameObject);
             peek = null; peekUid = null;
         }
-        bool TakeLongPress(string uid) { bool taken = longPressUid == uid; if (taken) longPressUid = null; return taken; }
+        bool TakeLongPress(int press) => peekedPresses.Remove(press);
         IEnumerator ShowOwnerBackAfter(string uid, int ticket)
         {
             yield return new WaitForSecondsRealtime(0.2f);
@@ -2900,19 +2929,19 @@ namespace MemoryForge.Client
         // sideways drags still scroll it. A view replaced mid-drag (its card disabled) drops nothing.
         sealed class CardDrag : MonoBehaviour, IInitializePotentialDragHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerDownHandler, IPointerUpHandler
         {
-            MemoryForgeExpeditionClient? owner; string uid = ""; ScrollRect? scroll; bool aiming;
+            MemoryForgeExpeditionClient? owner; string uid = ""; ScrollRect? scroll; bool aiming; int press;
             public void Bind(MemoryForgeExpeditionClient client, string card, ScrollRect? hand) { owner = client; uid = card; scroll = hand; }
             // One left pointer holds the card (its owner shows from behind) and one aims it; every event checks it comes from that
             // pointer, so another finger or button only scrolls the hand. An aim's release goes through OnEndDrag (sent after OnPointerUp).
             int holder = int.MinValue, aimer;
             bool Holds(PointerEventData e) => e.button == PointerEventData.InputButton.Left && e.pointerId == holder;
             bool Aims(PointerEventData e) => aiming && e.pointerId == aimer;
-            public void OnPointerDown(PointerEventData e) { if (e.button != PointerEventData.InputButton.Left || owner == null) return; holder = e.pointerId; owner.HoldCard(uid); }
+            public void OnPointerDown(PointerEventData e) { if (e.button != PointerEventData.InputButton.Left || owner == null) return; holder = e.pointerId; press = owner.HoldCard(uid); }
             public void OnPointerUp(PointerEventData e)
             {
                 if (!Holds(e)) return;
                 holder = int.MinValue;
-                if (owner != null && owner.TakeLongPress(uid)) e.eligibleForClick = false; // the long press showed its details: no tap
+                if (owner != null && owner.TakeLongPress(press)) e.eligibleForClick = false; // this press showed its details: no tap
                 if (!aiming && owner != null) owner.ReleaseCard(uid);
             }
             public void OnInitializePotentialDrag(PointerEventData e) { if (scroll != null) scroll.OnInitializePotentialDrag(e); }
@@ -3243,7 +3272,7 @@ namespace MemoryForge.Client
             previous.gameObject.SetActive(false);
             if (Application.isPlaying) Destroy(previous.gameObject); else DestroyImmediate(previous.gameObject);
             canvasRoot = null; frame = null; noticeLabel = null; summaryText = null; summaryStatus = null; summaryContent = null; summaryScroll = null;
-            actionText = null; actionStatus = null; actionSkip = null; confirmCaption = null; actionOverlay = null; dragLayer = null; dragUid = null; ownerBack = null; holdUid = null; peek = null; peekUid = null; actionGated.Clear(); paceButtons.Clear();
+            actionText = null; actionStatus = null; actionSkip = null; confirmCaption = null; actionOverlay = null; dragLayer = null; dragUid = null; ownerBack = null; holdUid = null; peek = null; peekUid = null; peekedPresses.Clear(); actionGated.Clear(); paceButtons.Clear();
         }
         RectTransform Box(Transform parent, string name, float x, float y, float width, float height, Color color)
         {

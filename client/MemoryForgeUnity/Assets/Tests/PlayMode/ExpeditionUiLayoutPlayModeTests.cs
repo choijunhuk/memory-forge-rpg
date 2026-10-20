@@ -330,6 +330,20 @@ namespace MemoryForge.Client.Tests
             Assert.That(Peek(), Is.Null, "an aimed card never peeks");
             ExecuteEvents.Execute(card, aim, ExecuteEvents.pointerUpHandler); ExecuteEvents.Execute(card, aim, ExecuteEvents.endDragHandler);
             yield return Settle();
+
+            // Two fingers: card A peeks, then card B is pressed; A's own release still taps nothing.
+            string nameB = "Hand:" + c.Snapshot!.Battle!.Zones.Hand.First(u => u != uid);
+            card = Card(); var first = new PointerEventData(EventSystem.current) { button = PointerEventData.InputButton.Left, position = Center(host, name) };
+            ExecuteEvents.Execute(card, first, ExecuteEvents.pointerDownHandler); first.eligibleForClick = true;
+            yield return new WaitForSecondsRealtime(0.65f);
+            Assert.That(Peek(), Is.Not.Null, "A peeks");
+            var cardB = View(host).GetComponentsInChildren<Button>().First(b => b.name == nameB).gameObject;
+            var second = new PointerEventData(EventSystem.current) { button = PointerEventData.InputButton.Left, position = Center(host, nameB), pointerId = 1 };
+            ExecuteEvents.Execute(cardB, second, ExecuteEvents.pointerDownHandler);
+            ExecuteEvents.Execute(card, first, ExecuteEvents.pointerUpHandler);
+            Assert.That(first.eligibleForClick, Is.False, "another finger's press does not give A's release its tap back");
+            ExecuteEvents.Execute(cardB, second, ExecuteEvents.pointerUpHandler);
+            yield return Settle();
         }
         // Two fingers: card A held, then card B (another owner) aimed. B's owner replaces A's, A's late release leaves B's alone, and
         // B's drop takes B's away.

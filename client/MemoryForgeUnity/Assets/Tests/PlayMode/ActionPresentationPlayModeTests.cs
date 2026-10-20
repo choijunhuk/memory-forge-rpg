@@ -94,6 +94,73 @@ namespace MemoryForge.Client.Tests
             Assert.That(s.Client.HasActionPresentation, Is.True, "an actual play opens its display");
         }
 
+        // The chosen card's Core forecast, split per enemy, lights on each enemy's own HP bar the HP it would take, with "now → after".
+        [UnityTest]
+        public IEnumerator EachEnemysBarShowsTheHpTheChosenCardWouldTake()
+        {
+            var s = new Session(); yield return OpenBattle(s);
+            var client = s.Client; var b = s.Mirror.State.Battle!;
+            string enemy = b.Enemies.First(e => e.Alive).Uid;
+            string? card = b.Zones.Hand.FirstOrDefault(u => Plain(s, u, enemy) && s.Mirror.BattleForecast(u, "now", enemy) is { Error: null, Hidden: false } f && f.EnemyHpLosses.Count > 0);
+            Assert.That(card, Is.Not.Null, "seed 1234's hand has a plain card that hits");
+            client.SelectEnemy(enemy); client.SelectCard(card!); client.SelectMode("now");
+            yield return null;
+            var expected = s.Mirror.BattleForecast(card!, "now", enemy).EnemyHpLosses.ToDictionary(e => e.Uid, e => e.HpLoss);
+            var view = ActiveView(s.Host);
+            foreach (var e in b.Enemies.Where(e => e.Alive))
+            {
+                var slot = view.GetComponentsInChildren<Button>().First(x => x.name == "Enemy:" + e.Uid).transform;
+                bool lit = slot.GetComponentsInChildren<RectTransform>().Any(r => r.name == "HpPreview");
+                Assert.That(lit, Is.EqualTo(expected.ContainsKey(e.Uid)), e.Uid + " lit exactly when the forecast takes its HP");
+                if (lit) Assert.That(slot.GetComponentsInChildren<Text>().Any(t => t.text == e.Hp + " → " + Math.Max(0, e.Hp - expected[e.Uid]) + " / " + e.MaxHp), Is.True, e.Uid + " numbers");
+            }
+            client.SelectCard(card!); // a second press clears the choice: no forecast, nothing lit
+            yield return null;
+            if (client.SelectedCard == null)
+                Assert.That(ActiveView(s.Host).GetComponentsInChildren<RectTransform>().Any(r => r.name == "HpPreview"), Is.False, "no chosen card, nothing lit");
+        }
+
+        // An ultimate shows the battle kit's cut-in (plate, no touch) while motion is on, and none under reduced motion (kit README).
+        [UnityTest]
+        public IEnumerator AnUltimateShowsTheKitCutInUnlessMotionIsReduced()
+        {
+            foreach (bool calm in new[] { false, true })
+            {
+                var s = new Session(); yield return OpenBattle(s);
+                var client = s.Client; int max = s.Data.Memory.Battle.Rules.GaugeMax;
+                if (calm) Assert.That(client.SetActionPace(Pacing.Reduced), Is.True);
+                string? actor = null;
+                for (int step = 0; step < 80 && actor == null; step++)
+                {
+                    var b = s.Mirror.State.Battle;
+                    Assert.That(b, Is.Not.Null, "the battle lasts until a gauge fills");
+                    actor = b!.Actors.FirstOrDefault(a => a.Gauge >= max)?.Id;
+                    if (actor != null) break;
+                    // Fill a gauge without ending the battle: only cards whose visible forecast leaves every enemy standing, else end the turn.
+                    string enemy = b.Enemies.First(e => e.Alive).Uid;
+                    string? card = b.Zones.Hand.FirstOrDefault(u => Plain(s, u, enemy) && s.Mirror.BattleForecast(u, "now", enemy) is { Error: null, Hidden: false } f
+                        && f.EnemyHpLosses.All(l => b.Enemies.First(e => e.Uid == l.Uid).Hp > l.HpLoss));
+                    if (card != null) { PlayPlain(s, card, enemy); Assert.That(client.ActionPresentationTerminal, Is.False, "the battle lasts until a gauge fills"); FinishAction(client); }
+                    else { Assert.That(Both(s, client.EndTurn, BattleCore(s, "end", null)), Is.True); Dismiss(client); }
+                    yield return null;
+                }
+                Assert.That(actor, Is.Not.Null, "a gauge fills");
+                string aim = s.Mirror.State.Battle!.Enemies.First(e => e.Alive).Uid;
+                client.SelectEnemy(aim);
+                var args = BattleArgument.Object(new[] { Pair("actor", actor), Pair("target", aim) });
+                Assert.That(Both(s, () => client.UseUltimate(actor!), BattleCore(s, "ult", args)), Is.True);
+                var cut = ActiveView(s.Host).GetComponentsInChildren<RectTransform>().FirstOrDefault(r => r.name == "UltimateCutIn");
+                Assert.That(cut != null, Is.EqualTo(!calm), calm ? "reduced motion omits the cut-in" : "the ultimate shows its cut-in");
+                if (cut != null)
+                {
+                    Assert.That(cut.GetComponent<Image>().sprite, Is.Not.Null, "on the kit's plate");
+                    Assert.That(cut.GetComponent<CanvasGroup>().blocksRaycasts, Is.False, "decoration takes no touch");
+                }
+                if (client.HasActionPresentation) FinishAction(client);
+                yield return null;
+            }
+        }
+
         // The committed play is shown in the strip at once over the actual current view; the next card, mode and target are prepared by
         // real rays during the display with their forecast on the action line; a confirm then only prepares the one unsent intent, which
         // is cancelled explicitly; every command is refused before the Run; the display ends on its real timer in place; then the prepared
