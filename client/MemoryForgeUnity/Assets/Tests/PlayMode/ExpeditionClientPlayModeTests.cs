@@ -1138,7 +1138,13 @@ namespace MemoryForge.Client.Tests
             {
                 client.SelectEnemy(enemy);
                 var args = BattleArgument.Object(new[] { Pair("actor", ready.Id), Pair("target", enemy) });
-                if (Both(client, mirror, () => client.UseUltimate(ready.Id), () => mirror.BattleCommand("ult", args))) { FinishActionDisplay(client); return; }
+                if (Both(client, mirror, () => client.UseUltimate(ready.Id), () => mirror.BattleCommand("ult", args)))
+                {
+                    // The kit's cut-in plate shows the ultimate unless motion is reduced (then it is omitted); decoration only.
+                    bool calm = MemoryForgeUiMotion.Reduced || client.ActionPace == MemoryForgeExpeditionClient.ActionPacing.Reduced;
+                    Assert.That(client.GetComponentsInChildren<Transform>(true).Any(t => t.name == "UltimateCutIn"), Is.EqualTo(!calm), "an ultimate's cut-in");
+                    FinishActionDisplay(client); return;
+                }
             }
             if (Both(client, mirror, () => client.EndTurn(), () => mirror.BattleCommand("end"))) DismissTurnSummary(client);
         }

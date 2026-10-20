@@ -283,6 +283,54 @@ namespace MemoryForge.Client.Tests
             yield return null; yield return null;
             Assert.That(OwnerBack(host), Is.Null, "calm takes it away at once");
         }
+        // A long press lays the card's whole current text over the stage while held, with no redraw (the owner stays); letting go takes
+        // it away and taps nothing. A shorter hold and an aimed drag never peek.
+        [UnityTest]
+        public IEnumerator ALongPressOnAHandCardPeeksAtItsDetailsWhileHeldAndItsReleaseTapsNothing()
+        {
+            var host = Open(1234); var c = host.GetComponent<MemoryForgeExpeditionClient>(); yield return null;
+            Press(host, b => b.name.StartsWith("Node:", StringComparison.Ordinal) && b.interactable); yield return null;
+            yield return Settle();
+            string uid = c.Snapshot!.Battle!.Zones.Hand[0], name = "Hand:" + uid;
+            GameObject Card() => View(host).GetComponentsInChildren<Button>().First(b => b.name == name).gameObject;
+            RectTransform? Peek() => View(host).GetComponentsInChildren<RectTransform>().FirstOrDefault(r => r.name == "CardPeek");
+            string? selected = c.SelectedCard;
+
+            var card = Card();
+            var press = new PointerEventData(EventSystem.current) { button = PointerEventData.InputButton.Left, position = Center(host, name) };
+            ExecuteEvents.Execute(card, press, ExecuteEvents.pointerDownHandler);
+            press.eligibleForClick = true; // as the input module marks a fresh press
+            yield return new WaitForSecondsRealtime(0.35f);
+            Assert.That(Peek(), Is.Null, "a short hold is not a long press");
+            yield return new WaitForSecondsRealtime(0.3f);
+            var peek = Peek();
+            Assert.That(peek, Is.Not.Null, "a long press shows the card's details");
+            var peekTexts = peek!.GetComponentsInChildren<Text>().Select(t => t.text).ToList();
+            Assert.That(peek.GetComponentsInChildren<Graphic>().All(g => !g.raycastTarget), Is.True, "the peek never takes a touch");
+            Assert.That(Card(), Is.SameAs(card), "no redraw under the held press");
+            Assert.That(OwnerBack(host), Is.Not.Null, "the owner's figure stays");
+            Assert.That(c.CardInfoOpen, Is.False, "no sheet opened");
+            ExecuteEvents.Execute(card, press, ExecuteEvents.pointerUpHandler);
+            Assert.That(press.eligibleForClick, Is.False, "its release is no tap");
+            Assert.That(c.SelectedCard, Is.EqualTo(selected), "nor did it choose the card");
+            yield return null;
+            Assert.That(Peek(), Is.Null, "letting go takes it away");
+            Assert.That(c.ShowHandCardInfo(uid), Is.True);
+            Assert.That(peekTexts, Does.Contain(c.CardInfoText), "the peek showed the same current text as 카드 설명");
+            c.CloseCardInfo();
+            yield return Settle();
+
+            // An upward drag inside the half second aims instead: no peek.
+            Vector2 from = Center(host, name);
+            var aim = new PointerEventData(EventSystem.current) { button = PointerEventData.InputButton.Left, position = from, pressPosition = from };
+            card = Card(); ExecuteEvents.Execute(card, aim, ExecuteEvents.pointerDownHandler); ExecuteEvents.Execute(card, aim, ExecuteEvents.initializePotentialDrag);
+            aim.position = from + new Vector2(0, 40); aim.delta = new Vector2(0, 40); aim.dragging = true;
+            ExecuteEvents.Execute(card, aim, ExecuteEvents.beginDragHandler);
+            yield return new WaitForSecondsRealtime(0.65f);
+            Assert.That(Peek(), Is.Null, "an aimed card never peeks");
+            ExecuteEvents.Execute(card, aim, ExecuteEvents.pointerUpHandler); ExecuteEvents.Execute(card, aim, ExecuteEvents.endDragHandler);
+            yield return Settle();
+        }
         // Two fingers: card A held, then card B (another owner) aimed. B's owner replaces A's, A's late release leaves B's alone, and
         // B's drop takes B's away.
         [UnityTest]

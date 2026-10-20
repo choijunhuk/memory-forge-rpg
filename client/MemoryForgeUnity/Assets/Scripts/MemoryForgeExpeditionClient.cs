@@ -160,6 +160,7 @@ namespace MemoryForge.Client
         readonly Dictionary<string, BattlePartDef> partDefs = new Dictionary<string, BattlePartDef>(StringComparer.Ordinal);
         readonly Dictionary<string, BattleRelicDef> relicDefs = new Dictionary<string, BattleRelicDef>(StringComparer.Ordinal);
         readonly Dictionary<string, string> characterNames = new Dictionary<string, string>(StringComparer.Ordinal);
+        readonly Dictionary<string, string> ultimateNames = new Dictionary<string, string>(StringComparer.Ordinal); // the cut-in's caption
         readonly Dictionary<string, string> characterAttrs = new Dictionary<string, string>(StringComparer.Ordinal); // card frames take the owner's attribute colour
         RectTransform? canvasRoot, frame;
         Font? font;
@@ -282,6 +283,7 @@ namespace MemoryForge.Client
             DropActionPresentation();
             // Away, a still press never hears its release: void its timer and take away a held (not aimed) card's owner.
             if (holdUid != null && holdUid != dragUid) { holdUid = null; holdTicket++; }
+            HidePeek();
             if (backUid != null && backUid != dragUid) HideOwnerBack(backUid, false);
         }
         // Resume: an unsent intent still waiting is dropped (never sent on resume), a pick sheet whose opening state is gone (Fresh) is
@@ -357,7 +359,7 @@ namespace MemoryForge.Client
             foreach (var card in data.Memory.Battle.Cards) cardDefs[card.Id] = card;
             foreach (var part in data.Memory.Battle.Parts) partDefs[part.Id] = part;
             foreach (var relic in data.Memory.Battle.Relics) relicDefs[relic.Id] = relic;
-            foreach (var character in data.Memory.Battle.Characters) { characterNames[character.Id] = character.Name; characterAttrs[character.Id] = character.Attr; }
+            foreach (var character in data.Memory.Battle.Characters) { characterNames[character.Id] = character.Name; characterAttrs[character.Id] = character.Attr; ultimateNames[character.Id] = character.Ult.Name; }
             var messages = Resources.Load<TextAsset>("MemoryForge/error-messages");
             if (messages != null)
                 foreach (var pair in Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(messages.text)!) errors[pair.Key] = pair.Value;
@@ -418,7 +420,7 @@ namespace MemoryForge.Client
         public bool EndTurn() => SendBattle("end", null, "적의 행동을 마쳤어요.");
         public bool UseUltimate(string actor)
         {
-            Launch(ultRects, actor, "필살기", "now", target, actor);
+            Launch(ultRects, actor, UltimateFlight, "now", target, actor);
             return SendBattle("ult", BattleArgument.Object(new[] { Pair("actor", actor), Pair("target", target) }), "필살기를 사용했어요.");
         }
         // The sheet's own pick, auto and cancel are its explicit owners: they pass the recovery/summary gate (Barred) only, never the
@@ -651,13 +653,19 @@ namespace MemoryForge.Client
         /// carries the card's upgrade and resonance overlays. Costs are Core's CostOf in the current state.</summary>
         public bool ShowHandCardInfo(string? uid = null)
         {
-            if (recovery != null) return false; // card details read the Run; the failed one is not read
-            var live = run; string? chosen = uid ?? selectedCard;
+            var info = HandCardInfo(uid ?? selectedCard);
+            return info != null && ShowInfo(info);
+        }
+        // A hand card's current details (카드 설명 and the long-press peek); null when there is no such card to read.
+        CardInfo? HandCardInfo(string? chosen)
+        {
+            if (recovery != null) return null; // card details read the Run; the failed one is not read
+            var live = run;
             var b = live?.State.Battle;
-            if (live == null || chosen == null || b == null || !b.Zones.Hand.Contains(chosen)) return false;
+            if (live == null || chosen == null || b == null || !b.Zones.Hand.Contains(chosen)) return null;
             string id = chosen; BattleCardDef def; List<string> modes;
             try { def = live.BattleEffectiveCard(id); modes = live.BattleAllowedModes(id); }
-            catch (RuleException error) { Reject(error.Code); return false; }
+            catch (RuleException error) { Reject(error.Code); return null; }
             b.Cards.TryGetValue(id, out var instance);
             var notes = new List<string>();
             var parts = instance == null ? new List<string>() : new[] { instance.Circuit, instance.Edge }.Concat(instance.Temp).Where(m => !string.IsNullOrEmpty(m)).Select(m => m!).ToList();
@@ -666,14 +674,14 @@ namespace MemoryForge.Client
             if (instance != null && def.Growth == true) notes.Add("성장 " + instance.Growth);
             notes.Add("적힌 수치는 카드 정의의 값이에요. 약점·상태·유물까지 반영한 예상은 방식을 고르면 행동 안내 줄에 보여요. 적 피해에는 적 방어에 막힌 몫도 들어가요. "
                 + "예약의 예상은 지금 상태에서 바로 해결한다고 가정한 값이라, 실제 결과는 해결되는 턴의 상태로 정해져요. 드로우·무작위 결과는 미리 보여 주지 않아요.");
-            return ShowInfo(new CardInfo
+            return new CardInfo
             {
                 Title = def.Name + (instance != null && instance.Plus ? "+" : ""),
                 Basis = "전투 중 이 카드의 현재 정의" + (instance != null && instance.Plus ? " · 강화(+) 반영" : "") + " · 공명 보정 반영 · 비용은 지금 상태 기준",
                 Facts = OwnerText(def.Owner) + " · 등급 " + def.Rarity + "  ·  " + (modes.Count == 0 ? "지금 쓸 수 있는 방식 없음"
                     : string.Join("  ·  ", modes.Select(m => ModeName(m) + " 비용 " + live.BattleCostOf(id, m)))),
                 Text = BattleText.Card(def, data!.Memory.Battle), Notes = string.Join("\n\n", notes)
-            });
+            };
         }
         /// <summary>Full text of an offered card (reward, evolution or shop) from its source definition. Opening it takes or buys nothing.</summary>
         public bool ShowCardInfo(string cardId)
@@ -2441,7 +2449,7 @@ namespace MemoryForge.Client
             foreach (string uid in b.Zones.Hand)
                 if (!seenHand.Contains(uid) && handFaces.TryGetValue(uid, out var face) && !Calm) StartCoroutine(Deal(face, first ? order++ * 0.05f : 0));
             seenHand.Clear(); seenHand.UnionWith(b.Zones.Hand);
-            if (flight != null) { Fly(flight.Value); Lunge(flight.Value.Owner); flight = null; }
+            if (flight != null) { if (flight.Value.Name == UltimateFlight) CutIn(flight.Value.Owner); Fly(flight.Value); Lunge(flight.Value.Owner); flight = null; }
         }
         IEnumerator Deal(RectTransform face, float delay)
         {
@@ -2551,6 +2559,35 @@ namespace MemoryForge.Client
             if (band != null) yield return MemoryForgeUiMotion.Fade(group, 1, 0, 0.3f, Still);
             if (band != null) Destroy(band.gameObject);
         }
+        // An ultimate's cut-in (Codex battle kit README: the common diagonal plate with the owner's approved cut-in layered on it, no
+        // new character motion): plate and picture slide in from the left, the member's name and ultimate follow from the right, all
+        // hold and fade. Decoration only (no raycasts, the committed result is already in the Run and its display); reduced motion
+        // omits it, as the kit asks, and 2배속 halves it. A member without a cut-in picture gets the plate and the words.
+        const string UltimateFlight = "필살기";
+        void CutIn(string? actor)
+        {
+            if (Calm || frame == null || actor == null) return;
+            var plate = Kit("ui_cutin_plate");
+            var band = Box(frame, "UltimateCutIn", 0, 240, 1600, 420, plate != null ? Color.white : Alpha(Background, 0.85f));
+            if (plate != null) band.GetComponent<Image>().sprite = plate;
+            Cover(band, "Figure", Art("Characters/char_" + actor + "_cutin", true), 160, 0, 600, 420, 0.12f);
+            var words = Strong(Label(band, CharacterName(actor) + "\n" + (ultimateNames.TryGetValue(actor, out var ult) && ult.Length > 0 ? ult : UltimateFlight),
+                800, 110, 720, 200, 52, Brass, FontStyle.Bold, TextAnchor.MiddleLeft));
+            words.resizeTextForBestFit = false;
+            StartCoroutine(ShowCutIn(band, (RectTransform)band.Find("Figure"), words.rectTransform));
+        }
+        IEnumerator ShowCutIn(RectTransform band, RectTransform figure, RectTransform words)
+        {
+            float pace = PaceScale;
+            var group = band.gameObject.AddComponent<CanvasGroup>(); group.blocksRaycasts = false; group.interactable = false;
+            StartCoroutine(MemoryForgeUiMotion.SlideIn(band, new Vector2(-320, 0), 0.22f * pace, Still));
+            StartCoroutine(MemoryForgeUiMotion.SlideIn(figure, new Vector2(-140, 0), 0.32f * pace, Still));
+            StartCoroutine(MemoryForgeUiMotion.SlideIn(words, new Vector2(160, 0), 0.32f * pace, Still));
+            yield return MemoryForgeUiMotion.Fade(group, 0, 1, 0.14f * pace, Still);
+            for (float t = 0; t < 0.6f * pace && !Calm; t += Time.unscaledDeltaTime) { if (band == null) yield break; yield return null; }
+            if (band != null) yield return MemoryForgeUiMotion.Fade(group, 1, 0, 0.25f * pace, Still);
+            if (band != null) Destroy(band.gameObject);
+        }
         // The played card's ghost (decoration) from its hand slot to the enemy it hit, the rail group it was reserved in or the party.
         void Fly((string Name, Vector2 From, string? Target, string Mode, string? Owner) shot)
         {
@@ -2600,7 +2637,7 @@ namespace MemoryForge.Client
         bool BeginCardDrag(string uid)
         {
             if (!CardInPlay(uid)) return false;
-            dragUid = uid; holdUid = uid; holdTicket++; ShowOwnerBack(uid); return true;
+            dragUid = uid; holdUid = uid; holdTicket++; HidePeek(); ShowOwnerBack(uid); return true;
         }
         void CardDragTo(Vector2 screen, Camera? eye)
         {
@@ -2682,8 +2719,36 @@ namespace MemoryForge.Client
         void HoldCard(string uid)
         {
             if (!CardInPlay(uid)) return;
-            holdUid = uid; StartCoroutine(ShowOwnerBackAfter(uid, ++holdTicket));
+            longPressUid = null; HidePeek(); // a stale long press (its card redrawn before the release) never swallows this one
+            holdUid = uid; int ticket = ++holdTicket; StartCoroutine(ShowOwnerBackAfter(uid, ticket));
+            if (!Showing) StartCoroutine(PeekAfter(uid, ticket));
         }
+        // A long press (still held after 0.5 s, not dragged) lays the card's whole current text (as 카드 설명 shows it) over the stage
+        // while it is held, without a redraw, so the owner's figure and the hand stay as they are. Letting go of that card, a drag, a new
+        // press, focus loss or a redraw takes it away, and that release taps nothing. A press made while an action's display or a turn
+        // summary is showing is the held next-card press (its release chooses the card once that display ends), so it never peeks.
+        const float LongPressSeconds = 0.5f; string? longPressUid, peekUid; RectTransform? peek;
+        bool Showing => actionRows != null || turnSummary != null;
+        IEnumerator PeekAfter(string uid, int ticket)
+        {
+            yield return new WaitForSecondsRealtime(LongPressSeconds);
+            if (ticket != holdTicket || holdUid != uid || dragUid != null || Showing || frame == null || !CardInPlay(uid)) yield break;
+            var info = HandCardInfo(uid);
+            if (info == null) yield break;
+            peek = Plate(frame, "CardPeek", 380, 110, 840, 430, Panel, Memory, 2);
+            Label(peek, info.Title, 24, 16, 792, 44, 30, Ink, FontStyle.Bold);
+            Label(peek, info.Facts, 24, 64, 792, 34, 19, Muted);
+            Label(peek, info.Text, 24, 108, 792, 302, 22, Ink);
+            foreach (var graphic in peek.GetComponentsInChildren<Graphic>()) graphic.raycastTarget = false; // it never takes a touch
+            peekUid = uid; longPressUid = uid;
+        }
+        void HidePeek(string? uid = null)
+        {
+            if (uid != null && uid != peekUid) return; // another card's release leaves this card's peek
+            if (peek != null) Destroy(peek.gameObject);
+            peek = null; peekUid = null;
+        }
+        bool TakeLongPress(string uid) { bool taken = longPressUid == uid; if (taken) longPressUid = null; return taken; }
         IEnumerator ShowOwnerBackAfter(string uid, int ticket)
         {
             yield return new WaitForSecondsRealtime(0.2f);
@@ -2695,6 +2760,7 @@ namespace MemoryForge.Client
         {
             if (uid == playingUid) return;
             if (holdUid == uid) { holdUid = null; holdTicket++; }
+            HidePeek(uid);
             HideOwnerBack(uid, false);
         }
         void ShowOwnerBack(string uid)
@@ -2845,7 +2911,9 @@ namespace MemoryForge.Client
             public void OnPointerUp(PointerEventData e)
             {
                 if (!Holds(e)) return;
-                holder = int.MinValue; if (!aiming && owner != null) owner.ReleaseCard(uid);
+                holder = int.MinValue;
+                if (owner != null && owner.TakeLongPress(uid)) e.eligibleForClick = false; // the long press showed its details: no tap
+                if (!aiming && owner != null) owner.ReleaseCard(uid);
             }
             public void OnInitializePotentialDrag(PointerEventData e) { if (scroll != null) scroll.OnInitializePotentialDrag(e); }
             public void OnBeginDrag(PointerEventData e)
@@ -3175,7 +3243,7 @@ namespace MemoryForge.Client
             previous.gameObject.SetActive(false);
             if (Application.isPlaying) Destroy(previous.gameObject); else DestroyImmediate(previous.gameObject);
             canvasRoot = null; frame = null; noticeLabel = null; summaryText = null; summaryStatus = null; summaryContent = null; summaryScroll = null;
-            actionText = null; actionStatus = null; actionSkip = null; confirmCaption = null; actionOverlay = null; dragLayer = null; dragUid = null; ownerBack = null; holdUid = null; actionGated.Clear(); paceButtons.Clear();
+            actionText = null; actionStatus = null; actionSkip = null; confirmCaption = null; actionOverlay = null; dragLayer = null; dragUid = null; ownerBack = null; holdUid = null; peek = null; peekUid = null; actionGated.Clear(); paceButtons.Clear();
         }
         RectTransform Box(Transform parent, string name, float x, float y, float width, float height, Color color)
         {
