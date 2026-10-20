@@ -1,7 +1,8 @@
 #if UNITY_5_3_OR_NEWER
 // P1-SERVER-BATTLE-CONTROLS-TESTS §5.10/§14.3/§14.7/§16.4: view checks of the server battle's ultimates, action pace and card details in
 // MemoryForgeServerPracticeClient (UltAsync, ActionPace/SetActionPace, CardDetailsOpen/OpenCardDetails/CloseCardDetails; buttons Ult:<actor>,
-// Pace:<pace>, OpenCardDetails/CloseCardDetails; label CardDetailsBody in scroll CardDetailsScroll) over the shared PROTOCOL FIXTURE of
+// Pace:<pace>, OpenCardDetails/CloseCardDetails; label CardDetailsBody in scroll CardDetailsScroll) and the per-enemy HP preview
+// (EnemyHpPreview; parts Bar/HpPreview of each Enemy:<uid> box) over the shared PROTOCOL FIXTURE of
 // PracticeServerSessionPlayModeTests (World, post, loopback host, View/Settled/Until/Refused/Sent/RunJson/QueryJson, Drawn/DrawnButton;
 // nothing is copied). The public battle here (three actors with gauge/gaugeMax, five enemies, two hand cards) is written into world.Extra;
 // the fixture's ult/play/end receipts and query answers stand in for Core: their gauges, damage, events and source name/text are protocol
@@ -11,6 +12,7 @@
 #nullable enable
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
@@ -417,6 +419,141 @@ namespace MemoryForge.Client.Tests
             Assert.That(BattleCommands(), Is.Empty);
         }
 
+        // SERVER-ENEMY-PREVIEW: each enemy's HP bar lights the HP the current battle query's forecast.enemyHpLosses names for that enemy
+        // ("now → after" beside it), only for the current answer to the current selection in the current context; never for another
+        // selection, a hidden outcome, a refused request, a malformed or older reply, a newer state or after the play. The fixture's
+        // per-card forecasts stand in for Core (protocol data); the bars are the five enemies of ControlRun (e1..e4 at 31..34 of 40, e5 fallen).
+        [UnityTest]
+        public IEnumerator EachEnemyBarShowsOnlyTheCurrentServerForecastsOwnHpLossAndDropsItWhenHiddenRefusedStaleOrPlayed()
+        {
+            ControlRun();
+            var forecasts = new Dictionary<string, JObject>(StringComparer.Ordinal)
+            {
+                ["h1"] = SplitForecast(null, false, ("e1", 8), ("e2", 3), ("e4", 34)),
+                ["h2"] = SplitForecast(null, true),
+            };
+            TaskCompletionSource<bool>? holdQueries = null;
+            post = request =>
+            {
+                if (request.Path != BattleQueryRoute) return PlayCommitted(ArgOf(request, "uid")!, ArgOf(request, "target"));
+                var asked = JObject.Parse(request.Text);
+                string uid = asked["uid"]!.Value<string>()!;
+                var reply = QueryJson(world, uid, asked["mode"]!.Value<string>()!, asked["target"]?.Value<string>(),
+                    ((asked["picks"] as JArray) ?? new JArray()).Select(p => p.Value<string>()!).ToList());
+                reply["forecast"] = forecasts[uid].DeepClone();
+                var answer = Reply.Json(200, reply);
+                answer.Hold = holdQueries?.Task;
+                return answer;
+            };
+            var view = View();
+            yield return Settled(view);
+            try
+            {
+                Assert.That(view.EnemyHpPreview, Is.Empty, "nothing is chosen");
+                Assert.That(HpPreviews(view), Is.Zero);
+
+                // Three enemies losing different amounts: each bar lights exactly its own loss, from what remains up to its current HP.
+                Assert.That(view.SelectCard("h1"), Is.True);
+                Assert.That(view.SelectEnemy("e1"), Is.True);
+                yield return Until(() => view.QueryView?.Target == "e1" && !view.Busy, "h1's query at e1 is current");
+                Assert.That(view.EnemyHpPreview, Is.EquivalentTo(new Dictionary<string, int> { ["e1"] = 8, ["e2"] = 3, ["e4"] = 34 }));
+                Assert.That(HpPreviews(view), Is.EqualTo(3));
+                foreach (var (enemy, hp, loss) in new[] { ("e1", 31, 8), ("e2", 32, 3), ("e4", 34, 34) })
+                {
+                    var bar = EnemyPart(view, enemy, "Bar")!;
+                    var lit = EnemyPart(view, enemy, "HpPreview");
+                    Assert.That(lit, Is.Not.Null, enemy);
+                    Assert.That(lit!.sizeDelta.x / bar.sizeDelta.x, Is.EqualTo(loss / 40f).Within(0.001f), enemy + ": the lit width is its own loss");
+                    Assert.That(lit.anchoredPosition.x / bar.sizeDelta.x, Is.EqualTo((hp - loss) / 40f).Within(0.001f), enemy + ": lit from what remains");
+                    Assert.That(EnemyText(view, enemy), Does.Contain(hp + " → " + (hp - loss) + " / 40"), enemy);
+                }
+                foreach (string enemy in new[] { "e3", "e5" })
+                {
+                    Assert.That(EnemyPart(view, enemy, "HpPreview"), Is.Null, enemy + " loses nothing");
+                    Assert.That(EnemyText(view, enemy), Does.Not.Contain("→"), enemy);
+                }
+                // Drawing changed nothing in the server's answer, and a caller's copy of the preview changes nothing either.
+                var shown = view.QueryView!;
+                Assert.That(shown.EnemyHpLosses, Is.EqualTo(new[] { ("e1", 8), ("e2", 3), ("e4", 34) }));
+                Assert.That(JToken.DeepEquals(shown.ToJObject()["forecast"], forecasts["h1"]), Is.True);
+                ((Dictionary<string, int>)view.EnemyHpPreview)["e1"] = 1;
+                Assert.That(view.EnemyHpPreview["e1"], Is.EqualTo(8));
+                Assert.That(BattleCommands(), Is.Empty, "a preview sends nothing");
+
+                // Another selection drops the older answer at once; a hidden outcome lights nothing.
+                Assert.That(view.SelectCard("h2"), Is.True);
+                Assert.That(view.EnemyHpPreview, Is.Empty, "the older answer is no longer current");
+                Assert.That(HpPreviews(view), Is.Zero);
+                yield return Until(() => view.QueryView?.Uid == "h2" && !view.Busy, "h2's hidden query is current");
+                Assert.That(view.QueryView!.ForecastHidden, Is.True);
+                Assert.That(view.EnemyHpPreview, Is.Empty, "hidden");
+                Assert.That(HpPreviews(view), Is.Zero);
+
+                // A refused request lights nothing.
+                forecasts["h1"] = SplitForecast("NOT_ENOUGH_AP", false);
+                Assert.That(view.SelectCard("h1"), Is.True);
+                Assert.That(view.SelectEnemy("e2"), Is.True);
+                yield return Until(() => view.QueryView?.Uid == "h1" && view.QueryView.Target == "e2" && !view.Busy, "the refused query is current");
+                Assert.That(view.QueryView!.ForecastError, Is.EqualTo("NOT_ENOUGH_AP"));
+                Assert.That(view.EnemyHpPreview, Is.Empty, "refused");
+                Assert.That(HpPreviews(view), Is.Zero);
+
+                // A malformed split (losses beside a hidden outcome) refuses the whole answer: no view, nothing lit.
+                forecasts["h1"] = SplitForecast(null, true);
+                ((JArray)forecasts["h1"]["enemyHpLosses"]!).Add(new JObject { ["uid"] = "e3", ["hpLoss"] = 7 });
+                int queried = BattleQueries().Length;
+                Assert.That(view.SelectEnemy("e3"), Is.True);
+                yield return Until(() => BattleQueries().Length > queried && !view.Busy, "the malformed answer resolves");
+                Assert.That(view.QueryView, Is.Null);
+                Assert.That(view.EnemyHpPreview, Is.Empty, "malformed");
+                Assert.That(HpPreviews(view), Is.Zero);
+
+                // An older server's answer without the split still shows its forecast line and lights no bar (nothing is derived).
+                forecasts["h1"] = SplitForecast(null, false, ("e1", 5));
+                forecasts["h1"].Remove("enemyHpLosses");
+                Assert.That(view.SelectEnemy("e1"), Is.True);
+                yield return Until(() => view.QueryView?.Target == "e1" && !view.Busy, "an older server's answer is current");
+                Assert.That(view.EnemyHpPreview, Is.Empty, "no split");
+                Assert.That(HpPreviews(view), Is.Zero);
+                Assert.That(Unbuttoned(view), Does.Contain("적 체력 -5"), "the forecast line is unchanged");
+
+                // A newer state never shows the older answer over its HP: nothing is lit until the new context's own answer arrives.
+                forecasts["h1"] = SplitForecast(null, false, ("e1", 5), ("e3", 7));
+                Assert.That(view.SelectEnemy("e3"), Is.True);
+                yield return Until(() => view.QueryView?.Target == "e3" && !view.Busy, "h1's query at e3 is current");
+                Assert.That(view.EnemyHpPreview, Is.EquivalentTo(new Dictionary<string, int> { ["e1"] = 5, ["e3"] = 7 }));
+                var battle = (JObject)world.Extra!["battle"]!;
+                world.Version++; world.BattleV++;
+                battle["v"] = world.BattleV;
+                Entry(battle, "enemies", "e1", "uid")["hp"] = 20;
+                holdQueries = new TaskCompletionSource<bool>();
+                var refresh = view.RefreshAsync();
+                yield return Until(() => refresh.IsCompleted, "the refresh resolves");
+                yield return null;
+                yield return null;
+                Assert.That(view.Snapshot!.Context.ServerVersion, Is.EqualTo(4));
+                Assert.That(view.EnemyHpPreview, Is.Empty, "the older answer belongs to the older context");
+                Assert.That(HpPreviews(view), Is.Zero);
+                Assert.That(EnemyText(view, "e1"), Does.Contain("20 / 40").And.Not.Contain("→"));
+                holdQueries.TrySetResult(true);
+                yield return Until(() => view.QueryView != null && !view.Busy, "the new context's answer is current");
+                Assert.That(view.QueryView!.Context.ServerVersion, Is.EqualTo(4));
+                Assert.That(EnemyText(view, "e1"), Does.Contain("20 → 15 / 40"));
+                Assert.That(EnemyText(view, "e3"), Does.Contain("33 → 26 / 40"));
+
+                // After the play the card has left the hand: nothing is lit.
+                var play = view.ConfirmAsync();
+                yield return Until(() => play.IsCompleted, "the play resolves");
+                Assert.That(play.Result, Is.True);
+                Sent(BattleCommands().Single(), "play", 4, new JObject { ["uid"] = "h1", ["mode"] = "now", ["target"] = "e3" });
+                Assert.That(view.SelectedCard, Is.Null);
+                Assert.That(view.EnemyHpPreview, Is.Empty, "nothing after the play");
+                yield return null;
+                Assert.That(HpPreviews(view), Is.Zero);
+            }
+            finally { holdQueries?.TrySetResult(true); }
+        }
+
         // ---- battle-control fixtures (protocol data on the shared World) ----
 
         // A live BATTLE in the PLAYER phase: PublicView.Battle's members for three actors (sera and ravien at the gaugeMax 100, yuri at
@@ -543,6 +680,21 @@ namespace MemoryForge.Client.Tests
             var row = view.GetComponentsInChildren<UnityEngine.UI.Text>().FirstOrDefault(t => t.text.Contains(marker) && t.GetComponentInParent<UnityEngine.UI.Button>() == null);
             return row == null ? null : string.Join("\n", row.transform.parent.GetComponentsInChildren<UnityEngine.UI.Text>().Select(t => t.text));
         }
+        // A battle-query forecast in PublicView's member order with the given per-enemy split (protocol data standing in for Core's
+        // BattlePlayForecast; enemyHpLoss/enemyDamage are the split's sum, as Core keeps them).
+        static JObject SplitForecast(string? error, bool hidden, params (string Uid, int HpLoss)[] losses) => new JObject
+        {
+            ["error"] = error == null ? JValue.CreateNull() : (JToken)error, ["mode"] = "now", ["cost"] = 1, ["due"] = JValue.CreateNull(), ["hidden"] = hidden,
+            ["enemyHpLoss"] = losses.Sum(l => l.HpLoss), ["enemyDamage"] = losses.Sum(l => l.HpLoss), ["newlyBroken"] = 0, ["blockDelta"] = 0, ["hpDelta"] = 0,
+            ["defeat"] = false, ["enemyHpLosses"] = new JArray(losses.Select(l => (object)new JObject { ["uid"] = l.Uid, ["hpLoss"] = l.HpLoss }).ToArray())
+        };
+        // A named part ("Bar", "HpPreview") of one live enemy box, or null.
+        static RectTransform? EnemyPart(MemoryForgeServerPracticeClient view, string enemy, string part) =>
+            view.GetComponentsInChildren<RectTransform>().FirstOrDefault(t => t.name == "Enemy:" + enemy)?
+                .GetComponentsInChildren<RectTransform>().FirstOrDefault(t => t.name == part);
+        static string EnemyText(MemoryForgeServerPracticeClient view, string enemy) => string.Join("\n",
+            view.GetComponentsInChildren<RectTransform>().First(t => t.name == "Enemy:" + enemy).GetComponentsInChildren<UnityEngine.UI.Text>().Select(t => t.text));
+        static int HpPreviews(MemoryForgeServerPracticeClient view) => view.GetComponentsInChildren<RectTransform>().Count(t => t.name == "HpPreview");
         static UnityEngine.UI.Text? DetailsBody(MemoryForgeServerPracticeClient view) =>
             view.GetComponentsInChildren<Transform>().FirstOrDefault(t => t.name == "CardDetailsBody")?.GetComponentInChildren<UnityEngine.UI.Text>();
     }

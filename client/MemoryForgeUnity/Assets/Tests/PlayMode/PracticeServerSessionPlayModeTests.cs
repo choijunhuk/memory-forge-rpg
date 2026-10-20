@@ -674,6 +674,99 @@ namespace MemoryForge.Client.Tests
             Assert.That(File.Exists(RecordPath), Is.False);
         }
 
+        // SERVER-ENEMY-PREVIEW: forecast.enemyHpLosses (PublicView's copy of Core's BattlePlayForecast.EnemyHpLosses) is passed on exactly
+        // as sent, detached, and only in Core's shape; a reply without it (an older server) is still accepted. The losses are protocol data.
+        [Test]
+        public void TheBattleQueryPassesCoresPerEnemyHpLossOnAsSentRefusesAnyOtherShapeAndAcceptsAnOlderReplyWithoutIt()
+        {
+            var session = Session();
+            var context = Refreshed(session).Context;
+            JToken? split = null, hidden = false;
+            string? error = null;
+            bool withSplit = false;
+            post = request =>
+            {
+                var asked = JObject.Parse(request.Text);
+                var reply = QueryJson(world, asked["uid"]!.Value<string>()!, asked["mode"]!.Value<string>()!, null, asked["picks"]!.Values<string>().Select(p => p!));
+                var forecast = (JObject)reply["forecast"]!;
+                forecast["error"] = error == null ? JValue.CreateNull() : (JToken)error;
+                if (hidden == null) forecast.Remove("hidden");
+                else forecast["hidden"] = hidden.DeepClone();
+                if (withSplit) forecast["enemyHpLosses"] = split?.DeepClone() ?? JValue.CreateNull();
+                return Reply.Json(200, reply);
+            };
+            PracticeBattleQueryResult Ask() => Run(() => session.BattleQueryAsync(context, "h2", "next", null, new[] { "r1" }));
+            static JObject Loss(string uid, JToken hpLoss) => new JObject { ["uid"] = uid, ["hpLoss"] = hpLoss };
+
+            // An older server without the member: accepted, with no split (nothing is derived from enemyHpLoss).
+            var older = Ask();
+            Assert.That(older.Code, Is.EqualTo(Codes.Ok));
+            Assert.That(older.View!.EnemyHpLosses, Is.Empty);
+            Assert.That(older.View.ForecastHidden, Is.False);
+
+            // Several enemies losing different amounts: exactly the server's entries in the server's order.
+            withSplit = true;
+            split = new JArray(Loss("e3", 12), Loss("e1", 8), Loss("e2", 3));
+            var answer = Ask();
+            Assert.That(answer.Code, Is.EqualTo(Codes.Ok));
+            var view = answer.View!;
+            Assert.That(view.EnemyHpLosses, Is.EqualTo(new[] { ("e3", 12), ("e1", 8), ("e2", 3) }));
+            // Detached both ways: a reply copy, the typed list and the view's JSON cannot change one another.
+            var copy = view.ToJObject();
+            copy["forecast"]!["enemyHpLosses"]![0]!["hpLoss"] = 99;
+            Assert.That(view.EnemyHpLosses[0], Is.EqualTo(("e3", 12)));
+            Assert.That(view.ToJObject()["forecast"]!["enemyHpLosses"]![0]!["hpLoss"]!.Value<int>(), Is.EqualTo(12));
+            Assert.Throws<NotSupportedException>(() => ((IList<(string Uid, int HpLoss)>)view.EnemyHpLosses)[0] = ("e3", 1));
+            Assert.That(view.EnemyHpLosses[0], Is.EqualTo(("e3", 12)));
+            Assert.That(session.IsCurrent(answer), Is.True);
+
+            // Empty with an error or a hidden outcome, as Core keeps it: accepted.
+            split = new JArray(); error = "NOT_ENOUGH_AP";
+            var refusedPlay = Ask();
+            Assert.That(refusedPlay.Code, Is.EqualTo(Codes.Ok));
+            Assert.That((refusedPlay.View!.ForecastError, refusedPlay.View.EnemyHpLosses.Count), Is.EqualTo(("NOT_ENOUGH_AP", 0)));
+            error = null; hidden = true;
+            var hiddenAnswer = Ask();
+            Assert.That(hiddenAnswer.Code, Is.EqualTo(Codes.Ok));
+            Assert.That((hiddenAnswer.View!.ForecastHidden, hiddenAnswer.View.EnemyHpLosses.Count), Is.EqualTo((true, 0)));
+
+            // Any other shape refuses the whole reply (no view, nothing to draw).
+            void Rejects(string what, JToken? bad, string? badError = null, bool badHidden = false, bool noHidden = false)
+            {
+                split = bad; error = badError; hidden = noHidden ? null : (JToken)badHidden;
+                var refused = Ask();
+                Assert.That(refused.Code, Is.EqualTo(PracticeProtocolException.Invalid), what);
+                Assert.That(refused.View, Is.Null, what);
+            }
+            Rejects("null", null);
+            Rejects("an object", new JObject { ["e1"] = 3 });
+            Rejects("a number entry", new JArray(3));
+            Rejects("an extra member", new JArray(new JObject { ["uid"] = "e1", ["hpLoss"] = 3, ["hp"] = 9 }));
+            Rejects("no hpLoss", new JArray(new JObject { ["uid"] = "e1" }));
+            Rejects("no uid", new JArray(new JObject { ["hpLoss"] = 3 }));
+            Rejects("a zero loss", new JArray(Loss("e1", 0)));
+            Rejects("a negative loss", new JArray(Loss("e1", -1)));
+            Rejects("a fractional loss", new JArray(Loss("e1", 1.5)));
+            Rejects("a text loss", new JArray(Loss("e1", "3")));
+            Rejects("a loss above int", new JArray(Loss("e1", 2147483648L)));
+            Rejects("an empty uid", new JArray(Loss("", 3)));
+            Rejects("a numeric uid", new JArray(new JObject { ["uid"] = 1, ["hpLoss"] = 3 }));
+            Rejects("an enemy named twice", new JArray(Loss("e1", 3), Loss("e1", 4)));
+            Rejects("a loss with an error", new JArray(Loss("e1", 3)), "NOT_ENOUGH_AP");
+            Rejects("a loss with a hidden outcome", new JArray(Loss("e1", 3)), null, true);
+            Rejects("a split without hidden", new JArray(Loss("e1", 3)), null, false, true);
+            split = new JArray(); error = null; hidden = JValue.CreateString("false");
+            var textHidden = Ask();
+            Assert.That(textHidden.Code, Is.EqualTo(PracticeProtocolException.Invalid), "a split with a text hidden");
+
+            // A private member name inside an entry refuses the reply as private.
+            split = new JArray(new JObject { ["uid"] = "e1", ["hpLoss"] = 3, ["seed"] = 1 }); hidden = false;
+            Assert.That(Ask().Code, Is.EqualTo(PracticeProtocolException.PrivateField));
+
+            Assert.That(session.State.NeedsRefresh, Is.False, "a malformed answer is not a newer state");
+            Assert.That(File.Exists(RecordPath), Is.False, "a query writes no record");
+        }
+
         // ---- the pure memory preview (P1-SERVER-MEMORY-PREVIEW §8.12/§14.7/§17.4) ----
 
         [Test]

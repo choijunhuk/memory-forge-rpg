@@ -20,6 +20,9 @@ using MemoryForge.Core;
 sealed partial class ServerChecks
 {
     static readonly string[] QueryMembers = { "runId", "version", "phase", "context", "source", "slots", "forecast", "choices" };
+    static readonly string[] ForecastMembers =
+        { "error", "mode", "cost", "due", "hidden", "enemyHpLoss", "enemyDamage", "newlyBroken", "blockDelta", "hpDelta", "defeat", "enemyHpLosses" };
+    static readonly string[] EnemyHpLossMembers = { "uid", "hpLoss" };
 
     static string QueryPath(string runId) => RunsPath + "/" + runId + "/battle-query";
     static Task<Result> Query(Api api, string? token, string runId, int version, string uid, string? mode = null, string? target = null, IReadOnlyList<string>? picks = null)
@@ -281,8 +284,8 @@ sealed partial class ServerChecks
         return core;
     }
 
-    // One full query round at the committed version: the served view and every hand card in every mode (plus explicit picks for pick
-    // cards) against the oracle, a repeat, the fixed NOT_IN_HAND for every instance outside the hand and for no card, stale and foreign
+    // One full query round at the committed version: the served view and every hand card in every mode (an enemy-target card also
+    // now at every other living enemy; plus explicit picks for pick cards) against the oracle, a repeat, the fixed NOT_IN_HAND for every instance outside the hand and for no card, stale and foreign
     // queries, and byte/SHA-256 purity of the stored envelope and the served view. Returns the oracle of that version.
     async Task<Run> QueryAllSources(Api api, string token, string otherToken, Func<Task<byte[]>> stored, Func<Task<bool>> unborn, BattleData content,
         string runId, int version, bool requireDraw, string label)
@@ -314,6 +317,15 @@ sealed partial class ServerChecks
                 Status(reply, 200, null, "the battle query of a hand card (" + mode + ")" + label);
                 SameQuery(reply.Json, core, content, runId, version, uid, mode, aim, Array.Empty<string>(), "hand card " + mode + label);
             }
+            // Every other living enemy as the immediate play's target too, so each per-enemy HP loss entry is matched to the enemy it
+            // names, not only to the first one.
+            if (aim != null)
+                foreach (string other in cb.Enemies.Where(e => e.Alive && e.Uid != aim).Select(e => e.Uid))
+                {
+                    var reply = await Query(api, token, runId, version, uid, "now", other);
+                    Status(reply, 200, null, "the battle query of a hand card at another living enemy" + label);
+                    SameQuery(reply.Json, core, content, runId, version, uid, "now", other, Array.Empty<string>(), "hand card now at another living enemy" + label);
+                }
             var sheet = core.BattleHandChoices(uid);
             if (sheet.Requests.Count == 0) continue;
             // An explicit first candidate, then the source itself, which is never on its own sheet (source exclusion).
@@ -359,7 +371,8 @@ sealed partial class ServerChecks
     }
 
     // One 200 reply against the oracle: exactly the allowlisted members; server journal version, node, turn and battle version; the
-    // source and request; the computed slots; Core's forecast of exactly this request; Core's pick sheet and its candidates.
+    // source and request; the computed slots; Core's forecast of exactly this request with its per-enemy HP loss split; Core's pick
+    // sheet and its candidates.
     void SameQuery(JsonElement reply, Run core, BattleData content, string runId, int version, string uid, string mode, string? target,
         IReadOnlyList<string> picks, string what)
     {
@@ -378,10 +391,21 @@ sealed partial class ServerChecks
 
         var f = core.BattleForecast(uid, mode, target, picks);
         var forecast = reply.GetProperty("forecast");
+        Check(forecast.EnumerateObject().Select(p => p.Name).SequenceEqual(ForecastMembers), what + ": only the allowlisted forecast members");
         Check(OptionalText(forecast, "error") == f.Error && S(forecast, "mode") == f.Mode && I(forecast, "cost") == f.Cost && OptionalInt(forecast, "due") == f.Due
             && forecast.GetProperty("hidden").GetBoolean() == f.Hidden && I(forecast, "enemyHpLoss") == f.EnemyHpLoss && I(forecast, "enemyDamage") == f.EnemyDamage
             && I(forecast, "newlyBroken") == f.NewlyBroken && I(forecast, "blockDelta") == f.BlockDelta && I(forecast, "hpDelta") == f.HpDelta
             && forecast.GetProperty("defeat").GetBoolean() == f.Defeat, what + ": Core's forecast of exactly this request");
+        // Core's per-enemy split of exactly this request, entry by entry in battle order: only {uid, hpLoss}, each a positive loss of a
+        // distinct enemy of this battle, summing to enemyHpLoss, and empty with an error or a hidden outcome (no draw or random result).
+        var split = A(forecast, "enemyHpLosses");
+        var enemies = new HashSet<string>(b.Enemies.Select(e => e.Uid), StringComparer.Ordinal);
+        Check(split.Count == f.EnemyHpLosses.Count && split.Zip(f.EnemyHpLosses).All(p => p.First.ValueKind == JsonValueKind.Object
+                && p.First.EnumerateObject().Select(m => m.Name).SequenceEqual(EnemyHpLossMembers) && S(p.First, "uid") == p.Second.Uid && I(p.First, "hpLoss") == p.Second.HpLoss),
+            what + ": Core's per-enemy HP loss of exactly this request, in battle order");
+        Check(split.All(e => I(e, "hpLoss") > 0 && enemies.Contains(S(e, "uid"))) && split.Select(e => S(e, "uid")).Distinct(StringComparer.Ordinal).Count() == split.Count
+            && split.Sum(e => (long)I(e, "hpLoss")) == I(forecast, "enemyHpLoss") && (split.Count == 0 || (f.Error == null && !f.Hidden)),
+            what + ": each split entry is a positive loss of a distinct enemy of this battle, the entries sum to enemyHpLoss, none with an error or hidden");
 
         var c = core.BattleHandChoices(uid, mode, picks);
         var choices = reply.GetProperty("choices");

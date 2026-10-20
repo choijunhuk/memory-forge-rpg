@@ -68,7 +68,8 @@ namespace MemoryForge.Server
         /// <summary>P1-PUBLIC-BATTLE-QUERY §17.4/§14.3/§14.7: the battle-query reply. The caller has already refused a source that is not a
         /// hand card (Core's fixed NOT_IN_HAND), so every member is public: the server run version and the node/turn/battle version the answer
         /// belongs to, the requested source (its effective name and BattleText) and request, the reservation board, Core's forecast of exactly
-        /// that play and the source's pick sheet. Not a promise about later states and not a replay of earlier ones.</summary>
+        /// that play (with Core's per-enemy HP loss of the enemies the reply's battle already shows) and the source's pick sheet. Not a
+        /// promise about later states and not a replay of earlier ones.</summary>
         public static Dictionary<string, object?> BattleQuery(Run run, string runId, int version, BattleQueryRequest request, BattleChoiceView choices,
             BattlePlayForecast forecast, BattleData content)
         {
@@ -85,7 +86,9 @@ namespace MemoryForge.Server
                 "slots", Slots(run.BattleReservationSlots(), b, content.Rules),
                 "forecast", Obj("error", forecast.Error, "mode", forecast.Mode, "cost", forecast.Cost, "due", forecast.Due, "hidden", forecast.Hidden,
                     "enemyHpLoss", forecast.EnemyHpLoss, "enemyDamage", forecast.EnemyDamage, "newlyBroken", forecast.NewlyBroken,
-                    "blockDelta", forecast.BlockDelta, "hpDelta", forecast.HpDelta, "defeat", forecast.Defeat),
+                    "blockDelta", forecast.BlockDelta, "hpDelta", forecast.HpDelta, "defeat", forecast.Defeat,
+                    // Core's own per-enemy split (BattlePlayForecast.EnemyHpLosses), copied entry by entry: empty with an error or hidden.
+                    "enemyHpLosses", forecast.EnemyHpLosses.Select(l => (object?)Obj("uid", l.Uid, "hpLoss", l.HpLoss)).ToList()),
                 "choices", Obj("error", choices.Error,
                     "requests", choices.Requests.Select(r => (object?)Obj("label", r.Label, "from", r.From, "count", r.Count, "growthOnly", r.GrowthOnly,
                         "op", r.Op, "part", r.Part, "leading", r.Leading)).ToList(),

@@ -384,10 +384,11 @@ namespace MemoryForge.Client
     {
         readonly JObject json;
         PracticeBattleQueryView(JObject json, PracticeUiContext context, string uid, string mode, string? target, IReadOnlyList<string> picks,
-            string battlePhase, string? forecastError, string? choicesError, string? choicesBlocked)
+            string battlePhase, string? forecastError, bool forecastHidden, IReadOnlyList<(string Uid, int HpLoss)> enemyHpLosses, string? choicesError,
+            string? choicesBlocked)
         {
             this.json = json; Context = context; Uid = uid; Mode = mode; Target = target; Picks = picks; BattlePhase = battlePhase;
-            ForecastError = forecastError; ChoicesError = choicesError; ChoicesBlocked = choicesBlocked;
+            ForecastError = forecastError; ForecastHidden = forecastHidden; EnemyHpLosses = enemyHpLosses; ChoicesError = choicesError; ChoicesBlocked = choicesBlocked;
         }
 
         /// <summary>The context the query was asked in; the answer belongs to it alone.</summary>
@@ -399,6 +400,12 @@ namespace MemoryForge.Client
         public string BattlePhase { get; }
         /// <summary>forecast.error: Core's verdict on exactly this request (phase, AP, target, slot, pull destination); null = legal now.</summary>
         public string? ForecastError { get; }
+        /// <summary>forecast.hidden is JSON true: the outcome depends on a draw or a random choice, so no outcome is shown.</summary>
+        public bool ForecastHidden { get; }
+        /// <summary>forecast.enemyHpLosses as sent: Core's BattlePlayForecast.EnemyHpLosses of exactly this request, one (uid, HP lost)
+        /// per enemy that loses HP, in the battle's enemy order; a read-only copy. Empty with an error or hidden, and when the server sent
+        /// no split (an older server: no per-enemy preview, nothing is derived from enemyHpLoss).</summary>
+        public IReadOnlyList<(string Uid, int HpLoss)> EnemyHpLosses { get; }
         /// <summary>choices.error: PICK_INVALID when a supplied pick does not hold; null only means the pick sheet was computed.</summary>
         public string? ChoicesError { get; }
         /// <summary>choices.blocked (PICK_GROWTH_CAP), or null.</summary>
@@ -406,7 +413,8 @@ namespace MemoryForge.Client
         public JObject ToJObject() => (JObject)json.DeepClone();
 
         /// <summary>Strictly parses the reply and requires it to echo the asking context (runId, server version, node, turn, battle.v) and
-        /// the exact request (uid, effective mode, target, ordered picks); anything else is RESPONSE_MISMATCH.</summary>
+        /// the exact request (uid, effective mode, target, ordered picks); anything else is RESPONSE_MISMATCH. A forecast.enemyHpLosses that
+        /// is sent must have Core's shape (see EnemyHpLosses), else RESPONSE_INVALID; its absence is accepted.</summary>
         public static PracticeBattleQueryView Parse(byte[] utf8, PracticeUiContext context, string uid, string mode, string? target, IReadOnlyList<string> picks)
         {
             if (context == null) throw new ArgumentNullException(nameof(context));
@@ -434,12 +442,39 @@ namespace MemoryForge.Client
             PracticePublicJson.Object(json, "slots");
             var forecast = PracticePublicJson.Object(json, "forecast");
             string? forecastError = PracticePublicJson.NullableText(forecast, "error");
+            bool forecastHidden = forecast.TryGetValue("hidden", out JToken? hidden) && hidden is JValue flag && flag.Type == JTokenType.Boolean && (bool)flag.Value!;
+            var losses = EnemyHpLossesOf(forecast, forecastError);
             var choices = PracticePublicJson.Object(json, "choices");
             string? choicesError = PracticePublicJson.NullableText(choices, "error"), choicesBlocked = PracticePublicJson.NullableText(choices, "blocked");
             PracticePublicJson.Array(choices, "requests");
             PracticePublicJson.Array(choices, "candidates");
             var copy = System.Array.AsReadOnly(new List<string>(picks).ToArray());
-            return new PracticeBattleQueryView(json, context, uid, mode, target, copy, battlePhase, forecastError, choicesError, choicesBlocked);
+            return new PracticeBattleQueryView(json, context, uid, mode, target, copy, battlePhase, forecastError, forecastHidden, losses, choicesError, choicesBlocked);
+        }
+
+        // forecast.enemyHpLosses is additive: without it (an older server) there is no per-enemy preview. When sent it must have Core's
+        // shape: an array of objects of exactly {uid, hpLoss}, each uid a non-empty string named once and each hpLoss a JSON integer
+        // 1..2147483647 (Core lists only enemies that lose HP). With an error or a hidden outcome (hidden is then required as a JSON
+        // boolean) it must be empty, as Core keeps it, so a drawn preview never discloses an outcome the forecast hides. Anything else is
+        // RESPONSE_INVALID. The values are passed on as sent; nothing is summed, compared or derived here.
+        static IReadOnlyList<(string Uid, int HpLoss)> EnemyHpLossesOf(JObject forecast, string? error)
+        {
+            if (!forecast.ContainsKey("enemyHpLosses")) return System.Array.AsReadOnly(System.Array.Empty<(string Uid, int HpLoss)>());
+            var rows = PracticePublicJson.Array(forecast, "enemyHpLosses");
+            bool hidden = PracticePublicJson.Member(forecast, "hidden") is JValue flag && flag.Type == JTokenType.Boolean
+                ? (bool)flag.Value! : throw PracticePublicJson.Invalid("hidden");
+            if ((error != null || hidden) && rows.Count != 0) throw PracticePublicJson.Invalid("enemyHpLosses");
+            var named = new HashSet<string>(StringComparer.Ordinal);
+            var losses = new List<(string Uid, int HpLoss)>();
+            foreach (var row in rows)
+            {
+                if (!(row is JObject entry) || entry.Count != 2) throw PracticePublicJson.Invalid("enemyHpLosses");
+                string enemy = PracticePublicJson.Text(entry, "uid");
+                int loss = PracticePublicJson.Count(entry, "hpLoss");
+                if (enemy.Length == 0 || loss == 0 || !named.Add(enemy)) throw PracticePublicJson.Invalid("enemyHpLosses");
+                losses.Add((enemy, loss));
+            }
+            return System.Array.AsReadOnly(losses.ToArray());
         }
     }
 

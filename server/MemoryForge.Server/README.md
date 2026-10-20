@@ -62,7 +62,9 @@ member is `400 UNKNOWN_FIELD`, a duplicate member `400 DUPLICATE_FIELD`.
   battle's own `v`, which differs from `version` once the run has other commands (a later battle, an `assign`); `source {uid, id, name,
   text, mode, target, picks}` with the effective name and Core `BattleText`; the same computed `slots` as above; `forecast` = Core
   `Run.BattleForecast` of exactly this request (`error`, `mode`, `cost`, `due`, `hidden`, `enemyHpLoss`, `enemyDamage`, `newlyBroken`,
-  `blockDelta`, `hpDelta`, `defeat`; with `hidden` the outcome fields stay default, so no draw order or random result is revealed);
+  `blockDelta`, `hpDelta`, `defeat`; with `hidden` the outcome fields stay default, so no draw order or random result is revealed) and,
+  added last, `enemyHpLosses [{uid, hpLoss}]`: Core's own `BattlePlayForecast.EnemyHpLosses`, one entry per enemy that loses HP, in the
+  battle's enemy order, summing to `enemyHpLoss`, empty with an error or `hidden` (nothing is recomputed; a client without it ignores it);
   `choices` = Core's shared pick sheet for the effective definition and Core prices: `requests [{label, from, count, growthOnly, op, part,
   leading}]`, `accepted` (leading picks that hold), `index`/`left` (the request the next pick fills), `blocked` (`PICK_GROWTH_CAP`),
   `candidates [{uid, id, zone, plus, mods, temp, growth}]` of that request only (`zone` is its `from`: `hand`, `discard` or `res`), and
@@ -168,11 +170,14 @@ never open, conflicting loopback hosting URLs (command line and environment) tha
 
 Both modes make the battle query scenario mandatory (`battle-query` / `pg-battle-query`, required before the privacy scan counts): auth,
 ownership and no file/row on refusal, `NO_BATTLE` on the map, stale versions, the strict body, every hand card and mode compared member
-by member with a check-side Core replay of the stored inputs, explicit picks, the fixed `NOT_IN_HAND` for every instance outside the hand
+by member with a check-side Core replay of the stored inputs (the forecast's exact member list and its `enemyHpLosses` entry by entry;
+an enemy-target card is also asked at every other living enemy), explicit picks, the fixed `NOT_IN_HAND` for every instance outside the hand
 (byte-identical to no card), byte/SHA-256 envelope purity, and at least one query round whose server journal version differs from
 `battle.v`, each checked against its own source. The v2 assignment boundary is checked too: a saved starting-memory key (the base common
 card included) is refused with `REASSIGNMENT_REQUIRES_SEPARATE_FLOW`, so the separate versions come from a legitimate assignment of a card
 gained in the run or from progression to a later battle. This proves the query contract, not client transport or process recovery.
+Whether a real round meets a play that hits several enemies for different amounts depends on the server-chosen seed and the hand; such
+splits themselves are pinned by Core's `BattlePreviewChecks`, and every real reply here must equal the oracle.
 Console failure output carries only check names, statuses, safe codes and keyed fingerprints; raw responses, host/build output and
 exception text go to `diagnostics.log` (0600) in the owner-only temp directory, which is kept only on failure. Run as a normal user (the
 write-failure check needs enforced directory permissions; as root it fails rather than skips).

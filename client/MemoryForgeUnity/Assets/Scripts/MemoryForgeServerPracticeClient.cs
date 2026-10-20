@@ -158,6 +158,10 @@ namespace MemoryForge.Client
         public string? Target => target;
         /// <summary>The battle query answer for the current selection and context; null while none is current.</summary>
         public PracticeBattleQueryView? QueryView => QueryCurrent() ? queryResult!.View : null;
+        /// <summary>The per-enemy HP loss the enemy bars light now (enemy uid → the server's forecast.enemyHpLosses value): only from the
+        /// current answer for exactly the current selection and context on a fresh snapshot, never with an error or hidden outcome; empty
+        /// otherwise. A detached copy per call.</summary>
+        public IReadOnlyDictionary<string, int> EnemyHpPreview => PreviewLosses();
         public bool PickerOpen => picker != null;
         public IReadOnlyList<string> PickerPicks => picker?.Picks.ToArray() ?? Array.Empty<string>();
         /// <summary>Exactly the server's candidates for the open sheet's next pick (empty while its answer is not current).</summary>
@@ -1147,6 +1151,20 @@ namespace MemoryForge.Client
             return view.Uid == uid && view.Mode == mode && view.Target == asked && view.Picks.SequenceEqual(picks);
         }
 
+        // Core's forecast split per enemy, as the server sent it (forecast.enemyHpLosses = BattlePlayForecast.EnemyHpLosses): each enemy's
+        // HP bar lights the part the current request takes, as the local expedition does. Only the current answer (this selection
+        // generation, context and exact request; QueryCurrent) on the session's fresh snapshot, so an older answer is never drawn over newer
+        // enemy HP; nothing with an error or a hidden outcome, during a result barrier, or when the server sent no split. Nothing is computed.
+        Dictionary<string, int> PreviewLosses()
+        {
+            var losses = new Dictionary<string, int>(StringComparer.Ordinal);
+            if (SnapshotStale || PresentationBarrier || !QueryCurrent()) return losses;
+            var view = queryResult!.View!;
+            if (view.ForecastError != null || view.ForecastHidden) return losses;
+            foreach (var (uid, hpLoss) in view.EnemyHpLosses) losses[uid] = hpLoss;
+            return losses;
+        }
+
         void DispatchPrepared()
         {
             var waiting = prepared!;
@@ -1946,8 +1964,10 @@ namespace MemoryForge.Client
                 18, 88, 344, 40, 16, Muted);
             ActorsView(party, b);
 
-            // Enemies (public HP, block, alive, current and next intent as published)
+            // Enemies (public HP, block, alive, current and next intent as published; the current forecast's per-enemy HP loss lit on
+            // each bar with "now → after" beside it, both the server's numbers)
             var enemies = Enemies();
+            var losses = PreviewLosses();
             var foes = Box(frame!, "Enemies", 428, 96, 1140, 264, Panel);
             float width = 1140f / Math.Max(1, enemies.Count);
             for (int i = 0; i < enemies.Count; i++)
@@ -1955,11 +1975,15 @@ namespace MemoryForge.Client
                 var e = enemies[i];
                 string uid = Str(e["uid"]) ?? "";
                 bool alive = Bool(e["alive"]);
+                int? hp = Int(e["hp"]);
+                int taking = alive && hp != null && losses.TryGetValue(uid, out int loss) ? loss : 0;
                 var box = Button(foes, "Enemy:" + uid, "", i * width + 6, 6, width - 12, 252, () => SelectEnemy(uid), uid == target ? Brass : Line);
                 box.interactable = alive && !SelectionLocked();
                 Label(box.transform, (Str(e["name"]) ?? "적") + (alive ? "" : " · 처치"), 12, 10, width - 36, 36, 25, alive ? Ink : Muted, FontStyle.Bold);
-                Label(box.transform, "체력 " + Int(e["hp"]) + " / " + Int(e["maxHp"]) + "   방어 " + Int(e["block"]), 12, 52, width - 36, 30, 21, Ink);
-                Bar(box.transform, 12, 86, width - 36, 8, Int(e["hp"]) ?? 0, Int(e["maxHp"]) ?? 0, Danger);
+                Label(box.transform, "체력 " + hp + (taking > 0 ? " → " + Math.Max(0, hp!.Value - taking) : "") + " / " + Int(e["maxHp"]) + "   방어 " + Int(e["block"]),
+                    12, 52, width - 36, 30, 21, Ink);
+                var bar = Bar(box.transform, 12, 86, width - 36, 8, hp ?? 0, Int(e["maxHp"]) ?? 0, Danger);
+                if (taking > 0) PreviewLoss(bar, hp!.Value, Int(e["maxHp"]) ?? 0, taking);
                 if (alive) Label(box.transform, "이번  " + MoveText(e["intent"]) + "\n다음  " + MoveText(e["next"]), 12, 104, width - 36, 96, 19, Brass);
                 if (uid == target) Label(box.transform, "대상", 12, 210, width - 36, 30, 19, Background, FontStyle.Bold);
             }
@@ -2222,7 +2246,7 @@ namespace MemoryForge.Client
             if ((Int(f?["enemyHpLoss"]) ?? 0) != 0) parts.Add("적 체력 -" + Int(f?["enemyHpLoss"]));
             if ((Int(f?["blockDelta"]) ?? 0) != 0) parts.Add("방어 " + Signed(Int(f?["blockDelta"]) ?? 0));
             if ((Int(f?["hpDelta"]) ?? 0) != 0) parts.Add("체력 " + Signed(Int(f?["hpDelta"]) ?? 0));
-            if (Bool(f?["defeat"])) parts.Add("처치");
+            if (Bool(f?["defeat"])) parts.Add("이 행동으로 패배해요");
             return head + (parts.Count == 0 ? "" : " · " + string.Join(" · ", parts));
         }
 
@@ -2475,8 +2499,19 @@ namespace MemoryForge.Client
             scroll.horizontal = contentWidth > width; scroll.vertical = contentHeight > height; scroll.movementType = ScrollRect.MovementType.Clamped; scroll.scrollSensitivity = 25;
             return content;
         }
-        void Bar(Transform parent, float x, float y, float width, float height, int value, int max, Color color)
-        { var back = Box(parent, "Bar", x, y, width, height, Line); Box(back, "Fill", 0, 0, width * Mathf.Clamp01(max > 0 ? (float)value / max : 0), height, color); }
+        RectTransform Bar(Transform parent, float x, float y, float width, float height, int value, int max, Color color)
+        {
+            var back = Box(parent, "Bar", x, y, width, height, Line);
+            Box(back, "Fill", 0, 0, width * Mathf.Clamp01(max > 0 ? (float)value / max : 0), height, color);
+            return back;
+        }
+        // The HP a forecast takes, lit over the bar's fill from what would remain up to the current HP (the expedition's PreviewLoss).
+        void PreviewLoss(RectTransform back, int hp, int max, int taking)
+        {
+            float w = back.sizeDelta.x, k = max > 0 ? w / max : 0;
+            float from = k * Math.Max(0, hp - taking), to = k * Math.Min(hp, max);
+            if (to > from) Box(back, "HpPreview", from, 0, to - from, back.sizeDelta.y, new Color(1, 1, 1, 0.55f));
+        }
         static Color Hex(string hex) { ColorUtility.TryParseHtmlString("#" + hex, out var color); return color; }
     }
 }
