@@ -1,5 +1,13 @@
 # Claude 작업자 계약 — ALL-IN-ONE
 
+## 2026-10-21 최신 우선 — Codex·Claude 공동 구현
+
+사용자 직접 지시에 따라 일반 구현·계획·작업 조정·시험·빌드·통합·커밋과 Unity 쓰기는 Codex와 Claude가 대략 동등하게 나눌 수 있다. [작업 배분](docs/WORK_ALLOCATION_20261021.md)과 `docs/AI_WORKFLOW.md` §0이 아래의 독점 역할·Codex 구현 금지·호출 단방향 서술보다 우선한다. 비율은 작업 배분이며 토큰 할당이나 구독량 이전이 아니다.
+
+선언된 담당 루트만 구독·과금 확인 후 상대 공식 CLI에 한정 작업을 맡긴다. 호출받은 작업은 어느 AI도 다시 호출하지 않는다. 별도 worktree·파일 담당과 Unity 전역 잠금의 단일 작성자를 지킨다. Claude 작성 변경은 Codex가, Codex 작성 변경은 Claude가 독립 리뷰하며 민감 경로는 상대 리뷰 전 통합하지 않는다.
+
+창작 원본·이미지 내용은 계속 Codex 소유다. Claude의 직접 수정 차단, §18.1·§18.6 표현 기준, 모델 고정·구독 포함 과금·승인 경계·Private은 유지한다. 기존 Claude 세션 감사는 그대로 적용하며 Codex App/native UI의 감사 증거로 사용하지 않는다.
+
 `AGENTS.md`, `docs/CURRENT.md`, `docs/AI_WORKFLOW.md`, `docs/START_CLAUDE.md`를 읽는다. Codex가 공식 CLI로 작업을 배정한다. (전환 전 이력) 현재 담당은 아래 2026-10-18·2026-10-17 절과 `OWNERSHIP.md`를 따른다.
 
 ## 2026-10-18 최신 우선 — 창작 원본은 Codex, 공통 구현은 Claude

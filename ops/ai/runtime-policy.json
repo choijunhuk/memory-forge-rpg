@@ -1,5 +1,5 @@
 {
-  "version": "2026-10-18-creative-originals-codex-implementation-claude",
+  "version": "2026-10-21-shared-implementation-codex-creative-originals",
   "models": {
     "codex": "gpt-6.1-sol",
     "claude": "claude-opus-5-5"
@@ -22,9 +22,8 @@
   },
   "fallbacks": [],
   "work_routing": {
-    "user_direction_on": "2026-10-17",
-    "effective_after_commit": "0623d61",
-    "root": "Claude Opus root session: task selection, planning, implementation, analysis, tests, Unity Editor single writer, integration, commit/push/PR/CI, acceptance records, adoption of review feedback",
+    "user_direction_on": "2026-10-21",
+    "root": "Codex or Claude declared task owner: task selection, planning, implementation, analysis, tests, Unity Editor single writer, integration, commit/push/PR/CI, acceptance records and adoption of review feedback",
     "codex_responsibilities": [
       "creative originals under art/: character, boss and enemy design, outfits and skins",
       "image generation and content edits",
@@ -36,14 +35,12 @@
       "read-only independent code review and visual-fidelity review of implemented screens"
     ],
     "codex_must_not": [
-      "task dispatch, direction or planning",
-      "system implementation: runtime code, UI, players, data plumbing",
-      "integration, commits or pushes",
-      "Unity Editor writes",
-      "calling Claude"
+      "recursive AI calls or child jobs dispatching either AI",
+      "same-file concurrency or multiple Unity scene/prefab writers",
+      "bypass model, subscription billing, approval or creative-original guards"
     ],
-    "invocation_direction": "Claude calls the official Codex CLI after subscription and billing checks; Codex never calls Claude; no recursion",
-    "codex_review": "read-only; Codex edits and commits nothing and returns claude_autonomy.feedback_classes; Claude adopts, fixes and reverifies; core defects block integration",
+    "invocation_direction": "declared task owner dispatches bounded official CLI jobs after subscription and billing checks: Codex may call the official Claude CLI; Claude may call the official Codex CLI; child jobs never call either AI; no recursion",
+    "codex_review": "independent review is read-only for either AI; the author/task owner fixes, tests and integrates; core defects block integration",
     "codex_review_required_before_integration": [
       "server",
       "save_and_memory",
@@ -53,10 +50,9 @@
       "netcode",
       "core_rules"
     ],
-    "codex_review_unavailable": "sensitive paths hold; other changes may integrate after a separate-context Claude review, recorded, with Codex review later",
-    "in_flight_codex_root_work": "a Codex root unit already in progress at the switch may only commit and CI-check its already written and verified changes and record its handoff; no new implementation, scope growth or Claude calls; otherwise checkpoint and hand off to Claude; open no new Codex root work",
-    "legacy_claude_runner": "tools/ai/run_claude.py, its MCP profiles, --allow-test registry, shell deny rules, locks and audits apply only to jobs launched through that runner; kept for evidence and reproduction; not used for new dispatch",
-    "allocation_basis": "user direction: Claude for development, Codex for images, character design and review; no fixed token percentage enforcement",
+    "codex_review_unavailable": "sensitive paths hold; if the required opposite-AI reviewer is unavailable, hold that unit and continue independent work; do not substitute self-review",
+    "legacy_claude_runner": "tools/ai/run_claude.py may launch bounded official Claude jobs; its MCP profiles, --allow-test registry, shell deny rules, locks and audits remain in force for those jobs; child jobs cannot dispatch either AI; not an OS sandbox",
+    "allocation_basis": "user direction 2026-10-21: roughly equal implementation workload by bounded task; no fixed token percentage enforcement or provider quota transfer",
     "quality_and_cross_review_unchanged": true,
     "enforcement": "task dispatch; not a provider quota-transfer setting",
     "root_session_controls": {
@@ -178,7 +174,26 @@
       "minors_no_sexualised_staging": true,
       "adult_charm_as_real_scenes": true,
       "imported_copies_checked_by": "tools/check_art_copies.py"
-    }
+    },
+    "implementation_owners": [
+      "Codex",
+      "Claude"
+    ],
+    "shared_responsibilities": [
+      "planning",
+      "coordination_and_bounded_dispatch",
+      "implementation_and_analysis",
+      "tests_and_builds",
+      "integration_commit_push_pr_ci",
+      "unity_editor_single_writer",
+      "acceptance_records"
+    ],
+    "independent_reviewers_by_author": {
+      "Claude": "Codex",
+      "Codex": "Claude"
+    },
+    "root_session_controls_scope": "Claude sessions only, not Codex App/native UI; root_session_controls and root_session_audit retain their Claude-session boundaries and do not audit native Codex actions",
+    "creative_ownership_scope": "creative_ownership.codex_writes_only limits delegated creative-original jobs under art/<folder>; general implementation is shared in the declared worktree; Claude original-write guards and expression standards remain unchanged"
   },
   "billing": "existing_subscription_included_allowance_only",
   "api_auth_allowed": false,
@@ -216,7 +231,7 @@
     "telemetry": false,
     "paid_asset_generation": false,
     "single_writer": true,
-    "writer": "Claude root session"
+    "writer": "declared Codex or Claude task owner"
   },
   "claude_mcp_profiles": {
     "selection": "explicit tools/ai/run_claude.py --mcp-profile; unknown profiles, URLs and commands are rejected",
@@ -537,7 +552,7 @@
       "real_constraint",
       "optional_opinion"
     ],
-    "adoption_decision": "Claude decides adoption of review feedback; optional opinions never block integration by themselves",
+    "adoption_decision": "declared task owner decides adoption of review feedback; optional opinions never block integration by themselves",
     "approved_character_expression": "approved non-sexual character age, existence, appearance and subculture expression are not removed, reduced or changed on generic terms-of-service speculation; a concrete cited constraint goes to Codex as real_constraint",
     "approval_still_required": [
       "price",

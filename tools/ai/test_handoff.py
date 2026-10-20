@@ -359,7 +359,7 @@ class ClaudeMcpProfileTests(unittest.TestCase):
   self.assertLessEqual({'price','probability','currency_totals','permanent_assets','age_policy','production_deploy'},set(autonomy['approval_still_required']))
   self.assertIs(autonomy['safety_permission_billing_boundaries_unchanged'],True)
   self.assertEqual(autonomy['feedback_classes'],['implementation_defect','design_mismatch','real_constraint','optional_opinion'])
- def test_claude_root_and_codex_image_design_review_routing(self):
+ def test_shared_implementation_keeps_creative_review_and_safety_boundaries(self):
   policy=json.loads((ROOT/'ops/ai/runtime-policy.json').read_text());route=policy['work_routing']
   duties=['creative originals under art/: character, boss and enemy design, outfits and skins','image generation and content edits','final character visual design',
    'story, world, dialogue, relationships and voice scripts with acting direction','expressions, poses, gestures and lobby interactions',
@@ -367,18 +367,29 @@ class ClaudeMcpProfileTests(unittest.TestCase):
    'per-character staging: storyboards, camera, Timeline, VFX and character visual prefabs',
    'read-only independent code review and visual-fidelity review of implemented screens']
   self.assertEqual((route['codex_responsibilities'],policy['claude_autonomy']['codex_keeps']),(duties,duties))
-  self.assertEqual(route['codex_must_not'],['task dispatch, direction or planning','system implementation: runtime code, UI, players, data plumbing','integration, commits or pushes','Unity Editor writes','calling Claude'])
+  self.assertEqual(route.get('implementation_owners'),['Codex','Claude'])
+  self.assertLessEqual({'planning','coordination_and_bounded_dispatch','implementation_and_analysis','tests_and_builds','integration_commit_push_pr_ci','unity_editor_single_writer'},set(route['shared_responsibilities']))
+  self.assertEqual(route['independent_reviewers_by_author'],{'Claude':'Codex','Codex':'Claude'})
+  self.assertEqual(route['codex_must_not'],['recursive AI calls or child jobs dispatching either AI','same-file concurrency or multiple Unity scene/prefab writers','bypass model, subscription billing, approval or creative-original guards'])
   creative=route['creative_ownership'];self.assertIn('art/<folder>',creative['codex_writes_only']);self.assertIs(creative['minors_no_sexualised_staging'],True)
   self.assertEqual(set(creative['issue_classes']),{'technical_defect','creative_taste','real_constraint'});self.assertTrue((ROOT/creative['imported_copies_checked_by']).exists())
   self.assertIn('## 18. 2026-10-18 최신 우선',(ROOT/'docs/AI_WORKFLOW.md').read_text())
   for r in ['AGENTS.md','CLAUDE.md','docs/START_CLAUDE.md','README.md']: self.assertIn('OWNERSHIP.md',(ROOT/r).read_text(),r)
-  self.assertTrue(route['root'].startswith('Claude Opus root session'));self.assertIn('Unity Editor single writer',route['root'])
-  self.assertEqual(policy['unity']['writer'],'Claude root session');self.assertIs(policy['unity']['single_writer'],True)
-  self.assertIn('Claude calls the official Codex CLI',route['invocation_direction']);self.assertIn('Codex never calls Claude',route['invocation_direction'])
+  self.assertTrue(route['root'].startswith('Codex or Claude declared task owner'));self.assertIn('Unity Editor single writer',route['root'])
+  self.assertEqual(policy['unity']['writer'],'declared Codex or Claude task owner');self.assertIs(policy['unity']['single_writer'],True)
+  self.assertIn('Codex may call the official Claude CLI',route['invocation_direction']);self.assertIn('Claude may call the official Codex CLI',route['invocation_direction'])
+  self.assertIn('child jobs never call either AI',route['invocation_direction']);self.assertIn('no recursion',route['invocation_direction'])
   self.assertLessEqual({'server','save_and_memory','economy','auth','migration','netcode','core_rules'},set(route['codex_review_required_before_integration']))
   self.assertIn('read-only',route['codex_review']);self.assertIn('sensitive paths hold',route['codex_review_unavailable'])
+  self.assertEqual(policy['models'],{'codex':'gpt-6.1-sol','claude':'claude-opus-5-5'});self.assertEqual(policy['fallbacks'],[])
+  self.assertEqual(policy['billing'],'existing_subscription_included_allowance_only');self.assertEqual(policy['image_generation_owner'],'Codex')
+  for field in ('api_auth_allowed','extra_usage_allowed','purchased_credit_spend_allowed','auto_recharge_allowed'):self.assertIs(policy[field],False,field)
+  self.assertIs(policy['private_repository'],True);self.assertIs(policy['unity']['paid_asset_generation'],False)
+  self.assertEqual(creative['claude_must_not_change'],['outfit, body, expression, character age','dialogue, relationships, speech style, scene emotion','core intent of poses, motion, camera and staging timing','expressive purpose of per-character physics, shaders and VFX'])
+  self.assertIs(creative['adult_charm_as_real_scenes'],True)
   self.assertLessEqual({'mcp__unityMCP__'+t for t in ('generate_image','generate_model','generate_audio','import_model','import_model_file','asset_gen')},set(route['root_denied_tools']))
   self.assertEqual(set(route['root_session_controls']),{'session','start_checks','tool_restriction','permission_mode_tradeoff','unity_lock','codex_calls','audit'})
+  self.assertIn('Claude sessions only',route['root_session_controls_scope']);self.assertIn('not Codex App/native UI',route['root_session_controls_scope'])
   self.assertLessEqual({'Read(~/.codex/auth.json)','Read(~/.claude/.credentials.json)','Bash(printenv:*)','Bash(security find-generic-password:*)'},set(route['root_denied_permissions']))
   self.assertIn("r.acquire_lock(r.CONTROL_LOCK",(ROOT/'docs/AI_WORKFLOW.md').read_text());self.assertEqual(RUNNER.CONTROL_LOCK,'ops/ai/local/exclusive-control.lock')
   self.assertIn('## 17. 2026-10-17 최신 우선 — Claude 루트',(ROOT/'docs/AI_WORKFLOW.md').read_text())
