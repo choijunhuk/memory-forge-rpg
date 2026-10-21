@@ -1,5 +1,5 @@
 // P1-PRACTICE-COMMAND-OUTBOX §14.7/§17.2/§17.4: the Development practice client's one durable, exact, unresolved mutating request.
-// A mutation (POST /dev/practice/runs, /dev/practice/runs/{runId}/commands or /dev/practice/runs/{runId}/memory-commit) is staged here
+// Run mutations and the three recruitment mutations are staged here
 // before it is first sent, so closing the client after a send never regenerates its requestId or body: an uncertain commit is retried
 // with the same bytes instead of becoming a new action. At most one request is pending per configured file. While it is pending, the same
 // exact request reloads/restages unchanged and any other request (or its requestId with another route or body) is refused, the record
@@ -78,9 +78,9 @@ namespace MemoryForge.Client
     /// account, route and the exact body; RequestId and ExpectedVersion are read from that body.</summary>
     public sealed class PendingPracticeCommand
     {
-        internal PendingPracticeCommand(string endpoint, string account, string route, string body, string requestId, int? expectedVersion)
+        internal PendingPracticeCommand(string endpoint, string account, string route, string body, string requestId, int? expectedVersion, long? expectedRevision = null)
         {
-            Endpoint = endpoint; Account = account; Route = route; Body = body; RequestId = requestId; ExpectedVersion = expectedVersion;
+            Endpoint = endpoint; Account = account; Route = route; Body = body; RequestId = requestId; ExpectedVersion = expectedVersion; ExpectedRevision = expectedRevision;
         }
 
         /// <summary>The practice host origin, http://127.0.0.1:&lt;port&gt;; the request URL is Endpoint + Route.</summary>
@@ -95,6 +95,8 @@ namespace MemoryForge.Client
         public string RequestId { get; }
         /// <summary>The body's expectedVersion on the commands and memory-commit routes; null for a new run.</summary>
         public int? ExpectedVersion { get; }
+        /// <summary>The recruitment account revision staged in the exact body; null on run routes.</summary>
+        public long? ExpectedRevision { get; }
         /// <summary>The exact UTF-8 body bytes to send, as a fresh copy on every call.</summary>
         public byte[] BodyUtf8() => PracticeCommandOutbox.StrictUtf8.GetBytes(Body);
 
@@ -110,6 +112,9 @@ namespace MemoryForge.Client
         public const string Method = "POST";
         /// <summary>POST /dev/practice/runs (new run); the run routes come from CommandRoute and MemoryCommitRoute.</summary>
         public const string CreateRunRoute = "/dev/practice/runs";
+        public const string RecruitmentPullRoute = "/dev/practice/recruitment/pulls", RecruitmentLaunchRoute = "/dev/practice/recruitment/claim-launch",
+            RecruitmentSelectorRoute = "/dev/practice/recruitment/selector";
+        public static bool IsRecruitmentRoute(string route) => route == RecruitmentPullRoute || route == RecruitmentLaunchRoute || route == RecruitmentSelectorRoute;
         /// <summary>The server's body limit (Contracts.MaxBodyBytes) and JSON nesting limit.</summary>
         public const int MaxBodyBytes = 64 * 1024, MaxBodyDepth = 8;
         /// <summary>Above every canonical record of a body within MaxBodyBytes (at most four file bytes per body byte, plus the fields).</summary>
@@ -328,13 +333,15 @@ namespace MemoryForge.Client
 
         // ---- the stageable request ----
 
-        /// <summary>One of the three mutation routes and a body of 1..MaxBodyBytes strict UTF-8 holding one strict JSON object whose
+        /// <summary>One allowed mutation route and a body of 1..MaxBodyBytes strict UTF-8 holding one strict JSON object whose
         /// requestId is a server-valid ID; on the run routes its expectedVersion (and, for memory-commit, expectedMemoryVersion) is a JSON
-        /// integer 0..2147483647, and a new run carries none. Every other member and game rule is the server's to judge.</summary>
+        /// integer 0..2147483647, and a new run carries none. Recruitment requires a nonnegative Int64 expectedRevision and only its public intent fields.
+        /// Every other run member and all game rules are the server's to judge.</summary>
         static PendingPracticeCommand Command(string endpoint, string account, string route, string body)
         {
             bool command = IsRunRoute(route, CommandsSuffix), commit = IsRunRoute(route, MemoryCommitSuffix);
-            if (route != CreateRunRoute && !command && !commit) throw new FormatException("route");
+            bool recruitment = IsRecruitmentRoute(route);
+            if (route != CreateRunRoute && !command && !commit && !recruitment) throw new FormatException("route");
             int size;
             try { size = StrictUtf8.GetByteCount(body); }
             catch (EncoderFallbackException) { throw new FormatException("body UTF-8"); }
@@ -348,7 +355,26 @@ namespace MemoryForge.Client
                 if (commit && Version(members, "expectedMemoryVersion") == null) throw new FormatException("body expectedMemoryVersion");
             }
             else if (members.ContainsKey("expectedVersion")) throw new FormatException("a new run has no expectedVersion");
-            return new PendingPracticeCommand(endpoint, account, route, body, requestId, expectedVersion);
+            long? expectedRevision = null;
+            if (recruitment)
+            {
+                if (!(members.TryGetValue("expectedRevision", out object? revision) && revision is long number && number >= 0)) throw new FormatException("body expectedRevision");
+                expectedRevision = number;
+                int fields = route == RecruitmentPullRoute ? 4 : route == RecruitmentSelectorRoute ? 3 : 2;
+                if (members.Count != fields) throw new FormatException("recruitment members");
+                if (route == RecruitmentPullRoute && (!(members.TryGetValue("bannerId", out object? banner) && banner is string bannerId && IsPublicId(bannerId))
+                    || !(members.TryGetValue("count", out object? count) && count is long pulls && (pulls == 1 || pulls == 10)))) throw new FormatException("recruitment pull");
+                if (route == RecruitmentSelectorRoute && !(members.TryGetValue("charId", out object? character) && character is string charId && IsPublicId(charId)))
+                    throw new FormatException("recruitment selector");
+            }
+            return new PendingPracticeCommand(endpoint, account, route, body, requestId, expectedVersion, expectedRevision);
+        }
+
+        internal static bool IsPublicId(string id)
+        {
+            if (id.Length == 0 || id.Length > 128) return false;
+            foreach (char c in id) if (!(c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c >= '0' && c <= '9' || c == '-' || c == '_' || c == '.' || c == ':')) return false;
+            return true;
         }
 
         static int? Version(Dictionary<string, object?> members, string name) =>

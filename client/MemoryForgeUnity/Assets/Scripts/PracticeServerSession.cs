@@ -189,7 +189,7 @@ namespace MemoryForge.Client
         public bool CanMutate => Snapshot != null && Pending == null && OutboxCode == null && !NeedsRefresh && !InFlight;
     }
 
-    public sealed class PracticeServerSession : IDisposable
+    public sealed partial class PracticeServerSession : IDisposable
     {
         public const string AccountRoute = "/dev/practice/account";
         public static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(30), MinTimeout = TimeSpan.FromSeconds(1), MaxTimeout = TimeSpan.FromSeconds(120);
@@ -309,6 +309,7 @@ namespace MemoryForge.Client
                 catch (PracticeOutboxException error) { NoteOutboxFailure(error.Code); return NotSent(error.Code); }
                 NotePending(pending);
                 if (pending == null) return NotSent(Codes.NothingPending);
+                if (PracticeCommandOutbox.IsRecruitmentRoute(pending.Route)) return NotSent(Codes.PendingUnresolved);
                 return await AttemptAsync(pending, State.Snapshot, cancellation).ConfigureAwait(false);
             }, NotSent);
 

@@ -1,0 +1,6 @@
+{
+  "server/MemoryForge.Server/Recruitment.cs": "aced43ed32d54de6350a1c9624e97af9988bed1a91403f8509334928291bb081",
+  "server/MemoryForge.Server/PracticeRunStore.cs": "5d58583549fbe958bf9c36380b96181abb522b83b6088057e4dc1fee86f8e507",
+  "server/MemoryForge.ServerChecks/RecruitmentChecks.cs": "4475d99e7282c04953a76299e3b6633d4b8ec9214c8b0e4d1f4ba18cc00a0fce",
+  "server/MemoryForge.Server/bin/Debug/net10.0/MemoryForge.Server.dll": "265167745d1dad6f89c8027710058cf39ec486ac9308e5cde97da66d7b9adb45"
+}

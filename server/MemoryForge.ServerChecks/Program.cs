@@ -9,7 +9,8 @@
 //   dotnet run --project server/MemoryForge.ServerChecks -- <repoRoot> [--server-dll <built MemoryForge.Server.dll>]
 //   dotnet run --project server/MemoryForge.ServerChecks -- <repoRoot> --postgres-file <private connection file> --psql <oracle wrapper>
 // The default runs the file-backend suite only (the PostgreSQL mode is then NOT_RUN). The PostgreSQL mode (PostgresChecks.cs) runs only
-// when both PostgreSQL arguments are given, and then the file-backend suite is NOT_RUN in that invocation.
+// when both PostgreSQL arguments are given, and then the file-backend suite is NOT_RUN in that invocation. Both modes end with the
+// recruitment scenario (RecruitmentChecks.cs) on fresh accounts.
 using System.Net;
 using System.Net.Sockets;
 using System;
@@ -59,6 +60,7 @@ static class Program
             if (postgresFile != null && psql != null)
             {
                 await checks.RunPostgres(postgresFile, psql);
+                await checks.RunPostgresRecruitment();
                 passed = true;
                 Console.WriteLine("SERVER CHECKS PASS [postgres]: " + checks.Passed + " assertions");
                 Console.WriteLine("File-backend suite: NOT_RUN in this invocation (run without the PostgreSQL arguments)");
@@ -239,7 +241,8 @@ sealed partial class ServerChecks
     readonly ResponseCapture capture = new ResponseCapture();
     readonly List<long> seeds = new List<long>();
     // Scenarios that must all have completed before the final leak scan counts as covering the suite.
-    static readonly string[] RequiredScenarios = { "refusals", "auth-input", "expedition", "concurrency", "ownership", "write-failure", "battle-query", "kestrel-reload", "hosting-url-pin", "partial-mutation", "corrupt-stores" };
+    static readonly string[] RequiredScenarios = { "refusals", "auth-input", "expedition", "concurrency", "ownership", "write-failure", "battle-query", "kestrel-reload", "hosting-url-pin", "partial-mutation", "corrupt-stores",
+        "recruitment" };
     readonly HashSet<string> completed = new HashSet<string>(StringComparer.Ordinal);
     string serverDll = "", fixture = "", store = "", alphaRunId = "", lockedDirectory = "";
     byte[] alphaDone = Array.Empty<byte>();
@@ -258,6 +261,7 @@ sealed partial class ServerChecks
     public async Task RunAll()
     {
         DiagnosticSafety();
+        RecruitmentScanSafety();
         Check(File.Exists(Path.Combine(root, "data", "game_data.json")), "the repository root has data/game_data.json");
         serverDll = await BuildServer();
         WriteFixture();
@@ -275,6 +279,8 @@ sealed partial class ServerChecks
         await HostingUrlsCannotMoveThePort();
         await PartialMutationRollback();
         await CorruptStores();
+        await RecruitmentFile();
+        RecruitmentLeakScan();
         LeakScan(RequiredScenarios);
     }
 

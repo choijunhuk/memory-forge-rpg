@@ -1,0 +1,43 @@
+{
+  "tests": {
+    "fullPlayMode": {
+      "total": "402",
+      "passed": "392",
+      "failed": "0",
+      "skipped": "10",
+      "duration": "257.9778582"
+    },
+    "fullEditMode": {
+      "total": "10",
+      "passed": "10",
+      "failed": "0",
+      "skipped": "0",
+      "duration": "0.0540188"
+    },
+    "liveReconnectAndRegression": {
+      "total": "2",
+      "passed": "2",
+      "failed": "0",
+      "skipped": "0",
+      "duration": "1.6751568"
+    }
+  },
+  "build": {
+    "result": "Succeeded",
+    "reportedBytes": "568327855",
+    "seconds": "14.5",
+    "errors": "0",
+    "warnings": "2"
+  },
+  "app": "/Users/choi/Documents/Memory_forge/ops/ai/local/followup-20261021/MemoryForge-PC-recruitment-20261021.app",
+  "actualAppBytes": 568327855,
+  "restoredGeneratedSettings": [
+    "client/MemoryForgeUnity/Assets/Settings/UniversalRP.asset",
+    "client/MemoryForgeUnity/Assets/UniversalRenderPipelineGlobalSettings.asset",
+    "client/MemoryForgeUnity/ProjectSettings/ProjectSettings.asset",
+    "client/MemoryForgeUnity/ProjectSettings/ShaderGraphSettings.asset",
+    "client/MemoryForgeUnity/ProjectSettings/UnityConnectSettings.asset"
+  ],
+  "globalUnityLockReleased": true,
+  "testedSourceHashesStillMatch": true
+}

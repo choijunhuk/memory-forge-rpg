@@ -65,7 +65,10 @@ namespace MemoryForge.Client
 
         /// <summary>One strict JSON object from exact reply bytes, detached (nothing else references it). Throws
         /// PracticeProtocolException (RESPONSE_INVALID or RESPONSE_PRIVATE_FIELD).</summary>
-        public static JObject ParseObject(byte[] utf8)
+        public static JObject ParseObject(byte[] utf8) => ParseObjectCore(utf8, false);
+        // Recruitment schema validates the only public locations of requestId/revision after this shared lexical/private-field pass.
+        internal static JObject ParseRecruitmentObject(byte[] utf8) => ParseObjectCore(utf8, true);
+        static JObject ParseObjectCore(byte[] utf8, bool recruitment)
         {
             if (utf8 == null) throw new ArgumentNullException(nameof(utf8));
             if (utf8.Length == 0 || utf8.Length > MaxResponseBytes) throw Invalid("body size");
@@ -83,12 +86,12 @@ namespace MemoryForge.Client
             }
             catch (Exception error) when (error is FormatException || error is JsonException || error is DecoderFallbackException) { throw Invalid("JSON"); }
             if (!(root is JObject top)) throw Invalid("not a JSON object");
-            CheckTree(top);
+            CheckTree(top, recruitment);
             return top;
         }
 
         // Every member name against PrivateNames and every value's type, iteratively (the depth is already bounded by the reader).
-        static void CheckTree(JObject top)
+        static void CheckTree(JObject top, bool recruitment)
         {
             var pending = new Stack<JToken>();
             pending.Push(top);
@@ -99,7 +102,10 @@ namespace MemoryForge.Client
                     case JObject members:
                         foreach (var member in members.Properties())
                         {
-                            if (PrivateNames.Contains(member.Name)) throw Private();
+                            bool recruitmentMember = recruitment && IsRecruitmentPublicMember(top, members, member.Name);
+                            if (PrivateNames.Contains(member.Name) && !recruitmentMember) throw Private();
+                            if (recruitment && (string.Equals(member.Name, "roll", StringComparison.OrdinalIgnoreCase) || string.Equals(member.Name, "rolls", StringComparison.OrdinalIgnoreCase)
+                                || string.Equals(member.Name, "growth", StringComparison.OrdinalIgnoreCase))) throw Private();
                             pending.Push(member.Value);
                         }
                         break;
@@ -117,6 +123,15 @@ namespace MemoryForge.Client
                     default: throw Invalid("value");
                 }
             }
+        }
+
+        static bool IsRecruitmentPublicMember(JObject root, JObject owner, string name)
+        {
+            if (name != "requestId" && name != "revision") return false;
+            if (ReferenceEquals(owner, root)) return true;
+            var snapshot = root["snapshot"] as JObject;
+            if (name == "revision") return snapshot != null && ReferenceEquals(owner, snapshot);
+            return ReferenceEquals(owner.Parent, root["history"]) || snapshot != null && ReferenceEquals(owner.Parent, snapshot["history"]);
         }
 
         // ---- typed members: a required member must be present with exactly this type ----

@@ -121,6 +121,9 @@ namespace MemoryForge.Server
     sealed record PreviewRequest(List<object?> SelectedChangeIds);
     sealed record CommitRequest(string RequestId, int ExpectedVersion, Dictionary<string, object?> Args, string Identity);
     sealed record BattleQueryRequest(int ExpectedVersion, string Uid, string Mode, string? Target, List<string> Picks);
+    sealed record PullRequest(string RequestId, long ExpectedRevision, string BannerId, int Count, string Identity);
+    sealed record LaunchClaimRequest(string RequestId, long ExpectedRevision, string Identity);
+    sealed record SelectorRequest(string RequestId, long ExpectedRevision, string CharId, string Identity);
 
     static class Contracts
     {
@@ -225,6 +228,50 @@ namespace MemoryForge.Server
                 args.TryGetValue("picks", out object? picks) ? ((List<object?>)picks!).Select(pick => (string)pick!).ToList() : new List<string>());
         }
 
+        /// <summary>RECRUIT-SERVER-20261021 {requestId, expectedRevision, bannerId, count}. expectedRevision is the committed envelope revision
+        /// the client last saw (a non-negative Int64, else INVALID_REQUEST); count is any non-negative Int32 here (else INVALID_REQUEST) and
+        /// Core refuses all but 1 and 10 with BAD_COUNT. An account, seed, state, wallet, result, growth or any other member is UNKNOWN_FIELD.</summary>
+        public static PullRequest ParsePull(byte[] body)
+        {
+            using var document = Document(body);
+            var members = Members(document.RootElement, "requestId", "expectedRevision", "bannerId", "count");
+            string requestId = RequestId(members);
+            long expected = Revision(members, "expectedRevision");
+            string bannerId = Reference(members, "bannerId");
+            int count = Version(members, "count");
+            return new PullRequest(requestId, expected, bannerId, count, PullIdentity(expected, bannerId, count));
+        }
+
+        /// <summary>{requestId, expectedRevision} of the once-per-account launch claim; the reward comes from the bound content only.</summary>
+        public static LaunchClaimRequest ParseLaunchClaim(byte[] body)
+        {
+            using var document = Document(body);
+            var members = Members(document.RootElement, "requestId", "expectedRevision");
+            string requestId = RequestId(members);
+            long expected = Revision(members, "expectedRevision");
+            return new LaunchClaimRequest(requestId, expected, LaunchIdentity(expected));
+        }
+
+        /// <summary>{requestId, expectedRevision, charId} of the standard selector.</summary>
+        public static SelectorRequest ParseSelector(byte[] body)
+        {
+            using var document = Document(body);
+            var members = Members(document.RootElement, "requestId", "expectedRevision", "charId");
+            string requestId = RequestId(members);
+            long expected = Revision(members, "expectedRevision");
+            string charId = Reference(members, "charId");
+            return new SelectorRequest(requestId, expected, charId, SelectorIdentity(expected, charId));
+        }
+
+        // Canonical recruitment identities: the operation, the expected revision and the validated content, never the requestId. Distinct ops
+        // never collide with each other or with run operations, so one requestId reused for another operation, revision or payload is
+        // IDEMPOTENCY_CONFLICT. The private ledger recomputes the same identity to match each entry with its receipt.
+        public static string PullIdentity(long expectedRevision, string bannerId, long count) =>
+            GraphJson.Digest(GraphJson.Object("op", "recruitmentPull", "expectedRevision", expectedRevision, "bannerId", bannerId, "count", count));
+        public static string LaunchIdentity(long expectedRevision) => GraphJson.Digest(GraphJson.Object("op", "recruitmentLaunch", "expectedRevision", expectedRevision));
+        public static string SelectorIdentity(long expectedRevision, string charId) =>
+            GraphJson.Digest(GraphJson.Object("op", "recruitmentSelector", "expectedRevision", expectedRevision, "charId", charId));
+
         /// <summary>Members ⊆ the kind's allowlist, required members present, null optional members dropped, values typed (ASCII text,
         /// non-negative Int32 as long, lists of text). Returns a fresh normalized dictionary; anything else is 400.</summary>
         public static Dictionary<string, object?> CheckArgs(string kind, IDictionary<string, object?> args)
@@ -265,10 +312,11 @@ namespace MemoryForge.Server
                     return text;
             }
         }
-        // Card/node/change IDs, keys and uids are all printable ASCII; nothing longer than 128 characters is a valid reference.
+        // Card/node/change/banner/character IDs, keys and uids are all printable ASCII; nothing longer than 128 characters is a valid reference.
+        public static bool IsReference(string text) => text.Length > 0 && text.Length <= MaxText && text.All(c => c >= 0x20 && c <= 0x7e);
         static string Text(object? value)
         {
-            if (!(value is string text) || text.Length == 0 || text.Length > MaxText || text.Any(c => c < 0x20 || c > 0x7e)) throw new ApiError(400, "INVALID_ARGS");
+            if (!(value is string text) || !IsReference(text)) throw new ApiError(400, "INVALID_ARGS");
             return text;
         }
 
@@ -304,13 +352,26 @@ namespace MemoryForge.Server
             catch (ApiError) { throw new ApiError(400, code); }
         }
         // 8..64 characters of [A-Za-z0-9._:-] (openapi RequestId length; UUIDs fit).
+        public static bool IsRequestId(string id) =>
+            id.Length >= 8 && id.Length <= 64 && id.All(c => c is >= 'a' and <= 'z' or >= 'A' and <= 'Z' or >= '0' and <= '9' or '-' or '_' or '.' or ':');
         static string RequestId(Dictionary<string, JsonElement> members)
         {
             if (!members.TryGetValue("requestId", out var raw) || raw.ValueKind != JsonValueKind.String) throw new ApiError(400, "INVALID_REQUEST_ID");
             string id = StringValue(raw, "INVALID_REQUEST_ID");
-            if (id.Length < 8 || id.Length > 64 || !id.All(c => c is >= 'a' and <= 'z' or >= 'A' and <= 'Z' or >= '0' and <= '9' or '-' or '_' or '.' or ':'))
-                throw new ApiError(400, "INVALID_REQUEST_ID");
+            if (!IsRequestId(id)) throw new ApiError(400, "INVALID_REQUEST_ID");
             return id;
+        }
+        // A required reference member (banner or character ID): printable ASCII text, else INVALID_REQUEST.
+        static string Reference(Dictionary<string, JsonElement> members, string name)
+        {
+            if (!members.TryGetValue(name, out var raw) || raw.ValueKind != JsonValueKind.String) throw new ApiError(400, "INVALID_REQUEST");
+            return StringValue(raw, "INVALID_REQUEST");
+        }
+        // A required non-negative Int64 written as a plain JSON integer (a fraction, exponent, string or negative value is refused).
+        static long Revision(Dictionary<string, JsonElement> members, string name)
+        {
+            if (!members.TryGetValue(name, out var raw) || raw.ValueKind != JsonValueKind.Number || !raw.TryGetInt64(out long value) || value < 0) throw new ApiError(400, "INVALID_REQUEST");
+            return value;
         }
         static int Version(Dictionary<string, JsonElement> members, string name)
         {

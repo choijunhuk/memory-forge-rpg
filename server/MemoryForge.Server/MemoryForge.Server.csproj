@@ -25,5 +25,7 @@
     <Compile Include="../../core/MemoryForge.CoreChecks/RunDataLoader.cs" Link="Linked/RunDataLoader.cs" />
     <Compile Include="../../core/MemoryForge.CoreChecks/StatsDataLoader.cs" Link="Linked/StatsDataLoader.cs" />
     <Compile Include="../../core/MemoryForge.CoreChecks/JsonGraphComparison.cs" Link="Linked/JsonGraphComparison.cs" />
+    <!-- RECRUIT-SERVER-20261021: the one gacha loader CoreChecks verifies against the vectors. -->
+    <Compile Include="../../core/MemoryForge.CoreChecks/GachaDataLoader.cs" Link="Linked/GachaDataLoader.cs" />
   </ItemGroup>
 </Project>

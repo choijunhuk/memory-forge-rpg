@@ -106,7 +106,7 @@ namespace MemoryForge.Client.Tests
             for (float t = 0; t < seconds; t += Time.unscaledDeltaTime) yield return null;
         }
         // The lobby canvas drawn by a camera into a 1600×900 texture, then back to the overlay.
-        static IEnumerator Shot(GameObject host, string path)
+        internal static IEnumerator Shot(GameObject host, string path)
         {
             var texture = new RenderTexture(1600, 900, 24);
             var camera = new GameObject("LobbyShotCamera").AddComponent<Camera>();

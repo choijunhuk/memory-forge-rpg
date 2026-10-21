@@ -10,6 +10,8 @@
 // be combined with PracticeStore; a connection file without the postgres backend, or any other backend name, is refused. There is no
 // fallback between backends. A missing or invalid value, or a database that fails verification, refuses startup with exit code 2. Logs
 // carry only exception type names (and SQLSTATE codes): never credentials, seeds, RNG, private state or exception messages.
+// RECRUIT-SERVER-20261021 adds the account's development recruitment under the same credential and envelope: GET /dev/practice/recruitment
+// and POST .../recruitment/pulls, .../claim-launch and .../selector (Recruitment.cs).
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -201,6 +203,14 @@ namespace MemoryForge.Server
                     Method(post); return await Commit(account, RunId(id), await Body(request));
                 case ["runs", var id, "battle-query"]:
                     Method(post); return await BattleQuery(account, RunId(id), await Body(request));
+                case ["recruitment"]:
+                    Method(get); return await RecruitmentRead(account);
+                case ["recruitment", "pulls"]:
+                    Method(post); return await RecruitmentPull(account, await Body(request));
+                case ["recruitment", "claim-launch"]:
+                    Method(post); return await RecruitmentLaunch(account, await Body(request));
+                case ["recruitment", "selector"]:
+                    Method(post); return await RecruitmentSelector(account, await Body(request));
                 default: throw new ApiError(404, "NOT_FOUND");
             }
         }
@@ -323,6 +333,31 @@ namespace MemoryForge.Server
                 PracticeRunStore.RequireUnchanged(run, digest);
                 return Reply.Json(200, reply);
             });
+        }
+
+        // RECRUIT-SERVER-20261021 (Recruitment.cs). The read is pure: an account without an envelope or without a recruitment member is shown
+        // empty (revision 0 / the envelope's revision) and nothing is created. Each mutation is one Mutate transaction with its own canonical
+        // identity: a committed receipt first, then expectedRevision (409 STALE_REVISION), then the rules; no client account, seed, state,
+        // wallet or result is accepted, and the balance is checked inside the transaction.
+        Task<Reply> RecruitmentRead(PracticeAccount account) => host.Store.Read(account, (envelope, live) =>
+            Reply.Json(200, RecruitmentCommands.Snapshot(host.Content.Recruitment, account.Id, envelope?.Revision ?? 0, envelope?.Recruitment)));
+
+        async Task<Reply> RecruitmentPull(PracticeAccount account, byte[] body)
+        {
+            var request = Contracts.ParsePull(body);
+            return await host.Store.Mutate(account, request.RequestId, request.Identity, (envelope, live) => RecruitmentCommands.Pull(host.Content.Recruitment, envelope, request));
+        }
+
+        async Task<Reply> RecruitmentLaunch(PracticeAccount account, byte[] body)
+        {
+            var request = Contracts.ParseLaunchClaim(body);
+            return await host.Store.Mutate(account, request.RequestId, request.Identity, (envelope, live) => RecruitmentCommands.ClaimLaunch(host.Content.Recruitment, envelope, request));
+        }
+
+        async Task<Reply> RecruitmentSelector(PracticeAccount account, byte[] body)
+        {
+            var request = Contracts.ParseSelector(body);
+            return await host.Store.Mutate(account, request.RequestId, request.Identity, (envelope, live) => RecruitmentCommands.ClaimSelector(host.Content.Recruitment, envelope, request));
         }
 
         // The command on the fresh replayed candidate: owner/run → version → Core → journal entry with the new state digest → public reply.

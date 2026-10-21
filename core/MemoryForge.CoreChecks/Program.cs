@@ -17,7 +17,7 @@ static class Program
         string root = args.Length > 0 ? args[0] : Directory.GetCurrentDirectory();
         var data = JsonDocument.Parse(File.ReadAllText(Path.Combine(root, "data", "game_data.json"))).RootElement;
         var vec = JsonDocument.Parse(File.ReadAllText(Path.Combine(root, "engine", "tests", "vectors", "rng_gacha_vectors.json"))).RootElement;
-        var cfg = LoadGacha(data.GetProperty("gacha"));
+        var cfg = GachaDataLoader.Load(data.GetProperty("gacha"));
         var stats = LoadStats(data.GetProperty("progression"));
         var weaponRarity = data.GetProperty("weapons").EnumerateArray().ToDictionary(w => w.GetProperty("id").GetString()!, w => w.GetProperty("rarity").GetString()!);
 
@@ -128,34 +128,13 @@ static class Program
         int lateFailures = BattleLateActionsChecks.Run(root);
         int presentationFailures = BattlePresentationQueryChecks.Run(root);
         int contentModeFailures = ContentModesChecks.Run(root);
+        int gachaRandomFailures = GachaRandomChecks.Run(root);
         return failures == 0 && traceFailures == 0 && openingFailures == 0 && turnFailures == 0 && queryFailures == 0 && playerFailures == 0 && memoryFailures == 0 && runCreateFailures == 0
-            && progressionFailures == 0 && numberFailures == 0 && textFailures == 0 && previewFailures == 0 && lateFailures == 0 && presentationFailures == 0 && contentModeFailures == 0 ? 0 : 1;
+            && progressionFailures == 0 && numberFailures == 0 && textFailures == 0 && previewFailures == 0 && lateFailures == 0 && presentationFailures == 0 && contentModeFailures == 0
+            && gachaRandomFailures == 0 ? 0 : 1;
     }
 
     static bool Throws(Action a, string code) { try { a(); return false; } catch (RuleException e) { return e.Code == code; } }
-
-    static GachaConfig LoadGacha(JsonElement g)
-    {
-        var cfg = new GachaConfig { CostPerPull = g.GetProperty("costPerPull").GetInt32() };
-        foreach (var c in g.GetProperty("curves").EnumerateObject())
-        {
-            int Get(string n) => c.Value.TryGetProperty(n, out var x) ? x.GetInt32() : 0;
-            cfg.Curves[c.Name] = new GachaCurve { SsrBase = Get("ssrBase"), SoftStart = Get("softStart"), SoftStep = Get("softStep"), Hard = Get("hard"), SrBase = Get("srBase"),
-                SrGuarantee = Get("srGuarantee"), FeaturedSsrBps = Get("featuredSsrBps"), FeaturedSrBps = Get("featuredSrBps"), SelectorAt = Get("selectorAt"), MaxPulls = Get("maxPulls"), TenPullTickets = Get("tenPullTickets") };
-        }
-        List<string> L(JsonElement e) => e.EnumerateArray().Select(x => x.GetString()!).ToList();
-        var pools = g.GetProperty("pools");
-        cfg.StandardSsrChars = L(pools.GetProperty("standardSsrChars")); cfg.SrChars = L(pools.GetProperty("srChars"));
-        cfg.StandardSsrWeapons = L(pools.GetProperty("standardSsrWeapons")); cfg.SrWeapons = L(pools.GetProperty("srWeapons"));
-        foreach (var b in g.GetProperty("banners").EnumerateArray())
-            cfg.Banners.Add(new GachaBanner { Id = b.GetProperty("id").GetString()!, Kind = b.GetProperty("kind").GetString()!, Ticket = b.GetProperty("ticket").GetString()!,
-                FeaturedSsr = b.TryGetProperty("featuredSsr", out var f) ? f.GetString() : null, FeaturedSr = b.TryGetProperty("featuredSr", out var fs) ? L(fs) : new List<string>() });
-        cfg.RItems = L(g.GetProperty("rItems"));
-        var d = g.GetProperty("duplicates");
-        cfg.ShardSsr = d.GetProperty("shardSsr").GetInt32(); cfg.ShardSsrOverflow = d.GetProperty("shardSsrOverflow").GetInt32();
-        cfg.ShardSr = d.GetProperty("shardSr").GetInt32(); cfg.ShardSrOverflow = d.GetProperty("shardSrOverflow").GetInt32(); cfg.AfterglowR = d.GetProperty("afterglowR").GetInt32();
-        return cfg;
-    }
 
     // Shared with tools/UnityContentExport through the linked StatsDataLoader.
     internal static StatsConfig LoadStats(JsonElement p) => StatsDataLoader.Load(p);

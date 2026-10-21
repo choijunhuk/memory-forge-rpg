@@ -1,5 +1,7 @@
 // Memory Forge v0.7 core — recruitment (gacha) rules. Server-authoritative in production.
-// Identical results to engine/rules-core.js Gacha for the same seed/state (see CoreChecks).
+// Identical results to engine/rules-core.js Gacha for the same seed/state (see CoreChecks). Every draw goes through one bounded source
+// below(n) ∈ [0, n): the seeded overloads forward to the state's Rng (unchanged vectors); the authoritative server injects its CSPRNG
+// into the Func<int, int> overloads on an unseeded state, so the same state machine never touches a seeded stream there.
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +26,7 @@ namespace MemoryForge.Core
     public sealed class GachaBanner
     {
         public string Id { get; set; } = "";
+        public string Name { get; set; } = "";     // display name (content); never read by the rules
         public string Kind { get; set; } = "";     // character | weapon | standard | beginner
         public string? FeaturedSsr { get; set; }
         public List<string> FeaturedSr { get; set; } = new List<string>();
@@ -61,7 +64,8 @@ namespace MemoryForge.Core
 
     public sealed class GachaState
     {
-        public Rng Rng { get; }
+        /// <summary>The seeded stream of the seeded overloads; null on an unseeded state, which only an injected source can draw for.</summary>
+        public Rng? Rng { get; }
         public long Crystals { get; set; }
         public Dictionary<string, int> Tickets { get; } = new Dictionary<string, int> { ["limitedTicket"] = 0, ["weaponTicket"] = 0, ["standardTicket"] = 0 };
         public long Shards { get; set; }
@@ -75,6 +79,8 @@ namespace MemoryForge.Core
         public long SpentCrystals { get; set; }
         public long SpentPulls { get; set; }
         public GachaState(uint seed) { Rng = new Rng(seed); }
+        /// <summary>No seeded stream: the seeded Pull/One overloads refuse it (RNG_UNSEEDED); the injected-source overloads draw.</summary>
+        public GachaState() { }
     }
 
     public sealed class PullResult
@@ -109,8 +115,15 @@ namespace MemoryForge.Core
             return c.SsrBase;
         }
 
-        public static List<PullResult> Pull(GachaConfig cfg, GachaState g, string bannerId, int count)
+        /// <summary>Seeded: every draw comes from g.Rng, exactly as before the injected-source overload existed.</summary>
+        public static List<PullResult> Pull(GachaConfig cfg, GachaState g, string bannerId, int count) => Pull(cfg, g, bannerId, count, Seeded(g));
+
+        /// <summary>The same rules with an injected bounded source: below(n) must return a uniform integer in [0, n) for n ≥ 1 (a value
+        /// outside it is RNG_RANGE). Validation and payment come before any draw. Any exception can leave g partly changed (paid, some
+        /// pulls applied), so a caller that must not commit a partial pull discards g on failure.</summary>
+        public static List<PullResult> Pull(GachaConfig cfg, GachaState g, string bannerId, int count, Func<int, int> below)
         {
+            if (below == null) throw new ArgumentNullException(nameof(below));
             var banner = cfg.Banners.FirstOrDefault(b => b.Id == bannerId) ?? throw new RuleException("UNKNOWN_BANNER");
             if (count != 1 && count != 10) throw new RuleException("BAD_COUNT");
             if (banner.Kind == "beginner")
@@ -129,19 +142,24 @@ namespace MemoryForge.Core
             g.SpentCrystals += crystalCost + (long)fromTicket * cfg.CostPerPull;
             g.SpentPulls += count;
             var outList = new List<PullResult>(count);
-            for (int i = 0; i < count; i++) outList.Add(One(cfg, g, banner));
+            for (int i = 0; i < count; i++) outList.Add(One(cfg, g, banner, below));
             if (banner.Kind == "beginner" && g.Pity["beginner"].Total >= cfg.Curves["beginner"].MaxPulls) g.Pity["beginner"].Done = true;
             return outList;
         }
 
-        public static PullResult One(GachaConfig cfg, GachaState g, GachaBanner banner)
+        /// <summary>Seeded single pull (no payment): every draw comes from g.Rng.</summary>
+        public static PullResult One(GachaConfig cfg, GachaState g, GachaBanner banner) => One(cfg, g, banner, Seeded(g));
+
+        /// <summary>One pull with an injected bounded source (see Pull): the rarity roll below(10000), then the 50:50/75:25 roll of a
+        /// character/weapon SSR or SR when no guarantee applies, then one pick from the result's pool.</summary>
+        public static PullResult One(GachaConfig cfg, GachaState g, GachaBanner banner, Func<int, int> below)
         {
-            var s = g.Rng;
+            if (below == null) throw new ArgumentNullException(nameof(below));
             string kind = KindOf(banner);
             var curve = cfg.Curves[kind];
             var p = g.Pity[kind];
             int ssrBp = SsrRate(curve, p.N);
-            int roll = s.Below(Bps);
+            int roll = Draw(below, Bps);
             string rarity;
             if (roll < ssrBp) rarity = "SSR";
             else if (p.SrN + 1 >= curve.SrGuarantee) rarity = "SR";
@@ -155,19 +173,19 @@ namespace MemoryForge.Core
                 p.N = 0; p.SrN = 0; if (kind == "beginner") p.GotSsr = true;
                 if (charLike)
                 {
-                    bool win = p.Guar || s.Below(Bps) < curve.FeaturedSsrBps; // short-circuit: no roll while guaranteed
+                    bool win = p.Guar || Draw(below, Bps) < curve.FeaturedSsrBps; // short-circuit: no roll while guaranteed
                     if (win) { r.Id = banner.FeaturedSsr ?? throw new RuleException("NO_FEATURED"); r.Featured = true; p.Guar = false; }
-                    else { r.Id = s.Pick(kind == "weapon" ? cfg.StandardSsrWeapons : cfg.StandardSsrChars); p.Guar = true; r.Lost = true; }
+                    else { r.Id = Pick(below, kind == "weapon" ? cfg.StandardSsrWeapons : cfg.StandardSsrChars); p.Guar = true; r.Lost = true; }
                 }
-                else r.Id = s.Pick(cfg.StandardSsrChars);
+                else r.Id = Pick(below, cfg.StandardSsrChars);
                 r.Kind = kind == "weapon" ? "weapon" : "char";
             }
             else if (rarity == "SR")
             {
                 p.N += 1; p.SrN = 0;
-                if (charLike && (p.SrGuar || s.Below(Bps) < curve.FeaturedSrBps))
+                if (charLike && (p.SrGuar || Draw(below, Bps) < curve.FeaturedSrBps))
                 {
-                    r.Id = s.Pick(banner.FeaturedSr); r.Featured = true; p.SrGuar = false;
+                    r.Id = Pick(below, banner.FeaturedSr); r.Featured = true; p.SrGuar = false;
                     r.Kind = kind == "weapon" ? "weapon" : "char";
                 }
                 else
@@ -176,15 +194,34 @@ namespace MemoryForge.Core
                     var pool = new List<KeyValuePair<string, string>>();
                     if (kind != "weapon") pool.AddRange(cfg.SrChars.Select(x => new KeyValuePair<string, string>("char", x)));
                     pool.AddRange(cfg.SrWeapons.Select(x => new KeyValuePair<string, string>("weapon", x)));
-                    var pick = s.Pick(pool);
+                    var pick = Pick(below, pool);
                     r.Kind = pick.Key; r.Id = pick.Value;
                 }
             }
-            else { p.N += 1; p.SrN += 1; r.Id = s.Pick(cfg.RItems); }
+            else { p.N += 1; p.SrN += 1; r.Id = Pick(below, cfg.RItems); }
             if (kind == "standard" || kind == "beginner") g.Pity["standard"].Total += 1;
             if (kind == "beginner") p.Total += 1;
             ApplyOwnership(cfg, g, r);
             return r;
+        }
+
+        // The seeded source: exactly Rng.Below per draw, so the vectors are unchanged.
+        private static Func<int, int> Seeded(GachaState g)
+        {
+            var rng = g.Rng ?? throw new RuleException("RNG_UNSEEDED");
+            return n => rng.Below(n);
+        }
+        private static int Draw(Func<int, int> below, int n)
+        {
+            int value = below(n);
+            if (value < 0 || value >= n) throw new RuleException("RNG_RANGE");
+            return value;
+        }
+        // Rng.Pick's order: an empty pool is refused before any draw.
+        private static T Pick<T>(Func<int, int> below, IReadOnlyList<T> list)
+        {
+            if (list == null || list.Count == 0) throw new RuleException("EMPTY_POOL");
+            return list[Draw(below, list.Count)];
         }
 
         private static void ApplyOwnership(GachaConfig cfg, GachaState g, PullResult r)

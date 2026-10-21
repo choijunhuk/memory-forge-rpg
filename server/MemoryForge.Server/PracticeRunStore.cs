@@ -97,8 +97,9 @@ namespace MemoryForge.Server
         }
     }
 
-    /// <summary>The whole private account file: binding, the existing v2 memory store, the current run, finished runs (kept whole) and
-    /// every committed request's receipt. No history is truncated and no command count is capped.</summary>
+    /// <summary>The whole private account file: binding, the existing v2 memory store, the current run, finished runs (kept whole),
+    /// every committed request's receipt and, once the account has recruited, its recruitment record (Recruitment.cs; absent before).
+    /// No history is truncated and no command count is capped.</summary>
     sealed class AccountEnvelope
     {
         public string AccountId = "";
@@ -108,6 +109,7 @@ namespace MemoryForge.Server
         public RunRecord? Run;
         public List<RunRecord> Archive = new List<RunRecord>();
         public Dictionary<string, StoredReceipt> Receipts = new Dictionary<string, StoredReceipt>(StringComparer.Ordinal);
+        public RecruitmentRecord? Recruitment;
 
         /// <summary>A new account: the same empty v2 store the practice client starts from (Migrate of no legacy decks), version 0.</summary>
         public static AccountEnvelope Fresh(PracticeAccount account, PracticeContent content) => new AccountEnvelope
@@ -132,6 +134,8 @@ namespace MemoryForge.Server
             var body = GraphJson.Object("accountId", envelope.AccountId, "binding", envelope.Binding.ToGraph(), "revision", envelope.Revision,
                 "memory", envelope.Memory, "run", envelope.Run?.ToGraph(), "archive", envelope.Archive.Select(r => (object?)r.ToGraph()).ToList(),
                 "receipts", envelope.Receipts.ToDictionary(p => p.Key, p => (object?)p.Value.ToGraph(), StringComparer.Ordinal));
+            // Optional: an account that never recruited keeps exactly the earlier body members.
+            if (envelope.Recruitment != null) body.Add("recruitment", envelope.Recruitment.ToGraph());
             string text = GraphJson.Text(body, false);
             return GraphJson.Bytes(GraphJson.Object("schema", Schema, "sha256", GraphJson.Sha256(Encoding.UTF8.GetBytes(text)), "body", text), false);
         }
@@ -162,12 +166,17 @@ namespace MemoryForge.Server
             if (binding.RulesVersion != content.RulesVersion || binding.ContentSha256 != content.ContentSha256) throw new ApiError(409, "STORE_CONTENT_MISMATCH");
             if (binding.CoreModule != content.CoreModule) throw new ApiError(409, "STORE_IMPLEMENTATION_MISMATCH");
             if (binding.FixtureSha256 != account.FixtureSha256) throw new ApiError(409, "STORE_FIXTURE_MISMATCH");
+            // Recruitment (Recruitment.cs) is checked only once the binding is accepted, so another content or Core build is still reported as
+            // a mismatch first: every non-run receipt must be a ledger entry's exact reply and the record must reconcile with its ledger
+            // through Core. Nothing that fails is rewritten.
+            try { RecruitmentRecord.CheckEnvelope(content.Recruitment, envelope); }
+            catch (Exception) { throw new ApiError(500, "STORE_CORRUPT"); }
             return envelope;
         }
 
         static AccountEnvelope Body(JsonElement root)
         {
-            BattleDataLoader.Fields(root, "accountId", "binding", "revision", "memory", "run", "archive", "receipts");
+            BattleDataLoader.Fields(root, "accountId", "binding", "revision", "memory", "run", "archive", "receipts", "recruitment");
             var envelope = new AccountEnvelope
             {
                 AccountId = Text(root, "accountId"), Binding = EnvelopeBinding.Parse(root.GetProperty("binding")), Revision = root.GetProperty("revision").GetInt64(),
@@ -176,6 +185,8 @@ namespace MemoryForge.Server
             };
             foreach (var record in root.GetProperty("archive").EnumerateArray()) envelope.Archive.Add(RunRecord.Parse(record));
             foreach (var receipt in root.GetProperty("receipts").EnumerateObject()) envelope.Receipts.Add(BattleDataLoader.Name(receipt), StoredReceipt.Parse(receipt.Value));
+            // Absent: never recruited. Present (null included) must be a well-formed record.
+            if (root.TryGetProperty("recruitment", out var recruitment)) envelope.Recruitment = RecruitmentRecord.Parse(recruitment);
             return envelope;
         }
         // The existing mf-memory-v2 store shape Core's CommitMemory requires; Core re-validates the decks themselves.
@@ -304,6 +315,9 @@ namespace MemoryForge.Server
         public PracticeRunStore(PracticeContent content, IEnvelopePersistence persistence) { this.content = content; this.persistence = persistence; }
 
         public static bool IsRunId(string id) => id.Length == 35 && id.StartsWith("pr-", StringComparison.Ordinal) && id.Skip(3).All(c => c >= '0' && c <= '9' || c >= 'a' && c <= 'f');
+        /// <summary>The revision a committing Mutate callback's envelope receives: exactly one above the decoded one (recruitment replies
+        /// carry it).</summary>
+        public static long NextRevision(AccountEnvelope envelope) => checked(envelope.Revision + 1);
         public static string StateDigest(Run run) => GraphJson.Digest(run.State.ToJsonGraph());
         /// <summary>Guards query purity: the public view and preview must leave the full Run state (RNG included) exactly as it was.</summary>
         public static void RequireUnchanged(Run run, string digest)
@@ -352,7 +366,7 @@ namespace MemoryForge.Server
                     var live = envelope.Run == null ? null : Replay(account, envelope);
                     var reply = mutate(envelope, live);
                     envelope.Receipts.Add(requestId, new StoredReceipt { Identity = identity, Status = reply.Status, Body = reply.Body });
-                    envelope.Revision = checked(envelope.Revision + 1);
+                    envelope.Revision = NextRevision(envelope);
                     byte[] bytes = Envelopes.Encode(envelope);
                     RequireWithinLimit(bytes.Length);
                     return new Transition(reply, bytes);

@@ -34,6 +34,8 @@ public static class MemoryForgeAndroidBuild
         // The client lays out one fixed 1600x900 frame (FitView); the project still allows portrait, which shrinks it.
         PlayerSettings.defaultInterfaceOrientation = UIOrientation.LandscapeLeft;
         EditorUserBuildSettings.buildAppBundle = false;
+        PlayerSettings.Android.forceInternetPermission = true;
+        PlayerSettings.insecureHttpOption = InsecureHttpOption.DevelopmentOnly;
         // Gradle can retain old split assets with incompatible object IDs. Removing only previous APK outputs forces fresh packaging.
         var gradleApk = Path.Combine("Library/Bee/Android/Prj", mono ? "Mono2x" : "IL2CPP", "Gradle/launcher/build/outputs/apk");
         if (Directory.Exists(gradleApk)) Directory.Delete(gradleApk, true);

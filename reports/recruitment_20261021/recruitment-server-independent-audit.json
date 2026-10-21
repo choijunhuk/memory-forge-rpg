@@ -1,0 +1,160 @@
+{
+  "schema": "memoryforge-independent-audit/1",
+  "packagedAtUtc": "2026-10-21T05:09:46.589080+00:00",
+  "verdict": "APPROVE",
+  "scope": "Independent read-only Codex review of recruitment Core/server source and isolated file-backend HTTP verification of both P2 integrity fixes.",
+  "auditedWorktree": "/Users/choi/.codex/worktrees/memoryforge-recruit-server/Memory_forge",
+  "evidenceOrigin": {
+    "kind": "completed tool execution output in this audit chat",
+    "tool": "functions.exec -> exec_command",
+    "executionChunkId": "753384",
+    "exitCode": 0,
+    "standaloneRawLogSaved": false,
+    "note": "This file packages the completed review and the observed sanitized output; it is not a newly run test or a pre-existing raw log."
+  },
+  "auditedSourceSha256": {
+    "server/MemoryForge.Server/Recruitment.cs": "aced43ed32d54de6350a1c9624e97af9988bed1a91403f8509334928291bb081",
+    "server/MemoryForge.Server/PracticeRunStore.cs": "5d58583549fbe958bf9c36380b96181abb522b83b6088057e4dc1fee86f8e507",
+    "server/MemoryForge.ServerChecks/RecruitmentChecks.cs": "4475d99e7282c04953a76299e3b6633d4b8ec9214c8b0e4d1f4ba18cc00a0fce"
+  },
+  "executedServerDllSha256": "265167745d1dad6f89c8027710058cf39ec486ac9308e5cde97da66d7b9adb45",
+  "finalInputStability": {
+    "verified": true,
+    "matchedReceipt": "/Users/choi/Documents/Memory_forge/ops/ai/local/followup-20261021/server-integrity-final-sha.json",
+    "unchangedInputs": 4
+  },
+  "resolvedFindings": [
+    {
+      "severity": "P2",
+      "issue": "Unchecked recruitment receipt body could return a known result different from the Core-replayed ledger and expose injected nested private members.",
+      "resolution": "Validate reconstructs the exact historical reply from the Core-replayed ledger prefix via shared ReplyText; stored bytes must match."
+    },
+    {
+      "severity": "P2",
+      "issue": "An absent recruitment member with success receipts retained was accepted as a fresh recruitment account and permitted a new launch claim.",
+      "resolution": "CheckEnvelope runs unconditionally and requires non-run receipts to have corresponding recruitment ledger entries."
+    }
+  ],
+  "httpRecheck": {
+    "status": "PASS",
+    "assertionsPassed": 53,
+    "assertionsFailed": 0,
+    "backend": "file",
+    "host": "real rebuilt MemoryForge.Server process, Development, ephemeral loopback address",
+    "store": "fresh owner-only temporary store and generated test-only fixture; removed after verification",
+    "tamperMethod": "Independently modify a copy of the committed envelope and recompute its outer SHA-256; receipt identity and HTTP status remain unchanged except the explicit invalid-status case.",
+    "tamperRequests": [
+      "GET /dev/practice/recruitment",
+      "POST /dev/practice/recruitment/pulls with the original committed requestId and exact original payload",
+      "POST /dev/practice/recruitment/pulls with a fresh requestId and current revision",
+      "POST /dev/practice/recruitment/claim-launch with a fresh requestId and current revision",
+      "GET /dev/practice/account"
+    ],
+    "tamperCases": [
+      {
+        "case": "known_result_and_receipt_history",
+        "httpStatuses": [
+          500,
+          500,
+          500,
+          500,
+          500
+        ],
+        "code": "STORE_CORRUPT",
+        "damagedStoreBytesUnchanged": true,
+        "assertions": 6
+      },
+      {
+        "case": "nested_private_field",
+        "httpStatuses": [
+          500,
+          500,
+          500,
+          500,
+          500
+        ],
+        "code": "STORE_CORRUPT",
+        "damagedStoreBytesUnchanged": true,
+        "assertions": 6
+      },
+      {
+        "case": "recruitment_removed_receipts_kept",
+        "httpStatuses": [
+          500,
+          500,
+          500,
+          500,
+          500
+        ],
+        "code": "STORE_CORRUPT",
+        "damagedStoreBytesUnchanged": true,
+        "assertions": 6
+      },
+      {
+        "case": "historical_wallet",
+        "httpStatuses": [
+          500,
+          500,
+          500,
+          500,
+          500
+        ],
+        "code": "STORE_CORRUPT",
+        "damagedStoreBytesUnchanged": true,
+        "assertions": 6
+      },
+      {
+        "case": "malformed_receipt",
+        "httpStatuses": [
+          500,
+          500,
+          500,
+          500,
+          500
+        ],
+        "code": "STORE_CORRUPT",
+        "damagedStoreBytesUnchanged": true,
+        "assertions": 6
+      },
+      {
+        "case": "bad_receipt_status",
+        "httpStatuses": [
+          500,
+          500,
+          500,
+          500,
+          500
+        ],
+        "code": "STORE_CORRUPT",
+        "damagedStoreBytesUnchanged": true,
+        "assertions": 6
+      }
+    ],
+    "tamperCaseDetails": {
+      "known_result_and_receipt_history": "Change the first pull receipt result ID and its snapshot history result ID to another known ID from the same result pool.",
+      "nested_private_field": "Insert results[0].draws = [[10000,7]] into the stored public receipt body.",
+      "recruitment_removed_receipts_kept": "Remove only the recruitment member; retain both recruitment success receipts and the interleaved run receipt.",
+      "historical_wallet": "Increase the stored pull receipt snapshot wallet freeCrystals by 160.",
+      "malformed_receipt": "Replace the stored pull receipt body with malformed JSON.",
+      "bad_receipt_status": "Change the stored pull receipt HTTP status from 200 to 422."
+    },
+    "normalControls": [
+      "Fresh account recruitment GET returns200 with launchClaimed false.",
+      "Launch claim at revision0 commits revision1; one standard pull at revision1 commits revision2.",
+      "Interleaved run creation commits successfully; next standard pull at revision3 commits revision4, preserving a legitimate recruitment ledger revision gap.",
+      "Original claim, first pull, later pull and run requests return byte-identical committed replies; retries leave stored bytes unchanged.",
+      "After killing and restarting the isolated host, the original first pull still returns its exact committed reply.",
+      "Re-digested but otherwise unchanged envelope is accepted; GET matches the committed snapshot and exact retry returns original bytes without rewriting the envelope.",
+      "Restoring intact bytes restores the exact original retry.",
+      "Intact current-revision repeat launch claim returns422 LAUNCH_ALREADY_CLAIMED.",
+      "Intact stale fresh pull returns409 STALE_REVISION."
+    ],
+    "observedCompletionLine": "INDEPENDENT_HTTP_RECHECK_PASS 53 assertions; isolated file backend; normal retry/restart/run gap preserved"
+  },
+  "limits": [
+    "No full file or PostgreSQL suite was executed by this independent reviewer; those integration suites are owned by the parent task.",
+    "No repository source edits, Git actions, existing-store access, credential reads or recursive AI calls were performed.",
+    "Integrity validation establishes internal consistency, not authenticated history protection; no MAC is claimed.",
+    "This packaging step ran no additional server tests."
+  ]
+}

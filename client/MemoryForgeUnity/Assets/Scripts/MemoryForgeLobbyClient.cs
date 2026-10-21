@@ -16,7 +16,7 @@ namespace MemoryForge.Client
     // systems that are not built yet say 준비 중 and do nothing (§14.7: never shown as done). Companions are the characters with a moments file (Resources/Art/moments/<id>/
     // moments.json, imported from art/moments) or a still in Resources/Art/Characters/char_<id>_cutin. Bond progress is not built
     // yet, so bond scenes open as labelled previews; the lobby never invents lines or motion for a companion.
-    public sealed class MemoryForgeLobbyClient : MonoBehaviour
+    public sealed partial class MemoryForgeLobbyClient : MonoBehaviour
     {
         public const string ExpeditionScene = "MemoryForgeExpedition", OwnedCanvas = "MemoryForgeLobbyCanvas";
         /// <summary>The expedition length chosen in 출격 준비, read once by the expedition client when it starts.</summary>
@@ -75,10 +75,11 @@ namespace MemoryForge.Client
             FitHome();
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                if (detailPanel.gameObject.activeSelf) ShowPanel(rosterPanel);
+                if (recruitmentReveal != null && recruitmentReveal.gameObject.activeSelf) FinishRecruitmentReveal();
+                else if (detailPanel.gameObject.activeSelf) ShowPanel(rosterPanel);
                 else ClosePanels();
             }
-            if (rosterPanel.gameObject.activeSelf || detailPanel.gameObject.activeSelf || sortiePanel.gameObject.activeSelf || settingsPanel.gameObject.activeSelf || listPanel.gameObject.activeSelf)
+            if (rosterPanel.gameObject.activeSelf || detailPanel.gameObject.activeSelf || sortiePanel.gameObject.activeSelf || settingsPanel.gameObject.activeSelf || listPanel.gameObject.activeSelf || recruitmentPanel.gameObject.activeSelf || recruitmentReveal.gameObject.activeSelf)
             { idleSince = Time.time; return; }
             if (player.Playing) { idleSince = Time.time; return; }
             // A new part of the day plays that period's reaction once, when nothing else is playing.
@@ -156,17 +157,20 @@ namespace MemoryForge.Client
             UtilityButton(side, "OpenSettings", "설정", 1544 - utilitySize, utilitySize, () => Toggle(settingsPanel), true);
             if (!Application.isMobilePlatform) UtilityButton(side, "QuitGame", "종료", 1520 - utilitySize * 2, utilitySize, Application.Quit, false);
 
-            var destination = Box(side, "ExpeditionDestination", 1096, 228, 448, 386, Panel);
+            float dockHeight = Math.Max(120, TouchUnits()), dockY = 884 - dockHeight;
+            float entryHeight = Math.Max(138, TouchUnits()), entryY = Math.Min(632, dockY - entryHeight - 16);
+            float destinationHeight = entryY - 244;
+            var destination = Box(side, "ExpeditionDestination", 1096, 228, 448, destinationHeight, Panel);
             var map = SpriteAt("Art/Backgrounds/bg_zone1_map");
-            var vista = Box(destination, "DestinationArt", 0, 0, 448, 240, Color.white);
+            var vista = Box(destination, "DestinationArt", 0, 0, 448, destinationHeight - 146, Color.white);
             vista.GetComponent<Image>().sprite = map;
             vista.GetComponent<Image>().color = map == null ? Panel : new Color(0.75f, 0.8f, 0.85f);
-            Box(destination, "DestinationShade", 0, 192, 448, 194, new Color(0.025f, 0.035f, 0.07f, 0.92f));
-            Box(destination, "BrassEdge", 0, 0, 4, 386, Brass);
-            Label(destination, "첫 번째 구역", 28, 202, 380, 36, 20, Brass);
-            Label(destination, "종탑 하층", 26, 242, 390, 64, 42, Ink, FontStyle.Bold);
-            Label(destination, "흩어진 기억을 따라 새로운 탐사를 시작하세요.", 28, 318, 390, 52, 20, Muted);
-            var sortie = MainEntry(side, "StartExpedition", "출격", "탐사 준비", "ico_node_battle", 1096, 632, 448, 138, () => Toggle(sortiePanel));
+            Box(destination, "DestinationShade", 0, destinationHeight - 194, 448, 194, new Color(0.025f, 0.035f, 0.07f, 0.92f));
+            Box(destination, "BrassEdge", 0, 0, 4, destinationHeight, Brass);
+            Label(destination, "첫 번째 구역", 28, destinationHeight - 184, 380, 36, 20, Brass);
+            Label(destination, "종탑 하층", 26, destinationHeight - 144, 390, 64, 42, Ink, FontStyle.Bold);
+            Label(destination, "흩어진 기억을 따라 새로운 탐사를 시작하세요.", 28, destinationHeight - 68, 390, 52, 20, Muted);
+            var sortie = MainEntry(side, "StartExpedition", "출격", "탐사 준비", "nav_expedition", 1096, entryY, 448, entryHeight, () => Toggle(sortiePanel));
             Breathe(sortie);
 
             var identity = Box(side, "CompanionIdentity", 56, 568, 460, 188, Color.clear);
@@ -176,21 +180,21 @@ namespace MemoryForge.Client
             noteText = Label(identity, "", 0, 114, 380, 56, 18, Muted);
             Button(identity, "NextCompanion", "교체", 348, 34, 112, 120, () => Show(index + 1), Line, 22);
 
-            var dock = Box(side, "HomeDock", 40, 764, 1520, 120, new Color(0.04f, 0.055f, 0.1f, 0.94f));
+            var dock = Box(side, "HomeDock", 40, dockY, 1520, dockHeight, new Color(0.04f, 0.055f, 0.1f, 0.94f));
             Box(dock, "DockRule", 0, 0, 1520, 2, new Color(Brass.r, Brass.g, Brass.b, 0.65f));
             var entries = new (string Name, string Title, string Icon, Action Click)[] {
-                ("Home", "홈", "ico_node_rest", ClosePanels),
-                ("OpenCompanions", "동료", "ico_node_archive", OpenRoster),
-                ("BondStories", "인연", "ico_node_event", () => OpenList("bond")),
-                ("Staging", "연출", "ico_node_forge", () => OpenList("staging")) };
+                ("Home", "홈", "nav_home", ClosePanels),
+                ("OpenCompanions", "동료", "nav_companions", OpenRoster),
+                ("OpenRecruitment", "모집", "nav_recruit", OpenRecruitment),
+                ("BondStories", "인연", "nav_bond", () => OpenList("bond")),
+                ("Staging", "연출", "nav_moments", () => OpenList("staging")) };
             for (int n = 0; n < entries.Length; n++)
             {
                 var e = entries[n];
-                var tab = Button(dock, e.Name, "", 12 + n * 300, 0, 288, 120, e.Click, Color.clear);
-                Glyph(tab.transform, e.Icon, 28, 40, 42, n == 0 ? Brass : Ink);
-                Label(tab.transform, e.Title, 88, 32, 180, 58, 27, n == 0 ? Brass : Ink, FontStyle.Bold, TextAnchor.MiddleLeft);
+                var tab = Button(dock, e.Name, "", 12 + n * 300, 0, 288, dockHeight, e.Click, Color.clear);
+                Glyph(tab.transform, e.Icon, 16, (dockHeight - 88) / 2, 88, Color.white);
+                Label(tab.transform, e.Title, 112, (dockHeight - 58) / 2, 160, 58, 27, n == 0 ? Brass : Ink, FontStyle.Bold, TextAnchor.MiddleLeft);
             }
-            Label(dock, "연습 탐사", 1240, 42, 240, 40, 20, Muted, FontStyle.Normal, TextAnchor.MiddleRight);
             modalShield = (RectTransform)Button(root, "ModalShield", "", 0, 0, 1600, 900, ClosePanels, new Color(0, 0, 0, 0.45f)).transform;
             var shieldNavigation = modalShield.GetComponent<Button>().navigation; shieldNavigation.mode = Navigation.Mode.None;
             modalShield.GetComponent<Button>().navigation = shieldNavigation; modalShield.gameObject.SetActive(false);
@@ -199,6 +203,7 @@ namespace MemoryForge.Client
             BuildRoster();
             listPanel = Box(root, "SceneList", 428, 80, 744, 736, new Color(0.08f, 0.1f, 0.17f, 0.96f));
             listPanel.gameObject.SetActive(false);
+            BuildRecruitment();
             var veilBox = Box(root, "Veil", 0, 0, 1600, 900, Color.black); veilBox.GetComponent<Image>().raycastTarget = true; // blocks input while leaving
             veil = veilBox.gameObject.AddComponent<CanvasGroup>(); veil.blocksRaycasts = false;
             foreach (var b in root.GetComponentsInChildren<Button>(true)) if (b.name != "FigureTap" && b.name != "MomentTap" && b.name != "ModalShield" && b.GetComponent<UiPress>() == null) b.gameObject.AddComponent<UiPress>();
@@ -247,7 +252,7 @@ namespace MemoryForge.Client
             Kit(r, "Frame", "ui_panel_frame", new Vector4(48, 48, 48, 48), 0, 0, w, h, 128);
             var edge = r.gameObject.AddComponent<Outline>(); edge.effectColor = new Color(Brass.r, Brass.g, Brass.b, 0.55f); edge.effectDistance = new Vector2(1, -1);
             var ring = Kit(r, "Ring", "ui_portrait_ring_ready", Vector4.zero, 24, (h - 108) / 2, 108, 108, 160);
-            Glyph(ring, icon, 26, 26, 56, Brass);
+            Glyph(ring, icon, 12, 12, 84, Brass);
             Label(r, title, 152, 22, 300, 70, 54, Ink, FontStyle.Bold);
             Label(r, sub, 154, 96, 400, 34, 21, Brass);
             Label(r, "›", w - 70, (h - 90) / 2, 50, 90, 72, Brass, FontStyle.Bold, TextAnchor.MiddleCenter);
@@ -308,7 +313,23 @@ namespace MemoryForge.Client
         }
         void Glyph(Transform parent, string icon, float x, float y, float size, Color tint)
         {
-            var glyph = SpriteAt("Art/UI/" + icon); if (glyph == null) return;
+            int cell = icon switch { "nav_home" => 0, "nav_companions" => 1, "nav_recruit" => 2, "nav_memory" => 3,
+                "nav_equipment" => 4, "nav_bond" => 5, "nav_moments" => 6, "nav_expedition" => 7, _ => -1 };
+            Sprite? glyph;
+            if (cell < 0) glyph = SpriteAt("Art/UI/" + icon);
+            else
+            {
+                if (!sprites.TryGetValue(icon, out glyph))
+                {
+                    var atlas = Resources.Load<Texture2D>("Art/UI/home-nav-20261021");
+                    glyph = atlas == null ? null : Sprite.Create(atlas,
+                        new Rect(cell % 4 * atlas.width / 4f, (1 - cell / 4) * atlas.height / 2f, atlas.width / 4f, atlas.height / 2f),
+                        new Vector2(0.5f, 0.5f), 100f, 0, SpriteMeshType.FullRect);
+                    sprites[icon] = glyph;
+                }
+                tint = Color.white;
+            }
+            if (glyph == null) return;
             var g = Box(parent, "Icon", x, y, size, size, tint); g.GetComponent<Image>().sprite = glyph; g.GetComponent<Image>().preserveAspect = true;
         }
         // The 출격 tile breathes its edge so the way into a run is the first thing the eye finds (calm under reduced motion).
@@ -327,7 +348,7 @@ namespace MemoryForge.Client
 
         void ClosePanels()
         {
-            foreach (var panel in new[] { sortiePanel, settingsPanel, listPanel, rosterPanel, detailPanel })
+            foreach (var panel in new[] { sortiePanel, settingsPanel, listPanel, rosterPanel, detailPanel, recruitmentPanel, recruitmentReveal })
                 if (panel != null) panel.gameObject.SetActive(false);
             idleSince = Time.time;
             if (modalShield != null) modalShield.gameObject.SetActive(false);
@@ -399,7 +420,15 @@ namespace MemoryForge.Client
             Button(rosterPanel, "CloseRoster", "홈", 1392, 24, 152, 112, ClosePanels, Line, 24);
             Button(rosterPanel, "FilterAll", "전체 동료", 56, 168, 264, 112, () => { catalogueFilter = "all"; RenderRoster(); }, catalogueFilter == "all" ? Brass : Panel, 24);
             Button(rosterPanel, "FilterParty", "연습 편성", 336, 168, 264, 112, () => { catalogueFilter = "party"; RenderRoster(); }, catalogueFilter == "party" ? Brass : Panel, 24);
-            var characters = content.Battle.Characters.Where(c => catalogueFilter != "party" || PracticeParty.Contains(c.Id)).ToList();
+            Button(rosterPanel, "FilterOwned", "보유 동료", 616, 168, 264, 112, () => { catalogueFilter = "owned"; RenderRoster(); }, catalogueFilter == "owned" ? Brass : Panel, 24);
+            var owned = recruitmentSession?.Recruitment?.OwnedChars;
+            var characters = content.Battle.Characters.Where(c => (catalogueFilter != "party" || PracticeParty.Contains(c.Id))
+                && (catalogueFilter != "owned" || owned != null && owned.ContainsKey(c.Id))).ToList();
+            if (catalogueFilter == "owned" && characters.Count == 0)
+            {
+                Label(rosterPanel, owned == null ? "계정을 연결하면 보유 동료를 볼 수 있어요." : "아직 모집한 동료가 없어요.", 100, 404, 1400, 80, 32, Ink, FontStyle.Normal, TextAnchor.MiddleCenter);
+                Button(rosterPanel, "RecruitFromRoster", owned == null ? "계정 연결" : "모집으로", 584, 520, 432, 120, OpenRecruitment, Brass, 26);
+            }
             Label(rosterPanel, characters.Count + "명의 동료", 1112, 204, 424, 44, 22, Muted, FontStyle.Normal, TextAnchor.MiddleRight);
             float cellH = Math.Max(380, TouchUnits() * 2f), total = (float)Math.Ceiling(characters.Count / 5f) * (cellH + 20);
             var grid = ScrollArea(rosterPanel, 56, 312, 1488, 508, Math.Max(508, total));
@@ -416,6 +445,7 @@ namespace MemoryForge.Client
                 Label(tile.transform, c.Name, 16, cellH - 54, 170, 42, 28, Ink, FontStyle.Bold);
                 Label(tile.transform, ElementName(c.Attr), 184, cellH - 52, 80, 40, 20, ElementColor(c.Attr), FontStyle.Normal, TextAnchor.MiddleRight);
                 if (PracticeParty.Contains(c.Id)) Label(tile.transform, "편성", 12, 8, 84, 36, 19, Brass, FontStyle.Bold);
+                if (owned != null && owned.TryGetValue(c.Id, out int copies)) Label(tile.transform, "보유 · 공명 " + Math.Min(6, copies - 1), 88, 8, 180, 36, 19, Memory, FontStyle.Bold, TextAnchor.MiddleRight);
             }
             Label(rosterPanel, (total > 508 ? "위아래로 밀어 동료를 더 볼 수 있어요.  ·  " : "") + "연습 편성: " + PartyNames(), 58, 838, 1440, 38, 19, Muted);
         }
@@ -466,7 +496,10 @@ namespace MemoryForge.Client
             var use = Button(detailPanel, "UseAsLobby", homeIndex < 0 ? "홈 일러스트 준비 중" : "홈에 함께하기", 128, 784, 500, 112,
                 () => { ClosePanels(); Show(homeIndex); }, Brass, 27);
             use.interactable = homeIndex >= 0;
-            Label(detailPanel, "성장·장비·공명은 계정 연동 후 연결돼요.", 752, 806, 776, 70, 20, Muted);
+            var owned = recruitmentSession?.Recruitment?.OwnedChars;
+            Label(detailPanel, owned != null && owned.TryGetValue(c.Id, out int copies)
+                ? "보유 동료 · 공명 " + Math.Min(6, copies - 1) + "  /  성장·장비 변경 준비 중"
+                : "도감 정보 · 성장·장비는 계정 보유 후 연결돼요.", 752, 806, 776, 70, 20, Muted);
         }
 
         Sprite? Portrait(string id)

@@ -1,7 +1,7 @@
 # MemoryForge.Server — local development practice host (P1-LOCAL-AUTHORITATIVE-PERSISTENCE, P1-POSTGRES-TRANSACTIONAL-PRACTICE)
 
 This is a **local development slice**, not the production API of `server/openapi.yaml` and not P1-2 as a whole. There is no production
-database or migration, real account/auth, gacha, collection, purchase, Unity transport or deployment here. `server/schema.sql`,
+database or migration, production identity/authentication, purchase or deployment here. The authenticated Development account now also supports durable recruitment and account ownership, connected from the Unity lobby. `server/schema.sql`,
 `server/openapi.yaml`, the SQL files and `data/` (all numbers and content) are unchanged. Core gained pure read-only presentation queries
 for the battle query below (P1-PUBLIC-BATTLE-QUERY: `Battle.ReservationSlots`/`HandChoices`, the shared `BattleChoicePolicy`, and the
 `Run.BattleReservationSlots`/`BattleHandChoices` wrappers); no Core rule or command changed. Storage is a private file per account by
@@ -44,6 +44,16 @@ default, or, when selected explicitly, one Development-only PostgreSQL row per a
   - `piles` are counts only. Pick candidates of one hand card's request (hand, discard pile or reservations) are listed only by the battle
     query below, never as a pile dump.
   - A pending event shows its event ID, `done` and `choice`; rendering its text and options needs the client's matching content.
+
+## Recruitment (Development accounts)
+
+The lobby connects to this same loopback host and credential fixture. `GET /dev/practice/recruitment` returns an explicit public snapshot: revision, balances, approved standard/beginner banners and rate curves, pity, owned copies, duplicate rewards and recent results. Practice parties remain fixtures rather than owned characters.
+
+Writes are `POST /dev/practice/recruitment/pulls` (`requestId`, `expectedRevision`, `bannerId`, `count`), `/claim-launch` (`requestId`, `expectedRevision`) and `/selector` (`requestId`, `expectedRevision`, `charId`). Bodies are strict allowlists. The account transaction checks existing receipt identity before the revision and Core rules. Successful writes atomically persist balances, ownership, pity, ledger and exact receipt bytes before replying; retries cannot spend twice. Launch claim grants exactly the approved 1600 free crystals and10 standard tickets once. There is no inferred prologue entitlement or extra beginner grant.
+
+The host injects bounded CSPRNG values into the existing Core gacha state machine. A private draw tape replays every historical operation and reconciles the stored state. Every stored recruitment response is re-projected at its ledger prefix and compared byte for byte; receipt entries also require a corresponding recruitment ledger. Missing recruitment state with surviving receipts is corruption, never a fresh account. Public views exclude the private tape and replay metadata. This is consistency checking, not authentication against an OS owner rewriting an entire history coherently.
+
+Only standard and beginner banners are active; a limited/weapon rotation epoch is not invented. The existing strict content/Core-module/fixture binding still refuses incompatible stores without resetting them. Production schema/API mapping, commercial identity, payments, owned-party editing and existing-store migration remain separate work.
 
 ## Battle query (read-only, P1-PUBLIC-BATTLE-QUERY)
 
@@ -193,7 +203,7 @@ observed server result, and no game value or seed is adjusted to make it pass.
   and macOS `F_FULLFSYNC` is not used, so nothing is claimed for power or storage failure: afterwards the store needs inspection and
   recovery, and a client retry is not guaranteed to be safe (for example, a lost create receipt would choose a new seed and runId).
 - Not in this slice: the production schema/API mapping (UUID accounts and runs, `command_receipt`, `memory_deck`) and its migrations,
-  real account auth, network UI recovery flows and Unity transport. The Development PostgreSQL rows are never a migration source.
+  production account auth and commercial deployment. Unity development transport/recovery is documented in the delivery reports. The Development PostgreSQL rows are never a migration source.
 - Performance: every request replays the whole current journal and rewrites (file) or updates (PostgreSQL) the whole envelope; receipts
   and finished runs are never pruned, so the 512 MiB dev-store boundary is eventually reached. Snapshots/compaction need an approved
   retention and migration policy.

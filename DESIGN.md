@@ -16,7 +16,7 @@ This is the current UI implementation brief. Game rules and approved character c
 - Home → companions → character details → representative companion → home works with actual content.
 - Home → expedition preparation → existing expedition remains available.
 - Keep complete moment scenes and authored character appearance intact.
-- This change does not implement recruitment, account ownership, growth transactions or a new economy.
+- Actual recruitment, owned collection and recoverable reveal are now authorized; see `docs/plans/recruitment-20261021.md`. Production authentication/payments and growth transactions remain separate.
 
 ## Personas and jobs
 - A landscape phone player who wants to meet companions, inspect their abilities and enter a run.
@@ -24,7 +24,7 @@ This is the current UI implementation brief. Game rules and approved character c
 
 ## Information architecture
 - Home: workshop and companion, compact identity bar, expedition destination at the right, companion/scene navigation along the bottom.
-- Companions: portrait grid, all/active-practice-party filters, character detail view with skills and starting cards.
+- Companions: portrait grid, all/owned/active-practice-party filters, character detail view with skills and starting cards.
 - Details: actual element, weapon type, passive, ultimate and Core-generated card descriptions; choose an available figure as home representative.
 - Preparation: existing length selection and fixed practice party; no pretend editable loadout.
 
@@ -63,13 +63,13 @@ This is the current UI implementation brief. Game rules and approved character c
 
 ## Content voice
 - Korean player-facing labels: 홈, 동료, 스킬, 기본 카드, 출격.
-- Use 전체 동료 and 연습 편성 until account ownership is connected. No fabricated levels, balances or reward badges.
+- Use 전체 동료 and 연습 편성 until account ownership is connected. No fabricated levels, balances or reward badges. Account-owned filters use only the authenticated server snapshot; recruitment waits for committed receipts.
 
 ## Implementation constraints
 - Unity 6 uGUI and existing assets/Core data only. Original artwork and moment JSON remain unchanged.
-- Own files: lobby implementation and its PlayMode/capture tests. Claude owns the independent server-preview worktree.
-- Verify navigation, data labels, modal blocking, representative choice, reduced motion, safe-area layout, screenshots and a new device APK.
+- Own files: lobby implementation and its PlayMode/capture tests. Claude owns the independently reviewed recruitment Core/server worktree.
+- Verify navigation, data labels, modal blocking, representative choice, reduced motion, safe-area layout, screenshots, a fresh macOS development app and actual loopback recruitment UI. The user excludes phone work for this unit.
 
 ## Open questions
-- Account-owned collection and editable expedition party require their real state flows; this UI must not imply they already exist.
+- Actual recruitment and account-owned collection are in progress through the authenticated Development server. Editable expedition party and production identity remain separate.
 - Phone-player assessment of the final composition remains separate from automated checks.

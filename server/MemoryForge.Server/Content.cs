@@ -30,28 +30,32 @@ namespace MemoryForge.Server
         public string RulesVersion { get; }
         public string ContentSha256 { get; }
         public string CoreModule { get; }
+        /// <summary>RECRUIT-SERVER-20261021: the gacha rules, active banners and launch reward of the same bound bytes.</summary>
+        public RecruitmentContent Recruitment { get; }
         public BattleRules Rules => Data.Memory.Battle.Rules;
 
-        PracticeContent(RunData data, string rulesVersion, string contentSha256, string coreModule)
+        PracticeContent(RunData data, string rulesVersion, string contentSha256, string coreModule, RecruitmentContent recruitment)
         {
-            Data = data; RulesVersion = rulesVersion; ContentSha256 = contentSha256; CoreModule = coreModule;
+            Data = data; RulesVersion = rulesVersion; ContentSha256 = contentSha256; CoreModule = coreModule; Recruitment = recruitment;
         }
 
         public static PracticeContent Load(string root)
         {
             string path = Path.Combine(root, "data", "game_data.json");
             byte[] before = ReadContent(path);
-            RunData data; string version;
+            RunData data; string version; RecruitmentContent recruitment;
             try
             {
                 data = RunDataLoader.Load(root);
                 using var document = JsonDocument.Parse(before);
                 version = document.RootElement.GetProperty("meta").GetProperty("version").GetString() ?? throw new InvalidDataException("meta.version");
+                // Parsed from the hashed bytes themselves (the linked GachaDataLoader), not from a second read of the file.
+                recruitment = RecruitmentContent.Load(document.RootElement);
             }
             catch (Exception) { throw new StartupRefusal("data/game_data.json failed the reviewed content loaders"); }
             // The loaders read the file themselves; the bound hash must be of exactly the bytes they read.
             if (!before.AsSpan().SequenceEqual(ReadContent(path))) throw new StartupRefusal("data/game_data.json changed while it was loading");
-            return new PracticeContent(data, version, GraphJson.Sha256(before), typeof(Run).Assembly.ManifestModule.ModuleVersionId.ToString("N"));
+            return new PracticeContent(data, version, GraphJson.Sha256(before), typeof(Run).Assembly.ManifestModule.ModuleVersionId.ToString("N"), recruitment);
         }
         static byte[] ReadContent(string path)
         {

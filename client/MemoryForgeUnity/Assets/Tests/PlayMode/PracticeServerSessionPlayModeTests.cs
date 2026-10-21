@@ -48,6 +48,7 @@ namespace MemoryForge.Client.Tests
         World world = null!;
         Func<string> source = null!;
         Func<Seen, Reply> post = null!;
+        Func<Seen, Reply?>? additionalReply;
         readonly List<PracticeServerSession> sessions = new List<PracticeServerSession>();
 
         [SetUp]
@@ -58,6 +59,7 @@ namespace MemoryForge.Client.Tests
             world = new World();
             source = () => Credential;
             post = request => Error(500, "INTERNAL_ERROR");
+            additionalReply = null;
             host = new FixtureHost(Serve);
         }
 
@@ -1725,6 +1727,8 @@ namespace MemoryForge.Client.Tests
         Reply Serve(Seen request)
         {
             if (request.Authorization != "Bearer " + Credential && request.Authorization != "Bearer " + RotatedCredential) return Error(401, "UNAUTHORIZED");
+            var additional = additionalReply?.Invoke(request);
+            if (additional != null) return additional;
             if (request.Method == "GET" && request.Path == AccountRoute) return world.AccountFailure ?? Reply.Json(200, AccountJson(world));
             if (request.Method == "GET")
                 return world.RunId != null && request.Path == "/dev/practice/runs/" + world.RunId
