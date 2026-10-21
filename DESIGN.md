@@ -71,5 +71,19 @@ This is the current UI implementation brief. Game rules and approved character c
 - Verify navigation, data labels, modal blocking, representative choice, reduced motion, safe-area layout, screenshots, a fresh macOS development app and actual loopback recruitment UI. The user excludes phone work for this unit.
 
 ## Open questions
-- Actual recruitment and account-owned collection are in progress through the authenticated Development server. Editable expedition party and production identity remain separate.
+- Actual recruitment and account-owned collection are implemented through the authenticated Development server (58ab499). Editable expedition party and production identity remain separate.
 - Phone-player assessment of the final composition remains separate from automated checks.
+
+## 2026-10-21 follow-up: populated workshop and safe expedition return
+
+The user explicitly reports poor/empty composition across home, companions and expedition, not just one screen. The native abandoned-result screenshot confirms three oversized mostly-empty deck columns and no workshop exit. This supersedes the earlier sparse edge-only home arrangement.
+
+- Home: keep the authored companion as the visual center. Add two narrow real-route entries at left (catalogue, recruitment), a right destination/actual practice-party preview and one departure action. Keep account access distinct from utility circles and the five-route dock. Character identity shows actual element/weapon, not production draft bookkeeping.
+- Companions: scrollable three-column catalogue plus a separate character passport/ability preview at right, so a two-character owned collection still has meaningful information. Card taps retain existing full details. Owned/empty/disconnected filters remain honest and link to an available next action. Missing art uses a labelled crest; do not invent portraits or ownership.
+- Preparation: one large readable overlay, destination artwork at left, length selection and three actual party portraits at right, one departure action below. Explain the fixed practice party and app-session memory once; no fake editable slots.
+- Expedition results: compact actual outcome/metrics and saved decks, primary return to workshop, optional next departure. Abandon confirmation says it returns to the workshop and cancellation does nothing. Failure/recovery and save-skipped states get an equally clear safe exit.
+- The return must preserve the trusted local memory graph, version/history/receipts and numbering across scene destruction. No run is created by returning home. Only a later explicit departure restores the app-session handoff and creates its next run. No disk-save or server-abandon capability is implied.
+
+Palette stays workshop ink #0d1322, layered slate #141c31, ivory #e9eef8, muted silver #98a5c0, brass #e2b45f, memory light #62d6c6. IBM Plex Sans KR remains the typeface. Align controls to the1600x900 safe frame, use24/32unitgaps, keep all144-unit touch targets within their view. Reuse existing kit frames, gradients, portraits, Core-derived text and reduced-motion behavior. Avoid repeated equal-weight full-height boxes; size information regions to their content.
+
+Acceptance: actual abandon-confirm/cancel and terminal-home routes; exact memory/receipt state survives a scene roundtrip; no automatic new expedition; real catalogue/ability and preparation data; no clipped/overlapping home/dock/footer at144touch units; screenshot review of home, filtered catalogue, preparation, map/battle and compact result, plus a fresh PC app and opposite-AI review. Phone remains excluded. No prices, rewards, probabilities, permanent-asset meaning, creative-original content or production deployment changes.

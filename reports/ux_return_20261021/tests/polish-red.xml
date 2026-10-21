@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="3" result="Failed(Child)" total="3" passed="0" failed="3" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-21 10:56:13Z" end-time="2026-10-21 10:56:15Z" duration="2.7490147">
+  <test-suite type="TestSuite" id="1478" name="Memory Forge" fullname="Memory Forge" runstate="Runnable" testcasecount="419" result="Failed" site="Child" start-time="2026-10-21 10:56:13Z" end-time="2026-10-21 10:56:15Z" duration="2.749015" total="3" passed="0" failed="3" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1470" name="MemoryForge.PlayModeTests.dll" fullname="/Users/choi/.codex/worktrees/memoryforge-followup/Memory_forge/client/MemoryForgeUnity/Library/ScriptAssemblies/MemoryForge.PlayModeTests.dll" runstate="Runnable" testcasecount="419" result="Failed" site="Child" start-time="2026-10-21 10:56:13Z" end-time="2026-10-21 10:56:15Z" duration="2.742788" total="3" passed="0" failed="3" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="85916" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="1471" name="MemoryForge" fullname="MemoryForge" runstate="Runnable" testcasecount="419" result="Failed" site="Child" start-time="2026-10-21 10:56:13Z" end-time="2026-10-21 10:56:15Z" duration="2.740025" total="3" passed="0" failed="3" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="1473" name="Client" fullname="MemoryForge.Client" runstate="Runnable" testcasecount="349" result="Failed" site="Child" start-time="2026-10-21 10:56:13Z" end-time="2026-10-21 10:56:15Z" duration="2.736880" total="3" passed="0" failed="3" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestSuite" id="1474" name="Tests" fullname="MemoryForge.Client.Tests" runstate="Runnable" testcasecount="349" result="Failed" site="Child" start-time="2026-10-21 10:56:13Z" end-time="2026-10-21 10:56:15Z" duration="2.734940" total="3" passed="0" failed="3" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="TestFixture" id="1171" name="ExpeditionResumeFailurePlayModeTests" fullname="MemoryForge.Client.Tests.ExpeditionResumeFailurePlayModeTests" classname="MemoryForge.Client.Tests.ExpeditionResumeFailurePlayModeTests" runstate="Runnable" testcasecount="4" result="Failed" site="Child" start-time="2026-10-21 10:56:13Z" end-time="2026-10-21 10:56:14Z" duration="1.058379" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="1175" name="FailedDepartureCanReturnHomeWithoutARunAndSceneFailureKeepsItsRecovery" fullname="MemoryForge.Client.Tests.ExpeditionResumeFailurePlayModeTests.FailedDepartureCanReturnHomeWithoutARunAndSceneFailureKeepsItsRecovery" methodname="FailedDepartureCanReturnHomeWithoutARunAndSceneFailureKeepsItsRecovery" classname="MemoryForge.Client.Tests.ExpeditionResumeFailurePlayModeTests" runstate="Runnable" seed="1003741195" result="Failed" start-time="2026-10-21 10:56:13Z" end-time="2026-10-21 10:56:14Z" duration="1.051638" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  returning home cancels the queued departure without dropping held memory
+  Expected: null
+  But was:  "full"
+]]></message>
+                  <stack-trace><![CDATA[at MemoryForge.Client.Tests.ExpeditionResumeFailurePlayModeTests+<FailedDepartureCanReturnHomeWithoutARunAndSceneFailureKeepsItsRecovery>d__18.MoveNext () [0x002d3] in /Users/choi/.codex/worktrees/memoryforge-followup/Memory_forge/client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionResumeFailurePlayModeTests.cs:186
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@388540dd9ce6/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+                <output><![CDATA[[MemoryForge] Practice departure could not start (InvalidDataException); the pending departure and session memory version 1 are kept.
+System.IO.InvalidDataException: test-local run content load failure
+  at MemoryForge.Client.Tests.ExpeditionResumeFailurePlayModeTests+<>c.<FailedDepartureCanReturnHomeWithoutARunAndSceneFailureKeepsItsRecovery>b__18_0 () [0x00000] in /Users/choi/.codex/worktrees/memoryforge-followup/Memory_forge/client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionResumeFailurePlayModeTests.cs:168
+  at MemoryForge.Client.MemoryForgeExpeditionClient.Load () [0x00040] in /Users/choi/.codex/worktrees/memoryforge-followup/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:416
+  at MemoryForge.Client.MemoryForgeExpeditionClient.Resume (MemoryForge.Client.MemoryForgePracticeSession+Held held) [0x0006f] in /Users/choi/.codex/worktrees/memoryforge-followup/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:375
+[MemoryForge] The practice did not return to the home (InvalidOperationException); session memory version 1 stays here.
+System.InvalidOperationException: test-local home scene failure
+  at MemoryForge.Client.Tests.ExpeditionResumeFailurePlayModeTests+<>c.<FailedDepartureCanReturnHomeWithoutARunAndSceneFailureKeepsItsRecovery>b__18_1 (System.String _) [0x00000] in /Users/choi/.codex/worktrees/memoryforge-followup/Memory_forge/client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionResumeFailurePlayModeTests.cs:172
+  at MemoryForge.Client.MemoryForgeExpeditionClient.ReturnToWorkshop () [0x00154] in /Users/choi/.codex/worktrees/memoryforge-followup/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:700
+]]></output>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1206" name="HomeReturnAcceptancePlayModeTests" fullname="MemoryForge.Client.Tests.HomeReturnAcceptancePlayModeTests" classname="MemoryForge.Client.Tests.HomeReturnAcceptancePlayModeTests" runstate="Runnable" testcasecount="2" result="Failed" site="Child" start-time="2026-10-21 10:56:14Z" end-time="2026-10-21 10:56:14Z" duration="0.661863" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="1207" name="HomeHandoffShowsTheActualReturnOnceAndPreselectsTheHeldLengthWithoutDeparting" fullname="MemoryForge.Client.Tests.HomeReturnAcceptancePlayModeTests.HomeHandoffShowsTheActualReturnOnceAndPreselectsTheHeldLengthWithoutDeparting" methodname="HomeHandoffShowsTheActualReturnOnceAndPreselectsTheHeldLengthWithoutDeparting" classname="MemoryForge.Client.Tests.HomeReturnAcceptancePlayModeTests" runstate="Runnable" seed="68932921" result="Failed" start-time="2026-10-21 10:56:14Z" end-time="2026-10-21 10:56:14Z" duration="0.660671" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Expected: greater than or equal to 0.899999976f
+  But was:  0.0f
+]]></message>
+                  <stack-trace><![CDATA[at MemoryForge.Client.Tests.HomeReturnAcceptancePlayModeTests+<HomeHandoffShowsTheActualReturnOnceAndPreselectsTheHeldLengthWithoutDeparting>d__4.MoveNext () [0x002a0] in /Users/choi/.codex/worktrees/memoryforge-followup/Memory_forge/client/MemoryForgeUnity/Assets/Tests/PlayMode/HomeReturnAcceptancePlayModeTests.cs:58
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@388540dd9ce6/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1213" name="LobbyOverviewPlayModeTests" fullname="MemoryForge.Client.Tests.LobbyOverviewPlayModeTests" classname="MemoryForge.Client.Tests.LobbyOverviewPlayModeTests" runstate="Runnable" testcasecount="5" result="Failed" site="Child" start-time="2026-10-21 10:56:14Z" end-time="2026-10-21 10:56:15Z" duration="1.006998" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="1215" name="RosterPreviewUsesRealSkillsAndBothDetailEntrypointsStillWork" fullname="MemoryForge.Client.Tests.LobbyOverviewPlayModeTests.RosterPreviewUsesRealSkillsAndBothDetailEntrypointsStillWork" methodname="RosterPreviewUsesRealSkillsAndBothDetailEntrypointsStillWork" classname="MemoryForge.Client.Tests.LobbyOverviewPlayModeTests" runstate="Runnable" seed="2013335364" result="Failed" start-time="2026-10-21 10:56:14Z" end-time="2026-10-21 10:56:15Z" duration="1.005951" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[Unhandled log message: '[Error] SendMessage BackToRoster has no receiver!'. Use UnityEngine.TestTools.LogAssert.Expect]]></message>
+                  <stack-trace><![CDATA[UnityEngine.GameObject:SendMessage (string)
+MemoryForge.Client.Tests.LobbyOverviewPlayModeTests/<RosterPreviewUsesRealSkillsAndBothDetailEntrypointsStillWork>d__5:MoveNext () (at Assets/Tests/PlayMode/LobbyOverviewPlayModeTests.cs:71)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+]]></stack-trace>
+                </failure>
+                <output><![CDATA[SendMessage BackToRoster has no receiver!
+<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: [TestRunnerNoThrottle] Restored Interaction Mode after test run.
+Saving results to: /Users/choi/Library/Application Support/DefaultCompany/Memory Forge/TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

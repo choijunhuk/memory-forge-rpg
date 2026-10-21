@@ -113,7 +113,7 @@ namespace MemoryForge.Client.Tests
 
             yield return null; Canvas.ForceUpdateCanvases();
             var view = SingleView(o.Host);
-            Assert.That(view.GetComponentsInChildren<Button>().Select(b => b.name), Is.EqualTo(new[] { "RecoveryDiscard" }), "one explicit action and no normal control");
+            Assert.That(view.GetComponentsInChildren<Button>().Select(b => b.name), Is.EqualTo(new[] { "RecoveryDiscard", "RecoveryHome" }), "explicit recovery and home actions, no normal control");
             AssertReadable(view, t => t == "이 연습 탐사를 계속할 수 없어요", "recovery title");
             AssertReadable(view, t => t.Contains("저장하지 않고 버려요"), "the failed Run is not saved");
             AssertReadable(view, t => t.Contains("기억 버전 1"), "the kept memory version");
@@ -130,7 +130,7 @@ namespace MemoryForge.Client.Tests
             o.Host.SetActive(true);
             yield return null;
             Assert.That(client.RecoveryRequired, Is.True, "enabling redraws the recovery screen, not the failed Run");
-            Assert.That(SingleView(o.Host).GetComponentsInChildren<Button>().Select(b => b.name), Is.EqualTo(new[] { "RecoveryDiscard" }));
+            Assert.That(SingleView(o.Host).GetComponentsInChildren<Button>().Select(b => b.name), Is.EqualTo(new[] { "RecoveryDiscard", "RecoveryHome" }));
             o.Host.SendMessage("OnApplicationPause", false); o.Host.SendMessage("OnApplicationFocus", true);
             Assert.That(client.RecoveryRequired, Is.True, "resuming keeps the quarantine");
             Assert.That(Print(client.Snapshot!), Is.EqualTo(failed));
@@ -200,7 +200,7 @@ namespace MemoryForge.Client.Tests
             StillQuarantined("a throwing retry by the public action");
             LogAssert.NoUnexpectedReceived();
             yield return null; Canvas.ForceUpdateCanvases();
-            Assert.That(SingleView(o.Host).GetComponentsInChildren<Button>().Select(b => b.name), Is.EqualTo(new[] { "RecoveryDiscard" }), "still only the read-only recovery screen");
+            Assert.That(SingleView(o.Host).GetComponentsInChildren<Button>().Select(b => b.name), Is.EqualTo(new[] { "RecoveryDiscard", "RecoveryHome" }), "still only the read-only recovery screen");
             AssertReadable(SingleView(o.Host), t => t.StartsWith("새 탐사를 시작하지 못했어요", StringComparison.Ordinal), "failed retry notice");
             AssertEverythingRefused(client, failed, store, start.Map!.Floors[0][0].Id);
             LogAssert.NoUnexpectedReceived(); // ordinary blocked commands log nothing

@@ -1,0 +1,107 @@
+{
+  "date": "2026-10-21",
+  "source_base": "58ab4990125653ce83ef2a31cfde583db74c5f14",
+  "source_fingerprint": "tests/final-review-source-hashes.json; entire Unity input set in tests/full-playmode-inputs.json",
+  "checks": {
+    "full-playmode": {
+      "total": 419,
+      "passed": 408,
+      "failed": 0,
+      "skipped": 11,
+      "duration": 285.7776523
+    },
+    "full-editmode": {
+      "total": 10,
+      "passed": 10,
+      "failed": 0,
+      "skipped": 0,
+      "duration": 0.0551049
+    },
+    "final-capture": {
+      "total": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "duration": 11.7088616
+    }
+  },
+  "required_checks": {
+    "engine": 358,
+    "proposals": 14,
+    "python": 64,
+    "docs": 9,
+    "handoff": 33,
+    "art_copies": 298,
+    "failed": 0
+  },
+  "manifest": {
+    "entries": 423,
+    "historical_changed_paths": 40,
+    "newly_changed_paths": 0,
+    "rewritten": false,
+    "evidence": "tests/manifest-baseline-comparison.json"
+  },
+  "review": {
+    "claude_model": "claude-opus-5-5",
+    "effort": "high",
+    "session_id": "2ddcbfd9-8a10-45d4-940f-afd8bb89c176",
+    "sequence": [
+      "REQUEST_CHANGES",
+      "APPROVE",
+      "APPROVE"
+    ],
+    "billing": "existing subscription, account-matched UI attestation (not server enforcement)",
+    "reviewer_executed_tests": false,
+    "latest_review_scope": "source and test changes only, no final rerender by reviewer"
+  },
+  "actual_scene_roundtrip": "fresh6/6targeted includes Home→Expedition→real defeat→savev1→Home→Expedition→abandon→Home, Harin/storev1 preserved, exactly4scene requests",
+  "visual": {
+    "score": 92,
+    "verdict": "pass",
+    "reference": "repository DESIGN and before captures; no other-game pixel matching"
+  },
+  "pc": {
+    "build": {
+      "result": "Succeeded",
+      "reportedBytes": "568347819",
+      "seconds": "16.1",
+      "errors": "0",
+      "warnings": "12"
+    },
+    "binary_sha256": {
+      "Contents/MacOS/Memory Forge": "6f9cdb2d258104829088a0a9db8c1f2cb0cc3fdf9f8664b0b32a67e0c7d538ed",
+      "Contents/Resources/Data/Managed/MemoryForge.Client.dll": "15b0512dc52f816184c0b105399325bc18e2d1ccbf7821550026bff59cad7abe"
+    },
+    "app_path": "/Users/choi/Documents/Memory_forge/ops/ai/local/ux-return-20261021/MemoryForge-PC-ux-return-20261021.app",
+    "native_home": "PASS",
+    "evidence": "tests/native-render.json",
+    "warnings_detail": "tests/final-unity-verification-summary.json",
+    "compiler_warnings": "12 reported;7unique nullable messages, not runtime exceptions"
+  },
+  "not_run": [
+    "phone/ADB, excluded by user",
+    "physical native pointer/user acceptance",
+    "fresh live recruitment spending in this UI-only unit",
+    "fresh local Core/server/PostgreSQL suites in this client-only unit; exact-headCI follows push"
+  ],
+  "limits": [
+    "App-session practice handoff only; closing app discards it",
+    "Server practice has no abandon command",
+    "Owned-party sortie/growth/equipment/partners remain future work, not implied by UI or Core math",
+    "Three missing character originals remain labelled",
+    "Missing licensed-font recovery remains a pre-existing defensive limitation"
+  ],
+  "log_sha256": {
+    "full-playmode.log": "f851c476e10a52586249ca655efd69172da68dbd073d32afe997aa10f3611601",
+    "full-editmode.log": "57e7e96a9534545f215f6fbeb2ad622865e8842e375a547b9f6b28813d4b73d3",
+    "final-capture.log": "1f99022ab15b453f330bf6c0881e4549a033f1f9c19a77bb3c1f643e0332cd8c",
+    "final-build.log": "d6711126a43c0b469f39977cc4ab99f892ada29a29424534f5064804c1763279",
+    "check-engine.log": "bc5a89eb9b3ec4d0c0973fec071ef6fd2cd466bffdeaf8aa4329b21738e647d9",
+    "check-proposals.log": "5f105f816f7b5a836d8511842d8ec289cbdff88d6edfb807a5a8b3207e926541",
+    "check-python.log": "e47ad8ee376af71f0624b78d944e9967d1de3a84a1c3054684f30c7157bf0fbc",
+    "check-docs-final.log": "5859faf36f6ab66d0456752948f3f5680e7d78a2cf491cc4bc0bc60129ea5dd3",
+    "check-handoff-final.log": "6da3d08f621a1fbc2b98e4c0553d0b38ca2ad8022325f1704462b5a048e7bc24",
+    "check-art-copies.log": "2842474bd37a41bfd9bf107b163be28084d4b7df46136ad1f81772a544478cc4",
+    "check-integrated-release.log": "a9b3f280f18c644bfe3eafd1ada63c088aca97c679db7c80900b11c2cee4ea53"
+  }
+}

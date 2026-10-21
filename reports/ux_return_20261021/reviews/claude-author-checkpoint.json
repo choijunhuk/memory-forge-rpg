@@ -1,0 +1,10 @@
+{
+  "task_id": "EXPEDITION-RETURN-UX-20261021",
+  "run_id": "EXPEDITION-RETURN-UX-20261021-20261021T092110910667Z",
+  "status": "TIMED_OUT",
+  "requestedModel": "claude-opus-5-5",
+  "requestedEffort": "xhigh",
+  "process_exit": null,
+  "changes_verified": false,
+  "session_id": null
+}

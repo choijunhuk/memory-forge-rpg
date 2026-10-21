@@ -1,0 +1,21 @@
+{
+  "DESIGN.md": "8dd9408bbe4292e9a84046c5cf279c726b202b735725b8715ce74dda733a01ca",
+  "docs/PROGRESSION_DIRECTION_20261021.md": "d4adefe6d8afb7f4b2be20b4f51145be831a9259d85809ce9e3f6db2eb67aec9",
+  "docs/plans/ux-return-20261021.md": "49387297f5e90ee9c53d82da5babeb9dcc2e7bf23480a99bcc87c9242f2a1d71",
+  "client/MemoryForgeUnity/Assets/Scripts/MemoryForgeLobbyClient.cs": "6cd3d98987ab6ef269d8ef50cfd4ab4de4dd756d07099a99b8e22578e624a4a2",
+  "client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs": "169fc0b1f5cee28813595e77a228225b8ffe4b833ee7fbfc530df0169146e614",
+  "client/MemoryForgeUnity/Assets/Scripts/MemoryForgePracticeSession.cs": "78b3354ceaeeee1595c9afa5717c9ed57206b0d5a83aaaf3725979e69f518b39",
+  "client/MemoryForgeUnity/Assets/Scripts/MemoryForgePracticeSession.cs.meta": "69f743b9804897a3bcf57c73a2a8c13f8709172ea8f0d457b0ff5ccd52df364a",
+  "client/MemoryForgeUnity/Assets/Tests/PlayMode/ActionPresentationPlayModeTests.cs": "cec2b2d193a04f7d8ad247344e05970c56464bb4f1f16ccffdd07e018f074ba8",
+  "client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionFailurePlayModeTests.cs": "1e1a99bbc941fb0a87583414a3a8a168fe19abc9a62f1e75b84c13fec8c90e4b",
+  "client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionResumeFailurePlayModeTests.cs": "5379045b6d91ecfe4c30d4eacf5c078b3c7829c73fb190bd4b9df73c1cd59632",
+  "client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionResumeFailurePlayModeTests.cs.meta": "6da502373c51b0f562b3436caec1237c167f68a79c3828a0a363dc3d62307b1b",
+  "client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionReturnNavigationPlayModeTests.cs": "eebe583711d28c5c6aa356768fbf49c8ecf3595a96017db03dcc1f71cb45dcec",
+  "client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionReturnNavigationPlayModeTests.cs.meta": "aaca99265893a3be756cd208c7dd3d733202f42908103a67dbe74a986b4dd8f0",
+  "client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionReturnPlayModeTests.cs": "ccefdade52d119342b61961cda9f88b89d2bf3953c56b089d65670b0213d9649",
+  "client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionReturnPlayModeTests.cs.meta": "af77f053cd8f1d173d32f3a74dce117d74d24a04faca3b1951111a19f4b7dd70",
+  "client/MemoryForgeUnity/Assets/Tests/PlayMode/HomeReturnAcceptancePlayModeTests.cs": "ed2c49b04e1201cc62313f79234205eeb44419436858a2d964b9216650723975",
+  "client/MemoryForgeUnity/Assets/Tests/PlayMode/HomeReturnAcceptancePlayModeTests.cs.meta": "b557bcfc494352a111acd327c3431de821fa062bf424340f28433b7dae0dc2d0",
+  "client/MemoryForgeUnity/Assets/Tests/PlayMode/LobbyOverviewPlayModeTests.cs": "8d4b9e93c83662fbdda227cab5e8dbf653310a826172b65c751ab3c804850b86",
+  "client/MemoryForgeUnity/Assets/Tests/PlayMode/LobbyOverviewPlayModeTests.cs.meta": "6beca404d638777b470d636ecf1739ea3fc7203d51bd14681d6e9a6e1d81d2df"
+}

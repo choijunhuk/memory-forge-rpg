@@ -21,6 +21,8 @@ namespace MemoryForge.Client
         public const string ExpeditionScene = "MemoryForgeExpedition", OwnedCanvas = "MemoryForgeLobbyCanvas";
         /// <summary>The expedition length chosen in 출격 준비, read once by the expedition client when it starts.</summary>
         public static string? NextLength;
+        internal static string? ReturnCompanion;
+        public Action<string>? SceneLoader { get; set; }
         const float IdleAfter = 25f, FigureCenterX = 1040f;
         static readonly Color Background = Hex("0d1322"), Panel = Hex("141c31"), Line = Hex("2f3d63"), Ink = Hex("e9eef8"),
             Muted = Hex("98a5c0"), Brass = Hex("e2b45f"), Memory = Hex("62d6c6");
@@ -53,7 +55,7 @@ namespace MemoryForge.Client
         CanvasGroup veil = null!;
         Coroutine? menuFade;
         bool leaving;
-        Text nameText = null!, noteText = null!;
+        Text nameText = null!, noteText = null!, homeAccountText = null!;
         int index, tapCursor;
         string? lastPeriod;
         float idleSince;
@@ -66,8 +68,14 @@ namespace MemoryForge.Client
             {
                 loadErrors.Add(e.Message); ShowLoadError(); return;
             }
+            string? returned = MemoryForgePracticeSession.ConsumeReturnNotice();
+            sortieLength = MemoryForgePracticeSession.HeldLength ?? sortieLength;
+            int representative = Math.Max(0, companions.FindIndex(companion => companion.Id == ReturnCompanion));
+            ReturnCompanion = null;
+            if (MemoryForgePracticeSession.HasHeldPractice && companions.Count != 0) enteredFor.Add(companions[representative].Id);
             Build();
-            Show(0);
+            Show(representative);
+            if (!string.IsNullOrEmpty(returned)) ShowHomeNotice(returned!);
         }
 
         void Update()
@@ -76,7 +84,7 @@ namespace MemoryForge.Client
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 if (recruitmentReveal != null && recruitmentReveal.gameObject.activeSelf) FinishRecruitmentReveal();
-                else if (detailPanel.gameObject.activeSelf) ShowPanel(rosterPanel);
+                else if (detailPanel.gameObject.activeSelf) BackToRoster();
                 else ClosePanels();
             }
             if (rosterPanel.gameObject.activeSelf || detailPanel.gameObject.activeSelf || sortiePanel.gameObject.activeSelf || settingsPanel.gameObject.activeSelf || listPanel.gameObject.activeSelf || recruitmentPanel.gameObject.activeSelf || recruitmentReveal.gameObject.activeSelf)
@@ -146,39 +154,64 @@ namespace MemoryForge.Client
             homeControls = sideGroup;
             player.Started += _ => { stage.anchoredPosition = Vector2.zero; SetHomeInput(false); FadeMenu(sideGroup, 0f, 0.25f); };
             player.Finished += _ => { stage.anchoredPosition = new Vector2(-340, 0); idleSince = Time.time; SetHomeInput(true); FadeMenu(sideGroup, 1f, 0.3f); };
-            // Keep the workshop and companion visible; the destination and navigation live on the edges of the scene.
-            Shade(side, "TopShade", 0, 0, 1600, 170, new Color(0.025f, 0.035f, 0.07f, 0.82f), false);
-            Shade(side, "RightShade", 1080, 0, 520, 900, new Color(0.025f, 0.035f, 0.07f, 0.8f), false);
+            Shade(side, "TopShade", 0, 0, 1600, 180, new Color(0.025f, 0.035f, 0.07f, 0.8f), false);
+            Shade(side, "RightShade", 1016, 0, 584, 900, new Color(0.025f, 0.035f, 0.07f, 0.88f), false);
             Shade(side, "IdentityShade", 32, 24, 620, 150, new Color(0.025f, 0.035f, 0.07f, 0.8f), true);
             Label(side, "기억 공방", 56, 30, 480, 64, 42, Ink, FontStyle.Bold);
-            Label(side, "종탑 아래, 당신의 동료들이 기다리는 곳", 58, 96, 620, 36, 20, Muted);
-            Ornament(side, 58, 144, 310);
+            Label(side, "종탑 아래, 동료들과 다음 이야기를 준비하는 곳", 58, 100, 760, 36, 20, Muted);
+            Ornament(side, 58, 148, 310);
             float utilitySize = Math.Max(96, TouchUnits());
             UtilityButton(side, "OpenSettings", "설정", 1544 - utilitySize, utilitySize, () => Toggle(settingsPanel), true);
             if (!Application.isMobilePlatform) UtilityButton(side, "QuitGame", "종료", 1520 - utilitySize * 2, utilitySize, Application.Quit, false);
+            var account = Box(side, "HomeAccount", 1040, 24, 176, utilitySize, Color.clear);
+            homeAccountText = Label(account, "계정 미연결\n모집에서 연결", 8, 8, 160, utilitySize - 16, 18, Muted, FontStyle.Normal, TextAnchor.MiddleCenter);
 
             float dockHeight = Math.Max(120, TouchUnits()), dockY = 884 - dockHeight;
             float entryHeight = Math.Max(138, TouchUnits()), entryY = Math.Min(632, dockY - entryHeight - 16);
-            float destinationHeight = entryY - 244;
-            var destination = Box(side, "ExpeditionDestination", 1096, 228, 448, destinationHeight, Panel);
+            float destinationY = Math.Max(184, utilitySize + 64), destinationHeight = entryY - destinationY - 16;
+            var destination = Box(side, "ExpeditionDestination", 1040, destinationY, 504, destinationHeight, Panel);
             var map = SpriteAt("Art/Backgrounds/bg_zone1_map");
-            var vista = Box(destination, "DestinationArt", 0, 0, 448, destinationHeight - 146, Color.white);
+            float mapHeight = Math.Min(180, destinationHeight - 200);
+            var vista = Box(destination, "DestinationArt", 0, 0, 504, mapHeight, Color.white);
             vista.GetComponent<Image>().sprite = map;
             vista.GetComponent<Image>().color = map == null ? Panel : new Color(0.75f, 0.8f, 0.85f);
-            Box(destination, "DestinationShade", 0, destinationHeight - 194, 448, 194, new Color(0.025f, 0.035f, 0.07f, 0.92f));
+            Box(destination, "DestinationShade", 0, mapHeight - 92, 504, 92, new Color(0.025f, 0.035f, 0.07f, 0.85f));
             Box(destination, "BrassEdge", 0, 0, 4, destinationHeight, Brass);
-            Label(destination, "첫 번째 구역", 28, destinationHeight - 184, 380, 36, 20, Brass);
-            Label(destination, "종탑 하층", 26, destinationHeight - 144, 390, 64, 42, Ink, FontStyle.Bold);
-            Label(destination, "흩어진 기억을 따라 새로운 탐사를 시작하세요.", 28, destinationHeight - 68, 390, 52, 20, Muted);
-            var sortie = MainEntry(side, "StartExpedition", "출격", "탐사 준비", "nav_expedition", 1096, entryY, 448, entryHeight, () => Toggle(sortiePanel));
+            Label(destination, "출발 구역", 24, mapHeight - 86, 440, 28, 18, Brass);
+            Label(destination, "종탑 하층", 22, mapHeight - 58, 456, 52, 36, Ink, FontStyle.Bold);
+            Label(destination, "전투와 사건을 지나, 기억을 이어가는 탐사", 24, mapHeight + 10, 456, 32, 19, Muted);
+            Label(destination, "함께 출발하는 연습 편성", 24, mapHeight + 48, 456, 28, 18, Brass);
+            for (int n = 0; n < PracticeParty.Count; n++)
+            {
+                string id = PracticeParty[n];
+                var slot = Box(destination, "PreviewParty:" + id, 24 + n * 152, mapHeight + 82, 136, 112, new Color(0.04f, 0.055f, 0.1f, 0.9f));
+                var face = Box(slot, "Portrait", 28, 4, 80, 76, Color.white);
+                var art = SpriteAt("Art/Characters/char_" + id + "_sd") ?? Portrait(id);
+                face.GetComponent<Image>().sprite = art; CenterSprite(face);
+                if (art == null) face.GetComponent<Image>().color = Color.clear;
+                Label(slot, content?.Battle.Characters.FirstOrDefault(c => c.Id == id)?.Name ?? id, 4, 82, 128, 28, 21, Ink, FontStyle.Bold, TextAnchor.MiddleCenter);
+            }
+            var sortie = MainEntry(side, "StartExpedition", "출격", "탐사 준비", "nav_expedition", 1040, entryY, 504, entryHeight, () => Toggle(sortiePanel));
             Breathe(sortie);
 
-            var identity = Box(side, "CompanionIdentity", 56, 568, 460, 188, Color.clear);
-            Shade(identity, "NameShade", 0, 0, 460, 188, new Color(0.025f, 0.035f, 0.07f, 0.85f), true);
-            Label(identity, "함께하는 동료", 0, 0, 330, 36, 19, Memory);
-            nameText = Label(identity, "", 0, 36, 340, 72, 52, Ink, FontStyle.Bold);
-            noteText = Label(identity, "", 0, 114, 380, 56, 18, Muted);
-            Button(identity, "NextCompanion", "교체", 348, 34, 112, 120, () => Show(index + 1), Line, 22);
+            var routes = new (string Name, string Title, string Detail, string Icon, Action Click)[] {
+                ("HomeCatalogueShortcut", "동료 기록", content == null ? "동료 자료 확인 중" : "전체 " + content.Battle.Characters.Count + "명의 동료", "nav_companions", OpenRoster),
+                ("HomeRecruitmentShortcut", "새로운 만남", "모집과 보유 기록", "nav_recruit", OpenRecruitment) };
+            float routeHeight = Math.Max(132, TouchUnits());
+            for (int n = 0; n < routes.Length; n++)
+            {
+                var route = routes[n];
+                var tile = Button(side, route.Name, "", 56, 232 + n * (routeHeight + 16), 280, routeHeight, route.Click, Line);
+                Glyph(tile.transform, route.Icon, 18, (routeHeight - 76) / 2, 76, Color.white);
+                Label(tile.transform, route.Title, 104, 24, 156, 40, 25, Ink, FontStyle.Bold);
+                Label(tile.transform, route.Detail, 106, 72, 154, 44, 17, Muted);
+            }
+            var identity = Box(side, "CompanionIdentity", 56, dockY - 184, 520, 168, Color.clear);
+            Shade(identity, "NameShade", 0, 0, 520, 168, new Color(0.025f, 0.035f, 0.07f, 0.85f), true);
+            Label(identity, "함께하는 동료", 0, 0, 330, 28, 18, Memory);
+            nameText = Label(identity, "", 0, 32, 340, 64, 46, Ink, FontStyle.Bold);
+            noteText = Label(identity, "", 0, 104, 340, 52, 20, Muted);
+            Button(identity, "NextCompanion", "교체", 356, 8, 128, 120, () => Show(index + 1), Line, 22);
 
             var dock = Box(side, "HomeDock", 40, dockY, 1520, dockHeight, new Color(0.04f, 0.055f, 0.1f, 0.94f));
             Box(dock, "DockRule", 0, 0, 1520, 2, new Color(Brass.r, Brass.g, Brass.b, 0.65f));
@@ -218,8 +251,27 @@ namespace MemoryForge.Client
         {
             if (leaving) yield break;
             leaving = true; veil.blocksRaycasts = true; player.Stop();
-            yield return MemoryForgeUiMotion.Fade(veil, 0, 1, 0.3f);
-            SceneManager.LoadScene(ExpeditionScene);
+            yield return MemoryForgeUiMotion.Fade(veil, 0, 1, 0.25f);
+            string? previous = ReturnCompanion;
+            ReturnCompanion = Current?.Id;
+            try { (SceneLoader ?? (scene => SceneManager.LoadScene(scene)))(ExpeditionScene); }
+            catch (Exception error)
+            {
+                ReturnCompanion = previous; NextLength = null; leaving = false;
+                ClosePanels(); veil.blocksRaycasts = false;
+                StartCoroutine(MemoryForgeUiMotion.Fade(veil, 1, 0, 0.2f));
+                ShowHomeNotice("출발하지 못했어요. 기억은 그대로이니 다시 시도해주세요.");
+                Debug.LogError("[MemoryForge] Workshop departure failed (" + error.GetType().Name + ")");
+            }
+        }
+
+        void ShowHomeNotice(string message)
+        {
+            var previous = homeControls.transform.Find("HomeNotice");
+            if (previous != null) Destroy(previous.gameObject);
+            var back = Box(homeControls.transform, "HomeNotice", 46, 164, 544, 66, new Color(0.04f, 0.06f, 0.11f, 0.96f));
+            var line = Label(back, message, 12, 6, 520, 54, 20, Memory);
+            line.gameObject.name = "HomeReturnNotice"; line.resizeTextMinSize = 16;
         }
 
         void UtilityButton(Transform parent, string name, string caption, float x, float size, Action click, bool settings)
@@ -253,8 +305,8 @@ namespace MemoryForge.Client
             var edge = r.gameObject.AddComponent<Outline>(); edge.effectColor = new Color(Brass.r, Brass.g, Brass.b, 0.55f); edge.effectDistance = new Vector2(1, -1);
             var ring = Kit(r, "Ring", "ui_portrait_ring_ready", Vector4.zero, 24, (h - 108) / 2, 108, 108, 160);
             Glyph(ring, icon, 12, 12, 84, Brass);
-            Label(r, title, 152, 22, 300, 70, 54, Ink, FontStyle.Bold);
-            Label(r, sub, 154, 96, 400, 34, 21, Brass);
+            Label(r, title, 152, 22, w - 224, 70, 54, Ink, FontStyle.Bold);
+            Label(r, sub, 154, 96, w - 188, 34, 21, Brass);
             Label(r, "›", w - 70, (h - 90) / 2, 50, 90, 72, Brass, FontStyle.Bold, TextAnchor.MiddleCenter);
             return r;
         }
@@ -330,8 +382,17 @@ namespace MemoryForge.Client
                 tint = Color.white;
             }
             if (glyph == null) return;
-            var g = Box(parent, "Icon", x, y, size, size, tint); g.GetComponent<Image>().sprite = glyph; g.GetComponent<Image>().preserveAspect = true;
+            var g = Box(parent, "Icon", x, y, size, size, tint); g.GetComponent<Image>().sprite = glyph; CenterSprite(g);
         }
+        // Preserve-aspect images use their pivot for alignment; center the sprite without moving its hit/layout rectangle.
+        static void CenterSprite(RectTransform rect)
+        {
+            Vector2 pivot = new Vector2(0.5f, 0.5f);
+            rect.anchoredPosition += Vector2.Scale(pivot - rect.pivot, rect.rect.size);
+            rect.pivot = pivot;
+            rect.GetComponent<Image>().preserveAspect = true;
+        }
+
         // The 출격 tile breathes its edge so the way into a run is the first thing the eye finds (calm under reduced motion).
         void Breathe(RectTransform tile)
         {
@@ -353,6 +414,16 @@ namespace MemoryForge.Client
             idleSince = Time.time;
             if (modalShield != null) modalShield.gameObject.SetActive(false);
             SetHomeInput(!player.Playing);
+            RefreshHomeAccount();
+        }
+
+        void RefreshHomeAccount()
+        {
+            if (homeAccountText == null) return;
+            var snapshot = recruitmentSession?.Recruitment;
+            homeAccountText.text = snapshot == null ? "계정 미연결\n모집에서 연결"
+                : recruitmentSession!.RecruitmentNeedsRefresh ? "마지막 확인 " + snapshot.OwnedChars.Count + "명\n연결 확인 필요"
+                : "보유 동료 " + snapshot.OwnedChars.Count + "명\n공방 계정";
         }
 
         void SetHomeInput(bool enabled)
@@ -361,6 +432,8 @@ namespace MemoryForge.Client
             homeControls.interactable = homeControls.blocksRaycasts = enabled;
             figureTap.interactable = enabled;
         }
+
+        void BackToRoster() { RenderRoster(); ShowPanel(rosterPanel); }
 
         void ShowPanel(RectTransform panel)
         {
@@ -415,39 +488,72 @@ namespace MemoryForge.Client
             var wall = Box(rosterPanel, "Workshop", 0, 0, 1600, 900, new Color(0.2f, 0.25f, 0.32f));
             wall.GetComponent<Image>().sprite = SpriteAt("Art/Backgrounds/bg_workshop");
             Box(rosterPanel, "CatalogueVeil", 0, 0, 1600, 900, new Color(0.035f, 0.05f, 0.09f, 0.83f));
-            Label(rosterPanel, "동료", 56, 28, 500, 72, 44, Ink, FontStyle.Bold);
-            Label(rosterPanel, "기억을 함께할 동료들을 만나보세요.", 58, 108, 850, 42, 21, Muted);
+            Label(rosterPanel, "동료 기록", 56, 24, 700, 64, 42, Ink, FontStyle.Bold);
+            Label(rosterPanel, recruitmentSession?.RecruitmentNeedsRefresh == true ? "마지막 확인한 보유 정보예요. 모집에서 연결을 새로 확인해주세요." : "동료의 능력과 시작 카드를 살펴보세요.", 58, 100, 1080, 30, 21, Muted);
             Button(rosterPanel, "CloseRoster", "홈", 1392, 24, 152, 112, ClosePanels, Line, 24);
-            Button(rosterPanel, "FilterAll", "전체 동료", 56, 168, 264, 112, () => { catalogueFilter = "all"; RenderRoster(); }, catalogueFilter == "all" ? Brass : Panel, 24);
-            Button(rosterPanel, "FilterParty", "연습 편성", 336, 168, 264, 112, () => { catalogueFilter = "party"; RenderRoster(); }, catalogueFilter == "party" ? Brass : Panel, 24);
-            Button(rosterPanel, "FilterOwned", "보유 동료", 616, 168, 264, 112, () => { catalogueFilter = "owned"; RenderRoster(); }, catalogueFilter == "owned" ? Brass : Panel, 24);
+            float filterHeight = Math.Max(104, TouchUnits()), gridY = 160 + filterHeight, gridHeight = 820 - gridY;
+            Button(rosterPanel, "FilterAll", "전체 동료", 56, 144, 264, filterHeight, () => { catalogueFilter = "all"; RenderRoster(); }, catalogueFilter == "all" ? Brass : Panel, 24);
+            Button(rosterPanel, "FilterParty", "연습 편성", 336, 144, 264, filterHeight, () => { catalogueFilter = "party"; RenderRoster(); }, catalogueFilter == "party" ? Brass : Panel, 24);
+            Button(rosterPanel, "FilterOwned", "보유 동료", 616, 144, 264, filterHeight, () => { catalogueFilter = "owned"; RenderRoster(); }, catalogueFilter == "owned" ? Brass : Panel, 24);
             var owned = recruitmentSession?.Recruitment?.OwnedChars;
             var characters = content.Battle.Characters.Where(c => (catalogueFilter != "party" || PracticeParty.Contains(c.Id))
                 && (catalogueFilter != "owned" || owned != null && owned.ContainsKey(c.Id))).ToList();
-            if (catalogueFilter == "owned" && characters.Count == 0)
+            Label(rosterPanel, characters.Count + "명의 동료", 1112, 192, 424, 40, 22, Muted, FontStyle.Normal, TextAnchor.MiddleRight);
+            float cellH = Math.Max(300, TouchUnits() * 2f + 24), total = (float)Math.Ceiling(characters.Count / 3f) * (cellH + 20);
+            if (characters.Count == 0)
             {
-                Label(rosterPanel, owned == null ? "계정을 연결하면 보유 동료를 볼 수 있어요." : "아직 모집한 동료가 없어요.", 100, 404, 1400, 80, 32, Ink, FontStyle.Normal, TextAnchor.MiddleCenter);
-                Button(rosterPanel, "RecruitFromRoster", owned == null ? "계정 연결" : "모집으로", 584, 520, 432, 120, OpenRecruitment, Brass, 26);
+                Glyph(rosterPanel, "nav_companions", 432, gridY + 24, 176, Color.white);
+                Label(rosterPanel, owned == null ? "계정을 연결하면 보유 동료를 볼 수 있어요." : "아직 모집한 동료가 없어요.", 96, gridY + 216, 880, 72, 28, Ink, FontStyle.Normal, TextAnchor.MiddleCenter);
+                Button(rosterPanel, "RecruitFromRoster", owned == null ? "계정 연결" : "모집으로", 196, gridY + 316, 688, Math.Max(112, TouchUnits()), OpenRecruitment, Brass, 26);
             }
-            Label(rosterPanel, characters.Count + "명의 동료", 1112, 204, 424, 44, 22, Muted, FontStyle.Normal, TextAnchor.MiddleRight);
-            float cellH = Math.Max(380, TouchUnits() * 2f), total = (float)Math.Ceiling(characters.Count / 5f) * (cellH + 20);
-            var grid = ScrollArea(rosterPanel, 56, 312, 1488, 508, Math.Max(508, total));
-            for (int n = 0; n < characters.Count; n++)
+            else
             {
-                var c = characters[n]; float x = n % 5 * 300, y = n / 5 * (cellH + 20);
-                var tile = Button(grid, "Companion:" + c.Id, "", x, y, 280, cellH, () => OpenDetails(c.Id), Color.clear);
-                Box(tile.transform, "CardBody", 0, 0, 280, cellH, new Color(0.09f, 0.12f, 0.19f, 0.96f));
-                var art = Portrait(c.Id);
-                var portrait = Box(tile.transform, "Portrait", 4, 4, 272, cellH - 56, Color.white);
-                portrait.GetComponent<Image>().sprite = art; portrait.GetComponent<Image>().preserveAspect = true;
-                if (art == null) { portrait.GetComponent<Image>().color = Color.clear; Label(portrait, "그림 준비 중", 12, 56, 248, 68, 22, Muted, FontStyle.Normal, TextAnchor.MiddleCenter); }
-                Box(tile.transform, "ElementEdge", 0, cellH - 62, 280, 3, ElementColor(c.Attr));
-                Label(tile.transform, c.Name, 16, cellH - 54, 170, 42, 28, Ink, FontStyle.Bold);
-                Label(tile.transform, ElementName(c.Attr), 184, cellH - 52, 80, 40, 20, ElementColor(c.Attr), FontStyle.Normal, TextAnchor.MiddleRight);
-                if (PracticeParty.Contains(c.Id)) Label(tile.transform, "편성", 12, 8, 84, 36, 19, Brass, FontStyle.Bold);
-                if (owned != null && owned.TryGetValue(c.Id, out int copies)) Label(tile.transform, "보유 · 공명 " + Math.Min(6, copies - 1), 88, 8, 180, 36, 19, Memory, FontStyle.Bold, TextAnchor.MiddleRight);
+                var grid = ScrollArea(rosterPanel, 56, gridY, 984, gridHeight, Math.Max(gridHeight, total));
+                for (int n = 0; n < characters.Count; n++)
+                {
+                    var c = characters[n]; float x = n % 3 * 328, y = n / 3 * (cellH + 20);
+                    var tile = Button(grid, "Companion:" + c.Id, "", x, y, 312, cellH, () => OpenDetails(c.Id), Color.clear);
+                    Box(tile.transform, "CardBody", 0, 0, 312, cellH, new Color(0.09f, 0.12f, 0.19f, 0.96f));
+                    var art = Portrait(c.Id);
+                    var portrait = Box(tile.transform, "Portrait", 4, 4, 304, cellH - 62, Color.white);
+                    portrait.GetComponent<Image>().sprite = art; CenterSprite(portrait);
+                    if (art == null)
+                    {
+                        portrait.GetComponent<Image>().color = Color.clear;
+                        Glyph(portrait, "nav_companions", 100, 28, 104, new Color(1, 1, 1, 0.65f));
+                        Label(portrait, "일러스트 준비 중", 12, 150, 280, 40, 18, Muted, FontStyle.Normal, TextAnchor.MiddleCenter);
+                    }
+                    Box(tile.transform, "ElementEdge", 0, cellH - 62, 312, 3, ElementColor(c.Attr));
+                    Label(tile.transform, c.Name, 16, cellH - 54, 186, 42, 27, Ink, FontStyle.Bold);
+                    Label(tile.transform, ElementName(c.Attr), 208, cellH - 52, 88, 40, 20, ElementColor(c.Attr), FontStyle.Normal, TextAnchor.MiddleRight);
+                    if (PracticeParty.Contains(c.Id)) Label(tile.transform, "편성", 12, 8, 84, 32, 18, Brass, FontStyle.Bold);
+                    if (owned != null && owned.TryGetValue(c.Id, out int copies)) Label(tile.transform, "보유 · 공명 " + Math.Min(6, Math.Max(0, copies - 1)), 112, 8, 184, 32, 18, Memory, FontStyle.Bold, TextAnchor.MiddleRight);
+                }
             }
-            Label(rosterPanel, (total > 508 ? "위아래로 밀어 동료를 더 볼 수 있어요.  ·  " : "") + "연습 편성: " + PartyNames(), 58, 838, 1440, 38, 19, Muted);
+            var previewCharacter = characters.FirstOrDefault(character => character.Id == detailId) ?? characters.FirstOrDefault() ?? content.Battle.Characters.First();
+            var preview = Box(rosterPanel, "RosterPreview", 1072, gridY, 472, gridHeight, new Color(0.04f, 0.055f, 0.1f, 0.96f));
+            Box(preview, "ElementEdge", 0, 0, 4, gridHeight, ElementColor(previewCharacter.Attr));
+            float buttonHeight = Math.Max(104, TouchUnits()), infoHeight = Math.Max(64, gridHeight - buttonHeight - 32);
+            float artHeight = Math.Max(88, Math.Min(184, infoHeight - 246));
+            var info = ScrollArea(preview, 0, 0, 472, infoHeight, Math.Max(infoHeight, artHeight + 246));
+            Label(info, characters.Count == 0 ? "전체 도감 미리보기" : "동료 도감 미리보기", 24, 16, 424, 28, 18, Brass);
+            var previewArt = Box(info, "PreviewArt", 24, 52, 424, artHeight, Color.white);
+            var previewSprite = SpriteAt("Art/Characters/char_" + previewCharacter.Id + "_sd") ?? Portrait(previewCharacter.Id);
+            previewArt.GetComponent<Image>().sprite = previewSprite; CenterSprite(previewArt);
+            if (previewSprite == null)
+            {
+                previewArt.GetComponent<Image>().color = Color.clear;
+                float crest = Math.Min(80, Math.Max(24, artHeight - 40));
+                Glyph(previewArt, "nav_companions", (424 - crest) / 2, 0, crest, Color.white);
+                Label(previewArt, "일러스트 준비 중", 0, artHeight - 32, 424, 32, 18, Muted, FontStyle.Normal, TextAnchor.MiddleCenter);
+            }
+            Label(info, previewCharacter.Name, 24, artHeight + 64, 424, 46, 34, Ink, FontStyle.Bold);
+            string weapon = content.CharacterWeaponTypes.TryGetValue(previewCharacter.Id, out var type) ? WeaponName(type) : "무기 정보 없음";
+            Label(info, ElementName(previewCharacter.Attr) + "  /  " + weapon, 26, artHeight + 118, 420, 30, 21, ElementColor(previewCharacter.Attr));
+            Label(info, "고유 능력  " + previewCharacter.Passive.Name, 26, artHeight + 158, 420, 32, 20, Ink);
+            Label(info, "필살기  " + previewCharacter.Ult.Name, 26, artHeight + 198, 420, 32, 20, Memory);
+            Button(preview, "PreviewCompanionDetails", "스킬과 카드 보기", 24, gridHeight - buttonHeight - 16, 424, buttonHeight, () => OpenDetails(previewCharacter.Id), Line, 23);
+            Label(rosterPanel, (total > gridHeight ? "위아래로 밀어 더 볼 수 있어요.  ·  " : "") + "연습 편성: " + PartyNames(), 58, 838, 1440, 38, 19, Muted);
         }
 
         void OpenDetails(string id)
@@ -462,19 +568,22 @@ namespace MemoryForge.Client
             var wall = Box(detailPanel, "Workshop", 0, 0, 1600, 900, new Color(0.3f, 0.35f, 0.42f));
             wall.GetComponent<Image>().sprite = SpriteAt("Art/Backgrounds/bg_workshop");
             Box(detailPanel, "DetailVeil", 0, 0, 1600, 900, new Color(0.035f, 0.05f, 0.09f, 0.65f));
-            Button(detailPanel, "BackToRoster", "동료 목록", 56, 24, 240, 112, () => ShowPanel(rosterPanel), Line, 24);
-            Button(detailPanel, "CloseDetails", "홈", 1392, 24, 152, 112, ClosePanels, Line, 24);
-            var portrait = Box(detailPanel, "CharacterArt", 88, 152, 600, 616, Color.white);
-            portrait.GetComponent<Image>().sprite = Portrait(c.Id); portrait.GetComponent<Image>().preserveAspect = true;
+            float buttonHeight = Math.Max(112, TouchUnits()), bodyY = 24 + buttonHeight + 16;
+            float footerY = 884 - buttonHeight, bodyHeight = footerY - bodyY - 16;
+            Button(detailPanel, "BackToRoster", "동료 목록", 56, 24, 240, buttonHeight, BackToRoster, Line, 24);
+            Button(detailPanel, "CloseDetails", "홈", 1392, 24, 152, buttonHeight, ClosePanels, Line, 24);
+            var portrait = Box(detailPanel, "CharacterArt", 88, bodyY, 600, bodyHeight, Color.white);
+            portrait.GetComponent<Image>().sprite = Portrait(c.Id); CenterSprite(portrait);
             if (portrait.GetComponent<Image>().sprite == null) { portrait.GetComponent<Image>().color = Color.clear; Label(portrait, "그림 준비 중", 100, 250, 400, 60, 26, Muted, FontStyle.Normal, TextAnchor.MiddleCenter); }
-            var paper = Box(detailPanel, "CharacterSheet", 740, 152, 804, 620, new Color(0.04f, 0.055f, 0.1f, 0.95f));
-            Box(paper, "ElementEdge", 0, 0, 4, 620, ElementColor(c.Attr));
+            var paper = Box(detailPanel, "CharacterSheet", 740, bodyY, 804, bodyHeight, new Color(0.04f, 0.055f, 0.1f, 0.95f));
+            Box(paper, "ElementEdge", 0, 0, 4, bodyHeight, ElementColor(c.Attr));
             Label(paper, c.Name, 32, 20, 600, 70, 48, Ink, FontStyle.Bold);
             string weapon = content.CharacterWeaponTypes.TryGetValue(c.Id, out var type) ? WeaponName(type) : "무기 정보 없음";
-            Label(paper, ElementName(c.Attr) + "  /  " + weapon, 34, 98, 720, 44, 23, ElementColor(c.Attr));
-            Button(paper, "ShowCompanionSkills", "스킬", 32, 156, 350, 112, () => RenderDetails(false), cards ? Panel : Brass, 24);
-            Button(paper, "ShowCompanionCards", "시작 고유 카드", 398, 156, 374, 112, () => RenderDetails(true), cards ? Brass : Panel, 24);
-            var details = ScrollArea(paper, 32, 288, 740, 304, cards ? content.Battle.Cards.Count(x => x.Owner == c.Id && x.Start == true) * 170 : 360);
+            Label(paper, ElementName(c.Attr) + "  /  " + weapon, 34, 98, 720, 44, 23, ElementColor(c?.Attr ?? ""));
+            float tabHeight = Math.Max(112, TouchUnits()), scrollY = 156 + tabHeight + 16;
+            Button(paper, "ShowCompanionSkills", "스킬", 32, 156, 350, tabHeight, () => RenderDetails(false), cards ? Panel : Brass, 24);
+            Button(paper, "ShowCompanionCards", "시작 고유 카드", 398, 156, 374, tabHeight, () => RenderDetails(true), cards ? Brass : Panel, 24);
+            var details = ScrollArea(paper, 32, scrollY, 740, bodyHeight - scrollY - 16, cards ? content.Battle.Cards.Count(x => x.Owner == c.Id && x.Start == true) * 170 : 360);
             if (cards)
             {
                 int n = 0;
@@ -493,13 +602,13 @@ namespace MemoryForge.Client
                 Label(details, c.Ult.Text, 0, 224, 708, 112, 23, Ink);
             }
             int homeIndex = companions.FindIndex(x => x.Id == c.Id);
-            var use = Button(detailPanel, "UseAsLobby", homeIndex < 0 ? "홈 일러스트 준비 중" : "홈에 함께하기", 128, 784, 500, 112,
+            var use = Button(detailPanel, "UseAsLobby", homeIndex < 0 ? "홈 일러스트 준비 중" : "홈에 함께하기", 128, footerY, 500, buttonHeight,
                 () => { ClosePanels(); Show(homeIndex); }, Brass, 27);
             use.interactable = homeIndex >= 0;
             var owned = recruitmentSession?.Recruitment?.OwnedChars;
             Label(detailPanel, owned != null && owned.TryGetValue(c.Id, out int copies)
-                ? "보유 동료 · 공명 " + Math.Min(6, copies - 1) + "  /  성장·장비 변경 준비 중"
-                : "도감 정보 · 성장·장비는 계정 보유 후 연결돼요.", 752, 806, 776, 70, 20, Muted);
+                ? "보유 동료 · 공명 " + Math.Min(6, Math.Max(0, copies - 1)) + "  /  성장·장비 변경 준비 중"
+                : "동료 도감 정보 · 성장·장비 변경은 준비 중이에요.", 752, footerY + 10, 776, buttonHeight - 20, 20, Muted);
         }
 
         Sprite? Portrait(string id)
@@ -522,40 +631,53 @@ namespace MemoryForge.Client
         // 출격 준비: the zone, the run's length and the party, then 출발. The practice party is fixed until 편성 is built.
         void BuildSortie()
         {
-            sortiePanel = Box(root, "SortiePanel", 600, 42, 944, 816, new Color(0.04f, 0.06f, 0.11f, 1f));
-            Kit(sortiePanel, "Frame", "ui_panel_frame", new Vector4(48, 48, 48, 48), 0, 0, 944, 816, 128);
-            var title = Kit(sortiePanel, "TitleRibbon", "ui_ribbon_title", new Vector4(64, 0, 64, 0), 24, 18, 360, 56, 96);
-            Label(title, "출격 준비", 0, 2, 360, 52, 30, Brass, FontStyle.Bold, TextAnchor.MiddleCenter);
-            Button(sortiePanel, "CloseSortie", "닫기", 784, 8, 128, 120, ClosePanels, Line, 22);
-            var zone = Box(sortiePanel, "Zone", 32, 138, 880, 124, Color.white);
+            sortiePanel = Box(root, "SortiePanel", 0, 0, 1600, 900, Background);
+            var wall = Box(sortiePanel, "Workshop", 0, 0, 1600, 900, new Color(0.18f, 0.23f, 0.3f));
+            wall.GetComponent<Image>().sprite = SpriteAt("Art/Backgrounds/bg_workshop");
+            Box(sortiePanel, "PreparationVeil", 0, 0, 1600, 900, new Color(0.025f, 0.04f, 0.075f, 0.83f));
+            Label(sortiePanel, "탐사 준비", 56, 28, 900, 64, 42, Ink, FontStyle.Bold);
+            Label(sortiePanel, "길이를 고르고, 함께 출발할 동료를 확인하세요.", 58, 108, 1100, 36, 21, Muted);
+            Ornament(sortiePanel, 58, 164, 440);
+            Button(sortiePanel, "CloseSortie", "홈", 1392, 24, 152, 112, ClosePanels, Line, 24);
+            var zone = Box(sortiePanel, "Zone", 56, 200, 456, 420, Color.white);
             var map = SpriteAt("Art/Backgrounds/bg_zone1_map");
-            zone.GetComponent<Image>().sprite = map; zone.GetComponent<Image>().color = map == null ? Panel : new Color(0.7f, 0.7f, 0.75f, 1f);
-            Label(zone, "1구역 · 종탑 하층", 24, 12, 800, 50, 34, Ink, FontStyle.Bold);
-            Label(zone, "7층과 보스 · 전투, 공방, 휴식, 상점, 사건", 24, 72, 800, 40, 21, Ink);
-            Label(sortiePanel, "탐사 길이", 32, 280, 300, 36, 22, Muted);
+            zone.GetComponent<Image>().sprite = map; zone.GetComponent<Image>().color = map == null ? Panel : new Color(0.7f, 0.75f, 0.82f);
+            Box(zone, "DestinationShade", 0, 232, 456, 188, new Color(0.025f, 0.04f, 0.075f, 0.92f));
+            Box(zone, "BrassEdge", 0, 0, 4, 420, Brass);
+            Label(zone, "출발 구역", 24, 252, 408, 32, 19, Brass);
+            Label(zone, "종탑 하층", 22, 292, 410, 52, 38, Ink, FontStyle.Bold);
+            Label(zone, "7층과 보스\n전투 · 공방 · 휴식 · 상점 · 사건", 24, 352, 408, 60, 20, Muted);
             Text? shortText = null, regularText = null;
             Button? shortButton = null, regularButton = null;
+            float choiceHeight = Math.Max(120, TouchUnits());
             void Mark()
             {
-                Pill(shortButton!.GetComponent<Image>(), sortieLength == "short" ? Brass : Panel, 120); shortText!.color = sortieLength == "short" ? Background : Ink;
-                Pill(regularButton!.GetComponent<Image>(), sortieLength == "full" ? Brass : Panel, 120); regularText!.color = sortieLength == "full" ? Background : Ink;
+                Pill(shortButton!.GetComponent<Image>(), sortieLength == "short" ? Brass : Panel, choiceHeight); shortText!.color = sortieLength == "short" ? Background : Ink;
+                Pill(regularButton!.GetComponent<Image>(), sortieLength == "full" ? Brass : Panel, choiceHeight); regularText!.color = sortieLength == "full" ? Background : Ink;
             }
-            shortButton = Button(sortiePanel, "Length:short", "", 32, 320, 432, 120, () => { sortieLength = "short"; Mark(); }, Brass, 22);
-            shortText = Label(shortButton.transform, "짧은 탐사 · 1구역 · 약 15분", 12, 24, 408, 72, 22, Background, FontStyle.Normal, TextAnchor.MiddleCenter);
-            regularButton = Button(sortiePanel, "Length:full", "", 480, 320, 432, 120, () => { sortieLength = "full"; Mark(); }, Panel, 22);
-            regularText = Label(regularButton.transform, "긴 탐사 · 2구역까지 · 약 30분", 12, 24, 408, 72, 22, Ink, FontStyle.Normal, TextAnchor.MiddleCenter);
-            Label(sortiePanel, "파티", 32, 464, 300, 36, 22, Muted);
-            var party = PracticeParty;
-            for (int i = 0; i < party.Count; i++)
+            shortButton = Button(sortiePanel, "Length:short", "", 544, 200, 480, choiceHeight, () => { sortieLength = "short"; Mark(); }, Brass, 22);
+            shortText = Label(shortButton.transform, "짧은 탐사\n1구역 · 약 15분", 12, 20, 456, choiceHeight - 36, 23, Background, FontStyle.Normal, TextAnchor.MiddleCenter);
+            regularButton = Button(sortiePanel, "Length:full", "", 1040, 200, 504, choiceHeight, () => { sortieLength = "full"; Mark(); }, Panel, 22);
+            regularText = Label(regularButton.transform, "긴 탐사\n2구역까지 · 약 30분", 12, 20, 480, choiceHeight - 36, 23, Ink, FontStyle.Normal, TextAnchor.MiddleCenter);
+            Label(sortiePanel, "함께 출발하는 동료", 544, 376, 1000, 36, 26, Brass, FontStyle.Bold);
+            for (int i = 0; i < PracticeParty.Count; i++)
             {
-                var slot = Box(sortiePanel, "Party:" + party[i], 32 + i * 152, 510, 140, 140, new Color(0.1f, 0.13f, 0.22f, 1f));
-                Kit(slot, "Frame", "ui_portrait_frame", new Vector4(40, 40, 40, 40), 0, 0, 140, 140, 240);
-                var art = SpriteAt("Art/Characters/char_" + party[i] + "_sd");
-                if (art != null) { var face = Box(slot, "Face", 10, 2, 120, 120, Color.white); face.GetComponent<Image>().sprite = art; face.GetComponent<Image>().preserveAspect = true; }
-                Label(slot, content?.Battle.Characters.FirstOrDefault(c => c.Id == party[i])?.Name ?? party[i], 0, 108, 140, 28, 18, Ink, FontStyle.Bold, TextAnchor.MiddleCenter);
+                string id = PracticeParty[i]; var c = content?.Battle.Characters.FirstOrDefault(x => x.Id == id);
+                var slot = Box(sortiePanel, "Party:" + id, 544 + i * 328, 424, 312, 232, new Color(0.08f, 0.11f, 0.18f, 0.96f));
+                Box(slot, "ElementEdge", 0, 0, 312, 3, ElementColor(c?.Attr ?? ""));
+                var art = SpriteAt("Art/Characters/char_" + id + "_sd") ?? Portrait(id);
+                var face = Box(slot, "Face", 16, 20, 128, 156, Color.white);
+                face.GetComponent<Image>().sprite = art; CenterSprite(face);
+                if (art == null) face.GetComponent<Image>().color = Color.clear;
+                Label(slot, c?.Name ?? id, 156, 32, 140, 48, 30, Ink, FontStyle.Bold);
+                Label(slot, ElementName(c?.Attr ?? ""), 158, 96, 138, 36, 23, ElementColor(c?.Attr ?? ""));
+                Label(slot, content != null && content.CharacterWeaponTypes.TryGetValue(id, out var type) ? WeaponName(type) : "", 158, 144, 138, 32, 20, Muted);
+                Label(slot, "시작 고유 카드 " + (content?.Battle.Cards.Count(card => card.Owner == id && card.Start == true) ?? 0) + "장", 24, 190, 264, 28, 18, Muted);
             }
-            Label(sortiePanel, "연습 편성: " + PartyNames() + "\n편성 변경은 아직 준비 중이에요.", 512, 526, 400, 100, 18, Muted);
-            Button(sortiePanel, "Depart", "출발", 600, 680, 312, 120, () => { NextLength = sortieLength; StartCoroutine(Leave()); }, Brass, 30);
+            Label(sortiePanel, "고정 연습 편성: " + PartyNames(), 546, 676, 996, 32, 20, Muted);
+            Label(sortiePanel, "연습 탐사\n저장한 기억은 이 앱을 실행하는 동안 이어집니다.\n편성·장비 변경은 준비 중이에요.", 58, 696, 984, 148, 21, Muted);
+            Button(sortiePanel, "Depart", "출발", 1112, 720, 432, Math.Max(120, TouchUnits()), () => { if (leaving) return; NextLength = sortieLength; StartCoroutine(Leave()); }, Brass, 32);
+            Mark();
             sortiePanel.gameObject.SetActive(false);
         }
 
@@ -601,8 +723,9 @@ namespace MemoryForge.Client
             nameText.text = c.Name;
             if (c.Moments != null) player.Bind(c.Moments); else player.ShowStill(c.Still);
             StillFrame(c.Moments == null);
-            int scenes = c.Moments?.Scenes.Count ?? 0;
-            noteText.text = scenes == 0 ? "이 동료의 로비 장면은 아직 제작 중이에요." : (c.Moments!.Status == "approved" ? "" : "초안 장면 · ") + "장면 " + scenes + "개";
+            var definition = content.Battle.Characters.FirstOrDefault(character => character.Id == c.Id);
+            noteText.text = definition == null ? "동료 장면 미리보기" : ElementName(definition.Attr)
+                + (content.CharacterWeaponTypes.TryGetValue(c.Id, out var weapon) ? "  /  " + WeaponName(weapon) : "");
             tapCursor = 0; idleSince = Time.time;
             lastPeriod = TimeOfDay(DateTime.Now.Hour);
             if (enteredFor.Add(c.Id) && !PlayFirst("enter")) PlayFirst("time");
@@ -666,20 +789,21 @@ namespace MemoryForge.Client
         void OpenList(string which)
         {
             player.Stop(); ClosePanels();
-            foreach (Transform child in listPanel) Destroy(child.gameObject);
+            ClearPanel(listPanel);
             var m = Current?.Moments;
             var scenes = m == null ? new List<MomentScene>() : m.Scenes.Where(s => which == "bond" ? s.Kind == "bond" : s.Kind == "entry" || s.Kind == "victory" || s.Kind == "skin").ToList();
             Label(listPanel, which == "bond" ? "인연 이야기" : "등장·승리 연출", 28, 22, 420, 46, 30, Brass, FontStyle.Bold);
             Button(listPanel, "CloseList", "닫기", 592, 8, 124, 120, ClosePanels, Line, 22);
             if (scenes.Count == 0) Label(listPanel, "아직 준비된 장면이 없어요.", 28, 144, 688, 72, 22, Muted);
-            var rows = ScrollArea(listPanel, 24, 144, 696, 568, Math.Max(568, scenes.Count * 132));
+            float rowHeight = Math.Max(120, TouchUnits()), pitch = rowHeight + 12;
+            var rows = ScrollArea(listPanel, 24, 160, 696, 552, Math.Max(552, scenes.Count * pitch));
             float y = 0;
             foreach (var s in scenes)
             {
-                var row = Button(rows, "Scene:" + s.Id, "", 0, y, 672, 120, () => Play(s), Panel);
+                var row = Button(rows, "Scene:" + s.Id, "", 0, y, 672, rowHeight, () => Play(s), Panel);
                 Label(row.transform, s.Title.Length == 0 ? s.Id : s.Title, 18, 14, 636, 38, 24, Ink, FontStyle.Bold);
                 Label(row.transform, Condition(s), 18, 70, 636, 30, 18, Memory);
-                y += 132;
+                y += pitch;
             }
             foreach (var b in listPanel.GetComponentsInChildren<Button>(true)) if (b.GetComponent<UiPress>() == null) b.gameObject.AddComponent<UiPress>();
             ShowPanel(listPanel);

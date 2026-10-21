@@ -1,0 +1,15 @@
+{
+  "verified_at": "2026-10-21T11:07:52.010391+00:00",
+  "pid": 99932,
+  "executable": "/Users/choi/Documents/Memory_forge/ops/ai/local/ux-return-20261021/MemoryForge-PC-ux-return-20261021.app/Contents/MacOS/Memory Forge",
+  "binary_sha256": {
+    "Contents/MacOS/Memory Forge": "6f9cdb2d258104829088a0a9db8c1f2cb0cc3fdf9f8664b0b32a67e0c7d538ed",
+    "Contents/Resources/Data/Managed/MemoryForge.Client.dll": "15b0512dc52f816184c0b105399325bc18e2d1ccbf7821550026bff59cad7abe"
+  },
+  "method": "Cua native app launch by exact bundle path, fresh window AX and screenshot; process executable identity checked",
+  "home_render": "PASS",
+  "runtime_exception_lines": 0,
+  "physical_pointer": "NOT_RUN; prior synthetic input did not establish physical acceptance",
+  "screenshot": "screenshots/native-home-final.png",
+  "player_log_sha256": "b5ec51beb165ba42c6f2df7b8dd23fad7f11023a5a110fd0dddb167acc3ef127"
+}

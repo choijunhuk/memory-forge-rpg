@@ -1,0 +1,67 @@
+{
+  "engine": {
+    "command": [
+      "npm",
+      "test"
+    ],
+    "exit": 0,
+    "seconds": 187.44,
+    "log": "check-engine.log"
+  },
+  "proposals": {
+    "command": [
+      "npm",
+      "run",
+      "test:proposals"
+    ],
+    "exit": 0,
+    "seconds": 0.76,
+    "log": "check-proposals.log"
+  },
+  "python": {
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-v"
+    ],
+    "exit": 0,
+    "seconds": 2.92,
+    "log": "check-python.log"
+  },
+  "docs": {
+    "command": [
+      "npm",
+      "run",
+      "test:docs"
+    ],
+    "exit": 0,
+    "seconds": 0.73,
+    "log": "check-docs.log"
+  },
+  "handoff": {
+    "command": [
+      "/Users/choi/.codex/venvs/memoryforge-docchecks/bin/python",
+      "tools/ai/test_handoff.py"
+    ],
+    "exit": 0,
+    "seconds": 1.85,
+    "log": "check-handoff-final.log",
+    "initial_environment_failure": 1,
+    "note": "Declared repository PDF dependencies installed in isolated Codex venv; no repository dependency change"
+  },
+  "manifest": {
+    "command": [
+      "npm",
+      "run",
+      "verify:manifest"
+    ],
+    "exit": 1,
+    "seconds": 0.9,
+    "log": "check-manifest.log",
+    "note": "Historical delivery manifest has40changed paths at both58ab499andcurrent; no newly changed manifested paths; manifest pair preserved."
+  }
+}

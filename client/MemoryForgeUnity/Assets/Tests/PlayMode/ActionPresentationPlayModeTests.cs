@@ -700,7 +700,7 @@ namespace MemoryForge.Client.Tests
                 Assert.That(client.SetActionPace(Pacing.Double), Is.True, "the pace is a display preference");
                 Assert.That(client.RecoveryRequired, Is.True, "choosing a pace does not leave recovery");
                 yield return null; Canvas.ForceUpdateCanvases();
-                Assert.That(SingleView(s.Host).GetComponentsInChildren<Button>().Select(x => x.name), Is.EqualTo(new[] { "RecoveryDiscard" }), "only the recovery action");
+                Assert.That(SingleView(s.Host).GetComponentsInChildren<Button>().Select(x => x.name), Is.EqualTo(new[] { "RecoveryDiscard", "RecoveryHome" }), "only explicit recovery and home actions");
                 s.Host.SendMessage("OnApplicationFocus", false); s.Host.SendMessage("OnApplicationFocus", true);
                 s.Host.SendMessage("OnApplicationPause", true); s.Host.SendMessage("OnApplicationPause", false);
                 s.Host.SetActive(false);
@@ -708,7 +708,7 @@ namespace MemoryForge.Client.Tests
                 s.Host.SetActive(true);
                 yield return null; Canvas.ForceUpdateCanvases();
                 Assert.That((client.RecoveryRequired, client.HasActionPresentation), Is.EqualTo((true, false)), "the quarantine survives; no display comes back");
-                Assert.That(SingleView(s.Host).GetComponentsInChildren<Button>().Select(x => x.name), Is.EqualTo(new[] { "RecoveryDiscard" }));
+                Assert.That(SingleView(s.Host).GetComponentsInChildren<Button>().Select(x => x.name), Is.EqualTo(new[] { "RecoveryDiscard", "RecoveryHome" }));
             }
             finally
             {

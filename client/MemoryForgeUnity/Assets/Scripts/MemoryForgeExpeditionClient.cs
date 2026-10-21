@@ -7,6 +7,7 @@ using MemoryForge.Core;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using CoreRun = MemoryForge.Core.Run;
 
@@ -24,8 +25,8 @@ namespace MemoryForge.Client
     // (BattleTurnDigest of public projections) over the already committed view. While it is open every public command and selection
     // is refused before it reaches the Run; its timer, skip and continue only change text. It is local practice, not a server reply.
     // P1-CARD-FLOW-FAIL-CLOSED §14.7/§16.4: a Run command that fails with anything but an ordinary, unchanged input rejection may have
-    // left the Run partly changed (Run commands are not transactional), so the practice is quarantined: only a recovery screen and its
-    // single action remain, which discards the failed practice Run unsaved and departs again from the last valid session store.
+    // left the Run partly changed (Run commands are not transactional), so the practice is quarantined: the recovery screen can discard
+    // that Run unsaved and depart again from the last valid store, or return to the home with that store.
     // P1-CARD-FLOW-PICKER-GUARD §14.3/§14.7: the card-pick sheet is a local unsent intent of one play, tied to the state it was opened in.
     // It offers exactly PickCandidates and accepts nothing else; once that state is gone it can no longer send and closes. While it is
     // open every other command and selection is refused. Nothing is spent until its final pick or auto sends the one play.
@@ -43,12 +44,22 @@ namespace MemoryForge.Client
     // price it after the play's own "next card costs 0" charge. Outside that scope (a costdown after other effects, a conditional cost, a
     // price Core refuses) the sheet keeps its earlier zone list, never shrinking manual choice. Filtering uses the current public zones;
     // it does not predict cards drawn by the commit or later effects. Core's resolution, fallback order and explicit auto are unchanged.
+    // EXPEDITION-RETURN-UX-20261021: an ended expedition (result screen, or the recovery screen through ReturnToWorkshop) goes back to
+    // the home (공방) instead of only offering the next departure; confirming 탐사 포기 abandons and returns at once. The session store
+    // travels with that explicit return through MemoryForgePracticeSession and comes back only at the home's explicit departure, which
+    // creates the one new Run; a client started any other way stays a fresh practice. No Core command, server or disk write is added.
     [ExecuteAlways]
     public sealed class MemoryForgeExpeditionClient : MonoBehaviour
     {
         public long Seed = 1234;
         public string Length = "short";
         public const string OwnedCanvas = "MemoryForgeExpeditionView";
+        /// <summary>The home scene ReturnToWorkshop opens (registered in the build settings).</summary>
+        public const string LobbyScene = "MemoryForgeLobby";
+        /// <summary>How ReturnToWorkshop opens LobbyScene: SceneManager.LoadScene when unset; a test sets it to observe the request.</summary>
+        public Action<string>? SceneLoader { get; set; }
+        /// <summary>True once ReturnToWorkshop handed the session to the home; every command and selection is refused from then on.</summary>
+        public bool ReturnRequested => returning;
         // The source's explicit reference party (res 0, Create's default weapons); not account ownership or saved growth.
         public static readonly IReadOnlyList<string> ReferenceParty = new[] { "sera", "harin", "nia" };
 
@@ -92,8 +103,8 @@ namespace MemoryForge.Client
         public IReadOnlyList<BattleDigestEntry> TurnSummaryRows => turnSummary ?? Array.Empty<BattleDigestEntry>();
         /// <summary>A copy of the recent battle event rows (at most 40) the log sheet shows; kept after a battle until the next departure.</summary>
         public IReadOnlyList<string> BattleLog => battleLog.ToArray();
-        /// <summary>True after a failed Run calculation quarantined the practice: every command and selection is refused and only
-        /// DiscardFailedPractice remains. It survives disable/enable and focus/pause.</summary>
+        /// <summary>True after a failed Run calculation or resumed departure: normal commands and selections are refused; recovery
+        /// and the return home remain explicit. It survives disable/enable and focus/pause.</summary>
         public bool RecoveryRequired => recovery != null;
         /// <summary>Presentation pace of a committed player action. Display only: it never changes Time.timeScale or reaches the Run.</summary>
         public enum ActionPacing { Normal, Double, Reduced }
@@ -151,6 +162,8 @@ namespace MemoryForge.Client
         }
 
         RunData? data;
+        Func<RunData> contentLoader = ClientRunContent.Load;
+        MemoryForgePracticeSession.Held? pendingResume;
         CoreRun? run;
         Dictionary<string, object?>? store, lastSave;
         string? closedKind; // "closed": save skipped at the terminal screen; "abandon": given up mid-expedition
@@ -190,6 +203,10 @@ namespace MemoryForge.Client
         const int BattleLogLimit = 40;            // §14.3 기록: the recent 40 lines
         string? recovery; // the failure that quarantined the practice (a Core code or exception type); null while healthy
         const string RecoveryCode = "RECOVERY_REQUIRED";
+        // The return to the home: set once the session is handed over (then everything is refused with ReturningHome); local codes for
+        // a return asked before the expedition has ended, and for one that could not hand over or open the home (nothing moved).
+        bool returning;
+        const string ReturningHome = "RETURNING_HOME", NotEnded = "RUN_NOT_ENDED", ReturnUnavailable = "RETURN_UNAVAILABLE";
         // Player-action display (cosmetic): its rows, how many are shown, when the next row may appear and when the finished display
         // closes (<0: not scheduled), whether the battle ended with it, and the labels/controls it rewrites in place (cleared with the view).
         IReadOnlyList<BattleDigestEntry>? actionRows;
@@ -255,10 +272,19 @@ namespace MemoryForge.Client
 
         void OnEnable()
         {
-            if (Resources.Load<TextAsset>(ClientRunContent.ResourcePath) == null || Resources.Load<TextAsset>("MemoryForge/battle-content") == null) return;
+            if (returning || recovery != null || run != null) { Render(); return; }
             // HOME-20261019: the length chosen in the home's 출격 준비 (once; a test or scene default stays when nothing was chosen).
-            if (run == null && MemoryForgeLobbyClient.NextLength is string chosen) { Length = chosen; MemoryForgeLobbyClient.NextLength = null; }
-            if (run == null) StartPractice(); else Render();
+            // That choice is the home's explicit departure: a practice that returned to the home (MemoryForgePracticeSession) departs
+            // again from the session it handed over. A client started any other way never takes it and starts fresh, as before.
+            if (MemoryForgeLobbyClient.NextLength is string chosen)
+            {
+                Length = chosen;
+                var held = MemoryForgePracticeSession.Peek();
+                if (held != null) { Resume(held); return; }
+                MemoryForgeLobbyClient.NextLength = null;
+            }
+            if (Resources.Load<TextAsset>(ClientRunContent.ResourcePath) == null || Resources.Load<TextAsset>("MemoryForge/battle-content") == null) return;
+            StartPractice();
         }
         // Disabling drops only the cosmetic summary, the player-action display and their timers, and the unsent intent (never sent);
         // OnEnable redraws the actual Run without restarting or changing it.
@@ -291,8 +317,9 @@ namespace MemoryForge.Client
         // dropped while away, or the view is missing. No Run command, replay, restart or server fetch; an open summary stays (it is not stale).
         void ResumeView()
         {
-            if (!Application.isPlaying || !isActiveAndEnabled || run == null || data == null || font == null) return;
+            if (!Application.isPlaying || !isActiveAndEnabled || font == null) return;
             if (recovery != null) { if (canvasRoot == null) Render(); return; } // the failed Run is not read; the quarantine stays
+            if (run == null || data == null) return;
             var s = run.State; bool stale = actionDropped; actionDropped = false;
             if (DropPrepared(IntentDropped)) stale = true;
             if (picker != null && !Fresh(picker, s)) { picker = null; stale = true; }
@@ -331,6 +358,37 @@ namespace MemoryForge.Client
             run = null; departures = 0; requestSerial = 0;
             Depart();
         }
+        // The home's departure of a practice that returned to it: the handed-over store (exactly as saved), last save and numbering
+        // become this component's session, then the ordinary Depart creates the one new Run from them, numbered after the last one. A
+        // A failed attempt keeps the hand-off and the chosen departure pending. Lifecycle callbacks only redraw its recovery view;
+        // retry is explicit, and neither a load failure nor Create rejection can fall through to a fresh baseline.
+        bool Resume(MemoryForgePracticeSession.Held held)
+        {
+            pendingResume = held;
+            store = held.Store; lastSave = held.LastSave; lastSaveCount = held.LastSaveCount;
+            departures = held.Departures; requestSerial = held.RequestSerial;
+            var loaded = data; var previous = run; string? closed = closedKind;
+            recovery = null; run = null; closedKind = null;
+            Exception? fault = null;
+            try
+            {
+                Load();
+                if (Depart())
+                {
+                    pendingResume = null; MemoryForgePracticeSession.Take(); MemoryForgeLobbyClient.NextLength = null;
+                    return true;
+                }
+            }
+            catch (Exception error) { fault = error; }
+            data = loaded; run = previous; closedKind = closed;
+            store = held.Store; lastSave = held.LastSave; lastSaveCount = held.LastSaveCount;
+            departures = held.Departures; requestSerial = held.RequestSerial;
+            recovery = "DEPARTURE_FAILED"; LastError = fault?.GetType().Name ?? LastError ?? recovery;
+            notice = "출발하지 못했어요. 저장된 기억은 그대로이고, 같은 기억으로 다시 출발하거나 공방으로 돌아갈 수 있어요."; noticeUntil = 0;
+            Debug.LogError("[MemoryForge] Practice departure could not start (" + LastError + "); the pending departure and session memory version "
+                + SessionMemoryVersion + " are kept." + (fault == null ? "" : "\n" + fault));
+            Render(); return false;
+        }
 
         /// <summary>Next departure from the session store's saved memory and version. Refused while an expedition is in progress.</summary>
         public bool Depart(string? length = null)
@@ -355,7 +413,7 @@ namespace MemoryForge.Client
             if (font == null) font = Resources.Load<Font>("Fonts/IBMPlexSansKR-Regular");
             if (font == null) throw new InvalidOperationException("The licensed Korean interface font is missing.");
             if (data != null) return;
-            data = ClientRunContent.Load();
+            data = contentLoader();
             foreach (var card in data.Memory.Battle.Cards) cardDefs[card.Id] = card;
             foreach (var part in data.Memory.Battle.Parts) partDefs[part.Id] = part;
             foreach (var relic in data.Memory.Battle.Relics) relicDefs[relic.Id] = relic;
@@ -599,11 +657,68 @@ namespace MemoryForge.Client
             if (ok) selectedChanges.Clear();
             Render(); return ok;
         }
-        /// <summary>Gives up a running expedition without touching the session store; the terminal save screen uses CloseWithoutSave.</summary>
+        /// <summary>Gives up a running expedition without touching the session store; the terminal save screen uses CloseWithoutSave.
+        /// This shows the abandoned result; the 탐사 포기 sheet's confirm also returns to the home (ReturnToWorkshop).</summary>
         public bool Abandon()
         {
             if (Blocked() || run == null || Finished(run.State) || SaveOpen(run.State)) return false;
             closedKind = "abandon"; sheet = Sheet.None; picker = null; cardInfo = null; LastError = null; notice = "탐사를 포기했어요. 기억 덱은 바뀌지 않았어요."; Render(); return true;
+        }
+        // The 탐사 포기 sheet's confirm: exactly Abandon, then the return to the home that the sheet promised.
+        void ConfirmAbandon() { if (Abandon()) ReturnToWorkshop(); }
+
+        /// <summary>공방으로 돌아가기: from an ended expedition (its result screen), or from the recovery screen, hands this session to
+        /// MemoryForgePracticeSession — detached copies of the store graph (memory, version, history, receipts), the last save, the
+        /// departure numbering and the length — and opens LobbyScene. Nothing is saved, discarded or departed here: the next departure
+        /// from the home creates one new Run from that store. In recovery the failed Run is never read and only the last valid store
+        /// goes. Refused with nothing handed over while an expedition runs or waits on its save screen, under an open sheet or display,
+        /// without a store, or once already returning (a repeated press does nothing). A home that does not open takes nothing.</summary>
+        public bool ReturnToWorkshop()
+        {
+            if (returning) { LastError = ReturningHome; return false; }
+            if (recovery == null)
+            {
+                if (Blocked()) return false;
+                if (run == null || !Finished(run.State)) { Reject(NotEnded); return false; }
+            }
+            else if (store == null)
+            {
+                LastError = RecoveryCode; notice = "기억 저장소를 확인할 수 없어 공방으로 돌아가지 않았어요. 저장된 기억은 지우지 않았어요."; noticeUntil = 0;
+                Render(); return false;
+            }
+            MemoryForgePracticeSession.Held held; string line;
+            try
+            {
+                held = new MemoryForgePracticeSession.Held { Store = (Dictionary<string, object?>)Copy(store)!, LastSave = Copy(lastSave) as Dictionary<string, object?>,
+                    LastSaveCount = lastSaveCount, Departures = departures, RequestSerial = requestSerial, Length = Length };
+                line = ReturnNotice();
+            }
+            catch (Exception error) { return NotReturned(error); }
+            var previous = MemoryForgePracticeSession.Peek(); string? previousNotice = MemoryForgePracticeSession.PeekNotice();
+            MemoryForgePracticeSession.Hold(held, line);
+            returning = true; sheet = Sheet.None; deckPicks.Clear(); cardInfo = null; LastError = null; notice = ""; noticeUntil = 0;
+            try { Render(); (SceneLoader ?? (scene => SceneManager.LoadScene(scene)))(LobbyScene); MemoryForgeLobbyClient.NextLength = null; return true; }
+            catch (Exception error) { MemoryForgePracticeSession.Hold(previous, previousNotice); return NotReturned(error); }
+        }
+        // A return that could not copy the store or open the home keeps this screen and the previous hand-off.
+        bool NotReturned(Exception error)
+        {
+            returning = false; LastError = ReturnUnavailable; notice = ErrorText(ReturnUnavailable); noticeUntil = 0;
+            Debug.LogError("[MemoryForge] The practice did not return to the home (" + error.GetType().Name + "); session memory version " + SessionMemoryVersion + " stays here.\n" + error);
+            Render(); return false;
+        }
+        // The home's one line about this return: the outcome and what the session memory holds now.
+        string ReturnNotice()
+        {
+            if (pendingResume != null) return "탐사를 출발하지 못했어요. 저장한 기억 덱(기억 버전 " + SessionMemoryVersion + ")은 그대로예요.";
+            if (recovery != null) return "멈춘 연습 탐사는 저장하지 않고 버렸어요. 저장한 기억 덱(기억 버전 " + SessionMemoryVersion + ")은 그대로예요.";
+            return OutcomeTitle(run!.State) + " · " + (closedKind != null || lastSave == null ? "기억 덱은 바뀌지 않았어요."
+                : lastSaveCount == 0 ? "기존 기억 덱을 그대로 유지했어요." : "변화 " + lastSaveCount + "개를 기억에 저장했어요 (기억 버전 " + SessionMemoryVersion + ").");
+        }
+        string OutcomeTitle(RunState s)
+        {
+            string outcome = Text(Get(s.Result, "outcome"));
+            return closedKind == "abandon" ? "탐사 포기" : outcome == "defeat" ? "패배" : outcome == "return" ? "기록소 귀환" : outcome == "clear" ? "탐사 완주" : "탐사 종료";
         }
 
         // ───────── v2 memory: selection is local, preview and commit are the Run's ─────────
@@ -842,13 +957,15 @@ namespace MemoryForge.Client
                 + "the Run may be partly changed, so it will be discarded unsaved. Session memory version " + SessionMemoryVersion + " is kept.\n" + error);
             if (render) Render();
         }
-        /// <summary>The recovery screen's single action: drops the failed local practice Run without saving it (no Core abandon, memory
+        /// <summary>The recovery screen's restart action: retries a pending home departure, or drops the failed local Run without saving it (no Core abandon, memory
         /// commit or close; nothing of it is shown or kept) and departs again from the last valid session store, whose memory, version
         /// and receipts stay, as does the departure numbering. If that departure is refused or throws, the failed Run, the quarantine,
         /// the store and the numbering are all restored and nothing escapes; only a successful departure leaves recovery.</summary>
         public bool DiscardFailedPractice()
         {
+            if (returning) { LastError = ReturningHome; return false; } // the store already went to the home with ReturnToWorkshop
             if (recovery == null) return false;
+            if (pendingResume != null) return Resume(pendingResume);
             // Without the loaded content or the last valid store, Depart would fall back to StartPractice and erase the session memory.
             if (data == null || store == null)
             {
@@ -874,7 +991,8 @@ namespace MemoryForge.Client
         // ───────── turn summary and battle log (§14.3/§16.4: text of Core's committed events; display only) ─────────
         // The turn barrier: while the summary is open every public command and selection is refused before it reaches the Run. Only
         // the summary's own skip/continue and display-only reads stay available. A refusal changes no view state, so nothing is redrawn.
-        // In recovery the same gate refuses everything; only DiscardFailedPractice remains.
+        // In recovery the same gate refuses normal play; recovery and the return home remain. Once ReturnToWorkshop handed the session to
+        // the home it refuses everything before all of these (its code comes first), including the recovery action.
         // An open pick sheet is one prepared, unsent play, so every other command and selection is refused as well, after recovery and
         // the summary (their codes come first). Only the sheet's own pick, auto and cancel pass, through Barred alone; its final send
         // closes the sheet before playing, so this gate never refuses that one play.
@@ -907,6 +1025,7 @@ namespace MemoryForge.Client
         }
         bool Barred()
         {
+            if (returning) { LastError = ReturningHome; return true; } // handed to the home: this component takes nothing more
             if (recovery != null) { LastError = RecoveryCode; return true; }
             if (turnSummary == null) return false;
             LastError = TurnSummaryOpen; return true;
@@ -1174,7 +1293,7 @@ namespace MemoryForge.Client
         // medal map nodes. Every shape is procedural until Codex's UI kit arrives (art/requests/expedition-restyle-needs-20261018.md).
         void Render()
         {
-            if (run == null || data == null || font == null) return;
+            if (font == null || (recovery == null && (run == null || data == null))) return;
             // A redraw keeps how the previous canvas was presented (overlay, or a camera that draws it).
             var previous = canvasRoot != null ? canvasRoot.GetComponent<Canvas>() : null;
             var mode = previous != null ? previous.renderMode : RenderMode.ScreenSpaceOverlay; var eye = previous != null ? previous.worldCamera : null;
@@ -1198,7 +1317,7 @@ namespace MemoryForge.Client
             if (recovery != null) RecoveryView(); // before the header and every normal view: the failed Run may not be renderable
             else
             {
-                var s = run.State;
+                var s = run!.State;
                 screen = Finished(s) ? "result" : s.Phase;
                 Backdrop(screen);
                 Header(s);
@@ -1229,6 +1348,7 @@ namespace MemoryForge.Client
                 if (actionRows != null && actionTerminal) ActionPresentationSheet(); // the battle's last action covers the next screen
                 if (turnSummary != null) TurnSummarySheet(); // topmost: the turn barrier covers every other control
             }
+            if (returning) ReturningVeil(); // over everything, the recovery screen too, until the home replaces this scene
             if (Application.isPlaying && EventSystem.current == null)
             { var events = new GameObject("ExpeditionInput", typeof(EventSystem), typeof(StandaloneInputModule)); events.transform.SetParent(canvasObject.transform, false); }
             Canvas.ForceUpdateCanvases(); FitView();
@@ -1248,22 +1368,34 @@ namespace MemoryForge.Client
             else Deco(frame!, "FloorShade", Fade(true), 0, 620, 1600, 280, Alpha(Background, 0.75f));
         }
 
-        // The recovery screen reads nothing from the failed Run: only the session store's version, and one explicit action.
+        // The recovery screen reads nothing from a failed Run: only the trusted store and the pending departure, when one exists.
         void RecoveryView()
         {
             var panel = Plate(frame!, "Recovery", 200, 160, 1200, 560, Panel, Danger, 2);
-            Label(panel, "이 연습 탐사를 계속할 수 없어요", 40, 36, 1120, 56, 34, Danger, FontStyle.Bold);
-            Label(panel, "계산 중 문제가 생겨 탐사를 멈췄어요. 이 탐사의 진행과 보상은 저장하지 않고 버려요.", 40, 120, 1120, 40, 22, Ink);
+            Label(panel, pendingResume == null ? "이 연습 탐사를 계속할 수 없어요" : "탐사를 출발하지 못했어요", 40, 36, 1120, 56, 34, Danger, FontStyle.Bold);
+            Label(panel, pendingResume == null ? "계산 중 문제가 생겨 탐사를 멈췄어요. 이 탐사의 진행과 보상은 저장하지 않고 버려요."
+                : "새 탐사는 시작되지 않았어요. 선택한 길이와 출발 전 기억을 그대로 보관하고 있어요.", 40, 120, 1120, 40, 22, Ink);
             Label(panel, store == null ? "저장된 기억을 확인할 수 없어 새로 출발할 수 없어요." : "마지막으로 저장한 기억 덱(기억 버전 " + SessionMemoryVersion + ")은 그대로이고, 새 탐사는 그 덱으로 시작해요.", 40, 170, 1120, 40, 22, Ink);
             Label(panel, "연습 기억은 이 앱 세션에만 있어요. 앱을 닫으면 사라져요.", 40, 220, 1120, 34, 19, Muted);
             if (notice.Length != 0) Label(panel, notice, 40, 290, 1120, 60, 20, Danger); // a failed new departure keeps the quarantine
-            Button(panel, "RecoveryDiscard", "이 탐사를 버리고 새로 출발", 40, 440, 560, 80, () => DiscardFailedPractice(), Brass, 26);
+            Button(panel, "RecoveryDiscard", pendingResume == null ? "이 탐사를 버리고 새로 출발" : "같은 기억으로 다시 출발", 40, 440, 560, 80, () => DiscardFailedPractice(), Brass, 26);
+            Button(panel, "RecoveryHome", "공방으로 돌아가기", 640, 440, 520, 80, () => ReturnToWorkshop(), Line, 26);
+        }
+        // While the home opens: the last view stays under a full-frame blocker with one quiet line, so no press reaches it (named as a
+        // sheet blocker, so the first-run guide steps back too).
+        void ReturningVeil()
+        {
+            var veil = Box(frame!, "ReturningInputBlocker", 0, 0, 1600, 900, Alpha(Background, 0.78f)); veil.GetComponent<Image>().raycastTarget = true;
+            Strong(Label(veil, "공방으로 돌아가는 중이에요", 0, 410, 1600, 80, 32, Ink, FontStyle.Bold, TextAnchor.MiddleCenter));
         }
 
-        // The top bar: the workshop's brass medal and title, the practice and place lines, and the deck, log and abandon pills on the right.
+        // The top bar: the workshop's brass medal and title, the practice and place lines, and the deck, log and abandon pills on the
+        // right; once the expedition has ended (its result, even after an abandon in battle) the normal bar with 공방으로 in the abandon
+        // pill's place, so the way home always sits in the same corner.
         void Header(RunState s)
         {
-            if (s.Phase == "BATTLE") BattleHeader(s); // RULES_NOW_PLAY: a battle keeps its top for the stage (no logo, no rail)
+            bool ended = Finished(s);
+            if (s.Phase == "BATTLE" && !ended) BattleHeader(s); // RULES_NOW_PLAY: a battle keeps its top for the stage (no logo, no rail)
             else
             {
                 var medal = Gem(frame!, "HeaderMedal", 20, 12, 62, Hex("1b2540"), Alpha(Brass, 0.95f));
@@ -1274,14 +1406,15 @@ namespace MemoryForge.Client
             }
             // On a phone their touch areas reach from the top of the frame down (never above it), over the status strip's text. They line
             // up on the frame's right edge; in a battle they are small pills so the stage keeps the top (KAZENA-BATTLE-20261019).
-            float reach = Math.Max(minTouch, 72); bool fight = s.Phase == "BATTLE";
+            float reach = Math.Max(minTouch, 72); bool fight = s.Phase == "BATTLE" && !ended;
             // Each width is already its touch width, so the touch areas tile without overlapping on any phone.
             float by = fight ? 16 : 18, bh = fight ? 46 : 54, gap = fight ? 10 : 16, aw = Math.Max(fight ? 150 : 246, minTouch), lw = Math.Max(fight ? 100 : 120, minTouch),
                 dw = Math.Max(fight ? 210 : 240, minTouch); int size = fight ? 19 : 22;
             float ax = 1568 - aw, lx = ax - gap - lw, dx = lx - gap - dw;
             Button(frame!, "DeckButton", "덱 " + s.Deck.Count + "장" + (s.PartsFound.Count != 0 ? " · 부품 " + s.PartsFound.Count : ""), dx, by, dw, bh, () => Open(Sheet.Deck), Line, size, hit: Band(dx, 0, dw, reach));
             Button(frame!, "LogButton", "기록", lx, by, lw, bh, () => Open(Sheet.Log), Line, size, hit: Band(lx, 0, lw, reach));
-            if (!Finished(s) && s.Phase != "VICTORY" && s.Phase != "DEFEAT") Button(frame!, "AbandonButton", "탐사 포기", ax, by, aw, bh, () => Open(Sheet.Abandon), Line, size, hit: Band(ax, 0, aw, reach));
+            if (!ended && s.Phase != "VICTORY" && s.Phase != "DEFEAT") Button(frame!, "AbandonButton", "탐사 포기", ax, by, aw, bh, () => Open(Sheet.Abandon), Line, size, hit: Band(ax, 0, aw, reach));
+            else if (ended) Button(frame!, "HomeButton", "공방으로", ax, by, aw, bh, () => ReturnToWorkshop(), Line, size, hit: Band(ax, 0, aw, reach));
         }
         // In a battle the header's left is the party's one shared HP bar with the block gem at its end and the party's statuses under it
         // (KAZENA-BATTLE-20261019: one long bar top left, as the reference's party HP); the place is a small line at the right under the
@@ -2380,36 +2513,87 @@ namespace MemoryForge.Client
         static long Capacity(object? preview, string cid) => Integer(Get(Get(preview, "capacities"), cid));
         static bool GainedCommon(RunCardSpec card) => card.Owner == "common" && Truthy(Get(card.ToJsonGraph(), "gained"));
 
+        // EXPEDITION-RETURN-UX-20261021: one calm card over the dimmed workshop: the outcome's glyph and title (an abandon is a quiet
+        // ivory title, not an alarm), the memory result, the Run's own numbers as chips, then each member's saved memory deck as a card
+        // sized to its own rows (a card kept more than once is one row with ×N; a long deck scrolls inside its card). The note at the
+        // foot carries the latest notice in its place. On the exits' row the way on: 공방으로 돌아가기 first, and the next departure
+        // from here as the optional second choice. Nothing is computed beyond the Run's statistics and the session store.
         void ResultView(RunState s)
         {
-            var panel = Frame(frame!, "Result", 32, 88, 1536, 796);
-            string outcome = Text(Get(s.Result, "outcome"));
-            string title = closedKind == "abandon" ? "탐사 포기" : outcome == "defeat" ? "패배" : outcome == "return" ? "기록소 귀환" : outcome == "clear" ? "탐사 완주" : "탐사 종료";
-            Strong(Label(panel, title, 24, 18, 1488, 56, 42, outcome == "defeat" || closedKind == "abandon" ? Danger : Brass, FontStyle.Bold));
-            Label(panel, "전투 " + s.Statistics.Battles + "회 (엘리트 " + s.Statistics.Elites + ")  ·  처치 " + s.Statistics.Kills + "  ·  남은 체력 " + s.Hp + "/" + s.MaxHp
-                + "  ·  유물 " + (s.Relics.Count == 0 ? "-" : string.Join(", ", s.Relics.Select(RelicName))), 24, 84, 1488, 34, 22, Ink);
+            string outcome = Text(Get(s.Result, "outcome")); bool abandoned = closedKind == "abandon";
+            Color tone = abandoned ? Ink : outcome == "defeat" ? Danger : Brass;
+            string glyph = abandoned ? "ico_node_rest" : outcome == "defeat" ? "ico_node_battle" : outcome == "return" ? "ico_node_archive" : outcome == "clear" ? "ico_node_boss" : "ico_node_rest";
+            float height = PanelBottom - 92;
+            var panel = Frame(frame!, "Result", 32, 92, 1536, height, Alpha(abandoned ? Muted : tone, 0.6f));
+            var medal = Gem(panel, "OutcomeMedal", 24, 18, 76, Hex("18223d"), Alpha(tone, 0.9f));
+            Icon(medal, "Glyph", glyph, 18, 18, 40, 40, tone);
+            Strong(Label(panel, OutcomeTitle(s), 116, 14, 900, 52, 40, tone, FontStyle.Bold));
             var used = Get(lastSave, "used") as IDictionary<string, object?>;
-            string memory = closedKind != null || lastSave == null ? "저장하지 않고 닫음 · 기억 덱 변화 없음"
+            string memory = abandoned ? "이번 탐사의 변화는 남기지 않았어요 · 기억 덱 변화 없음" : closedKind != null || lastSave == null ? "저장하지 않고 닫음 · 기억 덱 변화 없음"
                 : (lastSaveCount == 0 ? "기존 덱 유지" : "변화 " + lastSaveCount + "개 저장")
                   + (used == null ? "" : " · " + string.Join(", ", used.Select(u => CharacterName(u.Key) + " 용량 " + Integer(u.Value))));
-            Label(panel, memory, 24, 124, 1488, 34, 22, Memory);
-            for (int i = 0; i < ReferenceParty.Count; i++)
-            {
-                string cid = ReferenceParty[i]; var column = Plate(panel, "Saved:" + cid, 24 + i * 500, 176, 480, 360, Alpha(Background, 0.75f), Alpha(Brass, 0.4f));
-                Sheen(column, 480, 360, 0.04f);
-                var rows = Get(Get(store, "memory"), cid) as IList;
-                Picture(column, "Portrait", Art("Characters/char_" + cid + "_sd"), 8, 6, 64, 64, Color.white);
-                Label(column, CharacterName(cid), 80, 10, 384, 36, 28, Ink, FontStyle.Bold);
-                Label(column, rows == null ? "기본 덱 (저장된 변화 없음)" : "저장된 기억 덱 " + rows.Count + "장", 80, 46, 384, 26, 19, Memory);
-                var specs = rows != null ? rows.Cast<object?>().ToList() : MemoryV2.Baseline(data!.Memory, cid).Select(c => (object?)c.ToJsonGraph()).ToList();
-                TextList(column, "SavedList:" + cid, string.Join(", ", specs.Select(SpecText)), 16, 84, 448, 260, 17, Muted);
-            }
-            Label(panel, "이 기억은 연습용으로 이 세션에만 있어요. 앱을 닫으면 사라져요. 다음 탐사는 위 기억 덱으로 시작해요.", 24, 552, 1488, 60, 20, Muted);
-            Button(panel, "LengthShort", "짧은 탐사 (1구역)", 24, 640, 300, 64, () => { Length = "short"; Render(); }, Length == "short" ? Memory : Line, 22);
-            Button(panel, "LengthFull", "긴 탐사 (2구역)", 340, 640, 300, 64, () => { Length = "full"; Render(); }, Length == "full" ? Memory : Line, 22);
-            Button(panel, "Depart", "다음 탐사 출발", 1188, 640, 324, 64, () => Depart(), Brass, 26);
-            if (notice.Length != 0) TrackNotice(Label(panel, notice, 24, 722, 1488, 44, 20, LastError != null ? Danger : Memory), "", Memory);
+            float y = 70 + Grow(Label(panel, memory, 116, 70, 1396, 30, 21, Memory)) + 8;
+            var plain = Alpha(Background, 0.86f);
+            var metrics = new List<(string, Color, Color, Color?)> { ("전투 승리 " + s.Statistics.Battles + "회", Ink, plain, LineEdge), ("엘리트 승리 " + s.Statistics.Elites + "회", Ink, plain, LineEdge),
+                ("처치 " + s.Statistics.Kills, Ink, plain, LineEdge), ("남은 체력 " + s.Hp + " / " + s.MaxHp, Memory, plain, Alpha(Memory, 0.5f)), ("유물 " + s.Relics.Count + "개", Brass, plain, Alpha(Brass, 0.6f)) };
+            y += Chips(panel, "Metric", metrics, 116, y, 1512, 34, 18) + 8;
+            if (s.Relics.Count != 0) y += Grow(Label(panel, "유물 · " + string.Join(", ", s.Relics.Select(RelicName)), 116, y, 1396, 26, 17, Muted)) + 6;
+            y = Math.Max(y, 104) + 6;
+            Label(panel, "저장된 기억 덱 · 다음 출격은 이 덱으로 시작해요", 24, y, 1488, 30, 20, Brass); y += 38;
+            // The note (or the latest notice in its place) sits at the card's foot; the deck cards take what is left above it.
+            const string note = "연습 기억은 이 앱 세션에만 있어요. 공방으로 돌아가도 그대로 이어지고, 앱을 닫으면 사라져요. '다음 탐사 출발'은 공방에 들르지 않고 여기서 바로 출발해요.";
+            float noteHeight = Math.Max(TextHeight(note, 18, 1488), TextHeight(notice, 18, 1488)), noteTop = height - 14 - noteHeight;
+            for (int i = 0; i < ReferenceParty.Count; i++) SavedDeck(panel, ReferenceParty[i], 24 + i * 500, y, 480, Math.Max(120, noteTop - 12 - y));
+            var foot = Label(panel, notice.Length != 0 ? notice : note, 24, noteTop, 1488, noteHeight, 18, notice.Length == 0 ? Muted : LastError != null ? Danger : Memory);
+            foot.resizeTextForBestFit = false;
+            TrackNotice(foot, note, Muted);
+            // The exits' row: a touch area from ExitTop down for each, side by side without overlapping.
+            float row = 900 - ExitTop;
+            LengthButton("LengthShort", "짧은 탐사 (1구역)", "short", 24, row);
+            LengthButton("LengthFull", "긴 탐사 (2구역)", "full", 286, row);
+            Button(frame!, "Depart", "다음 탐사 출발", 548, 816, 300, 64, () => Depart(), Line, 22, hit: new Rect(548, ExitTop, 300, row));
+            Button(frame!, "ReturnHome", "공방으로 돌아가기", 1168, 816, 400, 64, () => ReturnToWorkshop(), Brass, 26, hit: new Rect(1168, ExitTop, 400, row));
         }
+        // The next departure's length: a choice only, nothing departs; the chosen one carries a teal rim and a dot.
+        void LengthButton(string name, string caption, string length, float x, float row)
+        {
+            bool chosen = Length == length;
+            Button(frame!, name, (chosen ? "● " : "") + caption, x, 816, 250, 64, () => { Length = length; Render(); }, Line, 20, chosen ? Memory : (Color?)null, 2, new Rect(x, ExitTop, 250, row));
+        }
+        // One member's saved memory deck (the baseline deck when nothing is saved for them) as a card sized to its own rows.
+        void SavedDeck(Transform parent, string cid, float x, float y, float width, float room)
+        {
+            var rows = Get(Get(store, "memory"), cid) as IList;
+            var specs = rows != null ? rows.Cast<object?>().ToList() : MemoryV2.Baseline(data!.Memory, cid).Select(c => (object?)c.ToJsonGraph()).ToList();
+            var lines = new List<(string Text, int Count)>();
+            foreach (var spec in specs)
+            {
+                string text = SpecText(spec); int at = lines.FindIndex(l => l.Text == text);
+                if (at < 0) lines.Add((text, 1)); else lines[at] = (text, lines[at].Count + 1);
+            }
+            const int size = 19; const float head = 92, foot = 14, gap = 4;
+            float textWidth = width - 56;
+            var heights = lines.Select(l => Math.Max(28, TextHeight(Counted(l), size, textWidth))).ToList();
+            float listHeight = Math.Max(28, heights.Sum() + gap * Math.Max(0, heights.Count - 1));
+            float cardHeight = Math.Min(room, head + listHeight + foot), region = Math.Max(0, cardHeight - head - foot);
+            var attr = AttributeColor(characterAttrs.TryGetValue(cid, out var a) ? a : "");
+            var card = Plate(parent, "Saved:" + cid, x, y, width, cardHeight, Alpha(Background, 0.8f), Alpha(attr, 0.55f));
+            Sheen(card, width, cardHeight, 0.04f);
+            Gem(card, "PortraitMedal", 14, 12, 68, Hex("18223d"), Alpha(attr, 0.9f));
+            Picture(card, "Portrait", Art("Characters/char_" + cid + "_sd"), 14, 10, 68, 68, Color.white);
+            Strong(Label(card, CharacterName(cid), 96, 12, width - 110, 36, 26, Ink, FontStyle.Bold));
+            Label(card, rows == null ? "기본 덱 " + specs.Count + "장 · 저장된 변화 없음" : "저장된 기억 덱 " + specs.Count + "장", 96, 50, width - 110, 26, 18, rows == null ? Muted : Memory);
+            var list = listHeight <= region ? Box(card, "SavedList:" + cid, 20, head, width - 34, region, Color.clear)
+                : Scroll(card, "SavedList:" + cid, 20, head, width - 34, region, width - 34, listHeight, Color.clear);
+            float ry = 0;
+            for (int k = 0; k < lines.Count; k++)
+            {
+                Deco(list, "Bullet", Diamond, 2, ry + 9, 10, 10, Alpha(attr, 0.85f));
+                Label(list, Counted(lines[k]), 22, ry, textWidth, heights[k], size, Ink).resizeTextForBestFit = false;
+                ry += heights[k] + gap;
+            }
+        }
+        static string Counted((string Text, int Count) line) => line.Count > 1 ? line.Text + "  ×" + line.Count : line.Text;
         // A comma list in its own region: drawn whole, scrolling when it is longer than the region.
         void TextList(Transform parent, string name, string value, float x, float y, float width, float height, int size, Color color)
         {
@@ -3088,13 +3272,20 @@ namespace MemoryForge.Client
             Button(p, "ContinueTurnSummary", "계속", 400, 760, 380, 60, () => ContinueTurnSummary(), Brass, 24, hit: Band(400, 840 - minTouch, 380, minTouch));
             RefreshTurnSummary();
         }
+        // EXPEDITION-RETURN-UX-20261021: the sheet says what the confirm does — this expedition's progress, rewards and unsaved changes
+        // are dropped, the saved memory deck stays, and the practice goes back to the home, which departs again from that deck. The
+        // confirm is the quiet choice (an ink pill with a red rim) and 계속 탐사 the brass one; cancel only closes the sheet.
         void AbandonSheet()
         {
-            var p = OverlayPanel("AbandonSheet", 440, 260, 720, 330);
-            Label(p, "탐사를 포기할까요?", 24, 20, 672, 44, 30, Ink, FontStyle.Bold);
-            Label(p, "이번 탐사의 진행과 변화는 기억에 남지 않고 버려져요. 출발 전 기억 덱은 그대로예요.", 24, 76, 672, 90, 21, Muted);
-            Button(p, "ConfirmAbandon", "포기하기", 24, 236, 300, 64, () => Abandon(), Danger, 24);
-            Button(p, "CancelAbandon", "계속 탐사", 396, 236, 300, 64, CloseSheet, Brass, 24);
+            var p = OverlayPanel("AbandonSheet", 400, 220, 800, 420);
+            Strong(Label(p, "탐사를 포기하고 공방으로 돌아갈까요?", 32, 24, 736, 48, 30, Ink, FontStyle.Bold));
+            float y = 88;
+            y += Grow(Label(p, "이번 탐사의 진행과 보상, 아직 저장하지 않은 변화는 기억에 남기지 않고 버려요.", 32, y, 736, 30, 21, Ink)) + 10;
+            y += Grow(Label(p, (SessionMemoryVersion == 0 ? "기억 덱은 출발 전 그대로예요." : "저장한 기억 덱(기억 버전 " + SessionMemoryVersion + ")은 그대로예요.")
+                + " 공방에서 다시 출격하면 그 덱으로 시작해요.", 32, y, 736, 30, 20, Memory)) + 10;
+            Grow(Label(p, "연습 기억은 이 앱 세션에만 있어요. 앱을 닫으면 사라져요.", 32, y, 736, 26, 18, Muted));
+            Button(p, "ConfirmAbandon", "포기하고 공방으로", 32, 320, 352, 64, ConfirmAbandon, Line, 24, Alpha(Danger, 0.85f), 2);
+            Button(p, "CancelAbandon", "계속 탐사", 416, 320, 352, 64, CloseSheet, Brass, 24);
         }
         void AssignSheet(RunState s)
         {
@@ -3123,6 +3314,7 @@ namespace MemoryForge.Client
         string PhaseName(RunState s)
         {
             if (closedKind == "abandon") return "포기";
+            if (closedKind == "closed") return "저장하지 않고 닫음"; // the Run still names its save phase; the expedition is closed
             switch (s.Phase)
             {
                 case "MAP": return "지도";
@@ -3199,6 +3391,9 @@ namespace MemoryForge.Client
             ["RUN_MISMATCH"] = "이 탐사와 저장 요청이 맞지 않아요.",
             ["REASSIGNMENT_REQUIRES_SEPARATE_FLOW"] = "출발 전 기억에 있던 공용 카드의 배정은 여기서 바꿀 수 없어요.",
             ["RUN_IN_PROGRESS"] = "진행 중인 탐사를 끝내거나 포기한 뒤에 출발할 수 있어요.",
+            [NotEnded] = "탐사가 끝난 뒤에 공방으로 돌아갈 수 있어요. 진행 중이면 '탐사 포기'를, 저장 화면이면 저장이나 닫기를 먼저 골라 주세요.",
+            [ReturningHome] = "공방으로 돌아가는 중이에요.",
+            [ReturnUnavailable] = "공방으로 돌아가지 못했어요. 저장된 기억은 이 화면에 그대로 있어요.",
             [TurnSummaryOpen] = "턴 결과를 확인하는 중이에요. '계속'을 누르면 다음 행동을 할 수 있어요.",
             [RecoveryCode] = "연습 탐사를 멈췄어요. 이 탐사를 버리고 새로 출발해 주세요.",
             [PickSheetOpen] = "카드를 고르는 중이에요. 고르기를 마치거나 취소한 뒤에 다른 행동을 할 수 있어요.",
