@@ -30,6 +30,7 @@ namespace MemoryForge.Client
 
         void OnApplicationFocus(bool focused)
         {
+            if (focused) MemoryForgeUiViewport.RefreshMetrics();
             if (focused && recruitmentSession != null && !recruitmentBusy && !accountBusy) StartRecruitmentRefresh();
         }
 
@@ -122,16 +123,17 @@ namespace MemoryForge.Client
             if (homePartyStrip == null) return;
             ClearPanel(homePartyStrip);
             var party = data == null ? PracticeParty.ToArray() : !data.Tutorial.Completed ? new[] { "nia", "harin", "rien" } : ownedParty.ToArray();
-            homePartyCaption.text = data == null ? "함께 출발하는 연습 편성" : !data.Tutorial.Completed ? "첫 기억의 임시 동행" : party.Length == 0 ? "출격 준비에서 보유 동료를 편성하세요" : "다음 출격 편성";
+            homePartyCaption.text = data == null ? "연습 동행 3명" : !data.Tutorial.Completed ? "첫 기억의 임시 동행" : party.Length == 0 ? "동료를 편성해주세요" : "다음 출격 편성";
             for (int n = 0; n < party.Length; n++)
             {
                 string id = party[n];
-                var slot = Box(homePartyStrip, (data == null ? "PreviewParty:" : "OwnedPreviewParty:") + id, n * 152, 0, 136, 112, new Color(0.04f, 0.055f, 0.1f, 0.9f));
-                var face = Box(slot, "Portrait", 28, 4, 80, 76, Color.white);
+                var slot = Box(homePartyStrip, (data == null ? "PreviewParty:" : "OwnedPreviewParty:") + id, n * 152, 0, 136, 80, new Color(0.04f, 0.055f, 0.1f, 0.9f));
+                slot.anchorMin = new Vector2(n / 3f, 1); slot.anchorMax = new Vector2((n + 1) / 3f, 1); slot.sizeDelta = new Vector2(-16, 80); slot.anchoredPosition = Vector2.zero;
+                var face = Box(slot, "Portrait", 4, 16, 48, 48, Color.white);
                 var art = SpriteAt("Art/Characters/char_" + id + "_sd") ?? Portrait(id);
                 face.GetComponent<Image>().sprite = art; CenterSprite(face);
-                if (art == null) { face.GetComponent<Image>().color = Color.clear; Glyph(face, "nav_companions", 8, 8, 60, Muted); }
-                Label(slot, content.Battle.Characters.FirstOrDefault(character => character.Id == id)?.Name ?? id, 4, 82, 128, 28, 21, Ink, FontStyle.Bold, TextAnchor.MiddleCenter);
+                if (art == null) { face.GetComponent<Image>().color = Color.clear; Glyph(face, "nav_companions", 0, 0, 48, Muted); }
+                Label(slot, content.Battle.Characters.FirstOrDefault(character => character.Id == id)?.Name ?? id, 56, 0, 76, 80, 18, Ink, FontStyle.Bold, TextAnchor.MiddleCenter);
             }
         }
 
@@ -139,13 +141,12 @@ namespace MemoryForge.Client
         {
             ClearPanel(sortiePanel); accountSortieDrawn = true;
             var wall = Box(sortiePanel, "AccountPreparationBackdrop", 0, 0, 1600, 900, new Color(0.2f, 0.25f, 0.33f));
-            wall.GetComponent<Image>().sprite = SpriteAt("Art/Backgrounds/bg_workshop");
+            wall.GetComponent<Image>().sprite = SpriteAt("Art/Backgrounds/bg_workshop"); MemoryForgeUiViewport.Cover(wall.GetComponent<Image>());
             Box(sortiePanel, "PreparationVeil", 0, 0, 1600, 900, new Color(0.025f, 0.04f, 0.075f, 0.72f));
-            Label(sortiePanel, "출격 준비", 56, 28, 1000, 64, 42, Ink, FontStyle.Bold);
-            Label(sortiePanel, "공방 계정 · 보유한 동료와 저장된 성장으로 출발해요.", 58, 108, 1180, 36, 21, Muted);
+            var preparationHeading = Label(sortiePanel, "출격 준비", 56, 28, 1000, 64, 42, Ink, FontStyle.Bold);
+            var preparationCaption = Label(sortiePanel, "공방 계정 · 보유한 동료와 저장된 성장으로 출발해요.", 58, 28 + preparationHeading.rectTransform.rect.height + 16, 920, 36, 21, Muted);
             Button(sortiePanel, "CloseSortie", "홈", 1392, 24, 152, 112, ClosePanels, Line, 24);
             Button(sortiePanel, "ChooseSupportPartner", "지원 파트너", 1060, 24, 236, 112, OpenSupportSelection, Line, 24).interactable = !accountBusy && !growthBusy && !recruitmentBusy;
-            Ornament(sortiePanel, 58, 164, 440);
             var data = AccountProgression;
             if (data == null)
             {
@@ -175,60 +176,66 @@ namespace MemoryForge.Client
             }
             bool tutorial = !data.Tutorial.Completed;
             var chapter = data.Chapters.FirstOrDefault(item => item.Id == 1);
-            var zone = Box(sortiePanel, "OwnedDestination", 56, 200, 440, 458, Panel);
+            var zone = Box(sortiePanel, "OwnedDestination", 56, 216, 440, 458, Panel);
             Kit(zone, "Frame", "ui_panel_frame", new Vector4(48, 48, 48, 48), 0, 0, 440, 458, 128);
             var vista = Box(zone, "DestinationArt", 0, 0, 440, 220, Color.white);
-            vista.GetComponent<Image>().sprite = SpriteAt("Art/Backgrounds/bg_zone1_map");
+            vista.GetComponent<Image>().sprite = SpriteAt("Art/Backgrounds/bg_zone1_map"); MemoryForgeUiViewport.Cover(vista.GetComponent<Image>());
             Box(zone, "ArtShade", 0, 156, 440, 64, new Color(0.025f, 0.04f, 0.075f, 0.86f));
             Label(zone, tutorial ? "프롤로그" : "이야기 1장", 24, 232, 392, 56, 36, Brass, FontStyle.Bold);
-            Label(zone, tutorial ? "종탑 하층 · 첫 기억\n7층 탐사와 보스\n첫 기억 저장 후 동료 3명과 기본 무기 지급"
+            var zoneBody = ScrollArea(zone, 24, 336, 392, 114, 114);
+            var zoneText = Label(zoneBody, tutorial ? "종탑 하층 · 첫 기억\n7층 탐사와 보스\n첫 기억 저장 후 동료 3명과 기본 무기 지급"
                 : "AL " + data.Account.Level + " · 권장 단계 " + (chapter?.StageLevel.ToString() ?? "확인 중")
                     + "\n보유 동료 3명을 순서대로 편성\n성장과 장비는 출발 시 고정됩니다."
-                    + (data.HasSupportSelection ? "\n다음 지원 · " + (data.SupportSelection == null ? "없음" : EquipmentCharacterName(data.SupportSelection)) : ""), 24, 306, 392, 144, 23, Ink);
-            float footerHeight = Math.Max(120, TouchUnits()), footerY = 824 - footerHeight;
+                    + (data.HasSupportSelection ? "\n다음 지원 · " + (data.SupportSelection == null ? "없음" : EquipmentCharacterName(data.SupportSelection)) : ""), 0, 0, 392, 144, 23, Ink);
+            zoneBody.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Math.Max(144, zoneText.rectTransform.rect.height));
+            float footerHeight = Math.Max(120, TouchUnits()), footerY = 836 - footerHeight;
             var chosen = tutorial ? new[] { "nia", "harin", "rien" } : ownedParty.ToArray();
-            Label(sortiePanel, tutorial ? "프롤로그 임시 동행 · 아직 보유로 지급되지 않았어요" : "출전 편성 · 선택 순서가 출전 순서예요", 536, 200, 1008, 40, 24, Brass, FontStyle.Bold);
+            Label(sortiePanel, tutorial ? "프롤로그 임시 동행 · 아직 보유로 지급되지 않았어요" : "출전 편성 · 선택 순서가 출전 순서예요", 536, 216, 1008, 72, 24, Brass, FontStyle.Bold);
+            var ownedRow = Box(sortiePanel, "OwnedPartyRow", 536, 304, 1008, 264, Color.clear);
             for (int n = 0; n < 3; n++)
             {
                 string? id = n < chosen.Length ? chosen[n] : null;
-                var slot = id == null || tutorial ? Box(sortiePanel, "OwnedPartySlot:" + n, 536 + n * 340, 256, 324, 196, Panel)
-                    : (RectTransform)Button(sortiePanel, "RemoveOwnedParty:" + id, "", 536 + n * 340, 256, 324, 196,
+                var slot = id == null || tutorial ? Box(ownedRow, "OwnedPartySlot:" + n, n * 340, 0, 324, 264, Panel)
+                    : (RectTransform)Button(ownedRow, "RemoveOwnedParty:" + id, "", n * 340, 0, 324, 264,
                         () => { ownedParty.Remove(id); RenderAccountSortie(); RefreshAccountHome(); }, Panel).transform;
+                slot.anchorMin = new Vector2(n / 3f, 1); slot.anchorMax = new Vector2((n + 1) / 3f, 1); slot.sizeDelta = new Vector2(-16, 264); slot.anchoredPosition = Vector2.zero;
                 if (id != null && !tutorial) slot.GetComponent<Button>().interactable = !accountBusy;
                 var surface = slot.GetComponent<Image>(); surface.sprite = null; surface.type = Image.Type.Simple; surface.color = Panel;
-                Kit(slot, "Frame", "ui_panel_frame", new Vector4(48, 48, 48, 48), 0, 0, 324, 196, 128);
+                Kit(slot, "Frame", "ui_panel_frame", new Vector4(48, 48, 48, 48), 0, 0, 324, 264, 128);
                 if (id == null) { Label(slot, "동료 선택", 16, 64, 292, 56, 28, Muted, FontStyle.Normal, TextAnchor.MiddleCenter); continue; }
                 var character = content.Battle.Characters.FirstOrDefault(item => item.Id == id);
-                var art = Box(slot, "Portrait", 12, 12, 112, 160, Color.white);
+                var art = Box(slot, "Portrait", 12, 16, 72, 72, Color.white);
                 art.GetComponent<Image>().sprite = SpriteAt("Art/Characters/char_" + id + "_sd") ?? Portrait(id); CenterSprite(art);
                 if (art.GetComponent<Image>().sprite == null)
                 {
                     art.GetComponent<Image>().color = Color.clear;
                     Glyph(art, "nav_companions", 16, 16, 80, Muted);
-                    Label(art, "그림 준비 중", 0, 112, 112, 32, 16, Muted, FontStyle.Normal, TextAnchor.MiddleCenter);
                 }
                 var owned = data.Characters.FirstOrDefault(item => item.CharId == id);
-                Label(slot, character?.Name ?? id, 136, 16, 176, 44, 28, Ink, FontStyle.Bold);
-                Label(slot, tutorial ? "임시 동행\nLv.1" : "Lv." + owned?.Level + "\n공명 " + owned?.Res, 136, 64, 176, 64, 22, Memory);
+                Label(slot, character?.Name ?? id, 96, 8, 216, 72, 28, Ink, FontStyle.Bold);
+                Label(slot, tutorial ? "임시 동행 · Lv.1" : "Lv." + owned?.Level + " · 공명 " + owned?.Res, 12, 96, 300, 72, 18, Memory);
                 if (!tutorial)
                 {
                     string weapon = owned?.WeaponInstanceId == null ? owned?.Deployable == false ? "무기 미장착 · 장비 공방에서 확인" : "장착 무기 확인 필요" : EquipmentWeaponName(owned.WeaponInstanceId);
-                    Label(slot, weapon, 136, 136, 176, 56, 18, owned?.Deployable == false ? Memory : Muted);
+                    var weaponBody = ScrollArea(slot, 12, 176, 300, 72, 72);
+                    var weaponText = Label(weaponBody, weapon, 0, 0, 300, 1, 18, owned?.Deployable == false ? Memory : Muted);
+                    weaponBody.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Math.Max(72, weaponText.rectTransform.rect.height));
                 }
             }
             if (tutorial)
-                Label(sortiePanel, "이야기와 보유 편성은 첫 기억 저장 후 열려요.\n임시 동행의 성장과 무기는 모두 1단계예요.", 544, 494, 1000, 112, 25, Ink);
+                Label(sortiePanel, "이야기와 보유 편성은 첫 기억 저장 후 열려요.\n임시 동행의 성장과 무기는 모두 1단계예요.", 544, 584, 1000, 112, 25, Ink);
             else
             {
                 float height = Math.Max(112, TouchUnits());
-                float gridHeight = footerY - 476 - 16;
-                var grid = ScrollArea(sortiePanel, 536, 476, 1008, gridHeight, Math.Max(gridHeight, (float)Math.Ceiling(data.Characters.Count / 3f) * (height + 12)));
+                float gridHeight = footerY - 580 - 16;
+                var grid = ScrollArea(sortiePanel, 536, 580, 1008, gridHeight, Math.Max(gridHeight, (float)Math.Ceiling(data.Characters.Count / 3f) * (height + 12)));
                 for (int n = 0; n < data.Characters.Count; n++)
                 {
                     var owned = data.Characters[n]; string id = owned.CharId;
                     string name = content.Battle.Characters.FirstOrDefault(item => item.Id == id)?.Name ?? id;
                     var pick = Button(grid, "SelectOwnedParty:" + id, name + "  ·  Lv." + owned.Level, n % 3 * 340, n / 3 * (height + 12), 324, height,
                         () => { if (!ownedParty.Contains(id) && ownedParty.Count < 3) ownedParty.Add(id); RenderAccountSortie(); RefreshAccountHome(); }, ownedParty.Contains(id) ? Brass : Line, 24);
+                    var pickRect = (RectTransform)pick.transform; pickRect.anchorMin = new Vector2((n % 3) / 3f, 1); pickRect.anchorMax = new Vector2((n % 3 + 1) / 3f, 1); pickRect.sizeDelta = new Vector2(-16, height); pickRect.anchoredPosition = new Vector2(0, -(n / 3) * (height + 12));
                     pick.interactable = !accountBusy && (ownedParty.Contains(id) || ownedParty.Count < 3);
                 }
             }

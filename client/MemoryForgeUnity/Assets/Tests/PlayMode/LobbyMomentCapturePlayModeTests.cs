@@ -105,7 +105,7 @@ namespace MemoryForge.Client.Tests
         {
             for (float t = 0; t < seconds; t += Time.unscaledDeltaTime) yield return null;
         }
-        // The lobby canvas drawn by a camera into a 1600×900 texture, then back to the overlay.
+        // Historical reference-art capture only. Its normalized authored frame is not phone/safe-area evidence.
         internal static IEnumerator Shot(GameObject host, string path, string canvasName = MemoryForgeLobbyClient.OwnedCanvas)
         {
             var texture = new RenderTexture(1600, 900, 24);
@@ -130,6 +130,41 @@ namespace MemoryForge.Client.Tests
                 // A failed write leaves no camera, texture or camera-drawn canvas behind.
                 RenderTexture.active = before;
                 if (canvas != null) { canvas.renderMode = RenderMode.ScreenSpaceOverlay; canvas.worldCamera = null; }
+                Object.Destroy(camera.gameObject); Object.Destroy(image); texture.Release(); Object.Destroy(texture);
+            }
+            yield return null;
+        }
+
+        // Viewport acceptance capture: caller supplies production viewport calibration before building the UI.
+        // The production Update/Fit path owns every frame transform; this overload never normalizes one.
+        internal static IEnumerator Shot(GameObject host, string path, int pixelWidth, int pixelHeight,
+            string canvasName = MemoryForgeLobbyClient.OwnedCanvas, Action<Canvas, Camera>? beforeCapture = null)
+        {
+            Assert.That(pixelWidth, Is.GreaterThan(0)); Assert.That(pixelHeight, Is.GreaterThan(0));
+            var canvas = host.GetComponentsInChildren<Canvas>().First(x => x.name == canvasName);
+            var previousMode = canvas.renderMode; var previousCamera = canvas.worldCamera;
+            float previousPlane = canvas.planeDistance;
+            var texture = new RenderTexture(pixelWidth, pixelHeight, 24);
+            var camera = new GameObject("ViewportAcceptanceCamera").AddComponent<Camera>();
+            camera.targetTexture = texture; camera.clearFlags = CameraClearFlags.SolidColor;
+            camera.backgroundColor = Color.black; camera.orthographic = true;
+            var image = new Texture2D(pixelWidth, pixelHeight, TextureFormat.RGB24, false);
+            var previousTarget = RenderTexture.active;
+            try
+            {
+                canvas.renderMode = RenderMode.ScreenSpaceCamera; canvas.worldCamera = camera;
+                yield return null; yield return null; yield return null;
+                Canvas.ForceUpdateCanvases(); beforeCapture?.Invoke(canvas, camera); camera.Render();
+                RenderTexture.active = texture;
+                image.ReadPixels(new Rect(0, 0, pixelWidth, pixelHeight), 0, 0); image.Apply();
+                File.WriteAllBytes(path, image.EncodeToJPG(90));
+            }
+            finally
+            {
+                RenderTexture.active = previousTarget;
+                if (canvas != null)
+                { canvas.renderMode = previousMode; canvas.worldCamera = previousCamera; canvas.planeDistance = previousPlane; }
+                camera.targetTexture = null;
                 Object.Destroy(camera.gameObject); Object.Destroy(image); texture.Release(); Object.Destroy(texture);
             }
             yield return null;

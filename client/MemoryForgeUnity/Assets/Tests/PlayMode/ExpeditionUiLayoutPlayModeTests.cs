@@ -209,6 +209,7 @@ namespace MemoryForge.Client.Tests
         [UnityTest]
         public IEnumerator HoldingOrAimingAHandCardShowsItsOwnerFromBehind()
         {
+            MemoryForgeUiMotion.Reduced = false;
             var host = Open(1234); var c = host.GetComponent<MemoryForgeExpeditionClient>(); yield return null;
             Press(host, b => b.name.StartsWith("Node:", StringComparison.Ordinal) && b.interactable); yield return null;
             yield return Settle();

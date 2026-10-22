@@ -57,6 +57,10 @@ namespace MemoryForge.Client
         bool leaving;
         Text nameText = null!, noteText = null!, homeAccountText = null!;
         int index, tapCursor;
+        Vector3 layoutCalibration;
+        bool homeEventsBound, detailCards;
+        RectTransform? homeRightShade;
+        string sceneListKind = "bond";
         string? lastPeriod;
         float idleSince;
 
@@ -81,6 +85,7 @@ namespace MemoryForge.Client
 
         void Update()
         {
+            if (root != null && homeControls != null && layoutCalibration != MemoryForgeUiViewport.Calibration) ReflowLayout();
             FitHome();
             if (Input.GetKeyDown(KeyCode.Escape))
             {
@@ -132,16 +137,18 @@ namespace MemoryForge.Client
             var scenery = Box(canvas, "FullBleedBackdrop", 0, 0, 1600, 900, new Color(0.78f, 0.78f, 0.8f));
             scenery.anchorMin = Vector2.zero; scenery.anchorMax = Vector2.one;
             scenery.offsetMin = scenery.offsetMax = Vector2.zero;
-            scenery.GetComponent<Image>().sprite = SpriteAt("Art/Backgrounds/bg_workshop");
+            scenery.GetComponent<Image>().sprite = SpriteAt("Art/Backgrounds/bg_workshop"); MemoryForgeUiViewport.Cover(scenery.GetComponent<Image>());
             root = Box(canvas, "LobbyFrame", 0, 0, 1600, 900, Color.clear);
-            root.anchorMin = root.anchorMax = root.pivot = new Vector2(0.5f, 0.5f); root.anchoredPosition = Vector2.zero;
+            root.anchorMin = root.anchorMax = root.pivot = new Vector2(0.5f, 0.5f); root.anchoredPosition = Vector2.zero; root.sizeDelta = new Vector2(1600, 900); FitHome();
 
 
             // The figure tap area sits under the stage so the player's own tap catcher and skip button stay on top while playing.
             var tapArea = Button(root, "FigureTap", "", FigureCenterX - 670, 40, 660, 730, OnFigureTap, Color.clear);
+            var tapRect = (RectTransform)tapArea.transform; tapRect.anchorMin = tapRect.anchorMax = new Vector2(0.5f, 1); tapRect.anchoredPosition = new Vector2(FigureCenterX - 670 - 800, -40);
             figureTap = tapArea;
             tapArea.transition = Selectable.Transition.None;
             stage = Box(root, "Stage", -340, 0, 1600, 900, Color.clear);
+            MemoryForgeUiViewport.ArtIsland(stage, -340);
             player = gameObject.AddComponent<MemoryForgeMomentPlayer>();
             // The menu hides during a scene, so the dialogue takes the free left side and never covers the figure or the props
             // at its feet (a chair, a table): the figure stands right of x=740 at rest.
@@ -150,88 +157,7 @@ namespace MemoryForge.Client
 
             // The home's controls in one group (LobbySide): the top bar and the menu tiles over the backdrop's left, clear of the
             // figure (x >= 710). While a moment plays they step back so the scene has the screen; they return when it ends.
-            var side = Box(root, "LobbySide", 0, 0, 1600, 900, Color.clear);
-            var sideGroup = side.gameObject.AddComponent<CanvasGroup>();
-            homeControls = sideGroup;
-            player.Started += _ => { stage.anchoredPosition = Vector2.zero; SetHomeInput(false); FadeMenu(sideGroup, 0f, 0.25f); };
-            player.Finished += _ => { stage.anchoredPosition = new Vector2(-340, 0); idleSince = Time.time; SetHomeInput(true); FadeMenu(sideGroup, 1f, 0.3f); };
-            Shade(side, "TopShade", 0, 0, 1600, 180, new Color(0.025f, 0.035f, 0.07f, 0.8f), false);
-            Shade(side, "RightShade", 1016, 0, 584, 900, new Color(0.025f, 0.035f, 0.07f, 0.88f), false);
-            Shade(side, "IdentityShade", 32, 24, 620, 150, new Color(0.025f, 0.035f, 0.07f, 0.8f), true);
-            Label(side, "기억 공방", 56, 30, 480, 64, 42, Ink, FontStyle.Bold);
-            Label(side, "종탑 아래, 동료들과 다음 이야기를 준비하는 곳", 58, 100, 760, 36, 20, Muted);
-            Ornament(side, 58, 148, 310);
-            float utilitySize = Math.Max(96, TouchUnits());
-            UtilityButton(side, "OpenSettings", "설정", 1544 - utilitySize, utilitySize, () => Toggle(settingsPanel), true);
-            if (!Application.isMobilePlatform) UtilityButton(side, "QuitGame", "종료", 1520 - utilitySize * 2, utilitySize, Application.Quit, false);
-            var account = Box(side, "HomeAccount", 1040, 24, 176, utilitySize, Color.clear);
-            homeAccountText = Label(account, "계정 미연결\n모집에서 연결", 8, 8, 160, utilitySize - 16, 18, Muted, FontStyle.Normal, TextAnchor.MiddleCenter);
-
-            float dockHeight = Math.Max(120, TouchUnits()), dockY = 884 - dockHeight;
-            float entryHeight = Math.Max(138, TouchUnits()), entryY = Math.Min(632, dockY - entryHeight - 16);
-            float destinationY = Math.Max(184, utilitySize + 64), destinationHeight = entryY - destinationY - 16;
-            var destination = Box(side, "ExpeditionDestination", 1040, destinationY, 504, destinationHeight, Panel);
-            var map = SpriteAt("Art/Backgrounds/bg_zone1_map");
-            float mapHeight = Math.Min(180, destinationHeight - 200);
-            var vista = Box(destination, "DestinationArt", 0, 0, 504, mapHeight, Color.white);
-            vista.GetComponent<Image>().sprite = map;
-            vista.GetComponent<Image>().color = map == null ? Panel : new Color(0.75f, 0.8f, 0.85f);
-            Box(destination, "DestinationShade", 0, mapHeight - 92, 504, 92, new Color(0.025f, 0.035f, 0.07f, 0.85f));
-            Box(destination, "BrassEdge", 0, 0, 4, destinationHeight, Brass);
-            Label(destination, "출발 구역", 24, mapHeight - 86, 440, 28, 18, Brass);
-            Label(destination, "종탑 하층", 22, mapHeight - 58, 456, 52, 36, Ink, FontStyle.Bold);
-            Label(destination, "전투와 사건을 지나, 기억을 이어가는 탐사", 24, mapHeight + 10, 456, 32, 19, Muted);
-            homePartyCaption = Label(destination, "함께 출발하는 연습 편성", 24, mapHeight + 48, 456, 28, 18, Brass);
-            homePartyStrip = Box(destination, "HomePartyStrip", 24, mapHeight + 82, 456, 112, Color.clear);
-            for (int n = 0; n < PracticeParty.Count; n++)
-            {
-                string id = PracticeParty[n];
-                var slot = Box(homePartyStrip, "PreviewParty:" + id, n * 152, 0, 136, 112, new Color(0.04f, 0.055f, 0.1f, 0.9f));
-                var face = Box(slot, "Portrait", 28, 4, 80, 76, Color.white);
-                var art = SpriteAt("Art/Characters/char_" + id + "_sd") ?? Portrait(id);
-                face.GetComponent<Image>().sprite = art; CenterSprite(face);
-                if (art == null) face.GetComponent<Image>().color = Color.clear;
-                Label(slot, content?.Battle.Characters.FirstOrDefault(c => c.Id == id)?.Name ?? id, 4, 82, 128, 28, 21, Ink, FontStyle.Bold, TextAnchor.MiddleCenter);
-            }
-            var sortie = MainEntry(side, "StartExpedition", "출격", "탐사 준비", "nav_expedition", 1040, entryY, 504, entryHeight, OpenSortie);
-            Breathe(sortie);
-
-            var routes = new (string Name, string Title, string Detail, string Icon, Action Click)[] {
-                ("HomeCatalogueShortcut", "동료 기록", content == null ? "동료 자료 확인 중" : "전체 " + content.Battle.Characters.Count + "명의 동료", "nav_companions", OpenRoster),
-                ("HomeRecruitmentShortcut", "새로운 만남", "모집과 보유 기록", "nav_recruit", OpenRecruitment) };
-            float routeHeight = Math.Max(132, TouchUnits());
-            for (int n = 0; n < routes.Length; n++)
-            {
-                var route = routes[n];
-                var tile = Button(side, route.Name, "", 56, 232 + n * (routeHeight + 16), 280, routeHeight, route.Click, Line);
-                Glyph(tile.transform, route.Icon, 18, (routeHeight - 76) / 2, 76, Color.white);
-                Label(tile.transform, route.Title, 104, 24, 156, 40, 25, Ink, FontStyle.Bold);
-                Label(tile.transform, route.Detail, 106, 72, 154, 44, 17, Muted);
-            }
-            var identity = Box(side, "CompanionIdentity", 56, dockY - 184, 520, 168, Color.clear);
-            Shade(identity, "NameShade", 0, 0, 520, 168, new Color(0.025f, 0.035f, 0.07f, 0.85f), true);
-            Label(identity, "함께하는 동료", 0, 0, 330, 28, 18, Memory);
-            nameText = Label(identity, "", 0, 32, 340, 64, 46, Ink, FontStyle.Bold);
-            noteText = Label(identity, "", 0, 104, 340, 52, 20, Muted);
-            Button(identity, "NextCompanion", "교체", 356, 8, 128, 120, () => Show(index + 1), Line, 22);
-
-            var dock = Box(side, "HomeDock", 40, dockY, 1520, dockHeight, new Color(0.04f, 0.055f, 0.1f, 0.94f));
-            Box(dock, "DockRule", 0, 0, 1520, 2, new Color(Brass.r, Brass.g, Brass.b, 0.65f));
-            var entries = new (string Name, string Title, string Icon, Action Click)[] {
-                ("Home", "홈", "nav_home", ClosePanels),
-                ("OpenCompanions", "동료", "nav_companions", OpenRoster),
-                ("OpenRecruitment", "모집", "nav_recruit", OpenRecruitment),
-                ("OpenGrowth", "육성", "nav_companions", OpenGrowth),
-                ("BondStories", "인연", "nav_bond", () => OpenList("bond")),
-                ("Staging", "연출", "nav_moments", () => OpenList("staging")) };
-            for (int n = 0; n < entries.Length; n++)
-            {
-                var e = entries[n];
-                float step = 1496f / entries.Length;
-                var tab = Button(dock, e.Name, "", 12 + n * step, 0, step - 12, dockHeight, e.Click, Color.clear);
-                Glyph(tab.transform, e.Icon, 12, (dockHeight - 72) / 2, 72, Color.white);
-                Label(tab.transform, e.Title, 96, (dockHeight - 58) / 2, step - 116, 58, 27, n == 0 ? Brass : Ink, FontStyle.Bold, TextAnchor.MiddleLeft);
-            }
+            BuildHomeControls();
             modalShield = (RectTransform)Button(root, "ModalShield", "", 0, 0, 1600, 900, ClosePanels, new Color(0, 0, 0, 0.45f)).transform;
             var shieldNavigation = modalShield.GetComponent<Button>().navigation; shieldNavigation.mode = Navigation.Mode.None;
             modalShield.GetComponent<Button>().navigation = shieldNavigation; modalShield.gameObject.SetActive(false);
@@ -248,7 +174,137 @@ namespace MemoryForge.Client
             FitHome();
             // Entrance: the veil lifts, the side column slides in from the left.
             StartCoroutine(MemoryForgeUiMotion.Fade(veil, 1, 0, 0.45f));
-            StartCoroutine(MemoryForgeUiMotion.SlideIn(side, new Vector2(-120, 0), 0.45f));
+            StartCoroutine(MemoryForgeUiMotion.SlideIn((RectTransform)homeControls.transform, new Vector2(-120, 0), 0.45f));
+        }
+
+        // Rebuild only UI groups. The existing Moment player, stage, coroutine and session stay alive.
+        void BuildHomeControls()
+        {
+            layoutCalibration = MemoryForgeUiViewport.Calibration;
+            var side = Box(root, "LobbySide", 0, 0, 1600, 900, Color.clear);
+            var sideGroup = side.gameObject.AddComponent<CanvasGroup>();
+            homeControls = sideGroup;
+            if (!homeEventsBound)
+            {
+                homeEventsBound = true;
+                player.Started += _ => { MemoryForgeUiViewport.ArtIsland(stage); SetHomeInput(false); FadeMenu(homeControls, 0f, 0.25f); };
+                player.Finished += _ => { MemoryForgeUiViewport.ArtIsland(stage, -340); idleSince = Time.time; SetHomeInput(true); FadeMenu(homeControls, 1f, 0.3f); };
+            }
+            MemoryForgeUiViewport.BleedX(Shade(side, "TopShade", 0, 0, 1600, 180, new Color(0.025f, 0.035f, 0.07f, 0.8f), false));
+            homeRightShade = Shade(side, "RightShade", 1016, 0, 584, 900, new Color(0.025f, 0.035f, 0.07f, 0.88f), false);
+            Shade(side, "IdentityShade", 32, 24, 620, 150, new Color(0.025f, 0.035f, 0.07f, 0.8f), true);
+            var homeHeading = Label(side, "기억 공방", 56, 24, 480, 64, 42, Ink, FontStyle.Bold);
+            var homeSubtitle = Label(side, "동료와 다음 탐사를 준비해요.", 58, 112, 480, 64, 19, Muted);
+            homeSubtitle.rectTransform.anchoredPosition = new Vector2(homeSubtitle.rectTransform.anchoredPosition.x, -(24 + homeHeading.rectTransform.rect.height + 16));
+            Ornament(side, 58, 24 + homeHeading.rectTransform.rect.height + 16 + homeSubtitle.rectTransform.rect.height + 8, 310);
+            float utilitySize = Math.Max(112, TouchUnits());
+            UtilityButton(side, "OpenSettings", "설정", 1544 - utilitySize, utilitySize, () => Toggle(settingsPanel), true);
+            if (!Application.isMobilePlatform) UtilityButton(side, "QuitGame", "종료", 1520 - utilitySize * 2, utilitySize, Application.Quit, false);
+            var account = Box(side, "HomeAccount", 1040, 24, 224, Math.Max(160, utilitySize), Color.clear);
+            homeAccountText = Label(account, "계정 미연결\n모집에서 연결", 8, 8, 208, Math.Max(144, utilitySize - 16), 18, Muted, FontStyle.Normal, TextAnchor.MiddleCenter);
+
+            float dockHeight = Math.Max(120, TouchUnits()), dockY = 884 - dockHeight;
+            float entryHeight = Math.Max(144, TouchUnits()), entryY = Math.Min(632, dockY - entryHeight - 16);
+            float destinationY = Math.Max(224, utilitySize + 96), destinationHeight = entryY - destinationY - 16;
+            var destination = Box(side, "ExpeditionDestination", 1040, destinationY, 504, destinationHeight, Panel);
+            var map = SpriteAt("Art/Backgrounds/bg_zone1_map");
+            float mapHeight = Math.Max(80, Math.Min(120, destinationHeight - 312));
+            var vista = Box(destination, "DestinationArt", 0, 0, 504, mapHeight, Color.white);
+            vista.GetComponent<Image>().sprite = map;
+            vista.GetComponent<Image>().color = map == null ? Panel : new Color(0.75f, 0.8f, 0.85f);
+            Box(destination, "DestinationShade", 0, Math.Max(0, mapHeight - 92), 504, Math.Min(92, mapHeight), new Color(0.025f, 0.035f, 0.07f, 0.85f));
+            Box(destination, "BrassEdge", 0, 0, 4, destinationHeight, Brass);
+            var destinationTitle = Label(destination, "종탑 하층", 22, 12, 456, 64, 36, Ink, FontStyle.Bold);
+            float destinationTextY = 12 + destinationTitle.rectTransform.rect.height + 12;
+            var destinationDescription = Label(destination, "전투 · 사건 · 기억 탐사", 24, destinationTextY, 456, 1, 19, Muted);
+            destinationTextY += destinationDescription.rectTransform.rect.height + 12;
+            homePartyCaption = Label(destination, "연습 동행 3명", 24, destinationTextY, 456, 48, 18, Brass);
+            homePartyStrip = Box(destination, "HomePartyStrip", 24, destinationTextY + homePartyCaption.rectTransform.rect.height + 8, 456, 80, Color.clear);
+            for (int n = 0; n < PracticeParty.Count; n++)
+            {
+                string id = PracticeParty[n];
+                var slot = Box(homePartyStrip, "PreviewParty:" + id, n * 152, 0, 136, 80, new Color(0.04f, 0.055f, 0.1f, 0.9f));
+                var face = Box(slot, "Portrait", 4, 16, 48, 48, Color.white);
+                var art = SpriteAt("Art/Characters/char_" + id + "_sd") ?? Portrait(id);
+                face.GetComponent<Image>().sprite = art; CenterSprite(face);
+                if (art == null) face.GetComponent<Image>().color = Color.clear;
+                Label(slot, content?.Battle.Characters.FirstOrDefault(c => c.Id == id)?.Name ?? id, 56, 0, 76, 80, 18, Ink, FontStyle.Bold, TextAnchor.MiddleCenter);
+            }
+            var sortie = MainEntry(side, "StartExpedition", "출격", "탐사 준비", "nav_expedition", 1040, entryY, 504, entryHeight, OpenSortie);
+            sortie.anchorMin = new Vector2(sortie.anchorMin.x, 0); sortie.anchorMax = new Vector2(sortie.anchorMax.x, 0);
+            sortie.anchoredPosition = new Vector2(sortie.anchoredPosition.x, 900 - entryY);
+            destination.anchorMin = new Vector2(destination.anchorMin.x, 0); destination.anchorMax = new Vector2(destination.anchorMax.x, 1);
+            destination.sizeDelta = new Vector2(destination.sizeDelta.x, destinationHeight - 900);
+            Breathe(sortie);
+
+            var routes = new (string Name, string Title, string Detail, string Icon, Action Click)[] {
+                ("HomeCatalogueShortcut", "동료 기록", content == null ? "동료 자료 확인 중" : "전체 " + content.Battle.Characters.Count + "명의 동료", "nav_companions", OpenRoster),
+                ("HomeRecruitmentShortcut", "새로운 만남", "모집과 보유 기록", "nav_recruit", OpenRecruitment) };
+            float routeHeight = Math.Max(160, TouchUnits());
+            for (int n = 0; n < routes.Length; n++)
+            {
+                var route = routes[n];
+                var tile = Button(side, route.Name, "", 56, 208 + n * (routeHeight + 16), 416, routeHeight, route.Click, Line);
+                Glyph(tile.transform, route.Icon, 18, (routeHeight - 76) / 2, 76, Color.white);
+                Label(tile.transform, route.Title, 104, 24, 296, routeHeight - 48, 25, Ink, FontStyle.Bold, TextAnchor.MiddleLeft);
+            }
+            var identity = Box(side, "CompanionIdentity", 56, dockY - 208, 520, 192, Color.clear);
+            identity.anchorMin = new Vector2(identity.anchorMin.x, 0); identity.anchorMax = new Vector2(identity.anchorMax.x, 0);
+            identity.anchoredPosition = new Vector2(identity.anchoredPosition.x, 900 - (dockY - 208));
+            Shade(identity, "NameShade", 0, 0, 520, 192, new Color(0.025f, 0.035f, 0.07f, 0.85f), true);
+            nameText = Label(identity, "", 0, 8, 340, 96, 46, Ink, FontStyle.Bold);
+            noteText = Label(identity, "", 0, 112, 340, 64, 19, Muted);
+            Button(identity, "NextCompanion", "교체", 356, 8, 128, 120, () => Show(index + 1), Line, 22);
+
+            var dock = Box(side, "HomeDock", 40, dockY, 1520, dockHeight, new Color(0.04f, 0.055f, 0.1f, 0.94f));
+            Box(dock, "DockRule", 0, 0, 1520, 2, new Color(Brass.r, Brass.g, Brass.b, 0.65f));
+            var entries = new (string Name, string Title, string Icon, Action Click)[] {
+                ("Home", "홈", "nav_home", ClosePanels),
+                ("OpenCompanions", "동료", "nav_companions", OpenRoster),
+                ("OpenRecruitment", "모집", "nav_recruit", OpenRecruitment),
+                ("OpenGrowth", "육성", "nav_companions", OpenGrowth),
+                ("BondStories", "인연", "nav_bond", () => OpenList("bond")),
+                ("Staging", "연출", "nav_moments", () => OpenList("staging")) };
+            for (int n = 0; n < entries.Length; n++)
+            {
+                var e = entries[n];
+                float step = 1496f / entries.Length;
+                var tab = Button(dock, e.Name, "", 12 + n * step, 0, step - 12, dockHeight, e.Click, Color.clear);
+                var tabRect = (RectTransform)tab.transform; tabRect.anchorMin = new Vector2((float)n / entries.Length, 0); tabRect.anchorMax = new Vector2((float)(n + 1) / entries.Length, 1); tabRect.offsetMin = new Vector2(12, 0); tabRect.offsetMax = new Vector2(0, 0);
+                Glyph(tab.transform, e.Icon, 12, (dockHeight - 72) / 2, 72, Color.white);
+                Label(tab.transform, e.Title, 96, (dockHeight - 58) / 2, step - 116, 58, 27, n == 0 ? Brass : Ink, FontStyle.Bold, TextAnchor.MiddleLeft);
+            }
+        }
+
+        void ReflowLayout()
+        {
+            int sibling = homeControls.transform.GetSiblingIndex();
+            string companionName = nameText.text, companionNote = noteText.text;
+            var previous = homeControls.gameObject; string? returnNotice = previous.transform.Find("HomeNotice")?.GetComponentInChildren<Text>()?.text; previous.SetActive(false); Destroy(previous);
+            BuildHomeControls(); homeControls.transform.SetSiblingIndex(sibling);
+            nameText.text = companionName; noteText.text = companionNote;
+            MemoryForgeUiViewport.WholeText(nameText); MemoryForgeUiViewport.WholeText(noteText);
+            RefreshHomeAccount();
+            if (!string.IsNullOrEmpty(returnNotice)) ShowHomeNotice(returnNotice!);
+            if (player.Playing) homeControls.alpha = 0;
+            SetHomeInput(!player.Playing && !modalShield.gameObject.activeSelf);
+            player.ReflowControls();
+            if (listPanel.gameObject.activeSelf) BuildSceneList(sceneListKind);
+            if (rosterPanel.gameObject.activeSelf) RenderRoster();
+            if (detailPanel.gameObject.activeSelf) RenderDetails(detailCards);
+            if (recruitmentPanel.gameObject.activeSelf) { if (recruitmentSession == null && recruitmentPanel.GetComponentInChildren<InputField>() != null) ReflowRecruitmentConnection(); else RenderRecruitment(); }
+            if (recruitmentReveal.gameObject.activeSelf) ReflowRecruitmentReveal();
+            if (settingsPanel.gameObject.activeSelf)
+            {
+                var old = settingsPanel; int order = old.GetSiblingIndex(); old.gameObject.SetActive(false); Destroy(old.gameObject);
+                BuildSettings(); settingsPanel.SetSiblingIndex(order); settingsPanel.gameObject.SetActive(true);
+            }
+            if (recruitmentSession != null) RepaintAccountPanels();
+            else if (sortiePanel.gameObject.activeSelf)
+            {
+                int order = sortiePanel.GetSiblingIndex();
+                BuildSortie(); sortiePanel.SetSiblingIndex(order); sortiePanel.gameObject.SetActive(true);
+            }
         }
 
         // Exit to the expedition behind a short fade so the scene change is not a hard cut.
@@ -281,7 +337,7 @@ namespace MemoryForge.Client
 
         void UtilityButton(Transform parent, string name, string caption, float x, float size, Action click, bool settings)
         {
-            var button = Button(parent, name, "", x, 24, size, size + 36, click, Color.clear);
+            var button = Button(parent, name, "", x, 24, size, size + 96, click, Color.clear);
             var face = Box(button.transform, "Face", 0, 0, size, size, Hex("111b2a"));
             face.GetComponent<Image>().sprite = MemoryForgeExpeditionClient.Pill(0);
             button.targetGraphic = face.GetComponent<Image>();
@@ -291,13 +347,14 @@ namespace MemoryForge.Client
             {
                 var icon = Box(button.transform, "Power", (size - 44) / 2, (size - 44) / 2, 44, 44, Color.clear);
                 var arc = Box(icon, "Arc", 0, 0, 44, 44, Ink);
+                arc.anchorMin = arc.anchorMax = new Vector2(0, 1); arc.sizeDelta = new Vector2(44, 44);
                 arc.pivot = new Vector2(0.5f, 0.5f); arc.anchoredPosition = new Vector2(22, -22); arc.localRotation = Quaternion.Euler(0, 0, -32.4f);
                 var image = arc.GetComponent<Image>(); image.sprite = MemoryForgeExpeditionClient.Pill(3);
                 image.type = Image.Type.Filled; image.fillMethod = Image.FillMethod.Radial360;
                 image.fillOrigin = (int)Image.Origin360.Top; image.fillClockwise = true; image.fillAmount = 0.82f;
                 Box(icon, "Stem", 20, -2, 4, 24, Ink);
             }
-            Label(button.transform, caption, -8, size + 4, size + 16, 30, 19, Ink, FontStyle.Normal, TextAnchor.MiddleCenter);
+            Label(button.transform, caption, -8, size + 4, size + 16, 80, 22, Ink, FontStyle.Normal, TextAnchor.MiddleCenter);
         }
 
         // 출격: a framed glass band (the kit's ornate panel frame) lit brass from the left, its glyph in the kit's ready ring, the title,
@@ -310,8 +367,7 @@ namespace MemoryForge.Client
             var edge = r.gameObject.AddComponent<Outline>(); edge.effectColor = new Color(Brass.r, Brass.g, Brass.b, 0.55f); edge.effectDistance = new Vector2(1, -1);
             var ring = Kit(r, "Ring", "ui_portrait_ring_ready", Vector4.zero, 24, (h - 108) / 2, 108, 108, 160);
             Glyph(ring, icon, 12, 12, 84, Brass);
-            Label(r, title, 152, 22, w - 224, 70, 54, Ink, FontStyle.Bold);
-            Label(r, sub, 154, 96, w - 188, 34, 21, Brass);
+            Label(r, title, 152, 16, w - 224, h - 32, 54, Ink, FontStyle.Bold, TextAnchor.MiddleLeft);
             Label(r, "›", w - 70, (h - 90) / 2, 50, 90, 72, Brass, FontStyle.Bold, TextAnchor.MiddleCenter);
             return r;
         }
@@ -320,10 +376,11 @@ namespace MemoryForge.Client
         {
             var view = Box(parent, "MenuScroll", x, y, w, h, new Color(0, 0, 0, 0.001f)); view.GetComponent<Image>().raycastTarget = true;
             view.gameObject.AddComponent<RectMask2D>();
+            if (h >= 160) MemoryForgeUiViewport.StretchY(view, y, MemoryForgeUiViewport.ReferenceSize((RectTransform)parent).y - y - h);
             var content = Box(view, "Content", 0, 0, w, contentHeight, Color.clear);
+            content.anchorMin = new Vector2(0, 1); content.anchorMax = new Vector2(1, 1); content.pivot = new Vector2(0, 1); content.sizeDelta = new Vector2(0, contentHeight); content.anchoredPosition = Vector2.zero;
             var scroll = view.gameObject.AddComponent<ScrollRect>(); scroll.viewport = view; scroll.content = content; scroll.horizontal = false;
             scroll.movementType = ScrollRect.MovementType.Clamped;
-            if (contentHeight > h)
             {
                 var track = Box(view, "ScrollPosition", w - 10, 4, 6, h - 8, Line);
                 var handle = Box(track, "Handle", 0, 0, 6, h - 8, Brass);
@@ -402,9 +459,9 @@ namespace MemoryForge.Client
         // Preserve-aspect images use their pivot for alignment; center the sprite without moving its hit/layout rectangle.
         static void CenterSprite(RectTransform rect)
         {
-            Vector2 pivot = new Vector2(0.5f, 0.5f);
-            rect.anchoredPosition += Vector2.Scale(pivot - rect.pivot, rect.rect.size);
-            rect.pivot = pivot;
+            Vector3 corner = rect.TransformPoint(rect.rect.min);
+            rect.pivot = new Vector2(0.5f, 0.5f);
+            rect.position += corner - rect.TransformPoint(rect.rect.min);
             rect.GetComponent<Image>().preserveAspect = true;
         }
 
@@ -477,12 +534,13 @@ namespace MemoryForge.Client
 
         void FitHome()
         {
-            var canvas = root.GetComponentInParent<Canvas>();
-            var safe = Screen.safeArea;
-            if (canvas.scaleFactor <= 0 || safe.width <= 0 || safe.height <= 0) return;
-            float scale = Mathf.Min(safe.width / 1600f, safe.height / 900f) / canvas.scaleFactor;
-            root.localScale = Vector3.one * scale;
-            root.anchoredPosition = (safe.center - new Vector2(Screen.width, Screen.height) / 2) / canvas.scaleFactor;
+            MemoryForgeUiViewport.Fit(root, (RectTransform)root.GetComponentInParent<Canvas>().transform);
+            if (homeRightShade != null)
+            {
+                var metrics = MemoryForgeUiViewport.Current; var geometry = MemoryForgeUiViewport.Calculate(metrics, metrics.Pixels);
+                float right = Math.Max(0, geometry.Pixels.x - geometry.SafeRect.xMax) / geometry.PixelsPerUnit;
+                homeRightShade.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, -right, 584 + right);
+            }
         }
 
         void BuildRoster()
@@ -504,20 +562,23 @@ namespace MemoryForge.Client
         {
             ClearPanel(rosterPanel);
             var wall = Box(rosterPanel, "Workshop", 0, 0, 1600, 900, new Color(0.2f, 0.25f, 0.32f));
-            wall.GetComponent<Image>().sprite = SpriteAt("Art/Backgrounds/bg_workshop");
+            wall.GetComponent<Image>().sprite = SpriteAt("Art/Backgrounds/bg_workshop"); MemoryForgeUiViewport.Cover(wall.GetComponent<Image>());
             Box(rosterPanel, "CatalogueVeil", 0, 0, 1600, 900, new Color(0.035f, 0.05f, 0.09f, 0.83f));
-            Label(rosterPanel, "동료 기록", 56, 24, 700, 64, 42, Ink, FontStyle.Bold);
-            Label(rosterPanel, recruitmentSession?.RecruitmentNeedsRefresh == true ? "마지막 확인한 보유 정보예요. 모집에서 연결을 새로 확인해주세요." : "동료의 능력과 시작 카드를 살펴보세요.", 58, 100, 1080, 30, 21, Muted);
+            var rosterHeading = Label(rosterPanel, "동료 기록", 56, 24, 700, 64, 42, Ink, FontStyle.Bold);
+            var rosterSubtitle = Label(rosterPanel, recruitmentSession?.RecruitmentNeedsRefresh == true ? "마지막 확인한 보유 정보예요. 모집에서 연결을 새로 확인해주세요." : "동료의 능력과 시작 카드를 살펴보세요.", 58, 100, 1080, 30, 21, Muted);
             Button(rosterPanel, "CloseRoster", "홈", 1392, 24, 152, 112, ClosePanels, Line, 24);
-            float filterHeight = Math.Max(104, TouchUnits()), gridY = 160 + filterHeight, gridHeight = 820 - gridY;
-            Button(rosterPanel, "FilterAll", "전체 동료", 56, 144, 264, filterHeight, () => { catalogueFilter = "all"; RenderRoster(); }, catalogueFilter == "all" ? Brass : Panel, 24);
-            Button(rosterPanel, "FilterParty", "연습 편성", 336, 144, 264, filterHeight, () => { catalogueFilter = "party"; RenderRoster(); }, catalogueFilter == "party" ? Brass : Panel, 24);
-            Button(rosterPanel, "FilterOwned", "보유 동료", 616, 144, 264, filterHeight, () => { catalogueFilter = "owned"; RenderRoster(); }, catalogueFilter == "owned" ? Brass : Panel, 24);
+            float subtitleY = 24 + rosterHeading.rectTransform.rect.height + 12;
+            rosterSubtitle.rectTransform.anchoredPosition = new Vector2(rosterSubtitle.rectTransform.anchoredPosition.x, -subtitleY);
+            float filterY = subtitleY + rosterSubtitle.rectTransform.rect.height + 16;
+            float filterHeight = Math.Max(112, TouchUnits()), gridY = filterY + filterHeight + 24, gridHeight = 800 - gridY;
+            Button(rosterPanel, "FilterAll", "전체 동료", 56, filterY, 264, filterHeight, () => { catalogueFilter = "all"; RenderRoster(); }, catalogueFilter == "all" ? Brass : Panel, 24);
+            Button(rosterPanel, "FilterParty", "연습 편성", 336, filterY, 264, filterHeight, () => { catalogueFilter = "party"; RenderRoster(); }, catalogueFilter == "party" ? Brass : Panel, 24);
+            Button(rosterPanel, "FilterOwned", "보유 동료", 616, filterY, 264, filterHeight, () => { catalogueFilter = "owned"; RenderRoster(); }, catalogueFilter == "owned" ? Brass : Panel, 24);
             var owned = recruitmentSession?.Recruitment?.OwnedChars;
             var characters = content.Battle.Characters.Where(c => (catalogueFilter != "party" || PracticeParty.Contains(c.Id))
                 && (catalogueFilter != "owned" || owned != null && owned.ContainsKey(c.Id))).ToList();
-            Label(rosterPanel, characters.Count + "명의 동료", 1112, 192, 424, 40, 22, Muted, FontStyle.Normal, TextAnchor.MiddleRight);
-            float cellH = Math.Max(300, TouchUnits() * 2f + 24), total = (float)Math.Ceiling(characters.Count / 3f) * (cellH + 20);
+            Label(rosterPanel, characters.Count + "명의 동료", 1112, filterY + 24, 424, 56, 22, Muted, FontStyle.Normal, TextAnchor.MiddleRight);
+            float cellH = Math.Max(320, TouchUnits() * 2f + 24), footer = Math.Max(104, MemoryForgeUiViewport.FontSize(27) * 1.9f), total = (float)Math.Ceiling(characters.Count / 3f) * (cellH + 20) + 80;
             if (characters.Count == 0)
             {
                 Glyph(rosterPanel, "nav_companions", 432, gridY + 24, 176, Color.white);
@@ -529,11 +590,14 @@ namespace MemoryForge.Client
                 var grid = ScrollArea(rosterPanel, 56, gridY, 984, gridHeight, Math.Max(gridHeight, total));
                 for (int n = 0; n < characters.Count; n++)
                 {
-                    var c = characters[n]; float x = n % 3 * 328, y = n / 3 * (cellH + 20);
+                    var c = characters[n]; float x = n % 3 * 328, y = 16 + n / 3 * (cellH + 20);
                     var tile = Button(grid, "Companion:" + c.Id, "", x, y, 312, cellH, () => OpenDetails(c.Id), Color.clear);
+                    var tileRect = (RectTransform)tile.transform;
+                    tileRect.anchorMin = new Vector2((n % 3) / 3f, 1); tileRect.anchorMax = new Vector2((n % 3 + 1) / 3f, 1);
+                    tileRect.sizeDelta = new Vector2(-16, cellH); tileRect.anchoredPosition = new Vector2(0, -y);
                     Box(tile.transform, "CardBody", 0, 0, 312, cellH, new Color(0.09f, 0.12f, 0.19f, 0.96f));
                     var art = Portrait(c.Id);
-                    var portrait = Box(tile.transform, "Portrait", 4, 4, 304, cellH - 62, Color.white);
+                    var portrait = Box(tile.transform, "Portrait", 4, 4, 304, cellH - footer, Color.white);
                     portrait.GetComponent<Image>().sprite = art; CenterSprite(portrait);
                     if (art == null)
                     {
@@ -541,9 +605,9 @@ namespace MemoryForge.Client
                         Glyph(portrait, "nav_companions", 100, 28, 104, new Color(1, 1, 1, 0.65f));
                         Label(portrait, "일러스트 준비 중", 12, 150, 280, 40, 18, Muted, FontStyle.Normal, TextAnchor.MiddleCenter);
                     }
-                    Box(tile.transform, "ElementEdge", 0, cellH - 62, 312, 3, ElementColor(c.Attr));
-                    Label(tile.transform, c.Name, 16, cellH - 54, 186, 42, 27, Ink, FontStyle.Bold);
-                    Label(tile.transform, ElementName(c.Attr), 208, cellH - 52, 88, 40, 20, ElementColor(c.Attr), FontStyle.Normal, TextAnchor.MiddleRight);
+                    Box(tile.transform, "ElementEdge", 0, cellH - footer, 312, 3, ElementColor(c.Attr));
+                    Label(tile.transform, c.Name, 16, cellH - footer + 12, 186, footer - 24, 27, Ink, FontStyle.Bold);
+                    Label(tile.transform, ElementName(c.Attr), 208, cellH - footer + 12, 88, footer - 24, 20, ElementColor(c.Attr), FontStyle.Normal, TextAnchor.MiddleRight);
                     if (PracticeParty.Contains(c.Id)) Label(tile.transform, "편성", 12, 8, 84, 32, 18, Brass, FontStyle.Bold);
                     if (owned != null && owned.TryGetValue(c.Id, out int copies)) Label(tile.transform, "보유 · 공명 " + Math.Min(6, Math.Max(0, copies - 1)), 112, 8, 184, 32, 18, Memory, FontStyle.Bold, TextAnchor.MiddleRight);
                 }
@@ -554,8 +618,9 @@ namespace MemoryForge.Client
             float buttonHeight = Math.Max(104, TouchUnits()), infoHeight = Math.Max(64, gridHeight - buttonHeight - 32);
             float artHeight = Math.Max(88, Math.Min(184, infoHeight - 246));
             var info = ScrollArea(preview, 0, 0, 472, infoHeight, Math.Max(infoHeight, artHeight + 246));
-            Label(info, characters.Count == 0 ? "전체 도감 미리보기" : "동료 도감 미리보기", 24, 16, 424, 28, 18, Brass);
-            var previewArt = Box(info, "PreviewArt", 24, 52, 424, artHeight, Color.white);
+            var previewHeading = Label(info, characters.Count == 0 ? "전체 도감 미리보기" : "동료 도감 미리보기", 24, 16, 424, 28, 18, Brass);
+            float previewArtY = 16 + previewHeading.rectTransform.rect.height + 16;
+            var previewArt = Box(info, "PreviewArt", 24, previewArtY, 424, artHeight, Color.white);
             var previewSprite = SpriteAt("Art/Characters/char_" + previewCharacter.Id + "_sd") ?? Portrait(previewCharacter.Id);
             previewArt.GetComponent<Image>().sprite = previewSprite; CenterSprite(previewArt);
             if (previewSprite == null)
@@ -565,13 +630,15 @@ namespace MemoryForge.Client
                 Glyph(previewArt, "nav_companions", (424 - crest) / 2, 0, crest, Color.white);
                 Label(previewArt, "일러스트 준비 중", 0, artHeight - 32, 424, 32, 18, Muted, FontStyle.Normal, TextAnchor.MiddleCenter);
             }
-            Label(info, previewCharacter.Name, 24, artHeight + 64, 424, 46, 34, Ink, FontStyle.Bold);
+            float previewY = previewArtY + artHeight + 16;
+            var previewName = Label(info, previewCharacter.Name, 24, previewY, 424, 1, 34, Ink, FontStyle.Bold); previewY += previewName.rectTransform.rect.height + 12;
             string weapon = content.CharacterWeaponTypes.TryGetValue(previewCharacter.Id, out var type) ? WeaponName(type) : "무기 정보 없음";
-            Label(info, ElementName(previewCharacter.Attr) + "  /  " + weapon, 26, artHeight + 118, 420, 30, 21, ElementColor(previewCharacter.Attr));
-            Label(info, "고유 능력  " + previewCharacter.Passive.Name, 26, artHeight + 158, 420, 32, 20, Ink);
-            Label(info, "필살기  " + previewCharacter.Ult.Name, 26, artHeight + 198, 420, 32, 20, Memory);
+            var previewType = Label(info, ElementName(previewCharacter.Attr) + "  /  " + weapon, 26, previewY, 420, 1, 21, ElementColor(previewCharacter.Attr)); previewY += previewType.rectTransform.rect.height + 12;
+            var previewPassive = Label(info, "고유 능력  " + previewCharacter.Passive.Name, 26, previewY, 420, 1, 20, Ink); previewY += previewPassive.rectTransform.rect.height + 12;
+            var previewUltimate = Label(info, "필살기  " + previewCharacter.Ult.Name, 26, previewY, 420, 1, 20, Memory); previewY += previewUltimate.rectTransform.rect.height + 16;
+            info.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Math.Max(infoHeight, previewY));
             Button(preview, "PreviewCompanionDetails", "스킬과 카드 보기", 24, gridHeight - buttonHeight - 16, 424, buttonHeight, () => OpenDetails(previewCharacter.Id), Line, 23);
-            Label(rosterPanel, (total > gridHeight ? "위아래로 밀어 더 볼 수 있어요.  ·  " : "") + "연습 편성: " + PartyNames(), 58, 838, 1440, 38, 19, Muted);
+            Label(rosterPanel, (total > gridHeight ? "위아래로 밀어 더 볼 수 있어요.  ·  " : "") + "연습 편성: " + PartyNames(), 58, 812, 1440, 72, 19, Muted);
         }
 
         void OpenDetails(string id)
@@ -581,44 +648,49 @@ namespace MemoryForge.Client
 
         void RenderDetails(bool cards)
         {
+            detailCards = cards;
             ClearPanel(detailPanel);
             var c = content.Battle.Characters.Single(x => x.Id == detailId);
             var wall = Box(detailPanel, "Workshop", 0, 0, 1600, 900, new Color(0.3f, 0.35f, 0.42f));
-            wall.GetComponent<Image>().sprite = SpriteAt("Art/Backgrounds/bg_workshop");
+            wall.GetComponent<Image>().sprite = SpriteAt("Art/Backgrounds/bg_workshop"); MemoryForgeUiViewport.Cover(wall.GetComponent<Image>());
             Box(detailPanel, "DetailVeil", 0, 0, 1600, 900, new Color(0.035f, 0.05f, 0.09f, 0.65f));
             float buttonHeight = Math.Max(112, TouchUnits()), bodyY = 24 + buttonHeight + 16;
             float footerY = 884 - buttonHeight, bodyHeight = footerY - bodyY - 16;
             Button(detailPanel, "BackToRoster", "동료 목록", 56, 24, 240, buttonHeight, BackToRoster, Line, 24);
             Button(detailPanel, "CloseDetails", "홈", 1392, 24, 152, buttonHeight, ClosePanels, Line, 24);
             var portrait = Box(detailPanel, "CharacterArt", 88, bodyY, 600, bodyHeight, Color.white);
+            MemoryForgeUiViewport.StretchY(portrait, bodyY, 900 - bodyY - bodyHeight);
             portrait.GetComponent<Image>().sprite = Portrait(c.Id); CenterSprite(portrait);
             if (portrait.GetComponent<Image>().sprite == null) { portrait.GetComponent<Image>().color = Color.clear; Label(portrait, "그림 준비 중", 100, 250, 400, 60, 26, Muted, FontStyle.Normal, TextAnchor.MiddleCenter); }
             var paper = Box(detailPanel, "CharacterSheet", 740, bodyY, 804, bodyHeight, new Color(0.04f, 0.055f, 0.1f, 0.95f));
+            MemoryForgeUiViewport.StretchX(paper, 740, 56); MemoryForgeUiViewport.StretchY(paper, bodyY, 900 - bodyY - bodyHeight);
             Box(paper, "ElementEdge", 0, 0, 4, bodyHeight, ElementColor(c.Attr));
-            Label(paper, c.Name, 32, 20, 600, 70, 48, Ink, FontStyle.Bold);
+            var detailHeading = Label(paper, c.Name, 32, 20, 600, 70, 48, Ink, FontStyle.Bold);
             string weapon = content.CharacterWeaponTypes.TryGetValue(c.Id, out var type) ? WeaponName(type) : "무기 정보 없음";
-            Label(paper, ElementName(c.Attr) + "  /  " + weapon, 34, 98, 720, 44, 23, ElementColor(c?.Attr ?? ""));
-            float tabHeight = Math.Max(112, TouchUnits()), scrollY = 156 + tabHeight + 16;
-            Button(paper, "ShowCompanionSkills", "스킬", 32, 156, 350, tabHeight, () => RenderDetails(false), cards ? Panel : Brass, 24);
-            Button(paper, "ShowCompanionCards", "시작 고유 카드", 398, 156, 374, tabHeight, () => RenderDetails(true), cards ? Brass : Panel, 24);
+            float detailTypeY = 20 + detailHeading.rectTransform.rect.height + 12;
+            var detailType = Label(paper, ElementName(c.Attr) + "  /  " + weapon, 34, detailTypeY, 720, 44, 23, ElementColor(c?.Attr ?? ""));
+            float tabY = detailTypeY + detailType.rectTransform.rect.height + 16;
+            float tabHeight = Math.Max(112, TouchUnits()), scrollY = tabY + tabHeight + 16;
+            Button(paper, "ShowCompanionSkills", "스킬", 32, tabY, 350, tabHeight, () => RenderDetails(false), cards ? Panel : Brass, 24);
+            Button(paper, "ShowCompanionCards", "시작 고유 카드", 398, tabY, 374, tabHeight, () => RenderDetails(true), cards ? Brass : Panel, 24);
             var details = ScrollArea(paper, 32, scrollY, 740, bodyHeight - scrollY - 16, cards ? content.Battle.Cards.Count(x => x.Owner == c.Id && x.Start == true) * 170 : 360);
+            float textY = 0;
             if (cards)
             {
-                int n = 0;
                 foreach (var card in content.Battle.Cards.Where(x => x.Owner == c.Id && x.Start == true))
                 {
-                    Label(details, card.Name + "   ·   행동력 " + card.Cost, 0, n * 170, 708, 44, 25, Brass, FontStyle.Bold);
-                    Label(details, BattleText.Card(card, content.Battle), 0, n * 170 + 52, 708, 104, 23, Ink);
-                    n++;
+                    textY = FlowLabel(details, card.Name + "   ·   행동력 " + card.Cost, textY, 25, Brass, FontStyle.Bold);
+                    textY = FlowLabel(details, BattleText.Card(card, content.Battle), textY, 23, Ink) + 16;
                 }
             }
             else
             {
-                Label(details, "고유 능력  /  " + c.Passive.Name, 0, 0, 708, 44, 25, Brass, FontStyle.Bold);
-                Label(details, c.Passive.Text, 0, 54, 708, 100, 23, Ink);
-                Label(details, "필살기  /  " + c.Ult.Name, 0, 168, 708, 44, 25, Memory, FontStyle.Bold);
-                Label(details, c.Ult.Text, 0, 224, 708, 112, 23, Ink);
+                textY = FlowLabel(details, "고유 능력  /  " + c.Passive.Name, textY, 25, Brass, FontStyle.Bold);
+                textY = FlowLabel(details, c.Passive.Text, textY, 23, Ink) + 16;
+                textY = FlowLabel(details, "필살기  /  " + c.Ult.Name, textY, 25, Memory, FontStyle.Bold);
+                textY = FlowLabel(details, c.Ult.Text, textY, 23, Ink);
             }
+            details.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Math.Max(((RectTransform)details.parent).rect.height, textY + 16));
             int homeIndex = companions.FindIndex(x => x.Id == c.Id);
             var use = Button(detailPanel, "UseAsLobby", homeIndex < 0 ? "홈 일러스트 준비 중" : "홈에 함께하기", 128, footerY, 500, buttonHeight,
                 () => { ClosePanels(); Show(homeIndex); }, Brass, 27);
@@ -627,6 +699,12 @@ namespace MemoryForge.Client
             if (owned != null) Button(detailPanel, "GrowOwnedCompanion", "성장 · 장비 공방", 752, footerY, 776, buttonHeight, () => OpenEquipmentFor(c.Id), Line, 27)
                 .interactable = !accountBusy && !growthBusy && !recruitmentBusy;
             else Label(detailPanel, "동료 도감 정보 · 보유 동료는 성장 공방에서 육성할 수 있어요.", 752, footerY + 10, 776, buttonHeight - 20, 20, Muted);
+        }
+
+        float FlowLabel(RectTransform parent, string value, float y, int size, Color color, FontStyle style = FontStyle.Normal)
+        {
+            var text = Label(parent, value, 0, y, Math.Max(1, MemoryForgeUiViewport.ReferenceSize(parent).x - 32), 1, size, color, style);
+            return y + text.rectTransform.rect.height + 14;
         }
 
         Sprite? Portrait(string id)
@@ -653,7 +731,7 @@ namespace MemoryForge.Client
             else ClearPanel(sortiePanel);
             accountSortieDrawn = false;
             var wall = Box(sortiePanel, "Workshop", 0, 0, 1600, 900, new Color(0.18f, 0.23f, 0.3f));
-            wall.GetComponent<Image>().sprite = SpriteAt("Art/Backgrounds/bg_workshop");
+            wall.GetComponent<Image>().sprite = SpriteAt("Art/Backgrounds/bg_workshop"); MemoryForgeUiViewport.Cover(wall.GetComponent<Image>());
             Box(sortiePanel, "PreparationVeil", 0, 0, 1600, 900, new Color(0.025f, 0.04f, 0.075f, 0.83f));
             Label(sortiePanel, "탐사 준비", 56, 28, 900, 64, 42, Ink, FontStyle.Bold);
             Label(sortiePanel, "길이를 고르고, 함께 출발할 동료를 확인하세요.", 58, 108, 1100, 36, 21, Muted);
@@ -705,23 +783,30 @@ namespace MemoryForge.Client
         void BuildSettings()
         {
             float tall = Application.isMobilePlatform ? 280 : 420;
-            settingsPanel = Box(root, "SettingsPanel", 1012, 148, 532, tall, new Color(0.04f, 0.06f, 0.11f, 0.95f));
+            settingsPanel = Box(root, "SettingsPanel", 1012, 148, 532, tall, Panel);
             Kit(settingsPanel, "Frame", "ui_panel_frame", new Vector4(48, 48, 48, 48), 0, 0, 532, tall, 128);
-            Label(settingsPanel, "설정", 24, 18, 300, 44, 28, Ink, FontStyle.Bold);
-            Button(settingsPanel, "CloseSettings", "닫기", 384, 8, 124, 112, ClosePanels, Line, 22);
+            var settingsHeading = Label(settingsPanel, "설정", 24, 18, 300, 88, 36, Ink, FontStyle.Bold);
+            float closeWidth = Math.Max(124, TouchUnits());
+            Button(settingsPanel, "CloseSettings", "닫기", 532 - 24 - closeWidth, 8, closeWidth, 112, ClosePanels, Line, 22);
             Text? motionLabel = null;
-            var motionToggle = Button(settingsPanel, "ReduceMotion", "", 24, 136, 484, 120, () => { MemoryForgeUiMotion.Reduced = !MemoryForgeUiMotion.Reduced; motionLabel!.text = MotionCaption(); }, Panel, 20);
-            motionLabel = Label(motionToggle.transform, MotionCaption(), 12, 24, 460, 72, 20, Ink, FontStyle.Normal, TextAnchor.MiddleCenter);
+            float rowHeight = Math.Max(160, TouchUnits()), motionY = Math.Max(136, 18 + settingsHeading.rectTransform.rect.height + 16);
+            var motionToggle = Button(settingsPanel, "ReduceMotion", "", 24, motionY, 484, rowHeight, () => { MemoryForgeUiMotion.Reduced = !MemoryForgeUiMotion.Reduced; motionLabel!.text = MotionCaption(); }, Panel, 20);
+            motionLabel = Label(motionToggle.transform, MotionCaption(), 12, 24, 460, rowHeight - 48, 20, Ink, FontStyle.Normal, TextAnchor.MiddleCenter);
+            float nextY = motionY + Math.Max(rowHeight, motionLabel.rectTransform.rect.height + 48) + 16;
+            ((RectTransform)motionToggle.transform).SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, nextY - motionY - 16);
             if (!Application.isMobilePlatform)
             {
                 Text? windowLabel = null;
-                var window = Button(settingsPanel, "WindowMode", "", 24, 276, 484, 120, () =>
+                var window = Button(settingsPanel, "WindowMode", "", 24, nextY, 484, rowHeight, () =>
                 {
                     Screen.fullScreenMode = Screen.fullScreenMode == FullScreenMode.Windowed ? FullScreenMode.FullScreenWindow : FullScreenMode.Windowed;
                     windowLabel!.text = WindowCaption(Screen.fullScreenMode != FullScreenMode.Windowed);
                 }, Panel, 20);
-                windowLabel = Label(window.transform, WindowCaption(Screen.fullScreenMode != FullScreenMode.Windowed), 12, 24, 460, 72, 20, Ink, FontStyle.Normal, TextAnchor.MiddleCenter);
+                windowLabel = Label(window.transform, WindowCaption(Screen.fullScreenMode != FullScreenMode.Windowed), 12, 24, 460, rowHeight - 48, 20, Ink, FontStyle.Normal, TextAnchor.MiddleCenter);
+                float windowHeight = Math.Max(rowHeight, windowLabel.rectTransform.rect.height + 48);
+                ((RectTransform)window.transform).SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, nextY, windowHeight); nextY += windowHeight + 16;
             }
+            settingsPanel.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Math.Max(tall, nextY + 16));
             settingsPanel.gameObject.SetActive(false);
         }
         // The caption shows the state the press switches to's opposite: the current mode.
@@ -809,6 +894,15 @@ namespace MemoryForge.Client
         void OpenList(string which)
         {
             player.Stop(); ClosePanels();
+            sceneListKind = which; BuildSceneList(which);
+            ShowPanel(listPanel);
+            var group = listPanel.GetComponent<CanvasGroup>(); if (group == null) group = listPanel.gameObject.AddComponent<CanvasGroup>();
+            StartCoroutine(MemoryForgeUiMotion.Fade(group, 0, 1, 0.2f));
+            StartCoroutine(MemoryForgeUiMotion.SlideIn(listPanel, new Vector2(0, -24), 0.2f));
+        }
+
+        void BuildSceneList(string which)
+        {
             ClearPanel(listPanel);
             var m = Current?.Moments;
             var scenes = m == null ? new List<MomentScene>() : m.Scenes.Where(s => which == "bond" ? s.Kind == "bond" : s.Kind == "entry" || s.Kind == "victory" || s.Kind == "skin").ToList();
@@ -821,15 +915,16 @@ namespace MemoryForge.Client
             foreach (var s in scenes)
             {
                 var row = Button(rows, "Scene:" + s.Id, "", 0, y, 672, rowHeight, () => Play(s), Panel);
-                Label(row.transform, s.Title.Length == 0 ? s.Id : s.Title, 18, 14, 636, 38, 24, Ink, FontStyle.Bold);
-                Label(row.transform, Condition(s), 18, 70, 636, 30, 18, Memory);
-                y += pitch;
+                var title = Label(row.transform, s.Title.Length == 0 ? s.Id : s.Title, 18, 14, 636, 38, 24, Ink, FontStyle.Bold);
+                float conditionY = Math.Max(70, 14 + title.rectTransform.rect.height + 12);
+                var condition = Label(row.transform, Condition(s), 18, conditionY, 636, 30, 18, Memory);
+                condition.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, conditionY, condition.rectTransform.rect.height);
+                float height = Math.Max(rowHeight, conditionY + condition.rectTransform.rect.height + 16);
+                ((RectTransform)row.transform).SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, y, height);
+                y += height + 12;
             }
+            rows.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Math.Max(552, y));
             foreach (var b in listPanel.GetComponentsInChildren<Button>(true)) if (b.GetComponent<UiPress>() == null) b.gameObject.AddComponent<UiPress>();
-            ShowPanel(listPanel);
-            var group = listPanel.GetComponent<CanvasGroup>(); if (group == null) group = listPanel.gameObject.AddComponent<CanvasGroup>();
-            StartCoroutine(MemoryForgeUiMotion.Fade(group, 0, 1, 0.2f));
-            StartCoroutine(MemoryForgeUiMotion.SlideIn(listPanel, new Vector2(0, -24), 0.2f));
         }
 
         static string MotionCaption() => "움직임 줄이기: " + (MemoryForgeUiMotion.Reduced ? "켬" : "끔");
@@ -858,22 +953,25 @@ namespace MemoryForge.Client
         static RectTransform Box(Transform parent, string name, float x, float y, float width, float height, Color color)
         {
             var obj = new GameObject(name, typeof(RectTransform), typeof(Image)); obj.transform.SetParent(parent, false);
-            var r = (RectTransform)obj.transform; r.anchorMin = r.anchorMax = new Vector2(0, 1); r.pivot = new Vector2(0, 1); r.anchoredPosition = new Vector2(x, -y); r.sizeDelta = new Vector2(width, height);
-            var image = obj.GetComponent<Image>(); image.color = color; image.raycastTarget = false; return r;
+            var r = (RectTransform)obj.transform; r.anchorMin = r.anchorMax = new Vector2(0, 1); r.pivot = new Vector2(0, 1); r.anchoredPosition = new Vector2(x, -y); r.sizeDelta = new Vector2(width, height); MemoryForgeUiViewport.Anchor(r, x, y, width, height);
+            var image = obj.GetComponent<Image>(); image.color = color; image.raycastTarget = false;
+            if (width == 1600 && height == 900 && MemoryForgeUiViewport.IsDim(name)) MemoryForgeUiViewport.BleedDim(image);
+            if (width == 1600 && height == 900 && (name.Contains("Workshop") || name.Contains("Backdrop") || name.EndsWith("Veil", StringComparison.Ordinal) || name.EndsWith("Shade", StringComparison.Ordinal) || name == "Shade")) MemoryForgeUiViewport.Bleed(r);
+            return r;
         }
         Text Label(Transform parent, string value, float x, float y, float width, float height, int size, Color color, FontStyle style = FontStyle.Normal, TextAnchor align = TextAnchor.UpperLeft)
         {
             var obj = new GameObject("Text", typeof(RectTransform), typeof(Text)); obj.transform.SetParent(parent, false);
-            var r = (RectTransform)obj.transform; r.anchorMin = r.anchorMax = new Vector2(0, 1); r.pivot = new Vector2(0, 1); r.anchoredPosition = new Vector2(x, -y); r.sizeDelta = new Vector2(width, height);
+            var r = (RectTransform)obj.transform; r.anchorMin = r.anchorMax = new Vector2(0, 1); r.pivot = new Vector2(0, 1); r.anchoredPosition = new Vector2(x, -y); r.sizeDelta = new Vector2(width, height); MemoryForgeUiViewport.Anchor(r, x, y, width, height);
             var text = obj.GetComponent<Text>(); text.font = font; text.text = value; text.fontSize = size; text.color = color; text.fontStyle = style; text.alignment = align; text.raycastTarget = false;
             text.horizontalOverflow = HorizontalWrapMode.Wrap; text.verticalOverflow = VerticalWrapMode.Truncate;
-            text.resizeTextForBestFit = true; text.resizeTextMinSize = Math.Max(14, (int)(size * 0.7f)); text.resizeTextMaxSize = size; return text;
+            MemoryForgeUiViewport.WholeText(text); return text;
         }
         Button Button(Transform parent, string name, string caption, float x, float y, float width, float height, Action click, Color color, int size = 24)
         {
             float touch = TouchUnits(); width = Math.Max(width, touch); height = Math.Max(height, touch);
             var r = Box(parent, name, x, y, width, height, color); var image = r.GetComponent<Image>(); image.raycastTarget = true;
-            Pill(image, color, height);
+            if (name != "ModalShield") Pill(image, color, height);
             var button = r.gameObject.AddComponent<Button>(); button.targetGraphic = image;
             if (name != "FigureTap" && name != "ModalShield") r.gameObject.AddComponent<UiPress>();
             button.onClick.AddListener(() => { if (button != null && button.IsActive() && button.IsInteractable()) click(); });
@@ -893,9 +991,7 @@ namespace MemoryForge.Client
         static float TouchUnits()
         {
             if (MemoryForgeExpeditionClient.TouchOverride.HasValue) return MemoryForgeExpeditionClient.TouchOverride.Value;
-            if (!Application.isMobilePlatform || Screen.dpi <= 0) return 0;
-            float scale = Mathf.Min(Screen.safeArea.width / 1600f, Screen.safeArea.height / 900f);
-            return scale <= 0 ? 0 : 48f * Screen.dpi / 160f / scale;
+            return MemoryForgeUiViewport.TouchUnits();
         }
         static Color Hex(string hex) { ColorUtility.TryParseHtmlString("#" + hex, out var color); return color; }
     }

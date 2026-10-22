@@ -120,7 +120,7 @@ namespace MemoryForge.Client
             var summary = Snapshot?.Run?.Support; var view = SupportQueryView;
             Label(shield, "지원 · " + (view?.Source.Name ?? CharacterName(summary?.CharId)), 56, 24, 1000, 64, 38, Brass);
             Label(shield, "전투당 1회 · 호출자의 개인 게이지 100 사용 · 출전 인원은 그대로예요.", 56, 104, 1220, 48, 23, Memory);
-            float height = Math.Max(144, MemoryForgeExpeditionClient.TouchOverride ?? 0), pitch = height + 16;
+            float height = Math.Max(144, MemoryForgeExpeditionClient.TouchUnits()), pitch = height + 16;
             var actors = Battle() is JObject battle ? Actors(battle) : new List<JObject>();
             float width = 1488f / Math.Max(1, actors.Count);
             for (int i = 0; i < actors.Count; i++)
@@ -161,7 +161,7 @@ namespace MemoryForge.Client
                 if (SupportCandidates().Count == 0) y = Flow(body, SupportReason(view.ChoicesBlocked ?? view.ChoicesError ?? "PICK_INVALID"), y, 24, Danger);
             }
             if (session?.State.Pending != null) y = Flow(body, "다른 미확정 요청이 남아 있어 실행 확인은 잠겨 있어요. 창을 닫고 같은 요청 확인을 먼저 진행해주세요.", y, 24, Danger);
-            y = Flow(body, notice, y, 22, noticeError ? Danger : Memory); body.sizeDelta = new Vector2(1488, Math.Max(344, y + 32));
+            y = Flow(body, notice, y, 22, noticeError ? Danger : Memory); body.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Math.Max(344, y + 32));
             Button(shield, "CancelRunSupport", "취소 · 돌아가기", 56, 728, 704, height, CancelSupport, Line, 28).interactable = !busy;
             Button(shield, "ConfirmRunSupport", "지원 실행 · 게이지 100", 840, 728, 704, height, () => Launch(ConfirmSupportAsync), Brass, 28).interactable = CanConfirmSupport;
         }

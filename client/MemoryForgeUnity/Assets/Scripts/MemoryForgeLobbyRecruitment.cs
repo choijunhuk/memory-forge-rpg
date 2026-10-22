@@ -18,6 +18,7 @@ namespace MemoryForge.Client
         string recruitmentNotice = "", recruitmentBanner = "standard";
         bool recruitmentBusy, revealSkipped, recruitmentRevealing;
         Coroutine? revealRoutine;
+        Action? revealLayout;
         Text? recruitmentDockLabel;
         IReadOnlyList<RecruitmentPull>? revealedResults;
         RecruitmentReceipt? latestRecruitmentReceipt;
@@ -48,11 +49,11 @@ namespace MemoryForge.Client
         {
             ClearPanel(recruitmentPanel);
             var wall = Box(recruitmentPanel, "RecruitmentWorkshop", 0, 0, 1600, 900, new Color(0.22f, 0.26f, 0.35f));
-            wall.GetComponent<Image>().sprite = SpriteAt("Art/Backgrounds/bg_workshop");
+            wall.GetComponent<Image>().sprite = SpriteAt("Art/Backgrounds/bg_workshop"); MemoryForgeUiViewport.Cover(wall.GetComponent<Image>());
             Box(recruitmentPanel, "RecruitmentVeil", 0, 0, 1600, 900, new Color(0.025f, 0.035f, 0.07f, 0.76f));
             Glyph(recruitmentPanel, "nav_recruit", 36, 12, 112, Color.white);
-            Label(recruitmentPanel, "모집", 152, 28, 300, 76, 44, Ink, FontStyle.Bold);
-            var subtitle = Label(recruitmentPanel, "공방의 문 너머, 새로운 인연", 154, 106, 650, 42, 22, Muted);
+            var recruitmentHeading = Label(recruitmentPanel, "모집", 152, 28, 300, 76, 44, Ink, FontStyle.Bold); recruitmentHeading.name = "RecruitmentHeading";
+            var subtitle = Label(recruitmentPanel, "공방의 문 너머, 새로운 인연", 154, 28 + recruitmentHeading.rectTransform.rect.height + 16, 650, 42, 22, Muted); subtitle.name = "RecruitmentSubtitle";
             Button(recruitmentPanel, "CloseRecruitment", "홈", 1392, 24, 152, 112, ClosePanels, Line, 24);
             var snapshot = recruitmentSession?.Recruitment;
             if (snapshot == null)
@@ -60,41 +61,47 @@ namespace MemoryForge.Client
                 RenderRecruitmentConnection(); return;
             }
             subtitle.text = "";
-            Label(recruitmentPanel, "개발 계정 · " + snapshot.AccountId, 816, 30, 540, 40, 19, Memory, FontStyle.Normal, TextAnchor.MiddleRight);
-            Label(recruitmentPanel, (recruitmentSession!.RecruitmentNeedsRefresh ? "마지막 확인 · " : "") + "결정 " + (snapshot.FreeCrystals + snapshot.PaidCrystals) + "   ·   상시 티켓 " + snapshot.Tickets["standardTicket"], 750, 82, 604, 44, 24, Brass, FontStyle.Bold, TextAnchor.MiddleRight);
+            var accountCaption = Label(recruitmentPanel, "개발 계정 · " + snapshot.AccountId, 816, 30, 540, 40, 19, Memory, FontStyle.Normal, TextAnchor.MiddleRight);
+            var balanceCaption = Label(recruitmentPanel, (recruitmentSession!.RecruitmentNeedsRefresh ? "마지막 확인 · " : "") + "결정 " + (snapshot.FreeCrystals + snapshot.PaidCrystals) + "   ·   상시 티켓 " + snapshot.Tickets["standardTicket"], 750, 30 + accountCaption.rectTransform.rect.height + 16, 604, 44, 24, Brass, FontStyle.Bold, TextAnchor.MiddleRight);
             var banner = snapshot.Banners.FirstOrDefault(x => x.Id == recruitmentBanner) ?? snapshot.Banners.FirstOrDefault();
             if (banner == null) { Label(recruitmentPanel, "현재 모집할 수 있는 배너가 없어요.", 360, 360, 880, 100, 30, Ink); return; }
             recruitmentBanner = banner.Id;
             var art = Box(recruitmentPanel, "RecruitmentBannerArt", 24, 106, 800, 680, Color.white);
             art.GetComponent<Image>().sprite = Portrait("sera"); art.GetComponent<Image>().preserveAspect = true;
             if (art.GetComponent<Image>().sprite == null) art.GetComponent<Image>().color = Color.clear;
-            Shade(recruitmentPanel, "RecruitmentBannerShade", 56, 570, 740, 160, new Color(0.03f, 0.04f, 0.075f, 0.97f), false);
-            Label(recruitmentPanel, banner.Name, 82, 592, 680, 68, 40, Ink, FontStyle.Bold);
-            Label(recruitmentPanel, "상시 SSR 동료가 같은 확률로 등장합니다.", 84, 670, 676, 42, 22, Muted);
-            float tabWidth = Math.Min(304, 640f / snapshot.Banners.Count);
+            Shade(recruitmentPanel, "RecruitmentBannerShade", 56, 536, 740, 200, new Color(0.03f, 0.04f, 0.075f, 0.97f), false);
+            var bannerHeading = Label(recruitmentPanel, banner.Name, 82, 544, 680, 68, 40, Ink, FontStyle.Bold);
+            Label(recruitmentPanel, "상시 SSR 동료 동일 확률", 84, 544 + bannerHeading.rectTransform.rect.height + 12, 676, 56, 22, Muted);
+            float tabWidth = Math.Min(304, 640f / snapshot.Banners.Count), tabHeight = Math.Max(112, TouchUnits());
+            float tabY = Math.Max(176, 30 + accountCaption.rectTransform.rect.height + 16 + balanceCaption.rectTransform.rect.height + 16);
             for (int i = 0; i < snapshot.Banners.Count; i++)
             {
                 var b = snapshot.Banners[i];
-                var tab = Button(recruitmentPanel, "Banner:" + b.Id, b.Kind == "beginner" ? "첫 공방" : "상시 모집", 856 + i * (tabWidth + 12), 176, tabWidth, 112,
+                var tab = Button(recruitmentPanel, "Banner:" + b.Id, b.Kind == "beginner" ? "첫 공방" : "상시 모집", 856 + i * (tabWidth + 12), tabY, tabWidth, tabHeight,
                     () => { recruitmentBanner = b.Id; RenderRecruitment(); }, b.Id == banner.Id ? Brass : Panel, 26);
                 tab.interactable = !recruitmentBusy;
             }
             var pity = snapshot.Pity[banner.Kind];
-            Label(recruitmentPanel, "다음 만남을 향한 기록", 872, 318, 620, 42, 24, Memory, FontStyle.Bold);
+            float termsTop = tabY + tabHeight + 16, termsHeight = Math.Max(80, 584 - termsTop);
+            var terms = ScrollArea(recruitmentPanel, 856, termsTop, 688, termsHeight, termsHeight);
+            float termsY = FlowLabel(terms, "다음 만남을 향한 기록", 0, 24, Memory, FontStyle.Bold);
             int maxPulls = banner.Curve.MaxPulls ?? banner.Curve.Hard;
             string guarantee = banner.Kind != "beginner" ? "SSR 확정까지 최대 " + (banner.Curve.Hard - pity.N) + "회"
                 : pity.Done || pity.Total >= maxPulls ? "첫 공방 모집 완료"
                 : pity.GotSsr ? "SSR 획득 완료 · 남은 " + (maxPulls - pity.Total) + "회"
                 : "SSR 1명 확정까지 최대 " + (maxPulls - pity.Total) + "회";
-            Label(recruitmentPanel, guarantee, 872, 378, 620, 64, 34, Ink, FontStyle.Bold);
+            termsY = FlowLabel(terms, guarantee, termsY, 34, Ink, FontStyle.Bold);
             string rule = banner.Kind == "beginner" ? "10회 전용 · 최대 " + maxPulls + "회\n10회당 상시 티켓 " + banner.TenPullTickets + "장 상당" : "1회당 티켓 1장 또는 결정 " + banner.CostPerPull;
             var standard = snapshot.Pity["standard"];
             if (banner.Kind == "standard" && banner.Curve.SelectorAt is int selectorAt && selectorAt > 0 && standard.Total >= selectorAt && !standard.SelectorUsed)
-                Button(recruitmentPanel, "OpenRecruitmentSelector", "SSR 동료 선택", 872, 456, 640, 112, () => ShowRecruitmentSelector(banner, snapshot.Revision), Brass, 28).interactable = CanRecruitmentAct();
-            else Label(recruitmentPanel, rule + "\n티켓 우선 사용 · 부족분은 무료 결정부터 사용", 874, 458, 620, 112, 22, Muted);
+                Button(terms, "OpenRecruitmentSelector", "SSR 동료 선택", 0, termsY, 640, 112, () => ShowRecruitmentSelector(banner, snapshot.Revision), Brass, 28).interactable = CanRecruitmentAct();
+            else termsY = FlowLabel(terms, rule + "\n티켓 우선 사용 · 부족분은 무료 결정부터 사용", termsY, 22, Muted);
+            terms.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Math.Max(termsHeight, termsY + 24));
             var one = Button(recruitmentPanel, "RecruitOne", "1회 모집", 856, 600, 300, 120, () => ConfirmRecruitment(banner, 1), Line, 27);
+            var oneRect = (RectTransform)one.transform; oneRect.anchorMin = new Vector2(oneRect.anchorMin.x, 0); oneRect.anchorMax = new Vector2(oneRect.anchorMax.x, 0); oneRect.anchoredPosition = new Vector2(oneRect.anchoredPosition.x, 300);
             one.interactable = CanRecruitmentAct() && banner.Kind != "beginner";
             var ten = Button(recruitmentPanel, "RecruitTen", "10회 모집", 1176, 600, 368, 120, () => ConfirmRecruitment(banner, 10), Brass, 30);
+            var tenRect = (RectTransform)ten.transform; tenRect.anchorMin = new Vector2(tenRect.anchorMin.x, 0); tenRect.anchorMax = new Vector2(tenRect.anchorMax.x, 0); tenRect.anchoredPosition = new Vector2(tenRect.anchoredPosition.x, 300);
             ten.interactable = CanRecruitmentAct() && !pity.Done && (banner.Kind != "beginner" || pity.Total < maxPulls);
             if (!snapshot.LaunchClaimed)
                 Button(recruitmentPanel, "ClaimRecruitmentLaunch", "런칭 선물 받기", 56, 752, 340, 120, () => BeginRecruitmentAction("launch"), Brass, 26).interactable = CanRecruitmentAct();
@@ -143,6 +150,7 @@ namespace MemoryForge.Client
 
         void ShowRecruitmentRates(RecruitmentBanner banner)
         {
+            revealLayout = () => ShowRecruitmentRates(banner);
             ClearPanel(recruitmentReveal);
             RecruitmentBackdrop();
             Label(recruitmentReveal, "모집 확률과 구성", 56, 28, 1200, 76, 40, Brass, FontStyle.Bold);
@@ -198,10 +206,10 @@ namespace MemoryForge.Client
 
         void RenderRecruitmentConnection()
         {
-            Label(recruitmentPanel, "공방 연결", 560, 192, 600, 64, 36, Ink, FontStyle.Bold);
-            Label(recruitmentPanel, "현재 모집은 인증된 개발 서버에 연결해 사용할 수 있어요.\n보유 동료와 결과는 서버에 저장됩니다.", 560, 250, 920, 64, 24, Muted);
+            var connectionHeading = Label(recruitmentPanel, "공방 연결", 560, 176, 600, 64, 36, Ink, FontStyle.Bold); connectionHeading.name = "ConnectionHeading";
+            var connectionIntro = Label(recruitmentPanel, "현재 모집은 인증된 개발 서버에 연결해 사용할 수 있어요.\n보유 동료와 결과는 서버에 저장됩니다.", 560, 250, 920, 64, 24, Muted); connectionIntro.name = "ConnectionIntro";
             float inputHeight = Math.Max(108, TouchUnits()), step = inputHeight + 24;
-            var form = ScrollArea(recruitmentPanel, 180, 362, 1200, 510, step * 3 + 136);
+            var form = ScrollArea(recruitmentPanel, 180, 362, 1200, 510, step * 3 + 136); form.name = "ConnectionForm";
             Label(form, "서버 주소", 20, 24, 320, 50, 24, Brass);
             var endpoint = RecruitmentInput(form, "RecruitmentEndpoint", PlayerPrefs.GetString("mf.account.endpoint", "http://127.0.0.1:5287"), 380, 0, inputHeight, false);
             Label(form, "개발 계정", 20, step + 24, 320, 50, 24, Brass);
@@ -228,12 +236,43 @@ namespace MemoryForge.Client
             }, Brass, 28);
 #if !UNITY_EDITOR && !DEVELOPMENT_BUILD
             connect.interactable = false;
-            Label(recruitmentPanel, "상용 계정 연결은 아직 준비 중이에요.", 560, 320, 920, 36, 22, Memory);
+            var connectionNotice = Label(recruitmentPanel, "상용 계정 연결은 아직 준비 중이에요.", 560, 320, 920, 36, 22, Memory); connectionNotice.name = "ConnectionNotice";
 #else
             connect.interactable = !recruitmentBusy;
-            Label(recruitmentPanel, recruitmentBusy ? "연결을 확인하고 있어요…" : recruitmentNotice, 560, 320, 940, 36, 20, Memory);
+            var connectionNotice = Label(recruitmentPanel, recruitmentBusy ? "연결을 확인하고 있어요…" : recruitmentNotice, 560, 320, 940, 36, 20, Memory); connectionNotice.name = "ConnectionNotice";
 #endif
+            ReflowRecruitmentConnection();
             FocusRecruitment(recruitmentPanel);
+        }
+
+        void ReflowRecruitmentConnection()
+        {
+            var heading = recruitmentPanel.Find("ConnectionHeading")?.GetComponent<Text>();
+            var intro = recruitmentPanel.Find("ConnectionIntro")?.GetComponent<Text>();
+            var notice = recruitmentPanel.Find("ConnectionNotice")?.GetComponent<Text>();
+            var form = recruitmentPanel.GetComponentsInChildren<RectTransform>().FirstOrDefault(item => item.name == "ConnectionForm");
+            if (heading == null || intro == null || notice == null || form == null) return;
+            MemoryForgeUiViewport.WholeText(heading); MemoryForgeUiViewport.WholeText(intro); MemoryForgeUiViewport.WholeText(notice);
+            var welcome = recruitmentPanel.Find("RecruitmentSubtitle")?.GetComponent<Text>();
+            if (welcome != null) MemoryForgeUiViewport.WholeText(welcome);
+            float headingY = Math.Max(176, welcome == null ? 176 : -welcome.rectTransform.anchoredPosition.y + welcome.rectTransform.rect.height + 24);
+            heading.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, headingY, heading.rectTransform.rect.height);
+            float y = headingY + heading.rectTransform.rect.height + 16;
+            intro.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, y, intro.rectTransform.rect.height); y += intro.rectTransform.rect.height + 12;
+            notice.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, y, Math.Max(64, notice.rectTransform.rect.height)); y += Math.Max(64, notice.rectTransform.rect.height) + 16;
+            var viewport = (RectTransform)form.parent; MemoryForgeUiViewport.StretchY(viewport, y, 28);
+            float height = Math.Max(112, TouchUnits()), step = height + 24;
+            string[] fields = { "RecruitmentEndpoint", "RecruitmentAccount", "RecruitmentCredential" }, captions = { "서버 주소", "개발 계정", "접속 키" };
+            for (int index = 0; index < fields.Length; index++)
+            {
+                var input = form.Find(fields[index]) as RectTransform;
+                if (input != null) input.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, index * step, height);
+                var caption = form.GetComponentsInChildren<Text>().FirstOrDefault(text => text.transform.parent == form && text.text == captions[index]);
+                if (caption != null) caption.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, index * step + 16, caption.rectTransform.rect.height);
+            }
+            var connect = form.Find("ConnectRecruitment") as RectTransform;
+            if (connect != null) connect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, step * 3, Math.Max(120, TouchUnits()));
+            form.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, step * 3 + Math.Max(120, TouchUnits()) + 24);
         }
 
         InputField RecruitmentInput(Transform parent, string name, string initial, float x, float y, float height, bool password)
@@ -293,6 +332,7 @@ namespace MemoryForge.Client
 
         void ConfirmRecruitment(RecruitmentBanner banner, int count)
         {
+            revealLayout = () => ConfirmRecruitment(banner, count);
             if (!CanRecruitmentAct()) return;
             var snapshot = recruitmentSession!.Recruitment!;
             int tickets = snapshot.Tickets[banner.Ticket];
@@ -314,6 +354,7 @@ namespace MemoryForge.Client
 
         void ShowRecruitmentSelector(RecruitmentBanner banner, long revision)
         {
+            revealLayout = () => ShowRecruitmentSelector(banner, revision);
             ClearPanel(recruitmentReveal); RecruitmentBackdrop();
             Label(recruitmentReveal, "함께할 SSR 동료를 선택하세요", 80, 36, 1220, 84, 40, Brass, FontStyle.Bold);
             Button(recruitmentReveal, "CloseRecruitmentSelector", "돌아가기", 1240, 24, 304, 120, OpenRecruitment, Line, 24);
@@ -321,20 +362,23 @@ namespace MemoryForge.Client
             {
                 string id = banner.SsrPool[i];
                 string name = content.Battle.Characters.FirstOrDefault(c => c.Id == id)?.Name ?? id;
-                var choice = Button(recruitmentReveal, "RecruitmentSelector:" + id, "", 80 + i % 2 * 740, 190 + i / 2 * 264, 700, 240, () =>
-                {
-                    ClearPanel(recruitmentReveal); RecruitmentBackdrop();
-                    Label(recruitmentReveal, "선택할 동료: " + name + "\nSSR 선택은 계정당 한 번만 받을 수 있어요.", 320, 260, 960, 180, 36, Ink, FontStyle.Normal, TextAnchor.MiddleCenter);
-                    Button(recruitmentReveal, "CancelRecruitmentSelector", "돌아가기", 360, 626, 400, 120, () => ShowRecruitmentSelector(banner, revision), Line, 28);
-                    Button(recruitmentReveal, "ConfirmRecruitmentSelector", "선택 확정", 840, 626, 400, 120, () => BeginRecruitmentAction("selector", charId: id, expectedRevision: revision), Brass, 30);
-                    FocusRecruitment(recruitmentReveal);
-                }, Panel);
+                var choice = Button(recruitmentReveal, "RecruitmentSelector:" + id, "", 80 + i % 2 * 740, 190 + i / 2 * 264, 700, 240, () => ShowRecruitmentSelectorChoice(banner, revision, id, name), Panel);
                 var art = Box(choice.transform, "SelectorPortrait", 20, 12, 180, 216, Color.white);
                 art.GetComponent<Image>().sprite = Portrait(id); art.GetComponent<Image>().preserveAspect = true;
                 if (art.GetComponent<Image>().sprite == null) art.GetComponent<Image>().color = Color.clear;
                 Label(choice.transform, name, 236, 84, 432, 72, 40, Ink, FontStyle.Bold);
             }
             ShowPanel(recruitmentReveal);
+        }
+
+        void ShowRecruitmentSelectorChoice(RecruitmentBanner banner, long revision, string id, string name)
+        {
+            revealLayout = () => ShowRecruitmentSelectorChoice(banner, revision, id, name);
+            ClearPanel(recruitmentReveal); RecruitmentBackdrop();
+            Label(recruitmentReveal, "선택할 동료: " + name + "\nSSR 선택은 계정당 한 번만 받을 수 있어요.", 320, 260, 960, 180, 36, Ink, FontStyle.Normal, TextAnchor.MiddleCenter);
+            Button(recruitmentReveal, "CancelRecruitmentSelector", "돌아가기", 360, 626, 400, 120, () => ShowRecruitmentSelector(banner, revision), Line, 28);
+            Button(recruitmentReveal, "ConfirmRecruitmentSelector", "선택 확정", 840, 626, 400, 120, () => BeginRecruitmentAction("selector", charId: id, expectedRevision: revision), Brass, 30);
+            FocusRecruitment(recruitmentReveal);
         }
 
         void BeginPreviousRunRetry()
@@ -502,6 +546,19 @@ namespace MemoryForge.Client
             RenderRecruitmentResults();
         }
 
+        void ReflowRecruitmentReveal()
+        {
+            if (!recruitmentRevealing) { revealLayout?.Invoke(); return; }
+            // Keep the active animation/audio. Its two skip controls are independent bottom/top bands.
+            foreach (var button in recruitmentReveal.GetComponentsInChildren<Button>())
+            {
+                var rect = (RectTransform)button.transform; float height = Math.Max(rect.rect.height, TouchUnits());
+                rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
+                if (button.name == "SkipRecruitmentArrival") { rect.anchorMin = new Vector2(rect.anchorMin.x, 0); rect.anchorMax = new Vector2(rect.anchorMax.x, 0); rect.anchoredPosition = new Vector2(rect.anchoredPosition.x, height + 16); }
+                foreach (var text in button.GetComponentsInChildren<Text>()) MemoryForgeUiViewport.WholeText(text);
+            }
+        }
+
         void FinishRecruitmentReveal()
         {
             if (recruitmentRevealing) { revealSkipped = true; return; }
@@ -510,6 +567,7 @@ namespace MemoryForge.Client
 
         void RenderRecruitmentResults()
         {
+            revealLayout = RenderRecruitmentResults;
             var results = revealedResults;
             if (results == null) return;
             ClearPanel(recruitmentReveal);
@@ -523,6 +581,7 @@ namespace MemoryForge.Client
                 var result = results[i]; float x = startX + i % 5 * 296, y = 202 + i / 5 * 250;
                 Color rarity = result.Rarity == "SSR" ? Brass : result.Rarity == "SR" ? Hex("bca2f3") : Memory;
                 var tile = Box(recruitmentReveal, "RecruitmentResult:" + i, x, y, cellW, 230, Panel);
+                tile.anchorMin = new Vector2((i % 5) / 5f, 1); tile.anchorMax = new Vector2((i % 5 + 1) / 5f, 1); tile.sizeDelta = new Vector2(-32, 230); tile.anchoredPosition = new Vector2(16, -y);
                 Kit(tile, "ResultFrame", "ui_panel_frame", new Vector4(48, 48, 48, 48), 0, 0, cellW, 230, 128);
                 Box(tile, "RarityEdge", 0, 0, cellW, 3, rarity);
                 var picture = Box(tile, "ResultArt", 12, 12, 112, 156, Color.white);
@@ -542,7 +601,7 @@ namespace MemoryForge.Client
         void RecruitmentBackdrop()
         {
             var wall = Box(recruitmentReveal, "ResultWorkshop", 0, 0, 1600, 900, new Color(0.25f, 0.3f, 0.4f));
-            wall.GetComponent<Image>().sprite = SpriteAt("Art/Backgrounds/bg_workshop");
+            wall.GetComponent<Image>().sprite = SpriteAt("Art/Backgrounds/bg_workshop"); MemoryForgeUiViewport.Cover(wall.GetComponent<Image>());
             Shade(recruitmentReveal, "ResultShade", 0, 0, 1600, 900, new Color(0.025f, 0.035f, 0.07f, 0.94f), false);
         }
 

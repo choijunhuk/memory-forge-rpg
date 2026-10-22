@@ -113,8 +113,10 @@ namespace MemoryForge.Client.Tests
             Assert.AreEqual("fig_b", player.CurrentFigure);
             Assert.AreEqual(2.6f, player.transform.Find("MomentStage/MomentCamera").localScale.x, 0.01f, "close shot frames the face");
             Assert.IsNotNull(player.transform.Find("MomentStage/MomentCamera/Figure/Overlay:o"));
-            var backdrop = player.transform.Find("MomentStage/Backdrop").GetComponent<Image>();
+            var backdrop = player.transform.Find("Backdrop").GetComponent<Image>();
             Assert.IsTrue(backdrop.enabled && backdrop.sprite == null, "a requested background that does not exist shows an empty stage");
+            Assert.IsFalse(backdrop.GetComponentsInChildren<Image>(true).Any(image => image != backdrop && image.gameObject.activeInHierarchy && image.enabled && image.sprite != null),
+                "missing background cannot leave active stale art in the player-owned full-bleed backdrop");
 
             // Beat 0 has no line: in tap mode it waits for a tap after its (zero) hold.
             for (int i = 0; i < 3; i++) yield return null;

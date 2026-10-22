@@ -12,6 +12,8 @@ namespace MemoryForge.Client
     public sealed partial class MemoryForgeLobbyClient
     {
         RectTransform equipmentPanel = null!;
+        float equipmentBodyY = 360, equipmentActionY = 416;
+        float EquipmentBodyHeight => Math.Max(160, 868 - equipmentBodyY);
         string equipmentTab = "characters", equipmentCharacter = "", equipmentWeapon = "", equipmentNotice = "";
         string? equipmentKind, equipmentTarget;
         JObject equipmentIntent = new JObject();
@@ -49,12 +51,18 @@ namespace MemoryForge.Client
         {
             ClearPanel(equipmentPanel);
             var backdrop = Box(equipmentPanel, "EquipmentWorkshopArt", 0, 0, 1600, 900, Color.white);
-            backdrop.GetComponent<Image>().sprite = SpriteAt("Art/Backgrounds/bg_workshop");
+            backdrop.GetComponent<Image>().sprite = SpriteAt("Art/Backgrounds/bg_workshop"); MemoryForgeUiViewport.Cover(backdrop.GetComponent<Image>());
             Box(equipmentPanel, "EquipmentWorkshopVeil", 0, 0, 1600, 900, new Color(0.025f, 0.04f, 0.075f, 0.86f));
-            Label(equipmentPanel, supportConfirmation ? "지원 설정 확인" : equipmentKind != null ? "변경 내용 확인" : equipmentTab == "support" ? "지원 파트너" : "장비 공방", 56, 24, 1240, 64, 42, Brass, FontStyle.Bold);
+            var equipmentHeading = Label(equipmentPanel, supportConfirmation ? "지원 설정 확인" : equipmentKind != null ? "변경 내용 확인" : equipmentTab == "support" ? "지원 파트너" : "장비 공방", 56, 24, 1240, 64, 42, Brass, FontStyle.Bold);
             Button(equipmentPanel, "CloseEquipment", "홈", 1392, 24, 152, Math.Max(112, TouchUnits()), ClosePanels, Line, 24).interactable = EquipmentIdle;
-            Label(equipmentPanel, growthBusy ? "서버에서 확인하고 있어요…" : equipmentNotice.Length > 0 ? equipmentNotice
-                : "성장 항목을 고르면 필요한 재료를 먼저 보여줘요. 목록을 위아래로 넘겨 확인하세요.", 58, 108, 1260, 64, 22, Memory);
+            float noticeY = 24 + equipmentHeading.rectTransform.rect.height + 16;
+            var noticeBody = ScrollArea(equipmentPanel, 58, noticeY, 1260, 144, 144);
+            var equipmentMessage = Label(noticeBody, growthBusy ? "서버에서 확인하고 있어요…" : equipmentNotice.Length > 0 ? equipmentNotice
+                : "선택한 성장에 필요한 재료를 먼저 확인하세요.", 0, 0, 1228, 1, 22, Memory);
+            float noticeHeight = Math.Min(144, Math.Max(64, equipmentMessage.rectTransform.rect.height));
+            ((RectTransform)noticeBody.parent).SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, noticeHeight);
+            noticeBody.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Math.Max(noticeHeight, equipmentMessage.rectTransform.rect.height));
+            equipmentBodyY = noticeY + noticeHeight + 16;
             var profile = AccountProgression;
             if (profile == null)
             {
@@ -81,12 +89,16 @@ namespace MemoryForge.Client
             }
             if (equipmentKind != null) { RenderEquipmentPreview(); return; }
             string[] tabs = { "characters", "weapons", "shop", "support" }, names = { "동료 성장", "보유 무기", "보스 교환소", "지원 파트너" };
-            float height = Math.Max(120, TouchUnits());
+            float height = Math.Max(120, TouchUnits()), tabsY = equipmentBodyY; equipmentBodyY += height + 32;
             for (int n = 0; n < tabs.Length; n++)
             {
                 string tab = tabs[n];
-                Button(equipmentPanel, "EquipmentTab:" + tab, names[n], 56 + n * 376, 196, 360, height,
-                    () => { equipmentTab = tab; EquipmentClearPreview(); RenderEquipment(); }, tab == equipmentTab ? Brass : Line, 28).interactable = EquipmentIdle;
+                var tabButton = Button(equipmentPanel, "EquipmentTab:" + tab, names[n], 56 + n * 376, tabsY, 360, height,
+                    () => { equipmentTab = tab; EquipmentClearPreview(); RenderEquipment(); }, tab == equipmentTab ? Brass : Line, 28);
+                tabButton.interactable = EquipmentIdle;
+                var tabRect = (RectTransform)tabButton.transform;
+                tabRect.anchorMin = new Vector2(n / 4f, 1); tabRect.anchorMax = new Vector2((n + 1) / 4f, 1);
+                tabRect.offsetMin = new Vector2(56 - n * 24, -tabsY - height); tabRect.offsetMax = new Vector2(16 - n * 24, -tabsY);
             }
             if (equipmentTab == "characters") RenderEquipmentCharacters();
             else if (equipmentTab == "weapons") RenderEquipmentWeapons();
@@ -100,36 +112,38 @@ namespace MemoryForge.Client
             var selected = rows.FirstOrDefault(c => c.CharId == equipmentCharacter) ?? rows.FirstOrDefault();
             if (selected == null) { Label(equipmentPanel, "보유한 동료가 없어요. 첫 기억을 완료하거나 모집 기록을 확인해주세요.", 96, 400, 1408, 152, 30, Ink); return; }
             equipmentCharacter = selected.CharId;
-            float height = Math.Max(144, TouchUnits()), pitch = height + 16;
-            var list = ScrollArea(equipmentPanel, 56, 360, 440, 508, Math.Max(508, rows.Count * pitch));
+            float height = Math.Max(192, Math.Max(TouchUnits(), MemoryForgeUiViewport.FontSize(25) * 3.4f + 32)), pitch = height + 16;
+            var list = ScrollArea(equipmentPanel, 56, equipmentBodyY, 440, EquipmentBodyHeight, Math.Max(EquipmentBodyHeight, rows.Count * pitch));
             for (int n = 0; n < rows.Count; n++)
             {
                 var row = rows[n]; string id = row.CharId;
                 Button(list, "EquipmentCharacter:" + id, EquipmentCharacterName(id) + "\nLv." + row.Level + " · 승급 " + row.Asc, 0, n * pitch, 424, height,
                     () => { equipmentCharacter = id; RenderEquipment(); }, id == selected.CharId ? Brass : Line, 25).interactable = EquipmentIdle;
             }
-            var body = ScrollArea(equipmentPanel, 520, 360, 1024, 508, 352 + 3 * pitch + 32);
-            Label(body, EquipmentCharacterName(selected.CharId), 16, 0, 712, 56, 34, Brass, FontStyle.Bold);
+            var body = ScrollArea(equipmentPanel, 520, equipmentBodyY, 1024, EquipmentBodyHeight, 416 + 3 * pitch + 32);
+            var characterHeading = Label(body, EquipmentCharacterName(selected.CharId), 16, 0, 712, 56, 34, Brass, FontStyle.Bold);
             var figure = Box(body, "EquipmentPortrait", 776, 0, 216, 304, Color.white); figure.GetComponent<Image>().sprite = Portrait(selected.CharId); CenterSprite(figure);
             if (figure.GetComponent<Image>().sprite == null) figure.GetComponent<Image>().color = Color.clear;
-            Label(body, "Lv." + selected.Level + (selected.Cap.HasValue ? "/" + selected.Cap : "") + "  ·  승급 " + selected.Asc + "  ·  공명 " + selected.Res
+            var characterStats = Label(body, "Lv." + selected.Level + (selected.Cap.HasValue ? "/" + selected.Cap : "") + "  ·  승급 " + selected.Asc + "  ·  공명 " + selected.Res
                 + "\n고유 카드 " + selected.SkillLv + (selected.EffectiveSkillLv.HasValue ? " (적용 " + selected.EffectiveSkillLv + ")" : "")
                 + "  /  필살기 " + selected.UltLv + (selected.EffectiveUltLv.HasValue ? " (적용 " + selected.EffectiveUltLv + ")" : "")
                 + "\n갑주 " + EquipmentGear(selected.Armor) + "  ·  장신구 " + EquipmentGear(selected.Accessory)
-                + "\n무기  " + EquipmentWeaponName(selected.WeaponInstanceId) + "\n" + EquipmentStats(selected.Stats), 16, 72, 728, 240, 25, Ink);
+                + "\n무기  " + EquipmentWeaponName(selected.WeaponInstanceId) + "\n" + EquipmentStats(selected.Stats), 16, characterHeading.rectTransform.rect.height + 16, 728, 240, 25, Ink);
+            equipmentActionY = Math.Max(416, characterHeading.rectTransform.rect.height + 16 + characterStats.rectTransform.rect.height + 24);
+            body.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, equipmentActionY + 3 * pitch + 32);
             EquipmentAction(body, 0, "CharacterAscend", "승급 확인", "characterAscend", selected.CharId);
             EquipmentAction(body, 1, "CardSkill", "고유 카드 스킬 확인", "skillUp", selected.CharId, new JObject { ["line"] = "card" });
             EquipmentAction(body, 2, "UltSkill", "필살기 스킬 확인", "skillUp", selected.CharId, new JObject { ["line"] = "ult" });
             EquipmentAction(body, 3, "Armor", selected.Armor.HasValue ? "갑주 강화 확인" : "갑주 제작 확인", selected.Armor.HasValue ? "gearEnhance" : "gearCraft", selected.CharId, new JObject { ["slot"] = "armor" });
             EquipmentAction(body, 4, "Accessory", selected.Accessory.HasValue ? "장신구 강화 확인" : "장신구 제작 확인", selected.Accessory.HasValue ? "gearEnhance" : "gearCraft", selected.CharId, new JObject { ["slot"] = "accessory" });
-            Button(body, "EquipmentCharacterLevel", "동료 레벨업", 512, 352 + 2 * pitch, 496, height,
+            Button(body, "EquipmentCharacterLevel", "동료 레벨업", 512, equipmentActionY + 2 * pitch, 496, height,
                 () => OpenCharacterLevel(selected.CharId), Line, 25).interactable = EquipmentReady;
         }
 
         void EquipmentAction(RectTransform body, int index, string name, string caption, string kind, string? target, JObject? intent = null)
         {
-            float height = Math.Max(144, TouchUnits());
-            Button(body, "EquipmentAction:" + name, caption, index % 2 * 512, 352 + index / 2 * (height + 16), 496, height,
+            float height = Math.Max(192, Math.Max(TouchUnits(), MemoryForgeUiViewport.FontSize(25) * 3.4f + 32));
+            Button(body, "EquipmentAction:" + name, caption, index % 2 * 512, equipmentActionY + index / 2 * (height + 16), 496, height,
                 () => EquipmentReadPreview(kind, target, intent ?? new JObject()), Line, 25).interactable = EquipmentReady;
         }
 
@@ -139,33 +153,37 @@ namespace MemoryForge.Client
             var selected = rows.FirstOrDefault(w => w.InstanceId == equipmentWeapon) ?? rows.FirstOrDefault();
             if (selected == null) { Label(equipmentPanel, "보유한 무기가 없어요. 첫 기억의 기본 지급과 실제 모집 기록을 확인해주세요.", 96, 400, 1408, 152, 30, Ink); return; }
             equipmentWeapon = selected.InstanceId;
-            float height = Math.Max(144, TouchUnits()), pitch = height + 16;
-            var list = ScrollArea(equipmentPanel, 56, 360, 440, 508, Math.Max(508, rows.Count * pitch));
+            float height = Math.Max(192, Math.Max(TouchUnits(), MemoryForgeUiViewport.FontSize(25) * 3.4f + 32)), pitch = height + 16;
+            var list = ScrollArea(equipmentPanel, 56, equipmentBodyY, 440, EquipmentBodyHeight, Math.Max(EquipmentBodyHeight, rows.Count * pitch));
             for (int n = 0; n < rows.Count; n++)
             {
                 var row = rows[n]; string id = row.InstanceId;
                 Button(list, "EquipmentWeapon:" + id, EquipmentWeaponName(id) + "\nLv." + row.Level + " · 정련 " + row.Refine, 0, n * pitch, 424, height,
                     () => { equipmentWeapon = id; RenderEquipment(); }, id == selected.InstanceId ? Brass : Line, 23).interactable = EquipmentIdle;
             }
-            var body = ScrollArea(equipmentPanel, 520, 360, 1024, 508, 784 + (profile.Characters.Count + 1) / 2 * pitch);
-            Label(body, EquipmentWeaponName(selected.InstanceId), 16, 0, 976, 64, 34, Brass, FontStyle.Bold);
-            Label(body, (selected.Rarity ?? "") + "  ·  " + EquipmentType(selected.Type) + "\nLv." + selected.Level + (selected.Cap.HasValue ? "/" + selected.Cap : "")
+            var body = ScrollArea(equipmentPanel, 520, equipmentBodyY, 1024, EquipmentBodyHeight, 848 + (profile.Characters.Count + 1) / 2 * pitch);
+            var weaponHeading = Label(body, EquipmentWeaponName(selected.InstanceId), 16, 0, 976, 64, 34, Brass, FontStyle.Bold);
+            var weaponStats = Label(body, (selected.Rarity ?? "") + "  ·  " + EquipmentType(selected.Type) + "\nLv." + selected.Level + (selected.Cap.HasValue ? "/" + selected.Cap : "")
                 + "  ·  승급 " + selected.Asc + "  ·  정련 " + selected.Refine + "\n장착 동료  " + EquipmentCharacterName(selected.EquippedBy)
                 + "\n" + (selected.RefineMode == "copy" ? "같은 무기의 중복 획득으로 정련이 반영돼요." : "기본 R 무기는 제련핵으로 정련해요.")
-                + "\n장착을 바꿔도 진행 중인 탐사의 출발 기록은 유지돼요.", 16, 88, 976, 224, 26, Ink);
+                + "\n장착을 바꿔도 진행 중인 탐사의 출발 기록은 유지돼요.", 16, weaponHeading.rectTransform.rect.height + 16, 976, 224, 26, Ink);
+            equipmentActionY = Math.Max(416, weaponHeading.rectTransform.rect.height + 16 + weaponStats.rectTransform.rect.height + 24);
             EquipmentAction(body, 0, "WeaponLevel", selected.Level >= 60 ? "레벨 상한" : "다음 레벨 확인", "weaponLevelUp", selected.InstanceId, new JObject { ["targetLevel"] = selected.Level + 1 });
             body.Find("EquipmentAction:WeaponLevel").GetComponent<Button>().interactable &= selected.Level < 60;
             EquipmentAction(body, 1, "WeaponAscend", "무기 승급 확인", "weaponAscend", selected.InstanceId);
             EquipmentAction(body, 2, "WeaponRefine", selected.RefineMode == "copy" ? "중복 획득으로 자동 정련" : "정련 확인", "weaponRefine", selected.InstanceId);
             body.Find("EquipmentAction:WeaponRefine").GetComponent<Button>().interactable &= selected.RefineMode != "copy";
             if (selected.EquippedBy != null) EquipmentAction(body, 3, "Unequip", "장착 해제 확인", "weaponEquip", selected.InstanceId, new JObject { ["charId"] = JValue.CreateNull() });
-            Label(body, "장착할 보유 동료 · 무기 종류와 교체 결과는 서버에서 먼저 확인해요.", 16, 704, 976, 56, 24, Memory);
+            float equipY = equipmentActionY + 2 * pitch + 24;
+            var equipCaption = Label(body, "장착할 보유 동료 · 무기 종류와 교체 결과는 서버에서 먼저 확인해요.", 16, equipY, 976, 64, 24, Memory);
+            equipY += equipCaption.rectTransform.rect.height + 16;
             for (int n = 0; n < profile.Characters.Count; n++)
             {
                 var character = profile.Characters[n]; string id = character.CharId;
-                Button(body, "EquipmentEquip:" + id, EquipmentCharacterName(id) + "에게 장착 확인", n % 2 * 512, 784 + n / 2 * pitch, 496, height,
+                Button(body, "EquipmentEquip:" + id, EquipmentCharacterName(id) + "에게 장착 확인", n % 2 * 512, equipY + n / 2 * pitch, 496, height,
                     () => EquipmentReadPreview("weaponEquip", selected.InstanceId, new JObject { ["charId"] = id }), Line, 25).interactable = EquipmentReady;
             }
+            body.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, equipY + (profile.Characters.Count + 1) / 2 * pitch + 24);
         }
 
         void RenderEquipmentShop()
@@ -177,8 +195,8 @@ namespace MemoryForge.Client
                 Button(equipmentPanel, "RefreshEquipmentShop", "계정 새로고침", 480, 632, 640, Math.Max(120, TouchUnits()), StartAccountProfileRefresh, Brass, 28).interactable = EquipmentIdle; return;
             }
             long? tokens = profile.Resources != null && profile.Resources.TryGetValue("boss_token", out var amount) ? amount : (long?)null;
-            float height = Math.Max(144, TouchUnits()), pitch = height + 64;
-            var body = ScrollArea(equipmentPanel, 56, 360, 1488, 508, 96 + shop.Items.Count * pitch);
+            float height = Math.Max(192, Math.Max(TouchUnits(), MemoryForgeUiViewport.FontSize(25) * 3.4f + 32)), pitch = height + 64;
+            var body = ScrollArea(equipmentPanel, 56, equipmentBodyY, 1488, EquipmentBodyHeight, 96 + shop.Items.Count * pitch);
             Label(body, "보스 토큰 " + (tokens.HasValue ? tokens.ToString() : "확인 필요") + "  ·  주간 기준 " + shop.WeekKey, 16, 0, 1440, 64, 27, Memory);
             for (int n = 0; n < shop.Items.Count; n++)
             {
@@ -212,8 +230,8 @@ namespace MemoryForge.Client
 
         void RenderEquipmentPreview()
         {
-            var profile = AccountProgression!; var preview = equipmentPreview; float height = Math.Max(144, TouchUnits());
-            var body = ScrollArea(equipmentPanel, 56, 196, 1488, 484, 1200);
+            var profile = AccountProgression!; var preview = equipmentPreview; float height = Math.Max(192, Math.Max(TouchUnits(), MemoryForgeUiViewport.FontSize(25) * 3.4f + 32));
+            var body = ScrollArea(equipmentPanel, 56, equipmentBodyY, 1488, Math.Max(160, 680 - equipmentBodyY), 1200);
             Label(body, EquipmentActionName(equipmentKind!, equipmentIntent), 24, 16, 1440, 64, 34, Brass, FontStyle.Bold);
             string details = preview == null ? "서버가 허용한 변경 내역을 아직 확인하지 못했어요.\n" + equipmentNotice : EquipmentChange(preview);
             Label(body, details, 24, 104, 1440, 300, 28, Ink);
@@ -230,7 +248,7 @@ namespace MemoryForge.Client
                 if (!preview.CanCommit) { Label(body, EquipmentReason(preview.Code), 24, y, 1440, 112, 28, Memory); y += 128; }
             }
             Label(body, "새 출격에는 변경한 성장이 반영돼요. 이미 시작한 탐사는 출발 당시 상태를 유지해요.", 24, y + 16, 1440, 112, 25, Muted);
-            body.sizeDelta = new Vector2(body.sizeDelta.x, Math.Max(484, y + 144));
+            body.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Math.Max(484, y + 144));
             Button(equipmentPanel, "CancelEquipmentPreview", "공방으로", 56, 704, 704, height,
                 () => { EquipmentClearPreview(); RenderEquipment(); }, Line, 28).interactable = EquipmentIdle;
             Button(equipmentPanel, "ConfirmEquipment", preview == null ? "다시 미리보기" : "확인 · 변경하기", 840, 704, 704, height,

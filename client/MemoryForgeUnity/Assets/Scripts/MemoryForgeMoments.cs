@@ -187,20 +187,25 @@ namespace MemoryForge.Client
         Coroutine? routine, cameraMove;
         MomentScene? current;
         bool tapped, skipped, running; // running, not the handle: a scene can finish inside StartCoroutine
+        // The line on screen, from its Say until the next line or cleanup: the exact authored text, the shown page's bounds and
+        // how far the typewriter has reached, as offsets into that text, so a reflow can re-cut the pages not yet turned.
+        string? authored; int pageStart, pageEnd; float typed; bool lineComplete;
         AudioSource music = null!, sfx = null!;
 
         // parent: a full-screen RectTransform on a 1600x900 reference canvas. figureCenterX: where the figure stands at rest.
         public void Build(RectTransform parent, Font uiFont, Func<string, Sprite?> loadSprite, float figureCenterX, Rect? dialogArea = null)
         {
             font = uiFont; sprite = loadSprite;
+            Transform controls = parent.parent is RectTransform ? parent.parent : parent;
             stage = Rect("MomentStage", parent); Stretch(stage);
-            backdrop = Rect("Backdrop", stage).gameObject.AddComponent<Image>(); Stretch(backdrop.rectTransform); backdrop.raycastTarget = false; backdrop.enabled = false;
+            backdrop = Rect("Backdrop", stage).gameObject.AddComponent<Image>(); Stretch(backdrop.rectTransform); backdrop.raycastTarget = false; backdrop.enabled = false; backdrop.gameObject.SetActive(false);
+            backdrop.transform.SetParent(controls, false); backdrop.transform.SetAsFirstSibling(); Stretch(backdrop.rectTransform); MemoryForgeUiViewport.Bleed(backdrop.rectTransform);
             lens = Rect("MomentCamera", stage); Stretch(lens);
             figure = new GameObject("Figure", typeof(RectTransform), typeof(Image)).GetComponent<Image>();
             figure.transform.SetParent(lens, false); figure.preserveAspect = true; figure.raycastTarget = false; figure.enabled = false;
             figureHome = new Vector2(figureCenterX - RefWidth / 2, -10); figure.rectTransform.anchoredPosition = figureHome;
 
-            tapCatcher = MakeButton("MomentTap", parent, Color.clear, Tap); Stretch((RectTransform)tapCatcher.transform); tapCatcher.gameObject.SetActive(false);
+            tapCatcher = MakeButton("MomentTap", controls, Color.clear, Tap); Stretch((RectTransform)tapCatcher.transform); tapCatcher.gameObject.SetActive(false);
             dialog = Rect("MomentDialog", parent, new Color(0.055f, 0.075f, 0.13f, 0.86f));
             var area = this.dialogArea = dialogArea ?? new Rect(200, 668, 1200, 206);
             Place(dialog, area.x, area.y, area.width, area.height);
@@ -211,11 +216,24 @@ namespace MemoryForge.Client
             // The "tap to continue" mark sits at the dialogue box's lower right; with no dialogue it shows at the same spot.
             waitMark = MakeText(parent, area.x + area.width - 56, area.y + area.height - 50, 40, 40, 26, new Color(0.886f, 0.706f, 0.373f), FontStyle.Bold);
             waitMark.text = "▼"; waitMark.alignment = TextAnchor.MiddleCenter; waitMark.gameObject.SetActive(false);
-            skip = MakeButton("MomentSkip", parent, new Color(0.08f, 0.11f, 0.19f, 0.85f), Skip);
-            Place((RectTransform)skip.transform, 1404, 24, 172, 52);
-            var label = MakeText(skip.transform, 0, 0, 172, 52, 22, new Color(0.914f, 0.933f, 0.973f), FontStyle.Normal); label.text = "건너뛰기"; label.alignment = TextAnchor.MiddleCenter;
+            skip = MakeButton("MomentSkip", controls, new Color(0.08f, 0.11f, 0.19f, 0.85f), Skip);
+            float skipHeight = Math.Max(52, MemoryForgeUiViewport.TouchUnits()), skipWidth = Math.Max(224, MemoryForgeUiViewport.TouchUnits());
+            var skipRect = (RectTransform)skip.transform; Place(skipRect, 0, 24, skipWidth, skipHeight);
+            skipRect.anchorMin = skipRect.anchorMax = new Vector2(1, 1); skipRect.anchoredPosition = new Vector2(-skipWidth - 24, -24);
+            var label = MakeText(skip.transform, 0, 0, skipWidth, skipHeight, 22, new Color(0.914f, 0.933f, 0.973f), FontStyle.Normal); label.text = "건너뛰기"; label.alignment = TextAnchor.MiddleCenter;
             skip.gameObject.SetActive(false);
             music = gameObject.AddComponent<AudioSource>(); music.loop = true; sfx = gameObject.AddComponent<AudioSource>();
+        }
+
+        public void ReflowControls()
+        {
+            if (skip == null) return;
+            var rect = (RectTransform)skip.transform;
+            float height = Math.Max(52, MemoryForgeUiViewport.TouchUnits()), width = Math.Max(224, MemoryForgeUiViewport.TouchUnits());
+            rect.sizeDelta = new Vector2(width, height); rect.anchoredPosition = new Vector2(-width - 24, -24);
+            var text = skip.GetComponentInChildren<Text>();
+            if (text != null) { text.rectTransform.sizeDelta = new Vector2(width, height); text.fontSize = MemoryForgeUiViewport.FontSize(22); }
+            if (authored != null) Repage(); else LayoutDialogue();
         }
 
         public void Bind(MomentFile? file)
@@ -276,6 +294,15 @@ namespace MemoryForge.Client
                     }
                     for (float t = 0; t < beat.Hold && !skipped; t += Time.deltaTime) yield return null;
                     if (tapMode) { var wait = WaitTap(); while (!skipped && wait.MoveNext()) yield return wait.Current; }
+                    // A reflow during the hold or the tap wait can split the last page on screen. The pages it leaves unread still
+                    // show, each with its own tap (tap mode) or reading time (auto), before the beat ends; the hold is not replayed.
+                    while (!skipped && MorePages)
+                    {
+                        NextPage();
+                        var rest = Typewrite(tapMode); while (!skipped && rest.MoveNext()) yield return rest.Current;
+                        if (tapMode) { var wait = WaitTap(); while (!skipped && wait.MoveNext()) yield return wait.Current; }
+                    }
+                    lineComplete = true;
                 }
             }
             finally
@@ -315,48 +342,99 @@ namespace MemoryForge.Client
                 StartCoroutine(MemoryForgeUiMotion.Fade(group, 0, 1, 0.18f));
             }
             speaker.text = said.Speaker == null ? "" : NameOf?.Invoke(said.Speaker) ?? said.Speaker;
-            var pages = Pages(said.Text);
-            for (int p = 0; p < pages.Count; p++)
+            authored = said.Text; pageStart = 0; typed = 0; tapped = lineComplete = false;
+            Repage();
+            var typing = Typewrite(tapMode); while (typing.MoveNext()) yield return typing.Current;
+        }
+
+        // Plays the line on screen from its shown page. ReflowControls can re-cut the page between frames, so the bounds and the
+        // typed count are re-read after every yield: a page cut shorter stops typing and keeps the typed rest for the next page;
+        // one cut longer leaves its tap gate to type its new end.
+        IEnumerator Typewrite(bool tapMode)
+        {
+            while (true)
             {
-                var page = pages[p];
-                tapped = false;
-                for (float shown = 0; shown < page.Length; shown += Time.deltaTime * CharsPerSecond)
+                while (typed < pageEnd)
                 {
-                    if (tapped) { tapped = false; break; }
-                    line.text = page.Substring(0, Mathf.Min(page.Length, (int)shown + 1));
-                    yield return null;
+                    if (tapped) { tapped = false; typed = pageEnd; break; }
+                    ShowTyped(); yield return null;
+                    typed = Mathf.Max(typed, Mathf.Min(pageEnd, typed + Time.deltaTime * CharsPerSecond));
                 }
-                line.text = page;
-                if (tapMode && p < pages.Count - 1) { var wait = WaitTap(); while (wait.MoveNext()) yield return wait.Current; }
-                else if (!tapMode) for (float t = 0, read = Mathf.Max(1.2f, page.Length * 0.07f); t < read; t += Time.deltaTime) yield return null;
+                ShowTyped();
+                if (tapMode && MorePages) { var wait = WaitTap(page: true); while (wait.MoveNext()) yield return wait.Current; }
+                else if (!tapMode) for (float t = 0, read = Mathf.Max(1.2f, (pageEnd - pageStart) * 0.07f); t < read && typed >= pageEnd; t += Time.deltaTime) yield return null;
+                if (typed < pageEnd) continue;
+                if (!MorePages) yield break;
+                NextPage();
             }
         }
 
-        IEnumerator WaitTap()
+        bool MorePages => !lineComplete && authored != null && pageEnd < authored.Length;
+        void ShowTyped() => line.text = authored!.Substring(pageStart, Mathf.Min(pageEnd, (int)typed + 1) - pageStart);
+        void NextPage() { tapped = false; pageStart = pageEnd; pageEnd = PageEnd(authored!, pageStart); }
+
+        // Re-cuts the line on screen at the current font and box size. Turned pages stay read; the shown page keeps its start and
+        // the typed count is kept, so typed text that no longer fits shows at once when its page comes.
+        void Repage()
+        {
+            LayoutDialogue();
+            pageEnd = PageEnd(authored!, pageStart); ShowTyped();
+        }
+
+        void LayoutDialogue()
+        {
+            float width = dialog.sizeDelta.x;
+            speaker.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, Mathf.Min(600, width - 68));
+            speaker.fontSize = 26; MemoryForgeUiViewport.WholeText(speaker);
+            waitMark.fontSize = MemoryForgeUiViewport.FontSize(26);
+            float markWidth = Mathf.Max(40, Mathf.Ceil(waitMark.preferredWidth) + 8);
+            waitMark.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, markWidth);
+            waitMark.fontSize = 26; MemoryForgeUiViewport.WholeText(waitMark);
+            float lineY = Mathf.Max(62, 22 + speaker.rectTransform.rect.height), bodyHeight = dialogArea.height - 78;
+            float height = lineY + bodyHeight + 16, top = dialogArea.y + dialogArea.height - height;
+            Place(dialog, dialogArea.x, top, width, height);
+            line.fontSize = MemoryForgeUiViewport.FontSize(29);
+            Place(line.rectTransform, 34, lineY, width - 34 - Mathf.Max(34, markWidth + 24), bodyHeight);
+            Place(waitMark.rectTransform, dialogArea.x + width - markWidth - 16,
+                dialogArea.y + dialogArea.height - waitMark.rectTransform.rect.height - 10, markWidth, waitMark.rectTransform.rect.height);
+        }
+
+        // A page gate (page: true) also ends untapped when a reflow leaves the shown page unfinished (its new end is typed first)
+        // or makes it the last page (the beat's own hold and tap follow). A tap on an unfinished page is kept for its reveal.
+        IEnumerator WaitTap(bool page = false)
         {
             WaitingForTap = true; waitMark.gameObject.SetActive(true);
-            try { while (!tapped) yield return null; }
-            finally { tapped = false; WaitingForTap = false; if (waitMark != null) waitMark.gameObject.SetActive(false); }
+            try { while (!tapped && (!page || (typed >= pageEnd && MorePages))) yield return null; }
+            finally { if (!page || typed >= pageEnd) tapped = false; WaitingForTap = false; if (waitMark != null) waitMark.gameObject.SetActive(false); }
         }
 
         // Splits a line into pages that fit the dialogue box at its font size. Pages are exact slices: joined, they are the
         // authored text, whitespace and line breaks included.
         public List<string> Pages(string text)
         {
+            LayoutDialogue();
             var pages = new List<string>();
-            var settings = line.GetGenerationSettings(line.rectTransform.rect.size);
-            settings.resizeTextForBestFit = false; settings.verticalOverflow = VerticalWrapMode.Truncate;
-            var generator = new TextGenerator();
             for (int start = 0; start < text.Length;)
             {
-                string rest = text.Substring(start);
-                generator.Populate(rest, settings);
-                int fit = Mathf.Clamp(generator.characterCountVisible, 1, rest.Length);
-                if (fit < rest.Length) { int space = rest.LastIndexOfAny(new[] { ' ', '\n' }, fit - 1, fit); if (space > fit / 2) fit = space + 1; }
-                pages.Add(rest.Substring(0, fit));
-                start += fit;
+                int end = PageEnd(text, start);
+                pages.Add(text.Substring(start, end - start));
+                start = end;
             }
             return pages;
+        }
+
+        // End of the page that starts at `start`: what the box shows at the line's current font and size, broken after a space or
+        // line break in the page's second half. Pages and the live typewriter cut with this one rule.
+        int PageEnd(string text, int start)
+        {
+            var settings = line.GetGenerationSettings(line.rectTransform.rect.size);
+            settings.resizeTextForBestFit = false; settings.verticalOverflow = VerticalWrapMode.Truncate;
+            string rest = text.Substring(start);
+            var generator = new TextGenerator();
+            generator.Populate(rest, settings);
+            int fit = Mathf.Clamp(generator.characterCountVisible, 1, rest.Length);
+            if (fit < rest.Length) { int space = rest.LastIndexOfAny(new[] { ' ', '\n' }, fit - 1, fit); if (space > fit / 2) fit = space + 1; }
+            return start + fit;
         }
 
         // ── stage state ──
@@ -376,8 +454,8 @@ namespace MemoryForge.Client
         {
             EndMotions();
             music.Stop(); sfx.Stop();
-            backdrop.enabled = false;
-            dialog.gameObject.SetActive(false); skip.gameObject.SetActive(false); tapCatcher.gameObject.SetActive(false);
+            backdrop.enabled = false; backdrop.gameObject.SetActive(false);
+            dialog.gameObject.SetActive(false); skip.gameObject.SetActive(false); tapCatcher.gameObject.SetActive(false); authored = null;
             waitMark.gameObject.SetActive(false); WaitingForTap = false;
             Rest();
             if (cameraMove != null) StopCoroutine(cameraMove);
@@ -406,7 +484,7 @@ namespace MemoryForge.Client
         void Backdrop(string key)
         {
             var s = SpriteFor(key);
-            backdrop.enabled = true; backdrop.sprite = s; backdrop.color = s == null ? Empty : Color.white; backdrop.preserveAspect = false;
+            backdrop.gameObject.SetActive(true); backdrop.enabled = true; backdrop.sprite = s; backdrop.color = s == null ? Empty : Color.white; MemoryForgeUiViewport.Cover(backdrop);
         }
 
         // Overlay value: an image key (same frame as the figure), {"image","x","y"} (offset in authored pixels), or null to remove.
@@ -568,8 +646,7 @@ namespace MemoryForge.Client
             float width = Mathf.Clamp(figureLeft - 24 - dialogArea.x, Mathf.Min(MinDialogWidth, dialogArea.width), dialogArea.width);
             dialog.sizeDelta = new Vector2(width, dialogArea.height);
             dialogEdge.sizeDelta = new Vector2(width, 3);
-            line.rectTransform.sizeDelta = new Vector2(width - 68, dialogArea.height - 78);
-            ((RectTransform)waitMark.transform).anchoredPosition = new Vector2(dialogArea.x + width - 56, -(dialogArea.y + dialogArea.height - 50));
+            if (authored != null) Repage(); else LayoutDialogue();
         }
 
         public float DialogWidth => dialog.sizeDelta.x;
@@ -624,7 +701,7 @@ namespace MemoryForge.Client
         Text MakeText(Transform parent, float x, float y, float w, float h, int size, Color color, FontStyle style)
         {
             var r = Rect("Text", parent); Place(r, x, y, w, h);
-            var text = r.gameObject.AddComponent<Text>(); text.font = font; text.fontSize = size; text.color = color; text.fontStyle = style; text.raycastTarget = false;
+            var text = r.gameObject.AddComponent<Text>(); text.font = font; text.fontSize = MemoryForgeUiViewport.FontSize(size); text.color = color; text.fontStyle = style; text.raycastTarget = false;
             text.horizontalOverflow = HorizontalWrapMode.Wrap; text.verticalOverflow = VerticalWrapMode.Truncate; text.lineSpacing = 1.15f;
             return text;
         }

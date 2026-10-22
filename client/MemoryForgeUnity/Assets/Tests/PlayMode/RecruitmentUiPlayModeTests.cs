@@ -66,11 +66,16 @@ namespace MemoryForge.Client.Tests
                 yield return null; lobby.Player!.Stop(); yield return null;
                 var frame = host.GetComponentsInChildren<RectTransform>().Single(r => r.name == "LobbyFrame");
                 var dock = host.GetComponentsInChildren<RectTransform>().Single(r => r.name == "HomeDock");
+                Canvas.ForceUpdateCanvases();
                 var corners = new Vector3[4];
                 foreach (var button in dock.GetComponentsInChildren<Button>())
                 {
                     ((RectTransform)button.transform).GetWorldCorners(corners);
-                    Assert.That(corners.Min(v => frame.InverseTransformPoint(v).y), Is.GreaterThanOrEqualTo(-450f), button.name + " remains inside the safe frame");
+                    var local = corners.Select(v => frame.InverseTransformPoint(v)).ToArray();
+                    Assert.That(local.Min(v => v.y), Is.GreaterThanOrEqualTo(frame.rect.yMin - 0.05f), button.name + " remains inside the actual safe frame bottom");
+                    Assert.That(local.Max(v => v.y), Is.LessThanOrEqualTo(frame.rect.yMax + 0.05f), button.name + " remains inside the actual safe frame top");
+                    Assert.That(local.Min(v => v.x), Is.GreaterThanOrEqualTo(frame.rect.xMin - 0.05f), button.name + " remains inside the actual safe frame left");
+                    Assert.That(local.Max(v => v.x), Is.LessThanOrEqualTo(frame.rect.xMax + 0.05f), button.name + " remains inside the actual safe frame right");
                 }
                 dock.GetWorldCorners(corners);
                 float dockTop = corners.Max(v => frame.InverseTransformPoint(v).y);

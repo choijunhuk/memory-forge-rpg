@@ -32,6 +32,7 @@ namespace MemoryForge.Client
             background.anchorMin = Vector2.zero; background.anchorMax = Vector2.one; background.offsetMin = background.offsetMax = Vector2.zero;
             background.GetComponent<UnityEngine.UI.Image>().sprite = AccountSprite(Snapshot?.Run?.Phase == "BATTLE" ? "Backgrounds/bg_zone1_battle"
                 : Snapshot?.Run?.Phase == "MAP" ? "Backgrounds/bg_zone1_map" : "Backgrounds/bg_workshop");
+            MemoryForgeUiViewport.Cover(background.GetComponent<UnityEngine.UI.Image>());
         }
 
         void AccountPartyArt(Transform parent, JObject battle)
@@ -60,7 +61,7 @@ namespace MemoryForge.Client
                 || item.transform.name.StartsWith("Enemy:", StringComparison.Ordinal)).ToArray())
             {
                 image.color = new Color(Panel.r, Panel.g, Panel.b, 0.92f);
-                var size = image.rectTransform.sizeDelta;
+                var size = image.rectTransform.rect.size;
                 var rim = Box(image.transform, "WorkshopFrame", 0, 0, size.x, size.y, Color.white).GetComponent<UnityEngine.UI.Image>();
                 rim.sprite = AccountSprite("UI/battle/ui_panel_frame"); rim.type = UnityEngine.UI.Image.Type.Sliced;
             }
@@ -85,8 +86,8 @@ namespace MemoryForge.Client
         void AccountHeader()
         {
             Button(frame!, "ReturnAccountHome", "공방", 32, 12, 144, 76, ReturnAccountHome, Line, 24).interactable = !busy;
-            Label(frame!, "동료 원정", 200, 12, 500, 36, 30, Brass);
-            Label(frame!, StatusText(), 200, 52, 568, 32, 18, SnapshotStale ? Danger : Muted);
+            Label(frame!, "동료 원정" + (Battle() is JObject battleHeader ? " · " + Int(battleHeader["turn"]) + "턴" : ""), 200, 12, 500, 52, 30, Brass);
+            Label(frame!, busy ? "서버 확인 중…" : session?.State.Pending != null ? "미확정 요청 보존 · 같은 요청 확인" : SnapshotStale ? "마지막 확인 정보 · 새로고침 필요" : session == null ? "연결 확인 필요" : "서버 상태와 일치해요", 200, 76, 568, 48, 18, SnapshotStale ? Danger : Muted);
             if (Snapshot?.Run?.Phase == "BATTLE") RunSupportEntry(784, 12, 216, 76);
             Button(frame!, "Refresh", "새로고침", 1016, 12, 224, 76, () => Launch(RefreshAsync), Line, 22).interactable = session != null && !busy;
             if (session?.State.Pending != null)
@@ -102,6 +103,68 @@ namespace MemoryForge.Client
             DropUnsent(); accountAbandonOpen = false;
             try { (SceneLoader ?? (destination => SceneManager.LoadScene(destination)))(MemoryForgeExpeditionClient.LobbyScene); }
             catch (Exception) { Say("공방으로 돌아가지 못했어요. 탐사는 보존되어 있어요.", true); Render(); }
+        }
+
+        // The phone keeps a stable header, scrollable gauge/hand strips and bottom action band.
+        // These are the same published state and commands as the desktop view.
+        void MobileBattleView(JObject battle)
+        {
+            var party = Box(frame!, "Party", 32, 144, 380, 304, Panel);
+            Label(party, "체력  " + Int(battle["hp"]) + " / " + Int(battle["maxHp"]), 16, 12, 348, 56, 24, Ink, UnityEngine.FontStyle.Bold);
+            Bar(party, 16, 80, 348, 12, Int(battle["hp"]) ?? 0, Int(battle["maxHp"]) ?? 0, Memory);
+            Label(party, "방어 " + Int(battle["block"]) + " · 행동력 " + Int(battle["ap"]) , 16, 104, 348, 56, 20, Brass);
+            var actors = Actors(battle);
+            float row = Math.Max(112, MemoryForgeExpeditionClient.TouchUnits());
+            var gauges = Scroll(party, "Actors", 12, 176, 356, row, Math.Max(356, actors.Count * 320), row, Panel);
+            for (int i = 0; i < actors.Count; i++)
+            {
+                var actor = actors[i]; string id = Str(actor["id"]) ?? ""; bool full = GaugeFull(actor, battle);
+                var ultimate = Button(gauges, "Ult:" + id, "", i * 320, 0, 308, row,
+                    () => Launch(() => UltAsync(id)), full ? Brass : Line, 20);
+                ultimate.interactable = full && CanCommand && Str(battle["phase"]) == "PLAYER";
+                Label(ultimate.transform, ActorName(actor), 12, 4, 284, 52, 20, full ? Background : Ink);
+                Label(ultimate.transform, Int(actor["gauge"]) + "/" + Int(battle["gaugeMax"]) + (full ? " · 필살기" : " · 충전 중"), 12, 60, 284, 44, 18, full ? Background : Memory);
+
+            }
+            var enemies = Enemies(); var losses = PreviewLosses();
+            var foes = Box(frame!, "Enemies", 428, 144, 1140, 304, Panel);
+            var enemyStrip = Scroll(foes, "EnemyStrip", 0, 0, 1140, 304, Math.Max(1140, enemies.Count * 380), 304, Color.clear);
+            float width = Math.Max(380, 1140f / Math.Max(1, enemies.Count));
+            for (int i = 0; i < enemies.Count; i++)
+            {
+                var enemy = enemies[i]; string uid = Str(enemy["uid"]) ?? ""; bool alive = Bool(enemy["alive"]);
+                int hp = Int(enemy["hp"]) ?? 0, loss = losses.TryGetValue(uid, out int predicted) && alive ? predicted : 0;
+                var tile = Button(enemyStrip, "Enemy:" + uid, "", i * width + 6, 6, width - 12, 292, () => SelectEnemy(uid), uid == target ? Brass : Line);
+                if (enemies.Count <= 3) { var tileRect = (RectTransform)tile.transform; tileRect.anchorMin = new Vector2((float)i / enemies.Count, 1); tileRect.anchorMax = new Vector2((float)(i + 1) / enemies.Count, 1); tileRect.sizeDelta = new Vector2(-12, 292); tileRect.anchoredPosition = new Vector2(6, -6); }
+                tile.interactable = alive && !SelectionLocked();
+                if (accountScene) AccountEnemyArt(tile.transform, Str(enemy["id"]), width - 12, alive, false);
+                Label(tile.transform, (Str(enemy["name"]) ?? "적") + (alive ? "" : " · 처치"), 16, 12, width - 44, 52, 25, Ink, UnityEngine.FontStyle.Bold);
+                Label(tile.transform, "체력 " + hp + (loss > 0 ? " → " + Math.Max(0, hp - loss) : "") + " / " + Int(enemy["maxHp"]), 16, 76, width - 44, 48, 21, Ink);
+                var hpBar = Bar(tile.transform, 16, 132, width - 44, 12, hp, Int(enemy["maxHp"]) ?? 0, Danger);
+                if (loss > 0) PreviewLoss(hpBar, hp, Int(enemy["maxHp"]) ?? 0, loss);
+                Label(tile.transform, "방어 " + Int(enemy["block"]) + (uid == target ? " · 선택한 대상" : ""), 16, 148, width - 44, 40, 18, Memory);
+                if (alive) Label(tile.transform, "이번 " + MoveText(enemy["intent"]) + "\n다음 " + MoveText(enemy["next"]), 16, 196, width - 44, 88, 19, Brass);
+            }
+            var reserved = (battle["reservations"] as JArray)?.OfType<JObject>().Select(r => CardName(Str(r["id"])) + " " + Int(r["due"]) + "턴").ToArray() ?? Array.Empty<string>();
+            var strip = Box(frame!, "Presentation", 32, 460, 1536, Math.Max(112, row), Panel);
+            presentationText = Label(strip, reserved.Length > 0 ? string.Join(" · ", reserved) : prepared != null ? "사용 대기: " + CardName(Str(Hand(prepared.Uid)?["id"])) : "행동 결과", 16, 12, 720, row - 24, 16, Memory);
+            if (rows != null && !barrier) { UpdatePresentation(); Button(strip, "SkipPresentation", "건너뛰기", 752, 0, 224, row, SkipPresentation, Line, 19); }
+            PaceButton(strip, MemoryForgeExpeditionClient.ActionPacing.Normal, "보통", 996, 120);
+            PaceButton(strip, MemoryForgeExpeditionClient.ActionPacing.Double, "2배속", 1128, 136);
+            PaceButton(strip, MemoryForgeExpeditionClient.ActionPacing.Reduced, "동작 줄이기", 1276, 244);
+            var hand = (battle["hand"] as JArray)?.OfType<JObject>().ToList() ?? new System.Collections.Generic.List<JObject>();
+            var cards = Scroll(frame!, "Hand", 32, 584, 1536, row, Math.Max(1536, hand.Count * 504), row, Panel);
+            // The full card name and cost are also in the selected-card action/detail view.
+            for (int i = 0; i < hand.Count; i++)
+            {
+                var card = hand[i]; string uid = Str(card["uid"]) ?? "";
+                var cardButton = Button(cards, "Card:" + uid, "", i * 504, 0, 488, row, () => SelectCard(uid), uid == selectedCard ? Memory : Line, 20);
+                cardButton.interactable = !SelectionLocked();
+                Label(cardButton.transform, CardName(Str(card["id"])) + (Bool(card["plus"]) ? "+" : ""), 12, 4, 464, 52, 20, uid == selectedCard ? Background : Ink);
+                Label(cardButton.transform, Int(card["cost"]) is int cost ? "행동력 " + cost : "사용 불가", 12, 60, 464, 44, 18, uid == selectedCard ? Background : Memory);
+
+            }
+            ActionView();
         }
 
         void AccountAbandonView()

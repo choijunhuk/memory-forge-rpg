@@ -58,8 +58,8 @@ namespace MemoryForge.Client.Tests
                     {
                         var rect = (RectTransform)button.transform; Assert.That(rect.rect.height, Is.GreaterThanOrEqualTo(144));
                         var corners = new Vector3[4]; rect.GetWorldCorners(corners);
-                        Assert.That(corners.Min(p => sheet.InverseTransformPoint(p).x), Is.GreaterThanOrEqualTo(0)); Assert.That(corners.Max(p => sheet.InverseTransformPoint(p).x), Is.LessThanOrEqualTo(1600));
-                        Assert.That(corners.Min(p => sheet.InverseTransformPoint(p).y), Is.GreaterThanOrEqualTo(-900)); Assert.That(corners.Max(p => sheet.InverseTransformPoint(p).y), Is.LessThanOrEqualTo(0));
+                        Assert.That(corners.Min(p => sheet.InverseTransformPoint(p).x), Is.GreaterThanOrEqualTo(sheet.rect.xMin)); Assert.That(corners.Max(p => sheet.InverseTransformPoint(p).x), Is.LessThanOrEqualTo(sheet.rect.xMax));
+                        Assert.That(corners.Min(p => sheet.InverseTransformPoint(p).y), Is.GreaterThanOrEqualTo(sheet.rect.yMin)); Assert.That(corners.Max(p => sheet.InverseTransformPoint(p).y), Is.LessThanOrEqualTo(sheet.rect.yMax));
                     }
                     var confirm = view.ConfirmSupportAsync(); var duplicate = view.ConfirmSupportAsync();
                     yield return Until(() => confirm.IsCompleted && duplicate.IsCompleted && !view.Busy, "one explicit support command");

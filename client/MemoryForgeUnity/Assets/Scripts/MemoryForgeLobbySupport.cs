@@ -41,26 +41,38 @@ namespace MemoryForge.Client
             if (supportConfirmation) { RenderSupportConfirmation(); return; }
             string selected = profile.SupportSelection == null ? "선택하지 않음" : EquipmentCharacterName(profile.SupportSelection);
             int eligible = profile.Characters.Count(c => !ownedParty.Contains(c.CharId) && c.Deployable == true);
-            Label(equipmentPanel, "다음 출격의 지원  " + selected + "\n출전 동료의 게이지 100 · 전투당 1회 · 파티 체력과 시작 덱에는 추가되지 않아요."
+            var summary = ScrollArea(equipmentPanel, 56, equipmentBodyY, 1112, 144, 144);
+            var supportSummary = Label(summary, "다음 출격의 지원  " + selected + "\n출전 동료의 게이지 100 · 전투당 1회 · 파티 체력과 시작 덱에는 추가되지 않아요."
                 + (eligible == 0 ? "\n출전 편성 밖에 무기를 장착한 보유 동료가 있어야 지원을 선택할 수 있어요." : "\n무기와 성장은 출발할 때 고정돼요. 진행 중인 전투의 파트너는 바뀌지 않아요."),
-                56, 360, 1112, 144, 24, Ink);
-            Button(equipmentPanel, "ClearSupportSelection", profile.SupportSelection == null ? "지원 없음" : "지원 해제 확인", 1200, 360, 344, 144,
+                0, 0, 1080, 144, 24, Ink);
+            summary.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Math.Max(144, supportSummary.rectTransform.rect.height));
+            Button(equipmentPanel, "ClearSupportSelection", profile.SupportSelection == null ? "지원 없음" : "지원 해제 확인", 1200, equipmentBodyY, 344, 144,
                 () => PrepareSupportSelection(null), Line, 25).interactable = EquipmentReady && profile.SupportSelection != null;
-            float height = Math.Max(176, TouchUnits()), pitch = height + 16;
-            var rows = ScrollArea(equipmentPanel, 56, 520, 1488, 348, Math.Max(348, (float)Math.Ceiling(profile.Characters.Count / 3f) * pitch));
+            float viewportHeight = Math.Max(Math.Max(160, TouchUnits()), 708 - equipmentBodyY);
+            float height = Math.Max(TouchUnits(), Math.Min(320, viewportHeight)), pitch = height + 16;
+            var rows = ScrollArea(equipmentPanel, 56, equipmentBodyY + 160, 1488, viewportHeight, Math.Max(viewportHeight, (float)Math.Ceiling(profile.Characters.Count / 3f) * pitch));
             for (int n = 0; n < profile.Characters.Count; n++)
             {
                 var character = profile.Characters[n]; string id = character.CharId;
                 bool selectedNow = profile.SupportSelection == id, deployed = ownedParty.Contains(id);
                 var cell = Button(rows, "SupportCandidate:" + id, "", n % 3 * 504, n / 3 * pitch, 480, height,
                     () => PrepareSupportSelection(id), selectedNow ? Brass : Line);
+                var cellRect = (RectTransform)cell.transform; cellRect.anchorMin = new Vector2((n % 3) / 3f, 1); cellRect.anchorMax = new Vector2((n % 3 + 1) / 3f, 1); cellRect.sizeDelta = new Vector2(-24, height); cellRect.anchoredPosition = new Vector2(0, -(n / 3) * pitch);
+                var surface = cell.GetComponent<Image>(); surface.sprite = null; surface.type = Image.Type.Simple; surface.color = selectedNow ? Brass : Panel;
+                var border = Kit(cell.transform, "SupportFrame", "ui_panel_frame", new Vector4(48, 48, 48, 48), 0, 0, 480, height, 128); border.GetComponent<Image>().pixelsPerUnitMultiplier = 2;
                 cell.interactable = EquipmentReady && !selectedNow && !deployed && character.Deployable == true;
-                var picture = Box(cell.transform, "SupportPortrait", 12, 12, 112, height - 24, Color.white);
+                var picture = Box(cell.transform, "SupportPortrait", 24, 24, 96, height - 48, Color.white);
                 picture.GetComponent<Image>().sprite = Portrait(id); CenterSprite(picture);
                 if (picture.GetComponent<Image>().sprite == null) { picture.GetComponent<Image>().color = Color.clear; Glyph(picture, "nav_companions", 16, 24, 80, Muted); }
-                Label(cell.transform, EquipmentCharacterName(id), 136, 12, 328, 48, 28, selectedNow ? Background : Brass, FontStyle.Bold);
-                Label(cell.transform, "Lv." + character.Level + " · 공명 " + character.Res + "\n" + EquipmentWeaponName(character.WeaponInstanceId), 136, 64, 328, 72, 22, selectedNow ? Background : Ink);
-                Label(cell.transform, selectedNow ? "현재 지원 파트너" : deployed ? "출전 편성에 포함됨" : character.Deployable == false ? "사용할 무기 장착 필요" : "지원 선택", 136, height - 40, 328, 32, 20, selectedNow ? Background : Memory);
+                var candidateName = Label(cell.transform, EquipmentCharacterName(id), 136, 24, 328, 1, 28, selectedNow ? Background : Brass, FontStyle.Bold);
+                var status = Label(cell.transform, selectedNow ? "현재 지원 파트너" : deployed ? "출전 편성에 포함됨" : character.Deployable == false ? "사용할 무기 장착 필요" : "지원 선택", 24, 0, 432, 1, 18, selectedNow ? Background : Memory);
+                float statusY = height - 24 - status.rectTransform.rect.height;
+                MemoryForgeUiViewport.Anchor(status.rectTransform, 24, statusY, 432, status.rectTransform.rect.height);
+                float statY = 24 + candidateName.rectTransform.rect.height + 12;
+                float bodyHeight = Math.Max(48, statusY - statY - 12);
+                var candidateBody = ScrollArea(cell.transform, 136, statY, 328, bodyHeight, bodyHeight);
+                var candidateStats = Label(candidateBody, "Lv." + character.Level + " · 공명 " + character.Res + "\n" + EquipmentWeaponName(character.WeaponInstanceId), 0, 0, 296, 1, 18, selectedNow ? Background : Ink);
+                candidateBody.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Math.Max(bodyHeight, candidateStats.rectTransform.rect.height));
             }
         }
 

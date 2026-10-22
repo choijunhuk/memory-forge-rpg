@@ -231,7 +231,7 @@ namespace MemoryForge.Client
             if (!OpenAndRefresh()) Render();
         }
         void OnDisable() { Suspend(); RemoveView(); }
-        void OnApplicationFocus(bool focused) { if (focused) { if (session == null) OpenAndRefresh(); } else LeaveApp(); }
+        void OnApplicationFocus(bool focused) { if (focused) MemoryForgeUiViewport.RefreshMetrics(); if (focused) { if (session == null) OpenAndRefresh(); } else LeaveApp(); }
         void OnApplicationPause(bool paused) { if (paused) LeaveApp(); else if (session == null) OpenAndRefresh(); }
         void LeaveApp() { if (session == null) return; Suspend(); Render(); }
 
@@ -270,8 +270,10 @@ namespace MemoryForge.Client
         }
         void DropParts() { partsOpen = false; partPick = null; partsContext = null; }
 
+        Vector3 layoutCalibration;
         void Update()
         {
+            if (canvasRoot != null && layoutCalibration != MemoryForgeUiViewport.Calibration) Render();
             RevalidateSupportPreparation();
             if (accountReturnAfterOperation && !busy) { accountReturnAfterOperation = false; ReturnAccountHome(); return; }
             FitView();
@@ -1345,6 +1347,7 @@ namespace MemoryForge.Client
 
         void Render()
         {
+            layoutCalibration = MemoryForgeUiViewport.Calibration;
             if (!isActiveAndEnabled || font == null || !Application.isPlaying) return;
             // The offset the player scrolled the save list to (SaveView restores it only for the same context).
             saveScrollY = saveContent != null ? saveContent.anchoredPosition.y : (float?)null;
@@ -1363,7 +1366,7 @@ namespace MemoryForge.Client
             {
                 // Unconfigured: a small, non-blocking status only.
                 frame = Box(canvasRoot, "ServerPracticeFrame", 0, 0, 1600, 900, Color.clear);
-                Center(frame);
+                Center(frame); frame.sizeDelta = new Vector2(1600, 900); FitView();
                 var status = Box(frame, "ServerPracticeIdle", 1180, 840, 400, 44, Panel);
                 Label(status, "서버 연습 · 연결 안 됨 (개발용)", 12, 8, 376, 30, 18, Muted);
             }
@@ -1371,7 +1374,7 @@ namespace MemoryForge.Client
             {
                 if (accountScene) AccountScenery(canvasRoot);
                 frame = Box(canvasRoot, "ServerPracticeFrame", 0, 0, 1600, 900, accountScene ? new Color(Background.r, Background.g, Background.b, 0.28f) : Background);
-                Center(frame);
+                Center(frame); frame.sizeDelta = new Vector2(1600, 900); FitView();
                 Header();
                 var snap = Snapshot;
                 var run = snap?.Run;
@@ -1408,7 +1411,7 @@ namespace MemoryForge.Client
         {
             if (accountScene) { AccountHeader(); return; }
             Label(frame!, "기억 공방", 32, 16, 230, 48, 36, Brass, FontStyle.Bold);
-            Label(frame!, "서버 연습 · 개발용 · 연습 계정", 272, 12, 480, 30, 22, Ink);
+            Label(frame!, "서버 연습 · 개발 계정" + (Battle() is JObject headerBattle ? " · " + Int(headerBattle["turn"]) + "턴" : ""), 272, 12, 480, 52, 22, Ink);
             Label(frame!, StatusText(), 272, 44, 480, 30, 18, SnapshotStale ? Danger : Muted);
             if (Snapshot?.Run?.Phase == "BATTLE") RunSupportEntry(784, 12, 288, 60);
             var refresh = Button(frame!, "Refresh", "새로고침", 1090, 18, 150, 52, () => Launch(RefreshAsync), Line, 22);
@@ -1981,6 +1984,7 @@ namespace MemoryForge.Client
         void BattleView()
         {
             var b = Battle()!;
+            if (MemoryForgeUiViewport.Current.Mobile) { MobileBattleView(b); return; }
             bool illustrated = accountScene && ((b["reservations"] as JArray)?.Count ?? 0) == 0;
             float battleHeight = illustrated ? 372 : 264;
             // Party
@@ -2100,7 +2104,7 @@ namespace MemoryForge.Client
 
         void ActionView()
         {
-            var panel = Box(frame!, "Action", 32, 668, 1536, 170, Panel);
+            var panel = Box(frame!, "Action", 32, MemoryForgeUiViewport.Current.Mobile ? 708 : 668, 1536, MemoryForgeUiViewport.Current.Mobile ? 176 : 170, Panel);
             var card = selectedCard == null ? null : Hand(selectedCard);
             if (card == null)
             {
@@ -2130,14 +2134,14 @@ namespace MemoryForge.Client
                 }
                 if (modes.Count == 0) Label(panel, ErrorText(Str(card["error"]) ?? ""), 790, 20, 380, 60, 18, Danger);
                 // The summary above is cut to its box; the detail shows the whole server text in a scroll (read-only, sends nothing).
-                Button(panel, "OpenCardDetails", "카드 설명 전체 보기", 790, 116, 240, 44, () => OpenCardDetails(), Line, 18)
+                Button(panel, "OpenCardDetails", "카드 설명", 790, MemoryForgeUiViewport.Current.Mobile ? 60 : 116, 240, 44, () => OpenCardDetails(), Line, 18)
                     .interactable = picker == null && !PresentationBarrier;
             }
             var confirm = Button(panel, "Confirm", rows != null && !barrier ? "사용 대기" : "사용 확정", 1190, 14, 160, 92, () => Launch(ConfirmAsync), Brass, 24);
             confirm.interactable = card != null && !busy && session != null && session.State.CanMutate && picker == null && !PresentationBarrier && prepared == null;
             var end = Button(panel, "EndTurn", "턴 종료", 1362, 14, 160, 92, () => Launch(EndTurnAsync), Line, 24);
             end.interactable = CanCommand;
-            if (prepared != null) Button(panel, "CancelPrepared", "대기 취소", 1190, 116, 160, 44, () => CancelPrepared(), Line, 18);
+            if (prepared != null) Button(panel, "CancelPrepared", "대기 취소", MemoryForgeUiViewport.Current.Mobile ? 1018 : 1190, MemoryForgeUiViewport.Current.Mobile ? 60 : 116, 160, 44, () => CancelPrepared(), Line, 18);
         }
 
         void PickView()
@@ -2215,7 +2219,7 @@ namespace MemoryForge.Client
             if (parts.Length != 0) y = Flow(content, parts, y, 19, Ink);
             y = Flow(content, view == null ? "예상: 서버 조회를 기다리는 중이에요." : (view.ForecastError != null ? "지금 이 요청으로는 쓸 수 없어요: " : "") + ForecastText(view),
                 y, 19, view?.ForecastError != null ? Danger : Memory);
-            content.sizeDelta = new Vector2(1072, Math.Max(636, y));
+            content.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Math.Max(636, y));
             content.parent.GetComponent<ScrollRect>().vertical = y > 636;
             // A redraw of the same open detail keeps where the player scrolled (clamped to the new content).
             if (detailsScrollY != null && detailsScrollAt == detailsAt)
@@ -2229,7 +2233,7 @@ namespace MemoryForge.Client
             text.gameObject.name = name;
             text.resizeTextForBestFit = false; text.verticalOverflow = VerticalWrapMode.Overflow;
             float height = Mathf.Ceil(text.preferredHeight) + 6;
-            text.rectTransform.sizeDelta = new Vector2(1040, height);
+            text.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
             return y + height + 14;
         }
         // The published modes of a hand card with each cost and the default-request verdict (blocked[mode]: auto target, no picks; shown,
@@ -2484,10 +2488,7 @@ namespace MemoryForge.Client
         void FitView()
         {
             if (canvasRoot == null || frame == null || Screen.width <= 0 || Screen.height <= 0) return;
-            Rect safe = Screen.safeArea; Vector2 size = canvasRoot.rect.size;
-            float width = size.x * safe.width / Screen.width, height = size.y * safe.height / Screen.height;
-            frame.localScale = Vector3.one * Mathf.Min(width / 1600, height / 900);
-            frame.anchoredPosition = new Vector2((safe.center.x / Screen.width - 0.5f) * size.x, (safe.center.y / Screen.height - 0.5f) * size.y);
+            MemoryForgeUiViewport.Fit(frame, canvasRoot);
         }
         void RemoveView()
         {
@@ -2500,19 +2501,23 @@ namespace MemoryForge.Client
         RectTransform Box(Transform parent, string name, float x, float y, float width, float height, Color color)
         {
             var obj = new GameObject(name, typeof(RectTransform), typeof(Image)); obj.transform.SetParent(parent, false);
-            var r = obj.GetComponent<RectTransform>(); r.anchorMin = r.anchorMax = new Vector2(0, 1); r.pivot = new Vector2(0, 1); r.anchoredPosition = new Vector2(x, -y); r.sizeDelta = new Vector2(width, height);
-            var image = obj.GetComponent<Image>(); image.color = color; image.raycastTarget = false; return r;
+            var r = obj.GetComponent<RectTransform>(); r.anchorMin = r.anchorMax = new Vector2(0, 1); r.pivot = new Vector2(0, 1); r.anchoredPosition = new Vector2(x, -y); r.sizeDelta = new Vector2(width, height); MemoryForgeUiViewport.Anchor(r, x, y, width, height);
+            var image = obj.GetComponent<Image>(); image.color = color; image.raycastTarget = false;
+            if (width == 1600 && height == 900 && MemoryForgeUiViewport.IsDim(name)) MemoryForgeUiViewport.BleedDim(image);
+            if (width == 1600 && height == 900 && (name.Contains("Workshop") || name.Contains("Backdrop") || name.EndsWith("Veil", StringComparison.Ordinal) || name.EndsWith("Shade", StringComparison.Ordinal) || name == "Shade")) MemoryForgeUiViewport.Bleed(r);
+            return r;
         }
         Text Label(Transform parent, string value, float x, float y, float width, float height, int size, Color color, FontStyle style = FontStyle.Normal, TextAnchor align = TextAnchor.UpperLeft)
         {
             var obj = new GameObject("Text", typeof(RectTransform), typeof(Text)); obj.transform.SetParent(parent, false);
-            var r = obj.GetComponent<RectTransform>(); r.anchorMin = r.anchorMax = new Vector2(0, 1); r.pivot = new Vector2(0, 1); r.anchoredPosition = new Vector2(x, -y); r.sizeDelta = new Vector2(width, height);
+            var r = obj.GetComponent<RectTransform>(); r.anchorMin = r.anchorMax = new Vector2(0, 1); r.pivot = new Vector2(0, 1); r.anchoredPosition = new Vector2(x, -y); r.sizeDelta = new Vector2(width, height); MemoryForgeUiViewport.Anchor(r, x, y, width, height);
             var text = obj.GetComponent<Text>(); text.font = font; text.text = value; text.fontSize = size; text.color = color; text.fontStyle = style; text.alignment = align; text.raycastTarget = false;
             text.horizontalOverflow = HorizontalWrapMode.Wrap; text.verticalOverflow = VerticalWrapMode.Truncate;
-            text.resizeTextForBestFit = true; text.resizeTextMinSize = Math.Max(12, (int)(size * 0.7f)); text.resizeTextMaxSize = size; return text;
+            MemoryForgeUiViewport.WholeText(text); return text;
         }
         Button Button(Transform parent, string name, string caption, float x, float y, float width, float height, Action click, Color? color = null, int size = 24)
         {
+            width = Math.Max(width, MemoryForgeExpeditionClient.TouchUnits()); height = Math.Max(height, MemoryForgeExpeditionClient.TouchUnits());
             var r = Box(parent, name, x, y, width, height, color ?? Line); var image = r.GetComponent<Image>(); image.raycastTarget = true;
             if (accountScene && caption.Length != 0)
             {
@@ -2532,6 +2537,8 @@ namespace MemoryForge.Client
         {
             var viewport = Box(parent, name, x, y, width, height, color); viewport.GetComponent<Image>().raycastTarget = true; viewport.gameObject.AddComponent<RectMask2D>();
             var content = Box(viewport, name + "Content", 0, 0, Math.Max(width, contentWidth), Math.Max(height, contentHeight), color);
+            content.anchorMin = new Vector2(0, 1); content.anchorMax = new Vector2(contentWidth > width ? 0 : 1, 1); content.pivot = new Vector2(0, 1);
+            content.sizeDelta = new Vector2(contentWidth > width ? contentWidth : 0, Math.Max(height, contentHeight)); content.anchoredPosition = Vector2.zero;
             var scroll = viewport.gameObject.AddComponent<ScrollRect>(); scroll.viewport = viewport; scroll.content = content;
             scroll.horizontal = contentWidth > width; scroll.vertical = contentHeight > height; scroll.movementType = ScrollRect.MovementType.Clamped; scroll.scrollSensitivity = 25;
             return content;
@@ -2539,15 +2546,21 @@ namespace MemoryForge.Client
         RectTransform Bar(Transform parent, float x, float y, float width, float height, int value, int max, Color color)
         {
             var back = Box(parent, "Bar", x, y, width, height, Line);
-            Box(back, "Fill", 0, 0, width * Mathf.Clamp01(max > 0 ? (float)value / max : 0), height, color);
+            float fraction = Mathf.Clamp01(max > 0 ? (float)value / max : 0);
+            var fill = Box(back, "Fill", 0, 0, width * fraction, height, color);
+            fill.anchorMin = Vector2.zero; fill.anchorMax = new Vector2(fraction, 1); fill.offsetMin = fill.offsetMax = Vector2.zero;
             return back;
         }
         // The HP a forecast takes, lit over the bar's fill from what would remain up to the current HP (the expedition's PreviewLoss).
         void PreviewLoss(RectTransform back, int hp, int max, int taking)
         {
-            float w = back.sizeDelta.x, k = max > 0 ? w / max : 0;
-            float from = k * Math.Max(0, hp - taking), to = k * Math.Min(hp, max);
-            if (to > from) Box(back, "HpPreview", from, 0, to - from, back.sizeDelta.y, new Color(1, 1, 1, 0.55f));
+            float from = max > 0 ? Mathf.Clamp01((float)Math.Max(0, hp - taking) / max) : 0;
+            float to = max > 0 ? Mathf.Clamp01((float)hp / max) : 0;
+            if (to > from)
+            {
+                var preview = Box(back, "HpPreview", 0, 0, 0, back.rect.height, new Color(1, 1, 1, 0.55f));
+                preview.anchorMin = new Vector2(from, 0); preview.anchorMax = new Vector2(to, 1); preview.offsetMin = preview.offsetMax = Vector2.zero;
+            }
         }
         static Color Hex(string hex) { ColorUtility.TryParseHtmlString("#" + hex, out var color); return color; }
     }

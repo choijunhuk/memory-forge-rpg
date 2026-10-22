@@ -26,7 +26,7 @@ namespace MemoryForge.Client
         {
             var support = session?.Encounter?.Support;
             if (support == null) return;
-            Button(parent, "GrowthSupportEntry", support.Used ? "지원 사용 완료" : "지원 · " + CharacterName(support.CharId) + " (100)", 696, 8, 464, 80,
+            Button(parent, "GrowthSupportEntry", support.Used ? "지원 사용 완료" : "지원 · " + CharacterName(support.CharId), 696, 8, 464, 80,
                 () => { if (!CanAct) return; DropSelection(); supportOpen = true; Render(); }, Brass).interactable = CanAct && !support.Used;
         }
 
@@ -52,7 +52,10 @@ namespace MemoryForge.Client
             string message = supportQueryBusy ? "지원 효과를 확인하고 있어요…" : supportCaller == null ? "게이지가 가득 찬 호출 동료를 선택해주세요."
                 : view == null ? "지원을 확인하지 못했어요. 취소 후 새로고침해주세요."
                 : view.Source.UltName + "\n" + view.Source.Text + (view.ForecastHidden ? "\n무작위·드로우 결과는 사용한 뒤 확인할 수 있어요." : "");
-            Label(paper, message, 32, 304, 1120, 128, 22, Ink);
+            var messageBody = Scroll(paper, "GrowthSupportMessage", 32, 304, 1120, 128, 1120);
+            var messageText = Label(messageBody, message, 0, 0, 1120, 128, 22, Ink);
+            messageBody.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Math.Max(128, messageText.rectTransform.rect.height));
+            var messageScroll = messageBody.parent.GetComponent<UnityEngine.UI.ScrollRect>(); messageScroll.horizontal = false; messageScroll.vertical = true;
             var choices = view?.ToJObject()["choices"] as JObject;
             var candidates = choices?["candidates"] as JArray;
             bool choosing = candidates != null && Number(choices?["index"]) < (choices?["requests"] as JArray)?.Count;

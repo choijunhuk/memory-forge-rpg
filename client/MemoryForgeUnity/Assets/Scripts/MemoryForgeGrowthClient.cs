@@ -33,6 +33,12 @@ namespace MemoryForge.Client
         public bool Busy => busy || queryBusy || supportQueryBusy;
         public PracticeEncounterSnapshot? Snapshot => session?.Encounter;
         int selection;
+        Vector3 layoutCalibration;
+        float BattleTop => 32 + Math.Max(160, TouchUnits() + 16);
+        float HandHeight => Math.Max(212, TouchUnits() * 1.4f + 16);
+        float HandTop => 884 - HandHeight;
+        float ActionHeight => Math.Max(112, TouchUnits());
+        float ActionTop => HandTop - 16 - ActionHeight;
 
         void OnEnable()
         {
@@ -46,8 +52,8 @@ namespace MemoryForge.Client
         void OnDestroy() { foreach (var sprite in sprites.Values) if (sprite != null) Destroy(sprite); }
         void OnApplicationQuit() => MemoryForgeAccountConnection.SetCurrent(null);
         void OnApplicationPause(bool paused) { if (paused) { session?.Dispose(); session = null; busy = queryBusy = false; DropSelection(); } else if (isActiveAndEnabled) Open(); }
-        void OnApplicationFocus(bool focused) { if (focused && isActiveAndEnabled && !Busy) { if (session == null) Open(); else _ = Refresh(); } }
-        void Update() { Fit(); if (Input.GetKeyDown(KeyCode.Escape) && !busy) { if (supportOpen) CloseGrowthSupport(); else Home(); } }
+        void OnApplicationFocus(bool focused) { if (focused) MemoryForgeUiViewport.RefreshMetrics(); if (focused && isActiveAndEnabled && !Busy) { if (session == null) Open(); else _ = Refresh(); } }
+        void Update() { if (canvas != null && layoutCalibration != MemoryForgeUiViewport.Calibration) Render(); Fit(); if (Input.GetKeyDown(KeyCode.Escape) && !busy) { if (supportOpen) CloseGrowthSupport(); else Home(); } }
 
         void Open()
         {
@@ -160,6 +166,7 @@ namespace MemoryForge.Client
 
         void Render()
         {
+            layoutCalibration = MemoryForgeUiViewport.Calibration;
             if (canvas != null) { canvas.gameObject.SetActive(false); Destroy(canvas.gameObject); }
             var host = new GameObject(OwnedCanvas, typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster)); host.transform.SetParent(transform, false);
             host.GetComponent<Canvas>().renderMode = RenderMode.ScreenSpaceOverlay;
@@ -167,13 +174,16 @@ namespace MemoryForge.Client
             canvas = (RectTransform)host.transform;
             if (EventSystem.current == null) new GameObject("GrowthInput", typeof(EventSystem), typeof(StandaloneInputModule)).transform.SetParent(transform, false);
             var backdrop = Box(canvas, "BattleBackdrop", 0, 0, 1600, 900, Color.white); backdrop.anchorMin = Vector2.zero; backdrop.anchorMax = Vector2.one; backdrop.offsetMin = backdrop.offsetMax = Vector2.zero;
-            backdrop.GetComponent<Image>().sprite = SpriteAt("Backgrounds/bg_zone1_battle");
-            frame = Box(canvas, "GrowthFrame", 0, 0, 1600, 900, Color.clear); frame.anchorMin = frame.anchorMax = frame.pivot = new Vector2(0.5f, 0.5f); frame.anchoredPosition = Vector2.zero;
+            backdrop.GetComponent<Image>().sprite = SpriteAt("Backgrounds/bg_zone1_battle"); MemoryForgeUiViewport.Cover(backdrop.GetComponent<Image>());
+            frame = Box(canvas, "GrowthFrame", 0, 0, 1600, 900, Color.clear); frame.anchorMin = frame.anchorMax = frame.pivot = new Vector2(0.5f, 0.5f); frame.anchoredPosition = Vector2.zero; frame.sizeDelta = new Vector2(1600, 900); Fit();
             Box(frame, "Shade", 0, 0, 1600, 900, new Color(0.02f, 0.035f, 0.065f, 0.32f));
-            var top = Box(frame, "Header", 32, 16, 1536, Math.Max(96, TouchUnits() + 16), Panel);
+            var top = Box(frame, "Header", 32, 16, 1536, Math.Max(160, TouchUnits() + 16), Panel);
             Button(top, "GrowthHome", "공방", 12, 8, 144, 80, Home).interactable = !Busy;
-            Label(top, session?.Encounter?.Kind == "weeklyBoss" ? "주간 보스 도전" : "동료 훈련", 184, 8, 420, 48, 32, Brass);
-            Label(top, Busy ? "서버 확인 중…" : notice, 184, 56, session?.Encounter?.Support != null ? 480 : 980, Math.Max(32, top.sizeDelta.y - 64), 18, Muted);
+            var headerBody = Scroll(top, "GrowthHeading", 184, 8, session?.Encounter?.Support != null ? 480 : 980, top.rect.height - 16, session?.Encounter?.Support != null ? 480 : 980);
+            var headerText = Label(headerBody, (session?.Encounter?.Kind == "weeklyBoss" ? "주간 보스 도전" : "동료 훈련") + (session?.Encounter == null ? "" : " · " + Number(session.Encounter.StateJObject()["turn"]) + "턴")
+                + "\n" + (session?.Encounter == null ? "" : "메아리 " + Number(session.Encounter.StateJObject()["echo"]) + "  ·  ") + (Busy ? "서버 확인 중…" : notice), 0, 0, session?.Encounter?.Support != null ? 456 : 956, 1, 28, Brass);
+            headerBody.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Math.Max(top.rect.height - 16, headerText.rectTransform.rect.height));
+            var headerScroll = headerBody.parent.GetComponent<ScrollRect>(); headerScroll.horizontal = false; headerScroll.vertical = true;
             GrowthSupportEntry(top);
             Button(top, "GrowthRefresh", "새로고침", 1188, 8, 336, 80, () => _ = Refresh()).interactable = !Busy;
             if (session?.State.Pending != null)
@@ -195,61 +205,76 @@ namespace MemoryForge.Client
 
         void BattleView(JObject state)
         {
-            bool large = TouchUnits() > 96;
-            float battleY = 32 + Math.Max(96, TouchUnits() + 16), battleHeight = (large ? 476 : 512) - battleY;
-            var party = Box(frame!, "GrowthParty", 32, battleY, 352, battleHeight, Panel);
-            Label(party, "턴 " + Number(state["turn"]) + "  ·  행동력 " + Number(state["ap"]), 20, large ? 0 : 20, 312, 44, 28, Brass);
-            Label(party, "파티 체력  " + Number(state["hp"]) + " / " + Number(state["maxHp"]), 20, large ? 44 : 80, 312, 40, 24, Ink);
-            Bar(party, 20, large ? 88 : 128, 312, 12, Number(state["hp"]), Number(state["maxHp"]), Teal);
-            Label(party, "방어 " + Number(state["block"]) + "  ·  메아리 " + Number(state["echo"]), 20, large ? 100 : 164, 312, 32, 20, Muted);
+            float battleY = BattleTop, battleHeight = Math.Max(TouchUnits(), ActionTop - BattleTop - 16);
+            var party = Box(frame!, "GrowthParty", 32, battleY, 400, battleHeight, Panel);
+            var partyBody = Scroll(party, "GrowthStats", 0, 0, 400, battleHeight, 400);
+            var hpText = Label(partyBody, "체력  " + Number(state["hp"]) + " / " + Number(state["maxHp"]), 20, 12, 360, 1, 24, Ink);
+            float partyY = 12 + hpText.rectTransform.rect.height + 12;
+            Bar(partyBody, 20, partyY, 360, 12, Number(state["hp"]), Number(state["maxHp"]), Teal); partyY += 24;
+            var statsText = Label(partyBody, "방어 " + Number(state["block"]) + " · 행동력 " + Number(state["ap"]), 20, partyY, 360, 1, 20, Muted);
+            partyY += statsText.rectTransform.rect.height + 16;
             var actors = state["actors"] as JArray ?? new JArray();
-            float ultimateHeight = Math.Max(80, TouchUnits());
-            var ultimateStrip = Scroll(party, "GrowthUltimates", 20, large ? 136 : 216, 312, ultimateHeight, Math.Max(312, actors.Count * 324 - 12));
+            float ultimateHeight = Math.Max(152, TouchUnits());
+            var ultimateStrip = Scroll(partyBody, "GrowthUltimates", 20, partyY, 360, ultimateHeight, Math.Max(360, actors.Count * 372 - 12));
             int n = 0;
             foreach (var actor in actors)
             {
                 string id = Text(actor["id"]); int gauge = Number(actor["gauge"]), max = Number(state["gaugeMax"]);
-                var ult = Button(ultimateStrip, "GrowthUlt:" + id, "", n++ * 324, 0, 312, ultimateHeight,
+                var ult = Button(ultimateStrip, "GrowthUlt:" + id, "", n++ * 372, 0, 360, ultimateHeight,
                     () => { var args = new JObject { ["actor"] = id }; if (target != null) args["target"] = target; _ = Send("ult", args, id); });
                 ult.interactable = CanAct && gauge >= max && max > 0;
-                var portrait = Box(ult.transform, "Companion", 8, 8, 56, ultimateHeight - 16, Color.white); portrait.GetComponent<Image>().sprite = SpriteAt("Characters/char_" + id + "_sd"); portrait.GetComponent<Image>().preserveAspect = true;
-                if (portrait.GetComponent<Image>().sprite == null) portrait.GetComponent<Image>().color = Color.clear;
-                Label(ult.transform, CharacterName(id) + "  " + gauge + "/" + max + "\n필살기 · 좌우로 동료 선택", 72, 12, 228, ultimateHeight - 24, 21, gauge >= max && max > 0 ? Brass : Muted);
+                Label(ult.transform, CharacterName(id) + "\n" + gauge + "/" + max + " · 필살기", 12, 0, 336, ultimateHeight, 21, gauge >= max && max > 0 ? Brass : Ink);
+
             }
+            partyBody.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Math.Max(battleHeight, partyY + ultimateHeight + 16));
+            var partyScroll = partyBody.parent.GetComponent<ScrollRect>(); partyScroll.horizontal = false; partyScroll.vertical = true;
             var enemies = (state["enemies"] as JArray ?? new JArray()).ToList();
-            float width = Math.Min(540, 1144f / Math.Max(1, enemies.Count));
+            float width = Math.Max(360, (1120f - 12 * Math.Max(0, enemies.Count - 1)) / Math.Max(1, enemies.Count));
+            var enemyStrip = Scroll(frame!, "GrowthEnemies", 448, battleY, 1120, battleHeight, Math.Max(1120, enemies.Count * (width + 12) - 12));
             for (int i = 0; i < enemies.Count; i++)
             {
                 var enemy = enemies[i]; string uid = Text(enemy["uid"]); bool alive = enemy["alive"]?.Value<bool>() == true;
-                var tile = Button(frame!, "GrowthEnemy:" + uid, "", 412 + i * (width + 12), battleY, width, battleHeight,
+                var tile = Button(enemyStrip, "GrowthEnemy:" + uid, "", i * (width + 12), 0, width, battleHeight,
                     () => { if (!CanAct) return; target = uid; picks.Clear(); selection++; _ = Query(); });
+                if (enemies.Count <= 3) { var tileRect = (RectTransform)tile.transform; tileRect.anchorMin = new Vector2((float)i / enemies.Count, 1); tileRect.anchorMax = new Vector2((float)(i + 1) / enemies.Count, 1); tileRect.sizeDelta = new Vector2(-12, battleHeight); tileRect.anchoredPosition = Vector2.zero; }
                 tile.interactable = CanAct && alive; tile.GetComponent<Image>().color = target == uid ? new Color(0.1f, 0.25f, 0.29f, 0.7f) : new Color(0.02f, 0.04f, 0.07f, 0.5f);
                 var figure = Box(tile.transform, "EnemyArt", 40, 20, width - 80, battleHeight - 152, alive ? Color.white : new Color(1, 1, 1, 0.3f));
                 figure.GetComponent<Image>().sprite = SpriteAt("Enemies/enemy_" + Text(enemy["id"])); figure.GetComponent<Image>().preserveAspect = true;
                 if (figure.GetComponent<Image>().sprite == null) figure.GetComponent<Image>().color = Color.clear;
-                Label(tile.transform, "이번  " + MemoryForgeServerPracticeClient.MoveText(enemy["intent"]), 20, 8, width - 40, 44, 20, Brass);
-                Label(tile.transform, Text(enemy["name"]), 20, battleHeight - 132, width - 40, 44, 28, Ink);
                 int loss = query?.EnemyHpLosses.FirstOrDefault(item => item.Uid == uid).HpLoss ?? 0;
-                Label(tile.transform, Number(enemy["hp"]) + " / " + Number(enemy["maxHp"]) + (loss > 0 ? " → " + Math.Max(0, Number(enemy["hp"]) - loss) : ""), 20, battleHeight - 80, width - 40, 44, 22, Teal);
-                Bar(tile.transform, 20, battleHeight - 28, width - 40, 12, Number(enemy["hp"]), Number(enemy["maxHp"]), Teal);
+                var enemyBody = Scroll(tile.transform, "GrowthEnemyInfo", 12, 8, width - 24, battleHeight - 16, width - 24);
+                var enemyText = Label(enemyBody, Text(enemy["name"]) + "\n" + Number(enemy["hp"]) + " / " + Number(enemy["maxHp"]) + (loss > 0 ? " → " + Math.Max(0, Number(enemy["hp"]) - loss) : "")
+                    + "\n이번  " + MemoryForgeServerPracticeClient.MoveText(enemy["intent"]), 8, 4, width - 40, 1, 28, Ink);
+                float enemyY = enemyText.rectTransform.rect.height + 16;
+                Bar(enemyBody, 8, enemyY, width - 40, 12, Number(enemy["hp"]), Number(enemy["maxHp"]), Teal);
+                enemyBody.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Math.Max(battleHeight - 16, enemyY + 28));
+                var enemyScroll = enemyBody.parent.GetComponent<ScrollRect>(); enemyScroll.horizontal = false; enemyScroll.vertical = true;
+
             }
-            Button(frame!, "GrowthEndTurn", "턴 마치기", 32, 528, 352, 96, () => _ = Send("end", new JObject())).interactable = CanAct && Text(state["phase"]) == "PLAYER";
+            Button(frame!, "GrowthEndTurn", "턴 마치기", 32, ActionTop, 400, ActionHeight, () => _ = Send("end", new JObject())).interactable = CanAct && Text(state["phase"]) == "PLAYER";
             SelectionView(state);
             HandView(state);
         }
 
         void SelectionView(JObject state)
         {
-            if (selected == null) { Label(frame!, "카드를 고른 뒤 대상을 선택하세요.", 424, 548, 1088, 48, 27, Ink); return; }
+            if (selected == null) { Label(frame!, "카드를 고른 뒤 대상을 선택하세요.", 448, ActionTop, 1120, ActionHeight, 27, Ink); return; }
             var answer = query?.ToJObject();
             var source = answer?["source"];
-            Label(frame!, source == null ? "카드 미리보기 확인 중…" : Text(source["name"]), 424, TouchUnits() > 96 ? 480 : 528, 744, 44, 26, Brass);
             var card = state["hand"]?.FirstOrDefault(item => Text(item["uid"]) == selected);
             var modes = card?["modes"] as JArray ?? new JArray();
-            for (int i = 0; i < modes.Count; i++)
+            bool onlyNow = modes.Count == 1 && Text(modes[0]) == "now";
+            var previewBody = Scroll(frame!, "GrowthSelection", 448, ActionTop, 720, ActionHeight, onlyNow ? 720 : Math.Max(720, modes.Count * 240));
+            if (onlyNow)
+            {
+                var description = Label(previewBody, source == null ? "카드 미리보기 확인 중…" : Text(source["name"]) + "\n" + Text(source["text"]), 12, 4, 696, 1, 24, Brass);
+                previewBody.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Math.Max(112, description.rectTransform.rect.height + 8));
+                var previewScroll = previewBody.parent.GetComponent<ScrollRect>(); previewScroll.horizontal = false; previewScroll.vertical = true;
+            }
+            for (int i = 0; !onlyNow && i < modes.Count; i++)
             {
                 string choice = Text(modes[i]);
-                Button(frame!, "GrowthMode:" + choice, choice == "now" ? "지금" : choice == "next" ? "다음" : "다다음", 424 + i * 160, TouchUnits() > 96 ? 528 : 576, 152, 48,
+                Button(previewBody, "GrowthMode:" + choice, choice == "now" ? "지금" : choice == "next" ? "다음" : "다다음", i * 240, 0, 224, Math.Max(112, TouchUnits()),
                     () => { mode = choice; picks.Clear(); selection++; _ = Query(); }, choice == mode ? Brass : Panel).interactable = CanAct;
             }
             var choices = answer?["choices"] as JObject;
@@ -271,7 +296,7 @@ namespace MemoryForge.Client
             bool legal = answer != null && answer["forecast"]?["error"]?.Type == JTokenType.Null
                 && choices?["error"]?.Type == JTokenType.Null && choices?["blocked"]?.Type == JTokenType.Null
                 && Number(choices?["index"]) >= (choices?["requests"] as JArray)?.Count;
-            Button(frame!, "GrowthPlay", legal ? "카드 사용" : "선택 확인", 1200, 528, 368, 96, () =>
+            Button(frame!, "GrowthPlay", legal ? "카드 사용" : "선택 확인", 1200, ActionTop, 368, ActionHeight, () =>
             {
                 if (selected == null || query == null) return;
                 var args = new JObject { ["uid"] = selected, ["mode"] = mode };
@@ -283,17 +308,16 @@ namespace MemoryForge.Client
         void HandView(JObject state)
         {
             var hand = state["hand"] as JArray ?? new JArray();
-            float y = 528 + Math.Max(96, TouchUnits()) + 16, height = 884 - y;
-            var strip = Scroll(frame!, "GrowthHand", 32, y, 1536, height, Math.Max(1536, hand.Count * 228));
+            float y = HandTop, height = HandHeight;
+            float cardWidth = Math.Max(488, MemoryForgeUiViewport.FontSize(24) * 10 + 32), cardPitch = cardWidth + 16;
+            var strip = Scroll(frame!, "GrowthHand", 32, y, 1536, height, Math.Max(1536, hand.Count * cardPitch));
             for (int n = 0; n < hand.Count; n++)
             {
                 var card = hand[n]; string uid = Text(card["uid"]);
-                var tile = Button(strip, "GrowthCard:" + uid, "", n * 228, 0, 212, height - 8, () => SelectCard(uid), selected == uid ? new Color(0.11f, 0.23f, 0.27f) : Panel);
+                var tile = Button(strip, "GrowthCard:" + uid, "", n * cardPitch, 0, cardWidth, height - 8, () => SelectCard(uid), selected == uid ? new Color(0.11f, 0.23f, 0.27f) : Panel);
                 tile.interactable = CanAct;
-                Label(tile.transform, CardName(Text(card["id"])), 16, 16, 180, 64, 24, Brass);
-                Label(tile.transform, card["cost"]?.Type == JTokenType.Integer ? "행동력 " + Number(card["cost"]) : "사용 불가", 16, 82, 180, 32, 20, Teal);
-                var definition = content?.Battle.Cards.FirstOrDefault(item => item.Id == Text(card["id"]));
-                Label(tile.transform, definition == null || content == null ? "카드를 골라 자세히 확인하세요." : BattleText.Card(definition, content.Battle), 16, 122, 180, height - 136, 17, Ink);
+                var cardName = Label(tile.transform, CardName(Text(card["id"])), 16, 8, cardWidth - 32, 1, 24, Brass);
+                Label(tile.transform, card["cost"]?.Type == JTokenType.Integer ? "행동력 " + Number(card["cost"]) : "사용 불가", 16, 8 + cardName.rectTransform.rect.height + 12, cardWidth - 32, 64, 18, Teal);
             }
         }
 
@@ -322,10 +346,7 @@ namespace MemoryForge.Client
         void Fit()
         {
             if (canvas == null || frame == null) return;
-            var bounds = canvas.rect; var safe = Screen.safeArea;
-            float width = bounds.width * safe.width / Math.Max(1, Screen.width), height = bounds.height * safe.height / Math.Max(1, Screen.height);
-            frame.localScale = Vector3.one * Math.Min(width / 1600f, height / 900f);
-            frame.anchoredPosition = new Vector2(bounds.width * (safe.center.x / Math.Max(1, Screen.width) - 0.5f), bounds.height * (safe.center.y / Math.Max(1, Screen.height) - 0.5f));
+            MemoryForgeUiViewport.Fit(frame, canvas);
         }
 
         Sprite? SpriteAt(string path)
@@ -340,7 +361,7 @@ namespace MemoryForge.Client
             if (frame == null) return;
             foreach (var image in frame.GetComponentsInChildren<Image>().Where(item => item.color == Panel && item.sprite == null).ToArray())
             {
-                var size = image.rectTransform.sizeDelta;
+                var size = image.rectTransform.rect.size;
                 var rim = Box(image.transform, "Ornament", 0, 0, size.x, size.y, Color.white).GetComponent<Image>();
                 rim.sprite = SpriteAt("UI/battle/ui_panel_frame"); rim.type = Image.Type.Sliced;
             }
@@ -370,14 +391,17 @@ namespace MemoryForge.Client
         static RectTransform Box(Transform parent, string name, float x, float y, float width, float height, Color color)
         {
             var host = new GameObject(name, typeof(RectTransform), typeof(Image)); host.transform.SetParent(parent, false);
-            var rect = (RectTransform)host.transform; rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(0, 1); rect.anchoredPosition = new Vector2(x, -y); rect.sizeDelta = new Vector2(width, height);
-            var image = host.GetComponent<Image>(); image.color = color; image.raycastTarget = false; return rect;
+            var rect = (RectTransform)host.transform; rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(0, 1); rect.anchoredPosition = new Vector2(x, -y); rect.sizeDelta = new Vector2(width, height); MemoryForgeUiViewport.Anchor(rect, x, y, width, height);
+            var image = host.GetComponent<Image>(); image.color = color; image.raycastTarget = false;
+            if (width == 1600 && height == 900 && MemoryForgeUiViewport.IsDim(name)) MemoryForgeUiViewport.BleedDim(image);
+            if (width == 1600 && height == 900 && (name.Contains("Backdrop") || name == "Shade")) MemoryForgeUiViewport.Bleed(rect);
+            return rect;
         }
         Text Label(Transform parent, string text, float x, float y, float width, float height, int size, Color color)
         {
             var host = new GameObject("Text", typeof(RectTransform), typeof(Text)); host.transform.SetParent(parent, false);
-            var rect = (RectTransform)host.transform; rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(0, 1); rect.anchoredPosition = new Vector2(x, -y); rect.sizeDelta = new Vector2(width, height);
-            var label = host.GetComponent<Text>(); label.font = font; label.text = text; label.fontSize = size; label.color = color; label.raycastTarget = false; label.horizontalOverflow = HorizontalWrapMode.Wrap; label.verticalOverflow = VerticalWrapMode.Truncate; return label;
+            var rect = (RectTransform)host.transform; rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(0, 1); rect.anchoredPosition = new Vector2(x, -y); rect.sizeDelta = new Vector2(width, height); MemoryForgeUiViewport.Anchor(rect, x, y, width, height);
+            var label = host.GetComponent<Text>(); label.font = font; label.text = text; label.fontSize = size; label.color = color; label.raycastTarget = false; label.horizontalOverflow = HorizontalWrapMode.Wrap; label.verticalOverflow = VerticalWrapMode.Truncate; MemoryForgeUiViewport.WholeText(label); return label;
         }
         Button Button(Transform parent, string name, string text, float x, float y, float width, float height, Action action, Color? color = null)
         {
@@ -393,19 +417,20 @@ namespace MemoryForge.Client
         static float TouchUnits()
         {
             if (MemoryForgeExpeditionClient.TouchOverride.HasValue) return MemoryForgeExpeditionClient.TouchOverride.Value;
-            if (!Application.isMobilePlatform || Screen.dpi <= 0) return 0;
-            float scale = Mathf.Min(Screen.safeArea.width / 1600f, Screen.safeArea.height / 900f);
-            return scale <= 0 ? 0 : 48f * Screen.dpi / 160f / scale;
+            return MemoryForgeUiViewport.TouchUnits();
         }
         static void Bar(Transform parent, float x, float y, float width, float height, int value, int max, Color color)
         {
             var back = Box(parent, "Bar", x, y, width, height, new Color(0.1f, 0.14f, 0.2f));
-            Box(back, "Fill", 0, 0, max > 0 ? width * Mathf.Clamp01((float)value / max) : 0, height, color);
+            float fraction = max > 0 ? Mathf.Clamp01((float)value / max) : 0;
+            var fill = Box(back, "Fill", 0, 0, width * fraction, height, color);
+            fill.anchorMin = Vector2.zero; fill.anchorMax = new Vector2(fraction, 1); fill.offsetMin = fill.offsetMax = Vector2.zero;
         }
         static RectTransform Scroll(Transform parent, string name, float x, float y, float width, float height, float contentWidth)
         {
             var viewport = Box(parent, name, x, y, width, height, Color.clear); viewport.GetComponent<Image>().raycastTarget = true;
             viewport.gameObject.AddComponent<RectMask2D>(); var content = Box(viewport, "Content", 0, 0, contentWidth, height, Color.clear);
+            content.anchorMin = new Vector2(0, 1); content.anchorMax = new Vector2(contentWidth > width ? 0 : 1, 1); content.pivot = new Vector2(0, 1); content.sizeDelta = new Vector2(contentWidth > width ? contentWidth : 0, height); content.anchoredPosition = Vector2.zero;
             var scroll = viewport.gameObject.AddComponent<ScrollRect>(); scroll.viewport = viewport; scroll.content = content; scroll.horizontal = true; scroll.vertical = false; scroll.movementType = ScrollRect.MovementType.Clamped; return content;
         }
     }

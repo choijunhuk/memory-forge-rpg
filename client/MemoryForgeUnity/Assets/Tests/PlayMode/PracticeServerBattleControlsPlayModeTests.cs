@@ -463,8 +463,11 @@ namespace MemoryForge.Client.Tests
                     var bar = EnemyPart(view, enemy, "Bar")!;
                     var lit = EnemyPart(view, enemy, "HpPreview");
                     Assert.That(lit, Is.Not.Null, enemy);
-                    Assert.That(lit!.sizeDelta.x / bar.sizeDelta.x, Is.EqualTo(loss / 40f).Within(0.001f), enemy + ": the lit width is its own loss");
-                    Assert.That(lit.anchoredPosition.x / bar.sizeDelta.x, Is.EqualTo((hp - loss) / 40f).Within(0.001f), enemy + ": lit from what remains");
+                    // Fraction anchors intentionally have zero sizeDelta: measure the actual drawn interval.
+                    Canvas.ForceUpdateCanvases(); var track = WorldRect(bar); var strip = WorldRect(lit!);
+                    Assert.That(track.width, Is.GreaterThan(0), enemy + ": the drawn HP track has width");
+                    Assert.That(strip.width / track.width, Is.EqualTo(loss / 40f).Within(0.001f), enemy + ": the lit width is its own loss");
+                    Assert.That((strip.xMin - track.xMin) / track.width, Is.EqualTo((hp - loss) / 40f).Within(0.001f), enemy + ": lit from what remains");
                     Assert.That(EnemyText(view, enemy), Does.Contain(hp + " → " + (hp - loss) + " / 40"), enemy);
                 }
                 foreach (string enemy in new[] { "e3", "e5" })

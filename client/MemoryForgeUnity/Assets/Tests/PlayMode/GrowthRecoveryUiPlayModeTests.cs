@@ -64,18 +64,42 @@ namespace MemoryForge.Client.Tests
                 home.GetComponentsInChildren<Button>().Single(b => b.name == "StartExpedition").onClick.Invoke();
                 var panel = home.GetComponentsInChildren<RectTransform>().Single(r => r.name == "SortiePanel");
                 var status = panel.GetComponentsInChildren<RectTransform>().Single(r => r.name == "AccountStatus");
+                yield return null; Canvas.ForceUpdateCanvases();
+                var statusBounds = GrowthRecoveryLocalBounds(panel, status);
+                var statusGlyphs = GrowthRecoveryStatusGlyphBounds(panel, status.GetComponent<Text>());
                 foreach (string name in new[] { "OwnedMemoryToggle", "RefreshAccountProgression", "DepartOwnedExpedition" })
                 {
                     var rect = (RectTransform)panel.GetComponentsInChildren<Button>().Single(b => b.name == name).transform;
-                    Assert.That(-status.anchoredPosition.y, Is.GreaterThanOrEqualTo(-rect.anchoredPosition.y + rect.rect.height + 8), name + " has a separate status row");
+                    var bounds = GrowthRecoveryLocalBounds(panel, rect);
+                    string glyphGap = statusGlyphs.HasValue ? (bounds.yMin - statusGlyphs.Value.yMax).ToString("F2") : "not generated";
+                    Assert.That(bounds.yMin - statusBounds.yMax, Is.GreaterThanOrEqualTo(8f - 0.05f), name + " has a separate status row; actual rendered glyph gap=" + glyphGap);
                 }
-                Assert.That(-status.anchoredPosition.y + status.rect.height, Is.LessThanOrEqualTo(900));
+                Assert.That(statusBounds.yMin, Is.GreaterThanOrEqualTo(panel.rect.yMin - 0.05f), "status stays inside the actual panel bottom");
                 Assert.That(panel.GetComponentsInChildren<Text>().Any(t => t.text.Contains("무기 미장착")), Is.True);
                 Assert.That(panel.GetComponentsInChildren<Button>().Single(b => b.name == "DepartOwnedExpedition").interactable, Is.False);
                 Assert.That(host.Posts, Is.Empty);
             }
             finally { Object.Destroy(home); MemoryForgeExpeditionClient.TouchOverride = null; MemoryForgeAccountConnection.SetCurrent(null); }
             yield return null;
+        }
+
+        static Rect GrowthRecoveryLocalBounds(RectTransform relativeTo, RectTransform target)
+        {
+            var corners = new Vector3[4]; target.GetWorldCorners(corners);
+            var points = corners.Select(relativeTo.InverseTransformPoint).ToArray();
+            return Rect.MinMaxRect(points.Min(v => v.x), points.Min(v => v.y), points.Max(v => v.x), points.Max(v => v.y));
+        }
+
+        static Rect? GrowthRecoveryStatusGlyphBounds(RectTransform relativeTo, Text text)
+        {
+            var mesh = text.canvasRenderer.GetMesh(); if (mesh == null) return null;
+            var vertices = mesh.vertices; var points = new List<Vector3>();
+            for (int start = 0; start + 3 < vertices.Length; start += 4)
+            {
+                var quad = Enumerable.Range(start, 4).Select(i => relativeTo.InverseTransformPoint(text.rectTransform.TransformPoint(vertices[i]))).ToArray();
+                if (quad.Max(v => v.x) - quad.Min(v => v.x) > 0.01f && quad.Max(v => v.y) - quad.Min(v => v.y) > 0.01f) points.AddRange(quad);
+            }
+            return points.Count == 0 ? (Rect?)null : Rect.MinMaxRect(points.Min(v => v.x), points.Min(v => v.y), points.Max(v => v.x), points.Max(v => v.y));
         }
 
         [UnityTest]

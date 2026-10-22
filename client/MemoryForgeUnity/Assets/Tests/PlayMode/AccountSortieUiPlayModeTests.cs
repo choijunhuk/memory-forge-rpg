@@ -52,8 +52,10 @@ namespace MemoryForge.Client.Tests
                     foreach (var button in panel.GetComponentsInChildren<Button>().Where(button => button.GetComponentInParent<ScrollRect>() == null))
                     {
                         var corners = new Vector3[4]; ((RectTransform)button.transform).GetWorldCorners(corners);
-                        Assert.That(corners.Min(point => panel.InverseTransformPoint(point).y), Is.GreaterThanOrEqualTo(-900f), button.name + " stays inside the bottom edge");
-                        Assert.That(corners.Max(point => panel.InverseTransformPoint(point).y), Is.LessThanOrEqualTo(0f), button.name + " stays below the top edge");
+                        Assert.That(corners.Min(point => panel.InverseTransformPoint(point).y), Is.GreaterThanOrEqualTo(panel.rect.yMin), button.name + " stays inside the actual bottom edge");
+                        Assert.That(corners.Max(point => panel.InverseTransformPoint(point).y), Is.LessThanOrEqualTo(panel.rect.yMax), button.name + " stays below the actual top edge");
+                        Assert.That(corners.Min(point => panel.InverseTransformPoint(point).x), Is.GreaterThanOrEqualTo(panel.rect.xMin), button.name + " stays inside the actual left edge");
+                        Assert.That(corners.Max(point => panel.InverseTransformPoint(point).x), Is.LessThanOrEqualTo(panel.rect.xMax), button.name + " stays inside the actual right edge");
                     }
                 }
                 void Rows(string prefix)
@@ -292,11 +294,14 @@ namespace MemoryForge.Client.Tests
                         Assert.That(rect.rect.height, Is.GreaterThanOrEqualTo(144), button.name + " reserves the touch height");
                         if (button.GetComponentInParent<ScrollRect>() != null) continue;
                         var corners = new Vector3[4]; rect.GetWorldCorners(corners);
-                        Assert.That(corners.Min(p => frame.InverseTransformPoint(p).y), Is.GreaterThanOrEqualTo(-900), button.name + " stays inside frame");
+                        Assert.That(corners.Min(p => frame.InverseTransformPoint(p).y), Is.GreaterThanOrEqualTo(frame.rect.yMin), button.name + " stays inside the actual frame bottom");
+                        Assert.That(corners.Max(p => frame.InverseTransformPoint(p).y), Is.LessThanOrEqualTo(frame.rect.yMax), button.name + " stays inside the actual frame top");
+                        Assert.That(corners.Min(p => frame.InverseTransformPoint(p).x), Is.GreaterThanOrEqualTo(frame.rect.xMin), button.name + " stays inside the actual frame left");
+                        Assert.That(corners.Max(p => frame.InverseTransformPoint(p).x), Is.LessThanOrEqualTo(frame.rect.xMax), button.name + " stays inside the actual frame right");
                     }
                     var portraits = screen.GetComponentsInChildren<Button>().Where(button => button.name.StartsWith("GrowthUlt:")).Select(button => (RectTransform)button.transform).ToArray();
                     Assert.That(portraits.Length, Is.EqualTo(3));
-                    for (int n = 1; n < portraits.Length; n++) Assert.That(portraits[n].anchoredPosition.x - portraits[n - 1].anchoredPosition.x, Is.GreaterThanOrEqualTo(portraits[n - 1].rect.width));
+                    for (int n = 1; n < portraits.Length; n++) Assert.That(WorldRect(portraits[n]).xMin, Is.GreaterThanOrEqualTo(WorldRect(portraits[n - 1]).xMax), "ultimate controls remain physically separated despite different anchor origins");
                     string? shots = Environment.GetEnvironmentVariable("MF_ACCOUNT_UI_SHOTS");
                     if (!string.IsNullOrEmpty(shots)) { Directory.CreateDirectory(shots!); yield return LobbyMomentCapturePlayModeTests.Shot(screen, Path.Combine(shots!, "growth-battle-144.jpg"), MemoryForgeGrowthClient.OwnedCanvas); }
                     Assert.That(host.Posts, Is.Empty);

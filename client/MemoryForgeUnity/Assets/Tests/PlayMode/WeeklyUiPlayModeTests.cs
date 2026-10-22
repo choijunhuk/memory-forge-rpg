@@ -54,8 +54,10 @@ namespace MemoryForge.Client.Tests
                 {
                     var rect = (RectTransform)button.transform; var corners = new Vector3[4]; rect.GetWorldCorners(corners);
                     Assert.That(rect.rect.height, Is.GreaterThanOrEqualTo(144));
-                    Assert.That(corners.Min(p => panel.InverseTransformPoint(p).y), Is.GreaterThanOrEqualTo(-900), button.name);
-                    Assert.That(corners.Max(p => panel.InverseTransformPoint(p).x), Is.LessThanOrEqualTo(1600), button.name);
+                    Assert.That(corners.Min(p => panel.InverseTransformPoint(p).y), Is.GreaterThanOrEqualTo(panel.rect.yMin), button.name);
+                    Assert.That(corners.Max(p => panel.InverseTransformPoint(p).y), Is.LessThanOrEqualTo(panel.rect.yMax), button.name);
+                    Assert.That(corners.Min(p => panel.InverseTransformPoint(p).x), Is.GreaterThanOrEqualTo(panel.rect.xMin), button.name);
+                    Assert.That(corners.Max(p => panel.InverseTransformPoint(p).x), Is.LessThanOrEqualTo(panel.rect.xMax), button.name);
                 }
                 Assert.That(host.Posts, Is.Empty);
                 string? shots = Environment.GetEnvironmentVariable("MF_ACCOUNT_UI_SHOTS");

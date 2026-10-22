@@ -18,7 +18,8 @@ namespace MemoryForge.Client
             scaler.referenceResolution = new Vector2(1600, 900); scaler.matchWidthOrHeight = 0.5f;
             var group = overlay.GetComponent<CanvasGroup>(); group.blocksRaycasts = false; group.interactable = false;
             var frame = Rect(overlay.transform, "Frame", 0, 0, 1600, 900);
-            frame.anchorMin = frame.anchorMax = frame.pivot = new Vector2(0.5f, 0.5f); frame.anchoredPosition = Vector2.zero;
+            frame.anchorMin = frame.anchorMax = frame.pivot = new Vector2(0.5f, 0.5f); frame.anchoredPosition = Vector2.zero; frame.sizeDelta = new Vector2(1600, 900);
+            MemoryForgeUiViewport.Anchor(frame, 0, 0, 1600, 900); frame.anchorMin = frame.anchorMax = frame.pivot = new Vector2(0.5f, 0.5f); MemoryForgeUiViewport.Fit(frame, (RectTransform)overlay.transform);
             var band = Rect(frame, "Band", 0, 224, 1600, 420); var background = band.gameObject.AddComponent<Image>();
             background.color = new Color(0.035f, 0.05f, 0.1f, 0.96f); background.raycastTarget = false;
             var lifetime = overlay.AddComponent<MemoryForgeCutinLifetime>();
@@ -34,7 +35,7 @@ namespace MemoryForge.Client
                 figure.sprite = portrait; figure.preserveAspect = true; figure.raycastTarget = false;
                 if (portrait == null) figure.color = Color.clear;
                 var words = Rect(band, "Words", 800, 96, 720, 224).gameObject.AddComponent<Text>();
-                words.font = font; words.fontSize = 48; words.fontStyle = FontStyle.Bold; words.color = new Color(0.886f, 0.706f, 0.373f);
+                words.font = font; words.fontSize = MemoryForgeUiViewport.FontSize(48); words.fontStyle = FontStyle.Bold; words.color = new Color(0.886f, 0.706f, 0.373f);
                 words.text = name + "\n" + title; words.raycastTarget = false;
                 yield return MemoryForgeUiMotion.Fade(group, 0, 1, 0.14f);
                 for (float time = 0; time < 0.6f && !MemoryForgeUiMotion.Reduced; time += Time.unscaledDeltaTime)
@@ -51,7 +52,7 @@ namespace MemoryForge.Client
         {
             var host = new GameObject(name, typeof(RectTransform)); host.transform.SetParent(parent, false);
             var rect = (RectTransform)host.transform; rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(0, 1);
-            rect.anchoredPosition = new Vector2(x, -y); rect.sizeDelta = new Vector2(width, height); return rect;
+            rect.anchoredPosition = new Vector2(x, -y); rect.sizeDelta = new Vector2(width, height); MemoryForgeUiViewport.Anchor(rect, x, y, width, height); return rect;
         }
     }
 }

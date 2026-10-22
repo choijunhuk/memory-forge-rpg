@@ -289,11 +289,12 @@ namespace MemoryForge.Client
         // Disabling drops only the cosmetic summary, the player-action display and their timers, and the unsent intent (never sent);
         // OnEnable redraws the actual Run without restarting or changing it.
         void OnDisable() { RemoveView(); CloseTurnSummary(); CloseActionPresentation(); DropPrepared(IntentDropped); }
+        Vector3 layoutCalibration;
         void Update()
         {
             // A canvas whose scale changed (a resized window, another screen or camera) is redrawn, so every measured text is measured at
             // the scale it is drawn at (line breaks follow the pixel size glyphs are generated at). Nothing but the view is rebuilt.
-            if (canvasRoot != null && Mathf.Abs(canvasRoot.GetComponent<Canvas>().scaleFactor - renderedScale) > 0.001f) Render();
+            if (canvasRoot != null && (Mathf.Abs(canvasRoot.GetComponent<Canvas>().scaleFactor - renderedScale) > 0.001f || layoutCalibration != MemoryForgeUiViewport.Calibration)) Render();
             FitView();
             if (noticeUntil > 0 && Time.realtimeSinceStartup >= noticeUntil) ExpireNotice();
             if (turnSummary != null && summaryShown < turnSummary.Count) AdvanceTurnSummary(Time.realtimeSinceStartup);
@@ -301,7 +302,7 @@ namespace MemoryForge.Client
             else if (prepared != null) DispatchPrepared(); // the Update after the display closed on its timer or by skip
         }
         void OnApplicationPause(bool paused) { if (paused) Leave(); else ResumeView(); }
-        void OnApplicationFocus(bool focused) { if (focused) ResumeView(); else Leave(); }
+        void OnApplicationFocus(bool focused) { if (focused) MemoryForgeUiViewport.RefreshMetrics(); if (focused) ResumeView(); else Leave(); }
         // Leaving the app (focus loss, pause) drops the unsent intent, so nothing is sent unseen, and then the committed display.
         void Leave()
         {
@@ -1076,8 +1077,8 @@ namespace MemoryForge.Client
             if (rows == null || summaryText == null || summaryContent == null) return;
             summaryText.text = string.Join("\n", rows.Take(summaryShown).Select(row => Decoration(row) ? row.Text : "· " + row.Text));
             float height = Mathf.Ceil(summaryText.preferredHeight) + 6;
-            summaryText.rectTransform.sizeDelta = new Vector2(1184, height);
-            summaryContent.sizeDelta = new Vector2(1216, Math.Max(600, height + 24));
+            summaryText.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
+            summaryContent.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Math.Max(600, height + 24));
             if (summaryScroll != null) summaryScroll.vertical = height + 24 > 600;
             if (summaryStatus != null)
                 summaryStatus.text = summaryShown < rows.Count ? "예약 해결을 차례로 보여 주는 중이에요 (" + summaryShown + "/" + rows.Count + ") · '남은 결과 모두 보기'로 바로 볼 수 있어요"
@@ -1293,6 +1294,7 @@ namespace MemoryForge.Client
         // medal map nodes. Every shape is procedural until Codex's UI kit arrives (art/requests/expedition-restyle-needs-20261018.md).
         void Render()
         {
+            layoutCalibration = MemoryForgeUiViewport.Calibration;
             if (font == null || (recovery == null && (run == null || data == null))) return;
             // A redraw keeps how the previous canvas was presented (overlay, or a camera that draws it).
             var previous = canvasRoot != null ? canvasRoot.GetComponent<Canvas>() : null;
@@ -1311,7 +1313,7 @@ namespace MemoryForge.Client
             var letterbox = Box(canvasRoot, "Letterbox", 0, 0, 0, 0, Background); // fills the bands beside an aspect-fit frame
             letterbox.anchorMin = Vector2.zero; letterbox.anchorMax = Vector2.one; letterbox.offsetMin = letterbox.offsetMax = Vector2.zero;
             frame = Box(canvasRoot, "ExpeditionFrame", 0, 0, 1600, 900, Background);
-            frame.anchorMin = frame.anchorMax = new Vector2(0.5f, 0.5f); frame.pivot = new Vector2(0.5f, 0.5f); frame.anchoredPosition = Vector2.zero;
+            frame.anchorMin = frame.anchorMax = new Vector2(0.5f, 0.5f); frame.pivot = new Vector2(0.5f, 0.5f); frame.anchoredPosition = Vector2.zero; frame.sizeDelta = new Vector2(1600, 900); FitView();
             enemyArt.Clear(); enemyRoots.Clear(); enemyBars.Clear(); handFaces.Clear(); ultRects.Clear(); railZones.Clear(); partyArt.Clear(); partyPanel = null; partyBar = null; partyStatus = null;
             string screen = "recovery";
             if (recovery != null) RecoveryView(); // before the header and every normal view: the failed Run may not be renderable
@@ -1422,12 +1424,13 @@ namespace MemoryForge.Client
         void BattleHeader(RunState s)
         {
             var b = s.Battle!; const float barWidth = 560;
-            var info = Box(frame!, "PartyStatus", 32, 12, barWidth + 52, 74, Color.clear); partyStatus = info;
-            partyBar = HpBar(info, "PartyHp", "ui_hp_frame_party", 0, 2, barWidth, 38, b.Hp, b.MaxHp, Hex("1f8f7d")); // a deeper teal keeps the numbers legible
-            var hpText = Strong(Label(info, "파티 체력 " + b.Hp + " / " + b.MaxHp, 0, 6, barWidth, 30, 20, Ink, FontStyle.Normal, TextAnchor.MiddleCenter));
+            var info = Box(frame!, "PartyStatus", 32, 12, barWidth + 76, 112, Color.clear); partyStatus = info;
+            partyBar = HpBar(info, "PartyHp", "ui_hp_frame_party", 0, 2, barWidth, 64, b.Hp, b.MaxHp, Hex("1f8f7d")); // a deeper teal keeps the numbers legible
+            var hpText = Strong(Label(info, "파티 체력 " + b.Hp + " / " + b.MaxHp, 0, 6, barWidth, 56, 20, Ink, FontStyle.Normal, TextAnchor.MiddleCenter));
             hpText.gameObject.AddComponent<Outline>().effectColor = new Color(0, 0, 0, 0.6f);
-            var gem = Shield(info, barWidth + 6, 0, 42, b.Block > 0 ? Color.white : new Color(1, 1, 1, 0.45f));
-            Strong(Label(gem, b.Block.ToString(), 0, 0, 42, 40, 17, Ink, FontStyle.Normal, TextAnchor.MiddleCenter));
+            var gem = Shield(info, barWidth + 6, 0, 64, b.Block > 0 ? Color.white : new Color(1, 1, 1, 0.45f));
+            Strong(Label(gem, b.Block.ToString(), 0, 0, 64, 56, 17, Ink, FontStyle.Normal, TextAnchor.MiddleCenter));
+            Strong(Label(frame!, b.Turn + "턴", 688, 0, 240, 72, 24, Ink, FontStyle.Bold, TextAnchor.MiddleCenter));
             var stats = new List<(string, Color, Color, Color?)>();
             if (b.Counter != 0) stats.Add(("반격 " + b.Counter, Ink, Alpha(Background, 0.8f), LineEdge));
             int debt = b.Debts.Sum(d => d.N);
@@ -1435,7 +1438,7 @@ namespace MemoryForge.Client
             if (b.EchoActive) stats.Add(("잔향 " + b.Echo + "/" + b.EchoMax, Memory, Alpha(Background, 0.8f), Alpha(Memory, 0.5f))); // only with Rien
             string party = MemoryForgeBattleClient.PartyStatusText(b); // each of the party's statuses as its own brass chip, in Core's order
             if (party.Length != 0) foreach (string buff in party.Split(new[] { " · " }, StringSplitOptions.None)) stats.Add((buff, Brass, Alpha(Brass, 0.14f), Alpha(Brass, 0.6f)));
-            Chips(frame!, "Status", stats, 32, 56, 900, 24, 15, 4);
+            Chips(frame!, "Status", stats, 32, 84, 900, 40, 15, 4);
             Label(frame!, Location(s) + " · " + PhaseName(s), 940, 68, 628, 22, 15, Muted, FontStyle.Normal, TextAnchor.MiddleRight);
         }
         // Off the battle: the HP on a framed plate with its gem, coins, relics and parts as chips, the relic names and the practice note.
@@ -1555,8 +1558,9 @@ namespace MemoryForge.Client
             Picture(frame!, "DrawPile", Kit("ui_pile_draw"), 22, HandTop - 2, icon, icon, Color.white);
             Strong(Label(frame!, "뽑을 " + b.Zones.Draw.Count, lx, HandTop + (phone ? 0 : 6), 134 - lx, phone ? 22 : 26, phone ? 14 : 15, Ink, FontStyle.Normal, TextAnchor.MiddleLeft));
             if (b.Zones.Exhaust.Count != 0) Label(frame!, "소멸 " + b.Zones.Exhaust.Count, lx, HandTop + (phone ? 21 : 28), 134 - lx, 20, 13, Muted, FontStyle.Normal, TextAnchor.MiddleLeft);
-            Picture(frame!, "DiscardPile", Kit("ui_pile_discard"), 1522, HandTop - 2, 44, 44, Color.white);
-            Strong(Label(frame!, "버림 " + b.Zones.Discard.Count, 1448, HandTop + 6, 72, 26, 15, Ink, FontStyle.Normal, TextAnchor.MiddleRight));
+            float right = MemoryForgeUiViewport.Current.Mobile ? frame!.rect.width - 1600 : 0;
+            Picture(frame!, "DiscardPile", Kit("ui_pile_discard"), 1522 + right, HandTop - 2, 44, 44, Color.white);
+            Strong(Label(frame!, "버림 " + b.Zones.Discard.Count, 1392 + right, HandTop + 6, 128, 26, 15, Ink, FontStyle.Normal, TextAnchor.MiddleRight));
         }
         // The battle's bands (frame units, y down). On a phone the card row's controls grow to 48dp and the hand starts lower, so the
         // stage gives up the height; every other band keeps its place.
@@ -1564,7 +1568,7 @@ namespace MemoryForge.Client
         // The action strip's band: under the top band off phones; on a phone below the header's touch band and 48dp tall (pace and skip).
         float StripTop => minTouch > 0 ? Math.Max(150, Math.Max(72, minTouch) + 2) : 150;
         float StripHeight => Math.Max(42, minTouch);
-        float StageTop => minTouch > 0 ? Math.Max(TopBandY, Math.Max(72, minTouch) + 6) : TopBandY; // RULES_NOW_PLAY: no rail band
+        float StageTop => minTouch > 0 ? Math.Max(140, Math.Max(72, minTouch) + 16) : TopBandY; // RULES_NOW_PLAY: no rail band
         float HandTop => minTouch > 0 ? 720 : 650; // KAZENA-BATTLE-20261019: larger portrait cards off phones
         float ControlsHeight => Math.Max(56, minTouch);
         float ActionsTop => HandTop - 4 - 34 - ControlsHeight;
@@ -1650,18 +1654,18 @@ namespace MemoryForge.Client
                 var actor = b.Actors[i]; float x = 4 + i * column; bool ready = actor.Gauge >= rules.GaugeMax; var tone = AttributeColor(actor.Attr);
                 var ult = Gate(Button(actors, "Ult:" + actor.Id, "", x, 0, column - 4, height, () => UseUltimate(actor.Id), Color.clear), ready && b.Phase == "PLAYER");
                 var face = Inner(ult); ultRects[actor.Id] = face;
-                const float caption = 66; float lift = (n - 1 - i) * 24; // back members stand higher
+                float caption = MemoryForgeUiViewport.Current.Mobile ? 120 : 66; float lift = (n - 1 - i) * 24; // back members stand higher
                 float side = Math.Min(column * 1.36f, height - caption - lift); // a square SD whose feet stand on the nameplate, back members higher
                 var sd = Picture(face, "Portrait:" + actor.Id, Art("Characters/char_" + actor.Id + "_sd"), -column * 0.18f, height - caption - side + 8 - lift, column * 1.36f, side, Color.white);
                 if (sd != null) partyArt[actor.Id] = sd.rectTransform;
                 // The name on the kit's title ribbon, the attribute glyph at its left (KAZENA-BATTLE-20261019).
-                var plate = KitPlate(face, "NamePlate", "ui_ribbon_title", new Vector4(64, 0, 64, 0), 96, 2, height - caption, column - 8, 32, Alpha(Background, 0.9f), Alpha(tone, 0.85f));
+                var plate = KitPlate(face, "NamePlate", "ui_ribbon_title", new Vector4(64, 0, 64, 0), 96, 2, height - caption, column - 8, MemoryForgeUiViewport.Current.Mobile ? 56 : 32, Alpha(Background, 0.9f), Alpha(tone, 0.85f));
                 Icon(plate, "Attribute", "ico_attribute_" + actor.Attr, 14, 7, 18, 18, tone);
-                Strong(Label(plate, actor.Name, 30, 0, column - 52, 32, 18, Ink, FontStyle.Normal, TextAnchor.MiddleCenter));
+                Strong(Label(plate, actor.Name, 30, 0, column - 52, MemoryForgeUiViewport.Current.Mobile ? 56 : 32, 18, Ink, FontStyle.Normal, TextAnchor.MiddleCenter));
                 if (ready)
                 {
-                    var pill = KitPlate(face, "UltReady", "ui_button_pill_brass", new Vector4(64, 0, 64, 0), 128, 2, height - 32, column - 8, 30, Brass, Alpha(Color.white, 0.4f));
-                    Strong(Label(pill, "필살기", 0, 0, column - 8, 30, 18, Background, FontStyle.Bold, TextAnchor.MiddleCenter));
+                    var pill = KitPlate(face, "UltReady", "ui_button_pill_brass", new Vector4(64, 0, 64, 0), 128, 2, height - (MemoryForgeUiViewport.Current.Mobile ? 56 : 32), column - 8, MemoryForgeUiViewport.Current.Mobile ? 52 : 30, Brass, Alpha(Color.white, 0.4f));
+                    Strong(Label(pill, "필살기", 0, 0, column - 8, MemoryForgeUiViewport.Current.Mobile ? 52 : 30, 18, Background, FontStyle.Bold, TextAnchor.MiddleCenter));
                     if (ult.interactable) Breathe(Glow(pill, Brass));
                 }
                 else
@@ -1682,15 +1686,17 @@ namespace MemoryForge.Client
         void EnemyStage(BattleState b, BattleRules rules, bool aiming)
         {
             FillPreviewLosses(b);
-            float left = 32 + PartyWidth(b) + 20, band = 1568 - left, top = StageTop, height = StageBottom - StageTop; const float gap = 12, narrowest = 196;
+            float left = 32 + PartyWidth(b) + 20, band = frame!.rect.width - 32 - left, top = StageTop, height = StageBottom - StageTop; const float gap = 12, narrowest = 196;
             int count = b.Enemies.Count;
             float widest = b.Enemies.Any(e => e.Tier == "boss") ? 480 : 360;
             float width = count == 0 ? 0 : Math.Min(widest, (band - gap * Math.Max(0, count - 1)) / count);
-            Transform host = frame!; float x = left, y = top;
+            var enemyBand = Box(frame!, "EnemyBand", left, top, band, height, Color.clear);
+            MemoryForgeUiViewport.StretchX(enemyBand, left, 32);
+            Transform host = enemyBand; float x = 0, y = 0;
             if (count != 0 && width < narrowest)
             {
                 width = narrowest;
-                host = Scroll(frame!, "Enemies", left, top, band, height, count * narrowest + gap * (count - 1), height, Color.clear); x = 0; y = 0;
+                host = Scroll(enemyBand, "Enemies", 0, 0, band, height, count * narrowest + gap * (count - 1), height, Color.clear); x = 0; y = 0;
             }
             else x += (band - (count * width + gap * Math.Max(0, count - 1))) / 2;
             foreach (var enemy in b.Enemies)
@@ -1824,9 +1830,14 @@ namespace MemoryForge.Client
         // The HP the forecast takes, lit over the bar's fill from what remains up to the current HP.
         void PreviewLoss(RectTransform fill, int hp, int max, int taking)
         {
-            var back = (RectTransform)fill.parent; float w = back.sizeDelta.x, k = max > 0 ? w / max : 0;
-            float from = k * Math.Max(0, hp - taking), to = k * Math.Min(hp, max);
-            if (to > from) Plate(back, "HpPreview", from, 0, to - from, back.sizeDelta.y, new Color(1, 1, 1, 0.55f), null, 1, true);
+            var back = (RectTransform)fill.parent;
+            float from = max > 0 ? Mathf.Clamp01((float)Math.Max(0, hp - taking) / max) : 0;
+            float to = max > 0 ? Mathf.Clamp01((float)hp / max) : 0;
+            if (to > from)
+            {
+                var preview = Plate(back, "HpPreview", 0, 0, 0, back.rect.height, new Color(1, 1, 1, 0.55f), null, 1, true);
+                preview.anchorMin = new Vector2(from, 0); preview.anchorMax = new Vector2(to, 1); preview.offsetMin = preview.offsetMax = Vector2.zero;
+            }
         }
         RectTransform HpBar(Transform parent, string name, string frameId, float x, float y, float width, float height, int value, int max, Color color)
         {
@@ -1841,7 +1852,7 @@ namespace MemoryForge.Client
         void Overflow(RectTransform info, float needed, float height, Transform keep)
         {
             var children = info.Cast<Transform>().Where(child => child.name != "Edge" && child != keep).ToList();
-            var content = Scroll(info, "InfoScroll", 0, 0, info.sizeDelta.x, height, info.sizeDelta.x, needed, Color.clear);
+            var content = Scroll(info, "InfoScroll", 0, 0, info.rect.width, height, info.rect.width, needed, Color.clear);
             foreach (var child in children) child.SetParent(content, false);
         }
         // Four corner brackets around a slot (selected: teal; still to choose: ink, breathing).
@@ -1908,8 +1919,34 @@ namespace MemoryForge.Client
         // hand's centre (tilted and lowered towards the ends, a short hand centred); the chosen one stands straight and lifted. The
         // button's own hit rectangle never moves or turns, so neighbours never share a press; its face ("Card") is the part that deals
         // in, tilts, lifts and sinks while pressed. Dragged up, a card is played on its drop (CardDrag); sideways drags scroll the hand.
+        void MobileHandDock(BattleState b)
+        {
+            float width = Math.Max(360, MemoryForgeUiViewport.FontSize(20) * 11 + 112), height = 176, pitch = width + 16;
+            float view = frame!.rect.width - HandLeft - (1600 - HandRight);
+            var dock = Scroll(frame, "Hand", HandLeft, HandTop, view, 900 - HandTop, Math.Max(view, b.Zones.Hand.Count * pitch), 900 - HandTop, Color.clear);
+            MemoryForgeUiViewport.StretchX((RectTransform)dock.parent, HandLeft, 1600 - HandRight);
+            var scroll = dock.parent.GetComponent<ScrollRect>(); int index = 0;
+            foreach (string uid in b.Zones.Hand)
+            {
+                var definition = run!.BattleEffectiveCard(uid); bool selected = uid == selectedCard;
+                var button = Button(dock, "Hand:" + uid, "", index++ * pitch, 0, width, height, () => SelectCard(uid), selected ? Alpha(Memory, 0.35f) : Hex("0f1628"), edge: selected ? Memory : OwnerColor(definition.Owner));
+                var face = Inner(button); handFaces[uid] = face;
+                if (Application.isPlaying) button.gameObject.AddComponent<CardDrag>().Bind(this, uid, scroll);
+                if (selected) Glow(face, Alpha(Memory, 0.6f));
+                string owner = definition.Owner;
+                if (!characterAttrs.ContainsKey(owner) && b.Cards.TryGetValue(uid, out var instance)) owner = instance.Wielder ?? instance.Assigned ?? owner;
+                Picture(face, "Owner", Art("Characters/char_" + owner + "_sd"), 8, 56, 72, 112, Color.white);
+                bool retained = b.Cards.TryGetValue(uid, out var card) && card.Held || run.BattleRetains(uid);
+                if (retained) Label(face, "보존", 8, 4, 80, 48, 17, Memory, FontStyle.Bold, TextAnchor.MiddleCenter);
+                var title = Label(face, definition.Name + (card != null && card.Plus ? "+" : ""), 96, 4, width - 112, 1, 20, Ink, FontStyle.Bold);
+                string mode = run.BattleAllowedModes(uid).FirstOrDefault() ?? "now";
+                Label(face, "행동력 " + run.BattleCostOf(uid, mode), 96, 4 + title.rectTransform.rect.height + 12, width - 112, 52, 18, Brass);
+            }
+        }
+
         void HandDock(BattleState b)
         {
+            if (MemoryForgeUiViewport.Current.Mobile) { MobileHandDock(b); return; }
             // KAZENA-BATTLE-20261019: every card is the same portrait shape (the kit's card frame, 360×520), so the row lines up. The art
             // window takes the top half down to the frame's divider; the name and the effect sit under it. An effect that does not fit
             // in three short lines points to 카드 설명 instead of being cut. The dock reaches the frame's bottom and the cards leave room
@@ -1968,7 +2005,7 @@ namespace MemoryForge.Client
                 body.resizeTextForBestFit = false;
                 var costArt = Picture(face, "Cost", Kit("ui_gem_cost"), -2, -2, 42, 42, poor ? new Color(0.5f, 0.5f, 0.58f) : Color.white);
                 var cost = costArt != null ? costArt.rectTransform : Gem(face, "Cost", 2, 2, 36, poor ? Hex("4a5677") : Brass, poor ? Hex("262e45") : Hex("7a5a22"));
-                float gemSide = cost.sizeDelta.x;
+                float gemSide = cost.rect.width;
                 Strong(Label(cost, run.BattleCostOf(uid, first).ToString(), 0, 0, gemSide, gemSide, 22, poor ? Danger : costArt != null ? Ink : Background, FontStyle.Bold, TextAnchor.MiddleCenter));
                 float tagY = 6;
                 if (selected) { var chip = Plate(face, "Selected", width - 48, tagY, 42, 22, Memory, null, 1, true); Label(chip, "선택", 0, 0, 42, 22, 14, Background, FontStyle.Bold, TextAnchor.MiddleCenter); tagY += 26; }
@@ -1989,7 +2026,7 @@ namespace MemoryForge.Client
         // Turns a top-left-pivoted face by `angle` degrees about its bottom centre (a fanned card); the result is its layout position.
         static void Tilt(RectTransform face, float angle)
         {
-            var size = face.sizeDelta; var foot = new Vector3(size.x / 2, -size.y, 0); var turn = Quaternion.Euler(0, 0, angle);
+            var size = face.rect.size; var foot = new Vector3(size.x / 2, -size.y, 0); var turn = Quaternion.Euler(0, 0, angle);
             face.localRotation = turn; face.anchoredPosition += (Vector2)(foot - turn * foot);
         }
         // The owner's approved cut-in as the card's art window (decorative: it does not depict the card's effect); other party members
@@ -2008,7 +2045,8 @@ namespace MemoryForge.Client
         // glows while there is nothing left to pay for, the turn's natural next step.
         void EndTurnDial(BattleState b)
         {
-            float left = HandRight + 6, w = 1568 - left, h = 892 - HandTop, d = Math.Min(w, h) - 36, cx = left + w / 2, cy = HandTop + h / 2 + 12;
+            float right = MemoryForgeUiViewport.Current.Mobile ? frame!.rect.width - 1600 : 0;
+            float left = HandRight + 6 + right, w = 1568 + right - left, h = 892 - HandTop, d = Math.Min(w, h) - 36, cx = left + w / 2, cy = HandTop + h / 2 + 12;
             var end = Gate(Button(frame!, "EndTurn", "", cx - d / 2, cy - d / 2, d, d, () => EndTurn(), Color.clear, 32, hit: new Rect(left, HandTop, w, 900 - HandTop)), b.Phase == "PLAYER");
             var face = Inner(end); var disc = face.GetComponent<Image>(); var kit = Kit("ui_button_endturn");
             if (kit != null)
@@ -2017,7 +2055,7 @@ namespace MemoryForge.Client
                 disc.sprite = kit; disc.type = Image.Type.Simple; disc.color = Color.white;
                 end.transition = Selectable.Transition.SpriteSwap;
                 end.spriteState = new SpriteState { pressedSprite = Kit("ui_button_endturn_pressed"), disabledSprite = Kit("ui_button_endturn_disabled"), highlightedSprite = kit, selectedSprite = kit };
-                Strong(Label(face, b.Phase == "PLAYER" ? "턴 종료\n" + b.Turn + "턴" : "전투 종료", d * 0.16f, d * 0.24f, d * 0.68f, d * 0.52f, (int)Math.Min(24, d * 0.15f), Ink, FontStyle.Bold, TextAnchor.MiddleCenter));
+                Strong(Label(end.transform, b.Phase == "PLAYER" ? "턴 종료" : "전투 끝", 12, 48, w - 24, 900 - HandTop - 56, (int)Math.Min(24, d * 0.15f), Ink, FontStyle.Bold, TextAnchor.MiddleCenter));
                 if (end.interactable && b.Ap == 0) Breathe(Glow(face, Brass));
                 return;
             }
@@ -2032,7 +2070,7 @@ namespace MemoryForge.Client
                 tick.localRotation = Quaternion.Euler(0, 0, -k * 30);
             }
             Deco(face, "Gloss", Pill(0), d * 0.24f, d * 0.1f, d * 0.52f, d * 0.24f, new Color(1, 1, 1, 0.24f));
-            Strong(Label(face, b.Phase == "PLAYER" ? "턴 종료\n" + b.Turn + "턴" : "전투 종료", d * 0.12f, d * 0.2f, d * 0.76f, d * 0.6f, 26, Background, FontStyle.Bold, TextAnchor.MiddleCenter));
+            Strong(Label(end.transform, b.Phase == "PLAYER" ? "턴 종료" : "전투 끝", 12, 48, w - 24, 900 - HandTop - 56, 26, Background, FontStyle.Bold, TextAnchor.MiddleCenter));
             if (end.interactable && b.Ap == 0) Breathe(Glow(face, Brass));
         }
         // The action points on a big brass gem at the hand's left (decoration: Core's number), dimmed at 0.
@@ -2042,9 +2080,8 @@ namespace MemoryForge.Client
             Deco(frame!, "ApGlow", Halo, x - 22, y - 22, d + 44, d + 44, Alpha(Brass, b.Ap > 0 ? 0.5f : 0.15f));
             var art = Picture(frame!, "ApGem", Kit("ui_gem_ap"), x - 8, y - 8, d + 16, d + 16, b.Ap > 0 ? Color.white : new Color(0.55f, 0.55f, 0.6f));
             var gem = art != null ? art.rectTransform : Gem(frame!, "ApGem", x, y, d, b.Ap > 0 ? Brass : Hex("6b5a3a"), Hex("7a5a22"));
-            float side = gem.sizeDelta.x;
+            float side = gem.rect.width;
             Strong(Label(gem, b.Ap.ToString(), 0, 0, side, side, 50, art != null ? Ink : Background, FontStyle.Bold, TextAnchor.MiddleCenter));
-            Strong(Label(frame!, "행동력  " + b.Ap, x - 8, y + d, d + 16, 24, 16, Brass, FontStyle.Normal, TextAnchor.MiddleCenter));
         }
         // The card row over the hand: the forecast (or the last command's notice) of exactly the request the confirm sends, then the
         // chosen card and its target, 카드 설명, one button per mode Core allows (cost and timing, or Core's refusal) and the confirm; a
@@ -2479,7 +2516,7 @@ namespace MemoryForge.Client
             {
                 float row = Math.Max(62, minTouch), pitch = row + 8;
                 // The changes list takes what the column leaves above the result preview (see below).
-                float listHeight = column.sizeDelta.y - 8 - 40 - 6 - 54 - 26 - 8 - 226;
+                float listHeight = column.rect.height - 8 - 40 - 6 - 54 - 26 - 8 - 226;
                 var list = Scroll(column, "Changes:" + cid, 16, 226, 468, listHeight, 468, changes.Count * pitch, Alpha(Background, 0.6f));
                 for (int k = 0; k < changes.Count; k++)
                 {
@@ -2494,7 +2531,7 @@ namespace MemoryForge.Client
             var resultKeys = new HashSet<string>(result.Select(r => Text(Get(r, "key"))), StringComparer.Ordinal);
             var dropped = before.Where(r => !resultKeys.Contains(Text(Get(r, "key")))).ToList();
             // The result preview and any dropped cards stack up from the column's own bottom (which ends above the exits' touch row).
-            float bottom = column.sizeDelta.y - 8, droppedTop = bottom - 40, resultHeight = dropped.Count != 0 ? 54 : 96;
+            float bottom = column.rect.height - 8, droppedTop = bottom - 40, resultHeight = dropped.Count != 0 ? 54 : 96;
             float resultTop = (dropped.Count != 0 ? droppedTop - 6 : bottom) - resultHeight;
             Label(column, "결과 덱 미리보기 " + result.Count + "장", 16, resultTop - 26, 468, 24, 17, Memory);
             TextList(column, "Result:" + cid, string.Join(", ", result.Select(r => SpecText(r) + (!beforeByKey.TryGetValue(Text(Get(r, "key")), out var sig) ? " (새로)" : sig != Signature(r) ? " (바뀜)" : ""))),
@@ -2719,17 +2756,17 @@ namespace MemoryForge.Client
         void Flash(RectTransform panel)
         {
             if (Calm) return;
-            var flash = Box(panel, "HitFlash", 0, 0, panel.sizeDelta.x, panel.sizeDelta.y, new Color(1f, 0.35f, 0.3f, 0.35f));
+            var flash = Box(panel, "HitFlash", 0, 0, panel.rect.width, panel.rect.height, new Color(1f, 0.35f, 0.3f, 0.35f));
             StartCoroutine(MemoryForgeUiMotion.Fade(flash.gameObject.AddComponent<CanvasGroup>(), 1, 0, 0.35f, Still));
         }
         // The lost part of a bar (its old value) shown behind the new fill: it holds a moment, so the size of the hit reads, then drains.
         void Drain(RectTransform fill, int before, int max)
         {
             if (Calm || max <= 0) return;
-            var back = (RectTransform)fill.parent; float width = back.sizeDelta.x;
-            var ghost = Box(back, "Lost", 0, 0, width * Mathf.Clamp01((float)before / max), back.sizeDelta.y, new Color(1f, 0.85f, 0.6f, 0.75f));
+            var back = (RectTransform)fill.parent; float width = back.rect.width;
+            var ghost = Box(back, "Lost", 0, 0, width * Mathf.Clamp01((float)before / max), back.rect.height, new Color(1f, 0.85f, 0.6f, 0.75f));
             ghost.SetSiblingIndex(0);
-            StartCoroutine(DrainLater(ghost, fill.sizeDelta.x));
+            StartCoroutine(DrainLater(ghost, fill.rect.width));
         }
         IEnumerator DrainLater(RectTransform ghost, float width)
         {
@@ -2745,7 +2782,7 @@ namespace MemoryForge.Client
             var label = Label(frame, text, at.x - 150, at.y - 45, 300, 90, size, color, FontStyle.Bold, TextAnchor.MiddleCenter);
             label.name = "HitNumber"; label.resizeTextForBestFit = false;
             var shadow = label.gameObject.AddComponent<Outline>(); shadow.effectColor = new Color(0, 0, 0, 0.8f); shadow.effectDistance = new Vector2(2, -2);
-            var r = label.rectTransform; r.pivot = new Vector2(0.5f, 0.5f); r.anchoredPosition += new Vector2(150, -45);
+            var r = label.rectTransform; r.pivot = new Vector2(0.5f, 0.5f); r.anchoredPosition += new Vector2(r.rect.width / 2, -r.rect.height / 2);
             StartCoroutine(MemoryForgeUiMotion.Rise(label, rise, 0.9f, Still));
             if (!Calm) StartCoroutine(MemoryForgeUiMotion.Punch(r, 1.7f, 0.2f, Still));
         }
@@ -2802,8 +2839,8 @@ namespace MemoryForge.Client
         void Fly((string Name, Vector2 From, string? Target, string Mode, string? Owner) shot)
         {
             if (Calm || frame == null) return;
-            Vector2 to = shot.Mode != "now" ? (railZones.TryGetValue(shot.Mode, out var zone) ? FramePoint(zone) : new Vector2(800, 113))
-                : shot.Target != null && enemyArt.TryGetValue(shot.Target, out var aim) ? FramePoint(aim) : partyPanel != null ? FramePoint(partyPanel) : new Vector2(800, 300);
+            Vector2 to = shot.Mode != "now" ? (railZones.TryGetValue(shot.Mode, out var zone) ? FramePoint(zone) : new Vector2(frame.rect.width / 2, 113))
+                : shot.Target != null && enemyArt.TryGetValue(shot.Target, out var aim) ? FramePoint(aim) : partyPanel != null ? FramePoint(partyPanel) : new Vector2(frame.rect.width / 2, 300);
             var ghost = Plate(frame, "PlayedCard", shot.From.x - 80, shot.From.y - 90, 160, 180, Panel, Memory, 2);
             Label(ghost, shot.Name, 10, 70, 140, 40, 22, Ink, FontStyle.Bold, TextAnchor.MiddleCenter);
             // Under every panel and control (just above the stage scrim): it shows over the painted stage only and never hides a
@@ -2822,7 +2859,7 @@ namespace MemoryForge.Client
         Vector2 FramePoint(RectTransform r)
         {
             var local = frame!.InverseTransformPoint(r.TransformPoint(r.rect.center));
-            return new Vector2(local.x + 800, 450 - local.y);
+            return new Vector2(local.x - frame!.rect.xMin, frame.rect.yMax - local.y);
         }
         // Remembers where a play or an ultimate leaves from (its card face or Ult button) and whose it is, so the view after it commits
         // can fly its ghost and step its owner forward.
@@ -3100,14 +3137,14 @@ namespace MemoryForge.Client
         Vector2 ScreenToFrame(Vector2 screen, Camera? eye)
         {
             RectTransformUtility.ScreenPointToLocalPointInRectangle(frame!, screen, eye, out var local);
-            return new Vector2(local.x + 800, 450 - local.y);
+            return new Vector2(local.x - frame!.rect.xMin, frame.rect.yMax - local.y);
         }
         // A rect's bounds in the frame's top-left coordinates.
         Rect FrameRect(RectTransform r)
         {
             var corners = new Vector3[4]; r.GetWorldCorners(corners);
             Vector3 a = frame!.InverseTransformPoint(corners[0]), c = frame.InverseTransformPoint(corners[2]);
-            return Rect.MinMaxRect(Math.Min(a.x, c.x) + 800, 450 - Math.Max(a.y, c.y), Math.Max(a.x, c.x) + 800, 450 - Math.Min(a.y, c.y));
+            return Rect.MinMaxRect(Math.Min(a.x, c.x) - frame!.rect.xMin, frame.rect.yMax - Math.Max(a.y, c.y), Math.Max(a.x, c.x) - frame.rect.xMin, frame.rect.yMax - Math.Min(a.y, c.y));
         }
         // A hand card's drag: upward, it aims and plays on release; otherwise every drag event goes on to the hand's own scroll, so
         // sideways drags still scroll it. A view replaced mid-drag (its card disabled) drops nothing.
@@ -3228,7 +3265,7 @@ namespace MemoryForge.Client
             y = Flow(content, info.Facts, y, 21, Brass);
             y = Flow(content, info.Text, y, 26, Ink);
             if (info.Notes.Length != 0) y = Flow(content, info.Notes, y, 20, Muted);
-            content.sizeDelta = new Vector2(1072, Math.Max(636, y));
+            content.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Math.Max(636, y));
             content.parent.GetComponent<ScrollRect>().vertical = y > 636;
         }
         float Flow(RectTransform content, string value, float y, int size, Color color, float width = 1040)
@@ -3236,7 +3273,7 @@ namespace MemoryForge.Client
             var text = Label(content, value, 16, y, width, 10, size, color);
             text.resizeTextForBestFit = false; text.verticalOverflow = VerticalWrapMode.Overflow;
             float height = Mathf.Ceil(text.preferredHeight) + 6;
-            text.rectTransform.sizeDelta = new Vector2(width, height);
+            text.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
             return y + height + 14;
         }
         // §14.3 기록: the Run's own log and the recent 40 battle event rows (digest event rows only; kept after a battle ends until the
@@ -3252,7 +3289,7 @@ namespace MemoryForge.Client
             y = Flow(content, lines.Count == 0 ? "아직 기록이 없어요." : string.Join("\n", lines), y, 19, Ink, 924);
             y = Flow(content, "전투 기록 · 최근 " + battleLog.Count + "개 (최대 " + BattleLogLimit + "개)", y, 20, Memory, 924);
             y = Flow(content, battleLog.Count == 0 ? "아직 전투 기록이 없어요." : string.Join("\n", battleLog), y, 19, Ink, 924);
-            content.sizeDelta = new Vector2(956, Math.Max(650, y));
+            content.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Math.Max(650, y));
             content.parent.GetComponent<ScrollRect>().vertical = y > 650;
         }
         // The turn barrier sheet: a full-frame blocker, the summary text revealed by AdvanceTurnSummary, and skip/continue placed away
@@ -3443,6 +3480,8 @@ namespace MemoryForge.Client
         {
             var viewport = Box(parent, name, x, y, width, height, color); viewport.GetComponent<Image>().raycastTarget = true; viewport.gameObject.AddComponent<RectMask2D>();
             var content = Box(viewport, name + "Content", 0, 0, Math.Max(width, contentWidth), Math.Max(height, contentHeight), Color.clear);
+            content.anchorMin = new Vector2(0, 1); content.anchorMax = new Vector2(contentWidth > width ? 0 : 1, 1); content.pivot = new Vector2(0, 1);
+            content.sizeDelta = new Vector2(contentWidth > width ? contentWidth : 0, Math.Max(height, contentHeight)); content.anchoredPosition = Vector2.zero;
             var scroll = viewport.gameObject.AddComponent<ScrollRect>(); scroll.viewport = viewport; scroll.content = content;
             scroll.horizontal = contentWidth > width; scroll.vertical = contentHeight > height; scroll.movementType = ScrollRect.MovementType.Clamped; scroll.scrollSensitivity = 25;
             return content;
@@ -3458,10 +3497,7 @@ namespace MemoryForge.Client
         void FitView()
         {
             if (canvasRoot == null || frame == null || Screen.width <= 0 || Screen.height <= 0) return;
-            Rect safe = Screen.safeArea; Vector2 size = canvasRoot.rect.size;
-            float width = size.x * safe.width / Screen.width, height = size.y * safe.height / Screen.height;
-            frame.localScale = Vector3.one * Mathf.Min(width / 1600, height / 900);
-            frame.anchoredPosition = new Vector2((safe.center.x / Screen.width - 0.5f) * size.x, (safe.center.y / Screen.height - 0.5f) * size.y);
+            MemoryForgeUiViewport.Fit(frame, canvasRoot);
         }
         void RemoveView()
         {
@@ -3476,7 +3512,12 @@ namespace MemoryForge.Client
         {
             var obj = new GameObject(name, typeof(RectTransform), typeof(Image)); obj.transform.SetParent(parent, false);
             var r = obj.GetComponent<RectTransform>(); r.anchorMin = r.anchorMax = new Vector2(0, 1); r.pivot = new Vector2(0, 1); r.anchoredPosition = new Vector2(x, -y); r.sizeDelta = new Vector2(width, height);
-            var image = obj.GetComponent<Image>(); image.color = color; image.raycastTarget = false; return r;
+            if (parent == frame && x == 0 && y == 0 && width == 1600 && height == 900) { MemoryForgeUiViewport.StretchX(r, 0, 0); MemoryForgeUiViewport.StretchY(r, 0, 0); }
+            var image = obj.GetComponent<Image>(); image.color = color; image.raycastTarget = false;
+            if (width == 1600 && height == 900 && MemoryForgeUiViewport.IsDim(name)) MemoryForgeUiViewport.BleedDim(image);
+            if (parent == frame && (name == "HeaderShade" || name == "ScrimLow" || name == "FloorShade")) MemoryForgeUiViewport.BleedX(r);
+            if (width == 1600 && height == 900 && (name.Contains("Workshop") || name.Contains("Backdrop") || name.EndsWith("Veil", StringComparison.Ordinal) || name.EndsWith("Shade", StringComparison.Ordinal) || name == "Shade" || name == "Scrim")) MemoryForgeUiViewport.Bleed(r);
+            return r;
         }
         // A rounded panel (procedural 9-sliced corner) or a pill (half-height ends) with an optional edge: a ring child named "Edge",
         // stretched to the panel, drawn above the fill and below every later child (so a translucent fill never shows an edge colour
@@ -3564,21 +3605,22 @@ namespace MemoryForge.Client
             // Only the Regular face ships: synthetic bold is kept for sizes where it stays crisp (22+).
             var text = obj.GetComponent<Text>(); text.font = font; text.text = value; text.fontSize = size; text.color = color; text.fontStyle = size >= 22 ? style : FontStyle.Normal; text.alignment = align; text.raycastTarget = false;
             text.horizontalOverflow = HorizontalWrapMode.Wrap; text.verticalOverflow = VerticalWrapMode.Truncate;
-            text.resizeTextForBestFit = true; text.resizeTextMinSize = Math.Max(14, (int)(size * 0.7f)); text.resizeTextMaxSize = size; return text;
+            MemoryForgeUiViewport.WholeText(text); return text;
         }
         // Sizes a wrapped label to its whole text at its own font size and returns that height (TextHeight's measure).
         float Grow(Text text)
         {
             text.resizeTextForBestFit = false;
             var r = text.rectTransform;
-            float height = TextHeight(text.text, text.fontSize, r.sizeDelta.x, text.fontStyle);
-            r.sizeDelta = new Vector2(r.sizeDelta.x, height); return height;
+            float height = TextHeight(text.text, text.fontSize, r.rect.width, text.fontStyle, true);
+            r.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height); return height;
         }
         // The height of a wrapped text at this canvas's scale (the one it is drawn at; a scale change redraws the view): Text.
         // preferredHeight's own generator settings, measured 3% narrower than drawn, plus a margin. Cached per scale, size and width,
         // so a redraw of the same screen measures nothing again.
-        float TextHeight(string value, int size, float width, FontStyle style = FontStyle.Normal)
+        float TextHeight(string value, int size, float width, FontStyle style = FontStyle.Normal, bool calibrated = false)
         {
+            if (!calibrated) size = MemoryForgeUiViewport.FontSize(size);
             if (value.Length == 0) return 0;
             float scale = canvasRoot != null ? Mathf.Max(0.01f, canvasRoot.GetComponent<Canvas>().scaleFactor) : 1f;
             string key = scale.ToString("F4") + "|" + size + "|" + (int)style + "|" + width.ToString("F1") + "|" + value;
@@ -3597,6 +3639,7 @@ namespace MemoryForge.Client
         // The one-line width of a text at this canvas's scale (cached like TextHeight), for chips sized to their words.
         float TextWidth(string value, int size, FontStyle style = FontStyle.Normal)
         {
+            size = MemoryForgeUiViewport.FontSize(size);
             if (value.Length == 0) return 0;
             float scale = canvasRoot != null ? Mathf.Max(0.01f, canvasRoot.GetComponent<Canvas>().scaleFactor) : 1f;
             string key = "w|" + scale.ToString("F4") + "|" + size + "|" + (int)style + "|" + value;
@@ -3665,9 +3708,7 @@ namespace MemoryForge.Client
         public static float TouchUnits()
         {
             if (TouchOverride.HasValue) return TouchOverride.Value;
-            if (!Application.isMobilePlatform || Screen.dpi <= 0) return 0;
-            var safe = Screen.safeArea; float pixels = Mathf.Min(safe.width / 1600f, safe.height / 900f);
-            return pixels <= 0 ? 0 : 48f * Screen.dpi / 160f / pixels;
+            return MemoryForgeUiViewport.TouchUnits();
         }
         // A bar and its fill (returned, so a hit can drain the lost part behind it): a dark pill track, the coloured fill
         // and, on a thick bar, a highlight along its top.
@@ -3676,6 +3717,7 @@ namespace MemoryForge.Client
             var back = Plate(parent, name, x, y, width, height, Alpha(Background, 0.92f), null, 1, true);
             float filled = width * Mathf.Clamp01(max > 0 ? (float)value / max : 0);
             var fill = Plate(back, "Fill", 0, 0, filled, height, color, null, 1, true);
+            fill.anchorMin = Vector2.zero; fill.anchorMax = new Vector2(Mathf.Clamp01(max > 0 ? (float)value / max : 0), 1); fill.offsetMin = fill.offsetMax = Vector2.zero;
             if (height >= 12 && filled >= height) Deco(fill, "Shine", Fade(false), height * 0.4f, 1, Math.Max(0, filled - height * 0.8f), height * 0.45f, new Color(1, 1, 1, 0.35f));
             return fill;
         }
@@ -3691,9 +3733,12 @@ namespace MemoryForge.Client
         {
             var window = Box(parent, name, x, y, width, height, Color.clear); window.gameObject.AddComponent<RectMask2D>();
             if (sprite == null) return;
+            if (name == "Backdrop")
+            {
+                var background = window.GetComponent<Image>(); background.sprite = sprite; background.color = Color.white; MemoryForgeUiViewport.Cover(background, focus); return;
+            }
             float aspect = sprite.rect.width / sprite.rect.height, w = Math.Max(width, height * aspect), h = w / aspect;
-            var image = Box(window, "Art", (width - w) / 2, -focus * (h - height), w, h, Color.white).GetComponent<Image>();
-            image.sprite = sprite;
+            var image = Box(window, "Art", (width - w) / 2, -focus * (h - height), w, h, Color.white).GetComponent<Image>(); image.sprite = sprite;
         }
         Outline Glow(RectTransform r, Color color)
         {

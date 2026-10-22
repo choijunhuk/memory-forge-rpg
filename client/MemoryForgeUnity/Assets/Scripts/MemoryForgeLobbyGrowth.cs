@@ -39,9 +39,9 @@ namespace MemoryForge.Client
         {
             ClearPanel(growthPanel);
             var background = Box(growthPanel, "TrainingWorkshop", 0, 0, 1600, 900, new Color(0.5f, 0.55f, 0.62f));
-            background.GetComponent<Image>().sprite = SpriteAt("Art/Backgrounds/bg_workshop");
+            background.GetComponent<Image>().sprite = SpriteAt("Art/Backgrounds/bg_workshop"); MemoryForgeUiViewport.Cover(background.GetComponent<Image>());
             Box(growthPanel, "TrainingShade", 0, 0, 1600, 900, new Color(0.025f, 0.04f, 0.075f, 0.76f));
-            Label(growthPanel, "성장 공방", 56, 24, 1000, 64, 42, Ink, FontStyle.Bold);
+            var growthHeading = Label(growthPanel, "성장 공방", 56, 24, 1000, 64, 42, Ink, FontStyle.Bold);
             Button(growthPanel, "CloseGrowth", "홈", 1392, 24, 152, 112, ClosePanels, Line, 24).interactable = !growthBusy;
             var profile = AccountProgression;
             if (profile?.Resources == null || profile.Focus == null || profile.Dungeons == null)
@@ -50,9 +50,9 @@ namespace MemoryForge.Client
                 GrowthRefreshButton(96, 480);
                 return;
             }
-            Label(growthPanel, "AL " + profile.Account.Level + "   ·   집중 " + profile.Focus.Value + "/" + profile.Focus.Cap
-                + "   ·   6분마다 1 회복", 58, 108, 1260, 36, 24, Memory);
-            Ornament(growthPanel, 58, 164, 480);
+            var focusText = Label(growthPanel, "AL " + profile.Account.Level + "   ·   집중 " + profile.Focus.Value + "/" + profile.Focus.Cap
+                + "   ·   6분마다 1 회복", 58, 24 + growthHeading.rectTransform.rect.height + 16, 944, 36, 24, Memory);
+            Ornament(growthPanel, 58, 24 + growthHeading.rectTransform.rect.height + 16 + focusText.rectTransform.rect.height + 8, 480);
             var pending = recruitmentSession?.State.Pending;
             if (pending != null || recruitmentSession?.State.OutboxCode != null)
             {
@@ -78,27 +78,34 @@ namespace MemoryForge.Client
             var source = profile.Dungeons.FirstOrDefault(item => item.Id == growthDungeon) ?? profile.Dungeons.First();
             growthDungeon = source.Id;
             var tier = source.Tiers.FirstOrDefault(item => item.Tier == growthTier) ?? source.Tiers.First(); growthTier = tier.Tier;
-            float rowHeight = Math.Max(116, TouchUnits()), pitch = rowHeight + 16;
+            float rowHeight = Math.Max(144, TouchUnits()), pitch = rowHeight + 16;
             float footerHeight = Math.Max(120, TouchUnits()), footerY = 884 - footerHeight;
-            float tierHeight = Math.Max(96, TouchUnits()), rewardY = 320 + tierHeight + 16;
-            var list = ScrollArea(growthPanel, 56, 200, 456, 496, Math.Max(496, profile.Dungeons.Count * pitch));
+            float tierHeight = Math.Max(112, TouchUnits());
+            var list = ScrollArea(growthPanel, 56, 256, 456, 440, Math.Max(440, profile.Dungeons.Count * pitch));
             for (int n = 0; n < profile.Dungeons.Count; n++)
             {
                 var item = profile.Dungeons[n];
                 Button(list, "GrowthDungeon:" + item.Id, DungeonName(item.Id) + "\n" + (item.Available ? "집중 " + item.Cost : "AL " + item.UnlockLevel + " 해금"), 0, n * pitch, 440, rowHeight,
                     () => { growthDungeon = item.Id; growthTier = 1; levelPreview = null; RenderGrowth(); }, item.Id == growthDungeon ? Brass : Line, 25).interactable = ready;
             }
-            Label(growthPanel, DungeonName(source.Id), 552, 200, 456, 56, 34, Brass, FontStyle.Bold);
-            Label(growthPanel, "1웨이브 · 패배 시 집중 소모 없음", 554, 264, 456, 36, 20, Ink);
+            var details = ScrollArea(growthPanel, 552, 256, 992, footerY - 272, 1200);
+            var heading = Label(details, DungeonName(source.Id), 0, 0, 456, 72, 34, Brass, FontStyle.Bold);
+            float detailsY = Math.Max(96, heading.rectTransform.rect.height + 16);
+            detailsY = FlowLabel(details, "1웨이브 · 패배 시 집중 소모 없음", detailsY, 20, Ink) + 12;
+            var tiers = Box(details, "GrowthTiers", 0, detailsY, 992, tierHeight, Color.clear);
             for (int n = 0; n < source.Tiers.Count; n++)
             {
                 var item = source.Tiers[n];
-                Button(growthPanel, "GrowthTier:" + item.Tier, item.Tier + "단계", 552 + n * 164, 320, 152, tierHeight,
-                    () => { growthTier = item.Tier; RenderGrowth(); }, item.Tier == growthTier ? Brass : Line, 23).interactable = ready;
+                var choice = Button(tiers, "GrowthTier:" + item.Tier, item.Tier + "단계", n * 164, 0, 152, tierHeight,
+                    () => { growthTier = item.Tier; RenderGrowth(); }, item.Tier == growthTier ? Brass : Line, 23);
+                choice.interactable = ready;
+                var rect = (RectTransform)choice.transform; rect.anchorMin = new Vector2((float)n / source.Tiers.Count, 1); rect.anchorMax = new Vector2((float)(n + 1) / source.Tiers.Count, 1); rect.sizeDelta = new Vector2(-12, tierHeight); rect.anchoredPosition = new Vector2(0, 0);
             }
-            Label(growthPanel, "권장 단계 " + tier.Stage + " · 기록 " + tier.BestStars + "/3\n보상  " + string.Join(" · ", tier.Reward.Resources.Where(item => item.Value > 0).Select(item => MemoryForgeGrowthClient.MaterialName(item.Key) + " " + item.Value))
-                + "\n계정 경험치 +" + tier.Reward.AccountXp, 554, rewardY, 988, 108, 24, Ink);
-            Label(growthPanel, "현재 편성  " + string.Join(" / ", ownedParty.Select(id => content.Battle.Characters.FirstOrDefault(item => item.Id == id)?.Name ?? id)), 554, rewardY + 128, 988, 44, 24, Memory);
+            detailsY += tierHeight + 24;
+            detailsY = FlowLabel(details, "권장 단계 " + tier.Stage + " · 기록 " + tier.BestStars + "/3\n보상  " + string.Join(" · ", tier.Reward.Resources.Where(item => item.Value > 0).Select(item => MemoryForgeGrowthClient.MaterialName(item.Key) + " " + item.Value))
+                + "\n계정 경험치 +" + tier.Reward.AccountXp, detailsY, 24, Ink) + 12;
+            detailsY = FlowLabel(details, "현재 편성  " + string.Join(" / ", ownedParty.Select(id => content.Battle.Characters.FirstOrDefault(item => item.Id == id)?.Name ?? id)), detailsY, 24, Memory);
+            details.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Math.Max(footerY - 272, detailsY + 16));
             Button(growthPanel, "EditGrowthParty", "편성 변경", 1320, 176, 224, 112, OpenSortie, Line, 25).interactable = ready;
             Button(growthPanel, "OpenWeeklyBosses", "주간 보스", 1060, 176, 236, 112, OpenWeeklyBosses, Line, 25).interactable = ready;
             bool noRun = profile.ActiveSession == null || profile.ActiveSession.Phase == "DONE";
@@ -108,7 +115,9 @@ namespace MemoryForge.Client
                 .interactable = ready && source.Available && tier.SweepAvailable && profile.Focus.Value >= source.Cost && noRun;
             if (recruitmentSession?.ProgressionNeedsRefresh == true) GrowthRefreshButton(56, footerY, 440);
             else Button(growthPanel, "OpenCharacterGrowth", "동료 성장", 56, footerY, 440, footerHeight, ShowCharacterGrowth, Line, 25).interactable = ready;
-            Label(growthPanel, growthBusy ? "서버에서 확인하고 있어요…" : growthNotice, 56, 176, 944, 28, 18, Memory);
+            var noticeBody = ScrollArea(growthPanel, 56, 168, 944, 72, 72);
+            var noticeText = Label(noticeBody, growthBusy ? "서버에서 확인하고 있어요…" : growthNotice, 0, 0, 912, 1, 18, Memory);
+            noticeBody.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Math.Max(72, noticeText.rectTransform.rect.height));
         }
 
         void ShowCharacterGrowth()
@@ -122,11 +131,11 @@ namespace MemoryForge.Client
             growthCharacter = character.CharId;
             var paper = Box(growthPanel, "CharacterGrowthSheet", 32, 24, 1536, 852, Panel);
             Kit(paper, "Frame", "ui_panel_frame", new Vector4(48, 48, 48, 48), 0, 0, 1536, 852, 128);
-            Label(paper, "동료 성장", 32, 24, 900, 64, 42, Brass, FontStyle.Bold);
+            var characterGrowthHeading = Label(paper, "동료 성장", 32, 24, 900, 64, 42, Brass, FontStyle.Bold);
             Button(paper, "CharacterEquipment", "성장 · 장비", 968, 16, 240, 112, () => OpenEquipmentFor(growthCharacter), Line, 24).interactable = !growthBusy && !recruitmentBusy && !accountBusy;
             Button(paper, "BackToTraining", "훈련 목록", 1264, 16, 240, 112, RenderGrowth, Line, 24).interactable = !growthBusy && !accountBusy && !recruitmentBusy;
-            Label(paper, "잉크 XP " + profile.Resources["ink"] + "   ·   공방화 " + profile.Resources["credits"], 32, 112, 880, 44, 26, Memory);
-            float rowHeight = Math.Max(116, TouchUnits()), pitch = rowHeight + 16;
+            Label(paper, "잉크 XP " + profile.Resources["ink"] + "   ·   공방화 " + profile.Resources["credits"], 32, 24 + characterGrowthHeading.rectTransform.rect.height + 16, 880, 64, 26, Memory);
+            float rowHeight = Math.Max(144, TouchUnits()), pitch = rowHeight + 16;
             float actionHeight = Math.Max(120, TouchUnits()), actionY = 852 - 64 - actionHeight;
             var list = ScrollArea(paper, 32, 192, 440, 624, Math.Max(624, profile.Characters.Count * pitch));
             for (int n = 0; n < profile.Characters.Count; n++)
@@ -143,9 +152,9 @@ namespace MemoryForge.Client
             {
                 Label(paper, "Lv." + preview.Before.Level + " → " + preview.After.Level + "\n체력 " + preview.Before.Stats.Hp + " → " + preview.After.Stats.Hp
                     + "\n위력 " + preview.Before.Stats.Power + " → " + preview.After.Stats.Power, 968, 280, 520, 160, 28, Brass);
-                Label(paper, "필요 잉크 XP " + preview.CostInk + "\n필요 공방화 " + preview.CostCredits + "\n남은 XP 재료는 그대로 보존돼요.", 968, 464, 520, 116, 25, Ink);
+                Label(paper, "필요 잉크 XP " + preview.CostInk + "\n필요 공방화 " + preview.CostCredits + "\n남은 XP 재료는 그대로 보존돼요.", 968, 448, 520, 152, 25, Ink);
                 Button(paper, "CommitCharacterLevel", "레벨업", 968, actionY, 520, actionHeight, () => BeginGrowthAction("level"), Brass, 30).interactable = !growthBusy && !accountBusy && !recruitmentBusy && recruitmentSession?.ProgressionNeedsRefresh == false && preview.CanCommit;
-                if (!preview.CanCommit) Label(paper, "자원 또는 승급 조건을 확인해주세요.", 968, 592, 520, 36, 22, Memory);
+                if (!preview.CanCommit) Label(paper, "자원 또는 승급 조건을 확인해주세요.", 968, 608, 520, 56, 22, Memory);
             }
             else
             {
