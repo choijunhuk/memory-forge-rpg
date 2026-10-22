@@ -106,12 +106,12 @@ namespace MemoryForge.Client.Tests
             for (float t = 0; t < seconds; t += Time.unscaledDeltaTime) yield return null;
         }
         // The lobby canvas drawn by a camera into a 1600×900 texture, then back to the overlay.
-        internal static IEnumerator Shot(GameObject host, string path)
+        internal static IEnumerator Shot(GameObject host, string path, string canvasName = MemoryForgeLobbyClient.OwnedCanvas)
         {
             var texture = new RenderTexture(1600, 900, 24);
             var camera = new GameObject("LobbyShotCamera").AddComponent<Camera>();
             camera.targetTexture = texture; camera.clearFlags = CameraClearFlags.SolidColor; camera.backgroundColor = Color.black; camera.orthographic = true;
-            var canvas = host.GetComponentsInChildren<Canvas>().First(x => x.name == MemoryForgeLobbyClient.OwnedCanvas);
+            var canvas = host.GetComponentsInChildren<Canvas>().First(x => x.name == canvasName);
             var image = new Texture2D(1600, 900, TextureFormat.RGB24, false); var before = RenderTexture.active;
             try
             {
@@ -119,7 +119,7 @@ namespace MemoryForge.Client.Tests
                 yield return null;
                 Canvas.ForceUpdateCanvases();
                 // Capture the authored frame; Screen.safeArea still describes the Editor Game view, not this render target.
-                var frame = host.GetComponentsInChildren<RectTransform>().FirstOrDefault(r => r.name == "LobbyFrame");
+                var frame = host.GetComponentsInChildren<RectTransform>().FirstOrDefault(r => r.name == "LobbyFrame" || r.name == "ServerPracticeFrame" || r.name == "GrowthFrame");
                 if (frame != null) { frame.localScale = Vector3.one; frame.anchoredPosition = Vector2.zero; }
                 camera.Render();
                 RenderTexture.active = texture; image.ReadPixels(new Rect(0, 0, 1600, 900), 0, 0); image.Apply();

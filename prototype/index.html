@@ -427,6 +427,23 @@ root.MFMemoryV2=api;
   const clone = (o) => JSON.parse(JSON.stringify(o));
   const MemoryV2 = typeof module !== 'undefined' && module.exports ? require('../proposals/memory_v2.cjs') : root.MFMemoryV2;
   const BPS = 10000;
+  const SUPPORT_GAUGE_COST = 100;
+  function supportNumber(value, lo = -0x80000000, hi = 0x7fffffff) {
+    if (!Number.isSafeInteger(value) || value < lo || value > hi) throw new RuleError('BATTLE_NUMBER_OUT_OF_RANGE');
+    return value;
+  }
+  // S4 mirrors typed Core numbers only on support-bearing candidates/sources; legacy JS numeric behavior stays unchanged.
+  function supportNumbers(node, wide = false, context = 'value') {
+    if (typeof node === 'number') supportNumber(node, wide ? Number.MIN_SAFE_INTEGER : -0x80000000, wide ? Number.MAX_SAFE_INTEGER : 0x7fffffff);
+    else if (Array.isArray(node)) for (const value of node) supportNumbers(value, wide, context === 'actors' ? 'actor' : 'value');
+    else if (node && typeof node === 'object') for (const [key, value] of Object.entries(node)) {
+      if (context === 'state' && key === 'rng') { for (const n of value) supportNumber(n, 0, 0xffffffff); continue; }
+      const child = context === 'state' && key === 'actors' ? 'actors' : context === 'state' && key === 'support' ? 'support'
+        : context === 'support' && key === 'source' ? 'source' : 'value';
+      const rank = (context === 'actor' || context === 'source') && (key === 'skillLv' || key === 'ultLv');
+      supportNumbers(value, wide || context === 'state' && key === 'runFlags' || rank, child);
+    }
+  }
 
   // xoshiro128** seeded through splitmix32 (128-bit state; seed is chosen by the server, never the client)
   function splitmix32(seed) {
@@ -653,8 +670,31 @@ root.MFMemoryV2=api;
       mods: { c: spec.mods?.c || null, e: spec.mods?.e || null }, temp: [], growth: spec.growth || 0, grown: false, held: false,
       used: 0, costMod: 0, token: !!extra.token, free: !!extra.free, assigned: spec.assigned || null, from: spec.from || null,
     };
+    // S4 provenance: only a token of the frozen support partner's own card carries it; the member is absent on every other card.
+    if (extra.supportSourceId !== undefined && extra.supportSourceId !== null) state.cards[uid].supportSourceId = extra.supportSourceId;
     return uid;
   }
+  // the accepted practice-view hidden-outcome rule: a random target or pick, or a draw, anywhere in if/then/else
+  const hiddenOps = (ops) => (ops || []).some((op) => op.tgt === 'rand' || op.pick === 'random' || op.op === 'draw' || hiddenOps(op.then) || hiddenOps(op.else));
+  // S4 support target need over its whole effect list: "fixed" anywhere wins, else "one" (tgt one or untargeted damage), nested branches included
+  function effectTarget(ops) {
+    let need = null;
+    for (const op of ops || []) {
+      if (op.tgt === 'fixed') return 'fixed';
+      if (op.tgt === 'one' || (op.op === 'dmg' && !op.tgt)) need = 'one';
+      for (const branch of [op.then, op.else]) { const nested = branch ? effectTarget(branch) : null; if (nested === 'fixed') return nested; if (nested) need = nested; }
+    }
+    return need;
+  }
+  // support picks are copied, never retained: a list, a string (characters, as the C# reader), or absent; anything else is malformed
+  function supportPicks(picks) {
+    if (!picks) return [];
+    if (Array.isArray(picks)) return [...picks];
+    if (typeof picks === 'string') return [...picks];
+    throw new RuleError('INVALID_COMMAND_ARGS');
+  }
+  const supportForecastResult = (error = null) => ({ error, mode: 'now', cost: 0, due: null, hidden: false, enemyHpLoss: 0, blockDelta: 0, hpDelta: 0,
+    defeat: false, enemyDamage: 0, newlyBroken: 0, enemyHpLosses: [] });
 
   class Battle {
     constructor(data, state) { this.ix = indexData(data); this.s = state; this.receipts = {}; }
@@ -689,6 +729,8 @@ root.MFMemoryV2=api;
         for (const node of ch.resonance.slice(0, res)) Battle.applyResonance(s, actor, node.fx);
         s.actors.push(actor);
       }
+      // S4: one optional owned non-party partner frozen as a detached effect source; no actor, HP, card, passive, start effect or rule
+      if (setup.support !== undefined && setup.support !== null) s.support = Battle.makeSupport(ix, setup.support, s.actors.map((a) => a.id));
       if (s.actors.some((a) => a.id === 'rien')) { s.echoActive = true; s.echoMax = s.actors.find((a) => a.id === 'rien').passive.params.max; }
       if (s.relics.includes('tuning_fork')) { s.echoMax += 1; s.echoStart = Math.max(s.echoStart, 1); }
       if (s.relics.includes('contract_seal')) s.debtCap += 1;
@@ -730,6 +772,37 @@ root.MFMemoryV2=api;
       }
     }
 
+    // S4: trusted derived support build {charId, res, weaponId, refine, power4, hp, gearBps, skillLv (base), ultLv (base)} → {source, used}.
+    // Source-only resonance: ranks, card modifiers, ult replace/extra and the partner's own hooks; passiveParam, capacity, battleStart
+    // and party rules belong to a deployed actor and are never applied. No reference-stat or default-weapon fallback.
+    static makeSupport(ix, sp, party) {
+      const known = (obj, id) => typeof id === 'string' && Object.hasOwn(obj, id);
+      const charId = sp && typeof sp === 'object' ? sp.charId : undefined;
+      if (party.includes(charId)) throw new RuleError('SUPPORT_IN_PARTY', charId);
+      if (!known(ix.chars, charId)) throw new RuleError('UNKNOWN_CHARACTER', charId);
+      const int = (v, lo, hi = 0x7fffffff) => Number.isInteger(v) && v >= lo && v <= hi;
+      if (!int(sp.res, 0, 6) || !int(sp.refine, 1, 5) || !int(sp.power4, 1) || !int(sp.hp, 1) || !int(sp.gearBps, 0) || !int(sp.skillLv, 1) || !int(sp.ultLv, 1)
+        || !known(ix.weapons, sp.weaponId)) throw new RuleError('INVALID_SNAPSHOT', charId);
+      const ch = ix.chars[charId];
+      const source = { id: ch.id, name: ch.name, attr: ch.attr, res: sp.res, power4: sp.power4, vit: sp.hp, gearBps: sp.gearBps, skillLv: sp.skillLv, ultLv: sp.ultLv,
+        weapon: { id: sp.weaponId, refine: sp.refine }, cardMods: [], ultExtra: [], ultReplace: null, hooks: [] };
+      for (const node of ch.resonance.slice(0, sp.res)) Battle.applySourceResonance(source, clone(node.fx));
+      return { source, used: false };
+    }
+    static applySourceResonance(src, fx) {
+      switch (fx.type) {
+        case 'multi': for (const f of fx.list) Battle.applySourceResonance(src, f); break;
+        case 'cardMod': src.cardMods.push(fx); break;
+        case 'skillLv': src.skillLv += fx.delta; break;
+        case 'ultLv': src.ultLv += fx.delta; break;
+        case 'ultExtra': src.ultExtra.push({ eff: fx.eff, once: !!fx.once }); break;
+        case 'ultReplace': src.ultReplace = fx.eff; break;
+        case 'hook': src.hooks.push(fx); break;
+        case 'passiveParam': case 'capacity': case 'battleStart': case 'rule': break;
+        default: throw new RuleError('BATTLE_RESONANCE_NOT_IMPLEMENTED');
+      }
+    }
+
     static addEnemy(s, ix, eid) {
       const d = ix.enemies[eid];
       if (!d) throw new RuleError('UNKNOWN_ENEMY', eid);
@@ -748,19 +821,31 @@ root.MFMemoryV2=api;
     has(rel) { return this.s.relics.includes(rel); }
     alive() { return this.s.enemies.filter((e) => e.alive); }
     enemy(uid) { return this.s.enemies.find((e) => e.uid === uid) || null; }
-    ownerChar(inst) { if (this.ix.chars[inst.owner]) return inst.owner; if (inst.owner === 'weapon') return inst.wielder; return null; }
+    // party bookkeeping owner (lastOwner/ownersThisTurn/echo/score/rift chain/gauge); a support-provenanced token has none
+    ownerChar(inst) { if (inst.supportSourceId !== undefined) return null; if (this.ix.chars[inst.owner]) return inst.owner; if (inst.owner === 'weapon') return inst.wielder; return null; }
+    // S4 combat-effect source of a card: its deployed owner actor as before or, only for a token carrying supportSourceId, this battle's
+    // frozen support source. Arithmetic, modifiers, attribute, weapon and NextBoost read it; forged provenance is INVALID_SNAPSHOT.
+    cardSource(inst) {
+      if (inst.supportSourceId === undefined) { const oc = this.ownerChar(inst); return oc ? this.actor(oc) : null; }
+      const src = this.s.support ? this.s.support.source : null;
+      if (!src || src.id !== inst.supportSourceId || !inst.token || inst.key !== undefined || inst.owner !== src.id) throw new RuleError('INVALID_SNAPSHOT', 'supportSourceId');
+      return src;
+    }
     attrOf(inst) {
       const d = this.ix.cards[inst.id];
-      if (d.attr === 'wielder') return this.actor(inst.wielder)?.attr || 'none';
+      if (d.attr === 'wielder') return (inst.supportSourceId === undefined ? this.actor(inst.wielder) : this.cardSource(inst))?.attr || 'none';
       return d.attr || 'none';
     }
     debtTotal() { return this.s.debts.reduce((a, d) => a + d.n, 0); }
     ev(e, data = {}) { this.s.ev.push({ e, ...data }); this.s.log.push({ t: this.s.turn, e, ...data }); if (this.s.log.length > 400) this.s.log.shift(); }
-    weaponPassive(actorId, pid) {
-      const a = this.actor(actorId); if (!a || !a.weapon) return null;
+    weaponPassive(actorId, pid) { return this.sourceWeapon(this.actor(actorId), pid); }
+    // one passive of an effect source's own equipped weapon (deployed actor or frozen support source)
+    sourceWeapon(a, pid) {
+      if (!a || !a.weapon) return null;
       const w = this.ix.weapons[a.weapon.id]; if (!w || w.passive.id !== pid) return null;
       return { value: w.passive.values[a.weapon.refine - 1], alt: w.passive.refineAlt ? w.passive.refineAlt[a.weapon.refine - 1] : 0, scope: w.passive.scope };
     }
+    sourceHook(src, hookId) { return !!src && src.hooks.some((h) => h.id === hookId); }
     partyWeapon(pid) { // party-scope passive (strongest instance)
       let best = null;
       for (const a of this.s.actors) { const p = this.weaponPassive(a.id, pid); if (p && (!best || p.value > best.value)) best = p; }
@@ -774,7 +859,7 @@ root.MFMemoryV2=api;
     scaleAtk(n) { return Math.floor(n * this.partyP4() / 160); }
     scaleVit(n) { return Math.floor(n * this.partyVit() / 81); }
     scaleEnemy(n) { return Math.round(n * ((this.s.diff && this.s.diff.dmg) || 100) / 100); }
-    hasHook(actorId, hookId) { const a = this.actor(actorId); return !!a && a.hooks.some((h) => h.id === hookId); }
+    hasHook(actorId, hookId) { return this.sourceHook(this.actor(actorId), hookId); }
     buff(s) { return this.s.buffs.find((b) => b.s === s && b.until >= this.s.turn) || null; }
 
     // effective definition for an instance: upgrade, resonance mods, evolutions handled by id
@@ -782,15 +867,16 @@ root.MFMemoryV2=api;
       const base = this.ix.cards[inst.id];
       let eff = base.eff;
       if (inst.plus) eff = base.plus?.eff || upgradeOps(eff, this.ix.rules.upgradeMult);
-      const oc = this.ownerChar(inst);
-      const actor = oc ? this.actor(oc) : null;
-      if (actor && actor.cardMods.length && inst.owner === oc) {
+      const actor = this.cardSource(inst);
+      if (actor && actor.cardMods.length && inst.owner === actor.id) {
         const mods = actor.cardMods.filter((m) => m.cards.includes(inst.id) || m.cards.includes(base.id));
         if (mods.length) eff = applyCardMods(eff, mods);
       }
       let uses = base.uses;
       if (actor) for (const m of actor.cardMods) if (m.prop === 'uses' && m.cards.includes(base.id)) uses = (uses || 0) + m.add;
-      return { ...base, eff, uses };
+      const definition = { ...base, eff, uses };
+      if (inst.supportSourceId !== undefined) supportNumbers(definition);
+      return definition;
     }
     partsOf(inst) { return [inst.mods.c, inst.mods.e, ...inst.temp].filter(Boolean).map((p) => this.ix.parts[p]).filter(Boolean); }
     // RULES_NOW_PLAY: a card with the 보존 keyword, or a part granting it, stays in hand at the end of the turn.
@@ -877,11 +963,13 @@ root.MFMemoryV2=api;
         case 'begin': cand.begin(); break;
         case 'play': cand.play(a.uid, a.mode || 'now', a.target || null, a.picks || []); break;
         case 'ult': cand.ult(a.actor, a.target || null, a.picks || []); break;
+        case 'support': cand.support(a.caller, a.target || null, a.picks || []); break;
         case 'end': cand.endTurn(); break;
         default: throw new RuleError('UNKNOWN_COMMAND');
       }
       cand.s.v += 1;
       cand.checkInvariants();
+      cand.checkSupportNumbers();
       const resp = { v: cand.s.v, phase: cand.s.phase, ev: cand.s.ev };
       this.s = cand.s;
       if (req.rid) Object.defineProperty(this.receipts, req.rid, { value: { digest, resp: clone(resp) }, enumerable: true, writable: true, configurable: true });
@@ -1191,7 +1279,7 @@ root.MFMemoryV2=api;
       for (const op of ops) {
         if (op.op === 'loan') {
           if (this.debtTotal() + op.n > s.debtCap) throw new RuleError('DEBT_CAP');
-          if (s.ap - this.costOf(inst.uid, mode) + op.n > this.ix.rules.apMax) throw new RuleError('LOAN_OVERFLOW');
+          if (s.ap - (inst ? this.costOf(inst.uid, mode) : 0) + op.n > this.ix.rules.apMax) throw new RuleError('LOAN_OVERFLOW');
         }
         if (op.op === 'defer') { if (!s.debts.some((d) => d.due === s.turn + 1 && !d.deferred)) throw new RuleError('NOT_DEFERRABLE'); if (this.debtTotal() + 1 > s.debtCap) throw new RuleError('DEBT_CAP'); }
         if (op.op === 'restraint' && (s.played >= 3 || s.restraint.usedTurn === s.turn)) throw new RuleError('RESTRAINT_UNAVAILABLE');
@@ -1227,24 +1315,162 @@ root.MFMemoryV2=api;
       const a = this.actor(actorId);
       if (!a) throw new RuleError('UNKNOWN_ACTOR');
       if (a.gauge < this.ix.rules.gaugeMax) throw new RuleError('ULT_NOT_READY');
-      const ch = this.ix.chars[a.id];
-      const eff = a.ultReplace || ch.ult.eff;
+      const eff = this.ultEffects(a);
       const needs = eff.some((o) => o.tgt === 'one' || (o.op === 'dmg' && !o.tgt));
       if (needs) { const alive = this.alive(); if (!target && alive.length === 1) target = alive[0].uid; const t = this.enemy(target); if (!t || !t.alive) throw new RuleError('BAD_TARGET'); }
       a.gauge -= this.ix.rules.gaugeMax;
-      const ctx = { inst: null, def: null, actor: a, attr: a.attr, reserved: null, target, lastTarget: target, picks: picks || [], isUlt: true, killed: false, lastCount: 0 };
+      const ctx = { inst: null, def: null, actor: a, source: a, attr: a.attr, reserved: null, target, lastTarget: target, picks: picks || [], isUlt: true, killed: false, lastCount: 0 };
       this.ev('ult', { actor: a.id });
-      for (const op of eff) { this.execOp(op, ctx); if (this.checkEnd()) return; }
-      for (const x of a.ultExtra) {
-        if (x.once) { if (s.battleFlags[`ultOnce_${a.id}`]) continue; s.battleFlags[`ultOnce_${a.id}`] = true; }
+      this.resolveUlt(a, ctx);
+    }
+    ultEffects(src) { return src.ultReplace || this.ix.chars[src.id].ult.eff; }
+    // authored ult effects, resonance extras (a once-extra spends its battle flag) and ult-local hooks in source order with the existing
+    // terminal short-circuit. ctx.source supplies arithmetic; ctx.actor is the deployed gauge holder (none for a support).
+    resolveUlt(src, ctx) {
+      const s = this.s;
+      for (const op of this.ultEffects(src)) { this.execOp(op, ctx); if (this.checkEnd()) return; }
+      for (const x of src.ultExtra) {
+        if (x.once) { if (s.battleFlags[`ultOnce_${src.id}`]) continue; s.battleFlags[`ultOnce_${src.id}`] = true; }
         for (const op of x.eff) { this.execOp(op, ctx); if (this.checkEnd()) return; }
       }
-      if (this.hasHook(a.id, 'sera_r6')) s.battleFlags.seraR6Turn = s.turn + 1;
-      if (this.hasHook(a.id, 'kaya_r6') && ctx.killed) a.gauge = Math.min(this.ix.rules.gaugeMax, a.gauge + 50);
+      if (this.sourceHook(src, 'sera_r6')) s.battleFlags.seraR6Turn = s.turn + 1;
+      // Kaya r6 refunds her own gauge; a support partner has none and never refunds its caller
+      if (ctx.actor && this.sourceHook(src, 'kaya_r6') && ctx.killed) ctx.actor.gauge = Math.min(this.ix.rules.gaugeMax, ctx.actor.gauge + 50);
       this.checkEnd();
     }
 
-    pseudoCtx(actor) { return { inst: null, def: null, actor, attr: actor.attr, reserved: null, target: null, lastTarget: null, picks: [], isUlt: false, killed: false, lastCount: 0, pseudo: true }; }
+    // ───── S4 support: a deployed caller spends its full gauge to fire the frozen non-party partner's authored ultimate, once per Battle ─────
+    supportEffects() {
+      const sp = this.s.support; if (!sp) throw new RuleError('SUPPORT_NOT_SELECTED');
+      return [...this.ultEffects(sp.source), ...sp.source.ultExtra.flatMap((x) => x.eff)];
+    }
+    supportNeedsTarget() { return effectTarget(this.supportEffects()); }
+    supportCaller(callerId) {
+      const s = this.s;
+      if (!s.support) throw new RuleError('SUPPORT_NOT_SELECTED');
+      if (s.support.used) throw new RuleError('SUPPORT_ALREADY_USED');
+      if (s.phase !== 'PLAYER') throw new RuleError('WRONG_PHASE');
+      const a = this.actor(callerId);
+      if (!a) throw new RuleError('UNKNOWN_ACTOR');
+      if (a.gauge < SUPPORT_GAUGE_COST) throw new RuleError('ULT_NOT_READY');
+      return a;
+    }
+    // pure: every rule the support must meet before anything is paid; returns the resolved target
+    supportPrecheck(callerId, target, picks) {
+      this.supportCaller(callerId);
+      const need = this.supportNeedsTarget();
+      if (need) {
+        const eligible = this.alive().filter((e) => need !== 'fixed' || e.st.mark > 0);
+        if (!target && eligible.length === 1) target = eligible[0].uid;
+        if (!eligible.some((e) => e.uid === target)) throw new RuleError('BAD_TARGET');
+      } else target = null;
+      const choices = this.supportChoices(callerId, picks);
+      if (choices.error) throw new RuleError(choices.error);
+      this.validateOps(this.supportEffects(), null, 'now', picks || []);
+      return target;
+    }
+    support(callerId, target, picks) {
+      const s = this.s; const chosen = supportPicks(picks);
+      target = this.supportPrecheck(callerId, target, chosen);
+      const a = this.actor(callerId); const src = s.support.source;
+      // cost and use are spent before the first effect, so a lethal first effect still pays exactly once
+      a.gauge -= SUPPORT_GAUGE_COST; s.support.used = true;
+      this.ev('support', { actor: src.id, caller: a.id });
+      this.resolveUlt(src, { inst: null, def: null, actor: null, source: src, attr: src.attr, reserved: null, target, lastTarget: target, picks: chosen, isUlt: true, killed: false, lastCount: 0 });
+    }
+    supportText(src) {
+      let text = this.supportEffects().map((op) => opText(op, this.ix)).filter(Boolean).join('. ') + '.';
+      if (this.sourceHook(src, 'aila_r6')) text += ' 필살기의 초과 회복은 100% 방어로 전환.';
+      if (this.sourceHook(src, 'sera_r6')) text += ' 필살기를 쓴 다음 턴, 세라의 카드 공격 피해 +50%.';
+      return text;
+    }
+    // pure source info for one caller/target/picks; SUPPORT_NOT_SELECTED when no partner is frozen into this battle
+    supportInfo(callerId, target = null, picks = []) {
+      const sp = this.s.support; if (!sp) throw new RuleError('SUPPORT_NOT_SELECTED');
+      const src = sp.source; const chosen = supportPicks(picks);
+      const view = { kind: 'support', caller: callerId, charId: src.id, name: src.name, ultName: this.ix.chars[src.id].ult.name, text: this.supportText(src),
+        attr: src.attr, gaugeCost: SUPPORT_GAUGE_COST, used: sp.used, ready: false, code: null, needsTarget: this.supportNeedsTarget(), target, picks: chosen };
+      try { view.target = this.supportPrecheck(callerId, target, chosen); view.ready = true; } catch (e) { if (!(e instanceof RuleError)) throw e; view.code = e.code; }
+      return view;
+    }
+    // pure pick sheet of the support's effect list (prototype choiceRequests/pickerOptions, C# BattleChoicePolicy): no hand card is its
+    // source and it spends no FreeNext charge, so a leading costdown is priced by costOf. Current authored ultimates request no picks.
+    supportChoices(callerId, picks = []) {
+      const s = this.s;
+      const view = { error: null, uid: '', mode: 'now', requests: [], accepted: 0, index: 0, left: 0, blocked: null, candidates: [] };
+      try {
+        const chosen = supportPicks(picks);
+        this.supportCaller(callerId);
+        const requests = [];
+        this.supportEffects().forEach((op, i) => {
+          const n = Math.max(1, op.n ?? 1); let r = null;
+          if (op.op === 'exhaustPick') r = [op.from === 'discard' ? '버린 카드에서 소멸할 카드' : '손에서 소멸할 카드', op.from === 'discard' ? 'discard' : 'hand', n, false];
+          else if (op.op === 'discard') r = ['버릴 카드', 'hand', n, false];
+          else if (op.op === 'tune' && op.pick === 'one') r = [`「${this.ix.parts[op.part]?.name ?? '부품'}」을 붙일 카드`, 'hand', 1, false];
+          else if (op.op === 'costdown' && op.pick === 'one') r = ['비용을 낮출 카드', 'hand', 1, false];
+          else if (op.op === 'recall') r = ['손으로 가져올 카드', 'discard', 1, false];
+          else if (op.op === 'growPick') r = ['성장시킬 카드', 'hand', 1, true];
+          else if (op.op === 'copyPick') r = ['사본을 만들 성장 카드', 'hand', 1, true];
+          else if (op.op === 'pull') r = ['앞당길 예약', 'res', 1, false];
+          if (r) requests.push({ label: r[0], from: r[1], count: r[2], growthOnly: r[3], op: op.op, part: op.op === 'tune' ? op.part : null, leading: i === 0 });
+        });
+        const blocked = (req) => (req.op === 'growPick' && s.growthCount >= s.growthCap ? 'PICK_GROWTH_CAP' : null);
+        const eligible = (req, u) => {
+          const c = s.cards[u]; const d = c && this.ix.cards[c.id];
+          if (!d) return null;
+          switch (req.op) {
+            case 'tune': return (req.part == null || !c.temp.includes(req.part)) && d.rar !== 'C';
+            case 'recall': return d.rar !== 'C';
+            case 'growPick': return !!d.growth && c.growth < 3;
+            case 'copyPick': return this.isGrowthInst(c);
+            case 'costdown': if (d.costIf) return null; try { return this.costOf(u, 'now') > 0; } catch (e) { if (e instanceof RuleError) return null; throw e; }
+            default: return true;
+          }
+        };
+        const narrowed = (req) => ['tune', 'recall', 'growPick', 'copyPick'].includes(req.op) || (req.op === 'costdown' && req.leading);
+        const candidates = (req, made) => {
+          const list = (req.from === 'hand' ? s.zones.hand : req.from === 'discard' ? s.zones.discard : s.res.map((r) => r.uid)).filter((u) => !made.includes(u));
+          if (!narrowed(req)) return req.growthOnly ? list.filter((u) => !!(s.cards[u] && this.ix.cards[s.cards[u].id]?.growth)) : list;
+          if (blocked(req)) return [];
+          return list.filter((u) => eligible(req, u) !== false);
+        };
+        const made = []; let index = 0; let left = requests.length ? requests[0].count : 0;
+        for (const u of chosen) {
+          if (index >= requests.length || !candidates(requests[index], made).includes(u)) break;
+          made.push(u);
+          if (--left <= 0 && ++index < requests.length) left = requests[index].count;
+        }
+        Object.assign(view, { requests, accepted: made.length, index, left });
+        if (made.length < chosen.length) view.error = 'PICK_INVALID';
+        if (index < requests.length) { view.blocked = blocked(requests[index]); view.candidates = candidates(requests[index], made); }
+        return view;
+      } catch (e) { if (e instanceof RuleError) return { ...view, error: e.code }; throw e; }
+    }
+    // pure forecast of the support command: the SAME command on a private copy; a random/draw definition or a moved RNG/draw pile hides
+    // every outcome number and per-enemy split. Rule rejections are returned, never thrown.
+    supportForecast(callerId, target = null, picks = []) {
+      const before = this.s;
+      try {
+        const candidate = new this.constructor(this.ix, clone(before));
+        candidate.command({ rid: null, v: before.v, kind: 'support', args: { caller: callerId, target, picks: supportPicks(picks) } });
+        const after = candidate.s; const out = supportForecastResult(); out.cost = SUPPORT_GAUGE_COST;
+        if (hiddenOps(this.supportEffects()) || JSON.stringify(after.rng) !== JSON.stringify(before.rng) || JSON.stringify(after.zones.draw) !== JSON.stringify(before.zones.draw)) {
+          out.hidden = true; return out;
+        }
+        for (const e of before.enemies) {
+          const now = after.enemies.find((x) => x.uid === e.uid);
+          const lost = Math.max(0, e.hp - (now ? now.hp : 0));
+          out.enemyHpLoss += lost; if (lost > 0) out.enemyHpLosses.push({ uid: e.uid, hpLoss: lost });
+          if (now) out.enemyDamage += Math.max(0, e.hp + e.block - (now.hp + now.block));
+        }
+        out.newlyBroken = after.enemies.filter((e) => e.brokenUntil && before.enemies.some((x) => x.uid === e.uid && !x.brokenUntil)).length;
+        out.blockDelta = after.block - before.block; out.hpDelta = after.hp - before.hp; out.defeat = after.phase === 'DEFEAT';
+        supportNumbers(out);
+        return out;
+      } catch (e) { if (e instanceof RuleError) return supportForecastResult(e.code); throw e; }
+    }
+
+    pseudoCtx(actor) { return { inst: null, def: null, actor, source: actor, attr: actor.attr, reserved: null, target: null, lastTarget: null, picks: [], isUlt: false, killed: false, lastCount: 0, pseudo: true }; }
 
     // ───── card resolution ─────
     resolveCard(uid, opts) {
@@ -1252,7 +1478,7 @@ root.MFMemoryV2=api;
       const inst = s.cards[uid]; const def = this.effDef(inst);
       const oc = this.ownerChar(inst);
       const actor = oc ? this.actor(oc) : null;
-      const ctx = { inst, def, actor, attr: this.attrOf(inst), reserved: opts.reserved, held: !!opts.held, target: opts.target, lastTarget: opts.target,
+      const ctx = { inst, def, actor, source: this.cardSource(inst), attr: this.attrOf(inst), reserved: opts.reserved, held: !!opts.held, target: opts.target, lastTarget: opts.target,
         picks: [...(opts.picks || [])], isUlt: false, killed: false, lastCount: 0, restraintBps: 0, boostBps: 0, chargeTaken: false, firstDmg: true };
       // fixed-target validation at resolution: dead or unmarked target fizzles (no refund)
       const hasFixed = JSON.stringify(def.eff).includes('"tgt":"fixed"');
@@ -1266,7 +1492,8 @@ root.MFMemoryV2=api;
       // restraint bonus: first damage/block card on the bonus turn
       if (s.bonus.avail && s.bonus.turn === s.turn && def.eff.some((o) => o.op === 'dmg' || o.op === 'blk')) { ctx.restraintBps = 3000; s.bonus.avail = false; }
       // rien duet boost: next card of a different character
-      if (s.nextBoost && oc && oc !== s.nextBoost.from) { ctx.boostBps = s.nextBoost.bps; s.nextBoost = null; }
+      const boostBy = inst.supportSourceId === undefined ? oc : (ctx.source ? ctx.source.id : null);
+      if (s.nextBoost && boostBy && boostBy !== s.nextBoost.from) { ctx.boostBps = s.nextBoost.bps; s.nextBoost = null; }
       // ultimate gauge
       if (actor) this.gainGauge(actor, this.ix.rules.gaugePerCard);
       if (actor && ctx.held && this.has('time_stamp')) this.gainGauge(actor, 5, true);
@@ -1286,7 +1513,12 @@ root.MFMemoryV2=api;
           if (p.fx.gauge && actor) this.gainGauge(actor, p.fx.gauge, true);
           // echo circuit: the copy is created at the start of the NEXT turn (no card instance exists until then,
           // so it can never be shuffled into the draw pile)
-          if (p.fx.echoCopy && !inst.echoCopy) { s.pendingCopies = s.pendingCopies || []; s.pendingCopies.push({ id: inst.id, wielder: inst.wielder, from: inst.from, due: s.turn + 1 }); }
+          if (p.fx.echoCopy && !inst.echoCopy) {
+            s.pendingCopies = s.pendingCopies || [];
+            const copy = { id: inst.id, wielder: inst.wielder, from: inst.from, due: s.turn + 1 };
+            if (inst.supportSourceId !== undefined) copy.supportSourceId = inst.supportSourceId;
+            s.pendingCopies.push(copy);
+          }
         }
         // character passives tied to resolution
         if (this.isGrowthInst(inst)) this.onGrowthCardResolved(inst);
@@ -1417,7 +1649,7 @@ root.MFMemoryV2=api;
     // additive damage bonus (bps) for a hit
     dmgBonusBps(ctx, enemy) {
       const s = this.s; let add = 0;
-      const inst = ctx.inst; const oc = ctx.actor ? ctx.actor.id : null;
+      const inst = ctx.inst; const src = ctx.source; const oc = src ? src.id : null;
       if (inst) {
         for (const p of this.partsOf(inst)) {
           if (p.fx.addBps) add += p.fx.addBps;
@@ -1432,20 +1664,19 @@ root.MFMemoryV2=api;
           for (const p of s.powers) if (p.id === 'blueprint') add += p.bps;
           if (this.has('golden_quill')) add += 1500;
         }
-        if (inst.from && this.hasHook('yuri', 'yuri_r4') && inst.owner === 'yuri') add += 1500;
-        // weapon (wielder-scope) bonuses
-        const wid = oc;
-        if (wid) {
-          const rd = this.weaponPassive(wid, 'w_reservedDmg'); if (rd && ctx.held) add += rd.value;
-          const md = this.weaponPassive(wid, 'w_markedDmg'); if (md && enemy && enemy.st.mark > 0) add += md.value;
-          const lh = this.weaponPassive(wid, 'w_lowHpDmg'); if (lh && s.hp * 2 <= s.maxHp) add += lh.value;
-          const bd = this.weaponPassive(wid, 'w_brokenDmg') || this.weaponPassive(wid, 'w_breakDmg'); if (bd && enemy && enemy.brokenUntil) add += bd.value;
-          const na = this.weaponPassive(wid, 'w_none'); if (na) add += na.alt;
-          const fa = this.weaponPassive(wid, 'w_firstAtk'); if (fa && !s.firstAtkDone) add += fa.value;
+        if (inst.from && this.sourceHook(src, 'yuri_r4') && inst.owner === 'yuri') add += 1500;
+        // weapon (wielder-scope) bonuses of the effect source's own weapon
+        if (src) {
+          const rd = this.sourceWeapon(src, 'w_reservedDmg'); if (rd && ctx.held) add += rd.value;
+          const md = this.sourceWeapon(src, 'w_markedDmg'); if (md && enemy && enemy.st.mark > 0) add += md.value;
+          const lh = this.sourceWeapon(src, 'w_lowHpDmg'); if (lh && s.hp * 2 <= s.maxHp) add += lh.value;
+          const bd = this.sourceWeapon(src, 'w_brokenDmg') || this.sourceWeapon(src, 'w_breakDmg'); if (bd && enemy && enemy.brokenUntil) add += bd.value;
+          const na = this.sourceWeapon(src, 'w_none'); if (na) add += na.alt;
+          const fa = this.sourceWeapon(src, 'w_firstAtk'); if (fa && !s.firstAtkDone) add += fa.value;
         }
       }
       const dd = this.partyWeapon('w_debtDmg'); if (dd && this.debtTotal() > 0) add += dd.value;
-      if (ctx.actor && ctx.actor.gearBps) add += ctx.actor.gearBps; // accessory (장신구)
+      if (src && src.gearBps) add += src.gearBps; // accessory (장신구)
       add += (ctx.restraintBps || 0) + (ctx.boostBps || 0);
       if (ctx.chargeBps) add += ctx.chargeBps;
       if (oc === 'sera' && ctx.inst) {
@@ -1470,7 +1701,7 @@ root.MFMemoryV2=api;
       let base = baseOverride !== undefined ? baseOverride : this.scaled(this.value(op, ctx), op.scale, ctx);
       if (ctx.flatBonus) base += ctx.flatBonus;
       if (base <= 0) return 0;
-      const actor = ctx.actor;
+      const actor = ctx.source;
       let num = BigInt(base);
       let den = 1n;
       // power factor (reference power 40 => power4 160)
@@ -1493,7 +1724,7 @@ root.MFMemoryV2=api;
       const s = this.s;
       let base = rawBase !== undefined ? rawBase : this.scaled(this.value(op, ctx), op.scale, ctx);
       if (base <= 0) return 0;
-      const actor = ctx.actor; let num = BigInt(base); let den = 1n;
+      const actor = ctx.source; let num = BigInt(base); let den = 1n;
       // defence scales with vitality (character HP / 81), so block keeps pace with stage-scaled enemy damage
       const vit = actor ? actor.vit : this.partyVit(); num *= BigInt(vit); den *= 81n;
       let lv = 1; if (ctx.isUlt && actor) lv = actor.ultLv; else if (actor && ctx.inst && ctx.inst.owner === actor.id) lv = actor.skillLv;
@@ -1515,8 +1746,8 @@ root.MFMemoryV2=api;
           for (const p of s.powers) if (p.id === 'blueprint') add += p.bps;
           if (this.has('golden_quill')) add += 1500;
         }
-        if (inst.from && this.hasHook('yuri', 'yuri_r4') && inst.owner === 'yuri') add += 1500;
-        if (actor) { const bu = this.weaponPassive(actor.id, 'w_blockUp'); if (bu) add += bu.value; const na = this.weaponPassive(actor.id, 'w_none'); if (na) add += na.alt; }
+        if (inst.from && this.sourceHook(actor, 'yuri_r4') && inst.owner === 'yuri') add += 1500;
+        if (actor) { const bu = this.sourceWeapon(actor, 'w_blockUp'); if (bu) add += bu.value; const na = this.sourceWeapon(actor, 'w_none'); if (na) add += na.alt; }
       }
       num *= BigInt(Math.max(0, BPS + add)); den *= BigInt(BPS);
       return Number(num / den);
@@ -1634,7 +1865,7 @@ root.MFMemoryV2=api;
             if (ch && !ctx.isUlt) { ctx.chargeBps = ch.n; s.buffs = s.buffs.filter((b) => b !== ch); }
             if (this.has('credit_ledger') && this.debtTotal() > 0 && !s.turnFlags.ledger && !ctx.isUlt) { s.turnFlags.ledger = true; ctx.creditLedger = true; }
             if (ctx.attr === 'volt' && this.has('volt_coil') && !s.turnFlags.voltCoil) { s.turnFlags.voltCoil = true; ctx.flatBonus = 4; }
-            if (ctx.inst && ctx.actor) { const ba = this.weaponPassive(ctx.actor.id, 'w_blockOnAtk'); if (ba) this.gainBlockRaw(ba.value, 'weapon'); }
+            if (ctx.inst && ctx.source) { const ba = this.sourceWeapon(ctx.source, 'w_blockOnAtk'); if (ba) this.gainBlockRaw(ba.value, 'weapon'); }
           }
           let hits = op.hits ?? 1;
           if (op.hitsScale) hits = this.scaled(hits, op.hitsScale, ctx);
@@ -1644,7 +1875,7 @@ root.MFMemoryV2=api;
             for (const e of targets) {
               if (!e.alive) continue;
               let amount = this.calcDamage(op, ctx, e);
-              if (h === 0 && hits >= 2 && ctx.actor) { const mh = this.weaponPassive(ctx.actor.id, 'w_multiHit'); if (mh) amount += mh.value; }
+              if (h === 0 && hits >= 2 && ctx.source) { const mh = this.sourceWeapon(ctx.source, 'w_multiHit'); if (mh) amount += mh.value; }
               ctx.lastTarget = e.uid;
               let pierce = op.pierce || 0;
               if (ctx.inst) for (const p of this.partsOf(ctx.inst)) if (p.fx.pierce) pierce = Math.max(pierce, p.fx.pierce);
@@ -1668,11 +1899,12 @@ root.MFMemoryV2=api;
         case 'heal': {
           let n = this.scaled(this.value(op, ctx), op.scale, ctx);
           // heals scale like block: vitality (owner or party average) and skill / ultimate level
-          const vit = ctx.actor ? ctx.actor.vit : this.partyVit();
-          let lv = 1; if (ctx.isUlt && ctx.actor) lv = ctx.actor.ultLv; else if (ctx.actor && ctx.inst && ctx.inst.owner === ctx.actor.id) lv = ctx.actor.skillLv;
+          const src = ctx.source;
+          const vit = src ? src.vit : this.partyVit();
+          let lv = 1; if (ctx.isUlt && src) lv = src.ultLv; else if (src && ctx.inst && ctx.inst.owner === src.id) lv = src.skillLv;
           n = Number((BigInt(Math.max(0, n)) * BigInt(vit) * BigInt(BPS + 400 * (lv - 1))) / (81n * BigInt(BPS)));
           const hu = this.buff('healUp'); if (hu) { n = Math.floor(n * (BPS + hu.n) / BPS); s.buffs = s.buffs.filter((b) => b !== hu); }
-          const o2 = { ...op, preScaled: true, ultAila: !!(ctx.isUlt && ctx.actor && this.hasHook(ctx.actor.id, 'aila_r6')) };
+          const o2 = { ...op, preScaled: true, ultAila: !!(ctx.isUlt && this.sourceHook(src, 'aila_r6')) };
           this.healParty(n, o2);
           break;
         }
@@ -1712,8 +1944,11 @@ root.MFMemoryV2=api;
           break;
         }
         case 'create': {
+          // S4: the support partner's own card created in its effect context (its ult or its provenanced token) keeps that provenance
+          const sp = s.support; const created = this.ix.cards[op.card];
+          const supportSourceId = sp && ctx.source && ctx.source.id === sp.source.id && created && created.owner === ctx.source.id ? ctx.source.id : undefined;
           for (let k = 0; k < op.n; k++) {
-            const uid = makeInst(s, this.ix, { id: op.card, wielder: ctx.inst ? ctx.inst.wielder : null }, { token: true });
+            const uid = makeInst(s, this.ix, { id: op.card, wielder: ctx.inst ? ctx.inst.wielder : null }, { token: true, supportSourceId });
             if (op.zone === 'hand' && s.zones.hand.length < s.handMax) s.zones.hand.push(uid); else s.zones.discard.push(uid);
           }
           break;
@@ -1819,7 +2054,7 @@ root.MFMemoryV2=api;
           const uid = this.takePick(ctx, s.zones.hand, (u) => this.isGrowthInst(s.cards[u]), 'first');
           if (uid && s.zones.hand.length < s.handMax) {
             const src = s.cards[uid];
-            const cu = makeInst(s, this.ix, { id: src.id, plus: src.plus, mods: src.mods, from: src.from }, { token: true, free: true });
+            const cu = makeInst(s, this.ix, { id: src.id, plus: src.plus, mods: src.mods, from: src.from }, { token: true, free: true, supportSourceId: src.supportSourceId });
             s.cards[cu].growth = src.growth; s.cards[cu].echoCopy = true;
             s.zones.hand.push(cu);
           }
@@ -1834,7 +2069,7 @@ root.MFMemoryV2=api;
           break;
         }
         case 'echo': if (s.echoActive) { s.echo = Math.min(s.echoMax, s.echo + op.n); this.echoCheck(); } break;
-        case 'nextBoost': s.nextBoost = { bps: op.bps, from: ctx.actor ? ctx.actor.id : null }; break;
+        case 'nextBoost': s.nextBoost = { bps: op.bps, from: ctx.source ? ctx.source.id : null }; break;
         case 'freeNext': s.freeNext = Math.max(s.freeNext, op.n); break;
         case 'clearDebt': ctx.lastCount = this.debtTotal(); s.debts = []; break;
         case 'breakBonus': {
@@ -1855,6 +2090,7 @@ root.MFMemoryV2=api;
         }
         default: throw new RuleError('UNSUPPORTED_EFFECT', op.op);
       }
+      if (ctx.source && ctx.source === s.support?.source) this.checkSupportNumbers();
     }
 
     echoCheck() {
@@ -1902,7 +2138,7 @@ root.MFMemoryV2=api;
       const due = s.pendingCopies.filter((x) => x.due <= s.turn);
       s.pendingCopies = s.pendingCopies.filter((x) => x.due > s.turn);
       for (const x of due) {
-        const cu = makeInst(s, this.ix, { id: x.id, wielder: x.wielder, from: x.from }, { token: true, free: true });
+        const cu = makeInst(s, this.ix, { id: x.id, wielder: x.wielder, from: x.from }, { token: true, free: true, supportSourceId: x.supportSourceId });
         s.cards[cu].temp.push('echoHalf'); s.cards[cu].echoCopy = true;
         if (s.zones.hand.length < s.handMax) s.zones.hand.push(cu); else s.zones.discard.push(cu);
         this.ev('echoCopy', { uid: cu, id: x.id });
@@ -1910,6 +2146,7 @@ root.MFMemoryV2=api;
     }
 
     // ───── invariants ─────
+    checkSupportNumbers() { if (this.s.support) supportNumbers(this.s, false, 'state'); }
     checkInvariants() {
       const s = this.s; const R = this.ix.rules;
       if (!(s.hp >= 0 && s.hp <= s.maxHp)) throw new RuleError('STATE_RANGE', 'hp');
@@ -1922,6 +2159,9 @@ root.MFMemoryV2=api;
       const all = Object.keys(s.cards);
       if (seen.length !== all.length || new Set(seen).size !== seen.length || !all.every((u) => seen.includes(u))) throw new RuleError('CARD_ZONE_CONSERVATION');
       for (const a of s.actors) if (a.gauge < 0 || a.gauge > R.gaugeMax) throw new RuleError('GAUGE_RANGE');
+      // S4: present support is a non-party source with a boolean use; provenance only on that partner's own keyless tokens
+      if (s.support !== undefined && (!s.support || !s.support.source || typeof s.support.used !== 'boolean' || s.actors.some((a) => a.id === s.support.source.id))) throw new RuleError('INVALID_SNAPSHOT', 'support');
+      for (const c of Object.values(s.cards)) if (c.supportSourceId !== undefined) this.cardSource(c);
       for (const e of s.enemies) if (e.hp < 0 || e.block < 0 || e.brk < 0) throw new RuleError('ENEMY_RANGE');
       for (const kind of ['next', 'after']) {
         const due = s.turn + (kind === 'next' ? 1 : 2);
@@ -1934,13 +2174,15 @@ root.MFMemoryV2=api;
     // public view: never includes draw order or RNG state
     publicView() {
       const s = this.s;
-      return {
+      const view = {
         v: s.v, turn: s.turn, phase: s.phase, hp: s.hp, maxHp: s.maxHp, block: s.block, counter: s.counter, ap: s.ap,
         apNext: s.apNext, apDrainNext: s.apDrainNext || 0, silenceUntil: s.silenceUntil || 0,
         debt: this.debtTotal(), drawCount: s.zones.draw.length, discard: [...s.zones.discard], exhaustCount: s.zones.exhaust.length,
         hand: s.zones.hand.map((u) => ({ ...s.cards[u] })), res: s.res.map((r) => ({ ...r })),
         enemies: s.enemies.map((e) => ({ ...e, st: { ...e.st } })), actors: s.actors.map((a) => ({ id: a.id, gauge: a.gauge })),
       };
+      if (s.support) view.support = { charId: s.support.source.id, used: s.support.used, gaugeCost: SUPPORT_GAUGE_COST };
+      return view;
     }
   }
 
@@ -1979,6 +2221,8 @@ root.MFMemoryV2=api;
       }
       // party max HP = sum of character HP (60 + Lv + armour); reference battle = 81 per character
       for (const p of s.party) { const d = Stats.derive(ix, p); Object.assign(p, { power4: d.power4, hp: d.hp, gearBps: d.gearBps, skillLv: d.skillLv, ultLv: d.ultLv }); }
+      // S4: one optional owned non-party support partner, frozen with its own derived build; never in the party, deck, HP or memory
+      if (setup.support !== undefined && setup.support !== null) s.support = Run.supportEntry(ix, setup.support, s.party);
       s.maxHp = s.party.reduce((a, p) => a + p.hp, 0); s.hp = s.maxHp; s.hpRef = s.maxHp;
       // deck = each character's memory deck (or base kit) + weapon card
       for (const p of s.party) {
@@ -2009,6 +2253,22 @@ root.MFMemoryV2=api;
       const starts = ix.raw.cards.filter((c) => c.owner === charId && c.start).map((c) => ({ id: c.id }));
       starts.push({ id: ix.raw.startingCommon[charId], assigned: charId });
       return starts;
+    }
+    // S4: validate and derive the explicit owned support build (C# Run.PrepareSupport). Real level/asc/res/ranks and an equipped weapon of
+    // the partner's own type are required: no reference stats, default weapon or shared weapon instance. Returns a detached derived copy.
+    static supportEntry(ix, entry, party) {
+      const p = entry && typeof entry === 'object' && !Array.isArray(entry) ? clone(entry) : {};
+      if (party.some((a) => a && a.charId === p.charId)) throw new RuleError('SUPPORT_IN_PARTY', p.charId);
+      if (typeof p.charId !== 'string' || !Object.hasOwn(ix.chars, p.charId)) throw new RuleError('UNKNOWN_CHARACTER', p.charId);
+      const st = ix.raw.progression && ix.raw.progression.stats; const ch = ix.chars[p.charId];
+      const w = typeof p.weaponId === 'string' && Object.hasOwn(ix.weapons, p.weaponId) ? ix.weapons[p.weaponId] : null;
+      const int = (v, lo, hi) => Number.isInteger(v) && v >= lo && v <= hi;
+      const gear = (v) => v === undefined || v === null || int(v, 0, st.gear.maxEnhance);
+      if (!st || !w || w.type !== ch.weapon || !int(p.level, 1, st.levelCap) || !int(p.asc, 0, 0x7fffffff) || !int(p.res, 0, 6) || !int(p.refine, 1, 5)
+        || !int(p.weaponLevel, 1, st.levelCap) || !int(p.skillLv, 1, st.skill.maxLevel) || !int(p.ultLv, 1, st.skill.maxLevel) || !gear(p.armor) || !gear(p.accessory)) throw new RuleError('INVALID_SNAPSHOT', p.charId);
+      if (typeof p.weaponInstanceId === 'string' && party.some((a) => a && a.weaponInstanceId === p.weaponInstanceId)) throw new RuleError('INVALID_SNAPSHOT', 'weaponInstanceId');
+      const d = Stats.derive(ix, p);
+      return Object.assign(p, { power4: d.power4, hp: d.hp, gearBps: d.gearBps, skillLv: d.skillLv, ultLv: d.ultLv });
     }
     static defaultWeapon(ix, charId) { const t = ix.chars[charId].weapon; return { ranged: 'w_basic_ranged', melee: 'w_basic_melee', device: 'w_basic_device', ritual: 'w_basic_ritual' }[t]; }
 
@@ -2095,7 +2355,7 @@ root.MFMemoryV2=api;
       const deck = s.deck.map((c) => ({ id: c.id, plus: c.plus, mods: c.mods, growth: c.growth || 0, wielder: c.wielder, assigned: c.assigned, from: c.from, key: c.key }));
       const seed = Rng.next(s.rng);
       const b = Battle.create(this.data, { party: s.party, deck, relics: s.relics, hp: s.hp, maxHp: s.maxHp, seed, runFlags: { ...s.runFlags, nextApBonus: 0 }, difficulty: s.difficulty,
-        enemies: this.encounterFor(type), nextApBonus: s.runFlags.nextApBonus || 0 });
+        enemies: this.encounterFor(type), nextApBonus: s.runFlags.nextApBonus || 0, support: s.support });
       s.runFlags.nextApBonus = 0; // one-shot: only this battle's first turn; its runFlags copy carries 0 so afterBattle cannot refund it
       // map battle instances back to deck keys for growth/evolution persistence
       const uids = Object.keys(b.s.cards);
@@ -2110,6 +2370,12 @@ root.MFMemoryV2=api;
       if (this.battle.isOver()) this.afterBattle();
       return r;
     }
+    // S4 pure support queries over the live battle (NO_BATTLE outside battle; the forecast reports it like a play forecast)
+    liveBattle() { if (!this.battle) throw new RuleError('NO_BATTLE'); return this.battle; }
+    battleSupportInfo(caller, target, picks) { return this.liveBattle().supportInfo(caller, target ?? null, picks); }
+    battleSupportNeedsTarget() { return this.liveBattle().supportNeedsTarget(); }
+    battleSupportChoices(caller, picks) { return this.liveBattle().supportChoices(caller, picks); }
+    battleSupportForecast(caller, target, picks) { return this.battle ? this.battle.supportForecast(caller, target ?? null, picks) : supportForecastResult('NO_BATTLE'); }
     afterBattle() {
       const s = this.s; const bs = this.battle.s;
       s.hp = bs.hp; s.runFlags = { ...s.runFlags, ...bs.runFlags };

@@ -51,7 +51,7 @@ namespace MemoryForge.Core
         }
         BigInteger DamageBonus(EffectContext context, BattleEnemyState? enemy)
         {
-            BigInteger add = 0; var instance = context.Instance; string? owner = context.Actor?.Id;
+            BigInteger add = 0; var instance = context.Instance; string? owner = context.Source?.Id;
             if (instance != null)
             {
                 foreach (var part in PartsOf(instance))
@@ -67,19 +67,19 @@ namespace MemoryForge.Core
                     foreach (var power in state.Powers) if (power.Id == "blueprint") add += power.Bps ?? 0;
                     if (Has("golden_quill")) add += 1500;
                 }
-                if (!string.IsNullOrEmpty(instance.From) && HasHook("yuri", "yuri_r4") && instance.Owner == "yuri") add += 1500;
+                if (!string.IsNullOrEmpty(instance.From) && SourceHook(context.Source, "yuri_r4") && instance.Owner == "yuri") add += 1500;
                 if (owner != null)
                 {
-                    if (context.Held) add += WeaponPassive(owner, "w_reservedDmg")?.Value ?? 0;
-                    if (enemy != null && enemy.Status.Mark > 0) add += WeaponPassive(owner, "w_markedDmg")?.Value ?? 0;
-                    if ((BigInteger)state.Hp * 2 <= state.MaxHp) add += WeaponPassive(owner, "w_lowHpDmg")?.Value ?? 0;
-                    if (enemy != null && enemy.BrokenUntil != 0) add += (WeaponPassive(owner, "w_brokenDmg") ?? WeaponPassive(owner, "w_breakDmg"))?.Value ?? 0;
-                    add += WeaponPassive(owner, "w_none")?.Alt ?? 0;
-                    if (!state.FirstAttackDone) add += WeaponPassive(owner, "w_firstAtk")?.Value ?? 0;
+                    if (context.Held) add += SourceWeapon(context.Source, "w_reservedDmg")?.Value ?? 0;
+                    if (enemy != null && enemy.Status.Mark > 0) add += SourceWeapon(context.Source, "w_markedDmg")?.Value ?? 0;
+                    if ((BigInteger)state.Hp * 2 <= state.MaxHp) add += SourceWeapon(context.Source, "w_lowHpDmg")?.Value ?? 0;
+                    if (enemy != null && enemy.BrokenUntil != 0) add += (SourceWeapon(context.Source, "w_brokenDmg") ?? SourceWeapon(context.Source, "w_breakDmg"))?.Value ?? 0;
+                    add += SourceWeapon(context.Source, "w_none")?.Alt ?? 0;
+                    if (!state.FirstAttackDone) add += SourceWeapon(context.Source, "w_firstAtk")?.Value ?? 0;
                 }
             }
             if (DebtTotal() > 0) add += PartyWeapon("w_debtDmg")?.Value ?? 0;
-            add += (BigInteger)(context.Actor?.GearBps ?? 0) + context.RestraintBps + context.BoostBps + context.ChargeBps;
+            add += (BigInteger)(context.Source?.GearBps ?? 0) + context.RestraintBps + context.BoostBps + context.ChargeBps;
             if (owner == "sera" && context.Instance != null)
             {
                 if (enemy != null && enemy.BrokenUntil != 0) add += PassiveOf("sera_foresight")?.Params["bps"] ?? 0;
@@ -101,11 +101,11 @@ namespace MemoryForge.Core
             if (context.CreditLedger) add += 2000;
             return add + RiftDamageBonus(context);
         }
-        long EffectLevel(EffectContext context) => context.Actor == null ? 1 : context.IsUlt ? context.Actor.UltLv : context.Instance?.Owner == context.Actor.Id ? context.Actor.SkillLv : 1;
+        long EffectLevel(EffectContext context) => context.Source == null ? 1 : context.IsUlt ? context.Source.UltLv : context.Instance?.Owner == context.Source.Id ? context.Source.SkillLv : 1;
         int CalculateDamage(EffectDef op, EffectContext context, BattleEnemyState enemy)
         {
             BigInteger value = Scaled(Value(op, context), op.Scale, context) + context.FlatBonus; if (value <= 0) return 0;
-            BigInteger num = value * (context.Actor?.Power4 ?? PartyPower()) * (10000 + 400 * ((BigInteger)EffectLevel(context) - 1)) * BigInteger.Max(0, 10000 + DamageBonus(context, enemy));
+            BigInteger num = value * (context.Source?.Power4 ?? PartyPower()) * (10000 + 400 * ((BigInteger)EffectLevel(context) - 1)) * BigInteger.Max(0, 10000 + DamageBonus(context, enemy));
             BigInteger den = (BigInteger)160 * 10000 * 10000;
             if (enemy.Status.Vul > 0) { num *= 10000 + (BigInteger)data.Rules.VulnerableBps; den *= 10000; }
             if (enemy.BrokenUntil != 0) { num *= 10000 + (BigInteger)data.Rules.BrokenDamageBps; den *= 10000; }
@@ -116,7 +116,7 @@ namespace MemoryForge.Core
         int CalculateBlock(EffectDef op, EffectContext context)
         {
             BigInteger value = Scaled(Value(op, context), op.Scale, context); if (value <= 0) return 0;
-            BigInteger add = (BigInteger)context.RestraintBps + context.BoostBps + (context.Actor?.GearBps ?? 0); var instance = context.Instance;
+            BigInteger add = (BigInteger)context.RestraintBps + context.BoostBps + (context.Source?.GearBps ?? 0); var instance = context.Instance;
             if (instance != null)
             {
                 foreach (var part in PartsOf(instance))
@@ -132,11 +132,11 @@ namespace MemoryForge.Core
                     foreach (var power in state.Powers) if (power.Id == "blueprint") add += power.Bps ?? 0;
                     if (Has("golden_quill")) add += 1500;
                 }
-                if (!string.IsNullOrEmpty(instance.From) && HasHook("yuri", "yuri_r4") && instance.Owner == "yuri") add += 1500;
-                if (context.Actor != null) { add += WeaponPassive(context.Actor.Id, "w_blockUp")?.Value ?? 0; add += WeaponPassive(context.Actor.Id, "w_none")?.Alt ?? 0; }
+                if (!string.IsNullOrEmpty(instance.From) && SourceHook(context.Source, "yuri_r4") && instance.Owner == "yuri") add += 1500;
+                if (context.Source != null) { add += SourceWeapon(context.Source, "w_blockUp")?.Value ?? 0; add += SourceWeapon(context.Source, "w_none")?.Alt ?? 0; }
             }
             // base0 is retained as metadata; the frozen JS/live sion_forget uses its v5 base.
-            return StateNumber(value * (context.Actor?.Vit ?? PartyVitality()) * (10000 + 400 * ((BigInteger)EffectLevel(context) - 1)) * BigInteger.Max(0, 10000 + add) / ((BigInteger)81 * 10000 * 10000));
+            return StateNumber(value * (context.Source?.Vit ?? PartyVitality()) * (10000 + 400 * ((BigInteger)EffectLevel(context) - 1)) * BigInteger.Max(0, 10000 + add) / ((BigInteger)81 * 10000 * 10000));
         }
         int HealParty(int amount, bool preScaled = false, bool fromWeapon = false, int overflowBlock = 0, bool ultAila = false)
         {
@@ -194,7 +194,7 @@ namespace MemoryForge.Core
                         if (charge != null && !context.IsUlt) { context.ChargeBps = charge.N; s.Buffs.Remove(charge); }
                         if (Has("credit_ledger") && DebtTotal() > 0 && !Flag(s.TurnFlags, "ledger") && !context.IsUlt) { s.TurnFlags["ledger"] = true; context.CreditLedger = true; }
                         if (context.Attr == "volt" && Has("volt_coil") && !Flag(s.TurnFlags, "voltCoil")) { s.TurnFlags["voltCoil"] = true; context.FlatBonus = 4; }
-                        if (context.Instance != null && context.Actor != null) { var weapon = WeaponPassive(context.Actor.Id, "w_blockOnAtk"); if (weapon.HasValue) GainBlockRaw(weapon.Value.Value, "weapon"); }
+                        if (context.Instance != null && context.Source != null) { var weapon = SourceWeapon(context.Source, "w_blockOnAtk"); if (weapon.HasValue) GainBlockRaw(weapon.Value.Value, "weapon"); }
                     }
                     int hits = StateNumber(Scaled(op.Hits ?? 1, op.HitsScale, context));
                     for (int h = 0; h < hits; h++)
@@ -203,7 +203,7 @@ namespace MemoryForge.Core
                         {
                             if (!enemy.Alive) continue;
                             int amount = CalculateDamage(op, context, enemy);
-                            if (h == 0 && hits >= 2 && context.Actor != null) amount = checked(amount + (WeaponPassive(context.Actor.Id, "w_multiHit")?.Value ?? 0));
+                            if (h == 0 && hits >= 2 && context.Source != null) amount = checked(amount + (SourceWeapon(context.Source, "w_multiHit")?.Value ?? 0));
                             context.LastTarget = enemy.Uid; int pierce = op.Pierce ?? 0;
                             if (context.Instance != null) foreach (var part in PartsOf(context.Instance)) if (part.Fx.Pierce.GetValueOrDefault() != 0) pierce = Math.Max(pierce, part.Fx.Pierce!.Value);
                             HitEnemy(enemy, amount, pierce, BreakFor(op, context, enemy), op.Shock ?? 0, context);
@@ -219,9 +219,9 @@ namespace MemoryForge.Core
                     int block = CalculateBlock(op, context); GainBlockRaw(block, "card");
                     var harin = PassiveOf("harin_stance"); if (harin != null && context.Actor?.Id == "harin" && block > 0) s.Counter = checked(s.Counter + harin.Params["n"]); break;
                 case "heal":
-                    int heal = StateNumber(BigInteger.Max(0, Scaled(Value(op, context), op.Scale, context)) * (context.Actor?.Vit ?? PartyVitality()) * (10000 + 400 * ((BigInteger)EffectLevel(context) - 1)) / ((BigInteger)81 * 10000));
+                    int heal = StateNumber(BigInteger.Max(0, Scaled(Value(op, context), op.Scale, context)) * (context.Source?.Vit ?? PartyVitality()) * (10000 + 400 * ((BigInteger)EffectLevel(context) - 1)) / ((BigInteger)81 * 10000));
                     var healUp = Buff("healUp"); if (healUp != null) { heal = StateNumber(Floor((BigInteger)heal * (10000 + (BigInteger)healUp.N), 10000)); s.Buffs.Remove(healUp); }
-                    HealParty(heal, true, overflowBlock: op.OverflowBlock ?? 0, ultAila: context.IsUlt && context.Actor != null && HasHook(context.Actor.Id, "aila_r6")); break;
+                    HealParty(heal, true, overflowBlock: op.OverflowBlock ?? 0, ultAila: context.IsUlt && SourceHook(context.Source, "aila_r6")); break;
                 case "st": foreach (var enemy in Targets(op.Target, context)) { AddStatus(enemy, op.Status!, ReservedNumber(op, context)); context.LastTarget = enemy.Uid; } break;
                 case "buff":
                     int until = checked(s.Turn + Or(op.Turns ?? 1, 1) - 1); var existing = Buff(op.Status!);
@@ -237,7 +237,7 @@ namespace MemoryForge.Core
                 case "create":
                     for (int k = 0; k < op.N!.Value; k++)
                     {
-                        string uid = MakeCard(s, data, new BattleCardSpec { Id = op.Card!, Wielder = context.Instance?.Wielder }, true);
+                        string uid = MakeCard(s, data, new BattleCardSpec { Id = op.Card!, Wielder = context.Instance?.Wielder, SupportSourceId = context.Source != null && s.Support != null && context.Source.Id == s.Support.Source.Id && data.CardIndex.TryGetValue(op.Card!, out var created) && created.Owner == context.Source.Id ? context.Source.Id : null }, true);
                         if (op.Zone == "hand" && s.Zones.Hand.Count < s.HandMax) s.Zones.Hand.Add(uid); else s.Zones.Discard.Add(uid);
                     }
                     break;
@@ -296,7 +296,7 @@ namespace MemoryForge.Core
                     var sourceUid = TakePick(context, s.Zones.Hand, uid => IsGrowthInstance(s.Cards[uid]), "first");
                     if (sourceUid != null && s.Zones.Hand.Count < s.HandMax)
                     {
-                        var original = s.Cards[sourceUid]; string uid = MakeCard(s, data, new BattleCardSpec { Id = original.Id, Plus = original.Plus, Circuit = original.Circuit, Edge = original.Edge, From = original.From }, true, true);
+                        var original = s.Cards[sourceUid]; string uid = MakeCard(s, data, new BattleCardSpec { Id = original.Id, Plus = original.Plus, Circuit = original.Circuit, Edge = original.Edge, From = original.From, SupportSourceId = original.SupportSourceId }, true, true);
                         s.Cards[uid].Growth = original.Growth; s.Cards[uid].EchoCopy = true; s.Zones.Hand.Add(uid);
                     }
                     break;
@@ -306,7 +306,7 @@ namespace MemoryForge.Core
                     else { if (op.Bps.HasValue) power.Bps = checked((power.Bps ?? 0) + op.Bps.Value); if (op.Block.HasValue) power.Block = checked((power.Block ?? 0) + op.Block.Value); if (op.Keep.HasValue) power.Keep = checked((power.Keep ?? 0) + op.Keep.Value); if (op.Heal.HasValue) power.Heal = checked((power.Heal ?? 0) + op.Heal.Value); }
                     Emit(new BattleEvent { E = "power", Id = op.Id }); break;
                 case "echo": if (s.EchoActive) { s.Echo = StateNumber(BigInteger.Min(s.EchoMax, (BigInteger)s.Echo + op.N!.Value)); EchoCheck(); } break;
-                case "nextBoost": s.NextBoost = new BattleBoostState { Bps = op.Bps!.Value, From = context.Actor?.Id }; break;
+                case "nextBoost": s.NextBoost = new BattleBoostState { Bps = op.Bps!.Value, From = context.Source?.Id }; break;
                 case "freeNext": s.FreeNext = Math.Max(s.FreeNext, op.N!.Value); break;
                 case "clearDebt": context.LastCount = DebtTotal(); s.Debts.Clear(); break;
                 case "breakBonus": case "breakBonusAll":

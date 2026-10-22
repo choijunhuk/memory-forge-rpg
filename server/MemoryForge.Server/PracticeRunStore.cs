@@ -64,13 +64,23 @@ namespace MemoryForge.Server
         public string RunId = "", CreatedSha256 = "";
         public long Seed, MemoryVersion;
         public bool UseMemory;
+        public ExpeditionLaunch? Launch;
+        public ExpeditionEnd? End;
         public object? StartMemory;
         public List<JournalEntry> Journal = new List<JournalEntry>();
-        public Dictionary<string, object?> ToGraph() => GraphJson.Object("runId", RunId, "seed", Seed, "useMemory", UseMemory, "memoryVersion", MemoryVersion,
-            "startMemory", StartMemory, "createdSha256", CreatedSha256, "journal", Journal.Select(e => (object?)e.ToGraph()).ToList());
+        public Dictionary<string, object?> ToGraph()
+        {
+            var graph = GraphJson.Object("runId", RunId, "seed", Seed, "useMemory", UseMemory, "memoryVersion", MemoryVersion,
+                "startMemory", StartMemory, "createdSha256", CreatedSha256, "journal", Journal.Select(e => (object?)e.ToGraph()).ToList());
+            if (Launch != null) graph.Add("launch", Launch.ToGraph());
+            if (End != null) graph.Add("end", End.ToGraph());
+            return graph;
+        }
+        public Run CreateRun(PracticeAccount account, PracticeContent content) => Run.Create(content.Data,
+            Launch == null ? account.Setup(Seed, RunId, MemoryVersion, StartMemory, UseMemory) : Launch.Setup(this));
         public static RunRecord Parse(JsonElement json)
         {
-            BattleDataLoader.Fields(json, "runId", "seed", "useMemory", "memoryVersion", "startMemory", "createdSha256", "journal");
+            BattleDataLoader.Fields(json, "runId", "seed", "useMemory", "memoryVersion", "startMemory", "createdSha256", "journal", "launch", "end");
             var record = new RunRecord
             {
                 RunId = Envelopes.Text(json, "runId"), Seed = json.GetProperty("seed").GetInt64(), MemoryVersion = json.GetProperty("memoryVersion").GetInt64(),
@@ -79,6 +89,8 @@ namespace MemoryForge.Server
             };
             if (!PracticeRunStore.IsRunId(record.RunId) || record.Seed < 0 || record.Seed > uint.MaxValue || record.MemoryVersion < 0) throw new InvalidDataException("run record");
             foreach (var entry in json.GetProperty("journal").EnumerateArray()) record.Journal.Add(JournalEntry.Parse(entry));
+            if (json.TryGetProperty("launch", out var launch)) record.Launch = ExpeditionLaunch.Parse(launch);
+            if (json.TryGetProperty("end", out var end)) record.End = ExpeditionEnd.Parse(end);
             return record;
         }
     }
@@ -110,6 +122,9 @@ namespace MemoryForge.Server
         public List<RunRecord> Archive = new List<RunRecord>();
         public Dictionary<string, StoredReceipt> Receipts = new Dictionary<string, StoredReceipt>(StringComparer.Ordinal);
         public RecruitmentRecord? Recruitment;
+        public ProgressionRecord? Progression;
+        public GrowthRecord? Growth;
+        internal GrowthTrace? GrowthCache;
 
         /// <summary>A new account: the same empty v2 store the practice client starts from (Migrate of no legacy decks), version 0.</summary>
         public static AccountEnvelope Fresh(PracticeAccount account, PracticeContent content) => new AccountEnvelope
@@ -136,6 +151,8 @@ namespace MemoryForge.Server
                 "receipts", envelope.Receipts.ToDictionary(p => p.Key, p => (object?)p.Value.ToGraph(), StringComparer.Ordinal));
             // Optional: an account that never recruited keeps exactly the earlier body members.
             if (envelope.Recruitment != null) body.Add("recruitment", envelope.Recruitment.ToGraph());
+            if (envelope.Progression != null) body.Add("progression", envelope.Progression.ToGraph());
+            if (envelope.Growth != null) body.Add("growth", envelope.Growth.ToGraph());
             string text = GraphJson.Text(body, false);
             return GraphJson.Bytes(GraphJson.Object("schema", Schema, "sha256", GraphJson.Sha256(Encoding.UTF8.GetBytes(text)), "body", text), false);
         }
@@ -169,14 +186,14 @@ namespace MemoryForge.Server
             // Recruitment (Recruitment.cs) is checked only once the binding is accepted, so another content or Core build is still reported as
             // a mismatch first: every non-run receipt must be a ledger entry's exact reply and the record must reconcile with its ledger
             // through Core. Nothing that fails is rewritten.
-            try { RecruitmentRecord.CheckEnvelope(content.Recruitment, envelope); }
+            try { RecruitmentRecord.CheckEnvelope(content.Recruitment, envelope); ProgressionCommands.Validate(content, account, envelope); GrowthCommands.Validate(content, account, envelope); }
             catch (Exception) { throw new ApiError(500, "STORE_CORRUPT"); }
             return envelope;
         }
 
         static AccountEnvelope Body(JsonElement root)
         {
-            BattleDataLoader.Fields(root, "accountId", "binding", "revision", "memory", "run", "archive", "receipts", "recruitment");
+            BattleDataLoader.Fields(root, "accountId", "binding", "revision", "memory", "run", "archive", "receipts", "recruitment", "progression", "growth");
             var envelope = new AccountEnvelope
             {
                 AccountId = Text(root, "accountId"), Binding = EnvelopeBinding.Parse(root.GetProperty("binding")), Revision = root.GetProperty("revision").GetInt64(),
@@ -187,6 +204,8 @@ namespace MemoryForge.Server
             foreach (var receipt in root.GetProperty("receipts").EnumerateObject()) envelope.Receipts.Add(BattleDataLoader.Name(receipt), StoredReceipt.Parse(receipt.Value));
             // Absent: never recruited. Present (null included) must be a well-formed record.
             if (root.TryGetProperty("recruitment", out var recruitment)) envelope.Recruitment = RecruitmentRecord.Parse(recruitment);
+            if (root.TryGetProperty("progression", out var progression)) envelope.Progression = ProgressionRecord.Parse(progression);
+            if (root.TryGetProperty("growth", out var growth)) envelope.Growth = GrowthRecord.Parse(growth);
             return envelope;
         }
         // The existing mf-memory-v2 store shape Core's CommitMemory requires; Core re-validates the decks themselves.
@@ -232,6 +251,7 @@ namespace MemoryForge.Server
                 case "enter": run.Enter(Text(args, "nodeId")); break;
                 case "play": outcome.Events = run.BattleCommand("play", Arguments(args, "uid", "mode", "target", "picks")).Events; break;
                 case "ult": outcome.Events = run.BattleCommand("ult", Arguments(args, "actor", "target", "picks")).Events; break;
+                case "support": outcome.Events=run.BattleCommand("support",Arguments(args,"caller","target","picks")).Events;break;
                 case "end": outcome.Events = run.BattleCommand("end").Events; break;
                 case "takeCard": run.TakeCard(Text(args, "id")); break;
                 case "skipCard": run.SkipCard(); break;
@@ -365,8 +385,11 @@ namespace MemoryForge.Server
                     envelope ??= AccountEnvelope.Fresh(account, content);
                     var live = envelope.Run == null ? null : Replay(account, envelope);
                     var reply = mutate(envelope, live);
+                    if (reply.Status != 200) throw new InvalidOperationException("Only committed successes can be stored");
                     envelope.Receipts.Add(requestId, new StoredReceipt { Identity = identity, Status = reply.Status, Body = reply.Body });
                     envelope.Revision = NextRevision(envelope);
+                    if (envelope.Progression != null || envelope.Archive.Any(r => r.End != null))
+                    { RecruitmentRecord.CheckEnvelope(content.Recruitment, envelope); ProgressionCommands.Validate(content, account, envelope); GrowthCommands.Validate(content, account, envelope); }
                     byte[] bytes = Envelopes.Encode(envelope);
                     RequireWithinLimit(bytes.Length);
                     return new Transition(reply, bytes);
@@ -389,7 +412,7 @@ namespace MemoryForge.Server
             Run run;
             try
             {
-                run = Run.Create(content.Data, account.Setup(record.Seed, record.RunId, record.MemoryVersion, record.StartMemory, record.UseMemory));
+                run = record.CreateRun(account, content);
                 if (StateDigest(run) != record.CreatedSha256) throw new InvalidDataException("created state differs");
                 foreach (var entry in record.Journal)
                 {

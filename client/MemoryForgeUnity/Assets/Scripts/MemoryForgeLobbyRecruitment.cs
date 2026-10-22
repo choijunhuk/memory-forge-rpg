@@ -15,7 +15,7 @@ namespace MemoryForge.Client
     {
         RectTransform recruitmentPanel = null!, recruitmentReveal = null!;
         PracticeServerSession? recruitmentSession;
-        string recruitmentCredential = "", recruitmentNotice = "", recruitmentBanner = "standard";
+        string recruitmentNotice = "", recruitmentBanner = "standard";
         bool recruitmentBusy, revealSkipped, recruitmentRevealing;
         Coroutine? revealRoutine;
         Text? recruitmentDockLabel;
@@ -34,7 +34,6 @@ namespace MemoryForge.Client
         void OnDestroy()
         {
             recruitmentSession?.Dispose(); recruitmentSession = null;
-            recruitmentCredential = "";
             foreach (var sprite in sprites.Values) if (sprite != null) Destroy(sprite);
         }
 
@@ -103,8 +102,9 @@ namespace MemoryForge.Client
                 Button(recruitmentPanel, "RecruitmentOwned", "보유 동료", 56, 752, 340, 120, () => { catalogueFilter = "owned"; OpenRoster(); }, Line, 26);
             Button(recruitmentPanel, "RecruitmentConnectionSettings", "연결 설정", 416, 752, 184, 120, () =>
             {
-                recruitmentSession?.Dispose(); recruitmentSession = null; recruitmentCredential = "";
+                recruitmentSession?.Dispose(); recruitmentSession = null; MemoryForgeAccountConnection.SetCurrent(null);
                 recruitmentNotice = ""; RenderRecruitment();
+                RefreshHomeAccount();
             }, Line, 20).interactable = !recruitmentBusy;
             var recent = recruitmentSession.RecruitmentNeedsRefresh && latestRecruitmentReceipt?.AccountId == snapshot.AccountId
                 && latestRecruitmentReceipt.Revision > snapshot.Revision && latestRecruitmentReceipt.Results.Count > 0
@@ -113,7 +113,7 @@ namespace MemoryForge.Client
                 Button(recruitmentPanel, "RecruitmentLastResult", "최근 결과", 616, 752, 248, 120, () => PresentRecruitment(recent, false), Line, 24).interactable = !recruitmentBusy;
             var pending = recruitmentSession!.State.Pending;
             if (pending != null)
-                Button(recruitmentPanel, "RetryRecruitmentPending", PracticeCommandOutbox.IsRecruitmentRoute(pending.Route) ? "미확정 결과 확인" : "이전 원정 요청 확인", 880, 752, 664, 120,
+                Button(recruitmentPanel, "RetryRecruitmentPending", PracticeCommandOutbox.IsRecruitmentRoute(pending.Route) ? "미확정 모집 결과 확인" : PracticeCommandOutbox.IsEquipmentRoute(pending.Route) ? "미확정 장비 변경 확인" : PracticeCommandOutbox.IsSupportSelectionRoute(pending.Route) ? "미확정 지원 설정 확인" : "이전 원정 요청 확인", 880, 752, 664, 120,
                     () => { if (PracticeCommandOutbox.IsRecruitmentRoute(pending.Route)) BeginRecruitmentAction("retry"); else BeginPreviousRunRetry(); }, Brass, 24).interactable = !recruitmentBusy;
             else
             {
@@ -130,7 +130,7 @@ namespace MemoryForge.Client
             FocusRecruitment(recruitmentPanel);
         }
 
-        bool CanRecruitmentAct() => !recruitmentBusy && recruitmentSession?.Recruitment != null && !recruitmentSession.RecruitmentNeedsRefresh
+        bool CanRecruitmentAct() => !recruitmentBusy && !accountBusy && !growthBusy && recruitmentSession?.Recruitment != null && !recruitmentSession.RecruitmentNeedsRefresh
             && !recruitmentSession.State.InFlight && recruitmentSession.State.Pending == null && recruitmentSession.State.OutboxCode == null;
 
         void FocusRecruitment(RectTransform panel)
@@ -212,13 +212,19 @@ namespace MemoryForge.Client
             {
                 if (recruitmentBusy) return;
                 string address = endpoint.text.Trim(), alias = account.text.Trim();
-                recruitmentCredential = credential.text; credential.text = "";
-                ConnectRecruitment(() =>
+                string key = credential.text; credential.text = "";
+                try
                 {
                     Directory.CreateDirectory(Application.persistentDataPath);
-                    var outbox = new PracticeCommandOutbox(Path.Combine(Application.persistentDataPath, "account-command-outbox.json"), address, alias);
-                    return new PracticeServerSession(address, alias, () => recruitmentCredential, outbox);
-                });
+                    var owner = new MemoryForgeAccountConnection(address, alias, key, Path.Combine(Application.persistentDataPath, "account-command-outbox.json"));
+                    MemoryForgeAccountConnection.SetCurrent(owner);
+                    ConnectRecruitment(owner.CreateSession);
+                }
+                catch (Exception error)
+                {
+                    if (Debug.isDebugBuild) Debug.LogWarning("MF_ACCOUNT_CONNECT_OWNER type=" + error.GetType().Name + " param=" + (error is ArgumentException argument ? argument.ParamName : "none") + " keyLength=" + key.Length);
+                    recruitmentNotice = "서버 주소와 개발 계정 설정을 확인해주세요."; RenderRecruitment();
+                }
             }, Brass, 28);
 #if !UNITY_EDITOR && !DEVELOPMENT_BUILD
             connect.interactable = false;
@@ -251,13 +257,17 @@ namespace MemoryForge.Client
             {
                 var next = create(); recruitmentSession?.Dispose(); recruitmentSession = next; latestRecruitmentReceipt = null;
             }
-            catch (Exception) { recruitmentCredential = ""; recruitmentNotice = "서버 주소와 개발 계정 설정을 확인해주세요."; RenderRecruitment(); return false; }
+            catch (Exception error)
+            {
+                if (Debug.isDebugBuild) Debug.LogWarning("MF_ACCOUNT_CONNECT_SESSION type=" + error.GetType().Name + " inner=" + (error.InnerException?.GetType().Name ?? "none"));
+                recruitmentNotice = "서버 주소와 개발 계정 설정을 확인해주세요."; RenderRecruitment(); return false;
+            }
             StartRecruitmentRefresh(); return true;
         }
 
         void StartRecruitmentRefresh()
         {
-            if (recruitmentBusy || recruitmentSession == null) return;
+            if (recruitmentBusy || accountBusy || growthBusy || recruitmentSession == null) return;
             recruitmentBusy = true; RenderRecruitment();
             StartCoroutine(RefreshRecruitmentView(recruitmentSession.RefreshRecruitmentAsync()));
         }
@@ -265,7 +275,6 @@ namespace MemoryForge.Client
         IEnumerator RefreshRecruitmentView(Task<RecruitmentRefreshResult> task)
         {
             while (!task.IsCompleted) yield return null;
-            recruitmentBusy = false;
             if (task.IsFaulted || task.IsCanceled) recruitmentNotice = "연결이 끊겼어요. 다시 확인해주세요.";
             else
             {
@@ -273,8 +282,12 @@ namespace MemoryForge.Client
                 if (task.Result.Code == PracticeSessionCodes.Ok && recruitmentSession != null)
                 {
                     PlayerPrefs.SetString("mf.account.endpoint", recruitmentSession.Endpoint); PlayerPrefs.SetString("mf.account.alias", recruitmentSession.Account);
+                    yield return ReadAccountProgression(recruitmentSession);
                 }
             }
+            recruitmentBusy = false;
+            RefreshHomeAccount();
+            RepaintAccountPanels();
             RenderRecruitment();
         }
 
@@ -326,9 +339,46 @@ namespace MemoryForge.Client
 
         void BeginPreviousRunRetry()
         {
-            if (recruitmentBusy || recruitmentSession == null) return;
+            if (recruitmentBusy || accountBusy || growthBusy || recruitmentSession == null) return;
             recruitmentBusy = true; OpenRecruitment();
-            StartCoroutine(AwaitPreviousRunRetry(recruitmentSession.RetryPendingAsync()));
+            var pending = recruitmentSession.State.Pending;
+            if (pending != null && PracticeCommandOutbox.IsSupportSelectionRoute(pending.Route))
+                StartCoroutine(AwaitSupportRecruitmentRetry(recruitmentSession, recruitmentSession.RetrySupportPendingAsync()));
+            else if (pending != null && PracticeCommandOutbox.IsEquipmentRoute(pending.Route))
+                StartCoroutine(AwaitEquipmentRecruitmentRetry(recruitmentSession, recruitmentSession.RetryEquipmentPendingAsync()));
+            else if (pending != null && PracticeCommandOutbox.IsGrowthRoute(pending.Route))
+                StartCoroutine(AwaitGrowthRecruitmentRetry(recruitmentSession.RetryGrowthPendingAsync()));
+            else if (pending != null && (pending.Route == PracticeCommandOutbox.ExpeditionRoute || pending.Route.EndsWith("/abandon", StringComparison.Ordinal)))
+                StartCoroutine(AwaitProgressionRetry(recruitmentSession.RetryProgressionPendingAsync()));
+            else StartCoroutine(AwaitPreviousRunRetry(recruitmentSession.RetryPendingAsync()));
+        }
+
+        IEnumerator AwaitProgressionRetry(Task<ProgressionMutationResult> task)
+        {
+            while (!task.IsCompleted) yield return null;
+            recruitmentBusy = false;
+            if (!task.IsFaulted && !task.IsCanceled && task.Result.OutboxCode == null
+                && (task.Result.Status == PracticeMutationStatus.Committed || task.Result.Status == PracticeMutationStatus.NotCommitted)) StartRecruitmentRefresh();
+            else { recruitmentNotice = "이전 요청은 보존되어 있어요. 연결을 확인한 뒤 다시 결과를 확인해주세요."; RenderRecruitment(); }
+        }
+
+        IEnumerator AwaitEquipmentRecruitmentRetry(PracticeServerSession captured, Task<EquipmentMutationResult> task)
+        {
+            while (!task.IsCompleted) yield return null;
+            if (!ReferenceEquals(captured, recruitmentSession)) yield break;
+            recruitmentBusy = false;
+            if (!task.IsFaulted && !task.IsCanceled && task.Result.OutboxCode == null
+                && (task.Result.Status == PracticeMutationStatus.Committed || task.Result.Status == PracticeMutationStatus.NotCommitted)) StartRecruitmentRefresh();
+            else { recruitmentNotice = "장비 변경 요청은 보존되어 있어요. 같은 요청으로 다시 확인해주세요."; RenderRecruitment(); }
+        }
+
+        IEnumerator AwaitGrowthRecruitmentRetry(Task<GrowthMutationResult> task)
+        {
+            while (!task.IsCompleted) yield return null;
+            recruitmentBusy = false;
+            if (!task.IsFaulted && !task.IsCanceled && task.Result.OutboxCode == null
+                && (task.Result.Status == PracticeMutationStatus.Committed || task.Result.Status == PracticeMutationStatus.NotCommitted)) StartRecruitmentRefresh();
+            else { recruitmentNotice = "이전 요청은 보존되어 있어요. 연결을 확인한 뒤 다시 결과를 확인해주세요."; RenderRecruitment(); }
         }
 
         IEnumerator AwaitPreviousRunRetry(Task<PracticeMutationResult> task)

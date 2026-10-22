@@ -82,6 +82,7 @@ namespace MemoryForge.Core
     }
     public sealed class RunSetup
     {
+        public RunPartyEntry? Support;
         public List<RunPartyEntry> Party = new List<RunPartyEntry>();
         public object? Memory, Bosses, RunId, MemoryVersion;
         public List<string> Relics = new List<string>();

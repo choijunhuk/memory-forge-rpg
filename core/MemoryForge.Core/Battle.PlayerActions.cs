@@ -12,6 +12,7 @@ namespace MemoryForge.Core
             internal BattleCardState? Instance;
             internal BattleCardDef? Definition;
             internal BattleActorState? Actor;
+            internal BattleEffectSource? Source;
             internal string Attr = "none";
             internal string? Reserved, Target, LastTarget, LastPicked;
             internal List<string> Picks = new List<string>();
@@ -26,7 +27,7 @@ namespace MemoryForge.Core
         bool IsOver() => state.Phase == "VICTORY" || state.Phase == "DEFEAT";
         int DebtTotal() => StateNumber(state.Debts.Aggregate(BigInteger.Zero, (total, d) => total + d.N));
         BattleBuff? Buff(string status) => state.Buffs.FirstOrDefault(b => b.Status == status);
-        string AttrOf(BattleCardState instance) => data.CardIndex[instance.Id].Attr == "wielder" ? Actor(instance.Wielder)?.Attr ?? "none" : OrNull(data.CardIndex[instance.Id].Attr) ?? "none";
+        string AttrOf(BattleCardState instance) => data.CardIndex[instance.Id].Attr == "wielder" ? (instance.SupportSourceId == null ? Actor(instance.Wielder)?.Attr : CardSource(instance)?.Attr) ?? "none" : OrNull(data.CardIndex[instance.Id].Attr) ?? "none";
         int SlotCapacity(string kind) => ReservationBook.CalculateCapacity(kind, state.SlotsBase.Next, state.SlotsBase.After, state.SlotsTemp.Next, state.SlotsTemp.After,
             state.SealedUntil, state.Turn, data.Rules.NextSlotsMax, data.Rules.AfterSlotsMax);
         int FreeSlots(string kind) => SlotCapacity(kind) - state.Reservations.Count(r => r.Due == (long)state.Turn + (kind == "next" ? 1 : 2));
@@ -86,14 +87,14 @@ namespace MemoryForge.Core
             catch (RuleException error) { return error.Code; }
             catch (OverflowException) { return "BATTLE_NUMBER_OUT_OF_RANGE"; }
         }
-        void ValidateOps(IEnumerable<EffectDef> effects, BattleCardState instance, string mode, IReadOnlyList<string> picks)
+        void ValidateOps(IEnumerable<EffectDef> effects, BattleCardState? instance, string mode, IReadOnlyList<string> picks)
         {
             foreach (var op in effects)
             {
                 if (op.Op == "loan")
                 {
                     if ((BigInteger)DebtTotal() + op.N!.Value > state.DebtCap) throw new RuleException("DEBT_CAP");
-                    if ((BigInteger)state.Ap - CostOf(instance.Uid, mode) + op.N.Value > data.Rules.ApMax) throw new RuleException("LOAN_OVERFLOW");
+                    if ((BigInteger)state.Ap - (instance == null ? 0 : CostOf(instance.Uid, mode)) + op.N.Value > data.Rules.ApMax) throw new RuleException("LOAN_OVERFLOW");
                 }
                 if (op.Op == "defer")
                 {
@@ -156,29 +157,16 @@ namespace MemoryForge.Core
             if (state.Phase != "PLAYER") throw new RuleException("WRONG_PHASE");
             var actor = Actor(actorId); if (actor == null) throw new RuleException("UNKNOWN_ACTOR");
             if (actor.Gauge < data.Rules.GaugeMax) throw new RuleException("ULT_NOT_READY");
-            var effects = actor.UltReplace ?? data.CharacterIndex[actor.Id].Ult.Effects;
-            if (effects.Any(o => o.Target == "one" || o.Op == "dmg" && string.IsNullOrEmpty(o.Target)))
-            {
-                var alive = state.Enemies.Where(e => e.Alive).ToList(); if (string.IsNullOrEmpty(target) && alive.Count == 1) target = alive[0].Uid;
-                if (Enemy(target)?.Alive != true) throw new RuleException("BAD_TARGET");
-            }
+            var source = EffectSource(actor); target = UltTarget(UltEffects(source), target);
             actor.Gauge = checked(actor.Gauge - data.Rules.GaugeMax);
-            var context = new EffectContext { Actor = actor, Attr = actor.Attr, Target = target, LastTarget = target, RawPicks = picks, IsUlt = true };
+            var context = new EffectContext { Actor = actor, Source = source, Attr = actor.Attr, Target = target, LastTarget = target, RawPicks = picks, IsUlt = true };
             Emit(new BattleEvent { E = "ult", Actor = actor.Id });
-            foreach (var op in effects) { ExecuteOp(op, context); if (CheckEnd()) return; }
-            foreach (var extra in actor.UltExtra)
-            {
-                if (extra.Once) { string key = "ultOnce_" + actor.Id; if (Flag(state.BattleFlags, key)) continue; state.BattleFlags[key] = true; }
-                foreach (var op in extra.Effects) { ExecuteOp(op, context); if (CheckEnd()) return; }
-            }
-            if (HasHook(actor.Id, "sera_r6")) state.BattleFlags["seraR6Turn"] = checked(state.Turn + 1);
-            if (HasHook(actor.Id, "kaya_r6") && context.Killed) actor.Gauge = StateNumber(BigInteger.Min(data.Rules.GaugeMax, (BigInteger)actor.Gauge + 50));
-            CheckEnd();
+            ResolveUlt(source, context);
         }
         void ResolveCard(string uid, string? reserved, string? target, IReadOnlyList<string> picks, bool held = false)
         {
             var instance = state.Cards[uid]; var definition = EffectiveCard(uid); string? owner = OwnerCharacter(instance); var actor = Actor(owner);
-            var context = new EffectContext { Instance = instance, Definition = definition, Actor = actor, Attr = AttrOf(instance), Reserved = reserved, Held = held, Target = target, LastTarget = target, Picks = new List<string>(picks), FirstDamage = true };
+            var context = new EffectContext { Instance = instance, Definition = definition, Actor = actor, Source = CardSource(instance), Attr = AttrOf(instance), Reserved = reserved, Held = held, Target = target, LastTarget = target, Picks = new List<string>(picks), FirstDamage = true };
             bool HasFixed(IEnumerable<EffectDef> effects) => effects.Any(o => o.Target == "fixed" || o.Then != null && HasFixed(o.Then) || o.Else != null && HasFixed(o.Else));
             if (HasFixed(definition.Effects))
             {
@@ -186,7 +174,8 @@ namespace MemoryForge.Core
             }
             else if (reserved != null && !string.IsNullOrEmpty(target) && Enemy(target)?.Alive != true) { context.Target = state.Enemies.FirstOrDefault(e => e.Alive)?.Uid; context.LastTarget = context.Target; }
             if (state.BonusAvailable && state.BonusTurn == state.Turn && definition.Effects.Any(o => o.Op == "dmg" || o.Op == "blk")) { context.RestraintBps = 3000; state.BonusAvailable = false; }
-            if (state.NextBoost != null && owner != null && owner != state.NextBoost.From) { context.BoostBps = state.NextBoost.Bps; state.NextBoost = null; }
+            string? effectOwner = instance.SupportSourceId == null ? owner : context.Source?.Id;
+            if (state.NextBoost != null && effectOwner != null && effectOwner != state.NextBoost.From) { context.BoostBps = state.NextBoost.Bps; state.NextBoost = null; }
             if (actor != null) GainGauge(actor, data.Rules.GaugePerCard);
             if (actor != null && context.Held && Has("time_stamp")) GainGauge(actor, 5, true);
             for (int i = 0; i < definition.Effects.Count; i++)
@@ -209,7 +198,7 @@ namespace MemoryForge.Core
                     if (part.Fx.EchoCopy.GetValueOrDefault() != 0 && instance.EchoCopy != true)
                     {
                         state.PendingCopies = state.PendingCopies ?? new List<BattlePendingCopy>();
-                        state.PendingCopies.Add(new BattlePendingCopy { Id = instance.Id, Wielder = instance.Wielder, From = instance.From, Due = checked(state.Turn + 1) });
+                        state.PendingCopies.Add(new BattlePendingCopy { Id = instance.Id, Wielder = instance.Wielder, From = instance.From, SupportSourceId = instance.SupportSourceId, Due = checked(state.Turn + 1) });
                     }
                 }
                 if (IsGrowthInstance(instance)) OnGrowthResolved(instance);
@@ -264,7 +253,7 @@ namespace MemoryForge.Core
             var due = state.PendingCopies.Where(p => p.Due <= state.Turn).ToList(); state.PendingCopies = state.PendingCopies.Where(p => p.Due > state.Turn).ToList();
             foreach (var copy in due)
             {
-                string uid = MakeCard(state, data, new BattleCardSpec { Id = copy.Id, Wielder = copy.Wielder, From = copy.From }, true, true);
+                string uid = MakeCard(state, data, new BattleCardSpec { Id = copy.Id, Wielder = copy.Wielder, From = copy.From, SupportSourceId = copy.SupportSourceId }, true, true);
                 state.Cards[uid].Temp.Add("echoHalf"); state.Cards[uid].EchoCopy = true;
                 if (state.Zones.Hand.Count < state.HandMax) state.Zones.Hand.Add(uid); else state.Zones.Discard.Add(uid);
                 Emit(new BattleEvent { E = "echoCopy", Uid = uid, Id = copy.Id });

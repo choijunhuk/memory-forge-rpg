@@ -123,8 +123,8 @@ namespace MemoryForge.Core
     }
 
     // ───────────────────────── inputs and results ─────────────────────────
-    public sealed class DungeonStartOptions { public string? DungeonId; public int? Tier; public List<RunPartyEntry?>? Party; public object? Memory; public uint? Seed; }
-    public sealed class WeeklyBossStartOptions { public string? BossId; public int? Difficulty; public List<RunPartyEntry?>? Party; public object? Memory; public uint? Seed; public bool Practice; }
+    public sealed class DungeonStartOptions { public RunPartyEntry? Support; public string? DungeonId; public int? Tier; public List<RunPartyEntry?>? Party; public object? Memory; public uint? Seed; }
+    public sealed class WeeklyBossStartOptions { public RunPartyEntry? Support; public string? BossId; public int? Difficulty; public List<RunPartyEntry?>? Party; public object? Memory; public uint? Seed; public bool Practice; }
     public sealed class RiftCycleRef { public int Index; public string? Key; }
     public sealed class RiftRunOptions
     {
@@ -297,14 +297,17 @@ namespace MemoryForge.Core
         public static BattleData ModeData(BattleData data, BattleMode? mode) => Battle.ModeData(data, mode);
 
         static Battle StartModeBattle(ContentModesData modes, ContentAccount account, List<RunPartyEntry?>? party, object? memory, uint? seed,
-            ContentStageRow row, List<List<string>> enemies, BattleMode mode)
+            ContentStageRow row, List<List<string>> enemies, BattleMode mode, RunPartyEntry? support = null)
         {
             var t = PartySetup(modes.Run, party, memory, account.Owned);
+            if (support != null && !account.Owned.Contains(support.CharId)) throw new RuleException("NOT_OWNED");
+            var source = support == null ? null : Run.PrepareSupport(modes.Run, support, t.Party);
             var diff = StageDiff(modes.Run, row);
             mode.Waves = enemies.Skip(1).Select(w => new List<string>(w)).ToList();
             var setup = new BattleSetup
             {
                 Party = t.Party.Select(Run.ActorSetup).ToList(), Deck = t.Deck.Select(Run.CardSpec).ToList(), Hp = t.MaxHp, MaxHp = t.MaxHp,
+                Support = source == null ? null : Run.SupportSetup(source),
                 Seed = seed ?? 1, DifficultyHp = diff.Hp, DifficultyDamage = diff.Dmg, Enemies = new List<string>(enemies[0])
             };
             Battle battle;
@@ -354,7 +357,7 @@ namespace MemoryForge.Core
                 if (W.Encounters != null && W.Encounters.TryGetValue(d.Id, out var byTier)) byTier.TryGetValue(t.Tier.ToString(CultureInfo.InvariantCulture), out waves);
                 if (waves == null) throw new RuleException("CONTENT_NOT_AUTHORED");
                 if (waves.Count < W.MinWaves || waves.Count > W.MaxWaves || waves.Any(w => w == null || w.Count == 0)) throw new RuleException("INVALID_CONTENT");
-                return StartModeBattle(modes, a, opts.Party, opts.Memory, opts.Seed, t, waves, new BattleMode { Kind = "dungeon", ContentId = d.Id, Tier = t.Tier });
+                return StartModeBattle(modes, a, opts.Party, opts.Memory, opts.Seed, t, waves, new BattleMode { Kind = "dungeon", ContentId = d.Id, Tier = t.Tier }, opts.Support);
             });
             /// <summary>Victory: spend 집중, pay the tier reward, record best stars. Defeat stays unsettled until defeatStamina is authored.</summary>
             public static ContentSettlement Settle(ContentModesData modes, ContentAccount account, BattleState? battle) => Guard(() =>
@@ -395,7 +398,7 @@ namespace MemoryForge.Core
                 if (opts.BossId == null || !W.Bosses.Contains(opts.BossId)) throw new RuleException("UNKNOWN_CONTENT");
                 var row = W.Difficulty.FirstOrDefault(x => x.Lv == opts.Difficulty) ?? throw new RuleException("UNKNOWN_TIER");
                 return StartModeBattle(modes, a, opts.Party, opts.Memory, opts.Seed, row, new List<List<string>> { new List<string> { opts.BossId } },
-                    new BattleMode { Kind = "weekly_boss", ContentId = opts.BossId, Difficulty = row.Lv, Practice = opts.Practice });
+                    new BattleMode { Kind = "weekly_boss", ContentId = opts.BossId, Difficulty = row.Lv, Practice = opts.Practice }, opts.Support);
             });
             /// <summary>§11.6: the victory record and the weekly counter are checked together. Every ended battle settles once, so a victory
             /// beyond the limit cannot be held back for next week; a defeat never touches the counter.</summary>

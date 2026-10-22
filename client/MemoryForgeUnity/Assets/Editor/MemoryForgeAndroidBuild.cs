@@ -17,7 +17,7 @@ public static class MemoryForgeAndroidBuild
 {
     const string DevPackage = "com.memoryforge.rpg.dev";
     // The lobby opens first and loads the expedition by name, so both scenes ship.
-    static readonly string[] Scenes = { "Assets/Scenes/MemoryForgeLobby.unity", "Assets/Scenes/MemoryForgeExpedition.unity" };
+    static readonly string[] Scenes = { "Assets/Scenes/MemoryForgeLobby.unity", "Assets/Scenes/MemoryForgeExpedition.unity", "Assets/Scenes/MemoryForgeServerPractice.unity", "Assets/Scenes/MemoryForgeGrowth.unity" };
 
     public static void BuildDevApk()
     {

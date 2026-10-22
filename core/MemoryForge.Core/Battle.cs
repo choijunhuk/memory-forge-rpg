@@ -50,6 +50,7 @@ namespace MemoryForge.Core
                 foreach (var fx in ch.Resonance.Take(resonance)) ApplyResonance(s, a, fx);
                 s.Actors.Add(a);
             }
+            if (setup.Support != null) s.Support = MakeSupport(data, setup.Support, s.Actors.Select(a => a.Id));
             var rien = s.Actors.FirstOrDefault(a => a.Id == "rien");
             if (rien != null) { s.EchoActive = true; s.EchoMax = rien.Passive.Params["max"]; }
             if (s.Relics.Contains("tuning_fork")) { s.EchoMax++; s.EchoStart = Math.Max(s.EchoStart, 1); }
@@ -80,7 +81,7 @@ namespace MemoryForge.Core
             string uid = "c" + s.Seq;
             s.Cards.Add(uid, new BattleCardState { Uid = uid, Id = spec.Id, Owner = def.Owner, Wielder = OrNull(spec.Wielder),
                 Plus = spec.Plus, Circuit = OrNull(spec.Circuit), Edge = OrNull(spec.Edge), Growth = spec.Growth,
-                Token = token, Free = free, Assigned = OrNull(spec.Assigned), From = OrNull(spec.From) });
+                Token = token, Free = free, Assigned = OrNull(spec.Assigned), From = OrNull(spec.From), SupportSourceId = spec.SupportSourceId });
             s.CardOrder.Add(uid); return uid;
         }
 
@@ -133,6 +134,7 @@ namespace MemoryForge.Core
                     case "end": candidate.EndTurn(); break;
                     case "play": candidate.PlayArguments(request.Args); break;
                     case "ult": candidate.UltArguments(request.Args); break;
+                    case "support": candidate.SupportArguments(request.Args); break;
                     default: throw new RuleException("UNKNOWN_COMMAND");
                 }
                 candidate.state.V = checked(candidate.state.V + 1);
@@ -210,7 +212,7 @@ namespace MemoryForge.Core
             if (string.IsNullOrEmpty(uid) || !state.Cards.TryGetValue(uid, out var card)) throw new RuleException("UNKNOWN_CARD_INSTANCE");
             return card;
         }
-        string? OwnerCharacter(BattleCardState card) => data.CharacterIndex.ContainsKey(card.Owner) ? card.Owner : card.Owner == "weapon" ? card.Wielder : null;
+        string? OwnerCharacter(BattleCardState card) => card.SupportSourceId != null ? null : data.CharacterIndex.ContainsKey(card.Owner) ? card.Owner : card.Owner == "weapon" ? card.Wielder : null;
         List<BattlePartDef> PartsOf(BattleCardState card)
         {
             var parts = new List<BattlePartDef>();
@@ -228,10 +230,10 @@ namespace MemoryForge.Core
                 else MapEffects(definition.Effects, UpgradeEffect);
             }
             string? owner = OwnerCharacter(instance);
-            var actor = owner == null ? null : state.Actors.FirstOrDefault(a => a.Id == owner);
+            var actor = CardSource(instance);
             if (actor != null)
             {
-                if (instance.Owner == owner)
+                if (instance.Owner == actor.Id)
                 {
                     var modifiers = actor.CardMods.Where(m => m.Cards != null && (m.Cards.Contains(instance.Id) || m.Cards.Contains(source.Id))).ToList();
                     MapEffects(definition.Effects, effect => { foreach (var modifier in modifiers) ApplyCardModifier(effect, modifier); });
@@ -397,7 +399,7 @@ namespace MemoryForge.Core
             foreach (var actor in state.Actors)
             {
                 var block = WeaponPassive(actor.Id, "w_startBlock"); if (block.HasValue) GainBlockRaw(block.Value.Value, "weapon");
-                foreach (var effect in actor.BattleStart.Where(e => e.Op != "tune")) ExecuteOp(effect, new EffectContext { Actor = actor, Attr = actor.Attr });
+                foreach (var effect in actor.BattleStart.Where(e => e.Op != "tune")) ExecuteOp(effect, new EffectContext { Actor = actor, Source = EffectSource(actor), Attr = actor.Attr });
             }
             if (Has("eternal_seed"))
             {
@@ -444,7 +446,7 @@ namespace MemoryForge.Core
             if (first)
             {
                 if (Has("memory_anvil")) for (int i = 0; i < 2; i++) TuneRandom("amp");
-                foreach (var actor in s.Actors) foreach (var effect in actor.BattleStart.Where(e => e.Op == "tune")) ExecuteOp(effect, new EffectContext { Actor = actor, Attr = actor.Attr });
+                foreach (var actor in s.Actors) foreach (var effect in actor.BattleStart.Where(e => e.Op == "tune")) ExecuteOp(effect, new EffectContext { Actor = actor, Source = EffectSource(actor), Attr = actor.Attr });
             }
             foreach (var enemy in s.Enemies.Where(e => e.Alive)) SetIntents(enemy);
             s.Phase = "PLAYER"; Emit(new BattleEvent { E = "turn", Turn = s.Turn, Ap = s.Ap });
@@ -815,16 +817,19 @@ namespace MemoryForge.Core
             if (s.Actors.Any(a => a.Gauge < 0 || a.Gauge > rules.GaugeMax)) throw new RuleException("GAUGE_RANGE");
             if (s.Enemies.Any(e => e.Hp < 0 || e.Block < 0 || e.Brk < 0)) throw new RuleException("ENEMY_RANGE");
             if (s.Reservations.Count(r => r.Due == s.Turn + 1) > rules.NextSlotsMax || s.Reservations.Count(r => r.Due == s.Turn + 2) > rules.AfterSlotsMax) throw new RuleException("CAPACITY_INVARIANT");
+            foreach (var card in s.Cards.Values) if (card.SupportSourceId != null) CardSource(card);
         }
 
         public Dictionary<string, object?> PublicView()
         {
             var s = state;
-            return BattleGraph.Object("v", s.V, "turn", s.Turn, "phase", s.Phase, "hp", s.Hp, "maxHp", s.MaxHp, "block", s.Block, "counter", s.Counter, "ap", s.Ap,
+            var graph = BattleGraph.Object("v", s.V, "turn", s.Turn, "phase", s.Phase, "hp", s.Hp, "maxHp", s.MaxHp, "block", s.Block, "counter", s.Counter, "ap", s.Ap,
                 "apNext", s.ApNext, "apDrainNext", s.ApDrainNext, "silenceUntil", s.SilenceUntil, "debt", s.Debts.Sum(d => d.N), "drawCount", s.Zones.Draw.Count,
                 "discard", new List<string>(s.Zones.Discard), "exhaustCount", s.Zones.Exhaust.Count,
                 "hand", s.Zones.Hand.Select(uid => s.Cards[uid].ToJsonGraph()).ToList(), "res", s.Reservations.Select(r => r.ToJsonGraph()).ToList(),
                 "enemies", s.Enemies.Select(e => e.ToJsonGraph()).ToList(), "actors", s.Actors.Select(a => BattleGraph.Object("id", a.Id, "gauge", a.Gauge)).ToList());
+            if (s.Support != null) graph.Add("support", BattleGraph.Object("charId", s.Support.Source.Id, "used", s.Support.Used, "gaugeCost", 100));
+            return graph;
         }
     }
 }

@@ -1,0 +1,79 @@
+{
+  "status": "SCOPED_PASS_WITH_KNOWN_GAP",
+  "candidate": "JS candidate1",
+  "completedAt": "2026-10-22T10:58:09.025136+00:00",
+  "crossLanguage": {
+    "status": "PASS",
+    "cases": 142,
+    "commands": 1004,
+    "queries": 1128,
+    "refusals": 295,
+    "fullStateComparisons": 2274,
+    "logAndEvIncluded": true,
+    "coreMvid": "a1b72b89701e4645a7b2f130ba71e282",
+    "coreDllSha256": "65bc74a134ee00da95c73d91e19fe8b42f855f9c8a81462b8959f9f745b801b8"
+  },
+  "authoredCases": 140,
+  "isolatedFollowupCases": 2,
+  "sourceHashes": {
+    "engine/rules-core.js": "c67915e853dae6d0ad4c6202cf97baa72d3ea2fd318ca8881a6dcbbe113ef44e",
+    "engine/content-modes.js": "99b2041428e514c05ad571737b472df75b2cf4c6740565eb42d5139248eeac52",
+    "engine/tests/support_partner.test.mjs": "b34b938e5c65b8fd8f656214eb1951907eb61c331545d97ac91ab3c6e3e6e11f",
+    "data/game_data.json": "b6d3543a1d87f0a28e4824e0c1ae45a1eabc676d7abefcd2e57e23b4abc0054a"
+  },
+  "jsSourceManifestSha256": "b35405aec259d99045565f32c4bd9d28afb4a3dad0ee287cc96144c4ddd7e826",
+  "coreInputs": {
+    "sourceRoot": "/Users/choi/.codex/worktrees/memoryforge-followup/Memory_forge",
+    "sourceManifestSha256": "44e19ab66f155b5624182cb8d2cade23b0f41ec90283e722b6cb1421a4df4a86",
+    "sourceFiles": 61,
+    "coreDllPath": "/Users/choi/.codex/worktrees/memoryforge-followup/Memory_forge/ops/ai/local/dotnet-artifacts/bin/MemoryForge.Core/debug/MemoryForge.Core.dll",
+    "coreDllSha256": "65bc74a134ee00da95c73d91e19fe8b42f855f9c8a81462b8959f9f745b801b8",
+    "coreBuildByThisTask": "NOT_RUN"
+  },
+  "oldJs": {
+    "artifactTestsPassed": 8,
+    "graphWitnesses": 11657,
+    "baseUltCases": 140,
+    "testCountIsNotWitnessCount": true
+  },
+  "oldCore": {
+    "status": "PASS",
+    "cases": 140,
+    "commands": 700,
+    "queries": 2940,
+    "checkpoints": 840,
+    "fullGraphs": true,
+    "logAndEventsIncluded": true,
+    "coreMvid": "a1b72b89701e4645a7b2f130ba71e282",
+    "coreDllSha256": "65bc74a134ee00da95c73d91e19fe8b42f855f9c8a81462b8959f9f745b801b8",
+    "coreBuild": "NOT_RUN: referenced preserved existing Core.dll only"
+  },
+  "oldCoreWitnessStreamsByteIdentical": true,
+  "baselineFilesUnchanged": 191,
+  "mechanicFailuresInRecordedCases": 0,
+  "knownUncoveredDefect": {
+    "kind": "JS candidate1 numeric-walker namespace defect",
+    "input": {
+      "runFlags": {
+        "rng": 7,
+        "skillLv": 3000000000
+      },
+      "support": "valid source"
+    },
+    "behavior": "JS TypeError for valid opaque metadata accepted by C#; author reported after scoped142 pass",
+    "state": "Root-authorized candidate2 repair pending; this is not final whole-proof approval"
+  },
+  "artifactErrorHistory": [
+    {
+      "kind": "exporter API-name mistake",
+      "detail": "effectiveCard was mapped to JS effDef; production unchanged",
+      "resolved": true,
+      "log": "logs/generate.log"
+    }
+  ],
+  "pinsEdited": false,
+  "productionEdited": false,
+  "fixturesRegenerated": "Existing fixtures never changed; new candidate-local shared fixture only",
+  "coreBuildByThisTask": "NOT_RUN",
+  "fixtureSha256": "fdffbfa0c59e2ae9b89d1a2e7944ed6ea5fa1148e80f6b5d411b29d9370d62bb"
+}

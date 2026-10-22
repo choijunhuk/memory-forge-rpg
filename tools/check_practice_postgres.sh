@@ -59,4 +59,11 @@ GRANT SELECT ON dev_practice.schema_marker TO mf_runtime;
 GRANT SELECT, INSERT, UPDATE ON dev_practice.account_state TO mf_runtime;
 SQL
 dotnet run --project "$MF_ROOT/server/MemoryForge.ServerChecks" -- "$MF_ROOT" --postgres-file "$MF_TMP/runtime.txt" --psql "$MF_TMP/psql-oracle"
+if [ -n "${MF_ACCOUNT_SUPPORT_BUNDLE:-}" ]; then
+  python3 "$MF_ROOT/tools/ai/test_account_support_migration_ci.py" \
+    --bundle "$MF_ACCOUNT_SUPPORT_BUNDLE" --sha256 "${MF_ACCOUNT_SUPPORT_BUNDLE_SHA256:?Reviewed account-support bundle SHA256 is required}" \
+    --cluster-context "$MF_TMP" --pgbin "$MF_PGBIN"
+else
+  echo 'Account migration/support checks: NOT_RUN (MF_ACCOUNT_SUPPORT_BUNDLE is unset).'
+fi
 MF_SUCCESS=1

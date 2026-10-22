@@ -16,7 +16,7 @@ public static class MemoryForgeDesktopBuild
         PlayerSettings.runInBackground = true;
         var report = BuildPipeline.BuildPlayer(new BuildPlayerOptions
         {
-            scenes = new[] { "Assets/Scenes/MemoryForgeLobby.unity", "Assets/Scenes/MemoryForgeExpedition.unity" },
+            scenes = new[] { "Assets/Scenes/MemoryForgeLobby.unity", "Assets/Scenes/MemoryForgeExpedition.unity", "Assets/Scenes/MemoryForgeServerPractice.unity", "Assets/Scenes/MemoryForgeGrowth.unity" },
             locationPathName = output, target = BuildTarget.StandaloneOSX, options = BuildOptions.Development
         });
         var s = report.summary;

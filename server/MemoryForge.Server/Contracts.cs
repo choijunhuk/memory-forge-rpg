@@ -125,7 +125,7 @@ namespace MemoryForge.Server
     sealed record LaunchClaimRequest(string RequestId, long ExpectedRevision, string Identity);
     sealed record SelectorRequest(string RequestId, long ExpectedRevision, string CharId, string Identity);
 
-    static class Contracts
+    static partial class Contracts
     {
         public const int MaxBodyBytes = 64 * 1024;
         /// <summary>Journal kind of the v2 terminal save; clients reach it only through the memory-commit endpoint.</summary>
@@ -140,6 +140,7 @@ namespace MemoryForge.Server
             ["enter"] = new[] { ("nodeId", true, "text") },
             ["play"] = new[] { ("uid", true, "text"), ("mode", false, "text"), ("target", false, "text"), ("picks", false, "list") },
             ["ult"] = new[] { ("actor", true, "text"), ("target", false, "text"), ("picks", false, "list") },
+            ["support"] = new[] { ("caller", true, "text"), ("target", false, "text"), ("picks", false, "list") },
             ["end"] = None,
             ["takeCard"] = new[] { ("id", true, "text") },
             ["skipCard"] = None,

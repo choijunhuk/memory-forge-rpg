@@ -64,6 +64,7 @@ namespace MemoryForge.Core
             var setup = new BattleSetup
             {
                 Party = s.Party.Select(p => ActorSetup(p)).ToList(), Deck = s.Deck.Select(c => CardSpec(c)).ToList(), Relics = new List<string>(s.Relics),
+                Support = s.Support == null ? null : SupportSetup(s.Support),
                 Hp = s.Hp, MaxHp = s.MaxHp, Seed = seed, RunFlags = flags, Enemies = enemies,
                 DifficultyHp = ToInt(JsOr(MemoryJson.Get(s.Difficulty.Fields, "hp"), 100)), DifficultyDamage = ToInt(JsOr(MemoryJson.Get(s.Difficulty.Fields, "dmg"), 100)),
                 NextApBonus = ToInt(JsOr(MemoryJson.Get(s.RunFlags, "nextApBonus"), 0))

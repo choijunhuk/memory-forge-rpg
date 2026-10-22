@@ -392,11 +392,13 @@ namespace MemoryForge.Core
         public string? Wielder, Circuit, Edge, Assigned, From;
         public bool Plus;
         public int Growth;
+        internal string? SupportSourceId;
         // Run assigns persistent keys after Battle.Create; combat UIDs are never memory keys.
     }
 
     public sealed class BattleSetup
     {
+        public BattleSupportSetup? Support;
         public List<BattleActorSetup> Party = new List<BattleActorSetup>();
         public List<BattleCardSpec> Deck = new List<BattleCardSpec>();
         public List<string> Enemies = new List<string>(), Relics = new List<string>();

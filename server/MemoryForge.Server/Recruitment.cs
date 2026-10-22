@@ -80,7 +80,8 @@ namespace MemoryForge.Server
     /// tape) or selector (the choice and its result). Append-only and chronological; history is never truncated.</summary>
     sealed class LedgerEntry
     {
-        public const string Launch = "launch", Pull = "pull", Selector = "selector";
+        public const string Launch = "launch", Pull = "pull", Selector = "selector", Grant = "grant";
+        public string PolicyVersion = ""; public int Chapter;
         public string RequestId = "", Kind = "", BannerId = "", Ticket = "", CharId = "";
         public long Revision;
         public int Count, TicketsUsed, GrantTickets;
@@ -99,6 +100,9 @@ namespace MemoryForge.Server
                 case Launch:
                     return GraphJson.Object("requestId", RequestId, "kind", Kind, "expectedRevision", Revision,
                         "grant", GraphJson.Object("freeCrystals", GrantCrystals, RecruitmentContent.LaunchTicket, GrantTickets));
+                case Grant:
+                    return GraphJson.Object("requestId", RequestId, "kind", Kind, "expectedRevision", Revision, "policyVersion", PolicyVersion, "chapter", Chapter,
+                        "grant", AccountPolicy.Grant(Chapter), "results", RecruitmentJson.Results(Results));
                 case Pull:
                     return GraphJson.Object("requestId", RequestId, "kind", Kind, "expectedRevision", Revision, "bannerId", BannerId, "count", Count,
                         "debit", GraphJson.Object("ticket", Ticket, "tickets", TicketsUsed, "freeCrystals", FreeCrystals, "paidCrystals", PaidCrystals),
@@ -132,6 +136,13 @@ namespace MemoryForge.Server
                     entry.PaidCrystals = RecruitmentJson.Amount(debit, "paidCrystals");
                     entry.Results = RecruitmentJson.ResultsOf(json.GetProperty("results"));
                     entry.Draws = RecruitmentJson.DrawsOf(json.GetProperty("draws"));
+                    break;
+                case Grant:
+                    BattleDataLoader.Fields(json, "requestId", "kind", "expectedRevision", "policyVersion", "chapter", "grant", "results");
+                    entry.PolicyVersion = Envelopes.Text(json, "policyVersion"); AccountPolicy.Require(entry.PolicyVersion);
+                    entry.Chapter = RecruitmentJson.Small(json, "chapter"); AccountPolicy.Stage(entry.Chapter);
+                    if (GraphJson.Digest(MemoryV2DataLoader.Graph(json.GetProperty("grant"))) != GraphJson.Digest(AccountPolicy.Grant(entry.Chapter))) throw new InvalidDataException("grant policy");
+                    entry.Results = RecruitmentJson.ResultsOf(json.GetProperty("results"));
                     break;
                 case Selector:
                     BattleDataLoader.Fields(json, "requestId", "kind", "expectedRevision", "charId", "results");
@@ -262,6 +273,15 @@ namespace MemoryForge.Server
                         g.Crystals = checked(g.Crystals + entry.GrantCrystals);
                         g.Tickets[RecruitmentContent.LaunchTicket] = checked(g.Tickets[RecruitmentContent.LaunchTicket] + entry.GrantTickets);
                         break;
+                    case LedgerEntry.Grant:
+                    {
+                        AccountPolicy.Require(entry.PolicyVersion);
+                        Require(entry.Chapter is 0 or 1, "grant chapter");
+                        var results = RecruitmentGrants.ApplyState(cfg, g, entry.Chapter);
+                        Require(SameResults(results, entry.Results), "grant results");
+                        free = checked(free + AccountPolicy.Value(entry.Chapter, "freeCrystals"));
+                        break;
+                    }
                     case LedgerEntry.Pull:
                     {
                         var banner = content.Active.FirstOrDefault(b => b.Id == entry.BannerId) ?? throw new InvalidDataException("recruitment record: pull banner");
@@ -297,6 +317,7 @@ namespace MemoryForge.Server
                 prefix.FreeCrystals = free; prefix.PaidCrystals = paid; prefix.LaunchClaimed = launched;
                 prefix.FromState(g);
                 prefix.Ledger.Add(entry);
+                if (entry.Kind == LedgerEntry.Grant) continue; // Its sole receipt is the linked, validated run memory-commit receipt.
                 string reply = RecruitmentCommands.ReplyText(content, accountId, entry, prefix);
                 if (entry.RequestId == pending)
                 {
@@ -323,8 +344,11 @@ namespace MemoryForge.Server
         {
             var ledger = new HashSet<string>(envelope.Recruitment?.Ledger.Select(e => e.RequestId) ?? Enumerable.Empty<string>(), StringComparer.Ordinal);
             foreach (var pair in envelope.Receipts)
-                Require(ledger.Contains(pair.Key) || IsRunReply(pair.Value.Body), "a recruitment receipt without its ledger entry");
+                Require(ledger.Contains(pair.Key) || GrowthCommands.ReceiptIds(envelope).Contains(pair.Key, StringComparer.Ordinal) || IsRunReply(pair.Value.Body), "a recruitment receipt without its ledger entry");
             envelope.Recruitment?.Validate(content, envelope.AccountId, envelope.Receipts, envelope.Revision, null);
+            foreach (var grant in envelope.Recruitment?.Ledger.Where(x => x.Kind == LedgerEntry.Grant) ?? Enumerable.Empty<LedgerEntry>())
+                Require(envelope.Progression?.Ledger.Count(f => f.Kind == "grant" && f.RequestId == grant.RequestId && f.Chapter == grant.Chapter && f.PolicyVersion == grant.PolicyVersion && f.Revision == grant.Revision) == 1,
+                    "orphan progression grant");
         }
 
         // The replies of Mutate's run callbacks (Create and Execute in Program.cs): one JSON object of only these members with a string runId.

@@ -1,8 +1,10 @@
 /*
  * Memory Forge v0.8.1 — content modes reference: §11.5 성장 던전 · §11.6 주간 보스 · §11.7 기록 균열 · §11.13 일일 활동.
  * Pure account-ledger functions (inputs are cloned, never mutated) plus a Battle subclass for waves and rift rules.
- * engine/rules-core.js stays byte-identical because its sha256 is pinned by the JS and C# vector fixtures, so every
- * rule hook lives here. Numbers come from data/game_data.json → progression and data/content_modes.json; items the
+ * Mode rule hooks live here. engine/rules-core.js is source-pinned by the JS and C# vector fixtures; S4 owned support is the one
+ * explicitly reviewed exception to keeping it byte-identical (no blanket JS parity waiver: old no-support graphs must stay exact).
+ * A dungeon/weekly launch may carry one owned non-party support build beside its party (support adds no party member, card or HP).
+ * Numbers come from data/game_data.json → progression and data/content_modes.json; items the
  * source leaves open are DECISION_PENDING there and throw CONTENT_NOT_AUTHORED instead of being invented.
  * Account, memory and party rows are server-held state; the client only names content and a party.
  */
@@ -128,11 +130,13 @@
         case 'begin': cand.begin(); break;
         case 'play': cand.play(a.uid, a.mode || 'now', a.target || null, a.picks || []); break;
         case 'ult': cand.ult(a.actor, a.target || null, a.picks || []); break;
+        case 'support': cand.support(a.caller, a.target || null, a.picks || []); break;
         case 'end': cand.endTurn(); break;
         default: throw new RuleError('UNKNOWN_COMMAND');
       }
       cand.s.v += 1;
       cand.checkInvariants();
+      cand.checkSupportNumbers();
       const resp = { v: cand.s.v, phase: cand.s.phase, ev: cand.s.ev };
       this.s = cand.s;
       if (req.rid) Object.defineProperty(this.receipts, req.rid, { value: { digest, resp: clone(resp) }, enumerable: true, writable: true, configurable: true });
@@ -196,10 +200,17 @@
     }
   }
 
+  // S4 standalone support: an owned non-party partner's frozen build (Run.supportEntry), separate from the party, deck and HP
+  function supportSetup(ix, support, party, owned) {
+    if (support === undefined || support === null) return undefined;
+    if (support && typeof support === 'object' && !owned.includes(support.charId)) throw new RuleError('NOT_OWNED', support.charId);
+    return Run.supportEntry(ix, support, party);
+  }
   function startModeBattle(data, account, opts, row, enemies, mode) {
     const ix = indexData(data);
     const t = partySetup(ix, opts.party, opts.memory, account.owned);
-    const b = ModeBattle.create(data, { party: t.party, deck: t.deck, hp: t.maxHp, maxHp: t.maxHp, seed: opts.seed ?? 1, difficulty: stageDiff(ix, row), enemies: enemies[0] },
+    const support = supportSetup(ix, opts.support, t.party, account.owned);
+    const b = ModeBattle.create(data, { party: t.party, deck: t.deck, hp: t.maxHp, maxHp: t.maxHp, seed: opts.seed ?? 1, difficulty: stageDiff(ix, row), enemies: enemies[0], support },
       { ...mode, waves: enemies.slice(1) });
     b.do('begin');
     return b;

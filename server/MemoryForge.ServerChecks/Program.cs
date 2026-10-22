@@ -10,7 +10,8 @@
 //   dotnet run --project server/MemoryForge.ServerChecks -- <repoRoot> --postgres-file <private connection file> --psql <oracle wrapper>
 // The default runs the file-backend suite only (the PostgreSQL mode is then NOT_RUN). The PostgreSQL mode (PostgresChecks.cs) runs only
 // when both PostgreSQL arguments are given, and then the file-backend suite is NOT_RUN in that invocation. Both modes end with the
-// recruitment scenario (RecruitmentChecks.cs) on fresh accounts.
+// recruitment scenario (RecruitmentChecks.cs) on fresh accounts, then the read-only --verify-store scenario (AccountStoreVerifierChecks.cs)
+// over the stores the suite committed.
 using System.Net;
 using System.Net.Sockets;
 using System;
@@ -61,6 +62,7 @@ static class Program
             {
                 await checks.RunPostgres(postgresFile, psql);
                 await checks.RunPostgresRecruitment();
+                await checks.RunPostgresVerifyStore();
                 passed = true;
                 Console.WriteLine("SERVER CHECKS PASS [postgres]: " + checks.Passed + " assertions");
                 Console.WriteLine("File-backend suite: NOT_RUN in this invocation (run without the PostgreSQL arguments)");
@@ -165,13 +167,15 @@ sealed class ServerProcess
     public string Output { get { lock (sync) return output.ToString(); } }
     ServerProcess(string name, Process process) { Name = name; Process = process; }
 
+    // arguments: raw arguments before the configuration (the bare --verify-store flag and its refused spellings).
     public static ServerProcess Launch(string name, string dotnet, string dll, IReadOnlyDictionary<string, string> config, string environment,
-        IReadOnlyDictionary<string, string>? extra, string? workingDirectory)
+        IReadOnlyDictionary<string, string>? extra, string? workingDirectory, IReadOnlyList<string>? arguments = null)
     {
         var start = new ProcessStartInfo(dotnet) { RedirectStandardOutput = true, RedirectStandardError = true, UseShellExecute = false };
         // The host's content root (and so its appsettings.json) is its working directory.
         if (workingDirectory != null) start.WorkingDirectory = workingDirectory;
         start.ArgumentList.Add(dll);
+        if (arguments != null) foreach (string argument in arguments) start.ArgumentList.Add(argument);
         foreach (var pair in config) start.ArgumentList.Add("--" + pair.Key + "=" + pair.Value);
         // Only this launch's configuration: no inherited URLs, ports, Kestrel endpoints, environment names or MemoryForge settings.
         foreach (string key in start.Environment.Keys.ToList())
@@ -242,7 +246,7 @@ sealed partial class ServerChecks
     readonly List<long> seeds = new List<long>();
     // Scenarios that must all have completed before the final leak scan counts as covering the suite.
     static readonly string[] RequiredScenarios = { "refusals", "auth-input", "expedition", "concurrency", "ownership", "write-failure", "battle-query", "kestrel-reload", "hosting-url-pin", "partial-mutation", "corrupt-stores",
-        "recruitment" };
+        "recruitment", "verify-store", "progression-http", "growth-http" };
     readonly HashSet<string> completed = new HashSet<string>(StringComparer.Ordinal);
     string serverDll = "", fixture = "", store = "", alphaRunId = "", lockedDirectory = "";
     byte[] alphaDone = Array.Empty<byte>();
@@ -280,6 +284,9 @@ sealed partial class ServerChecks
         await PartialMutationRollback();
         await CorruptStores();
         await RecruitmentFile();
+        await VerifyStoreFile();
+        await ProgressionHttpFile();
+        await GrowthHttpFile();
         RecruitmentLeakScan();
         LeakScan(RequiredScenarios);
     }
@@ -417,9 +424,9 @@ sealed partial class ServerChecks
         ["MemoryForge:PracticeStore"] = storeDirectory, ["MemoryForge:PracticePort"] = "0"
     };
     ServerProcess Launch(string name, IReadOnlyDictionary<string, string> config, string environment = "Development", IReadOnlyDictionary<string, string>? extra = null,
-        string? workingDirectory = null)
+        string? workingDirectory = null, IReadOnlyList<string>? arguments = null)
     {
-        var server = ServerProcess.Launch(name, dotnet, serverDll, config, environment, extra, workingDirectory);
+        var server = ServerProcess.Launch(name, dotnet, serverDll, config, environment, extra, workingDirectory, arguments);
         processes.Add(server);
         return server;
     }
@@ -679,8 +686,10 @@ sealed partial class ServerChecks
         return server;
     }
 
-    // Wins the first battle with a greedy check bot, takes one reward card, then only ends turns in the next battle until defeat.
-    async Task<(JsonElement State, string? TakenKey)> PlayToDefeat(Api api, string token, string runId, JsonElement state, List<string> kinds)
+    // Wins the first battle with a greedy check bot, takes one reward card, then only ends turns in the next battle until defeat. pick: the
+    // index of the offered reward card to take, or -1 to take none yet and keep fighting (default: the first card).
+    async Task<(JsonElement State, string? TakenKey)> PlayToDefeat(Api api, string token, string runId, JsonElement state, List<string> kinds,
+        Func<List<JsonElement>, int>? pick = null, bool keepWinning = false)
     {
         string? taken = null;
         var rejected = new HashSet<string>(StringComparer.Ordinal);
@@ -694,13 +703,16 @@ sealed partial class ServerChecks
             {
                 case "BATTLE":
                     var battle = state.GetProperty("battle");
-                    command = taken == null && S(battle, "phase") == "PLAYER" ? Choose(battle, rejected, version) ?? ("end", new JsonObject(), "end") : ("end", new JsonObject(), "end");
+                    command = (keepWinning || taken == null) && S(battle, "phase") == "PLAYER" ? Choose(battle, rejected, version) ?? ("end", new JsonObject(), "end") : ("end", new JsonObject(), "end");
                     break;
                 case "REWARD":
                     var cards = A(state.GetProperty("pending"), "cards");
-                    command = taken == null && cards.Count > 0 ? ("takeCard", new JsonObject { ["id"] = cards[0].GetString() }, "takeCard") : ("proceed", new JsonObject(), "proceed");
+                    int choice = (keepWinning || taken == null) && cards.Count > 0 ? pick?.Invoke(cards) ?? 0 : -1;
+                    command = choice >= 0 && choice < cards.Count ? ("takeCard", new JsonObject { ["id"] = cards[choice].GetString() }, "takeCard") : ("proceed", new JsonObject(), "proceed");
                     break;
                 case "MAP": command = ("enter", new JsonObject { ["nodeId"] = A(state, "available")[0].GetString() }, "enter"); break;
+                case "REST" when keepWinning && I(state.GetProperty("pending"), "uses") > 0:
+                    command = ("rest", new JsonObject { ["choice"] = "heal" }, "rest"); break;
                 case "REST": case "FORGE": case "SHOP": case "EVENT": command = ("proceed", new JsonObject(), "proceed"); break;
                 case "ARCHIVE": command = ("archive", new JsonObject { ["choice"] = "return" }, "archive"); break;
                 default:

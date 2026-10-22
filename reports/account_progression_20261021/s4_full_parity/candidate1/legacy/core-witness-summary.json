@@ -1,0 +1,1 @@
+{"status":"PASS","cases":140,"commands":700,"queries":2940,"checkpoints":840,"fullGraphs":true,"logAndEventsIncluded":true,"coreMvid":"a1b72b89701e4645a7b2f130ba71e282","coreDllSha256":"65bc74a134ee00da95c73d91e19fe8b42f855f9c8a81462b8959f9f745b801b8","coreBuild":"NOT_RUN: referenced preserved existing Core.dll only"}

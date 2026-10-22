@@ -1,0 +1,108 @@
+{
+  "status": "INVENTORY_ONLY_NO_PINS_EDITED",
+  "sources": {
+    "engine/rules-core.js": "c67915e853dae6d0ad4c6202cf97baa72d3ea2fd318ca8881a6dcbbe113ef44e",
+    "engine/content-modes.js": "99b2041428e514c05ad571737b472df75b2cf4c6740565eb42d5139248eeac52"
+  },
+  "records": [
+    {
+      "file": "engine/tests/vectors/run_create_vectors.json.gz",
+      "pointer": "/sources/engine/sha256",
+      "source": "engine/rules-core.js",
+      "old": "2078bdaf45ac22a3d662958331dd3fb43661e29124132a9f8c20252c14f113ad",
+      "new": "c67915e853dae6d0ad4c6202cf97baa72d3ea2fd318ca8881a6dcbbe113ef44e"
+    },
+    {
+      "file": "engine/tests/vectors/battle_preview_vectors.json.gz",
+      "pointer": "/sources/engine/sha256",
+      "source": "engine/rules-core.js",
+      "old": "2078bdaf45ac22a3d662958331dd3fb43661e29124132a9f8c20252c14f113ad",
+      "new": "c67915e853dae6d0ad4c6202cf97baa72d3ea2fd318ca8881a6dcbbe113ef44e"
+    },
+    {
+      "file": "engine/tests/vectors/traces.jsonl.gz",
+      "pointer": "/sources/engine/sha256",
+      "source": "engine/rules-core.js",
+      "old": "2078bdaf45ac22a3d662958331dd3fb43661e29124132a9f8c20252c14f113ad",
+      "new": "c67915e853dae6d0ad4c6202cf97baa72d3ea2fd318ca8881a6dcbbe113ef44e"
+    },
+    {
+      "file": "engine/tests/vectors/battle_late_actions_vectors.json.gz",
+      "pointer": "/sources/engine/sha256",
+      "source": "engine/rules-core.js",
+      "old": "2078bdaf45ac22a3d662958331dd3fb43661e29124132a9f8c20252c14f113ad",
+      "new": "c67915e853dae6d0ad4c6202cf97baa72d3ea2fd318ca8881a6dcbbe113ef44e"
+    },
+    {
+      "file": "engine/tests/vectors/run_memory_vectors.json.gz",
+      "pointer": "/sources/engine/sha256",
+      "source": "engine/rules-core.js",
+      "old": "2078bdaf45ac22a3d662958331dd3fb43661e29124132a9f8c20252c14f113ad",
+      "new": "c67915e853dae6d0ad4c6202cf97baa72d3ea2fd318ca8881a6dcbbe113ef44e"
+    },
+    {
+      "file": "engine/tests/vectors/battle_player_action_vectors.json.gz",
+      "pointer": "/sources/engine/sha256",
+      "source": "engine/rules-core.js",
+      "old": "2078bdaf45ac22a3d662958331dd3fb43661e29124132a9f8c20252c14f113ad",
+      "new": "c67915e853dae6d0ad4c6202cf97baa72d3ea2fd318ca8881a6dcbbe113ef44e"
+    },
+    {
+      "file": "engine/tests/vectors/battle_player_query_vectors.json.gz",
+      "pointer": "/sources/engine/sha256",
+      "source": "engine/rules-core.js",
+      "old": "2078bdaf45ac22a3d662958331dd3fb43661e29124132a9f8c20252c14f113ad",
+      "new": "c67915e853dae6d0ad4c6202cf97baa72d3ea2fd318ca8881a6dcbbe113ef44e"
+    },
+    {
+      "file": "engine/tests/vectors/memory_rule_vectors.json.gz",
+      "pointer": "/sources/engine/sha256",
+      "source": "engine/rules-core.js",
+      "old": "2078bdaf45ac22a3d662958331dd3fb43661e29124132a9f8c20252c14f113ad",
+      "new": "c67915e853dae6d0ad4c6202cf97baa72d3ea2fd318ca8881a6dcbbe113ef44e"
+    },
+    {
+      "file": "engine/tests/vectors/content_modes_vectors.json.gz",
+      "pointer": "/sources/engine/sha256",
+      "source": "engine/rules-core.js",
+      "old": "2078bdaf45ac22a3d662958331dd3fb43661e29124132a9f8c20252c14f113ad",
+      "new": "c67915e853dae6d0ad4c6202cf97baa72d3ea2fd318ca8881a6dcbbe113ef44e"
+    },
+    {
+      "file": "engine/tests/vectors/content_modes_vectors.json.gz",
+      "pointer": "/sources/contentEngine/sha256",
+      "source": "engine/content-modes.js",
+      "old": "1297e1a0f59292e5e53868b179170d26c6552673cc25ab1215c3269510ee32a6",
+      "new": "99b2041428e514c05ad571737b472df75b2cf4c6740565eb42d5139248eeac52"
+    },
+    {
+      "file": "engine/tests/vectors/battle_turn_vectors.json.gz",
+      "pointer": "/sources/engine/sha256",
+      "source": "engine/rules-core.js",
+      "old": "2078bdaf45ac22a3d662958331dd3fb43661e29124132a9f8c20252c14f113ad",
+      "new": "c67915e853dae6d0ad4c6202cf97baa72d3ea2fd318ca8881a6dcbbe113ef44e"
+    },
+    {
+      "file": "engine/tests/vectors/run_progression_vectors.json.gz",
+      "pointer": "/sources/engine/sha256",
+      "source": "engine/rules-core.js",
+      "old": "2078bdaf45ac22a3d662958331dd3fb43661e29124132a9f8c20252c14f113ad",
+      "new": "c67915e853dae6d0ad4c6202cf97baa72d3ea2fd318ca8881a6dcbbe113ef44e"
+    },
+    {
+      "file": "engine/tests/vectors/battle_opening_vectors.json.gz",
+      "pointer": "/sources/engine/sha256",
+      "source": "engine/rules-core.js",
+      "old": "2078bdaf45ac22a3d662958331dd3fb43661e29124132a9f8c20252c14f113ad",
+      "new": "c67915e853dae6d0ad4c6202cf97baa72d3ea2fd318ca8881a6dcbbe113ef44e"
+    },
+    {
+      "file": "reports/card_text_20261016/reference.json",
+      "pointer": "/sources/engine/rules-core.js",
+      "source": "engine/rules-core.js",
+      "old": "2078bdaf45ac22a3d662958331dd3fb43661e29124132a9f8c20252c14f113ad",
+      "new": "c67915e853dae6d0ad4c6202cf97baa72d3ea2fd318ca8881a6dcbbe113ef44e"
+    }
+  ],
+  "rule": "Update only reviewed source provenance metadata; retain original case/setup/request/state/log/ev/query/response/receipt/expected-hash values and validation functions."
+}

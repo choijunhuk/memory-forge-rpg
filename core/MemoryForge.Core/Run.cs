@@ -33,6 +33,7 @@ namespace MemoryForge.Core
                 Zones = setup.Zones == null ? length == "full" ? new List<int> { 1, 2 } : new List<int> { 1 } : new List<int>(setup.Zones),
                 Bosses = MemoryJson.Truthy(setup.Bosses) ? MemoryJson.Copy(setup.Bosses) : null, Party = setup.Party.Select(p => p.Copy()).ToList(),
                 Relics = new List<string>(setup.Relics), StartMemory = MemoryJson.Copy(MemoryJson.Truthy(setup.Memory) ? setup.Memory : MemoryJson.Object()) };
+            if (setup.Support != null) s.Support = PrepareSupport(data, setup.Support, s.Party);
             if (s.StageLevel.HasValue)
             {
                 var scale = Stats.StageScale(data.Stats, s.StageLevel.Value);

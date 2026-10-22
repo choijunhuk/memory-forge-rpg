@@ -25,7 +25,7 @@ namespace MemoryForge.Server
     {
         /// <summary>Server journal/dispatch format. Bump it whenever RunCommands or the journal meaning changes; stored envelopes of
         /// another format are refused, never reinterpreted.</summary>
-        public const string ReplayFormat = "mf-dev-practice-replay-1";
+        public const string ReplayFormat = "mf-dev-practice-replay-2";
         public RunData Data { get; }
         public string RulesVersion { get; }
         public string ContentSha256 { get; }

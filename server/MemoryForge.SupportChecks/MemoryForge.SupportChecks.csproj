@@ -1,0 +1,4 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net10.0</TargetFramework><Nullable>enable</Nullable><ImplicitUsings>disable</ImplicitUsings><TreatWarningsAsErrors>true</TreatWarningsAsErrors><InvariantGlobalization>true</InvariantGlobalization></PropertyGroup>
+  <ItemGroup><ProjectReference Include="../MemoryForge.Server/MemoryForge.Server.csproj"/><FrameworkReference Include="Microsoft.AspNetCore.App"/><Compile Include="../MemoryForge.GrowthChecks/S1Journey.cs" Link="S1Journey.cs"/></ItemGroup>
+</Project>

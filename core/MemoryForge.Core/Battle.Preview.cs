@@ -78,22 +78,27 @@ namespace MemoryForge.Core
                 }
                 if (HiddenOutcome(EffectiveCard(uid).Effects) || !state.Rng.SequenceEqual(after.Rng) || !state.Zones.Draw.SequenceEqual(after.Zones.Draw))
                 { forecast.Hidden = true; return forecast; }
-                long loss = 0, damage = 0;
-                foreach (var enemy in state.Enemies)
-                {
-                    var now = after.Enemies.FirstOrDefault(e => e.Uid == enemy.Uid);
-                    long lost = Math.Max(0, enemy.Hp - (now?.Hp ?? 0));
-                    loss += lost;
-                    if (lost > 0) forecast.EnemyHpLosses.Add(new BattleEnemyHpLoss { Uid = enemy.Uid, HpLoss = StateNumber(lost) });
-                    if (now != null) damage += Math.Max(0L, (long)enemy.Hp + enemy.Block - ((long)now.Hp + now.Block));
-                }
-                forecast.EnemyHpLoss = StateNumber(loss); forecast.EnemyDamage = StateNumber(damage);
-                forecast.NewlyBroken = after.Enemies.Count(e => e.BrokenUntil != 0 && state.Enemies.Any(x => x.Uid == e.Uid && x.BrokenUntil == 0));
-                forecast.BlockDelta = after.Block - state.Block; forecast.HpDelta = after.Hp - state.Hp;
-                forecast.Defeat = after.Phase == "DEFEAT";
+                FillForecast(forecast, after);
                 return forecast;
             }
             catch (RuleException rejected) { return new BattlePlayForecast { Mode = mode, Error = rejected.Code }; }
+        }
+
+        void FillForecast(BattlePlayForecast forecast, BattleState after)
+        {
+            long loss = 0, damage = 0;
+            foreach (var enemy in state.Enemies)
+            {
+                var now = after.Enemies.FirstOrDefault(e => e.Uid == enemy.Uid);
+                long lost = Math.Max(0, enemy.Hp - (now?.Hp ?? 0));
+                loss += lost;
+                if (lost > 0) forecast.EnemyHpLosses.Add(new BattleEnemyHpLoss { Uid = enemy.Uid, HpLoss = StateNumber(lost) });
+                if (now != null) damage += Math.Max(0L, (long)enemy.Hp + enemy.Block - ((long)now.Hp + now.Block));
+            }
+            forecast.EnemyHpLoss = StateNumber(loss); forecast.EnemyDamage = StateNumber(damage);
+            forecast.NewlyBroken = after.Enemies.Count(e => e.BrokenUntil != 0 && state.Enemies.Any(x => x.Uid == e.Uid && x.BrokenUntil == 0));
+            forecast.BlockDelta = after.Block - state.Block; forecast.HpDelta = after.Hp - state.Hp;
+            forecast.Defeat = after.Phase == "DEFEAT";
         }
 
         // The original HTML preview's reserved branch (prototype/index.html preview): a copy of this unpaid state, the card out of the hand,

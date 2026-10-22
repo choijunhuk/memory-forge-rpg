@@ -13,6 +13,7 @@
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
   </PropertyGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Policies/account-progression-20261021-v1.json" LogicalName="MemoryForge.Server.AccountPolicyV1.json" />
     <ProjectReference Include="../../core/MemoryForge.Core/MemoryForge.Core.csproj" />
     <PackageReference Include="Npgsql" Version="10.0.3" />
   </ItemGroup>
@@ -27,5 +28,11 @@
     <Compile Include="../../core/MemoryForge.CoreChecks/JsonGraphComparison.cs" Link="Linked/JsonGraphComparison.cs" />
     <!-- RECRUIT-SERVER-20261021: the one gacha loader CoreChecks verifies against the vectors. -->
     <Compile Include="../../core/MemoryForge.CoreChecks/GachaDataLoader.cs" Link="Linked/GachaDataLoader.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Policies/account-progression-20261021-v2.json" LogicalName="MemoryForge.Server.AccountPolicyV2.json" />
+    <EmbeddedResource Include="Policies/account-progression-20261021-v3.json" LogicalName="MemoryForge.Server.AccountPolicyV3.json" />
+    <EmbeddedResource Include="Policies/account-progression-20261021-v4.json" LogicalName="MemoryForge.Server.AccountPolicyV4.json" />
+    <Compile Include="../../core/MemoryForge.CoreChecks/ContentModesDataLoader.cs" Link="Linked/ContentModesDataLoader.cs" />
   </ItemGroup>
 </Project>

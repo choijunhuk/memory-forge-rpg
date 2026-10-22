@@ -21,6 +21,7 @@ using Newtonsoft.Json.Linq;
 
 namespace MemoryForge.Client
 {
+    internal enum GrowthPublicKind { None, Encounter, Action, Preview, Query, SupportQuery }
     /// <summary>A server reply that is not acceptable public JSON of this protocol. Code is one of the constants below; the message names
     /// at most a member name of the protocol, never a value, body, header or credential.</summary>
     public sealed class PracticeProtocolException : Exception
@@ -56,7 +57,8 @@ namespace MemoryForge.Client
         {
             "seed", "rng", "journal", "receipts", "receipt", "binding", "requestId", "identity", "digest", "sha256", "stateSha256",
             "createdSha256", "credential", "credentialSha256", "password", "secret", "authorization", "pattern", "pi", "passive", "runFlags",
-            "turnFlags", "offered", "startMemory", "memoryBaseline", "envelope", "revision", "archive", "seq", "resSeq", "seqCard"
+            "turnFlags", "offered", "startMemory", "memoryBaseline", "envelope", "revision", "archive", "seq", "resSeq", "seqCard",
+            "serverNowMs", "nextRegenAtMs", "regenAtMs", "startedAtMs", "settledAtMs", "resetsAtMs", "caller", "supportSourceId", "supportSource"
         };
 
         // Location-dependent: members of state.battle that are private there although the same names are public elsewhere.
@@ -68,7 +70,9 @@ namespace MemoryForge.Client
         public static JObject ParseObject(byte[] utf8) => ParseObjectCore(utf8, false);
         // Recruitment schema validates the only public locations of requestId/revision after this shared lexical/private-field pass.
         internal static JObject ParseRecruitmentObject(byte[] utf8) => ParseObjectCore(utf8, true);
-        static JObject ParseObjectCore(byte[] utf8, bool recruitment)
+        internal static JObject ParseProgressionObject(byte[] utf8) => ParseObjectCore(utf8, false, true);
+        internal static JObject ParseGrowthObject(byte[] utf8, GrowthPublicKind kind) => ParseObjectCore(utf8, false, false, kind);
+        static JObject ParseObjectCore(byte[] utf8, bool recruitment, bool progression = false, GrowthPublicKind growth = GrowthPublicKind.None)
         {
             if (utf8 == null) throw new ArgumentNullException(nameof(utf8));
             if (utf8.Length == 0 || utf8.Length > MaxResponseBytes) throw Invalid("body size");
@@ -86,12 +90,12 @@ namespace MemoryForge.Client
             }
             catch (Exception error) when (error is FormatException || error is JsonException || error is DecoderFallbackException) { throw Invalid("JSON"); }
             if (!(root is JObject top)) throw Invalid("not a JSON object");
-            CheckTree(top, recruitment);
+            CheckTree(top, recruitment, progression, growth);
             return top;
         }
 
         // Every member name against PrivateNames and every value's type, iteratively (the depth is already bounded by the reader).
-        static void CheckTree(JObject top, bool recruitment)
+        static void CheckTree(JObject top, bool recruitment, bool progression, GrowthPublicKind growth)
         {
             var pending = new Stack<JToken>();
             pending.Push(top);
@@ -103,7 +107,11 @@ namespace MemoryForge.Client
                         foreach (var member in members.Properties())
                         {
                             bool recruitmentMember = recruitment && IsRecruitmentPublicMember(top, members, member.Name);
-                            if (PrivateNames.Contains(member.Name) && !recruitmentMember) throw Private();
+                            bool progressionRevision = progression && member.Name == "revision" && ReferenceEquals(members, top);
+                            bool growthMember = IsGrowthPublicMember(top, members, member.Name, progression, growth);
+                            bool supportMember = member.Name == "caller" && (growth == GrowthPublicKind.SupportQuery && ReferenceEquals(members, top["source"])
+                                || ReferenceEquals(members.Parent, top["events"]) && members["e"]?.Type == JTokenType.String && members["e"]!.Value<string>() == "support");
+                            if (PrivateNames.Contains(member.Name) && !recruitmentMember && !progressionRevision && !growthMember && !supportMember) throw Private();
                             if (recruitment && (string.Equals(member.Name, "roll", StringComparison.OrdinalIgnoreCase) || string.Equals(member.Name, "rolls", StringComparison.OrdinalIgnoreCase)
                                 || string.Equals(member.Name, "growth", StringComparison.OrdinalIgnoreCase))) throw Private();
                             pending.Push(member.Value);
@@ -132,6 +140,21 @@ namespace MemoryForge.Client
             var snapshot = root["snapshot"] as JObject;
             if (name == "revision") return snapshot != null && ReferenceEquals(owner, snapshot);
             return ReferenceEquals(owner.Parent, root["history"]) || snapshot != null && ReferenceEquals(owner.Parent, snapshot["history"]);
+        }
+
+        static bool IsGrowthPublicMember(JObject root, JObject owner, string name, bool progression, GrowthPublicKind kind)
+        {
+            var profile = progression ? root : kind == GrowthPublicKind.Action ? root["profile"] as JObject : null;
+            if ((name == "serverNowMs" || name == "nextRegenAtMs") && profile != null && ReferenceEquals(owner, profile["focus"])) return true;
+            if (name == "resetsAtMs")
+            {
+                if (profile != null && (ReferenceEquals(owner, profile["bossShop"]) || ReferenceEquals(owner, profile["weeklyBoss"]))) return true;
+                if ((kind == GrowthPublicKind.Action || kind == GrowthPublicKind.Preview) && root["kind"]?.Type == JTokenType.String && root["kind"]!.Value<string>() == "bossExchange"
+                    && (ReferenceEquals(owner, root["before"]) || ReferenceEquals(owner, root["after"]))) return true;
+            }
+            if (name == "revision" && kind != GrowthPublicKind.None && kind != GrowthPublicKind.Query && kind != GrowthPublicKind.SupportQuery && ReferenceEquals(owner, root)) return true;
+            if (name == "revision" && kind == GrowthPublicKind.Action && profile != null && ReferenceEquals(owner, profile)) return true;
+            return name == "requestId" && kind == GrowthPublicKind.Action && ReferenceEquals(owner, root);
         }
 
         // ---- typed members: a required member must be present with exactly this type ----
@@ -239,9 +262,11 @@ namespace MemoryForge.Client
         {
             this.json = json; RunId = runId; ServerVersion = serverVersion; Phase = phase; AccountMemoryVersion = accountMemoryVersion;
             RunMemoryVersion = runMemoryVersion; Node = node; BattleVersion = battleVersion; Turn = turn; BattlePhase = battlePhase; PendingType = pendingType;
+            Support = json["state"]?["battle"] is JObject battle ? SupportJson.Summary(battle) : null;
         }
 
         public string RunId { get; }
+        public PracticeSupportSummary? Support { get; }
         /// <summary>The server journal version (committed command count): the expectedVersion of the next command. Not battle.v.</summary>
         public int ServerVersion { get; }
         public string Phase { get; }
@@ -297,8 +322,7 @@ namespace MemoryForge.Client
                 turn = PracticePublicJson.Count(battle, "turn");
                 battlePhase = PracticePublicJson.Text(battle, "phase");
             }
-            if (json.ContainsKey("events"))
-                foreach (var item in PracticePublicJson.Array(json, "events")) if (!(item is JObject)) throw PracticePublicJson.Invalid("events");
+            if (json.ContainsKey("events")) SupportJson.Events(PracticePublicJson.Array(json, "events"));
             string? pendingType = state.TryGetValue("pending", out JToken? pending) && pending is JObject open && open.TryGetValue("type", out JToken? type)
                 && type is JValue text && text.Type == JTokenType.String ? (string)text.Value! : null;
             return new PracticeRunView(json, runId, version, phase, memoryVersion, runMemoryVersion, node, battleVersion, turn, battlePhase, pendingType);
@@ -379,7 +403,9 @@ namespace MemoryForge.Client
         {
             if (pending == null) throw new ArgumentNullException(nameof(pending));
             const string runsPrefix = PracticeCommandOutbox.CreateRunRoute + "/";
-            bool create = pending.Route == PracticeCommandOutbox.CreateRunRoute;
+            bool create = pending.Route == PracticeCommandOutbox.CreateRunRoute || pending.Route == PracticeCommandOutbox.ExpeditionRoute;
+            if (PracticeCommandOutbox.IsAbandonRoute(pending.Route) || PracticeCommandOutbox.IsRecruitmentRoute(pending.Route) || PracticeCommandOutbox.IsGrowthRoute(pending.Route) || PracticeCommandOutbox.IsEquipmentRoute(pending.Route) || PracticeCommandOutbox.IsSupportSelectionRoute(pending.Route))
+                throw PracticePublicJson.Mismatch("run receipt route");
             // The outbox only holds the three mutation routes, so a run route always carries a validated 35-character run ID here.
             string? runId = create ? null : pending.Route.Substring(runsPrefix.Length, 35);
             var reply = PracticeRunView.Parse(utf8, runId);
@@ -387,6 +413,7 @@ namespace MemoryForge.Client
             if (reply.ServerVersion != expected) throw PracticePublicJson.Mismatch("version");
             if (runId != null && pending.Route == PracticeCommandOutbox.MemoryCommitRoute(runId) && !(reply.ResultJToken() is JObject))
                 throw PracticePublicJson.Invalid("result");
+            SupportJson.CommandReceipt(pending, reply.EventsJArray(), reply.Support);
             return new PracticeReceipt(pending.Route, pending.RequestId, reply);
         }
     }
@@ -472,7 +499,7 @@ namespace MemoryForge.Client
         // 1..2147483647 (Core lists only enemies that lose HP). With an error or a hidden outcome (hidden is then required as a JSON
         // boolean) it must be empty, as Core keeps it, so a drawn preview never discloses an outcome the forecast hides. Anything else is
         // RESPONSE_INVALID. The values are passed on as sent; nothing is summed, compared or derived here.
-        static IReadOnlyList<(string Uid, int HpLoss)> EnemyHpLossesOf(JObject forecast, string? error)
+        internal static IReadOnlyList<(string Uid, int HpLoss)> EnemyHpLossesOf(JObject forecast, string? error)
         {
             if (!forecast.ContainsKey("enemyHpLosses")) return System.Array.AsReadOnly(System.Array.Empty<(string Uid, int HpLoss)>());
             var rows = PracticePublicJson.Array(forecast, "enemyHpLosses");

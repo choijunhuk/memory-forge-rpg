@@ -39,7 +39,7 @@ namespace MemoryForge.Client
     //   the original's display pace (Normal, Double ×0.5, Reduced: every row at once) changes only these waits, never a barrier's Continue.
     // - Services and event choices that need deck cards open a local, unsent deck sheet bound to the context it was opened in; cancel,
     //   any snapshot change (a commit, another device, a new node) and a reconnect drop it, so an old selection is never sent.
-    public sealed class MemoryForgeServerPracticeClient : MonoBehaviour
+    public sealed partial class MemoryForgeServerPracticeClient : MonoBehaviour
     {
         /// <summary>Why the deck sheet is open: a node service that needs one card (§7.3 node table: rest upgrade, forge variation or
         /// removal, shop removal), or an event choice that copies or removes cards (§7.7, its authored count).</summary>
@@ -189,7 +189,7 @@ namespace MemoryForge.Client
         /// <summary>How many keys the open sheet needs before it can be sent: its count, at most the pickable cards (the original rule).</summary>
         public int DeckPickRequired => deckPick == null ? 0 : Required(deckPick);
         /// <summary>Whether a new command may be sent now (session CanMutate, nothing local open, no presentation, no operation).</summary>
-        public bool CanCommand => !busy && session != null && session.State.CanMutate && rows == null && picker == null && prepared == null && deckPick == null;
+        public bool CanCommand => !busy && session != null && session.State.CanMutate && rows == null && picker == null && prepared == null && deckPick == null && !supportOpen;
         /// <summary>True while the session's current snapshot shows the published terminal save (VICTORY/DEFEAT, pending save, state.memory).</summary>
         public bool ShowingSave => SaveState(session?.State.Snapshot) != null;
         /// <summary>The unsent save selection in the published change order (what a preview or save sends); empty without a current save.</summary>
@@ -226,6 +226,8 @@ namespace MemoryForge.Client
         void OnEnable()
         {
             if (font == null) font = Resources.Load<Font>("Fonts/IBMPlexSansKR-Regular");
+            var owner = MemoryForgeAccountConnection.Current;
+            if (factory == null && owner?.IsAuthenticated == true) { accountScene = true; factory = owner.CreateSession; }
             if (!OpenAndRefresh()) Render();
         }
         void OnDisable() { Suspend(); RemoveView(); }
@@ -257,6 +259,8 @@ namespace MemoryForge.Client
         }
         void DropUnsent()
         {
+            DropSupport();
+            accountAbandonOpen = false;
             selectedCard = null; selectedMode = null; target = null; picker = null; prepared = null; deckPick = null; rows = null;
             queryResult = null; queryWanted = false; refreshWanted = false; generation++;
             saveContext = null; saveSelection.Clear(); assignOpen = false; previewResult = null; previewWanted = false; saveRevision++;
@@ -268,6 +272,8 @@ namespace MemoryForge.Client
 
         void Update()
         {
+            RevalidateSupportPreparation();
+            if (accountReturnAfterOperation && !busy) { accountReturnAfterOperation = false; ReturnAccountHome(); return; }
             FitView();
             float now = Time.realtimeSinceStartup;
             if (rows != null) Advance(now);
@@ -296,15 +302,18 @@ namespace MemoryForge.Client
         /// <summary>The explicit exact retry of the outbox's unresolved request (never automatic).</summary>
         public Task<bool> RetryAsync() => Operate(async s =>
         {
+            if (s.State.Pending?.Route.EndsWith("/abandon", StringComparison.Ordinal) == true)
+                return HandleAccountAbandon(await s.RetryProgressionPendingAsync(), s);
             var before = s.State.Snapshot;
             var result = await s.RetryPendingAsync();
             if (!ReferenceEquals(s, session)) return false;
-            return Handle(result, before, true, "보관했던 요청을 확인했어요.");
+            return Handle(result, before, true, "보관했던 요청을 확인했어요.", false);
         });
 
         /// <summary>A new server run; only offered without a current run or after it is DONE (a create refusal stays unresolved).</summary>
         public Task<bool> CreateRunAsync()
         {
+            if (accountScene) return Refuse("공방의 출격 준비에서 출발해주세요.");
             var run = Snapshot?.Run;
             if (run != null && run.Phase != "DONE") return Refuse("진행 중인 탐사가 있어요.");
             if (!CanCommand) return Refuse(NotReady());
@@ -351,6 +360,7 @@ namespace MemoryForge.Client
         /// prepares it (one, unsent) during an ordinary presentation, or sends exactly one play.</summary>
         public Task<bool> ConfirmAsync()
         {
+            if (supportOpen) return Refuse("지원 확인 창을 먼저 닫아주세요.");
             if (DetailsCurrent()) return Refuse(DetailsOpenText);
             if (picker != null || PresentationBarrier) return Refuse("지금은 카드를 사용할 수 없어요.");
             if (!Ready()) return Refuse(NotReady());
@@ -431,6 +441,7 @@ namespace MemoryForge.Client
 
         public Task<bool> EndTurnAsync()
         {
+            if (supportOpen) { CancelSupport(); return Refuse("지원 준비를 취소했어요. 턴 종료를 다시 선택해주세요."); }
             if (DetailsCurrent()) return Refuse(DetailsOpenText);
             // A prepared play still waiting (e.g. after skip, before its Update dispatch) is never overtaken by an end.
             if (rows != null || picker != null || prepared != null) return Refuse("지금은 턴을 마칠 수 없어요.");
@@ -461,7 +472,8 @@ namespace MemoryForge.Client
             if (!GaugeFull(actor, b)) return Refuse("필살기 게이지가 아직 차지 않았어요.");
             var args = new JObject { ["actor"] = actorId };
             if (target != null && Enemies().Any(e => Str(e["uid"]) == target && Bool(e["alive"]))) args["target"] = target;
-            return Mutate((s, context) => s.CommandAsync(context, "ult", args), true, false, ActorName(actor) + "의 필살기를 사용했어요.");
+            return accountScene ? AccountUltimate(actorId, args, ActorName(actor))
+                : Mutate((s, context) => s.CommandAsync(context, "ult", args), true, false, ActorName(actor) + "의 필살기를 사용했어요.");
         }
 
         /// <summary>Chooses the pace of result rows (the open presentation's remaining rows and later ones). Display only: never
@@ -481,6 +493,7 @@ namespace MemoryForge.Client
         /// prepared play. Refused without a selected hand card, with a pick sheet open or during a barrier.</summary>
         public bool OpenCardDetails()
         {
+            if (supportOpen) { DropSupport(); Render(); }
             if (selectedCard == null || Hand(selectedCard) == null || picker != null || PresentationBarrier || Snapshot?.Run?.Phase != "BATTLE") return false;
             detailsAt = generation;
             Render();
@@ -805,7 +818,7 @@ namespace MemoryForge.Client
             var context = view.Context;
             var ids = view.SelectedChangeIds.ToArray();
             saveContext = null; saveSelection.Clear(); InvalidatePreview(false);
-            return Mutate((s, current) => s.CommitMemoryAsync(context, ids), false, false,
+            return CommitSaveAndRefreshAccount(context, ids,
                 ids.Length == 0 ? "기존 기억 덱을 그대로 유지하고 탐사를 마쳤어요." : "고른 변화 " + ids.Length + "개를 기억에 저장했어요.");
         }
 
@@ -1055,7 +1068,7 @@ namespace MemoryForge.Client
                 if (before == null) { Say("먼저 서버 상태를 새로고침해 주세요.", true); return false; }
                 var result = await send(s, before.Context);
                 if (!ReferenceEquals(s, session)) return false;
-                return Handle(result, present ? before : null, endTurn, success);
+                return Handle(result, present ? before : null, endTurn, success, true);
             });
 
         Task<bool> SendPlayAsync(string uid, string mode, string? playTarget, IReadOnlyList<string> picks)
@@ -1067,14 +1080,19 @@ namespace MemoryForge.Client
         }
 
         // A resolution: the session already re-read the state; presentation only from a fresh receipt's events.
-        bool Handle(PracticeMutationResult result, PracticeSnapshot? before, bool endTurn, string success)
+        bool Handle(PracticeMutationResult result, PracticeSnapshot? before, bool endTurn, string success, bool presentSupportCutin)
         {
             AfterSnapshotChange();
             switch (result.Status)
             {
                 case PracticeMutationStatus.Committed:
                     var events = result.PresentableEvents();
-                    if (before != null && events != null && result.Snapshot != null) StartPresentation(before, events, result.Snapshot, endTurn);
+                    if (before != null && events != null && result.Snapshot != null)
+                    {
+                        StartPresentation(before, events, result.Snapshot, endTurn);
+                        // A retry can first reveal a version-fresh receipt, but it is still an earlier action's resolution.
+                        if (presentSupportCutin) PresentRunSupportCutin(before, events, result.Snapshot);
+                    }
                     if (result.RefreshCode != null) Say("행동은 서버에 반영됐지만 최신 상태를 다시 불러와야 해요. 새로고침해 주세요.", true);
                     else if (result.OutboxCode != null) Say("행동은 반영됐지만 요청 기록을 정리하지 못했어요. '같은 요청 다시 보내기'로 확인해 주세요.", true);
                     else Say(success, false);
@@ -1094,6 +1112,7 @@ namespace MemoryForge.Client
         // After any server read: keep the last good snapshot, drop local things that no longer match it, and re-ask the query.
         void AfterSnapshotChange()
         {
+            DropSupport();
             var snap = session?.State.Snapshot;
             if (snap != null) lastGood = snap;
             if (picker != null && (snap == null || !picker.Context.Equals(snap.Context))) picker = null;
@@ -1115,6 +1134,7 @@ namespace MemoryForge.Client
 
         void SelectionChanged()
         {
+            DropSupport();
             generation++; queryResult = null; queryWanted = selectedCard != null;
             Render();
         }
@@ -1186,7 +1206,7 @@ namespace MemoryForge.Client
             : session == null ? "서버 연습에 연결되어 있지 않아요."
             : "서버 확인이 끝나지 않았어요. 새로고침하거나 '같은 요청 다시 보내기'로 확인해 주세요.";
         string Blocked() => rows != null || picker != null || prepared != null || deckPick != null ? "지금은 할 수 없어요." : NotReady();
-        bool SelectionLocked() => !Ready() || PresentationBarrier || picker != null || prepared != null || session!.State.Snapshot?.Run?.BattleVersion == null;
+        bool SelectionLocked() => !Ready() || supportOpen || PresentationBarrier || picker != null || prepared != null || session!.State.Snapshot?.Run?.BattleVersion == null;
 
         // ───────── presentation (cosmetic public event rows) ─────────
 
@@ -1206,6 +1226,8 @@ namespace MemoryForge.Client
         // The fresh receipt's own ult event names whose ultimate this is (its actor, as the battle before the command published it).
         string? UltTitle(PracticeSnapshot before, JArray events)
         {
+            var support = events.OfType<JObject>().FirstOrDefault(e => Str(e["e"]) == "support");
+            if (support != null) return CharacterName(Str(support["actor"])) + " 지원 · 호출 " + CharacterName(Str(support["caller"]));
             var ult = events.OfType<JObject>().FirstOrDefault(e => Str(e["e"]) == "ult");
             if (ult == null) return null;
             string? id = Str(ult["actor"]);
@@ -1277,7 +1299,7 @@ namespace MemoryForge.Client
                     IntentText = Bool(e["alive"]) ? MoveText(e["intent"]) : null
                 }).ToList(),
                 Reservations = reservations.Select(r => new BattleDigestReservation { Uid = Str(r["uid"]), Name = CardName(Str(r["id"])), Kind = Str(r["kind"]), Due = Int(r["due"]) }).ToList(),
-                CardNames = names
+                CardNames = names, ActorNames = new Dictionary<string, string>(characterNames, StringComparer.Ordinal)
             };
         }
 
@@ -1289,7 +1311,7 @@ namespace MemoryForge.Client
             From = Int(e["from"]), To = Int(e["to"]), Index = Int(e["index"]), Hp = Int(e["hp"]), Brk = Int(e["brk"]),
             Uid = Str(e["uid"]), Source = Str(e["src"]), Status = Str(e["s"]), Part = Str(e["part"]), Phase = Str(e["phase"]), Id = Str(e["id"]),
             Card = Str(e["card"]), Mode = Str(e["mode"]), Target = Str(e["target"]), Kind = Str(e["kind"]), Reserved = Str(e["reserved"]),
-            Actor = Str(e["actor"]), Fizzled = BoolOrNull(e["fizzled"]), Fallback = BoolOrNull(e["fallback"]), Discarded = BoolOrNull(e["discarded"])
+            Actor = Str(e["actor"]), Caller = Str(e["caller"]), Fizzled = BoolOrNull(e["fizzled"]), Fallback = BoolOrNull(e["fallback"]), Discarded = BoolOrNull(e["discarded"])
         };
 
         // ───────── public-state readers (the drawn snapshot only) ─────────
@@ -1347,13 +1369,14 @@ namespace MemoryForge.Client
             }
             else
             {
-                frame = Box(canvasRoot, "ServerPracticeFrame", 0, 0, 1600, 900, Background);
+                if (accountScene) AccountScenery(canvasRoot);
+                frame = Box(canvasRoot, "ServerPracticeFrame", 0, 0, 1600, 900, accountScene ? new Color(Background.r, Background.g, Background.b, 0.28f) : Background);
                 Center(frame);
                 Header();
                 var snap = Snapshot;
                 var run = snap?.Run;
                 if (snap == null) Label(frame, busy ? "서버 상태를 불러오는 중이에요…" : "아직 서버 상태를 받지 못했어요. 새로고침을 눌러 주세요.", 32, 200, 1536, 60, 26, Muted);
-                else if (run == null) Label(frame, "진행 중인 서버 탐사가 없어요. '새 서버 탐사'로 시작할 수 있어요.", 32, 200, 1536, 60, 26, Ink);
+                else if (run == null) Label(frame, accountScene ? "진행 중인 탐사가 없어요. 공방의 출격 준비에서 다음 이야기를 선택해주세요." : "진행 중인 서버 탐사가 없어요. '새 서버 탐사'로 시작할 수 있어요.", 32, 200, 1536, 60, 26, Ink);
                 else if (run.Phase == "MAP") MapView();
                 else if (run.Phase == "BATTLE" && Battle() != null) BattleView();
                 else if (run.Phase == "REWARD" && Pending(State(), "reward") != null) RewardView();
@@ -1372,6 +1395,9 @@ namespace MemoryForge.Client
                 if (partsOpen && SaveState(snap) != null) SavePartsView();
                 if (DetailsCurrent()) CardDetailsView();
                 if (rows != null && barrier) BarrierView();
+                if (accountAbandonOpen) AccountAbandonView();
+                if (supportOpen) RunSupportView();
+                if (accountScene) AccountFrames();
             }
             if (factory != null && EventSystem.current == null)
             { var input = new GameObject("ServerPracticeInput", typeof(EventSystem), typeof(StandaloneInputModule)); input.transform.SetParent(canvasObject.transform, false); }
@@ -1380,9 +1406,11 @@ namespace MemoryForge.Client
 
         void Header()
         {
+            if (accountScene) { AccountHeader(); return; }
             Label(frame!, "기억 공방", 32, 16, 230, 48, 36, Brass, FontStyle.Bold);
-            Label(frame!, "서버 연습 · 개발용 · 연습 계정", 272, 12, 600, 30, 22, Ink);
-            Label(frame!, StatusText(), 272, 44, 800, 30, 18, SnapshotStale ? Danger : Muted);
+            Label(frame!, "서버 연습 · 개발용 · 연습 계정", 272, 12, 480, 30, 22, Ink);
+            Label(frame!, StatusText(), 272, 44, 480, 30, 18, SnapshotStale ? Danger : Muted);
+            if (Snapshot?.Run?.Phase == "BATTLE") RunSupportEntry(784, 12, 288, 60);
             var refresh = Button(frame!, "Refresh", "새로고침", 1090, 18, 150, 52, () => Launch(RefreshAsync), Line, 22);
             refresh.interactable = session != null && !busy;
             if (session?.State.Pending != null)
@@ -1953,8 +1981,10 @@ namespace MemoryForge.Client
         void BattleView()
         {
             var b = Battle()!;
+            bool illustrated = accountScene && ((b["reservations"] as JArray)?.Count ?? 0) == 0;
+            float battleHeight = illustrated ? 372 : 264;
             // Party
-            var party = Box(frame!, "Party", 32, 96, 380, 264, Panel);
+            var party = Box(frame!, "Party", 32, 96, 380, battleHeight, Panel);
             Label(party, "파티 체력  " + Int(b["hp"]) + " / " + Int(b["maxHp"]), 18, 8, 344, 30, 24, Ink, FontStyle.Bold);
             Bar(party, 18, 42, 344, 8, Int(b["hp"]) ?? 0, Int(b["maxHp"]) ?? 0, Memory);
             Label(party, "방어 " + Int(b["block"]) + "   ·   " + Int(b["turn"]) + "턴", 18, 56, 184, 30, 20, Ink);
@@ -1963,12 +1993,13 @@ namespace MemoryForge.Client
             Label(party, "뽑을 더미 " + Int(piles?["draw"]) + " · 손패 " + Int(piles?["hand"]) + " · 버린 더미 " + Int(piles?["discard"]) + " · 소멸 " + Int(piles?["exhaust"]),
                 18, 88, 344, 40, 16, Muted);
             ActorsView(party, b);
+            if (illustrated) AccountPartyArt(party, b);
 
             // Enemies (public HP, block, alive, current and next intent as published; the current forecast's per-enemy HP loss lit on
             // each bar with "now → after" beside it, both the server's numbers)
             var enemies = Enemies();
             var losses = PreviewLosses();
-            var foes = Box(frame!, "Enemies", 428, 96, 1140, 264, Panel);
+            var foes = Box(frame!, "Enemies", 428, 96, 1140, battleHeight, Panel);
             float width = 1140f / Math.Max(1, enemies.Count);
             for (int i = 0; i < enemies.Count; i++)
             {
@@ -1977,15 +2008,16 @@ namespace MemoryForge.Client
                 bool alive = Bool(e["alive"]);
                 int? hp = Int(e["hp"]);
                 int taking = alive && hp != null && losses.TryGetValue(uid, out int loss) ? loss : 0;
-                var box = Button(foes, "Enemy:" + uid, "", i * width + 6, 6, width - 12, 252, () => SelectEnemy(uid), uid == target ? Brass : Line);
+                var box = Button(foes, "Enemy:" + uid, "", i * width + 6, 6, width - 12, battleHeight - 12, () => SelectEnemy(uid), uid == target ? Brass : Line);
                 box.interactable = alive && !SelectionLocked();
+                if (accountScene) AccountEnemyArt(box.transform, Str(e["id"]), width - 12, alive, illustrated);
                 Label(box.transform, (Str(e["name"]) ?? "적") + (alive ? "" : " · 처치"), 12, 10, width - 36, 36, 25, alive ? Ink : Muted, FontStyle.Bold);
                 Label(box.transform, "체력 " + hp + (taking > 0 ? " → " + Math.Max(0, hp!.Value - taking) : "") + " / " + Int(e["maxHp"]) + "   방어 " + Int(e["block"]),
                     12, 52, width - 36, 30, 21, Ink);
                 var bar = Bar(box.transform, 12, 86, width - 36, 8, hp ?? 0, Int(e["maxHp"]) ?? 0, Danger);
                 if (taking > 0) PreviewLoss(bar, hp!.Value, Int(e["maxHp"]) ?? 0, taking);
-                if (alive) Label(box.transform, "이번  " + MoveText(e["intent"]) + "\n다음  " + MoveText(e["next"]), 12, 104, width - 36, 96, 19, Brass);
-                if (uid == target) Label(box.transform, "대상", 12, 210, width - 36, 30, 19, Background, FontStyle.Bold);
+                if (alive) Label(box.transform, "이번  " + MoveText(e["intent"]) + "\n다음  " + MoveText(e["next"]), 12, illustrated ? 268 : 104, width - 36, illustrated ? 68 : 96, 19, Brass);
+                if (uid == target) Label(box.transform, "대상", 12, illustrated ? 330 : 210, width - 36, 30, 19, accountScene ? Memory : Background, FontStyle.Bold);
             }
 
             // Time reservations: the server's cap/used/sealed/due per column and every public reservation. Under the now-play rules
@@ -2254,7 +2286,7 @@ namespace MemoryForge.Client
             : label + " (" + Int(column["due"]) + "턴) · 사용 " + Int(column["used"]) + " / 칸 " + Int(column["cap"]) + (Bool(column["sealed"]) ? " · 봉인" : "");
 
         // The published move as-is (base values; the server does not publish a final damage forecast for intents).
-        static string MoveText(JToken? move)
+        internal static string MoveText(JToken? move)
         {
             if (!(move is JObject m)) return "대기";
             string? label = Str(m["label"]);
@@ -2482,6 +2514,11 @@ namespace MemoryForge.Client
         Button Button(Transform parent, string name, string caption, float x, float y, float width, float height, Action click, Color? color = null, int size = 24)
         {
             var r = Box(parent, name, x, y, width, height, color ?? Line); var image = r.GetComponent<Image>(); image.raycastTarget = true;
+            if (accountScene && caption.Length != 0)
+            {
+                image.sprite = AccountSprite(color == Brass ? "UI/battle/ui_button_pill_brass" : "UI/battle/ui_button_pill_ink");
+                image.type = Image.Type.Sliced; image.pixelsPerUnitMultiplier = 128f / Math.Max(1, height); image.color = Color.white;
+            }
             var button = r.gameObject.AddComponent<Button>(); button.targetGraphic = image;
             // Only a live, interactable button acts: a replaced view's button is inactive (RemoveView) until its deferred destroy.
             button.onClick.AddListener(() => { if (button != null && button.IsActive() && button.IsInteractable()) click(); });

@@ -85,7 +85,7 @@ namespace MemoryForge.Core
     public sealed class BattleCardState
     {
         public string Uid = "", Id = "", Owner = "";
-        public string? Wielder, Circuit, Edge, Assigned, From;
+        public string? Wielder, Circuit, Edge, Assigned, From, SupportSourceId;
         public bool Plus, Grown, Held, Token, Free;
         public bool? EchoCopy;
         public int Growth, Used, CostMod;
@@ -102,6 +102,7 @@ namespace MemoryForge.Core
                 "grown", Grown, "held", Held, "used", Used, "costMod", CostMod, "token", Token, "free", Free, "assigned", Assigned, "from", From);
             if (Key != null) graph.Add("key", Key);
             BattleGraph.Optional(graph, "echoCopy", EchoCopy);
+            BattleGraph.Optional(graph, "supportSourceId", SupportSourceId);
             return graph;
         }
     }
@@ -196,10 +197,14 @@ namespace MemoryForge.Core
     public sealed class BattlePendingCopy
     {
         public string Id = "";
-        public string? Wielder, From;
+        public string? Wielder, From, SupportSourceId;
         public int Due;
         internal BattlePendingCopy Copy() => (BattlePendingCopy)MemberwiseClone();
-        public Dictionary<string, object?> ToJsonGraph() => BattleGraph.Object("id", Id, "wielder", Wielder, "from", From, "due", Due);
+        public Dictionary<string, object?> ToJsonGraph()
+        {
+            var graph = BattleGraph.Object("id", Id, "wielder", Wielder, "from", From, "due", Due);
+            BattleGraph.Optional(graph, "supportSourceId", SupportSourceId); return graph;
+        }
     }
     public sealed class BattleBoostState
     {
@@ -212,7 +217,7 @@ namespace MemoryForge.Core
     {
         public string E = "";
         public int? T, N, Growth, Turn, Ap, Damage, Blocked, Cost, Due, Until, From, To, Index, Hp, Brk, Wave, Left;
-        public string? Uid, Source, Status, Part, Phase, Id, Card, Mode, Target, Kind, Reserved, Actor;
+        public string? Uid, Source, Status, Part, Phase, Id, Card, Mode, Target, Kind, Reserved, Actor, Caller;
         public bool? Fizzled, Fallback, Discarded;
         internal BattleEvent Copy() => (BattleEvent)MemberwiseClone();
         public Dictionary<string, object?> ToJsonGraph()
@@ -227,6 +232,7 @@ namespace MemoryForge.Core
             if (E == "dmg" && (Source == "card" || Source == "ult") && Card == null) graph.Add("card", null);
             BattleGraph.Optional(graph, "mode", Mode); BattleGraph.Optional(graph, "cost", Cost); BattleGraph.Optional(graph, "due", Due);
             BattleGraph.Optional(graph, "kind", Kind); BattleGraph.Optional(graph, "actor", Actor); BattleGraph.Optional(graph, "fizzled", Fizzled);
+            BattleGraph.Optional(graph, "caller", Caller);
             if (E == "play") graph.Add("target", Target); else BattleGraph.Optional(graph, "target", Target);
             if (E == "resolved") graph.Add("reserved", Reserved); else BattleGraph.Optional(graph, "reserved", Reserved);
             BattleGraph.Optional(graph, "until", Until); BattleGraph.Optional(graph, "fallback", Fallback);
@@ -263,6 +269,7 @@ namespace MemoryForge.Core
         public bool EchoActive, FirstAttackDone, OverloadFreeUsed;
         public BattleBoostState? NextBoost;
         public List<BattleActorState> Actors = new List<BattleActorState>();
+        public BattleSupportState? Support;
         public List<BattleEnemyState> Enemies = new List<BattleEnemyState>();
         public Dictionary<string, BattleCardState> Cards = new Dictionary<string, BattleCardState>(StringComparer.Ordinal);
         internal List<string> CardOrder = new List<string>();
@@ -293,6 +300,7 @@ namespace MemoryForge.Core
             copy.BattleFlags = BattleGraph.CopyDictionary(BattleFlags); copy.RunFlags = BattleGraph.CopyDictionary(RunFlags);
             copy.Log = Log.Select(e => e.Copy()).ToList(); copy.Events = Events.Select(e => e.Copy()).ToList(); copy.Result = Result?.Copy();
             copy.Mode = Mode?.Copy();
+            copy.Support = Support?.Copy();
             return copy;
         }
 
@@ -313,6 +321,7 @@ namespace MemoryForge.Core
             "ev", Events.Select(e => e.ToJsonGraph()).ToList(), "result", Result?.ToJsonGraph(), "killedMarked", KilledMarked, "diff", BattleGraph.Object("hp", DifficultyHp, "dmg", DifficultyDamage));
             if (PendingCopies != null) graph.Add("pendingCopies", PendingCopies.Select(p => p.ToJsonGraph()).ToList());
             if (Mode != null) graph.Add("mode", Mode.ToJsonGraph());
+            if (Support != null) graph.Add("support", Support.ToJsonGraph());
             return graph;
         }
     }

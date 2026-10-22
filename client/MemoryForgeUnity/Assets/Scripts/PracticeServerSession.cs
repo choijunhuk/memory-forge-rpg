@@ -35,6 +35,7 @@
 #nullable enable
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -198,7 +199,7 @@ namespace MemoryForge.Client
         // Contracts.CommandArgs: the existing journal kinds of the commands route (memoryCommit has its own route). Arguments are the server's.
         static readonly HashSet<string> CommandKinds = new HashSet<string>(StringComparer.Ordinal)
         {
-            "enter", "play", "ult", "end", "takeCard", "skipCard", "takeRelic", "takePart", "evolve", "proceed", "archive", "rest",
+            "enter", "play", "ult", "support", "end", "takeCard", "skipCard", "takeRelic", "takePart", "evolve", "proceed", "archive", "rest",
             "forgeOffer", "forgeApply", "forgeRemove", "applyPart", "buy", "event", "assign"
         };
         static readonly HashSet<string> Modes = new HashSet<string>(StringComparer.Ordinal) { "now", "next", "after" };
@@ -231,7 +232,7 @@ namespace MemoryForge.Client
             lifetimeToken = lifetime.Token;
             var handler = new HttpClientHandler
             {
-                AllowAutoRedirect = false, UseProxy = false, Proxy = null, UseCookies = false, UseDefaultCredentials = false, Credentials = null, PreAuthenticate = false
+                AllowAutoRedirect = false, UseProxy = false, UseCookies = false, UseDefaultCredentials = false, Credentials = null, PreAuthenticate = false
             };
             // HttpClient's own timeout is only a backstop behind the per-exchange deadline below.
             client = new HttpClient(handler, true) { Timeout = limit + TimeSpan.FromSeconds(1), MaxResponseContentBufferSize = PracticePublicJson.MaxResponseBytes };
@@ -278,6 +279,7 @@ namespace MemoryForge.Client
             if (kind == null) throw new ArgumentNullException(nameof(kind));
             if (!CommandKinds.Contains(kind)) return Task.FromResult(NotSent(Codes.InvalidCommand));
             var copied = args == null ? new JObject() : (JObject)args.DeepClone();
+            if (kind == "support" && !SupportJson.ValidArgs(copied)) return Task.FromResult(NotSent(Codes.InvalidCommand));
             return Exclusive(() => NewMutationAsync(context, true, (requestId, run) => (PracticeCommandOutbox.CommandRoute(run!.RunId),
                 Json(new JObject { ["requestId"] = requestId, ["expectedVersion"] = run!.ServerVersion, ["kind"] = kind, ["args"] = copied })), cancellation), NotSent);
         }
@@ -309,7 +311,7 @@ namespace MemoryForge.Client
                 catch (PracticeOutboxException error) { NoteOutboxFailure(error.Code); return NotSent(error.Code); }
                 NotePending(pending);
                 if (pending == null) return NotSent(Codes.NothingPending);
-                if (PracticeCommandOutbox.IsRecruitmentRoute(pending.Route)) return NotSent(Codes.PendingUnresolved);
+                if (PracticeCommandOutbox.IsRecruitmentRoute(pending.Route) || PracticeCommandOutbox.IsProgressionRoute(pending.Route) || PracticeCommandOutbox.IsGrowthRoute(pending.Route) || PracticeCommandOutbox.IsEquipmentRoute(pending.Route) || PracticeCommandOutbox.IsSupportSelectionRoute(pending.Route)) return NotSent(Codes.PendingUnresolved);
                 return await AttemptAsync(pending, State.Snapshot, cancellation).ConfigureAwait(false);
             }, NotSent);
 
@@ -439,7 +441,17 @@ namespace MemoryForge.Client
             if (exchange.Status == 200)
             {
                 PracticeReceipt receipt;
-                try { receipt = PracticeReceipt.Parse(pending, exchange.Body); }
+                try
+                {
+                    receipt = PracticeReceipt.Parse(pending, exchange.Body);
+                    if (SupportJson.IsSupportCommand(pending) && shown?.Run?.RunId == receipt.RunId && shown.Run.Support != null)
+                    {
+                        var supportEvents = receipt.Reply.EventsJArray()!.OfType<JObject>();
+                        if (supportEvents.Any(e => e["e"]?.Type != JTokenType.String)) throw PracticePublicJson.Invalid("support receipt event kind");
+                        var supportEvent = supportEvents.Single(e => e["e"]?.Type == JTokenType.String && e["e"]!.Value<string>() == "support");
+                        if (supportEvent["actor"]!.Value<string>() != shown.Run.Support.CharId) throw PracticePublicJson.Mismatch("frozen support receipt actor");
+                    }
+                }
                 catch (PracticeProtocolException error) { return Unresolved(pending, error.Code, 200); }
                 string? outboxCode = Resolve(pending, true);
                 var after = await RefreshWithAsync(credential, cancellation).ConfigureAwait(false);
@@ -483,6 +495,9 @@ namespace MemoryForge.Client
         /// before the lookup), 401/403, 409 IDEMPOTENCY_CONFLICT and the store binding refusals, every 500/503 and anything unknown.</summary>
         static bool KnownNotCommitted(PendingPracticeCommand pending, PracticeAccountView handshake, int status, string code)
         {
+            if (SupportJson.IsSupportCommand(pending) && status == 422 && !SupportJson.KnownCommandRefusal(code)
+                && !(code == "NO_BATTLE" && handshake.Run != null && pending.Route == PracticeCommandOutbox.CommandRoute(handshake.Run.RunId))) return false;
+            if (pending.Route == PracticeCommandOutbox.CreateRunRoute && status == 409 && code == "LEGACY_PRACTICE_RETIRED") return true;
             if (!(pending.ExpectedVersion is int expected) || pending.Route == PracticeCommandOutbox.CreateRunRoute) return false;
             if (!(status == 409 && code == "STALE_VERSION" || status == 422)) return false;
             var run = handshake.Run;
@@ -786,7 +801,11 @@ namespace MemoryForge.Client
 
         void SetNeedsRefresh()
         {
-            lock (sync) state = new PracticeSessionState(state.Snapshot, state.Pending, state.OutboxCode, true, state.InFlight);
+            lock (sync)
+            {
+                state = new PracticeSessionState(state.Snapshot, state.Pending, state.OutboxCode, true, state.InFlight);
+                progressionNeedsRefresh = true; recruitmentNeedsRefresh = true; encounterNeedsRefresh = true;
+            }
         }
 
         void SetInFlight(bool inFlight)

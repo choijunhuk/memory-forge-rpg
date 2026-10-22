@@ -14,12 +14,13 @@
 //   are backslash-escaped and every other character outside 0x20..0x7E is a \u escape (lowercase hex). A file is accepted only as
 //   exactly that canonical encoding of a valid record bound to this endpoint and account. The checksum detects accidental corruption,
 //   not tampering. No credential, seed, RNG or Core state is stored.
-// - <file>.lock: the permanent lock file, never deleted, replaced or written. Each Load/Stage/Confirm opens it with FileShare.None
-//   (same-process exclusion; Mono enforces FileShare only inside one process) and holds a checked native flock(LOCK_EX|LOCK_NB) on that
-//   descriptor (exclusion between processes, verified by Root on macOS Mono/.NET) until the operation ends. Contention is OUTBOX_BUSY at
-//   once; there is no wait or spin. Platforms other than macOS/Linux, or any native failure, fail closed before the record is touched.
+// - <file>.lock: the permanent lock file, never deleted, replaced or written. macOS/Linux managed runtimes open it with FileShare.None
+//   (same-process exclusion; Mono enforces FileShare only inside one process) and hold a checked native flock(LOCK_EX|LOCK_NB) on that
+//   descriptor until the operation ends. Android uses native open/flock directly: IL2CPP's managed file handle is an opaque pointer,
+//   not an fd. Distinct native opens also conflict within one process. Contention is OUTBOX_BUSY at once; there is no wait or spin.
+//   Platforms other than macOS/Linux/Android, or any native failure, fail closed before the record is touched.
 // - .<file name>.<random>.tmp: the private temp file of one Stage, created new, set to owner-only 0600 by a checked fchmod on its
-//   descriptor before any byte is written, written, Flush(true)ed and moved to <file> by a move that never overwrites (so a newly
+//   descriptor before any byte is written, written, Flush(true)ed (native fsync on Android) and moved to <file> by a move that never overwrites (so a newly
 //   published record is 0600). A temp file is never read or promoted. Existing records and the lock file keep whatever mode they have.
 // JSON strings are checked on the original text for escapes and well-formed UTF-16 (no lone or misordered surrogate, escaped or raw)
 // before Newtonsoft reads them. A corrupt, truncated, unknown, oversized or differently bound record is refused and kept byte for byte;
@@ -30,11 +31,13 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.Win32.SafeHandles;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace MemoryForge.Client
 {
@@ -49,7 +52,7 @@ namespace MemoryForge.Client
         public const string Busy = "OUTBOX_BUSY";
         /// <summary>The lock could not be taken (missing directory, a directory in its place, access, native lock error); nothing changed.</summary>
         public const string LockFailed = "OUTBOX_LOCK_FAILED";
-        /// <summary>No checked interprocess lock on this platform (only macOS/Linux libc flock); nothing was read or changed.</summary>
+        /// <summary>No checked interprocess lock on this platform (only macOS/Linux/Android libc flock); nothing was read or changed.</summary>
         public const string Unsupported = "OUTBOX_UNSUPPORTED_PLATFORM";
         /// <summary>A different request is pending; it was kept.</summary>
         public const string PendingOther = "OUTBOX_PENDING_OTHER";
@@ -112,9 +115,21 @@ namespace MemoryForge.Client
         public const string Method = "POST";
         /// <summary>POST /dev/practice/runs (new run); the run routes come from CommandRoute and MemoryCommitRoute.</summary>
         public const string CreateRunRoute = "/dev/practice/runs";
+        public const string ExpeditionRoute = "/dev/practice/expeditions";
+        public const string SupportSelectionRoute = "/dev/practice/progression/support";
+        public static bool IsSupportSelectionRoute(string route) => route == SupportSelectionRoute;
+        public const string WeeklyBossStartRoute = "/dev/practice/weekly-bosses";
+        public const string StartEncounterRoute = "/dev/practice/encounters", DungeonSweepRoute = "/dev/practice/dungeons/sweep";
         public const string RecruitmentPullRoute = "/dev/practice/recruitment/pulls", RecruitmentLaunchRoute = "/dev/practice/recruitment/claim-launch",
             RecruitmentSelectorRoute = "/dev/practice/recruitment/selector";
         public static bool IsRecruitmentRoute(string route) => route == RecruitmentPullRoute || route == RecruitmentLaunchRoute || route == RecruitmentSelectorRoute;
+        public static bool IsAbandonRoute(string route) => IsRunRoute(route, "/abandon");
+        public static bool IsProgressionRoute(string route) => route == ExpeditionRoute || IsAbandonRoute(route);
+        public static bool IsEncounterCommandRoute(string route) => IsEncounterRoute(route, "/commands");
+        public static bool IsCharacterLevelUpRoute(string route) => CharacterRouteId(route, "/level-up") != null;
+        public static bool IsGrowthRoute(string route) => route == WeeklyBossStartRoute || route == StartEncounterRoute || route == DungeonSweepRoute || IsEncounterCommandRoute(route) || IsCharacterLevelUpRoute(route);
+        public static bool IsEquipmentRoute(string route) => EquipmentJson.Kind(route, out _) != null;
+        public static string EquipmentActionRoute(string kind, string? target, bool preview = false) => EquipmentJson.Route(kind, target, preview);
         /// <summary>The server's body limit (Contracts.MaxBodyBytes) and JSON nesting limit.</summary>
         public const int MaxBodyBytes = 64 * 1024, MaxBodyDepth = 8;
         /// <summary>Above every canonical record of a body within MaxBodyBytes (at most four file bytes per body byte, plus the fields).</summary>
@@ -125,8 +140,13 @@ namespace MemoryForge.Client
         // POSIX mode 0600 (owner read/write) written in hex: a C# literal 0600 would be decimal 600.
         const uint OwnerReadWrite = 0x180;
         internal static readonly UTF8Encoding StrictUtf8 = new UTF8Encoding(false, true);
+        // Android IL2CPP reports an unknown OS; bionic still uses Linux flock errno values.
+#if UNITY_ANDROID && !UNITY_EDITOR
+        static readonly int WouldBlock = 11;
+#else
         // EWOULDBLOCK of flock(LOCK_NB): 35 on macOS, 11 on Linux; 0 = no checked lock on this platform.
         static readonly int WouldBlock = RuntimeInformation.IsOSPlatform(OSPlatform.OSX) ? 35 : RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ? 11 : 0;
+#endif
         static readonly object Nested = new object();
 
         readonly string recordPath, lockPath, folder, fileName;
@@ -155,6 +175,33 @@ namespace MemoryForge.Client
 
         public static string CommandRoute(string runId) => RunRoute(runId) + CommandsSuffix;
         public static string MemoryCommitRoute(string runId) => RunRoute(runId) + MemoryCommitSuffix;
+        public static string AbandonRoute(string runId) => RunRoute(runId) + "/abandon";
+        public static string EncounterRoute(string encounterId) => IsEncounterId(encounterId) ? StartEncounterRoute + "/" + encounterId
+            : throw Fail(PracticeOutboxException.InvalidRequest, "Not an encounter ID.");
+        public static string EncounterCommandRoute(string encounterId) => EncounterRoute(encounterId) + "/commands";
+        public static string EncounterBattleQueryRoute(string encounterId) => EncounterRoute(encounterId) + "/battle-query";
+        public static string RunSupportQueryRoute(string runId) => RunRoute(runId) + "/support-query";
+        public static string EncounterSupportQueryRoute(string encounterId) => EncounterRoute(encounterId) + "/support-query";
+        public static string CharacterLevelUpRoute(string charId) => CharacterRoute(charId) + "/level-up";
+        public static string CharacterLevelPreviewRoute(string charId) => CharacterRoute(charId) + "/level-preview";
+        static string CharacterRoute(string charId) => charId != null && IsPublicId(charId) ? "/dev/practice/progression/characters/" + charId
+            : throw Fail(PracticeOutboxException.InvalidRequest, "Not a character ID.");
+        internal static string? CharacterRouteId(string route, string suffix)
+        {
+            const string prefix = "/dev/practice/progression/characters/";
+            if (!route.StartsWith(prefix, StringComparison.Ordinal) || !route.EndsWith(suffix, StringComparison.Ordinal) || route.Length <= prefix.Length + suffix.Length) return null;
+            string id = route.Substring(prefix.Length, route.Length - prefix.Length - suffix.Length);
+            return IsPublicId(id) ? id : null;
+        }
+        static bool IsEncounterRoute(string route, string suffix) => route.Length == StartEncounterRoute.Length + 1 + 35 + suffix.Length
+            && route.StartsWith(StartEncounterRoute + "/", StringComparison.Ordinal) && route.EndsWith(suffix, StringComparison.Ordinal)
+            && IsEncounterId(route.Substring(StartEncounterRoute.Length + 1, 35));
+        internal static bool IsEncounterId(string id)
+        {
+            if (id == null || id.Length != 35 || !id.StartsWith("ec-", StringComparison.Ordinal)) return false;
+            for (int i = 3; i < id.Length; i++) if (!(id[i] >= '0' && id[i] <= '9' || id[i] >= 'a' && id[i] <= 'f')) return false;
+            return true;
+        }
         static string RunRoute(string runId) => runId != null && IsRunId(runId) ? RunPrefix + runId
             : throw Fail(PracticeOutboxException.InvalidRequest, "Not a practice run ID.");
 
@@ -277,6 +324,13 @@ namespace MemoryForge.Client
             bool created = false;
             try
             {
+#if UNITY_ANDROID && !UNITY_EDITOR
+                using (var file = PracticeAndroidFile.CreateTemp(temp))
+                {
+                    created = true;
+                    file.WriteAndFlush(bytes);
+                }
+#else
                 using (var stream = new FileStream(temp, FileMode.CreateNew, FileAccess.Write, FileShare.None))
                 {
                     created = true;
@@ -284,6 +338,7 @@ namespace MemoryForge.Client
                     stream.Write(bytes, 0, bytes.Length);
                     stream.Flush(true);
                 }
+#endif
                 File.Move(temp, recordPath);
             }
             catch (Exception error) when (error is IOException || error is UnauthorizedAccessException)
@@ -339,9 +394,9 @@ namespace MemoryForge.Client
         /// Every other run member and all game rules are the server's to judge.</summary>
         static PendingPracticeCommand Command(string endpoint, string account, string route, string body)
         {
-            bool command = IsRunRoute(route, CommandsSuffix), commit = IsRunRoute(route, MemoryCommitSuffix);
-            bool recruitment = IsRecruitmentRoute(route);
-            if (route != CreateRunRoute && !command && !commit && !recruitment) throw new FormatException("route");
+            bool command = IsRunRoute(route, CommandsSuffix), commit = IsRunRoute(route, MemoryCommitSuffix), abandon = IsAbandonRoute(route);
+            bool recruitment = IsRecruitmentRoute(route), expedition = route == ExpeditionRoute, growth = IsGrowthRoute(route), equipment = IsEquipmentRoute(route), support = IsSupportSelectionRoute(route), encounterCommand = IsEncounterCommandRoute(route);
+            if (route != CreateRunRoute && !command && !commit && !recruitment && !abandon && !expedition && !growth && !equipment && !support) throw new FormatException("route");
             int size;
             try { size = StrictUtf8.GetByteCount(body); }
             catch (EncoderFallbackException) { throw new FormatException("body UTF-8"); }
@@ -349,26 +404,126 @@ namespace MemoryForge.Client
             var members = StrictObject(body, MaxBodyDepth);
             if (!(members.TryGetValue("requestId", out object? id) && id is string requestId && IsRequestId(requestId))) throw new FormatException("body requestId");
             int? expectedVersion = null;
-            if (command || commit)
+            if (command || commit || abandon || encounterCommand)
             {
                 expectedVersion = Version(members, "expectedVersion") ?? throw new FormatException("body expectedVersion");
                 if (commit && Version(members, "expectedMemoryVersion") == null) throw new FormatException("body expectedMemoryVersion");
             }
             else if (members.ContainsKey("expectedVersion")) throw new FormatException("a new run has no expectedVersion");
+            if (abandon && (members.Count != 2 || !members.ContainsKey("requestId") || !members.ContainsKey("expectedVersion"))) throw new FormatException("abandon members");
             long? expectedRevision = null;
-            if (recruitment)
+            if (recruitment || expedition || equipment || support || growth && !encounterCommand)
             {
                 if (!(members.TryGetValue("expectedRevision", out object? revision) && revision is long number && number >= 0)) throw new FormatException("body expectedRevision");
                 expectedRevision = number;
-                int fields = route == RecruitmentPullRoute ? 4 : route == RecruitmentSelectorRoute ? 3 : 2;
-                if (members.Count != fields) throw new FormatException("recruitment members");
-                if (route == RecruitmentPullRoute && (!(members.TryGetValue("bannerId", out object? banner) && banner is string bannerId && IsPublicId(bannerId))
-                    || !(members.TryGetValue("count", out object? count) && count is long pulls && (pulls == 1 || pulls == 10)))) throw new FormatException("recruitment pull");
-                if (route == RecruitmentSelectorRoute && !(members.TryGetValue("charId", out object? character) && character is string charId && IsPublicId(charId)))
-                    throw new FormatException("recruitment selector");
+                if (support)
+                {
+                    var json = JObject.Parse(body);
+                    if (members.Count != 3 || json.Property("charId") == null || json["charId"]!.Type != JTokenType.Null && (json["charId"]!.Type != JTokenType.String || !(json["charId"]!.Value<string>() is string selected) || !IsPublicId(selected))) throw new FormatException("support selection intent");
+                }
+                else if (equipment)
+                {
+                    string kind = EquipmentJson.Kind(route, out _)!;
+                    var intent = JObject.Parse(body); intent.Remove("requestId"); intent.Remove("expectedRevision");
+                    if (!EquipmentJson.Intent(kind, intent)) throw new FormatException("equipment intent");
+                }
+                else if (growth) ValidateGrowthBody(route, JObject.Parse(body));
+                else if (expedition)
+                {
+                    if (!(members.TryGetValue("mode", out object? rawMode) && rawMode is string mode && (mode == "tutorial" || mode == "story"))
+                        || !(members.TryGetValue("useMemory", out object? useMemory) && useMemory is bool)) throw new FormatException("expedition members");
+                    if (mode == "tutorial")
+                    {
+                        if (members.Count != 4) throw new FormatException("tutorial members");
+                    }
+                    else
+                    {
+                        if (members.Count != 6 || !(members.TryGetValue("chapter", out object? chapter) && chapter is long chapterId && chapterId == 1)
+                            || !(JObject.Parse(body)["party"] is JArray party && party.Count == 3)
+                            || party.Any(token => token.Type != JTokenType.String || !(token.Value<string>() is string id) || !IsPublicId(id))
+                            || party.Values<string>().Distinct(StringComparer.Ordinal).Count() != 3)
+                            throw new FormatException("story members");
+                    }
+                }
+                else
+                {
+                    int fields = route == RecruitmentPullRoute ? 4 : route == RecruitmentSelectorRoute ? 3 : 2;
+                    if (members.Count != fields) throw new FormatException("recruitment members");
+                    if (route == RecruitmentPullRoute && (!(members.TryGetValue("bannerId", out object? banner) && banner is string bannerId && IsPublicId(bannerId))
+                        || !(members.TryGetValue("count", out object? count) && count is long pulls && (pulls == 1 || pulls == 10)))) throw new FormatException("recruitment pull");
+                    if (route == RecruitmentSelectorRoute && !(members.TryGetValue("charId", out object? character) && character is string charId && IsPublicId(charId)))
+                        throw new FormatException("recruitment selector");
+                }
             }
+            if (command && members.TryGetValue("kind", out object? commandKind) && commandKind is string supportKind && supportKind == "support")
+            {
+                var json = JObject.Parse(body);
+                if (members.Count != 4 || !(json["args"] is JObject supportArgs) || !SupportJson.ValidArgs(supportArgs)) throw new FormatException("run support command");
+            }
+            if (encounterCommand) ValidateGrowthBody(route, JObject.Parse(body));
             return new PendingPracticeCommand(endpoint, account, route, body, requestId, expectedVersion, expectedRevision);
         }
+
+        static void ValidateGrowthBody(string route, JObject body)
+        {
+            void Fields(string[] required, params string[] optional)
+            {
+                if (required.Any(name => body.Property(name) == null) || body.Properties().Any(property => !required.Contains(property.Name) && !optional.Contains(property.Name))) throw new FormatException("growth members");
+            }
+            bool Id(string name) => body[name]?.Type == JTokenType.String && body[name]!.Value<string>() is string id && IsPublicId(id);
+            bool Number(string name, int minimum, int maximum) => body[name] is JValue value && value.Type == JTokenType.Integer && value.Value is long number && number >= minimum && number <= maximum;
+            if (route == WeeklyBossStartRoute)
+            {
+                Fields(new[] { "requestId", "expectedRevision", "bossId", "difficulty", "practice", "party" });
+                if (!Id("bossId") || !new[] { "b_bell", "b_notary", "b_garden", "b_archivist" }.Contains(body["bossId"]!.Value<string>()) || !Number("difficulty", 1, 5)
+                    || body["practice"]?.Type != JTokenType.Boolean || !(body["party"] is JArray party) || party.Count != 3
+                    || party.Any(token => token.Type != JTokenType.String || !(token.Value<string>() is string id) || !IsPublicId(id))
+                    || party.Values<string>().Distinct(StringComparer.Ordinal).Count() != 3) throw new FormatException("weekly intent");
+            }
+            else if (route == StartEncounterRoute)
+            {
+                Fields(new[] { "requestId", "expectedRevision", "dungeonId", "tier", "party" });
+                if (!Id("dungeonId") || !Number("tier", 1, 6) || !(body["party"] is JArray party) || party.Count != 3
+                    || party.Any(token => token.Type != JTokenType.String || !(token.Value<string>() is string id) || !IsPublicId(id))
+                    || party.Values<string>().Distinct(StringComparer.Ordinal).Count() != 3) throw new FormatException("encounter intent");
+            }
+            else if (route == DungeonSweepRoute)
+            {
+                Fields(new[] { "requestId", "expectedRevision", "dungeonId", "tier", "times" });
+                if (!Id("dungeonId") || !Number("tier", 1, 6) || !Number("times", 1, 12)) throw new FormatException("sweep intent");
+            }
+            else if (IsCharacterLevelUpRoute(route))
+            {
+                Fields(new[] { "requestId", "expectedRevision", "targetLevel" });
+                if (!Number("targetLevel", 1, 60)) throw new FormatException("level intent");
+            }
+            else
+            {
+                Fields(new[] { "requestId", "expectedVersion", "kind", "args" });
+                if (!(body["kind"]?.Type == JTokenType.String && body["kind"]!.Value<string>() is string kind) || !(body["args"] is JObject args)
+                    || !ValidEncounterArgs(kind, args)) throw new FormatException("encounter command");
+            }
+        }
+
+        internal static bool ValidEncounterArgs(string kind, JObject args)
+        {
+            string[] required, optional;
+            switch (kind)
+            {
+                case "play": required = new[] { "uid", "mode" }; optional = new[] { "target", "picks" }; break;
+                case "support": return SupportJson.ValidArgs(args);
+                case "ult": required = new[] { "actor" }; optional = new[] { "target", "picks" }; break;
+                case "end": return args.Count == 0;
+                default: return false;
+            }
+            if (required.Any(name => args.Property(name) == null) || args.Properties().Any(property => !required.Contains(property.Name) && !optional.Contains(property.Name))) return false;
+            foreach (string text in new[] { "uid", "actor", "target" }) if (args.Property(text) != null && !ReferenceText(args[text]!)) return false;
+            if (kind == "play" && !(args["mode"]?.Type == JTokenType.String && new[] { "now", "next", "after" }.Contains(args["mode"]!.Value<string>()))) return false;
+            return args.Property("picks") == null || args["picks"] is JArray picks && picks.Count <= 64 && picks.All(ReferenceText);
+        }
+
+        internal static bool ReferenceText(JToken token) => token.Type == JTokenType.String && token.Value<string>() is string text
+            && text.Length > 0 && text.Length <= 128 && text.All(character => character >= ' ' && character <= '~');
 
         internal static bool IsPublicId(string id)
         {
@@ -649,12 +804,15 @@ namespace MemoryForge.Client
 
         // ---- the lock ----
 
-        /// <summary>The permanent lock file, opened with FileShare.None (same-process exclusion) and then held by a checked native
-        /// flock(LOCK_EX|LOCK_NB) on that very descriptor (exclusion between processes) until the returned stream is disposed. Contention
+        /// <summary>The permanent lock file: managed FileShare.None plus native flock on macOS/Linux; native open plus flock on Android.
+        /// The checked flock(LOCK_EX|LOCK_NB) stays held on that descriptor until the returned lease is disposed. Contention
         /// at either level is OUTBOX_BUSY at once; EINTR is retried a bounded number of times; anything else fails closed.</summary>
-        FileStream Lock()
+        IDisposable Lock()
         {
-            if (WouldBlock == 0) throw Fail(PracticeOutboxException.Unsupported, "The outbox needs the macOS/Linux flock lock; nothing was read or changed.");
+#if UNITY_ANDROID && !UNITY_EDITOR
+            return PracticeAndroidFile.Lock(lockPath);
+#else
+            if (WouldBlock == 0) throw Fail(PracticeOutboxException.Unsupported, "The outbox needs the macOS/Linux/Android flock lock; nothing was read or changed.");
             if (Directory.Exists(lockPath)) throw Fail(PracticeOutboxException.LockFailed, "The outbox lock path holds a directory; nothing was changed.");
             FileStream stream;
             try { stream = new FileStream(lockPath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None); }
@@ -673,6 +831,7 @@ namespace MemoryForge.Client
                 stream.Dispose();
                 throw;
             }
+#endif
         }
 
         static void HoldNativeLock(SafeFileHandle handle)

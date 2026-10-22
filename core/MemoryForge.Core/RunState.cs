@@ -47,6 +47,7 @@ namespace MemoryForge.Core
         public object? Bosses;
         public RunMap? Map;
         public List<RunPartyEntry> Party = new List<RunPartyEntry>();
+        public RunPartyEntry? Support;
         public List<RunCardSpec> Deck = new List<RunCardSpec>();
         public List<string> Relics = new List<string>(), PartsFound = new List<string>(), Log = new List<string>();
         public object? Pending, Result;
@@ -73,7 +74,7 @@ namespace MemoryForge.Core
             copy.Pending = MemoryJson.Copy(Pending); copy.Result = MemoryJson.Copy(Result); copy.Battle = Battle?.Copy(); copy.Statistics = Statistics.Copy();
             copy.RunFlags = RunValues.Fields(RunFlags); copy.Offered = new Dictionary<string, int>(Offered, StringComparer.Ordinal); copy.StartMemory = MemoryJson.Copy(StartMemory);
             copy.MemoryBaseline = MemoryBaseline?.Copy(); copy.MemoryBefore = MemoryBefore?.Copy(); copy.PlayBefore = PlayBefore?.Copy(); copy.MemoryAfter = MemoryAfter?.Copy();
-            copy.SavedMemory = MemoryJson.Copy(SavedMemory); return copy;
+            copy.SavedMemory = MemoryJson.Copy(SavedMemory); copy.Support = Support?.Copy(); return copy;
         }
         public Dictionary<string, object?> ToJsonGraph()
         {
@@ -93,6 +94,7 @@ namespace MemoryForge.Core
             if (PlayBefore != null) graph.Add("playBefore", PlayBefore.ToJsonGraph());
             if (BattleType != null) graph.Add("battleType", BattleType);
             if (MemoryAfter != null) graph.Add("memoryAfter", MemoryAfter.ToJsonGraph());
+            if (Support != null) graph.Add("support", Support.ToJsonGraph());
             if (SavedMemory != null) graph.Add("savedMemory", MemoryJson.Copy(SavedMemory)); return graph;
         }
     }

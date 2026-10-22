@@ -12,6 +12,30 @@ namespace MemoryForge.Client.Tests
     public class RecruitmentUiPlayModeTests
     {
         [UnityTest]
+        public IEnumerator InvalidConnectionReportsOnlyTheFailureKindAndClearsTheCredential()
+        {
+            const string secret = "hidden-key";
+            var host = new GameObject("RecruitmentInvalidConnection");
+            host.AddComponent<MemoryForgeLobbyClient>();
+            try
+            {
+                yield return null;
+                host.GetComponentsInChildren<Button>().Single(b => b.name == "OpenRecruitment").onClick.Invoke();
+                var inputs = host.GetComponentsInChildren<InputField>();
+                inputs.Single(f => f.name == "RecruitmentEndpoint").text = "http://127.0.0.1:5287";
+                inputs.Single(f => f.name == "RecruitmentAccount").text = "dev-local";
+                inputs.Single(f => f.name == "RecruitmentCredential").text = secret;
+                LogAssert.Expect(LogType.Warning, "MF_ACCOUNT_CONNECT_OWNER type=ArgumentException param=credential keyLength=" + secret.Length);
+                host.GetComponentsInChildren<Button>().Single(b => b.name == "ConnectRecruitment").onClick.Invoke();
+                yield return null;
+                Assert.That(host.GetComponentsInChildren<InputField>().Single(f => f.name == "RecruitmentCredential").text, Is.Empty);
+                Assert.That(host.GetComponentsInChildren<Text>().Any(t => t.text.Contains(secret)), Is.False);
+                Assert.That(host.GetComponentsInChildren<Button>().Any(b => b.name == "RecruitOne"), Is.False);
+            }
+            finally { Object.Destroy(host); }
+        }
+
+        [UnityTest]
         public IEnumerator DisconnectedRecruitmentAsksForConnectionAndDoesNotInventBalances()
         {
             var host = new GameObject("RecruitmentUiTest");

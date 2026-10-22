@@ -12,7 +12,7 @@ using MemoryForge.Core;
 
 namespace MemoryForge.Server
 {
-    static class PublicView
+    static partial class PublicView
     {
         static readonly string[] DeckFields = { "key", "id", "owner", "assigned", "wielder", "weapon", "plus", "growth", "from", "evolved", "gained" };
         static readonly string[] SpecFields = { "key", "id", "plus", "from", "assigned" };
@@ -44,6 +44,7 @@ namespace MemoryForge.Server
         {
             var view = Obj();
             foreach (var pair in e.ToJsonGraph()) if (EventFields.Contains(pair.Key)) view[pair.Key] = Scalar(pair.Value);
+            if(e.E=="support"&&e.Caller!=null)view.Add("caller",e.Caller);
             return (object?)view;
         }).ToList();
 
@@ -96,7 +97,7 @@ namespace MemoryForge.Server
                     "candidates", choices.Candidates.Select(uid => (object?)Candidate(b.Cards[uid], zone)).ToList()));
         }
 
-        static Dictionary<string, object?> Battle(Run run, BattleState b, BattleRules rules) => Obj(
+        static Dictionary<string, object?> Battle(Run run, BattleState b, BattleRules rules) => WithSupport(Obj(
             "v", b.V, "phase", b.Phase, "turn", b.Turn, "hp", b.Hp, "maxHp", b.MaxHp, "block", b.Block, "counter", b.Counter,
             "ap", b.Ap, "apNext", b.ApNext, "apDrainNext", b.ApDrainNext, "silenceUntil", b.SilenceUntil, "weak", b.Weak,
             "debts", b.Debts.Select(d => (object?)Obj("n", d.N, "due", d.Due, "deferred", d.Deferred)).ToList(),
@@ -113,7 +114,7 @@ namespace MemoryForge.Server
             "gaugeMax", rules.GaugeMax,
             "actors", b.Actors.Select(a => (object?)Obj("id", a.Id, "name", a.Name, "attr", a.Attr, "gauge", a.Gauge, "res", a.Res)).ToList(),
             "enemies", b.Enemies.Select(e => (object?)Enemy(e)).ToList(),
-            "result", b.Result == null ? null : Obj("phase", b.Result.Phase, "turn", b.Result.Turn, "hp", b.Result.Hp));
+            "result", b.Result == null ? null : Obj("phase", b.Result.Phase, "turn", b.Result.Turn, "hp", b.Result.Hp)),b);
 
         static Dictionary<string, object?> HandCard(Run run, BattleState b, string uid)
         {

@@ -21,6 +21,7 @@ namespace MemoryForge.Client
         public List<BattleDigestReservation>? Reservations;
         /// <summary>Display names by card instance uid: public hand and reservation cards and the card uids the command's events name.</summary>
         public Dictionary<string, string>? CardNames;
+        public Dictionary<string, string>? ActorNames;
     }
     public sealed class BattleDigestEnemy
     {
@@ -201,6 +202,7 @@ namespace MemoryForge.Client
                 case "power": return Row(BattleDigestKind.Other, "지속 효과 등록");
                 case "restraintKept": return Row(BattleDigestKind.Other, "절제 유지");
                 case "restraintBroken": return Row(BattleDigestKind.Other, "절제 깨짐");
+                case "support": return Row(BattleDigestKind.Other, "지원 · " + names.Actor(e.Actor) + " · 호출 " + names.Actor(e.Caller) + " · 호출자 게이지 100", "지원");
                 case "ult": return Row(BattleDigestKind.Other, "필살기 사용");
                 default: return Row(BattleDigestKind.Other, Generic);
             }
@@ -256,12 +258,13 @@ namespace MemoryForge.Client
         sealed class Names
         {
             readonly Dictionary<string, string> cards = new Dictionary<string, string>(StringComparer.Ordinal),
-                definitions = new Dictionary<string, string>(StringComparer.Ordinal), enemies = new Dictionary<string, string>(StringComparer.Ordinal);
+                definitions = new Dictionary<string, string>(StringComparer.Ordinal), enemies = new Dictionary<string, string>(StringComparer.Ordinal), actors = new Dictionary<string, string>(StringComparer.Ordinal);
             internal Names(BattleDigestSnapshot? before, BattleDigestSnapshot? after, List<BattleEvent?> events)
             {
                 foreach (var snapshot in new[] { before, after })
                 {
                     if (snapshot == null) continue;
+                    if (snapshot.ActorNames != null) foreach (var pair in snapshot.ActorNames) Add(actors, pair.Key, pair.Value);
                     if (snapshot.CardNames != null) foreach (var pair in snapshot.CardNames) Add(cards, pair.Key, pair.Value);
                     if (snapshot.Reservations != null) foreach (var r in snapshot.Reservations) if (r != null) Add(cards, r.Uid, r.Name);
                     if (snapshot.Enemies != null) foreach (var x in snapshot.Enemies) if (x != null) Add(enemies, x.Uid, x.Name);
@@ -270,6 +273,7 @@ namespace MemoryForge.Client
                 foreach (var e in events)
                     if (e != null && (e.E == "play" || e.E == "resolved" || e.E == "echoCopy") && e.Uid != null && cards.TryGetValue(e.Uid, out var name)) Add(definitions, e.Id, name);
             }
+            internal string Actor(string? id) => id != null && actors.TryGetValue(id, out var name) ? name : id ?? "동료";
             internal string Card(string? uid, string? id) =>
                 uid != null && cards.TryGetValue(uid, out var name) ? name : id != null && definitions.TryGetValue(id, out var source) ? source : "카드";
             internal string? Definition(string? id) => id != null && definitions.TryGetValue(id, out var name) ? name : null;

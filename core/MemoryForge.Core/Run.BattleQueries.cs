@@ -49,5 +49,11 @@ namespace MemoryForge.Core
         public BattleChoiceView BattleHandChoices(string uid, string mode = "now", IReadOnlyList<string>? picks = null) => LiveBattle().HandChoices(uid, mode, picks);
 
         Battle LiveBattle() => battle ?? throw new RuleException("NO_BATTLE");
+
+        public BattleSupportInfo BattleSupportInfo(string caller, string? target = null, IReadOnlyList<string>? picks = null) => LiveBattle().SupportInfo(caller, target, picks);
+        public string? BattleSupportNeedsTarget() => LiveBattle().SupportNeedsTarget();
+        public BattleChoiceView BattleSupportChoices(string caller, IReadOnlyList<string>? picks = null) => LiveBattle().SupportChoices(caller, picks);
+        public BattlePlayForecast BattleSupportForecast(string caller, string? target = null, IReadOnlyList<string>? picks = null) =>
+            battle == null ? new BattlePlayForecast { Error = "NO_BATTLE" } : battle.SupportForecast(caller, target, picks);
     }
 }

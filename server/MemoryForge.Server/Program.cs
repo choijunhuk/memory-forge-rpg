@@ -12,6 +12,9 @@
 // carry only exception type names (and SQLSTATE codes): never credentials, seeds, RNG, private state or exception messages.
 // RECRUIT-SERVER-20261021 adds the account's development recruitment under the same credential and envelope: GET /dev/practice/recruitment
 // and POST .../recruitment/pulls, .../claim-launch and .../selector (Recruitment.cs).
+// ACCOUNT-PROGRESSION-S0-20261021: the bare flag --verify-store runs the owner-only, offline, read-only store verifier
+// (AccountStoreVerifier.cs) on this same startup configuration instead of the listener: no socket, route, authentication or write, and the
+// file store directory is never created. The create/command reply projection (RunReplies) is shared with it.
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -40,10 +43,26 @@ namespace MemoryForge.Server
         static async Task<int> Main(string[] args)
         {
             if (OperatingSystem.IsWindows()) { Console.Error.WriteLine("MemoryForge dev practice server refused to start: macOS/Linux only (POSIX permissions and file locks)"); return 2; }
-            var builder = WebApplication.CreateBuilder(new WebApplicationOptions { Args = args });
+            if(OwnerMigration.Requested(args))return await OwnerMigration.RunAsync(args,Console.Out,Console.Error);
+            // The bare --verify-store is taken out of the arguments, so the configuration parser never pairs it with the next argument; any other
+            // spelling of it (repeated, with a value, another case or prefix) is refused rather than starting the listener.
+            bool verify = false;
+            var hostArgs = new List<string>();
+            foreach (string arg in args)
+            {
+                if (arg == AccountStoreVerifier.Flag && !verify) { verify = true; continue; }
+                if (AccountStoreVerifier.Resembles(arg))
+                {
+                    Console.Error.WriteLine("MemoryForge dev practice server refused to start: " + AccountStoreVerifier.Flag + " is accepted only once, as a bare flag");
+                    return 2;
+                }
+                hostArgs.Add(arg);
+            }
+            var builder = WebApplication.CreateBuilder(new WebApplicationOptions { Args = hostArgs.ToArray() });
             builder.Logging.ClearProviders();
             builder.Logging.AddSimpleConsole(options => { options.SingleLine = true; options.IncludeScopes = false; });
             builder.Logging.SetMinimumLevel(LogLevel.Warning);
+            if (verify) return await AccountStoreVerifier.RunAsync(builder.Environment, builder.Configuration, Console.Out, Console.Error);
             PracticeHost host;
             try { host = await PracticeHost.ConfigureAsync(builder.Environment, builder.Configuration); }
             catch (StartupRefusal refusal) { Console.Error.WriteLine("MemoryForge dev practice server refused to start: " + refusal.Message); return 2; }
@@ -86,17 +105,23 @@ namespace MemoryForge.Server
 
     sealed class PracticeHost : IAsyncDisposable
     {
+        const UnixFileMode GroupOrOther = UnixFileMode.GroupRead | UnixFileMode.GroupWrite | UnixFileMode.GroupExecute | UnixFileMode.OtherRead | UnixFileMode.OtherWrite | UnixFileMode.OtherExecute;
         public PracticeContent Content { get; }
         public PracticeFixture Fixture { get; }
         public PracticeRunStore Store { get; }
+        /// <summary>The configured backend Store decides around; --verify-store only calls its pure ReadAsync and never transacts.</summary>
+        public IEnvelopePersistence Persistence { get; }
+        public string Backend => postgres == null ? "file" : "postgres";
         public int Port { get; }
         readonly PostgresEnvelopePersistence? postgres;
-        PracticeHost(PracticeContent content, PracticeFixture fixture, PracticeRunStore store, int port, PostgresEnvelopePersistence? postgres)
+        PracticeHost(PracticeContent content, PracticeFixture fixture, IEnvelopePersistence persistence, int port, PostgresEnvelopePersistence? postgres)
         {
-            Content = content; Fixture = fixture; Store = store; Port = port; this.postgres = postgres;
+            Content = content; Fixture = fixture; Persistence = persistence; Store = new PracticeRunStore(content, persistence); Port = port; this.postgres = postgres;
         }
 
-        public static async Task<PracticeHost> ConfigureAsync(IHostEnvironment environment, IConfiguration configuration)
+        /// <summary>readOnly (--verify-store): the same configuration and checks, except that the file store directory must already exist and
+        /// is never created; the PostgreSQL startup verification is SELECT-only in both modes.</summary>
+        public static async Task<PracticeHost> ConfigureAsync(IHostEnvironment environment, IConfiguration configuration, bool readOnly = false)
         {
             if (!environment.IsDevelopment()) throw new StartupRefusal("only the Development environment is supported; there is no production mode or fallback");
             if (configuration.GetSection("Kestrel:Endpoints").GetChildren().Any()) throw new StartupRefusal("Kestrel endpoint configuration is not accepted; the host binds 127.0.0.1 only");
@@ -119,15 +144,38 @@ namespace MemoryForge.Server
             if (!int.TryParse(configuration["MemoryForge:PracticePort"], System.Globalization.NumberStyles.None, System.Globalization.CultureInfo.InvariantCulture, out int port) || port > 65535)
                 throw new StartupRefusal("MemoryForge:PracticePort must be 0..65535 (0 = ephemeral)");
             if (!Directory.Exists(contentRoot)) throw new StartupRefusal("MemoryForge:ContentRoot is not a directory");
+            try { AccountPolicy.Verify(); }
+            catch (InvalidDataException) { throw new StartupRefusal("the account progression policy is invalid"); }
             var content = PracticeContent.Load(contentRoot);
+            GrowthPolicy.Require(GrowthPolicy.Version, GrowthPolicy.Hash);
+            try { GrowthPolicy.Require(EquipmentPolicy.Version, EquipmentPolicy.Hash); }
+            catch (InvalidDataException) { throw new StartupRefusal("the account equipment policy is invalid"); }
+            try{GrowthPolicy.Require(SupportPolicy.Version,SupportPolicy.Hash);}catch(InvalidDataException){throw new StartupRefusal("the account support policy is invalid");}
             var practiceFixture = PracticeFixture.Load(fixture, content);
             if (!postgresBackend)
             {
-                string directory = FileEnvelopePersistence.PrepareDirectory(store, contentRoot);
-                return new PracticeHost(content, practiceFixture, new PracticeRunStore(content, new FileEnvelopePersistence(directory)), port, null);
+                string directory = readOnly ? ExistingStore(store, contentRoot) : FileEnvelopePersistence.PrepareDirectory(store, contentRoot);
+                return new PracticeHost(content, practiceFixture, new FileEnvelopePersistence(directory), port, null);
             }
             var postgres = await PostgresEnvelopePersistence.OpenAsync(PostgresSettings.ConnectionString(connectionFile, contentRoot));
-            return new PracticeHost(content, practiceFixture, new PracticeRunStore(content, postgres), port, postgres);
+            return new PracticeHost(content, practiceFixture, postgres, port, postgres);
+        }
+
+        // FileEnvelopePersistence.PrepareDirectory's checks (outside the repository, not a link, owner-only) without its creation: a store that
+        // does not exist is refused, so a verification never leaves even an empty directory behind.
+        static string ExistingStore(string path, string contentRoot)
+        {
+            string full = Path.TrimEndingDirectorySeparator(Path.GetFullPath(path));
+            if (PracticeRunStore.IsInside(full, contentRoot)) throw new StartupRefusal("the private store must be outside the content root (repository)");
+            try
+            {
+                var info = new DirectoryInfo(full);
+                if (!info.Exists) throw new StartupRefusal(File.Exists(full) ? "the private store path is a file" : "the private store directory does not exist (--verify-store never creates it)");
+                if (info.LinkTarget != null) throw new StartupRefusal("the private store must not be a symbolic link");
+                if ((File.GetUnixFileMode(full) & GroupOrOther) != 0) throw new StartupRefusal("the private store directory must not be accessible to group/other (chmod 700)");
+            }
+            catch (Exception error) when (error is IOException || error is UnauthorizedAccessException) { throw new StartupRefusal("the private store directory cannot be inspected"); }
+            return full;
         }
 
         /// <summary>Lets the PostgreSQL backend log failure categories (type and SQLSTATE only) once the host's logger exists.</summary>
@@ -191,18 +239,50 @@ namespace MemoryForge.Server
             {
                 case ["account"]:
                     Method(get); return await Account(account);
+                case ["progression"]:
+                    Method(get); return await ProgressionRoutes.Read(host, account);
+                case ["progression","support"]:
+                    Method(post);return await SupportRoutes.Select(host,account,await Body(request));
+                case ["weekly-bosses"]:
+                    Method(post); return await WeeklyBossRoutes.Start(host,account,await Body(request));
+                case ["encounters"]:
+                    Method(post); return await GrowthRoutes.Start(host, account, await Body(request));
+                case ["encounters", var encounter]:
+                    Method(get); return await GrowthRoutes.Read(host, account, encounter);
+                case ["encounters", var encounter, "commands"]:
+                    Method(post); return await GrowthRoutes.Command(host, account, encounter, await Body(request));
+                case ["encounters", var encounter, "battle-query"]:
+                    Method(post); return await GrowthRoutes.Query(host, account, encounter, await Body(request));
+                case ["encounters",var encounter,"support-query"]:
+                    Method(post);return await GrowthRoutes.SupportQuery(host,account,encounter,await Body(request));
+                case ["dungeons", "sweep"]:
+                    Method(post); return await GrowthRoutes.Sweep(host, account, await Body(request));
+                case ["progression", "characters", var character, "level-preview"]:
+                    Method(post); return await GrowthRoutes.Level(host, account, character, await Body(request), true);
+                case ["progression", "characters", var character, "level-up"]:
+                    Method(post); return await GrowthRoutes.Level(host, account, character, await Body(request), false);
+                case ["progression", "characters" or "weapons", var target, var action] when EquipmentRoutes.Match(path.Substring(Prefix.Length).Split('/')[1], action) is { } s3:
+                    Method(post); return await EquipmentRoutes.Execute(host, account, s3.Kind, target, await Body(request), s3.Preview);
+                case ["progression", "boss-shop", var action] when EquipmentRoutes.Match("boss-shop", action) is { } shop:
+                    Method(post); return await EquipmentRoutes.Execute(host, account, shop.Kind, null, await Body(request), shop.Preview);
+                case ["expeditions"]:
+                    Method(post); return await ProgressionRoutes.Launch(host, account, await Body(request));
                 case ["runs"]:
                     Method(post); return await Create(account, await Body(request));
                 case ["runs", var id]:
                     Method(get); return await ReadRun(account, RunId(id));
                 case ["runs", var id, "commands"]:
                     Method(post); return await Command(account, RunId(id), await Body(request));
+                case ["runs", var id, "abandon"]:
+                    Method(post); return await ProgressionRoutes.Abandon(host, account, RunId(id), await Body(request));
                 case ["runs", var id, "memory-preview"]:
                     Method(post); return await Preview(account, RunId(id), await Body(request));
                 case ["runs", var id, "memory-commit"]:
                     Method(post); return await Commit(account, RunId(id), await Body(request));
                 case ["runs", var id, "battle-query"]:
                     Method(post); return await BattleQuery(account, RunId(id), await Body(request));
+                case ["runs",var id,"support-query"]:
+                    Method(post);return await SupportQuery(account,RunId(id),await Body(request));
                 case ["recruitment"]:
                     Method(get); return await RecruitmentRead(account);
                 case ["recruitment", "pulls"]:
@@ -257,6 +337,8 @@ namespace MemoryForge.Server
             var request = Contracts.ParseCreate(body);
             return await host.Store.Mutate(account, request.RequestId, request.Identity, (envelope, live) =>
             {
+                GrowthCommands.NoEncounter(envelope);
+                ProgressionCommands.EnsureLegacyAllowed(envelope);
                 // §17.1: one run in progress per account; a finished (DONE) run moves to the archive whole.
                 if (envelope.Run != null)
                 {
@@ -273,9 +355,9 @@ namespace MemoryForge.Server
                 catch (MemoryBoundaryException) { throw new ApiError(422, "COMMAND_REJECTED"); }
                 string created = PracticeRunStore.StateDigest(run);
                 envelope.Run = new RunRecord { RunId = runId, Seed = seed, UseMemory = request.UseMemory, MemoryVersion = memoryVersion, StartMemory = startMemory, CreatedSha256 = created };
-                var view = PublicView.Run(run, runId, 0, host.Content.Rules);
+                var reply = RunReplies.Created(run, runId, memoryVersion, host.Content.Rules);
                 PracticeRunStore.RequireUnchanged(run, created);
-                return Reply.Json(200, GraphJson.Object("runId", runId, "version", 0, "phase", view["phase"], "memoryVersion", memoryVersion, "state", view));
+                return Reply.Json(200, reply);
             });
         }
 
@@ -335,6 +417,19 @@ namespace MemoryForge.Server
             });
         }
 
+        async Task<Reply> SupportQuery(PracticeAccount account,string runId,byte[] body)
+        {
+            var q=Contracts.ParseSupportQuery(body);
+            try{return await host.Store.Read(account,(envelope,live)=>
+            {
+                var record=Current(envelope,runId);if(record.Journal.Count!=q.ExpectedVersion)throw new ApiError(409,"STALE_VERSION");var run=live??throw new InvalidOperationException("run replay");
+                var s=run.State;var b=s.Battle??throw new ApiError(422,"NO_BATTLE");string digest=PracticeRunStore.StateDigest(run);
+                var info=run.BattleSupportInfo(q.Caller,q.Target,q.Picks);var choices=run.BattleSupportChoices(q.Caller,q.Picks);var forecast=run.BattleSupportForecast(q.Caller,q.Target,q.Picks);
+                var view=PublicView.SupportQuery("runId",runId,record.Journal.Count,s.Phase,GraphJson.Object("node",s.Position,"turn",b.Turn,"battleVersion",b.V,"battlePhase",b.Phase),q,info,choices,forecast,b,run.BattleReservationSlots(),host.Content.Rules);
+                PracticeRunStore.RequireUnchanged(run,digest);return Reply.Json(200,view);
+            });}catch(RuleException e){throw new ApiError(422,e.Code);}catch(OverflowException){throw new ApiError(422,"BATTLE_NUMBER_OUT_OF_RANGE");}
+        }
+
         // RECRUIT-SERVER-20261021 (Recruitment.cs). The read is pure: an account without an envelope or without a recruitment member is shown
         // empty (revision 0 / the envelope's revision) and nothing is created. Each mutation is one Mutate transaction with its own canonical
         // identity: a committed receipt first, then expectedRevision (409 STALE_REVISION), then the rules; no client account, seed, state,
@@ -373,13 +468,10 @@ namespace MemoryForge.Server
             if (outcome.NextMemory != null) envelope.Memory = outcome.NextMemory;
             string digest = PracticeRunStore.StateDigest(run);
             record.Journal.Add(new JournalEntry { Kind = kind, Args = args, StateSha256 = digest });
+            if (kind == Contracts.MemoryCommit)
+                ProgressionCommands.AfterMemoryCommit(envelope, run, record, (string)args["requestId"]!, host.Content);
             int version = record.Journal.Count;
-            var view = PublicView.Run(run, runId, version, host.Content.Rules);
-            var reply = GraphJson.Object("runId", runId, "version", version, "phase", view["phase"], "memoryVersion", AccountEnvelope.MemoryVersion(envelope.Memory));
-            if (outcome.Events != null) reply.Add("events", PublicView.Events(outcome.Events));
-            if (kind == "forgeOffer") reply.Add("result", PublicView.Offer(outcome.Result));
-            if (kind == Contracts.MemoryCommit) reply.Add("result", PublicView.Commit(outcome.Result));
-            reply.Add("state", view);
+            var reply = RunReplies.Executed(run, runId, version, kind, outcome, AccountEnvelope.MemoryVersion(envelope.Memory), host.Content.Rules);
             PracticeRunStore.RequireUnchanged(run, digest);
             return Reply.Json(200, reply);
         }
@@ -408,6 +500,30 @@ namespace MemoryForge.Server
                 buffer.Write(chunk, 0, read);
             }
             return buffer.ToArray();
+        }
+    }
+
+    /// <summary>The public reply of a create and of a committed command (its receipt body), member for member. The live handlers call it on
+    /// the fresh candidate; AccountStoreVerifier calls it at every reconstructed checkpoint with that checkpoint's historical memory version,
+    /// so a stored run receipt is proven byte for byte by the same projection, never by a copy of it.</summary>
+    static class RunReplies
+    {
+        public static Dictionary<string, object?> Created(Run run, string runId, long memoryVersion, BattleRules rules)
+        {
+            var view = PublicView.Run(run, runId, 0, rules);
+            return GraphJson.Object("runId", runId, "version", 0, "phase", view["phase"], "memoryVersion", memoryVersion, "state", view);
+        }
+
+        /// <summary>version: the journal length after the command; memoryVersion: the store's version after it (a save advances it).</summary>
+        public static Dictionary<string, object?> Executed(Run run, string runId, int version, string kind, CommandOutcome outcome, long memoryVersion, BattleRules rules)
+        {
+            var view = PublicView.Run(run, runId, version, rules);
+            var reply = GraphJson.Object("runId", runId, "version", version, "phase", view["phase"], "memoryVersion", memoryVersion);
+            if (outcome.Events != null) reply.Add("events", PublicView.Events(outcome.Events));
+            if (kind == "forgeOffer") reply.Add("result", PublicView.Offer(outcome.Result));
+            if (kind == Contracts.MemoryCommit) reply.Add("result", PublicView.Commit(outcome.Result));
+            reply.Add("state", view);
+            return reply;
         }
     }
 }

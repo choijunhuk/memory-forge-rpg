@@ -18,12 +18,12 @@ namespace MemoryForge.Core
         // Display-only projection of prototype/src/ui.js choiceRequests: the immediate plays whose card picks the player makes, each with the
         // Core effect it feeds and whether that effect is the card's first one (Leading: only the play's commit runs before it). Core still
         // validates and resolves them; picks left unmade keep Core's own choice, which the overlay states.
-        static IEnumerable<((string Label, string From, int Count, bool GrowthOnly) Request, (string Op, string? Part, bool Leading) Rule)> Choices(BattleCardDef card, string mode, BattleData? content)
+        static IEnumerable<((string Label, string From, int Count, bool GrowthOnly) Request, (string Op, string? Part, bool Leading) Rule)> Choices(IReadOnlyList<EffectDef> effects, string mode, BattleData? content)
         {
             if (mode != "now") yield break;
-            for (int i = 0; i < card.Effects.Count; i++)
+            for (int i = 0; i < effects.Count; i++)
             {
-                var op = card.Effects[i]; bool leading = i == 0;
+                var op = effects[i]; bool leading = i == 0;
                 int count = Math.Max(1, op.N ?? 1);
                 switch (op.Op)
                 {
@@ -43,11 +43,14 @@ namespace MemoryForge.Core
         /// <summary>The card picks one play of the given (effective) definition asks for, in order: label (part names from content, else
         /// "부품"), zone ("hand", "discard" or "res"), count and whether only growth definitions qualify. A next/after reservation asks for none.</summary>
         public static List<(string Label, string From, int Count, bool GrowthOnly)> ChoiceRequests(BattleCardDef card, string mode, BattleData? content = null) =>
-            Choices(card, mode, content).Select(c => c.Request).ToList();
+            ChoiceRequests(card.Effects, mode, content);
+        public static List<(string Label, string From, int Count, bool GrowthOnly)> ChoiceRequests(IReadOnlyList<EffectDef> effects, string mode, BattleData? content = null) =>
+            Choices(effects, mode, content).Select(c => c.Request).ToList();
         /// <summary>The Core effect each request of ChoiceRequests feeds, in the same order: its operation (tune, costdown, recall, growPick,
         /// copyPick, discard, exhaustPick, pull), for tune the part it attaches, and whether it is the card's first top-level effect (only
         /// the play's commit runs before it). Metadata of the given (effective) definition only; nothing is resolved here.</summary>
-        public static List<(string Op, string? Part, bool Leading)> ChoiceRules(BattleCardDef card, string mode) => Choices(card, mode, null).Select(c => c.Rule).ToList();
+        public static List<(string Op, string? Part, bool Leading)> ChoiceRules(BattleCardDef card, string mode) => ChoiceRules(card.Effects, mode);
+        public static List<(string Op, string? Part, bool Leading)> ChoiceRules(IReadOnlyList<EffectDef> effects, string mode) => Choices(effects, mode, null).Select(c => c.Rule).ToList();
         /// <summary>The cards a pick sheet offers for one request, in zone order (prototype/src/ui.js pickerOptions): the hand without the
         /// playing card, the discard pile or the time reservations, none already picked. Without a rule this is that zone list (growth-card
         /// definitions only when the request says so), the sheet's earlier list. With the request's rule (ChoiceRules) it is the list

@@ -1,0 +1,560 @@
+{
+  "schema": "memory-forge-account-progression-verification-draft-v1",
+  "status": "IN_PROGRESS",
+  "draft": true,
+  "overallComplete": false,
+  "asOfDate": "2026-10-22",
+  "preparedAtUtc": "2026-10-22T12:54:48.749748+00:00",
+  "documentationLane": {
+    "mode": "documentation-only",
+    "sourceAndExistingEvidenceRead": true,
+    "newCodeOrTestsRun": false,
+    "productionOrRuntimeOrPinEdits": false,
+    "privateAccountOrCredentialCopied": false
+  },
+  "checkout": {
+    "branch": "codex/followup-20261021",
+    "baseCommit": "fc71caf6b50cc15d9445a3931eecd412be2165bc",
+    "commitSha": null,
+    "pullRequests": [],
+    "sourceFreeze": "ANDROID_OUTBOX_DELTA_ACTIVE_FINAL_IDENTIFICATION_PENDING"
+  },
+  "scope": {
+    "implementationSequence": [
+      "ownedPartySortie",
+      "growth",
+      "equipmentAndWeeklyBoss",
+      "ownedNonPartySupport"
+    ],
+    "phone": "Oct22 reconnection instruction supersedes the earlier exclusion",
+    "priceProbabilityCreativeOriginalChanges": false
+  },
+  "approvedRules": {
+    "tutorialAccountXp": 320,
+    "tutorialAfterLevel": 3,
+    "chapter1AccountXp": 200,
+    "afterBothTotalXp": 520,
+    "afterChapter1Level": 5,
+    "tutorialExistingFreeCrystals": 300,
+    "tutorialExistingStandardTickets": 5,
+    "chapter1ExistingFreeCrystals": 600,
+    "chapter1ExistingStandardTickets": 2,
+    "tutorialStarterCharacters": [
+      "nia",
+      "harin",
+      "rien"
+    ],
+    "basicRTypesOncePerAccount": 4,
+    "grantTrigger": "LIVE verified first tutorial memory commit; never replay or PlayerPrefs",
+    "tutorialBuild": "level1 asc0 res0 basicR",
+    "prologueImplementation": "existing 7-floor Run, not full scripted 3-battle+boss onboarding",
+    "dungeonWaves": 1,
+    "dungeonDefeatFocusCost": 0,
+    "basicRRefineCost": {
+      "refine_core": 1
+    },
+    "support": {
+      "ownedNonPartyCompanions": 1,
+      "callerIndividualGaugeCost": 100,
+      "usesPerBattle": 1,
+      "sourceBuildFrozenAtLaunch": true,
+      "addsPartyHpOrStartingDeckOrOrdinaryPartyPassive": false,
+      "authoredEphemeralTokensAllowed": true,
+      "separateGacha": false
+    },
+    "beginner40TicketGrantTrigger": "UNDECIDED_NOT_IMPLEMENTED"
+  },
+  "implementationModules": {
+    "verification": "server/MemoryForge.Server/AccountStoreVerifier.cs",
+    "progressionServer": "server/MemoryForge.Server/Progression.cs",
+    "growthServer": "server/MemoryForge.Server/S2Growth.cs",
+    "equipmentServer": "server/MemoryForge.Server/S3Equipment.cs",
+    "weeklyBossServer": "server/MemoryForge.Server/S3WeeklyBoss.cs",
+    "supportServer": "server/MemoryForge.Server/S4Support.cs",
+    "supportCore": "core/MemoryForge.Core/Battle.Support.cs",
+    "migrationOwnerOnly": "server/MemoryForge.Server/OwnerMigration.cs",
+    "growthClient": "client/MemoryForgeUnity/Assets/Scripts/MemoryForgeGrowthClient.cs",
+    "supportClient": "client/MemoryForgeUnity/Assets/Scripts/MemoryForgeLobbySupport.cs"
+  },
+  "checks": {
+    "core": {
+      "status": "PASS_RECORDED_FINAL",
+      "reportedGroups": 19,
+      "supportAssertionsPassed": 1065,
+      "sumOverlappingGroups": false,
+      "evidenceKind": "read existing Root s4-core-all-final.log",
+      "finalFreezeRecheck": "FINAL_IDENTIFICATION_PENDING_ROOT"
+    },
+    "server": {
+      "status": "PASS_RECORDED",
+      "assertionsPassed": 3128,
+      "evidenceKind": "read existing Root log s4-server-full.log",
+      "linuxPostgresClaim": false
+    },
+    "domainRunners": {
+      "status": "PASS_ROOT_FINAL_REPORTED",
+      "growth": 192,
+      "equipment": 54,
+      "progression": 64,
+      "draftLaneReran": false,
+      "evidenceKind": "Root final isolated actual Core/file compatibility runners",
+      "evidenceNote": "Final isolated domain results supplied by Root; distinct from native client NUnit aggregates."
+    },
+    "clientTransportNative": {
+      "status": "HISTORICAL_ISOLATED_NUNIT_SNAPSHOT_PASS",
+      "growthAggregate": 227,
+      "equipmentAggregate": 303,
+      "supportAggregate": 395,
+      "supportNewCases": 92,
+      "countsAreOverlappingAggregates": true,
+      "actualUnityOrHttpClaim": false,
+      "finalDeltaReviewedRootReportedNunit": 410
+    },
+    "unityPlayMode": {
+      "status": "PASS_WITH_EXPLICIT_NOT_RUN",
+      "total": 733,
+      "passed": 722,
+      "failed": 0,
+      "notRun": 11,
+      "xmlRootResult": "Skipped:Ignored",
+      "notRunCases": [
+        {
+          "test": "MemoryForge.Client.Tests.ExpeditionUiCapturePlayModeTests.CaptureCardHoldBackView",
+          "status": "NOT_RUN",
+          "xmlResult": "Skipped",
+          "reason": "writes a report screenshot; run by name with MF_EXPEDITION_SHOTS"
+        },
+        {
+          "test": "MemoryForge.Client.Tests.ExpeditionUiCapturePlayModeTests.CaptureExpeditionScreens",
+          "status": "NOT_RUN",
+          "xmlResult": "Skipped",
+          "reason": "writes report screenshots; run by name with MF_EXPEDITION_SHOTS"
+        },
+        {
+          "test": "MemoryForge.Client.Tests.HomeReturnAcceptancePlayModeTests.ActualHomeAndExpeditionScenesPreserveSavedMemoryAndRequireEveryDeparture",
+          "status": "NOT_RUN",
+          "xmlResult": "Skipped",
+          "reason": "loads the shipped home and expedition scenes; writes MF_HOME_RETURN_SHOTS"
+        },
+        {
+          "test": "MemoryForge.Client.Tests.LobbyMomentCapturePlayModeTests.CaptureHomeAndSortie",
+          "status": "NOT_RUN",
+          "xmlResult": "Skipped",
+          "reason": "writes report screenshots; run by name with MF_EXPEDITION_SHOTS"
+        },
+        {
+          "test": "MemoryForge.Client.Tests.LobbyMomentCapturePlayModeTests.CaptureHomeCatalogueAndDetails",
+          "status": "NOT_RUN",
+          "xmlResult": "Skipped",
+          "reason": "writes report screenshots; run by name with MF_EXPEDITION_SHOTS"
+        },
+        {
+          "test": "MemoryForge.Client.Tests.LobbyMomentCapturePlayModeTests.CaptureMomentScenes",
+          "status": "NOT_RUN",
+          "xmlResult": "Skipped",
+          "reason": "writes report screenshots; run by name with Temp/moment_shots.txt"
+        },
+        {
+          "test": "MemoryForge.Client.Tests.OnboardingPlayModeTests.CaptureCoachScreens",
+          "status": "NOT_RUN",
+          "xmlResult": "Skipped",
+          "reason": "writes report screenshots; run by name with MF_ONBOARDING_SHOTS"
+        },
+        {
+          "test": "MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.CaptureRecruitmentFlow",
+          "status": "NOT_RUN",
+          "xmlResult": "Skipped",
+          "reason": "writes protocol-fixture screenshots with MF_EXPEDITION_SHOTS"
+        },
+        {
+          "test": "MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.CaptureTenRecruitmentFlow",
+          "status": "NOT_RUN",
+          "xmlResult": "Skipped",
+          "reason": "writes ten-pull protocol screenshots with MF_EXPEDITION_SHOTS"
+        },
+        {
+          "test": "MemoryForge.Client.Tests.RecruitmentLiveAcceptancePlayModeTests.ExistingLocalAccountPullPersistsAcrossLobbyRecreation",
+          "status": "NOT_RUN",
+          "xmlResult": "Skipped",
+          "reason": "MF_RECRUITMENT_LIVE_METADATA is not set; no live account is changed"
+        },
+        {
+          "test": "MemoryForge.Client.Tests.RecruitmentLiveAcceptancePlayModeTests.SpentLocalAccountReconnectsToItsPersistedResultAndOwnedRoster",
+          "status": "NOT_RUN",
+          "xmlResult": "Skipped",
+          "reason": "MF_RECRUITMENT_LIVE_METADATA is not set; no live account is accessed"
+        }
+      ],
+      "evidenceKind": "read existing Root s4-live-fixes-play.xml"
+    },
+    "unityEditMode": {
+      "status": "PASS_RECORDED",
+      "passed": 10,
+      "failed": 0,
+      "evidenceKind": "read existing Root s4-live-fixes-edit.xml"
+    },
+    "builds": {
+      "pc": {
+        "status": "SUCCEEDED_RECORDED",
+        "errors": 0,
+        "warnings": 14,
+        "evidenceKind": "read existing Root s4-live-fixes-pc-build.log"
+      },
+      "android": {
+        "status": "SUCCEEDED_RECORDED",
+        "errors": 0,
+        "warnings": 15,
+        "evidenceKind": "read existing Root s4-live-fixes-android-build.log",
+        "scope": "last successful observed build; a newer Android-only outbox fix rebuild is RUNNING"
+      },
+      "gameplayAcceptanceImplied": false
+    },
+    "jsCoreParity": {
+      "status": "PASS_FOR_EXACT_CANDIDATE2",
+      "evidence": "s4_full_parity/candidate2/evidence.json",
+      "sharedCases": 144,
+      "authoredCases": 140,
+      "fullStateComparisons": 2292,
+      "commands": 1009,
+      "pureQueries": 1139,
+      "exactCommandRefusals": 297,
+      "oldJsFullGraphs": 11657,
+      "oldCoreFullCheckpoints": 840,
+      "cardDescriptions": 519,
+      "supportTests": 38,
+      "baselineArtifactTests": 8,
+      "retainsLogEvRngAndOmission": true,
+      "rulesCoreSha256": "0d116c2c38e68f6577aadb9eb73c08903df4cd7b9cbb33101da2beffa78ad01d",
+      "contentModesSha256": "99b2041428e514c05ad571737b472df75b2cf4c6740565eb42d5139248eeac52",
+      "testSha256": "3100a11bb5f6da95e43d13cede28a2870dfff1959e2fd102075675089cc2a395",
+      "finalIntegratedTestClaim": false
+    },
+    "sourceProvenance": {
+      "status": "METADATA_ONLY_RECORDED",
+      "evidence": "s4_full_parity/provenance-update.json",
+      "files": 14,
+      "sourceRecords": 16,
+      "metadataValues": 1016,
+      "otherUncompressedExpectedBytesHeadIdentical": true,
+      "manifestRegenerated": false,
+      "oldSemanticExpectationsRegenerated": false
+    },
+    "fullNode": {
+      "status": "PASS_RECORDED_PLUS_FINAL_PREVIEW_CHECK",
+      "latestWholeRun": {
+        "total": 396,
+        "passed": 396,
+        "failed": 0,
+        "evidenceKind": "read existing Root s4-npm-complete-final.log"
+      },
+      "finalPreviewAfterSourceProvenanceUpdate": {
+        "total": 1,
+        "passed": 1,
+        "failed": 0,
+        "evidenceKind": "Root-reported final targeted preview check"
+      },
+      "draftLaneReran": false
+    },
+    "pythonMigrationCi": {
+      "status": "PASS_RECORDED",
+      "totalPassed": 78,
+      "newTestsIncluded": 14,
+      "actualLinuxPostgresClaim": false,
+      "evidenceKind": "read existing Root s4-python-final.log"
+    },
+    "privateCiBundle": {
+      "status": "VALIDATE_ONLY_PASS_ROOT_REPORTED",
+      "accountKind": "synthetic earned Aila fixture; no personal account",
+      "bytes": 2135275,
+      "sha256": "341c279bbd5181e1508231e96a4d1c88e508e99f81db37e022f0265a16675075",
+      "managedRuntimeFiles": 10,
+      "personalAccountIncluded": false,
+      "bearerIncluded": false,
+      "machOOrApphostIncluded": false,
+      "privatePayloadCopiedToReport": false
+    },
+    "regressionSuites": {
+      "proposals": {
+        "passed": 14,
+        "failed": 0,
+        "evidenceKind": "read s4-proposals-final.log"
+      },
+      "docs": {
+        "passed": 9,
+        "failed": 0,
+        "evidenceKind": "read s4-docs-final.log"
+      },
+      "handoff": {
+        "passed": 33,
+        "failed": 0,
+        "evidenceKind": "read s4-handoff-venv-final.log"
+      },
+      "playwrightMemoryUi": {
+        "passed": 13,
+        "failed": 0,
+        "evidenceKind": "read s4-memory-ui-final.log"
+      },
+      "playwrightLateUi": {
+        "passed": 6,
+        "failed": 0,
+        "evidenceKind": "read s4-late-ui-final.log"
+      },
+      "nativeOrLiveAccountAcceptanceImplied": false
+    }
+  },
+  "oppositeAiReview": {
+    "status": "PASS_FOR_REVIEWED_SNAPSHOTS",
+    "receipts": [
+      {
+        "taskId": "ACCOUNT-PROGRESSION-S2-REVIEW-20261021",
+        "scopeVerdict": "PASS_FOR_REVIEWED_SNAPSHOT",
+        "summary": "## S2 server + client domain review: **PASS**, no P1/P2 blockers",
+        "requestedModel": "claude-opus-5-5",
+        "requestedEffort": "xhigh",
+        "processExit": 0,
+        "receiptStatus": "RECEIVED_UNVERIFIED",
+        "evidenceAvailability": "Root-retained official CLI receipt; not copied into this report",
+        "testsRunByReviewer": false
+      },
+      {
+        "taskId": "ACCOUNT-S3-REVIEW-20261022",
+        "scopeVerdict": "PASS_FOR_REVIEWED_SNAPSHOT",
+        "summary": "## S3 server + client domain review: **PASS** — no P1/P2 blockers",
+        "requestedModel": "claude-opus-5-5",
+        "requestedEffort": "xhigh",
+        "processExit": 0,
+        "receiptStatus": "RECEIVED_UNVERIFIED",
+        "evidenceAvailability": "Root-retained official CLI receipt; not copied into this report",
+        "testsRunByReviewer": false
+      },
+      {
+        "taskId": "ACCOUNT-S4-CORE-REVIEW-20261022",
+        "scopeVerdict": "PASS_FOR_REVIEWED_SNAPSHOT",
+        "summary": "## S4 Core review: **PASS** — no P1/P2 blockers",
+        "requestedModel": "claude-opus-5-5",
+        "requestedEffort": "xhigh",
+        "processExit": 0,
+        "receiptStatus": "RECEIVED_UNVERIFIED",
+        "evidenceAvailability": "Root-retained official CLI receipt; not copied into this report",
+        "testsRunByReviewer": false
+      },
+      {
+        "taskId": "ACCOUNT-S4-SERVER-REVIEW-20261022",
+        "scopeVerdict": "PASS_FOR_REVIEWED_SNAPSHOT",
+        "summary": "**VERDICT: PASS.** I found no P1 or P2 issues in ACCOUNT-S4-SERVER-REVIEW-20261022.",
+        "requestedModel": "claude-opus-5-5",
+        "requestedEffort": "max",
+        "processExit": 0,
+        "receiptStatus": "RECEIVED_UNVERIFIED",
+        "evidenceAvailability": "Root-retained official CLI receipt; not copied into this report",
+        "testsRunByReviewer": false
+      },
+      {
+        "taskId": "ACCOUNT-S4-CLIENT-REVIEW-20261022",
+        "scopeVerdict": "PASS_FOR_REVIEWED_SNAPSHOT",
+        "summary": "**VERDICT: PASS.** I found no P1 or P2 issues in ACCOUNT-S4-CLIENT-REVIEW-20261022.",
+        "requestedModel": "claude-opus-5-5",
+        "requestedEffort": "xhigh",
+        "processExit": 0,
+        "receiptStatus": "RECEIVED_UNVERIFIED",
+        "evidenceAvailability": "Root-retained official CLI receipt; not copied into this report",
+        "testsRunByReviewer": false
+      },
+      {
+        "taskId": "ACCOUNT-S4-UI-FINAL-REVIEW-20261022",
+        "scopeVerdict": "PASS_FOR_REVIEWED_SNAPSHOT",
+        "summary": "## ACCOUNT-S4-UI-FINAL-REVIEW-20261022: **PASS** — no P1 or P2 issues",
+        "requestedModel": "claude-opus-5-5",
+        "requestedEffort": "xhigh",
+        "processExit": 0,
+        "receiptStatus": "RECEIVED_UNVERIFIED",
+        "evidenceAvailability": "Root-retained official CLI receipt; not copied into this report",
+        "testsRunByReviewer": false
+      },
+      {
+        "taskId": "ACCOUNT-S4-JS-CI-REVIEW-20261022",
+        "scopeVerdict": "PASS_FOR_REVIEWED_SNAPSHOT",
+        "summary": "**VERDICT: PASS.** I found no P1 or P2 issues in ACCOUNT-S4-JS-CI-REVIEW-20261022.",
+        "requestedModel": "claude-opus-5-5",
+        "requestedEffort": "xhigh",
+        "processExit": 0,
+        "receiptStatus": "RECEIVED_UNVERIFIED",
+        "evidenceAvailability": "Root-retained official CLI receipt; not copied into this report",
+        "testsRunByReviewer": false
+      },
+      {
+        "taskId": "ACCOUNT-S4-FINAL-DELTA-REVIEW-20261022",
+        "scopeVerdict": "PASS_FOR_REVIEWED_SNAPSHOT",
+        "summary": "**VERDICT: PASS.** I found no P1 or P2 issues in ACCOUNT-S4-FINAL-DELTA-REVIEW-20261022.",
+        "requestedModel": "claude-opus-5-5",
+        "requestedEffort": "xhigh",
+        "processExit": 0,
+        "receiptStatus": "RECEIVED_UNVERIFIED",
+        "evidenceAvailability": "Root-retained official CLI receipt; not copied into this report",
+        "testsRunByReviewer": false
+      }
+    ],
+    "historicalUiFailuresSupersededByFinalUiReview": true,
+    "postReviewCiReliabilityDelta": {
+      "status": "PASS_OPPOSITE_REVIEWED",
+      "scope": [
+        "DONE response parser",
+        "Android proxy fix",
+        "CI test reliability"
+      ],
+      "followupOppositeReview": "ACCOUNT-S4-FINAL-DELTA-REVIEW-20261022 PASS no P1/P2",
+      "finalSourceRuntimeIdentification": "PENDING_ROOT"
+    },
+    "postFinalReviewAndroidOutboxDelta": {
+      "status": "ACTIVE_AUTHOR_WORK_AND_NARROW_REVIEW",
+      "scope": "Android player-only WouldBlock error code constant; flock/fchmod/atomic/exact retry behavior unchanged per Root",
+      "rootCause": "IL2CPP RuntimeInformation.GetOSName returns unknown on Android; WouldBlock previously0",
+      "proposedAndroidConstant": 11,
+      "targetedUnityOutboxChecks": "RUNNING",
+      "apkRebuild": "RUNNING",
+      "officialOppositeReview": "RUNNING",
+      "acceptance": "PENDING"
+    }
+  },
+  "runtimeSnapshot": {
+    "coreModule": "a1b72b89701e4645a7b2f130ba71e282",
+    "coreSha256": "65bc74a134ee00da95c73d91e19fe8b42f855f9c8a81462b8959f9f745b801b8",
+    "coreSourceManifestSha256": "44e19ab66f155b5624182cb8d2cade23b0f41ec90283e722b6cb1421a4df4a86",
+    "coreSourceFiles": 61,
+    "serverSha256": "d01d0a03c27faeaace64f96973f6b120aa8baabe9699e00d1d23d37442aacadf",
+    "finalIntegratedFreeze": "ANDROID_OUTBOX_DELTA_ACTIVE_FINAL_IDENTIFICATION_PENDING"
+  },
+  "localDevelopmentAccountMigration": {
+    "status": "MIGRATED_ROOT_VERIFIED",
+    "sequence": [
+      "NORMAL_OLD_FULL_PROOF",
+      "DRY_RUN_PASS",
+      "PRIVATE_BACKUP",
+      "LOCKED_SOURCE_BYTE_CAS",
+      "MIGRATED",
+      "NORMAL_NEW_FULL_PROOF"
+    ],
+    "recordedPreviousPulls": 22,
+    "receiptsPreservedExact": 5,
+    "revisionUnchanged": 5,
+    "postMigrationEconomicWrites": "EXECUTED_AND_VERIFIED_IN_SAFE_AGGREGATES",
+    "tutorialOwnedGrowthRecruitJourney": "LIVE_TUTORIAL_CHAPTER1_MEMORY_COMMITS_GROWTH_ENTRY_AND_NATIVE_PC_SINGLE_PULL_CONFIRMED",
+    "privateEnvelopeBackupOrAuthenticationPublished": false,
+    "productionMigrationClaim": false
+  },
+  "nativeAcceptance": {
+    "pc": {
+      "status": "FRESH_AUTH_PARSER_HOME_AND_GROWTH_PASS",
+      "observed": [
+        "actual app window home",
+        "catalogue detail click",
+        "one actual recruitment in prior run: tickets7to6, totalPulls22to23",
+        "fresh native auth and DONE parser PASS",
+        "fresh HOME AL5 owned3 and Growth AL5 through normal session click"
+      ],
+      "authenticatedAccountJourney": "AUTH_AND_PROFILE_PASS; EQUIPMENT_AND_CURRENT_BATTLE_READONLY_NEXT",
+      "humanManualAcceptanceClaim": false,
+      "cuaNativePipe": "FAILED_TOOL_BOUNDARY; Quartz native observation retained by Root",
+      "latestNativePid": 55890
+    },
+    "phone": {
+      "status": "FRESH_AUTH_PASS_OUTBOX_STORAGE_BLOCKED",
+      "apkBytes": 131838379,
+      "apkSha256": "915e51de15030b8425572c8c4d1982b16ea6264099d0677c858ff8050c03aa58",
+      "installedPreservingAppData": true,
+      "observed": [
+        "app-data-preserving APK installation",
+        "fresh home",
+        "touch login entry",
+        "actual authentication PASS",
+        "OUTBOX_UNSUPPORTED protective refusal"
+      ],
+      "actualAccountConnection": "AUTH_PASS",
+      "economicJourney": "PENDING_OUTBOX_STORAGE_ACCEPTANCE",
+      "humanManualAcceptanceClaim": false,
+      "hostToolFailure": "Unity-bundled ADB34.0.5/libusb SIGABRT; process-only native USB repair with ADB35, not a game-code crash",
+      "apkIdentityEvidence": "Fresh build artifact bytes and SHA read; installation/home/touch observations supplied by Root",
+      "authenticatedPublicTotals": {
+        "freeCrystals": 900,
+        "standardTickets": 6
+      },
+      "installedApkIsUpcomingRebuild": false,
+      "upcomingApkIdentity": "PENDING_ROOT_REBUILD_RECEIPT",
+      "outboxNativeProbe": {
+        "status": "PASS_ROOT_REPORTED",
+        "scope": "actual app UID internal and external persistent paths",
+        "flock": true,
+        "fchmod0600": true,
+        "interprocessWouldBlock": true,
+        "privateUidOrPathsPublished": false
+      },
+      "apkIdentityScope": "last observed installed APK; not the upcoming Android-only outbox fix rebuild"
+    }
+  },
+  "ci": {
+    "status": "NOT_RUN",
+    "exactCommitSha": null,
+    "linuxPostgres": "NOT_RUN_UNTIL_PUSH",
+    "localDocker": "BLOCKED_ENVIRONMENT",
+    "newSourceExactShaCiRequired": true,
+    "oldCiSubstitution": false
+  },
+  "pending": [
+    "PC equipment and current-battle read-only acceptance",
+    "Android-only outbox delta targeted checks",
+    "Android-only outbox delta fresh APK build and identity",
+    "Android-only outbox delta opposite-AI review",
+    "phone outbox storage and economic acceptance",
+    "final source and runtime identification confirmation",
+    "commit and push",
+    "pull request",
+    "CI on exact pushed commit including Linux PostgreSQL"
+  ],
+  "currentHistoryPreservation": {
+    "oldBytes": 72977,
+    "oldSha256": "0465d9dac6e39d6808e8a3e476ce55e61d698419951cba39d2c6a63e9bca16ad",
+    "edit": "new latest header only; all earlier content preserved"
+  },
+  "publicationBoundary": "Only safe summaries and existing relative evidence links; no credentials, personal fixture, raw account store, private backup, host endpoint or private bundle location.",
+  "documentationChecks": {
+    "jsonParse": "PASS",
+    "relativeLinksExisting": 28,
+    "currentPreviousBytesPreserved": 72977,
+    "currentPreviousSha256": "0465d9dac6e39d6808e8a3e476ce55e61d698419951cba39d2c6a63e9bca16ad",
+    "gitDiffWhitespace": "PASS",
+    "codeExamplesOrCommandsAdded": 0,
+    "newApplicationTestsRun": false
+  },
+  "actualDevelopmentAccountProgress": {
+    "status": "PARTIAL_LIVE_SERVER_AND_NATIVE_PC_PASS",
+    "source": "Root-supplied safe aggregates; no private account record read or copied for this update",
+    "tutorialMemoryCommit": "LIVE_PASS",
+    "chapter1MemoryCommit": "LIVE_PASS",
+    "starterRTypesGrantedOnce": 4,
+    "accountLevel": 5,
+    "niaLevel": 2,
+    "ink": 5800,
+    "credits": 9900,
+    "growthEncounter": {
+      "dungeonId": "dg_ink",
+      "phase": "PLAYER",
+      "version": 0,
+      "hp": 184,
+      "victoryClaim": false
+    },
+    "nativePcSingleRecruitment": {
+      "status": "PASS_IN_PREVIOUS_NATIVE_APP_RUN",
+      "standardTicketsBefore": 7,
+      "standardTicketsAfter": 6,
+      "totalPullsBefore": 22,
+      "totalPullsAfter": 23,
+      "revisionAfter": 351
+    },
+    "normalRootStoreVerifier": {
+      "status": "PASS_ROOT_REPORTED",
+      "receipts": 351
+    },
+    "oldFiveReceiptBodyStringsPreserved": true,
+    "finalFreshNativeAuthentication": "PC_AND_PHONE_AUTH_PASS; PHONE_STORAGE_ECONOMIC_ACCEPTANCE_PENDING"
+  }
+}
