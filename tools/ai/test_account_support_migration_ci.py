@@ -26,6 +26,12 @@ PAYLOAD |= {"content/data/game_data.json", "source/fixture.json", "source/accoun
 SCHEMA = "memoryforge-account-support-ci-v1"
 HEX64 = re.compile(r"[0-9a-f]{64}\Z")
 HEX32 = re.compile(r"[0-9a-f]{32}\Z")
+CHILD_STAGES = frozenset({
+    "PG_INTERNAL_CREATE_DATABASE", "PG_INTERNAL_SCHEMA", "PG_INTERNAL_PRACTICE_SCHEMA", "PG_INTERNAL_GRANTS",
+    "PG_OWNERCLI_CREATE_DATABASE", "PG_OWNERCLI_SCHEMA", "PG_OWNERCLI_PRACTICE_SCHEMA", "PG_OWNERCLI_GRANTS",
+    "BUILD_MIGRATION_CHECKS", "BUILD_SUPPORT_CHECKS", "HEAD_FILE_MIGRATION", "HEAD_FILE_SUPPORT_HTTP",
+    "PINNED_POSTGRES_MIGRATION", "PINNED_POSTGRES_SUPPORT_HTTP",
+})
 
 
 class GateError(Exception):
@@ -185,14 +191,17 @@ def private(path, directory=False):
             and (stat.S_ISDIR(info.st_mode) if directory else stat.S_ISREG(info.st_mode)), "PostgreSQL context permissions are not owner-only.")
 
 
-def run_private(command, log, env, data=None, timeout=7200):
+def run_private(command, log, env, data=None, timeout=7200, *, stage):
+    require(type(stage) is str and stage in CHILD_STAGES, "A CI child stage is not allowlisted.")
     with log.open("ab") as output:
         os.chmod(log, 0o600)
         try:
             result = subprocess.run(command, input=data, stdout=output, stderr=subprocess.STDOUT, env=env, cwd=ROOT, timeout=timeout, check=False)
-        except (OSError, subprocess.TimeoutExpired):
-            raise GateError("A CI child failed or timed out; see private diagnostics.") from None
-    require(result.returncode == 0, "A CI child returned failure; see private diagnostics.")
+        except subprocess.TimeoutExpired:
+            raise GateError(f"A CI child timed out; stage={stage} child_exit=unavailable code=CHILD_TIMEOUT; see private diagnostics.") from None
+        except OSError:
+            raise GateError(f"A CI child could not start; stage={stage} child_exit=unavailable code=CHILD_SPAWN_FAILED; see private diagnostics.") from None
+    require(result.returncode == 0, f"A CI child returned failure; stage={stage} child_exit={result.returncode} code=CHILD_NONZERO; see private diagnostics.")
 
 
 def run_gate(bundle, provenance, context, pgbin):
@@ -217,28 +226,28 @@ def run_gate(bundle, provenance, context, pgbin):
     env["TMPDIR"] = str(work)
     admin = dict(env, PGPASSFILE=str(context / "pgpass"))
     files = []
-    for role in ("internal", "ownercli"):
+    for role, prefix in (("internal", "PG_INTERNAL"), ("ownercli", "PG_OWNERCLI")):
         database = "mf_support_" + role + "_" + secrets.token_hex(8)
         psql = [str(pgbin / "psql"), "-h", "127.0.0.1", "-p", port, "-U", "mf_admin", "-Xq", "-v", "ON_ERROR_STOP=1", "-d"]
-        run_private(psql + ["postgres"], log, admin, f"CREATE DATABASE {database};\n".encode())
-        for schema in ("schema.sql", "dev_practice_schema.sql"):
-            run_private(psql + [database], log, admin, (ROOT / "server" / schema).read_bytes())
+        run_private(psql + ["postgres"], log, admin, f"CREATE DATABASE {database};\n".encode(), stage=prefix + "_CREATE_DATABASE")
+        for schema, suffix in (("schema.sql", "SCHEMA"), ("dev_practice_schema.sql", "PRACTICE_SCHEMA")):
+            run_private(psql + [database], log, admin, (ROOT / "server" / schema).read_bytes(), stage=prefix + "_" + suffix)
         grants = f"GRANT CONNECT ON DATABASE {database} TO mf_runtime;\nGRANT USAGE ON SCHEMA dev_practice TO mf_runtime;\nGRANT SELECT ON dev_practice.schema_marker TO mf_runtime;\nGRANT SELECT,INSERT,UPDATE ON dev_practice.account_state TO mf_runtime;\n"
-        run_private(psql + [database], log, admin, grants.encode())
+        run_private(psql + [database], log, admin, grants.encode(), stage=prefix + "_GRANTS")
         config = work / (role + ".txt")
         config.write_text(raw.replace("Database=mf_practice_checks;", "Database=" + database + ";"))
         config.chmod(0o600)
         files.append(config)
     outputs = []
-    for project in ("MemoryForge.MigrationChecks", "MemoryForge.SupportChecks"):
+    for project, stage in (("MemoryForge.MigrationChecks", "BUILD_MIGRATION_CHECKS"), ("MemoryForge.SupportChecks", "BUILD_SUPPORT_CHECKS")):
         output = work / project
-        run_private([dotnet, "build", str(ROOT / "server" / project / (project + ".csproj")), "-c", "Debug", "-o", str(output), "--nologo"], log, env)
+        run_private([dotnet, "build", str(ROOT / "server" / project / (project + ".csproj")), "-c", "Debug", "-o", str(output), "--nologo"], log, env, stage=stage)
         outputs.append(output)
     # Test the actual freshly compiled HEAD before replacing its runtime with the reviewed positive-migration target.
     head_proof = work / "head-file-result"
     head_migration_log = work / "head-migration.log"
     run_private([dotnet, str(outputs[0] / "MemoryForge.MigrationChecks.dll"), str(bundle / "content"), str(bundle / "old-runtime"),
-                 str(bundle / "source/fixture.json"), str(bundle / "source/account-growth-check.json"), "--cli", "--out", str(head_proof)], head_migration_log, env)
+                 str(bundle / "source/fixture.json"), str(bundle / "source/account-growth-check.json"), "--cli", "--out", str(head_proof)], head_migration_log, env, stage="HEAD_FILE_MIGRATION")
     head = read_json((head_proof / "result.json").read_bytes())
     require(head.get("postgres") is False and head.get("postgresCli") is False and head.get("ownerPgCli") is False
             and head.get("cli") is True and head.get("cliTarget") in ("KNOWN", "REFUSED_UNKNOWN")
@@ -252,7 +261,7 @@ def run_gate(bundle, provenance, context, pgbin):
                       + head["cliTarget"] + ";ownerFileCli=" + file_cli + ";ownerPgCli=NOT_RUN", head_migration_log.read_text()) is not None,
             "Fresh HEAD file proof or honest unknown-target refusal marker is absent.")
     head_support_log = work / "head-support.log"
-    run_private([dotnet, str(outputs[1] / "MemoryForge.SupportChecks.dll"), str(bundle / "content"), str(head_proof / "candidate.envelope.json"), "--http"], head_support_log, env)
+    run_private([dotnet, str(outputs[1] / "MemoryForge.SupportChecks.dll"), str(bundle / "content"), str(head_proof / "candidate.envelope.json"), "--http"], head_support_log, env, stage="HEAD_FILE_SUPPORT_HTTP")
     require(re.search(r"SupportChecks: [1-9][0-9]* passed", head_support_log.read_text()) is not None and "backend=file" in head_support_log.read_text(),
             "Fresh HEAD actual file support/HTTP acceptance marker is absent.")
     for output in outputs:
@@ -262,7 +271,7 @@ def run_gate(bundle, provenance, context, pgbin):
     migration_log = work / "pinned-migration.log"
     run_private([dotnet, str(outputs[0] / "MemoryForge.MigrationChecks.dll"), str(bundle / "content"), str(bundle / "old-runtime"),
                  str(bundle / "source/fixture.json"), str(bundle / "source/account-growth-check.json"), "--postgres-file", str(files[0]),
-                 "--postgres-cli-file", str(files[1]), "--cli", "--require-registered-target", "--out", str(proof)], migration_log, env)
+                 "--postgres-cli-file", str(files[1]), "--cli", "--require-registered-target", "--out", str(proof)], migration_log, env, stage="PINNED_POSTGRES_MIGRATION")
     result = read_json((proof / "result.json").read_bytes())
     require(result.get("postgres") is True and result.get("postgresCli") is True and result.get("ownerFileCli") is True
             and result.get("ownerPgCli") is True and result.get("cliTarget") == "KNOWN" and result.get("newCoreModule") == provenance["targetCoreModule"],
@@ -272,7 +281,7 @@ def run_gate(bundle, provenance, context, pgbin):
             "The registered owner CLI PostgreSQL acceptance marker is absent.")
     support_log = work / "pinned-support.log"
     run_private([dotnet, str(outputs[1] / "MemoryForge.SupportChecks.dll"), str(bundle / "content"), str(proof / "candidate.envelope.json"),
-                 "--postgres-file", str(files[0]), "--http"], support_log, env)
+                 "--postgres-file", str(files[0]), "--http"], support_log, env, stage="PINNED_POSTGRES_SUPPORT_HTTP")
     text = support_log.read_text()
     require(re.search(r"SupportChecks: [1-9][0-9]* passed", text) is not None and "backend=postgres" in text,
             "The actual PostgreSQL support/HTTP acceptance marker is absent.")

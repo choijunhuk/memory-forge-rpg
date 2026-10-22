@@ -148,11 +148,87 @@ class AccountSupportCiTests(unittest.TestCase):
 
     def test_failed_child_output_is_kept_in_a_private_log(self):
         log = self.base / "diagnostics.log"
+        secret = "unit-only-secret"
+        command = [sys.executable, "-c", "import os,sys;print(sys.argv[1]);print(os.environ['CI_UNIT_SECRET']);print(sys.stdin.read());print('unit-only-secret-stderr',file=sys.stderr);raise SystemExit(3)", secret + "-argv"]
         with contextlib.redirect_stdout(io.StringIO()) as stdout, contextlib.redirect_stderr(io.StringIO()) as stderr:
-            with self.assertRaises(GATE.GateError):
-                GATE.run_private([sys.executable, "-c", "print('unit-only-secret');raise SystemExit(3)"], log, dict(os.environ))
+            with self.assertRaises(GATE.GateError) as failure:
+                GATE.run_private(command, log, dict(os.environ, CI_UNIT_SECRET=secret + "-env"),
+                                 data=(secret + "-stdin").encode(), stage="HEAD_FILE_MIGRATION")
         self.assertEqual(stdout.getvalue() + stderr.getvalue(), "")
-        self.assertIn("unit-only-secret", log.read_text())
+        self.assertEqual(str(failure.exception), "A CI child returned failure; stage=HEAD_FILE_MIGRATION child_exit=3 code=CHILD_NONZERO; see private diagnostics.")
+        for suffix in ("-argv", "-env", "-stdin", "-stderr"):
+            self.assertIn(secret + suffix, log.read_text())
+            self.assertNotIn(secret + suffix, str(failure.exception))
+        self.assertEqual(log.stat().st_mode & 0o777, 0o600)
+
+    def test_successful_child_preserves_process_options_and_private_log(self):
+        command, env, data = ["unit-only-command"], {"CI_UNIT_SECRET": "unit-only-secret"}, b"unit-only-input"
+        log = self.base / "success.log"
+        with patch.object(GATE.subprocess, "run", return_value=subprocess.CompletedProcess(command, 0)) as run:
+            GATE.run_private(command, log, env, data=data, timeout=23, stage="BUILD_SUPPORT_CHECKS")
+        run.assert_called_once()
+        self.assertEqual(run.call_args.args, (command,))
+        options = run.call_args.kwargs
+        self.assertEqual(set(options), {"input", "stdout", "stderr", "env", "cwd", "timeout", "check"})
+        self.assertEqual(options["input"], data)
+        self.assertIs(options["env"], env)
+        self.assertEqual(options["cwd"], GATE.ROOT)
+        self.assertEqual(options["timeout"], 23)
+        self.assertIs(options["check"], False)
+        self.assertEqual(options["stderr"], subprocess.STDOUT)
+        self.assertEqual(Path(options["stdout"].name), log)
+        self.assertEqual(log.stat().st_mode & 0o777, 0o600)
+
+    def test_timeout_and_spawn_errors_expose_only_fixed_diagnostics(self):
+        command = ["unit-only-secret-command"]
+        failures = (
+            (subprocess.TimeoutExpired(command, 23, output=b"unit-only-secret-output", stderr=b"unit-only-secret-stderr"), "CHILD_TIMEOUT"),
+            (OSError("unit-only-secret-exception"), "CHILD_SPAWN_FAILED"),
+        )
+        for index, (error, code) in enumerate(failures):
+            log = self.base / ("failure-" + str(index) + ".log")
+            with self.subTest(code=code), patch.object(GATE.subprocess, "run", side_effect=error), \
+                    contextlib.redirect_stdout(io.StringIO()) as stdout, contextlib.redirect_stderr(io.StringIO()) as stderr:
+                with self.assertRaises(GATE.GateError) as failure:
+                    GATE.run_private(command, log, {"CI_UNIT_SECRET": "unit-only-secret-env"},
+                                     data=b"unit-only-secret-input", timeout=23, stage="HEAD_FILE_SUPPORT_HTTP")
+            self.assertEqual(stdout.getvalue() + stderr.getvalue(), "")
+            self.assertEqual(str(failure.exception), "A CI child " + ("timed out" if code == "CHILD_TIMEOUT" else "could not start")
+                             + "; stage=HEAD_FILE_SUPPORT_HTTP child_exit=unavailable code=" + code + "; see private diagnostics.")
+            self.assertNotIn("unit-only-secret", str(failure.exception))
+            self.assertTrue(failure.exception.__suppress_context__)
+            self.assertEqual(log.stat().st_mode & 0o777, 0o600)
+
+    def test_invalid_or_custom_stages_are_refused_before_logging_or_execution(self):
+        class CustomStage(str):
+            def __format__(self, spec):
+                return "unit-only-secret-stage"
+
+        for index, stage in enumerate(("HEAD_FILE_MIGRATION\nunit-only-secret-stage", "UNKNOWN", None, [], CustomStage("HEAD_FILE_MIGRATION"))):
+            log = self.base / ("invalid-stage-" + str(index) + ".log")
+            with self.subTest(index=index), patch.object(GATE.subprocess, "run") as run:
+                with self.assertRaises(GATE.GateError) as failure:
+                    GATE.run_private(["unit-only-secret-command"], log, {}, stage=stage)
+            self.assertEqual(str(failure.exception), "A CI child stage is not allowlisted.")
+            self.assertNotIn("unit-only-secret", str(failure.exception))
+            run.assert_not_called()
+            self.assertFalse(log.exists())
+
+    def test_main_reports_only_sanitized_child_stage_and_signed_exit(self):
+        archive, sha = self.pack()
+        log = self.base / "signed-exit.log"
+
+        def gate(*_):
+            with patch.object(GATE.subprocess, "run", return_value=subprocess.CompletedProcess(["unit-only-secret-command"], -9)):
+                GATE.run_private(["unit-only-secret-command"], log, {"CI_UNIT_SECRET": "unit-only-secret-env"},
+                                 data=b"unit-only-secret-input", stage="PINNED_POSTGRES_MIGRATION")
+
+        with patch.object(GATE.sys, "platform", "linux"), patch.object(GATE, "run_gate", side_effect=gate), \
+                contextlib.redirect_stdout(io.StringIO()) as stdout, contextlib.redirect_stderr(io.StringIO()) as stderr:
+            self.assertEqual(GATE.main(["--bundle", str(archive), "--sha256", sha, "--cluster-context", str(self.base)]), 1)
+        self.assertEqual(stdout.getvalue(), "")
+        self.assertEqual(stderr.getvalue(), "Account migration/support CI FAIL: A CI child returned failure; stage=PINNED_POSTGRES_MIGRATION child_exit=-9 code=CHILD_NONZERO; see private diagnostics. No unverified PostgreSQL PASS.\n")
+        self.assertNotIn("unit-only-secret", stdout.getvalue() + stderr.getvalue())
         self.assertEqual(log.stat().st_mode & 0o777, 0o600)
 
     def test_duplicate_json_members_are_not_silently_overwritten(self):
@@ -210,9 +286,12 @@ class AccountSupportCiTests(unittest.TestCase):
         (pgbin / "psql").write_text("unit-only")
         calls = []
         stages = []
+        diagnostic_stages = []
 
-        def child(command, log, env, data=None, timeout=7200):
+        def child(command, log, env, data=None, timeout=7200, *, stage):
             calls.append((command, env.copy(), data))
+            diagnostic_stages.append(stage)
+            self.assertIn(stage, GATE.CHILD_STAGES)
             self.assertNotIn(password, " ".join(command))
             self.assertNotIn("PGPASSWORD", env)
             self.assertIn("TMPDIR", env)
@@ -261,6 +340,12 @@ class AccountSupportCiTests(unittest.TestCase):
         self.assertEqual(len(created), 2)
         self.assertNotEqual(created[0], created[1])
         self.assertEqual(stages, ["head-migration", "head-support", "pinned-migration", "pinned-support"])
+        self.assertEqual(diagnostic_stages, [
+            "PG_INTERNAL_CREATE_DATABASE", "PG_INTERNAL_SCHEMA", "PG_INTERNAL_PRACTICE_SCHEMA", "PG_INTERNAL_GRANTS",
+            "PG_OWNERCLI_CREATE_DATABASE", "PG_OWNERCLI_SCHEMA", "PG_OWNERCLI_PRACTICE_SCHEMA", "PG_OWNERCLI_GRANTS",
+            "BUILD_MIGRATION_CHECKS", "BUILD_SUPPORT_CHECKS", "HEAD_FILE_MIGRATION", "HEAD_FILE_SUPPORT_HTTP",
+            "PINNED_POSTGRES_MIGRATION", "PINNED_POSTGRES_SUPPORT_HTTP",
+        ])
         migration = next(c for c, _, _ in calls if "MemoryForge.MigrationChecks.dll" in c[1] and "--postgres-file" in c)
         support = next(c for c, _, _ in calls if "MemoryForge.SupportChecks.dll" in c[1] and "--postgres-file" in c)
         internal = migration[migration.index("--postgres-file") + 1]

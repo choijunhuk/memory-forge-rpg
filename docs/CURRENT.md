@@ -1,5 +1,9 @@
 # 현재 기준 — ALL-IN-ONE
 
+## 2026-10-23 CI 후속 — 계정 이관·지원 실패 단계 기록 보강
+
+7bcb69f PR CI는 PostgreSQL1722 판정 통과 뒤 계정 이관/지원 하위 과정에서 실패했다. 원시 로그를 비공개로 유지하면서14개 고정 단계·숫자 종료 코드·고정 원인 코드만 공개하도록 보강했다. Python18/18·전체82/82와 공식 Opus5.5 Max 독립 검토가 PASS다. 동일 합성 번들의 macOS 파일/HTTP와 격리 Docker PostgreSQL16.15 등록 소유자 CLI/지원 HTTP 하위 재현도 PASS했으나 최초 Linux 실패 원인은 확정하지 않았다. 서버·Core·SQL·번들·게임 UI·검증 판정은 변경하지 않았으며 최신 head 전체 CI 결과를 별도로 확인한다. [CI 후속 보고서](../reports/ci_child_diagnostics_20261023/README.md)를 따른다.
+
 ## 2026-10-23 최신 — 안전 영역·큰 글자·네이티브 저장 수정의 최종 자동 검사 PASS
 
 최종 소스는 UI·저장63/63, 전체 PlayMode752 PASS/0 FAIL/11 Explicit NOT_RUN(763), Edit10/10 PASS다. 작은 화면·130% 글자·가득 찬 게이지·소멸88 표시까지 실제 glyph, 전체 제어의 스크롤 도달, Core 해시·무전송 보장을 확인했다. 홈의 중복 설명을 덜고 동료 이름/속성을 실측 배치했으며, 전투 숫자와 테두리·성장 필살기 행을 보정했다. 글자 크기는 줄이지 않았다. PC Final3와 ARM64 IL2CPP APK131,893,173바이트를 빌드했다. 공식 Claude Opus5.5 Max의 최종 R4 독립 소스 검토도 P1/P2 없이 PASS다. 자세한 범위는 [검증 보고서](../reports/mobile_layout_20261023/README.md)와 [검증 현황](../reports/mobile_layout_20261023/verification.json)을 따른다.
