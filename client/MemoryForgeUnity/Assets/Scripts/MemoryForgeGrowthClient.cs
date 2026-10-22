@@ -213,6 +213,8 @@ namespace MemoryForge.Client
             Bar(partyBody, 20, partyY, 360, 12, Number(state["hp"]), Number(state["maxHp"]), Teal); partyY += 24;
             var statsText = Label(partyBody, "방어 " + Number(state["block"]) + " · 행동력 " + Number(state["ap"]), 20, partyY, 360, 1, 20, Muted);
             partyY += statsText.rectTransform.rect.height + 16;
+            var ultimateTitle = Label(partyBody, "필살기", 20, partyY, 360, 1, 20, Brass);
+            partyY += ultimateTitle.rectTransform.rect.height + 12;
             var actors = state["actors"] as JArray ?? new JArray();
             float ultimateHeight = Math.Max(152, TouchUnits());
             var ultimateStrip = Scroll(partyBody, "GrowthUltimates", 20, partyY, 360, ultimateHeight, Math.Max(360, actors.Count * 372 - 12));
@@ -223,9 +225,17 @@ namespace MemoryForge.Client
                 var ult = Button(ultimateStrip, "GrowthUlt:" + id, "", n++ * 372, 0, 360, ultimateHeight,
                     () => { var args = new JObject { ["actor"] = id }; if (target != null) args["target"] = target; _ = Send("ult", args, id); });
                 ult.interactable = CanAct && gauge >= max && max > 0;
-                Label(ult.transform, CharacterName(id) + "\n" + gauge + "/" + max + " · 필살기", 12, 0, 336, ultimateHeight, 21, gauge >= max && max > 0 ? Brass : Ink);
-
+                var caption = Label(ult.transform, CharacterName(id) + "\n" + gauge + "/" + max, 24, 16, 312, ultimateHeight - 24, 21, gauge >= max && max > 0 ? Brass : Ink);
+                caption.lineSpacing = 0.85f; MemoryForgeUiViewport.WholeText(caption);
+                float captionHeight = caption.rectTransform.rect.height;
+                caption.rectTransform.anchorMin = new Vector2(caption.rectTransform.anchorMin.x, 1);
+                caption.rectTransform.anchorMax = new Vector2(caption.rectTransform.anchorMax.x, 1);
+                caption.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, captionHeight);
+                ultimateHeight = Math.Max(ultimateHeight, captionHeight + 24);
             }
+            ultimateStrip.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, ultimateHeight);
+            ((RectTransform)ultimateStrip.parent).SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, ultimateHeight);
+            foreach (RectTransform ultimate in ultimateStrip) ultimate.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, ultimateHeight);
             partyBody.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Math.Max(battleHeight, partyY + ultimateHeight + 16));
             var partyScroll = partyBody.parent.GetComponent<ScrollRect>(); partyScroll.horizontal = false; partyScroll.vertical = true;
             var enemies = (state["enemies"] as JArray ?? new JArray()).ToList();
@@ -316,8 +326,8 @@ namespace MemoryForge.Client
                 var card = hand[n]; string uid = Text(card["uid"]);
                 var tile = Button(strip, "GrowthCard:" + uid, "", n * cardPitch, 0, cardWidth, height - 8, () => SelectCard(uid), selected == uid ? new Color(0.11f, 0.23f, 0.27f) : Panel);
                 tile.interactable = CanAct;
-                var cardName = Label(tile.transform, CardName(Text(card["id"])), 16, 8, cardWidth - 32, 1, 24, Brass);
-                Label(tile.transform, card["cost"]?.Type == JTokenType.Integer ? "행동력 " + Number(card["cost"]) : "사용 불가", 16, 8 + cardName.rectTransform.rect.height + 12, cardWidth - 32, 64, 18, Teal);
+                var cardName = Label(tile.transform, CardName(Text(card["id"])), 24, 16, cardWidth - 48, 1, 24, Brass);
+                Label(tile.transform, card["cost"]?.Type == JTokenType.Integer ? "행동력 " + Number(card["cost"]) : "사용 불가", 24, 16 + cardName.rectTransform.rect.height + 12, cardWidth - 48, 64, 18, Teal);
             }
         }
 
@@ -363,7 +373,9 @@ namespace MemoryForge.Client
             {
                 var size = image.rectTransform.rect.size;
                 var rim = Box(image.transform, "Ornament", 0, 0, size.x, size.y, Color.white).GetComponent<Image>();
-                rim.sprite = SpriteAt("UI/battle/ui_panel_frame"); rim.type = Image.Type.Sliced;
+                rim.sprite = SpriteAt("UI/battle/ui_panel_frame"); rim.type = Image.Type.Sliced; rim.transform.SetAsFirstSibling();
+                rim.rectTransform.anchorMin = Vector2.zero; rim.rectTransform.anchorMax = Vector2.one;
+                rim.rectTransform.offsetMin = rim.rectTransform.offsetMax = Vector2.zero;
             }
         }
         string CardName(string id) => content?.Battle.Cards.FirstOrDefault(card => card.Id == id)?.Name ?? id;

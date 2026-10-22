@@ -133,7 +133,8 @@ namespace MemoryForge.Client.Tests
                         Assert.That(cards.Length, Is.EqualTo(5)); var hand = cards[0].GetComponentInParent<ScrollRect>(); Assert.That(hand, Is.Not.Null);
                         var reserved = new[] { "EndTurn", "DrawPile", "DiscardPile" }.Select(name => LegacyPracticePanel(practice.Host, name)).ToList();
                         reserved.AddRange(frame.GetComponentsInChildren<Text>().Where(t => t.transform.parent == frame
-                            && (t.text.StartsWith("뽑을 ", StringComparison.Ordinal) || t.text.StartsWith("버림 ", StringComparison.Ordinal) || t.text.StartsWith("소멸 ", StringComparison.Ordinal))).Select(t => t.rectTransform));
+                            && (t.name == "DrawCount" || t.name == "DiscardCount" || t.text.StartsWith("덱", StringComparison.Ordinal)
+                                || t.text.StartsWith("뽑을 ", StringComparison.Ordinal) || t.text.StartsWith("버림", StringComparison.Ordinal) || (t.name == "ExhaustCount" || t.text.StartsWith("소멸", StringComparison.Ordinal)))).Select(t => t.rectTransform));
                         string unchanged = CanonicalState.Hash(practice.Client.Snapshot.ToJsonGraph()); int turn = practice.Client.Snapshot.Battle.Turn;
                         foreach (float position in new[] { 0f, 0.25f, 0.5f, 0.75f, 1f })
                         {
@@ -160,7 +161,7 @@ namespace MemoryForge.Client.Tests
                                 MobileInside(pixels, MobilePixels(endTurn, practice.Surface.Camera), "every whole turn-end label stays inside its own actual hit rectangle");
                                 MobileInside(pixels, scenario.Safe, "every whole turn-end label stays inside native safe pixels");
                             });
-                        var discard = frame.GetComponentsInChildren<Text>().Single(t => t.transform.parent == frame && t.text.StartsWith("버림 ", StringComparison.Ordinal));
+                        var discard = frame.GetComponentsInChildren<Text>().Single(t => t.transform.parent == frame && (t.name == "DiscardCount" || t.text.StartsWith("버림", StringComparison.Ordinal)));
                         MobileCheck(failures, scenario.Name + "/end-turn-discard-drawn-glyphs", () =>
                         {
                             MobileWholeText(discard, scenario, practice.Surface.Camera, MobileTextFloor(discard));
@@ -201,6 +202,115 @@ namespace MemoryForge.Client.Tests
                         Assert.That(CanonicalState.Hash(practice.Client.Snapshot.ToJsonGraph()), Is.EqualTo(unchanged), "card selection cannot commit an end-turn or play action");
                         Assert.That(MobileButton(practice.Host, tappedName), Is.Not.Null, "the selected UID exists in the freshly rendered hand");
                         Assert.That(practice.Client.SelectedCard, Is.EqualTo(tappedUid), "the visible card receives the actual tap");
+                    }
+                    yield return null;
+                }
+                Assert.That(failures, Is.Empty, string.Join("\n", failures));
+            }
+            finally { MobileResetCalibration(); MemoryForgeUiMotion.Reduced = reduced; MemoryForgePracticeSession.ResetForTests(); }
+            yield return null;
+        }
+
+        [UnityTest, Timeout(90000)]
+        public IEnumerator LegacyPhonePileCountProjectionKeepsTwoDigitGlyphsWholeAndSeparateWithoutChangingTheRun()
+        {
+            var baseline = LegacyFrameCases().First(); var failures = new List<string>();
+            var scenarios = new[] {
+                new MobileCase("legacy-native-small-font130", 1280, 720, new Rect(68, 0, 1212, 720), 2, 1.3f),
+                new MobileCase("legacy-s24-font130", baseline.Width, baseline.Height, baseline.Safe, baseline.Density, 1.3f)
+            };
+            bool reduced = MemoryForgeUiMotion.Reduced; MemoryForgeUiMotion.Reduced = true;
+            try
+            {
+                foreach (var scenario in scenarios)
+                {
+                    using (var practice = new LegacyPractice(scenario))
+                    {
+                        yield return practice.Ready(failures); yield return practice.EnterBattle(failures);
+                        string unchanged = CanonicalState.Hash(practice.Client.Snapshot!.ToJsonGraph());
+                        Assert.That(host.Posts, Is.Empty, "local practice setup cannot POST");
+                        var render = typeof(MemoryForgeExpeditionClient).GetMethod("Piles", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                        Assert.That(render, Is.Not.Null);
+                        var renderAp = typeof(MemoryForgeExpeditionClient).GetMethod("ApGem", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                        Assert.That(renderAp, Is.Not.Null);
+                        foreach (var pileCounts in new[] { (Count: 10, Exhaust: 0), (Count: 23, Exhaust: 0), (Count: 99, Exhaust: 0), (Count: 10, Exhaust: 3), (Count: 23, Exhaust: 12), (Count: 99, Exhaust: 88) })
+                        {
+                            int count = pileCounts.Count, exhaustCount = pileCounts.Exhaust;
+                            var frame = LegacyPracticePanel(practice.Host, "ExpeditionFrame");
+                            foreach (var old in frame.GetComponentsInChildren<RectTransform>().Where(r => r.parent == frame
+                                && (r.name == "ApGem" || r.name == "ApGlow" || r.name == "DrawPile" || r.name == "DiscardPile" || r.name == "DrawCount" || r.name == "DiscardCount" || r.name == "ExhaustCount"
+                                    || r.GetComponent<Text>() is Text label && (label.text.StartsWith("뽑을 ", StringComparison.Ordinal)
+                                        || label.text.StartsWith("덱", StringComparison.Ordinal) || label.text.StartsWith("버림", StringComparison.Ordinal) || label.text.StartsWith("소멸", StringComparison.Ordinal)))).ToArray())
+                            { old.gameObject.SetActive(false); Object.Destroy(old.gameObject); }
+                            // Detached presentation counts exercise the row width; these UIDs are never cards in the live run.
+                            var projection = new BattleState { Ap = practice.Client.Snapshot!.Battle!.Ap, Zones = new BattleZones {
+                                Draw = Enumerable.Range(0, count).Select(i => "presentation-only:draw:" + i).ToList(),
+                                Discard = Enumerable.Range(0, count).Select(i => "presentation-only:discard:" + i).ToList(),
+                                Exhaust = Enumerable.Range(0, exhaustCount).Select(i => "presentation-only:exhaust:" + i).ToList()
+                            } };
+                            renderAp!.Invoke(practice.Client, new object[] { projection });
+                            render!.Invoke(practice.Client, new object[] { projection });
+                            yield return null; Canvas.ForceUpdateCanvases();
+                            string scope = scenario.Name + "/pile-projection-" + count + "-exhaust-" + exhaustCount;
+                            var labels = frame.GetComponentsInChildren<Text>().Where(t => t.transform.parent == frame && t.isActiveAndEnabled).ToArray();
+                            var draw = labels.Single(t => t.name == "DrawCount" || t.text.StartsWith("뽑을 ", StringComparison.Ordinal) || t.text.StartsWith("덱", StringComparison.Ordinal));
+                            var discard = labels.Single(t => t.name == "DiscardCount" || t.text.StartsWith("버림", StringComparison.Ordinal));
+                            var exhaustLabels = labels.Where(t => t.name == "ExhaustCount" || t.text.StartsWith("소멸", StringComparison.Ordinal)).ToArray();
+                            Assert.That(exhaustLabels.Length, Is.EqualTo(exhaustCount == 0 ? 0 : 1), scope + " publishes exactly the nonzero exhaust count");
+                            MobileCheck(failures, scope + "/exact-counts", () =>
+                            {
+                                Assert.That(draw.text.Replace(" ", ""), Is.EqualTo("뽑을" + count).Or.EqualTo("덱" + count));
+                                Assert.That(discard.text.Replace(" ", ""), Is.EqualTo("버림" + count));
+                                if (exhaustCount != 0) Assert.That(exhaustLabels[0].text.Replace(" ", ""), Is.EqualTo("소멸" + exhaustCount));
+                            });
+                            foreach (var text in new[] { draw, discard }.Concat(exhaustLabels))
+                                MobileCheck(failures, scope + "/whole-single-line/" + text.name, () =>
+                                {
+                                    MobileWholeText(text, scenario, practice.Surface.Camera, MobileTextFloor(text));
+                                    var glyphs = MobileVisibleGlyphs(text, scenario, practice.Surface.Camera);
+                                    // Strong adds shadow quads; check character generation separately from the decorated mesh.
+                                    Assert.That(text.cachedTextGenerator.characterCountVisible, Is.GreaterThanOrEqualTo(text.text.Count(c => !char.IsWhiteSpace(c))), "every count character must be generated");
+                                    Assert.That(glyphs.Count, Is.GreaterThanOrEqualTo(text.text.Count(c => !char.IsWhiteSpace(c))), "every count glyph must actually draw");
+                                    Assert.That(text.cachedTextGenerator.lines.Count, Is.EqualTo(1), "a pile count cannot wrap into the control row below");
+                                    foreach (var glyph in glyphs) MobileInside(glyph, MobilePixels(text.rectTransform, practice.Surface.Camera), "every drawn count glyph stays in its own label");
+                                });
+                            MobileCheck(failures, scope + "/discard-end-turn-glyphs", () =>
+                            {
+                                var glyphs = MobileVisibleGlyphs(discard, scenario, practice.Surface.Camera); Assert.That(glyphs, Is.Not.Empty);
+                                var bounds = Rect.MinMaxRect(glyphs.Min(r => r.xMin), glyphs.Min(r => r.yMin), glyphs.Max(r => r.xMax), glyphs.Max(r => r.yMax));
+                                foreach (var caption in LegacyPracticePanel(practice.Host, "EndTurn").GetComponentsInChildren<Text>().Where(t => !string.IsNullOrWhiteSpace(t.text)))
+                                {
+                                    var other = MobileVisibleGlyphs(caption, scenario, practice.Surface.Camera); Assert.That(other, Is.Not.Empty);
+                                    var otherBounds = Rect.MinMaxRect(other.Min(r => r.xMin), other.Min(r => r.yMin), other.Max(r => r.xMax), other.Max(r => r.yMax));
+                                    MobileSeparate(bounds, otherBounds, "actual discard and turn-end glyph bounds cannot overlap at " + count);
+                                }
+                            });
+                            MobileCheck(failures, scope + "/draw-ap-gem", () =>
+                            {
+                                var glyphs = MobileVisibleGlyphs(draw, scenario, practice.Surface.Camera); Assert.That(glyphs, Is.Not.Empty);
+                                var bounds = Rect.MinMaxRect(glyphs.Min(r => r.xMin), glyphs.Min(r => r.yMin), glyphs.Max(r => r.xMax), glyphs.Max(r => r.yMax));
+                                var ap = LegacyPracticePanel(practice.Host, "ApGem").GetComponentsInChildren<Text>().Single(text => text.text == practice.Client.Snapshot!.Battle!.Ap.ToString());
+                                var apGlyphs = MobileVisibleGlyphs(ap, scenario, practice.Surface.Camera); Assert.That(apGlyphs, Is.Not.Empty);
+                                var apBounds = Rect.MinMaxRect(apGlyphs.Min(r => r.xMin), apGlyphs.Min(r => r.yMin), apGlyphs.Max(r => r.xMax), apGlyphs.Max(r => r.yMax));
+                                MobileSeparate(bounds, apBounds, "actual draw count glyphs cannot cover the AP number at " + count);
+                            });
+                            if (exhaustCount != 0)
+                                MobileCheck(failures, scope + "/exhaust-control-glyphs", () =>
+                                {
+                                    var glyphs = MobileVisibleGlyphs(exhaustLabels[0], scenario, practice.Surface.Camera); Assert.That(glyphs, Is.Not.Empty);
+                                    var bounds = Rect.MinMaxRect(glyphs.Min(r => r.xMin), glyphs.Min(r => r.yMin), glyphs.Max(r => r.xMax), glyphs.Max(r => r.yMax));
+                                    var ap = LegacyPracticePanel(practice.Host, "ApGem").GetComponentsInChildren<Text>().Single(text => text.text == practice.Client.Snapshot!.Battle!.Ap.ToString());
+                                    var neighbors = new[] { draw, discard, ap }.Concat(LegacyPracticePanel(practice.Host, "EndTurn").GetComponentsInChildren<Text>().Where(t => !string.IsNullOrWhiteSpace(t.text)));
+                                    foreach (var neighbor in neighbors)
+                                    {
+                                        var other = MobileVisibleGlyphs(neighbor, scenario, practice.Surface.Camera); Assert.That(other, Is.Not.Empty);
+                                        var otherBounds = Rect.MinMaxRect(other.Min(r => r.xMin), other.Min(r => r.yMin), other.Max(r => r.xMax), other.Max(r => r.yMax));
+                                        MobileSeparate(bounds, otherBounds, "actual exhaust count glyphs cannot overlap " + neighbor.name + " / " + neighbor.text + " at " + exhaustCount);
+                                    }
+                                });
+                            Assert.That(CanonicalState.Hash(practice.Client.Snapshot!.ToJsonGraph()), Is.EqualTo(unchanged), "a detached presentation projection cannot change the live Core graph");
+                            Assert.That(host.Posts, Is.Empty, "a detached presentation projection cannot POST");
+                        }
                     }
                     yield return null;
                 }

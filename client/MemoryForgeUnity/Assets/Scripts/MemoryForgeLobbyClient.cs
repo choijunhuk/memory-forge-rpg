@@ -194,9 +194,7 @@ namespace MemoryForge.Client
             homeRightShade = Shade(side, "RightShade", 1016, 0, 584, 900, new Color(0.025f, 0.035f, 0.07f, 0.88f), false);
             Shade(side, "IdentityShade", 32, 24, 620, 150, new Color(0.025f, 0.035f, 0.07f, 0.8f), true);
             var homeHeading = Label(side, "기억 공방", 56, 24, 480, 64, 42, Ink, FontStyle.Bold);
-            var homeSubtitle = Label(side, "동료와 다음 탐사를 준비해요.", 58, 112, 480, 64, 19, Muted);
-            homeSubtitle.rectTransform.anchoredPosition = new Vector2(homeSubtitle.rectTransform.anchoredPosition.x, -(24 + homeHeading.rectTransform.rect.height + 16));
-            Ornament(side, 58, 24 + homeHeading.rectTransform.rect.height + 16 + homeSubtitle.rectTransform.rect.height + 8, 310);
+            Ornament(side, 58, 24 + homeHeading.rectTransform.rect.height + 16, 310);
             float utilitySize = Math.Max(112, TouchUnits());
             UtilityButton(side, "OpenSettings", "설정", 1544 - utilitySize, utilitySize, () => Toggle(settingsPanel), true);
             if (!Application.isMobilePlatform) UtilityButton(side, "QuitGame", "종료", 1520 - utilitySize * 2, utilitySize, Application.Quit, false);
@@ -205,7 +203,7 @@ namespace MemoryForge.Client
 
             float dockHeight = Math.Max(120, TouchUnits()), dockY = 884 - dockHeight;
             float entryHeight = Math.Max(144, TouchUnits()), entryY = Math.Min(632, dockY - entryHeight - 16);
-            float destinationY = Math.Max(224, utilitySize + 96), destinationHeight = entryY - destinationY - 16;
+            float destinationY = Math.Max(224, 24 + utilitySize + 96 + 16), destinationHeight = entryY - destinationY - 16;
             var destination = Box(side, "ExpeditionDestination", 1040, destinationY, 504, destinationHeight, Panel);
             var map = SpriteAt("Art/Backgrounds/bg_zone1_map");
             float mapHeight = Math.Max(80, Math.Min(120, destinationHeight - 312));
@@ -216,8 +214,6 @@ namespace MemoryForge.Client
             Box(destination, "BrassEdge", 0, 0, 4, destinationHeight, Brass);
             var destinationTitle = Label(destination, "종탑 하층", 22, 12, 456, 64, 36, Ink, FontStyle.Bold);
             float destinationTextY = 12 + destinationTitle.rectTransform.rect.height + 12;
-            var destinationDescription = Label(destination, "전투 · 사건 · 기억 탐사", 24, destinationTextY, 456, 1, 19, Muted);
-            destinationTextY += destinationDescription.rectTransform.rect.height + 12;
             homePartyCaption = Label(destination, "연습 동행 3명", 24, destinationTextY, 456, 48, 18, Brass);
             homePartyStrip = Box(destination, "HomePartyStrip", 24, destinationTextY + homePartyCaption.rectTransform.rect.height + 8, 456, 80, Color.clear);
             for (int n = 0; n < PracticeParty.Count; n++)
@@ -606,8 +602,12 @@ namespace MemoryForge.Client
                         Label(portrait, "일러스트 준비 중", 12, 150, 280, 40, 18, Muted, FontStyle.Normal, TextAnchor.MiddleCenter);
                     }
                     Box(tile.transform, "ElementEdge", 0, cellH - footer, 312, 3, ElementColor(c.Attr));
-                    Label(tile.transform, c.Name, 16, cellH - footer + 12, 186, footer - 24, 27, Ink, FontStyle.Bold);
-                    Label(tile.transform, ElementName(c.Attr), 208, cellH - footer + 12, 88, footer - 24, 20, ElementColor(c.Attr), FontStyle.Normal, TextAnchor.MiddleRight);
+                    var name = Label(tile.transform, c.Name, 16, cellH - footer + 12, 186, footer - 24, 27, Ink, FontStyle.Bold);
+                    var element = Label(tile.transform, ElementName(c.Attr), 208, cellH - footer + 12, 88, footer - 24, 20, ElementColor(c.Attr), FontStyle.Normal, TextAnchor.MiddleRight);
+                    float elementWidth = Math.Max(88, Mathf.Ceil(element.preferredWidth) + 8);
+                    element.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, 16, elementWidth);
+                    name.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 16, Math.Max(1, tileRect.rect.width - 44 - elementWidth));
+                    MemoryForgeUiViewport.WholeText(name); MemoryForgeUiViewport.WholeText(element);
                     if (PracticeParty.Contains(c.Id)) Label(tile.transform, "편성", 12, 8, 84, 32, 18, Brass, FontStyle.Bold);
                     if (owned != null && owned.TryGetValue(c.Id, out int copies)) Label(tile.transform, "보유 · 공명 " + Math.Min(6, Math.Max(0, copies - 1)), 112, 8, 184, 32, 18, Memory, FontStyle.Bold, TextAnchor.MiddleRight);
                 }
@@ -698,7 +698,7 @@ namespace MemoryForge.Client
             var owned = AccountProgression?.Characters.FirstOrDefault(item => item.CharId == c.Id);
             if (owned != null) Button(detailPanel, "GrowOwnedCompanion", "성장 · 장비 공방", 752, footerY, 776, buttonHeight, () => OpenEquipmentFor(c.Id), Line, 27)
                 .interactable = !accountBusy && !growthBusy && !recruitmentBusy;
-            else Label(detailPanel, "동료 도감 정보 · 보유 동료는 성장 공방에서 육성할 수 있어요.", 752, footerY + 10, 776, buttonHeight - 20, 20, Muted);
+            else Label(detailPanel, "보유 동료 육성: 성장 공방", 752, footerY + 10, 776, buttonHeight - 20, 20, Muted);
         }
 
         float FlowLabel(RectTransform parent, string value, float y, int size, Color color, FontStyle style = FontStyle.Normal)

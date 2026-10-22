@@ -129,7 +129,8 @@ namespace MemoryForge.Client.Tests
             yield return null;
             var view = ActiveView(host); var b = entered.Battle; var rules = ClientBattleContent.Load().Battle.Rules;
             Canvas.ForceUpdateCanvases();
-            AssertReadable(view, t => t == "행동력  " + b.Ap, "AP");
+            var apGem = view.GetComponentsInChildren<Transform>().Single(t => t.name == "ApGem").gameObject;
+            AssertReadable(apGem, t => t == b.Ap.ToString(), "AP gem");
             AssertReadable(view, t => t.StartsWith("턴 종료", StringComparison.Ordinal), "end turn");
             foreach (var group in b.Enemies.GroupBy(e => e.Name)) AssertReadable(view, t => t == group.Key, "enemy " + group.Key, group.Count());
             foreach (var enemy in b.Enemies)

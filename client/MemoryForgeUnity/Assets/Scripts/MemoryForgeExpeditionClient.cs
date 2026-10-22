@@ -1551,16 +1551,25 @@ namespace MemoryForge.Client
             Piles(b);
         }
         // The draw pile at the hand's left end and the discard pile at its right end, each the kit's stack icon with its count beside it
-        // (KAZENA-BATTLE-20261019); the exhausted count, when there is one, under the draw pile. Decoration: no press.
+        // (KAZENA-BATTLE-20261019); on phones the exhausted count sits under the AP number. Decoration: no press.
         void Piles(BattleState b)
         {
-            bool phone = minTouch > 0; float icon = phone ? 30 : 44, lx = 22 + icon + 2;
-            Picture(frame!, "DrawPile", Kit("ui_pile_draw"), 22, HandTop - 2, icon, icon, Color.white);
-            Strong(Label(frame!, "뽑을 " + b.Zones.Draw.Count, lx, HandTop + (phone ? 0 : 6), 134 - lx, phone ? 22 : 26, phone ? 14 : 15, Ink, FontStyle.Normal, TextAnchor.MiddleLeft));
-            if (b.Zones.Exhaust.Count != 0) Label(frame!, "소멸 " + b.Zones.Exhaust.Count, lx, HandTop + (phone ? 21 : 28), 134 - lx, 20, 13, Muted, FontStyle.Normal, TextAnchor.MiddleLeft);
+            bool phone = minTouch > 0; float icon = phone ? 24 : 44, left = phone ? 10 : 22, lx = left + icon + 2;
+            Picture(frame!, "DrawPile", Kit("ui_pile_draw"), left, HandTop - 2, icon, icon, Color.white);
+            var draw = Strong(Label(frame!, (phone ? "덱" : "뽑을 ") + b.Zones.Draw.Count, lx, HandTop + (phone ? 0 : 6), 134 - lx, phone ? 22 : 26, phone ? 14 : 15, Ink, FontStyle.Normal, TextAnchor.MiddleLeft));
+            draw.gameObject.name = "DrawCount";
+            if (b.Zones.Exhaust.Count != 0)
+            {
+                var exhaust = Strong(Label(frame!, (phone ? "소멸" : "소멸 ") + b.Zones.Exhaust.Count, phone ? 0 : lx, HandTop + (phone ? 112 : 28), phone ? HandLeft : 134 - lx, 20, 13, Muted, FontStyle.Normal, phone ? TextAnchor.MiddleCenter : TextAnchor.MiddleLeft));
+                exhaust.gameObject.name = "ExhaustCount";
+            }
             float right = MemoryForgeUiViewport.Current.Mobile ? frame!.rect.width - 1600 : 0;
             Picture(frame!, "DiscardPile", Kit("ui_pile_discard"), 1522 + right, HandTop - 2, 44, 44, Color.white);
-            Strong(Label(frame!, "버림 " + b.Zones.Discard.Count, 1392 + right, HandTop + 6, 128, 26, 15, Ink, FontStyle.Normal, TextAnchor.MiddleRight));
+            var discard = Strong(Label(frame!, "버림" + b.Zones.Discard.Count, 1392 + right, HandTop + 6, 128, 26, 15, Ink, FontStyle.Normal, TextAnchor.MiddleRight));
+            discard.gameObject.name = "DiscardCount";
+            float width = Mathf.Min(1520 - HandRight - 6, Mathf.Max(128, Mathf.Ceil(discard.preferredWidth) + 8));
+            discard.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 1520 + right - width, width);
+            MemoryForgeUiViewport.WholeText(discard);
         }
         // The battle's bands (frame units, y down). On a phone the card row's controls grow to 48dp and the hand starts lower, so the
         // stage gives up the height; every other band keeps its place.
@@ -2080,8 +2089,8 @@ namespace MemoryForge.Client
             Deco(frame!, "ApGlow", Halo, x - 22, y - 22, d + 44, d + 44, Alpha(Brass, b.Ap > 0 ? 0.5f : 0.15f));
             var art = Picture(frame!, "ApGem", Kit("ui_gem_ap"), x - 8, y - 8, d + 16, d + 16, b.Ap > 0 ? Color.white : new Color(0.55f, 0.55f, 0.6f));
             var gem = art != null ? art.rectTransform : Gem(frame!, "ApGem", x, y, d, b.Ap > 0 ? Brass : Hex("6b5a3a"), Hex("7a5a22"));
-            float side = gem.rect.width;
-            Strong(Label(gem, b.Ap.ToString(), 0, 0, side, side, 50, art != null ? Ink : Background, FontStyle.Bold, TextAnchor.MiddleCenter));
+            float side = gem.rect.width, numberHeight = minTouch > 0 && b.Zones.Exhaust.Count != 0 ? side - 32 : side;
+            Strong(Label(gem, b.Ap.ToString(), 0, 0, side, numberHeight, 50, art != null ? Ink : Background, FontStyle.Bold, TextAnchor.MiddleCenter));
         }
         // The card row over the hand: the forecast (or the last command's notice) of exactly the request the confirm sends, then the
         // chosen card and its target, 카드 설명, one button per mode Core allows (cost and timing, or Core's refusal) and the confirm; a

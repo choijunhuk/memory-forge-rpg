@@ -558,6 +558,92 @@ namespace MemoryForge.Client.Tests
             finally { MobileResetCalibration(); MemoryForgeExpeditionClient.TouchOverride = null; MemoryForgeUiMotion.Reduced = reduced; }
         }
 
+        [UnityTest, Timeout(120000)]
+        public IEnumerator NativeSmallHomeRosterAndDetailsKeepEveryPublishedNameAndAttributeInsideItsOwnTile()
+        {
+            // Exact observed Android API36 viewport/DisplayMetrics; editor calibration is layout proof, not JNI/device proof.
+            var scenario = new MobileCase("native-small-1280x720-left68-density2-font130", 1280, 720, new Rect(68, 0, 1212, 720), 2, 1.3f);
+            bool reduced = MemoryForgeUiMotion.Reduced; MemoryForgeUiMotion.Reduced = true; var failures = new List<string>();
+            MobileApplyCalibration(scenario); EquipmentLobbyFixture();
+            var screen = new GameObject("NativeSmallRoster"); var lobby = screen.AddComponent<MemoryForgeLobbyClient>();
+            using (var surface = new MobileRenderSurface(scenario))
+            {
+                try
+                {
+                    yield return null; lobby.Player!.Stop(); lobby.ConnectRecruitment(() => Session());
+                    yield return Until(() => lobby.AccountProgression?.Resources != null && screen.GetComponentsInChildren<Button>(true).Any(b => b.name == "RefreshRecruitment" && b.interactable), "small viewport read-only fixture GET");
+                    yield return MobileSettle(surface, screen, MemoryForgeLobbyClient.OwnedCanvas, "small-home", failures);
+                    var home = MobilePanel(screen, "LobbySide");
+                    MobileCheck(failures, scenario.Name + "/home", () => { MobilePanelAcceptance(home, scenario, surface.Camera); MobileHomeEdges(screen, scenario, surface.Camera); MobileTouchHits(home, surface.Camera); });
+                    MobileClick(screen, "OpenCompanions"); yield return MobileSettle(surface, screen, MemoryForgeLobbyClient.OwnedCanvas, "small-roster", failures);
+                    var roster = MobilePanel(screen, "RosterPanel");
+                    MobileCheck(failures, scenario.Name + "/roster", () => { MobilePanelAcceptance(roster, scenario, surface.Camera); MobileTouchHits(roster, surface.Camera); });
+                    var definitions = ClientBattleContent.Load().Battle.Characters;
+                    var tiles = roster.GetComponentsInChildren<Button>().Where(b => b.name.StartsWith("Companion:", StringComparison.Ordinal)).ToArray();
+                    Assert.That(tiles.Select(b => b.name.Substring(10)), Is.EquivalentTo(definitions.Select(c => c.Id)), "the real published roster supplies all labels");
+                    var attributeNames = new Dictionary<string, string> { ["volt"] = "전격", ["flame"] = "화염", ["frost"] = "빙결", ["void"] = "공허" };
+                    foreach (var tile in tiles)
+                    {
+                        var definition = definitions.Single(c => tile.name == "Companion:" + c.Id);
+                        var tileRect = (RectTransform)tile.transform; var scroll = tile.GetComponentInParent<ScrollRect>(); Assert.That(scroll, Is.Not.Null);
+                        yield return MobileScrollButtonReachability(scroll, tile, scenario, surface.Camera, failures);
+                        yield return LegacyReveal(tile, surface.Camera); Canvas.ForceUpdateCanvases();
+                        MobileCheck(failures, scenario.Name + "/" + tile.name + "/actual-full-exposure", () =>
+                        {
+                            MobileInside(MobilePixels(tileRect, surface.Camera), MobilePixels(scroll.viewport, surface.Camera), "the inspected roster tile is fully exposed by a real scroll position");
+                            MobileInside(MobilePixels(tileRect, surface.Camera), scenario.Safe, "the inspected roster tile is fully inside safe pixels");
+                        });
+                        foreach (string expected in new[] { definition.Name, attributeNames[definition.Attr] })
+                            MobileCheck(failures, scenario.Name + "/" + tile.name + "/whole-rendered-glyphs/" + expected, () =>
+                            {
+                                var label = tile.GetComponentsInChildren<Text>().Single(t => t.transform.parent == tile.transform && t.text == expected);
+                                MobileWholeText(label, scenario, surface.Camera, expected == definition.Name ? 14 : 12);
+                                var mesh = label.canvasRenderer.GetMesh(); Assert.That(mesh, Is.Not.Null); var vertices = mesh.vertices;
+                                Assert.That(vertices.Length, Is.GreaterThanOrEqualTo(4), expected + " needs its real rendered glyph mesh");
+                                var own = MobilePixels(tileRect, surface.Camera); int drawn = 0;
+                                for (int first = 0; first + 3 < vertices.Length; first += 4)
+                                {
+                                    var points = Enumerable.Range(first, 4).Select(i => RectTransformUtility.WorldToScreenPoint(surface.Camera, label.rectTransform.TransformPoint(vertices[i]))).ToArray();
+                                    var glyph = Rect.MinMaxRect(points.Min(v => v.x), points.Min(v => v.y), points.Max(v => v.x), points.Max(v => v.y));
+                                    if (glyph.width <= 0.1f || glyph.height <= 0.1f) continue; drawn++;
+                                    // Use the un-clipped mesh: a viewport mask cannot hide a glyph escaping its own tile.
+                                    MobileInside(glyph, own, tile.name + " " + expected + " actual glyph=" + glyph + " must remain inside its own tile=" + own);
+                                    foreach (var other in tiles.Where(other => other != tile && Math.Abs(((RectTransform)other.transform).anchoredPosition.y - tileRect.anchoredPosition.y) > 1))
+                                        MobileSeparate(glyph, MobilePixels((RectTransform)other.transform, surface.Camera), expected + " glyph cannot spill into another roster row's " + other.name);
+                                }
+                                Assert.That(drawn, Is.GreaterThan(0), expected + " cannot pass with an empty rendered name/attribute");
+                            });
+                    }
+                    yield return MobileScrollEnds(roster, scenario, surface.Camera, failures);
+                    var longest = definitions.OrderByDescending(c => c.Passive.Text.Length + c.Ult.Text.Length).First();
+                    yield return MobileRevealRow((RectTransform)MobileButton(screen, "Companion:" + longest.Id).transform, surface.Camera, failures);
+                    MobileClick(screen, "Companion:" + longest.Id); yield return MobileSettle(surface, screen, MemoryForgeLobbyClient.OwnedCanvas, "small-details", failures);
+                    var details = MobilePanel(screen, "CompanionDetails");
+                    MobileCheck(failures, scenario.Name + "/details", () =>
+                    {
+                        MobilePanelAcceptance(details, scenario, surface.Camera); MobilePrimary(details, scenario, surface.Camera, longest.Name, 18);
+                        MobilePrimary(details, scenario, surface.Camera, longest.Passive.Text, 14); MobilePrimary(details, scenario, surface.Camera, longest.Ult.Text, 14);
+                    });
+                    yield return MobileScrollEnds(details, scenario, surface.Camera, failures);
+                    var unowned = definitions.Single(c => c.Id == "lumi");
+                    Assert.That(lobby.AccountProgression!.Characters.Any(c => c.CharId == unowned.Id), Is.False, "the informational footer must be exercised separately from the owned growth button");
+                    MobileClick(screen, "BackToRoster"); yield return MobileSettle(surface, screen, MemoryForgeLobbyClient.OwnedCanvas, "small-unowned-roster", failures);
+                    yield return MobileRevealRow((RectTransform)MobileButton(screen, "Companion:" + unowned.Id).transform, surface.Camera, failures);
+                    MobileClick(screen, "Companion:" + unowned.Id); yield return MobileSettle(surface, screen, MemoryForgeLobbyClient.OwnedCanvas, "small-unowned-details", failures);
+                    details = MobilePanel(screen, "CompanionDetails");
+                    MobileCheck(failures, scenario.Name + "/unowned-details", () =>
+                    {
+                        MobilePanelAcceptance(details, scenario, surface.Camera); MobileTouchHits(details, surface.Camera);
+                        MobilePrimary(details, scenario, surface.Camera, unowned.Name, 18);
+                    });
+                    Assert.That(host.Posts, Is.Empty, "small roster acceptance is read-only"); Assert.That(Outbox().Load(), Is.Null);
+                    Assert.That(failures, Is.Empty, string.Join("\n", failures));
+                }
+                finally { Object.Destroy(screen); MemoryForgeAccountConnection.SetCurrent(null); MobileResetCalibration(); MemoryForgeExpeditionClient.TouchOverride = null; MemoryForgeUiMotion.Reduced = reduced; }
+            }
+            yield return null;
+        }
+
         [UnityTest, Timeout(180000)]
         public IEnumerator MobileGrowthWorkshopAndBattleKeepWholePrimaryTextAnd48DpControls()
         {
@@ -606,6 +692,20 @@ namespace MemoryForge.Client.Tests
                             {
                                 MobilePanelAcceptance(frame, scenario, surface.Camera); MobileTouchHits(frame, surface.Camera);
                                 foreach (var text in MobilePanel(screen, "GrowthParty").GetComponentsInChildren<Text>().Where(t => t.transform.parent.name == "GrowthParty")) MobileWholeText(text, scenario, surface.Camera, 14);
+                                var ornaments = frame.GetComponentsInChildren<Image>().Where(image => image.name == "Ornament").ToArray();
+                                Assert.That(ornaments, Is.Not.Empty, "the authored decorative frames remain present");
+                                foreach (var ornament in ornaments)
+                                    foreach (var text in ornament.transform.parent.GetComponentsInChildren<Text>().Where(text => MobileVisible(text) && !text.canvasRenderer.cull && !string.IsNullOrWhiteSpace(text.text)))
+                                        Assert.That(ornament.canvasRenderer.absoluteDepth, Is.LessThan(text.canvasRenderer.absoluteDepth),
+                                            scenario.Name + "/" + ornament.transform.parent.name + " decorative frame covers foreground text " + text.text);
+                                float pixelUnit = MobilePixels(frame, surface.Camera).width / frame.rect.width;
+                                foreach (var button in frame.GetComponentsInChildren<Button>().Where(button => button.name.StartsWith("GrowthUlt:", StringComparison.Ordinal) || button.name.StartsWith("GrowthCard:", StringComparison.Ordinal)))
+                                    foreach (var text in button.GetComponentsInChildren<Text>().Where(text => text.transform.parent == button.transform))
+                                    {
+                                        var tile = MobilePixels((RectTransform)button.transform, surface.Camera); var label = MobilePixels(text.rectTransform, surface.Camera);
+                                        Assert.That(label.xMin - tile.xMin, Is.GreaterThanOrEqualTo(16 * pixelUnit - 1), "framed growth text needs a left gutter");
+                                        Assert.That(tile.yMax - label.yMax, Is.GreaterThanOrEqualTo(16 * pixelUnit - 1), "framed growth text needs a top gutter");
+                                    }
                             });
                             yield return MobileScrollEnds(frame, scenario, surface.Camera, failures);
 
@@ -619,6 +719,61 @@ namespace MemoryForge.Client.Tests
             }
             finally { MobileResetCalibration(); MemoryForgeExpeditionClient.TouchOverride = null; MemoryForgeUiMotion.Reduced = reduced; }
         }
+        [UnityTest, Timeout(120000)]
+        public IEnumerator MobileFullGrowthGaugeKeepsWholeLabelsAndFramesInsideTheirOwners()
+        {
+            var baseline = MobileCases().First(); var failures = new List<string>();
+            var cases = new[] {
+                new MobileCase("full-gauge-s24-font130", baseline.Width, baseline.Height, baseline.Safe, baseline.Density, 1.3f),
+                new MobileCase("full-gauge-native-small-font130", 1280, 720, new Rect(68, 0, 1212, 720), 2, 1.3f)
+            };
+            bool reduced = MemoryForgeUiMotion.Reduced; MemoryForgeUiMotion.Reduced = true;
+            try
+            {
+                foreach (var scenario in cases)
+                {
+                    MobileApplyCalibration(scenario); GrowthFixture(true);
+                    var state = (JObject)growthEncounters[GrowthEncounter]["state"]!;
+                    state["actors"]![0]!["gauge"] = state["gaugeMax"]!.DeepClone();
+                    using (var owner = new MemoryForgeAccountConnection(host.Endpoint, Account, Credential, RecordPath))
+                    using (var surface = new MobileRenderSurface(scenario))
+                    {
+                        MemoryForgeAccountConnection.SetCurrent(owner); var screen = new GameObject("FullGrowthGauge");
+                        var view = screen.AddComponent<MemoryForgeGrowthClient>();
+                        try
+                        {
+                            yield return Until(() => view.Snapshot != null && !view.Busy, "full gauge read-only fixture GET");
+                            yield return MobileSettle(surface, screen, MemoryForgeGrowthClient.OwnedCanvas, "full-gauge-growth", failures);
+                            var frame = MobilePanel(screen, "GrowthFrame");
+                            Assert.That(frame.GetComponentsInChildren<Text>().Count(text => text.text == "필살기"), Is.EqualTo(1), "the ultimate group keeps its readable action heading");
+                            foreach (var button in frame.GetComponentsInChildren<Button>().Where(button => button.name.StartsWith("GrowthUlt:", StringComparison.Ordinal)))
+                            {
+                                yield return LegacyReveal(button, surface.Camera); Canvas.ForceUpdateCanvases();
+                                MobileCheck(failures, scenario.Name + "/whole-full-gauge", () =>
+                                {
+                                    var caption = button.GetComponentInChildren<Text>(); Assert.That(caption.text, Does.Contain("100/100"));
+                                    MobileWholeText(caption, scenario, surface.Camera, 14);
+                                    MobileInside(MobilePixels(caption.rectTransform, surface.Camera), MobilePixels((RectTransform)button.transform, surface.Camera), "full gauge label must fit its own ultimate button");
+                                });
+                            }
+                            foreach (var rim in frame.GetComponentsInChildren<Image>().Where(image => image.name == "Ornament"))
+                                MobileCheck(failures, scenario.Name + "/rim-bounds/" + rim.transform.parent.name, () =>
+                                {
+                                    var actual = MobilePixels(rim.rectTransform, surface.Camera); var parent = MobilePixels((RectTransform)rim.transform.parent, surface.Camera);
+                                    Assert.That(actual.xMin, Is.EqualTo(parent.xMin).Within(1)); Assert.That(actual.xMax, Is.EqualTo(parent.xMax).Within(1), "frame rim must not extend beyond its actual resized parent");
+                                    Assert.That(actual.yMin, Is.EqualTo(parent.yMin).Within(1)); Assert.That(actual.yMax, Is.EqualTo(parent.yMax).Within(1));
+                                });
+                            Assert.That(host.Posts, Is.Empty, "full gauge layout never sends a command");
+                        }
+                        finally { Object.Destroy(screen); MemoryForgeAccountConnection.SetCurrent(null); }
+                    }
+                    yield return null;
+                }
+                Assert.That(failures, Is.Empty, string.Join("\n", failures));
+            }
+            finally { MobileResetCalibration(); MemoryForgeExpeditionClient.TouchOverride = null; MemoryForgeUiMotion.Reduced = reduced; }
+        }
+
         static Rect MobileIntersection(Rect a, Rect b)
         {
             float left = Mathf.Max(a.xMin, b.xMin), right = Mathf.Min(a.xMax, b.xMax), bottom = Mathf.Max(a.yMin, b.yMin), top = Mathf.Min(a.yMax, b.yMax);

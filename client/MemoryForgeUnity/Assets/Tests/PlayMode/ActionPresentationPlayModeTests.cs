@@ -210,7 +210,8 @@ namespace MemoryForge.Client.Tests
             int k = client.ActionPresentationShown;
             AssertReadable(view, t => t == "카드 사용 결과 " + k + "/" + rows.Count, "strip status");
             AssertReadable(view, t => t == StripText(rows, k), "strip rows");
-            AssertReadable(view, t => t == "행동력  " + b.Ap, "the actual AP");
+            var apGem = view.GetComponentsInChildren<Transform>().Single(t => t.name == "ApGem").gameObject;
+            AssertReadable(apGem, t => t == b.Ap.ToString(), "the actual AP gem");
 
             // The next intent by real rays during the display: accepted, pure, and its forecast on its own action line.
             string target = b.Enemies.First(e => e.Alive).Uid;
