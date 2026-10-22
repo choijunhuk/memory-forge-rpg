@@ -1,23 +1,27 @@
 {
-  "schema": "memory-forge-account-progression-verification-draft-v1",
-  "status": "IN_PROGRESS",
-  "draft": true,
-  "overallComplete": false,
+  "schema": "memory-forge-account-progression-verification-v1",
+  "status": "PASS_WITH_EXPLICIT_LIMITS",
+  "draft": false,
+  "overallComplete": true,
   "asOfDate": "2026-10-22",
-  "preparedAtUtc": "2026-10-22T12:54:48.749748+00:00",
+  "preparedAtUtc": "2026-10-22T13:58:52.047067+00:00",
   "documentationLane": {
     "mode": "documentation-only",
     "sourceAndExistingEvidenceRead": true,
     "newCodeOrTestsRun": false,
     "productionOrRuntimeOrPinEdits": false,
-    "privateAccountOrCredentialCopied": false
+    "privateAccountOrCredentialCopied": false,
+    "finalizedBy": "Root from fresh native/CI outputs"
   },
   "checkout": {
     "branch": "codex/followup-20261021",
     "baseCommit": "fc71caf6b50cc15d9445a3931eecd412be2165bc",
-    "commitSha": null,
-    "pullRequests": [],
-    "sourceFreeze": "ANDROID_OUTBOX_DELTA_ACTIVE_FINAL_IDENTIFICATION_PENDING"
+    "commitSha": "8d1b8d6ca02ead19b5c7cbb5064a425e42bc8a29",
+    "pullRequests": [
+      "https://github.com/choijunhuk/memory-forge-rpg/pull/2"
+    ],
+    "sourceFreeze": "REVIEWED_SOURCE_COMMITTED_NATIVE_PC_ANDROID_ACCEPTANCE_PASS",
+    "validatedSourceCommitSha": "8d1b8d6ca02ead19b5c7cbb5064a425e42bc8a29"
   },
   "scope": {
     "implementationSequence": [
@@ -83,13 +87,16 @@
       "supportAssertionsPassed": 1065,
       "sumOverlappingGroups": false,
       "evidenceKind": "read existing Root s4-core-all-final.log",
-      "finalFreezeRecheck": "FINAL_IDENTIFICATION_PENDING_ROOT"
+      "finalFreezeRecheck": "PASS_FINAL19_GROUPS_AND_REVIEWED61_SOURCE_MANIFEST"
     },
     "server": {
       "status": "PASS_RECORDED",
       "assertionsPassed": 3128,
       "evidenceKind": "read existing Root log s4-server-full.log",
-      "linuxPostgresClaim": false
+      "linuxPostgresClaim": false,
+      "linuxFileAssertions": 3044,
+      "linuxPostgresAssertions": 1692,
+      "countScope": "3128 local file invocation;3044 fresh Linux file;1692 PostgreSQL invocation; different invocations are not summed"
     },
     "domainRunners": {
       "status": "PASS_ROOT_FINAL_REPORTED",
@@ -201,11 +208,11 @@
         "evidenceKind": "read existing Root s4-live-fixes-pc-build.log"
       },
       "android": {
-        "status": "SUCCEEDED_RECORDED",
+        "status": "SUCCEEDED_RECORDED_NATIVE_FD_FINAL",
         "errors": 0,
         "warnings": 15,
-        "evidenceKind": "read existing Root s4-live-fixes-android-build.log",
-        "scope": "last successful observed build; a newer Android-only outbox fix rebuild is RUNNING"
+        "evidenceKind": "read android-native-fd-build.log",
+        "scope": "final Android native fd IL2CPP ARM64 build, installed and actual authentication/recruitment confirmed by Root"
       },
       "gameplayAcceptanceImplied": false
     },
@@ -271,7 +278,8 @@
       "personalAccountIncluded": false,
       "bearerIncluded": false,
       "machOOrApphostIncluded": false,
-      "privatePayloadCopiedToReport": false
+      "privatePayloadCopiedToReport": false,
+      "linuxPostgresStatus": "PASS_REGISTERED_TARGET_REAL_OWNER_FILE_AND_PG_CLI_AND_HTTP"
     },
     "regressionSuites": {
       "proposals": {
@@ -300,6 +308,34 @@
         "evidenceKind": "read s4-late-ui-final.log"
       },
       "nativeOrLiveAccountAcceptanceImplied": false
+    },
+    "androidNativeFd": {
+      "status": "PASS_FROZEN_AND_OPPOSITE_REVIEWED",
+      "androidOnly": true,
+      "nonAndroidBehaviorUnchanged": true,
+      "sourceHashes": {
+        "PracticeCommandOutbox.cs": "ca1a1800e97ac63ca506eca24ff4f094ac342f9043c3453bb40fe8a889e9ba94",
+        "PracticeAndroidFile.cs": "06999e9f45d2f660d6fbd228b21a99a532a9100e450ad6c9f187f75d1900b0cb"
+      },
+      "hostBoundaryChecks": {
+        "passed": 14,
+        "failed": 0,
+        "evidenceKind": "read android-native-fd-final14-root.log"
+      },
+      "actualUnityOutbox": {
+        "passed": 17,
+        "failed": 0,
+        "evidenceKind": "read android-native-fd-play.xml"
+      },
+      "normalPhoneRecruitment": "PASS_ROOT_NATIVE_OBSERVATION",
+      "nativeTestSourceSupplement": {
+        "sha256": "6565fa8c63414b729c37afdbb81ae31a46fb06ea7cf716305f3f6d39626c5141",
+        "status": "ROOT_PROVENANCE_SUPPLEMENT_COMPLETED",
+        "rootDiffInspection": "Only fault-injection skip/offset delta; flag validation, fd ownership, chmod-before-write and errno mapping unchanged. Snapshot copy and supplement receipt retained.",
+        "reviewResultUnmodified": true
+      },
+      "ciNamedNativeFd14": "PASS_14_OF_14",
+      "ciLinuxDirect2": "PASS_2_OF_2"
     }
   },
   "oppositeAiReview": {
@@ -392,6 +428,28 @@
         "receiptStatus": "RECEIVED_UNVERIFIED",
         "evidenceAvailability": "Root-retained official CLI receipt; not copied into this report",
         "testsRunByReviewer": false
+      },
+      {
+        "taskId": "ANDROID-NATIVE-FD-REVIEW-20261022",
+        "scopeVerdict": "PASS_FOR_REVIEWED_SNAPSHOT",
+        "summary": "**VERDICT: PASS.** I found no P1 or P2 issues in ANDROID-NATIVE-FD-REVIEW-20261022.",
+        "requestedModel": "claude-opus-5-5",
+        "requestedEffort": "max",
+        "processExit": 0,
+        "receiptStatus": "RECEIVED_UNVERIFIED",
+        "evidenceAvailability": "Root-retained official CLI receipt; not copied into this report",
+        "testsRunByReviewer": false
+      },
+      {
+        "taskId": "ANDROID-NATIVE-FD-FINAL-TESTS-20261022",
+        "scopeVerdict": "PASS_FOR_REVIEWED_SNAPSHOT",
+        "summary": "**VERDICT: PASS.** I found no P1 or P2 issues in ANDROID-NATIVE-FD-FINAL-TESTS-20261022.",
+        "requestedModel": "claude-opus-5-5",
+        "requestedEffort": "xhigh",
+        "processExit": 0,
+        "receiptStatus": "RECEIVED_UNVERIFIED",
+        "evidenceAvailability": "Root-retained official CLI receipt; not copied into this report",
+        "testsRunByReviewer": false
       }
     ],
     "historicalUiFailuresSupersededByFinalUiReview": true,
@@ -403,17 +461,21 @@
         "CI test reliability"
       ],
       "followupOppositeReview": "ACCOUNT-S4-FINAL-DELTA-REVIEW-20261022 PASS no P1/P2",
-      "finalSourceRuntimeIdentification": "PENDING_ROOT"
+      "finalSourceRuntimeIdentification": "PASS_CORE65bc74a1_SERVERd01d0a03_FROZEN_REVIEWED_RUNTIME"
     },
     "postFinalReviewAndroidOutboxDelta": {
-      "status": "ACTIVE_AUTHOR_WORK_AND_NARROW_REVIEW",
-      "scope": "Android player-only WouldBlock error code constant; flock/fchmod/atomic/exact retry behavior unchanged per Root",
-      "rootCause": "IL2CPP RuntimeInformation.GetOSName returns unknown on Android; WouldBlock previously0",
-      "proposedAndroidConstant": 11,
-      "targetedUnityOutboxChecks": "RUNNING",
-      "apkRebuild": "RUNNING",
-      "officialOppositeReview": "RUNNING",
-      "acceptance": "PENDING"
+      "status": "PASS_FROZEN_AND_OPPOSITE_REVIEWED",
+      "finalMechanism": "Android-only native fd open/flock/fchmod/write/fsync/close; nonAndroid unchanged",
+      "sourceHashes": {
+        "PracticeCommandOutbox.cs": "ca1a1800e97ac63ca506eca24ff4f094ac342f9043c3453bb40fe8a889e9ba94",
+        "PracticeAndroidFile.cs": "06999e9f45d2f660d6fbd228b21a99a532a9100e450ad6c9f187f75d1900b0cb"
+      },
+      "implementationReview": "ANDROID-NATIVE-FD-REVIEW-20261022 PASS no P1/P2, requested max",
+      "finalTestsReview": "ANDROID-NATIVE-FD-FINAL-TESTS-20261022 PASS no P1/P2, requested xhigh",
+      "lowProvenanceSupplement": "ROOT_COMPLETED; not a fabricated additional AI review",
+      "targetedUnityOutboxChecks": "17/17 PASS",
+      "hostBoundaryChecks": "14/14 PASS",
+      "apkRebuild": "SUCCEEDED_INSTALLED_AUTH_AND_NORMAL_RECRUITMENT_PASS"
     }
   },
   "runtimeSnapshot": {
@@ -422,7 +484,7 @@
     "coreSourceManifestSha256": "44e19ab66f155b5624182cb8d2cade23b0f41ec90283e722b6cb1421a4df4a86",
     "coreSourceFiles": 61,
     "serverSha256": "d01d0a03c27faeaace64f96973f6b120aa8baabe9699e00d1d23d37442aacadf",
-    "finalIntegratedFreeze": "ANDROID_OUTBOX_DELTA_ACTIVE_FINAL_IDENTIFICATION_PENDING"
+    "finalIntegratedFreeze": "ANDROID_NATIVE_FD_FROZEN_REVIEWED_APK_IDENTITY_RECORDED"
   },
   "localDevelopmentAccountMigration": {
     "status": "MIGRATED_ROOT_VERIFIED",
@@ -438,48 +500,59 @@
     "receiptsPreservedExact": 5,
     "revisionUnchanged": 5,
     "postMigrationEconomicWrites": "EXECUTED_AND_VERIFIED_IN_SAFE_AGGREGATES",
-    "tutorialOwnedGrowthRecruitJourney": "LIVE_TUTORIAL_CHAPTER1_MEMORY_COMMITS_GROWTH_ENTRY_AND_NATIVE_PC_SINGLE_PULL_CONFIRMED",
+    "tutorialOwnedGrowthRecruitJourney": "LIVE_TUTORIAL_CHAPTER1_MEMORY_COMMITS_GROWTH_ENTRY_PC_AND_PHONE_NORMAL_RECRUITMENT_CONFIRMED",
     "privateEnvelopeBackupOrAuthenticationPublished": false,
     "productionMigrationClaim": false
   },
   "nativeAcceptance": {
     "pc": {
-      "status": "FRESH_AUTH_PARSER_HOME_AND_GROWTH_PASS",
+      "status": "PASS_LATEST_NATIVE_RENDER_AUTH_PROFILE_AND_READONLY_JOURNEY",
       "observed": [
-        "actual app window home",
-        "catalogue detail click",
-        "one actual recruitment in prior run: tickets7to6, totalPulls22to23",
-        "fresh native auth and DONE parser PASS",
-        "fresh HOME AL5 owned3 and Growth AL5 through normal session click"
+        "HOME AL5, owned3",
+        "Growth AL5, NiaLv2, ink5800, credits9900",
+        "Nia equipment detail",
+        "current battle HP184/184",
+        "Nia/Harin/Rien gauge0/100 reachable by native horizontal strip drag",
+        "Settings",
+        "support selection honestly unavailable: all3owned in party",
+        "stored Rpolish/starlight15 result",
+        "authenticated HOME after read-only journey"
       ],
-      "authenticatedAccountJourney": "AUTH_AND_PROFILE_PASS; EQUIPMENT_AND_CURRENT_BATTLE_READONLY_NEXT",
+      "authenticatedAccountJourney": "PASS_AUTH_HOME_GROWTH_EQUIPMENT_CURRENT_BATTLE_SETTINGS_SUPPORT_STORED_RESULT",
       "humanManualAcceptanceClaim": false,
-      "cuaNativePipe": "FAILED_TOOL_BOUNDARY; Quartz native observation retained by Root",
-      "latestNativePid": 55890
+      "cuaNativePipe": "INITIAL_FAILURE_THEN_RECOVERED; final Quartz cgSession native events and fresh CUA observations",
+      "latestNativePid": 55890,
+      "nativeLatestRunMutations": 0,
+      "battleJournalVersionEvidence": "server-corrobated v0 only; not displayed in native UI",
+      "crossDeviceRefresh": "PASS_NORMAL_FOCUS_GET_WALLET900_TICKETS5_AFTER_PHONE_PULL; revision352 from Root normal verifier"
     },
     "phone": {
-      "status": "FRESH_AUTH_PASS_OUTBOX_STORAGE_BLOCKED",
-      "apkBytes": 131838379,
-      "apkSha256": "915e51de15030b8425572c8c4d1982b16ea6264099d0677c858ff8050c03aa58",
+      "status": "PASS_FRESH_APK_NATIVE_AUTH_RECRUITMENT_RESTART_CURRENT_GROWTH_AND_RETURN",
+      "apkBytes": 131848036,
+      "apkSha256": "a8da740897505f73e7e6fd06a1464151f5bd01ae0f4cbad2de261b3b469dea87",
       "installedPreservingAppData": true,
       "observed": [
-        "app-data-preserving APK installation",
-        "fresh home",
-        "touch login entry",
-        "actual authentication PASS",
-        "OUTBOX_UNSUPPORTED protective refusal"
+        "app-data-preserving final APK installation",
+        "authentication PASS",
+        "storage guard resolved",
+        "normal single recruitment R polish and starlight+15",
+        "physical lock mode0600",
+        "pending and temp absent after Confirm",
+        "process restart and normal reauthentication: wallet900/tickets5 and stored R result",
+        "current training HP184/184, turn1/AP4; three actors by horizontal strip",
+        "authenticated HOME restored after scene return"
       ],
       "actualAccountConnection": "AUTH_PASS",
-      "economicJourney": "PENDING_OUTBOX_STORAGE_ACCEPTANCE",
+      "economicJourney": "PASS_NORMAL_SINGLE_RECRUITMENT_AND_PERSISTED_RESULT_AFTER_PROCESS_RESTART",
       "humanManualAcceptanceClaim": false,
       "hostToolFailure": "Unity-bundled ADB34.0.5/libusb SIGABRT; process-only native USB repair with ADB35, not a game-code crash",
-      "apkIdentityEvidence": "Fresh build artifact bytes and SHA read; installation/home/touch observations supplied by Root",
+      "apkIdentityEvidence": "Final Android native fd artifact size/hash read; install, auth, normal recruitment and file observations supplied by Root",
       "authenticatedPublicTotals": {
         "freeCrystals": 900,
-        "standardTickets": 6
+        "paidCrystals": 0,
+        "standardTickets": 5
       },
       "installedApkIsUpcomingRebuild": false,
-      "upcomingApkIdentity": "PENDING_ROOT_REBUILD_RECEIPT",
       "outboxNativeProbe": {
         "status": "PASS_ROOT_REPORTED",
         "scope": "actual app UID internal and external persistent paths",
@@ -488,32 +561,59 @@
         "interprocessWouldBlock": true,
         "privateUidOrPathsPublished": false
       },
-      "apkIdentityScope": "last observed installed APK; not the upcoming Android-only outbox fix rebuild"
+      "apkIdentityScope": "latest reviewed native fd build installed on actual device",
+      "normalSingleRecruitment": {
+        "status": "PASS",
+        "rarity": "R",
+        "resultName": "연마석",
+        "starlightAdded": 15,
+        "standardTicketsBefore": 6,
+        "standardTicketsAfter": 5,
+        "totalStandardPullsBefore": 23,
+        "totalStandardPullsAfter": 24,
+        "revisionBefore": 351,
+        "revisionAfter": 352,
+        "freeCrystalsUnchanged": 900,
+        "paidCrystalsUnchanged": 0
+      },
+      "processReopen": "PASS_NORMAL_REAUTH_WALLET900_TICKETS5_RECENT_RESULT",
+      "currentGrowthReadAfterReopen": "PASS_HP184_3ACTOR_GAUGES_AND_AUTHENTICATED_HOME_RETURN",
+      "physicalFileEvidence": {
+        "lockMode": "OBSERVED_0600",
+        "pendingAfterConfirm": "ABSENT_OBSERVED",
+        "tempAfterConfirm": "ABSENT_OBSERVED",
+        "shortLivedRequestRecordMode": "NOT_OBSERVED_SAMPLING_TIMEOUT",
+        "requestRecord0600Assurance": "host14 private-mode regression plus source guarantee; no claim of actual-device request-record-mode observation"
+      },
+      "runtimeFatalCount": 0
     }
   },
   "ci": {
-    "status": "NOT_RUN",
-    "exactCommitSha": null,
-    "linuxPostgres": "NOT_RUN_UNTIL_PUSH",
+    "status": "PASS",
+    "exactCommitSha": "8d1b8d6ca02ead19b5c7cbb5064a425e42bc8a29",
+    "linuxPostgres": "PASS_FRESH_HEAD_FILE_HTTP_AND_PINNED_REGISTERED_PG16_OWNER_CLI_HTTP",
     "localDocker": "BLOCKED_ENVIRONMENT",
     "newSourceExactShaCiRequired": true,
-    "oldCiSubstitution": false
+    "oldCiSubstitution": false,
+    "namedAndroidNativeFd14": "PASS_14_OF_14",
+    "linuxDirectNativeFd2": "PASS_2_OF_2",
+    "pushRun": "https://github.com/choijunhuk/memory-forge-rpg/actions/runs/39786386457",
+    "pullRequestRun": "https://github.com/choijunhuk/memory-forge-rpg/actions/runs/39786371455",
+    "allLegacyChecks": "PASS_18_STEPS",
+    "freshLinuxFileServerAssertions": 3044,
+    "postgresServerAssertions": 1692,
+    "sourceValidationRun": "https://github.com/choijunhuk/memory-forge-rpg/actions/runs/39786386457",
+    "runId": 39786386457,
+    "reportCommitScope": "Evidence-only documentation follows this validated implementation commit; its own latest checks remain visible on PR2.",
+    "pullRequestResult": "PASS",
+    "pullRequestRunId": 39786371455
   },
-  "pending": [
-    "PC equipment and current-battle read-only acceptance",
-    "Android-only outbox delta targeted checks",
-    "Android-only outbox delta fresh APK build and identity",
-    "Android-only outbox delta opposite-AI review",
-    "phone outbox storage and economic acceptance",
-    "final source and runtime identification confirmation",
-    "commit and push",
-    "pull request",
-    "CI on exact pushed commit including Linux PostgreSQL"
-  ],
+  "pending": [],
   "currentHistoryPreservation": {
     "oldBytes": 72977,
     "oldSha256": "0465d9dac6e39d6808e8a3e476ce55e61d698419951cba39d2c6a63e9bca16ad",
-    "edit": "new latest header only; all earlier content preserved"
+    "edit": "new latest header only; all earlier content preserved",
+    "validation": "Removing only the new dated section reconstructs the prior72977-byte file with the recorded SHA256 exactly."
   },
   "publicationBoundary": "Only safe summaries and existing relative evidence links; no credentials, personal fixture, raw account store, private backup, host endpoint or private bundle location.",
   "documentationChecks": {
@@ -526,7 +626,7 @@
     "newApplicationTestsRun": false
   },
   "actualDevelopmentAccountProgress": {
-    "status": "PARTIAL_LIVE_SERVER_AND_NATIVE_PC_PASS",
+    "status": "LIVE_SERVER_AND_PC_PHONE_NATIVE_SINGLE_RECRUITMENT_PASS",
     "source": "Root-supplied safe aggregates; no private account record read or copied for this update",
     "tutorialMemoryCommit": "LIVE_PASS",
     "chapter1MemoryCommit": "LIVE_PASS",
@@ -551,10 +651,52 @@
       "revisionAfter": 351
     },
     "normalRootStoreVerifier": {
-      "status": "PASS_ROOT_REPORTED",
-      "receipts": 351
+      "status": "PASS_ROOT_NORMAL_FULL_VERIFY",
+      "revision": 352,
+      "uniqueReceipts": 352,
+      "receiptFamilies": {
+        "run": 313,
+        "recruitment": 7,
+        "growth": 32
+      },
+      "memoryVersion": 2,
+      "recursiveReceiptObjectsIncludingDuplicates": 353,
+      "recursiveCountIsUniqueCount": false
     },
     "oldFiveReceiptBodyStringsPreserved": true,
-    "finalFreshNativeAuthentication": "PC_AND_PHONE_AUTH_PASS; PHONE_STORAGE_ECONOMIC_ACCEPTANCE_PENDING"
-  }
+    "finalFreshNativeAuthentication": "PASS_LATEST_PC_AND_ANDROID_AUTH; ANDROID_PROCESS_REOPEN_RECENT_RESULT_GROWTH_HP184_HOME_RETURN",
+    "phoneSingleRecruitment": {
+      "status": "PASS",
+      "rarity": "R",
+      "resultName": "연마석",
+      "starlightAdded": 15,
+      "standardTicketsBefore": 6,
+      "standardTicketsAfter": 5,
+      "totalStandardPullsBefore": 23,
+      "totalStandardPullsAfter": 24,
+      "revisionBefore": 351,
+      "revisionAfter": 352,
+      "freeCrystalsUnchanged": 900,
+      "paidCrystalsUnchanged": 0
+    },
+    "existingReceiptEntriesExactPreserved": true
+  },
+  "manualVisualJudgment": "USER_NOT_RECORDED",
+  "artCoverage": {
+    "status": "PARTIAL_EXISTING_ART_NO_GENERATION_IN_THIS_TASK",
+    "lobbyPortraitsAvailable": 7,
+    "sdAvailable": 3,
+    "dedicatedCutinAvailable": 2,
+    "totalCompanions": 10,
+    "noRuntimePortrait": [
+      "yuri",
+      "rien",
+      "kaya"
+    ],
+    "growthGaugeUsesSdOnly": true,
+    "existingRienConceptBoard": "candidate only; no verified production approval",
+    "humanFinalVisualAcceptance": "NOT_RECORDED"
+  },
+  "productionAuthOrPaymentClaim": false,
+  "completionScope": "Approved S0-S4 implementation, preservation, local/native verification and exact-source CI; excludes production release/auth/payments, missing character art, and human visual acceptance."
 }
