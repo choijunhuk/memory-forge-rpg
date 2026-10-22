@@ -890,9 +890,15 @@ namespace MemoryForge.Client
             }
         }
 
-        [DllImport("libc", SetLastError = true)]
+#if UNITY_EDITOR_OSX || (UNITY_STANDALONE_OSX && !UNITY_EDITOR)
+        // Unity's macOS player probes relative libc names as plugins; resolve the system library directly.
+        const string NativeLibrary = "/usr/lib/libSystem.B.dylib";
+#else
+        const string NativeLibrary = "libc";
+#endif
+        [DllImport(NativeLibrary, SetLastError = true)]
         static extern int flock(int fd, int operation);
-        [DllImport("libc", SetLastError = true)]
+        [DllImport(NativeLibrary, SetLastError = true)]
         static extern int fchmod(int fd, uint mode);
 
         static PracticeOutboxException Busy() => Fail(PracticeOutboxException.Busy, "Another outbox operation holds the lock; nothing was changed. Retry later.");

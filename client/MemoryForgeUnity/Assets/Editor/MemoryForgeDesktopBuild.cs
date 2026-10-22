@@ -14,6 +14,7 @@ public static class MemoryForgeDesktopBuild
         Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(output)));
         // PC review often opens the player behind Codex; keep its first frame and async receipts running without focus.
         PlayerSettings.runInBackground = true;
+        PlayerSettings.insecureHttpOption = InsecureHttpOption.DevelopmentOnly;
         var report = BuildPipeline.BuildPlayer(new BuildPlayerOptions
         {
             scenes = new[] { "Assets/Scenes/MemoryForgeLobby.unity", "Assets/Scenes/MemoryForgeExpedition.unity", "Assets/Scenes/MemoryForgeServerPractice.unity", "Assets/Scenes/MemoryForgeGrowth.unity" },
