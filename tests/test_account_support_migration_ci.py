@@ -199,6 +199,55 @@ class AccountSupportCiTests(unittest.TestCase):
             self.assertTrue(failure.exception.__suppress_context__)
             self.assertEqual(log.stat().st_mode & 0o777, 0o600)
 
+    def test_support_failure_hints_keep_raw_diagnostics_private_and_preserve_failure(self):
+        cases = [
+            ("SupportGaugeBotChecks: 9 passed (isolated Core regression)\nSystem.Exception: real battle ended before naturally earned support gauge", "GAUGE_BATTLE_ENDED"),
+            ("System.Exception: SupportGaugeBotChecks: unit-only-secret-label", "GAUGE_BOT_REGRESSION"),
+            ("System.TimeoutException: unit-only-secret-path", "TIMEOUT"),
+            ("System.Threading.Tasks.TaskCanceledException: unit-only-secret-token", "TIMEOUT"),
+            ("System.Exception: real battle ended before naturally earned support gauge", "GAUGE_BATTLE_ENDED"),
+            ("System.Exception: story no battle", "STORY_BATTLE_ABSENT"),
+            ("MemoryForge.Server.ApiError: unit-only-secret-code", "API_REFUSAL"),
+            ("System.MissingMethodException: unit-only-secret-member", "RUNTIME_BINDING"),
+            ("unit-only-secret-unknown support_hint=TIMEOUT", "UNCLASSIFIED"),
+        ]
+        for index, (message, expected) in enumerate(cases):
+            for stage in ("HEAD_FILE_SUPPORT_HTTP", "PINNED_POSTGRES_SUPPORT_HTTP"):
+                log = self.base / (str(index) + stage + ".log")
+                script = "import sys;sys.stderr.write(sys.argv[1]);sys.exit(7)"
+                with self.subTest(stage=stage, expected=expected), self.assertRaises(GATE.GateError) as failure:
+                    GATE.run_private([sys.executable, "-c", script, "unit-only-secret-prefix\n" + message], log, os.environ.copy(), stage=stage)
+                public = str(failure.exception)
+                self.assertIn("child_exit=7 code=CHILD_NONZERO support_hint=" + expected + ";", public)
+                self.assertNotIn("unit-only-secret", public)
+                self.assertIn(message, log.read_text())
+                self.assertEqual(log.stat().st_mode & 0o777, 0o600)
+
+    def test_support_diagnostic_hint_is_bounded_and_missing_logs_never_hide_child_failure(self):
+        log = self.base / "bounded-support.log"
+        message = b"unit-only-secret" * 6000 + b"\nSystem.TimeoutException: private-tail"
+        script = "import sys;sys.stdout.buffer.write(b'unit-only-secret'*6000+b'\\nSystem.TimeoutException: private-tail');sys.exit(8)"
+        with self.assertRaises(GATE.GateError) as failure:
+            GATE.run_private([sys.executable, "-c", script], log, os.environ.copy(), stage="HEAD_FILE_SUPPORT_HTTP")
+        self.assertIn("child_exit=8 code=CHILD_NONZERO support_hint=TIMEOUT;", str(failure.exception))
+        self.assertNotIn("unit-only-secret", str(failure.exception))
+        self.assertEqual(log.read_bytes(), message)
+
+        script = "import sys;sys.stdout.buffer.write(b'System.TimeoutException: private-prefix\\n'+b'unit-only-secret'*6000);sys.exit(8)"
+        with self.assertRaises(GATE.GateError) as failure:
+            GATE.run_private([sys.executable, "-c", script], log, os.environ.copy(), stage="HEAD_FILE_SUPPORT_HTTP")
+        self.assertIn("support_hint=UNCLASSIFIED;", str(failure.exception))
+        self.assertNotIn("unit-only-secret", str(failure.exception))
+
+        def removed_log(*args, **kwargs):
+            log.unlink()
+            return subprocess.CompletedProcess(args[0], -9)
+
+        with patch.object(GATE.subprocess, "run", side_effect=removed_log), self.assertRaises(GATE.GateError) as failure:
+            GATE.run_private(["unit-only-secret-command"], log, {}, stage="PINNED_POSTGRES_SUPPORT_HTTP")
+        self.assertIn("child_exit=-9 code=CHILD_NONZERO support_hint=UNCLASSIFIED;", str(failure.exception))
+        self.assertNotIn("unit-only-secret", str(failure.exception))
+
     def test_invalid_or_custom_stages_are_refused_before_logging_or_execution(self):
         class CustomStage(str):
             def __format__(self, spec):

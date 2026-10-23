@@ -34,6 +34,24 @@ CHILD_STAGES = frozenset({
 })
 
 
+SUPPORT_FAILURE_HINTS = (
+    ("System.Exception: SupportGaugeBotChecks:", "GAUGE_BOT_REGRESSION"),
+    ("System.TimeoutException:", "TIMEOUT"),
+    ("System.Threading.Tasks.TaskCanceledException:", "TIMEOUT"),
+    ("real battle ended before naturally earned support gauge", "GAUGE_BATTLE_ENDED"),
+    ("natural gauge bound", "GAUGE_NOT_REACHED"),
+    ("story no battle", "STORY_BATTLE_ABSENT"),
+    ("story caller100 earned by actual non-damaging card plays", "STORY_GAUGE_NOT_REACHED"),
+    ("flat typed query binds caller/frozen partner/request target without fake hand UID", "QUERY_ASSERTION"),
+    ("actual Core spends caller100 and marks one Battle use", "GAUGE_ASSERTION"),
+    ("no fourth owned companion with four usable instances", "ASSIGNMENT_UNAVAILABLE"),
+    ("MemoryForge.Server.ApiError:", "API_REFUSAL"),
+    ("System.MissingMethodException:", "RUNTIME_BINDING"),
+    ("System.TypeLoadException:", "RUNTIME_BINDING"),
+    ("System.IO.FileLoadException:", "RUNTIME_BINDING"),
+)
+
+
 class GateError(Exception):
     """Only fixed, non-secret diagnostics may reach CI stdout/stderr."""
 
@@ -201,7 +219,19 @@ def run_private(command, log, env, data=None, timeout=7200, *, stage):
             raise GateError(f"A CI child timed out; stage={stage} child_exit=unavailable code=CHILD_TIMEOUT; see private diagnostics.") from None
         except OSError:
             raise GateError(f"A CI child could not start; stage={stage} child_exit=unavailable code=CHILD_SPAWN_FAILED; see private diagnostics.") from None
-    require(result.returncode == 0, f"A CI child returned failure; stage={stage} child_exit={result.returncode} code=CHILD_NONZERO; see private diagnostics.")
+    hint = ""
+    if result.returncode != 0 and stage in ("HEAD_FILE_SUPPORT_HTTP", "PINNED_POSTGRES_SUPPORT_HTTP"):
+        reason = "UNCLASSIFIED"
+        try:
+            with log.open("rb") as tail:
+                tail.seek(0, os.SEEK_END)
+                tail.seek(max(0, tail.tell() - 65536))
+                text = tail.read(65536).decode("utf-8", "replace")
+            reason = next((code for message, code in SUPPORT_FAILURE_HINTS if message in text), reason)
+        except OSError:
+            pass  # Diagnostic reads must not replace the original child failure.
+        hint = " support_hint=" + reason
+    require(result.returncode == 0, f"A CI child returned failure; stage={stage} child_exit={result.returncode} code=CHILD_NONZERO{hint}; see private diagnostics.")
 
 
 def run_gate(bundle, provenance, context, pgbin):

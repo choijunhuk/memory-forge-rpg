@@ -25,7 +25,9 @@ static class SupportChecks
     }
     static async Task Journey(string root,string migrated,string? postgresFile,bool http)
     {
-        var content=PracticeContent.Load(root);var account=new PracticeAccount("growth-check",new byte[32],"short",new List<Dictionary<string,object?>>{GraphJson.Object("charId","sera")});byte[] initial=File.ReadAllBytes(migrated);
+        var content=PracticeContent.Load(root);
+        Console.WriteLine("SupportGaugeBotChecks: "+SupportGaugeBotChecks.Run(content.Data.Memory.Battle)+" passed (isolated Core regression; not account/HTTP proof)");
+        var account=new PracticeAccount("growth-check",new byte[32],"short",new List<Dictionary<string,object?>>{GraphJson.Object("charId","sera")});byte[] initial=File.ReadAllBytes(migrated);
         var start=AccountStoreVerifier.Verify(content,account,initial,out var original);Check(start.GrowthReceipts==993,"full S3-earned prefix normally verified at this exact new Core binding");
         string directory=Path.Combine(Path.GetTempPath(),"mf-support-earned-"+Id());Directory.CreateDirectory(directory,UnixFileMode.UserRead|UnixFileMode.UserWrite|UnixFileMode.UserExecute);
         PostgresEnvelopePersistence? postgres=postgresFile==null?null:await PostgresEnvelopePersistence.OpenAsync(PostgresSettings.ConnectionString(postgresFile,root));
@@ -136,7 +138,7 @@ static class SupportChecks
                         var b=run!.State.Battle??throw new Exception("story no battle");var caller=b.Actors.FirstOrDefault(a=>a.Gauge>=100);string target=b.Enemies.First(e=>e.Alive).Uid;
                         if(caller!=null)return Reply.Json(200,GraphJson.Object("caller",caller.Id,"target",target));
                         var defensive=b.Zones.Hand.Where(uid=>run.BattleCheck(uid,"now",target)==null).Select(uid=>(Uid:uid,Forecast:run.BattleForecast(uid,"now",target)))
-                            .Where(p=>!p.Forecast.Hidden&&p.Forecast.Error==null&&p.Forecast.EnemyHpLoss==0).OrderByDescending(p=>p.Forecast.BlockDelta+p.Forecast.HpDelta).ThenBy(p=>p.Uid,StringComparer.Ordinal).FirstOrDefault();
+                            .Where(p=>!p.Forecast.Hidden&&p.Forecast.Error==null&&p.Forecast.EnemyHpLoss==0&&SupportGaugeBot.Allows(content.Data.Memory.Battle,b,p.Uid,target)).OrderByDescending(p=>p.Forecast.BlockDelta+p.Forecast.HpDelta).ThenBy(p=>p.Uid,StringComparer.Ordinal).FirstOrDefault();
                         if(defensive.Uid!=null)return Reply.Json(200,GraphJson.Object("kind","play","args",GraphJson.Object("uid",defensive.Uid,"mode","now","target",target)));
                         return Reply.Json(200,GraphJson.Object("kind","end","args",GraphJson.Object()));
                     });
@@ -180,7 +182,7 @@ static class SupportChecks
             var x=await Read();var battle=x.GrowthCache!.Battles[id];var b=battle.State;string target=b.Enemies.Where(t=>t.Alive).OrderByDescending(t=>t.Hp).First().Uid;
             var legal=b.Zones.Hand.Where(uid=>battle.Check(uid,"now",target)==null).Select(uid=>(Uid:uid,Forecast:battle.Forecast(uid,"now",target))).ToList();
             // Hidden forecasts contain zero placeholders; they are not proof that a real card deals no damage.
-            if(conserve)legal=legal.Where(p=>!p.Forecast.Hidden&&p.Forecast.Error==null&&p.Forecast.EnemyHpLoss==0).ToList();
+            if(conserve)legal=legal.Where(p=>!p.Forecast.Hidden&&p.Forecast.Error==null&&p.Forecast.EnemyHpLoss==0&&SupportGaugeBot.Allows(content.Data.Memory.Battle,b,p.Uid,target)).ToList();
             if(!conserve){var ult=b.Actors.FirstOrDefault(a=>a.Gauge>=100);if(ult!=null){await Command(id,"ult",GraphJson.Object("actor",ult.Id,"target",target));return;}}
             if(legal.Count==0){await Command(id,"end",GraphJson.Object());return;}var chosen=conserve?legal.OrderByDescending(p=>p.Forecast.BlockDelta+p.Forecast.HpDelta).ThenBy(p=>p.Uid,StringComparer.Ordinal).First():legal.OrderByDescending(p=>p.Forecast.EnemyHpLoss).First();await Command(id,"play",GraphJson.Object("uid",chosen.Uid,"mode","now","target",target));
         }
