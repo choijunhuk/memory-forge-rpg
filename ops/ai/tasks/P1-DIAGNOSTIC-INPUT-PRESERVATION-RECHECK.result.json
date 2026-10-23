@@ -1,0 +1,28 @@
+{
+  "task_id": "P1-DIAGNOSTIC-INPUT-PRESERVATION-RECHECK",
+  "run_id": "P1-DIAGNOSTIC-INPUT-PRESERVATION-RECHECK-20261016T003104845425Z",
+  "status": "RECEIVED_UNVERIFIED",
+  "requestedEffort": "high",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "changes_verified": false,
+  "raw_output": "ops/ai/local/P1-DIAGNOSTIC-INPUT-PRESERVATION-RECHECK-20261016T003104845425Z*",
+  "billing_verified_at": "2026-10-15T21:22:01.277612+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "codex/csharp-battle-opening",
+  "base_commit": "2ffc29ecdbdeee5027258ad6f73302b98820fc35",
+  "worktree": "/Users/choi/.codex/worktrees/csharp-battle-opening/Memory_forge",
+  "allowed_files": [
+    "reports/requirements_status_20261016/input_preservation_recheck.md"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "87e13a8c-c543-48f9-a850-cda68299b85b",
+  "subtype": "success",
+  "is_error": false,
+  "result": "**Verdict: APPROVE.** I ran nothing (no Bash, no hashing), so I couldn't confirm the byte-for-byte SHA match myself.\n\n**What I checked**\n- **Script matches the original:** `tools/run_all_checks.sh:37` is the original 9-entry `not_done` line, word for word. The new wording is gone, and the earlier edit was the file's only change. All three manifest rows still give the original SHA `34f4b54447d4fdf6a1ced5cc3cb9076b505e81d4b292c78151ac91f79d4f7257` (3372 bytes), and it matches the archived original. `.gitattributes` keeps line endings as LF, so checkout won't change the bytes.\n- **Red/green evidence:** the red receipt shows 30 changed paths vs 29 expected, with `run_all_checks.sh` the only unexpected one. The green receipt shows 29, nothing regenerated and the fixture unchanged. I didn't run either; they're your receipts.\n- **No weakening:** `ManifestAudit` still checks the size and SHA of every entry. The JS test still checks for 423 entries, `manifestMatch: false`, `regenerated: false` and the 4 CSV exclusions. I found no allowlist entry for the script.\n- **Labels kept:** the 4 checker-only scope labels in the C# check files are still the new text, which is correct because those files aren't original-manifest inputs. The status ledger rows are unchanged.\n\n**Notes (not blocking)**\n- `recheck.md` and `diagnostic_labels.diff` still describe the two-description edit to the script. Treat them as history, not the current state. Rewording `not_done` later would need its own approval as a 30th changed input.\n- CI `engine_tests`/`csharp_checks` and the C# runtime are still re-running and not PASS yet. Don't merge until both are green.\n\n**Changed file:** `reports/requirements_status_20261016/input_preservation_recheck.md` (the only file I edited). This environment doesn't give me a session_id, so take it from the CLI session metadata.",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ]
+}

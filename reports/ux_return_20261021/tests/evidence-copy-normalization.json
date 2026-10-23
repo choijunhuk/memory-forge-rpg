@@ -1,0 +1,25 @@
+{
+  "reason": "Unity/NUnit stacktrace lines contain trailing whitespace; original raw logs/XML remain untouched in local ops evidence. Only right-edge spaces/tabs are removed in published text copies; test nodes/assertions/results unchanged.",
+  "files": [
+    {
+      "path": "tests/resume-related-green.xml",
+      "original_sha256": "05ba374f3427fcf2abf5fa800df797e8879d2782630d3ecf15358bdb677bc2ab",
+      "published_sha256": "474ba7e083a76c98f1a333bea43f2ad8bdd4f3edd49a7aeef16d5e8dd598138d"
+    },
+    {
+      "path": "tests/final-capture.xml",
+      "original_sha256": "9c59e2aa683e99ad3008eea964f9334cac494502de96d7eacd71d81c41d770ea",
+      "published_sha256": "b118198b6546d408b42c9b05614c9eb24dff3d431a641e33b92ffe19b8d47286"
+    },
+    {
+      "path": "tests/polish-red.xml",
+      "original_sha256": "151f6b3ebe6dbfd1abc8b7762cacd1d4060114de03acc6822a7223b1469cf1c0",
+      "published_sha256": "5086773dc7fd41b5a38cb5c115d7b42574dc06ea25dc885046e8451e6364669a"
+    },
+    {
+      "path": "tests/full-playmode.xml",
+      "original_sha256": "cebd0b0e5b35626dd628248112f0cb293bd3c3c4d77fa0a3d89f44f86eb51e90",
+      "published_sha256": "e999c1a27018e9549539e1fb565d074489c296ac9e5aa3357d340f4d76831f1f"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "name": "MemoryForge.EditorTests",
+  "references": ["UnityEngine.UI"],
+  "includePlatforms": ["Editor"],
+  "optionalUnityReferences": ["TestAssemblies"],
+  "autoReferenced": false
+}

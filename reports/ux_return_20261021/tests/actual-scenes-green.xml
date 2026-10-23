@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="10" result="Passed" total="10" passed="10" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-21 10:40:19Z" end-time="2026-10-21 10:40:34Z" duration="15.5849023">
+  <test-suite type="TestSuite" id="1478" name="Memory Forge" fullname="Memory Forge" runstate="Runnable" testcasecount="419" result="Passed" start-time="2026-10-21 10:40:19Z" end-time="2026-10-21 10:40:34Z" duration="15.584902" total="10" passed="10" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1470" name="MemoryForge.PlayModeTests.dll" fullname="/Users/choi/.codex/worktrees/memoryforge-followup/Memory_forge/client/MemoryForgeUnity/Library/ScriptAssemblies/MemoryForge.PlayModeTests.dll" runstate="Runnable" testcasecount="419" result="Passed" start-time="2026-10-21 10:40:19Z" end-time="2026-10-21 10:40:34Z" duration="15.578659" total="10" passed="10" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="66284" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1471" name="MemoryForge" fullname="MemoryForge" runstate="Runnable" testcasecount="419" result="Passed" start-time="2026-10-21 10:40:19Z" end-time="2026-10-21 10:40:34Z" duration="15.575947" total="10" passed="10" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1473" name="Client" fullname="MemoryForge.Client" runstate="Runnable" testcasecount="349" result="Passed" start-time="2026-10-21 10:40:19Z" end-time="2026-10-21 10:40:34Z" duration="15.571232" total="10" passed="10" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1474" name="Tests" fullname="MemoryForge.Client.Tests" runstate="Runnable" testcasecount="349" result="Passed" start-time="2026-10-21 10:40:19Z" end-time="2026-10-21 10:40:34Z" duration="15.569351" total="10" passed="10" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1176" name="ExpeditionReturnNavigationPlayModeTests" fullname="MemoryForge.Client.Tests.ExpeditionReturnNavigationPlayModeTests" classname="MemoryForge.Client.Tests.ExpeditionReturnNavigationPlayModeTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-10-21 10:40:19Z" end-time="2026-10-21 10:40:19Z" duration="0.443437" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1177" name="AnAbandonedExpeditionOffersAWorkshopExitWithoutAutomaticallyDeparting" fullname="MemoryForge.Client.Tests.ExpeditionReturnNavigationPlayModeTests.AnAbandonedExpeditionOffersAWorkshopExitWithoutAutomaticallyDeparting" methodname="AnAbandonedExpeditionOffersAWorkshopExitWithoutAutomaticallyDeparting" classname="MemoryForge.Client.Tests.ExpeditionReturnNavigationPlayModeTests" runstate="Runnable" seed="1010327913" result="Passed" start-time="2026-10-21 10:40:19Z" end-time="2026-10-21 10:40:19Z" duration="0.437424" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1206" name="HomeReturnAcceptancePlayModeTests" fullname="MemoryForge.Client.Tests.HomeReturnAcceptancePlayModeTests" classname="MemoryForge.Client.Tests.HomeReturnAcceptancePlayModeTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-10-21 10:40:19Z" end-time="2026-10-21 10:40:26Z" duration="6.332159" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1208" name="ActualHomeAndExpeditionScenesPreserveSavedMemoryAndRequireEveryDeparture" fullname="MemoryForge.Client.Tests.HomeReturnAcceptancePlayModeTests.ActualHomeAndExpeditionScenesPreserveSavedMemoryAndRequireEveryDeparture" methodname="ActualHomeAndExpeditionScenesPreserveSavedMemoryAndRequireEveryDeparture" classname="MemoryForge.Client.Tests.HomeReturnAcceptancePlayModeTests" runstate="Explicit" seed="1636767681" result="Passed" start-time="2026-10-21 10:40:19Z" end-time="2026-10-21 10:40:25Z" duration="5.678211" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="Timeout" value="300000" />
+                  <property name="_SKIPREASON" value="loads the shipped home and expedition scenes; writes MF_HOME_RETURN_SHOTS" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1207" name="HomeHandoffShowsTheActualReturnOnceAndPreselectsTheHeldLengthWithoutDeparting" fullname="MemoryForge.Client.Tests.HomeReturnAcceptancePlayModeTests.HomeHandoffShowsTheActualReturnOnceAndPreselectsTheHeldLengthWithoutDeparting" methodname="HomeHandoffShowsTheActualReturnOnceAndPreselectsTheHeldLengthWithoutDeparting" classname="MemoryForge.Client.Tests.HomeReturnAcceptancePlayModeTests" runstate="Runnable" seed="1182650544" result="Passed" start-time="2026-10-21 10:40:25Z" end-time="2026-10-21 10:40:26Z" duration="0.652360" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1209" name="LobbyMomentCapturePlayModeTests" fullname="MemoryForge.Client.Tests.LobbyMomentCapturePlayModeTests" classname="MemoryForge.Client.Tests.LobbyMomentCapturePlayModeTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-10-21 10:40:26Z" end-time="2026-10-21 10:40:29Z" duration="3.397104" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1212" name="CaptureHomeAndSortie" fullname="MemoryForge.Client.Tests.LobbyMomentCapturePlayModeTests.CaptureHomeAndSortie" methodname="CaptureHomeAndSortie" classname="MemoryForge.Client.Tests.LobbyMomentCapturePlayModeTests" runstate="Explicit" seed="471854350" result="Passed" start-time="2026-10-21 10:40:26Z" end-time="2026-10-21 10:40:27Z" duration="1.654052" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="_SKIPREASON" value="writes report screenshots; run by name with MF_EXPEDITION_SHOTS" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1211" name="CaptureHomeCatalogueAndDetails" fullname="MemoryForge.Client.Tests.LobbyMomentCapturePlayModeTests.CaptureHomeCatalogueAndDetails" methodname="CaptureHomeCatalogueAndDetails" classname="MemoryForge.Client.Tests.LobbyMomentCapturePlayModeTests" runstate="Explicit" seed="1089020386" result="Passed" start-time="2026-10-21 10:40:27Z" end-time="2026-10-21 10:40:29Z" duration="1.734441" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="_SKIPREASON" value="writes report screenshots; run by name with MF_EXPEDITION_SHOTS" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1213" name="LobbyOverviewPlayModeTests" fullname="MemoryForge.Client.Tests.LobbyOverviewPlayModeTests" classname="MemoryForge.Client.Tests.LobbyOverviewPlayModeTests" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-10-21 10:40:29Z" end-time="2026-10-21 10:40:34Z" duration="5.383768" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1217" name="FullSortieOverviewUsesActualPartyNamesAndElementsWithoutChangingLengthControls" fullname="MemoryForge.Client.Tests.LobbyOverviewPlayModeTests.FullSortieOverviewUsesActualPartyNamesAndElementsWithoutChangingLengthControls" methodname="FullSortieOverviewUsesActualPartyNamesAndElementsWithoutChangingLengthControls" classname="MemoryForge.Client.Tests.LobbyOverviewPlayModeTests" runstate="Runnable" seed="191104811" result="Passed" start-time="2026-10-21 10:40:29Z" end-time="2026-10-21 10:40:30Z" duration="0.748530" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1214" name="HomeOverviewShowsTheActualPracticePartyAndWorkingDestinations" fullname="MemoryForge.Client.Tests.LobbyOverviewPlayModeTests.HomeOverviewShowsTheActualPracticePartyAndWorkingDestinations" methodname="HomeOverviewShowsTheActualPracticePartyAndWorkingDestinations" classname="MemoryForge.Client.Tests.LobbyOverviewPlayModeTests" runstate="Runnable" seed="769344031" result="Passed" start-time="2026-10-21 10:40:30Z" end-time="2026-10-21 10:40:31Z" duration="0.981838" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1218" name="LargeTouchControlsStayInsideTheFrameAndClearOfEachOtherAndHeaders" fullname="MemoryForge.Client.Tests.LobbyOverviewPlayModeTests.LargeTouchControlsStayInsideTheFrameAndClearOfEachOtherAndHeaders" methodname="LargeTouchControlsStayInsideTheFrameAndClearOfEachOtherAndHeaders" classname="MemoryForge.Client.Tests.LobbyOverviewPlayModeTests" runstate="Runnable" seed="1300888087" result="Passed" start-time="2026-10-21 10:40:31Z" end-time="2026-10-21 10:40:32Z" duration="1.700044" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1216" name="OwnedEmptyStateStillConnectsWithoutInventingPracticeOwnership" fullname="MemoryForge.Client.Tests.LobbyOverviewPlayModeTests.OwnedEmptyStateStillConnectsWithoutInventingPracticeOwnership" methodname="OwnedEmptyStateStillConnectsWithoutInventingPracticeOwnership" classname="MemoryForge.Client.Tests.LobbyOverviewPlayModeTests" runstate="Runnable" seed="705909156" result="Passed" start-time="2026-10-21 10:40:32Z" end-time="2026-10-21 10:40:33Z" duration="0.962976" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1215" name="RosterPreviewUsesRealSkillsAndBothDetailEntrypointsStillWork" fullname="MemoryForge.Client.Tests.LobbyOverviewPlayModeTests.RosterPreviewUsesRealSkillsAndBothDetailEntrypointsStillWork" methodname="RosterPreviewUsesRealSkillsAndBothDetailEntrypointsStillWork" classname="MemoryForge.Client.Tests.LobbyOverviewPlayModeTests" runstate="Runnable" seed="1437230936" result="Passed" start-time="2026-10-21 10:40:33Z" end-time="2026-10-21 10:40:34Z" duration="0.987289" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: [TestRunnerNoThrottle] Restored Interaction Mode after test run.
+Saving results to: /Users/choi/Library/Application Support/DefaultCompany/Memory Forge/TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

@@ -1,0 +1,29 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Retrieved 2 log entries.\",\"data\":[{\"type\":\"Warning\",\"message\":\"Ignoring depth surface load action as it is memoryless\\n\",\"file\":\"\",\"line\":0,\"stackTrace\":null},{\"type\":\"Warning\",\"message\":\"Ignoring depth surface store action as it is memoryless\\n\",\"file\":\"\",\"line\":0,\"stackTrace\":null}]}"
+    }
+  ],
+  "structuredContent": {
+    "success": true,
+    "message": "Retrieved 2 log entries.",
+    "data": [
+      {
+        "type": "Warning",
+        "message": "Ignoring depth surface load action as it is memoryless\n",
+        "file": "",
+        "line": 0,
+        "stackTrace": null
+      },
+      {
+        "type": "Warning",
+        "message": "Ignoring depth surface store action as it is memoryless\n",
+        "file": "",
+        "line": 0,
+        "stackTrace": null
+      }
+    ]
+  },
+  "isError": false
+}

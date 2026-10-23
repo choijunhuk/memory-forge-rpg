@@ -1,0 +1,24 @@
+
+> memory-forge-rpg@0.8.1-aio.2 verify:manifest
+> python3 tools/ai/verify_manifest.py
+
+{
+  "release": "0.8.1-aio.2",
+  "entries": 423,
+  "pass": false,
+  "errors": [
+    "CHANGED .github/workflows/ci.yml",
+    "CHANGED Memory_Forge_Complete_Design.pdf",
+    "CHANGED docs/CURRENT.md",
+    "CHANGED docs/Memory_Forge_v0.8.1_Restored_Design.pdf",
+    "CHANGED docs/decisions_v0.8.1.md",
+    "CHANGED docs/design/gen/errors.md",
+    "CHANGED engine/rules-core.js",
+    "CHANGED package.json",
+    "CHANGED proposals/memory_v2.cjs",
+    "CHANGED prototype/index.html",
+    "CHANGED prototype/src/ui.js",
+    "CHANGED tools/build_prototype.mjs",
+    "CHANGED tools/gen_docs.mjs"
+  ]
+}

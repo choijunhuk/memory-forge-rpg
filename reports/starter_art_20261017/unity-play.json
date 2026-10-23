@@ -1,0 +1,69 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"playing\":true,\"isBatch\":false,\"images\":[{\"name\":\"nia_sd\",\"width\":1254,\"height\":1254},{\"name\":\"nia_cutin\",\"width\":1086,\"height\":1448},{\"name\":\"nia_sheet\",\"width\":1774,\"height\":887},{\"name\":\"harin_sd\",\"width\":1254,\"height\":1254},{\"name\":\"harin_cutin\",\"width\":1086,\"height\":1448},{\"name\":\"harin_sheet\",\"width\":1774,\"height\":887},{\"name\":\"sera_sd\",\"width\":1254,\"height\":1254},{\"name\":\"sera_cutin\",\"width\":1086,\"height\":1448},{\"name\":\"sera_sheet\",\"width\":1774,\"height\":887}],\"gameWidth\":2363,\"gameHeight\":1423},\"compiler\":\"codedom\"}}"
+    }
+  ],
+  "structuredContent": {
+    "success": true,
+    "message": "Code executed successfully.",
+    "data": {
+      "result": {
+        "playing": true,
+        "isBatch": false,
+        "images": [
+          {
+            "name": "nia_sd",
+            "width": 1254,
+            "height": 1254
+          },
+          {
+            "name": "nia_cutin",
+            "width": 1086,
+            "height": 1448
+          },
+          {
+            "name": "nia_sheet",
+            "width": 1774,
+            "height": 887
+          },
+          {
+            "name": "harin_sd",
+            "width": 1254,
+            "height": 1254
+          },
+          {
+            "name": "harin_cutin",
+            "width": 1086,
+            "height": 1448
+          },
+          {
+            "name": "harin_sheet",
+            "width": 1774,
+            "height": 887
+          },
+          {
+            "name": "sera_sd",
+            "width": 1254,
+            "height": 1254
+          },
+          {
+            "name": "sera_cutin",
+            "width": 1086,
+            "height": 1448
+          },
+          {
+            "name": "sera_sheet",
+            "width": 1774,
+            "height": 887
+          }
+        ],
+        "gameWidth": 2363,
+        "gameHeight": 1423
+      },
+      "compiler": "codedom"
+    }
+  },
+  "isError": false
+}

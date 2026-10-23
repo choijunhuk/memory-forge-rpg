@@ -1,0 +1,22 @@
+{
+  "status": "VERIFIED_JS_ORACLE_ONLY",
+  "cases": 5,
+  "actualAttempts": 2684,
+  "committed": 1370,
+  "rejected": 1314,
+  "pureQueries": 1074,
+  "fullSourceStatesAndReturns": true,
+  "noExpectedStateInjection": true,
+  "targetedNode25": 5,
+  "targetedNode22": 5,
+  "fullNode25": 307,
+  "fullNode22": 307,
+  "strictFullRegeneration": "PASS",
+  "gzipBytes": 2000612,
+  "uncompressedBytes": 29905373,
+  "maximumResidentSetBytes": 731545600,
+  "exportSeconds": 4.84,
+  "csharpRunCommands": 0,
+  "wholeRunCSharpParity": false,
+  "next": "Actual R1a Core commands and independent host checks in disjoint worktrees"
+}

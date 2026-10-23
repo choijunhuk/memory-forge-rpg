@@ -1,0 +1,16 @@
+{
+  "success": true,
+  "message": "Build Succeeded.",
+  "data": {
+    "job_id": "build-ef4590be2e",
+    "result": "succeeded",
+    "platform": "StandaloneOSX",
+    "output_path": "Builds/MemoryForgePlayerActionsSmoke.app",
+    "started_at": "2026-10-15T01:40:10.828628Z",
+    "duration_seconds": 26.997698999999997,
+    "completed_at": "2026-10-15T01:40:37.826327Z",
+    "total_size_mb": 110.21,
+    "errors": 0,
+    "warnings": 0
+  }
+}

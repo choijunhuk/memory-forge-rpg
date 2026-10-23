@@ -1,0 +1,14 @@
+test_enums_stay_inside_game_data (test_events_schema.TelemetrySchema.test_enums_stay_inside_game_data) ... ok
+test_event_names_are_unique_and_match_source (test_events_schema.TelemetrySchema.test_event_names_are_unique_and_match_source) ... ok
+test_fields_and_required_match_source (test_events_schema.TelemetrySchema.test_fields_and_required_match_source) ... ok
+test_keywords_are_supported (test_events_schema.TelemetrySchema.test_keywords_are_supported) ... ok
+test_no_personal_or_hidden_fields (test_events_schema.TelemetrySchema.test_no_personal_or_hidden_fields) ... ok
+test_objects_are_closed_and_strings_are_not_free_text (test_events_schema.TelemetrySchema.test_objects_are_closed_and_strings_are_not_free_text) ... ok
+test_reference_validator_agrees (test_events_schema.TelemetrySchema.test_reference_validator_agrees) ... skipped 'jsonschema not installed; CI installs it with openapi-spec-validator'
+test_samples (test_events_schema.TelemetrySchema.test_samples) ... ok
+test_sampling_and_retention_follow_source (test_events_schema.TelemetrySchema.test_sampling_and_retention_follow_source) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.010s
+
+OK (skipped=1)

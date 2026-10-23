@@ -1,0 +1,24 @@
+{
+  "c": "ravien",
+  "key": "bg_victory",
+  "path": "ravien/images/char_ravien_background_quiet_afterbattle_v01.png",
+  "transparent": false,
+  "common": "Use case: stylized-concept. One EMPTY landscape background for a narrative anime RPG, 16:9 2560x1440 PNG, no characters, no people, no text or UI. Fine painterly cel-art matching Memory Forge: night workshop, brass instruments, stopped clocks, dark calm atmosphere, small teal memory lights, character overlays must stay brightest. ",
+  "pose": "Quiet cobbled guild passage after a battle, paper scraps settled near walls and a few cooled brass mechanical fragments at edges, absolutely no bodies or blood. Warm workshop windows beyond an arch and a stopped brass clock mounted to stone. Spacious uncomplicated central foreground to stage two adults, horizon midheight, muted cool slate and restrained amber teal.",
+  "prompt": "Use case: stylized-concept. One EMPTY landscape background for a narrative anime RPG, 16:9 2560x1440 PNG, no characters, no people, no text or UI. Fine painterly cel-art matching Memory Forge: night workshop, brass instruments, stopped clocks, dark calm atmosphere, small teal memory lights, character overlays must stay brightest. Quiet cobbled guild passage after a battle, paper scraps settled near walls and a few cooled brass mechanical fragments at edges, absolutely no bodies or blood. Warm workshop windows beyond an arch and a stopped brass clock mounted to stone. Spacious uncomplicated central foreground to stage two adults, horizon midheight, muted cool slate and restrained amber teal.",
+  "source": "/Users/choi/.codex/generated_images/01a14d20-ffd5-7e81-9e47-85c1c8415e11/exec-80891ec8-1ee1-4c7a-b40e-957e0efabcc1.png",
+  "tool": "Codex built-in image_gen; subscription-included; no API fallback",
+  "review": "pass",
+  "previous_attempt": null,
+  "score": 93,
+  "review_notes": "Rendered output inspected against design/source narrative. Face, age, outfit, primary hand/prop state and grounded support match the key-pose. No rig or live playback acceptance.",
+  "backend_model": "not exposed by tool",
+  "selected": true,
+  "sha256": "b519e6d45975d1390cf437bcfe91728601a8e4802a92b91f6392ace094196036",
+  "size": [
+    1672,
+    941
+  ],
+  "mode": "RGB",
+  "alpha_extrema": null
+}

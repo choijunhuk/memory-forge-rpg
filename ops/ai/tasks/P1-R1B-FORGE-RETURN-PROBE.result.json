@@ -1,0 +1,29 @@
+{
+  "task_id": "P1-R1B-FORGE-RETURN-PROBE",
+  "run_id": "P1-R1B-FORGE-RETURN-PROBE-20261015T194906167186Z",
+  "status": "RECEIVED_UNVERIFIED",
+  "requestedEffort": "high",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "changes_verified": false,
+  "raw_output": "ops/ai/local/P1-R1B-FORGE-RETURN-PROBE-20261015T194906167186Z*",
+  "billing_verified_at": "2026-10-14T21:44:57.439760+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "codex/csharp-memory-v2",
+  "base_commit": "3d33c4cb2e0c7cee14ced2c67c33b8fb55cef267",
+  "worktree": "/Users/choi/.codex/worktrees/csharp-memory-v2/Memory_forge",
+  "allowed_files": [
+    "core/MemoryForge.CoreChecks/RunProgressionChecks.cs",
+    "reports/run_services_core_20261016/forge_return_probe_author.md"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "31485873-d5b7-4053-b074-c1aa272c8a0a",
+  "subtype": "success",
+  "is_error": false,
+  "result": "legacy 재생에 `forgeOffer` 반환값 검사를 추가했습니다. 컴파일과 실행은 하지 않았습니다(NOT_RUN).\n\n**완료:** `core/MemoryForge.CoreChecks/RunProgressionChecks.cs`의 `LegacyTrace` 호출 지점에 20줄을 더했습니다.\n- `call()`의 반환값을 버리지 않고 받습니다.\n- 결과·오류 코드·상태 해시가 JS 기록과 일치한 뒤, 성공한 `forgeOffer`마다 다음을 차례로 확인합니다.\n  1. 반환값이 dictionary여야 합니다.\n  2. 반환된 `{key, parts}`가 `after.Pending.offers`와 값 전체로 같아야 합니다. 이 값은 JS 전체 상태 해시로 이미 확정돼 있습니다.\n  3. 반환값을 `Scribble`로 훼손했을 때 그 사본이 실제로 바뀌어야 합니다(양성 대조).\n  4. 그 뒤에도 log를 포함한 실제 Run 전체가 그대로여야 합니다.\n- 하나라도 실패하면 `LegacyMismatch`를 남기고 그 케이스를 끝냅니다. 조용히 건너뛰지 않습니다.\n- 새 상수 `LegacyOfferReturns = 567`을 두고 `legacyOfferProbes`가 정확히 567인지 검사하며, `RunTracePrefixReplay` 줄에 `N/567`로 출력합니다.\n- 272504 분모, 메서드별 수치, 전체 실행 0 표기, 기존 검사와 카운터는 바꾸지 않았습니다. Core·데이터·fixture·Unity·API도 건드리지 않았습니다.\n\n**Root가 확인할 점:** 567은 legacy `forgeOffer` 시도가 전부 성공한다는 Root의 집계를 전제로 합니다. 거부된 시도가 있으면 검사가 FAIL로 나옵니다. 그때는 기준을 느슨하게 하지 말고 코퍼스에서 실제 성공 횟수를 세어 상수를 고쳐야 합니다.\n\n**RED 확인 제안:**\n- `ForgeOffer`가 복사하지 않은 `offers`를 그대로 반환하게 하면 \"live pending or Run\" 실패가 나야 합니다.\n- 반환 사본의 부품 하나를 바꾸면 값 비교 실패가 나야 합니다.\n- 각 확인 뒤에는 원래대로 복구해야 합니다.\n\n상세 내용은 `reports/run_services_core_20261016/forge_return_probe_author.md`에 있습니다. 이 세션 안에서는 session_id를 볼 수 없으니 Codex 쪽 CLI 메타데이터에서 가져가야 합니다.",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ]
+}

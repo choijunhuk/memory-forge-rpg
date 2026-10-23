@@ -1,0 +1,12 @@
+{
+  "score": 89,
+  "verdict": "revise",
+  "category_match": true,
+  "differences": [
+    "Ravien stamp sprite has alpha 1 at bottom-right empty corner despite a visually clean composite."
+  ],
+  "suggestions": [
+    "Remove remaining background alpha while retaining the exact sprite drawing."
+  ],
+  "reasoning": "The A style, stamp gesture and furniture read correctly, but strict zero-alpha corner acceptance still fails."
+}

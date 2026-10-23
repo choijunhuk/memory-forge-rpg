@@ -1,0 +1,39 @@
+{
+  "evidence_type": "Unity PlayMode real HTTP UI acceptance (Button.onClick), not native pointer acceptance",
+  "local_dev_account_only": true,
+  "mutationPerformedInInitialRun": true,
+  "initialRun": "unity-live-acceptance.xml",
+  "initialRunResult": "two assertion-only failures: single result uses Arrival instead of tile; unrelated home Sera included in result text assertion",
+  "authoritativeStateBefore": {
+    "revision": 4,
+    "freeCrystals": 160,
+    "paidCrystals": 0,
+    "tickets": 0,
+    "pullCount": 21,
+    "ownedChars": {
+      "harin": 1,
+      "rien": 1
+    }
+  },
+  "authoritativeStateAfter": {
+    "revision": 5,
+    "freeCrystals": 0,
+    "paidCrystals": 0,
+    "tickets": 0,
+    "pullCount": 22,
+    "ownedChars": {
+      "harin": 2,
+      "rien": 1
+    }
+  },
+  "committedRequestId": "28619ab2-fca0-44d2-8402-61ef2b4b8117",
+  "confirmationCost": "0 tickets + 160 free crystals",
+  "revealSkipInvoked": true,
+  "mutationRepeated": false,
+  "accountResetOrGranted": false,
+  "continuationRun": "unity-live-reconnect.xml",
+  "continuationResult": "2 passed 0 failed; read-only reconnect twice plus latest-history regression",
+  "continuationMutations": 0,
+  "credentialStorage": "in-memory UI/session; generated credential file pre-existed outside repository; no plaintext in acceptance log/json/xml",
+  "nativePointerAcceptance": "BLOCKED: root observed CUA bridge coordinates outside player; no manual input claim"
+}

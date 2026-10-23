@@ -1,0 +1,45 @@
+{
+  "pass": true,
+  "frame_order_preserved": {
+    "sera/check_time": true
+  },
+  "idle_new_style": 6,
+  "expression_sets": {
+    "sera": {
+      "count": 6,
+      "unique_hashes": 6
+    },
+    "ravien": {
+      "count": 6,
+      "unique_hashes": 6
+    },
+    "harin": {
+      "count": 6,
+      "unique_hashes": 6
+    },
+    "aila": {
+      "count": 6,
+      "unique_hashes": 6
+    },
+    "sion": {
+      "count": 6,
+      "unique_hashes": 6
+    },
+    "lumi": {
+      "count": 6,
+      "unique_hashes": 6
+    }
+  },
+  "scene_image_assets_ready": 121,
+  "voice_assets_still_todo": 18,
+  "unique_pngs": 128,
+  "image_mappings": 130,
+  "counts": {
+    "figure": 84,
+    "background": 8,
+    "expression": 36
+  },
+  "missing_or_unaccepted": 0,
+  "baseline_png_apng_count": 124,
+  "historical_image_changes": []
+}

@@ -1,0 +1,30 @@
+{
+  "status": "PASS",
+  "checks": [
+    "actual next run wins with preserved server memory",
+    "before deck contains the previously saved Nia card",
+    "actual victory offers at least four new Sera changes",
+    "actual save raycast reaches Change",
+    "actual save raycast reaches Change",
+    "victory allows two real changes after authoritative preview",
+    "actual save raycast reaches ClearChanges",
+    "actual save raycast reaches Change",
+    "actual save raycast reaches Change",
+    "actual save raycast reaches Change",
+    "actual save raycast reaches Change",
+    "actual Core over-capacity result closes saving",
+    "capacity refusal and all queries preserve whole real server envelope",
+    "actual save raycast reaches ClearChanges",
+    "actual save raycast reaches Change",
+    "actual lower-character viewport remains scrolled and within valid content bounds",
+    "chosen lower row remains entirely inside actual viewport after permitted layout clamp",
+    "current lower-character result remains approved and visible",
+    "every victory/viewport action remains pure, no outbox or server journal change"
+  ],
+  "server_version": 142,
+  "memory_version": 1,
+  "clicked_scroll_y": 1100.0,
+  "kept_scroll_y": 944.0,
+  "selected_row_fully_visible": true,
+  "scope": "actual winning Core run, positive multiple selection/capacity refusal and persistent actual uGUI viewport; no memory commit in this phase"
+}

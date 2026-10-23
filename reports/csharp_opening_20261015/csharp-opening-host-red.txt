@@ -1,0 +1,24 @@
+CoreChecks: 202/202 passed
+CanonicalJsonChecks: 87/87 passed
+CanonicalSnapshotChecks: 2000/2000 hashes verified; scenarios=1000/1000 (700 short, 300 full); sourceFiles=5; commandEnvelopes=273748
+TraceFixtureValidationChecks: 13/13 passed
+BattleRunCommandReplay: NOT_IMPLEMENTED (0 full Run replay commands executed in C#; opening commands are checked separately)
+FAIL BattleOpening fixture/adapter: System.InvalidOperationException: Cannot read incomplete UTF-16 JSON text as string with missing low surrogate.
+   at System.Text.Json.ThrowHelper.ThrowInvalidOperationException_ReadIncompleteUTF16()
+   at System.Text.Json.JsonReaderHelper.TryUnescape(ReadOnlySpan`1 source, Span`1 destination, Int32 idx, Int32& written)
+   at System.Text.Json.JsonReaderHelper.GetUnescapedString(ReadOnlySpan`1 utf8Source)
+   at BattleDataLoader.<>c.<Argument>b__7_0(JsonProperty p) in /Users/choi/.codex/worktrees/csharp-battle-opening/Memory_forge/core/MemoryForge.CoreChecks/BattleDataLoader.cs:line 130
+   at System.Linq.Enumerable.IEnumerableSelectIterator`2.ToList()
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at MemoryForge.Core.BattleArgument..ctor(IEnumerable`1 values) in /Users/choi/.codex/worktrees/csharp-battle-opening/Memory_forge/core/MemoryForge.Core/BattleState.cs:line 255
+   at MemoryForge.Core.BattleArgument.Object(IEnumerable`1 values) in /Users/choi/.codex/worktrees/csharp-battle-opening/Memory_forge/core/MemoryForge.Core/BattleState.cs:line 269
+   at BattleDataLoader.Argument(JsonElement json) in /Users/choi/.codex/worktrees/csharp-battle-opening/Memory_forge/core/MemoryForge.CoreChecks/BattleDataLoader.cs:line 130
+   at BattleDataLoader.Request(JsonElement json) in /Users/choi/.codex/worktrees/csharp-battle-opening/Memory_forge/core/MemoryForge.CoreChecks/BattleDataLoader.cs:line 123
+   at BattleDataLoader.Request(String json) in /Users/choi/.codex/worktrees/csharp-battle-opening/Memory_forge/core/MemoryForge.CoreChecks/BattleDataLoader.cs:line 118
+   at BattleOpeningChecks.<BoundaryChecks>g__Request|12_33(String args) in /Users/choi/.codex/worktrees/csharp-battle-opening/Memory_forge/core/MemoryForge.CoreChecks/BattleOpeningChecks.cs:line 204
+   at BattleOpeningChecks.<>c__DisplayClass12_0.<BoundaryChecks>g__ReceiptPair|21(String firstArgs, String secondArgs, Boolean same, String label) in /Users/choi/.codex/worktrees/csharp-battle-opening/Memory_forge/core/MemoryForge.CoreChecks/BattleOpeningChecks.cs:line 205
+   at BattleOpeningChecks.BoundaryChecks(String root, Dictionary`2 cases) in /Users/choi/.codex/worktrees/csharp-battle-opening/Memory_forge/core/MemoryForge.CoreChecks/BattleOpeningChecks.cs:line 218
+   at BattleOpeningChecks.Run(String root) in /Users/choi/.codex/worktrees/csharp-battle-opening/Memory_forge/core/MemoryForge.CoreChecks/BattleOpeningChecks.cs:line 67
+BattleOpeningChecks: 2202/2203 passed; 267 actual C# begin commands (267 expected)
+BattleOpeningScope: fresh Battle.Create + begin; integer JSON args with JS receipt ordering; fractional request numbers explicitly unsupported
+BattleRunCommandReplay: NOT_IMPLEMENTED (play/ult/end, later turns, Run and restoration are not ported)

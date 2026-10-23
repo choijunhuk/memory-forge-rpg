@@ -1,0 +1,14 @@
+{
+  "score": 92,
+  "verdict": "pass",
+  "category_match": true,
+  "differences": [
+    "Static poses cover one acting state rather than all movements in a narration."
+  ],
+  "suggestions": [],
+  "reasoning": "Ravien, Harin, Sion and Lumi bond hesitation poses retain their adult designs and readable face/prop relationship.",
+  "next_actions": [
+    "Complete remaining B poses.",
+    "Aila worried output is blocked; no nonexistent asset may be ready."
+  ]
+}

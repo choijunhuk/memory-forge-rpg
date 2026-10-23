@@ -1,0 +1,26 @@
+test_account_mismatch_or_missing_identity_blocks_inference_without_disclosure (test_ai_runner.ClaudeRunner.test_account_mismatch_or_missing_identity_blocks_inference_without_disclosure) ... ok
+test_adverse_user_project_and_local_sources_are_excluded (test_ai_runner.ClaudeRunner.test_adverse_user_project_and_local_sources_are_excluded) ... ok
+test_api_cloud_proxy_and_model_environment_are_removed_without_output (test_ai_runner.ClaudeRunner.test_api_cloud_proxy_and_model_environment_are_removed_without_output) ... ok
+test_cli_error_and_malformed_json_fail_with_local_output (test_ai_runner.ClaudeRunner.test_cli_error_and_malformed_json_fail_with_local_output) ... ok
+test_credentials_and_local_checkpoints_receive_read_denials (test_ai_runner.ClaudeRunner.test_credentials_and_local_checkpoints_receive_read_denials) ... ok
+test_edit_scope_rejects_traversal_globs_nonfiles_and_symlink_escape (test_ai_runner.ClaudeRunner.test_edit_scope_rejects_traversal_globs_nonfiles_and_symlink_escape) ... ok
+test_edit_scope_uses_exact_permissions (test_ai_runner.ClaudeRunner.test_edit_scope_uses_exact_permissions) ... ok
+test_exact_model_effort_permissions_context_and_resume_are_passed (test_ai_runner.ClaudeRunner.test_exact_model_effort_permissions_context_and_resume_are_passed) ... ok
+test_main_checkout_nested_folder_other_repo_and_same_branch_are_rejected (test_ai_runner.ClaudeRunner.test_main_checkout_nested_folder_other_repo_and_same_branch_are_rejected) ... ok
+test_matching_account_is_case_normalized_and_not_disclosed (test_ai_runner.ClaudeRunner.test_matching_account_is_case_normalized_and_not_disclosed) ... ok
+test_missing_billing_attestation_blocks_before_any_process (test_ai_runner.ClaudeRunner.test_missing_billing_attestation_blocks_before_any_process) ... ok
+test_non_subscription_or_mixed_authentication_blocks_inference (test_ai_runner.ClaudeRunner.test_non_subscription_or_mixed_authentication_blocks_inference) ... ok
+test_only_expected_model_usage_is_accepted (test_ai_runner.ClaudeRunner.test_only_expected_model_usage_is_accepted) ... ok
+test_quota_keeps_checkpoint_without_retry (test_ai_runner.ClaudeRunner.test_quota_keeps_checkpoint_without_retry) ... ok
+test_recursive_call_is_rejected_before_any_process (test_ai_runner.ClaudeRunner.test_recursive_call_is_rejected_before_any_process) ... ok
+test_settings_cannot_enable_api_auth_fallback_hooks_or_broad_permissions (test_ai_runner.ClaudeRunner.test_settings_cannot_enable_api_auth_fallback_hooks_or_broad_permissions) ... ok
+test_timeout_keeps_partial_output_without_retry (test_ai_runner.ClaudeRunner.test_timeout_keeps_partial_output_without_retry) ... ok
+test_unavailable_cli_saves_a_blocked_checkpoint (test_ai_runner.ClaudeRunner.test_unavailable_cli_saves_a_blocked_checkpoint) ... ok
+test_unsafe_or_stale_attestation_blocks_before_any_process (test_ai_runner.ClaudeRunner.test_unsafe_or_stale_attestation_blocks_before_any_process) ... ok
+test_unsupported_effort_model_and_resume_are_rejected_without_processes (test_ai_runner.ClaudeRunner.test_unsupported_effort_model_and_resume_are_rejected_without_processes) ... ok
+test_xhigh_reaches_the_scoped_opus_session_and_receipt (test_ai_runner.ClaudeRunner.test_xhigh_reaches_the_scoped_opus_session_and_receipt) ... ok
+
+----------------------------------------------------------------------
+Ran 21 tests in 0.913s
+
+OK

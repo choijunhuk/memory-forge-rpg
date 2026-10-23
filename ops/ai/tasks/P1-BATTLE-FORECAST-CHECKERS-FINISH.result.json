@@ -1,0 +1,31 @@
+{
+  "task_id": "P1-BATTLE-FORECAST-CHECKERS-FINISH",
+  "run_id": "P1-BATTLE-FORECAST-CHECKERS-FINISH-20261016T001118701666Z",
+  "status": "RECEIVED_UNVERIFIED",
+  "requestedEffort": "xhigh",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "changes_verified": false,
+  "raw_output": "ops/ai/local/P1-BATTLE-FORECAST-CHECKERS-FINISH-20261016T001118701666Z*",
+  "billing_verified_at": "2026-10-15T21:22:01.277612+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "codex/csharp-memory-v2",
+  "base_commit": "3d33c4cb2e0c7cee14ced2c67c33b8fb55cef267",
+  "worktree": "/Users/choi/.codex/worktrees/csharp-memory-v2/Memory_forge",
+  "allowed_files": [
+    "core/MemoryForge.CoreChecks/BattlePreviewChecks.cs",
+    "engine/tests/battle_preview_vectors.test.mjs",
+    "reports/battle_preview_20261016/author_report.md",
+    "tools/gen_battle_preview_vectors.mjs"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "b0545ad4-ddb1-421f-8c73-4b7511e293bd",
+  "subtype": "success",
+  "is_error": false,
+  "result": "I've written the C# consumer, the Node test and the author report, and made the decoder correction in the producer. Nothing was compiled or run on my side, so every result is NOT_RUN by me. I didn't touch the production files, `Program.cs`, the data or the fixture.\n\n**Decoder correction (affects you first):**\n- **What changed:** `--check` and the export now use the shared `decodeVectors` from `tools/gen_run_create_vectors.mjs`, and that file is pinned as a new source (`runCreateDecoder`). The cases and expected values are unchanged.\n- **Effect:** the producer's own SHA changed, so **the gzip currently in B is stale and you need to regenerate it**. Until then, the checked-in fixture Node test and the C# source-pin check fail by design.\n\n**Node test:**\n- Pins your measured counts: 9 cases, 51/23 battle, 6+13 run forecasts / 17 run commands, 70/40 in total.\n- Re-derives every forecast with its own code from the public JS replays and checks each real command reproduces its recorded state.\n- Includes hand-derived exact numbers from the original data.\n- Checks source pins, fresh regeneration and tamper rejection.\n- Codec controls: empty gzip member as prefix or suffix, truncation, CRC flip, BOM, duplicate keys, invalid UTF-8.\n- Checks that export failure (including an impure `check()`) leaves the previous output in place.\n\n**C# consumer (`BattlePreviewChecks.Run`):**\n- Reads the fixture through the existing strict `RunCreateChecks.Decode`/`UniqueKeys`, and validates source paths before hashing them.\n- Validates the fixed counts and that setups contain only inputs (no injected state).\n- Every case starts from a fresh `Battle.Create` or `Run.Create` and replays the recorded commands.\n- Each of the 70 forecasts:\n  - all nine fields match the oracle;\n  - live state (log, events, RNG, version), public view, definitions and the caller's picks are unchanged;\n  - a repeat after mutating the returned object and the picks gives the same result.\n- Each of the 40 real commands:\n  - stored receipts still replay, and a probe proves no forecast stored a receipt;\n  - the command executes once and matches the JS response and state;\n  - replaying it changes nothing;\n  - where it equals a forecast, the actual cost, due turn and changes match.\n- It also runs 22 fixture tamper rejections.\n\n**Categories kept separate:**\n- **Not covered:** the `pick:\"random\"` hidden rule, because no authored card has it.\n- **C#-only:** a late rejection (Check passes but the real play fails), shown with a local definition fault. It isn't backed by the JS oracle.\n\n**For you next:**\n1. `node tools/gen_battle_preview_vectors.mjs`, then the same with `--check`.\n2. `node --test engine/tests/battle_preview_vectors.test.mjs`, then `npm test`.\n3. Register the checker in `Program.cs`: `int previewFailures = BattlePreviewChecks.Run(root);` plus `&& previewFailures == 0` in the return condition. Then run `dotnet run --project core/MemoryForge.CoreChecks -- <root>`; it should report 70 forecasts / 40 commands and 0 failures.\n4. The remaining AGENTS.md suites, your diff review and the opposite-AI review, then Unity integration.\n\nIf one of my hand-derived numbers fails while the oracle comparison passes, the number is my mistake; treat it as a FAIL and don't edit the oracle to match.\n\nSession: b0545ad4-ddb1-421f-8c73-4b7511e293bd. Full details are in `reports/battle_preview_20261016/author_report.md`.",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ]
+}

@@ -1,0 +1,148 @@
+{
+  "status": "PASS_FOR_EXACT_FROZEN_JS_AND_CORE",
+  "candidate": "JS candidate2",
+  "completedAt": "2026-10-22T11:07:08.197841+00:00",
+  "crossLanguage": {
+    "status": "PASS",
+    "cases": 144,
+    "commands": 1009,
+    "queries": 1139,
+    "refusals": 297,
+    "fullStateComparisons": 2292,
+    "logAndEvIncluded": true,
+    "coreMvid": "a1b72b89701e4645a7b2f130ba71e282",
+    "coreDllSha256": "65bc74a134ee00da95c73d91e19fe8b42f855f9c8a81462b8959f9f745b801b8"
+  },
+  "authoredSupportCases": 140,
+  "authoredCoverage": "10 authored ultimates x resonance 0..6 x 2 frozen growth/equipment builds",
+  "isolatedFollowupCases": [
+    "support-created own/common/foreign token, copy, pending echo, reservation",
+    "support selection queries and invalid/valid picks"
+  ],
+  "metadataRegressionCases": [
+    "opaque runFlags rng=7 and skillLv=3000000000 without support",
+    "same opaque metadata with support, pure queries, invalid-pick rollback and successful commit"
+  ],
+  "sourceHashes": {
+    "engine/rules-core.js": "0d116c2c38e68f6577aadb9eb73c08903df4cd7b9cbb33101da2beffa78ad01d",
+    "engine/content-modes.js": "99b2041428e514c05ad571737b472df75b2cf4c6740565eb42d5139248eeac52",
+    "engine/tests/support_partner.test.mjs": "3100a11bb5f6da95e43d13cede28a2870dfff1959e2fd102075675089cc2a395",
+    "data/game_data.json": "b6d3543a1d87f0a28e4824e0c1ae45a1eabc676d7abefcd2e57e23b4abc0054a"
+  },
+  "jsSourceManifestSha256": "dc6fd4850835b7851f13bf164f70368e8af64b25f52a1dfc3638c08f1f633439",
+  "coreInputs": {
+    "sourceRoot": "/Users/choi/.codex/worktrees/memoryforge-followup/Memory_forge",
+    "sourceManifestSha256": "44e19ab66f155b5624182cb8d2cade23b0f41ec90283e722b6cb1421a4df4a86",
+    "sourceFiles": 61,
+    "coreDllPath": "/Users/choi/.codex/worktrees/memoryforge-followup/Memory_forge/ops/ai/local/dotnet-artifacts/bin/MemoryForge.Core/debug/MemoryForge.Core.dll",
+    "coreDllSha256": "65bc74a134ee00da95c73d91e19fe8b42f855f9c8a81462b8959f9f745b801b8",
+    "coreBuildByThisTask": "NOT_RUN"
+  },
+  "oldJs": {
+    "artifactTestsPassed": 8,
+    "fullGraphComparison": {
+      "status": "PASS",
+      "graphWitnesses": 11657,
+      "families": {
+        "player-actions": 3745,
+        "run-create": 4056,
+        "run-memory": 16,
+        "preview": 60,
+        "growth-ults": 3780
+      },
+      "authoredOrdinaryUltCases": 140,
+      "authoredUltCommands": 700,
+      "authoredUltQueries": 2940,
+      "fullGraphIncludesLogEvRng": true,
+      "optionalSupportEntirelyAbsent": true,
+      "sourceRoot": "/Users/choi/.codex/worktrees/account-support-js/Memory_forge",
+      "sourceSha256": "0d116c2c38e68f6577aadb9eb73c08903df4cd7b9cbb33101da2beffa78ad01d",
+      "expectedIndexSha256": "24257f3ac0079930255edf5a6ff0f1eda895d8b353982fdb09795729717524c6",
+      "actualIndexSha256": "fb133ea82aaf98a1717faf2192adc44a4fa63b970ddfb861bba3c5604b65ee4e",
+      "fixtureOrPinWrites": false
+    },
+    "authoredOrdinaryUltCases": 140,
+    "supportSuiteTestsPassed": 38,
+    "supportSuiteFullNoSupportCorpora": 11,
+    "testCountIsNotWitnessCount": true
+  },
+  "oldCore": {
+    "status": "PASS",
+    "cases": 140,
+    "commands": 700,
+    "queries": 2940,
+    "checkpoints": 840,
+    "fullGraphs": true,
+    "logAndEventsIncluded": true,
+    "coreMvid": "a1b72b89701e4645a7b2f130ba71e282",
+    "coreDllSha256": "65bc74a134ee00da95c73d91e19fe8b42f855f9c8a81462b8959f9f745b801b8",
+    "coreBuild": "NOT_RUN: referenced preserved existing Core.dll only"
+  },
+  "oldCoreWitnessStreamsByteIdentical": true,
+  "oldCoreUncompressedWitnessSha256": "15774f4d168362ca1987f49dc20a4a9dd49bfd57831eca9aade5da128b478c65",
+  "additionalLegacyCoreEvidence": {
+    "path": "/Users/choi/Documents/Memory_forge/ops/ai/local/account-progression-20261021/core-support-oldgraph-compare/evidence.json",
+    "reportedGroupsPassed": 19,
+    "dllSha256": "e0816bb1ef9febbb3557f4127c68e537b7af5761ae8c41426689760409ddcf0a",
+    "note": "Earlier author-checkpoint2 runtime; same 61 Core source bytes as FUP, distinct build path/MVID. Do not sum overlapping group assertion counts or label that run as FUP DLL."
+  },
+  "baselineFilesUnchanged": 191,
+  "candidate1PreservedSeparately": true,
+  "mechanicFailuresInRecordedCases": 0,
+  "resolvedCandidate1Defect": "JS numeric walker classified opaque runFlags keys as typed support fields. Candidate2 path-aware guard passes actual C#/JS metadata cases. Candidate1 remains scoped PASS with known gap.",
+  "artifactErrorHistory": [
+    {
+      "kind": "exporter API-name mismatch in candidate1 setup",
+      "detail": "JS effDef(card) is mapped from the C# EffectiveCard(uid) label; no production edits.",
+      "resolved": true,
+      "evidence": "../candidate1/logs/generate.log"
+    },
+    {
+      "kind": "report packaging path",
+      "detail": "Initial copy expected runner-final-build.log at report root; corrected to logs/runner-final-build.log. No semantic run failed.",
+      "resolved": true
+    }
+  ],
+  "packagedHarness": {
+    "build": "PASS 0 warnings / 0 errors",
+    "coreBuild": "NOT_RUN",
+    "compressedFixtureRun": "PASS; raw final result bytes equal first 144-case result",
+    "log": "logs/crosslanguage-packaged-candidate2.log"
+  },
+  "authorFullNpmBeforePinRefresh": {
+    "total": 396,
+    "passed": 384,
+    "failed": 12,
+    "status": "REQUIRES_REVIEWED_PROVENANCE_PIN_REFRESH",
+    "log": "logs/author-full-npm-candidate2.log",
+    "scope": "Author-run log retained. Engine provenance stale; independent 11 full old corpora plus 11,657 old graphs match; this report does not claim full npm green."
+  },
+  "provenancePinInventory": {
+    "records": 14,
+    "files": 13,
+    "path": "provenance-pin-inventory.json",
+    "updatesByThisLane": 0
+  },
+  "preservedValidation": "Dynamic exporter source-hash functions, strict decoders and original semantic expectations were not modified.",
+  "productionEdited": false,
+  "existingFixtureOrPinWrites": false,
+  "fixtureSha256": "848aa21e6fe2a49143c6ce5614d67b4d96401a4e5e33899d6251180a832aa07b",
+  "fixtureGzipSha256": "c8fc14806e2a6292d25b0b426af18470c4c1a159fbb9f6fcd24b14341fedfcdd",
+  "notRun": [
+    "Core compilation by this lane",
+    "server/migration proof or actual account writes",
+    "Unity/device/phone acceptance",
+    "full npm green after Root integration/pin refresh",
+    "CI"
+  ],
+  "cardTextProvenanceOnlyComparison": {
+    "status": "PASS",
+    "descriptions": 519,
+    "changedSourceKeys": [
+      "engine/rules-core.js"
+    ],
+    "expectedSemanticBytesUnchanged": true,
+    "rowsSha256": "b9d9e609f293e84e586314b38004940e6568fe05a3d98913a54e5944bab448b7",
+    "fixtureOrPinWrites": false
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "server_checks": {
+    "assertions": 3540,
+    "mode": "fresh file/HTTP",
+    "result": "PASS"
+  },
+  "progression": {
+    "assertions": 65,
+    "result": "PASS"
+  },
+  "growth": {
+    "assertions": 175,
+    "result": "PASS"
+  },
+  "equipment": {
+    "assertions": 54,
+    "result": "PASS"
+  },
+  "head_migration": {
+    "assertions": 1415,
+    "result": "PASS",
+    "registered_owner_cli": "REFUSED_UNKNOWN",
+    "note": "full synthetic old/new candidate proof; unknown Core module is honestly refused by owner CLI"
+  },
+  "head_support_http": {
+    "assertions": 48,
+    "result": "PASS",
+    "backend": "file",
+    "new_story_preset": true
+  },
+  "actual_existing_store": {
+    "result": "PASS",
+    "mode": "offline read-only, new server with exact registered Core",
+    "bytes": 3303321,
+    "bytes_unchanged": true,
+    "mtime_unchanged": true,
+    "coreSha256": "65bc74a134ee00da95c73d91e19fe8b42f855f9c8a81462b8959f9f745b801b8",
+    "serverSha256": "b25813f7f45e0813392a2c1fb8c45ab1aeae641a6ab5ef48a52a46792dbeb645"
+  },
+  "postgresql": "latest CI required; local new preset scenario exercised common file codec/HTTP, no new PG domain logic",
+  "core_checks": {
+    "result": "PASS",
+    "scope": "full CoreChecks fresh execution; source/data unchanged",
+    "support_assertions": 1065,
+    "run_trace_scenarios": 1000,
+    "run_trace_attempts": 202224
+  },
+  "node": 396,
+  "python": 82,
+  "docs": 9,
+  "handoff": 33,
+  "CI": "See PR #2 checks for exact latest SHA; local results do not replace CI"
+}

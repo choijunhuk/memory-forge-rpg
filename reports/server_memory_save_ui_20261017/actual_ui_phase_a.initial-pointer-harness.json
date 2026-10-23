@@ -1,0 +1,11 @@
+{
+  "status": "FAIL",
+  "checks": [
+    "real Core-earned defeat opens empty server-preview save",
+    "unpublished change cannot become an intent",
+    "actual save raycast reaches Change",
+    "changing selection immediately revokes old preview permission",
+    "one actual defeat change has server approval"
+  ],
+  "safe_error": "Exception: actual save raycast reaches Change"
+}

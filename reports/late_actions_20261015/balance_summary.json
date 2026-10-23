@@ -1,0 +1,311 @@
+{
+  "report": "paired_balance.json",
+  "report_sha256": "abbf43f1c7024ae3a0cefb66ae5548bd08bd140e364283f91210bf87617ba136",
+  "command": "node engine/tests/balance_probe.mjs 350 --late --out reports/late_actions_20261015/paired_balance.json",
+  "hashes": {
+    "baseContent": "6a09e6dd2d81055738c84951ea5b5ae50c25fd8c9732c8443e81ec1498625688",
+    "content": "7e676aef384aacb0927235bc3bd969a788d0751e56468d45e15ae3ccb5e4a9df",
+    "candidate": "73011d741040271a6da513979e585e9817a71811d24d473de9dc828ff3805ccd",
+    "engine": "027c22df5f7763da4e137723e3d24a5abc3dff948e5175a3ba9b92c8e5c21fab",
+    "runner": "44126e4bef3c89646d1d4fd63f2cbbf28948bf783d970f403f4e98f49d8e8410"
+  },
+  "method": {
+    "requestedN": 350,
+    "groups": 44,
+    "repsPerGroup": 10,
+    "scenarios": 440,
+    "policies": [
+      "random",
+      "greedy",
+      "planner"
+    ],
+    "trials": 1320,
+    "scenarioSeed": 777,
+    "maxTurns": 60,
+    "actionCap": 12,
+    "reference": "power4 160, HP 81 per actor, resonance 0, basic R1 weapons, no relics/gear/upgrades, normal difficulty",
+    "denominator": "all outcomes",
+    "quantile": "nearest rank",
+    "turnsMetric": "battle state turn; may be maxTurns + 1 after the last end transition",
+    "processedPlayerTurns": "number of player-turn loops executed, bounded by maxTurns"
+  },
+  "assessment": "failed",
+  "failed_metrics": 32,
+  "above": 27,
+  "below": 5,
+  "failed_details": [
+    {
+      "group": "1/normal/greedy",
+      "metric": "hpLossPct",
+      "value": 3.7624926513815393,
+      "min": 4,
+      "max": 12,
+      "status": "below"
+    },
+    {
+      "group": "1/normal/planner",
+      "metric": "hpLossPct",
+      "value": 3.897707231040563,
+      "min": 4,
+      "max": 12,
+      "status": "below"
+    },
+    {
+      "group": "2/boss/planner",
+      "metric": "turns",
+      "value": 13.1,
+      "min": 14,
+      "max": 18,
+      "status": "below"
+    },
+    {
+      "group": "3/normal/greedy",
+      "metric": "hpLossPct",
+      "value": 7.053497942386832,
+      "min": 8,
+      "max": 20,
+      "status": "below"
+    },
+    {
+      "group": "3/normal/planner",
+      "metric": "hpLossPct",
+      "value": 7.440329218106997,
+      "min": 8,
+      "max": 20,
+      "status": "below"
+    },
+    {
+      "group": "3/elite/random",
+      "metric": "turns",
+      "value": 8.85,
+      "min": 6,
+      "max": 8.8,
+      "status": "above"
+    },
+    {
+      "group": "3/elite/greedy",
+      "metric": "turns",
+      "value": 8.85,
+      "min": 6,
+      "max": 8.8,
+      "status": "above"
+    },
+    {
+      "group": "4/normal/random",
+      "metric": "turns",
+      "value": 6.88,
+      "min": 4,
+      "max": 6.6000000000000005,
+      "status": "above"
+    },
+    {
+      "group": "4/normal/random",
+      "metric": "hpLossPct",
+      "value": 20.732510288065846,
+      "min": 8,
+      "max": 20,
+      "status": "above"
+    },
+    {
+      "group": "4/normal/greedy",
+      "metric": "turns",
+      "value": 7,
+      "min": 4,
+      "max": 6.6000000000000005,
+      "status": "above"
+    },
+    {
+      "group": "4/elite/random",
+      "metric": "turns",
+      "value": 9.35,
+      "min": 6,
+      "max": 8.8,
+      "status": "above"
+    },
+    {
+      "group": "4/elite/random",
+      "metric": "hpLossPct",
+      "value": 36.934156378600825,
+      "min": 18,
+      "max": 33,
+      "status": "above"
+    },
+    {
+      "group": "4/elite/greedy",
+      "metric": "turns",
+      "value": 9.75,
+      "min": 6,
+      "max": 8.8,
+      "status": "above"
+    },
+    {
+      "group": "4/elite/greedy",
+      "metric": "hpLossPct",
+      "value": 38.00411522633745,
+      "min": 18,
+      "max": 33,
+      "status": "above"
+    },
+    {
+      "group": "4/elite/planner",
+      "metric": "turns",
+      "value": 8.9,
+      "min": 6,
+      "max": 8.8,
+      "status": "above"
+    },
+    {
+      "group": "4/boss/random",
+      "metric": "hpLossPct",
+      "value": 59.83539094650206,
+      "min": 30,
+      "max": 55,
+      "status": "above"
+    },
+    {
+      "group": "5/normal/random",
+      "metric": "turns",
+      "value": 6.84,
+      "min": 4,
+      "max": 6.6000000000000005,
+      "status": "above"
+    },
+    {
+      "group": "5/normal/random",
+      "metric": "hpLossPct",
+      "value": 30.38683127572016,
+      "min": 8,
+      "max": 20,
+      "status": "above"
+    },
+    {
+      "group": "5/normal/greedy",
+      "metric": "turns",
+      "value": 7.04,
+      "min": 4,
+      "max": 6.6000000000000005,
+      "status": "above"
+    },
+    {
+      "group": "5/normal/greedy",
+      "metric": "hpLossPct",
+      "value": 27.22633744855968,
+      "min": 8,
+      "max": 20,
+      "status": "above"
+    },
+    {
+      "group": "5/normal/planner",
+      "metric": "hpLossPct",
+      "value": 24.106995884773664,
+      "min": 8,
+      "max": 20,
+      "status": "above"
+    },
+    {
+      "group": "5/elite/random",
+      "metric": "turns",
+      "value": 9,
+      "min": 6,
+      "max": 8.8,
+      "status": "above"
+    },
+    {
+      "group": "5/elite/random",
+      "metric": "hpLossPct",
+      "value": 41.44032921810699,
+      "min": 18,
+      "max": 33,
+      "status": "above"
+    },
+    {
+      "group": "5/elite/greedy",
+      "metric": "turns",
+      "value": 8.9,
+      "min": 6,
+      "max": 8.8,
+      "status": "above"
+    },
+    {
+      "group": "5/elite/greedy",
+      "metric": "hpLossPct",
+      "value": 43.333333333333336,
+      "min": 18,
+      "max": 33,
+      "status": "above"
+    },
+    {
+      "group": "5/elite/planner",
+      "metric": "hpLossPct",
+      "value": 41.39917695473251,
+      "min": 18,
+      "max": 33,
+      "status": "above"
+    },
+    {
+      "group": "5/boss/random",
+      "metric": "turns",
+      "value": 20.5,
+      "min": 14,
+      "max": 19.8,
+      "status": "above"
+    },
+    {
+      "group": "5/boss/random",
+      "metric": "hpLossPct",
+      "value": 73.45679012345678,
+      "min": 30,
+      "max": 55,
+      "status": "above"
+    },
+    {
+      "group": "5/boss/greedy",
+      "metric": "turns",
+      "value": 21.3,
+      "min": 14,
+      "max": 19.8,
+      "status": "above"
+    },
+    {
+      "group": "5/boss/greedy",
+      "metric": "hpLossPct",
+      "value": 81.3991769547325,
+      "min": 30,
+      "max": 55,
+      "status": "above"
+    },
+    {
+      "group": "5/boss/planner",
+      "metric": "turns",
+      "value": 19.9,
+      "min": 14,
+      "max": 19.8,
+      "status": "above"
+    },
+    {
+      "group": "5/boss/planner",
+      "metric": "hpLossPct",
+      "value": 71.68724279835389,
+      "min": 30,
+      "max": 55,
+      "status": "above"
+    }
+  ],
+  "nameless_planner": {
+    "attempts": 10,
+    "wins": 8,
+    "defeats": 2,
+    "timeouts": 0,
+    "denominator": "all attempts, including defeats and timeouts",
+    "turns": {
+      "mean": 19.9,
+      "p50": 19,
+      "p90": 23
+    },
+    "hpLossPct": {
+      "mean": 71.68724279835389,
+      "p50": 68.3127572016461,
+      "p90": 100
+    }
+  }
+}

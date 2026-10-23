@@ -1,0 +1,7 @@
+**FIXED** — [ExpeditionUiCapturePlayModeTests.cs:186](/Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionUiCapturePlayModeTests.cs:186) now protects canvas switching, waits, rendering and file writing with `try`. The canvas is reacquired at line 192. The `finally` at lines 197–203 restores `RenderTexture.active`, restores the canvas to overlay, and destroys the camera, image and released render texture—even when writing fails.
+
+No new concrete defects found across the specified Rail/threat/status-icon/gauge-ring changes and both capture helpers.
+
+Scoped `git diff --check`: **PASS**. Unity tests: **NOT_RUN** (read-only review). No files edited.
+
+**Final verdict: APPROVE.**

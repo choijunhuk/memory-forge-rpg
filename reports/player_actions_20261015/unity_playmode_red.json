@@ -1,0 +1,157 @@
+{
+  "success": true,
+  "message": "Test job status retrieved.",
+  "error": null,
+  "data": {
+    "job_id": "a7a6e1abb54044e498290d082d5a2216",
+    "status": "failed",
+    "mode": "PlayMode",
+    "started_unix_ms": 1792025253093,
+    "finished_unix_ms": 1792025260006,
+    "last_update_unix_ms": 1792025260006,
+    "progress": {
+      "completed": 11,
+      "total": 11,
+      "current_test_full_name": null,
+      "current_test_started_unix_ms": null,
+      "last_finished_test_full_name": "MemoryForge.PlayModeTests.SharedCorePlayModeTests.SharedRngAndReservationsKeepTheirStateAcrossARealTurn",
+      "last_finished_unix_ms": 1792025259991,
+      "stuck_suspected": false,
+      "editor_is_focused": false,
+      "run_in_background": false,
+      "focus_nudge_attempts": null,
+      "focus_nudge_limit": null,
+      "focus_nudge_status": null,
+      "blocked_reason": null,
+      "failures_so_far": [
+        {
+          "full_name": "MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.AuthoredBulwarkRetainsTenBlockOnTheNextTurn",
+          "message": "MemoryForge.Core.RuleException : BATTLE_COMMAND_NOT_IMPLEMENTED"
+        },
+        {
+          "full_name": "MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.AuthoredUltimateSpendsGaugeWithoutPlayingTheCardInHand",
+          "message": "MemoryForge.Core.RuleException : BATTLE_COMMAND_NOT_IMPLEMENTED"
+        },
+        {
+          "full_name": "MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.ReservedShieldPaysNowAndEarnsGaugeOnlyWhenResolved",
+          "message": "MemoryForge.Core.RuleException : BATTLE_COMMAND_NOT_IMPLEMENTED"
+        }
+      ],
+      "failures_capped": false
+    },
+    "error": null,
+    "result": {
+      "mode": "PlayMode",
+      "summary": {
+        "total": 11,
+        "passed": 8,
+        "failed": 3,
+        "skipped": 0,
+        "durationSeconds": 0.0617004,
+        "resultState": "Failed(Child)"
+      },
+      "results": [
+        {
+          "name": "AuthoredBulwarkRetainsTenBlockOnTheNextTurn",
+          "fullName": "MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.AuthoredBulwarkRetainsTenBlockOnTheNextTurn",
+          "state": "Failed:Error",
+          "durationSeconds": 0.0219202,
+          "message": "MemoryForge.Core.RuleException : BATTLE_COMMAND_NOT_IMPLEMENTED",
+          "stackTrace": "  at MemoryForge.Core.Battle.Command (MemoryForge.Core.BattleRequest request) [0x000e5] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Battle.cs:135 \n  at MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.AuthoredBulwarkRetainsTenBlockOnTheNextTurn () [0x00052] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Tests/PlayMode/BattleOpeningPlayModeTests.cs:76 \n  at (wrapper managed-to-native) System.Reflection.RuntimeMethodInfo.InternalInvoke(System.Reflection.RuntimeMethodInfo,object,object[],System.Exception&)\n  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x0006a] in <27bd554a9f0e46179afd19da1336e638>:0 ",
+          "output": ""
+        },
+        {
+          "name": "AuthoredOpeningAndIdempotentRetryExecuteInsidePlayMode",
+          "fullName": "MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.AuthoredOpeningAndIdempotentRetryExecuteInsidePlayMode",
+          "state": "Passed",
+          "durationSeconds": 0.0097772,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "AuthoredUltimateSpendsGaugeWithoutPlayingTheCardInHand",
+          "fullName": "MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.AuthoredUltimateSpendsGaugeWithoutPlayingTheCardInHand",
+          "state": "Failed:Error",
+          "durationSeconds": 0.0005439,
+          "message": "MemoryForge.Core.RuleException : BATTLE_COMMAND_NOT_IMPLEMENTED",
+          "stackTrace": "  at MemoryForge.Core.Battle.Command (MemoryForge.Core.BattleRequest request) [0x000e5] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Battle.cs:135 \n  at MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.AuthoredUltimateSpendsGaugeWithoutPlayingTheCardInHand () [0x00079] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Tests/PlayMode/BattleOpeningPlayModeTests.cs:123 \n  at (wrapper managed-to-native) System.Reflection.RuntimeMethodInfo.InternalInvoke(System.Reflection.RuntimeMethodInfo,object,object[],System.Exception&)\n  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x0006a] in <27bd554a9f0e46179afd19da1336e638>:0 ",
+          "output": ""
+        },
+        {
+          "name": "CircuitTerminationAndEnvelopeSurvivalExecuteInsidePlayMode(False)",
+          "fullName": "MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.CircuitTerminationAndEnvelopeSurvivalExecuteInsidePlayMode(False)",
+          "state": "Passed",
+          "durationSeconds": 0.0009545,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "CircuitTerminationAndEnvelopeSurvivalExecuteInsidePlayMode(True)",
+          "fullName": "MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.CircuitTerminationAndEnvelopeSurvivalExecuteInsidePlayMode(True)",
+          "state": "Passed",
+          "durationSeconds": 0.0002105,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "EnemyPhaseAndNextPlayerTurnReuseTheAuthoredOpening",
+          "fullName": "MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.EnemyPhaseAndNextPlayerTurnReuseTheAuthoredOpening",
+          "state": "Passed",
+          "durationSeconds": 0.0022988,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "PureCardQueriesReturnDetachedDefinitionsWithoutChangingTheRunningBattle",
+          "fullName": "MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.PureCardQueriesReturnDetachedDefinitionsWithoutChangingTheRunningBattle",
+          "state": "Passed",
+          "durationSeconds": 0.0027297,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "ReservedShieldPaysNowAndEarnsGaugeOnlyWhenResolved",
+          "fullName": "MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.ReservedShieldPaysNowAndEarnsGaugeOnlyWhenResolved",
+          "state": "Failed:Error",
+          "durationSeconds": 0.0005576,
+          "message": "MemoryForge.Core.RuleException : BATTLE_COMMAND_NOT_IMPLEMENTED",
+          "stackTrace": "  at MemoryForge.Core.Battle.Command (MemoryForge.Core.BattleRequest request) [0x000e5] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Battle.cs:135 \n  at MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.ReservedShieldPaysNowAndEarnsGaugeOnlyWhenResolved () [0x0003b] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Tests/PlayMode/BattleOpeningPlayModeTests.cs:98 \n  at (wrapper managed-to-native) System.Reflection.RuntimeMethodInfo.InternalInvoke(System.Reflection.RuntimeMethodInfo,object,object[],System.Exception&)\n  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x0006a] in <27bd554a9f0e46179afd19da1336e638>:0 ",
+          "output": ""
+        },
+        {
+          "name": "UsedEnvelopeDoesNotHideAFatalSecondTurnCircuitCost",
+          "fullName": "MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.UsedEnvelopeDoesNotHideAFatalSecondTurnCircuitCost",
+          "state": "Passed",
+          "durationSeconds": 0.000652,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "SharedCoreHashesTheSameJsonInTheRunningPlayer",
+          "fullName": "MemoryForge.PlayModeTests.SharedCorePlayModeTests.SharedCoreHashesTheSameJsonInTheRunningPlayer",
+          "state": "Passed",
+          "durationSeconds": 0.0002563,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "SharedRngAndReservationsKeepTheirStateAcrossARealTurn",
+          "fullName": "MemoryForge.PlayModeTests.SharedCorePlayModeTests.SharedRngAndReservationsKeepTheirStateAcrossARealTurn",
+          "state": "Passed",
+          "durationSeconds": 0.0015624,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        }
+      ]
+    }
+  },
+  "hint": null
+}

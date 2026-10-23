@@ -1,0 +1,16 @@
+{
+  "success": true,
+  "message": "Build Succeeded.",
+  "data": {
+    "job_id": "build-3e329a391a",
+    "result": "succeeded",
+    "platform": "StandaloneOSX",
+    "output_path": "Builds/MemoryForgeMcpSmoke.app",
+    "started_at": "2026-10-14T22:09:54.653513Z",
+    "duration_seconds": 12.451621,
+    "completed_at": "2026-10-14T22:10:07.105134Z",
+    "total_size_mb": 251.29,
+    "errors": 0,
+    "warnings": 0
+  }
+}

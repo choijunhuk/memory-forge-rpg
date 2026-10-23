@@ -1,0 +1,44 @@
+✔ tracing preserves battle result, input data, and prototype even on an error (68.964375ms)
+✔ independent aggregation and signed contributors reconcile all failed metrics (158.275041ms)
+▶ analysis rejects altered target bounds and assessment results with unchanged source hashes
+  ✔ weakened target bands (23.974209ms)
+  ✔ changed lower bound (23.244791ms)
+  ✔ changed upper bound (25.730417ms)
+  ✔ changed metric status (24.082084ms)
+  ✔ changed failure count (22.69175ms)
+  ✔ changed overall result (24.176542ms)
+✔ analysis rejects altered target bounds and assessment results with unchanged source hashes (169.857875ms)
+▶ official CLI requires complete canonical probe provenance while analyze supports smaller probes
+  ✔ accepts complete base probe (4084.842875ms)
+  ✔ accepts complete candidate probe (10537.104375ms)
+  ✔ rejects base encounter subset (2117.510584ms)
+  ✔ rejects candidate encounter subset (5564.164459ms)
+  ✔ rejects mislabeled actual enemies (2176.055417ms)
+  ✔ rejects different scenario generation seed (2101.093334ms)
+  ✔ rejects different turn limit (2228.272458ms)
+  ✔ rejects oversized requestedN (122.004ms)
+  ✔ rejects forged method scenarioSeed (2093.048458ms)
+  ✔ rejects forged method actionCap (2095.189917ms)
+  ✔ rejects forged method groups (2076.467458ms)
+  ✔ rejects forged method repsPerGroup (2098.452125ms)
+  ✔ rejects forged baseContent source hash (2108.378125ms)
+  ✔ rejects forged candidate source hash (5241.648458ms)
+  ✔ rejects unknown report mode (80.685416ms)
+✔ official CLI requires complete canonical probe provenance while analyze supports smaller probes (56186.805459ms)
+✔ card reflection attribution uses actual HP loss and restores methods (5.164541ms)
+✔ phase counts both bars and six candidate normal encounters miss the preserved HP budget (1.294542ms)
+✔ all policies receive the exact same independent starting setup (28.679ms)
+✔ policy randomness cannot change later scenarios; repeat is deterministic (17.02475ms)
+✔ report counts use actual scenarios and all policy trials (82.684791ms)
+✔ timeouts and defeats remain in the denominator and quantiles use all outcomes (0.777125ms)
+✔ unexpected internal precheck code aborts the fight (0.823375ms)
+✔ documented balance bands preserve exact upper boundaries and gate only random wins (0.20075ms)
+✔ CLI rejects malformed N and writes a readable full JSON report (2080.040625ms)
+ℹ tests 34
+ℹ suites 0
+ℹ pass 34
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 56722.504

@@ -1,0 +1,134 @@
+{
+  "result": "PASS",
+  "initial_cua_input_attempt": "blocked; superseded by this actual native input acceptance",
+  "tool": "existing @steipete/peekaboo4.9.5 CLI",
+  "input": "documented foreground synthOnly long-press and drag, exact-window receipt/PID checked",
+  "billing": "local non-AI commands only; no remote bridge, agent or analyze",
+  "appClientSha256": "869ea398c2917adf010162e92c31072df61dd4d58cefeafe45f6993bd5ce33bc",
+  "source_commit": "207406cd40ab7c150c444ea89c7da93bcee37913 (client sources unchanged since d78e448)",
+  "cases": [
+    {
+      "launch_render_pixels": [
+        960,
+        540
+      ],
+      "observed_window_points": [
+        480,
+        298
+      ],
+      "screens": [
+        "roster",
+        "yuri detail",
+        "yuri home"
+      ]
+    },
+    {
+      "launch_render_pixels": [
+        1920,
+        1080
+      ],
+      "observed_window_points": [
+        960,
+        568
+      ],
+      "screens": [
+        "roster10",
+        "yuri detail/home",
+        "rien detail/home",
+        "kaya detail/home",
+        "nia detail/home",
+        "roster drag to lower rows"
+      ]
+    }
+  ],
+  "account": "anonymous; no connection, POST, recruitment, battle, growth or economic commands",
+  "runtime_exceptions": 0,
+  "captures": [
+    {
+      "capture": "05-yuri-detail.png",
+      "sha256": "6d432bd541ada068cf0f28491345e322b8d0d7f787e4935524e14635de618119",
+      "points": {
+        "height": 568,
+        "width": 960
+      },
+      "observed": "PASS"
+    },
+    {
+      "capture": "06-yuri-home.png",
+      "sha256": "3e2599a7d6cdbe5aabc3afe351269f4371eba9e0ac75eb8285561c076781a05e",
+      "points": {
+        "height": 568,
+        "width": 960
+      },
+      "observed": "PASS"
+    },
+    {
+      "capture": "08-rien-detail.png",
+      "sha256": "3ac886ec88069c9054258c922cf733b5b0a8f5c708a43314473a3fe8a4535acd",
+      "points": {
+        "width": 960,
+        "height": 568
+      },
+      "observed": "PASS"
+    },
+    {
+      "capture": "09-rien-home.png",
+      "sha256": "8a63dd924356f2bb5ba578c22fdd994115b1e6647c0da13945f7669abd852b09",
+      "points": {
+        "width": 960,
+        "height": 568
+      },
+      "observed": "PASS"
+    },
+    {
+      "capture": "15-kaya-detail.png",
+      "sha256": "afb6023fc732e4e5cbe5b23830dc754ff12452f18103d54beffe3b464f182b63",
+      "points": {
+        "height": 568,
+        "width": 960
+      },
+      "observed": "PASS"
+    },
+    {
+      "capture": "16-kaya-home.png",
+      "sha256": "f032a4e812857a8c3d4df4733273f61e574ab5b69efe836eb01983e51ff1be70",
+      "points": {
+        "width": 960,
+        "height": 568
+      },
+      "observed": "PASS"
+    },
+    {
+      "capture": "18-nia-detail.png",
+      "sha256": "991770d9b5998a98fe8573885d650b802167834b782fdb9c66baa021fc033ab5",
+      "points": {
+        "height": 568,
+        "width": 960
+      },
+      "observed": "PASS"
+    },
+    {
+      "capture": "19-nia-home.png",
+      "sha256": "23573b198cfcad96ad1942225fdb70a2a3dfa9f1c544340455500b6efd4b2e08",
+      "points": {
+        "height": 568,
+        "width": 960
+      },
+      "observed": "PASS"
+    },
+    {
+      "capture": "20-yuri-home-final.png",
+      "sha256": "33aa6b8772ae02dda691413048253cb35c1c0ee01858918331f9aa9cb43caff5",
+      "points": {
+        "width": 960,
+        "height": 568
+      },
+      "observed": "PASS"
+    }
+  ],
+  "limits": [
+    "not human subjective art acceptance",
+    "existing home foreground footer and party panel overlap lower figure/drone by design",
+    "phone excluded"
+  ]
+}

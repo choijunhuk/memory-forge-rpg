@@ -1,0 +1,16 @@
+{
+  "character": "sion",
+  "key": "fig_bond_neutral",
+  "target": "sion/images/char_sion_fig_bond_neutral_styleA_v02.png",
+  "args": {
+    "prompt": "Use case: background-extraction. Preserve the ENTIRE current clear-cel A sprite exactly: adult Sion27, face/hair/glasses, purple coat/clothing, hands holding ONE open book, personal memo and same SCREEN-RIGHT lectern. No content/geometry/pose changes. Change ONLY exterior alpha: remove faint haze/near-transparent residue everywhere OUTSIDE subject and furniture, especially bottom-left corner alpha1, so all empty margins and all four corners are alpha EXACTLY0. Preserve hair/clothing edges and intended solid opacity. Same 1024x1536 framing, actual transparent RGBA. No new floor/shadow/halo/backdrop/checkerboard/text.",
+    "referenced_image_paths": [
+      "/Users/choi/Documents/Memory_forge/art/moments/sion/images/char_sion_fig_bond_neutral_styleA_v01.png"
+    ],
+    "transparent_background": true
+  },
+  "cache_path": "/Users/choi/.codex/generated_images/01a14db0-4150-7f01-9240-82aaa185dd28/exec-15a4c663-944f-43fd-8c1c-1a2adb20b91d.png",
+  "status": "ready",
+  "generation_status": "generated_pending_review",
+  "selected": true
+}

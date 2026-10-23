@@ -1,0 +1,16 @@
+{
+  "settings": [
+    {
+      "path": "client/MemoryForgeUnity/ProjectSettings/EditorSettings.asset",
+      "originalSemanticsRestored": true,
+      "normalizedWhitespaceOnlyAfterApiRestoration": true
+    },
+    {
+      "path": "client/MemoryForgeUnity/ProjectSettings/ProjectSettings.asset",
+      "originalSemanticsRestored": true,
+      "normalizedWhitespaceOnlyAfterApiRestoration": true
+    }
+  ],
+  "orphanScenePreservedPrivately": "InitTestScene0a9aae17-11bd-48ae-8a3b-8791c4707f22.unity",
+  "defaultBattleSceneIntentional": true
+}

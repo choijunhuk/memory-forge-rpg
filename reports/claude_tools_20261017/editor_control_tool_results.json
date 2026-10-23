@@ -1,0 +1,100 @@
+{
+  "scope": "actual tool results only; no hidden reasoning or authentication",
+  "session_id": "71bbcd5c-6cdf-41d5-b37e-538628940366",
+  "tools": [
+    {
+      "name": "mcp__unityMCP__execute_code",
+      "input": {
+        "action": "execute",
+        "compiler": "codedom",
+        "code": "return \"isPlaying=\" + UnityEditor.EditorApplication.isPlaying + \";isPaused=\" + UnityEditor.EditorApplication.isPaused + \";isBatchMode=\" + UnityEngine.Application.isBatchMode + \";scene=\" + UnityEngine.SceneManagement.SceneManager.GetActiveScene().path;"
+      },
+      "is_error": false,
+      "content": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":\"isPlaying=False;isPaused=False;isBatchMode=False;scene=Assets/Scenes/MemoryForgeServerPractice.unity\",\"compiler\":\"codedom\"}}"
+    },
+    {
+      "name": "mcp__unityMCP__manage_editor",
+      "input": {
+        "action": "play"
+      },
+      "is_error": false,
+      "content": "{\"success\":true,\"message\":\"Entered play mode.\",\"data\":null}"
+    },
+    {
+      "name": "mcp__unityMCP__execute_code",
+      "input": {
+        "action": "execute",
+        "compiler": "codedom",
+        "code": "return \"isPlaying=\" + UnityEditor.EditorApplication.isPlaying + \";isPaused=\" + UnityEditor.EditorApplication.isPaused + \";isChanging=\" + UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode + \";scene=\" + UnityEngine.SceneManagement.SceneManager.GetActiveScene().path;"
+      },
+      "is_error": false,
+      "content": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":\"isPlaying=True;isPaused=False;isChanging=True;scene=Assets/Scenes/MemoryForgeServerPractice.unity\",\"compiler\":\"codedom\"}}"
+    },
+    {
+      "name": "mcp__unityMCP__manage_editor",
+      "input": {
+        "action": "pause"
+      },
+      "is_error": false,
+      "content": "{\"success\":true,\"message\":\"Game paused.\",\"data\":null}"
+    },
+    {
+      "name": "mcp__unityMCP__execute_code",
+      "input": {
+        "action": "execute",
+        "compiler": "codedom",
+        "code": "return \"isPlaying=\" + UnityEditor.EditorApplication.isPlaying + \";isPaused=\" + UnityEditor.EditorApplication.isPaused;"
+      },
+      "is_error": false,
+      "content": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":\"isPlaying=True;isPaused=True\",\"compiler\":\"codedom\"}}"
+    },
+    {
+      "name": "mcp__unityMCP__manage_editor",
+      "input": {
+        "action": "pause"
+      },
+      "is_error": false,
+      "content": "{\"success\":true,\"message\":\"Game resumed.\",\"data\":null}"
+    },
+    {
+      "name": "mcp__unityMCP__execute_code",
+      "input": {
+        "action": "execute",
+        "compiler": "codedom",
+        "code": "return \"isPlaying=\" + UnityEditor.EditorApplication.isPlaying + \";isPaused=\" + UnityEditor.EditorApplication.isPaused;"
+      },
+      "is_error": false,
+      "content": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":\"isPlaying=True;isPaused=False\",\"compiler\":\"codedom\"}}"
+    },
+    {
+      "name": "mcp__unityMCP__manage_editor",
+      "input": {
+        "action": "stop"
+      },
+      "is_error": false,
+      "content": "{\"success\":true,\"message\":\"Exited play mode.\",\"data\":null}"
+    },
+    {
+      "name": "mcp__unityMCP__execute_code",
+      "input": {
+        "action": "execute",
+        "compiler": "codedom",
+        "code": "return \"isPlaying=\" + UnityEditor.EditorApplication.isPlaying + \";isPaused=\" + UnityEditor.EditorApplication.isPaused + \";willChange=\" + UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode + \";isBatchMode=\" + UnityEngine.Application.isBatchMode + \";scene=\" + UnityEngine.SceneManagement.SceneManager.GetActiveScene().path + \";sceneDirty=\" + UnityEngine.SceneManagement.SceneManager.GetActiveScene().isDirty;"
+      },
+      "is_error": false,
+      "content": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":\"isPlaying=False;isPaused=False;willChange=False;isBatchMode=False;scene=Assets/Scenes/MemoryForgeServerPractice.unity;sceneDirty=False\",\"compiler\":\"codedom\"}}"
+    },
+    {
+      "name": "mcp__unityMCP__read_console",
+      "input": {
+        "action": "get",
+        "types": [
+          "error"
+        ],
+        "count": 5
+      },
+      "is_error": false,
+      "content": "{\"success\":true,\"message\":\"Retrieved 0 log entries.\",\"data\":[]}"
+    }
+  ]
+}

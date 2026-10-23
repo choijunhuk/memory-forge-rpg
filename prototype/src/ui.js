@@ -465,7 +465,7 @@
   }
 
   // ───────── battle ─────────
-  const INTENT_TEXT = (mv, e) => {
+  const INTENT_TEXT = (mv, e, current = false) => {
     if (!mv) return { cls: 'other', ico: ICON.eye, t: '-' };
     const dm = (d) => { const s = app.run ? app.run.battle.s : null; const mul = s ? s.diff.dmg : 100; return Math.round(d * mul / 100) + ((e && e.st.str) || 0); };
     switch (mv.t) {
@@ -482,14 +482,27 @@
       case 'expose': return { cls: 'atk', ico: ICON.eye, t: `${mv.label || '약점 노출'} → ${dm(mv.then.d)}` };
       case 'blockAll': return { cls: 'def', ico: ICON.shield, t: `전원 방어 ${mv.b}` };
       case 'stun': return { cls: 'stun', ico: ICON.zz, t: '균열: 행동 불가' };
+      // late-zone actions (§10.4); numbers come from the move, rules live in the engine
+      case 'apDrain': return { cls: 'other', ico: ICON.eye, t: `시간 착취 ${mv.n} · 다음 턴 행동력 −${mv.n}` };
+      case 'sealSlot': return { cls: 'other', ico: ICON.shield, t: '칸 봉인 · 다음 턴 예약 칸 1개' };
+      case 'delayRes': {
+        const preview = current && app.run ? app.run.battle.previewDelay() : null;
+        const warning = preview && preview.discarded ? '현재 기준 버림 · 행동력 환급 없음' : '빈 칸 없으면 버림 · 행동력 환급 없음';
+        return { cls: 'other', ico: ICON.eye, t: `시간 지연 · 마지막 예약 만기 +1턴 · ${warning}` };
+      }
+      case 'silence': return { cls: 'other', ico: ICON.zz, t: '침묵 · 다음 턴 예약 비용 +1' };
+      case 'eatName': return { cls: 'other', ico: ICON.void, t: '이름 먹기 · 버린 카드 1장 소멸' };
+      case 'phase': return { cls: 'other', ico: ICON.up, t: '2페이즈' };
       default: return { cls: 'other', ico: ICON.eye, t: mv.t };
     }
   };
   function enemyCard(b, e, targetMode) {
-    const it = INTENT_TEXT(e.intent, e); const nx = e.next && !(e.intent && e.intent.t === 'stun') ? INTENT_TEXT(e.next, e) : (e.next ? INTENT_TEXT(e.next, e) : null);
+    const it = INTENT_TEXT(e.intent, e, true); const nx = e.next ? INTENT_TEXT(e.next, e) : null;
     const targetable = targetMode && e.alive && (targetMode !== 'fixed' || e.st.mark > 0);
     const st = [];
     if (e.block) st.push(`<span class="pill">${ICON.shield} 방어 ${e.block}</span>`);
+    if (e.phaseIndex) st.push(`<span class="pill warn">${e.phaseIndex + 1}페이즈</span>`);
+    else if (IX.enemies[e.id] && IX.enemies[e.id].phase) st.push('<span class="pill">1페이즈</span>');
     if (e.brokenUntil) st.push('<span class="pill brass">균열 +25%</span>');
     for (const [k, nm] of [['vul', '취약'], ['weak', '약화'], ['mark', '표식'], ['burn', '화상'], ['str', '힘'], ['reflect', '반사']]) if (e.st[k]) st.push(`<span class="pill ${k === 'mark' ? 'time' : ''}">${nm} ${e.st[k]}</span>`);
     const pop = app.lastDmg[e.uid] ? `<span class="dmg-pop">-${app.lastDmg[e.uid]}</span>` : '';
@@ -510,7 +523,13 @@
     const sealed = kind === 'next' && s.sealedUntil >= s.turn ? 1 : 0;
     const cells = [];
     for (let i = 0; i < 3; i++) {
-      if (i < list.length) { const inst = s.cards[list[i].uid]; const def = IX.cards[inst.id]; cells.push(`<button class="slot filled attr-${attrOfDef(def, inst)}" data-act="resInfo" data-uid="${inst.uid}">${esc(def.name)}${inst.plus ? '+' : ''}</button>`); }
+      if (i < list.length) {
+        const r = list[i]; const inst = s.cards[r.uid]; const def = IX.cards[inst.id];
+        // delayed reservations keep their original kind/power: label it so the later column doesn't imply the stronger after-effect
+        const delayed = !!r.delayed;
+        const note = delayed ? `지연됨 · 원래 ${r.kind === 'next' ? '다음 턴' : '다다음 턴'} 예약 위력` : '';
+        cells.push(`<button class="slot filled attr-${attrOfDef(def, inst)}" data-act="resInfo" data-uid="${inst.uid}"${delayed ? ` title="${esc(note)}" aria-label="${esc(`${def.name}${inst.plus ? '+' : ''} (${note})`)}"` : ''}>${esc(def.name)}${inst.plus ? '+' : ''}${delayed ? `<small>${esc(note)}</small>` : ''}</button>`);
+      }
       else if (i < cap) cells.push('<span class="slot">빈 칸</span>');
       else if (i < cap + sealed) cells.push('<span class="slot sealed">봉인</span>');
       else if (i < capMax) cells.push('<span class="slot none"></span>');
@@ -524,13 +543,19 @@
     const ultSel = app.sel && app.sel.ult ? app.sel.ult : null;
     const need = selCard ? b.needsTarget(selCard) : (ultSel ? 'one' : null);
     const debt = b.debtTotal();
-    const dueNext = s.debts.filter((d) => d.due === s.turn + 1).reduce((a, d) => a + d.n, 0);
-    const pips = Array.from({ length: Math.max(4, s.ap) }, (_, i) => `<span class="pip ${i < s.ap ? 'on' : ''}"></span>`).join('');
+    const R = IX.rules;
+    const drainNext = b.nextTurnDrain();
+    const apNextPreview = b.nextTurnAp();
+    const silenceNow = (s.silenceUntil || 0) === s.turn; const silenceNext = (s.silenceUntil || 0) > s.turn;
+    const pips = Array.from({ length: Math.max(R.apPerTurn, s.ap) }, (_, i) => `<span class="pip ${i < s.ap ? 'on' : ''}"></span>`).join('');
     const buffs = s.buffs.filter((x) => x.until >= s.turn).map((x) => `<span class="pill time">${esc(({ charge: '충전', seraLock: '미래 확정', healUp: '기도문', lumiRush: '한계 돌파', counterDouble: '반격 2배', overloadFree: '과부하 무료' })[x.s] || x.s)}</span>`).join('');
     const chips = [
       s.block ? `<span class="pill">${ICON.shield} 방어 <b class="num">${s.block}</b></span>` : '',
       s.counter ? `<span class="pill">반격 ${s.counter}</span>` : '',
-      debt ? `<span class="pill warn">부채 ${debt} · 다음 턴 행동력 ${Math.max(0, 4 + s.apNext - dueNext)}</span>` : (s.apNext ? `<span class="pill time">다음 턴 행동력 +${s.apNext}</span>` : ''),
+      debt ? `<span class="pill warn">부채 ${debt}</span>` : '',
+      drainNext ? `<span class="pill warn">시간 착취 −${drainNext}</span>` : '',
+      `<span class="pill ${apNextPreview < R.apPerTurn ? 'warn' : 'time'}">예상 다음 턴 행동력 ${apNextPreview}</span>`,
+      silenceNow ? '<span class="pill warn">침묵: 이번 턴 예약 비용 +1</span>' : (silenceNext ? '<span class="pill warn">침묵 예고: 다음 턴 예약 비용 +1</span>' : ''),
       s.echoActive ? `<span class="pill brass">잔향 ${s.echo}/${s.echoMax}</span>` : '',
       s.pst.weak ? `<span class="pill warn">파티 약화 ${s.pst.weak}</span>` : '',
       s.restraint.active ? '<span class="pill brass">절제 계약 중</span>' : '',
@@ -612,6 +637,14 @@
       case 'reshuffle': return '버린 카드를 섞어 뽑을 더미로';
       case 'envelope': return '기억의 봉투가 쓰러짐을 막았다';
       case 'insert': return `얼룩 ${l.n}장이 버린 더미에 섞였다`;
+      case 'apDrain': return `${nameOfUid(l.uid)}의 시간 착취: 다음 턴 행동력 −${l.n} (부채와 별도)`;
+      case 'sealSlot': return l.fallback ? `${nameOfUid(l.uid)}: 봉인할 칸이 없어 대신 방어를 올렸다` : `${nameOfUid(l.uid)}의 칸 봉인: ${l.until}턴 예약 칸 1개 봉인`;
+      case 'delayRes': return !l.uid ? '시간 지연: 예약이 없어 아무것도 지연되지 않았다' : l.discarded
+        ? `시간 지연: ${nameOfUid(l.uid)} 예약이 밀릴 칸이 없어 버린 더미로 (해결되지 않음 · 이미 낸 행동력은 돌려받지 못함)`
+        : `시간 지연: ${nameOfUid(l.uid)} 예약 만기 ${l.from}턴 → ${l.to}턴 (원래 ${l.kind === 'after' ? '다다음 턴' : '다음 턴'} 예약 위력 유지)`;
+      case 'silence': return `${l.uid ? `${nameOfUid(l.uid)}의 ` : ''}침묵: ${l.until ? `${l.until}턴 ` : '다음 턴 '}예약 비용 +1`;
+      case 'eatName': return l.uid ? `이름 먹기: ${nameOfUid(l.uid)}이(가) 이번 전투에서 소멸했다` : '이름 먹기: 버린 더미가 비어 아무것도 먹히지 않았다';
+      case 'phase': return `★ ${nameOfUid(l.uid)} ${l.index + 1}페이즈 돌입! 체력 ${l.hp} · 균열 ${l.brk} (상태·방어 초기화)`;
       case 'end': return l.phase === 'VICTORY' ? '승리!' : '패배...';
       default: return '';
     }
@@ -1106,7 +1139,10 @@
           app.target = d.uid; break;
         }
         const def = IX.enemies[e.id];
-        app.modal = { type: 'info', html: `<h2>${esc(e.name)}</h2><p>체력 ${e.hp}/${e.maxHp} · 균열 ${e.brk}/${e.brkMax} · 약점 ${e.weak.map((x) => ATTR[x].name).join(', ')}</p><p><b>행동 순환</b>: ${def.pattern.map((m) => esc(INTENT_TEXT(m, e).t)).join(' → ')}</p>` };
+        // e.pattern holds the active phase pattern once a boss has changed phase
+        const pat = e.pattern || def.pattern;
+        const phaseNote = def.phase ? `<p><b>${(e.phaseIndex || 0) + 1}페이즈</b>${e.phaseIndex ? '' : ' · 체력이 0이 되면 쓰러지는 대신 2페이즈로 전환'}</p>` : '';
+        app.modal = { type: 'info', html: `<h2>${esc(e.name)}</h2>${phaseNote}<p>체력 ${e.hp}/${e.maxHp} · 균열 ${e.brk}/${e.brkMax} · 약점 ${e.weak.map((x) => ATTR[x].name).join(', ')}</p><p><b>행동 순환</b>: ${pat.map((m) => esc(INTENT_TEXT(m, e).t)).join(' → ')}</p>` };
         break;
       }
       case 'cancel': app.sel = null; app.target = null; break;
@@ -1139,7 +1175,11 @@
       }
       case 'toggleLog': app.logOpen = !app.logOpen; break;
       case 'pile': app.modal = { type: 'pile', z: d.z }; break;
-      case 'resInfo': { const b = run.battle; const inst = b.s.cards[d.uid]; app.modal = { type: 'info', html: `<h2>예약된 카드</h2><div class="pick-grid">${cardFace(inst, { def: b.effDef(inst) })}</div>` }; break; }
+      case 'resInfo': {
+        const b = run.battle; const inst = b.s.cards[d.uid]; const r = b.s.res.find((x) => x.uid === d.uid);
+        const delayNote = r && r.delayed ? `<p class="muted">시간 지연으로 만기가 ${r.due}턴으로 밀렸어요. 위력은 ${r.kind === 'next' ? '다음 턴' : '다다음 턴'} 예약 기준 그대로예요.</p>` : '';
+        app.modal = { type: 'info', html: `<h2>예약된 카드</h2>${delayNote}<div class="pick-grid">${cardFace(inst, { def: b.effDef(inst) })}</div>` }; break;
+      }
       case 'deck': app.modal = { type: 'deck' }; break;
       case 'parts': app.modal = { type: 'parts' }; break;
       case 'usePart': app.modal = { type: 'deck', pick: { label: `「${IX.parts[d.id].name}」을 붙일 카드를 고르세요`, kind: 'part', part: d.id } }; break;

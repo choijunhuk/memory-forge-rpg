@@ -1,0 +1,62 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":[{\"kind\":\"capacity\",\"expectedBoundaryHeld\":true,\"error\":\"INTENT_PENDING\",\"completeRunJsonPure\":true,\"hasPrepared\":false,\"version\":2,\"ap\":3,\"comparison\":\"full JSON including logs/events\",\"seam\":\"public client input/lifecycle only\"},{\"kind\":\"cancel\",\"expectedBoundaryHeld\":true,\"error\":\"\",\"completeRunJsonPure\":true,\"hasPrepared\":false,\"version\":2,\"ap\":3,\"comparison\":\"full JSON including logs/events\",\"seam\":\"public client input/lifecycle only\"},{\"kind\":\"focus\",\"expectedBoundaryHeld\":true,\"error\":\"INTENT_DROPPED\",\"completeRunJsonPure\":true,\"hasPrepared\":false,\"version\":2,\"ap\":3,\"comparison\":\"full JSON including logs/events\",\"seam\":\"public client input/lifecycle only\"},{\"kind\":\"stale\",\"expectedBoundaryHeld\":true,\"error\":\"INTENT_STALE\",\"completeRunJsonPure\":true,\"hasPrepared\":false,\"version\":3,\"ap\":4,\"comparison\":\"full JSON including logs/events\",\"seam\":\"real public Core end, then reflected private dispatcher validation; no expected state injection\"}],\"compiler\":\"codedom\"}}"
+    }
+  ],
+  "structuredContent": {
+    "success": true,
+    "message": "Code executed successfully.",
+    "data": {
+      "result": [
+        {
+          "kind": "capacity",
+          "expectedBoundaryHeld": true,
+          "error": "INTENT_PENDING",
+          "completeRunJsonPure": true,
+          "hasPrepared": false,
+          "version": 2,
+          "ap": 3,
+          "comparison": "full JSON including logs/events",
+          "seam": "public client input/lifecycle only"
+        },
+        {
+          "kind": "cancel",
+          "expectedBoundaryHeld": true,
+          "error": "",
+          "completeRunJsonPure": true,
+          "hasPrepared": false,
+          "version": 2,
+          "ap": 3,
+          "comparison": "full JSON including logs/events",
+          "seam": "public client input/lifecycle only"
+        },
+        {
+          "kind": "focus",
+          "expectedBoundaryHeld": true,
+          "error": "INTENT_DROPPED",
+          "completeRunJsonPure": true,
+          "hasPrepared": false,
+          "version": 2,
+          "ap": 3,
+          "comparison": "full JSON including logs/events",
+          "seam": "public client input/lifecycle only"
+        },
+        {
+          "kind": "stale",
+          "expectedBoundaryHeld": true,
+          "error": "INTENT_STALE",
+          "completeRunJsonPure": true,
+          "hasPrepared": false,
+          "version": 3,
+          "ap": 4,
+          "comparison": "full JSON including logs/events",
+          "seam": "real public Core end, then reflected private dispatcher validation; no expected state injection"
+        }
+      ],
+      "compiler": "codedom"
+    }
+  },
+  "isError": false
+}

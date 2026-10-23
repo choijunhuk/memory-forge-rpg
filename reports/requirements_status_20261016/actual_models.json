@@ -1,0 +1,26 @@
+[
+  {
+    "task": "P1-REQUIREMENT-STATUS-CURRENT-REVIEW",
+    "sessionId": "c6e0a93e-d37d-4183-89e1-d8217d36c285",
+    "actualModels": [
+      "claude-opus-5-5"
+    ],
+    "actualPerTurnEffort": {
+      "high": 19
+    },
+    "billingAccountMatched": true,
+    "rawReasoningCopied": false
+  },
+  {
+    "task": "P1-REQUIREMENT-STATUS-RECHECK",
+    "sessionId": "c6e0a93e-d37d-4183-89e1-d8217d36c285",
+    "actualModels": [
+      "claude-opus-5-5"
+    ],
+    "actualPerTurnEffort": {
+      "high": 20
+    },
+    "billingAccountMatched": true,
+    "rawReasoningCopied": false
+  }
+]

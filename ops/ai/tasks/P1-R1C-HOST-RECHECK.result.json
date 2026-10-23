@@ -1,0 +1,28 @@
+{
+  "task_id": "P1-R1C-HOST-RECHECK",
+  "run_id": "P1-R1C-HOST-RECHECK-20261015T203405165004Z",
+  "status": "RECEIVED_UNVERIFIED",
+  "requestedEffort": "xhigh",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "changes_verified": false,
+  "raw_output": "ops/ai/local/P1-R1C-HOST-RECHECK-20261015T203405165004Z*",
+  "billing_verified_at": "2026-10-14T21:44:57.439760+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "codex/csharp-battle-opening",
+  "base_commit": "2ffc29ecdbdeee5027258ad6f73302b98820fc35",
+  "worktree": "/Users/choi/.codex/worktrees/csharp-battle-opening/Memory_forge",
+  "allowed_files": [
+    "reports/run_memory_core_20261016/host_recheck.md"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "c1b34a4b-d227-4de8-9504-bb76ae06d41a",
+  "subtype": "success",
+  "is_error": false,
+  "result": "**APPROVE.** Both earlier findings (P1, P2) are fixed and nothing blocks integration. I ran nothing; this review is from reading the code. The pass counts you quoted are your receipts, not runs of mine. The full review is in `reports/run_memory_core_20261016/host_recheck.md`, the only file I edited.\n\n- **P1 (v2 arity) is resolved.**\n  - `RunCall` picks the argument count from the actual run's memory policy: 2 for v2, 1 for legacy (`RunProgressionChecks.cs:585-593`).\n  - The recorded store in `args[1]` is only compared against the host's own migrated store; Core is always handed the host's actual store.\n  - Any mismatch fails that case rather than passing.\n- **P2 (Unity claim) is resolved.** The line now reads \"Assign 0 attempts in this host (separate Unity evidence)\", and the \"RuleError name/message/detail unclaimed (code only)\" disclaimer is back.\n  - The separate evidence is real: `ActualCommonAssignmentMatchesOriginalJs` runs 5 actual `Assign` calls per policy against a JS reference, and `playmode29_pass.json` shows both cases passed.\n  - That receipt is from the earlier `run_services` unit, so it is not a fresh Unity run after these changes.\n- **The P3 follow-ups are in.**\n  - The caller's v2 store is checked unchanged after the commit call.\n  - The completion and reload counters can't move during probes.\n  - The two completion forgeries pass structural validation as intended, and actual C# should reject them.\n  - There are now 24 probes; that total is printed, not asserted.\n  - The `TraceHashChecks` callback only runs after the strict `finalState` checks and receives the trace intact, which settles the item I couldn't verify last time.\n\nThree things to fix or word carefully, none blocking:\n1. **The two new forgery probes don't check where they fail.** The older forgery probe asserts the exact failing step; these don't, and there is no untampered control that runs a full save and reload. So they show \"rejected\", not \"rejected by actual save/reload\" as the label says. The fix is cheap:\n   - require the stop at the last step for the return forgery, and after all commands for the reload forgery;\n   - add an untampered round-trip control that completes save and reload.\n2. **Some cleanups you listed aren't in the copy I reviewed.**\n   - Line 49 still says \"commitMemory alone still stops a case\".\n   - Line 569 still labels the rest/buy/eventChoose comment as terminal saving.\n   - Lines 322 and 518 still print \"before DONE\".\n   - No text says the legacy committed/rejected, battle and archive counts are observed rather than asserted.\n\n   Either fix these or leave them out of the integration report.\n3. **The two new probes are still rebuilding and not yet PASS**, so this approval of the code doesn't replace your fresh receipt.\n\nSession: c1b34a4b-d227-4de8-9504-bb76ae06d41a (resumed). Effort requested was xhigh; I can't see the applied level from inside the session.",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "character": "aila",
+  "key": "fig_bond_return",
+  "target": "aila/images/char_aila_fig_bond_return_styleA_v01.png",
+  "args": {
+    "prompt": "Use case: identity-preserve. Edit the FIRST canonical B master sprite, same clearly adult character, EXACT same identity/age/face/hair/costume design/palette and clear-cel A rendering. Preserve all furniture perspective, shape, scale, screen coordinates and prop design across this sequence. Modify ONLY the specified acting/hand state/expression. Direction A: crisp controlled line, emphatic upper eyelid, small symbolic nose and mouth, matte large one-step cel shadows, grouped hair and broad highlight bands, limited metal highlights. Full body/equipment/furniture completely inside same 1024x1536 portrait with clear margins. TRUE RGBA transparent empty canvas, every empty corner alpha=0; remove all haze, background residue, halo, floor, cast shadows, checkerboard, text and watermark. Keep opaque clothing/skin solid and clean hair edges. Character: aila, age 23. Keep EXACT desk/lantern/cups/pot/drawer layout. Aila RECEIVES and carefully holds the same written page just above desktop by its corner, looks at the page edge with a small relieved warm smile; other hand near pen resting on desk. Same faint handwriting strokes. No other person's hand in frame. No lantern held.",
+    "referenced_image_paths": [
+      "/Users/choi/Documents/Memory_forge/art/moments/aila/images/char_aila_fig_worried_styleA_v01.png"
+    ],
+    "transparent_background": true
+  },
+  "error": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID a94ab0cf-25d0-4320-afeb-d739346d8ee4. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
+  "status": "generation_failed",
+  "generation_status": "generation_failed",
+  "selected": false,
+  "resolved_by": "aila/images/char_aila_fig_bond_return_styleA_v01.png"
+}

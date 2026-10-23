@@ -1,0 +1,14 @@
+{
+  "result": "Succeeded",
+  "errors": 0,
+  "warnings": 0,
+  "bytes": 267430167,
+  "seconds": 12.3528583,
+  "platform": "StandaloneOSX",
+  "scenePaths": [
+    "Assets/Scenes/MemoryForgeExpedition.unity",
+    "Assets/Scenes/MemoryForgeBattle.unity",
+    "Assets/Scenes/SampleScene.unity"
+  ],
+  "outputPath": "/Users/choi/Documents/Memory_forge/ops/ai/local/builds/MemoryForgeExpedition-20261016.app"
+}

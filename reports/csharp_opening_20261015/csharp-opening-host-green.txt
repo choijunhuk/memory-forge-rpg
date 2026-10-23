@@ -1,0 +1,8 @@
+CoreChecks: 202/202 passed
+CanonicalJsonChecks: 87/87 passed
+CanonicalSnapshotChecks: 2000/2000 hashes verified; scenarios=1000/1000 (700 short, 300 full); sourceFiles=5; commandEnvelopes=273748
+TraceFixtureValidationChecks: 13/13 passed
+BattleRunCommandReplay: NOT_IMPLEMENTED (0 full Run replay commands executed in C#; opening commands are checked separately)
+BattleOpeningChecks: 2215/2215 passed; 267 actual C# begin commands (267 expected)
+BattleOpeningScope: fresh Battle.Create + begin; integer JSON args with JS receipt ordering; fractional request numbers explicitly unsupported
+BattleRunCommandReplay: NOT_IMPLEMENTED (play/ult/end, later turns, Run and restoration are not ported)

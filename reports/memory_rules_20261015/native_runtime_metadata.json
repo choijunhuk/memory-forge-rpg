@@ -1,0 +1,23 @@
+{
+  "agentPath": "/root/opening_core_review",
+  "threadId": "01a13ca9-097b-7b40-9361-2adb430aec82",
+  "evidence": "Actual current turn_context metadata, not prompt-only declaration",
+  "source": "/Users/choi/.codex/sessions/2026/10/15/rollout-2026-10-15T08-04-33-01a13ca9-097b-7b40-9361-2adb430aec82.jsonl",
+  "contexts": [
+    {
+      "at": "2026-10-15T00:47:10.756Z",
+      "model": "gpt-6.1-sol",
+      "effort": "max"
+    },
+    {
+      "at": "2026-10-15T00:57:59.105Z",
+      "model": "gpt-6.1-sol",
+      "effort": "max"
+    },
+    {
+      "at": "2026-10-15T01:25:39.133Z",
+      "model": "gpt-6.1-sol",
+      "effort": "max"
+    }
+  ]
+}

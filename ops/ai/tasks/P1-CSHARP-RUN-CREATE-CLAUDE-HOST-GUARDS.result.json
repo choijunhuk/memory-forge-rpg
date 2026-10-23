@@ -1,0 +1,22 @@
+{
+  "task_id": "P1-CSHARP-RUN-CREATE-CLAUDE-HOST-GUARDS",
+  "run_id": "P1-CSHARP-RUN-CREATE-CLAUDE-HOST-GUARDS-20261015T080727925826Z",
+  "status": "TIMED_OUT",
+  "requestedEffort": "xhigh",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": null,
+  "changes_verified": false,
+  "raw_output": "ops/ai/local/P1-CSHARP-RUN-CREATE-CLAUDE-HOST-GUARDS-20261015T080727925826Z*",
+  "billing_verified_at": "2026-10-14T21:44:57.439760+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "codex/csharp-battle-opening",
+  "base_commit": "2ffc29ecdbdeee5027258ad6f73302b98820fc35",
+  "worktree": "/Users/choi/.codex/worktrees/csharp-battle-opening/Memory_forge",
+  "allowed_files": [
+    "core/MemoryForge.CoreChecks/RunCreateChecks.cs"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "blocking_reason": "CLI timeout; local checkpoint saved; no retry"
+}

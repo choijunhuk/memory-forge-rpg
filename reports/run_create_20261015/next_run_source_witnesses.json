@@ -1,0 +1,8327 @@
+{
+  "source": "actual public commands only; no injected state",
+  "probes": {
+    "repeatEvent": {
+      "seed": 1000,
+      "setup": {
+        "party": [
+          {
+            "charId": "nia",
+            "res": 0,
+            "weaponId": "w_ravien",
+            "refine": 5
+          },
+          {
+            "charId": "kaya",
+            "res": 4,
+            "weaponId": "w_sera",
+            "refine": 5
+          },
+          {
+            "charId": "sera",
+            "res": 2,
+            "weaponId": "w_star_bow",
+            "refine": 4
+          }
+        ],
+        "seed": 1000,
+        "length": "full",
+        "memoryPolicy": "legacy",
+        "memory": {},
+        "relics": [],
+        "difficulty": {
+          "hp": 100,
+          "dmg": 100
+        },
+        "zones": [
+          1,
+          2
+        ]
+      },
+      "commands": [
+        {
+          "scope": "run",
+          "kind": "enter",
+          "args": [
+            "z1f0n2"
+          ]
+        },
+        {
+          "scope": "battle",
+          "rid": "r1-play",
+          "v": 1,
+          "kind": "play",
+          "args": {
+            "uid": "c18",
+            "mode": "now",
+            "target": "e19",
+            "picks": [
+              "c12"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r2-play",
+          "v": 2,
+          "kind": "play",
+          "args": {
+            "uid": "c17",
+            "mode": "now",
+            "target": "e19",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r3-play",
+          "v": 3,
+          "kind": "play",
+          "args": {
+            "uid": "c12",
+            "mode": "now",
+            "target": "e19",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r4-play",
+          "v": 4,
+          "kind": "play",
+          "args": {
+            "uid": "c15",
+            "mode": "next",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r5-end",
+          "v": 5,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r6-play",
+          "v": 6,
+          "kind": "play",
+          "args": {
+            "uid": "c2",
+            "mode": "now",
+            "target": "e19",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r7-play",
+          "v": 7,
+          "kind": "play",
+          "args": {
+            "uid": "c11",
+            "mode": "now",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r8-play",
+          "v": 8,
+          "kind": "play",
+          "args": {
+            "uid": "c3",
+            "mode": "now",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r9-play",
+          "v": 9,
+          "kind": "play",
+          "args": {
+            "uid": "c8",
+            "mode": "now",
+            "target": "e19",
+            "picks": [
+              "c9"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r10-play",
+          "v": 10,
+          "kind": "play",
+          "args": {
+            "uid": "c9",
+            "mode": "now",
+            "target": "e19",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r11-play",
+          "v": 11,
+          "kind": "play",
+          "args": {
+            "uid": "c13",
+            "mode": "after",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r12-end",
+          "v": 12,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r13-play",
+          "v": 13,
+          "kind": "play",
+          "args": {
+            "uid": "c6",
+            "mode": "now",
+            "target": "e20",
+            "picks": [
+              "c1"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r14-play",
+          "v": 14,
+          "kind": "play",
+          "args": {
+            "uid": "c1",
+            "mode": "next",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r15-play",
+          "v": 15,
+          "kind": "play",
+          "args": {
+            "uid": "c16",
+            "mode": "after",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r16-play",
+          "v": 16,
+          "kind": "play",
+          "args": {
+            "uid": "c7",
+            "mode": "now",
+            "target": "e20",
+            "picks": [
+              "c1",
+              "c14"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r17-play",
+          "v": 17,
+          "kind": "play",
+          "args": {
+            "uid": "c14",
+            "mode": "next",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r17-end",
+          "v": 17,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "run",
+          "kind": "takeCard",
+          "args": [
+            "com_focus"
+          ]
+        },
+        {
+          "scope": "run",
+          "kind": "proceed",
+          "args": []
+        },
+        {
+          "scope": "run",
+          "kind": "enter",
+          "args": [
+            "z1f1n1"
+          ]
+        },
+        {
+          "scope": "battle",
+          "rid": "r1-play",
+          "v": 1,
+          "kind": "play",
+          "args": {
+            "uid": "c2",
+            "mode": "after",
+            "target": "e22",
+            "picks": [
+              "c17"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r2-play",
+          "v": 2,
+          "kind": "play",
+          "args": {
+            "uid": "c8",
+            "mode": "now",
+            "target": "e20",
+            "picks": [
+              "c2",
+              "c4"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r3-play",
+          "v": 3,
+          "kind": "play",
+          "args": {
+            "uid": "c16",
+            "mode": "next",
+            "target": "e21",
+            "picks": [
+              "c4"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r4-play",
+          "v": 4,
+          "kind": "play",
+          "args": {
+            "uid": "c4",
+            "mode": "now",
+            "target": "e22",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r5-end",
+          "v": 5,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r6-play",
+          "v": 6,
+          "kind": "play",
+          "args": {
+            "uid": "c12",
+            "mode": "now",
+            "target": "e22",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r7-play",
+          "v": 7,
+          "kind": "play",
+          "args": {
+            "uid": "c18",
+            "mode": "next",
+            "target": "e22",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r8-play",
+          "v": 8,
+          "kind": "play",
+          "args": {
+            "uid": "c14",
+            "mode": "after",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r9-play",
+          "v": 9,
+          "kind": "play",
+          "args": {
+            "uid": "c10",
+            "mode": "now",
+            "target": "e20",
+            "picks": [
+              "c14",
+              "c1"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r10-end",
+          "v": 10,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r11-play",
+          "v": 11,
+          "kind": "play",
+          "args": {
+            "uid": "c5",
+            "mode": "after",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r12-play",
+          "v": 12,
+          "kind": "play",
+          "args": {
+            "uid": "c7",
+            "mode": "now",
+            "target": "e20",
+            "picks": [
+              "c19"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r13-play",
+          "v": 13,
+          "kind": "play",
+          "args": {
+            "uid": "c19",
+            "mode": "now",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r14-play",
+          "v": 14,
+          "kind": "play",
+          "args": {
+            "uid": "c6",
+            "mode": "now",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r15-play",
+          "v": 15,
+          "kind": "play",
+          "args": {
+            "uid": "c11",
+            "mode": "after",
+            "target": "e20",
+            "picks": [
+              "c14"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r15-play",
+          "v": 15,
+          "kind": "play",
+          "args": {
+            "uid": "c11",
+            "mode": "next",
+            "target": "e20",
+            "picks": [
+              "c14"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r16-end",
+          "v": 16,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r17-play",
+          "v": 17,
+          "kind": "play",
+          "args": {
+            "uid": "c15",
+            "mode": "next",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r18-play",
+          "v": 18,
+          "kind": "play",
+          "args": {
+            "uid": "c14",
+            "mode": "after",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r19-play",
+          "v": 19,
+          "kind": "play",
+          "args": {
+            "uid": "c9",
+            "mode": "after",
+            "target": "e20",
+            "picks": [
+              "c14"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r19-play",
+          "v": 19,
+          "kind": "play",
+          "args": {
+            "uid": "c1",
+            "mode": "next",
+            "target": "e20",
+            "picks": [
+              "c15",
+              "c3"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r19-play",
+          "v": 19,
+          "kind": "play",
+          "args": {
+            "uid": "c9",
+            "mode": "now",
+            "target": "e20",
+            "picks": [
+              "c1"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r19-play",
+          "v": 19,
+          "kind": "play",
+          "args": {
+            "uid": "c9",
+            "mode": "next",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r19-play",
+          "v": 19,
+          "kind": "play",
+          "args": {
+            "uid": "c3",
+            "mode": "now",
+            "target": "e20",
+            "picks": [
+              "c9"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r20-play",
+          "v": 20,
+          "kind": "play",
+          "args": {
+            "uid": "c9",
+            "mode": "next",
+            "target": "e20",
+            "picks": [
+              "c1"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r20-play",
+          "v": 20,
+          "kind": "play",
+          "args": {
+            "uid": "c1",
+            "mode": "after",
+            "target": "e20",
+            "picks": [
+              "c9"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r20-play",
+          "v": 20,
+          "kind": "play",
+          "args": {
+            "uid": "c9",
+            "mode": "now",
+            "target": "e20",
+            "picks": [
+              "c1"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r20-play",
+          "v": 20,
+          "kind": "play",
+          "args": {
+            "uid": "c1",
+            "mode": "after",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r20-play",
+          "v": 20,
+          "kind": "play",
+          "args": {
+            "uid": "c1",
+            "mode": "next",
+            "target": "e20",
+            "picks": [
+              "c9"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r20-play",
+          "v": 20,
+          "kind": "play",
+          "args": {
+            "uid": "c1",
+            "mode": "now",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r21-play",
+          "v": 21,
+          "kind": "play",
+          "args": {
+            "uid": "c9",
+            "mode": "next",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r21-play",
+          "v": 21,
+          "kind": "play",
+          "args": {
+            "uid": "c9",
+            "mode": "after",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r21-play",
+          "v": 21,
+          "kind": "play",
+          "args": {
+            "uid": "c9",
+            "mode": "now",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r21-play",
+          "v": 21,
+          "kind": "play",
+          "args": {
+            "uid": "c9",
+            "mode": "after",
+            "target": "e20",
+            "picks": [
+              "c5"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r21-play",
+          "v": 21,
+          "kind": "play",
+          "args": {
+            "uid": "c9",
+            "mode": "next",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r21-play",
+          "v": 21,
+          "kind": "play",
+          "args": {
+            "uid": "c9",
+            "mode": "next",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r21-play",
+          "v": 21,
+          "kind": "play",
+          "args": {
+            "uid": "c9",
+            "mode": "after",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r21-play",
+          "v": 21,
+          "kind": "play",
+          "args": {
+            "uid": "c9",
+            "mode": "after",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r21-play",
+          "v": 21,
+          "kind": "play",
+          "args": {
+            "uid": "c9",
+            "mode": "next",
+            "target": "e20",
+            "picks": [
+              "c15"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r21-play",
+          "v": 21,
+          "kind": "play",
+          "args": {
+            "uid": "c9",
+            "mode": "next",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r21-play",
+          "v": 21,
+          "kind": "play",
+          "args": {
+            "uid": "c9",
+            "mode": "after",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r21-play",
+          "v": 21,
+          "kind": "play",
+          "args": {
+            "uid": "c9",
+            "mode": "next",
+            "target": "e20",
+            "picks": [
+              "c5"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r21-play",
+          "v": 21,
+          "kind": "play",
+          "args": {
+            "uid": "c9",
+            "mode": "after",
+            "target": "e20",
+            "picks": [
+              "c15"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r21-play",
+          "v": 21,
+          "kind": "play",
+          "args": {
+            "uid": "c9",
+            "mode": "now",
+            "target": "e20",
+            "picks": [
+              "c15"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r21-play",
+          "v": 21,
+          "kind": "play",
+          "args": {
+            "uid": "c9",
+            "mode": "after",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r21-play",
+          "v": 21,
+          "kind": "play",
+          "args": {
+            "uid": "c9",
+            "mode": "next",
+            "target": "e20",
+            "picks": [
+              "c15"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r21-play",
+          "v": 21,
+          "kind": "play",
+          "args": {
+            "uid": "c9",
+            "mode": "after",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r21-end",
+          "v": 21,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "run",
+          "kind": "takeCard",
+          "args": [
+            "kaya_deduce"
+          ]
+        },
+        {
+          "scope": "run",
+          "kind": "proceed",
+          "args": []
+        },
+        {
+          "scope": "run",
+          "kind": "enter",
+          "args": [
+            "z1f2n1"
+          ]
+        },
+        {
+          "scope": "battle",
+          "rid": "r1-play",
+          "v": 1,
+          "kind": "play",
+          "args": {
+            "uid": "c4",
+            "mode": "next",
+            "target": "e22",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r2-play",
+          "v": 2,
+          "kind": "play",
+          "args": {
+            "uid": "c6",
+            "mode": "now",
+            "target": "e23",
+            "picks": [
+              "c4"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r3-play",
+          "v": 3,
+          "kind": "play",
+          "args": {
+            "uid": "c9",
+            "mode": "next",
+            "target": "e23",
+            "picks": [
+              "c17"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r4-play",
+          "v": 4,
+          "kind": "play",
+          "args": {
+            "uid": "c17",
+            "mode": "now",
+            "target": "e23",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r5-play",
+          "v": 5,
+          "kind": "play",
+          "args": {
+            "uid": "c8",
+            "mode": "now",
+            "target": "e21",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r6-end",
+          "v": 6,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r7-play",
+          "v": 7,
+          "kind": "play",
+          "args": {
+            "uid": "c7",
+            "mode": "now",
+            "target": "e22",
+            "picks": [
+              "c10"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r8-play",
+          "v": 8,
+          "kind": "play",
+          "args": {
+            "uid": "c10",
+            "mode": "now",
+            "target": "e22",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r9-play",
+          "v": 9,
+          "kind": "play",
+          "args": {
+            "uid": "c18",
+            "mode": "now",
+            "target": "e22",
+            "picks": [
+              "c11"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r10-play",
+          "v": 10,
+          "kind": "play",
+          "args": {
+            "uid": "c12",
+            "mode": "now",
+            "target": "e21",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r11-end",
+          "v": 11,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r12-play",
+          "v": 12,
+          "kind": "play",
+          "args": {
+            "uid": "c16",
+            "mode": "next",
+            "target": "e21",
+            "picks": [
+              "c5"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r13-play",
+          "v": 13,
+          "kind": "play",
+          "args": {
+            "uid": "c20",
+            "mode": "after",
+            "target": "e21",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r14-play",
+          "v": 14,
+          "kind": "play",
+          "args": {
+            "uid": "c2",
+            "mode": "next",
+            "target": "e21",
+            "picks": [
+              "c5"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r15-play",
+          "v": 15,
+          "kind": "play",
+          "args": {
+            "uid": "c3",
+            "mode": "now",
+            "target": "e21",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r16-play",
+          "v": 16,
+          "kind": "play",
+          "args": {
+            "uid": "c5",
+            "mode": "next",
+            "target": "e21",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r16-play",
+          "v": 16,
+          "kind": "play",
+          "args": {
+            "uid": "c5",
+            "mode": "next",
+            "target": "e21",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r16-play",
+          "v": 16,
+          "kind": "play",
+          "args": {
+            "uid": "c5",
+            "mode": "now",
+            "target": "e21",
+            "picks": [
+              "c16"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r17-end",
+          "v": 17,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "run",
+          "kind": "takeCard",
+          "args": [
+            "sera_timed"
+          ]
+        },
+        {
+          "scope": "run",
+          "kind": "takePart",
+          "args": []
+        },
+        {
+          "scope": "run",
+          "kind": "proceed",
+          "args": []
+        },
+        {
+          "scope": "run",
+          "kind": "enter",
+          "args": [
+            "z1f3n0"
+          ]
+        },
+        {
+          "scope": "run",
+          "kind": "eventChoose",
+          "args": [
+            0,
+            "k2"
+          ]
+        },
+        {
+          "scope": "run",
+          "kind": "eventChoose",
+          "args": [
+            0,
+            "k2"
+          ]
+        }
+      ],
+      "event": "ev_archive",
+      "before": {
+        "hp": 149,
+        "maxHp": 238,
+        "coins": 138,
+        "deck": 19,
+        "done": true
+      },
+      "after": {
+        "hp": 149,
+        "maxHp": 233,
+        "coins": 138,
+        "deck": 17,
+        "done": true
+      },
+      "rejected": false
+    },
+    "secondShopRemoval": {
+      "seed": 1020,
+      "setup": {
+        "party": [
+          {
+            "charId": "lumi",
+            "res": 5,
+            "weaponId": "w_frost_blade",
+            "refine": 4
+          },
+          {
+            "charId": "nia",
+            "res": 6,
+            "weaponId": "w_clock_core",
+            "refine": 5
+          },
+          {
+            "charId": "aila",
+            "res": 2,
+            "weaponId": "w_basic_ritual",
+            "refine": 1
+          }
+        ],
+        "seed": 1020,
+        "length": "full",
+        "memoryPolicy": "legacy",
+        "memory": {},
+        "relics": [],
+        "difficulty": {
+          "hp": 100,
+          "dmg": 100
+        },
+        "zones": [
+          1,
+          2
+        ]
+      },
+      "commands": [
+        {
+          "scope": "run",
+          "kind": "enter",
+          "args": [
+            "z1f0n1"
+          ]
+        },
+        {
+          "scope": "battle",
+          "rid": "r1-play",
+          "v": 1,
+          "kind": "play",
+          "args": {
+            "uid": "c8",
+            "mode": "next",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r2-play",
+          "v": 2,
+          "kind": "play",
+          "args": {
+            "uid": "c6",
+            "mode": "after",
+            "target": "e19",
+            "picks": [
+              "c13"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r3-play",
+          "v": 3,
+          "kind": "play",
+          "args": {
+            "uid": "c17",
+            "mode": "now",
+            "target": "e19",
+            "picks": [
+              "c16"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r4-play",
+          "v": 4,
+          "kind": "play",
+          "args": {
+            "uid": "c16",
+            "mode": "now",
+            "target": "e19",
+            "picks": [
+              "c13"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r5-play",
+          "v": 5,
+          "kind": "play",
+          "args": {
+            "uid": "c5",
+            "mode": "after",
+            "target": "e19",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r5-play",
+          "v": 5,
+          "kind": "play",
+          "args": {
+            "uid": "c9",
+            "mode": "now",
+            "target": "e19",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r6-play",
+          "v": 6,
+          "kind": "play",
+          "args": {
+            "uid": "c10",
+            "mode": "next",
+            "target": "e20",
+            "picks": [
+              "c13"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r7-end",
+          "v": 7,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r8-play",
+          "v": 8,
+          "kind": "play",
+          "args": {
+            "uid": "c7",
+            "mode": "after",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r9-play",
+          "v": 9,
+          "kind": "play",
+          "args": {
+            "uid": "c11",
+            "mode": "after",
+            "target": "e19",
+            "picks": [
+              "c14"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r9-play",
+          "v": 9,
+          "kind": "play",
+          "args": {
+            "uid": "c14",
+            "mode": "after",
+            "target": "e19",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r9-play",
+          "v": 9,
+          "kind": "play",
+          "args": {
+            "uid": "c3",
+            "mode": "after",
+            "target": "e19",
+            "picks": [
+              "c6",
+              "c4"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r9-play",
+          "v": 9,
+          "kind": "play",
+          "args": {
+            "uid": "c11",
+            "mode": "next",
+            "target": "e20",
+            "picks": [
+              "c4"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r10-play",
+          "v": 10,
+          "kind": "play",
+          "args": {
+            "uid": "c3",
+            "mode": "after",
+            "target": "e19",
+            "picks": [
+              "c7"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r10-play",
+          "v": 10,
+          "kind": "play",
+          "args": {
+            "uid": "c4",
+            "mode": "next",
+            "target": "e20",
+            "picks": [
+              "c6",
+              "c14"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r10-play",
+          "v": 10,
+          "kind": "play",
+          "args": {
+            "uid": "c3",
+            "mode": "next",
+            "target": "e19",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r10-play",
+          "v": 10,
+          "kind": "play",
+          "args": {
+            "uid": "c4",
+            "mode": "next",
+            "target": "e20",
+            "picks": [
+              "c14"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r10-play",
+          "v": 10,
+          "kind": "play",
+          "args": {
+            "uid": "c3",
+            "mode": "now",
+            "target": "e20",
+            "picks": [
+              "c14"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r11-play",
+          "v": 11,
+          "kind": "play",
+          "args": {
+            "uid": "c12",
+            "mode": "now",
+            "target": "e19",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r12-end",
+          "v": 12,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r13-play",
+          "v": 13,
+          "kind": "play",
+          "args": {
+            "uid": "c21",
+            "mode": "now",
+            "target": "e20",
+            "picks": [
+              "c7"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r14-play",
+          "v": 14,
+          "kind": "play",
+          "args": {
+            "uid": "c2",
+            "mode": "now",
+            "target": "e20",
+            "picks": [
+              "c18"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r15-play",
+          "v": 15,
+          "kind": "play",
+          "args": {
+            "uid": "c14",
+            "mode": "next",
+            "target": "e19",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r16-play",
+          "v": 16,
+          "kind": "play",
+          "args": {
+            "uid": "c18",
+            "mode": "next",
+            "target": "e19",
+            "picks": [
+              "c17"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r16-play",
+          "v": 16,
+          "kind": "play",
+          "args": {
+            "uid": "c17",
+            "mode": "after",
+            "target": "e19",
+            "picks": [
+              "c5"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r17-play",
+          "v": 17,
+          "kind": "play",
+          "args": {
+            "uid": "c5",
+            "mode": "now",
+            "target": "e19",
+            "picks": [
+              "c17",
+              "c18"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r18-end",
+          "v": 18,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "run",
+          "kind": "skipCard",
+          "args": []
+        },
+        {
+          "scope": "run",
+          "kind": "proceed",
+          "args": []
+        },
+        {
+          "scope": "run",
+          "kind": "enter",
+          "args": [
+            "z1f1n1"
+          ]
+        },
+        {
+          "scope": "battle",
+          "rid": "r1-play",
+          "v": 1,
+          "kind": "play",
+          "args": {
+            "uid": "c2",
+            "mode": "now",
+            "target": "e20",
+            "picks": [
+              "c16"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r2-play",
+          "v": 2,
+          "kind": "play",
+          "args": {
+            "uid": "c1",
+            "mode": "after",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r3-play",
+          "v": 3,
+          "kind": "play",
+          "args": {
+            "uid": "c4",
+            "mode": "now",
+            "target": "e19",
+            "picks": [
+              "c1",
+              "c14"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r4-play",
+          "v": 4,
+          "kind": "play",
+          "args": {
+            "uid": "c10",
+            "mode": "next",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r5-play",
+          "v": 5,
+          "kind": "play",
+          "args": {
+            "uid": "c14",
+            "mode": "next",
+            "target": "e19",
+            "picks": [
+              "c10"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r6-end",
+          "v": 6,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r7-play",
+          "v": 7,
+          "kind": "play",
+          "args": {
+            "uid": "c6",
+            "mode": "after",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r8-play",
+          "v": 8,
+          "kind": "play",
+          "args": {
+            "uid": "c3",
+            "mode": "next",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r9-play",
+          "v": 9,
+          "kind": "play",
+          "args": {
+            "uid": "c5",
+            "mode": "now",
+            "target": "e20",
+            "picks": [
+              "c12"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r10-play",
+          "v": 10,
+          "kind": "play",
+          "args": {
+            "uid": "c18",
+            "mode": "now",
+            "target": "e20",
+            "picks": [
+              "c12"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r11-play",
+          "v": 11,
+          "kind": "play",
+          "args": {
+            "uid": "c15",
+            "mode": "after",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r11-end",
+          "v": 11,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "run",
+          "kind": "skipCard",
+          "args": []
+        },
+        {
+          "scope": "run",
+          "kind": "takePart",
+          "args": []
+        },
+        {
+          "scope": "run",
+          "kind": "proceed",
+          "args": []
+        },
+        {
+          "scope": "run",
+          "kind": "enter",
+          "args": [
+            "z1f2n1"
+          ]
+        },
+        {
+          "scope": "battle",
+          "rid": "r1-play",
+          "v": 1,
+          "kind": "play",
+          "args": {
+            "uid": "c18",
+            "mode": "next",
+            "target": "e19",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r2-play",
+          "v": 2,
+          "kind": "play",
+          "args": {
+            "uid": "c14",
+            "mode": "after",
+            "target": "e19",
+            "picks": [
+              "c18"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r3-play",
+          "v": 3,
+          "kind": "play",
+          "args": {
+            "uid": "c17",
+            "mode": "after",
+            "target": "e19",
+            "picks": [
+              "c18"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r3-play",
+          "v": 3,
+          "kind": "play",
+          "args": {
+            "uid": "c9",
+            "mode": "now",
+            "target": "e20",
+            "picks": [
+              "c16"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r4-play",
+          "v": 4,
+          "kind": "play",
+          "args": {
+            "uid": "c10",
+            "mode": "next",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r5-play",
+          "v": 5,
+          "kind": "play",
+          "args": {
+            "uid": "c12",
+            "mode": "now",
+            "target": "e19",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r6-play",
+          "v": 6,
+          "kind": "play",
+          "args": {
+            "uid": "c16",
+            "mode": "now",
+            "target": "e20",
+            "picks": [
+              "c17"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r7-end",
+          "v": 7,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r8-play",
+          "v": 8,
+          "kind": "play",
+          "args": {
+            "uid": "c5",
+            "mode": "now",
+            "target": "e19",
+            "picks": [
+              "c14",
+              "c4"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r9-play",
+          "v": 9,
+          "kind": "play",
+          "args": {
+            "uid": "c4",
+            "mode": "next",
+            "target": "e19",
+            "picks": [
+              "c8"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r10-play",
+          "v": 10,
+          "kind": "play",
+          "args": {
+            "uid": "c7",
+            "mode": "now",
+            "target": "e19",
+            "picks": [
+              "c4",
+              "c1"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r11-play",
+          "v": 11,
+          "kind": "play",
+          "args": {
+            "uid": "c13",
+            "mode": "now",
+            "target": "e19",
+            "picks": [
+              "c8"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r12-end",
+          "v": 12,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r13-play",
+          "v": 13,
+          "kind": "play",
+          "args": {
+            "uid": "c6",
+            "mode": "now",
+            "target": "e19",
+            "picks": [
+              "c1"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r14-play",
+          "v": 14,
+          "kind": "play",
+          "args": {
+            "uid": "c13",
+            "mode": "next",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r15-play",
+          "v": 15,
+          "kind": "play",
+          "args": {
+            "uid": "c5",
+            "mode": "now",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r16-play",
+          "v": 16,
+          "kind": "play",
+          "args": {
+            "uid": "c1",
+            "mode": "next",
+            "target": "e20",
+            "picks": [
+              "c11"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r17-end",
+          "v": 17,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r18-play",
+          "v": 18,
+          "kind": "play",
+          "args": {
+            "uid": "c9",
+            "mode": "now",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r19-play",
+          "v": 19,
+          "kind": "play",
+          "args": {
+            "uid": "c10",
+            "mode": "now",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r20-play",
+          "v": 20,
+          "kind": "play",
+          "args": {
+            "uid": "c15",
+            "mode": "after",
+            "target": "e20",
+            "picks": [
+              "c21"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r21-play",
+          "v": 21,
+          "kind": "play",
+          "args": {
+            "uid": "c21",
+            "mode": "now",
+            "target": "e20",
+            "picks": [
+              "c15",
+              "c12"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r22-play",
+          "v": 22,
+          "kind": "play",
+          "args": {
+            "uid": "c12",
+            "mode": "now",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r23-play",
+          "v": 23,
+          "kind": "play",
+          "args": {
+            "uid": "c16",
+            "mode": "now",
+            "target": "e20",
+            "picks": [
+              "c15"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r24-play",
+          "v": 24,
+          "kind": "play",
+          "args": {
+            "uid": "c2",
+            "mode": "now",
+            "target": "e20",
+            "picks": [
+              "c7"
+            ]
+          }
+        },
+        {
+          "scope": "run",
+          "kind": "takeCard",
+          "args": [
+            "com_patch"
+          ]
+        },
+        {
+          "scope": "run",
+          "kind": "proceed",
+          "args": []
+        },
+        {
+          "scope": "run",
+          "kind": "enter",
+          "args": [
+            "z1f3n0"
+          ]
+        },
+        {
+          "scope": "run",
+          "kind": "rest",
+          "args": [
+            "heal"
+          ]
+        },
+        {
+          "scope": "run",
+          "kind": "proceed",
+          "args": []
+        },
+        {
+          "scope": "run",
+          "kind": "enter",
+          "args": [
+            "z1f4n0"
+          ]
+        },
+        {
+          "scope": "battle",
+          "rid": "r1-play",
+          "v": 1,
+          "kind": "play",
+          "args": {
+            "uid": "c2",
+            "mode": "now",
+            "target": "e21",
+            "picks": [
+              "c15"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r2-play",
+          "v": 2,
+          "kind": "play",
+          "args": {
+            "uid": "c3",
+            "mode": "next",
+            "target": "e21",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r3-play",
+          "v": 3,
+          "kind": "play",
+          "args": {
+            "uid": "c6",
+            "mode": "next",
+            "target": "e20",
+            "picks": [
+              "c13"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r4-play",
+          "v": 4,
+          "kind": "play",
+          "args": {
+            "uid": "c9",
+            "mode": "now",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r5-play",
+          "v": 5,
+          "kind": "play",
+          "args": {
+            "uid": "c13",
+            "mode": "next",
+            "target": "e21",
+            "picks": [
+              "c6"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r5-play",
+          "v": 5,
+          "kind": "play",
+          "args": {
+            "uid": "c12",
+            "mode": "now",
+            "target": "e20",
+            "picks": [
+              "c6",
+              "c15"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r6-play",
+          "v": 6,
+          "kind": "play",
+          "args": {
+            "uid": "c14",
+            "mode": "after",
+            "target": "e20",
+            "picks": [
+              "c15"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r7-end",
+          "v": 7,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r8-play",
+          "v": 8,
+          "kind": "play",
+          "args": {
+            "uid": "c5",
+            "mode": "next",
+            "target": "e21",
+            "picks": [
+              "c17"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r9-play",
+          "v": 9,
+          "kind": "play",
+          "args": {
+            "uid": "c17",
+            "mode": "now",
+            "target": "e21",
+            "picks": [
+              "c5"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r10-play",
+          "v": 10,
+          "kind": "play",
+          "args": {
+            "uid": "c4",
+            "mode": "after",
+            "target": "e20",
+            "picks": [
+              "c8"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r11-play",
+          "v": 11,
+          "kind": "play",
+          "args": {
+            "uid": "c19",
+            "mode": "next",
+            "target": "e20",
+            "picks": [
+              "c5",
+              "c8"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r11-play",
+          "v": 11,
+          "kind": "play",
+          "args": {
+            "uid": "c8",
+            "mode": "next",
+            "target": "e20",
+            "picks": [
+              "c5"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r11-play",
+          "v": 11,
+          "kind": "play",
+          "args": {
+            "uid": "c19",
+            "mode": "after",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r11-play",
+          "v": 11,
+          "kind": "play",
+          "args": {
+            "uid": "c8",
+            "mode": "after",
+            "target": "e20",
+            "picks": [
+              "c14"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r11-play",
+          "v": 11,
+          "kind": "play",
+          "args": {
+            "uid": "c19",
+            "mode": "after",
+            "target": "e20",
+            "picks": [
+              "c8"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r11-play",
+          "v": 11,
+          "kind": "play",
+          "args": {
+            "uid": "c8",
+            "mode": "after",
+            "target": "e20",
+            "picks": [
+              "c19"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r11-play",
+          "v": 11,
+          "kind": "play",
+          "args": {
+            "uid": "c19",
+            "mode": "now",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r12-play",
+          "v": 12,
+          "kind": "play",
+          "args": {
+            "uid": "c8",
+            "mode": "after",
+            "target": "e20",
+            "picks": [
+              "c14"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r12-play",
+          "v": 12,
+          "kind": "play",
+          "args": {
+            "uid": "c8",
+            "mode": "now",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r12-play",
+          "v": 12,
+          "kind": "play",
+          "args": {
+            "uid": "c8",
+            "mode": "next",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r12-end",
+          "v": 12,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "run",
+          "kind": "takeCard",
+          "args": [
+            "aila_bell"
+          ]
+        },
+        {
+          "scope": "run",
+          "kind": "takePart",
+          "args": []
+        },
+        {
+          "scope": "run",
+          "kind": "proceed",
+          "args": []
+        },
+        {
+          "scope": "run",
+          "kind": "enter",
+          "args": [
+            "z1f5n0"
+          ]
+        },
+        {
+          "scope": "battle",
+          "rid": "r1-play",
+          "v": 1,
+          "kind": "play",
+          "args": {
+            "uid": "c18",
+            "mode": "after",
+            "target": "e21",
+            "picks": [
+              "c3"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r2-play",
+          "v": 2,
+          "kind": "play",
+          "args": {
+            "uid": "c19",
+            "mode": "now",
+            "target": "e21",
+            "picks": [
+              "c16"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r3-play",
+          "v": 3,
+          "kind": "play",
+          "args": {
+            "uid": "c8",
+            "mode": "after",
+            "target": "e22",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r3-play",
+          "v": 3,
+          "kind": "play",
+          "args": {
+            "uid": "c16",
+            "mode": "now",
+            "target": "e22",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r4-play",
+          "v": 4,
+          "kind": "play",
+          "args": {
+            "uid": "c8",
+            "mode": "after",
+            "target": "e21",
+            "picks": [
+              "c18",
+              "c12"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r4-play",
+          "v": 4,
+          "kind": "play",
+          "args": {
+            "uid": "c3",
+            "mode": "after",
+            "target": "e22",
+            "picks": [
+              "c11"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r4-play",
+          "v": 4,
+          "kind": "play",
+          "args": {
+            "uid": "c11",
+            "mode": "after",
+            "target": "e21",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r4-play",
+          "v": 4,
+          "kind": "play",
+          "args": {
+            "uid": "c8",
+            "mode": "now",
+            "target": "e21",
+            "picks": [
+              "c12"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r5-play",
+          "v": 5,
+          "kind": "play",
+          "args": {
+            "uid": "c3",
+            "mode": "next",
+            "target": "e21",
+            "picks": [
+              "c12"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r6-end",
+          "v": 6,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r7-play",
+          "v": 7,
+          "kind": "play",
+          "args": {
+            "uid": "c5",
+            "mode": "next",
+            "target": "e22",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r8-play",
+          "v": 8,
+          "kind": "play",
+          "args": {
+            "uid": "c15",
+            "mode": "next",
+            "target": "e21",
+            "picks": [
+              "c17"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r8-play",
+          "v": 8,
+          "kind": "play",
+          "args": {
+            "uid": "c17",
+            "mode": "now",
+            "target": "e22",
+            "picks": [
+              "c9"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r9-play",
+          "v": 9,
+          "kind": "play",
+          "args": {
+            "uid": "c15",
+            "mode": "next",
+            "target": "e22",
+            "picks": [
+              "c9"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r9-play",
+          "v": 9,
+          "kind": "play",
+          "args": {
+            "uid": "c1",
+            "mode": "now",
+            "target": "e21",
+            "picks": [
+              "c9"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r10-play",
+          "v": 10,
+          "kind": "play",
+          "args": {
+            "uid": "c9",
+            "mode": "now",
+            "target": "e22",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r11-play",
+          "v": 11,
+          "kind": "play",
+          "args": {
+            "uid": "c15",
+            "mode": "now",
+            "target": "e22",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r12-end",
+          "v": 12,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r13-play",
+          "v": 13,
+          "kind": "play",
+          "args": {
+            "uid": "c2",
+            "mode": "now",
+            "target": "e21",
+            "picks": [
+              "c14"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r14-play",
+          "v": 14,
+          "kind": "play",
+          "args": {
+            "uid": "c6",
+            "mode": "after",
+            "target": "e22",
+            "picks": [
+              "c4"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r15-play",
+          "v": 15,
+          "kind": "play",
+          "args": {
+            "uid": "c10",
+            "mode": "next",
+            "target": "e21",
+            "picks": [
+              "c14"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r16-play",
+          "v": 16,
+          "kind": "play",
+          "args": {
+            "uid": "c7",
+            "mode": "now",
+            "target": "e22",
+            "picks": [
+              "c4"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r17-play",
+          "v": 17,
+          "kind": "play",
+          "args": {
+            "uid": "c4",
+            "mode": "now",
+            "target": "e21",
+            "picks": [
+              "c10",
+              "c14"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r18-end",
+          "v": 18,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r19-play",
+          "v": 19,
+          "kind": "play",
+          "args": {
+            "uid": "c10",
+            "mode": "after",
+            "target": "e21",
+            "picks": [
+              "c17"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r20-play",
+          "v": 20,
+          "kind": "play",
+          "args": {
+            "uid": "c18",
+            "mode": "after",
+            "target": "e22",
+            "picks": [
+              "c20"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r20-play",
+          "v": 20,
+          "kind": "play",
+          "args": {
+            "uid": "c4",
+            "mode": "now",
+            "target": "e21",
+            "picks": [
+              "c20"
+            ]
+          }
+        },
+        {
+          "scope": "run",
+          "kind": "takeCard",
+          "args": [
+            "com_flash"
+          ]
+        },
+        {
+          "scope": "run",
+          "kind": "applyFoundPart",
+          "args": [
+            "e_sacrifice",
+            "k7"
+          ]
+        },
+        {
+          "scope": "run",
+          "kind": "proceed",
+          "args": []
+        },
+        {
+          "scope": "run",
+          "kind": "enter",
+          "args": [
+            "z1f6n1"
+          ]
+        },
+        {
+          "scope": "run",
+          "kind": "forgeOffer",
+          "args": [
+            "k13"
+          ]
+        },
+        {
+          "scope": "run",
+          "kind": "forgeApply",
+          "args": [
+            "e_chill"
+          ]
+        },
+        {
+          "scope": "run",
+          "kind": "proceed",
+          "args": []
+        },
+        {
+          "scope": "run",
+          "kind": "enter",
+          "args": [
+            "z1boss"
+          ]
+        },
+        {
+          "scope": "battle",
+          "rid": "r1-play",
+          "v": 1,
+          "kind": "play",
+          "args": {
+            "uid": "c13",
+            "mode": "after",
+            "target": "e22",
+            "picks": [
+              "c15"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r2-play",
+          "v": 2,
+          "kind": "play",
+          "args": {
+            "uid": "c15",
+            "mode": "next",
+            "target": "e22",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r3-play",
+          "v": 3,
+          "kind": "play",
+          "args": {
+            "uid": "c1",
+            "mode": "next",
+            "target": "e22",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r4-play",
+          "v": 4,
+          "kind": "play",
+          "args": {
+            "uid": "c19",
+            "mode": "after",
+            "target": "e22",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r4-play",
+          "v": 4,
+          "kind": "play",
+          "args": {
+            "uid": "c14",
+            "mode": "now",
+            "target": "e22",
+            "picks": [
+              "c9"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r5-end",
+          "v": 5,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r6-play",
+          "v": 6,
+          "kind": "play",
+          "args": {
+            "uid": "c4",
+            "mode": "after",
+            "target": "e22",
+            "picks": [
+              "c8"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r7-play",
+          "v": 7,
+          "kind": "play",
+          "args": {
+            "uid": "c2",
+            "mode": "now",
+            "target": "e22",
+            "picks": [
+              "c7"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r8-play",
+          "v": 8,
+          "kind": "play",
+          "args": {
+            "uid": "c6",
+            "mode": "next",
+            "target": "e22",
+            "picks": [
+              "c7"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r9-play",
+          "v": 9,
+          "kind": "play",
+          "args": {
+            "uid": "c17",
+            "mode": "next",
+            "target": "e22",
+            "picks": [
+              "c6"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r9-play",
+          "v": 9,
+          "kind": "play",
+          "args": {
+            "uid": "c7",
+            "mode": "now",
+            "target": "e22",
+            "picks": [
+              "c8"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r10-play",
+          "v": 10,
+          "kind": "play",
+          "args": {
+            "uid": "c17",
+            "mode": "now",
+            "target": "e22",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r11-end",
+          "v": 11,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r12-play",
+          "v": 12,
+          "kind": "play",
+          "args": {
+            "uid": "c10",
+            "mode": "after",
+            "target": "e22",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r13-play",
+          "v": 13,
+          "kind": "play",
+          "args": {
+            "uid": "c3",
+            "mode": "after",
+            "target": "e22",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r13-play",
+          "v": 13,
+          "kind": "play",
+          "args": {
+            "uid": "c5",
+            "mode": "now",
+            "target": "e22",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r14-play",
+          "v": 14,
+          "kind": "play",
+          "args": {
+            "uid": "c21",
+            "mode": "now",
+            "target": "e22",
+            "picks": [
+              "c4"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r15-play",
+          "v": 15,
+          "kind": "play",
+          "args": {
+            "uid": "c3",
+            "mode": "next",
+            "target": "e22",
+            "picks": [
+              "c12"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r16-play",
+          "v": 16,
+          "kind": "play",
+          "args": {
+            "uid": "c12",
+            "mode": "now",
+            "target": "e22",
+            "picks": [
+              "c10"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r17-end",
+          "v": 17,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r18-play",
+          "v": 18,
+          "kind": "play",
+          "args": {
+            "uid": "c11",
+            "mode": "next",
+            "target": "e22",
+            "picks": [
+              "c12"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r19-play",
+          "v": 19,
+          "kind": "play",
+          "args": {
+            "uid": "c19",
+            "mode": "now",
+            "target": "e22",
+            "picks": [
+              "c6"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r20-play",
+          "v": 20,
+          "kind": "play",
+          "args": {
+            "uid": "c12",
+            "mode": "now",
+            "target": "e22",
+            "picks": [
+              "c10"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r21-play",
+          "v": 21,
+          "kind": "play",
+          "args": {
+            "uid": "c17",
+            "mode": "next",
+            "target": "e22",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r21-play",
+          "v": 21,
+          "kind": "play",
+          "args": {
+            "uid": "c17",
+            "mode": "next",
+            "target": "e22",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r21-play",
+          "v": 21,
+          "kind": "play",
+          "args": {
+            "uid": "c14",
+            "mode": "after",
+            "target": "e22",
+            "picks": [
+              "c17"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r22-end",
+          "v": 22,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r23-play",
+          "v": 23,
+          "kind": "play",
+          "args": {
+            "uid": "c1",
+            "mode": "next",
+            "target": "e22",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r24-play",
+          "v": 24,
+          "kind": "play",
+          "args": {
+            "uid": "c8",
+            "mode": "after",
+            "target": "e22",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r25-play",
+          "v": 25,
+          "kind": "play",
+          "args": {
+            "uid": "c9",
+            "mode": "now",
+            "target": "e22",
+            "picks": [
+              "c18"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r26-play",
+          "v": 26,
+          "kind": "play",
+          "args": {
+            "uid": "c18",
+            "mode": "now",
+            "target": "e22",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r27-play",
+          "v": 27,
+          "kind": "play",
+          "args": {
+            "uid": "c15",
+            "mode": "after",
+            "target": "e22",
+            "picks": [
+              "c4"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r27-play",
+          "v": 27,
+          "kind": "play",
+          "args": {
+            "uid": "c15",
+            "mode": "now",
+            "target": "e22",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r28-end",
+          "v": 28,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r29-play",
+          "v": 29,
+          "kind": "play",
+          "args": {
+            "uid": "c3",
+            "mode": "after",
+            "target": "e22",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r30-play",
+          "v": 30,
+          "kind": "play",
+          "args": {
+            "uid": "c5",
+            "mode": "after",
+            "target": "e22",
+            "picks": [
+              "c13"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r30-play",
+          "v": 30,
+          "kind": "play",
+          "args": {
+            "uid": "c16",
+            "mode": "now",
+            "target": "e22",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r31-play",
+          "v": 31,
+          "kind": "play",
+          "args": {
+            "uid": "c1",
+            "mode": "after",
+            "target": "e22",
+            "picks": [
+              "c13"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r31-play",
+          "v": 31,
+          "kind": "play",
+          "args": {
+            "uid": "c13",
+            "mode": "now",
+            "target": "e22",
+            "picks": [
+              "c1"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r32-play",
+          "v": 32,
+          "kind": "play",
+          "args": {
+            "uid": "c1",
+            "mode": "now",
+            "target": "e22",
+            "picks": [
+              "c2"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r33-play",
+          "v": 33,
+          "kind": "play",
+          "args": {
+            "uid": "c5",
+            "mode": "after",
+            "target": "e22",
+            "picks": [
+              "c2"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r33-play",
+          "v": 33,
+          "kind": "play",
+          "args": {
+            "uid": "c5",
+            "mode": "after",
+            "target": "e22",
+            "picks": [
+              "c2"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r33-play",
+          "v": 33,
+          "kind": "play",
+          "args": {
+            "uid": "c2",
+            "mode": "now",
+            "target": "e22",
+            "picks": [
+              "c8",
+              "c5"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r34-play",
+          "v": 34,
+          "kind": "play",
+          "args": {
+            "uid": "c5",
+            "mode": "now",
+            "target": "e22",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r35-play",
+          "v": 35,
+          "kind": "play",
+          "args": {
+            "uid": "c20",
+            "mode": "now",
+            "target": "e22",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r35-end",
+          "v": 35,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r36-play",
+          "v": 36,
+          "kind": "play",
+          "args": {
+            "uid": "c4",
+            "mode": "after",
+            "target": "e22",
+            "picks": [
+              "c11"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r37-play",
+          "v": 37,
+          "kind": "play",
+          "args": {
+            "uid": "c9",
+            "mode": "now",
+            "target": "e22",
+            "picks": [
+              "c11"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r38-play",
+          "v": 38,
+          "kind": "play",
+          "args": {
+            "uid": "c18",
+            "mode": "now",
+            "target": "e22",
+            "picks": [
+              "c3"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r39-play",
+          "v": 39,
+          "kind": "play",
+          "args": {
+            "uid": "c11",
+            "mode": "after",
+            "target": "e22",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r39-play",
+          "v": 39,
+          "kind": "play",
+          "args": {
+            "uid": "c11",
+            "mode": "next",
+            "target": "e22",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r40-play",
+          "v": 40,
+          "kind": "play",
+          "args": {
+            "uid": "c15",
+            "mode": "now",
+            "target": "e22",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r41-end",
+          "v": 41,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "run",
+          "kind": "takeCard",
+          "args": [
+            "lumi_lightning"
+          ]
+        },
+        {
+          "scope": "run",
+          "kind": "takeRelic",
+          "args": [
+            "eye_of_rift"
+          ]
+        },
+        {
+          "scope": "run",
+          "kind": "proceed",
+          "args": []
+        },
+        {
+          "scope": "run",
+          "kind": "archive",
+          "args": [
+            "continue"
+          ]
+        },
+        {
+          "scope": "run",
+          "kind": "enter",
+          "args": [
+            "z2f0n1"
+          ]
+        },
+        {
+          "scope": "battle",
+          "rid": "r1-play",
+          "v": 1,
+          "kind": "play",
+          "args": {
+            "uid": "c1",
+            "mode": "now",
+            "target": "e24",
+            "picks": [
+              "c12"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r2-play",
+          "v": 2,
+          "kind": "play",
+          "args": {
+            "uid": "c6",
+            "mode": "next",
+            "target": "e24",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r3-play",
+          "v": 3,
+          "kind": "play",
+          "args": {
+            "uid": "c16",
+            "mode": "now",
+            "target": "e24",
+            "picks": [
+              "c6"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r4-play",
+          "v": 4,
+          "kind": "play",
+          "args": {
+            "uid": "c13",
+            "mode": "after",
+            "target": "e24",
+            "picks": [
+              "c6",
+              "c22"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r5-play",
+          "v": 5,
+          "kind": "play",
+          "args": {
+            "uid": "c20",
+            "mode": "now",
+            "target": "e24",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r6-play",
+          "v": 6,
+          "kind": "play",
+          "args": {
+            "uid": "c22",
+            "mode": "after",
+            "target": "e24",
+            "picks": [
+              "c13",
+              "c12"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r6-end",
+          "v": 6,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r7-play",
+          "v": 7,
+          "kind": "play",
+          "args": {
+            "uid": "c2",
+            "mode": "now",
+            "target": "e24",
+            "picks": [
+              "c4"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r8-play",
+          "v": 8,
+          "kind": "play",
+          "args": {
+            "uid": "c4",
+            "mode": "after",
+            "target": "e24",
+            "picks": [
+              "c13"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r9-play",
+          "v": 9,
+          "kind": "play",
+          "args": {
+            "uid": "c23",
+            "mode": "now",
+            "target": "e24",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r10-play",
+          "v": 10,
+          "kind": "play",
+          "args": {
+            "uid": "c10",
+            "mode": "after",
+            "target": "e24",
+            "picks": [
+              "c4",
+              "c14"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r10-play",
+          "v": 10,
+          "kind": "play",
+          "args": {
+            "uid": "c14",
+            "mode": "after",
+            "target": "e24",
+            "picks": [
+              "c10"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r10-play",
+          "v": 10,
+          "kind": "play",
+          "args": {
+            "uid": "c14",
+            "mode": "after",
+            "target": "e24",
+            "picks": [
+              "c4",
+              "c15"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r10-play",
+          "v": 10,
+          "kind": "play",
+          "args": {
+            "uid": "c10",
+            "mode": "next",
+            "target": "e24",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r11-play",
+          "v": 11,
+          "kind": "play",
+          "args": {
+            "uid": "c15",
+            "mode": "after",
+            "target": "e24",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r11-play",
+          "v": 11,
+          "kind": "play",
+          "args": {
+            "uid": "c15",
+            "mode": "after",
+            "target": "e24",
+            "picks": [
+              "c10"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r11-play",
+          "v": 11,
+          "kind": "play",
+          "args": {
+            "uid": "c14",
+            "mode": "next",
+            "target": "e24",
+            "picks": [
+              "c15"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r11-play",
+          "v": 11,
+          "kind": "play",
+          "args": {
+            "uid": "c14",
+            "mode": "next",
+            "target": "e24",
+            "picks": [
+              "c10"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r11-play",
+          "v": 11,
+          "kind": "play",
+          "args": {
+            "uid": "c14",
+            "mode": "now",
+            "target": "e24",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r12-end",
+          "v": 12,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r13-play",
+          "v": 13,
+          "kind": "play",
+          "args": {
+            "uid": "c7",
+            "mode": "next",
+            "target": "e24",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r14-play",
+          "v": 14,
+          "kind": "play",
+          "args": {
+            "uid": "c9",
+            "mode": "now",
+            "target": "e24",
+            "picks": [
+              "c7",
+              "c11"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r15-play",
+          "v": 15,
+          "kind": "play",
+          "args": {
+            "uid": "c11",
+            "mode": "next",
+            "target": "e24",
+            "picks": [
+              "c4",
+              "c18"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r15-play",
+          "v": 15,
+          "kind": "play",
+          "args": {
+            "uid": "c3",
+            "mode": "now",
+            "target": "e24",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r16-play",
+          "v": 16,
+          "kind": "play",
+          "args": {
+            "uid": "c17",
+            "mode": "now",
+            "target": "e24",
+            "picks": [
+              "c7"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r17-play",
+          "v": 17,
+          "kind": "play",
+          "args": {
+            "uid": "c18",
+            "mode": "now",
+            "target": "e24",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r18-end",
+          "v": 18,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "run",
+          "kind": "takeCard",
+          "args": [
+            "nia_shock"
+          ]
+        },
+        {
+          "scope": "run",
+          "kind": "applyFoundPart",
+          "args": [
+            "c_echo",
+            "k2"
+          ]
+        },
+        {
+          "scope": "run",
+          "kind": "proceed",
+          "args": []
+        },
+        {
+          "scope": "run",
+          "kind": "enter",
+          "args": [
+            "z2f1n0"
+          ]
+        },
+        {
+          "scope": "run",
+          "kind": "eventChoose",
+          "args": [
+            1,
+            "k10"
+          ]
+        },
+        {
+          "scope": "run",
+          "kind": "proceed",
+          "args": []
+        },
+        {
+          "scope": "run",
+          "kind": "enter",
+          "args": [
+            "z2f2n0"
+          ]
+        },
+        {
+          "scope": "battle",
+          "rid": "r1-play",
+          "v": 1,
+          "kind": "play",
+          "args": {
+            "uid": "c23",
+            "mode": "next",
+            "target": "e25",
+            "picks": [
+              "c4"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r2-play",
+          "v": 2,
+          "kind": "play",
+          "args": {
+            "uid": "c15",
+            "mode": "after",
+            "target": "e25",
+            "picks": [
+              "c23",
+              "c24"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r3-play",
+          "v": 3,
+          "kind": "play",
+          "args": {
+            "uid": "c14",
+            "mode": "next",
+            "target": "e25",
+            "picks": [
+              "c24"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r4-end",
+          "v": 4,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r5-play",
+          "v": 5,
+          "kind": "play",
+          "args": {
+            "uid": "c20",
+            "mode": "next",
+            "target": "e25",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r6-play",
+          "v": 6,
+          "kind": "play",
+          "args": {
+            "uid": "c12",
+            "mode": "now",
+            "target": "e25",
+            "picks": [
+              "c20"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r7-play",
+          "v": 7,
+          "kind": "play",
+          "args": {
+            "uid": "c1",
+            "mode": "after",
+            "target": "e25",
+            "picks": [
+              "c18"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r8-play",
+          "v": 8,
+          "kind": "play",
+          "args": {
+            "uid": "c8",
+            "mode": "next",
+            "target": "e25",
+            "picks": [
+              "c18"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r8-play",
+          "v": 8,
+          "kind": "play",
+          "args": {
+            "uid": "c21",
+            "mode": "now",
+            "target": "e25",
+            "picks": [
+              "c18"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r9-play",
+          "v": 9,
+          "kind": "play",
+          "args": {
+            "uid": "c18",
+            "mode": "after",
+            "target": "e25",
+            "picks": [
+              "c9"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r9-play",
+          "v": 9,
+          "kind": "play",
+          "args": {
+            "uid": "c18",
+            "mode": "after",
+            "target": "e25",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r9-play",
+          "v": 9,
+          "kind": "play",
+          "args": {
+            "uid": "c8",
+            "mode": "now",
+            "target": "e25",
+            "picks": [
+              "c15"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r10-end",
+          "v": 10,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r11-play",
+          "v": 11,
+          "kind": "play",
+          "args": {
+            "uid": "c10",
+            "mode": "next",
+            "target": "e25",
+            "picks": [
+              "c7"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r12-play",
+          "v": 12,
+          "kind": "play",
+          "args": {
+            "uid": "c19",
+            "mode": "next",
+            "target": "e25",
+            "picks": [
+              "c3"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r12-play",
+          "v": 12,
+          "kind": "play",
+          "args": {
+            "uid": "c3",
+            "mode": "after",
+            "target": "e25",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r13-play",
+          "v": 13,
+          "kind": "play",
+          "args": {
+            "uid": "c19",
+            "mode": "after",
+            "target": "e25",
+            "picks": [
+              "c10"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r13-play",
+          "v": 13,
+          "kind": "play",
+          "args": {
+            "uid": "c11",
+            "mode": "next",
+            "target": "e25",
+            "picks": [
+              "c1"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r13-play",
+          "v": 13,
+          "kind": "play",
+          "args": {
+            "uid": "c11",
+            "mode": "after",
+            "target": "e25",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r13-play",
+          "v": 13,
+          "kind": "play",
+          "args": {
+            "uid": "c19",
+            "mode": "after",
+            "target": "e25",
+            "picks": [
+              "c7"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r13-play",
+          "v": 13,
+          "kind": "play",
+          "args": {
+            "uid": "c7",
+            "mode": "after",
+            "target": "e25",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r13-play",
+          "v": 13,
+          "kind": "play",
+          "args": {
+            "uid": "c11",
+            "mode": "next",
+            "target": "e25",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r13-play",
+          "v": 13,
+          "kind": "play",
+          "args": {
+            "uid": "c19",
+            "mode": "after",
+            "target": "e25",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r13-play",
+          "v": 13,
+          "kind": "play",
+          "args": {
+            "uid": "c7",
+            "mode": "next",
+            "target": "e25",
+            "picks": [
+              "c11"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r13-play",
+          "v": 13,
+          "kind": "play",
+          "args": {
+            "uid": "c7",
+            "mode": "after",
+            "target": "e25",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r13-play",
+          "v": 13,
+          "kind": "play",
+          "args": {
+            "uid": "c7",
+            "mode": "now",
+            "target": "e25",
+            "picks": [
+              "c3",
+              "c11"
+            ]
+          }
+        },
+        {
+          "scope": "run",
+          "kind": "takeCard",
+          "args": [
+            "nia_overclock"
+          ]
+        },
+        {
+          "scope": "run",
+          "kind": "takePart",
+          "args": []
+        },
+        {
+          "scope": "run",
+          "kind": "proceed",
+          "args": []
+        },
+        {
+          "scope": "run",
+          "kind": "enter",
+          "args": [
+            "z2f3n1"
+          ]
+        },
+        {
+          "scope": "battle",
+          "rid": "r1-play",
+          "v": 1,
+          "kind": "play",
+          "args": {
+            "uid": "c12",
+            "mode": "now",
+            "target": "e26",
+            "picks": [
+              "c4"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r2-play",
+          "v": 2,
+          "kind": "play",
+          "args": {
+            "uid": "c14",
+            "mode": "next",
+            "target": "e26",
+            "picks": [
+              "c19"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r3-play",
+          "v": 3,
+          "kind": "play",
+          "args": {
+            "uid": "c19",
+            "mode": "after",
+            "target": "e26",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r4-play",
+          "v": 4,
+          "kind": "play",
+          "args": {
+            "uid": "c2",
+            "mode": "now",
+            "target": "e26",
+            "picks": [
+              "c14"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r5-play",
+          "v": 5,
+          "kind": "play",
+          "args": {
+            "uid": "c4",
+            "mode": "after",
+            "target": "e26",
+            "picks": [
+              "c18"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r5-play",
+          "v": 5,
+          "kind": "play",
+          "args": {
+            "uid": "c4",
+            "mode": "now",
+            "target": "e26",
+            "picks": [
+              "c19",
+              "c23"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r6-end",
+          "v": 6,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r7-play",
+          "v": 7,
+          "kind": "play",
+          "args": {
+            "uid": "c8",
+            "mode": "now",
+            "target": "e26",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r8-play",
+          "v": 8,
+          "kind": "play",
+          "args": {
+            "uid": "c3",
+            "mode": "after",
+            "target": "e26",
+            "picks": [
+              "c16"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r9-play",
+          "v": 9,
+          "kind": "play",
+          "args": {
+            "uid": "c25",
+            "mode": "now",
+            "target": "e26",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r10-play",
+          "v": 10,
+          "kind": "play",
+          "args": {
+            "uid": "c16",
+            "mode": "now",
+            "target": "e26",
+            "picks": [
+              "c1"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r11-play",
+          "v": 11,
+          "kind": "play",
+          "args": {
+            "uid": "c10",
+            "mode": "now",
+            "target": "e26",
+            "picks": [
+              "c1"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r12-end",
+          "v": 12,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r13-play",
+          "v": 13,
+          "kind": "play",
+          "args": {
+            "uid": "c24",
+            "mode": "now",
+            "target": "e26",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r14-play",
+          "v": 14,
+          "kind": "play",
+          "args": {
+            "uid": "c17",
+            "mode": "next",
+            "target": "e26",
+            "picks": [
+              "c7"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r15-play",
+          "v": 15,
+          "kind": "play",
+          "args": {
+            "uid": "c7",
+            "mode": "now",
+            "target": "e26",
+            "picks": [
+              "c20"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r16-play",
+          "v": 16,
+          "kind": "play",
+          "args": {
+            "uid": "c11",
+            "mode": "after",
+            "target": "e26",
+            "picks": [
+              "c3"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r17-play",
+          "v": 17,
+          "kind": "play",
+          "args": {
+            "uid": "c20",
+            "mode": "next",
+            "target": "e26",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r17-end",
+          "v": 17,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r18-play",
+          "v": 18,
+          "kind": "play",
+          "args": {
+            "uid": "c13",
+            "mode": "after",
+            "target": "e26",
+            "picks": [
+              "c5"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r19-play",
+          "v": 19,
+          "kind": "play",
+          "args": {
+            "uid": "c24",
+            "mode": "now",
+            "target": "e26",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r20-play",
+          "v": 20,
+          "kind": "play",
+          "args": {
+            "uid": "c5",
+            "mode": "now",
+            "target": "e26",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r21-play",
+          "v": 21,
+          "kind": "play",
+          "args": {
+            "uid": "c23",
+            "mode": "after",
+            "target": "e26",
+            "picks": [
+              "c13",
+              "c9"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r21-play",
+          "v": 21,
+          "kind": "play",
+          "args": {
+            "uid": "c9",
+            "mode": "now",
+            "target": "e26",
+            "picks": [
+              "c23"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r22-play",
+          "v": 22,
+          "kind": "play",
+          "args": {
+            "uid": "c23",
+            "mode": "next",
+            "target": "e26",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r23-end",
+          "v": 23,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "run",
+          "kind": "takeCard",
+          "args": [
+            "aila_mend"
+          ]
+        },
+        {
+          "scope": "run",
+          "kind": "takeRelic",
+          "args": [
+            "bronze_cog"
+          ]
+        },
+        {
+          "scope": "run",
+          "kind": "applyFoundPart",
+          "args": [
+            "e_pierce",
+            "k13"
+          ]
+        },
+        {
+          "scope": "run",
+          "kind": "proceed",
+          "args": []
+        },
+        {
+          "scope": "run",
+          "kind": "enter",
+          "args": [
+            "z2f4n1"
+          ]
+        },
+        {
+          "scope": "battle",
+          "rid": "r1-play",
+          "v": 1,
+          "kind": "play",
+          "args": {
+            "uid": "c21",
+            "mode": "now",
+            "target": "e27",
+            "picks": [
+              "c3"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r2-play",
+          "v": 2,
+          "kind": "play",
+          "args": {
+            "uid": "c19",
+            "mode": "next",
+            "target": "e29",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r3-play",
+          "v": 3,
+          "kind": "play",
+          "args": {
+            "uid": "c9",
+            "mode": "now",
+            "target": "e27",
+            "picks": [
+              "c19",
+              "c2"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r4-play",
+          "v": 4,
+          "kind": "play",
+          "args": {
+            "uid": "c2",
+            "mode": "now",
+            "target": "e29",
+            "picks": [
+              "c19",
+              "c10"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r5-play",
+          "v": 5,
+          "kind": "play",
+          "args": {
+            "uid": "c10",
+            "mode": "after",
+            "target": "e27",
+            "picks": [
+              "c19",
+              "c15"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r6-play",
+          "v": 6,
+          "kind": "play",
+          "args": {
+            "uid": "c3",
+            "mode": "now",
+            "target": "e27",
+            "picks": [
+              "c15"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r7-play",
+          "v": 7,
+          "kind": "play",
+          "args": {
+            "uid": "c6",
+            "mode": "next",
+            "target": "e28",
+            "picks": [
+              "c15"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r8-end",
+          "v": 8,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r9-play",
+          "v": 9,
+          "kind": "play",
+          "args": {
+            "uid": "c26",
+            "mode": "now",
+            "target": "e29",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r10-play",
+          "v": 10,
+          "kind": "play",
+          "args": {
+            "uid": "c1",
+            "mode": "after",
+            "target": "e27",
+            "picks": [
+              "c10"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r11-play",
+          "v": 11,
+          "kind": "play",
+          "args": {
+            "uid": "c18",
+            "mode": "next",
+            "target": "e29",
+            "picks": [
+              "c12"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r12-play",
+          "v": 12,
+          "kind": "play",
+          "args": {
+            "uid": "c16",
+            "mode": "now",
+            "target": "e27",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r13-play",
+          "v": 13,
+          "kind": "play",
+          "args": {
+            "uid": "c7",
+            "mode": "next",
+            "target": "e27",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r13-play",
+          "v": 13,
+          "kind": "play",
+          "args": {
+            "uid": "c12",
+            "mode": "now",
+            "target": "e27",
+            "picks": [
+              "c7"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r14-end",
+          "v": 14,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r15-play",
+          "v": 15,
+          "kind": "play",
+          "args": {
+            "uid": "c4",
+            "mode": "next",
+            "target": "e29",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r16-play",
+          "v": 16,
+          "kind": "play",
+          "args": {
+            "uid": "c8",
+            "mode": "after",
+            "target": "e27",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r17-play",
+          "v": 17,
+          "kind": "play",
+          "args": {
+            "uid": "c24",
+            "mode": "now",
+            "target": "e27",
+            "picks": [
+              "c8",
+              "c17"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r18-play",
+          "v": 18,
+          "kind": "play",
+          "args": {
+            "uid": "c23",
+            "mode": "after",
+            "target": "e29",
+            "picks": [
+              "c1"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r18-play",
+          "v": 18,
+          "kind": "play",
+          "args": {
+            "uid": "c23",
+            "mode": "next",
+            "target": "e29",
+            "picks": [
+              "c17"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r18-play",
+          "v": 18,
+          "kind": "play",
+          "args": {
+            "uid": "c17",
+            "mode": "after",
+            "target": "e27",
+            "picks": [
+              "c23"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r18-play",
+          "v": 18,
+          "kind": "play",
+          "args": {
+            "uid": "c11",
+            "mode": "after",
+            "target": "e29",
+            "picks": [
+              "c23"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r18-play",
+          "v": 18,
+          "kind": "play",
+          "args": {
+            "uid": "c17",
+            "mode": "next",
+            "target": "e27",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r18-play",
+          "v": 18,
+          "kind": "play",
+          "args": {
+            "uid": "c11",
+            "mode": "now",
+            "target": "e27",
+            "picks": [
+              "c17"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r19-end",
+          "v": 19,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "run",
+          "kind": "takeCard",
+          "args": [
+            "lumi_overdrive"
+          ]
+        },
+        {
+          "scope": "run",
+          "kind": "takePart",
+          "args": []
+        },
+        {
+          "scope": "run",
+          "kind": "proceed",
+          "args": []
+        },
+        {
+          "scope": "run",
+          "kind": "enter",
+          "args": [
+            "z2f5n2"
+          ]
+        },
+        {
+          "scope": "run",
+          "kind": "buy",
+          "args": [
+            "remove",
+            null,
+            "k5"
+          ]
+        },
+        {
+          "scope": "run",
+          "kind": "buy",
+          "args": [
+            "remove",
+            null,
+            "k1"
+          ]
+        }
+      ],
+      "before": {
+        "coins": 365,
+        "deck": 25,
+        "removeCost": null,
+        "removals": 1
+      },
+      "after": {
+        "coins": 365,
+        "deck": 24,
+        "removeCost": null,
+        "removals": 2
+      },
+      "rejected": false
+    },
+    "nextApLifetime": {
+      "seed": 1036,
+      "setup": {
+        "party": [
+          {
+            "charId": "rien",
+            "res": 6,
+            "weaponId": "w_choir_bell",
+            "refine": 3
+          },
+          {
+            "charId": "sion",
+            "res": 6,
+            "weaponId": "w_sion",
+            "refine": 2
+          },
+          {
+            "charId": "sera",
+            "res": 5,
+            "weaponId": null,
+            "refine": 1
+          }
+        ],
+        "seed": 1036,
+        "length": "full",
+        "memoryPolicy": "legacy",
+        "memory": {},
+        "relics": [],
+        "difficulty": {
+          "hp": 100,
+          "dmg": 100
+        },
+        "zones": [
+          1,
+          2
+        ]
+      },
+      "firstEventCommand": 265,
+      "eventBonus": 2,
+      "observations": [
+        {
+          "at": 267,
+          "kind": "enter",
+          "phase": "BATTLE",
+          "runBonus": 0,
+          "battleCopiedBonus": 2,
+          "ap": 7,
+          "battleTurn": 1
+        },
+        {
+          "at": 276,
+          "kind": "play",
+          "phase": "REWARD",
+          "runBonus": 2
+        },
+        {
+          "at": 279,
+          "kind": "enter",
+          "phase": "BATTLE",
+          "runBonus": 0,
+          "battleCopiedBonus": 2,
+          "ap": 7,
+          "battleTurn": 1
+        }
+      ],
+      "commands": [
+        {
+          "scope": "run",
+          "kind": "enter",
+          "args": [
+            "z1f0n2"
+          ]
+        },
+        {
+          "scope": "battle",
+          "rid": "r1-play",
+          "v": 1,
+          "kind": "play",
+          "args": {
+            "uid": "c18",
+            "mode": "after",
+            "target": "e19",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r2-play",
+          "v": 2,
+          "kind": "play",
+          "args": {
+            "uid": "c5",
+            "mode": "now",
+            "target": "e19",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r3-play",
+          "v": 3,
+          "kind": "play",
+          "args": {
+            "uid": "c6",
+            "mode": "after",
+            "target": "e19",
+            "picks": [
+              "c12"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r3-play",
+          "v": 3,
+          "kind": "play",
+          "args": {
+            "uid": "c1",
+            "mode": "now",
+            "target": "e19",
+            "picks": [
+              "c12"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r4-play",
+          "v": 4,
+          "kind": "play",
+          "args": {
+            "uid": "c6",
+            "mode": "after",
+            "target": "e19",
+            "picks": [
+              "c12"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r4-play",
+          "v": 4,
+          "kind": "play",
+          "args": {
+            "uid": "c12",
+            "mode": "now",
+            "target": "e19",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r5-end",
+          "v": 5,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r6-play",
+          "v": 6,
+          "kind": "play",
+          "args": {
+            "uid": "c7",
+            "mode": "now",
+            "target": "e19",
+            "picks": []
+          }
+        },
+        {
+          "scope": "run",
+          "kind": "takeCard",
+          "args": [
+            "sion_cut"
+          ]
+        },
+        {
+          "scope": "run",
+          "kind": "proceed",
+          "args": []
+        },
+        {
+          "scope": "run",
+          "kind": "enter",
+          "args": [
+            "z1f1n0"
+          ]
+        },
+        {
+          "scope": "battle",
+          "rid": "r1-play",
+          "v": 1,
+          "kind": "play",
+          "args": {
+            "uid": "c13",
+            "mode": "after",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r2-play",
+          "v": 2,
+          "kind": "play",
+          "args": {
+            "uid": "c5",
+            "mode": "next",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r3-play",
+          "v": 3,
+          "kind": "play",
+          "args": {
+            "uid": "c10",
+            "mode": "after",
+            "target": "e21",
+            "picks": [
+              "c8"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r3-play",
+          "v": 3,
+          "kind": "play",
+          "args": {
+            "uid": "c10",
+            "mode": "after",
+            "target": "e21",
+            "picks": [
+              "c13"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r3-play",
+          "v": 3,
+          "kind": "play",
+          "args": {
+            "uid": "c8",
+            "mode": "now",
+            "target": "e21",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r4-play",
+          "v": 4,
+          "kind": "play",
+          "args": {
+            "uid": "c4",
+            "mode": "now",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r5-play",
+          "v": 5,
+          "kind": "play",
+          "args": {
+            "uid": "c18",
+            "mode": "now",
+            "target": "e21",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r6-play",
+          "v": 6,
+          "kind": "play",
+          "args": {
+            "uid": "c10",
+            "mode": "after",
+            "target": "e21",
+            "picks": [
+              "c7"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r6-play",
+          "v": 6,
+          "kind": "play",
+          "args": {
+            "uid": "c10",
+            "mode": "now",
+            "target": "e21",
+            "picks": [
+              "c7"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r7-play",
+          "v": 7,
+          "kind": "play",
+          "args": {
+            "uid": "c7",
+            "mode": "now",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r7-end",
+          "v": 7,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r8-play",
+          "v": 8,
+          "kind": "play",
+          "args": {
+            "uid": "c11",
+            "mode": "now",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r9-play",
+          "v": 9,
+          "kind": "play",
+          "args": {
+            "uid": "c9",
+            "mode": "now",
+            "target": "e20",
+            "picks": [
+              "c13",
+              "c1"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r10-play",
+          "v": 10,
+          "kind": "play",
+          "args": {
+            "uid": "c15",
+            "mode": "after",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r11-play",
+          "v": 11,
+          "kind": "play",
+          "args": {
+            "uid": "c1",
+            "mode": "now",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r12-play",
+          "v": 12,
+          "kind": "play",
+          "args": {
+            "uid": "c3",
+            "mode": "now",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r13-play",
+          "v": 13,
+          "kind": "play",
+          "args": {
+            "uid": "c17",
+            "mode": "next",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r13-end",
+          "v": 13,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r14-play",
+          "v": 14,
+          "kind": "play",
+          "args": {
+            "uid": "c6",
+            "mode": "next",
+            "target": "e20",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r15-play",
+          "v": 15,
+          "kind": "play",
+          "args": {
+            "uid": "c12",
+            "mode": "now",
+            "target": "e20",
+            "picks": [
+              "c6",
+              "c19"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r16-play",
+          "v": 16,
+          "kind": "play",
+          "args": {
+            "uid": "c13",
+            "mode": "next",
+            "target": "e20",
+            "picks": [
+              "c6"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r16-play",
+          "v": 16,
+          "kind": "play",
+          "args": {
+            "uid": "c13",
+            "mode": "now",
+            "target": "e20",
+            "picks": [
+              "c6"
+            ]
+          }
+        },
+        {
+          "scope": "run",
+          "kind": "takeCard",
+          "args": [
+            "sera_reload"
+          ]
+        },
+        {
+          "scope": "run",
+          "kind": "takePart",
+          "args": []
+        },
+        {
+          "scope": "run",
+          "kind": "applyFoundPart",
+          "args": [
+            "e_mark",
+            "k8"
+          ]
+        },
+        {
+          "scope": "run",
+          "kind": "proceed",
+          "args": []
+        },
+        {
+          "scope": "run",
+          "kind": "enter",
+          "args": [
+            "z1f2n0"
+          ]
+        },
+        {
+          "scope": "battle",
+          "rid": "r1-play",
+          "v": 1,
+          "kind": "play",
+          "args": {
+            "uid": "c13",
+            "mode": "now",
+            "target": "e22",
+            "picks": [
+              "c20"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r2-play",
+          "v": 2,
+          "kind": "play",
+          "args": {
+            "uid": "c12",
+            "mode": "next",
+            "target": "e21",
+            "picks": [
+              "c18"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r3-play",
+          "v": 3,
+          "kind": "play",
+          "args": {
+            "uid": "c20",
+            "mode": "now",
+            "target": "e21",
+            "picks": [
+              "c8"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r4-play",
+          "v": 4,
+          "kind": "play",
+          "args": {
+            "uid": "c18",
+            "mode": "now",
+            "target": "e21",
+            "picks": [
+              "c12"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r5-play",
+          "v": 5,
+          "kind": "play",
+          "args": {
+            "uid": "c3",
+            "mode": "next",
+            "target": "e21",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r6-end",
+          "v": 6,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r7-play",
+          "v": 7,
+          "kind": "play",
+          "args": {
+            "uid": "c10",
+            "mode": "now",
+            "target": "e22",
+            "picks": [
+              "c1"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r8-play",
+          "v": 8,
+          "kind": "play",
+          "args": {
+            "uid": "c16",
+            "mode": "next",
+            "target": "e21",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r9-play",
+          "v": 9,
+          "kind": "play",
+          "args": {
+            "uid": "c4",
+            "mode": "now",
+            "target": "e21",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r10-play",
+          "v": 10,
+          "kind": "play",
+          "args": {
+            "uid": "c1",
+            "mode": "now",
+            "target": "e21",
+            "picks": [
+              "c16"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r11-play",
+          "v": 11,
+          "kind": "play",
+          "args": {
+            "uid": "c14",
+            "mode": "after",
+            "target": "e21",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r12-play",
+          "v": 12,
+          "kind": "play",
+          "args": {
+            "uid": "c5",
+            "mode": "after",
+            "target": "e21",
+            "picks": [
+              "c9"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r12-play",
+          "v": 12,
+          "kind": "play",
+          "args": {
+            "uid": "c5",
+            "mode": "next",
+            "target": "e21",
+            "picks": [
+              "c9"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r12-end",
+          "v": 12,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "run",
+          "kind": "takeCard",
+          "args": [
+            "rien_note"
+          ]
+        },
+        {
+          "scope": "run",
+          "kind": "takePart",
+          "args": []
+        },
+        {
+          "scope": "run",
+          "kind": "proceed",
+          "args": []
+        },
+        {
+          "scope": "run",
+          "kind": "enter",
+          "args": [
+            "z1f3n0"
+          ]
+        },
+        {
+          "scope": "battle",
+          "rid": "r1-play",
+          "v": 1,
+          "kind": "play",
+          "args": {
+            "uid": "c17",
+            "mode": "after",
+            "target": "e22",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r2-play",
+          "v": 2,
+          "kind": "play",
+          "args": {
+            "uid": "c11",
+            "mode": "now",
+            "target": "e23",
+            "picks": [
+              "c13"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r3-play",
+          "v": 3,
+          "kind": "play",
+          "args": {
+            "uid": "c10",
+            "mode": "next",
+            "target": "e22",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r4-play",
+          "v": 4,
+          "kind": "play",
+          "args": {
+            "uid": "c14",
+            "mode": "after",
+            "target": "e23",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r4-play",
+          "v": 4,
+          "kind": "play",
+          "args": {
+            "uid": "c13",
+            "mode": "next",
+            "target": "e22",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r5-end",
+          "v": 5,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r6-play",
+          "v": 6,
+          "kind": "play",
+          "args": {
+            "uid": "c9",
+            "mode": "next",
+            "target": "e23",
+            "picks": [
+              "c17",
+              "c6"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r7-play",
+          "v": 7,
+          "kind": "play",
+          "args": {
+            "uid": "c20",
+            "mode": "now",
+            "target": "e23",
+            "picks": [
+              "c9",
+              "c7"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r8-play",
+          "v": 8,
+          "kind": "play",
+          "args": {
+            "uid": "c21",
+            "mode": "now",
+            "target": "e23",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r9-play",
+          "v": 9,
+          "kind": "play",
+          "args": {
+            "uid": "c6",
+            "mode": "now",
+            "target": "e23",
+            "picks": [
+              "c12"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r10-play",
+          "v": 10,
+          "kind": "play",
+          "args": {
+            "uid": "c1",
+            "mode": "now",
+            "target": "e23",
+            "picks": [
+              "c15"
+            ]
+          }
+        },
+        {
+          "scope": "run",
+          "kind": "takeCard",
+          "args": [
+            "rien_harmony"
+          ]
+        },
+        {
+          "scope": "run",
+          "kind": "takePart",
+          "args": []
+        },
+        {
+          "scope": "run",
+          "kind": "applyFoundPart",
+          "args": [
+            "e_recall",
+            "k21"
+          ]
+        },
+        {
+          "scope": "run",
+          "kind": "proceed",
+          "args": []
+        },
+        {
+          "scope": "run",
+          "kind": "enter",
+          "args": [
+            "z1f4n0"
+          ]
+        },
+        {
+          "scope": "battle",
+          "rid": "r1-play",
+          "v": 1,
+          "kind": "play",
+          "args": {
+            "uid": "c9",
+            "mode": "after",
+            "target": "e23",
+            "picks": [
+              "c7"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r2-play",
+          "v": 2,
+          "kind": "play",
+          "args": {
+            "uid": "c4",
+            "mode": "now",
+            "target": "e23",
+            "picks": [
+              "c9"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r3-play",
+          "v": 3,
+          "kind": "play",
+          "args": {
+            "uid": "c19",
+            "mode": "after",
+            "target": "e23",
+            "picks": [
+              "c17"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r3-play",
+          "v": 3,
+          "kind": "play",
+          "args": {
+            "uid": "c7",
+            "mode": "now",
+            "target": "e23",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r4-play",
+          "v": 4,
+          "kind": "play",
+          "args": {
+            "uid": "c20",
+            "mode": "now",
+            "target": "e23",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r5-play",
+          "v": 5,
+          "kind": "play",
+          "args": {
+            "uid": "c19",
+            "mode": "next",
+            "target": "e23",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r6-play",
+          "v": 6,
+          "kind": "play",
+          "args": {
+            "uid": "c17",
+            "mode": "after",
+            "target": "e23",
+            "picks": [
+              "c9",
+              "c12"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r6-play",
+          "v": 6,
+          "kind": "play",
+          "args": {
+            "uid": "c17",
+            "mode": "after",
+            "target": "e23",
+            "picks": [
+              "c19"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r6-play",
+          "v": 6,
+          "kind": "play",
+          "args": {
+            "uid": "c17",
+            "mode": "after",
+            "target": "e23",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r6-play",
+          "v": 6,
+          "kind": "play",
+          "args": {
+            "uid": "c17",
+            "mode": "now",
+            "target": "e23",
+            "picks": [
+              "c12"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r7-end",
+          "v": 7,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r8-play",
+          "v": 8,
+          "kind": "play",
+          "args": {
+            "uid": "c14",
+            "mode": "now",
+            "target": "e23",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r9-play",
+          "v": 9,
+          "kind": "play",
+          "args": {
+            "uid": "c8",
+            "mode": "now",
+            "target": "e23",
+            "picks": [
+              "c9"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r10-play",
+          "v": 10,
+          "kind": "play",
+          "args": {
+            "uid": "c21",
+            "mode": "now",
+            "target": "e23",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r11-play",
+          "v": 11,
+          "kind": "play",
+          "args": {
+            "uid": "c2",
+            "mode": "after",
+            "target": "e23",
+            "picks": [
+              "c13"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r12-play",
+          "v": 12,
+          "kind": "play",
+          "args": {
+            "uid": "c3",
+            "mode": "now",
+            "target": "e23",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r13-play",
+          "v": 13,
+          "kind": "play",
+          "args": {
+            "uid": "c6",
+            "mode": "now",
+            "target": "e23",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r14-end",
+          "v": 14,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r15-play",
+          "v": 15,
+          "kind": "play",
+          "args": {
+            "uid": "c10",
+            "mode": "now",
+            "target": "e23",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r16-play",
+          "v": 16,
+          "kind": "play",
+          "args": {
+            "uid": "c16",
+            "mode": "after",
+            "target": "e23",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r17-play",
+          "v": 17,
+          "kind": "play",
+          "args": {
+            "uid": "c5",
+            "mode": "next",
+            "target": "e23",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r18-play",
+          "v": 18,
+          "kind": "play",
+          "args": {
+            "uid": "c11",
+            "mode": "next",
+            "target": "e23",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r18-end",
+          "v": 18,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "run",
+          "kind": "takeCard",
+          "args": [
+            "sera_lock"
+          ]
+        },
+        {
+          "scope": "run",
+          "kind": "takeRelic",
+          "args": [
+            "quick_hands"
+          ]
+        },
+        {
+          "scope": "run",
+          "kind": "proceed",
+          "args": []
+        },
+        {
+          "scope": "run",
+          "kind": "enter",
+          "args": [
+            "z1f5n0"
+          ]
+        },
+        {
+          "scope": "run",
+          "kind": "forgeRemove",
+          "args": [
+            "k9"
+          ]
+        },
+        {
+          "scope": "run",
+          "kind": "proceed",
+          "args": []
+        },
+        {
+          "scope": "run",
+          "kind": "enter",
+          "args": [
+            "z1f6n0"
+          ]
+        },
+        {
+          "scope": "run",
+          "kind": "rest",
+          "args": [
+            "upgrade",
+            "k1"
+          ]
+        },
+        {
+          "scope": "run",
+          "kind": "proceed",
+          "args": []
+        },
+        {
+          "scope": "run",
+          "kind": "enter",
+          "args": [
+            "z1boss"
+          ]
+        },
+        {
+          "scope": "battle",
+          "rid": "r1-play",
+          "v": 1,
+          "kind": "play",
+          "args": {
+            "uid": "c9",
+            "mode": "now",
+            "target": "e23",
+            "picks": [
+              "c10"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r2-play",
+          "v": 2,
+          "kind": "play",
+          "args": {
+            "uid": "c3",
+            "mode": "next",
+            "target": "e23",
+            "picks": [
+              "c16"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r3-play",
+          "v": 3,
+          "kind": "play",
+          "args": {
+            "uid": "c16",
+            "mode": "after",
+            "target": "e23",
+            "picks": [
+              "c21"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r4-play",
+          "v": 4,
+          "kind": "play",
+          "args": {
+            "uid": "c14",
+            "mode": "next",
+            "target": "e23",
+            "picks": [
+              "c3",
+              "c10"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r5-end",
+          "v": 5,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r6-play",
+          "v": 6,
+          "kind": "play",
+          "args": {
+            "uid": "c5",
+            "mode": "now",
+            "target": "e23",
+            "picks": [
+              "c16",
+              "c1"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r7-play",
+          "v": 7,
+          "kind": "play",
+          "args": {
+            "uid": "c13",
+            "mode": "next",
+            "target": "e25",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r8-play",
+          "v": 8,
+          "kind": "play",
+          "args": {
+            "uid": "c12",
+            "mode": "after",
+            "target": "e24",
+            "picks": [
+              "c1"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r9-play",
+          "v": 9,
+          "kind": "play",
+          "args": {
+            "uid": "c1",
+            "mode": "now",
+            "target": "e24",
+            "picks": [
+              "c16",
+              "c4"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r10-play",
+          "v": 10,
+          "kind": "play",
+          "args": {
+            "uid": "c19",
+            "mode": "now",
+            "target": "e25",
+            "picks": [
+              "c4"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r11-play",
+          "v": 11,
+          "kind": "play",
+          "args": {
+            "uid": "c2",
+            "mode": "after",
+            "target": "e23",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r11-play",
+          "v": 11,
+          "kind": "play",
+          "args": {
+            "uid": "c2",
+            "mode": "next",
+            "target": "e25",
+            "picks": [
+              "c17"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r11-play",
+          "v": 11,
+          "kind": "play",
+          "args": {
+            "uid": "c2",
+            "mode": "after",
+            "target": "e25",
+            "picks": [
+              "c17"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r11-play",
+          "v": 11,
+          "kind": "play",
+          "args": {
+            "uid": "c17",
+            "mode": "now",
+            "target": "e23",
+            "picks": [
+              "c16"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r12-play",
+          "v": 12,
+          "kind": "play",
+          "args": {
+            "uid": "c2",
+            "mode": "after",
+            "target": "e23",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r12-play",
+          "v": 12,
+          "kind": "play",
+          "args": {
+            "uid": "c2",
+            "mode": "after",
+            "target": "e23",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r12-play",
+          "v": 12,
+          "kind": "play",
+          "args": {
+            "uid": "c2",
+            "mode": "after",
+            "target": "e23",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r12-end",
+          "v": 12,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r13-play",
+          "v": 13,
+          "kind": "play",
+          "args": {
+            "uid": "c15",
+            "mode": "after",
+            "target": "e23",
+            "picks": [
+              "c6"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r14-play",
+          "v": 14,
+          "kind": "play",
+          "args": {
+            "uid": "c7",
+            "mode": "after",
+            "target": "e25",
+            "picks": [
+              "c6"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r14-play",
+          "v": 14,
+          "kind": "play",
+          "args": {
+            "uid": "c7",
+            "mode": "after",
+            "target": "e23",
+            "picks": [
+              "c22"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r14-play",
+          "v": 14,
+          "kind": "play",
+          "args": {
+            "uid": "c22",
+            "mode": "now",
+            "target": "e23",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r15-play",
+          "v": 15,
+          "kind": "play",
+          "args": {
+            "uid": "c6",
+            "mode": "now",
+            "target": "e25",
+            "picks": [
+              "c18"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r16-play",
+          "v": 16,
+          "kind": "play",
+          "args": {
+            "uid": "c18",
+            "mode": "now",
+            "target": "e25",
+            "picks": [
+              "c7"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r17-end",
+          "v": 17,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r18-play",
+          "v": 18,
+          "kind": "play",
+          "args": {
+            "uid": "c2",
+            "mode": "next",
+            "target": "e23",
+            "picks": [
+              "c20"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r19-play",
+          "v": 19,
+          "kind": "play",
+          "args": {
+            "uid": "c11",
+            "mode": "next",
+            "target": "e23",
+            "picks": [
+              "c12"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r19-play",
+          "v": 19,
+          "kind": "play",
+          "args": {
+            "uid": "c11",
+            "mode": "next",
+            "target": "e23",
+            "picks": [
+              "c2",
+              "c19"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r19-play",
+          "v": 19,
+          "kind": "play",
+          "args": {
+            "uid": "c12",
+            "mode": "now",
+            "target": "e23",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r20-play",
+          "v": 20,
+          "kind": "play",
+          "args": {
+            "uid": "c11",
+            "mode": "after",
+            "target": "e23",
+            "picks": [
+              "c2"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r21-play",
+          "v": 21,
+          "kind": "play",
+          "args": {
+            "uid": "c20",
+            "mode": "now",
+            "target": "e23",
+            "picks": [
+              "c21"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r22-play",
+          "v": 22,
+          "kind": "play",
+          "args": {
+            "uid": "c21",
+            "mode": "now",
+            "target": "e23",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r23-play",
+          "v": 23,
+          "kind": "play",
+          "args": {
+            "uid": "c6",
+            "mode": "now",
+            "target": "e23",
+            "picks": [
+              "c2"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r24-end",
+          "v": 24,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r25-play",
+          "v": 25,
+          "kind": "play",
+          "args": {
+            "uid": "c3",
+            "mode": "next",
+            "target": "e23",
+            "picks": [
+              "c11",
+              "c4"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r26-play",
+          "v": 26,
+          "kind": "play",
+          "args": {
+            "uid": "c4",
+            "mode": "now",
+            "target": "e23",
+            "picks": [
+              "c3"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r27-play",
+          "v": 27,
+          "kind": "play",
+          "args": {
+            "uid": "c14",
+            "mode": "after",
+            "target": "e23",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r28-play",
+          "v": 28,
+          "kind": "play",
+          "args": {
+            "uid": "c18",
+            "mode": "after",
+            "target": "e23",
+            "picks": [
+              "c3"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r28-play",
+          "v": 28,
+          "kind": "play",
+          "args": {
+            "uid": "c16",
+            "mode": "next",
+            "target": "e23",
+            "picks": [
+              "c17"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r28-play",
+          "v": 28,
+          "kind": "play",
+          "args": {
+            "uid": "c16",
+            "mode": "next",
+            "target": "e23",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r28-play",
+          "v": 28,
+          "kind": "play",
+          "args": {
+            "uid": "c17",
+            "mode": "now",
+            "target": "e23",
+            "picks": [
+              "c18"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r29-play",
+          "v": 29,
+          "kind": "play",
+          "args": {
+            "uid": "c16",
+            "mode": "after",
+            "target": "e23",
+            "picks": [
+              "c14"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r29-play",
+          "v": 29,
+          "kind": "play",
+          "args": {
+            "uid": "c18",
+            "mode": "next",
+            "target": "e23",
+            "picks": [
+              "c3",
+              "c16"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r29-play",
+          "v": 29,
+          "kind": "play",
+          "args": {
+            "uid": "c18",
+            "mode": "now",
+            "target": "e23",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r30-end",
+          "v": 30,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r31-play",
+          "v": 31,
+          "kind": "play",
+          "args": {
+            "uid": "c13",
+            "mode": "now",
+            "target": "e26",
+            "picks": [
+              "c14"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r32-play",
+          "v": 32,
+          "kind": "play",
+          "args": {
+            "uid": "c22",
+            "mode": "now",
+            "target": "e27",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r33-play",
+          "v": 33,
+          "kind": "play",
+          "args": {
+            "uid": "c8",
+            "mode": "now",
+            "target": "e27",
+            "picks": [
+              "c1"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r34-ult",
+          "v": 34,
+          "kind": "ult",
+          "args": {
+            "actor": "sera",
+            "target": "e27"
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r35-play",
+          "v": 35,
+          "kind": "play",
+          "args": {
+            "uid": "c5",
+            "mode": "after",
+            "target": "e23",
+            "picks": [
+              "c14",
+              "c7"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r36-play",
+          "v": 36,
+          "kind": "play",
+          "args": {
+            "uid": "c11",
+            "mode": "after",
+            "target": "e26",
+            "picks": [
+              "c14",
+              "c7"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r36-play",
+          "v": 36,
+          "kind": "play",
+          "args": {
+            "uid": "c10",
+            "mode": "next",
+            "target": "e26",
+            "picks": [
+              "c11"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r37-end",
+          "v": 37,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r38-play",
+          "v": 38,
+          "kind": "play",
+          "args": {
+            "uid": "c16",
+            "mode": "next",
+            "target": "e26",
+            "picks": [
+              "c4"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r39-play",
+          "v": 39,
+          "kind": "play",
+          "args": {
+            "uid": "c6",
+            "mode": "after",
+            "target": "e23",
+            "picks": [
+              "c5",
+              "c15"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r40-play",
+          "v": 40,
+          "kind": "play",
+          "args": {
+            "uid": "c15",
+            "mode": "next",
+            "target": "e26",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r40-play",
+          "v": 40,
+          "kind": "play",
+          "args": {
+            "uid": "c22",
+            "mode": "now",
+            "target": "e26",
+            "picks": [
+              "c15"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r41-play",
+          "v": 41,
+          "kind": "play",
+          "args": {
+            "uid": "c15",
+            "mode": "next",
+            "target": "e23",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r41-play",
+          "v": 41,
+          "kind": "play",
+          "args": {
+            "uid": "c15",
+            "mode": "next",
+            "target": "e23",
+            "picks": [
+              "c16"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r41-play",
+          "v": 41,
+          "kind": "play",
+          "args": {
+            "uid": "c15",
+            "mode": "next",
+            "target": "e26",
+            "picks": [
+              "c6",
+              "c4"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r41-play",
+          "v": 41,
+          "kind": "play",
+          "args": {
+            "uid": "c15",
+            "mode": "after",
+            "target": "e23",
+            "picks": [
+              "c4"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r41-play",
+          "v": 41,
+          "kind": "play",
+          "args": {
+            "uid": "c4",
+            "mode": "now",
+            "target": "e26",
+            "picks": [
+              "c6"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r42-ult",
+          "v": 42,
+          "kind": "ult",
+          "args": {
+            "actor": "rien",
+            "target": "e23"
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r43-play",
+          "v": 43,
+          "kind": "play",
+          "args": {
+            "uid": "c2",
+            "mode": "next",
+            "target": "e26",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r43-play",
+          "v": 43,
+          "kind": "play",
+          "args": {
+            "uid": "c15",
+            "mode": "next",
+            "target": "e23",
+            "picks": [
+              "c6"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r43-play",
+          "v": 43,
+          "kind": "play",
+          "args": {
+            "uid": "c15",
+            "mode": "after",
+            "target": "e23",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r43-play",
+          "v": 43,
+          "kind": "play",
+          "args": {
+            "uid": "c2",
+            "mode": "after",
+            "target": "e26",
+            "picks": [
+              "c15"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r43-play",
+          "v": 43,
+          "kind": "play",
+          "args": {
+            "uid": "c15",
+            "mode": "next",
+            "target": "e23",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r43-play",
+          "v": 43,
+          "kind": "play",
+          "args": {
+            "uid": "c15",
+            "mode": "after",
+            "target": "e26",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r43-play",
+          "v": 43,
+          "kind": "play",
+          "args": {
+            "uid": "c2",
+            "mode": "next",
+            "target": "e26",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r43-play",
+          "v": 43,
+          "kind": "play",
+          "args": {
+            "uid": "c2",
+            "mode": "now",
+            "target": "e23",
+            "picks": [
+              "c15"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r44-play",
+          "v": 44,
+          "kind": "play",
+          "args": {
+            "uid": "c15",
+            "mode": "next",
+            "target": "e23",
+            "picks": [
+              "c6"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r44-play",
+          "v": 44,
+          "kind": "play",
+          "args": {
+            "uid": "c15",
+            "mode": "next",
+            "target": "e23",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r44-play",
+          "v": 44,
+          "kind": "play",
+          "args": {
+            "uid": "c15",
+            "mode": "after",
+            "target": "e23",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r44-play",
+          "v": 44,
+          "kind": "play",
+          "args": {
+            "uid": "c15",
+            "mode": "next",
+            "target": "e26",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r44-play",
+          "v": 44,
+          "kind": "play",
+          "args": {
+            "uid": "c15",
+            "mode": "after",
+            "target": "e26",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r44-play",
+          "v": 44,
+          "kind": "play",
+          "args": {
+            "uid": "c15",
+            "mode": "next",
+            "target": "e23",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r44-play",
+          "v": 44,
+          "kind": "play",
+          "args": {
+            "uid": "c15",
+            "mode": "next",
+            "target": "e23",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r44-play",
+          "v": 44,
+          "kind": "play",
+          "args": {
+            "uid": "c15",
+            "mode": "after",
+            "target": "e26",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r44-play",
+          "v": 44,
+          "kind": "play",
+          "args": {
+            "uid": "c15",
+            "mode": "next",
+            "target": "e23",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r44-play",
+          "v": 44,
+          "kind": "play",
+          "args": {
+            "uid": "c15",
+            "mode": "after",
+            "target": "e23",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r44-play",
+          "v": 44,
+          "kind": "play",
+          "args": {
+            "uid": "c15",
+            "mode": "after",
+            "target": "e23",
+            "picks": [
+              "c5"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r44-play",
+          "v": 44,
+          "kind": "play",
+          "args": {
+            "uid": "c15",
+            "mode": "next",
+            "target": "e26",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r44-play",
+          "v": 44,
+          "kind": "play",
+          "args": {
+            "uid": "c15",
+            "mode": "after",
+            "target": "e26",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r44-end",
+          "v": 44,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r45-play",
+          "v": 45,
+          "kind": "play",
+          "args": {
+            "uid": "c20",
+            "mode": "now",
+            "target": "e23",
+            "picks": [
+              "c19"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r46-play",
+          "v": 46,
+          "kind": "play",
+          "args": {
+            "uid": "c12",
+            "mode": "after",
+            "target": "e26",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r47-play",
+          "v": 47,
+          "kind": "play",
+          "args": {
+            "uid": "c3",
+            "mode": "after",
+            "target": "e23",
+            "picks": [
+              "c19"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r47-play",
+          "v": 47,
+          "kind": "play",
+          "args": {
+            "uid": "c21",
+            "mode": "now",
+            "target": "e23",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r48-play",
+          "v": 48,
+          "kind": "play",
+          "args": {
+            "uid": "c3",
+            "mode": "next",
+            "target": "e26",
+            "picks": [
+              "c19"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r49-play",
+          "v": 49,
+          "kind": "play",
+          "args": {
+            "uid": "c19",
+            "mode": "now",
+            "target": "e26",
+            "picks": [
+              "c18"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r50-play",
+          "v": 50,
+          "kind": "play",
+          "args": {
+            "uid": "c17",
+            "mode": "now",
+            "target": "e26",
+            "picks": [
+              "c13"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r51-end",
+          "v": 51,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r52-play",
+          "v": 52,
+          "kind": "play",
+          "args": {
+            "uid": "c5",
+            "mode": "now",
+            "target": "e23",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r53-play",
+          "v": 53,
+          "kind": "play",
+          "args": {
+            "uid": "c6",
+            "mode": "after",
+            "target": "e23",
+            "picks": [
+              "c8"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r54-play",
+          "v": 54,
+          "kind": "play",
+          "args": {
+            "uid": "c10",
+            "mode": "next",
+            "target": "e23",
+            "picks": [
+              "c20"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r55-play",
+          "v": 55,
+          "kind": "play",
+          "args": {
+            "uid": "c16",
+            "mode": "now",
+            "target": "e23",
+            "picks": [
+              "c20"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r56-play",
+          "v": 56,
+          "kind": "play",
+          "args": {
+            "uid": "c20",
+            "mode": "now",
+            "target": "e23",
+            "picks": [
+              "c8"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r57-play",
+          "v": 57,
+          "kind": "play",
+          "args": {
+            "uid": "c8",
+            "mode": "now",
+            "target": "e23",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r58-play",
+          "v": 58,
+          "kind": "play",
+          "args": {
+            "uid": "c15",
+            "mode": "next",
+            "target": "e23",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r58-play",
+          "v": 58,
+          "kind": "play",
+          "args": {
+            "uid": "c13",
+            "mode": "next",
+            "target": "e23",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r58-play",
+          "v": 58,
+          "kind": "play",
+          "args": {
+            "uid": "c15",
+            "mode": "next",
+            "target": "e23",
+            "picks": [
+              "c12",
+              "c13"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r58-play",
+          "v": 58,
+          "kind": "play",
+          "args": {
+            "uid": "c15",
+            "mode": "next",
+            "target": "e23",
+            "picks": [
+              "c13"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r58-play",
+          "v": 58,
+          "kind": "play",
+          "args": {
+            "uid": "c13",
+            "mode": "next",
+            "target": "e23",
+            "picks": [
+              "c15"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r58-play",
+          "v": 58,
+          "kind": "play",
+          "args": {
+            "uid": "c15",
+            "mode": "next",
+            "target": "e23",
+            "picks": [
+              "c12"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r58-play",
+          "v": 58,
+          "kind": "play",
+          "args": {
+            "uid": "c13",
+            "mode": "now",
+            "target": "e23",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r59-play",
+          "v": 59,
+          "kind": "play",
+          "args": {
+            "uid": "c15",
+            "mode": "next",
+            "target": "e23",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r59-end",
+          "v": 59,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r60-play",
+          "v": 60,
+          "kind": "play",
+          "args": {
+            "uid": "c21",
+            "mode": "now",
+            "target": "e28",
+            "picks": [
+              "c18"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r61-play",
+          "v": 61,
+          "kind": "play",
+          "args": {
+            "uid": "c22",
+            "mode": "now",
+            "target": "e29",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r62-play",
+          "v": 62,
+          "kind": "play",
+          "args": {
+            "uid": "c18",
+            "mode": "next",
+            "target": "e23",
+            "picks": [
+              "c11"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r63-play",
+          "v": 63,
+          "kind": "play",
+          "args": {
+            "uid": "c19",
+            "mode": "now",
+            "target": "e23",
+            "picks": [
+              "c2"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r64-play",
+          "v": 64,
+          "kind": "play",
+          "args": {
+            "uid": "c17",
+            "mode": "now",
+            "target": "e28",
+            "picks": [
+              "c7"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r65-play",
+          "v": 65,
+          "kind": "play",
+          "args": {
+            "uid": "c11",
+            "mode": "now",
+            "target": "e23",
+            "picks": [
+              "c7"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r65-end",
+          "v": 65,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r66-play",
+          "v": 66,
+          "kind": "play",
+          "args": {
+            "uid": "c7",
+            "mode": "now",
+            "target": "e23",
+            "picks": [
+              "c16"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r67-play",
+          "v": 67,
+          "kind": "play",
+          "args": {
+            "uid": "c16",
+            "mode": "after",
+            "target": "e29",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r68-play",
+          "v": 68,
+          "kind": "play",
+          "args": {
+            "uid": "c10",
+            "mode": "next",
+            "target": "e29",
+            "picks": [
+              "c8"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r69-play",
+          "v": 69,
+          "kind": "play",
+          "args": {
+            "uid": "c22",
+            "mode": "now",
+            "target": "e29",
+            "picks": [
+              "c8"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r70-play",
+          "v": 70,
+          "kind": "play",
+          "args": {
+            "uid": "c8",
+            "mode": "now",
+            "target": "e29",
+            "picks": [
+              "c10"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r71-play",
+          "v": 71,
+          "kind": "play",
+          "args": {
+            "uid": "c17",
+            "mode": "now",
+            "target": "e29",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r72-end",
+          "v": 72,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r73-ult",
+          "v": 73,
+          "kind": "ult",
+          "args": {
+            "actor": "sera",
+            "target": "e29"
+          }
+        },
+        {
+          "scope": "run",
+          "kind": "takeCard",
+          "args": [
+            "sion_burnbook"
+          ]
+        },
+        {
+          "scope": "run",
+          "kind": "takeRelic",
+          "args": [
+            "chrono_crown"
+          ]
+        },
+        {
+          "scope": "run",
+          "kind": "applyFoundPart",
+          "args": [
+            "c_quick",
+            "k13"
+          ]
+        },
+        {
+          "scope": "run",
+          "kind": "proceed",
+          "args": []
+        },
+        {
+          "scope": "run",
+          "kind": "archive",
+          "args": [
+            "continue"
+          ]
+        },
+        {
+          "scope": "run",
+          "kind": "enter",
+          "args": [
+            "z2f0n0"
+          ]
+        },
+        {
+          "scope": "battle",
+          "rid": "r1-play",
+          "v": 1,
+          "kind": "play",
+          "args": {
+            "uid": "c2",
+            "mode": "after",
+            "target": "e25",
+            "picks": [
+              "c5"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r2-play",
+          "v": 2,
+          "kind": "play",
+          "args": {
+            "uid": "c11",
+            "mode": "now",
+            "target": "e25",
+            "picks": [
+              "c5"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r3-play",
+          "v": 3,
+          "kind": "play",
+          "args": {
+            "uid": "c14",
+            "mode": "after",
+            "target": "e25",
+            "picks": [
+              "c8"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r3-play",
+          "v": 3,
+          "kind": "play",
+          "args": {
+            "uid": "c14",
+            "mode": "after",
+            "target": "e25",
+            "picks": [
+              "c8"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r3-play",
+          "v": 3,
+          "kind": "play",
+          "args": {
+            "uid": "c14",
+            "mode": "now",
+            "target": "e25",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r4-play",
+          "v": 4,
+          "kind": "play",
+          "args": {
+            "uid": "c20",
+            "mode": "now",
+            "target": "e26",
+            "picks": [
+              "c6"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r5-play",
+          "v": 5,
+          "kind": "play",
+          "args": {
+            "uid": "c6",
+            "mode": "after",
+            "target": "e24",
+            "picks": [
+              "c8"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r5-play",
+          "v": 5,
+          "kind": "play",
+          "args": {
+            "uid": "c18",
+            "mode": "after",
+            "target": "e25",
+            "picks": [
+              "c2"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r5-play",
+          "v": 5,
+          "kind": "play",
+          "args": {
+            "uid": "c6",
+            "mode": "next",
+            "target": "e24",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r6-play",
+          "v": 6,
+          "kind": "play",
+          "args": {
+            "uid": "c18",
+            "mode": "after",
+            "target": "e25",
+            "picks": [
+              "c8"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r6-play",
+          "v": 6,
+          "kind": "play",
+          "args": {
+            "uid": "c8",
+            "mode": "now",
+            "target": "e26",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r7-play",
+          "v": 7,
+          "kind": "play",
+          "args": {
+            "uid": "c10",
+            "mode": "next",
+            "target": "e26",
+            "picks": [
+              "c4"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r8-play",
+          "v": 8,
+          "kind": "play",
+          "args": {
+            "uid": "c4",
+            "mode": "now",
+            "target": "e24",
+            "picks": [
+              "c2"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r9-end",
+          "v": 9,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r10-play",
+          "v": 10,
+          "kind": "play",
+          "args": {
+            "uid": "c21",
+            "mode": "now",
+            "target": "e25",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r11-play",
+          "v": 11,
+          "kind": "play",
+          "args": {
+            "uid": "c16",
+            "mode": "after",
+            "target": "e26",
+            "picks": [
+              "c15"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r12-play",
+          "v": 12,
+          "kind": "play",
+          "args": {
+            "uid": "c19",
+            "mode": "now",
+            "target": "e26",
+            "picks": [
+              "c2",
+              "c1"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r13-play",
+          "v": 13,
+          "kind": "play",
+          "args": {
+            "uid": "c7",
+            "mode": "now",
+            "target": "e25",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r14-play",
+          "v": 14,
+          "kind": "play",
+          "args": {
+            "uid": "c9",
+            "mode": "after",
+            "target": "e26",
+            "picks": [
+              "c16"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r14-play",
+          "v": 14,
+          "kind": "play",
+          "args": {
+            "uid": "c15",
+            "mode": "after",
+            "target": "e24",
+            "picks": [
+              "c9"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r14-play",
+          "v": 14,
+          "kind": "play",
+          "args": {
+            "uid": "c15",
+            "mode": "after",
+            "target": "e24",
+            "picks": []
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r14-play",
+          "v": 14,
+          "kind": "play",
+          "args": {
+            "uid": "c15",
+            "mode": "next",
+            "target": "e24",
+            "picks": [
+              "c9"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r15-end",
+          "v": 15,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r16-play",
+          "v": 16,
+          "kind": "play",
+          "args": {
+            "uid": "c22",
+            "mode": "now",
+            "target": "e26",
+            "picks": [
+              "c16",
+              "c13"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r17-play",
+          "v": 17,
+          "kind": "play",
+          "args": {
+            "uid": "c13",
+            "mode": "after",
+            "target": "e26",
+            "picks": [
+              "c17"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r18-play",
+          "v": 18,
+          "kind": "play",
+          "args": {
+            "uid": "c17",
+            "mode": "after",
+            "target": "e26",
+            "picks": [
+              "c23"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r18-play",
+          "v": 18,
+          "kind": "play",
+          "args": {
+            "uid": "c17",
+            "mode": "now",
+            "target": "e26",
+            "picks": []
+          }
+        },
+        {
+          "scope": "run",
+          "kind": "takeCard",
+          "args": [
+            "rien_rest"
+          ]
+        },
+        {
+          "scope": "run",
+          "kind": "proceed",
+          "args": []
+        },
+        {
+          "scope": "run",
+          "kind": "enter",
+          "args": [
+            "z2f1n0"
+          ]
+        },
+        {
+          "scope": "run",
+          "kind": "eventChoose",
+          "args": [
+            0,
+            "k7"
+          ]
+        },
+        {
+          "scope": "run",
+          "kind": "proceed",
+          "args": []
+        },
+        {
+          "scope": "run",
+          "kind": "enter",
+          "args": [
+            "z2f2n1"
+          ]
+        },
+        {
+          "scope": "battle",
+          "rid": "r1-play",
+          "v": 1,
+          "kind": "play",
+          "args": {
+            "uid": "c9",
+            "mode": "after",
+            "target": "e27",
+            "picks": [
+              "c21"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r2-play",
+          "v": 2,
+          "kind": "play",
+          "args": {
+            "uid": "c23",
+            "mode": "now",
+            "target": "e27",
+            "picks": [
+              "c21"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r3-end",
+          "v": 3,
+          "kind": "end",
+          "args": {}
+        },
+        {
+          "scope": "battle",
+          "rid": "r4-play",
+          "v": 4,
+          "kind": "play",
+          "args": {
+            "uid": "c4",
+            "mode": "now",
+            "target": "e27",
+            "picks": [
+              "c1"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r5-play",
+          "v": 5,
+          "kind": "play",
+          "args": {
+            "uid": "c7",
+            "mode": "next",
+            "target": "e27",
+            "picks": [
+              "c9"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r6-play",
+          "v": 6,
+          "kind": "play",
+          "args": {
+            "uid": "c22",
+            "mode": "now",
+            "target": "e27",
+            "picks": [
+              "c24"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r7-play",
+          "v": 7,
+          "kind": "play",
+          "args": {
+            "uid": "c19",
+            "mode": "now",
+            "target": "e27",
+            "picks": [
+              "c7"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r8-play",
+          "v": 8,
+          "kind": "play",
+          "args": {
+            "uid": "c24",
+            "mode": "now",
+            "target": "e27",
+            "picks": [
+              "c9"
+            ]
+          }
+        },
+        {
+          "scope": "battle",
+          "rid": "r9-play",
+          "v": 9,
+          "kind": "play",
+          "args": {
+            "uid": "c2",
+            "mode": "now",
+            "target": "e27",
+            "picks": [
+              "c9"
+            ]
+          }
+        },
+        {
+          "scope": "run",
+          "kind": "skipCard",
+          "args": []
+        },
+        {
+          "scope": "run",
+          "kind": "proceed",
+          "args": []
+        },
+        {
+          "scope": "run",
+          "kind": "enter",
+          "args": [
+            "z2f3n2"
+          ]
+        }
+      ]
+    }
+  }
+}

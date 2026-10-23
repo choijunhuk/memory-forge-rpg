@@ -1,0 +1,53 @@
+sera sera_lobby_01 advance=auto beats=5
+  shot0 (auto) t=0.1 fig=fig_scope sprite=char_sera_lobby_scope_v02 scale=1.45 dialogW=519 dialog=-
+  shot1 (auto) t=0.9 fig=fig_scope sprite=char_sera_lobby_scope_v02 scale=1.45 dialogW=519 dialog=-
+  shot2 (auto) t=2.9 fig=fig_scope sprite=char_sera_lobby_smile_v01 scale=1.45 dialogW=519 dialog=-
+  shot3 (auto) t=3.5 fig=fig_smile sprite=char_sera_lobby_smile_v01 scale=1.90 dialogW=420 dialog=세라 / 시간은 비워 뒀어요. 아직 누구와 
+  shot4 (auto) t=5.5 fig=fig_smile sprite=char_sera_lobby_smile_v01 scale=1.90 dialogW=420 dialog=세라 / 시간은 비워 뒀어요. 아직 누구와 보낼지는 안 적었지만.
+  shot5 (auto) t=7.6 fig=fig_smile sprite=char_sera_lobby_smile_v01 scale=1.90 dialogW=420 dialog=세라 / 시간은 비워 뒀어요. 아직 누구와 보낼지는 안 적었지만.
+  shot6 (auto) t=9.6 fig=fig_smile sprite=char_sera_lobby_smile_v01 scale=1.90 dialogW=420 dialog=세라 / …힌트가
+  shot7 (auto) t=11.6 fig=fig_smile sprite=char_sera_lobby_smile_v01 scale=1.90 dialogW=420 dialog=세라 / …힌트가 더 필요해요?
+  finished fig=fig_smile err=
+ravien ravien_lobby_01 advance=tap beats=7
+  shot0 (beat shown) t=2.1 fig=fig_stamp sprite=char_ravien_stamp_focused_v01 scale=1.00 dialogW=600 dialog= / 서류철을 팔에 받친 라비엔이 도장을 한 번 누른다. 도장 자국을 확인하고 서류에서 손을 뗀다.
+  shot1 (beat shown) t=3.6 fig=fig_default sprite=char_ravien_stand_neutral_v01 scale=1.45 dialogW=560 dialog=라비엔 / 끝났어요. 여기까지는요.
+  shot2 (beat shown) t=5.6 fig=fig_turn sprite=char_ravien_paper_turn_playful_v01 scale=1.90 dialogW=431 dialog= / 종이 끝을 손끝으로 반 바퀴 돌려 서류철 안으로 넣는다. 종이를 내려놓고서야 
+  shot3 (beat shown) t=7.4 fig=fig_turn sprite=char_ravien_paper_turn_playful_v01 scale=1.90 dialogW=431 dialog= / 고개를 든다. 초록 눈이 공방장을 붙든다.
+  shot4 (beat shown) t=9.5 fig=fig_offer sprite=char_ravien_chair_offer_happy_v01 scale=1.00 dialogW=600 dialog=라비엔 / 공방장님이 바로 나가시면, 제가 이 의자를 괜히 꺼내 놓은 셈인데.
+  shot5 (beat shown) t=13.0 fig=fig_offer sprite=char_ravien_chair_offer_happy_v01 scale=1.00 dialogW=600 dialog= / 손끝으로 옆 의자를 가리킨 뒤 손을 내린다. 비워 둔 자리를 사이에 두고 공방장의 대답을 기다린다.
+  shot6 (beat shown) t=15.0 fig=fig_lobby_soft sprite=char_ravien_stand_soft_v01 scale=1.90 dialogW=420 dialog=라비엔 / 아직 앉아 있을 시간은 있죠? 이번엔 서류 얘기 안 할게요.
+  shot7 (beat shown) t=17.6 fig=fig_default sprite=char_ravien_stand_neutral_v01 scale=1.45 dialogW=560 dialog= / 라비엔은 몸을 제자리로 돌리고 서류철을 닫아 둔다. 옆 의자는 비워 둔 채, 닫힌 서류철에는 손을 대지 않고 
+  shot8 (beat shown) t=19.1 fig=fig_default sprite=char_ravien_stand_neutral_v01 scale=1.45 dialogW=560 dialog= / 공방장에게 시선을 둔다.
+  finished fig=fig_lobby_soft err=
+harin harin_lobby_01 advance=tap beats=7
+  shot0 (beat shown) t=2.4 fig=fig_glove sprite=char_harin_glove_determined_v01 scale=1.00 dialogW=600 dialog= / 하린이 방패를 세워 둔 채 장갑 손목끈을 두 번 고른다. 한쪽 망토가 들리며 주머니에서 고양이 인형 귀가 드러난다.
+  shot1 (beat shown) t=4.3 fig=fig_hide sprite=char_harin_pocket_surprised_v01 scale=1.45 dialogW=552 dialog=하린 / 순찰 끝. ……그쪽은 확인 안 해도 된다.
+  shot2 (beat shown) t=6.4 fig=fig_cough sprite=char_harin_cough_annoyed_v01 scale=1.90 dialogW=420 dialog= / 인형을 손으로 덮었다가 급히 주머니 안으로 밀어 넣는다. 공방장의 눈길을 피한 채 
+  shot3 (beat shown) t=7.9 fig=fig_cough sprite=char_harin_cough_annoyed_v01 scale=1.90 dialogW=420 dialog= / 손을 떼고 낮게 헛기침한다.
+  shot4 (beat shown) t=9.8 fig=fig_lobby_cat sprite=char_harin_pocket_reveal_soft_v01 scale=1.45 dialogW=552 dialog=하린 / 아니. 봐도 된다. 네가 보는 건…… 괜찮다.
+  shot5 (beat shown) t=12.6 fig=fig_lobby_soft sprite=char_harin_stand_soft_v01 scale=1.90 dialogW=420 dialog= / 인형 귀를 다시 조금 내놓고 손을 내린다. 굳은 입매가 아주 짧게 풀린다.
+  shot6 (beat shown) t=14.8 fig=fig_lobby_soft sprite=char_harin_stand_soft_v01 scale=1.90 dialogW=420 dialog=하린 / 다음 순찰 전까진 여기 있다. 할 얘기 있으면…… 내 옆에 와서 해라.
+  shot7 (beat shown) t=17.7 fig=fig_resolve sprite=char_harin_stand_determined_v01 scale=1.00 dialogW=600 dialog= / 하린은 방패를 확인하고 편한 정면 자세로 돌아온다. 주머니를 다시 가리지 않고 공방장을 향한 자리를 남겨 둔다.
+  finished fig=fig_lobby_soft err=
+aila aila_lobby_01 advance=tap beats=5
+  shot0 (beat shown) t=2.8 fig=fig_neutral sprite=char_aila_moment_neutral_v02 scale=1.00 dialogW=600 dialog= / 에일라는 장부를 덮고 손끝으로 종을 고른다. 등불을 낮게 든 채 고개를 돌리자, 열린 등과 서리 자수가 저녁빛을 받는다.
+  shot1 (beat shown) t=5.4 fig=fig_action1 sprite=char_aila_moment_action1_v02 scale=1.45 dialogW=552 dialog=에일라 / 잠깐만요. 이번에는 기록 때문이 아니에요.
+  shot2 (beat shown) t=8.4 fig=fig_action2 sprite=char_aila_moment_action2_v02 scale=1.45 dialogW=600 dialog= / 찻잔을 빈 옆자리 앞으로 옮긴다. 손을 거둔 뒤에도 기다리고, 어깨보다 먼저 눈이 공방장에게 돌아간다.
+  shot3 (beat shown) t=11.2 fig=fig_happy sprite=char_aila_moment_happy_v02 scale=1.90 dialogW=420 dialog=에일라 / 제가 같이 있고 싶어서 불렀어요. 이 자리는 공방장이 앉아 줬으면 해요.
+  shot4 (beat shown) t=13.7 fig=fig_soft sprite=char_aila_moment_soft_v02 scale=1.45 dialogW=535 dialog=에일라 / 차가 식는 건 괜찮아요. 대답은 기다릴 수 있으니까.
+  finished fig=fig_soft err=
+sion sion_lobby_01 advance=tap beats=5
+  shot0 (beat shown) t=2.2 fig=fig_neutral sprite=char_sion_moment_neutral_v01 scale=1.00 dialogW=600 dialog= / 시온은 페이지 끝을 들어 올린 채 멈춘다. 코트 사슬이 작게 흔들리다가 멎는다.
+  shot1 (beat shown) t=4.7 fig=fig_action1 sprite=char_sion_moment_action1_v01 scale=1.45 dialogW=552 dialog=시온 / 아까 하신 말, 다시 하실 필요 없습니다.
+  shot2 (beat shown) t=7.3 fig=fig_action2 sprite=char_sion_moment_action2_v01 scale=1.90 dialogW=420 dialog=시온 / 못 들은 게 아니에요. 들었으니까 다음 줄을 놓친 겁니다.
+  shot3 (beat shown) t=9.1 fig=fig_happy sprite=char_sion_moment_happy_v01 scale=1.90 dialogW=420 dialog= / 안경을 바로잡고 책을 입가까지 올린다. 눈만큼은 숨기지 못하고 
+  shot4 (beat shown) t=10.9 fig=fig_happy sprite=char_sion_moment_happy_v01 scale=1.90 dialogW=420 dialog= / 공방장에게 돌아온다.
+  shot5 (beat shown) t=13.3 fig=fig_soft sprite=char_sion_moment_soft_v01 scale=1.45 dialogW=552 dialog=시온 / 앉으세요. 이번에는 읽는 척을 그만하겠습니다.
+  finished fig=fig_soft err=
+lumi lumi_lobby_01 advance=tap beats=5
+  shot0 (beat shown) t=1.9 fig=fig_neutral sprite=char_lumi_moment_neutral_v01 scale=1.00 dialogW=600 dialog=루미 / 공방장! 오늘은 급행 안 받아요.
+  shot1 (beat shown) t=5.0 fig=fig_action1 sprite=char_lumi_moment_action1_v01 scale=1.45 dialogW=577 dialog= / 헬멧을 손목 위에서 짧게 돌려 잡는다. 팔에 끼우고 손을 비우자, 뒤따라 흔들리던 재킷 자락도 가라앉는다.
+  shot2 (beat shown) t=7.5 fig=fig_action2 sprite=char_lumi_moment_action2_v01 scale=1.45 dialogW=577 dialog=루미 / 뒷자리는 비워 뒀는데, 목적지는 같이 정하고 싶어서요.
+  shot3 (beat shown) t=10.3 fig=fig_happy sprite=char_lumi_moment_happy_v01 scale=1.90 dialogW=453 dialog=루미 / 걷자고 해도 돼요. 오늘은 공방장 옆에서 속도 맞추는 연습할래요.
+  shot4 (beat shown) t=12.9 fig=fig_soft sprite=char_lumi_moment_soft_v01 scale=1.00 dialogW=600 dialog= / 손바닥을 위로 내민 루미는 발을 움직이지 않은 채 공방장의 대답을 기다린다.
+  finished fig=fig_neutral err=

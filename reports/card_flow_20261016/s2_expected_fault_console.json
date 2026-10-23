@@ -1,0 +1,50 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Retrieved 5 log entries.\",\"data\":[{\"type\":\"Error\",\"message\":\"[MemoryForge] Practice expedition quarantined after a failed local Run calculation (InvalidOperationException); the Run may be partly changed, so it will be discarded unsaved. Session memory version 0 is kept.\",\"file\":\"Assets/Scripts/MemoryForgeExpeditionClient.cs\",\"line\":562,\"stackTrace\":null},{\"type\":\"Error\",\"message\":\"[MemoryForge] Practice recovery could not start a new departure (NullReferenceException); the quarantine and session memory version 0 are kept.\",\"file\":\"Assets/Scripts/MemoryForgeExpeditionClient.cs\",\"line\":589,\"stackTrace\":null},{\"type\":\"Error\",\"message\":\"[MemoryForge] Practice expedition quarantined after a failed local Run calculation (UNKNOWN_ENEMY); the Run may be partly changed, so it will be discarded unsaved. Session memory version 0 is kept.\",\"file\":\"Assets/Scripts/MemoryForgeExpeditionClient.cs\",\"line\":562,\"stackTrace\":null},{\"type\":\"Warning\",\"message\":\"Ignoring depth surface load action as it is memoryless\\n\",\"file\":\"\",\"line\":0,\"stackTrace\":null},{\"type\":\"Warning\",\"message\":\"Ignoring depth surface store action as it is memoryless\\n\",\"file\":\"\",\"line\":0,\"stackTrace\":null}]}"
+    }
+  ],
+  "structuredContent": {
+    "success": true,
+    "message": "Retrieved 5 log entries.",
+    "data": [
+      {
+        "type": "Error",
+        "message": "[MemoryForge] Practice expedition quarantined after a failed local Run calculation (InvalidOperationException); the Run may be partly changed, so it will be discarded unsaved. Session memory version 0 is kept.",
+        "file": "Assets/Scripts/MemoryForgeExpeditionClient.cs",
+        "line": 562,
+        "stackTrace": null
+      },
+      {
+        "type": "Error",
+        "message": "[MemoryForge] Practice recovery could not start a new departure (NullReferenceException); the quarantine and session memory version 0 are kept.",
+        "file": "Assets/Scripts/MemoryForgeExpeditionClient.cs",
+        "line": 589,
+        "stackTrace": null
+      },
+      {
+        "type": "Error",
+        "message": "[MemoryForge] Practice expedition quarantined after a failed local Run calculation (UNKNOWN_ENEMY); the Run may be partly changed, so it will be discarded unsaved. Session memory version 0 is kept.",
+        "file": "Assets/Scripts/MemoryForgeExpeditionClient.cs",
+        "line": 562,
+        "stackTrace": null
+      },
+      {
+        "type": "Warning",
+        "message": "Ignoring depth surface load action as it is memoryless\n",
+        "file": "",
+        "line": 0,
+        "stackTrace": null
+      },
+      {
+        "type": "Warning",
+        "message": "Ignoring depth surface store action as it is memoryless\n",
+        "file": "",
+        "line": 0,
+        "stackTrace": null
+      }
+    ]
+  },
+  "isError": false
+}

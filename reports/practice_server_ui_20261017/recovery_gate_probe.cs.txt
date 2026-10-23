@@ -1,0 +1,60 @@
+var c = UnityEngine.Object.FindObjectOfType<MemoryForge.Client.MemoryForgeServerPracticeClient>();
+var key = "MemoryForge.Codex.ServerUI.GateTail.20261017";
+System.Func<System.Func<bool>, System.Threading.Tasks.Task> until = async ready => {
+    for (int n = 0; n < 1000; n++) { if (ready()) return; await System.Threading.Tasks.Task.Delay(10); }
+    throw new System.Exception("Bounded recovery wait expired");
+};
+var checks = new Newtonsoft.Json.Linq.JArray();
+System.Action<bool, string> check = (ok, name) => { if (!ok) throw new System.Exception(name); checks.Add(name); };
+System.Func<System.Threading.Tasks.Task<string>> run = async () => {
+    try {
+        await until(() => c.CanCommand);
+        int before = c.Snapshot.Run.ServerVersion;
+        if (c.SelectedCard == null) {
+            var cards = (Newtonsoft.Json.Linq.JArray)c.Snapshot.Run.StateJObject()["battle"]["hand"];
+            check(cards.Count > 0 && c.SelectCard((string)cards[0]["uid"]), "select published hand card again after lifecycle cleared unsent selection");
+            await until(() => !c.Busy && c.QueryView != null);
+        }
+        string target = null;
+        foreach (Newtonsoft.Json.Linq.JObject enemy in (Newtonsoft.Json.Linq.JArray)c.Snapshot.Run.StateJObject()["battle"]["enemies"])
+            if ((bool)enemy["alive"]) { target = (string)enemy["uid"]; break; }
+        check(target != null && c.SelectEnemy(target), "explicitly reselect live target after lifecycle cleared it");
+        await until(() => !c.Busy && c.QueryView != null);
+        check(c.QueryView.ForecastError == null, "server approves exact target-bound request before send");
+        var root = "/Users/choi/Documents/Memory_forge/ops/ai/local/";
+        var proxy = Newtonsoft.Json.Linq.JObject.Parse(System.IO.File.ReadAllText(root + "transport-fault-proxy.json"));
+        var host = Newtonsoft.Json.Linq.JObject.Parse(System.IO.File.ReadAllText(root + "transport-dev-host.json"));
+        System.IO.File.WriteAllText((string)proxy["control_file"], "{\"mode\":\"503_once\"}");
+        await c.ConfirmAsync();
+        check(c.SessionState.Pending != null && !c.CanCommand && c.SnapshotStale, "real committed reply replaced by503 keeps exact pending and locks new commands");
+        var oldHand = (Newtonsoft.Json.Linq.JArray)c.Snapshot.Run.StateJObject()["battle"]["hand"];
+        check(oldHand.Count == 0 || !c.SelectCard((string)oldHand[0]["uid"]), "unresolved pending refuses old-hand selection");
+        c.enabled = false; c.enabled = true;
+        await until(() => c.Connected && !c.Busy && c.Snapshot != null && c.Snapshot.Run.ServerVersion == before + 1);
+        check(c.SessionState.Pending != null && !c.CanCommand && !c.HasPresentation, "reconnect reads committed full state without auto retry or event replay");
+        var file = System.IO.Path.Combine((string)host["store_directory"], "account-" + (string)host["account"] + ".json");
+        string digestBefore;
+        using (var hash = System.Security.Cryptography.SHA256.Create()) digestBefore = System.Convert.ToBase64String(hash.ComputeHash(System.IO.File.ReadAllBytes(file)));
+        await c.RetryAsync();
+        string digestAfter;
+        using (var hash = System.Security.Cryptography.SHA256.Create()) digestAfter = System.Convert.ToBase64String(hash.ComputeHash(System.IO.File.ReadAllBytes(file)));
+        check(c.SessionState.Pending == null && c.CanCommand && !c.HasPresentation && digestBefore == digestAfter, "explicit exact retry clears record with whole envelope unchanged and no old events");
+        var hand = (Newtonsoft.Json.Linq.JArray)c.Snapshot.Run.StateJObject()["battle"]["hand"];
+        string uid = hand.Count == 0 ? null : (string)hand[0]["uid"];
+        var end = c.EndTurnAsync();
+        bool during = uid != null && c.SelectCard(uid);
+        await end;
+        check(!during, "selection locked while end-turn request is in flight");
+        check(c.PresentationBarrier && c.Snapshot.Run.ServerVersion == before + 2, "committed end opens full turn barrier");
+        check(!c.SelectEnemy(target), "turn barrier rejects target selection");
+        int version = c.Snapshot.Run.ServerVersion;
+        c.SkipPresentation(); c.ContinuePresentation();
+        check(c.Snapshot.Run.ServerVersion == version && c.SessionState.Pending == null, "skip and continue are presentation-only");
+        return new Newtonsoft.Json.Linq.JObject { ["status"] = "PASS", ["checks"] = checks, ["before_version"] = before, ["after_version"] = version,
+            ["actual_editor_play"] = true, ["actual_core_http"] = true, ["scope"] = "final UI hash recovery/gate continuation; physical-device acceptance separate" }.ToString(Newtonsoft.Json.Formatting.None);
+    } catch (System.Exception error) {
+        return new Newtonsoft.Json.Linq.JObject { ["status"] = "FAIL", ["checks"] = checks, ["safe_error"] = error.GetType().Name + ": " + error.Message }.ToString(Newtonsoft.Json.Formatting.None);
+    }
+};
+System.AppDomain.CurrentDomain.SetData(key, run());
+return "Started actual recovery/gate continuation with explicit post-resume target selection";

@@ -1,0 +1,49 @@
+{
+  "status": "PASS",
+  "before_version": 3,
+  "committed_version": 4,
+  "request_id": "fff8a270-0539-4c6a-b02a-b2cb2414bb00",
+  "body_sha256": "9c08221b134d3101354a7fa89b9253573305a3e7798926ac54a29a164d5deecc",
+  "pending_file_sha256": "e4274e038848176e6ce0d2088528ca025b5d08e9ea02c36a1644ef0bb21af4d7",
+  "server_files": {
+    "account-transport-alpha.lock": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "account-transport-alpha.json": "4ae45a45493b26b3e33b2c2b660f2214e616b80d279a460ddb0ca400854c7fe2"
+  },
+  "original_response_sha256": "d52c231edb5fa16b90713aea36724a6d37fda3e567aadc141cc5fa554d1b2c79",
+  "reservation_registered_once": true,
+  "ap_spent_exact_public_cost_once": true,
+  "client_result": {
+    "operation": "play-next",
+    "owner_verified": true,
+    "before_server_version": 3,
+    "before_battle_version": 3,
+    "code": "NETWORK_FAILED",
+    "status": "Pending",
+    "refresh_code": null,
+    "request_id": "fff8a270-0539-4c6a-b02a-b2cb2414bb00",
+    "request_body_sha256": "9c08221b134d3101354a7fa89b9253573305a3e7798926ac54a29a164d5deecc",
+    "presentable_event_count": null,
+    "pending": true,
+    "needs_refresh": false,
+    "after_server_version": 3
+  },
+  "scope": "actual unchanged Core HTTP host and actual SDK client; owned proxy drops real200",
+  "fresh_client_process_retry": {
+    "operation": "retry",
+    "owner_verified": true,
+    "before_server_version": 4,
+    "before_battle_version": 4,
+    "code": "OK",
+    "status": "Committed",
+    "refresh_code": null,
+    "request_id": "fff8a270-0539-4c6a-b02a-b2cb2414bb00",
+    "request_body_sha256": "9c08221b134d3101354a7fa89b9253573305a3e7798926ac54a29a164d5deecc",
+    "presentable_event_count": null,
+    "pending": false,
+    "needs_refresh": false,
+    "after_server_version": 4
+  },
+  "server_process_restarted": true,
+  "whole_server_envelope_unchanged_after_retry": true,
+  "no_old_event_replay": true
+}

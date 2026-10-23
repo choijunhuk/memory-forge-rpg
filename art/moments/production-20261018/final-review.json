@@ -1,0 +1,28 @@
+{
+  "status": "PASS",
+  "manifest_hashes_still_current": true,
+  "preexisting_changed_files": [
+    "FORMAT-REQUESTS.md",
+    "SOURCE-RECORD.json",
+    "README.md",
+    "VALIDATION.json",
+    "HANDOFF.md",
+    "sion/moments.json",
+    "sion/README.md",
+    "ravien/moments.json",
+    "ravien/README.md",
+    "lumi/moments.json",
+    "lumi/README.md",
+    "sera/moments.json",
+    "sera/README.md",
+    "aila/moments.json",
+    "aila/README.md",
+    "harin/moments.json",
+    "harin/README.md"
+  ],
+  "existing_pngs_unchanged": true,
+  "new_record_count": 44,
+  "final_artifacts_present": true,
+  "scope": "art/moments",
+  "runtime_acceptance": "NOT_RUN"
+}

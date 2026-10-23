@@ -1,0 +1,31 @@
+{
+  "task_id": "P1-CARD-FLOW-FAIL-CLOSED",
+  "run_id": "P1-CARD-FLOW-FAIL-CLOSED-20261016T034931322565Z",
+  "status": "VERIFIED",
+  "requestedEffort": "xhigh",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "changes_verified": true,
+  "raw_output": "ops/ai/local/P1-CARD-FLOW-FAIL-CLOSED-20261016T034931322565Z*",
+  "billing_verified_at": "2026-10-15T21:22:01.277612+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "claude/balance-audit",
+  "base_commit": "9be537f4c5ef59e890322cb2d1de914fb49bfed6",
+  "worktree": "/Users/choi/.codex/worktrees/claude-balance-audit/Memory_forge",
+  "allowed_files": [
+    "client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs",
+    "client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionFailurePlayModeTests.cs",
+    "reports/card_flow_20261016/failure_author_report.md"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "d2bda3e6-a0ab-4f84-82e6-c15d5d12127f",
+  "subtype": "success",
+  "is_error": false,
+  "result": "I added fail-closed recovery to the expedition client plus 5 focused tests and the author report, but none of it has been compiled or run. Compile, Unity Edit/PlayMode and screenshots are all **NOT_RUN** (no Editor or shell here). I only checked it by reading it against Core's `RuleException` throw sites, `Run.Enter`'s mutation order, the `RunState` copy/graph code, `CanonicalState` (it rejects floats) and A's new `enemy.Pattern` path.\n\n**What changed in `MemoryForgeExpeditionClient.cs`:**\n- **Failure check:** every Run-changing command already goes through `Do`. It now keeps a detached copy of the Run (`run.State`) and of the session store before each command. On any exception it compares before and after as `JToken` deep equality, which handles the legal fractional metadata that `CanonicalState.Hash` rejects.\n  - A rejection stays an ordinary toast only if its code is on the allowlist **and** neither the Run nor the store changed. The allowlist is 37 explicit input-validation codes (e.g. `NOT_IN_HAND`, `BAD_TARGET`, `WRONG_PHASE`, `COINS_LOW`, `OVER_CAPACITY`).\n  - Everything else quarantines the practice, even if nothing changed: engine and integrity codes, version and request conflicts, unknown ids, `INVALID_PART`, non-rule exceptions, `MemoryBoundaryException` (previously an INTERNAL toast), a failed snapshot, or a failed comparison.\n- **Quarantine:**\n  - The store goes back to its pre-command copy.\n  - Picker, selections, sheets, card detail and the turn summary are cleared, and one `Debug.LogError` diagnostic is written.\n  - There is no retry, refund, auto-advance, auto-save or server fetch.\n- **Blocking:** the new read-only `RecoveryRequired` makes the existing gate refuse every public command and selection with `RECOVERY_REQUIRED`, including `StartPractice`, `Depart`, `CommitMemory`, `CloseWithoutSave` and `Abandon`. Read APIs that would touch the failed Run (card details, forecast, memory previews) return false or null.\n- **Recovery screen:** `Render` branches to it before the header or any normal view, and it reads nothing from the failed Run. It shows short Korean text with the kept memory version and the session-only limitation, plus one button. The quarantine survives disable/enable and focus/pause.\n- **Exit:** `DiscardFailedPractice()` drops the failed Run without saving it — no Core abandon, commit or close, and it is never treated as a save screen. It then calls the existing `Depart` from the last valid store, so memory, version, receipts and departure numbering carry over. If that departure fails, the quarantine stays.\n\n**Tests (`ExpeditionFailurePlayModeTests`, 5):**\n1. **Main regression:**\n   - A genuine save is earned first: end turns until defeat, commit with no change, reaching version 1.\n   - A test-local unknown encounter enemy is put into the client's own content, then a real `EnterNode` runs. Position and RNG change but no battle starts, and the client quarantines.\n   - The store is kept, everything is refused, and the quarantine survives disable/enable and resume.\n   - After the fault is removed, a real click on the recovery button gives `practice-3`, identical to `Create` from the saved store.\n2. **Ordinary rejections** (`NODE_UNREACHABLE`, `NOT_IN_HAND`, `ULT_NOT_READY`, `BAD_REWARD`, `WRONG_PHASE`) stay toasts with no error log. `BAD_TARGET` is only checked when two or more enemies are alive.\n3. **Unknown enemy move:** a test-local unknown move type makes `end` fail. Battle rolls back so the Run is unchanged, and the practice still quarantines.\n4. **Private `Do` via reflection:** a non-rule exception quarantines, and a real `Enter` followed by an allowlisted code is still caught as a change.\n5. **Fractional metadata:** `SameRun` compares it exactly, where `CanonicalState.Hash` throws.\n\n**Existing tests:** I didn't need to change any; every code they expect is either allowlisted or rejected locally outside `Do`.\n\n**Remaining risks:**\n- Exceptions outside `Do` still escape as before instead of quarantining. That covers display code that runs after a successful command and pure queries such as `ConfirmCard`'s card lookup.\n- Test 1's defeat may not be reached, in which case it reports Inconclusive.\n- Each command now makes one extra deep copy of the Run and store.\n- This is app-session only. Server, account, reconnect and device are not covered.\n\n**Next:**\n1. Run `ExpeditionFailurePlayModeTests`, then the turn-flow, client and digest suites, then full PlayMode/EditMode.\n2. Check the Console only has the expected quarantine diagnostics.\n3. Screenshot the recovery screen at 1600×900, 640×360 and 130% text.\n\nFiles are in `client/MemoryForgeUnity/Assets/`:\n- `Scripts/MemoryForgeExpeditionClient.cs`\n- `Tests/PlayMode/ExpeditionFailurePlayModeTests.cs`\n\nAnd the report:\n- `reports/card_flow_20261016/failure_author_report.md`",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ],
+  "root_verification": "reports/card_flow_20261016/s2_root_acceptance.md"
+}

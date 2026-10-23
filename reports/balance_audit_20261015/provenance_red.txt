@@ -1,0 +1,290 @@
+▶ official CLI requires complete canonical probe provenance while analyze supports smaller probes
+  ✔ accepts complete base probe (2185.381542ms)
+  ✔ accepts complete candidate probe (5376.316125ms)
+  ✖ rejects base encounter subset (118.166875ms)
+  ✖ rejects candidate encounter subset (116.903375ms)
+  ✖ rejects mislabeled actual enemies (2171.765167ms)
+  ✖ rejects different scenario generation seed (2151.370583ms)
+  ✖ rejects different turn limit (437.534834ms)
+  ✖ rejects forged method scenarioSeed (2143.263375ms)
+  ✖ rejects forged method actionCap (2133.355791ms)
+  ✖ rejects forged method groups (2182.699625ms)
+  ✖ rejects forged method repsPerGroup (2269.463792ms)
+  ✖ rejects forged baseContent source hash (2104.492875ms)
+  ✖ rejects forged candidate source hash (5381.546167ms)
+  ✖ rejects unknown report mode (2132.29675ms)
+✖ official CLI requires complete canonical probe provenance while analyze supports smaller probes (43447.531625ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 2
+ℹ fail 13
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 43571.301833
+
+✖ failing tests:
+
+test at engine/tests/balance_causes.test.mjs:151:57
+✖ rejects base encounter subset (118.166875ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  0 !== 1
+
+      at TestContext.<anonymous> (file:///Users/choi/Documents/Memory_forge/engine/tests/balance_causes.test.mjs:153:14)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.start (node:internal/test_runner/test:1096:17)
+      at TestContext.test (node:internal/test_runner/test:377:20)
+      at TestContext.<anonymous> (file:///Users/choi/Documents/Memory_forge/engine/tests/balance_causes.test.mjs:151:57)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at engine/tests/balance_causes.test.mjs:151:57
+✖ rejects candidate encounter subset (116.903375ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  0 !== 1
+
+      at TestContext.<anonymous> (file:///Users/choi/Documents/Memory_forge/engine/tests/balance_causes.test.mjs:153:14)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.start (node:internal/test_runner/test:1096:17)
+      at TestContext.test (node:internal/test_runner/test:377:20)
+      at TestContext.<anonymous> (file:///Users/choi/Documents/Memory_forge/engine/tests/balance_causes.test.mjs:151:57)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at engine/tests/balance_causes.test.mjs:151:57
+✖ rejects mislabeled actual enemies (2171.765167ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  0 !== 1
+
+      at TestContext.<anonymous> (file:///Users/choi/Documents/Memory_forge/engine/tests/balance_causes.test.mjs:153:14)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.start (node:internal/test_runner/test:1096:17)
+      at TestContext.test (node:internal/test_runner/test:377:20)
+      at TestContext.<anonymous> (file:///Users/choi/Documents/Memory_forge/engine/tests/balance_causes.test.mjs:151:57)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at engine/tests/balance_causes.test.mjs:151:57
+✖ rejects different scenario generation seed (2151.370583ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  0 !== 1
+
+      at TestContext.<anonymous> (file:///Users/choi/Documents/Memory_forge/engine/tests/balance_causes.test.mjs:153:14)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.start (node:internal/test_runner/test:1096:17)
+      at TestContext.test (node:internal/test_runner/test:377:20)
+      at TestContext.<anonymous> (file:///Users/choi/Documents/Memory_forge/engine/tests/balance_causes.test.mjs:151:57)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at engine/tests/balance_causes.test.mjs:151:57
+✖ rejects different turn limit (437.534834ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  0 !== 1
+
+      at TestContext.<anonymous> (file:///Users/choi/Documents/Memory_forge/engine/tests/balance_causes.test.mjs:153:14)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.start (node:internal/test_runner/test:1096:17)
+      at TestContext.test (node:internal/test_runner/test:377:20)
+      at TestContext.<anonymous> (file:///Users/choi/Documents/Memory_forge/engine/tests/balance_causes.test.mjs:151:57)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at engine/tests/balance_causes.test.mjs:151:57
+✖ rejects forged method scenarioSeed (2143.263375ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  0 !== 1
+
+      at TestContext.<anonymous> (file:///Users/choi/Documents/Memory_forge/engine/tests/balance_causes.test.mjs:153:14)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.start (node:internal/test_runner/test:1096:17)
+      at TestContext.test (node:internal/test_runner/test:377:20)
+      at TestContext.<anonymous> (file:///Users/choi/Documents/Memory_forge/engine/tests/balance_causes.test.mjs:151:57)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at engine/tests/balance_causes.test.mjs:151:57
+✖ rejects forged method actionCap (2133.355791ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  0 !== 1
+
+      at TestContext.<anonymous> (file:///Users/choi/Documents/Memory_forge/engine/tests/balance_causes.test.mjs:153:14)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.start (node:internal/test_runner/test:1096:17)
+      at TestContext.test (node:internal/test_runner/test:377:20)
+      at TestContext.<anonymous> (file:///Users/choi/Documents/Memory_forge/engine/tests/balance_causes.test.mjs:151:57)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at engine/tests/balance_causes.test.mjs:151:57
+✖ rejects forged method groups (2182.699625ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  0 !== 1
+
+      at TestContext.<anonymous> (file:///Users/choi/Documents/Memory_forge/engine/tests/balance_causes.test.mjs:153:14)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.start (node:internal/test_runner/test:1096:17)
+      at TestContext.test (node:internal/test_runner/test:377:20)
+      at TestContext.<anonymous> (file:///Users/choi/Documents/Memory_forge/engine/tests/balance_causes.test.mjs:151:57)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at engine/tests/balance_causes.test.mjs:151:57
+✖ rejects forged method repsPerGroup (2269.463792ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  0 !== 1
+
+      at TestContext.<anonymous> (file:///Users/choi/Documents/Memory_forge/engine/tests/balance_causes.test.mjs:153:14)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.start (node:internal/test_runner/test:1096:17)
+      at TestContext.test (node:internal/test_runner/test:377:20)
+      at TestContext.<anonymous> (file:///Users/choi/Documents/Memory_forge/engine/tests/balance_causes.test.mjs:151:57)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at engine/tests/balance_causes.test.mjs:151:57
+✖ rejects forged baseContent source hash (2104.492875ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  0 !== 1
+
+      at TestContext.<anonymous> (file:///Users/choi/Documents/Memory_forge/engine/tests/balance_causes.test.mjs:153:14)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.start (node:internal/test_runner/test:1096:17)
+      at TestContext.test (node:internal/test_runner/test:377:20)
+      at TestContext.<anonymous> (file:///Users/choi/Documents/Memory_forge/engine/tests/balance_causes.test.mjs:151:57)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at engine/tests/balance_causes.test.mjs:151:57
+✖ rejects forged candidate source hash (5381.546167ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  0 !== 1
+
+      at TestContext.<anonymous> (file:///Users/choi/Documents/Memory_forge/engine/tests/balance_causes.test.mjs:153:14)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.start (node:internal/test_runner/test:1096:17)
+      at TestContext.test (node:internal/test_runner/test:377:20)
+      at TestContext.<anonymous> (file:///Users/choi/Documents/Memory_forge/engine/tests/balance_causes.test.mjs:151:57)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at engine/tests/balance_causes.test.mjs:151:57
+✖ rejects unknown report mode (2132.29675ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  0 !== 1
+
+      at TestContext.<anonymous> (file:///Users/choi/Documents/Memory_forge/engine/tests/balance_causes.test.mjs:153:14)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.start (node:internal/test_runner/test:1096:17)
+      at TestContext.test (node:internal/test_runner/test:377:20)
+      at TestContext.<anonymous> (file:///Users/choi/Documents/Memory_forge/engine/tests/balance_causes.test.mjs:151:57)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

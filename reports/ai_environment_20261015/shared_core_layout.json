@@ -1,0 +1,18 @@
+{
+  "command": "dotnet run --project core/MemoryForge.CoreChecks -- .",
+  "artifacts_override": false,
+  "status": "PASS",
+  "package_bin_obj_absent": true,
+  "checks_bin_obj_absent": true,
+  "artifacts_location": "ops/ai/local/dotnet-artifacts",
+  "artifacts_examples": [
+    "bin/MemoryForge.Core/debug/MemoryForge.Core.dll",
+    "bin/MemoryForge.CoreChecks/debug/MemoryForge.Core.dll",
+    "obj/MemoryForge.Core/debug/MemoryForge.Core.dll"
+  ],
+  "proof": "default_dotnet_run.txt",
+  "reason": "Avoid duplicate Unity imports of SDK build outputs; preserve shared source and numbers",
+  "console_proof": "shared_core_errors_only.json",
+  "transport_warning_proof": "shared_core_console.json",
+  "transport_warning_observed": "One MCP WebSocket not-initialised warning during domain reload; retained, not a C# compiler diagnostic"
+}

@@ -1,0 +1,204 @@
+{
+  "scope": "Actual live Editor scene, public UI command driver and EventSystem pointer save/departure; not native/physical input",
+  "driverSteps": 127,
+  "driverStepIsNotExactCommandAttemptCount": true,
+  "batches": [
+    {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"ActualPublicCommandsThisBatch\":32,\"Phase\":\"BATTLE\",\"HP\":236,\"Coins\":86,\"Deck\":19,\"SameCompleteState\":true},\"compiler\":\"codedom\"}}"
+        }
+      ],
+      "structuredContent": {
+        "success": true,
+        "message": "Code executed successfully.",
+        "data": {
+          "result": {
+            "ActualPublicCommandsThisBatch": 32,
+            "Phase": "BATTLE",
+            "HP": 236,
+            "Coins": 86,
+            "Deck": 19,
+            "SameCompleteState": true
+          },
+          "compiler": "codedom"
+        }
+      },
+      "isError": false
+    },
+    {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"DriverSteps\":32,\"Phase\":\"REWARD\",\"HP\":186,\"Coins\":172,\"Deck\":21,\"SameCompleteState\":true},\"compiler\":\"codedom\"}}"
+        }
+      ],
+      "structuredContent": {
+        "success": true,
+        "message": "Code executed successfully.",
+        "data": {
+          "result": {
+            "DriverSteps": 32,
+            "Phase": "REWARD",
+            "HP": 186,
+            "Coins": 172,
+            "Deck": 21,
+            "SameCompleteState": true
+          },
+          "compiler": "codedom"
+        }
+      },
+      "isError": false
+    },
+    {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"DriverSteps\":32,\"Phase\":\"BATTLE\",\"HP\":180,\"Coins\":199,\"Deck\":23,\"SameCompleteState\":true},\"compiler\":\"codedom\"}}"
+        }
+      ],
+      "structuredContent": {
+        "success": true,
+        "message": "Code executed successfully.",
+        "data": {
+          "result": {
+            "DriverSteps": 32,
+            "Phase": "BATTLE",
+            "HP": 180,
+            "Coins": 199,
+            "Deck": 23,
+            "SameCompleteState": true
+          },
+          "compiler": "codedom"
+        }
+      },
+      "isError": false
+    },
+    {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"DriverSteps\":31,\"Phase\":\"VICTORY\",\"HP\":115,\"Coins\":299,\"Deck\":24,\"SameCompleteState\":true},\"compiler\":\"codedom\"}}"
+        }
+      ],
+      "structuredContent": {
+        "success": true,
+        "message": "Code executed successfully.",
+        "data": {
+          "result": {
+            "DriverSteps": 31,
+            "Phase": "VICTORY",
+            "HP": 115,
+            "Coins": 299,
+            "Deck": 24,
+            "SameCompleteState": true
+          },
+          "compiler": "codedom"
+        }
+      },
+      "isError": false
+    }
+  ],
+  "selection": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"SelectedChanges\":8,\"MemoryVersionStill\":0,\"RunStateUnchanged\":true,\"PreviewUsed\":{\"sera\":5,\"harin\":4,\"nia\":3},\"Capacities\":{\"sera\":6,\"harin\":6,\"nia\":6},\"Error\":null},\"compiler\":\"codedom\"}}"
+      }
+    ],
+    "structuredContent": {
+      "success": true,
+      "message": "Code executed successfully.",
+      "data": {
+        "result": {
+          "SelectedChanges": 8,
+          "MemoryVersionStill": 0,
+          "RunStateUnchanged": true,
+          "PreviewUsed": {
+            "sera": 5,
+            "harin": 4,
+            "nia": 3
+          },
+          "Capacities": {
+            "sera": 6,
+            "harin": 6,
+            "nia": 6
+          },
+          "Error": null
+        },
+        "compiler": "codedom"
+      }
+    },
+    "isError": false
+  },
+  "harnessReturnShapeErrorAfterBothRealCommits": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":false,\"message\":\"Runtime error: The given key 'store' was not present in the dictionary.\",\"data\":{\"exceptionType\":\"KeyNotFoundException\",\"stackTrace\":\"  at System.Collections.Generic.Dictionary`2[TKey,TValue].get_Item (TKey key) [0x0001e] in <27bd554a9f0e46179afd19da1336e638>:0 \\n  at MCPDynamicCode.Execute () [0x001de] in <ae33b2304356411e91335c9be1eb66f1>:0 \\n  at (wrapper managed-to-native) System.Reflection.RuntimeMethodInfo.InternalInvoke(System.Reflection.RuntimeMethodInfo,object,object[],System.Exception&)\\n  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x0006a] in <27bd554a9f0e46179afd19da1336e638>:0 \",\"compiler\":\"codedom\"}}"
+      }
+    ],
+    "structuredContent": {
+      "success": false,
+      "message": "Runtime error: The given key 'store' was not present in the dictionary.",
+      "data": {
+        "exceptionType": "KeyNotFoundException",
+        "stackTrace": "  at System.Collections.Generic.Dictionary`2[TKey,TValue].get_Item (TKey key) [0x0001e] in <27bd554a9f0e46179afd19da1336e638>:0 \n  at MCPDynamicCode.Execute () [0x001de] in <ae33b2304356411e91335c9be1eb66f1>:0 \n  at (wrapper managed-to-native) System.Reflection.RuntimeMethodInfo.InternalInvoke(System.Reflection.RuntimeMethodInfo,object,object[],System.Exception&)\n  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x0006a] in <27bd554a9f0e46179afd19da1336e638>:0 ",
+        "compiler": "codedom"
+      }
+    },
+    "isError": false
+  },
+  "verifiedWithoutSecondCommit": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"Phase\":\"DONE\",\"MemoryVersion\":1,\"SameCompleteState\":true,\"SameProducedMemory\":true,\"NoSecondCommit\":true,\"Selected8Costs\":\"sera5/harin4/nia3\",\"LastError\":null},\"compiler\":\"codedom\"}}"
+      }
+    ],
+    "structuredContent": {
+      "success": true,
+      "message": "Code executed successfully.",
+      "data": {
+        "result": {
+          "Phase": "DONE",
+          "MemoryVersion": 1,
+          "SameCompleteState": true,
+          "SameProducedMemory": true,
+          "NoSecondCommit": true,
+          "Selected8Costs": "sera5/harin4/nia3",
+          "LastError": null
+        },
+        "compiler": "codedom"
+      }
+    },
+    "isError": false
+  },
+  "departureFromActuallyProducedMemory": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"ActualPointerDeparted\":true,\"Phase\":\"MAP\",\"Seed\":1235,\"MemoryVersion\":1,\"Deck\":24,\"SameSaveDerivedFreshRun\":true,\"Error\":null,\"QaMirrorCleared\":true},\"compiler\":\"codedom\"}}"
+      }
+    ],
+    "structuredContent": {
+      "success": true,
+      "message": "Code executed successfully.",
+      "data": {
+        "result": {
+          "ActualPointerDeparted": true,
+          "Phase": "MAP",
+          "Seed": 1235,
+          "MemoryVersion": 1,
+          "Deck": 24,
+          "SameSaveDerivedFreshRun": true,
+          "Error": null,
+          "QaMirrorCleared": true
+        },
+        "compiler": "codedom"
+      }
+    },
+    "isError": false
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "protected47_unchanged": true,
+  "input423_historical29_same": true,
+  "manifest_regenerated": false,
+  "runner_sha256": "34f4b54447d4fdf6a1ced5cc3cb9076b505e81d4b292c78151ac91f79d4f7257",
+  "core_unity_game_data_original_sql_openapi_changed_paths": [],
+  "candidate_hashes": {
+    "tools/check_practice_postgres.sh": "88ed060d615875787c6b6fd49c6141bba37b1ef015c399ea1e5b2764594e55c7",
+    ".github/workflows/ci.yml": "913522572db008da5f28702eb3860191194927e652f4aec18167a496a1dad15b"
+  }
+}

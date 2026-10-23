@@ -1,0 +1,2 @@
+NOT_RUN: the read-only repository bind-mount Docker launch stalled before container creation; only its owned client was stopped.
+PASS fallback: the unchanged script/schema/checks were streamed over stdin to a separate network-disabled, cached postgres:16 container. See postgres_schema_stdin_baseline.txt and postgres_validation.json.

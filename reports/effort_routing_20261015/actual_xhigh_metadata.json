@@ -1,0 +1,109 @@
+{
+  "scope": "Only current final-review call metadata; no content or internal reasoning copied",
+  "requested": "xhigh",
+  "actualRecords": 16,
+  "models": [
+    "claude-opus-5-5"
+  ],
+  "sessionId": "0189a4bb-b798-494e-8878-ab0db85b2912",
+  "runStart": "2026-10-15T06:39:42.527310+00:00",
+  "records": [
+    {
+      "at": "2026-10-15T06:40:15.278Z",
+      "model": "claude-opus-5-5",
+      "effort": "xhigh",
+      "perTurnEffort": "xhigh"
+    },
+    {
+      "at": "2026-10-15T06:40:17.727Z",
+      "model": "claude-opus-5-5",
+      "effort": "xhigh",
+      "perTurnEffort": "xhigh"
+    },
+    {
+      "at": "2026-10-15T06:40:19.007Z",
+      "model": "claude-opus-5-5",
+      "effort": "xhigh",
+      "perTurnEffort": "xhigh"
+    },
+    {
+      "at": "2026-10-15T06:40:19.036Z",
+      "model": "claude-opus-5-5",
+      "effort": "xhigh",
+      "perTurnEffort": "xhigh"
+    },
+    {
+      "at": "2026-10-15T06:40:29.427Z",
+      "model": "claude-opus-5-5",
+      "effort": "xhigh",
+      "perTurnEffort": "xhigh"
+    },
+    {
+      "at": "2026-10-15T06:40:30.120Z",
+      "model": "claude-opus-5-5",
+      "effort": "xhigh",
+      "perTurnEffort": "xhigh"
+    },
+    {
+      "at": "2026-10-15T06:40:30.232Z",
+      "model": "claude-opus-5-5",
+      "effort": "xhigh",
+      "perTurnEffort": "xhigh"
+    },
+    {
+      "at": "2026-10-15T06:40:37.087Z",
+      "model": "claude-opus-5-5",
+      "effort": "xhigh",
+      "perTurnEffort": "xhigh"
+    },
+    {
+      "at": "2026-10-15T06:40:37.987Z",
+      "model": "claude-opus-5-5",
+      "effort": "xhigh",
+      "perTurnEffort": "xhigh"
+    },
+    {
+      "at": "2026-10-15T06:40:39.192Z",
+      "model": "claude-opus-5-5",
+      "effort": "xhigh",
+      "perTurnEffort": "xhigh"
+    },
+    {
+      "at": "2026-10-15T06:40:39.896Z",
+      "model": "claude-opus-5-5",
+      "effort": "xhigh",
+      "perTurnEffort": "xhigh"
+    },
+    {
+      "at": "2026-10-15T06:40:56.653Z",
+      "model": "claude-opus-5-5",
+      "effort": "xhigh",
+      "perTurnEffort": "xhigh"
+    },
+    {
+      "at": "2026-10-15T06:40:56.769Z",
+      "model": "claude-opus-5-5",
+      "effort": "xhigh",
+      "perTurnEffort": "xhigh"
+    },
+    {
+      "at": "2026-10-15T06:41:07.499Z",
+      "model": "claude-opus-5-5",
+      "effort": "xhigh",
+      "perTurnEffort": "xhigh"
+    },
+    {
+      "at": "2026-10-15T06:41:08.709Z",
+      "model": "claude-opus-5-5",
+      "effort": "xhigh",
+      "perTurnEffort": "xhigh"
+    },
+    {
+      "at": "2026-10-15T06:41:08.902Z",
+      "model": "claude-opus-5-5",
+      "effort": "xhigh",
+      "perTurnEffort": "xhigh"
+    }
+  ],
+  "review_completion": "Process0 returned APPROVE_XHIGH_ROUTING; separate M0 P2 remains blocked pending patch"
+}

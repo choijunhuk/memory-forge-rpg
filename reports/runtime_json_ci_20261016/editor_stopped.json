@@ -1,0 +1,14 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Exited play mode.\",\"data\":null}"
+    }
+  ],
+  "structuredContent": {
+    "success": true,
+    "message": "Exited play mode.",
+    "data": null
+  },
+  "isError": false
+}

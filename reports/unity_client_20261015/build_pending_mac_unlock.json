@@ -1,0 +1,17 @@
+{
+  "status": "ATTEMPT_UNCONFIRMED_MAC_LOCKED",
+  "attemptedTool": "Unity MCP manage_build osx development",
+  "toolResult": "TimeoutError; subsequent status disconnected",
+  "targetAppExistedAtLastCheck": false,
+  "blocker": "Computer-use tool confirmed Mac locked; manual unlock required",
+  "editorPlayTests": {
+    "passed": 26,
+    "total": 26
+  },
+  "editorEditTests": {
+    "passed": 3,
+    "total": 3
+  },
+  "wholeRunCommands": 0,
+  "requestToUserPending": true
+}

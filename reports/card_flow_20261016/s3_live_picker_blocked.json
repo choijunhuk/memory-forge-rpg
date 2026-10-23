@@ -1,0 +1,31 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"actualScene\":\"MemoryForgeExpedition\",\"pickerOpen\":true,\"endAccepted\":false,\"endCode\":\"PICKER_OPEN\",\"invalidPickAccepted\":false,\"invalidCode\":\"PICK_INVALID\",\"completeRunJsonUnchanged\":true,\"wholeStoreUnchanged\":true,\"picks\":[],\"version\":1,\"ap\":4,\"comparison\":\"complete JSON including log/events, no canonical omissions\",\"expectedStateInjected\":false},\"compiler\":\"codedom\"}}"
+    }
+  ],
+  "structuredContent": {
+    "success": true,
+    "message": "Code executed successfully.",
+    "data": {
+      "result": {
+        "actualScene": "MemoryForgeExpedition",
+        "pickerOpen": true,
+        "endAccepted": false,
+        "endCode": "PICKER_OPEN",
+        "invalidPickAccepted": false,
+        "invalidCode": "PICK_INVALID",
+        "completeRunJsonUnchanged": true,
+        "wholeStoreUnchanged": true,
+        "picks": [],
+        "version": 1,
+        "ap": 4,
+        "comparison": "complete JSON including log/events, no canonical omissions",
+        "expectedStateInjected": false
+      },
+      "compiler": "codedom"
+    }
+  },
+  "isError": false
+}

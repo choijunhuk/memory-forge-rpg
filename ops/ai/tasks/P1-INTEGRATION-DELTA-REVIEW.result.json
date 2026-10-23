@@ -1,0 +1,26 @@
+{
+  "task_id": "P1-INTEGRATION-DELTA-REVIEW",
+  "run_id": "P1-INTEGRATION-DELTA-REVIEW-20261014T221743904599Z",
+  "status": "RECEIVED_UNVERIFIED",
+  "requestedEffort": "max",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "changes_verified": false,
+  "raw_output": "ops/ai/local/P1-INTEGRATION-DELTA-REVIEW-20261014T221743904599Z*",
+  "billing_verified_at": "2026-10-14T21:44:57.439760+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "claude/balance-audit",
+  "base_commit": "9be537f4c5ef59e890322cb2d1de914fb49bfed6",
+  "worktree": "/Users/choi/.codex/worktrees/claude-balance-audit/Memory_forge",
+  "allowed_files": [],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "4f90a3bc-f540-472f-9f55-08a4b75d143e",
+  "subtype": "success",
+  "is_error": false,
+  "result": "# P1-INTEGRATION-DELTA-REVIEW 결과 (읽기 전용, Opus Max)\n\n1~3번은 통합 가능합니다. 4번(Unity 공유 Core 연결)은 결함 1건 때문에 차단이지만, 작은 수정으로 풀립니다. 1~3번 통합과는 따로 처리하면 됩니다. 저는 아무것도 실행하지 않았고, 코드와 문서만 대조했습니다.\n\n| 항목 | 판정 | 근거 |\n|---|---|---|\n| 1. 출고 검사 A 수정 | 통합 가능 | `private_path`가 `.gitignore:10-16`의 인증 목록 전체와 `.credentials.json`까지 막습니다. `.git`이 없는 추출본은 실제 파일 전체를 검사합니다(`delivery_files.py:14-19`). `build_manifest.py:9-10`은 쓰기 전에 사전검사를 끝내므로, 실패하면 기존 두 매니페스트가 그대로 남습니다. 실제 subprocess 회귀 시험도 확인했습니다(`test_delivery_files.py:67-81`). |\n| 2. B/C 수정 | 통합 가능 | 재생성 명령이 문서에 들어갔습니다(`cross_language_20261015/README.md:9-15`). `reports/csharp_checks.txt`에는 실제 명령, 출력, NOT_IMPLEMENTED 표기가 있습니다. 대기 문구도 고쳐졌습니다(`AI_ENVIRONMENT.md:52`, `IMPLEMENTATION_STATUS.md:13`). |\n| 3. 숫자형 키 독립 oracle | 통합 가능 | 정렬한 전체 키 목록을 `JSON.stringify`의 replacer로 넘겨, 모든 깊이의 객체 키를 ordinal 순서로 출력합니다. production 직렬화기를 베끼지 않습니다(`trace_export.test.mjs:15-27`). 중첩 숫자 키, 배열, RNG 상태를 바꾸지 않는지도 회귀 시험합니다(`:42-54`). 시험 파일은 corpus 출처 해시 대상이 아니라서 corpus는 그대로 유효합니다. |\n| 4. Unity 공유 Core | **차단** | 아래 결함 1건입니다. 그 밖의 부분은 문제없습니다: `file:../../../core/MemoryForge.Core` 경로, `noEngineReferences`, `csc.rsp`의 nullable 설정, PlayMode 2개의 내용, `LoadPrefabContents`/`Unload`로 프리팹을 분리해 활성 씬을 더럽히지 않는 것. |\n\n## 차단 결함 (4번): .NET 기본 빌드 출력이 Unity 패키지 폴더 안에 생김\n- **원인:** `core/MemoryForge.Core/`는 이제 UPM 패키지이면서 SDK 프로젝트입니다. 그런데 csproj에 출력 경로 설정이 없고 `Directory.Build.props`도 없습니다.\n- **문서 명령이 기본 경로를 씀:** 다음 명령은 모두 `core/MemoryForge.Core/bin/**`와 `obj/**`에 `MemoryForge.Core.dll` 여러 벌과 생성된 `.cs` 파일을 만듭니다.\n  - `core/README.md:7`\n  - `reports/cross_language_20261015/README.md:14`\n  - 원문 §20.9 P1-1의 완료 명령 `dotnet run --project core/MemoryForge.CoreChecks -- .`\n- **결과:** Unity는 숨김 폴더나 `~`로 끝나는 폴더 같은 일부만 건너뜁니다. 그래서 `bin`/`obj` 안의 DLL을 플러그인으로 가져옵니다. 이름이 같은 사전 컴파일 어셈블리가 겹치고 asmdef와도 이름이 충돌해서 스크립트 컴파일이 막힙니다.\n- **확인된 \"오류 0\" 결과가 이 경로를 피했던 이유:** `reports/csharp_checks.txt:16`을 보면 빌드할 때 `--artifacts-path …/ops/ai/local/dotnet-sdk10/artifacts`를 줬습니다. 문서 명령에는 이 옵션이 없습니다.\n- **재현 (NOT_RUN):** Unity 프로젝트가 이 패키지를 참조하는 root에서 문서 명령을 그대로 실행합니다 → `core/MemoryForge.Core/bin`, `obj`가 생깁니다 → Editor를 새로고침하면 Console에 컴파일 오류가 납니다.\n- **해제 조건:**\n  1. 빌드 출력을 패키지 밖으로 고정합니다. 예: `core/Directory.Build.props`에 artifacts 경로를 지정하거나 `bin~`/`obj~`로 바꿉니다.\n  2. 문서 명령을 실행한 직후 `resolve_packages`를 돌리고 컴파일 오류 0을 다시 확인합니다.\n\n## 비차단 참고\n- **1번의 남은 범위:** ZIP 안에 `.git`이 들어 있으면 Git 소스로 판정됩니다(`delivery_files.py:16-17`). 그러면 무시 대상인 개인 파일은 실제 파일 검사를 받지 않습니다. 이번 주장(\".git이 없는 ZIP\")의 범위 밖이고, ZIP을 Git 출고 목록으로 만들면 생기지 않습니다.\n- **문서 두 곳:**\n  - `AI_ENVIRONMENT.md:51`은 Core 연결 전 빌드인 `unity_build.json`을 가리킵니다. Core 연결 후 빌드 증거인 `unity_build_final.json`은 어디에도 링크되지 않았습니다.\n  - `core/README.md:11`의 \"Unity 실제 컴파일은 아직 하지 않았다\"는 지금 상황과 다릅니다.\n\n## 실행 구분\n- **NOT_RUN:** 저는 Bash가 없어서 아무것도 실행하지 않았습니다. Python 48개, Node 168/168, dotnet CoreChecks, Unity resolve·PlayMode·EditMode·빌드는 모두 Codex가 실행한 증거입니다.\n- **gzip corpus:** 이 worktree에 복사되지 않았을 뿐이고, root에 없다고 판정하지 않았습니다.\n- **범위:** 전체 C# Battle/Run, Android, 서버 수용은 주장하지 않습니다.\n- **변경 파일:** 없음\n- **session_id:** 세션 안에서는 확인할 수 없습니다.",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ]
+}

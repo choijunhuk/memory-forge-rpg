@@ -1,0 +1,19 @@
+{
+  "design": "docs/source_v0.8.1/14_chapter.md:24",
+  "family": "IBM Plex Sans KR",
+  "license": "SIL-OFL-1.1",
+  "source": "https://github.com/google/fonts/tree/main/ofl/ibmplexsanskr",
+  "unchangedBinary": true,
+  "files": [
+    {
+      "path": "client/MemoryForgeUnity/Assets/Resources/Fonts/IBMPlexSansKR-Regular.ttf",
+      "sha256": "53750379270312368cf7641901f43a98dd892e3d9d5798cf25cdc245c85c71c0"
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/Resources/Fonts/IBMPlexSansKR-OFL.txt",
+      "sha256": "7e6b2818edbd8f6a01ae80641cc8f16a51080d08fb4e532be3a0b6f74adb07da"
+    }
+  ],
+  "licenseCanonicalization": "CRLF to LF only; font binary is never normalized",
+  "licenseNormalizedSha256": "37784b44044a4ffd9256702b7c0982c37e5c8887ba90c6dca0479aea93dc898d"
+}

@@ -1,0 +1,26 @@
+
+> memory-forge-rpg@0.8.1-aio.2 test:proposals
+> node --test proposals/tests/*.test.cjs
+
+✔ M2-01 no selection preserves every prior card and trait (2.583959ms)
+✔ M2-02 one new card preserves other characters previous upgrades (0.7625ms)
+✔ M2-03 prior six plus delta three is rejected against full result (1.114958ms)
+✔ M2-04 an already saved addition is not offered as a new delta (0.172166ms)
+✔ M2-05 duplicate card types have independent stable identities (0.416583ms)
+✔ M2-06 picking evolution does not also import an unselected upgrade (0.410125ms)
+✔ M2-07 bundled new rare card charges rarity, upgrade and rare part (0.460083ms)
+✔ M2-08 more than one selected delta is rejected (0.187042ms)
+✔ M2-09 invalid change ID cannot modify the snapshot (0.200584ms)
+✔ M2-10 missing or colliding stable identities are rejected (0.174875ms)
+✔ M2-11 chosen part update imports only the server-derived changed slot (0.456167ms)
+✔ M2-12 temporary parts and invalid slot assignments are not persistent (0.138333ms)
+✔ M2-13 removal preserves the other card of the same type (0.585208ms)
+✔ M2-14 arbitrary card replacement is not accepted as evolution (0.155792ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 127.05125

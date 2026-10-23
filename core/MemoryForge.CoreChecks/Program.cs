@@ -17,7 +17,7 @@ static class Program
         string root = args.Length > 0 ? args[0] : Directory.GetCurrentDirectory();
         var data = JsonDocument.Parse(File.ReadAllText(Path.Combine(root, "data", "game_data.json"))).RootElement;
         var vec = JsonDocument.Parse(File.ReadAllText(Path.Combine(root, "engine", "tests", "vectors", "rng_gacha_vectors.json"))).RootElement;
-        var cfg = LoadGacha(data.GetProperty("gacha"));
+        var cfg = GachaDataLoader.Load(data.GetProperty("gacha"));
         var stats = LoadStats(data.GetProperty("progression"));
         var weaponRarity = data.GetProperty("weapons").EnumerateArray().ToDictionary(w => w.GetProperty("id").GetString()!, w => w.GetProperty("rarity").GetString()!);
 
@@ -114,51 +114,29 @@ static class Program
         Check(Throws(() => new ReservationBook(4, 1), "CAPACITY_RANGE"), "ctor range");
 
         Console.WriteLine($"CoreChecks: {checks - failures}/{checks} passed");
-        return failures == 0 ? 0 : 1;
+        int traceFailures = TraceHashChecks.Run(root);
+        int openingFailures = BattleOpeningChecks.Run(root);
+        int turnFailures = BattleTurnChecks.Run(root);
+        int queryFailures = BattlePlayerQueryChecks.Run(root);
+        int playerFailures = BattlePlayerActionChecks.Run(root);
+        int memoryFailures = MemoryV2Checks.Run(root);
+        int runCreateFailures = RunCreateChecks.Run(root);
+        int progressionFailures = RunProgressionChecks.Run(root);
+        int numberFailures = RunJsonNumberChecks.Run(root);
+        int textFailures = CardTextChecks.Run(root);
+        int previewFailures = BattlePreviewChecks.Run(root);
+        int lateFailures = BattleLateActionsChecks.Run(root);
+        int presentationFailures = BattlePresentationQueryChecks.Run(root);
+        int contentModeFailures = ContentModesChecks.Run(root);
+        int gachaRandomFailures = GachaRandomChecks.Run(root);
+        int supportFailures = SupportChecks.Run(root);
+        return failures == 0 && traceFailures == 0 && openingFailures == 0 && turnFailures == 0 && queryFailures == 0 && playerFailures == 0 && memoryFailures == 0 && runCreateFailures == 0
+            && progressionFailures == 0 && numberFailures == 0 && textFailures == 0 && previewFailures == 0 && lateFailures == 0 && presentationFailures == 0 && contentModeFailures == 0
+            && gachaRandomFailures == 0 && supportFailures == 0 ? 0 : 1;
     }
 
     static bool Throws(Action a, string code) { try { a(); return false; } catch (RuleException e) { return e.Code == code; } }
 
-    static GachaConfig LoadGacha(JsonElement g)
-    {
-        var cfg = new GachaConfig { CostPerPull = g.GetProperty("costPerPull").GetInt32() };
-        foreach (var c in g.GetProperty("curves").EnumerateObject())
-        {
-            int Get(string n) => c.Value.TryGetProperty(n, out var x) ? x.GetInt32() : 0;
-            cfg.Curves[c.Name] = new GachaCurve { SsrBase = Get("ssrBase"), SoftStart = Get("softStart"), SoftStep = Get("softStep"), Hard = Get("hard"), SrBase = Get("srBase"),
-                SrGuarantee = Get("srGuarantee"), FeaturedSsrBps = Get("featuredSsrBps"), FeaturedSrBps = Get("featuredSrBps"), SelectorAt = Get("selectorAt"), MaxPulls = Get("maxPulls"), TenPullTickets = Get("tenPullTickets") };
-        }
-        List<string> L(JsonElement e) => e.EnumerateArray().Select(x => x.GetString()!).ToList();
-        var pools = g.GetProperty("pools");
-        cfg.StandardSsrChars = L(pools.GetProperty("standardSsrChars")); cfg.SrChars = L(pools.GetProperty("srChars"));
-        cfg.StandardSsrWeapons = L(pools.GetProperty("standardSsrWeapons")); cfg.SrWeapons = L(pools.GetProperty("srWeapons"));
-        foreach (var b in g.GetProperty("banners").EnumerateArray())
-            cfg.Banners.Add(new GachaBanner { Id = b.GetProperty("id").GetString()!, Kind = b.GetProperty("kind").GetString()!, Ticket = b.GetProperty("ticket").GetString()!,
-                FeaturedSsr = b.TryGetProperty("featuredSsr", out var f) ? f.GetString() : null, FeaturedSr = b.TryGetProperty("featuredSr", out var fs) ? L(fs) : new List<string>() });
-        cfg.RItems = L(g.GetProperty("rItems"));
-        var d = g.GetProperty("duplicates");
-        cfg.ShardSsr = d.GetProperty("shardSsr").GetInt32(); cfg.ShardSsrOverflow = d.GetProperty("shardSsrOverflow").GetInt32();
-        cfg.ShardSr = d.GetProperty("shardSr").GetInt32(); cfg.ShardSrOverflow = d.GetProperty("shardSrOverflow").GetInt32(); cfg.AfterglowR = d.GetProperty("afterglowR").GetInt32();
-        return cfg;
-    }
-
-    static StatsConfig LoadStats(JsonElement p)
-    {
-        var s = p.GetProperty("stats"); var lv = p.GetProperty("levelling");
-        var wp = s.GetProperty("weaponPower");
-        return new StatsConfig
-        {
-            LevelCap = s.GetProperty("levelCap").GetInt32(), ReferencePower = s.GetProperty("referencePower").GetInt32(), ReferenceHpPerChar = s.GetProperty("referenceHpPerChar").GetInt32(),
-            CharPowerBase = s.GetProperty("charPower").GetProperty("base").GetInt32(), CharPowerNum = s.GetProperty("charPower").GetProperty("num").GetInt32(), CharPowerDen = s.GetProperty("charPower").GetProperty("den").GetInt32(),
-            HpBase = s.GetProperty("hpBase").GetInt32(),
-            WeaponSsrBase = wp.GetProperty("SSR").GetProperty("base").GetInt32(), WeaponSsrK = wp.GetProperty("SSR").GetProperty("k").GetInt32(),
-            WeaponSrBase = wp.GetProperty("SR").GetProperty("base").GetInt32(), WeaponSrK = wp.GetProperty("SR").GetProperty("k").GetInt32(),
-            WeaponRBase = wp.GetProperty("R").GetProperty("base").GetInt32(), WeaponRK = wp.GetProperty("R").GetProperty("k").GetInt32(),
-            GearMax = s.GetProperty("gear").GetProperty("maxEnhance").GetInt32(), ArmorFlatBase = s.GetProperty("gear").GetProperty("armorFlatBase").GetInt32(),
-            ArmorBpsBase = s.GetProperty("gear").GetProperty("armorBpsBase").GetInt32(), ArmorBpsPer = s.GetProperty("gear").GetProperty("armorBpsPer").GetInt32(),
-            AccessoryBpsBase = s.GetProperty("gear").GetProperty("accessoryBpsBase").GetInt32(), AccessoryBpsPer = s.GetProperty("gear").GetProperty("accessoryBpsPer").GetInt32(),
-            SkillMax = s.GetProperty("skill").GetProperty("maxLevel").GetInt32(), StageRefWeapon = s.GetProperty("stageScale").GetProperty("refWeapon").GetString()!,
-            XpK = lv.GetProperty("charXp").GetProperty("k").GetInt32(), XpA = lv.GetProperty("charXp").GetProperty("a").GetInt32(), XpSqDiv = lv.GetProperty("charXp").GetProperty("sqDiv").GetInt32(),
-        };
-    }
+    // Shared with tools/UnityContentExport through the linked StatsDataLoader.
+    internal static StatsConfig LoadStats(JsonElement p) => StatsDataLoader.Load(p);
 }

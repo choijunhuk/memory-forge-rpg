@@ -1,0 +1,8 @@
+{
+  "context": "After default dotnet run and actual MCP resolve/refresh",
+  "success": true,
+  "message": "Retrieved 1 log entries.",
+  "data": [
+    "<b><color=#cc7a00>MCP-FOR-UNITY</color></b>: [WebSocket] Unexpected receive error: WebSocket is not initialised"
+  ]
+}

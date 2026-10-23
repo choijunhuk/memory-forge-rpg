@@ -1,4 +1,4 @@
-# Proposed CI gate (NOT run on GitHub in this delivery). Pin reviewed action commits before production use.
+# Development CI gate; local Unity/device validation is recorded separately. Pin reviewed action commits before production use.
 name: checks
 on: [push, pull_request]
 permissions:
@@ -19,11 +19,41 @@ jobs:
         with: { python-version: '3.13' }
       - uses: actions/setup-dotnet@v4
         with: { dotnet-version: '10.0.x' }
+      - name: Android outbox native descriptor boundary
+        run: bash tools/tests/AndroidOutboxProbe/run.sh
       - run: npm install --no-audit --no-fund && npx playwright install --with-deps chromium
-      - run: pip install openapi-spec-validator -r tools/audit/requirements-docs.txt
+      - run: pip install openapi-spec-validator -r tools/audit/requirements-docs.txt -r tools/ai/requirements.txt
       - run: sudo apt-get update && sudo apt-get install -y postgresql-16 poppler-utils fonts-nanum
       - run: node content/build.mjs data && git diff --exit-code data/
+      - name: New expedition balance preset and held-out calibration
+        run: node tools/review/expedition_balance.mjs
       - run: node tools/gen_vectors.mjs && git diff --exit-code engine/tests/vectors/
+      - run: node tools/gen_hash_vectors.mjs && git diff --exit-code engine/tests/vectors/canonical_hash_vectors.json
       - run: bash tools/run_all_checks.sh
+        id: all_checks
+      # Failure-only: the runner keeps tail -3 per step, so print the full reports this run marked FAIL. reports/ also holds committed
+      # older evidence; a delivery_status.json unchanged from checkout is not trusted. The job keeps the original failure.
+      - name: Show failed run_all_checks reports
+        if: failure() && steps.all_checks.outcome == 'failure'
+        run: |
+          status=reports/delivery_status.json
+          if [ -z "$(git status --porcelain -- "$status")" ]; then echo "$status was not rewritten by this run; see the run_all_checks log"; exit 0; fi
+          stop="diag-$(od -An -N16 -tx1 /dev/urandom | tr -d ' \n')"
+          for name in $(grep -oE '"[a-z_]+": "FAIL"' "$status" | cut -d'"' -f2); do
+            echo "::group::reports/$name.txt"; echo "::stop-commands::$stop"; cat "reports/$name.txt" || true; echo "::$stop::"; echo "::endgroup::"
+          done
+      - run: dotnet restore server/MemoryForge.Server/MemoryForge.Server.csproj --locked-mode
+      - run: dotnet run --project server/MemoryForge.ServerChecks -- "$PWD"
+      - name: PostgreSQL legacy checks and registered account migration/support
+        run: bash tools/check_practice_postgres.sh
+        env:
+          MF_ACCOUNT_SUPPORT_BUNDLE: ${{ github.workspace }}/tests/fixtures/account-support-runtime-20261022.tar.gz
+          MF_ACCOUNT_SUPPORT_BUNDLE_SHA256: 341c279bbd5181e1508231e96a4d1c88e508e99f81db37e022f0265a16675075
       - run: npm run test:memory-ui
+      - run: node engine/tests/fuzz_runs.mjs 100 full --late
+      - run: node engine/tests/balance_probe.mjs 350 --late --out reports/paired_balance_late.json
+      - run: node tools/review/balance_causes.mjs reports/paired_balance_late.json reports/paired_balance_causes.json
+      - run: npm run test:late-ui
       - run: python3 tools/check_integrated_release.py
+      - run: python3 tools/check_art_copies.py
+      - run: npm run test:handoff

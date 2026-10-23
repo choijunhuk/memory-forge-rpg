@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Host-only Unity content bridge. Links the reviewed CoreChecks loaders (not copies); build with -artifacts-path ops/ai/local/...
+       JsonGraphComparison is linked only because MemoryV2DataLoader references it. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <Deterministic>true</Deterministic>
+    <RollForward>Major</RollForward>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../core/MemoryForge.Core/MemoryForge.Core.csproj" />
+    <Compile Include="../../core/MemoryForge.CoreChecks/BattleDataLoader.cs" Link="Linked/BattleDataLoader.cs" />
+    <Compile Include="../../core/MemoryForge.CoreChecks/MemoryV2DataLoader.cs" Link="Linked/MemoryV2DataLoader.cs" />
+    <Compile Include="../../core/MemoryForge.CoreChecks/RunDataLoader.cs" Link="Linked/RunDataLoader.cs" />
+    <Compile Include="../../core/MemoryForge.CoreChecks/StatsDataLoader.cs" Link="Linked/StatsDataLoader.cs" />
+    <Compile Include="../../core/MemoryForge.CoreChecks/JsonGraphComparison.cs" Link="Linked/JsonGraphComparison.cs" />
+  </ItemGroup>
+</Project>

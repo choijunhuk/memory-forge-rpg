@@ -1,0 +1,14 @@
+{
+  "score": 92,
+  "verdict": "pass",
+  "category_match": true,
+  "differences": [],
+  "suggestions": [
+    "Larger text/accessibility/device validation remains pending."
+  ],
+  "reasoning": "실제원정완주 후 선택8개/세라5·하린4·니아3 용량과 결과기억7/8/6장을 세열에서 확인했다. 선택버튼실제색은배경62D6C6/글자0D1322이며단순픽셀인상으로색결함을추정하지않는다. 원정끝화면·저장완료·다음출발의정보가겹침없이보인다.",
+  "threshold": 90,
+  "threshold_pass": true,
+  "generated_screenshot": "reports/expedition_client_20261016/live_memory_selected.png",
+  "reference_screenshot": "reports/expedition_client_20261016/map_final_87.png"
+}

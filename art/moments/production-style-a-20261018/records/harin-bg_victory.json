@@ -1,0 +1,19 @@
+{
+  "character": "harin",
+  "key": "bg_victory",
+  "path": "moments/harin/images/char_harin_bg_victory_styleA_v01.png",
+  "status": "ready",
+  "target": "harin/images/char_harin_bg_victory_styleA_v01.png",
+  "old_path": "moments/harin/images/char_harin_background_quiet_afterbattle_v01.png",
+  "background": true,
+  "args": {
+    "prompt": "Use case: style-transfer. Redraw this empty Memory Forge quiet AFTER-BATTLE city environment in direction A clear cel illustration. Preserve original architecture, viewpoint, cobbled open space, lamps, clockwork/harbor motifs, evening/night time and calm scene intent. Crisp controlled linework and large hard-edged shadow/color planes, simplify material noise, no photoreal CGI or blurry airbrushing. OPAQUE 16:9 landscape stage, scenery fills all edges, around 1536x864 or higher. No characters, people, silhouettes, text, watermark, gore or new destruction. Keep center open for character overlay.",
+    "referenced_image_paths": [
+      "/Users/choi/Documents/Memory_forge/art/moments/harin/images/char_harin_background_quiet_afterbattle_v01.png"
+    ],
+    "transparent_background": false
+  },
+  "cache_path": "/Users/choi/.codex/generated_images/01a14db0-4150-7f01-9240-82aaa185dd28/exec-6ee8df17-3bce-4b78-af8a-ee19224bad8f.png",
+  "generation_status": "generated_pending_review",
+  "selected": true
+}

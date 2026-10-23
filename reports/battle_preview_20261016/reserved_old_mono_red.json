@@ -1,0 +1,24 @@
+{
+  "success": true,
+  "message": "Code executed successfully.",
+  "data": {
+    "result": {
+      "actualPlayMode": true,
+      "forecast": {
+        "Error": null,
+        "Mode": "next",
+        "Cost": 1,
+        "Due": 2,
+        "Hidden": false,
+        "EnemyHpLoss": 0,
+        "BlockDelta": 0,
+        "HpDelta": 0,
+        "Defeat": false
+      },
+      "pure": true,
+      "originalHtmlRequiredBlockDelta": 11,
+      "gapReproduced": true
+    },
+    "compiler": "codedom"
+  }
+}

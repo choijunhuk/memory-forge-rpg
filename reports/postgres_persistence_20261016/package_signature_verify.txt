@@ -1,0 +1,8 @@
+
+Npgsql.10.0.3을(를) 확인하고 있습니다.
+콘텐츠 해시: 7nb5YzXuvWWJxB0J8DiyL3we+X4FOctZrt0fIBnucOIaIevFEEwGQVZKtiu9olXdlNAK1eNgqSral6r/jlhI4w==
+
+시그니처 형식: Repository
+  주체 이름: CN=NuGet.org Repository by Microsoft, O=NuGet.org Repository by Microsoft, L=Redmond, S=Washington, C=US
+  SHA256 해시: 1F4B311D9ACC115C8DC8018B5A49E00FCE6DA8E2855F9F014CA6F34570BC482D
+  유효 기간: 2024. 2. 23. 오전 9:00:00~007E;2027. 5. 19. 오전 8:59:59

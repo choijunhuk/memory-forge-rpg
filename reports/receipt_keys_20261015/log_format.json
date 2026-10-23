@@ -1,0 +1,8 @@
+[
+  {
+    "path": "reports/receipt_keys_20261015/red.txt",
+    "rawSHA256": "d8e8b9fe9b84131e42cce442b78ba956cc2703db30ffc5e2ff89bbd8591b553e",
+    "formattedSHA256": "8c4b6d169af53ef824de5ebd8700f321754582c0f73a0399f386f63c2b176db7",
+    "transformation": "trailing whitespace only; full raw log kept locally"
+  }
+]

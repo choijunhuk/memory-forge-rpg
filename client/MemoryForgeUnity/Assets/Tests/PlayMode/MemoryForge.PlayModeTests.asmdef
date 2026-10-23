@@ -1,0 +1,17 @@
+{
+  "name": "MemoryForge.PlayModeTests",
+  "references": [
+    "MemoryForge.Core",
+    "MemoryForge.Client",
+    "UnityEngine.UI"
+  ],
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ],
+  "autoReferenced": false,
+  "overrideReferences": true,
+  "precompiledReferences": [
+    "Newtonsoft.Json.dll",
+    "nunit.framework.dll"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "status": "PASS",
+  "graphWitnesses": 11657,
+  "families": {
+    "player-actions": 3745,
+    "run-create": 4056,
+    "run-memory": 16,
+    "preview": 60,
+    "growth-ults": 3780
+  },
+  "authoredOrdinaryUltCases": 140,
+  "authoredUltCommands": 700,
+  "authoredUltQueries": 2940,
+  "fullGraphIncludesLogEvRng": true,
+  "optionalSupportEntirelyAbsent": true,
+  "sourceRoot": "/Users/choi/.codex/worktrees/account-support-js/Memory_forge",
+  "sourceSha256": "0d116c2c38e68f6577aadb9eb73c08903df4cd7b9cbb33101da2beffa78ad01d",
+  "expectedIndexSha256": "24257f3ac0079930255edf5a6ff0f1eda895d8b353982fdb09795729717524c6",
+  "actualIndexSha256": "fb133ea82aaf98a1717faf2192adc44a4fa63b970ddfb861bba3c5604b65ee4e",
+  "fixtureOrPinWrites": false
+}

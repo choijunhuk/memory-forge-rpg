@@ -1,0 +1,306 @@
+{
+  "success": true,
+  "message": "Test job status retrieved.",
+  "error": null,
+  "data": {
+    "job_id": "c271867fc532443fab0adf1a89bbc385",
+    "status": "succeeded",
+    "mode": "PlayMode",
+    "started_unix_ms": 1792093512501,
+    "finished_unix_ms": 1792093520149,
+    "last_update_unix_ms": 1792093520149,
+    "progress": {
+      "completed": 29,
+      "total": 29,
+      "current_test_full_name": null,
+      "current_test_started_unix_ms": null,
+      "last_finished_test_full_name": "MemoryForge.PlayModeTests.SharedCorePlayModeTests.SharedRngAndReservationsKeepTheirStateAcrossARealTurn",
+      "last_finished_unix_ms": 1792093520132,
+      "stuck_suspected": false,
+      "editor_is_focused": true,
+      "run_in_background": false,
+      "focus_nudge_attempts": null,
+      "focus_nudge_limit": null,
+      "focus_nudge_status": null,
+      "blocked_reason": null,
+      "failures_so_far": [],
+      "failures_capped": false
+    },
+    "error": null,
+    "result": {
+      "mode": "PlayMode",
+      "summary": {
+        "total": 29,
+        "passed": 29,
+        "failed": 0,
+        "skipped": 0,
+        "durationSeconds": 0.9142644,
+        "resultState": "Passed"
+      },
+      "results": [
+        {
+          "name": "DefaultPracticeOpensTheReferenceBattleWithReadableCriticalLabels",
+          "fullName": "MemoryForge.Client.Tests.BattleClientPlayModeTests.DefaultPracticeOpensTheReferenceBattleWithReadableCriticalLabels",
+          "state": "Passed",
+          "durationSeconds": 0.1008152,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "DrawForecastDoesNotRevealOrConsumeTheHiddenDeck",
+          "fullName": "MemoryForge.Client.Tests.BattleClientPlayModeTests.DrawForecastDoesNotRevealOrConsumeTheHiddenDeck",
+          "state": "Passed",
+          "durationSeconds": 0.0716185,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "EnemyIntentForecastMatchesActualHitsAndStatusesAreVisible",
+          "fullName": "MemoryForge.Client.Tests.BattleClientPlayModeTests.EnemyIntentForecastMatchesActualHitsAndStatusesAreVisible",
+          "state": "Passed",
+          "durationSeconds": 0.089585,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "ExportedContentLoadsEveryOriginalDefinitionAndRoundTripsExactly",
+          "fullName": "MemoryForge.Client.Tests.BattleClientPlayModeTests.ExportedContentLoadsEveryOriginalDefinitionAndRoundTripsExactly",
+          "state": "Passed",
+          "durationSeconds": 0.1432071,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "ModeAndTargetSelectionSpendNothingAndHistoryBlocksBackgroundClicks",
+          "fullName": "MemoryForge.Client.Tests.BattleClientPlayModeTests.ModeAndTargetSelectionSpendNothingAndHistoryBlocksBackgroundClicks",
+          "state": "Passed",
+          "durationSeconds": 0.0900736,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "PreviewLeavesTheBattleUntouchedAndPlayCommitsThroughTheCore",
+          "fullName": "MemoryForge.Client.Tests.BattleClientPlayModeTests.PreviewLeavesTheBattleUntouchedAndPlayCommitsThroughTheCore",
+          "state": "Passed",
+          "durationSeconds": 0.093161,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "ReservationResolvesOnTheNextTurnAndResetRebuildsOneOwnedView",
+          "fullName": "MemoryForge.Client.Tests.BattleClientPlayModeTests.ReservationResolvesOnTheNextTurnAndResetRebuildsOneOwnedView",
+          "state": "Passed",
+          "durationSeconds": 0.141431,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "TimelineKeepsEveryReservationAfterSeraUltimateAndLabelsSealedSlots",
+          "fullName": "MemoryForge.Client.Tests.BattleClientPlayModeTests.TimelineKeepsEveryReservationAfterSeraUltimateAndLabelsSealedSlots",
+          "state": "Passed",
+          "durationSeconds": 0.0165294,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "AuthoredBulwarkRetainsTenBlockOnTheNextTurn",
+          "fullName": "MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.AuthoredBulwarkRetainsTenBlockOnTheNextTurn",
+          "state": "Passed",
+          "durationSeconds": 0.004672,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "AuthoredOpeningAndIdempotentRetryExecuteInsidePlayMode",
+          "fullName": "MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.AuthoredOpeningAndIdempotentRetryExecuteInsidePlayMode",
+          "state": "Passed",
+          "durationSeconds": 0.0007949,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "AuthoredUltimateSpendsGaugeWithoutPlayingTheCardInHand",
+          "fullName": "MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.AuthoredUltimateSpendsGaugeWithoutPlayingTheCardInHand",
+          "state": "Passed",
+          "durationSeconds": 0.0005743,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "CircuitTerminationAndEnvelopeSurvivalExecuteInsidePlayMode(False)",
+          "fullName": "MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.CircuitTerminationAndEnvelopeSurvivalExecuteInsidePlayMode(False)",
+          "state": "Passed",
+          "durationSeconds": 0.0006399,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "CircuitTerminationAndEnvelopeSurvivalExecuteInsidePlayMode(True)",
+          "fullName": "MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.CircuitTerminationAndEnvelopeSurvivalExecuteInsidePlayMode(True)",
+          "state": "Passed",
+          "durationSeconds": 0.0001451,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "EnemyPhaseAndNextPlayerTurnReuseTheAuthoredOpening",
+          "fullName": "MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.EnemyPhaseAndNextPlayerTurnReuseTheAuthoredOpening",
+          "state": "Passed",
+          "durationSeconds": 0.0004631,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "ExhaustKillReshuffleUsesTheCurrentDiscardPile",
+          "fullName": "MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.ExhaustKillReshuffleUsesTheCurrentDiscardPile",
+          "state": "Passed",
+          "durationSeconds": 0.0036194,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "PureCardQueriesReturnDetachedDefinitionsWithoutChangingTheRunningBattle",
+          "fullName": "MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.PureCardQueriesReturnDetachedDefinitionsWithoutChangingTheRunningBattle",
+          "state": "Passed",
+          "durationSeconds": 0.0009189,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "ReservedShieldPaysNowAndEarnsGaugeOnlyWhenResolved",
+          "fullName": "MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.ReservedShieldPaysNowAndEarnsGaugeOnlyWhenResolved",
+          "state": "Passed",
+          "durationSeconds": 0.0006639,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "UsedEnvelopeDoesNotHideAFatalSecondTurnCircuitCost",
+          "fullName": "MemoryForge.PlayModeTests.BattleOpeningPlayModeTests.UsedEnvelopeDoesNotHideAFatalSecondTurnCircuitCost",
+          "state": "Passed",
+          "durationSeconds": 0.0003587,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "CompleteResultCostDecidesSelectedChangesWithDetachedGraphs",
+          "fullName": "MemoryForge.PlayModeTests.MemoryRulesPlayModeTests.CompleteResultCostDecidesSelectedChangesWithDetachedGraphs",
+          "state": "Passed",
+          "durationSeconds": 0.0101485,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "MigrationArrayRowsDoNotHideEarlierValidationErrors(False,\"INVALID_UPGRADE\")",
+          "fullName": "MemoryForge.PlayModeTests.MemoryRulesPlayModeTests.MigrationArrayRowsDoNotHideEarlierValidationErrors(False,\"INVALID_UPGRADE\")",
+          "state": "Passed",
+          "durationSeconds": 0.0014562,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "MigrationArrayRowsDoNotHideEarlierValidationErrors(True,\"IDENTITY_REQUIRED\")",
+          "fullName": "MemoryForge.PlayModeTests.MemoryRulesPlayModeTests.MigrationArrayRowsDoNotHideEarlierValidationErrors(True,\"IDENTITY_REQUIRED\")",
+          "state": "Passed",
+          "durationSeconds": 0.0000855,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "MigrationQuarantinesAnOwnProtoOwnerWithItsCompleteOriginal",
+          "fullName": "MemoryForge.PlayModeTests.MemoryRulesPlayModeTests.MigrationQuarantinesAnOwnProtoOwnerWithItsCompleteOriginal",
+          "state": "Passed",
+          "durationSeconds": 0.0012049,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "LegacySeraLevel20CreatesSourceDeckMapAndDetachedQueries",
+          "fullName": "MemoryForge.PlayModeTests.RunCreatePlayModeTests.LegacySeraLevel20CreatesSourceDeckMapAndDetachedQueries",
+          "state": "Passed",
+          "durationSeconds": 0.0121779,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "V2BasePlaySkipsOccupiedSavedIdentityAndKeepsInputsDetached",
+          "fullName": "MemoryForge.PlayModeTests.RunCreatePlayModeTests.V2BasePlaySkipsOccupiedSavedIdentityAndKeepsInputsDetached",
+          "state": "Passed",
+          "durationSeconds": 0.0039725,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "ActualCommonAssignmentMatchesOriginalJs(\"legacy\")",
+          "fullName": "MemoryForge.PlayModeTests.RunProgressionPlayModeTests.ActualCommonAssignmentMatchesOriginalJs(\"legacy\")",
+          "state": "Passed",
+          "durationSeconds": 0.0156439,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "ActualCommonAssignmentMatchesOriginalJs(\"v2\")",
+          "fullName": "MemoryForge.PlayModeTests.RunProgressionPlayModeTests.ActualCommonAssignmentMatchesOriginalJs(\"v2\")",
+          "state": "Passed",
+          "durationSeconds": 0.0151505,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "ActualRunEnterBattleRewardAndProceedMatchEveryOriginalJsHash",
+          "fullName": "MemoryForge.PlayModeTests.RunProgressionPlayModeTests.ActualRunEnterBattleRewardAndProceedMatchEveryOriginalJsHash",
+          "state": "Passed",
+          "durationSeconds": 0.051521,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "SharedCoreHashesTheSameJsonInTheRunningPlayer",
+          "fullName": "MemoryForge.PlayModeTests.SharedCorePlayModeTests.SharedCoreHashesTheSameJsonInTheRunningPlayer",
+          "state": "Passed",
+          "durationSeconds": 0.0003154,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "SharedRngAndReservationsKeepTheirStateAcrossARealTurn",
+          "fullName": "MemoryForge.PlayModeTests.SharedCorePlayModeTests.SharedRngAndReservationsKeepTheirStateAcrossARealTurn",
+          "state": "Passed",
+          "durationSeconds": 0.0016083,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        }
+      ]
+    }
+  },
+  "hint": null
+}

@@ -1,0 +1,28 @@
+{
+  "task_id": "P1-NATIVE-INPUT-RECEIPT-RECHECK",
+  "run_id": "P1-NATIVE-INPUT-RECEIPT-RECHECK-20261015T231852424422Z",
+  "status": "RECEIVED_UNVERIFIED",
+  "requestedEffort": "high",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "changes_verified": false,
+  "raw_output": "ops/ai/local/P1-NATIVE-INPUT-RECEIPT-RECHECK-20261015T231852424422Z*",
+  "billing_verified_at": "2026-10-15T21:22:01.277612+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "codex/csharp-battle-opening",
+  "base_commit": "2ffc29ecdbdeee5027258ad6f73302b98820fc35",
+  "worktree": "/Users/choi/.codex/worktrees/csharp-battle-opening/Memory_forge",
+  "allowed_files": [
+    "reports/expedition_client_20261016/native_observation_recheck.md"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "ec8f9e67-4bc1-408b-90fb-8c8adc09592c",
+  "subtype": "success",
+  "is_error": false,
+  "result": "**APPROVE.** The evidence gap I raised is closed: the retained `native_input_probe.txt` now supports your narrow conclusion. I didn't run anything or check the SHA, and I couldn't see the private raw log.\n\n**What the 49 lines show**\n- **One continuous run:** a single `start`, then heartbeats about every 300 frames from frame 1 to 12598. Every line shows the game focused, a 4112×2580 screen, and the view's own `ExpeditionInput` event system with `StandaloneInputModule`. The only exception is frame 1, where no input module is active yet. The heartbeat frames differ from the earlier file's, which fits your account that the earlier file came from a relaunched player.\n- **Click:** pressed at frame 2193 and released at 2218. That is 25 frames, about 0.42 s, matching the 400 ms hold.\n- **Same position everywhere:** the mouse position is the launch value (869,1031) on all 49 lines, roughly 210 s in total, including both button events. The raycast at that position hit nothing, so no node could receive the click.\n\n**One wording precision, not a blocker:** the drag's press and release both arrived in the same frame, 5015. So that record shows one press-and-release at the stale position, not the position staying frozen while the button was held. The click and the heartbeats carry the evidence across frames. Please describe the drag that way.\n\n**Where the conclusion stops**\n- The probe doesn't log the game phase. \"No battle transition\" rests on your screenshots, so \"native battle transition UNCONFIRMED\" is the right status.\n- Nothing here says who causes the frozen position (the automation tool, macOS or Unity) or how a physical mouse behaves, and the conclusion correctly doesn't claim either.\n\nOnly `reports/expedition_client_20261016/native_observation_recheck.md` changed. I can't see the session_id.",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "build": "effect_build_result.json",
+  "processes": [
+    {
+      "pid": 42043,
+      "executable": "/Users/choi/Documents/Memory_forge/ops/ai/local/builds/MemoryForgeExpedition-Candidates-20261016.app/Contents/MacOS/2D_URP"
+    }
+  ],
+  "app": "/Users/choi/Documents/Memory_forge/ops/ai/local/builds/MemoryForgeExpedition-Candidates-20261016.app",
+  "binary_sha256": "7ecf973a1856622d485a380efe3a08e5f9a075cf05e1d2df5a2aa1b6f1482ae3",
+  "client_assembly_sha256": "095ef0a7e060da49437b42987ffb7fd499798e8e0a5be4e6e707bdb67faae511",
+  "core_assembly_sha256": "62679e4207bbdac53d111a4fae115a2c7a81c25fa11664a9108f1e2414d7085c",
+  "new_pure_query_present_in_core_and_client": true,
+  "native_window_observed": "2D_URP",
+  "native_battle_input": "NOT_RUN",
+  "physical_mouse": "NOT_RUN",
+  "Android_IL2CPP_device": "NOT_RUN",
+  "native_korean_map_observed_via_cua": true,
+  "screen": "Memory Forge practice reference party,243HP,60coins,available first battle nodes,session-local warning,DevelopmentBuild"
+}

@@ -1,0 +1,20 @@
+✔ all authored characters, eligible cards, evolution branches and permanent parts retain their complete denominators (3.394042ms)
+✔ independent literal baseline, complete-result and evolution costs catch shortcuts in the oracle and port (0.684833ms)
+✔ current capacity preserves ascension and resonance, including actual JS fallback and negative slice boundaries (0.592541ms)
+✔ selection order, defeat limits, no selection and absent/null/false/partial fields preserve exact JSON shapes (0.521375ms)
+✔ identity, owner, evolution, assignment, selection and part rejection precedence stays explicit (0.909167ms)
+✔ URI escaping and UTF-16 cid sorting preserve non-BMP and instance order while lone-surrogate changes reject (0.270541ms)
+✔ migration preserves deterministic keys, complete quarantine and fractional invalid legacy metadata (1.350834ms)
+✔ migration preserves an own __proto__ quarantine entry and its complete original (0.165458ms)
+✔ every actual call verifies the entire input/data graph, and returned mutable memory graphs are detached (8.525792ms)
+✔ strict fixture checks reject provenance, case coverage, result/error and input-shape tampering (5886.526166ms)
+✔ gzip export is byte deterministic, strict on damaged/ambiguous encoding and atomic on unexpected exceptions (3061.413625ms)
+✔ checked-in artifact matches fresh actual JS execution without claiming Run or persistence acceptance (476.058834ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10267.245458

@@ -1,0 +1,28 @@
+{
+  "c": "sion",
+  "key": "fig_victory_check",
+  "path": "sion/images/char_sion_moment_victory_check_v01.png",
+  "refs": [
+    "/Users/choi/Documents/Memory_forge/art/moments/sion/images/char_sion_moment_neutral_v01.png"
+  ],
+  "pose": "Sion age27, exact long straight black hair, silver-gray eyes behind half-rim glasses, fitted purple longcoat and bookmark chains, white blouse, black highwaist miniskirt/thigh-high boots. NO book or notes in hands. ONE giant bookmark-shaped longsword: long flat silver-gray ribbonlike blade with notched bookmark tip and purple/brass hilt, right hand grips hilt securely, blade pointed LOW outward away from body, entire blade inside canvas. Full-body front three-quarter, feet firmly planted, cool focused face looking off left past viewer as fight ends, empty left hand lowered. Two torn blank pages gently settling beside sword, no readable writing or heavy effect obscuring character.",
+  "prompt": "Use case: identity-preserve. Locked character design reference. Make ONE new non-explicit narrative RPG key-pose, 1024x1536 full length transparent PNG. Preserve adult identity, age, hairstyle, face, exact costume/colors and painterly anime cel style. All head, fingers, shoes and important props inside canvas. No scene background, haze, labels, panels, other people or erotic posing. Character acting and prop contact are the focus. Acting: Sion age27, exact long straight black hair, silver-gray eyes behind half-rim glasses, fitted purple longcoat and bookmark chains, white blouse, black highwaist miniskirt/thigh-high boots. NO book or notes in hands. ONE giant bookmark-shaped longsword: long flat silver-gray ribbonlike blade with notched bookmark tip and purple/brass hilt, right hand grips hilt securely, blade pointed LOW outward away from body, entire blade inside canvas. Full-body front three-quarter, feet firmly planted, cool focused face looking off left past viewer as fight ends, empty left hand lowered. Two torn blank pages gently settling beside sword, no readable writing or heavy effect obscuring character.",
+  "source": "/Users/choi/.codex/generated_images/01a14d20-ffd5-7e81-9e47-85c1c8415e11/exec-135d3a7c-af93-4b2d-881b-5d7563a76999.png",
+  "tool": "Codex built-in image_gen; subscription-included; no API fallback",
+  "review": "pass",
+  "previous_attempt": null,
+  "score": 92,
+  "review_notes": "Inspected rendered output: approved adult design; safe settled weapon/lantern grip, head/hands and footwear visible, no accidental book/cup/helmet in victory. Source key-pose only.",
+  "backend_model": "not exposed by tool",
+  "selected": true,
+  "sha256": "8126b2d678c35e3ce02ea447c2151793f739be219f4441ae67a248936a79726c",
+  "size": [
+    1024,
+    1536
+  ],
+  "mode": "RGBA",
+  "alpha_extrema": [
+    0,
+    254
+  ]
+}

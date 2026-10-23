@@ -1,0 +1,16 @@
+battle_five
+battle_two
+boss_b_bell
+boss_b_garden
+boss_b_notary
+event
+forge
+map
+rest
+result
+reward
+reward_elite
+save_defeat
+save_victory
+shop
+missing: 

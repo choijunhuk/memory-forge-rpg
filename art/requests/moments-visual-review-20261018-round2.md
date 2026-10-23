@@ -1,0 +1,23 @@
+**NO_BLOCKING_DEFECT for the implementation in the supplied captures.** I reviewed all 41 screenshots, the synchronized log, source scenes and supplied diff. All **48 source/import pairs—6 JSON files and 42 PNGs—match byte for byte**. Nothing was edited or committed.
+
+| Round-1 finding | Round-2 result |
+|---|---|
+| **1 · `implementation_defect`: medium/body framing clips faces and gestures** | **Resolved.** Aila’s face, hands and cup remain visible together in [aila_02.png](/Users/choi/Documents/Memory_forge/reports/lobby_moments_20261018/all_lobby/aila_02.png). Sion’s face and page hand survive the medium shot in [sion_01.png](/Users/choi/Documents/Memory_forge/reports/lobby_moments_20261018/all_lobby/sion_01.png). Lumi’s face and helmet contact remain readable in [lumi_01.png](/Users/choi/Documents/Memory_forge/reports/lobby_moments_20261018/all_lobby/lumi_01.png) and the following beat. |
+| **2 · `implementation_defect`: dialogue obscures Ravien’s chair** | **Resolved.** Both invitation beats show the chair clear of the panel: [ravien_04.png](/Users/choi/Documents/Memory_forge/reports/lobby_moments_20261018/all_lobby/ravien_04.png), [ravien_05.png](/Users/choi/Documents/Memory_forge/reports/lobby_moments_20261018/all_lobby/ravien_05.png). |
+| **3 · `design_mismatch`: my chair camera is too tight** | **Resolved.** The widened composition preserves her face, pointing hand, backrest and complete empty seat throughout both invitation beats. It follows the revised [source camera contract](/Users/choi/Documents/Memory_forge/art/moments/ravien/README.md:19). |
+| **4 · `design_mismatch`: production directions appear as narration** | **Resolved in these lobby scenes.** Displayed passages now read as narrative prose; technical directions are retained outside displayed text, for example in [Harin’s README](/Users/choi/Documents/Memory_forge/art/moments/harin/README.md:7). Legitimate null-speaker narration remains visible. |
+
+Across the remaining captures, Sera’s watch gesture and both spoken lines stay legible; Harin’s glove, cough, cat reveal and ending remain readable; Sion’s book conceals her mouth while preserving her eyes; Lumi’s final open palm and planted stance are fully visible. I found **no additional settled-frame UI overlap, face clipping or visibly truncated dialogue**. Split narration continues on subsequent pages with the same figure.
+
+There are remaining source-side fidelity issues:
+
+- **`design_mismatch` — non-blocking prop and ending-pose continuity.** In [ravien_07.png](/Users/choi/Documents/Memory_forge/reports/lobby_moments_20261018/all_lobby/ravien_07.png), the offered chair has disappeared and she still holds the folder, while the narration says the chair remains empty and she no longer touches the closed folder. The [source explicitly selects `fig_default`](/Users/choi/Documents/Memory_forge/art/moments/ravien/moments.json:495), whose PNG contains that pose and no chair. Likewise, [aila_04.png](/Users/choi/Documents/Memory_forge/reports/lobby_moments_20261018/all_lobby/aila_04.png) ends with a lowered lantern rather than the hand-on-chair ending specified in her [scene intent](/Users/choi/Documents/Memory_forge/art/moments/aila/moments.json:240). **Codex should repair the source poses/prop continuity and their beat assignments; Claude should import the resulting assets.** These are faithfully reproduced source inconsistencies.
+
+- **`optional_opinion` — Aila’s invitation could show more chair.** In [aila_03.png](/Users/choi/Documents/Memory_forge/reports/lobby_moments_20261018/all_lobby/aila_03.png), her face and hand on the backrest are clear, but the seat is below frame. The player follows the authored [bust/face shot](/Users/choi/Documents/Memory_forge/art/moments/aila/moments.json:343). **Codex could widen that source camera** if showing the actual sitting place matters more than the intimate eye-contact composition. No implementation correction is required.
+
+- **`real_constraint` — continuous acting remains unproduced.** Static poses do not complete every narrated movement: Ravien’s hand stays pointed in `_05`, Aila still holds the cup in `_02`, and Lumi still balances the helmet in `_01`. The missing intermediate frames/rigs are documented in [HANDOFF.md](/Users/choi/Documents/Memory_forge/art/moments/HANDOFF.md:130). **Codex owns those animation assets; Claude owns their playback integration.**
+
+Not checked: live replay, transition-time overlap, audio, other aspect ratios or test execution. Sera’s short final pullback falls between samples; these captures do not prove it.
+
+**Implementation verdict: NO_BLOCKING_DEFECT.**
+

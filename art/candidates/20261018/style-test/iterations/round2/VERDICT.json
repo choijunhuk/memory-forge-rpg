@@ -1,0 +1,43 @@
+{
+  "score": 76,
+  "verdict": "revise",
+  "category_match": true,
+  "differences": [
+    "A의 셀·B의 반셀·C의 각진 붓면은 구분되지만 세라의 코트가 어깨에서 내려가거나 바디수트에 어깨·가슴·허리·허벅지 트임이 생겼다.",
+    "세라의 포니테일 위치가 높아졌고 의상/장총 세부 배치가 바뀌었다.",
+    "하린의 방패 방향·고양이 위치·어깨 갑주/망토의 재단이 안별로 달라졌다."
+  ],
+  "suggestions": [
+    "기존 로비 이미지를 의상·정체성·포즈의 유일한 구조 참조로 사용한다.",
+    "2차 생성물은 채색과 얼굴 기호의 스타일 참조로만 사용한다.",
+    "세라의 낮은 포니테일·정상적으로 걸친 코트·틈 없는 하이넥 바디수트, 하린의 기존 어깨 갑주·방패 방향·고양이 위치를 복구한다."
+  ],
+  "reasoning": "스타일 차이는 확보했지만 의상 보존 조건에 미달하므로 최종 비교판에서 제외하고 구조 복구를 진행한다.",
+  "files": [
+    {
+      "id": "a_sera_v02",
+      "path": "/Users/choi/.codex/generated_images/01a14d94-27ff-7e11-b654-a9d6ecdd5cd1/exec-8af6f6dd-926f-4e22-aedc-45ba3e5dcd98.png"
+    },
+    {
+      "id": "a_harin_v02",
+      "path": "/Users/choi/.codex/generated_images/01a14d94-27ff-7e11-b654-a9d6ecdd5cd1/exec-9fb7e47d-22cb-4f03-8bd6-87957f402f09.png"
+    },
+    {
+      "id": "b_sera_v02",
+      "path": "/Users/choi/.codex/generated_images/01a14d94-27ff-7e11-b654-a9d6ecdd5cd1/exec-cd453611-dc85-45b3-9133-c2f0525ca733.png"
+    },
+    {
+      "id": "b_harin_v02",
+      "path": "/Users/choi/.codex/generated_images/01a14d94-27ff-7e11-b654-a9d6ecdd5cd1/exec-d1417342-4076-47f7-85c6-c027416159fd.png"
+    },
+    {
+      "id": "c_sera_v02",
+      "path": "/Users/choi/.codex/generated_images/01a14d94-27ff-7e11-b654-a9d6ecdd5cd1/exec-8c68bbbe-8f7e-4a0c-9cb3-6e243c649c22.png"
+    },
+    {
+      "id": "c_harin_v02",
+      "path": "/Users/choi/.codex/generated_images/01a14d94-27ff-7e11-b654-a9d6ecdd5cd1/exec-2a409e9f-4f7b-4cfd-9d2f-ace248866659.png"
+    }
+  ],
+  "selected": false
+}

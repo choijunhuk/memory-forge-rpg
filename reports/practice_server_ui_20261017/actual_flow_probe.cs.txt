@@ -1,0 +1,100 @@
+var c = UnityEngine.Object.FindObjectOfType<MemoryForge.Client.MemoryForgeServerPracticeClient>();
+if (c == null || System.Threading.SynchronizationContext.Current == null) return "UI_CONTEXT_REQUIRED";
+var key = "MemoryForge.Codex.ServerUI.Flow.20261017";
+var checks = new Newtonsoft.Json.Linq.JArray();
+var failures = new Newtonsoft.Json.Linq.JArray();
+System.Action<bool, string> check = (ok, name) => { if (ok) checks.Add(name); else failures.Add(name); };
+System.Func<System.Func<bool>, System.Threading.Tasks.Task> until = async ready => {
+    for (int n = 0; n < 1000; n++) { if (ready()) return; await System.Threading.Tasks.Task.Delay(10); }
+    throw new System.Exception("Bounded UI wait expired");
+};
+System.Func<int> version = () => c.Snapshot.Run.ServerVersion;
+System.Func<Newtonsoft.Json.Linq.JObject> battle = () => (Newtonsoft.Json.Linq.JObject)c.Snapshot.Run.StateJObject()["battle"];
+System.Action<string> click = name => {
+    UnityEngine.UI.Button button = null;
+    foreach (var candidate in c.GetComponentsInChildren<UnityEngine.UI.Button>()) if (candidate.name == name) { button = candidate; break; }
+    if (button == null || !button.interactable) throw new System.Exception("Required UI button unavailable: " + name);
+    var rect = (UnityEngine.RectTransform)button.transform;
+    var data = new UnityEngine.EventSystems.PointerEventData(UnityEngine.EventSystems.EventSystem.current);
+    data.position = UnityEngine.RectTransformUtility.WorldToScreenPoint(null, rect.TransformPoint(rect.rect.center));
+    data.button = UnityEngine.EventSystems.PointerEventData.InputButton.Left;
+    var hits = new System.Collections.Generic.List<UnityEngine.EventSystems.RaycastResult>();
+    UnityEngine.EventSystems.EventSystem.current.RaycastAll(data, hits);
+    if (hits.Count == 0 || hits[0].gameObject.GetComponentInParent<UnityEngine.UI.Button>() != button) throw new System.Exception("UI raycast does not reach button: " + name);
+    UnityEngine.EventSystems.ExecuteEvents.Execute(button.gameObject, data, UnityEngine.EventSystems.ExecuteEvents.pointerDownHandler);
+    UnityEngine.EventSystems.ExecuteEvents.Execute(button.gameObject, data, UnityEngine.EventSystems.ExecuteEvents.pointerUpHandler);
+    UnityEngine.EventSystems.ExecuteEvents.Execute(button.gameObject, data, UnityEngine.EventSystems.ExecuteEvents.pointerClickHandler);
+};
+System.Func<System.Threading.Tasks.Task<string>> run = async () => {
+    try {
+        await until(() => c.Connected && !c.Busy && c.CanCommand);
+        int initialVersion = version();
+        var initial = battle();
+        var hand = (Newtonsoft.Json.Linq.JArray)initial["hand"];
+        string firstUid = (string)hand[0]["uid"], nextUid = null, target = null;
+        foreach (Newtonsoft.Json.Linq.JObject card in hand) if ((string)card["uid"] != firstUid && card["blocked"]["now"] != null && card["blocked"]["now"].Type == Newtonsoft.Json.Linq.JTokenType.Null) { nextUid = (string)card["uid"]; break; }
+        foreach (Newtonsoft.Json.Linq.JObject enemy in (Newtonsoft.Json.Linq.JArray)initial["enemies"]) if ((bool)enemy["alive"]) { target = (string)enemy["uid"]; break; }
+        if (nextUid == null || target == null) throw new System.Exception("Actual public hand lacks this bounded flow's two plays");
+        click("Card:" + firstUid);
+        await until(() => !c.Busy && c.QueryView != null);
+        await System.Threading.Tasks.Task.Delay(20);
+        click("Enemy:" + target);
+        await until(() => !c.Busy && c.QueryView != null);
+        check(version() == initialVersion && (int)battle()["ap"] == (int)initial["ap"] && c.SessionState.Pending == null, "raycast selections and pure query spend nothing");
+        if (c.QueryView.ForecastError != null) throw new System.Exception("Actual selected request is refused by Core");
+        click("Confirm");
+        await until(() => !c.Busy && version() == initialVersion + 1);
+        check(c.HasPresentation && !c.PresentationBarrier, "approved ordinary play opens nonterminal presentation");
+        check(!c.SelectCard(firstUid), "already consumed UID cannot be selected twice");
+        click("Card:" + nextUid);
+        await until(() => !c.Busy && c.QueryView != null);
+        await c.ConfirmAsync();
+        check(c.HasPreparedIntent && c.SessionState.Pending == null && version() == initialVersion + 1, "one confirmed next play stays unsent during presentation");
+        await c.ConfirmAsync();
+        check(c.HasPreparedIntent && version() == initialVersion + 1 && c.SessionState.Pending == null, "second preparation does not create a request");
+        c.enabled = false;
+        check(!c.HasPreparedIntent && !c.PickerOpen && !c.HasPresentation && c.SessionState == null, "disable drops only unsent UI and presentation");
+        c.enabled = true;
+        await until(() => c.Connected && !c.Busy && !c.SnapshotStale);
+        check(version() == initialVersion + 1 && c.SessionState.Pending == null && !c.HasPresentation, "reenable refreshes without dispatch or replay");
+        var root = "/Users/choi/Documents/Memory_forge/ops/ai/local/";
+        var proxy = Newtonsoft.Json.Linq.JObject.Parse(System.IO.File.ReadAllText(root + "transport-fault-proxy.json"));
+        var host = Newtonsoft.Json.Linq.JObject.Parse(System.IO.File.ReadAllText(root + "transport-dev-host.json"));
+        click("Card:" + nextUid);
+        await until(() => !c.Busy && c.QueryView != null);
+        System.IO.File.WriteAllText((string)proxy["control_file"], "{\"mode\":\"503_once\"}");
+        await c.ConfirmAsync();
+        check(c.SessionState.Pending != null && !c.CanCommand && c.SnapshotStale, "real committed reply replaced by503 keeps pending and locks new commands");
+        c.enabled = false; c.enabled = true;
+        await until(() => c.Connected && !c.Busy && c.Snapshot != null && version() == initialVersion + 2);
+        check(c.SessionState.Pending != null && !c.CanCommand && !c.HasPresentation, "reconnect reads full committed state without auto retry or old events");
+        var serverPath = System.IO.Path.Combine((string)host["store_directory"], "account-" + (string)host["account"] + ".json");
+        string beforeRetry;
+        using (var hash = System.Security.Cryptography.SHA256.Create()) beforeRetry = System.Convert.ToBase64String(hash.ComputeHash(System.IO.File.ReadAllBytes(serverPath)));
+        click("Retry");
+        await until(() => !c.Busy && c.SessionState.Pending == null && c.CanCommand);
+        string afterRetry;
+        using (var hash = System.Security.Cryptography.SHA256.Create()) afterRetry = System.Convert.ToBase64String(hash.ComputeHash(System.IO.File.ReadAllBytes(serverPath)));
+        check(beforeRetry == afterRetry && version() == initialVersion + 2 && !c.HasPresentation, "explicit retry clears exact record without another gain or event replay");
+        var remaining = (Newtonsoft.Json.Linq.JArray)battle()["hand"];
+        string liveUid = remaining.Count == 0 ? null : (string)remaining[0]["uid"];
+        var ending = c.EndTurnAsync();
+        bool selectedDuringEnd = liveUid != null && c.SelectCard(liveUid);
+        await ending;
+        check(!selectedDuringEnd, "selection locked while end-turn request is in flight");
+        check(c.PresentationBarrier && version() == initialVersion + 3, "committed end and reservation resolution open full turn barrier");
+        var newHand = (Newtonsoft.Json.Linq.JArray)battle()["hand"];
+        check(newHand.Count == 0 || !c.SelectCard((string)newHand[0]["uid"]), "turn barrier refuses card selection");
+        int endVersion = version();
+        c.SkipPresentation(); c.ContinuePresentation();
+        check(version() == endVersion && c.SessionState.Pending == null, "skip and continue only change presentation");
+        return new Newtonsoft.Json.Linq.JObject { ["status"] = failures.Count == 0 ? "PASS" : "FAIL", ["checks"] = checks, ["failures"] = failures,
+            ["initial_server_version"] = initialVersion, ["final_server_version"] = version(), ["actual_editor_play"] = true, ["actual_core_http"] = true,
+            ["input_kind"] = "uGUI raycast + PointerDown/Up/Click and public lifecycle actions; not physical native mouse/device" }.ToString(Newtonsoft.Json.Formatting.None);
+    } catch (System.Exception error) {
+        return new Newtonsoft.Json.Linq.JObject { ["status"] = "FAIL", ["checks"] = checks, ["failures"] = failures, ["safe_error"] = error.GetType().Name + ": " + error.Message }.ToString(Newtonsoft.Json.Formatting.None);
+    }
+};
+var task = run();
+System.AppDomain.CurrentDomain.SetData(key, task);
+return "Started bounded actual uGUI/Core-HTTP flow; no private credential exposed";

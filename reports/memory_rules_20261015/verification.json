@@ -1,0 +1,42 @@
+{
+  "status": "VERIFIED_LOCAL_PENDING_COMMIT_CI",
+  "baseCommit": "ec121ff9569e2c3dcd87c51bad4108ae5cfa69ae",
+  "scope": "Pure current memory rules; actual full Run commands0",
+  "metrics": {
+    "Core": 202,
+    "canonical": 87,
+    "snapshots": 2000,
+    "fixture": 13,
+    "opening": 2221,
+    "turn": 29232,
+    "query": 128244,
+    "player": 87991,
+    "memoryAssertions": 5451,
+    "memoryCalls": 1072,
+    "nativeRegressions": 29,
+    "Node": 269,
+    "proposals": 14,
+    "Python": 49,
+    "docs": 9,
+    "handoff": 13,
+    "browserMemory": 13,
+    "browserLate": 10,
+    "UnityPlay": 16,
+    "UnityEdit": 3
+  },
+  "oppositeAI": "Opus xhigh P2 fixed by Claude xhigh; independently source-reviewed and executed by Codex",
+  "sourcePreservation": "42 unchanged protected files;5 intentional source/provenance changes;all5corpora complete-record equality apart from exact SHA paths",
+  "inputManifestsRegenerated": false,
+  "console": {
+    "errors": 0,
+    "warnings": 1,
+    "warning": "MCP WebSocket reload transport; preserved"
+  },
+  "remaining": [
+    "FullRun/save/restore/raw-byte backup/account migration",
+    "Full gameUI/Android/IL2CPP/device/server",
+    "Documented outside-contract coercion/future-data limits",
+    "Commit/push/PR2 exact-head CI"
+  ],
+  "at": "2026-10-15T07:30:04.582564+00:00"
+}

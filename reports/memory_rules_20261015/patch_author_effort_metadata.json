@@ -1,0 +1,66 @@
+{
+  "scope": "Actual inference call metadata only; no content/reasoning copied",
+  "model": "claude-opus-5-5",
+  "effort": "xhigh",
+  "sessionId": "0189a4bb-b798-494e-8878-ab0db85b2912",
+  "zero_usage_CLI_synthetic_bookkeeping_records": 0,
+  "actual_result_model_keys": [
+    "claude-opus-5-5"
+  ],
+  "records": [
+    {
+      "at": "2026-10-15T07:01:31.740Z",
+      "model": "claude-opus-5-5",
+      "effort": "xhigh",
+      "perTurnEffort": "xhigh"
+    },
+    {
+      "at": "2026-10-15T07:01:33.869Z",
+      "model": "claude-opus-5-5",
+      "effort": "xhigh",
+      "perTurnEffort": "xhigh"
+    },
+    {
+      "at": "2026-10-15T07:01:34.912Z",
+      "model": "claude-opus-5-5",
+      "effort": "xhigh",
+      "perTurnEffort": "xhigh"
+    },
+    {
+      "at": "2026-10-15T07:01:38.824Z",
+      "model": "claude-opus-5-5",
+      "effort": "xhigh",
+      "perTurnEffort": "xhigh"
+    },
+    {
+      "at": "2026-10-15T07:01:39.618Z",
+      "model": "claude-opus-5-5",
+      "effort": "xhigh",
+      "perTurnEffort": "xhigh"
+    },
+    {
+      "at": "2026-10-15T07:01:48.064Z",
+      "model": "claude-opus-5-5",
+      "effort": "xhigh",
+      "perTurnEffort": "xhigh"
+    },
+    {
+      "at": "2026-10-15T07:01:50.213Z",
+      "model": "claude-opus-5-5",
+      "effort": "xhigh",
+      "perTurnEffort": "xhigh"
+    },
+    {
+      "at": "2026-10-15T07:02:05.233Z",
+      "model": "claude-opus-5-5",
+      "effort": "xhigh",
+      "perTurnEffort": "xhigh"
+    },
+    {
+      "at": "2026-10-15T07:02:07.510Z",
+      "model": "claude-opus-5-5",
+      "effort": "xhigh",
+      "perTurnEffort": "xhigh"
+    }
+  ]
+}

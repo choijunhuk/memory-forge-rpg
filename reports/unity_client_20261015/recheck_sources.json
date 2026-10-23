@@ -1,0 +1,18 @@
+[
+  {
+    "path": "client/MemoryForgeUnity/Assets/Scripts/MemoryForgeBattleClient.cs",
+    "sha256": "7931b0dfad71f923ae24582778fb742c80d8e76bd62e9efc8870fe7e7391c09f"
+  },
+  {
+    "path": "client/MemoryForgeUnity/Assets/Scripts/MemoryForge.Client.asmdef",
+    "sha256": "0bfb9652226ecc2ae3aade08e4a0b4910e603228fab0f66609732e3c21df65af"
+  },
+  {
+    "path": "client/MemoryForgeUnity/Assets/Tests/PlayMode/BattleClientPlayModeTests.cs",
+    "sha256": "05f4543f0d55176bba8c01e949265d1b4338e7a20d99b946d5a33df781e9242e"
+  },
+  {
+    "path": "client/MemoryForgeUnity/Assets/Tests/PlayMode/MemoryForge.PlayModeTests.asmdef",
+    "sha256": "13458068b209da809a731fb9600373eaf9a340efb4a7d2069efe510af14f4bc0"
+  }
+]

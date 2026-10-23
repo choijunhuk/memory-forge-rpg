@@ -1,0 +1,10 @@
+{
+  "scope": "actual frozen-a0 component OS contention and owned-directory IO failure preview, not final",
+  "cases": [
+    "real stage cannot publish/return sendable when its owned directory is not writable",
+    "real confirmed unlink failure preserves exact pending record",
+    "actual component Load/Stage/Confirm all refuse a separate Mono-process lock without changing the record",
+    "same component reacquires and confirms correctly after holder SIGKILL"
+  ],
+  "pass": true
+}

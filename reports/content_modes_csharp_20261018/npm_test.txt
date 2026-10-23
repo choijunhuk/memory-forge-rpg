@@ -1,0 +1,34 @@
+# npm test (node --test engine/tests/*.test.mjs), 2026-10-18 — content-mode lines and the full summary
+✔ content-mode data only restates the source and agrees with progression data (1.57475ms)
+✔ reset clocks: daily 05:00 KST, weekly Monday 05:00 KST, rift cycles season day 1·15·29 11:00 KST (10.657417ms)
+✔ ModeBattle#command is Battle#command with only the candidate constructor changed (0.382333ms)
+✔ without waves or a rule a ModeBattle plays exactly like Battle (35.926209ms)
+✔ §11.5 dungeon rewards scale by tier with an integer floor; unlock by account level (0.6055ms)
+✔ §11.5 stars: victory, within 4 turns, party HP at least 50% (0.077917ms)
+✔ §11.5 waves continue the same battle; victory spends 20 집중 once and records best stars (3.271708ms)
+✔ §11.5 sweep: only after 3 stars on that tier, 1..12 times, same reward and 집중 per run (0.210208ms)
+✔ §11.6 weekly boss: unlock 15, four bosses, difficulty table, real victory pays once (2.205208ms)
+✔ §11.6/§11.13 shared 3 claims per week, defeat and practice never count, Monday 05:00 resets (1.404959ms)
+✔ §11.7 rift floor setup: unlock 20, authored rotation required, team count by policy, re-entry only below six owned (1.309791ms)
+✔ §11.7 three battles: team order 1·2·1, team HP carries, deck/reservations/gauge reset each battle (5.107709ms)
+✔ §11.7 reward: per floor per cycle, star portions 60/20/20, 2-star cap on re-entry; pending thresholds block settlement (9.3485ms)
+✔ rift_reserve: reserved damage +30%, immediate damage −10% (0.34975ms)
+✔ rift_break: break gauge ×1.5 (rounded) for every enemy and phase, broken bonus +50% instead of +25% (4.409375ms)
+✔ rift_ink: one smudge into the discard pile each turn start; +3% damage per exhausted card (0.33275ms)
+✔ rift_debt: debt cap +2 on top of relics; any debt adds +15% damage (0.215209ms)
+✔ rift_bloom: growth cap +2; a resolving growth card adds 3 block (0.247833ms)
+✔ rift_echo: echo max +2; three different characters in a row give 1 AP once per turn; ownerless cards break the chain (0.7195ms)
+✔ rift rules are validated and only rift_break rewrites data (1.045542ms)
+✔ §11.13 daily activity: v0.8.1 needs all five tasks, so a level-capped account stops at 80 (0.404666ms)
+✔ §11.13 target policy: a selectable pool reaches 100 without level-ups and caps at 100 (pool is pending data) (0.191ms)
+✔ content-mode vectors are current and cover every rule branch, error path and ledger (1284.1455ms)
+✔ content-mode generation is deterministic (1932.760958ms)
+ℹ tests 357
+ℹ suites 0
+ℹ pass 357
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 181278.750917
+npm exit 0

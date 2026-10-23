@@ -1,0 +1,72 @@
+{
+  "phase": "final polished frozen sources",
+  "tests": {
+    "total": "419",
+    "passed": "408",
+    "failed": "0",
+    "skipped": "11",
+    "duration": "285.7776523",
+    "start-time": "2026-10-21 10:57:53Z",
+    "end-time": "2026-10-21 11:02:39Z"
+  },
+  "skippedTests": [
+    {
+      "test": "CaptureCardHoldBackView",
+      "label": "Explicit",
+      "reason": "writes a report screenshot; run by name with MF_EXPEDITION_SHOTS"
+    },
+    {
+      "test": "CaptureExpeditionScreens",
+      "label": "Explicit",
+      "reason": "writes report screenshots; run by name with MF_EXPEDITION_SHOTS"
+    },
+    {
+      "test": "ActualHomeAndExpeditionScenesPreserveSavedMemoryAndRequireEveryDeparture",
+      "label": "Explicit",
+      "reason": "loads the shipped home and expedition scenes; writes MF_HOME_RETURN_SHOTS"
+    },
+    {
+      "test": "CaptureHomeAndSortie",
+      "label": "Explicit",
+      "reason": "writes report screenshots; run by name with MF_EXPEDITION_SHOTS"
+    },
+    {
+      "test": "CaptureHomeCatalogueAndDetails",
+      "label": "Explicit",
+      "reason": "writes report screenshots; run by name with MF_EXPEDITION_SHOTS"
+    },
+    {
+      "test": "CaptureMomentScenes",
+      "label": "Explicit",
+      "reason": "writes report screenshots; run by name with Temp/moment_shots.txt"
+    },
+    {
+      "test": "CaptureCoachScreens",
+      "label": "Explicit",
+      "reason": "writes report screenshots; run by name with MF_ONBOARDING_SHOTS"
+    },
+    {
+      "test": "CaptureRecruitmentFlow",
+      "label": "Explicit",
+      "reason": "writes protocol-fixture screenshots with MF_EXPEDITION_SHOTS"
+    },
+    {
+      "test": "CaptureTenRecruitmentFlow",
+      "label": "Explicit",
+      "reason": "writes ten-pull protocol screenshots with MF_EXPEDITION_SHOTS"
+    },
+    {
+      "test": "ExistingLocalAccountPullPersistsAcrossLobbyRecreation",
+      "label": "Ignored",
+      "reason": "MF_RECRUITMENT_LIVE_METADATA is not set; no live account is changed"
+    },
+    {
+      "test": "SpentLocalAccountReconnectsToItsPersistedResultAndOwnedRoster",
+      "label": "Ignored",
+      "reason": "MF_RECRUITMENT_LIVE_METADATA is not set; no live account is accessed"
+    }
+  ],
+  "exitCode": 0,
+  "frozenCSharpInputs": 90,
+  "sourceHashChanges": []
+}

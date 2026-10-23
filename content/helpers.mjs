@@ -64,7 +64,7 @@ export function card(id, name, owner, o) {
     rar: o.rar ?? 'B',
     cost: o.cost ?? 1,
     type: o.type ?? 'atk',
-    res: o.res ?? 'y',
+    res: o.res ?? 'n', // RULES_NOW_PLAY: every card is played now
     eff: o.eff ?? [],
     kw: o.kw ?? [],
   };

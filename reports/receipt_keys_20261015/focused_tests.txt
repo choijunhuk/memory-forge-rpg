@@ -1,0 +1,44 @@
+✔ opening oracle covers every authored character/resonance, weapon/refine, relic and enemy (1.912917ms)
+✔ only the four currently authored opening DSL shapes are exercised, including every resonance tag (0.172083ms)
+✔ each vector retains complete real CREATED and committed snapshots, events, hashes and public view (190.544167ms)
+✔ pinned first-turn regressions independently retain Harin block26/counter2 and seed+moss growth1/block3 (0.152625ms)
+✔ real opening edges cover seeds, strongest weapons, tuning, growth eligibility, ownership and circuit/AP limits (0.209958ms)
+✔ begin receipts copy responses and compare request property order and diagnostic args before stale/phase checks (0.456375ms)
+✔ an unsupported opening rejected after candidate RNG/events leaves full state and receipts unchanged; failed rid retries (0.435125ms)
+✔ fixture source provenance and every case are deterministic and tampering is rejected (1175.519541ms)
+✔ lossless fixture exports are byte deterministic and atomic on unexpected exceptions or RuleErrors (198.18775ms)
+✔ checked-in opening fixture matches fresh engine results without weakening full Battle/Run acceptance (78.91575ms)
+✔ request ID "ordinary-request" stores and replays a detached response after version advance (3.637084ms)
+✔ rejected request ID "ordinary-request" remains available for a corrected command (0.571875ms)
+✔ request ID "constructor" stores and replays a detached response after version advance (0.41125ms)
+✔ rejected request ID "constructor" remains available for a corrected command (0.238583ms)
+✔ request ID "__defineGetter__" stores and replays a detached response after version advance (0.787458ms)
+✔ rejected request ID "__defineGetter__" remains available for a corrected command (0.245791ms)
+✔ request ID "__defineSetter__" stores and replays a detached response after version advance (0.311708ms)
+✔ rejected request ID "__defineSetter__" remains available for a corrected command (0.185542ms)
+✔ request ID "hasOwnProperty" stores and replays a detached response after version advance (0.291916ms)
+✔ rejected request ID "hasOwnProperty" remains available for a corrected command (0.242708ms)
+✔ request ID "__lookupGetter__" stores and replays a detached response after version advance (0.26ms)
+✔ rejected request ID "__lookupGetter__" remains available for a corrected command (0.168209ms)
+✔ request ID "__lookupSetter__" stores and replays a detached response after version advance (0.237667ms)
+✔ rejected request ID "__lookupSetter__" remains available for a corrected command (0.174334ms)
+✔ request ID "isPrototypeOf" stores and replays a detached response after version advance (0.249167ms)
+✔ rejected request ID "isPrototypeOf" remains available for a corrected command (0.15775ms)
+✔ request ID "propertyIsEnumerable" stores and replays a detached response after version advance (0.242333ms)
+✔ rejected request ID "propertyIsEnumerable" remains available for a corrected command (0.170125ms)
+✔ request ID "toString" stores and replays a detached response after version advance (0.259083ms)
+✔ rejected request ID "toString" remains available for a corrected command (0.161708ms)
+✔ request ID "valueOf" stores and replays a detached response after version advance (0.24775ms)
+✔ rejected request ID "valueOf" remains available for a corrected command (0.157792ms)
+✔ request ID "__proto__" stores and replays a detached response after version advance (0.282875ms)
+✔ rejected request ID "__proto__" remains available for a corrected command (0.146791ms)
+✔ request ID "toLocaleString" stores and replays a detached response after version advance (0.481ms)
+✔ rejected request ID "toLocaleString" remains available for a corrected command (0.161667ms)
+ℹ tests 36
+ℹ suites 0
+ℹ pass 36
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1856.311958

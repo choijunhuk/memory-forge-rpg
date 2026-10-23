@@ -1,0 +1,16 @@
+{
+  "character": "ravien",
+  "key": "fig_bond_end",
+  "target": "ravien/images/char_ravien_fig_bond_end_styleA_v01.png",
+  "args": {
+    "prompt": "Use case: identity-preserve. Edit the FIRST canonical B master sprite, same clearly adult character, EXACT same identity/age/face/hair/costume design/palette and clear-cel A rendering. Preserve all furniture perspective, shape, scale, screen coordinates and prop design across this sequence. Modify ONLY the specified acting/hand state/expression. Direction A: crisp controlled line, emphatic upper eyelid, small symbolic nose and mouth, matte large one-step cel shadows, grouped hair and broad highlight bands, limited metal highlights. Full body/equipment/furniture completely inside same 1024x1536 portrait with clear margins. TRUE RGBA transparent empty canvas, every empty corner alpha=0; remove all haze, background residue, halo, floor, cast shadows, checkerboard, text and watermark. Keep opaque clothing/skin solid and clean hair edges. Character: ravien, age 28. After rising, she stands just to SCREEN RIGHT of the now empty SAME burgundy chair, both gloved hands empty and lowered, head gently tilted waiting for player. Keep SAME oval foreground desk in its EXACT location, cream sheet and closed folder left on desktop. Maintain same perspective/scale/geometry, no new little side table. Fit feet, chair and original desk legs.",
+    "referenced_image_paths": [
+      "/Users/choi/Documents/Memory_forge/art/moments/ravien/images/char_ravien_fig_waver_styleA_v01.png"
+    ],
+    "transparent_background": true
+  },
+  "cache_path": "/Users/choi/.codex/generated_images/01a14db0-4150-7f01-9240-82aaa185dd28/exec-50e962d4-9d06-4e8d-a0da-84621f742004.png",
+  "status": "history_unselected",
+  "generation_status": "generated_pending_review",
+  "selected": false
+}

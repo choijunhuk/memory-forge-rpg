@@ -1,0 +1,11 @@
+{
+  "checkedAt": "2026-10-15T16:41:42.673989+00:00",
+  "unityVersion": "6000.0.46f1",
+  "installedPlaybackEngines": [
+    "MacStandaloneSupport"
+  ],
+  "androidModuleInstalled": false,
+  "androidBuild": "NOT_RUN: AndroidPlayer module is absent; no device acceptance claimed",
+  "macOSBuildReceipt": "build_after_unlock.json",
+  "changes": "Read-only availability check; no module installation or project platform switch"
+}

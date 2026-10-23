@@ -1,0 +1,20 @@
+[
+  {
+    "command": "git status --short && git log --oneline -3 && grep -n \"UNITY_DENY\\|UNITY_WRITE\\b\\|exposed_not_allowed\\|connected = \\|violation = \" tools/ai/run_claude.py",
+    "is_error": false,
+    "permissionDenial": false,
+    "resultPrefix": " M AGENTS.md\n M CLAUDE.md\n M docs/AI_ENVIRONMENT.md\n M docs/AI_WORKFLOW.md\n M ops/ai/runtime-policy.json\n M tools/ai/run_claude.py\n M tools/ai/test_handoff.py\n2b2d8ca Make early pa"
+  },
+  {
+    "command": "grep -n '\"manage_shader\"' ops/ai/runtime-policy.json; grep -n '\"fail_closed_audit\"' ops/ai/runtime-policy.json; grep -n '\"unity_tools_list\"\\|\"unity_profile_connection\"' ops/ai/runtime-policy.json",
+    "is_error": false,
+    "permissionDenial": false,
+    "resultPrefix": "152:          \"manage_shader\"\n203:          \"manage_shader\"\n83:    \"fail_closed_audit\": [\n93:      \"unity_tools_list\": \"NOT_RUN\",\n94:      \"unity_profile_connection\": \"NOT_RUN\","
+  },
+  {
+    "command": "python3 -c \"import json;json.load(open('ops/ai/runtime-policy.json'));print('json ok')\" && python3 -m py_compile tools/ai/run_claude.py tools/ai/test_handoff.py && echo compile ok",
+    "is_error": true,
+    "permissionDenial": true,
+    "resultPrefix": "Permission to use Bash has been denied because Claude Code is running in don't ask mode. IMPORTANT: You *may* attempt to accomplish this action using other tools that might natural"
+  }
+]

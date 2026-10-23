@@ -1,0 +1,32 @@
+{
+  "task_id": "P1-PRACTICE-TRANSPORT-FIX-TEST-BATCH-20261017",
+  "run_id": "P1-PRACTICE-TRANSPORT-FIX-TEST-BATCH-20261017-20261016T183524981448Z",
+  "status": "RECEIVED_UNVERIFIED",
+  "requestedEffort": "high",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "changes_verified": false,
+  "raw_output": "ops/ai/local/P1-PRACTICE-TRANSPORT-FIX-TEST-BATCH-20261017-20261016T183524981448Z*",
+  "billing_verified_at": "2026-10-15T21:22:01.277612+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "codex/public-battle-query-20261017",
+  "base_commit": "47502b797ebc2de262704968f85b9ce30ed7665f",
+  "worktree": "/Users/choi/.codex/worktrees/claude-public-battle/Memory_forge",
+  "allowed_files": [
+    "client/MemoryForgeUnity/Assets/Scripts/PracticePublicSnapshot.cs",
+    "client/MemoryForgeUnity/Assets/Scripts/PracticeServerSession.cs",
+    "client/MemoryForgeUnity/Assets/Tests/PlayMode/PracticeServerSessionPlayModeTests.cs",
+    "reports/practice_transport_20261017/author_report.md",
+    "reports/practice_transport_20261017/tests_author_report.md"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "cfcd60b9-d701-4abf-874b-b6915e50765e",
+  "subtype": "success",
+  "is_error": false,
+  "result": "I made the three source fixes and wrote the test file (protocol fixture tests, not server acceptance), but nothing was compiled or run (author NOT_RUN). The outbox and the existing 17 outbox tests are untouched.\n\n**Source changes** (`PracticeServerSession.cs`, `PracticePublicSnapshot.cs`; no public API added or removed):\n1. **Refusals that clear a pending request.** Only 409 `STALE_VERSION` or 422 on `/commands` or `/memory-commit` clear it. The same credential's account check, made just before that POST, must also show the request's run at a journal version ≥ its `expectedVersion`.\n   - Phase is not checked, so a save on a DONE run still clears.\n   - Every create refusal, 400, 404, 507, 401/403, `IDEMPOTENCY_CONFLICT`, store-binding refusal, 500/503 and unknown status keeps the request pending.\n   - A later GET never clears an earlier refusal.\n   - The old `InputRefusals` table is gone.\n2. **Hidden battle data.** `state.battle.zones` and `state.battle.cards` are now refused with `RESPONSE_PRIVATE_FIELD`, at that location only. `battle.piles.draw/hand/discard/exhaust` must be integer counts.\n   - `state.zones`, reward/shop `cards` and the pile counts stay public.\n   - Unknown public fields and the full original JSON are kept.\n3. **Owner check before staging.** A new mutation now runs these steps in order:\n   - checks the snapshot, the context, that nothing is pending, and cancellation;\n   - reads the credential once and checks the owner with it;\n   - confirms the server still shows the acting context;\n   - checks cancellation again;\n   - generates the Guid and stages the request;\n   - sends the POST with that same check and credential (no second callback or GET).\n\n   Any failure before staging returns `NotSent` and leaves no record and no POST. If the server has moved past the shown context, the result is `REFRESH_REQUIRED` and the session is marked as needing a refresh. A retry loads the exact stored request, runs its own owner check, then POSTs.\n4. **Failed refresh.** Any failed current-state refresh keeps the last good snapshot readable but sets `NeedsRefresh`, so a stale screen can't start a mutation.\n\n**Tests** (`PracticeServerSessionPlayModeTests.cs`): 17 test methods, about 64 cases with the parameterised ones. They use BCL, NUnit 3.5 and Newtonsoft only (no UnityEngine, TestTools or reflection), synchronous with 20 s bounded waits and no sleeps. The fixture server is a test-owned loopback HTTP listener that returns fixed public-protocol replies, and can hold, drop, truncate, omit the length or send the wrong content type. Coverage:\n- owner, wrong owner, 401 and credential rotation, with no record or POST after a failed pre-check;\n- public schema and deep copies, server version vs `battle.v`, null run, coherence, rollback refusal and new-run adoption;\n- staging before a held POST, exact bytes and ordered picks after the caller mutates its args, the busy second call, and an exact retry from a new session;\n- successful receipt clears the request; an old receipt replays no events and doesn't roll back; a failed refresh blocks new mutations;\n- 14 uncertain endings and cancel/timeout/Dispose all leave the exact request pending;\n- 20 refusal cases, plus a future-version refusal that stays pending after a later read catches up;\n- DONE-run memory-commit;\n- the pure battle query: request and context matching, no record written, and a default `blocked[next]` doesn't stop an explicit pull query;\n- `ConfirmNotCommitted` clears only the exact current request.\n\n**Reports:** `author_report.md` now has the corrected whitelist, mutation order and DTO rule. `tests_author_report.md` is new, with the coverage table and the source changes.\n\n**Risks for your run:** Unity Mono's `HttpClient` may report a dropped connection as a different exception type, may handle `text/plain` or a missing Content-Length differently, or may retry a dropped POST; the test asserts exactly one POST. The 1 s timeout case is real timing. If any case fails, please treat it as a source gap rather than loosening the test.\n\n**Next (Root):** compile, run these tests on .NET and Unity Mono, run the real host / fault-proxy / process proofs, do the full independent review, then UI integration. My session_id isn't visible to me; your prompt gives `cfcd60b9-d701-4abf-874b-b6915e50765e`.",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ]
+}

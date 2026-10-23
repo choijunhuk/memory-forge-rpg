@@ -1,0 +1,25 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"phase\":\"REST\",\"version\":39,\"hp\":\"243\",\"uses\":\"0\",\"canCommand\":true,\"notice\":\"체력을 회복했어요.\",\"batch\":false},\"compiler\":\"codedom\"}}"
+    }
+  ],
+  "structuredContent": {
+    "success": true,
+    "message": "Code executed successfully.",
+    "data": {
+      "result": {
+        "phase": "REST",
+        "version": 39,
+        "hp": "243",
+        "uses": "0",
+        "canCommand": true,
+        "notice": "체력을 회복했어요.",
+        "batch": false
+      },
+      "compiler": "codedom"
+    }
+  },
+  "isError": false
+}

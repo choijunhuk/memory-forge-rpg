@@ -1,0 +1,19 @@
+{
+  "character": "harin",
+  "key": "expr_neutral",
+  "target": "harin/images/char_harin_expr_neutral_styleA_v01.png",
+  "args": {
+    "prompt": "Use case: style-transfer. One production HEAD-AND-UPPER-SHOULDERS expression portrait for Memory Forge, SQUARE 1:1, intended game output 512x512 (generate a clean larger square master). FIRST reference controls this character's face identity/head angle, age, hair, accessories and neckline. SECOND reference is SAME character redrawn in approved direction A and controls rendering: crisp controlled outlines, emphatic upper eyelids, tiny symbolic nose, short matte mouth, flat matte skin with ONE broad hard-edged shadow step, large grouped hair locks and broad flat highlight bands, restrained material highlights. Redraw away from old glossy/3D/airbrush face rendering. Clearly ADULT harin age 26. Identity invariants: Short navy hair, slate-blue eyes, SAME scar above left eyebrow, strong adult jaw/neck, white/navy/gold frost armor collar and single shoulder-cape clasp. Expression NEUTRAL: calm resting eyes and mouth consistent with personality, no broad smile. Same head tilt and angle as first portrait, head centered with full hair/accessories visible and close readable face, original neckline/shoulder design. No hands, weapons, furniture, props or second face. Leave true transparent clearance around top/sides; all four corners empty alpha exactly0, no opaque backdrop, halo, haze, floor, shadow, checkerboard, labels or watermark. Actual RGBA transparency. Do not adopt another character's face or outfit.",
+    "referenced_image_paths": [
+      "/Users/choi/Documents/Memory_forge/art/moments/harin/images/char_harin_expression_neutral_v01.png",
+      "/Users/choi/Documents/Memory_forge/art/moments/harin/images/char_harin_fig_glove_styleA_v01.png"
+    ],
+    "transparent_background": true
+  },
+  "cache_path": "/Users/choi/.codex/generated_images/01a14db0-4150-7f01-9240-82aaa185dd28/exec-5c6dd3ce-1a3f-449f-9198-0f58a74b613a.png",
+  "hires": "production-style-a-20261018/expression-hires/harin-expr_neutral.png",
+  "postprocess": "sips -z 512 512; non-generative resize only",
+  "status": "ready",
+  "generation_status": "generated_pending_review",
+  "selected": true
+}

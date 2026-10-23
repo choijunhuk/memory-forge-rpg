@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "scope": "original PostgreSQL schema baseline only; not application/database persistence integration",
+  "postgres_reported_version": "16.15",
+  "existing_cached_image": "postgres:16",
+  "image_id": "sha256:1a6ab3f5345eb6dbe04a1349529caabdb0ab09293a09590fad07b2246bfa4b54",
+  "architecture": "arm64",
+  "pull": "never",
+  "network": "none",
+  "repository_mount": false,
+  "existing_database_or_volume_used": false,
+  "transport": "tar stream of exactly three original files over container stdin",
+  "source_sha256": {
+    "tools/check_schema.sh": "d8022d3d8375c2f2de968de4a011676776021241c59f486de2a50eb0e4b9c10c",
+    "server/schema.sql": "ea60907ef082ff4f69d418a8db3f74e47d1e819227c7631eeac9ef137c057b06",
+    "server/tests/schema_checks.sql": "23d982c0372f4cc7f0c9ded545487bba0aaef73d18281ec59c843a3022706be2"
+  },
+  "check": "tools/check_schema.sh applied schema.sql and server/tests/schema_checks.sql in a throwaway in-container cluster",
+  "exit": 0,
+  "owned_containers_absent_afterward": true,
+  "earlier_attempt": "repository bind mount stalled before container creation; cause unconfirmed; only owned client stopped"
+}

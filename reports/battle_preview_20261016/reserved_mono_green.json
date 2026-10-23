@@ -1,0 +1,149 @@
+{
+  "success": true,
+  "message": "Code executed successfully.",
+  "data": {
+    "result": {
+      "actualPlayMode": true,
+      "checks": 8,
+      "rows": [
+        {
+          "card": "sera_round",
+          "forecast": {
+            "Error": null,
+            "Mode": "now",
+            "Cost": 1,
+            "Due": null,
+            "Hidden": false,
+            "EnemyHpLoss": 8,
+            "BlockDelta": 0,
+            "HpDelta": 0,
+            "Defeat": false,
+            "EnemyDamage": 8,
+            "NewlyBroken": 0
+          },
+          "pure": true
+        },
+        {
+          "card": "sera_timed",
+          "forecast": {
+            "Error": null,
+            "Mode": "next",
+            "Cost": 2,
+            "Due": 2,
+            "Hidden": false,
+            "EnemyHpLoss": 22,
+            "BlockDelta": 0,
+            "HpDelta": 0,
+            "Defeat": false,
+            "EnemyDamage": 22,
+            "NewlyBroken": 0
+          },
+          "pure": true
+        },
+        {
+          "card": "sera_timed",
+          "forecast": {
+            "Error": null,
+            "Mode": "after",
+            "Cost": 2,
+            "Due": 3,
+            "Hidden": false,
+            "EnemyHpLoss": 30,
+            "BlockDelta": 0,
+            "HpDelta": 0,
+            "Defeat": false,
+            "EnemyDamage": 30,
+            "NewlyBroken": 0
+          },
+          "pure": true
+        },
+        {
+          "card": "harin_shield",
+          "forecast": {
+            "Error": null,
+            "Mode": "next",
+            "Cost": 1,
+            "Due": 2,
+            "Hidden": false,
+            "EnemyHpLoss": 0,
+            "BlockDelta": 11,
+            "HpDelta": 0,
+            "Defeat": false,
+            "EnemyDamage": 0,
+            "NewlyBroken": 0
+          },
+          "pure": true
+        },
+        {
+          "card": "sera_round",
+          "forecast": {
+            "Error": null,
+            "Mode": "now",
+            "Cost": 1,
+            "Due": null,
+            "Hidden": false,
+            "EnemyHpLoss": 0,
+            "BlockDelta": 0,
+            "HpDelta": 0,
+            "Defeat": false,
+            "EnemyDamage": 8,
+            "NewlyBroken": 0
+          },
+          "pure": true
+        },
+        {
+          "card": "sera_round",
+          "forecast": {
+            "Error": null,
+            "Mode": "next",
+            "Cost": 1,
+            "Due": 3,
+            "Hidden": false,
+            "EnemyHpLoss": 2,
+            "BlockDelta": 0,
+            "HpDelta": 0,
+            "Defeat": false,
+            "EnemyDamage": 12,
+            "NewlyBroken": 0
+          },
+          "pure": true
+        },
+        {
+          "card": "sera_timed",
+          "forecast": {
+            "Error": null,
+            "Mode": "next",
+            "Cost": 2,
+            "Due": 2,
+            "Hidden": false,
+            "EnemyHpLoss": 18,
+            "BlockDelta": 0,
+            "HpDelta": 0,
+            "Defeat": false,
+            "EnemyDamage": 18,
+            "NewlyBroken": 1
+          },
+          "pure": true
+        },
+        {
+          "card": "sera_phase",
+          "forecast": {
+            "Error": null,
+            "Mode": "now",
+            "Cost": 2,
+            "Due": null,
+            "Hidden": false,
+            "EnemyHpLoss": 6,
+            "BlockDelta": 0,
+            "HpDelta": 0,
+            "Defeat": false,
+            "EnemyDamage": 6,
+            "NewlyBroken": 0
+          },
+          "pure": true
+        }
+      ]
+    },
+    "compiler": "codedom"
+  }
+}

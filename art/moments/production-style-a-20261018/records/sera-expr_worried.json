@@ -1,0 +1,18 @@
+{
+  "character": "sera",
+  "key": "expr_worried",
+  "target": "sera/images/char_sera_expr_worried_styleA_v01.png",
+  "args": {
+    "prompt": "Use case: identity-preserve. One facial expression variant from this SAME-CHARACTER A-style neutral portrait. Clearly ADULT sera age 24. Preserve EXACT head angle/tilt, face proportions/identity, iris color, hairstyle and all accessories, scar/glasses when present, original costume neckline/shoulder crop, canvas composition, neutral lighting, palette, crisp line art and clear-cel A rendering. Identity: Silver-white low ponytail, amber eyes, brass clock hair ornament, navy/gold coat collar over black high-neck bodysuit. Change ONLY eyes/eyelids/eyebrows/mouth and natural facial muscles. Target expression WORRIED: Inner eyebrows lift slightly, gaze softens downward and mouth becomes a small uneasy line. Make that emotion distinctly readable at 512x512 while respecting character's restrained or energetic personality. Keep skin matte, tiny symbolic nose and short stylized mouth, no added lip gloss, no realistic nose/skin rendering, no new texture or micro-hair detail. Same square head-and-shoulders portrait, no hands/props/second face/labels. Preserve the existing intentional lower shoulder crop; don't erase costume at bottom. All actual EMPTY space (especially top corners) must be genuinely transparent alpha exactly0, no rectangular backdrop, halo, haze, checkerboard, floor or watermark. Output clean larger square master for non-generative 512x512 resize.",
+    "referenced_image_paths": [
+      "/Users/choi/Documents/Memory_forge/art/moments/sera/images/char_sera_expr_neutral_styleA_v01.png"
+    ],
+    "transparent_background": true
+  },
+  "cache_path": "/Users/choi/.codex/generated_images/01a14db0-4150-7f01-9240-82aaa185dd28/exec-124ae1b4-9121-4184-85dc-7eb5168fb799.png",
+  "hires": "production-style-a-20261018/expression-hires/sera-expr_worried.png",
+  "postprocess": "sips -z 512 512; non-generative resize only",
+  "status": "ready",
+  "generation_status": "generated_pending_review",
+  "selected": true
+}

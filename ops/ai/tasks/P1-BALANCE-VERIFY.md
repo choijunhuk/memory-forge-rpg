@@ -1,0 +1,15 @@
+# P1-BALANCE-VERIFY — same audit follow-up
+
+Read-only, no edits/commands/models/agents. Same branch/base9be537f; Codex copied current files (hashes below) into this worktree, not a new commit. User already authorized source-correct fixes; do not ask them to choose an already specified rule.
+Root verified reflect contract via design5.7/5.8 card-only and5.10 ult not card. Red2fail/1pass: Sera lost3 and Lumi lost15 on ult; immediate/reserved card reflect still3. Fixed ONLY !ctx.isUlt guard;3tests thenPASS. Same original1320 reveals8changed trials,81lessHP loss,totalturns/outcomes unchanged, targetcount32still. No numbers/scenarios/policies/thresholds changed.
+Root found another exact design5.3 mismatch while tracing: every attack must stop on party defeat, but enemyMove atk/atkdebuff used isOver() while phase staysRESOLVING. Actual e_twinink3x12 withpartyHP5,counter2 produced3hit/3counter afterdeath (enemy80->74); shouldstop afterfatalstrike (existing strike/counterorder preserved enemy78). Red3fail/1pass included atkdebuff and memory_envelope survival; fixed two isOver checks to checkEnd withinloops. All11targeted tests nowPASS, full119pending/collectedbyroot. Please check this and our newdiagnostic tool for concrete errors. Don't broaden same-hit lethal counter ordering beyondexistingcode; source rule here is stop subsequent hits/suffix effects.
+Review tools/review/balance_causes.mjs for side effects, actual HP loss/heal attribution, prototype restoration on throw, metric row/key completeness, all-outcome independent aggregation and signed contribution sums. All original1320 replayedexact beforefix. Fresh correctedreport will be rerun and inspectedbyroot. One representative per failedrow is illustrative only, not selected denominator. Hash checks intentionally refuse stale engine report atCLI.
+Sampling probe BEFOREfix expanded10->40reps, original1320trials byteequalsubset of5280:32->21outside,12oldcrossinband1newout. Rootwillalso measure afterfix40. This is uncertainty evidence, never relaxedthreshold orautomatedhumanbalancepass. Candidate budgets6 and unclear twinheal/pattern lengths remainpreserveddiagnostic findings.
+Return up to3concrete source/repro defects if any; otherwise no concrete blocker with inspection-only limits. No formalapproval withheld for absent LSP. Commands/tests NOT_RUN inyour read-onlysession. Root owns execution.
+{
+  "engine/rules-core.js": "79bb86d533b32d3e13644a54da660a709320f0186c7c7417764d0c14856622da",
+  "tools/review/balance_causes.mjs": "6bf6b10a8f2e24ec3eb179045ae5faa186b18d3460f97705b3eaee50489c93e1",
+  "engine/tests/balance_causes.test.mjs": "f402e920e617ad778d3464371c6929627b7d72889a8e768ef618a8636346b607",
+  "engine/tests/reflect_ultimate.test.mjs": "648faebdd901b99713dd91c749bc4c322d38c16136e51bfc4aaf4e00381d7eeb",
+  "engine/tests/enemy_lethal_multihit.test.mjs": "7becd72845b61961de378fe83e2fb93d8a72b03e59c36dffb76614822dc796b4"
+}

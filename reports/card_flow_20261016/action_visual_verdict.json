@@ -1,0 +1,18 @@
+{
+  "score": 94,
+  "verdict": "pass",
+  "scope": "Actual committed-action strip while next card is purely selected",
+  "evidence": "reports/card_flow_20261016/action_live_first.png",
+  "checks": [
+    "Actual AP3/block8/V2 shown immediately after one shield command",
+    "Separate committed-use row1/3 and next-card damage8 forecast visible at once",
+    "Normal/2x/reduced/skip controls readable",
+    "Time-reservation timeline remains distinct and unchanged",
+    "No visual/physical UI layout defect observed at captured viewport"
+  ],
+  "limits": [
+    "Draft source validation, final source/new tests still pending",
+    "Text presentation, not final art/VFX/audio or device accessibility",
+    "Turn-summary global speed coverage is not inferred from player-action controls"
+  ]
+}

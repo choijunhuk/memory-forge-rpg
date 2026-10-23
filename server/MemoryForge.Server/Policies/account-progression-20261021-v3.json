@@ -1,0 +1,1242 @@
+{
+  "version": "account-progression-20261021-v3",
+  "progression": {
+    "accountLevel": {
+      "cap": 60,
+      "xp": {
+        "per": 20,
+        "base": 80
+      },
+      "xpSources": {
+        "staminaSpent": 1,
+        "dailyMissionComplete": 300,
+        "storyFirstClear": 200,
+        "weeklyBossClaim": 100
+      },
+      "unlocks": [
+        {
+          "lv": 1,
+          "what": "탐사(프롤로그), 모집, 기억 저장"
+        },
+        {
+          "lv": 3,
+          "what": "1장, 도감"
+        },
+        {
+          "lv": 5,
+          "what": "잉크·크레딧 던전, 일일 임무"
+        },
+        {
+          "lv": 8,
+          "what": "2장, 인연(선물·에피소드)"
+        },
+        {
+          "lv": 10,
+          "what": "캐릭터 1차 승급, 태엽 공장·인장 회랑, 장비 제작"
+        },
+        {
+          "lv": 15,
+          "what": "3장, 주간 보스, 금서 열람실"
+        },
+        {
+          "lv": 20,
+          "what": "캐릭터 2차 승급, 기록 균열, 연마 작업장"
+        },
+        {
+          "lv": 22,
+          "what": "4장"
+        },
+        {
+          "lv": 30,
+          "what": "캐릭터 3차 승급, 5장"
+        },
+        {
+          "lv": 38,
+          "what": "6장"
+        },
+        {
+          "lv": 40,
+          "what": "캐릭터 4차 승급(Lv.60)"
+        }
+      ]
+    },
+    "affinity": {
+      "maxLevel": 10,
+      "xpPerLevel": 100,
+      "sources": {
+        "battleTogether": 5,
+        "dailyBattleCap": 50,
+        "giftSmall": 20,
+        "giftMid": 50,
+        "giftLarge": 100,
+        "preferredMult": 1.5
+      },
+      "rewards": [
+        {
+          "lv": 2,
+          "reward": "프로필·생일 해금"
+        },
+        {
+          "lv": 3,
+          "reward": "인연 에피소드 1 + 결정 50"
+        },
+        {
+          "lv": 4,
+          "reward": "로비 대사 추가"
+        },
+        {
+          "lv": 5,
+          "reward": "인연 에피소드 2 + 결정 50 + 공방장의 기억 조각 1"
+        },
+        {
+          "lv": 6,
+          "reward": "전투 대사 추가"
+        },
+        {
+          "lv": 7,
+          "reward": "인연 에피소드 3 + 결정 50"
+        },
+        {
+          "lv": 8,
+          "reward": "로비 상호작용 추가"
+        },
+        {
+          "lv": 9,
+          "reward": "공방장의 기억 조각 2"
+        },
+        {
+          "lv": 10,
+          "reward": "인연 에피소드 4(최종) + 결정 100 + 의상 색 변경 1 + 칭호"
+        }
+      ]
+    },
+    "dungeonStars": {
+      "star1": "승리",
+      "star2": "4턴 이내 승리",
+      "star3": "승리 시 파티 체력 50% 이상",
+      "sweepUnlock": 3,
+      "sweepMax": 12
+    },
+    "dungeonTiers": [
+      {
+        "tier": 1,
+        "stage": 10,
+        "pct": 25
+      },
+      {
+        "tier": 2,
+        "stage": 20,
+        "pct": 40
+      },
+      {
+        "tier": 3,
+        "stage": 30,
+        "pct": 55
+      },
+      {
+        "tier": 4,
+        "stage": 40,
+        "pct": 70
+      },
+      {
+        "tier": 5,
+        "stage": 50,
+        "pct": 85
+      },
+      {
+        "tier": 6,
+        "stage": 60,
+        "pct": 100
+      }
+    ],
+    "dungeons": [
+      {
+        "id": "dg_ink",
+        "name": "잉크 저장고",
+        "unlock": 5,
+        "cost": 20,
+        "yield": {
+          "ink": 24000
+        },
+        "note": "캐릭터 경험치(잉크 아이템 합산 환산)"
+      },
+      {
+        "id": "dg_credit",
+        "name": "반짝이는 금고",
+        "unlock": 5,
+        "cost": 20,
+        "yield": {
+          "credits": 40000
+        }
+      },
+      {
+        "id": "dg_oil",
+        "name": "태엽 공장",
+        "unlock": 10,
+        "cost": 20,
+        "yield": {
+          "oil": 12000,
+          "alloy": 1
+        }
+      },
+      {
+        "id": "dg_seal",
+        "name": "인장 회랑",
+        "unlock": 10,
+        "cost": 20,
+        "yield": {
+          "seal": 3
+        }
+      },
+      {
+        "id": "dg_book",
+        "name": "금서 열람실",
+        "unlock": 15,
+        "cost": 20,
+        "yield": {
+          "book": 8
+        }
+      },
+      {
+        "id": "dg_polish",
+        "name": "연마 작업장",
+        "unlock": 20,
+        "cost": 20,
+        "yield": {
+          "polish": 20
+        }
+      }
+    ],
+    "exchangeShops": {
+      "shard": {
+        "currency": "shard",
+        "name": "기억 결정체 교환",
+        "resetMonthly": true,
+        "items": [
+          {
+            "item": "ticket_limited",
+            "cost": 5,
+            "limit": 5
+          },
+          {
+            "item": "ticket_weapon",
+            "cost": 5,
+            "limit": 5
+          },
+          {
+            "item": "skin_dye",
+            "cost": 30,
+            "limit": 1,
+            "note": "보유 캐릭터 의상 색 변경 1회"
+          }
+        ]
+      },
+      "afterglow": {
+        "currency": "afterglow",
+        "name": "잔광 교환",
+        "resetMonthly": true,
+        "items": [
+          {
+            "item": "ticket_standard",
+            "cost": 75,
+            "limit": 5
+          },
+          {
+            "item": "ticket_limited",
+            "cost": 75,
+            "limit": 5
+          },
+          {
+            "item": "credit",
+            "cost": 1,
+            "qty": 400,
+            "limit": 500
+          },
+          {
+            "item": "gift_mid",
+            "cost": 20,
+            "limit": 20
+          }
+        ]
+      },
+      "bossToken": {
+        "currency": "boss_token",
+        "name": "보스 토큰 교환",
+        "resetWeekly": true,
+        "items": [
+          {
+            "item": "refine_core",
+            "cost": 60,
+            "limit": 2,
+            "note": "기본(R) 무기 정련 1단계"
+          },
+          {
+            "item": "book",
+            "cost": 10,
+            "limit": 6
+          },
+          {
+            "item": "polish",
+            "cost": 5,
+            "limit": 20
+          }
+        ]
+      },
+      "event": {
+        "currency": "event_token",
+        "name": "시즌 이벤트 상점(이벤트마다)",
+        "items": [
+          {
+            "item": "ticket_limited",
+            "cost": 400,
+            "limit": 3,
+            "note": "첫 이벤트 3장, 두 번째 이벤트 2장 = 시즌 5장"
+          },
+          {
+            "item": "crystal_free",
+            "cost": 100,
+            "qty": 80,
+            "limit": 6
+          },
+          {
+            "item": "core",
+            "cost": 300,
+            "limit": 2
+          },
+          {
+            "item": "gift_large",
+            "cost": 60,
+            "limit": 10
+          },
+          {
+            "item": "event_relic_unlock",
+            "cost": 500,
+            "limit": 1,
+            "note": "이벤트 탐사 전용 유물 상시화"
+          }
+        ]
+      }
+    },
+    "levelling": {
+      "charXp": {
+        "k": 40,
+        "a": 4,
+        "sqDiv": 10
+      },
+      "weaponXpRatio": 0.5,
+      "creditsPerXp": 0.5,
+      "xpItems": [
+        {
+          "id": "ink_s",
+          "name": "기록 잉크(소)",
+          "xp": 1000
+        },
+        {
+          "id": "ink_m",
+          "name": "기록 잉크(중)",
+          "xp": 5000
+        },
+        {
+          "id": "ink_l",
+          "name": "기록 잉크(대)",
+          "xp": 20000
+        }
+      ],
+      "weaponXpItems": [
+        {
+          "id": "oil_s",
+          "name": "태엽 기름(소)",
+          "xp": 1000
+        },
+        {
+          "id": "oil_m",
+          "name": "태엽 기름(중)",
+          "xp": 5000
+        },
+        {
+          "id": "oil_l",
+          "name": "태엽 기름(대)",
+          "xp": 20000
+        }
+      ],
+      "charAscension": [
+        {
+          "stage": 1,
+          "cap": 30,
+          "account": 10,
+          "seals": 4,
+          "cores": 0,
+          "credits": 10000
+        },
+        {
+          "stage": 2,
+          "cap": 40,
+          "account": 20,
+          "seals": 8,
+          "cores": 0,
+          "credits": 20000
+        },
+        {
+          "stage": 3,
+          "cap": 50,
+          "account": 30,
+          "seals": 12,
+          "cores": 2,
+          "credits": 40000
+        },
+        {
+          "stage": 4,
+          "cap": 60,
+          "account": 40,
+          "seals": 16,
+          "cores": 4,
+          "credits": 60000
+        }
+      ],
+      "weaponAscension": [
+        {
+          "stage": 1,
+          "cap": 30,
+          "alloys": 2,
+          "credits": 5000
+        },
+        {
+          "stage": 2,
+          "cap": 40,
+          "alloys": 4,
+          "credits": 10000
+        },
+        {
+          "stage": 3,
+          "cap": 50,
+          "alloys": 6,
+          "credits": 20000
+        },
+        {
+          "stage": 4,
+          "cap": 60,
+          "alloys": 8,
+          "credits": 30000
+        }
+      ],
+      "skillCosts": [
+        {
+          "to": 2,
+          "books": 2,
+          "credits": 5000,
+          "cores": 0
+        },
+        {
+          "to": 3,
+          "books": 4,
+          "credits": 10000,
+          "cores": 0
+        },
+        {
+          "to": 4,
+          "books": 6,
+          "credits": 15000,
+          "cores": 0
+        },
+        {
+          "to": 5,
+          "books": 8,
+          "credits": 20000,
+          "cores": 0
+        },
+        {
+          "to": 6,
+          "books": 10,
+          "credits": 30000,
+          "cores": 0
+        },
+        {
+          "to": 7,
+          "books": 14,
+          "credits": 40000,
+          "cores": 0
+        },
+        {
+          "to": 8,
+          "books": 18,
+          "credits": 60000,
+          "cores": 0
+        },
+        {
+          "to": 9,
+          "books": 24,
+          "credits": 80000,
+          "cores": 2
+        },
+        {
+          "to": 10,
+          "books": 32,
+          "credits": 120000,
+          "cores": 2
+        }
+      ],
+      "skillLines": [
+        "card",
+        "ult"
+      ],
+      "gearCraft": {
+        "polish": 20,
+        "credits": 10000
+      },
+      "gearEnhance": {
+        "polishPerLevel": 1,
+        "creditsPerLevel": 1000
+      }
+    },
+    "materials": [
+      {
+        "id": "credits",
+        "name": "크레딧",
+        "use": "모든 육성"
+      },
+      {
+        "id": "ink",
+        "name": "기록 잉크",
+        "use": "캐릭터 경험치"
+      },
+      {
+        "id": "oil",
+        "name": "태엽 기름",
+        "use": "무기 경험치"
+      },
+      {
+        "id": "seal",
+        "name": "기억 인장",
+        "use": "캐릭터 승급"
+      },
+      {
+        "id": "alloy",
+        "name": "기계 합금",
+        "use": "무기 승급"
+      },
+      {
+        "id": "book",
+        "name": "공방 교본",
+        "use": "스킬 레벨"
+      },
+      {
+        "id": "polish",
+        "name": "연마재",
+        "use": "장비 제작·강화"
+      },
+      {
+        "id": "core",
+        "name": "승급 핵",
+        "use": "캐릭터 승급 3·4단계, 스킬 Lv.9·10"
+      },
+      {
+        "id": "gift",
+        "name": "선물",
+        "use": "인연 경험치"
+      }
+    ],
+    "missions": {
+      "daily": {
+        "points": 100,
+        "tasks": [
+          {
+            "id": "d_login",
+            "text": "접속",
+            "pts": 20
+          },
+          {
+            "id": "d_stamina",
+            "text": "집중 120 사용",
+            "pts": 20
+          },
+          {
+            "id": "d_battle",
+            "text": "전투 3회 승리",
+            "pts": 20
+          },
+          {
+            "id": "d_level",
+            "text": "캐릭터 또는 무기 레벨 올리기 1회",
+            "pts": 20
+          },
+          {
+            "id": "d_affinity",
+            "text": "인연 선물 1회 또는 로비 대화 1회",
+            "pts": 20
+          }
+        ],
+        "milestones": [
+          {
+            "at": 20,
+            "crystals": 10,
+            "credits": 10000
+          },
+          {
+            "at": 40,
+            "crystals": 10,
+            "stamina": 30
+          },
+          {
+            "at": 60,
+            "crystals": 10,
+            "ink_m": 2
+          },
+          {
+            "at": 80,
+            "crystals": 10,
+            "credits": 10000
+          },
+          {
+            "at": 100,
+            "crystals": 20,
+            "passXp": 1000
+          }
+        ]
+      },
+      "weekly": {
+        "crystals": 420,
+        "standardTicket": 2,
+        "passXp": 4000,
+        "tasks": [
+          "일일 임무 5일 완료",
+          "주간 보스 보상 3회",
+          "탐사 2회 완주",
+          "기억 저장 1회",
+          "성장 던전 20회"
+        ]
+      },
+      "weeklyRun": {
+        "crystals": 200,
+        "text": "이번 주 탐사(짧게 이상) 첫 완주 보상"
+      },
+      "attendance": {
+        "weeklyCrystals": 160,
+        "text": "7일 누적 접속 보상(주 단위, 연속 불필요)"
+      }
+    },
+    "products": {
+      "crystalPacks": [
+        {
+          "id": "pk_160",
+          "crystals": 160,
+          "krw": 2400,
+          "firstBonus": 160
+        },
+        {
+          "id": "pk_800",
+          "crystals": 800,
+          "krw": 11000,
+          "firstBonus": 800
+        },
+        {
+          "id": "pk_1680",
+          "crystals": 1680,
+          "krw": 22000,
+          "firstBonus": 1680
+        },
+        {
+          "id": "pk_3440",
+          "crystals": 3440,
+          "krw": 44000,
+          "firstBonus": 3440
+        },
+        {
+          "id": "pk_7000",
+          "crystals": 7000,
+          "krw": 88000,
+          "firstBonus": 7000
+        }
+      ],
+      "monthly": {
+        "id": "monthly",
+        "name": "공방 정기권",
+        "krw": 6900,
+        "days": 30,
+        "upfrontPaid": 300,
+        "dailyFree": 90,
+        "total": 3000,
+        "autoRenew": false,
+        "maxStackDays": 180
+      },
+      "pass": {
+        "id": "pass",
+        "name": "시즌 패스",
+        "krw": 12900,
+        "levels": 50,
+        "xpPerLevel": 1000,
+        "crystals": 2560,
+        "limitedTicket": 0,
+        "plus": {
+          "krw": 24900,
+          "levelsGranted": 10,
+          "extra": "한정 의상 1(패스 전용)"
+        }
+      },
+      "skins": [
+        {
+          "tier": 1,
+          "krw": 9900,
+          "scope": "일러스트·로비 모델 색/소품 변경"
+        },
+        {
+          "tier": 2,
+          "krw": 19800,
+          "scope": "새 의상(로비·전투 모델·일러스트)"
+        },
+        {
+          "tier": 3,
+          "krw": 29800,
+          "scope": "새 의상 + 필살기 연출·전용 대사"
+        }
+      ],
+      "rules": [
+        "유료/무료 결정을 분리 원장으로 관리(환불·청약철회 대응)",
+        "모든 상품 페이지에 구성·확률·기간 표시",
+        "랜덤 상품은 모집(가챠) 외에 판매하지 않는다"
+      ]
+    },
+    "recordRift": {
+      "unlock": 20,
+      "cycleDays": 14,
+      "cyclesPerSeason": 3,
+      "floors": [
+        {
+          "floor": 1,
+          "stage": 40,
+          "reward": 200
+        },
+        {
+          "floor": 2,
+          "stage": 45,
+          "reward": 160
+        },
+        {
+          "floor": 3,
+          "stage": 50,
+          "reward": 160
+        },
+        {
+          "floor": 4,
+          "stage": 55,
+          "reward": 120
+        },
+        {
+          "floor": 5,
+          "stage": 60,
+          "reward": 80
+        },
+        {
+          "floor": 6,
+          "stage": 60,
+          "hpBps": 12500,
+          "dmgBps": 12000,
+          "reward": 80
+        }
+      ],
+      "battlesPerFloor": 3,
+      "rule": "층마다 3연전. 1·3전은 1파티, 2전은 2파티(서로 다른 6명). 파티별 체력은 층 안에서 이어진다. 저장된 기억 덱만 사용(탐사 보상 없음). 층마다 균열 규칙 1개(14일마다 교체).",
+      "modifiers": [
+        {
+          "id": "rift_reserve",
+          "name": "시간의 틈",
+          "text": "보존했던 카드의 피해 +30%, 그 밖의 피해 -10%."
+        },
+        {
+          "id": "rift_break",
+          "name": "금 간 거울",
+          "text": "균열 게이지 +50%, 균열 시 받는 피해 +50%(기본 +25% 대신)."
+        },
+        {
+          "id": "rift_ink",
+          "name": "번지는 잉크",
+          "text": "매 턴 시작 시 얼룩 1장이 버린 더미에 섞인다. 소멸시킨 카드 1장당 피해 +3%."
+        },
+        {
+          "id": "rift_debt",
+          "name": "이자의 밤",
+          "text": "부채 상한 +2, 부채가 있으면 모든 피해 +15%."
+        },
+        {
+          "id": "rift_bloom",
+          "name": "서리 온실",
+          "text": "성장 상한 +2, 성장 카드 해결 시 방어 +3."
+        },
+        {
+          "id": "rift_echo",
+          "name": "공명하는 무대",
+          "text": "잔향 최대 +2, 서로 다른 캐릭터 카드를 연속 3장 내면 행동력 +1(턴당 1회)."
+        }
+      ]
+    },
+    "seasonIncome": {
+      "days": 42,
+      "note": "v0.6 기준선 A안을 유지. 실제 운영 보상표는 이 표를 원장으로 서버가 지급.",
+      "f2pRecurring": [
+        {
+          "src": "일일 임무",
+          "per": 60,
+          "times": 42,
+          "crystals": 2520
+        },
+        {
+          "src": "주간 임무",
+          "per": 420,
+          "times": 6,
+          "crystals": 2520
+        },
+        {
+          "src": "주간 탐사 첫 완주",
+          "per": 200,
+          "times": 6,
+          "crystals": 1200
+        },
+        {
+          "src": "주간 누적 접속",
+          "per": 160,
+          "times": 6,
+          "crystals": 960
+        },
+        {
+          "src": "시즌 이벤트",
+          "per": 2880,
+          "times": 1,
+          "crystals": 2880
+        },
+        {
+          "src": "무료 패스",
+          "per": 1440,
+          "times": 1,
+          "crystals": 1440
+        },
+        {
+          "src": "기록 균열(최대)",
+          "per": 800,
+          "times": 3,
+          "crystals": 2400,
+          "optional": true
+        }
+      ],
+      "tickets": {
+        "limitedTicket": 9,
+        "limitedSources": "시즌 이벤트 상점 5 + 무료 패스 4",
+        "standardTicket": 12,
+        "standardSources": "주간 임무 2×6"
+      },
+      "f2p": {
+        "crystals": 13920,
+        "limitedTicket": 9,
+        "standardTicket": 12
+      },
+      "oneTime": {
+        "story": "storyChapters.firstClear 합계",
+        "beginnerBanner": "첫 공방 모집 50회 = 상시권 40장(10회=8장)",
+        "launch": {
+          "crystals": 1600,
+          "standardTicket": 10
+        }
+      }
+    },
+    "stamina": {
+      "name": "집중",
+      "cap": 240,
+      "regenMinutes": 6,
+      "dailyRegen": 240,
+      "missionBonusPerDay": 30,
+      "refillCrystals": [
+        50,
+        100,
+        100,
+        150
+      ],
+      "refillAmount": 60,
+      "overflowCap": 999
+    },
+    "stats": {
+      "levelCap": 60,
+      "referencePower": 40,
+      "referenceHpPerChar": 81,
+      "charPower": {
+        "base": 20,
+        "num": 14,
+        "den": 60
+      },
+      "weaponPower": {
+        "SSR": {
+          "base": 2,
+          "k": 6
+        },
+        "SR": {
+          "base": 1,
+          "k": 5
+        },
+        "R": {
+          "base": 1,
+          "k": 3
+        }
+      },
+      "hpBase": 60,
+      "gear": {
+        "maxEnhance": 15,
+        "armorFlatBase": 2,
+        "armorBpsBase": 300,
+        "armorBpsPer": 60,
+        "accessoryBpsBase": 250,
+        "accessoryBpsPer": 50
+      },
+      "skill": {
+        "maxLevel": 10,
+        "bpsPerLevel": 400,
+        "resonanceBonus": 2
+      },
+      "capacity": {
+        "base": 6,
+        "ascension": [
+          {
+            "asc": 2,
+            "add": 1
+          },
+          {
+            "asc": 4,
+            "add": 1
+          }
+        ]
+      },
+      "stageScale": {
+        "refWeapon": "SR"
+      }
+    },
+    "storyChapters": [
+      {
+        "ch": 0,
+        "name": "프롤로그: 자정에 멈춘 시계",
+        "stage": 1,
+        "zones": [
+          1
+        ],
+        "bosses": [
+          "b_bell"
+        ],
+        "firstClear": {
+          "crystals": 300,
+          "standardTicket": 5
+        },
+        "unlockAccount": 1,
+        "tutorial": true
+      },
+      {
+        "ch": 1,
+        "name": "1장: 잉크가 번지는 거리",
+        "stage": 8,
+        "zones": [
+          1
+        ],
+        "bosses": [
+          "b_bell"
+        ],
+        "firstClear": {
+          "crystals": 600,
+          "standardTicket": 2
+        },
+        "unlockAccount": 3
+      },
+      {
+        "ch": 2,
+        "name": "2장: 열지 말 것",
+        "stage": 16,
+        "zones": [
+          1
+        ],
+        "bosses": [
+          "b_notary"
+        ],
+        "firstClear": {
+          "crystals": 600,
+          "limitedTicket": 1
+        },
+        "unlockAccount": 8
+      },
+      {
+        "ch": 3,
+        "name": "3장: 잠긴 기록소",
+        "stage": 26,
+        "zones": [
+          1,
+          2
+        ],
+        "bosses": [
+          "b_garden",
+          "b_archivist"
+        ],
+        "firstClear": {
+          "crystals": 800,
+          "limitedTicket": 1
+        },
+        "unlockAccount": 15
+      },
+      {
+        "ch": 4,
+        "name": "4장: 갚지 못한 계약",
+        "stage": 36,
+        "zones": [
+          3
+        ],
+        "bosses": [
+          "b_usurer"
+        ],
+        "firstClear": {
+          "crystals": 800,
+          "limitedTicket": 1
+        },
+        "unlockAccount": 22,
+        "authored": false
+      },
+      {
+        "ch": 5,
+        "name": "5장: 끝나지 않는 곡",
+        "stage": 46,
+        "zones": [
+          4
+        ],
+        "bosses": [
+          "b_overture"
+        ],
+        "firstClear": {
+          "crystals": 800,
+          "limitedTicket": 1
+        },
+        "unlockAccount": 30,
+        "authored": false
+      },
+      {
+        "ch": 6,
+        "name": "6장: 마지막 태엽",
+        "stage": 56,
+        "zones": [
+          4,
+          5
+        ],
+        "bosses": [
+          "b_overture",
+          "b_nameless"
+        ],
+        "firstClear": {
+          "crystals": 1000,
+          "limitedTicket": 2
+        },
+        "unlockAccount": 38,
+        "authored": false
+      }
+    ],
+    "weeklyBoss": {
+      "unlock": 15,
+      "claimsPerWeek": 3,
+      "resetDay": "MON 05:00 KST",
+      "perClaim": {
+        "core": 2,
+        "credits": 20000,
+        "bossToken": 40
+      },
+      "difficulty": [
+        {
+          "lv": 1,
+          "stage": 30
+        },
+        {
+          "lv": 2,
+          "stage": 40
+        },
+        {
+          "lv": 3,
+          "stage": 50
+        },
+        {
+          "lv": 4,
+          "stage": 60
+        },
+        {
+          "lv": 5,
+          "stage": 60,
+          "hpBps": 13000,
+          "dmgBps": 12000
+        }
+      ],
+      "note": "보상은 주 3회, 모든 보스 공유. 연습·재도전은 무제한(보상 없음). 저장된 기억 덱으로 1전투."
+    }
+  },
+  "contentModes": {
+    "schemaVersion": 1,
+    "source": "docs/source_v0.8.1/11_chapter.md §11.1·§11.4–§11.7·§11.9·§11.11·§11.13, 13_chapter.md §13.3",
+    "note": "Supplements data/game_data.json → progression (unchanged). Only rules and numbers written in the source; anything the source leaves open is DECISION_PENDING and the engine throws CONTENT_NOT_AUTHORED instead of inventing it.",
+    "resets": {
+      "source": "§13.3 일일 초기화 05:00 KST, 주간 초기화 월요일 05:00 KST",
+      "utcOffsetMinutes": 540,
+      "dailyHour": 5,
+      "weeklyWeekday": 1,
+      "weeklyHour": 5
+    },
+    "dungeon": {
+      "stars": {
+        "source": "§11.5 별 3개 = 승리 + 4턴 이내 + 체력 50% 이상",
+        "maxTurns": 4,
+        "minHpPct": 50
+      },
+      "waves": {
+        "source": "§11.5 저장 덱으로 단일 전투(1~3웨이브)",
+        "minWaves": 1,
+        "maxWaves": 3,
+        "status": "DECISION_PENDING",
+        "reason": "No enemy composition per dungeon and tier exists in the source or data.",
+        "encounters": null
+      },
+      "defeatStamina": {
+        "status": "DECISION_PENDING",
+        "reason": "§11.4/§11.5 give 20 집중 per run and per sweep but do not say whether a lost battle spends it. A victory settles and spends 20; a defeat cannot settle (CONTENT_NOT_AUTHORED) until this is authored."
+      },
+      "tierGate": {
+        "status": "NO_RULE_IN_SOURCE",
+        "reading": "§11.5 gates each dungeon by account level only and names no per-tier gate, so none is added; every tier of an unlocked dungeon is open and harder tiers are limited by stage-level scaling (§11.1)."
+      }
+    },
+    "weeklyBoss": {
+      "source": "§11.6 구역 보스 3종(종을 삼킨 기록관·거울의 공증인·잠든 정원) + 기록소의 대사서",
+      "bosses": [
+        "b_bell",
+        "b_notary",
+        "b_garden",
+        "b_archivist"
+      ]
+    },
+    "rift": {
+      "battles": {
+        "source": "§11.7 층마다 3연전: 1전·3전은 1파티, 2전은 2파티",
+        "twoTeamOrder": [
+          0,
+          1,
+          0
+        ],
+        "oneTeamOrder": [
+          0,
+          0,
+          0
+        ]
+      },
+      "distinctCharacters": 6,
+      "smallRosterMaxStars": 2,
+      "starPortionsPct": [
+        60,
+        20,
+        20
+      ],
+      "cycleStartHour": 11,
+      "cycleStartHourSource": "§13.3 기록 균열: 시즌 1일·15일·29일 11:00 시작(14일 주기)",
+      "teamsByFloor": {
+        "source": "§11.7 (v0.8.1 active text) and §11.13 / data/design_policy_v0.8.json rift target",
+        "v0.8.1": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "target": [
+          1,
+          1,
+          1,
+          2,
+          2,
+          2
+        ]
+      },
+      "activeTeamPolicy": "v0.8.1",
+      "stars": {
+        "source": "§11.7 별 3개 기준: 3전 모두 승리 / 총 턴 수 / 남은 체력",
+        "status": "DECISION_PENDING",
+        "reason": "The source names the total-turn and remaining-HP criteria without thresholds; a cleared floor cannot be scored or settled (CONTENT_NOT_AUTHORED) until both exist.",
+        "maxTotalTurns": null,
+        "minHpPct": null
+      },
+      "rotation": {
+        "source": "§11.7 14일마다 층별 규칙(표)과 적 조합이 바뀐다",
+        "status": "DECISION_PENDING",
+        "reason": "No per-cycle assignment of the six rules to floors and no enemy lineups exist in the source or data.",
+        "cycles": null
+      },
+      "floorOrder": {
+        "status": "NO_RULE_IN_SOURCE",
+        "reading": "§11.7 gives the floors, their levels and rewards but no requirement to clear floor n-1 first, so floors are not gated on each other."
+      },
+      "modifiers": {
+        "source": "§11.1 기록 균열 규칙 표",
+        "rift_reserve": {
+          "reservedBps": 3000,
+          "immediateBps": -1000
+        },
+        "rift_break": {
+          "gaugeBps": 15000,
+          "brokenDamageBps": 5000
+        },
+        "rift_ink": {
+          "smudgePerTurn": 1,
+          "perExhaustBps": 300
+        },
+        "rift_debt": {
+          "debtCapAdd": 2,
+          "debtDamageBps": 1500
+        },
+        "rift_bloom": {
+          "growthCapAdd": 2,
+          "growthBlock": 3
+        },
+        "rift_echo": {
+          "echoMaxAdd": 2,
+          "distinctChain": 3,
+          "apGain": 1
+        }
+      }
+    },
+    "daily": {
+      "source": "§11.1 계정 레벨 5 일일 임무, §11.11 일일 100점(5개 × 20), §11.13 선택형 100점 목표",
+      "unlock": 5,
+      "pointsCap": 100,
+      "goals": {
+        "d_login": {
+          "event": "login",
+          "n": 1
+        },
+        "d_stamina": {
+          "event": "staminaSpent",
+          "n": 120
+        },
+        "d_battle": {
+          "event": "battleWin",
+          "n": 3
+        },
+        "d_level": {
+          "event": "levelUp",
+          "n": 1
+        },
+        "d_affinity": {
+          "event": "affinity",
+          "n": 1
+        }
+      },
+      "activePolicy": "v0.8.1",
+      "targetPool": {
+        "source": "§11.13 콘텐츠 완료·집중 정산·교류 등 대체 행동으로 달성",
+        "status": "DECISION_PENDING",
+        "reason": "The selectable task list, its events, goals and points are not authored.",
+        "tasks": null
+      }
+    }
+  },
+  "approvedOverrides": {
+    "rWeaponRefine": {
+      "material": "refine_core",
+      "count": 1
+    },
+    "weeklyBossSingleExistingWave": true
+  },
+  "sourceProgressionSha256": "35664d5e76989d39045dcb7f45d69236055e37838e5b00b27d64cb6f6e091a53",
+  "sourceContentModesSha256": "e13f2d1f2bcbe8cd2247bfd1ded287b4eecd5c76bb326662bfe3489536f30c30"
+}

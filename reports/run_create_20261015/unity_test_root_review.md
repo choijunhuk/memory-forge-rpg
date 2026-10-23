@@ -1,0 +1,3 @@
+# Codex independent review of Claude R0 Play tests
+
+Source APPROVE: exact actual-JS legacy Sera level20/seed0 and v2 base-play/key-collision inputs and literal outputs were independently executed before authoring. Reviewed full seven-floor map, RNG/deck/key/stats/snapshot immutability and exact departure error cases. The selected fixture reuses the authored M0 starter/cost fixture and adds source zone1/basic ranged records; no Host loader/parser/restore or fake progression. Existing M0 change is exactly one visibility keyword, no value/assertion changes. Actual Unity execution remains pending separately. This is a selected typed runtime subset, not full-content import/game UI/full Run/server/device acceptance.

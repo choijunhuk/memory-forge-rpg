@@ -1,0 +1,14 @@
+{
+  "score": 94,
+  "verdict": "pass",
+  "category_match": true,
+  "differences": [
+    "Some facial muscle and hair-strand pixels vary; these are six separately generated portraits, not layered face-rig parts."
+  ],
+  "suggestions": [],
+  "reasoning": "All 36 portraits were inspected. Neutral, happy, annoyed, surprised, worried and determined expressions stay distinct and preserve each adult character.",
+  "next_actions": [
+    "Resize to exact 512x512.",
+    "Run final source/path/readiness checks."
+  ]
+}

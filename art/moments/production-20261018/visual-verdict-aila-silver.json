@@ -1,0 +1,57 @@
+[
+  {
+    "image": "aila/images/char_aila_moment_neutral_v02.png",
+    "score": 92,
+    "verdict": "pass",
+    "category_match": true,
+    "differences": [
+      "Minor generated cloth and ornament variation remains; no articulated in-between frames."
+    ],
+    "suggestions": [],
+    "reasoning": "Silver lantern and bells now match the brief while adult face, violet eyes, open-back robe and action are preserved."
+  },
+  {
+    "image": "aila/images/char_aila_moment_action1_v02.png",
+    "score": 92,
+    "verdict": "pass",
+    "category_match": true,
+    "differences": [
+      "Minor generated cloth and ornament variation remains; no articulated in-between frames."
+    ],
+    "suggestions": [],
+    "reasoning": "Silver lantern and bells now match the brief while adult face, violet eyes, open-back robe and action are preserved."
+  },
+  {
+    "image": "aila/images/char_aila_moment_action2_v02.png",
+    "score": 92,
+    "verdict": "pass",
+    "category_match": true,
+    "differences": [
+      "Minor generated cloth and ornament variation remains; no articulated in-between frames."
+    ],
+    "suggestions": [],
+    "reasoning": "Silver lantern and bells now match the brief while adult face, violet eyes, open-back robe and action are preserved."
+  },
+  {
+    "image": "aila/images/char_aila_moment_happy_v02.png",
+    "score": 92,
+    "verdict": "pass",
+    "category_match": true,
+    "differences": [
+      "Minor generated cloth and ornament variation remains; no articulated in-between frames."
+    ],
+    "suggestions": [],
+    "reasoning": "Silver lantern and bells now match the brief while adult face, violet eyes, open-back robe and action are preserved."
+  },
+  {
+    "image": "aila/images/char_aila_moment_soft_v02.png",
+    "score": 92,
+    "verdict": "pass",
+    "category_match": true,
+    "differences": [
+      "Minor generated cloth and ornament variation remains; no articulated in-between frames."
+    ],
+    "suggestions": [],
+    "reasoning": "Silver lantern and bells now match the brief while adult face, violet eyes, open-back robe and action are preserved."
+  }
+]

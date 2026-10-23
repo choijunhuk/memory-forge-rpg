@@ -1,0 +1,46 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"ActualPlayMode\":true,\"ShieldForecast\":{\"Error\":null,\"Mode\":\"now\",\"Cost\":1,\"Due\":null,\"Hidden\":false,\"EnemyHpLoss\":0,\"BlockDelta\":8,\"HpDelta\":0,\"Defeat\":false},\"ShieldPure\":true,\"ActualShieldBlock\":8,\"ActualShieldAP\":3,\"ActualShieldVersion\":2,\"HiddenForecast\":{\"Error\":null,\"Mode\":\"now\",\"Cost\":0,\"Due\":null,\"Hidden\":true,\"EnemyHpLoss\":0,\"BlockDelta\":0,\"HpDelta\":0,\"Defeat\":false},\"HiddenPure\":true},\"compiler\":\"codedom\"}}"
+    }
+  ],
+  "structuredContent": {
+    "success": true,
+    "message": "Code executed successfully.",
+    "data": {
+      "result": {
+        "ActualPlayMode": true,
+        "ShieldForecast": {
+          "Error": null,
+          "Mode": "now",
+          "Cost": 1,
+          "Due": null,
+          "Hidden": false,
+          "EnemyHpLoss": 0,
+          "BlockDelta": 8,
+          "HpDelta": 0,
+          "Defeat": false
+        },
+        "ShieldPure": true,
+        "ActualShieldBlock": 8,
+        "ActualShieldAP": 3,
+        "ActualShieldVersion": 2,
+        "HiddenForecast": {
+          "Error": null,
+          "Mode": "now",
+          "Cost": 0,
+          "Due": null,
+          "Hidden": true,
+          "EnemyHpLoss": 0,
+          "BlockDelta": 0,
+          "HpDelta": 0,
+          "Defeat": false
+        },
+        "HiddenPure": true
+      },
+      "compiler": "codedom"
+    }
+  },
+  "isError": false
+}

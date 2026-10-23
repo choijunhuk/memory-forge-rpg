@@ -1,0 +1,9 @@
+{
+  "name": "CandidateLateCorpusReplaysThroughMonoCore",
+  "fullName": "MemoryForge.Client.Tests.BattleLateActionsPlayModeTests.CandidateLateCorpusReplaysThroughMonoCore",
+  "state": "Passed",
+  "durationSeconds": 2.3927367,
+  "message": null,
+  "stackTrace": null,
+  "output": "BattleLateActionsPlayMode: 8459/8459 checks; 81 actual Battle.Create, 473 actual requests (445 committed, 2 replayed, 26 rejected), 554 compared checkpoints\n"
+}

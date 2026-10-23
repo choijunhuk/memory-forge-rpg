@@ -1,0 +1,617 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+[hidden]{display:none!important}body{margin:0}
+@page{size:A4;margin:14mm 12mm}
+@media print{
+  .wrap{max-width:none!important;padding:0!important}
+  .scroll{overflow:visible!important}
+  .t-plan,.t-verify,.t-dist{min-width:0!important}
+  .finding,.slot,.decisions li,tr,.fig,.verdicts li{break-inside:avoid}
+  h2,h3,h4{break-after:avoid}
+  section{padding-block:22px!important}
+  section,main,.wrap,.group,.chart,section>header{display:block!important}
+  section>*+*{margin-top:14px}
+  .group>*+*{margin-top:12px}
+  .scroll{overflow:visible!important;border:1px solid #d5dcd9}
+  table{table-layout:auto}
+  td code{white-space:nowrap}
+  .t-verify td:first-child,.t-plan td:first-child{min-width:7.5rem}
+  .tip,.toc,summary{display:none!important}
+  details{border-top:0!important;padding-top:0!important}
+  body,.slot,.scroll{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style></head><body>
+<title>기억 공방 프로젝트 점검</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: one reading column (about 48rem). Verdict first, numbers second, evidence after.
+   Wide tables scroll inside their own frame; the page body never scrolls sideways. */
+:root{
+  --bg:#f2f5f3;
+  --surface:#fbfcfb;
+  --ink:#172022;
+  --ink-2:#43504d;
+  --muted:#66736f;
+  --rule:#d5dcd9;
+  --accent:#17675f;
+  --accent-wash:#e2eeeb;
+  --good:#0ca30c;
+  --warn:#fab219;
+  --crit:#d03b3b;
+  --hold:#898781;
+  --good-text:#006300;
+  --crit-text:#b02a2a;
+  --font-display:"Hahmlet","Noto Serif KR","AppleMyungjo",serif;
+  --font-body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f1517; --surface:#151e21; --ink:#e4ebe8; --ink-2:#b5c2be; --muted:#8a9995;
+    --rule:#29353a; --accent:#62c1b4; --accent-wash:#16302d; --good-text:#3fbf3f; --crit-text:#ef7b7b;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f1517; --surface:#151e21; --ink:#e4ebe8; --ink-2:#b5c2be; --muted:#8a9995;
+  --rule:#29353a; --accent:#62c1b4; --accent-wash:#16302d; --good-text:#3fbf3f; --crit-text:#ef7b7b;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:var(--font-body); font-size:16px; line-height:1.75;
+  word-break:keep-all; overflow-wrap:break-word;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{
+  max-width:48rem; margin:0 auto;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));
+  padding-right:max(16px, env(safe-area-inset-right, 0px));
+  padding-block:44px 72px;
+  display:grid; gap:0;
+}
+a{color:var(--accent); text-underline-offset:3px}
+a:focus-visible,summary:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:3px}
+h1,h2{font-family:var(--font-display); text-wrap:balance; margin:0; letter-spacing:-0.01em}
+h1{font-size:clamp(2rem, 6.2vw, 2.85rem); font-weight:700; line-height:1.2}
+h2{font-size:1.5rem; font-weight:600; line-height:1.35}
+h3{font-size:1.0625rem; font-weight:600; line-height:1.5; margin:0; text-wrap:balance}
+p{margin:0}
+code{font-family:var(--font-mono); font-size:.86em; background:var(--accent-wash); padding:.05em .35em; border-radius:4px; overflow-wrap:anywhere; word-break:normal}
+.eyebrow{font-size:.8125rem; font-weight:600; letter-spacing:.06em; color:var(--accent)}
+.muted{color:var(--muted)}
+.small{font-size:.875rem; line-height:1.65}
+
+/* Header */
+header{display:grid; gap:18px; padding-bottom:36px}
+.lede{font-size:1.125rem; line-height:1.75; color:var(--ink-2); max-width:42rem}
+.meta{display:grid; grid-template-columns:auto 1fr; gap:6px 16px; margin:4px 0 0; font-size:.875rem; line-height:1.6}
+.meta dt{color:var(--muted); white-space:nowrap}
+.meta dd{margin:0; min-width:0}
+
+/* Sections */
+section{display:grid; gap:18px; padding-block:40px; border-top:1px solid var(--rule)}
+section > header{display:grid; gap:6px; padding:0}
+.toc{display:flex; flex-wrap:wrap; gap:8px 14px; font-size:.875rem}
+.toc a{text-decoration:none; border-bottom:1px solid var(--rule)}
+.toc a:hover{border-bottom-color:var(--accent)}
+
+/* Status chips: dot carries the color, the label carries the meaning */
+.chip{display:inline-flex; align-items:center; gap:6px; font-size:.75rem; font-weight:600; line-height:1.4;
+  padding:2px 9px 2px 8px; border:1px solid var(--rule); border-radius:999px; background:var(--surface); color:var(--ink); white-space:nowrap; vertical-align:2px}
+.chip::before{content:""; width:8px; height:8px; border-radius:50%; background:var(--c, var(--hold)); flex:none}
+.c-good{--c:var(--good)} .c-warn{--c:var(--warn)} .c-crit{--c:var(--crit)} .c-hold{--c:var(--hold)}
+
+/* Verdict list */
+.verdicts{list-style:none; margin:0; padding:0; display:grid; gap:14px}
+.verdicts li{display:grid; grid-template-columns:5.25rem 1fr; gap:4px 14px; align-items:start}
+.verdicts li > .chip{justify-self:start; margin-top:4px}
+.verdicts strong{font-weight:600}
+@media (max-width:520px){ .verdicts li{grid-template-columns:1fr} }
+
+/* Figures row */
+.figures{display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:0; border-top:1px solid var(--rule)}
+.fig{display:grid; gap:4px; align-content:start; padding:16px 14px 18px 0; border-bottom:1px solid var(--rule); min-width:0}
+.fig + .fig{padding-left:14px; border-left:1px solid var(--rule)}
+.fig:nth-child(3n+1){padding-left:0; border-left:0}
+.fig .label{font-size:.8125rem; color:var(--ink-2)}
+.fig .value{font-size:1.75rem; font-weight:600; line-height:1.25; letter-spacing:-0.01em}
+.fig .value small{font-size:.9rem; font-weight:500; color:var(--ink-2); letter-spacing:0}
+.fig .note{font-size:.8125rem; color:var(--muted); line-height:1.55}
+@media (max-width:640px){
+  .figures{grid-template-columns:repeat(2, minmax(0,1fr))}
+  .fig:nth-child(3n+1){padding-left:14px; border-left:1px solid var(--rule)}
+  .fig:nth-child(2n+1){padding-left:0; border-left:0}
+}
+
+/* Distribution chart */
+.chart{margin:0; display:grid; gap:14px; position:relative}
+.legend{display:flex; flex-wrap:wrap; gap:6px 16px; font-size:.8125rem; color:var(--ink-2)}
+.legend span{display:inline-flex; align-items:center; gap:6px}
+.legend i{display:inline-block; width:14px; height:10px; border-radius:2px; background:var(--c)}
+.rows{display:grid; gap:14px}
+.row{display:grid; grid-template-columns:12.5rem minmax(0,1fr) 3rem; gap:6px 14px; align-items:center}
+.row-label{display:grid; line-height:1.4; min-width:0}
+.row-label .dom{font-size:.9rem; font-weight:600}
+.row-label .ch{font-size:.75rem; color:var(--muted)}
+.track{display:flex; gap:2px; height:20px; min-width:0}
+.seg{flex-basis:0; min-width:0; height:100%; background:var(--c); display:flex; align-items:center; justify-content:center;
+  font-size:.75rem; font-weight:600; font-variant-numeric:tabular-nums; color:var(--on, #0b0b0b); cursor:default; transition:filter .12s}
+.seg:last-child{border-radius:0 4px 4px 0}
+.seg:hover,.seg:focus-visible{filter:brightness(1.12) saturate(1.05)}
+.seg:focus-visible{outline:2px solid var(--ink); outline-offset:1px; border-radius:2px}
+.seg[data-k="I"]{--c:var(--good)} .seg[data-k="P"]{--c:var(--warn)} .seg[data-k="N"]{--c:var(--crit); --on:#ffffff} .seg[data-k="D"]{--c:var(--hold)}
+.ratio{font-size:.875rem; font-weight:600; text-align:right; font-variant-numeric:tabular-nums}
+@media (max-width:600px){
+  .row{grid-template-columns:minmax(0,1fr) 3rem}
+  .row-label{grid-column:1 / -1}
+}
+.tip{position:absolute; pointer-events:none; z-index:2; background:var(--surface); color:var(--ink); border:1px solid var(--rule);
+  border-radius:6px; padding:8px 10px; font-size:.8125rem; line-height:1.45; box-shadow:0 6px 18px rgba(0,0,0,.12); max-width:16rem}
+.tip strong{display:block; font-size:.95rem; font-variant-numeric:tabular-nums}
+.tip .k{display:inline-block; width:12px; height:2px; background:var(--c); vertical-align:middle; margin-right:6px}
+details{border-top:1px solid var(--rule); padding-top:10px}
+summary{cursor:pointer; font-size:.875rem; color:var(--accent); font-weight:600}
+.source{font-size:.8125rem; color:var(--muted); line-height:1.6}
+
+/* Tables */
+.scroll{overflow-x:auto; -webkit-overflow-scrolling:touch; border:1px solid var(--rule); border-radius:6px; background:var(--surface)}
+table{border-collapse:collapse; width:100%; font-size:.875rem; line-height:1.6}
+th,td{text-align:left; vertical-align:top; padding:9px 12px; border-bottom:1px solid var(--rule)}
+tr:last-child td{border-bottom:0}
+th{font-size:.75rem; font-weight:600; color:var(--ink-2); letter-spacing:.03em; background:var(--bg); white-space:nowrap}
+td.num{font-variant-numeric:tabular-nums; white-space:nowrap}
+td .chip{margin-right:2px}
+.t-plan td:first-child{white-space:nowrap; font-weight:600}
+.t-plan{min-width:40rem}
+.t-verify{min-width:38rem}
+.t-dist{min-width:30rem}
+.t-dist td:not(:first-child),.t-dist th:not(:first-child){text-align:right}
+
+/* Findings */
+.group{display:grid; gap:14px}
+.group > h3{font-family:var(--font-display); font-size:1.125rem; font-weight:600}
+.finding{display:grid; gap:6px; padding:14px 0 16px; border-top:1px solid var(--rule)}
+.finding:first-of-type{border-top:0; padding-top:0}
+.finding .head{display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 10px}
+.finding .head h4{margin:0; font-size:1rem; font-weight:600; line-height:1.5; flex:1 1 18rem; min-width:0}
+.finding p{color:var(--ink-2)}
+.finding .ev{font-size:.8125rem; color:var(--muted); line-height:1.6}
+
+/* Decisions */
+.decisions{margin:0; padding:0; list-style:none; display:grid; gap:0; border-top:1px solid var(--rule)}
+.decisions li{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:4px 18px; padding:12px 0; border-bottom:1px solid var(--rule)}
+.decisions .q{font-weight:600}
+.decisions .blocks{font-size:.875rem; color:var(--ink-2)}
+.decisions .where{grid-column:1 / -1; font-size:.8125rem; color:var(--muted)}
+@media (max-width:600px){ .decisions li{grid-template-columns:1fr} }
+
+/* Reservation-style priorities: now / next turn / turn after next */
+.slots{display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:12px}
+.slot{display:grid; grid-template-rows:auto 1fr; gap:10px; background:var(--surface); border:1px solid var(--rule); border-radius:8px; padding:14px 14px 16px; min-width:0}
+.slot-head{display:flex; align-items:center; justify-content:space-between; gap:8px; padding-bottom:10px; border-bottom:1px solid var(--rule)}
+.slot-head b{font-family:var(--font-display); font-size:1.125rem; font-weight:700}
+.pips{display:inline-flex; gap:4px}
+.pips i{width:10px; height:10px; border-radius:2px; border:1.5px solid var(--accent)}
+.pips i.on{background:var(--accent)}
+.slot ol{margin:0; padding-left:1.15rem; display:grid; gap:10px; font-size:.9rem; line-height:1.65}
+.slot ol li::marker{color:var(--accent); font-weight:600}
+.slot .why{display:block; color:var(--muted); font-size:.8125rem}
+@media (max-width:760px){ .slots{grid-template-columns:1fr} }
+
+/* Scope */
+.cols{display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:18px}
+.cols ul{margin:0; padding-left:1.1rem; display:grid; gap:6px; font-size:.9rem}
+@media (max-width:600px){ .cols{grid-template-columns:1fr} }
+footer{padding-top:28px; border-top:1px solid var(--rule); font-size:.8125rem; color:var(--muted); display:grid; gap:8px}
+@media (prefers-reduced-motion: reduce){ .seg{transition:none} }
+</style>
+
+<div class="wrap">
+<header>
+  <p class="eyebrow">읽기 전용 점검 보고서 · 2026년 10월 16일 16:20 기준</p>
+  <h1>기억 공방 프로젝트 점검</h1>
+  <p class="lede">전투 규칙 엔진과 C# 이식은 오늘 다시 돌려도 전부 통과할 만큼 단단하다. 반면 사람이 직접 해 보고 재미를 확인한 기록은 아직 없고, 서버·계정 저장·후반 콘텐츠는 시작 전이거나 사용자 결정을 기다리며 멈춰 있다. 이번 주에는 화면 연출을 더 다듬기보다 사람 플레이 시험과 막힌 결정 몇 개를 먼저 푸는 쪽이 효과가 크다.</p>
+  <dl class="meta">
+    <dt>저장소</dt><dd><code>choijunhuk/memory-forge-rpg</code> (비공개) · 브랜치 <code>codex/late-actions-balance</code></dd>
+    <dt>기준 시점</dt><dd>커밋 <code>dec7688</code>(16:00, S4B 포함)까지. 시험 재실행은 그 직전 커밋 <code>d008eed</code> 기준</dd>
+    <dt>방법</dt><dd>문서·계획·코드·증거 기록을 읽고, 시험은 원본이 아닌 별도 복제본에서 다시 실행</dd>
+    <dt>원본 변경</dt><dd>없음. 이 보고서는 저장소 밖에서 작성했다.</dd>
+  </dl>
+  <nav class="toc" aria-label="목차">
+    <a href="#verdict">결론</a><a href="#numbers">숫자</a><a href="#dist">구현 분포</a><a href="#verify">재실행 검증</a><a href="#plan">계획 대비</a><a href="#findings">발견 사항</a><a href="#decide">결정 필요</a><a href="#next">권장 순서</a><a href="#scope">범위와 한계</a>
+  </nav>
+</header>
+
+<main style="display:grid">
+<section id="verdict" aria-labelledby="h-verdict">
+  <header><p class="eyebrow">1 · 결론</p><h2 id="h-verdict">한눈에 보는 결론</h2></header>
+  <ul class="verdicts">
+    <li><span class="chip c-good">강점</span><p><strong>규칙 코어는 믿을 만하다.</strong> JS 참조 엔진과 C# 공유 Core가 1,000개 탐사, 273,504개 명령을 끝까지 같은 상태로 재생한다. 오늘 별도 복제본에서 다시 돌려도 JS 333건과 C# 16개 결과 묶음이 모두 통과했다.</p></li>
+    <li><span class="chip c-crit">높음</span><p><strong>사람 플레이 시험 기록이 없다.</strong> 원래 계획의 첫 칸인 P0-1(10판, 예약·균열 이해 80%, 재플레이 의향 70%)이 비어 있다. 설계서가 첫 번째 위험으로 꼽은 ‘예약·균열 규칙이 초보자에게 어렵다’의 대응책 셋(온보딩, 버튼 미리보기, 이해도 측정) 가운데 미리보기만 만들어졌고, 그사이 이식과 화면 연출이 쌓이고 있다.</p></li>
+    <li><span class="chip c-crit">높음</span><p><strong>후반 콘텐츠는 저절로 풀리지 않는 잠금에 걸려 있다.</strong> 목표 미달 32개·21개는 단순 봇으로 잰 값이다. 원래 계획은 수치 조정을 AI에게 맡겼지만 이후 규칙은 원문 수치를 보존하라고 한다. 어느 쪽을 따를지 사용자가 정하기 전에는 구역 3~5와 4~6장을 열 수 없다.</p></li>
+    <li><span class="chip c-crit">높음</span><p><strong>서버가 멈춰 있다.</strong> C# 이식이 끝난 뒤 작업은 ‘Unity에서 결과가 보이게 하라’는 사용자 우선순위에 따라 Unity 원정 화면으로 갔고, 서버(P1-2)는 작업 지시가 하나도 없다. 원정 화면의 기억은 앱을 닫으면 사라지고, 수직 슬라이스 완료 조건인 ‘dev 서버와 연결해 한 판 완주’에는 닿을 수 없다. C# Core에도 저장 상태 복원과 원자적 탐사 명령이 없어 서버보다 먼저 손볼 곳이 있다.</p></li>
+    <li><span class="chip c-warn">중간</span><p><strong>속도에 비해 통합과 문서가 뒤처진다.</strong> 약 38시간 동안 32개 개발 커밋이 초안 PR 두 개에 쌓였고 main에는 최초 커밋 하나뿐이다. 현재 상태 문서는 띄어쓰기가 사라질 만큼 압축된 누적 로그가 됐고, 사용자 결정 항목은 여러 문서에 흩어져 있다.</p></li>
+  </ul>
+</section>
+
+<section id="numbers" aria-labelledby="h-numbers">
+  <header><p class="eyebrow">2 · 숫자</p><h2 id="h-numbers">숫자로 본 현재 상태</h2></header>
+  <div class="figures">
+    <div class="fig"><span class="label">구현으로 표시된 요구사항</span><span class="value">68 <small>/ 183절</small></span><span class="note">부분 84 · 미구현 23 · 결정 대기 6 · 진행 2. 구현의 다수는 JS 참조·문서 범위다.</span></div>
+    <div class="fig"><span class="label">C# 이식 재생 명령</span><span class="value">273,504</span><span class="note">JS 기록 1,000개 탐사를 C#이 끝까지 같은 상태로 재생</span></div>
+    <div class="fig"><span class="label">오늘 다시 돌린 검사</span><span class="value">9 <small>/ 11 통과</small></span><span class="note">실패 2건은 예정된 매니페스트 차이와, 재실행 환경에 PDF 라이브러리를 설치하지 않은 탓이다.</span></div>
+    <div class="fig"><span class="label">GitHub Actions 실행</span><span class="value">50 <small>/ 54 성공</small></span><span class="note">10월 15일 02:52부터 끝난 실행 기준. 실패 4건 뒤의 실행은 모두 성공했고, dec7688 실행은 점검 시점에 진행 중이었다.</span></div>
+    <div class="fig"><span class="label">밸런스 목표 미달 지표</span><span class="value">32 <small>· 21</small></span><span class="note">1,320회 · 5,280회 표본. 단순 봇 정책 기준이다.</span></div>
+    <div class="fig"><span class="label">main에 통합된 개발 커밋</span><span class="value">0 <small>/ 32</small></span><span class="note">약 38시간 동안의 커밋 전부가 초안 PR #1→#2 사슬에 있다.</span></div>
+  </div>
+</section>
+
+<section id="dist" aria-labelledby="h-dist">
+  <header><p class="eyebrow">3 · 구현 분포</p><h2 id="h-dist">요구사항 183절은 어디까지 왔나</h2>
+    <p class="muted small">설계서 0~23장의 모든 절을 추적하는 장부(<code>docs/IMPLEMENTATION_STATUS.md</code>)를 영역별로 묶어 셌다. 규칙 엔진 쪽은 대부분 채워졌고, 계정·서버·UI·서사처럼 제품을 이루는 층은 대부분 ‘부분’에 머문다.</p></header>
+  <figure class="chart" id="dist-chart">
+    <div class="legend" aria-hidden="true">
+      <span><i style="--c:var(--good)"></i>구현</span>
+      <span><i style="--c:var(--warn)"></i>부분 (진행 중 포함)</span>
+      <span><i style="--c:var(--crit)"></i>미구현</span>
+      <span><i style="--c:var(--hold)"></i>결정 대기</span>
+      <span class="muted">오른쪽 숫자 = 구현 비율</span>
+    </div>
+    <div class="rows" id="dist-rows" role="list"></div>
+    <div class="tip" id="dist-tip" hidden></div>
+    <details open>
+      <summary>표로 보기</summary>
+      <div class="scroll" style="margin-top:10px">
+        <table class="t-dist" id="dist-table">
+          <thead><tr><th>영역</th><th>구현</th><th>부분</th><th>미구현</th><th>결정 대기</th><th>합계</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </details>
+    <p class="source">장부의 ‘구현’은 장부가 적은 범위(JS 참조, 문서, 데이터, Unity 연습 등)에서의 구현이다. 제품 완성이나 서버·기기 수용을 뜻하지 않는다. 진행 중 2절(제작 계획 20장)은 ‘부분’에 넣었다.</p>
+  </figure>
+</section>
+
+<section id="verify" aria-labelledby="h-verify">
+  <header><p class="eyebrow">4 · 재실행 검증</p><h2 id="h-verify">오늘 다시 돌린 검사</h2>
+    <p class="muted small">작업 중인 원본을 건드리지 않도록 커밋 <code>d008eed</code>를 별도 폴더에 복제해 실행했다. 16:00 커밋 <code>dec7688</code>은 다시 돌리지 않았다. 일부 검사는 데이터·시험 벡터·경제 보고서 같은 추적 파일을 다시 쓰는데, 다시 쓴 결과가 모두 커밋본과 같아 실행 뒤 변경은 0개였다.</p></header>
+  <div class="scroll">
+    <table class="t-verify">
+      <thead><tr><th>검사</th><th>결과</th><th>시간</th><th>내용</th></tr></thead>
+      <tbody>
+        <tr><td>JS 규칙 엔진<br><code>npm test</code></td><td><span class="chip c-good">통과</span></td><td class="num">200초</td><td>333/333. 전투·탐사·기억 저장·트레이스 내보내기 회귀 포함</td></tr>
+        <tr><td>C# 공유 Core<br><code>CoreChecks</code></td><td><span class="chip c-good">통과</span></td><td class="num">71초</td><td>16개 결과 묶음 전부 통과, 중복 제외 505,565건. 1,000탐사·273,504명령 재생, 카드 질의 128,244건, 탐사 생성 215,677건 포함</td></tr>
+        <tr><td>무작위 탐사 퍼즈<br><code>fuzz_runs 100 short</code></td><td><span class="chip c-good">통과</span></td><td class="num">3초</td><td>100판 중 92클리어·8패배, 예상 밖 오류 0</td></tr>
+        <tr><td>데이터 재생성 재현</td><td><span class="chip c-good">통과</span></td><td class="num">1초 미만</td><td><code>content/</code>에서 다시 만든 <code>data/</code>가 커밋본과 바이트 단위로 같음</td></tr>
+        <tr><td>시험 벡터 재생성 재현</td><td><span class="chip c-good">통과</span></td><td class="num">1초 미만</td><td>RNG·모집·스탯 벡터가 커밋본과 같음</td></tr>
+        <tr><td>저장 v2 모듈<br><code>test:proposals</code></td><td><span class="chip c-good">통과</span></td><td class="num">1초 미만</td><td>14/14</td></tr>
+        <tr><td>Python 시험</td><td><span class="chip c-good">통과</span></td><td class="num">2초</td><td>57/57. 경제 검산, AI 실행기, 출고 파일 검사</td></tr>
+        <tr><td>설계 문서 보존<br><code>test:docs</code></td><td><span class="chip c-good">통과</span></td><td class="num">1초 미만</td><td>24개 장, 카드 173, 캐릭터 10, 프롬프트 50 보존 확인과 문서 계약 9건</td></tr>
+        <tr><td>경제 검산</td><td><span class="chip c-good">통과</span></td><td class="num">1초 미만</td><td>1명 완성 = 성장 던전 131회·집중 2,620 등 원문 수치 재현</td></tr>
+        <tr><td>인계 시험<br><code>test:handoff</code></td><td><span class="chip c-hold">환경 미비</span></td><td class="num">1초 미만</td><td>13건 중 10건 통과. PDF 검사 3건은 <code>tools/ai/requirements.txt</code>의 <code>pypdf</code>·<code>PyMuPDF</code>를 이번 재실행 환경에 설치하지 않아 확인하지 못했다. 코드 결함은 아니다. CI는 이 시험을 돌리지 않는다.</td></tr>
+        <tr><td>입력 매니페스트<br><code>verify:manifest</code></td><td><span class="chip c-warn">예정된 실패</span></td><td class="num">1초 미만</td><td>입력 423개 중 29개가 개발로 바뀌어 실패. 프로젝트가 ‘기존 차이 29개’로 따로 추적한다. README의 첫 검사 명령이 항상 실패하는 상태다.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="small">돌리지 않은 것: Unity PlayMode·EditMode(Codex가 Editor를 쓰는 중이라 건드리지 않음), 브라우저 UI 시험(Playwright 미설치), PostgreSQL 스키마 검사, OpenAPI 검증, 밸런스 프로브. Unity PlayMode 147/147(dec7688)은 Codex의 기록(<code>docs/CURRENT.md</code> S4B 절)이고 이번에 확인한 값이 아니다.</p>
+  <p class="small">GitHub Actions는 push 한 번에 push·pull_request 실행이 두 번 돌고, 한 번에 15~20분 걸린다. 마지막 실패는 10월 16일 09:05(KST)였고 다음 커밋부터 다시 통과했다. CI는 Unity 시험과 <code>test:handoff</code>를 돌리지 않는다.</p>
+</section>
+
+<section id="plan" aria-labelledby="h-plan">
+  <header><p class="eyebrow">5 · 계획 대비</p><h2 id="h-plan">원래 제작 계획과 실제 진행</h2>
+    <p class="muted small">설계서 20장(§20.8)의 원래 단계표를 기준으로 현재 상태를 맞춰 봤다. ‘P0 저장’ 행만 §20.3 기준이다.</p></header>
+  <div class="scroll">
+    <table class="t-plan">
+      <thead><tr><th>단계</th><th>원래 산출물</th><th>상태</th><th>현재</th></tr></thead>
+      <tbody>
+        <tr><td>P0-1</td><td>사람 플레이 10판 이상, 설문(예약·균열 이해 80%, 재플레이 70%)</td><td><span class="chip c-crit">미실행</span></td><td>자동 봇 측정만 있다.</td></tr>
+        <tr><td>P0-2</td><td>카드·적 수치 조정, 결정 기록</td><td><span class="chip c-hold">결정 대기</span></td><td>엔진 결함 5개는 고쳤다. 수치는 보존 원칙 때문에 손대지 않아 목표 미달 32개가 그대로다.</td></tr>
+        <tr><td>P0 저장</td><td>보존형 기억 저장 v2를 실제 흐름에 연결</td><td><span class="chip c-good">완료</span></td><td>JS 탐사와 HTML에 연결. 서버·계정은 별도.</td></tr>
+        <tr><td>P1-1</td><td>C# 전투·탐사·기억 저장 이식, JS 1,000시나리오 해시 일치</td><td><span class="chip c-good">완료</span></td><td>현행 참조 기준 1,000/1,000 완주 일치. 중도 탐사 복원 등 일부 경계는 남음.</td></tr>
+        <tr><td>P1-2</td><td>ASP.NET 서버 골격: 인증·계정·모집·탐사·기억 저장, 동시성·멱등 시험</td><td><span class="chip c-crit">미착수</span></td><td>스키마·API 계약·SQL 제약 시험만 있고 애플리케이션 코드는 없다.</td></tr>
+        <tr><td>P2-1</td><td>구역 3~5 일반·엘리트 20종과 보스 3종, 새 행동 6종, 4~6장 활성화</td><td><span class="chip c-warn">부분</span></td><td>새 행동 6종은 JS·C# 모두 구현. 적 23종은 시험 후보로만 있고 밸런스 미달로 잠김.</td></tr>
+        <tr><td>P2-3</td><td>고난도 규칙: 기록 균열 연전, 성장 던전 웨이브</td><td><span class="chip c-crit">미착수</span></td><td>데이터만 있고 진행기가 없다.</td></tr>
+        <tr><td>P2-2</td><td>1부 대본, 인연 에피소드 40편, 이벤트 2편, 대사 600줄</td><td><span class="chip c-crit">미착수</span></td><td>4~6장 대본 초안만 있다. 원래 Claude 담당.</td></tr>
+        <tr><td>P3-1</td><td>Unity 수직 슬라이스: 로비→편성→지도→전투→보상→저장, 서버 연동, 48dp·60fps</td><td><span class="chip c-warn">부분</span></td><td>지도→전투→보상→기억 선택→다음 출발은 로컬 연습판으로 동작. 로비·편성·서버·기기 성능은 없음.</td></tr>
+        <tr><td>P3-2</td><td>Unity 전체 화면: 모집·캐릭터·무기·도감·임무·우편·상점·설정</td><td><span class="chip c-crit">미착수</span></td><td>HTML 시제품에만 일부 있다.</td></tr>
+        <tr><td>P4</td><td>아트·사운드 전체, Spine 리그</td><td><span class="chip c-crit">미착수</span></td><td>캐릭터 브리프와 프롬프트 50개만 있다.</td></tr>
+        <tr><td>P5</td><td>임무·패스·월정액·결제 검증·운영 도구·텔레메트리</td><td><span class="chip c-crit">미착수</span></td><td>상품 데이터와 API 계약만 있다.</td></tr>
+        <tr><td>P6</td><td>비공개 테스트, 등급·확률 고지, 성능·안정성</td><td><span class="chip c-crit">미착수</span></td><td>체크리스트만 있다.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="group">
+    <p>계획서가 정한 실행 순서는 ‘저장 연결 → 후반 행동·C# 이식 → 서버·Unity’다(§20.7 아래 주석). Codex 작업 순서도 C# 다음을 서버로 적는다(<code>docs/AI_WORKFLOW.md:77</code>). 앞의 두 칸은 그대로 지켰다. 그다음은 ‘개발 결과가 Unity에서 보이지 않는다’는 사용자 우선순위에 따라 Unity로 갔다(<code>ops/ai/tasks/P1-UNITY-COMBAT-CONTENT-EXPORT.md</code>). 서버를 언제 다시 잡을지는 어디에도 적혀 있지 않다. 10월 16일 06시 이후 추가된 작업 지시 49개 가운데 약 4분의 3이 Unity 원정 화면, 카드 흐름, 예측 표시에 관한 것이고 서버 지시는 0개다.</p>
+    <p>최근 다섯 단위(S1~S4B: 턴 잠금, 오류 뒤 차단, 선택창 가드, 연출 배속, 미전송 사용 대기)는 사용자가 준 카드 흐름 참고 자료를 따른 작업이라 방향 자체는 요청과 맞다. 다만 그 요청도 서버 응답을 전제하고 있어서, 서버가 생기면 이 입력·연출 흐름을 다시 맞춰야 할 가능성이 높다(판단). 원래 Claude 몫이던 4~6장 서사와 아트 요청은 Claude를 구현에 우선 배정한 뒤로 산출물이 없다. <code>art/requests/</code>에는 README만, <code>art/provenance.csv</code>에는 머리글만 있다.</p>
+  </div>
+</section>
+
+<section id="findings" aria-labelledby="h-findings">
+  <header><p class="eyebrow">6 · 발견 사항</p><h2 id="h-findings">주요 발견 사항</h2>
+    <p class="muted small">심각도는 ‘지금 손대지 않으면 이후 작업이 얼마나 막히거나 다시 해야 하는가’로 매겼다.</p></header>
+  <div class="group">
+    <h3>제품과 방향</h3>
+    <article class="finding">
+      <div class="head"><h4>사람 플레이 시험 기록이 없다</h4><span class="chip c-crit">높음</span></div>
+      <p>계획 §20.8의 첫 단계 P0-1(사람 플레이 10판 이상, 예약·균열 이해 80%, ‘다시 하고 싶다’ 70%)을 실행한 기록이 없다. 사용자가 macOS 빌드에서 지도 칸을 눌러 전투로 넘어가는 것을 확인한 기록은 있지만, 그것은 입력 확인이지 플레이 시험이 아니다. 밸런스는 random·greedy·planner 세 봇으로만 쟀고, 감사 보고서 스스로 이 봇들이 최적 플레이어가 아니라고 적는다.</p>
+      <p>설계서 §22.2가 꼽은 첫 번째 위험은 ‘예약·균열 규칙이 초보자에게 어렵다’이고, 대응책은 온보딩 4단계, 버튼 미리보기, P0-1 이해도 측정 셋이다. 미리보기는 만들었지만 온보딩과 이해도 측정은 아직 없다.</p>
+      <p>HTML 시제품은 지금도 탐사 편성부터 기억 저장까지 한 판을 돌릴 수 있다(설계서 §1.5). 시험 비용은 낮고, 결과에 따라 이식·화면 작업의 방향이 바뀔 수 있다.</p>
+      <p class="ev">근거: <code>docs/source_v0.8.1/20_chapter.md</code> §20.8, <code>docs/source_v0.8.1/22_chapter.md</code> §22.2, <code>reports/balance_audit_20261015/README.md</code> ‘측정 조건과 해석의 경계’, <code>docs/IMPLEMENTATION_STATUS.md</code> ‘결정 대기와 실행 목표의 구분’</p>
+    </article>
+    <article class="finding">
+      <div class="head"><h4>후반 콘텐츠 잠금은 규칙끼리 부딪혀서 생겼다</h4><span class="chip c-crit">높음</span></div>
+      <p>구역 3~5의 적 23종은 시험 후보로만 있고, 동일 조건 측정 1,320회에서 목표 이탈 32개(상한 초과 27, 하한 미만 5), 5,280회에서 21개가 남았다. 엔진 결함 5개를 고쳐도 승패와 턴 수는 하나도 바뀌지 않았다. 후보 조우 6개는 설계서 §10.3의 HP 예산 자체를 벗어난다.</p>
+      <p>원래 계획(§20.8 P0-2)은 카드·적 수치 조정을 Claude와 Codex에 맡겼다. 그런데 10월 15일 지시(<code>AGENTS.md:39</code>, <code>CLAUDE.md:21</code>)는 기존 수치를 보존하라고 한다. 그래서 AI는 측정과 기록만 되풀이하고, 이 상태는 결정 항목으로도 등록돼 있지 않다.</p>
+      <p class="ev">근거: <code>reports/balance_audit_20261015/README.md</code>, <code>reports/balance_audit_20261015/metrics.md</code>, <code>docs/decisions_v0.8.1.md</code> BALANCE-081-17·22</p>
+    </article>
+    <article class="finding">
+      <div class="head"><h4>서버 없이 Unity 화면만 앞서 나간다</h4><span class="chip c-crit">높음</span></div>
+      <p>서버는 스키마, API 계약, SQL 제약 시험만 있고 애플리케이션 코드가 없다. 설계서 17장 다섯 절 가운데 트랜잭션(§17.2)과 저장 v2 접합(§17.5)은 미구현이고, 나머지 셋은 스키마·계약 수준의 부분 구현이다. 서버 작업 지시는 0개다. Unity를 먼저 보이게 한 것은 사용자 요청이었지만, 서버를 언제 다시 잡을지는 정해지지 않았다. Unity 원정 화면은 지도→전투→보상→기억 선택→다음 출발까지 동작하지만, 기억은 앱을 닫으면 사라지고 중도 복원도 없다.</p>
+      <p>수직 슬라이스(P3-1)의 완료 조건은 ‘dev 서버와 연결해 짧은 탐사 1판 완주와 기억 저장’이다. 지금 구조로는 이 조건에 닿을 수 없어서, Unity 쪽 작업을 아무리 더해도 이 단계는 끝나지 않는다.</p>
+      <p class="ev">근거: <code>docs/source_v0.8.1/20_chapter.md</code> §20.9 P1-2·P3-1, <code>docs/CURRENT.md</code> ‘실제 Unity 탐사 화면’ 절, <code>docs/IMPLEMENTATION_STATUS.md</code> 17장</p>
+    </article>
+    <article class="finding">
+      <div class="head"><h4>Claude 몫의 콘텐츠 작업이 비어 있다</h4><span class="chip c-warn">중간</span></div>
+      <p>운영 규칙상 Claude의 순서는 캐릭터 시트·아트 브리프 → 저장 UI → 이미지 요청 → 4~6장 서사 → Unity UI다(<code>docs/AI_WORKFLOW.md:79</code>). 10월 15일 사용량 배분으로 Claude를 구현에 우선 배정한 뒤 이 줄은 멈췄다. 4~6장은 대본 초안만 있고(장부 §4.4·§4.7), 이미지 요청과 아트 출처 기록은 비어 있다. 4~6장 서사는 후반 활성화의 완료 조건 중 하나다.</p>
+      <p class="ev">근거: <code>docs/IMPLEMENTATION_STATUS.md</code> §4.4·§4.7, <code>art/requests/</code>, <code>art/provenance.csv</code>, <code>docs/AI_WORKFLOW.md</code> §11</p>
+    </article>
+  </div>
+
+  <div class="group">
+    <h3>기술과 코드</h3>
+    <article class="finding">
+      <div class="head"><h4>JS 기준과 C# 이식을 맞추는 체계가 단단하다</h4><span class="chip c-good">강점</span></div>
+      <p>JS 엔진을 기준으로 삼고, 생성기 14개가 그 동작을 시험 자료로 고정하며, C# Core가 그 자료를 다시 실행해 정규화한 상태의 SHA-256을 비교한다. 오늘 복제본 실행에서 데이터 파일과 RNG·모집 벡터를 다시 만들어도 커밋본과 바이트 단위로 같았고, 큰 시험 자료는 시험 안에서 다시 계산해 커밋본과 대조했다. 알 수 없는 콘텐츠를 만나면 Core가 조용히 넘어가지 않고 오류로 멈춘다.</p>
+      <p class="ev">근거: <code>tools/gen_battle_turn_vectors.mjs:24-31</code>, <code>core/MemoryForge.CoreChecks/RunProgressionChecks.cs</code>, 4절 재실행 결과</p>
+    </article>
+    <article class="finding">
+      <div class="head"><h4>C# Core에 서버가 쓸 기능이 아직 없다</h4><span class="chip c-crit">높음</span></div>
+      <p>서버는 요청마다 저장된 상태를 불러와 명령을 적용해야 하는데, Core에는 저장 상태를 되살리는 입구가 없다(<code>Battle.cs:22</code> ‘restoration is not exposed’). 같은 요청의 재전송을 판별하는 전투 영수증은 저장 상태 밖의 메모리에만 있어서(<code>rules-core.js:247</code>), 복원 뒤 재시도는 저장된 응답 대신 버전 충돌을 받는다. 탐사 명령은 실패해도 일부 변경이 남을 수 있는데, API 계약은 ‘원자적, 실패 시 변화 없음’을 약속한다(<code>server/openapi.yaml:248</code>). Unity의 S2 오류 차단은 이 차이를 화면에서 막는 우회책이다.</p>
+      <p>API의 기억 저장 요청도 아직 예전 방식(카드 순번 선택)이라 저장 v2의 변화 ID·버전 방식과 맞지 않는다(<code>openapi.yaml:259-276</code>). 서버를 시작하려면 복원, 영수증 보존, 탐사 명령의 원자화를 Core에 먼저 넣어야 한다.</p>
+      <p class="ev">근거: <code>core/MemoryForge.Core/Battle.cs</code>, <code>core/MemoryForge.Core/Run.cs</code>, <code>engine/rules-core.js</code>, <code>server/openapi.yaml</code></p>
+    </article>
+    <article class="finding">
+      <div class="head"><h4>고른 카드 대신 다른 카드에 효과가 들어갈 수 있다</h4><span class="chip c-warn">중간</span></div>
+      <p>효과가 카드를 고르게 할 때, Core는 조건에 맞지 않는 선택을 버리고 자동으로 다른 카드를 고른다(<code>rules-core.js:1438-1450</code>, C# <code>Battle.PlayerActions.cs</code>). 그런데 HTML과 Unity의 후보 목록은 효과별 조건(성장 3 미만, 비용 0 초과, 저주 아님, 같은 부품 미부착)을 걸러 내지 않는다. 그래서 플레이어가 고를 수 있게 보인 카드가 실제로는 무시되고, 오류 없이 다른 카드에 효과가 적용될 수 있다.</p>
+      <p>팀도 이 경계를 알고 후속 작업으로 적어 두었고(<code>ops/ai/tasks/P1-EFFECT-CANDIDATE-FOLLOWUP.md</code>), 16:18 현재 이 일을 Claude(Opus xhigh)에 배정하는 새 작업 지시가 생겼다(<code>P1-CARD-FLOW-EFFECT-CANDIDATES.md</code>, 미커밋). 화면 후보를 Core의 실제 조건에 맞추는 범위라 크지 않은 작업이다.</p>
+      <p class="ev">근거: <code>engine/rules-core.js:1319·1372·1377</code>, <code>core/MemoryForge.Core/Battle.Effects.cs</code>, <code>prototype/src/ui.js</code></p>
+    </article>
+    <article class="finding">
+      <div class="head"><h4>엔진을 조금만 고쳐도 시험 자료 약 20MB가 다시 써진다</h4><span class="chip c-warn">중간</span></div>
+      <p>시험 자료마다 엔진·데이터·생성기 파일의 정확한 바이트 해시를 기록한다. 주석 한 줄만 바꿔도 해시가 달라져 압축 자료 전체를 다시 만들어야 한다. 커밋 <code>8d17999</code>은 트레이스 12.7MB, 탐사 생성 자료 5.5MB, 행동 자료 1.5MB, 턴 자료 0.6MB를 다시 썼는데, 뒤의 셋은 크기가 그대로이고 기록된 해시만 바뀌었다. 저장소 이력은 33커밋 만에 96MB다. 압축 자료는 리뷰에서 차이를 볼 수도 없다.</p>
+      <p>JS 엔진이 머리말의 ‘정수 계산’과 달리 일부 부동소수 계산을 써서(<code>rules-core.js:209</code>), C# 쪽은 BigInteger 반올림과 JS 숫자 표기까지 흉내 내야 한다. 이 구조가 이식 코드를 복잡하게 만드는 원인 중 하나다.</p>
+      <p class="ev">근거: <code>tools/gen_battle_turn_vectors.mjs:24-31</code>, <code>git show --stat 8d17999</code>, <code>core/MemoryForge.Core/Battle.cs:340-353</code></p>
+    </article>
+    <article class="finding">
+      <div class="head"><h4>Unity 원정 화면 한 클래스에 규칙과 상태가 모인다</h4><span class="chip c-warn">중간</span></div>
+      <p><code>MemoryForgeExpeditionClient.cs</code>는 지금 2,027줄짜리 클래스 하나다. 입력 잠금 판정 다섯 종류(<code>Blocked</code>·<code>Locked</code>·<code>Held</code>·<code>Waiting</code>·<code>Barred</code>), 효과 후보 계산, 타이머, 세션 기억 저장소, 격리 처리가 한 파일에 있다. 카드 흐름 단위가 하나 늘 때마다 잠금 조건이 하나씩 붙었다. <code>Render()</code>는 호출될 때마다 기존 화면을 지우고 Canvas를 새로 만들며, 버튼 위치는 1600×900 기준 좌표로 직접 적는다. S4B의 버튼 겹침 결함도 이 좌표가 겹쳐서 생겼다.</p>
+      <p>전투 연습 화면과 원정 화면은 UI 도우미 함수를 서로 복사했고, 복사본이 이미 갈라졌다(낡은 클릭 방지는 원정 쪽에만 있음). 적 피해 공식은 JS·C# Core·Unity 전투 화면 세 곳에, 오류 문구도 세 곳에 따로 있다. 제품 UI를 만들 때 이 구조를 그대로 쓰기는 어렵다(판단).</p>
+      <p class="ev">근거: <code>client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:1110</code>, <code>MemoryForgeBattleClient.cs:387-393</code>, 커밋 <code>dec7688</code> 기준</p>
+    </article>
+    <article class="finding">
+      <div class="head"><h4>Unity와 Android는 자동 검사 밖에 있다</h4><span class="chip c-warn">중간</span></div>
+      <p>CI는 Unity를 돌리지 않는다. PlayMode 시험 147개는 사용자 Mac 한 대의 Editor에서 MCP로만 실행되고, 화면 잠금만으로도 검증이 멈춘 적이 있다. Android 설정은 Mono·ARMv7 단일 구성(<code>ProjectSettings.asset:265·581</code>)이라, 설계가 정한 IL2CPP·ARM64와 다르고 Google Play의 64비트 요구도 채우지 못한다. 게임 코드가 쓰는 Newtonsoft JSON은 편집기 도구인 Unity MCP 패키지를 통해서만 들어오므로(<code>packages-lock.json</code>), 그 도구를 빼면 게임 빌드가 깨진다.</p>
+      <p class="ev">근거: <code>.github/workflows/ci.yml</code>, <code>client/MemoryForgeUnity/Packages/packages-lock.json</code>, <code>Assets/Scripts/MemoryForge.Client.asmdef</code></p>
+    </article>
+    <article class="finding">
+      <div class="head"><h4>검사·저장소 위생의 작은 구멍들</h4><span class="chip c-hold">낮음</span></div>
+      <p><code>verify:manifest</code>는 개발 이후 항상 실패한다. CI 시험 일부가 날짜가 붙은 증거 폴더(<code>reports/run_memory_core_20261016/</code> 등)의 생성기를 불러온다. <code>tools/run_all_checks.sh</code>는 추적 중인 보고서 파일을 덮어쓴다. 무시 규칙에 걸리는데도 추적되는 파일이 56개, <code>/Users/choi</code> 경로가 들어간 추적 파일이 200개다. <code>package-lock.json</code>이 없고 Actions가 커밋 해시로 고정되지 않았으며, <code>ci.yml</code> 첫 줄은 아직 ‘GitHub에서 돌지 않음’이라고 적혀 있다.</p>
+      <p class="ev">근거: <code>engine/tests/unity_run_reference.test.mjs:4</code>, <code>git ls-files -ci --exclude-standard</code>, <code>git grep -l /Users/choi</code></p>
+    </article>
+  </div>
+
+  <div class="group">
+    <h3>작업 방식과 저장소</h3>
+    <article class="finding">
+      <div class="head"><h4>main에 아무것도 통합되지 않았다</h4><span class="chip c-warn">중간</span></div>
+      <p>main은 최초 가져오기 커밋 하나뿐이다. 개발 32커밋은 초안 PR #1(<code>codex/storage-v2</code>) 위에 쌓인 초안 PR #2(<code>codex/late-actions-balance</code>)에 있다. PR #2 하나가 1,532개 파일, 약 39만 줄 추가라서 사람이 리뷰할 수 있는 크기가 아니다. 계획 §20.10은 작업마다 브랜치·PR·CI를 요구했다. 안정된 기준선이 없으면 회귀 비교와 되돌리기가 어렵다.</p>
+      <p class="ev">근거: <code>git rev-list --count main</code> = 1, <code>gh pr view 1·2</code>, <code>docs/source_v0.8.1/20_chapter.md</code> §20.10</p>
+    </article>
+    <article class="finding">
+      <div class="head"><h4>현재 상태 문서가 읽을 수 없는 로그가 됐다</h4><span class="chip c-warn">중간</span></div>
+      <p><code>docs/CURRENT.md</code>는 40KB, 28개 절로 계속 늘어나는 기록이다. 띄어쓰기 하나당 한글 음절 수가 앞부분 2.2~3.2에서 S3 절 17.1, S4A 절 19.2로 올랐다. 보통 한국어 문장은 3 안팎이다. 예: “새8검사와기존127을합친실제전체Play135/135·skip0을확인했다”.</p>
+      <p>머리말(15행)은 HTML 저장이 legacy라고 하고 본문(19행)은 v2를 쓴다고 한다. <code>README.md</code>, <code>AGENTS.md</code> 8번, <code>data/design_policy_v0.8.json</code>도 저장 v2가 미연결이라고 적는다. 일부 낡은 문구는 인계 시험이 그대로 남아 있기를 요구한다(7절). 처음 읽는 사람과 새 에이전트가 서로 다른 말을 듣게 된다.</p>
+      <p class="ev">근거: <code>docs/CURRENT.md:15</code>·<code>:19</code>, <code>AGENTS.md:25</code>, <code>tools/ai/test_handoff.py</code></p>
+    </article>
+    <article class="finding">
+      <div class="head"><h4>교차 검토는 결함을 잡지만 단위가 너무 잘다</h4><span class="chip c-warn">중간</span></div>
+      <p>작업 지시 119개 중 60개(50%)가 이름부터 리뷰·재확인·수정·마무리 작업이다. 검토는 실제로 효과가 있었다. 소멸 중 허위 승리(A1), 배열 이관 오류 순서(M0), Unity Mono 숫자 직렬화 불일치(R1c), 새출발 예외의 잠금 해제(S2)를 잡았고, 오늘 S4B 최종 검토는 ‘확정’과 ‘대기 취소’ 버튼이 같은 자리에 그려져 두 번 누르면 취소한 카드가 다시 사용되는 결함을 찾았고, 이 결함은 16:00 커밋에서 고쳐졌다.</p>
+      <p>반면 한 줄짜리 nullable 선언 분리까지 Max 검토에 넣는다. Claude는 셸·Unity 실행 권한 없이 코드만 쓰고, 시험·Editor 쓰기·통합은 Codex 혼자 맡는다. Codex 사용량을 아끼려던 배분이 결과적으로 Codex에 실행 부담을 모은다.</p>
+      <p class="ev">근거: <code>ops/ai/tasks/</code> 파일명 집계, <code>ops/ai/tasks/P1-CARD-FLOW-FINAL-REVIEW.result.json</code>, <code>docs/AI_ENVIRONMENT.md</code></p>
+    </article>
+    <article class="finding">
+      <div class="head"><h4>증거 기록이 저장소를 채우고 있다</h4><span class="chip c-hold">낮음</span></div>
+      <p>추적 파일 1,954개 중 1,178개(60%)가 <code>reports/</code>이고 디스크 기준 38MB다. <code>.git</code>은 96MB다. 결과 기록 101개 중 67개는 ‘받았으나 미검증(RECEIVED_UNVERIFIED)’ 상태로 남아 있다. 로컬 전용 기록 <code>ops/ai/local/</code>은 3.2GB다. worktree 5개(약 257MB)의 브랜치는 모두 현재 브랜치에 병합됐고, 그중 하나는 Claude 리뷰 작업 공간으로 계속 쓰인다. 지금 당장 기능을 해치지는 않지만 지금 속도라면 금방 커진다.</p>
+      <p class="ev">근거: <code>git ls-files reports | wc -l</code>, <code>du -sh</code>, <code>git worktree list</code></p>
+    </article>
+  </div>
+</section>
+
+<section id="decide" aria-labelledby="h-decide">
+  <header><p class="eyebrow">7 · 결정 필요</p><h2 id="h-decide">사용자가 정해야 하는 것</h2>
+    <p class="muted small">작업 규칙상 AI는 가격·확률·재화·나이·원문 수치·정책을 스스로 바꾸지 않는다. 아래 항목은 사용자가 정하기 전까지 계속 보류된다.</p></header>
+  <p class="small">지금 결정 항목은 설계서 22.1절, <code>docs/decisions.md</code>, <code>docs/decisions_v0.8.1.md</code>, <code>review/DECISIONS_PROPOSED.md</code>, 요구사항 장부의 ‘결정 대기’ 행, CURRENT.md 본문 등에 흩어져 있고, 무엇을 막는지 함께 적은 표는 없다. 아래는 그 내용을 한곳에 모은 것이다.</p>
+  <h3>먼저 정할 것</h3>
+  <ul class="decisions">
+    <li><span class="q">후반 구역 밸런스를 어떻게 판정할지</span><span class="blocks">AI에게 후보 23종 수치 조정을 맡길지(범위와 결정 기록 조건을 붙여), 목표 범위를 다시 볼지, 사람 시험 뒤로 미룰지. 후보 조우 6개의 HP 예산 충돌도 함께. <b>막는 것:</b> 구역 3~5, 4~6장 활성화</span><span class="where">계획 §20.8 P0-2는 조정을 Claude·Codex에 맡겼고, <code>AGENTS.md</code>·<code>CLAUDE.md</code>는 수치 보존을 요구한다. 근거: <code>reports/balance_audit_20261015/README.md</code>, <code>docs/decisions_v0.8.1.md</code> BALANCE-081-22. 지금은 결정 항목으로 등록돼 있지 않다.</span></li>
+    <li><span class="q">사람 플레이 시험(P0-1) 실행</span><span class="blocks">결정이라기보다 사용자(디렉터) 몫의 행동이다. <b>막는 것:</b> 수치 조정(P0-2), 모집 체감 조정(ADR-083은 ‘P0-1 후 결정’), 난이도·온보딩 판단</span><span class="where">설계서 §20.8, <code>docs/decisions.md</code> ADR-083</span></li>
+    <li><span class="q">성인 캐릭터 나이 대안 채택 여부</span><span class="blocks">현재 나이를 유지할지, 대안 구성을 쓸지. <b>막는 것:</b> 아트 시트 착수(나중에 바꾸면 다시 그려야 함), 등급 검토</span><span class="where">설계서 §9.5·§22.1, <code>review/DECISIONS_PROPOSED.md</code> AUD-111, <code>proposals/roster_age_option.json</code></span></li>
+    <li><span class="q">무료 기억 용량 6+1+2 전환</span><span class="blocks">목표 정책을 언제 켤지. 장부는 ‘미구현 목표’, AUD-107은 ‘제안·미적용’, 22.1절은 ‘미결정’으로 서로 다르게 적는다. <b>막는 것:</b> §8.13 구현과 저장 이관, 중복 획득의 가치</span><span class="where"><code>data/design_policy_v0.8.json</code>, 설계서 §8.13·§11.14</span></li>
+    <li><span class="q">기록 균열 팀 수와 본편 결말 분리</span><span class="blocks">초기 층 1팀안과 ADR-084의 층마다 2파티안 중 무엇을 쓸지, 본편 인장 6개·인연 20조각 분리를 확정할지. <b>막는 것:</b> 고난도 진행기(P2-3), 4~6장 서사·보상</span><span class="where"><code>docs/decisions.md</code> ADR-084, AUD-108·AUD-109, 설계서 §4.6·§11.7</span></li>
+    <li><span class="q">낡은 문구를 고정하는 시험을 고쳐도 되는지</span><span class="blocks"><code>tools/ai/test_handoff.py</code>는 CURRENT.md에 ‘구현된 것이 아니다’ 같은 문구가, <code>ops/ai/policy.json</code>에 <code>actual_cli_call_verified=false</code>가 남아 있기를 요구한다. 이 시험은 개발 중 두 번 고쳐진 적이 있지만, 낡은 문구를 지우려면 기대값을 바꾸는 셈이라 ‘시험을 결과에 맞춰 고치지 말라’는 규칙과 부딪힌다(판단). 허용 범위를 정해 두면 문서 정리가 쉬워진다. <b>막는 것:</b> 문서 정리</span><span class="where"><code>tools/ai/test_handoff.py</code></span></li>
+    <li><span class="q">다음 우선순위와 통합 방식</span><span class="blocks">카드 흐름 참고 자료의 남은 항목을 계속할지, 서버(P1-2)를 먼저 할지. 초안 PR #1을 main에 합칠지, PR #2(1,532개 파일)를 나눌지. <b>막는 것:</b> 서버·영구 저장 착수, 안정 기준선</span><span class="where">카드 흐름 작업(S1~S4B)은 사용자가 준 참고 자료 <code>references/card-flow-study-20261016/</code>의 우선 반영 목록을 따른 것이다. 그 요청도 ‘복귀 시 서버의 공개 상태로 화면을 다시 구성’하라고 해서 서버를 전제한다.</span></li>
+  </ul>
+  <details open>
+    <summary>나중에 정해도 되는 것 9개</summary>
+    <ul class="decisions" style="margin-top:10px">
+      <li><span class="q">모집 체감 조정(ADR-083)</span><span class="blocks">수급 상향, 픽업 55%, 누적 보정 중 선택. P0-1 뒤로 예정돼 있다.</span><span class="where"><code>docs/decisions.md</code>, 설계서 §12.6</span></li>
+      <li><span class="q">업적 120개 목록·조건·보상 원장</span><span class="blocks">업적 시스템과 보상 원장</span><span class="where">설계서 §11.15·§23.8</span></li>
+      <li><span class="q">패스 1~50레벨 보상표, 월정액·패스 예외</span><span class="blocks">미접속·미수령·업그레이드 차액. 상품(P5)</span><span class="where">설계서 §12.11·§12.12</span></li>
+      <li><span class="q">무기 전승·해체·정련 환급</span><span class="blocks">무기 성장 원장</span><span class="where">설계서 §23.8</span></li>
+      <li><span class="q">가격·확률·재화 변경</span><span class="blocks">현행 유지 중. P5·P6 전 상시 승인 관문</span><span class="where">설계서 §12.10</span></li>
+      <li><span class="q">§6.3 base0 일반 조항과 §9 시온 카드 표의 충돌</span><span class="blocks">현재 기본 방어 5를 유지 중. §6.3 마감</span><span class="where"><code>docs/IMPLEMENTATION_STATUS.md</code> §6.3 행</span></li>
+      <li><span class="q">Android 모듈과 중급 Android 기기 준비</span><span class="blocks">IL2CPP·48dp·60fps 수용 시험</span><span class="where">장부 §16.4·§19.3</span></li>
+      <li><span class="q">서버 호스팅 비용과 원격 배포</span><span class="blocks">staging·production만. 로컬 개발은 막지 않는다.</span><span class="where"><code>docs/AI_WORKFLOW.md</code>, 설계서 §20.6</span></li>
+      <li><span class="q">난이도 D2, 세로 모드 D5, 기억 프리셋 D6, 일본어 음성 D7</span><span class="blocks">급하지 않음</span><span class="where">설계서 §22.1</span></li>
+    </ul>
+  </details>
+</section>
+
+<section id="next" aria-labelledby="h-next">
+  <header><p class="eyebrow">8 · 권장 순서</p><h2 id="h-next">무엇부터 할까</h2>
+    <p class="muted small">게임의 시간 예약처럼 세 칸으로 나눴다. ‘지금’은 이번 주, ‘다음 턴’은 그 다음, ‘다다음 턴’은 앞 두 칸이 끝난 뒤를 뜻한다.</p></header>
+  <div class="slots">
+    <div class="slot">
+      <div class="slot-head"><b>지금</b><span class="pips" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i></span></div>
+      <ol>
+        <li>사람 플레이 시험 10판과 짧은 설문(§20.8 기준). HTML 시제품이나 이미 만든 macOS 빌드로 충분하다.<span class="why">원래 계획의 첫 칸이고, 밸런스·모집 체감 결정 대부분이 이 결과를 기다린다.</span></li>
+        <li>결정 자리를 한 번 갖고 7절 ‘먼저 정할 것’을 한꺼번에 정한다. 결과는 요구사항 장부 맨 위에 표 하나로 남긴다.<span class="why">후반 구역, 아트 시트, 문서 정리가 동시에 풀린다.</span></li>
+        <li>카드 흐름 연출은 16:00에 커밋된 S4B에서 멈추고, 지금 배정된 효과 후보 작업(고른 카드와 다른 카드에 효과가 들어가는 문제)까지만 마무리한다.<span class="why">같은 전투 화면의 입력·연출 정교화가 오늘에만 다섯 단위였고, 후보 불일치는 플레이어가 바로 겪는 오류다.</span></li>
+      </ol>
+    </div>
+    <div class="slot">
+      <div class="slot-head"><b>다음 턴</b><span class="pips" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i></span></div>
+      <ol start="4">
+        <li>서버 준비: Core에 저장 상태 복원, 영수증 보존, 탐사 명령 원자화를 넣고, 그 위에 서버 골격(P1-2)을 세운다. PostgreSQL 16, 게스트·dev 인증, 기억·탐사·전투 API, 안전한 재시도부터.<span class="why">Unity 영구 저장, 중도 복원, 수직 슬라이스 완료 조건이 모두 여기에 걸려 있다.</span></li>
+        <li>같은 기간에 Claude는 4~6장 대본과 Codex용 이미지 요청을 맡는다.<span class="why">원래 Claude 몫이고 후반 활성화의 완료 조건이다. 서버와 파일이 겹치지 않는다.</span></li>
+        <li>PR #1을 main에 합치고 PR #2를 리뷰 가능한 크기로 나눈다. CURRENT.md는 ‘현재 상태 한 쪽’과 ‘변경 이력’으로 나눈다.<span class="why">안정된 기준선과 읽히는 상태 문서가 있어야 사용자가 방향을 잡을 수 있다.</span></li>
+      </ol>
+    </div>
+    <div class="slot">
+      <div class="slot-head"><b>다다음 턴</b><span class="pips" aria-hidden="true"><i class="on"></i><i></i><i></i></span></div>
+      <ol start="7">
+        <li>시험 자료 고정 방식을 파일 바이트 해시에서 규칙 버전·의미 해시로 바꾸고, 큰 자료는 CI가 만들게 한다. 증거 기록도 요약과 최종 영수증만 남긴다.<span class="why">엔진 수정마다 20MB씩 이력이 늘어나는 것을 멈춘다.</span></li>
+        <li>Unity CI(EditMode·PlayMode)와 IL2CPP·ARM64 빌드를 한 번 만든다. Newtonsoft는 직접 의존성으로 적는다.<span class="why">Mac 한 대에만 기대는 검증을 줄이고 Android 요건을 일찍 확인한다.</span></li>
+        <li>검토 단위를 조정한다. 단위마다 반대편 리뷰 한 번, 재확인은 고친 부분만. 5줄 이하·시험 전용 수정은 먼저 반영하고 뒤에 검토한다.<span class="why">작업 지시의 절반이 리뷰·재확인이고, Codex에 실행이 몰린다.</span></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section id="scope" aria-labelledby="h-scope">
+  <header><p class="eyebrow">9 · 범위와 한계</p><h2 id="h-scope">이번 점검이 본 것과 보지 않은 것</h2></header>
+  <div class="cols">
+    <div>
+      <h3>본 것</h3>
+      <ul>
+        <li>진입·운영 문서: <code>README.md</code>, <code>AGENTS.md</code>, <code>CLAUDE.md</code>, <code>docs/CURRENT.md</code>, <code>docs/IMPLEMENTATION_STATUS.md</code>, <code>docs/AI_WORKFLOW.md</code>, <code>docs/decisions_v0.8.1.md</code></li>
+        <li>설계서 1장(요약)·20장(제작 계획)·22장(결정과 위험), 밸런스 감사 보고서</li>
+        <li>git 이력, 브랜치·worktree, 초안 PR 2개, GitHub Actions 54회 기록</li>
+        <li>코드 구조: <code>engine/</code>, <code>core/</code>, Unity 스크립트·시험, <code>server/</code>, <code>prototype/</code>, <code>tools/</code>, CI 설정</li>
+        <li>작업 지시·결과 기록 <code>ops/ai/tasks/</code></li>
+        <li>별도 복제본에서 검사 11종 재실행(4절)</li>
+      </ul>
+    </div>
+    <div>
+      <h3>보지 않은 것</h3>
+      <ul>
+        <li>Unity Editor·PlayMode·빌드 실행과 실제 화면. Codex가 같은 Editor를 쓰는 중이라 손대지 않았다.</li>
+        <li>실기기·Android·성능·네이티브 입력</li>
+        <li>설계서 본문 전체(약 23만 자) 정독과 카드·캐릭터 수치의 타당성 판단</li>
+        <li>비공개 로컬 기록 <code>ops/ai/local/</code>(3.2GB)과 계정·과금 증거</li>
+        <li>보안 전수 점검, 버그 전수 탐색</li>
+      </ul>
+    </div>
+  </div>
+  <p class="small muted">점검 중 Codex가 같은 작업 트리에서 S4B를 마무리해 16:00에 커밋했다(<code>dec7688</code>). 이 보고서는 16:20까지의 git 상태를 반영했고, 시험 재실행은 그 직전 커밋 <code>d008eed</code> 기준이다. 보조 에이전트 셋(코드 구조, 계획 검토, 사실 대조)의 결과는 원문과 다시 맞춰 본 뒤 넣었다.</p>
+</section>
+
+<footer>
+  <p>작성: Claude Code (Opus 5.5). 원본 저장소는 수정하지 않았다. 코드 구조·계획 검토·사실 대조는 읽기 전용 보조 에이전트가 맡았고, 그 결과를 원문과 다시 대조해 반영했다.</p>
+  <p>경로는 저장소 루트 기준이다. 시점이 다른 보고서의 수치는 각 실행 당시의 기록이며, 이번에 다시 확인한 값은 4절에 따로 적었다.</p>
+</footer>
+
+<script>
+(function(){
+  var DATA = [
+    {name:'전투·카드·탐사·기억 규칙', ch:'5·6·7·8·10장', I:43, P:14, N:1, D:0},
+    {name:'문서·제작 계획·부록', ch:'0·20~23장', I:10, P:14, N:1, D:1},
+    {name:'계정 성장·모집·라이브 운영', ch:'11~13장', I:7, P:15, N:8, D:4},
+    {name:'기술·서버·운영·시험', ch:'16~19장', I:4, P:11, N:7, D:0},
+    {name:'콘셉트·세계관·캐릭터', ch:'1~4·9장', I:3, P:22, N:2, D:1},
+    {name:'UI·아트·사운드', ch:'14·15장', I:1, P:10, N:4, D:0}
+  ];
+  var KEYS = [['I','구현'],['P','부분'],['N','미구현'],['D','결정 대기']];
+  var rows = document.getElementById('dist-rows');
+  var tip = document.getElementById('dist-tip');
+  var fig = document.getElementById('dist-chart');
+  var tbody = document.querySelector('#dist-table tbody');
+  var tot = {I:0,P:0,N:0,D:0};
+
+  DATA.forEach(function(d){
+    var total = d.I + d.P + d.N + d.D;
+    var row = document.createElement('div'); row.className = 'row'; row.setAttribute('role','listitem');
+    var lab = document.createElement('div'); lab.className = 'row-label';
+    var dom = document.createElement('span'); dom.className = 'dom'; dom.textContent = d.name;
+    var ch = document.createElement('span'); ch.className = 'ch'; ch.textContent = d.ch + ' · ' + total + '절';
+    lab.appendChild(dom); lab.appendChild(ch);
+    var track = document.createElement('div'); track.className = 'track';
+    KEYS.forEach(function(k){
+      var v = d[k[0]]; if(!v) return;
+      var s = document.createElement('div'); s.className = 'seg'; s.dataset.k = k[0];
+      s.style.flexGrow = v; s.tabIndex = 0;
+      var pct = Math.round(v / total * 100);
+      s.setAttribute('aria-label', d.name + ' ' + k[1] + ' ' + v + '절, ' + pct + '%');
+      s.dataset.v = v; s.dataset.label = k[1]; s.dataset.dom = d.name; s.dataset.pct = pct;
+      var t = document.createElement('span'); t.textContent = v; s.appendChild(t);
+      ['pointerenter','focus'].forEach(function(ev){ s.addEventListener(ev, function(e){ show(s, e); }); });
+      s.addEventListener('pointermove', function(e){ place(e.clientX, e.clientY); });
+      ['pointerleave','blur'].forEach(function(ev){ s.addEventListener(ev, hide); });
+      track.appendChild(s);
+    });
+    var ratio = document.createElement('div'); ratio.className = 'ratio';
+    ratio.textContent = Math.round(d.I / total * 100) + '%';
+    row.appendChild(lab); row.appendChild(track); row.appendChild(ratio);
+    rows.appendChild(row);
+
+    var tr = document.createElement('tr');
+    [d.name, d.I, d.P, d.N, d.D, total].forEach(function(c, i){
+      var td = document.createElement('td'); td.textContent = c; if(i) td.className = 'num'; tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+    tot.I += d.I; tot.P += d.P; tot.N += d.N; tot.D += d.D;
+  });
+  var tr = document.createElement('tr');
+  ['합계', tot.I, tot.P, tot.N, tot.D, tot.I + tot.P + tot.N + tot.D].forEach(function(c, i){
+    var td = document.createElement('td'); td.textContent = c; td.style.fontWeight = '600'; if(i) td.className = 'num'; tr.appendChild(td);
+  });
+  tbody.appendChild(tr);
+
+  function fitLabels(){
+    document.querySelectorAll('#dist-rows .seg').forEach(function(s){
+      var span = s.firstChild; span.style.visibility = 'visible';
+      if (s.getBoundingClientRect().width < 24) span.style.visibility = 'hidden';
+    });
+  }
+  function show(s, e){
+    tip.textContent = '';
+    var strong = document.createElement('strong'); strong.textContent = s.dataset.v + '절 · ' + s.dataset.pct + '%';
+    var line = document.createElement('span');
+    var key = document.createElement('i'); key.className = 'k'; key.style.setProperty('--c', getComputedStyle(s).backgroundColor);
+    line.appendChild(key); line.appendChild(document.createTextNode(s.dataset.label + ' · ' + s.dataset.dom));
+    tip.appendChild(strong); tip.appendChild(line); tip.hidden = false;
+    if (e && e.clientX) { place(e.clientX, e.clientY); }
+    else { var r = s.getBoundingClientRect(); place(r.left + r.width / 2, r.top); }
+  }
+  function place(x, y){
+    var fr = fig.getBoundingClientRect();
+    var w = tip.offsetWidth, h = tip.offsetHeight;
+    var left = Math.min(Math.max(0, x - fr.left - w / 2), fr.width - w);
+    var top = y - fr.top - h - 12;
+    if (top < 0) top = y - fr.top + 16;
+    tip.style.left = left + 'px'; tip.style.top = top + 'px';
+  }
+  function hide(){ tip.hidden = true; }
+  fitLabels();
+  window.addEventListener('resize', fitLabels);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitLabels);
+})();
+</script>
+</main>
+</div>
+</body></html>

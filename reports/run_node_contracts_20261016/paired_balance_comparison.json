@@ -1,0 +1,15 @@
+{
+  "baseline": "reports/balance_audit_20261015/paired_after.json",
+  "actualTrialCount": 1320,
+  "allActualSetupsStartingStatesTrialsAndMetricsIdentical": true,
+  "failedMetrics": 32,
+  "metadataChanges": {
+    "engineBefore": "b1ba35f433197072200825ffa85cac49cf3d4812c4bf02032793fef8491d63eb",
+    "engineAfter": "dae99192bfa137762c1c863efda8207b3851e3a6e7ecf2ff029bed3585a33ab4",
+    "requestedNBefore": 440,
+    "requestedNAfter": 350,
+    "bothActualRepetitionsPerGroup": 10,
+    "actualScenarios": 440
+  },
+  "valuesAndTargetsRetuned": false
+}

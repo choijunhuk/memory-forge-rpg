@@ -1,0 +1,16 @@
+{
+  "character": "ravien",
+  "key": "fig_bond_end",
+  "target": "ravien/images/char_ravien_fig_bond_end_styleA_v03.png",
+  "args": {
+    "prompt": "Use case: background-extraction. Keep the ENTIRE illustrated sprite exactly unchanged: adult character face, hair, expression, costume, hands, every prop and furniture contour, their screen coordinates and full 1024x1536 framing. Change ONLY the exterior alpha. The bottom-left empty corner still has alpha1: remove ALL faint background haze throughout empty canvas and every margin/corner so they are alpha EXACTLY ZERO. Preserve true subject-edge anti-aliasing without deleting any hair/fabric. No new backdrop, floor, cast shadow, halo, checkerboard, text or redraw of scene content. Output genuinely transparent RGBA.",
+    "referenced_image_paths": [
+      "/Users/choi/Documents/Memory_forge/art/moments/ravien/images/char_ravien_fig_bond_end_styleA_v02.png"
+    ],
+    "transparent_background": true
+  },
+  "cache_path": "/Users/choi/.codex/generated_images/01a14db0-4150-7f01-9240-82aaa185dd28/exec-e53f92b4-737d-4450-bf39-1d3c2928b2f6.png",
+  "status": "ready",
+  "generation_status": "generated_pending_review",
+  "selected": true
+}

@@ -1,0 +1,17 @@
+{
+  "at": "2026-10-15T05:45:25.517816+00:00",
+  "rootBase": "2954eeb6fc6503381628898a16451837d7d066c3",
+  "files": {
+    "core/MemoryForge.Core/MemoryV2.cs": "68d9b58dd81e731f1078d946b8a5e03f80a1aa565352552ff0c1d0dc1d8ed22d",
+    "core/MemoryForge.CoreChecks/MemoryV2DataLoader.cs": "8dbd4094b5232ab2c2fc2ce6629a07f15989ec77a636a7a34e85954f9d896740",
+    "core/MemoryForge.CoreChecks/MemoryV2Checks.cs": "9ac8a48ac7ca53abe8d3751c6cde296651df095227aa3123482e45a956ea6f19",
+    "core/MemoryForge.CoreChecks/BattleDataLoader.cs": "16a7c2786033256bc745ff9488748cf86f25dd34baa533240887f47ce05c95d7",
+    "proposals/memory_v2.cjs": "6ee5aa939e3169d034c99418ceebdc864473fe5cc9b4464fccf7e80dcbec308d",
+    "tools/gen_memory_rule_vectors.mjs": "8254442ce9ba43a7de995d3a72accc8e43abae7ec14117975f82a61805045178",
+    "engine/tests/memory_rule_vectors.test.mjs": "34402ac2e0d7ff84bd771cfac75a513f9526319692451e90742201731ac62165",
+    "engine/tests/vectors/memory_rule_vectors.json.gz": "b50d572e1d9e737d267ac467a8a43901459b577804688d9ddd1de1f28dda2428"
+  },
+  "status": "COPIED_PENDING_ROOT_TESTS_OPUS_EDITOR",
+  "all_old_player_gates_retained": true,
+  "old_artifacts_private_backup": "ops/ai/local/m0-before-root-refresh"
+}

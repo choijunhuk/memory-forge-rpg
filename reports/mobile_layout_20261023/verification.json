@@ -1,0 +1,99 @@
+{
+  "scope": "mobile-safe-area-final-20261023",
+  "baseCommit": "d03648b",
+  "unity": {
+    "playmode": {
+      "total": "763",
+      "passed": "752",
+      "failed": "0",
+      "skipped": "11",
+      "duration": "411.8930584"
+    },
+    "targeted": {
+      "total": "63",
+      "passed": "63",
+      "failed": "0",
+      "skipped": "0",
+      "duration": "51.1197795"
+    },
+    "editmode": {
+      "total": "10",
+      "passed": "10",
+      "failed": "0",
+      "skipped": "0",
+      "duration": "0.0446428"
+    },
+    "explicitNotRun": [
+      "MemoryForge.Client.Tests.ExpeditionUiCapturePlayModeTests.CaptureCardHoldBackView",
+      "MemoryForge.Client.Tests.ExpeditionUiCapturePlayModeTests.CaptureExpeditionScreens",
+      "MemoryForge.Client.Tests.HomeReturnAcceptancePlayModeTests.ActualHomeAndExpeditionScenesPreserveSavedMemoryAndRequireEveryDeparture",
+      "MemoryForge.Client.Tests.LobbyMomentCapturePlayModeTests.CaptureHomeAndSortie",
+      "MemoryForge.Client.Tests.LobbyMomentCapturePlayModeTests.CaptureHomeCatalogueAndDetails",
+      "MemoryForge.Client.Tests.LobbyMomentCapturePlayModeTests.CaptureMomentScenes",
+      "MemoryForge.Client.Tests.OnboardingPlayModeTests.CaptureCoachScreens",
+      "MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.CaptureRecruitmentFlow",
+      "MemoryForge.Client.Tests.PracticeServerSessionPlayModeTests.CaptureTenRecruitmentFlow",
+      "MemoryForge.Client.Tests.RecruitmentLiveAcceptancePlayModeTests.ExistingLocalAccountPullPersistsAcrossLobbyRecreation",
+      "MemoryForge.Client.Tests.RecruitmentLiveAcceptancePlayModeTests.SpentLocalAccountReconnectsToItsPersistedResultAndOwnedRoster"
+    ]
+  },
+  "build": {
+    "pc": "PASS: Memory Forge SafeArea Final3.app",
+    "apk": {
+      "bytes": 131893173,
+      "sha256": "2445af7691ecbb3977d00d8fe5b3b680e1d0d611bf6e59ee14da2b28f07d1f74"
+    }
+  },
+  "native": {
+    "pcIsolatedSnapshot351ActualPull": "PASS: previousVerifiedplayer actualUI 1pull; restart/receipts/persistence",
+    "pcFinal3ReadOnly": "PASS: actual960x568 glyphs/frames; currentMonoLibSystem/flock; exactstorebytes+mtime; 0exceptions/noadditionalcommands",
+    "androidFinal3AnonymousSmall130": "PASS: exact2445afAPK; nativeJNI1280x720/safe68,1212/font130; all10names/attrs/LumiFooter/Home/settings/font1.3→1→1.3;0runtimeErrors;settingsrestored/AVDstopped",
+    "physicalPhone": "NOT_RUN: disconnected",
+    "androidAuthenticatedGrowth": "NOT_RUN: no emulator auth/economy",
+    "pcFinal3ClientAssemblySha256": "f6d24e08e1a0e40064443357a64b92246f6767b8e1d7601d200b3de3be3038b6",
+    "pcNativeFullGauge100": "NOT_RUN: syntheticfixturePASS, actualreadonlygauge0"
+  },
+  "account": {
+    "historical352": "Originaltemporaryserver/store/credentialmissing; responses/fingerprintretained",
+    "recovery": "Exact352restorationblocked; immutable351backupretained",
+    "testCopy": "Isolatedearned351fork, oneactualnewpull producesdifferent352; originalunchanged",
+    "copyVerifiedReceipts": 352,
+    "copyDraws": 24,
+    "copyFreeCurrency": 900,
+    "copyPaidCurrency": 0,
+    "copyStandardTickets": 5
+  },
+  "ci": {
+    "url": "https://github.com/choijunhuk/memory-forge-rpg/pull/2/checks",
+    "required": "ExactfinalGitHubHEAD checks; draftuntilfinalverification",
+    "priorCheckpointBada": "push39837778324 andPR39837793768 SUCCESS",
+    "d036": "IN_PROGRESS"
+  },
+  "independentReview": {
+    "officialOpusFinal": "R4PASS noP1/P2; SOURCE_ONLY/TESTS_NOT_RUN",
+    "remainingLow": [
+      "oversizedtouchownedpartygrid",
+      "deckcounterwording"
+    ]
+  },
+  "sourceHashes": {
+    "Assets/Scripts/MemoryForgeLobbyClient.cs": "a9992bdf333b7b1b2fafc2bbc0597e1c61fc63b0e9225d5b1d6112dea08d8d02",
+    "Assets/Scripts/MemoryForgeGrowthClient.cs": "635afdc0d2b3123e9549504ed29b9d61db9fcbc84b539a4ab086448a948545ac",
+    "Assets/Scripts/MemoryForgeExpeditionClient.cs": "c17ab21a3414a12d9f0d638e311e2d78aa45604ab9e2cd0bfc12949d29e62308",
+    "Assets/Scripts/PracticeCommandOutbox.cs": "0a7e9ed1d713be68cf8f365267e172b317ee30e65d5f8e6088c7e3996d552d69",
+    "Assets/Editor/MemoryForgeDesktopBuild.cs": "6ce136315f1f7185019dcf4eec03085e0194b879fccf5ff516dabf555c48b5fe",
+    "Assets/Tests/PlayMode/MobileViewportPlayModeTests.cs": "b6903ba7c58479db0b97254ebe32b6bf9bec870d1880fbd30ca66990f9e0a46e",
+    "Assets/Tests/PlayMode/MobileLegacySurfacePlayModeTests.cs": "9dfde56347e0acdbd7f955ed2fdef73ca18c8b969ecbb3624b431a7b29b40d39",
+    "Assets/Tests/PlayMode/ActionPresentationPlayModeTests.cs": "b71b50b1acc5d1ab9fe3c7070331b3384695836c988c689d7f3adec52cefcd5b",
+    "Assets/Tests/PlayMode/ExpeditionClientPlayModeTests.cs": "c40df8c264ffd4e872ab0c28707dd544f11f73276bbc106a72fdfc2112938f8e"
+  },
+  "localChecks": {
+    "engine": 396,
+    "proposals": 14,
+    "python": 78,
+    "docsFinal": 9,
+    "handoffFinal": 33,
+    "diffCheck": "PASS"
+  },
+  "verifiedAt": "2026-10-22T21:51:46.441537+00:00"
+}

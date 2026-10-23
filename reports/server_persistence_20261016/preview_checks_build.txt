@@ -1,0 +1,11 @@
+  복원할 프로젝트를 확인하는 중...
+  /Users/choi/.codex/worktrees/claude-balance-audit/Memory_forge/server/MemoryForge.ServerChecks/MemoryForge.ServerChecks.csproj을(를) 45밀리초 동안 복원했습니다.
+  복원할 2 프로젝트의 1이(가) 최신 상태입니다.
+  MemoryForge.Core -> /Users/choi/Documents/Memory_forge/ops/ai/local/server-preview-artifacts/bin/MemoryForge.Core/debug/MemoryForge.Core.dll
+  MemoryForge.ServerChecks -> /Users/choi/Documents/Memory_forge/ops/ai/local/server-preview-artifacts/bin/MemoryForge.ServerChecks/debug/MemoryForge.ServerChecks.dll
+
+빌드했습니다.
+    경고 0개
+    오류 0개
+
+경과 시간: 00:00:01.80

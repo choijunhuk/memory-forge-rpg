@@ -1,0 +1,88 @@
+{
+  "scope": "test-only support-readiness bot and privacy-preserving failure hints",
+  "base_commit": "4b239f3d50d8b2c7d33d32bf6d4d0e6522a42066",
+  "original_ci": {
+    "push": 39901263210,
+    "push_status": "FAIL",
+    "failure_stage": "PINNED_POSTGRES_SUPPORT_HTTP",
+    "child_exit": 1,
+    "pr": 39901270701,
+    "pr_status": "SUCCESS",
+    "exact_exception_or_failed_seed_recovered": false
+  },
+  "reproduction": {
+    "source": "reviewed synthetic earned account; frozen build and original creation digests verified",
+    "core_sha256": "65bc74a134ee00da95c73d91e19fe8b42f855f9c8a81462b8959f9f745b801b8",
+    "phase2_server_sha256": "b25813f7f45e0813392a2c1fb8c45ab1aeae641a6ab5ef48a52a46792dbeb645",
+    "dungeon_unit_seeds": 1000,
+    "old_premature_victories": 17,
+    "fixed_premature_victories": 0,
+    "story_unit_seeds": 1000,
+    "story_old_no_ready": 0,
+    "story_fixed_no_ready": 0,
+    "unit_counterexample_seed": 158,
+    "unit_counterexample_final_gauges": [
+      80,
+      80,
+      20
+    ],
+    "limits": "Cloned unit cases are not the recovered failed GitHub case or a human balance certification"
+  },
+  "validation": {
+    "core_unit_regressions": 9,
+    "macos_pinned_real_http": 48,
+    "native_linux_pg_gate": "PASS",
+    "native_linux_limit": "Final C# bot sources matched; diagnostic failure-prefix delta validated separately with20 trust-boundary tests",
+    "node": 396,
+    "proposals": 14,
+    "python": 84,
+    "documents": 9,
+    "handoff": 34,
+    "csharp_warnings": 0,
+    "csharp_errors": 0,
+    "hosted_final_head": "PENDING; inspect exact latest PR head checks"
+  },
+  "independent_review": {
+    "tool": "official Claude Code",
+    "model": "claude-opus-5-5",
+    "effort": "xhigh",
+    "session_id": "04106fd1-c8a7-4677-87a1-d55cd7a93284",
+    "actual_model_usage": [
+      "claude-opus-5-5"
+    ],
+    "process_exit": 0,
+    "billing_account_matched": true,
+    "rounds": [
+      {
+        "round": "diagnostic R1",
+        "verdict": "PASS"
+      },
+      {
+        "round": "bot + diagnostic R2",
+        "verdict": "FAIL",
+        "P2": "Pass line matched failure hint; no P1/P2 in bot fix"
+      },
+      {
+        "round": "R3",
+        "verdict": "PASS",
+        "P1_P2_remaining": 0
+      }
+    ],
+    "scope": "Read-only source review; tests executed independently by Codex"
+  },
+  "source_sha256": {
+    "server/MemoryForge.SupportChecks/Program.cs": "e706066663ebb47475db45da1aaceca62e53cfcc22f75ca1081cf34e40aca1dc",
+    "server/MemoryForge.SupportChecks/SupportGaugeBot.cs": "75b7a5460907714816a7d618b60c87103e70e886cc82ca1b274c1e3be2bb9c2e",
+    "server/MemoryForge.SupportChecks/SupportGaugeBotChecks.cs": "08709b435d6a5b353777c05df6ddbbd92646b1ea589e567b01c46b4adb4a8b78",
+    "tools/ai/test_account_support_migration_ci.py": "969e9ae91bb42cc9de6225d380b6272b0017ab6684afa154f804a4af0495afb0",
+    "tests/test_account_support_migration_ci.py": "018540fa63bf8e43c92e6ce02fd6406bc82a30ee797d084fcc19044e61a6ceeb"
+  },
+  "unchanged": [
+    "Core/game/server product source",
+    "account store and source fixture",
+    "real recruitment RNG/results",
+    "prices/probabilities/rewards",
+    "CI pass/fail predicates and all original acceptance assertions",
+    "included-subscription billing settings"
+  ]
+}

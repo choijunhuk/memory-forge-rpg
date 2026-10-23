@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "checks": [
+    "connect verifies owner without automatically creating a run or row",
+    "raycast reaches CreateRun",
+    "explicit create produces authoritative full map at journal version0",
+    "raycast reaches Node",
+    "clicked available map node enters real Core battle exactly once",
+    "actual server battle AP and hand shown in usable UI"
+  ],
+  "server_version": 1,
+  "scene": "Assets/Scenes/MemoryForgeServerPractice.unity",
+  "input_kind": "actual Editor uGUI raycast/Pointer events; not physical device"
+}

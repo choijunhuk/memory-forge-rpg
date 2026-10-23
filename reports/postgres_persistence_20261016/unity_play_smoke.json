@@ -1,0 +1,58 @@
+{
+  "observed_utc": "2026-10-16T12:41:22.806410+00:00",
+  "scope": "Existing expedition map actual Editor Play smoke only, no server/PG Unity transport",
+  "state": {
+    "contents": [
+      {
+        "uri": "mcpforunity://editor/state",
+        "mimeType": "text/plain",
+        "text": "{\"success\":true,\"message\":\"Retrieved editor state.\",\"error\":null,\"data\":{\"schema_version\":\"unity-mcp/editor_state@2\",\"observed_at_unix_ms\":1792154441344,\"sequence\":4,\"unity\":{\"instance_id\":\"MemoryForgeUnity@4034a4e2fe236d6e\",\"unity_version\":\"6000.0.46f1\",\"project_id\":null,\"platform\":\"OSXEditor\",\"is_batch_mode\":false},\"editor\":{\"is_focused\":true,\"play_mode\":{\"is_playing\":true,\"is_paused\":false,\"is_changing\":true},\"active_scene\":{\"path\":\"Assets/Scenes/MemoryForgeExpedition.unity\",\"guid\":\"ef192f5c231004a7e908bfc69d6f8cca\",\"name\":\"MemoryForgeExpedition\"}},\"activity\":{\"phase\":\"playmode_transition\",\"since_unix_ms\":1792154441344,\"reasons\":[\"tick\"]},\"compilation\":{\"is_compiling\":false,\"is_domain_reload_pending\":false,\"last_compile_started_unix_ms\":1792145788262,\"last_compile_finished_unix_ms\":1792145789027,\"last_domain_reload_before_unix_ms\":null,\"last_domain_reload_after_unix_ms\":1792154438472},\"assets\":{\"is_updating\":false,\"external_changes_dirty\":false,\"external_changes_last_seen_unix_ms\":1792145710216,\"external_changes_dirty_since_unix_ms\":null,\"external_changes_last_cleared_unix_ms\":1792145716135,\"refresh\":{\"is_refresh_in_progress\":false,\"last_refresh_requested_unix_ms\":null,\"last_refresh_finished_unix_ms\":null}},\"tests\":{\"is_running\":false,\"mode\":null,\"current_job_id\":null,\"started_unix_ms\":null,\"started_by\":\"unknown\",\"last_run\":null},\"transport\":{\"unity_bridge_connected\":null,\"last_message_unix_ms\":null},\"settings\":{\"batch_execute_max_commands\":25},\"advice\":{\"ready_for_tools\":false,\"blocking_reasons\":[\"stale_status\"],\"recommended_retry_after_ms\":500,\"recommended_next_action\":\"retry_later\"},\"staleness\":{\"age_ms\":41424,\"is_stale\":true}},\"hint\":null}"
+      }
+    ]
+  },
+  "console": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Retrieved 2 log entries.\",\"data\":[{\"type\":\"Warning\",\"message\":\"Ignoring depth surface load action as it is memoryless\\n\",\"file\":\"\",\"line\":0,\"stackTrace\":null},{\"type\":\"Warning\",\"message\":\"Ignoring depth surface store action as it is memoryless\\n\",\"file\":\"\",\"line\":0,\"stackTrace\":null}]}"
+      }
+    ],
+    "structuredContent": {
+      "success": true,
+      "message": "Retrieved 2 log entries.",
+      "data": [
+        {
+          "type": "Warning",
+          "message": "Ignoring depth surface load action as it is memoryless\n",
+          "file": "",
+          "line": 0,
+          "stackTrace": null
+        },
+        {
+          "type": "Warning",
+          "message": "Ignoring depth surface store action as it is memoryless\n",
+          "file": "",
+          "line": 0,
+          "stackTrace": null
+        }
+      ]
+    },
+    "isError": false
+  },
+  "stop": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Exited play mode.\",\"data\":null}"
+      }
+    ],
+    "structuredContent": {
+      "success": true,
+      "message": "Exited play mode.",
+      "data": null
+    },
+    "isError": false
+  },
+  "new_play_test_suite": "NOT_RUN",
+  "device": "NOT_RUN"
+}

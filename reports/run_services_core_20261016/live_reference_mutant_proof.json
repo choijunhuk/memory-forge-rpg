@@ -1,0 +1,10 @@
+{
+  "scope": "Private copied projects only; Root Core and Unity source never mutated",
+  "mutation": "ForgeOffer return RunValues.Fields(offers) -> return offers (live graph leak)",
+  "rootGoodServiceSha256": "3798d92641e6c95fcc17eac696499cb1a0a64fa638dbceb7c16be55e8824e254",
+  "privateMutantServiceSha256": "267999e249b57b976d5bc52c210afe45887f4d1dd3270dbc4c7ea50d850b3107",
+  "purpose": "Verify the new567 real legacy forge return ownership probes catch a live reference, without relying on changed numeric outcomes",
+  "actualExitCode": 229,
+  "liveReferenceLeakDetected": true,
+  "rootSourcesMutated": false
+}

@@ -1,0 +1,2 @@
+SERVER CHECKS PASS: 952 assertions
+PostgreSQL mode: NOT_RUN in this invocation (select it with --postgres-file and --psql)

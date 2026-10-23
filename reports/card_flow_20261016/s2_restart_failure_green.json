@@ -1,0 +1,25 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"preliminaryDraft\":false,\"fault\":\"test-local invalid content causing real Run.Create unexpected exception\",\"quarantinedBefore\":true,\"restartThrown\":null,\"quarantinedAfter\":true,\"hasRunAfter\":true,\"expectedStateInjected\":false},\"compiler\":\"codedom\"}}"
+    }
+  ],
+  "structuredContent": {
+    "success": true,
+    "message": "Code executed successfully.",
+    "data": {
+      "result": {
+        "preliminaryDraft": false,
+        "fault": "test-local invalid content causing real Run.Create unexpected exception",
+        "quarantinedBefore": true,
+        "restartThrown": null,
+        "quarantinedAfter": true,
+        "hasRunAfter": true,
+        "expectedStateInjected": false
+      },
+      "compiler": "codedom"
+    }
+  },
+  "isError": false
+}

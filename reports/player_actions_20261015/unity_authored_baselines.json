@@ -1,0 +1,212 @@
+{
+  "source": "actual data/game_data.json + actual Create/begin/play|ult/end; no state edits",
+  "results": [
+    {
+      "card": "harin_bulwark",
+      "kind": "play",
+      "stage": "action",
+      "s": {
+        "block": 26,
+        "counter": 2,
+        "ap": 2,
+        "gauge": 10,
+        "used": 1,
+        "zones": {
+          "draw": [],
+          "hand": [],
+          "discard": [],
+          "exhaust": [
+            "c1"
+          ]
+        },
+        "res": [],
+        "powers": [
+          {
+            "id": "bulwark",
+            "keep": 10
+          }
+        ]
+      },
+      "ev": [
+        {
+          "e": "play",
+          "uid": "c1",
+          "id": "harin_bulwark",
+          "mode": "now",
+          "cost": 2,
+          "target": null
+        },
+        {
+          "e": "power",
+          "id": "bulwark"
+        },
+        {
+          "e": "exhaust",
+          "uid": "c1"
+        },
+        {
+          "e": "resolved",
+          "uid": "c1",
+          "id": "harin_bulwark",
+          "reserved": null,
+          "fizzled": false
+        }
+      ]
+    },
+    {
+      "card": "harin_bulwark",
+      "kind": "play",
+      "stage": "end",
+      "s": {
+        "block": 10,
+        "counter": 0,
+        "ap": 4,
+        "gauge": 10,
+        "used": 1,
+        "zones": {
+          "draw": [],
+          "hand": [],
+          "discard": [],
+          "exhaust": [
+            "c1"
+          ]
+        },
+        "res": [],
+        "powers": [
+          {
+            "id": "bulwark",
+            "keep": 10
+          }
+        ]
+      },
+      "ev": [
+        {
+          "e": "turn",
+          "turn": 2,
+          "ap": 4
+        }
+      ]
+    },
+    {
+      "card": "harin_shield",
+      "kind": "play",
+      "stage": "action",
+      "s": {
+        "block": 26,
+        "counter": 2,
+        "ap": 3,
+        "gauge": 0,
+        "used": 0,
+        "zones": {
+          "draw": [],
+          "hand": [],
+          "discard": [],
+          "exhaust": []
+        },
+        "res": [
+          {
+            "uid": "c1",
+            "due": 2,
+            "order": 1,
+            "target": null,
+            "kind": "next"
+          }
+        ],
+        "powers": []
+      },
+      "ev": [
+        {
+          "e": "play",
+          "uid": "c1",
+          "id": "harin_shield",
+          "mode": "next",
+          "cost": 1,
+          "target": null
+        },
+        {
+          "e": "reserve",
+          "uid": "c1",
+          "due": 2,
+          "kind": "next"
+        }
+      ]
+    },
+    {
+      "card": "harin_shield",
+      "kind": "play",
+      "stage": "end",
+      "s": {
+        "block": 11,
+        "counter": 2,
+        "ap": 4,
+        "gauge": 10,
+        "used": 1,
+        "zones": {
+          "draw": [],
+          "hand": [
+            "c1"
+          ],
+          "discard": [],
+          "exhaust": []
+        },
+        "res": [],
+        "powers": []
+      },
+      "ev": [
+        {
+          "e": "block",
+          "n": 11,
+          "src": "card"
+        },
+        {
+          "e": "resolved",
+          "uid": "c1",
+          "id": "harin_shield",
+          "reserved": "next",
+          "fizzled": false
+        },
+        {
+          "e": "reshuffle"
+        },
+        {
+          "e": "turn",
+          "turn": 2,
+          "ap": 4
+        }
+      ]
+    },
+    {
+      "card": "harin_shield",
+      "kind": "ult",
+      "stage": "action",
+      "s": {
+        "block": 56,
+        "counter": 10,
+        "ap": 4,
+        "gauge": 0,
+        "used": 0,
+        "zones": {
+          "draw": [],
+          "hand": [
+            "c1"
+          ],
+          "discard": [],
+          "exhaust": []
+        },
+        "res": [],
+        "powers": []
+      },
+      "ev": [
+        {
+          "e": "ult",
+          "actor": "harin"
+        },
+        {
+          "e": "block",
+          "n": 30,
+          "src": "card"
+        }
+      ]
+    }
+  ]
+}

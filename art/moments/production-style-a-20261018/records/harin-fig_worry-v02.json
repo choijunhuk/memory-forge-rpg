@@ -1,0 +1,16 @@
+{
+  "character": "harin",
+  "key": "fig_worry",
+  "target": "harin/images/char_harin_fig_worry_styleA_v02.png",
+  "args": {
+    "prompt": "Use case: identity-preserve. Edit the FIRST canonical B master sprite, same clearly adult character, EXACT same identity/age/face/hair/costume design/palette and clear-cel A rendering. Preserve all furniture perspective, shape, scale, screen coordinates and prop design across this sequence. Modify ONLY the specified acting/hand state/expression. Direction A: crisp controlled line, emphatic upper eyelid, small symbolic nose and mouth, matte large one-step cel shadows, grouped hair and broad highlight bands, limited metal highlights. Full body/equipment/furniture completely inside same 1024x1536 portrait with clear margins. TRUE RGBA transparent empty canvas, every empty corner alpha=0; remove all haze, background residue, halo, floor, cast shadows, checkerboard, text and watermark. Keep opaque clothing/skin solid and clean hair edges. Character: harin, age 26. Change ONLY exterior transparency. Preserve entire existing drawing including every face, hand, pose, table/chair, prop and costume contour. Remove all faint background alpha residue from ALL empty canvas and especially bottom corners; empty corners must be alpha exactly zero. Do not redraw or move subject/furniture, do not add floor or halo.",
+    "referenced_image_paths": [
+      "/Users/choi/Documents/Memory_forge/art/moments/harin/images/char_harin_fig_worry_styleA_v01.png"
+    ],
+    "transparent_background": true
+  },
+  "cache_path": "/Users/choi/.codex/generated_images/01a14db0-4150-7f01-9240-82aaa185dd28/exec-32be2427-d9c7-4b31-b8ac-4867caadb113.png",
+  "status": "ready",
+  "generation_status": "generated_pending_review",
+  "selected": true
+}

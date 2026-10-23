@@ -1,0 +1,21 @@
+✔ legacy migration preserves the exact old bytes in a separate backup (597.163833ms)
+✔ visible exploration defeats the party and no-selection save preserves its previous upgrade across reloads (929.190542ms)
+✔ full-result six plus three selection shows capacity error and disables commit (320.035084ms)
+✔ two same-kind cards expose separate stable-key toggles for one upgrade (357.022541ms)
+✔ evolution-only selection preserves the card without its unselected upgrade (352.783625ms)
+✔ storage-write failure leaves live memory and run unchanged for retry after reload (471.591333ms)
+✔ newer storage version rejects a stale in-progress save (355.149041ms)
+✔ malformed v2 non-array character rows blocks start and preserves its raw record (251.18675ms)
+✔ malformed v2 missing history blocks start and preserves its raw record (308.147875ms)
+✔ malformed v2 missing receipts blocks start and preserves its raw record (282.164625ms)
+✔ deleting v2 memory after boot blocks a new run instead of using cached memory (283.484167ms)
+✔ an oversized but well-formed v2 deck blocks start without truncation or render errors (260.046875ms)
+✔ memory and save layouts fit desktop, mobile, and 130 percent text (863.148708ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7595.847375

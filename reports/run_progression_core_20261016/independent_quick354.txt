@@ -1,0 +1,1 @@
+{"cases":5,"actualPrefixAttempts":354,"committedBattleCommands":210,"actualQueries":223,"fullRunCompletions":0,"scope":"Real Create/public commands; independent Root quick full-state/return/query comparison; no expected-state injection"}

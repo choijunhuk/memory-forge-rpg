@@ -1,0 +1,39 @@
+{
+  "task_id": "P1-CARD-FLOW-EFFECT-CANDIDATES",
+  "run_id": "P1-CARD-FLOW-EFFECT-CANDIDATES-20261016T071514085509Z",
+  "status": "ROOT_REVIEW_CHANGES_REQUIRED",
+  "requestedEffort": "xhigh",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "changes_verified": false,
+  "raw_output": "ops/ai/local/P1-CARD-FLOW-EFFECT-CANDIDATES-20261016T071514085509Z*",
+  "billing_verified_at": "2026-10-15T21:22:01.277612+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "claude/balance-audit",
+  "base_commit": "9be537f4c5ef59e890322cb2d1de914fb49bfed6",
+  "worktree": "/Users/choi/.codex/worktrees/claude-balance-audit/Memory_forge",
+  "allowed_files": [
+    "client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs",
+    "client/MemoryForgeUnity/Assets/Tests/PlayMode/EffectCandidatePlayModeTests.cs",
+    "client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionPickerGuardPlayModeTests.cs",
+    "client/MemoryForgeUnity/Assets/Tests/PlayMode/PreparedIntentPlayModeTests.cs",
+    "reports/card_flow_20261016/effect_candidates_author_report.md"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "9e72e086-dd3f-4efa-8840-28d42f883c9b",
+  "subtype": "success",
+  "is_error": false,
+  "result": "I've made the card-pick sheet offer and accept only cards the reached Core effect actually takes, without changing Core's resolution, fallback or explicit Auto. Nothing was compiled or run; author execution is **NOT_RUN**. Core stayed read-only, and the edits are limited to the five allowed files.\n\n**Why the old sheet was wrong:** Core's `TakePick` quietly discards a manual pick its effect won't take and uses its own fallback instead (`Battle.PlayerActions.cs:260-275`). Each authored pick card has exactly one pick effect, and no earlier effect on any of them changes whether a visible card is eligible. The one real exception is costdown right after Rien's ultimate (more on that below).\n\n**Production change**\n- **One shared filter for all three paths:** the drawn sheet, `PickCard` acceptance and the waiting-intent re-check all go through the same function now. The waiting intent also re-checks its frozen effect list.\n- **`PickCandidates`** keeps its old signature and gains two optional parameters (the effect rule and a cost lookup). Old callers compile unchanged and still get the old zone list.\n- **New public helpers:**\n  - `ChoiceRules`: which Core effect each pick request feeds.\n  - `EffectEligible`: a copy of Core's own check per effect. tune skips rarity C and cards already carrying the part. costdown uses Core's real `BattleCostOf`, with no cost arithmetic of mine. recall skips rarity C. growPick needs growth below 3. copyPick now includes evolutions of a growth card, which the old filter missed.\n  - `PickBlocked`: offers nothing when Core would skip the effect (growth cap, full hand), or when the cost can't be known yet.\n- **Empty sheet:** it now says why it's empty. Explicit Auto is unchanged.\n\n**Gap that needs a Core decision (not built):** with exactly one free-card charge left (after Rien's ultimate plus one play), playing the card spends the charge before costdown runs. The current cost query returns 0 for every card, so the client can't tell which cards will be eligible. For now the sheet blocks manual picks in that one case and leaves Auto to Core. A pure Core query, e.g. `Run.BattlePickEligible`, would close it; details are in report §5.\n\n**Tests (all NOT_RUN)**\n- **`EffectCandidatePlayModeTests`**, three client tests using only APIs the old client already had:\n  - `TuneSheetOffersAndAcceptsOnlyCardsItsCoreEffectTakes`: should fail on old Main.\n  - `ExplicitAutoStillSendsCoresOwnChoiceAndNeverAHiddenCard`: its list check should also fail on old Main.\n  - `APreparedTunePickUsesTheSameEligibleList`: should fail on old Main.\n  - They rely on one test-local fixture, restored in finally: the source's only rarity-C cards are curses, so one hand card's definition is set to rarity C in both the client's and the mirror's content. The task's example of a \"common card\" doesn't work as a witness: `com_slash` and `com_guard` are rarity B, so they're eligible.\n- **`EffectCandidateCoreWitnessTests`**, seven pure tests on real content:\n  - `ChoiceRules` maps all 14 authored pick cards.\n  - tune skips the real `eye_of_rift` curse, and a card already tuned in an earlier turn.\n  - costdown follows real costs, including the `c_lite` part and a reserve-only card.\n  - costdown under Rien's free cards: exact with two charges left, blocked with one (where Core does take the card).\n  - recall skips the curse, while exhaustPick still takes any discard card.\n  - growPick excludes growth 3 and blocks at the battle cap.\n  - copyPick offers the evolved card, and its free copy fails costdown.\n  - Each one compares the client function with Core's own result on a twin battle.\n- **Old-Main RED run:** drop the `EffectCandidateCoreWitnessTests` class (the middle block of the file); it uses the new API. The two adapted files below use no new API.\n- **Adapted:** the PickerGuard sheet test now expects the filtered list (the old zone-helper check is kept). The PreparedIntent `Tune` witness now also requires a card tune can actually take.\n\n**Risks**\n- **Non-owned tests:** `ExpeditionClientPlayModeTests.PickSheetForecasts…` and the TurnFlow stale-sheet test assume every hand card is offered. They would fail only if their seed-1234 hand holds a curse or an already-tuned card at that moment; if so, they need the same narrowing as PickerGuard.\n- **Uncovered branches:** these are listed honestly in report §7, e.g. the full-hand recall block, which can't be reached with authored cards, and hidden draws that happen when a card is played.\n\nNext on your side: review, capture RED on old Main, then the targeted and full PlayMode/EditMode/native runs. The details, including the effect-by-effect analysis, are in `reports/card_flow_20261016/effect_candidates_author_report.md`.",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ],
+  "root_review": {
+    "issue": "FreeNext1 auto-only removes an existing legal manual choice; do not integrate this draft",
+    "evidence": "Author report sections3/5/6 plus Core Play FreeNext consumption source",
+    "correction": "P1-CARD-FLOW-CANDIDATE-COST-QUERY, Opus Max; only two read-only pricing Core files newly authorized",
+    "actual_old_main_red": "3/3 integration tests fail precisely at overbroad candidate lists; effect_red_result.json; original Main remains dec7688",
+    "author_execution": "NOT_RUN"
+  }
+}

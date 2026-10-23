@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Failed(Child)" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-18 08:33:43Z" end-time="2026-10-18 08:33:57Z" duration="14.4412798">
+  <test-suite type="TestSuite" id="1388" name="Memory Forge" fullname="Memory Forge" runstate="Runnable" testcasecount="342" result="Failed" site="Child" start-time="2026-10-18 08:33:43Z" end-time="2026-10-18 08:33:57Z" duration="14.441280" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1380" name="MemoryForge.PlayModeTests.dll" fullname="/Users/choi/Documents/Memory_forge/.claude/worktrees/expedition-ui-40eff0/client/MemoryForgeUnity/Library/ScriptAssemblies/MemoryForge.PlayModeTests.dll" runstate="Runnable" testcasecount="342" result="Failed" site="Child" start-time="2026-10-18 08:33:43Z" end-time="2026-10-18 08:33:57Z" duration="14.431172" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="12837" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="1381" name="MemoryForge" fullname="MemoryForge" runstate="Runnable" testcasecount="342" result="Failed" site="Child" start-time="2026-10-18 08:33:43Z" end-time="2026-10-18 08:33:57Z" duration="14.428850" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="1383" name="Client" fullname="MemoryForge.Client" runstate="Runnable" testcasecount="272" result="Failed" site="Child" start-time="2026-10-18 08:33:43Z" end-time="2026-10-18 08:33:57Z" duration="14.426221" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestSuite" id="1384" name="Tests" fullname="MemoryForge.Client.Tests" runstate="Runnable" testcasecount="272" result="Failed" site="Child" start-time="2026-10-18 08:33:43Z" end-time="2026-10-18 08:33:57Z" duration="14.424036" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="TestFixture" id="1181" name="ExpeditionUiLayoutPlayModeTests" fullname="MemoryForge.Client.Tests.ExpeditionUiLayoutPlayModeTests" classname="MemoryForge.Client.Tests.ExpeditionUiLayoutPlayModeTests" runstate="Runnable" testcasecount="3" result="Failed" site="Child" start-time="2026-10-18 08:33:43Z" end-time="2026-10-18 08:33:57Z" duration="14.420067" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="1182" name="PhoneTouchTargetsAreFortyEightDpAndEachFaceTakesItsOwnPress" fullname="MemoryForge.Client.Tests.ExpeditionUiLayoutPlayModeTests.PhoneTouchTargetsAreFortyEightDpAndEachFaceTakesItsOwnPress" methodname="PhoneTouchTargetsAreFortyEightDpAndEachFaceTakesItsOwnPress" classname="MemoryForge.Client.Tests.ExpeditionUiLayoutPlayModeTests" runstate="Runnable" seed="1668352812" result="Failed" start-time="2026-10-18 08:33:43Z" end-time="2026-10-18 08:33:57Z" duration="14.412508" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="Timeout" value="900000" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  battle step 144 of seed 1235: the intent of Enemy:e22 (x:382.00, y:233.20, width:114.80, height:38.00) is partly hidden by InfoScroll (x:365.20, y:236.80, width:138.80, height:118.40)
+  Expected: True
+  But was:  False
+]]></message>
+                  <stack-trace><![CDATA[at MemoryForge.Client.Tests.ExpeditionUiLayoutPlayModeTests.AssertIntentsInView (UnityEngine.GameObject host, System.String what) [0x00103] in /Users/choi/Documents/Memory_forge/.claude/worktrees/expedition-ui-40eff0/client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionUiLayoutPlayModeTests.cs:343
+at MemoryForge.Client.Tests.ExpeditionUiLayoutPlayModeTests+<PhoneWalk>d__7.MoveNext () [0x002d6] in /Users/choi/Documents/Memory_forge/.claude/worktrees/expedition-ui-40eff0/client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionUiLayoutPlayModeTests.cs:73
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@388540dd9ce6/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+                <output><![CDATA[[ExpeditionUiLayout] seed 1234 added: map, battle_two, picks, summary, lastAction, reward, rest, deckPick, boss_b_notary, reward_elite, save_victory, result
+<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: [TestRunnerNoThrottle] Restored Interaction Mode after test run.
+Saving results to: /Users/choi/Library/Application Support/DefaultCompany/Memory Forge/TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

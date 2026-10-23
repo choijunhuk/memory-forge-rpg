@@ -1,0 +1,2716 @@
+{
+  "id": "edge-exhaust-discard-reshuffle-live-zone",
+  "scope": "Real authored setup/commands only; expected snapshots are comparison-only",
+  "engineSha256": "1de10fff56242ebfe711d0f8165adf69fd418c423b810c340a9ba0c2400fab0c",
+  "setup": {
+    "party": [
+      {
+        "charId": "sion"
+      },
+      {
+        "charId": "kaya",
+        "res": 4
+      },
+      {
+        "charId": "nia"
+      }
+    ],
+    "deck": [
+      {
+        "id": "sion_forget"
+      },
+      {
+        "id": "com_sort"
+      },
+      {
+        "id": "kaya_clue"
+      },
+      {
+        "id": "kaya_clue"
+      },
+      {
+        "id": "kaya_clue"
+      },
+      {
+        "id": "kaya_clue"
+      }
+    ],
+    "hp": 243,
+    "maxHp": 243,
+    "enemies": [
+      "e_seed",
+      "e_seed"
+    ],
+    "difficulty": {
+      "hp": 50
+    },
+    "relics": [
+      "void_shard",
+      "detective_notebook"
+    ],
+    "seed": 1
+  },
+  "steps": [
+    {
+      "request": {
+        "rid": "live-zone-0",
+        "v": 0,
+        "kind": "begin",
+        "args": {}
+      },
+      "response": {
+        "v": 1,
+        "phase": "PLAYER",
+        "ev": [
+          {
+            "e": "status",
+            "uid": "e8",
+            "s": "mark",
+            "n": 2
+          },
+          {
+            "e": "turn",
+            "turn": 1,
+            "ap": 4
+          }
+        ]
+      },
+      "state": {
+        "schema": "mf-battle-0.7",
+        "v": 1,
+        "turn": 1,
+        "phase": "PLAYER",
+        "rng": [
+          1139658107,
+          1388964670,
+          3725279914,
+          3999740333
+        ],
+        "seq": 8,
+        "hp": 243,
+        "maxHp": 243,
+        "block": 0,
+        "counter": 0,
+        "ap": 4,
+        "apNext": 0,
+        "apDrainNext": 0,
+        "silenceUntil": 0,
+        "breakApTurn": 0,
+        "pst": {
+          "weak": 0
+        },
+        "buffs": [],
+        "debts": [],
+        "debtCap": 4,
+        "restraint": {
+          "active": false,
+          "usedTurn": 0
+        },
+        "bonus": {
+          "turn": 0,
+          "avail": false
+        },
+        "drawPenalty": 0,
+        "sealedUntil": 0,
+        "slotsBase": {
+          "next": 2,
+          "after": 1
+        },
+        "slotsTemp": {
+          "next": 0,
+          "after": 0
+        },
+        "growthCount": 0,
+        "growthCap": 3,
+        "played": 0,
+        "lastOwner": null,
+        "ownersThisTurn": [],
+        "echo": 0,
+        "echoMax": 3,
+        "echoActive": false,
+        "echoStart": 0,
+        "contracts": 0,
+        "exhausted": 0,
+        "exhaustStart": 0,
+        "tempParts": 0,
+        "freeNext": 0,
+        "nextBoost": null,
+        "firstAtkDone": false,
+        "overloadFreeUsed": false,
+        "actors": [
+          {
+            "id": "sion",
+            "name": "시온",
+            "attr": "void",
+            "gauge": 0,
+            "gaugeTurn": 0,
+            "res": 0,
+            "power4": 160,
+            "vit": 81,
+            "gearBps": 0,
+            "skillLv": 1,
+            "ultLv": 1,
+            "passive": {
+              "id": "sion_shelf",
+              "name": "망각의 서가",
+              "params": {
+                "perBps": 400,
+                "maxBps": 4000
+              },
+              "text": "이번 전투에서 소멸한 카드 1장당 시온의 공격 피해 +4%(최대 +40%)."
+            },
+            "weapon": null,
+            "cardMods": [],
+            "battleStart": [],
+            "ultExtra": [],
+            "ultReplace": null,
+            "hooks": [],
+            "capacity": 0
+          },
+          {
+            "id": "kaya",
+            "name": "카야",
+            "attr": "flame",
+            "gauge": 0,
+            "gaugeTurn": 0,
+            "res": 4,
+            "power4": 160,
+            "vit": 81,
+            "gearBps": 0,
+            "skillLv": 3,
+            "ultLv": 1,
+            "passive": {
+              "id": "kaya_deduction",
+              "name": "추리",
+              "params": {},
+              "text": "표식이 있는 적을 처치하면 행동력 +1, 카드 1장 뽑기(턴당 1회)."
+            },
+            "weapon": null,
+            "cardMods": [
+              {
+                "type": "cardMod",
+                "cards": [
+                  "kaya_clue"
+                ],
+                "prop": "n",
+                "add": 1
+              }
+            ],
+            "battleStart": [
+              {
+                "op": "st",
+                "s": "mark",
+                "n": 2,
+                "tgt": "rand"
+              }
+            ],
+            "ultExtra": [],
+            "ultReplace": null,
+            "hooks": [
+              {
+                "type": "hook",
+                "id": "kaya_r2"
+              }
+            ],
+            "capacity": 1
+          },
+          {
+            "id": "nia",
+            "name": "니아",
+            "attr": "void",
+            "gauge": 0,
+            "gaugeTurn": 0,
+            "res": 0,
+            "power4": 160,
+            "vit": 81,
+            "gearBps": 0,
+            "skillLv": 1,
+            "ultLv": 1,
+            "passive": {
+              "id": "nia_handiwork",
+              "name": "손재주",
+              "params": {
+                "bps": 1500
+              },
+              "text": "개조(임시 포함)가 붙은 카드의 피해·방어 +15%."
+            },
+            "weapon": null,
+            "cardMods": [],
+            "battleStart": [],
+            "ultExtra": [],
+            "ultReplace": null,
+            "hooks": [],
+            "capacity": 0
+          }
+        ],
+        "enemies": [
+          {
+            "uid": "e7",
+            "id": "e_seed",
+            "name": "씨앗",
+            "tier": "minion",
+            "hp": 3,
+            "maxHp": 3,
+            "block": 0,
+            "brkMax": 1,
+            "brk": 1,
+            "weak": [
+              "flame",
+              "frost",
+              "volt",
+              "void"
+            ],
+            "st": {
+              "vul": 0,
+              "weak": 0,
+              "mark": 0,
+              "burn": 0,
+              "str": 0,
+              "reflect": 0
+            },
+            "brokenUntil": 0,
+            "stunned": false,
+            "pi": 0,
+            "intent": {
+              "t": "def",
+              "b": 2
+            },
+            "next": {
+              "t": "def",
+              "b": 2
+            },
+            "alive": true,
+            "passive": null
+          },
+          {
+            "uid": "e8",
+            "id": "e_seed",
+            "name": "씨앗",
+            "tier": "minion",
+            "hp": 3,
+            "maxHp": 3,
+            "block": 0,
+            "brkMax": 1,
+            "brk": 1,
+            "weak": [
+              "flame",
+              "frost",
+              "volt",
+              "void"
+            ],
+            "st": {
+              "vul": 0,
+              "weak": 0,
+              "mark": 2,
+              "burn": 0,
+              "str": 0,
+              "reflect": 0
+            },
+            "brokenUntil": 0,
+            "stunned": false,
+            "pi": 0,
+            "intent": {
+              "t": "def",
+              "b": 2
+            },
+            "next": {
+              "t": "def",
+              "b": 2
+            },
+            "alive": true,
+            "passive": null
+          }
+        ],
+        "cards": {
+          "c1": {
+            "uid": "c1",
+            "id": "sion_forget",
+            "owner": "sion",
+            "wielder": null,
+            "plus": false,
+            "mods": {
+              "c": null,
+              "e": null
+            },
+            "temp": [],
+            "growth": 0,
+            "grown": false,
+            "used": 0,
+            "costMod": 0,
+            "token": false,
+            "free": false,
+            "assigned": null,
+            "from": null
+          },
+          "c2": {
+            "uid": "c2",
+            "id": "com_sort",
+            "owner": "common",
+            "wielder": null,
+            "plus": false,
+            "mods": {
+              "c": null,
+              "e": null
+            },
+            "temp": [],
+            "growth": 0,
+            "grown": false,
+            "used": 0,
+            "costMod": 0,
+            "token": false,
+            "free": false,
+            "assigned": null,
+            "from": null
+          },
+          "c3": {
+            "uid": "c3",
+            "id": "kaya_clue",
+            "owner": "kaya",
+            "wielder": null,
+            "plus": false,
+            "mods": {
+              "c": null,
+              "e": null
+            },
+            "temp": [],
+            "growth": 0,
+            "grown": false,
+            "used": 0,
+            "costMod": 0,
+            "token": false,
+            "free": false,
+            "assigned": null,
+            "from": null
+          },
+          "c4": {
+            "uid": "c4",
+            "id": "kaya_clue",
+            "owner": "kaya",
+            "wielder": null,
+            "plus": false,
+            "mods": {
+              "c": null,
+              "e": null
+            },
+            "temp": [],
+            "growth": 0,
+            "grown": false,
+            "used": 0,
+            "costMod": 0,
+            "token": false,
+            "free": false,
+            "assigned": null,
+            "from": null
+          },
+          "c5": {
+            "uid": "c5",
+            "id": "kaya_clue",
+            "owner": "kaya",
+            "wielder": null,
+            "plus": false,
+            "mods": {
+              "c": null,
+              "e": null
+            },
+            "temp": [],
+            "growth": 0,
+            "grown": false,
+            "used": 0,
+            "costMod": 0,
+            "token": false,
+            "free": false,
+            "assigned": null,
+            "from": null
+          },
+          "c6": {
+            "uid": "c6",
+            "id": "kaya_clue",
+            "owner": "kaya",
+            "wielder": null,
+            "plus": false,
+            "mods": {
+              "c": null,
+              "e": null
+            },
+            "temp": [],
+            "growth": 0,
+            "grown": false,
+            "used": 0,
+            "costMod": 0,
+            "token": false,
+            "free": false,
+            "assigned": null,
+            "from": null
+          }
+        },
+        "zones": {
+          "draw": [
+            "c5"
+          ],
+          "hand": [
+            "c2",
+            "c3",
+            "c1",
+            "c6",
+            "c4"
+          ],
+          "discard": [],
+          "exhaust": []
+        },
+        "res": [],
+        "resSeq": 0,
+        "relics": [
+          "void_shard",
+          "detective_notebook"
+        ],
+        "powers": [],
+        "turnFlags": {},
+        "battleFlags": {
+          "seraR6Turn": 0
+        },
+        "runFlags": {},
+        "handMax": 10,
+        "log": [
+          {
+            "t": 0,
+            "e": "status",
+            "uid": "e8",
+            "s": "mark",
+            "n": 2
+          },
+          {
+            "t": 1,
+            "e": "turn",
+            "turn": 1,
+            "ap": 4
+          }
+        ],
+        "ev": [
+          {
+            "e": "status",
+            "uid": "e8",
+            "s": "mark",
+            "n": 2
+          },
+          {
+            "e": "turn",
+            "turn": 1,
+            "ap": 4
+          }
+        ],
+        "result": null,
+        "killedMarked": 0,
+        "diff": {
+          "hp": 50,
+          "dmg": 100
+        }
+      }
+    },
+    {
+      "request": {
+        "rid": "live-zone-1",
+        "v": 1,
+        "kind": "play",
+        "args": {
+          "uid": "c2",
+          "picks": [
+            "c3"
+          ]
+        }
+      },
+      "response": {
+        "v": 2,
+        "phase": "PLAYER",
+        "ev": [
+          {
+            "e": "play",
+            "uid": "c2",
+            "id": "com_sort",
+            "mode": "now",
+            "cost": 0,
+            "target": null
+          },
+          {
+            "e": "resolved",
+            "uid": "c2",
+            "id": "com_sort",
+            "reserved": null,
+            "fizzled": false
+          }
+        ]
+      },
+      "state": {
+        "schema": "mf-battle-0.7",
+        "v": 2,
+        "turn": 1,
+        "phase": "PLAYER",
+        "rng": [
+          1139658107,
+          1388964670,
+          3725279914,
+          3999740333
+        ],
+        "seq": 8,
+        "hp": 243,
+        "maxHp": 243,
+        "block": 0,
+        "counter": 0,
+        "ap": 4,
+        "apNext": 0,
+        "apDrainNext": 0,
+        "silenceUntil": 0,
+        "breakApTurn": 0,
+        "pst": {
+          "weak": 0
+        },
+        "buffs": [],
+        "debts": [],
+        "debtCap": 4,
+        "restraint": {
+          "active": false,
+          "usedTurn": 0
+        },
+        "bonus": {
+          "turn": 0,
+          "avail": false
+        },
+        "drawPenalty": 0,
+        "sealedUntil": 0,
+        "slotsBase": {
+          "next": 2,
+          "after": 1
+        },
+        "slotsTemp": {
+          "next": 0,
+          "after": 0
+        },
+        "growthCount": 0,
+        "growthCap": 3,
+        "played": 1,
+        "lastOwner": null,
+        "ownersThisTurn": [],
+        "echo": 0,
+        "echoMax": 3,
+        "echoActive": false,
+        "echoStart": 0,
+        "contracts": 0,
+        "exhausted": 0,
+        "exhaustStart": 0,
+        "tempParts": 0,
+        "freeNext": 0,
+        "nextBoost": null,
+        "firstAtkDone": false,
+        "overloadFreeUsed": false,
+        "actors": [
+          {
+            "id": "sion",
+            "name": "시온",
+            "attr": "void",
+            "gauge": 0,
+            "gaugeTurn": 0,
+            "res": 0,
+            "power4": 160,
+            "vit": 81,
+            "gearBps": 0,
+            "skillLv": 1,
+            "ultLv": 1,
+            "passive": {
+              "id": "sion_shelf",
+              "name": "망각의 서가",
+              "params": {
+                "perBps": 400,
+                "maxBps": 4000
+              },
+              "text": "이번 전투에서 소멸한 카드 1장당 시온의 공격 피해 +4%(최대 +40%)."
+            },
+            "weapon": null,
+            "cardMods": [],
+            "battleStart": [],
+            "ultExtra": [],
+            "ultReplace": null,
+            "hooks": [],
+            "capacity": 0
+          },
+          {
+            "id": "kaya",
+            "name": "카야",
+            "attr": "flame",
+            "gauge": 0,
+            "gaugeTurn": 0,
+            "res": 4,
+            "power4": 160,
+            "vit": 81,
+            "gearBps": 0,
+            "skillLv": 3,
+            "ultLv": 1,
+            "passive": {
+              "id": "kaya_deduction",
+              "name": "추리",
+              "params": {},
+              "text": "표식이 있는 적을 처치하면 행동력 +1, 카드 1장 뽑기(턴당 1회)."
+            },
+            "weapon": null,
+            "cardMods": [
+              {
+                "type": "cardMod",
+                "cards": [
+                  "kaya_clue"
+                ],
+                "prop": "n",
+                "add": 1
+              }
+            ],
+            "battleStart": [
+              {
+                "op": "st",
+                "s": "mark",
+                "n": 2,
+                "tgt": "rand"
+              }
+            ],
+            "ultExtra": [],
+            "ultReplace": null,
+            "hooks": [
+              {
+                "type": "hook",
+                "id": "kaya_r2"
+              }
+            ],
+            "capacity": 1
+          },
+          {
+            "id": "nia",
+            "name": "니아",
+            "attr": "void",
+            "gauge": 0,
+            "gaugeTurn": 0,
+            "res": 0,
+            "power4": 160,
+            "vit": 81,
+            "gearBps": 0,
+            "skillLv": 1,
+            "ultLv": 1,
+            "passive": {
+              "id": "nia_handiwork",
+              "name": "손재주",
+              "params": {
+                "bps": 1500
+              },
+              "text": "개조(임시 포함)가 붙은 카드의 피해·방어 +15%."
+            },
+            "weapon": null,
+            "cardMods": [],
+            "battleStart": [],
+            "ultExtra": [],
+            "ultReplace": null,
+            "hooks": [],
+            "capacity": 0
+          }
+        ],
+        "enemies": [
+          {
+            "uid": "e7",
+            "id": "e_seed",
+            "name": "씨앗",
+            "tier": "minion",
+            "hp": 3,
+            "maxHp": 3,
+            "block": 0,
+            "brkMax": 1,
+            "brk": 1,
+            "weak": [
+              "flame",
+              "frost",
+              "volt",
+              "void"
+            ],
+            "st": {
+              "vul": 0,
+              "weak": 0,
+              "mark": 0,
+              "burn": 0,
+              "str": 0,
+              "reflect": 0
+            },
+            "brokenUntil": 0,
+            "stunned": false,
+            "pi": 0,
+            "intent": {
+              "t": "def",
+              "b": 2
+            },
+            "next": {
+              "t": "def",
+              "b": 2
+            },
+            "alive": true,
+            "passive": null
+          },
+          {
+            "uid": "e8",
+            "id": "e_seed",
+            "name": "씨앗",
+            "tier": "minion",
+            "hp": 3,
+            "maxHp": 3,
+            "block": 0,
+            "brkMax": 1,
+            "brk": 1,
+            "weak": [
+              "flame",
+              "frost",
+              "volt",
+              "void"
+            ],
+            "st": {
+              "vul": 0,
+              "weak": 0,
+              "mark": 2,
+              "burn": 0,
+              "str": 0,
+              "reflect": 0
+            },
+            "brokenUntil": 0,
+            "stunned": false,
+            "pi": 0,
+            "intent": {
+              "t": "def",
+              "b": 2
+            },
+            "next": {
+              "t": "def",
+              "b": 2
+            },
+            "alive": true,
+            "passive": null
+          }
+        ],
+        "cards": {
+          "c1": {
+            "uid": "c1",
+            "id": "sion_forget",
+            "owner": "sion",
+            "wielder": null,
+            "plus": false,
+            "mods": {
+              "c": null,
+              "e": null
+            },
+            "temp": [],
+            "growth": 0,
+            "grown": false,
+            "used": 0,
+            "costMod": 0,
+            "token": false,
+            "free": false,
+            "assigned": null,
+            "from": null
+          },
+          "c2": {
+            "uid": "c2",
+            "id": "com_sort",
+            "owner": "common",
+            "wielder": null,
+            "plus": false,
+            "mods": {
+              "c": null,
+              "e": null
+            },
+            "temp": [],
+            "growth": 0,
+            "grown": false,
+            "used": 1,
+            "costMod": 0,
+            "token": false,
+            "free": false,
+            "assigned": null,
+            "from": null
+          },
+          "c3": {
+            "uid": "c3",
+            "id": "kaya_clue",
+            "owner": "kaya",
+            "wielder": null,
+            "plus": false,
+            "mods": {
+              "c": null,
+              "e": null
+            },
+            "temp": [],
+            "growth": 0,
+            "grown": false,
+            "used": 0,
+            "costMod": 0,
+            "token": false,
+            "free": false,
+            "assigned": null,
+            "from": null
+          },
+          "c4": {
+            "uid": "c4",
+            "id": "kaya_clue",
+            "owner": "kaya",
+            "wielder": null,
+            "plus": false,
+            "mods": {
+              "c": null,
+              "e": null
+            },
+            "temp": [],
+            "growth": 0,
+            "grown": false,
+            "used": 0,
+            "costMod": 0,
+            "token": false,
+            "free": false,
+            "assigned": null,
+            "from": null
+          },
+          "c5": {
+            "uid": "c5",
+            "id": "kaya_clue",
+            "owner": "kaya",
+            "wielder": null,
+            "plus": false,
+            "mods": {
+              "c": null,
+              "e": null
+            },
+            "temp": [],
+            "growth": 0,
+            "grown": false,
+            "used": 0,
+            "costMod": 0,
+            "token": false,
+            "free": false,
+            "assigned": null,
+            "from": null
+          },
+          "c6": {
+            "uid": "c6",
+            "id": "kaya_clue",
+            "owner": "kaya",
+            "wielder": null,
+            "plus": false,
+            "mods": {
+              "c": null,
+              "e": null
+            },
+            "temp": [],
+            "growth": 0,
+            "grown": false,
+            "used": 0,
+            "costMod": 0,
+            "token": false,
+            "free": false,
+            "assigned": null,
+            "from": null
+          }
+        },
+        "zones": {
+          "draw": [],
+          "hand": [
+            "c1",
+            "c6",
+            "c4",
+            "c5"
+          ],
+          "discard": [
+            "c3",
+            "c2"
+          ],
+          "exhaust": []
+        },
+        "res": [],
+        "resSeq": 0,
+        "relics": [
+          "void_shard",
+          "detective_notebook"
+        ],
+        "powers": [],
+        "turnFlags": {},
+        "battleFlags": {
+          "seraR6Turn": 0
+        },
+        "runFlags": {},
+        "handMax": 10,
+        "log": [
+          {
+            "t": 0,
+            "e": "status",
+            "uid": "e8",
+            "s": "mark",
+            "n": 2
+          },
+          {
+            "t": 1,
+            "e": "turn",
+            "turn": 1,
+            "ap": 4
+          },
+          {
+            "t": 1,
+            "e": "play",
+            "uid": "c2",
+            "id": "com_sort",
+            "mode": "now",
+            "cost": 0,
+            "target": null
+          },
+          {
+            "t": 1,
+            "e": "resolved",
+            "uid": "c2",
+            "id": "com_sort",
+            "reserved": null,
+            "fizzled": false
+          }
+        ],
+        "ev": [
+          {
+            "e": "play",
+            "uid": "c2",
+            "id": "com_sort",
+            "mode": "now",
+            "cost": 0,
+            "target": null
+          },
+          {
+            "e": "resolved",
+            "uid": "c2",
+            "id": "com_sort",
+            "reserved": null,
+            "fizzled": false
+          }
+        ],
+        "result": null,
+        "killedMarked": 0,
+        "diff": {
+          "hp": 50,
+          "dmg": 100
+        }
+      }
+    },
+    {
+      "request": {
+        "rid": "live-zone-2",
+        "v": 2,
+        "kind": "play",
+        "args": {
+          "uid": "c6",
+          "target": "e7"
+        }
+      },
+      "response": {
+        "v": 3,
+        "phase": "PLAYER",
+        "ev": [
+          {
+            "e": "play",
+            "uid": "c6",
+            "id": "kaya_clue",
+            "mode": "now",
+            "cost": 0,
+            "target": "e7"
+          },
+          {
+            "e": "status",
+            "uid": "e7",
+            "s": "mark",
+            "n": 3
+          },
+          {
+            "e": "resolved",
+            "uid": "c6",
+            "id": "kaya_clue",
+            "reserved": null,
+            "fizzled": false
+          }
+        ]
+      },
+      "state": {
+        "schema": "mf-battle-0.7",
+        "v": 3,
+        "turn": 1,
+        "phase": "PLAYER",
+        "rng": [
+          1139658107,
+          1388964670,
+          3725279914,
+          3999740333
+        ],
+        "seq": 8,
+        "hp": 243,
+        "maxHp": 243,
+        "block": 0,
+        "counter": 0,
+        "ap": 4,
+        "apNext": 0,
+        "apDrainNext": 0,
+        "silenceUntil": 0,
+        "breakApTurn": 0,
+        "pst": {
+          "weak": 0
+        },
+        "buffs": [],
+        "debts": [],
+        "debtCap": 4,
+        "restraint": {
+          "active": false,
+          "usedTurn": 0
+        },
+        "bonus": {
+          "turn": 0,
+          "avail": false
+        },
+        "drawPenalty": 0,
+        "sealedUntil": 0,
+        "slotsBase": {
+          "next": 2,
+          "after": 1
+        },
+        "slotsTemp": {
+          "next": 0,
+          "after": 0
+        },
+        "growthCount": 0,
+        "growthCap": 3,
+        "played": 2,
+        "lastOwner": "kaya",
+        "ownersThisTurn": [
+          "kaya"
+        ],
+        "echo": 0,
+        "echoMax": 3,
+        "echoActive": false,
+        "echoStart": 0,
+        "contracts": 0,
+        "exhausted": 0,
+        "exhaustStart": 0,
+        "tempParts": 0,
+        "freeNext": 0,
+        "nextBoost": null,
+        "firstAtkDone": false,
+        "overloadFreeUsed": false,
+        "actors": [
+          {
+            "id": "sion",
+            "name": "시온",
+            "attr": "void",
+            "gauge": 0,
+            "gaugeTurn": 0,
+            "res": 0,
+            "power4": 160,
+            "vit": 81,
+            "gearBps": 0,
+            "skillLv": 1,
+            "ultLv": 1,
+            "passive": {
+              "id": "sion_shelf",
+              "name": "망각의 서가",
+              "params": {
+                "perBps": 400,
+                "maxBps": 4000
+              },
+              "text": "이번 전투에서 소멸한 카드 1장당 시온의 공격 피해 +4%(최대 +40%)."
+            },
+            "weapon": null,
+            "cardMods": [],
+            "battleStart": [],
+            "ultExtra": [],
+            "ultReplace": null,
+            "hooks": [],
+            "capacity": 0
+          },
+          {
+            "id": "kaya",
+            "name": "카야",
+            "attr": "flame",
+            "gauge": 10,
+            "gaugeTurn": 10,
+            "res": 4,
+            "power4": 160,
+            "vit": 81,
+            "gearBps": 0,
+            "skillLv": 3,
+            "ultLv": 1,
+            "passive": {
+              "id": "kaya_deduction",
+              "name": "추리",
+              "params": {},
+              "text": "표식이 있는 적을 처치하면 행동력 +1, 카드 1장 뽑기(턴당 1회)."
+            },
+            "weapon": null,
+            "cardMods": [
+              {
+                "type": "cardMod",
+                "cards": [
+                  "kaya_clue"
+                ],
+                "prop": "n",
+                "add": 1
+              }
+            ],
+            "battleStart": [
+              {
+                "op": "st",
+                "s": "mark",
+                "n": 2,
+                "tgt": "rand"
+              }
+            ],
+            "ultExtra": [],
+            "ultReplace": null,
+            "hooks": [
+              {
+                "type": "hook",
+                "id": "kaya_r2"
+              }
+            ],
+            "capacity": 1
+          },
+          {
+            "id": "nia",
+            "name": "니아",
+            "attr": "void",
+            "gauge": 0,
+            "gaugeTurn": 0,
+            "res": 0,
+            "power4": 160,
+            "vit": 81,
+            "gearBps": 0,
+            "skillLv": 1,
+            "ultLv": 1,
+            "passive": {
+              "id": "nia_handiwork",
+              "name": "손재주",
+              "params": {
+                "bps": 1500
+              },
+              "text": "개조(임시 포함)가 붙은 카드의 피해·방어 +15%."
+            },
+            "weapon": null,
+            "cardMods": [],
+            "battleStart": [],
+            "ultExtra": [],
+            "ultReplace": null,
+            "hooks": [],
+            "capacity": 0
+          }
+        ],
+        "enemies": [
+          {
+            "uid": "e7",
+            "id": "e_seed",
+            "name": "씨앗",
+            "tier": "minion",
+            "hp": 3,
+            "maxHp": 3,
+            "block": 0,
+            "brkMax": 1,
+            "brk": 1,
+            "weak": [
+              "flame",
+              "frost",
+              "volt",
+              "void"
+            ],
+            "st": {
+              "vul": 0,
+              "weak": 0,
+              "mark": 3,
+              "burn": 0,
+              "str": 0,
+              "reflect": 0
+            },
+            "brokenUntil": 0,
+            "stunned": false,
+            "pi": 0,
+            "intent": {
+              "t": "def",
+              "b": 2
+            },
+            "next": {
+              "t": "def",
+              "b": 2
+            },
+            "alive": true,
+            "passive": null
+          },
+          {
+            "uid": "e8",
+            "id": "e_seed",
+            "name": "씨앗",
+            "tier": "minion",
+            "hp": 3,
+            "maxHp": 3,
+            "block": 0,
+            "brkMax": 1,
+            "brk": 1,
+            "weak": [
+              "flame",
+              "frost",
+              "volt",
+              "void"
+            ],
+            "st": {
+              "vul": 0,
+              "weak": 0,
+              "mark": 2,
+              "burn": 0,
+              "str": 0,
+              "reflect": 0
+            },
+            "brokenUntil": 0,
+            "stunned": false,
+            "pi": 0,
+            "intent": {
+              "t": "def",
+              "b": 2
+            },
+            "next": {
+              "t": "def",
+              "b": 2
+            },
+            "alive": true,
+            "passive": null
+          }
+        ],
+        "cards": {
+          "c1": {
+            "uid": "c1",
+            "id": "sion_forget",
+            "owner": "sion",
+            "wielder": null,
+            "plus": false,
+            "mods": {
+              "c": null,
+              "e": null
+            },
+            "temp": [],
+            "growth": 0,
+            "grown": false,
+            "used": 0,
+            "costMod": 0,
+            "token": false,
+            "free": false,
+            "assigned": null,
+            "from": null
+          },
+          "c2": {
+            "uid": "c2",
+            "id": "com_sort",
+            "owner": "common",
+            "wielder": null,
+            "plus": false,
+            "mods": {
+              "c": null,
+              "e": null
+            },
+            "temp": [],
+            "growth": 0,
+            "grown": false,
+            "used": 1,
+            "costMod": 0,
+            "token": false,
+            "free": false,
+            "assigned": null,
+            "from": null
+          },
+          "c3": {
+            "uid": "c3",
+            "id": "kaya_clue",
+            "owner": "kaya",
+            "wielder": null,
+            "plus": false,
+            "mods": {
+              "c": null,
+              "e": null
+            },
+            "temp": [],
+            "growth": 0,
+            "grown": false,
+            "used": 0,
+            "costMod": 0,
+            "token": false,
+            "free": false,
+            "assigned": null,
+            "from": null
+          },
+          "c4": {
+            "uid": "c4",
+            "id": "kaya_clue",
+            "owner": "kaya",
+            "wielder": null,
+            "plus": false,
+            "mods": {
+              "c": null,
+              "e": null
+            },
+            "temp": [],
+            "growth": 0,
+            "grown": false,
+            "used": 0,
+            "costMod": 0,
+            "token": false,
+            "free": false,
+            "assigned": null,
+            "from": null
+          },
+          "c5": {
+            "uid": "c5",
+            "id": "kaya_clue",
+            "owner": "kaya",
+            "wielder": null,
+            "plus": false,
+            "mods": {
+              "c": null,
+              "e": null
+            },
+            "temp": [],
+            "growth": 0,
+            "grown": false,
+            "used": 0,
+            "costMod": 0,
+            "token": false,
+            "free": false,
+            "assigned": null,
+            "from": null
+          },
+          "c6": {
+            "uid": "c6",
+            "id": "kaya_clue",
+            "owner": "kaya",
+            "wielder": null,
+            "plus": false,
+            "mods": {
+              "c": null,
+              "e": null
+            },
+            "temp": [],
+            "growth": 0,
+            "grown": false,
+            "used": 1,
+            "costMod": 0,
+            "token": false,
+            "free": false,
+            "assigned": null,
+            "from": null
+          }
+        },
+        "zones": {
+          "draw": [],
+          "hand": [
+            "c1",
+            "c4",
+            "c5"
+          ],
+          "discard": [
+            "c3",
+            "c2",
+            "c6"
+          ],
+          "exhaust": []
+        },
+        "res": [],
+        "resSeq": 0,
+        "relics": [
+          "void_shard",
+          "detective_notebook"
+        ],
+        "powers": [],
+        "turnFlags": {},
+        "battleFlags": {
+          "seraR6Turn": 0
+        },
+        "runFlags": {},
+        "handMax": 10,
+        "log": [
+          {
+            "t": 0,
+            "e": "status",
+            "uid": "e8",
+            "s": "mark",
+            "n": 2
+          },
+          {
+            "t": 1,
+            "e": "turn",
+            "turn": 1,
+            "ap": 4
+          },
+          {
+            "t": 1,
+            "e": "play",
+            "uid": "c2",
+            "id": "com_sort",
+            "mode": "now",
+            "cost": 0,
+            "target": null
+          },
+          {
+            "t": 1,
+            "e": "resolved",
+            "uid": "c2",
+            "id": "com_sort",
+            "reserved": null,
+            "fizzled": false
+          },
+          {
+            "t": 1,
+            "e": "play",
+            "uid": "c6",
+            "id": "kaya_clue",
+            "mode": "now",
+            "cost": 0,
+            "target": "e7"
+          },
+          {
+            "t": 1,
+            "e": "status",
+            "uid": "e7",
+            "s": "mark",
+            "n": 3
+          },
+          {
+            "t": 1,
+            "e": "resolved",
+            "uid": "c6",
+            "id": "kaya_clue",
+            "reserved": null,
+            "fizzled": false
+          }
+        ],
+        "ev": [
+          {
+            "e": "play",
+            "uid": "c6",
+            "id": "kaya_clue",
+            "mode": "now",
+            "cost": 0,
+            "target": "e7"
+          },
+          {
+            "e": "status",
+            "uid": "e7",
+            "s": "mark",
+            "n": 3
+          },
+          {
+            "e": "resolved",
+            "uid": "c6",
+            "id": "kaya_clue",
+            "reserved": null,
+            "fizzled": false
+          }
+        ],
+        "result": null,
+        "killedMarked": 0,
+        "diff": {
+          "hp": 50,
+          "dmg": 100
+        }
+      }
+    },
+    {
+      "request": {
+        "rid": "live-zone-3",
+        "v": 3,
+        "kind": "play",
+        "args": {
+          "uid": "c4",
+          "target": "e8"
+        }
+      },
+      "response": {
+        "v": 4,
+        "phase": "PLAYER",
+        "ev": [
+          {
+            "e": "play",
+            "uid": "c4",
+            "id": "kaya_clue",
+            "mode": "now",
+            "cost": 0,
+            "target": "e8"
+          },
+          {
+            "e": "status",
+            "uid": "e8",
+            "s": "mark",
+            "n": 3
+          },
+          {
+            "e": "resolved",
+            "uid": "c4",
+            "id": "kaya_clue",
+            "reserved": null,
+            "fizzled": false
+          }
+        ]
+      },
+      "state": {
+        "schema": "mf-battle-0.7",
+        "v": 4,
+        "turn": 1,
+        "phase": "PLAYER",
+        "rng": [
+          1139658107,
+          1388964670,
+          3725279914,
+          3999740333
+        ],
+        "seq": 8,
+        "hp": 243,
+        "maxHp": 243,
+        "block": 0,
+        "counter": 0,
+        "ap": 4,
+        "apNext": 0,
+        "apDrainNext": 0,
+        "silenceUntil": 0,
+        "breakApTurn": 0,
+        "pst": {
+          "weak": 0
+        },
+        "buffs": [],
+        "debts": [],
+        "debtCap": 4,
+        "restraint": {
+          "active": false,
+          "usedTurn": 0
+        },
+        "bonus": {
+          "turn": 0,
+          "avail": false
+        },
+        "drawPenalty": 0,
+        "sealedUntil": 0,
+        "slotsBase": {
+          "next": 2,
+          "after": 1
+        },
+        "slotsTemp": {
+          "next": 0,
+          "after": 0
+        },
+        "growthCount": 0,
+        "growthCap": 3,
+        "played": 3,
+        "lastOwner": "kaya",
+        "ownersThisTurn": [
+          "kaya"
+        ],
+        "echo": 0,
+        "echoMax": 3,
+        "echoActive": false,
+        "echoStart": 0,
+        "contracts": 0,
+        "exhausted": 0,
+        "exhaustStart": 0,
+        "tempParts": 0,
+        "freeNext": 0,
+        "nextBoost": null,
+        "firstAtkDone": false,
+        "overloadFreeUsed": false,
+        "actors": [
+          {
+            "id": "sion",
+            "name": "시온",
+            "attr": "void",
+            "gauge": 0,
+            "gaugeTurn": 0,
+            "res": 0,
+            "power4": 160,
+            "vit": 81,
+            "gearBps": 0,
+            "skillLv": 1,
+            "ultLv": 1,
+            "passive": {
+              "id": "sion_shelf",
+              "name": "망각의 서가",
+              "params": {
+                "perBps": 400,
+                "maxBps": 4000
+              },
+              "text": "이번 전투에서 소멸한 카드 1장당 시온의 공격 피해 +4%(최대 +40%)."
+            },
+            "weapon": null,
+            "cardMods": [],
+            "battleStart": [],
+            "ultExtra": [],
+            "ultReplace": null,
+            "hooks": [],
+            "capacity": 0
+          },
+          {
+            "id": "kaya",
+            "name": "카야",
+            "attr": "flame",
+            "gauge": 20,
+            "gaugeTurn": 20,
+            "res": 4,
+            "power4": 160,
+            "vit": 81,
+            "gearBps": 0,
+            "skillLv": 3,
+            "ultLv": 1,
+            "passive": {
+              "id": "kaya_deduction",
+              "name": "추리",
+              "params": {},
+              "text": "표식이 있는 적을 처치하면 행동력 +1, 카드 1장 뽑기(턴당 1회)."
+            },
+            "weapon": null,
+            "cardMods": [
+              {
+                "type": "cardMod",
+                "cards": [
+                  "kaya_clue"
+                ],
+                "prop": "n",
+                "add": 1
+              }
+            ],
+            "battleStart": [
+              {
+                "op": "st",
+                "s": "mark",
+                "n": 2,
+                "tgt": "rand"
+              }
+            ],
+            "ultExtra": [],
+            "ultReplace": null,
+            "hooks": [
+              {
+                "type": "hook",
+                "id": "kaya_r2"
+              }
+            ],
+            "capacity": 1
+          },
+          {
+            "id": "nia",
+            "name": "니아",
+            "attr": "void",
+            "gauge": 0,
+            "gaugeTurn": 0,
+            "res": 0,
+            "power4": 160,
+            "vit": 81,
+            "gearBps": 0,
+            "skillLv": 1,
+            "ultLv": 1,
+            "passive": {
+              "id": "nia_handiwork",
+              "name": "손재주",
+              "params": {
+                "bps": 1500
+              },
+              "text": "개조(임시 포함)가 붙은 카드의 피해·방어 +15%."
+            },
+            "weapon": null,
+            "cardMods": [],
+            "battleStart": [],
+            "ultExtra": [],
+            "ultReplace": null,
+            "hooks": [],
+            "capacity": 0
+          }
+        ],
+        "enemies": [
+          {
+            "uid": "e7",
+            "id": "e_seed",
+            "name": "씨앗",
+            "tier": "minion",
+            "hp": 3,
+            "maxHp": 3,
+            "block": 0,
+            "brkMax": 1,
+            "brk": 1,
+            "weak": [
+              "flame",
+              "frost",
+              "volt",
+              "void"
+            ],
+            "st": {
+              "vul": 0,
+              "weak": 0,
+              "mark": 3,
+              "burn": 0,
+              "str": 0,
+              "reflect": 0
+            },
+            "brokenUntil": 0,
+            "stunned": false,
+            "pi": 0,
+            "intent": {
+              "t": "def",
+              "b": 2
+            },
+            "next": {
+              "t": "def",
+              "b": 2
+            },
+            "alive": true,
+            "passive": null
+          },
+          {
+            "uid": "e8",
+            "id": "e_seed",
+            "name": "씨앗",
+            "tier": "minion",
+            "hp": 3,
+            "maxHp": 3,
+            "block": 0,
+            "brkMax": 1,
+            "brk": 1,
+            "weak": [
+              "flame",
+              "frost",
+              "volt",
+              "void"
+            ],
+            "st": {
+              "vul": 0,
+              "weak": 0,
+              "mark": 5,
+              "burn": 0,
+              "str": 0,
+              "reflect": 0
+            },
+            "brokenUntil": 0,
+            "stunned": false,
+            "pi": 0,
+            "intent": {
+              "t": "def",
+              "b": 2
+            },
+            "next": {
+              "t": "def",
+              "b": 2
+            },
+            "alive": true,
+            "passive": null
+          }
+        ],
+        "cards": {
+          "c1": {
+            "uid": "c1",
+            "id": "sion_forget",
+            "owner": "sion",
+            "wielder": null,
+            "plus": false,
+            "mods": {
+              "c": null,
+              "e": null
+            },
+            "temp": [],
+            "growth": 0,
+            "grown": false,
+            "used": 0,
+            "costMod": 0,
+            "token": false,
+            "free": false,
+            "assigned": null,
+            "from": null
+          },
+          "c2": {
+            "uid": "c2",
+            "id": "com_sort",
+            "owner": "common",
+            "wielder": null,
+            "plus": false,
+            "mods": {
+              "c": null,
+              "e": null
+            },
+            "temp": [],
+            "growth": 0,
+            "grown": false,
+            "used": 1,
+            "costMod": 0,
+            "token": false,
+            "free": false,
+            "assigned": null,
+            "from": null
+          },
+          "c3": {
+            "uid": "c3",
+            "id": "kaya_clue",
+            "owner": "kaya",
+            "wielder": null,
+            "plus": false,
+            "mods": {
+              "c": null,
+              "e": null
+            },
+            "temp": [],
+            "growth": 0,
+            "grown": false,
+            "used": 0,
+            "costMod": 0,
+            "token": false,
+            "free": false,
+            "assigned": null,
+            "from": null
+          },
+          "c4": {
+            "uid": "c4",
+            "id": "kaya_clue",
+            "owner": "kaya",
+            "wielder": null,
+            "plus": false,
+            "mods": {
+              "c": null,
+              "e": null
+            },
+            "temp": [],
+            "growth": 0,
+            "grown": false,
+            "used": 1,
+            "costMod": 0,
+            "token": false,
+            "free": false,
+            "assigned": null,
+            "from": null
+          },
+          "c5": {
+            "uid": "c5",
+            "id": "kaya_clue",
+            "owner": "kaya",
+            "wielder": null,
+            "plus": false,
+            "mods": {
+              "c": null,
+              "e": null
+            },
+            "temp": [],
+            "growth": 0,
+            "grown": false,
+            "used": 0,
+            "costMod": 0,
+            "token": false,
+            "free": false,
+            "assigned": null,
+            "from": null
+          },
+          "c6": {
+            "uid": "c6",
+            "id": "kaya_clue",
+            "owner": "kaya",
+            "wielder": null,
+            "plus": false,
+            "mods": {
+              "c": null,
+              "e": null
+            },
+            "temp": [],
+            "growth": 0,
+            "grown": false,
+            "used": 1,
+            "costMod": 0,
+            "token": false,
+            "free": false,
+            "assigned": null,
+            "from": null
+          }
+        },
+        "zones": {
+          "draw": [],
+          "hand": [
+            "c1",
+            "c5"
+          ],
+          "discard": [
+            "c3",
+            "c2",
+            "c6",
+            "c4"
+          ],
+          "exhaust": []
+        },
+        "res": [],
+        "resSeq": 0,
+        "relics": [
+          "void_shard",
+          "detective_notebook"
+        ],
+        "powers": [],
+        "turnFlags": {},
+        "battleFlags": {
+          "seraR6Turn": 0
+        },
+        "runFlags": {},
+        "handMax": 10,
+        "log": [
+          {
+            "t": 0,
+            "e": "status",
+            "uid": "e8",
+            "s": "mark",
+            "n": 2
+          },
+          {
+            "t": 1,
+            "e": "turn",
+            "turn": 1,
+            "ap": 4
+          },
+          {
+            "t": 1,
+            "e": "play",
+            "uid": "c2",
+            "id": "com_sort",
+            "mode": "now",
+            "cost": 0,
+            "target": null
+          },
+          {
+            "t": 1,
+            "e": "resolved",
+            "uid": "c2",
+            "id": "com_sort",
+            "reserved": null,
+            "fizzled": false
+          },
+          {
+            "t": 1,
+            "e": "play",
+            "uid": "c6",
+            "id": "kaya_clue",
+            "mode": "now",
+            "cost": 0,
+            "target": "e7"
+          },
+          {
+            "t": 1,
+            "e": "status",
+            "uid": "e7",
+            "s": "mark",
+            "n": 3
+          },
+          {
+            "t": 1,
+            "e": "resolved",
+            "uid": "c6",
+            "id": "kaya_clue",
+            "reserved": null,
+            "fizzled": false
+          },
+          {
+            "t": 1,
+            "e": "play",
+            "uid": "c4",
+            "id": "kaya_clue",
+            "mode": "now",
+            "cost": 0,
+            "target": "e8"
+          },
+          {
+            "t": 1,
+            "e": "status",
+            "uid": "e8",
+            "s": "mark",
+            "n": 3
+          },
+          {
+            "t": 1,
+            "e": "resolved",
+            "uid": "c4",
+            "id": "kaya_clue",
+            "reserved": null,
+            "fizzled": false
+          }
+        ],
+        "ev": [
+          {
+            "e": "play",
+            "uid": "c4",
+            "id": "kaya_clue",
+            "mode": "now",
+            "cost": 0,
+            "target": "e8"
+          },
+          {
+            "e": "status",
+            "uid": "e8",
+            "s": "mark",
+            "n": 3
+          },
+          {
+            "e": "resolved",
+            "uid": "c4",
+            "id": "kaya_clue",
+            "reserved": null,
+            "fizzled": false
+          }
+        ],
+        "result": null,
+        "killedMarked": 0,
+        "diff": {
+          "hp": 50,
+          "dmg": 100
+        }
+      }
+    },
+    {
+      "request": {
+        "rid": "live-zone-4",
+        "v": 4,
+        "kind": "play",
+        "args": {
+          "uid": "c1",
+          "picks": [
+            "c3"
+          ]
+        }
+      },
+      "response": {
+        "v": 5,
+        "phase": "PLAYER",
+        "ev": [
+          {
+            "e": "play",
+            "uid": "c1",
+            "id": "sion_forget",
+            "mode": "now",
+            "cost": 1,
+            "target": null
+          },
+          {
+            "e": "exhaust",
+            "uid": "c3"
+          },
+          {
+            "e": "dmg",
+            "uid": "e7",
+            "n": 3,
+            "blocked": 0,
+            "src": "relic"
+          },
+          {
+            "e": "kill",
+            "uid": "e7",
+            "id": "e_seed"
+          },
+          {
+            "e": "reshuffle"
+          },
+          {
+            "e": "status",
+            "uid": "e8",
+            "s": "burn",
+            "n": 3
+          },
+          {
+            "e": "block",
+            "n": 10,
+            "src": "card"
+          },
+          {
+            "e": "resolved",
+            "uid": "c1",
+            "id": "sion_forget",
+            "reserved": null,
+            "fizzled": false
+          }
+        ]
+      },
+      "state": {
+        "schema": "mf-battle-0.7",
+        "v": 5,
+        "turn": 1,
+        "phase": "PLAYER",
+        "rng": [
+          3604652282,
+          544282413,
+          1267161376,
+          3034057615
+        ],
+        "seq": 8,
+        "hp": 243,
+        "maxHp": 243,
+        "block": 10,
+        "counter": 0,
+        "ap": 4,
+        "apNext": 0,
+        "apDrainNext": 0,
+        "silenceUntil": 0,
+        "breakApTurn": 0,
+        "pst": {
+          "weak": 0
+        },
+        "buffs": [],
+        "debts": [],
+        "debtCap": 4,
+        "restraint": {
+          "active": false,
+          "usedTurn": 0
+        },
+        "bonus": {
+          "turn": 0,
+          "avail": false
+        },
+        "drawPenalty": 0,
+        "sealedUntil": 0,
+        "slotsBase": {
+          "next": 2,
+          "after": 1
+        },
+        "slotsTemp": {
+          "next": 0,
+          "after": 0
+        },
+        "growthCount": 0,
+        "growthCap": 3,
+        "played": 4,
+        "lastOwner": "sion",
+        "ownersThisTurn": [
+          "kaya",
+          "sion"
+        ],
+        "echo": 0,
+        "echoMax": 3,
+        "echoActive": false,
+        "echoStart": 0,
+        "contracts": 0,
+        "exhausted": 1,
+        "exhaustStart": 0,
+        "tempParts": 0,
+        "freeNext": 0,
+        "nextBoost": null,
+        "firstAtkDone": false,
+        "overloadFreeUsed": false,
+        "actors": [
+          {
+            "id": "sion",
+            "name": "시온",
+            "attr": "void",
+            "gauge": 10,
+            "gaugeTurn": 10,
+            "res": 0,
+            "power4": 160,
+            "vit": 81,
+            "gearBps": 0,
+            "skillLv": 1,
+            "ultLv": 1,
+            "passive": {
+              "id": "sion_shelf",
+              "name": "망각의 서가",
+              "params": {
+                "perBps": 400,
+                "maxBps": 4000
+              },
+              "text": "이번 전투에서 소멸한 카드 1장당 시온의 공격 피해 +4%(최대 +40%)."
+            },
+            "weapon": null,
+            "cardMods": [],
+            "battleStart": [],
+            "ultExtra": [],
+            "ultReplace": null,
+            "hooks": [],
+            "capacity": 0
+          },
+          {
+            "id": "kaya",
+            "name": "카야",
+            "attr": "flame",
+            "gauge": 20,
+            "gaugeTurn": 20,
+            "res": 4,
+            "power4": 160,
+            "vit": 81,
+            "gearBps": 0,
+            "skillLv": 3,
+            "ultLv": 1,
+            "passive": {
+              "id": "kaya_deduction",
+              "name": "추리",
+              "params": {},
+              "text": "표식이 있는 적을 처치하면 행동력 +1, 카드 1장 뽑기(턴당 1회)."
+            },
+            "weapon": null,
+            "cardMods": [
+              {
+                "type": "cardMod",
+                "cards": [
+                  "kaya_clue"
+                ],
+                "prop": "n",
+                "add": 1
+              }
+            ],
+            "battleStart": [
+              {
+                "op": "st",
+                "s": "mark",
+                "n": 2,
+                "tgt": "rand"
+              }
+            ],
+            "ultExtra": [],
+            "ultReplace": null,
+            "hooks": [
+              {
+                "type": "hook",
+                "id": "kaya_r2"
+              }
+            ],
+            "capacity": 1
+          },
+          {
+            "id": "nia",
+            "name": "니아",
+            "attr": "void",
+            "gauge": 0,
+            "gaugeTurn": 0,
+            "res": 0,
+            "power4": 160,
+            "vit": 81,
+            "gearBps": 0,
+            "skillLv": 1,
+            "ultLv": 1,
+            "passive": {
+              "id": "nia_handiwork",
+              "name": "손재주",
+              "params": {
+                "bps": 1500
+              },
+              "text": "개조(임시 포함)가 붙은 카드의 피해·방어 +15%."
+            },
+            "weapon": null,
+            "cardMods": [],
+            "battleStart": [],
+            "ultExtra": [],
+            "ultReplace": null,
+            "hooks": [],
+            "capacity": 0
+          }
+        ],
+        "enemies": [
+          {
+            "uid": "e7",
+            "id": "e_seed",
+            "name": "씨앗",
+            "tier": "minion",
+            "hp": 0,
+            "maxHp": 3,
+            "block": 0,
+            "brkMax": 1,
+            "brk": 1,
+            "weak": [
+              "flame",
+              "frost",
+              "volt",
+              "void"
+            ],
+            "st": {
+              "vul": 0,
+              "weak": 0,
+              "mark": 3,
+              "burn": 0,
+              "str": 0,
+              "reflect": 0
+            },
+            "brokenUntil": 0,
+            "stunned": false,
+            "pi": 0,
+            "intent": {
+              "t": "def",
+              "b": 2
+            },
+            "next": {
+              "t": "def",
+              "b": 2
+            },
+            "alive": false,
+            "passive": null
+          },
+          {
+            "uid": "e8",
+            "id": "e_seed",
+            "name": "씨앗",
+            "tier": "minion",
+            "hp": 3,
+            "maxHp": 3,
+            "block": 0,
+            "brkMax": 1,
+            "brk": 1,
+            "weak": [
+              "flame",
+              "frost",
+              "volt",
+              "void"
+            ],
+            "st": {
+              "vul": 0,
+              "weak": 0,
+              "mark": 5,
+              "burn": 3,
+              "str": 0,
+              "reflect": 0
+            },
+            "brokenUntil": 0,
+            "stunned": false,
+            "pi": 0,
+            "intent": {
+              "t": "def",
+              "b": 2
+            },
+            "next": {
+              "t": "def",
+              "b": 2
+            },
+            "alive": true,
+            "passive": null
+          }
+        ],
+        "cards": {
+          "c1": {
+            "uid": "c1",
+            "id": "sion_forget",
+            "owner": "sion",
+            "wielder": null,
+            "plus": false,
+            "mods": {
+              "c": null,
+              "e": null
+            },
+            "temp": [],
+            "growth": 0,
+            "grown": false,
+            "used": 1,
+            "costMod": 0,
+            "token": false,
+            "free": false,
+            "assigned": null,
+            "from": null
+          },
+          "c2": {
+            "uid": "c2",
+            "id": "com_sort",
+            "owner": "common",
+            "wielder": null,
+            "plus": false,
+            "mods": {
+              "c": null,
+              "e": null
+            },
+            "temp": [],
+            "growth": 0,
+            "grown": false,
+            "used": 1,
+            "costMod": 0,
+            "token": false,
+            "free": false,
+            "assigned": null,
+            "from": null
+          },
+          "c3": {
+            "uid": "c3",
+            "id": "kaya_clue",
+            "owner": "kaya",
+            "wielder": null,
+            "plus": false,
+            "mods": {
+              "c": null,
+              "e": null
+            },
+            "temp": [],
+            "growth": 0,
+            "grown": false,
+            "used": 0,
+            "costMod": 0,
+            "token": false,
+            "free": false,
+            "assigned": null,
+            "from": null
+          },
+          "c4": {
+            "uid": "c4",
+            "id": "kaya_clue",
+            "owner": "kaya",
+            "wielder": null,
+            "plus": false,
+            "mods": {
+              "c": null,
+              "e": null
+            },
+            "temp": [],
+            "growth": 0,
+            "grown": false,
+            "used": 1,
+            "costMod": 0,
+            "token": false,
+            "free": false,
+            "assigned": null,
+            "from": null
+          },
+          "c5": {
+            "uid": "c5",
+            "id": "kaya_clue",
+            "owner": "kaya",
+            "wielder": null,
+            "plus": false,
+            "mods": {
+              "c": null,
+              "e": null
+            },
+            "temp": [],
+            "growth": 0,
+            "grown": false,
+            "used": 0,
+            "costMod": 0,
+            "token": false,
+            "free": false,
+            "assigned": null,
+            "from": null
+          },
+          "c6": {
+            "uid": "c6",
+            "id": "kaya_clue",
+            "owner": "kaya",
+            "wielder": null,
+            "plus": false,
+            "mods": {
+              "c": null,
+              "e": null
+            },
+            "temp": [],
+            "growth": 0,
+            "grown": false,
+            "used": 1,
+            "costMod": 0,
+            "token": false,
+            "free": false,
+            "assigned": null,
+            "from": null
+          }
+        },
+        "zones": {
+          "draw": [
+            "c6"
+          ],
+          "hand": [
+            "c5",
+            "c2",
+            "c4"
+          ],
+          "discard": [
+            "c1"
+          ],
+          "exhaust": [
+            "c3"
+          ]
+        },
+        "res": [],
+        "resSeq": 0,
+        "relics": [
+          "void_shard",
+          "detective_notebook"
+        ],
+        "powers": [],
+        "turnFlags": {
+          "deduction": true
+        },
+        "battleFlags": {
+          "seraR6Turn": 0
+        },
+        "runFlags": {
+          "coinsBonus": 10
+        },
+        "handMax": 10,
+        "log": [
+          {
+            "t": 0,
+            "e": "status",
+            "uid": "e8",
+            "s": "mark",
+            "n": 2
+          },
+          {
+            "t": 1,
+            "e": "turn",
+            "turn": 1,
+            "ap": 4
+          },
+          {
+            "t": 1,
+            "e": "play",
+            "uid": "c2",
+            "id": "com_sort",
+            "mode": "now",
+            "cost": 0,
+            "target": null
+          },
+          {
+            "t": 1,
+            "e": "resolved",
+            "uid": "c2",
+            "id": "com_sort",
+            "reserved": null,
+            "fizzled": false
+          },
+          {
+            "t": 1,
+            "e": "play",
+            "uid": "c6",
+            "id": "kaya_clue",
+            "mode": "now",
+            "cost": 0,
+            "target": "e7"
+          },
+          {
+            "t": 1,
+            "e": "status",
+            "uid": "e7",
+            "s": "mark",
+            "n": 3
+          },
+          {
+            "t": 1,
+            "e": "resolved",
+            "uid": "c6",
+            "id": "kaya_clue",
+            "reserved": null,
+            "fizzled": false
+          },
+          {
+            "t": 1,
+            "e": "play",
+            "uid": "c4",
+            "id": "kaya_clue",
+            "mode": "now",
+            "cost": 0,
+            "target": "e8"
+          },
+          {
+            "t": 1,
+            "e": "status",
+            "uid": "e8",
+            "s": "mark",
+            "n": 3
+          },
+          {
+            "t": 1,
+            "e": "resolved",
+            "uid": "c4",
+            "id": "kaya_clue",
+            "reserved": null,
+            "fizzled": false
+          },
+          {
+            "t": 1,
+            "e": "play",
+            "uid": "c1",
+            "id": "sion_forget",
+            "mode": "now",
+            "cost": 1,
+            "target": null
+          },
+          {
+            "t": 1,
+            "e": "exhaust",
+            "uid": "c3"
+          },
+          {
+            "t": 1,
+            "e": "dmg",
+            "uid": "e7",
+            "n": 3,
+            "blocked": 0,
+            "src": "relic"
+          },
+          {
+            "t": 1,
+            "e": "kill",
+            "uid": "e7",
+            "id": "e_seed"
+          },
+          {
+            "t": 1,
+            "e": "reshuffle"
+          },
+          {
+            "t": 1,
+            "e": "status",
+            "uid": "e8",
+            "s": "burn",
+            "n": 3
+          },
+          {
+            "t": 1,
+            "e": "block",
+            "n": 10,
+            "src": "card"
+          },
+          {
+            "t": 1,
+            "e": "resolved",
+            "uid": "c1",
+            "id": "sion_forget",
+            "reserved": null,
+            "fizzled": false
+          }
+        ],
+        "ev": [
+          {
+            "e": "play",
+            "uid": "c1",
+            "id": "sion_forget",
+            "mode": "now",
+            "cost": 1,
+            "target": null
+          },
+          {
+            "e": "exhaust",
+            "uid": "c3"
+          },
+          {
+            "e": "dmg",
+            "uid": "e7",
+            "n": 3,
+            "blocked": 0,
+            "src": "relic"
+          },
+          {
+            "e": "kill",
+            "uid": "e7",
+            "id": "e_seed"
+          },
+          {
+            "e": "reshuffle"
+          },
+          {
+            "e": "status",
+            "uid": "e8",
+            "s": "burn",
+            "n": 3
+          },
+          {
+            "e": "block",
+            "n": 10,
+            "src": "card"
+          },
+          {
+            "e": "resolved",
+            "uid": "c1",
+            "id": "sion_forget",
+            "reserved": null,
+            "fizzled": false
+          }
+        ],
+        "result": null,
+        "killedMarked": 1,
+        "diff": {
+          "hp": 50,
+          "dmg": 100
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,1040 @@
+fileFormatVersion: 2
+guid: 60237087f93e14da48010e77de6f34e6
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -327104101037421061
+    second: enemy_e_lantern_0
+  - first:
+      213: 5790451430270736069
+    second: enemy_e_lantern_1
+  - first:
+      213: -2291482791154125481
+    second: enemy_e_lantern_2
+  - first:
+      213: 1696778482137632265
+    second: enemy_e_lantern_3
+  - first:
+      213: -3882477332568327184
+    second: enemy_e_lantern_4
+  - first:
+      213: 4322187445382708845
+    second: enemy_e_lantern_5
+  - first:
+      213: 6929520833787297678
+    second: enemy_e_lantern_6
+  - first:
+      213: -2051979595252865643
+    second: enemy_e_lantern_7
+  - first:
+      213: -9061436023261319928
+    second: enemy_e_lantern_8
+  - first:
+      213: 2376119212075824073
+    second: enemy_e_lantern_9
+  - first:
+      213: -5480297747471554556
+    second: enemy_e_lantern_10
+  - first:
+      213: -5632311343736184785
+    second: enemy_e_lantern_11
+  - first:
+      213: 4166515933800038218
+    second: enemy_e_lantern_12
+  - first:
+      213: -6003939346876598154
+    second: enemy_e_lantern_13
+  - first:
+      213: -4756429835708746534
+    second: enemy_e_lantern_14
+  - first:
+      213: 1636666853993778990
+    second: enemy_e_lantern_15
+  - first:
+      213: -5284219655344666375
+    second: enemy_e_lantern_16
+  - first:
+      213: 5811381604873809096
+    second: enemy_e_lantern_17
+  - first:
+      213: 9015605805597311080
+    second: enemy_e_lantern_18
+  - first:
+      213: 5558511011849089992
+    second: enemy_e_lantern_19
+  - first:
+      213: 2647009104603291685
+    second: enemy_e_lantern_20
+  - first:
+      213: -8767698356209305713
+    second: enemy_e_lantern_21
+  - first:
+      213: -2410016275578542490
+    second: enemy_e_lantern_22
+  - first:
+      213: -1934567511742898270
+    second: enemy_e_lantern_23
+  - first:
+      213: 2641413258734207043
+    second: enemy_e_lantern_24
+  - first:
+      213: -4552796385726978331
+    second: enemy_e_lantern_25
+  - first:
+      213: -1052478122785325645
+    second: enemy_e_lantern_26
+  - first:
+      213: 7146656061019627754
+    second: enemy_e_lantern_27
+  - first:
+      213: -5873675162133377351
+    second: enemy_e_lantern_28
+  - first:
+      213: -8237150979582107736
+    second: enemy_e_lantern_29
+  - first:
+      213: -8939033177623180310
+    second: enemy_e_lantern_30
+  - first:
+      213: -852403720670151675
+    second: enemy_e_lantern_31
+  - first:
+      213: -7112135116441874670
+    second: enemy_e_lantern_32
+  - first:
+      213: 5242599720099621656
+    second: enemy_e_lantern_33
+  - first:
+      213: -676753298212544805
+    second: enemy_e_lantern_34
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 1
+    enableMipMap: 1
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 2
+    aniso: 1
+    mipBias: -0.5
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 1
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 0
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 2
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: 50
+    textureCompression: 1
+    compressionQuality: 100
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 1
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: enemy_e_lantern_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1245
+        height: 1238
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bfd471d9d84e57bf0800000000000000
+      internalID: -327104101037421061
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_lantern_1
+      rect:
+        serializedVersion: 2
+        x: 569
+        y: 1217
+        width: 9
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5c6907e85e0db5050800000000000000
+      internalID: 5790451430270736069
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_lantern_2
+      rect:
+        serializedVersion: 2
+        x: 1131
+        y: 1106
+        width: 100
+        height: 118
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7557650da840330e0800000000000000
+      internalID: -2291482791154125481
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_lantern_3
+      rect:
+        serializedVersion: 2
+        x: 1125
+        y: 1012
+        width: 88
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 90e07522a0b2c8710800000000000000
+      internalID: 1696778482137632265
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_lantern_4
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 899
+        width: 7
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0fb32cfaf6bae1ac0800000000000000
+      internalID: -3882477332568327184
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_lantern_5
+      rect:
+        serializedVersion: 2
+        x: 1130
+        y: 853
+        width: 19
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d6e70b6e49e7bfb30800000000000000
+      internalID: 4322187445382708845
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_lantern_6
+      rect:
+        serializedVersion: 2
+        x: 1153
+        y: 859
+        width: 32
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e8f7f81fb7a9a2060800000000000000
+      internalID: 6929520833787297678
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_lantern_7
+      rect:
+        serializedVersion: 2
+        x: 1161
+        y: 819
+        width: 24
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5956a921e67e583e0800000000000000
+      internalID: -2051979595252865643
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_lantern_8
+      rect:
+        serializedVersion: 2
+        x: 1132
+        y: 791
+        width: 13
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 80da49642ff4f3280800000000000000
+      internalID: -9061436023261319928
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_lantern_9
+      rect:
+        serializedVersion: 2
+        x: 1149
+        y: 788
+        width: 6
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9c3b2cb85dba9f020800000000000000
+      internalID: 2376119212075824073
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_lantern_10
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 738
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 408a59a0c3212f3b0800000000000000
+      internalID: -5480297747471554556
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_lantern_11
+      rect:
+        serializedVersion: 2
+        x: 1131
+        y: 636
+        width: 13
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f20a3349ca206d1b0800000000000000
+      internalID: -5632311343736184785
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_lantern_12
+      rect:
+        serializedVersion: 2
+        x: 1139
+        y: 646
+        width: 12
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a4ff729aa2072d930800000000000000
+      internalID: 4166515933800038218
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_lantern_13
+      rect:
+        serializedVersion: 2
+        x: 1143
+        y: 638
+        width: 80
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 678fd6869f8bdaca0800000000000000
+      internalID: -6003939346876598154
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_lantern_14
+      rect:
+        serializedVersion: 2
+        x: 1148
+        y: 645
+        width: 9
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ad4b28bd344cdfdb0800000000000000
+      internalID: -4756429835708746534
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_lantern_15
+      rect:
+        serializedVersion: 2
+        x: 1141
+        y: 585
+        width: 31
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e2f84ff05db96b610800000000000000
+      internalID: 1636666853993778990
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_lantern_16
+      rect:
+        serializedVersion: 2
+        x: 1141
+        y: 604
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9f84b00783eaaa6b0800000000000000
+      internalID: -5284219655344666375
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_lantern_17
+      rect:
+        serializedVersion: 2
+        x: 1165
+        y: 596
+        width: 34
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8cc2eb497cc26a050800000000000000
+      internalID: 5811381604873809096
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_lantern_18
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 577
+        width: 16
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 860c395a6bddd1d70800000000000000
+      internalID: 9015605805597311080
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_lantern_19
+      rect:
+        serializedVersion: 2
+        x: 1131
+        y: 549
+        width: 18
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8c3bc55a05cc32d40800000000000000
+      internalID: 5558511011849089992
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_lantern_20
+      rect:
+        serializedVersion: 2
+        x: 1157
+        y: 505
+        width: 74
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 520aa1591c01cb420800000000000000
+      internalID: 2647009104603291685
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_lantern_21
+      rect:
+        serializedVersion: 2
+        x: 1146
+        y: 489
+        width: 23
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f873e5c5cc0e25680800000000000000
+      internalID: -8767698356209305713
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_lantern_22
+      rect:
+        serializedVersion: 2
+        x: 1149
+        y: 509
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6662b3757f6ed8ed0800000000000000
+      internalID: -2410016275578542490
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_lantern_23
+      rect:
+        serializedVersion: 2
+        x: 1159
+        y: 513
+        width: 10
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2af9d8c09190725e0800000000000000
+      internalID: -1934567511742898270
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_lantern_24
+      rect:
+        serializedVersion: 2
+        x: 1131
+        y: 503
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3400cdf2d5f28a420800000000000000
+      internalID: 2641413258734207043
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_lantern_25
+      rect:
+        serializedVersion: 2
+        x: 1139
+        y: 503
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5e6af061fc731d0c0800000000000000
+      internalID: -4552796385726978331
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_lantern_26
+      rect:
+        serializedVersion: 2
+        x: 1131
+        y: 479
+        width: 17
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3bdb28d39b8d461f0800000000000000
+      internalID: -1052478122785325645
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_lantern_27
+      rect:
+        serializedVersion: 2
+        x: 1127
+        y: 469
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ae0a7f8a2d50e2360800000000000000
+      internalID: 7146656061019627754
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_lantern_28
+      rect:
+        serializedVersion: 2
+        x: 22
+        y: 449
+        width: 7
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9be41036f838c7ea0800000000000000
+      internalID: -5873675162133377351
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_lantern_29
+      rect:
+        serializedVersion: 2
+        x: 1109
+        y: 345
+        width: 11
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8af5fbc83d2cfad80800000000000000
+      internalID: -8237150979582107736
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_lantern_30
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 184
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aebc65c9fac22f380800000000000000
+      internalID: -8939033177623180310
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_lantern_31
+      rect:
+        serializedVersion: 2
+        x: 78
+        y: 150
+        width: 18
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 50cfb301557ab24f0800000000000000
+      internalID: -852403720670151675
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_lantern_32
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 95
+        width: 26
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 21f86e51bce9c4d90800000000000000
+      internalID: -7112135116441874670
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_lantern_33
+      rect:
+        serializedVersion: 2
+        x: 86
+        y: 81
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 81ba9104ba471c840800000000000000
+      internalID: 5242599720099621656
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_lantern_34
+      rect:
+        serializedVersion: 2
+        x: 1037
+        y: 23
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bde977bf570bb96f0800000000000000
+      internalID: -676753298212544805
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      enemy_e_lantern_0: -327104101037421061
+      enemy_e_lantern_1: 5790451430270736069
+      enemy_e_lantern_10: -5480297747471554556
+      enemy_e_lantern_11: -5632311343736184785
+      enemy_e_lantern_12: 4166515933800038218
+      enemy_e_lantern_13: -6003939346876598154
+      enemy_e_lantern_14: -4756429835708746534
+      enemy_e_lantern_15: 1636666853993778990
+      enemy_e_lantern_16: -5284219655344666375
+      enemy_e_lantern_17: 5811381604873809096
+      enemy_e_lantern_18: 9015605805597311080
+      enemy_e_lantern_19: 5558511011849089992
+      enemy_e_lantern_2: -2291482791154125481
+      enemy_e_lantern_20: 2647009104603291685
+      enemy_e_lantern_21: -8767698356209305713
+      enemy_e_lantern_22: -2410016275578542490
+      enemy_e_lantern_23: -1934567511742898270
+      enemy_e_lantern_24: 2641413258734207043
+      enemy_e_lantern_25: -4552796385726978331
+      enemy_e_lantern_26: -1052478122785325645
+      enemy_e_lantern_27: 7146656061019627754
+      enemy_e_lantern_28: -5873675162133377351
+      enemy_e_lantern_29: -8237150979582107736
+      enemy_e_lantern_3: 1696778482137632265
+      enemy_e_lantern_30: -8939033177623180310
+      enemy_e_lantern_31: -852403720670151675
+      enemy_e_lantern_32: -7112135116441874670
+      enemy_e_lantern_33: 5242599720099621656
+      enemy_e_lantern_34: -676753298212544805
+      enemy_e_lantern_4: -3882477332568327184
+      enemy_e_lantern_5: 4322187445382708845
+      enemy_e_lantern_6: 6929520833787297678
+      enemy_e_lantern_7: -2051979595252865643
+      enemy_e_lantern_8: -9061436023261319928
+      enemy_e_lantern_9: 2376119212075824073
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

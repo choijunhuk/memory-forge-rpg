@@ -1,0 +1,17 @@
+{
+  "character": "aila",
+  "key": "fig_bond_return",
+  "target": "aila/images/char_aila_fig_bond_return_styleA_v01.png",
+  "args": {
+    "prompt": "Use case: identity-preserve. Edit this existing clear-cel sprite of adult archivist Aila, age 23, for a quiet document-return story beat. Change ONLY the hands/page/gaze: she now holds the SAME written cream page by its lower corners JUST ABOVE the desk and looks gently down at its edge with a small relieved smile, as after receiving her page back. Preserve her entire current face identity, outfit design and coverage, braid, bells, standing posture, silver lantern planted on desk center, teacups, pot, desk and open drawer in exact same locations. Preserve the page's existing ink/decoration and size. No other person/hands or new objects. Same full portrait canvas and A line/cel rendering. Genuine transparent RGBA empty background/margins/corners=0; no haze, halo, floor, checkerboard or text labels.",
+    "referenced_image_paths": [
+      "/Users/choi/Documents/Memory_forge/art/moments/aila/images/char_aila_fig_bond_present_styleA_v01.png"
+    ],
+    "transparent_background": true
+  },
+  "cache_path": "/Users/choi/.codex/generated_images/01a14db0-4150-7f01-9240-82aaa185dd28/exec-21c03585-5de5-4b79-9657-5b51f6ce14f2.png",
+  "status": "ready",
+  "previous_attempt": "output moderation rejection; same benign document scene retried without changing outfit/design",
+  "generation_status": "generated_pending_review",
+  "selected": true
+}

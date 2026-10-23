@@ -1,0 +1,23 @@
+{
+  "scope": "new disposable native Linux PG16 CI-harness verification",
+  "script_sha256": "af6f1296ab2ab2c3c276443da8099904279381d57c8ffd8a143dd737affa1945",
+  "workflow_sha256": "913522572db008da5f28702eb3860191194927e652f4aec18167a496a1dad15b",
+  "sdk": {
+    "version": "10.0.402",
+    "rid": "linux-arm64",
+    "url": "https://builds.dotnet.microsoft.com/dotnet/Sdk/10.0.402/dotnet-sdk-10.0.402-linux-arm64.tar.gz",
+    "sha512": "db85ae85527251fbb1290720ac3bf324bb1d9eea74516ef291ed4bb1f8ff6ec63a17593367f49b456115e8b24ead6d0c2ece2801e501f36a6cd4444ed01a498f",
+    "verified": true,
+    "scope": "isolated disposable Linux verification; no host/global SDK or product dependency changed"
+  },
+  "host_or_existing_db_modified": false,
+  "exit": 0,
+  "status": "PASS",
+  "native_script_actually_executed": true,
+  "initial_failure": "verification image lacked CA certificate bundle; source unmodified; original log retained",
+  "tls_verification_bypassed": false,
+  "postgresql": "16.15 cached postgres:16 native Linux binaries",
+  "execution_user": "postgres (non-root)",
+  "passed_assertions": 190,
+  "product_or_host_dependency_changed": false
+}

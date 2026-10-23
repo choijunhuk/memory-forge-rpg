@@ -1,0 +1,25 @@
+{
+  "unchangedOutsideAuditAndRuntime": true,
+  "cases": [
+    2131,
+    2131
+  ],
+  "countsUnchanged": true,
+  "sourcePinsUnchanged": true,
+  "auditCounts": [
+    29,
+    30
+  ],
+  "added": [
+    "art/provenance.csv"
+  ],
+  "removed": [],
+  "runtime": [
+    {
+      "node": "25.9.0"
+    },
+    {
+      "node": "25.9.0"
+    }
+  ]
+}

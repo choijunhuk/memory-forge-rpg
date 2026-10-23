@@ -1,0 +1,10 @@
+{
+  "scope": "owned disposable local PG16 only; no original records inserted",
+  "original_account_rows": 0,
+  "original_run_rows": 0,
+  "development_state_rows": 0,
+  "runtime_role_denied_original_tables": true,
+  "host_publish": "127.0.0.1 only",
+  "existing_user_database_or_volume_used": false,
+  "source_schema_sha256": "73bcad986ab8c656ad7d9861bc12b7dd255595f52ab4a5fcd1c6785def292aac"
+}

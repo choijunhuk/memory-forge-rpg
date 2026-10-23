@@ -1,0 +1,31 @@
+{
+  "task_id": "P1-RUN-FINAL-COVERAGE-AND-REVIEW",
+  "run_id": "P1-RUN-FINAL-COVERAGE-AND-REVIEW-20261015T171739846043Z",
+  "status": "RECEIVED_UNVERIFIED",
+  "requestedEffort": "xhigh",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "changes_verified": true,
+  "raw_output": "ops/ai/local/P1-RUN-FINAL-COVERAGE-AND-REVIEW-20261015T171739846043Z*",
+  "billing_verified_at": "2026-10-14T21:44:57.439760+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "codex/csharp-battle-opening",
+  "base_commit": "2ffc29ecdbdeee5027258ad6f73302b98820fc35",
+  "worktree": "/Users/choi/.codex/worktrees/csharp-battle-opening/Memory_forge",
+  "allowed_files": [
+    "engine/tests/run_node_contracts.test.mjs",
+    "reports/run_node_contracts_20261016/claude_final_review.md"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "62e5d43b-f9e9-48de-800c-fd5c9c14118c",
+  "subtype": "success",
+  "is_error": false,
+  "result": "I approve your final terminal guard. I added four new tests alongside the existing nine, but I ran nothing: no tests and no SHA recompute (NOT_RUN, no Bash). The dae… engine SHA is your claim; I read the working-tree source as I found it.\n\n**Review: APPROVE, no blocker.** The full write-up is in `reports/run_node_contracts_20261016/claude_final_review.md`.\n- **Callers:** inside the engine, `startBattle` is called only from `Run.enter` (`engine/rules-core.js:1642`). `afterBattle` is called only from `enter` (`:1650`) and `battleCmd` (`:1678`). The prototype and review folders hold separate copies of the engine, not callers of this one.\n- **When the guard fires:** only for a battle started by that same `enter`. No public command reaches MAP with a live battle, so rest, forge, shop and event entries can't trigger it. The finalizer runs once and doesn't re-run `begin`. A defeat draws no Run RNG and pays no reward. The log reads entry, then 패배.\n- **Placement:** your narrower placement is right and my earlier log-move proposal was wrong. If battle setup throws, the original never writes the entry log; my move would have added one. A new test pins this.\n\n**Tests added (`engine/tests/run_node_contracts.test.mjs`):**\n1. **seed2654 packet:** replays all 1525 recorded commands and checks every outcome.\n   - Two separate `ev_rift` pendings each resolve once; every repeat returns `BAD_CHOICE` and leaves the full Run JSON, RNG and log unchanged.\n   - Across the whole run, the Run AP-bonus flag changes only at `[78:0→2, 80:2→0, 1519:0→2, 1524:2→0]`.\n   - The battle after each event gets AP6, the eight battles between get AP4, and every battle-copy flag and `apNext` stays 0.\n2. **seed1102, legacy and v2:** uses the real `generateScenario`/`replayScenario`. Before the final entry the run is at HP 1 holding `infinite_circuit`. The finalizer runs once, after a 2 HP relic loss on turn 1 before any draw. The run ends DEFEAT, not BATTLE.\n   - Keeping two changes is refused with `DEFEAT_KEEP_ONE`, then the recorded save reaches DONE.\n   - v2: the store goes from version 0 to 1 with one history entry and one receipt, and the input store is untouched.\n   - Legacy: no store and no `memoryAfter`.\n3. **`bosses:['missing']`:** replays to the first zone-1 boss, then `enter` throws and the log is unchanged. The test does not claim pos, floor or RNG roll back.\n\n**Things that differ from the brief:**\n- **Error type:** the missing boss throws `RuleError('UNKNOWN_ENEMY')` from `Battle.addEnemy` (`:322-324`), not a native TypeError. The test asserts what the source actually does.\n- **Assumption that may fail:** the legacy seed1102 test assumes the frozen `openingDefeat` witness came from this same generator, so it checks the setup and all 221 steps match exactly. The v2 test checks the same command and outcome sequence. If either fails, the first thing to check is that assumption, not the engine.\n\n**Non-blocking notes:**\n- The help text in `tools/gen_traces.mjs:314` should say that `enter` can also run the finalizer.\n- The C# Run port (R1) has to keep the same order: entry log, then finalizer.\n- The HTML prototype has its own inline copy of the engine without this guard or the AP-bonus fix.\n- After this guard, the UI goes straight from the map to the save screen, and the defeat's cause is discarded with the battle.\n\n**Not covered:** a battle won inside `begin`, saves already stuck by the original defect, raw-snapshot restore, C# and server parity.\n\n**Next:** you run the tests, check that the four new ones pass (especially the generator-to-witness match), then integrate.",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ],
+  "root_verification": "reports/run_node_contracts_20261016/verification.json",
+  "integration_status": "verified; Git integration tracked separately in repository history"
+}

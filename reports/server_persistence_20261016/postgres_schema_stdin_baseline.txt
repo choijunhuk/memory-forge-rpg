@@ -1,0 +1,2 @@
+ schema checks passed
+PostgreSQL 16.15: schema applied, checks passed

@@ -1,0 +1,26 @@
+{
+  "task_id": "P1-UNITY-OUTPUT-VERIFY",
+  "run_id": "P1-UNITY-OUTPUT-VERIFY-20261014T222912613159Z",
+  "status": "RECEIVED_UNVERIFIED",
+  "requestedEffort": "max",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "changes_verified": false,
+  "raw_output": "ops/ai/local/P1-UNITY-OUTPUT-VERIFY-20261014T222912613159Z*",
+  "billing_verified_at": "2026-10-14T21:44:57.439760+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "claude/balance-audit",
+  "base_commit": "9be537f4c5ef59e890322cb2d1de914fb49bfed6",
+  "worktree": "/Users/choi/.codex/worktrees/claude-balance-audit/Memory_forge",
+  "allowed_files": [],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "4f90a3bc-f540-472f-9f55-08a4b75d143e",
+  "subtype": "success",
+  "is_error": false,
+  "result": "**판정: 4번 차단은 해제해도 됩니다.**\n\n근거: `core/Directory.Build.props`가 SDK 공식 속성 `UseArtifactsOutput`/`ArtifactsPath`로 두 프로젝트의 빌드 출력을 패키지 밖 `ops/ai/local/dotnet-artifacts`(gitignore 대상)에 모읍니다. `--artifacts-path`를 따로 주면 조건식 때문에 그 값이 우선합니다. 문서 명령을 옵션 없이 그대로 실행한 기록도 있습니다(`default_dotnet_run.txt`: exit 0, 202+87+2000+13 통과). 그 뒤 `core/MemoryForge.Core`와 `core/MemoryForge.CoreChecks`에 `bin`/`obj`가 생기지 않았고, 출력은 모두 정해진 위치에만 있었습니다(`shared_core_layout.json`). 따라서 원래 원인이던 패키지 안 DLL 중복 임포트가 없어졌습니다.\n\n비차단 참고 두 가지:\n- `shared_core_console.json`에는 Console 항목이 1건 있습니다. MCP WebSocket 메시지(\"WebSocket is not initialised\")라서 컴파일이나 Core와는 관계없습니다. 다만 로그인지 경고인지가 기록되지 않아, \"오류/경고 0\"이라는 표현과 정확히 일치하지는 않습니다.\n- 출력 위치가 `ops/ai/local` 아래입니다. 그래서 `.git`이 없는 추출본에서 빌드하면 출고 검사가 이 파일들을 개인 경로로 보고 실패합니다. 막는 쪽으로 실패하는 것이고 Unity와는 관계없습니다.\n\n실행 구분: 저는 dotnet·MCP·Unity를 하나도 실행하지 않았습니다(NOT_RUN). 위 결과는 모두 Codex가 실행한 증거입니다. SDK 공식 문서와 설치된 SDK의 targets 파일도 직접 열어 보지 않았고, Codex가 확인한 내용에 의존했습니다. 변경한 파일은 없고, session_id는 세션 안에서 확인할 수 없습니다.",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ]
+}

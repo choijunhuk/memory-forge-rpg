@@ -1,0 +1,25 @@
+{
+  "effective_editor_options": 0,
+  "files": [
+    {
+      "path": "client/MemoryForgeUnity/ProjectSettings/EditorSettings.asset",
+      "exact_head_bytes": true
+    },
+    {
+      "path": "client/MemoryForgeUnity/ProjectSettings/ProjectSettings.asset",
+      "exact_head_bytes": true
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/Settings/UniversalRP.asset",
+      "exact_head_bytes": true
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/UniversalRenderPipelineGlobalSettings.asset",
+      "exact_head_bytes": true
+    },
+    {
+      "path": "client/MemoryForgeUnity/ProjectSettings/UnityConnectSettings.asset",
+      "exact_head_bytes": true
+    }
+  ]
+}

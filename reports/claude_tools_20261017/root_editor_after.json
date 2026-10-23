@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"playing\":false,\"paused\":false,\"batch\":false,\"dirty\":false,\"scene\":\"Assets/Scenes/MemoryForgeServerPractice.unity\"},\"compiler\":\"codedom\"}}"
+    }
+  ],
+  "structuredContent": {
+    "success": true,
+    "message": "Code executed successfully.",
+    "data": {
+      "result": {
+        "playing": false,
+        "paused": false,
+        "batch": false,
+        "dirty": false,
+        "scene": "Assets/Scenes/MemoryForgeServerPractice.unity"
+      },
+      "compiler": "codedom"
+    }
+  },
+  "isError": false
+}

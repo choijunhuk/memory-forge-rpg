@@ -1,0 +1,28 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"sourceHead\":\"fcdc3e3 + preliminary S3 guard\",\"seed\":1234,\"cardUid\":\"c15\",\"invalidUid\":\"not-a-displayed-current-option\",\"accepted\":false,\"pickerStillOpen\":true,\"stateUnchanged\":true,\"beforeVersion\":1,\"afterVersion\":1,\"expectedStateInjected\":false},\"compiler\":\"codedom\"}}"
+    }
+  ],
+  "structuredContent": {
+    "success": true,
+    "message": "Code executed successfully.",
+    "data": {
+      "result": {
+        "sourceHead": "fcdc3e3 + preliminary S3 guard",
+        "seed": 1234,
+        "cardUid": "c15",
+        "invalidUid": "not-a-displayed-current-option",
+        "accepted": false,
+        "pickerStillOpen": true,
+        "stateUnchanged": true,
+        "beforeVersion": 1,
+        "afterVersion": 1,
+        "expectedStateInjected": false
+      },
+      "compiler": "codedom"
+    }
+  },
+  "isError": false
+}

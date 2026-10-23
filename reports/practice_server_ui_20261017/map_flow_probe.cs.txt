@@ -1,0 +1,52 @@
+var root = "/Users/choi/Documents/Memory_forge/ops/ai/local/";
+var host = Newtonsoft.Json.Linq.JObject.Parse(System.IO.File.ReadAllText(root + "ui-map-host.json"));
+foreach (var old in UnityEngine.Object.FindObjectsOfType<MemoryForge.Client.MemoryForgeServerPracticeClient>()) old.enabled = false;
+var go = new UnityEngine.GameObject("VerifiedServerMapPractice");
+var c = go.AddComponent<MemoryForge.Client.MemoryForgeServerPracticeClient>();
+string endpoint = (string)host["endpoint"], owner = (string)host["account"], credentialFile = (string)host["credential_file"], pendingFile = (string)host["client_pending_file"];
+c.Connect(() => new MemoryForge.Client.PracticeServerSession(endpoint, owner, () => System.IO.File.ReadAllText(credentialFile).Trim(),
+    new MemoryForge.Client.PracticeCommandOutbox(pendingFile, endpoint, owner), System.TimeSpan.FromSeconds(5)));
+UnityEngine.Application.runInBackground = true;
+var checks = new Newtonsoft.Json.Linq.JArray();
+System.Action<bool, string> check = (ok, name) => { if (!ok) throw new System.Exception(name); checks.Add(name); };
+System.Func<System.Func<bool>, System.Threading.Tasks.Task> until = async ready => {
+    for (int n = 0; n < 1000; n++) { if (ready()) return; await System.Threading.Tasks.Task.Delay(10); }
+    throw new System.Exception("Bounded map-flow wait expired");
+};
+System.Action<string> click = name => {
+    UnityEngine.UI.Button button = null;
+    foreach (var b in c.GetComponentsInChildren<UnityEngine.UI.Button>()) if (b.name == name) { button = b; break; }
+    if (button == null || !button.interactable) throw new System.Exception("Map-flow button unavailable: " + name);
+    var r = (UnityEngine.RectTransform)button.transform;
+    var data = new UnityEngine.EventSystems.PointerEventData(UnityEngine.EventSystems.EventSystem.current) { position = UnityEngine.RectTransformUtility.WorldToScreenPoint(null, r.TransformPoint(r.rect.center)) };
+    var hits = new System.Collections.Generic.List<UnityEngine.EventSystems.RaycastResult>();
+    UnityEngine.EventSystems.EventSystem.current.RaycastAll(data, hits);
+    check(hits.Count > 0 && hits[0].gameObject.GetComponentInParent<UnityEngine.UI.Button>() == button, "raycast reaches " + name.Split(':')[0]);
+    UnityEngine.EventSystems.ExecuteEvents.Execute(button.gameObject, data, UnityEngine.EventSystems.ExecuteEvents.pointerDownHandler);
+    UnityEngine.EventSystems.ExecuteEvents.Execute(button.gameObject, data, UnityEngine.EventSystems.ExecuteEvents.pointerUpHandler);
+    UnityEngine.EventSystems.ExecuteEvents.Execute(button.gameObject, data, UnityEngine.EventSystems.ExecuteEvents.pointerClickHandler);
+};
+System.Func<System.Threading.Tasks.Task<string>> run = async () => {
+    try {
+        await until(() => c.CanCommand && c.Snapshot != null);
+        check(c.Snapshot.Account.AccountId == owner && c.Snapshot.Run == null && System.IO.Directory.GetFiles((string)host["store_directory"], "account-*.json").Length == 0, "connect verifies owner without automatically creating a run or row");
+        await System.Threading.Tasks.Task.Delay(20);
+        click("CreateRun");
+        await until(() => !c.Busy && c.Snapshot.Run != null && c.Snapshot.Run.Phase == "MAP");
+        check(c.Snapshot.Run.ServerVersion == 0 && c.SessionState.Pending == null && c.CanCommand, "explicit create produces authoritative full map at journal version0");
+        UnityEngine.ScreenCapture.CaptureScreenshot("/Users/choi/Documents/Memory_forge/reports/practice_server_ui_20261017/server_map.png");
+        await System.Threading.Tasks.Task.Delay(40);
+        var state = c.Snapshot.Run.StateJObject();
+        string available = (string)((Newtonsoft.Json.Linq.JArray)state["available"])[0];
+        click("Node:" + available);
+        await until(() => !c.Busy && c.Snapshot.Run.Phase == "BATTLE");
+        var battle = (Newtonsoft.Json.Linq.JObject)c.Snapshot.Run.StateJObject()["battle"];
+        check(c.Snapshot.Run.ServerVersion == 1 && c.Snapshot.Run.Node == available && c.SessionState.Pending == null, "clicked available map node enters real Core battle exactly once");
+        check((int)battle["ap"] == 4 && ((Newtonsoft.Json.Linq.JArray)battle["hand"]).Count > 0 && c.CanCommand, "actual server battle AP and hand shown in usable UI");
+        UnityEngine.ScreenCapture.CaptureScreenshot("/Users/choi/Documents/Memory_forge/reports/practice_server_ui_20261017/server_battle_final.png");
+        return new Newtonsoft.Json.Linq.JObject { ["status"] = "PASS", ["checks"] = checks, ["server_version"] = c.Snapshot.Run.ServerVersion,
+            ["scene"] = UnityEngine.SceneManagement.SceneManager.GetActiveScene().path, ["input_kind"] = "actual Editor uGUI raycast/Pointer events; not physical device" }.ToString(Newtonsoft.Json.Formatting.None);
+    } catch (System.Exception error) { return new Newtonsoft.Json.Linq.JObject { ["status"] = "FAIL", ["checks"] = checks, ["safe_error"] = error.GetType().Name + ": " + error.Message }.ToString(Newtonsoft.Json.Formatting.None); }
+};
+System.AppDomain.CurrentDomain.SetData("MemoryForge.Codex.ServerUI.Map.20261017", run());
+return "Started actual no-row connection, explicit CreateRun and map-node pointer flow";

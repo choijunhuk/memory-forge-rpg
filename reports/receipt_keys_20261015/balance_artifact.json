@@ -1,0 +1,8 @@
+{
+  "path": "reports/receipt_keys_20261015/paired_balance.json.gz",
+  "rawBytes": 1853268,
+  "compressedBytes": 130367,
+  "rawSHA256": "a91faefe408334c81fb3633de3f12fdae33679b235ac7a901d2866025b55813f",
+  "compressedSHA256": "f90950cb05e1cf23febcc573dff683fa6613b8240b496fe2f74fb597f1f0479a",
+  "losslessRoundtripVerified": true
+}

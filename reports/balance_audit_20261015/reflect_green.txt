@@ -1,0 +1,15 @@
+✔ tracing preserves battle result, input data, and prototype even on an error (41.282584ms)
+✔ independent aggregation and signed contributors reconcile all failed metrics (120.886792ms)
+✔ card reflection attribution uses actual HP loss and restores methods (4.546625ms)
+✔ phase counts both bars and six candidate normal encounters miss the preserved HP budget (1.233291ms)
+✔ sera ultimate damage does not trigger card-only reflect (3.142ms)
+✔ lumi ultimate damage does not trigger card-only reflect (0.423125ms)
+✔ immediate and reserved card hits still trigger the unchanged reflect value (0.9775ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 256.02275

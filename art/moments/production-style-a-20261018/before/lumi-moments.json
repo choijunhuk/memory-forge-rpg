@@ -1,0 +1,973 @@
+{
+  "format": "memory-forge-moments/1",
+  "character": "lumi",
+  "status": "draft",
+  "images": {
+    "fig_neutral": "moments/lumi/images/char_lumi_moment_neutral_v01.png",
+    "fig_action1": "moments/lumi/images/char_lumi_moment_action1_v01.png",
+    "fig_action2": "moments/lumi/images/char_lumi_moment_action2_v01.png",
+    "fig_happy": "moments/lumi/images/char_lumi_moment_happy_v01.png",
+    "fig_worried": "moments/lumi/images/char_lumi_moment_worried_v01.png",
+    "fig_surprised": "moments/lumi/images/char_lumi_moment_surprised_v01.png",
+    "fig_determined": "moments/lumi/images/char_lumi_moment_determined_v01.png",
+    "fig_soft": "moments/lumi/images/char_lumi_moment_soft_v01.png",
+    "expr_neutral": "moments/lumi/images/char_lumi_expression_neutral_v01.png",
+    "expr_happy": "moments/lumi/images/char_lumi_expression_happy_v01.png",
+    "expr_annoyed": "moments/lumi/images/char_lumi_expression_annoyed_v01.png",
+    "expr_surprised": "moments/lumi/images/char_lumi_expression_surprised_v01.png",
+    "expr_worried": "moments/lumi/images/char_lumi_expression_worried_v01.png",
+    "expr_determined": "moments/lumi/images/char_lumi_expression_determined_v01.png",
+    "bg": "moments/lumi/images/char_lumi_background_workshop_street_evening_v01.png",
+    "fig_victory_land": "moments/lumi/images/char_lumi_moment_victory_land_v01.png",
+    "fig_victory_turn": "moments/lumi/images/char_lumi_moment_victory_turn_v01.png",
+    "fig_victory_grin": "moments/lumi/images/char_lumi_moment_victory_grin_v01.png",
+    "fig_victory_wait": "moments/lumi/images/char_lumi_moment_victory_wait_v01.png"
+  },
+  "anchors": {
+    "fig_neutral": {
+      "face": [
+        0.48,
+        0.105
+      ],
+      "body": [
+        0.48,
+        0.5
+      ],
+      "hands": [
+        0.26,
+        0.51
+      ]
+    },
+    "fig_action1": {
+      "face": [
+        0.48,
+        0.105
+      ],
+      "body": [
+        0.48,
+        0.5
+      ],
+      "hands": [
+        0.24,
+        0.22
+      ]
+    },
+    "fig_action2": {
+      "face": [
+        0.48,
+        0.105
+      ],
+      "body": [
+        0.48,
+        0.5
+      ],
+      "hands": [
+        0.72,
+        0.39
+      ]
+    },
+    "fig_happy": {
+      "face": [
+        0.48,
+        0.105
+      ],
+      "body": [
+        0.48,
+        0.5
+      ],
+      "hands": [
+        0.71,
+        0.41
+      ]
+    },
+    "fig_worried": {
+      "face": [
+        0.66,
+        0.105
+      ],
+      "body": [
+        0.5,
+        0.5
+      ],
+      "hands": [
+        0.48,
+        0.55
+      ]
+    },
+    "fig_surprised": {
+      "face": [
+        0.51,
+        0.105
+      ],
+      "body": [
+        0.5,
+        0.5
+      ],
+      "hands": [
+        0.48,
+        0.55
+      ]
+    },
+    "fig_determined": {
+      "face": [
+        0.51,
+        0.105
+      ],
+      "body": [
+        0.5,
+        0.5
+      ],
+      "hands": [
+        0.48,
+        0.55
+      ]
+    },
+    "fig_soft": {
+      "face": [
+        0.48,
+        0.105
+      ],
+      "body": [
+        0.48,
+        0.5
+      ],
+      "hands": [
+        0.28,
+        0.36
+      ]
+    },
+    "fig_victory_land": {
+      "face": [
+        0.51,
+        0.105
+      ],
+      "body": [
+        0.5,
+        0.5
+      ],
+      "hands": [
+        0.48,
+        0.55
+      ]
+    },
+    "fig_victory_turn": {
+      "face": [
+        0.51,
+        0.105
+      ],
+      "body": [
+        0.5,
+        0.5
+      ],
+      "hands": [
+        0.48,
+        0.55
+      ]
+    },
+    "fig_victory_grin": {
+      "face": [
+        0.51,
+        0.105
+      ],
+      "body": [
+        0.5,
+        0.5
+      ],
+      "hands": [
+        0.48,
+        0.55
+      ]
+    },
+    "fig_victory_wait": {
+      "face": [
+        0.68,
+        0.105
+      ],
+      "body": [
+        0.5,
+        0.5
+      ],
+      "hands": [
+        0.48,
+        0.55
+      ]
+    },
+    "expr_neutral": {
+      "face": [
+        0.52,
+        0.4
+      ]
+    },
+    "expr_happy": {
+      "face": [
+        0.52,
+        0.4
+      ]
+    },
+    "expr_annoyed": {
+      "face": [
+        0.52,
+        0.4
+      ]
+    },
+    "expr_surprised": {
+      "face": [
+        0.52,
+        0.4
+      ]
+    },
+    "expr_worried": {
+      "face": [
+        0.52,
+        0.4
+      ]
+    },
+    "expr_determined": {
+      "face": [
+        0.52,
+        0.4
+      ]
+    }
+  },
+  "motions": {
+    "stage_settle": {
+      "tracks": {
+        "figure": [
+          {
+            "t": 0,
+            "x": 0,
+            "y": 0,
+            "rot": 0,
+            "scale": 1,
+            "alpha": 1
+          },
+          {
+            "t": 0.35,
+            "x": 0,
+            "y": -3,
+            "rot": 0,
+            "scale": 1,
+            "alpha": 1
+          },
+          {
+            "t": 0.75,
+            "x": 0,
+            "y": 0,
+            "rot": 0,
+            "scale": 1,
+            "alpha": 1
+          }
+        ]
+      },
+      "loop": false,
+      "ease": "inOut"
+    }
+  },
+  "scenes": [
+    {
+      "id": "lumi_lobby_01",
+      "kind": "lobby",
+      "title": "급행 없는 초대",
+      "trigger": {
+        "on": "tap",
+        "note": "로비의 캐릭터 선택 후 명시적 반응 재생. 반복 탭으로 신체를 평가하는 분기 없음."
+      },
+      "why": "빨리 데려다주겠다는 능력 자랑을 넘어 목적지를 함께 정하고 기다리고 싶은 사적 관심을 밝힌다.",
+      "intent": "시작: 멈춰 선 전신에서 헬멧 손목 회전. 핵심: 팔에 끼워 빈손을 만들고 상대를 향해 밝게 웃음. 끝: 끌지 않고 손바닥을 내밀며 발을 고정. 어깨에 흘러내린 재킷·크롭 스포츠 톱·바이크 쇼츠를 유지, 얼굴과 운동선수 체중 지지를 한 구도에 읽힌다.",
+      "assets": [
+        {
+          "key": "bg",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_action1",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_action2",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_happy",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_neutral",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_soft",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "stage_settle",
+          "type": "motion",
+          "status": "ready"
+        },
+        {
+          "key": "voice_lumi_short_recording",
+          "type": "voice",
+          "status": "todo"
+        }
+      ],
+      "input": {
+        "skippable": true,
+        "advance": "tap",
+        "repeatable": true,
+        "cooldown_s": 10
+      },
+      "stage": {
+        "background": "bg",
+        "music": "silence"
+      },
+      "beats": [
+        {
+          "figure": "fig_neutral",
+          "gaze": "player",
+          "camera": {
+            "shot": "full",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": "lumi",
+            "text": "공방장! 오늘은 급행 안 받아요.",
+            "tone": "빠르고 시원하게, 도착의 들뜸"
+          },
+          "hold": 0.9
+        },
+        {
+          "figure": "fig_action1",
+          "gaze": "down",
+          "camera": {
+            "shot": "medium",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": null,
+            "text": "헬멧을 손목 위에서 짧게 돌려 잡는다. 팔에 끼우고 손을 비우자, 뒤따라 흔들리던 재킷 자락도 가라앉는다.",
+            "tone": "무성 지문. 헬멧을 손목 위에서 짧게 회전시키는 키포즈, 손가락 고정점 가시"
+          },
+          "hold": 0.55
+        },
+        {
+          "figure": "fig_action2",
+          "gaze": "player",
+          "camera": {
+            "shot": "medium",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": "lumi",
+            "text": "뒷자리는 비워 뒀는데, 목적지는 같이 정하고 싶어서요.",
+            "tone": "한 박자 천천히, 장난의 반응을 기다림"
+          },
+          "hold": 0.9
+        },
+        {
+          "figure": "fig_happy",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "push_in",
+            "duration": 0.55
+          },
+          "line": {
+            "speaker": "lumi",
+            "text": "걷자고 해도 돼요. 오늘은 공방장 옆에서 속도 맞추는 연습할래요.",
+            "tone": "이를 보이는 시원한 웃음"
+          },
+          "hold": 0.9,
+          "motion": "stage_settle"
+        },
+        {
+          "figure": "fig_soft",
+          "gaze": "player",
+          "camera": {
+            "shot": "full",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": null,
+            "text": "손바닥을 위로 내민 루미는 발을 움직이지 않은 채 공방장의 대답을 기다린다.",
+            "tone": "무성 지문. 헬멧을 한 팔에 끼고 다른 손바닥을 위로 내민 기다리는 자세"
+          },
+          "hold": 0.55
+        }
+      ]
+    },
+    {
+      "id": "lumi_bond_01",
+      "kind": "bond",
+      "title": "제한 속도",
+      "trigger": {
+        "on": "event",
+        "note": "기존 인연 에피소드 「제한 속도」를 현재 구현의 해금 상태에서 선택할 때. 새 인연 레벨·소모·보상·해금 정책을 정하지 않는다."
+      },
+      "why": "속도로 증명하던 친밀감을 나란한 보폭으로 바꾸며, 기다림을 패배가 아닌 자신이 고른 방식으로 느낀다.",
+      "intent": "기존 인연 2화 제목의 완결 초안. 시작: 헬멧 둘을 준비해 초대. 핵심: 가까운 목적지를 함께 골라 달리는 대신 걸으며 보폭을 맞춤. 끝: 도착 뒤 더 긴 귀로를 청하며 선택 가능한 손을 내밂. 미배달 소포·수취인·내용물·1년 전 진상은 밝히거나 변경하지 않는다.",
+      "assets": [
+        {
+          "key": "bg",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_action1",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_action2",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_determined",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_happy",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_neutral",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_soft",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_surprised",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_worried",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "stage_settle",
+          "type": "motion",
+          "status": "ready"
+        },
+        {
+          "key": "voice_lumi_bond_recording",
+          "type": "voice",
+          "status": "todo"
+        }
+      ],
+      "input": {
+        "skippable": true,
+        "advance": "tap",
+        "repeatable": true,
+        "cooldown_s": 0
+      },
+      "stage": {
+        "background": "bg",
+        "music": "silence"
+      },
+      "beats": [
+        {
+          "figure": "fig_neutral",
+          "gaze": "side",
+          "camera": {
+            "shot": "full",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": null,
+            "text": "공방 앞에 멈춘 루미가 헬멧을 한 번 돌려 팔에 끼웠다. 짧은 금발 사이로 파란 브릿지가 튀어 올랐다. 평소 같으면 도착했다는 말보다 다음 출발이 먼저였을 텐데, 오늘은 한쪽 운동화를 바닥에 붙인 채 공방장을 기다리고 있었다.",
+            "tone": "무성 지문. 한쪽 운동화를 바닥에 단단히 붙인 3/4 전신, 헬멧을 손에 듦"
+          },
+          "hold": 0.8
+        },
+        {
+          "figure": "fig_happy",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": "lumi",
+            "text": "늦었다고 생각했어요? 오늘은 내가 먼저 왔어요. 출발 시간은 안 정했지만요. 그런 날도 있어야죠. 자, 헬멧. 아직 쓰지는 말고 받아만 봐요. 공방장한테 맞는지 확인하려고 하나 더 챙겨 왔거든요.",
+            "tone": "빠르고 시원한 중음. 자기 선택을 또렷이, 명령처럼 누르지 않음."
+          },
+          "hold": 1.0
+        },
+        {
+          "figure": "fig_action2",
+          "gaze": "side",
+          "camera": {
+            "shot": "medium",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": null,
+            "text": "공방장이 건네받은 헬멧을 들여다보는 동안 루미는 턱끈을 가리켰다. 어깨에 걸친 재킷은 그대로 두고 손목만 가볍게 꺾었다. 크롭 스포츠 톱 아래로 숨을 고르는 복부가 자연스럽게 움직였다. 그녀는 가까이 붙지 않고 손이 닿을 거리를 남겼다.",
+            "tone": "무성 지문. 헬멧을 한쪽 팔에 안정적으로 낀 자세, 열린 재킷은 어깨 원위치"
+          },
+          "hold": 0.8
+        },
+        {
+          "figure": "fig_determined",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": "lumi",
+            "text": "직접 해 봐요. 어려우면 내가 알려 줄게요. 대신 장난으로 빨리 끝내려고는 하지 마요. 내가 빠른 건 맞지만 챙길 건 챙기거든요. 오늘 같이 가자는 건, 공방장 표정까지 놓고 달리자는 뜻은 아니니까.",
+            "tone": "빠르고 시원한 중음. 상대의 반응을 기다리는 쉼 0.4초, 출발 전 편안한 집중"
+          },
+          "hold": 1.0
+        },
+        {
+          "figure": "fig_happy",
+          "gaze": "down",
+          "camera": {
+            "shot": "medium",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": null,
+            "text": "잠금장치가 맞물리는 작은 소리가 났다. 루미는 엄지를 세우다가 공방장이 조심스럽게 헬멧을 돌려 보는 모습을 보고 웃었다. 늘 자신 있게 먼저 움직이던 팔이 잠깐 느려졌다. 기다리는 동안 무엇을 해야 하는지 손이 모르겠다는 듯했다.",
+            "tone": "무성 지문. 한 팔에 헬멧을 끼고 이를 드러내며 웃는 자신감 있는 자세"
+          },
+          "hold": 0.8
+        },
+        {
+          "figure": "fig_happy",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": "lumi",
+            "text": "그렇게 신기하게 보니까 내가 더 신나잖아요. 그런데 오늘 목적지는 아직 말 안 했죠? 사실 아직 안 정했어요. 길을 모르는 건 아니고, 같이 정해 보고 싶어서요. 내 뒤만 따라오면 되는 날 말고, 같은 쪽을 보고 가는 날.",
+            "tone": "빠르고 시원한 중음. 상대의 반응을 기다리는 쉼 0.4초, 이를 보이는 자신감 있는 큰 웃음"
+          },
+          "hold": 1.0
+        },
+        {
+          "figure": "fig_surprised",
+          "gaze": "player",
+          "camera": {
+            "shot": "medium",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": null,
+            "text": "공방장은 헬멧을 옆구리에 끼고 골목 건너를 가리켰다. 루미는 바로 방향을 따라갔다가, 그곳이 걸어서도 금방 닿는 거리라는 걸 깨달았다. 대담하게 올라가던 입꼬리가 멈추더니 이내 조금 더 크게 벌어졌다.",
+            "tone": "무성 지문. 생각보다 가까운 목적지를 확인해 눈이 커졌다 웃음으로 넘어가는 순간"
+          },
+          "hold": 0.8
+        },
+        {
+          "figure": "fig_happy",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": "lumi",
+            "text": "저기요? 정말 저기까지? 내가 온 도시를 한 바퀴 돌 길도 생각해 뒀는데. 아, 방금 안 정했다는 건 목적지 얘기예요. 갈 수 있는 길은 많이 알아 두는 편이 좋죠. 좋아요. 그러면 오늘은 걸어가요.",
+            "tone": "빠르고 시원한 중음. 상대의 반응을 기다리는 쉼 0.4초, 이를 보이는 자신감 있는 큰 웃음"
+          },
+          "hold": 1.0
+        },
+        {
+          "figure": "fig_action2",
+          "gaze": "down",
+          "camera": {
+            "shot": "medium",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": null,
+            "text": "루미는 몸을 돌려 장비를 정리했다. 출발을 재촉하던 빛은 멎고 두 발이 나란히 바닥에 놓였다. 공방장이 헬멧을 돌려주려 하자 그녀는 팔을 조금 뒤로 뺐다. 아직 건네받지 않은 채로 얼굴부터 다시 마주 봤다.",
+            "tone": "무성 지문. 헬멧을 한쪽 팔에 안정적으로 낀 자세, 열린 재킷은 어깨 원위치"
+          },
+          "hold": 0.8
+        },
+        {
+          "figure": "fig_soft",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "push_in",
+            "duration": 0.55
+          },
+          "line": {
+            "speaker": "lumi",
+            "text": "그건 잠깐 더 들고 있어요. 쓸 일이 없어졌다고 바로 돌려받으면, 괜히 내가 혼자 들떠 온 것 같잖아요. 나중에 같이 탈 때 쓰면 되죠. 다음이 있다고 정해 놓는 건 너무 앞서간 걸까요? 나는 꽤 마음에 드는데.",
+            "tone": "빠르고 시원한 중음. 상대의 반응을 기다리는 쉼 0.4초, 이를 보이는 자신감 있는 큰 웃음"
+          },
+          "hold": 1.0
+        },
+        {
+          "figure": "fig_neutral",
+          "gaze": "side",
+          "camera": {
+            "shot": "medium",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": null,
+            "text": "공방장이 헬멧을 다시 고쳐 들었다. 루미는 그 대답에 어깨를 한 번 들썩이고 옆에 섰다. 보폭은 처음 두 걸음 동안 평소대로 컸다. 조금 앞서 나간 뒤에야 그녀는 뒤돌아보았다. 재킷 자락이 늦게 따라와 팔꿈치에 닿았다.",
+            "tone": "무성 지문. 한쪽 운동화를 바닥에 단단히 붙인 3/4 전신, 헬멧을 손에 듦"
+          },
+          "hold": 0.8
+        },
+        {
+          "figure": "fig_worried",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": "lumi",
+            "text": "어, 내가 또 먼저 갔네. 일부러 그런 건 아니에요. 잠깐만, 거기 서 있어요. 아니, 기다리는 건 내가 할게요. 공방장이 뛰어오면 그냥 평소랑 똑같잖아. 오늘은 이쪽에서 맞춰 볼래요.",
+            "tone": "빠르고 시원한 중음. 상대의 반응을 기다리는 쉼 0.4초, 상대 속도 확인하는 진지한 눈"
+          },
+          "hold": 1.0
+        },
+        {
+          "figure": "fig_worried",
+          "gaze": "player",
+          "camera": {
+            "shot": "medium",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": null,
+            "text": "루미가 두 걸음 돌아왔다. 어깨를 맞대는 대신 반걸음의 틈을 두고 나란히 섰다. 전기 같은 흥분이 사라진 얼굴은 아니었다. 달리기 직전보다 조금 어려운 도전을 만난 얼굴이었다. 그녀는 공방장의 발끝을 보고 자기 발을 천천히 내디뎠다.",
+            "tone": "무성 지문. 앞서가다 돌아와 상대의 발끝을 확인하는 집중, 눈썹이 살짝 모임"
+          },
+          "hold": 0.8
+        },
+        {
+          "figure": "fig_determined",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": "lumi",
+            "text": "이 정도면 돼요? 생각보다 어렵네. 느리게 걷는 게 아니라 옆에 있는 사람을 보면서 걷는 거라서요. 웃어도 돼요. 나 지금 되게 진지하거든요. 다음번에는 자연스러울 테니까 첫 연습을 잘 봐 둬요.",
+            "tone": "빠르고 시원한 중음. 자기 선택을 또렷이, 명령처럼 누르지 않음."
+          },
+          "hold": 1.0
+        },
+        {
+          "figure": "fig_happy",
+          "gaze": "down",
+          "camera": {
+            "shot": "medium",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": null,
+            "text": "공방장은 보폭을 조금 늘렸다가 다시 줄였다. 루미의 운동화와 발소리가 한 번 겹쳤다. 두 사람은 서로를 보며 멈춰 웃었다. 누구도 먼저 가라고 손짓하지 않았다. 골목 모퉁이의 짧은 거리가 아직 반이나 남아 있었다.",
+            "tone": "무성 지문. 한 팔에 헬멧을 끼고 이를 드러내며 웃는 자신감 있는 자세"
+          },
+          "hold": 0.8
+        },
+        {
+          "figure": "fig_happy",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": "lumi",
+            "text": "방금은 맞았죠? 내가 늦어지고 공방장이 빨라지는 중간. 거기쯤이 오늘 제한 속도인가 봐요. 표지판은 없지만 알아볼 수 있네요. 옆얼굴을 보려고 자꾸 고개를 돌리지 않아도 되면, 대충 잘 맞는 것 같아요.",
+            "tone": "빠르고 시원한 중음. 상대의 반응을 기다리는 쉼 0.4초, 이를 보이는 자신감 있는 큰 웃음"
+          },
+          "hold": 1.0
+        },
+        {
+          "figure": "fig_action1",
+          "gaze": "player",
+          "camera": {
+            "shot": "medium",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": null,
+            "text": "바람이 불자 루미는 뻗친 앞머리를 손으로 눌렀다. 헬멧을 든 공방장의 손이 조금 높아졌다. 그녀는 받아 들려다가 멈추고, 대신 자기 팔에 끼운 헬멧을 들어 보였다. 비슷한 모양 두 개가 같은 높이에서 나란히 흔들렸다.",
+            "tone": "무성 지문. 헬멧을 손목 위에서 짧게 회전시키는 키포즈, 손가락 고정점 가시"
+          },
+          "hold": 0.8
+        },
+        {
+          "figure": "fig_happy",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "push_in",
+            "duration": 0.55
+          },
+          "line": {
+            "speaker": "lumi",
+            "text": "하나씩 들면 되겠네요. 혼자 둘 다 챙기는 건 잘하는데, 같이 하나씩 드는 건 생각 못 했어요. 오늘 공방장이 잘하네. 이러면 다음에도 불러야겠는데? 그건 칭찬이고, 반은 내가 또 만나고 싶다는 얘기예요.",
+            "tone": "빠르고 시원한 중음. 상대의 반응을 기다리는 쉼 0.4초, 이를 보이는 자신감 있는 큰 웃음"
+          },
+          "hold": 1.0
+        },
+        {
+          "figure": "fig_neutral",
+          "gaze": "down",
+          "camera": {
+            "shot": "medium",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": null,
+            "text": "모퉁이에 닿았을 때 루미는 발을 멈췄다. 목적지는 바로 앞이었다. 빨리 왔다고 자랑할 수도, 먼 길을 달렸다고 말할 수도 없었다. 그 대신 공방장이 어느 쪽으로 웃는지 또렷하게 보였다. 그녀는 그 얼굴을 보며 운동화 앞코를 한 번 들었다.",
+            "tone": "무성 지문. 한쪽 운동화를 바닥에 단단히 붙인 3/4 전신, 헬멧을 손에 듦"
+          },
+          "hold": 0.8
+        },
+        {
+          "figure": "fig_happy",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": "lumi",
+            "text": "도착. 기록은 안 쟀어요. 대신 중간에 세 번 웃은 건 셌어요. 공방장은 모르겠지만 나는 세고 있었거든요. 이런 것도 기록이라고 해 두죠. 내가 빨리 가는 것 말고 잘하는 일을 하나 더 찾았으니까.",
+            "tone": "빠르고 시원한 중음. 상대의 반응을 기다리는 쉼 0.4초, 이를 보이는 자신감 있는 큰 웃음"
+          },
+          "hold": 1.0
+        },
+        {
+          "figure": "fig_soft",
+          "gaze": "player",
+          "camera": {
+            "shot": "full",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": null,
+            "text": "공방장이 헬멧을 내밀자 루미는 이번에는 받아 들었다. 두 개를 한 팔에 끼우고 다른 손을 비웠다. 돌아가는 길을 가리키려다 손바닥을 위로 바꾸었다. 붙잡아 끄는 손이 아니라 옆에서 따라올 시간을 남겨 둔 손이었다.",
+            "tone": "무성 지문. 헬멧을 한 팔에 끼고 다른 손바닥을 위로 내민 기다리는 자세"
+          },
+          "hold": 0.8
+        },
+        {
+          "figure": "fig_soft",
+          "gaze": "player",
+          "camera": {
+            "shot": "medium",
+            "focus": "body",
+            "move": "pull_out",
+            "duration": 0.55
+          },
+          "line": {
+            "speaker": "lumi",
+            "text": "돌아갈 때는 좀 더 멀리 돌아도 돼요? 빨리 가자는 뜻은 아니에요. 아직 같이 걸을 만큼은 남아 있는 것 같아서. 손은 잡아도 되고 안 잡아도 돼요. 대신 내 옆자리는 공방장 거예요. 오늘은 끝까지 비워 둘게요.",
+            "tone": "빠르고 시원한 중음. 자기 선택을 또렷이, 명령처럼 누르지 않음."
+          },
+          "hold": 1.0,
+          "motion": "stage_settle"
+        }
+      ]
+    },
+    {
+      "id": "lumi_victory_01",
+      "kind": "victory",
+      "title": "결승선 옆자리",
+      "trigger": {
+        "on": "event",
+        "note": "전투 종료 후 승리 연출을 볼 때만. 보상·판정·체력 변화 없음."
+      },
+      "why": "전투의 가속을 멈춘 뒤 혼자 먼저 돌아가고 싶은 대신 상대와 귀환하고 싶은 에너지를 밝힌다.",
+      "intent": "시작: 헬멧 없이 양손의 쌍단검을 각각 몸 바깥쪽 낮게 둔 양발 착지. 핵심: 호흡·헤어·재킷 잔움직임이 가라앉고 고개를 돌려 귀환의 동행을 청함. 끝: 한 발 앞에서 멈춰 옆자리를 비워 두되 두 손의 단검은 낮은 안전 방향에 유지. 로비의 헬멧·팔 끼우기·내민 손 포즈를 쓰지 않는다. 과부하·체력·보상 변화 없는 승리 연출이다.",
+      "assets": [
+        {
+          "key": "bg",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_victory_land",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_victory_turn",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_victory_grin",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_victory_wait",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "stage_settle",
+          "type": "motion",
+          "status": "ready"
+        },
+        {
+          "key": "voice_lumi_short_recording",
+          "type": "voice",
+          "status": "todo"
+        }
+      ],
+      "input": {
+        "skippable": true,
+        "advance": "tap",
+        "repeatable": true,
+        "cooldown_s": 0
+      },
+      "stage": {
+        "background": "bg",
+        "music": "silence"
+      },
+      "beats": [
+        {
+          "figure": "fig_victory_land",
+          "gaze": "side",
+          "camera": {
+            "shot": "full",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": "lumi",
+            "text": "배달 완료!",
+            "tone": "시원한 한 호흡, 힘찬 마침표 포즈: 쌍단검을 양손에 든 채 양발 착지, 날은 각각 몸 바깥쪽 낮은 안전 방향, 헬멧 없음"
+          },
+          "hold": 0.9
+        },
+        {
+          "figure": "fig_victory_turn",
+          "gaze": "away",
+          "camera": {
+            "shot": "full",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": null,
+            "text": "양발이 지면을 딛자 루미가 두 단검을 몸 바깥쪽으로 낮춘다. 뻗친 머리와 재킷 자락이 가라앉은 뒤, 루미가 고개를 돌려 공방장을 본다.",
+            "tone": "무성 지문. 쌍단검을 몸 바깥쪽 낮게 유지하고 양발을 지면에 붙인 3/4 회전 자세, 재킷·머리 잔움직임 뒤 고개만 돌아봄; 헬멧 없음"
+          },
+          "hold": 0.55
+        },
+        {
+          "figure": "fig_victory_grin",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "push_in",
+            "duration": 0.55
+          },
+          "line": {
+            "speaker": "lumi",
+            "text": "돌아가는 길은 같이 가요. 내가 먼저 도착해 버리면 재미없잖아.",
+            "tone": "환하게 웃다가 마지막 단어를 조금 길게 포즈: 양손의 쌍단검은 몸 옆 낮은 방향 그대로, 상체를 공방장 쪽으로 돌려 이를 보이며 웃음; 헬멧 없음"
+          },
+          "hold": 0.9
+        },
+        {
+          "figure": "fig_victory_wait",
+          "gaze": "player",
+          "camera": {
+            "shot": "medium",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": "lumi",
+            "text": "잡을 수 있겠어요? …아니, 안 뛰어도 돼요. 여기서 기다릴게요.",
+            "tone": "발랄한 장난 뒤 실제로 기다리는 정적 포즈: 한 발 앞에서 멈춰 옆자리를 비워 둔 전신, 양손의 쌍단검은 몸 바깥쪽 낮게 고정하고 눈을 맞추며 기다림; 손을 내밀거나 헬멧을 들지 않음"
+          },
+          "hold": 0.9,
+          "motion": "stage_settle"
+        }
+      ]
+    }
+  ],
+  "idle_figure": "fig_neutral"
+}

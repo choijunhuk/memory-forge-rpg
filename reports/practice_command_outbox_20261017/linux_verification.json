@@ -1,0 +1,7 @@
+{
+  "scope": "actual unprivileged Linux arm64 .NET10 with same fixed managed client/source",
+  "pass": true,
+  "stage_reload_exact": true,
+  "published_mode": "600",
+  "source_sha256": "4a62c02db936831cce01b2557e9d39052de536eeec8adf227c7db23e0b8241c1"
+}

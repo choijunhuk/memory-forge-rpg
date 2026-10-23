@@ -1,0 +1,14 @@
+{
+  "score": 92,
+  "verdict": "pass",
+  "category_match": true,
+  "differences": [
+    "Aila fourth victory candidate was rejected by image output moderation; use the accepted lowered-lantern return-look pose as the final held waiting state."
+  ],
+  "suggestions": [],
+  "reasoning": "Accepted Aila and Sion C frames contain the intended victory props rather than lobby objects and keep expressive eye contact.",
+  "next_actions": [
+    "Reuse Aila victory turn for final wait.",
+    "Inspect remaining C sets and repair outputs."
+  ]
+}

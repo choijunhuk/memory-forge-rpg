@@ -1,0 +1,13 @@
+{
+  "task": "P1-POSTGRES-TRANSACTIONAL-PRACTICE",
+  "official_result_status": "FAILED",
+  "exit": 1,
+  "actual_reason": "included subscription session limit",
+  "exact_notice": "You've hit your session limit \u00b7 resets 12am (Asia/Seoul)",
+  "fallback_or_paid_retry": false,
+  "further_claude_calls": "STOPPED until included allowance returns",
+  "written_sources_preserved": true,
+  "author_runtime": "NOT_RUN",
+  "root_independent_verification": "continues",
+  "runner_classification_gap": "session limit wording not matched by current subscription-limit regex; original result preserved, do not silently rewrite it"
+}

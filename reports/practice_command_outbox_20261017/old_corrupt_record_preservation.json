@@ -1,0 +1,19 @@
+{
+  "scope": "actual old A0 writer / fixed A1 reader on unprivileged Linux, no graph injection",
+  "old_bridge_sha256": "cdf933cf7813bfec6691ce81909822d9907586c37ce397c38afc442783c83b4f",
+  "pass": true,
+  "cases": [
+    {
+      "case": "high",
+      "old_writer_accepted": true,
+      "fixed_reader_code": "OUTBOX_RECORD_CORRUPT",
+      "original_bytes_preserved": true
+    },
+    {
+      "case": "low",
+      "old_writer_accepted": true,
+      "fixed_reader_code": "OUTBOX_RECORD_CORRUPT",
+      "original_bytes_preserved": true
+    }
+  ]
+}

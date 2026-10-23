@@ -1,0 +1,30 @@
+{
+  "jobs": [
+    {
+      "task_id": "P1-SERVER-REWARD-UI-20261017",
+      "session_id": "cfcd60b9-d701-4abf-874b-b6915e50765e",
+      "requestedModel": "claude-opus-5-5",
+      "requestedEffort": "high",
+      "process_exit": 0,
+      "model_usage_keys": [
+        "claude-opus-5-5"
+      ],
+      "billing_account_matched": true,
+      "billing_verified_at": "2026-10-15T21:22:01.277612+00:00"
+    },
+    {
+      "task_id": "P1-SERVER-REWARD-LAYOUT-20261017",
+      "session_id": "cfcd60b9-d701-4abf-874b-b6915e50765e",
+      "requestedModel": "claude-opus-5-5",
+      "requestedEffort": "high",
+      "process_exit": 0,
+      "model_usage_keys": [
+        "claude-opus-5-5"
+      ],
+      "billing_account_matched": true,
+      "billing_verified_at": "2026-10-15T21:22:01.277612+00:00"
+    }
+  ],
+  "author_runtime": "NOT_RUN",
+  "runtime_verifier": "Codex actual Editor/CoreHTTP"
+}

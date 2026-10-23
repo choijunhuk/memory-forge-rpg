@@ -1,0 +1,65 @@
+{
+  "note": "Read-only input fingerprints recorded before comparison-sheet assembly; not an earlier-session baseline. No inputs overwritten by this task.",
+  "inputs": [
+    {
+      "path": "/Users/choi/Documents/Memory_forge/art/requests/style-revision-20261018.md",
+      "sha256": "c09c0c4d086ade333796cb63cd1113feb878e5ae4b1efc06740bfaa443739482",
+      "bytes": 3358
+    },
+    {
+      "path": "/Users/choi/Documents/Memory_forge/docs/design_v0.8.1.md",
+      "sha256": "1eabb524cc0e5593f88c930edf7bade2ab00825cd72212b05a50dfa5a77959a8",
+      "bytes": 379942
+    },
+    {
+      "path": "/Users/choi/Documents/Memory_forge/art/generated/starter-20261017/char_sera_sheet_default_v02.png",
+      "sha256": "d895e00377ed5b56f7dca20be23adda59b0de186eae2fd02e720039d1b0f4477",
+      "bytes": 2045429
+    },
+    {
+      "path": "/Users/choi/Documents/Memory_forge/art/generated/starter-20261017/char_harin_sheet_default_v01.png",
+      "sha256": "2c736b1ef79868dfa8dd8150750f9339469f54df25ccea7f5358edbd7ddefce1",
+      "bytes": 2416115
+    },
+    {
+      "path": "/Users/choi/Documents/Memory_forge/art/moments/sera/images/char_sera_lobby_scope_v02.png",
+      "sha256": "0025e262e4ef2a8c21e680323839ac5791628882832b963b2e669264a03e6100",
+      "bytes": 2114478
+    },
+    {
+      "path": "/Users/choi/Documents/Memory_forge/art/moments/harin/images/char_harin_stand_neutral_v01.png",
+      "sha256": "bc0d480879c54124365bbc1630a1dda13d2755a075225c7e1927171fd1964cf3",
+      "bytes": 2361267
+    },
+    {
+      "path": "/Users/choi/Documents/Memory_forge/art/moments/sera/images/char_sera_expr_neutral_v01.png",
+      "sha256": "2e5fa003499c0e5b203f96b80a63b6191bc5bcbfae8e0dfedcf429cab70dba1f",
+      "bytes": 430851
+    },
+    {
+      "path": "/Users/choi/Documents/Memory_forge/art/moments/harin/images/char_harin_expression_neutral_v01.png",
+      "sha256": "fb461c6f34b4ddd6cd6476a82bd5c297920310dd00492bcb497f81b4e37668a2",
+      "bytes": 395493
+    },
+    {
+      "path": "/Users/choi/Documents/Memory_forge/art/moments/ravien/images/char_ravien_stand_neutral_v01.png",
+      "sha256": "36d32168b79245642ba4db63cbe952c19d452d1dc44485b927197f53784e6367",
+      "bytes": 1562571
+    },
+    {
+      "path": "/Users/choi/Documents/Memory_forge/art/moments/aila/images/char_aila_moment_neutral_v02.png",
+      "sha256": "84d1468e00ecd54ea1372c1315f3680dc18653416029ac272242a67658c74ad1",
+      "bytes": 2260718
+    },
+    {
+      "path": "/Users/choi/Documents/Memory_forge/art/moments/sion/images/char_sion_moment_neutral_v01.png",
+      "sha256": "8f1325f20daf44f869c3337bb37f230101cab532028fae27d8411d05f5ba826c",
+      "bytes": 2169825
+    },
+    {
+      "path": "/Users/choi/Documents/Memory_forge/art/moments/lumi/images/char_lumi_moment_neutral_v01.png",
+      "sha256": "ee0eb2f06b8498227bd93b3371bd193c35a638c62f30543b585aa8a7e1a651d9",
+      "bytes": 1858990
+    }
+  ]
+}

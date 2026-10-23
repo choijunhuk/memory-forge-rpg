@@ -1,0 +1,31 @@
+{
+  "task_id": "P1-PUBLIC-QUERY-SERVER-TESTS-20261017",
+  "run_id": "P1-PUBLIC-QUERY-SERVER-TESTS-20261017-20261016T161657014628Z",
+  "status": "RECEIVED_UNVERIFIED",
+  "requestedEffort": "xhigh",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "changes_verified": false,
+  "raw_output": "ops/ai/local/P1-PUBLIC-QUERY-SERVER-TESTS-20261017-20261016T161657014628Z*",
+  "billing_verified_at": "2026-10-15T21:22:01.277612+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "codex/public-battle-query-20261017",
+  "base_commit": "47502b797ebc2de262704968f85b9ce30ed7665f",
+  "worktree": "/Users/choi/.codex/worktrees/claude-public-battle/Memory_forge",
+  "allowed_files": [
+    "reports/public_battle_query_20261017/author_report.md",
+    "server/MemoryForge.Server/PublicView.cs",
+    "server/MemoryForge.ServerChecks/BattleQueryChecks.cs",
+    "server/MemoryForge.ServerChecks/Program.cs"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "bc4c8bd8-684e-4e74-be0f-e49277bc4530",
+  "subtype": "success",
+  "is_error": false,
+  "result": "I've added the battle-query HTTP scenario and the candidate `zone` field. Nothing was compiled or run on my side: I had no Bash/dotnet in either job.\n\n**What changed (only the four allowed files)**\n- **`PublicView.cs`:** each offered candidate now carries `zone`, taken from the current request's `From` (`hand`, `discard` or `res`). No other part of the reply changed.\n- **`ServerChecks/Program.cs`:**\n  - `\"battle-query\"` is added to the file-suite required list and runs on the main host after the write-failure scenario.\n  - I moved the existing check-side Core oracle setup unchanged out of `IndependentReplay` into a shared `CheckSideRun(run)`, so the old check and the new scenario use the same oracle.\n- **`BattleQueryChecks.cs`** (new scenario, real child host over real HTTP):\n  - **Refusals on the map, at version 0:**\n    - auth → 401;\n    - another account, an account with no run, an unknown run ID or a malformed run ID → 404, and gamma's file is still absent;\n    - no battle → 422; stale version → 409;\n    - 21 bad request bodies → 400 with their codes; non-JSON content type → 415; GET → 405.\n  - **After a real `enter` (version 1):** every hand card in `now`/`next`/`after` is queried, plus explicit-pick queries for pick cards. Each reply is compared field by field with the check-side Core oracle: context, source text, computed slots, forecast, pick sheet, and candidates with their zone.\n  - **Hidden cards:** every draw/discard/exhaust/reservation/enemy uid returns 422 `NOT_IN_HAND`, byte-identical to the reply for a uid that doesn't exist.\n  - **Purity and repeats:** a repeated query returns the same bytes. After every round the stored envelope is byte-identical with the same SHA-256, and the run read is unchanged.\n  - **Second round:** up to two legal plays, chosen from the oracle's own forecast, each commit exactly the next version. Then a second full query round runs. If a play ended the battle, the query must return 422 `NO_BATTLE`.\n- **`author_report.md`:**\n  - It now says job 1 timed out at 30 minutes (not a quota stop) and lists which files were actually written in each job.\n  - The Core/Mono test files and the CoreChecks wiring were never written by me; they belong to the other job.\n  - Verification is recorded as NOT_RUN for me. Your compile and 44-check HTTP pass are recorded as reported by you only. Full acceptance is recorded as not complete.\n\n**Limits worth knowing**\n- **First-battle versions:** in a run's first battle the server journal version and `battle.v` are always equal (enter matches begin). The test checks each against its own source but cannot detect the two being swapped.\n- **PostgreSQL:** the scenario isn't wired into PostgreSQL mode, because `PostgresChecks.cs` wasn't in my edit list. The scenario code doesn't depend on the backend, and the report has the exact call to add after `PostgresOwnership`.\n\n**Next for you:** build and run the file-mode ServerChecks, run the PostgreSQL suite against a fresh test database (the new Core build makes the server refuse old dev records), and finish the Core/Mono tests and Unity import (new Core files need `.meta` files).\n\nSession: `bc4c8bd8-684e-4e74-be0f-e49277bc4530`",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ]
+}

@@ -1,0 +1,110 @@
+[
+  {
+    "task": "P1-PUBLIC-BATTLE-QUERY-20261017",
+    "session_id": "bc4c8bd8-684e-4e74-be0f-e49277bc4530",
+    "requested_effort": "max",
+    "actual_positive_model_records": {
+      "claude-opus-5-5": 181
+    },
+    "actual_effort_records": {
+      "max": 181
+    },
+    "actual_per_turn_effort_records": {
+      "max": 181
+    },
+    "runner_status": "TIMED_OUT",
+    "process_exit": null,
+    "billing_account_matched": true,
+    "author_runtime": "NOT_RUN"
+  },
+  {
+    "task": "P1-PUBLIC-QUERY-APP-DOCS-20261017",
+    "session_id": "bc4c8bd8-684e-4e74-be0f-e49277bc4530",
+    "requested_effort": "high",
+    "actual_positive_model_records": {
+      "claude-opus-5-5": 12
+    },
+    "actual_effort_records": {
+      "high": 12
+    },
+    "actual_per_turn_effort_records": {
+      "high": 12
+    },
+    "runner_status": "RECEIVED_UNVERIFIED",
+    "process_exit": 0,
+    "billing_account_matched": true,
+    "author_runtime": "NOT_RUN"
+  },
+  {
+    "task": "P1-PUBLIC-QUERY-BACKEND-BOUNDARY-20261017",
+    "session_id": "bc4c8bd8-684e-4e74-be0f-e49277bc4530",
+    "requested_effort": "xhigh",
+    "actual_positive_model_records": {
+      "claude-opus-5-5": 38
+    },
+    "actual_effort_records": {
+      "xhigh": 38
+    },
+    "actual_per_turn_effort_records": {
+      "xhigh": 38
+    },
+    "runner_status": "RECEIVED_UNVERIFIED",
+    "process_exit": 0,
+    "billing_account_matched": true,
+    "author_runtime": "NOT_RUN"
+  },
+  {
+    "task": "P1-PUBLIC-QUERY-CORE-TESTS-20261017",
+    "session_id": "b727f1dc-15a0-4976-afb8-eb71ff77367e",
+    "requested_effort": "xhigh",
+    "actual_positive_model_records": {
+      "claude-opus-5-5": 104
+    },
+    "actual_effort_records": {
+      "xhigh": 104
+    },
+    "actual_per_turn_effort_records": {
+      "xhigh": 104
+    },
+    "runner_status": "RECEIVED_UNVERIFIED",
+    "process_exit": 0,
+    "billing_account_matched": true,
+    "author_runtime": "NOT_RUN"
+  },
+  {
+    "task": "P1-PUBLIC-QUERY-PURITY-TEST-FIX-20261017",
+    "session_id": "b727f1dc-15a0-4976-afb8-eb71ff77367e",
+    "requested_effort": "xhigh",
+    "actual_positive_model_records": {
+      "claude-opus-5-5": 25
+    },
+    "actual_effort_records": {
+      "xhigh": 25
+    },
+    "actual_per_turn_effort_records": {
+      "xhigh": 25
+    },
+    "runner_status": "RECEIVED_UNVERIFIED",
+    "process_exit": 0,
+    "billing_account_matched": true,
+    "author_runtime": "NOT_RUN"
+  },
+  {
+    "task": "P1-PUBLIC-QUERY-SERVER-TESTS-20261017",
+    "session_id": "bc4c8bd8-684e-4e74-be0f-e49277bc4530",
+    "requested_effort": "xhigh",
+    "actual_positive_model_records": {
+      "claude-opus-5-5": 27
+    },
+    "actual_effort_records": {
+      "xhigh": 27
+    },
+    "actual_per_turn_effort_records": {
+      "xhigh": 27
+    },
+    "runner_status": "RECEIVED_UNVERIFIED",
+    "process_exit": 0,
+    "billing_account_matched": true,
+    "author_runtime": "NOT_RUN"
+  }
+]

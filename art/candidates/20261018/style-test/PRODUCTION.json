@@ -1,0 +1,215 @@
+{
+  "created_utc": "2026-10-18 06:21:18 UTC",
+  "scope": "style-test only",
+  "status": "complete-for-style-selection",
+  "research_before_generation": true,
+  "research_file": "RESEARCH.md",
+  "tool": "image_gen.imagegen",
+  "route": "built-in subscription image tool",
+  "backend_model": null,
+  "seed": null,
+  "sampler": null,
+  "steps": null,
+  "payment_actions": [],
+  "api_sdk_calls": 0,
+  "external_reference_images_downloaded": 0,
+  "external_reference_images_submitted": 0,
+  "local_source_inputs": "INPUTS.json",
+  "generation_calls": 18,
+  "selected_images": 6,
+  "characters": [
+    {
+      "id": "sera",
+      "age": 24
+    },
+    {
+      "id": "harin",
+      "age": 26
+    }
+  ],
+  "directions": [
+    "A crisp cel",
+    "B restrained half-cel",
+    "C graphic painterly"
+  ],
+  "records": [
+    {
+      "id": "a_sera_v01",
+      "round": 1,
+      "prompt_file": "PROMPTS.json",
+      "cache_source": "/Users/choi/.codex/generated_images/01a14d94-27ff-7e11-b654-a9d6ecdd5cd1/exec-8322c113-1d89-4b6d-905f-7ba274e366b9.png",
+      "artifact": "iterations/round1/a_sera_v01.png",
+      "selected": false
+    },
+    {
+      "id": "a_harin_v01",
+      "round": 1,
+      "prompt_file": "PROMPTS.json",
+      "cache_source": "/Users/choi/.codex/generated_images/01a14d94-27ff-7e11-b654-a9d6ecdd5cd1/exec-3a4047a5-f167-435f-973d-c6a0d3c7bba0.png",
+      "artifact": "iterations/round1/a_harin_v01.png",
+      "selected": false
+    },
+    {
+      "id": "b_sera_v01",
+      "round": 1,
+      "prompt_file": "PROMPTS.json",
+      "cache_source": "/Users/choi/.codex/generated_images/01a14d94-27ff-7e11-b654-a9d6ecdd5cd1/exec-ea881f3a-9a08-4e49-bfb0-323120da777b.png",
+      "artifact": "iterations/round1/b_sera_v01.png",
+      "selected": false
+    },
+    {
+      "id": "b_harin_v01",
+      "round": 1,
+      "prompt_file": "PROMPTS.json",
+      "cache_source": "/Users/choi/.codex/generated_images/01a14d94-27ff-7e11-b654-a9d6ecdd5cd1/exec-c4082b20-1a61-472e-bae2-c0735c2cc9e4.png",
+      "artifact": "iterations/round1/b_harin_v01.png",
+      "selected": false
+    },
+    {
+      "id": "c_sera_v01",
+      "round": 1,
+      "prompt_file": "PROMPTS.json",
+      "cache_source": "/Users/choi/.codex/generated_images/01a14d94-27ff-7e11-b654-a9d6ecdd5cd1/exec-0c9d7f70-f249-4ea3-866d-1da395c692a9.png",
+      "artifact": "iterations/round1/c_sera_v01.png",
+      "selected": false
+    },
+    {
+      "id": "c_harin_v01",
+      "round": 1,
+      "prompt_file": "PROMPTS.json",
+      "cache_source": "/Users/choi/.codex/generated_images/01a14d94-27ff-7e11-b654-a9d6ecdd5cd1/exec-7529d718-fb96-4a2b-9921-d7a43558cd30.png",
+      "artifact": "iterations/round1/c_harin_v01.png",
+      "selected": false
+    },
+    {
+      "id": "a_sera_v02",
+      "round": 2,
+      "prompt_file": "PROMPTS-round2.json",
+      "cache_source": "/Users/choi/.codex/generated_images/01a14d94-27ff-7e11-b654-a9d6ecdd5cd1/exec-8af6f6dd-926f-4e22-aedc-45ba3e5dcd98.png",
+      "artifact": "iterations/round2/a_sera_v02.png",
+      "selected": false
+    },
+    {
+      "id": "a_harin_v02",
+      "round": 2,
+      "prompt_file": "PROMPTS-round2.json",
+      "cache_source": "/Users/choi/.codex/generated_images/01a14d94-27ff-7e11-b654-a9d6ecdd5cd1/exec-9fb7e47d-22cb-4f03-8bd6-87957f402f09.png",
+      "artifact": "iterations/round2/a_harin_v02.png",
+      "selected": false
+    },
+    {
+      "id": "b_sera_v02",
+      "round": 2,
+      "prompt_file": "PROMPTS-round2.json",
+      "cache_source": "/Users/choi/.codex/generated_images/01a14d94-27ff-7e11-b654-a9d6ecdd5cd1/exec-cd453611-dc85-45b3-9133-c2f0525ca733.png",
+      "artifact": "iterations/round2/b_sera_v02.png",
+      "selected": false
+    },
+    {
+      "id": "b_harin_v02",
+      "round": 2,
+      "prompt_file": "PROMPTS-round2.json",
+      "cache_source": "/Users/choi/.codex/generated_images/01a14d94-27ff-7e11-b654-a9d6ecdd5cd1/exec-d1417342-4076-47f7-85c6-c027416159fd.png",
+      "artifact": "iterations/round2/b_harin_v02.png",
+      "selected": false
+    },
+    {
+      "id": "c_sera_v02",
+      "round": 2,
+      "prompt_file": "PROMPTS-round2.json",
+      "cache_source": "/Users/choi/.codex/generated_images/01a14d94-27ff-7e11-b654-a9d6ecdd5cd1/exec-8c68bbbe-8f7e-4a0c-9cb3-6e243c649c22.png",
+      "artifact": "iterations/round2/c_sera_v02.png",
+      "selected": false
+    },
+    {
+      "id": "c_harin_v02",
+      "round": 2,
+      "prompt_file": "PROMPTS-round2.json",
+      "cache_source": "/Users/choi/.codex/generated_images/01a14d94-27ff-7e11-b654-a9d6ecdd5cd1/exec-2a409e9f-4f7b-4cfd-9d2f-ace248866659.png",
+      "artifact": "iterations/round2/c_harin_v02.png",
+      "selected": false
+    },
+    {
+      "id": "a_sera_v03",
+      "round": 3,
+      "prompt_file": "PROMPTS-round3.json",
+      "cache_source": "/Users/choi/.codex/generated_images/01a14d94-27ff-7e11-b654-a9d6ecdd5cd1/exec-decf60b7-5237-4b47-b2be-80a42bf41025.png",
+      "artifact": "individuals/a_sera_v03.png",
+      "selected": true
+    },
+    {
+      "id": "a_harin_v03",
+      "round": 3,
+      "prompt_file": "PROMPTS-round3.json",
+      "cache_source": "/Users/choi/.codex/generated_images/01a14d94-27ff-7e11-b654-a9d6ecdd5cd1/exec-6c499b5c-ac5c-42be-9e79-cb29bb44d4b4.png",
+      "artifact": "individuals/a_harin_v03.png",
+      "selected": true
+    },
+    {
+      "id": "b_sera_v03",
+      "round": 3,
+      "prompt_file": "PROMPTS-round3.json",
+      "cache_source": "/Users/choi/.codex/generated_images/01a14d94-27ff-7e11-b654-a9d6ecdd5cd1/exec-5a86ae67-1097-4007-be84-ab887274f69b.png",
+      "artifact": "individuals/b_sera_v03.png",
+      "selected": true
+    },
+    {
+      "id": "b_harin_v03",
+      "round": 3,
+      "prompt_file": "PROMPTS-round3.json",
+      "cache_source": "/Users/choi/.codex/generated_images/01a14d94-27ff-7e11-b654-a9d6ecdd5cd1/exec-6e5be2ae-942e-40e5-91ed-71fc3116c914.png",
+      "artifact": "individuals/b_harin_v03.png",
+      "selected": true
+    },
+    {
+      "id": "c_sera_v03",
+      "round": 3,
+      "prompt_file": "PROMPTS-round3.json",
+      "cache_source": "/Users/choi/.codex/generated_images/01a14d94-27ff-7e11-b654-a9d6ecdd5cd1/exec-a3bda00b-754f-4d14-93c7-4456e979e9f3.png",
+      "artifact": "individuals/c_sera_v03.png",
+      "selected": true
+    },
+    {
+      "id": "c_harin_v03",
+      "round": 3,
+      "prompt_file": "PROMPTS-round3.json",
+      "cache_source": "/Users/choi/.codex/generated_images/01a14d94-27ff-7e11-b654-a9d6ecdd5cd1/exec-b187cae5-0c4a-4c52-8275-8998dd5647f1.png",
+      "artifact": "individuals/c_harin_v03.png",
+      "selected": true
+    }
+  ],
+  "comparison": {
+    "path": "COMPARISON.png",
+    "method": "render_sheet.swift / AppKit; deterministic PNG composition and face crops only",
+    "width": 3360,
+    "height": 3660,
+    "source_art_used": "two existing project lobby images; no third-party art",
+    "labels_embedded": true
+  },
+  "recommendation": "A",
+  "approval": "pending user style choice",
+  "real_constraints": [
+    "No backend model or seed exposed by tool",
+    "Round1 style change too weak",
+    "Round2 costume/pose drift rejected and repaired in round3",
+    "Small ornament lines and internal prop details can vary; candidates are not production turnarounds",
+    "Final PNGs have light backgrounds; no transparent game-ready assets promised"
+  ],
+  "not_run": [
+    "whole-roster redraw",
+    "user approval",
+    "Unity import and playback",
+    "game tests and builds",
+    "PSD/layer extraction",
+    "rigging/animation",
+    "Claude review"
+  ],
+  "scope_actions": {
+    "game_code": false,
+    "Unity": false,
+    "git_commit": false,
+    "git_push": false,
+    "Claude_calls": false,
+    "other_service_generation": false
+  }
+}

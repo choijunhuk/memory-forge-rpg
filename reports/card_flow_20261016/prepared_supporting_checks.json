@@ -1,0 +1,34 @@
+{
+  "checks": {
+    "node": {
+      "passed": 333,
+      "failed": 0,
+      "skipped": 0,
+      "receipt": "prepared_node_tests.txt",
+      "actual_runtime": "v25.9.0 (/opt/homebrew/bin/node); earlier Node22 evidence and CI remain separate"
+    },
+    "proposals": {
+      "passed": 14,
+      "failed": 0,
+      "skipped": 0,
+      "receipt": "prepared_proposals_tests.txt"
+    },
+    "python": {
+      "passed": 57,
+      "failed": 0,
+      "receipt": "prepared_python_tests.txt"
+    },
+    "docs": {
+      "passed": 9,
+      "failed": 0,
+      "receipt": "prepared_docs_tests.txt"
+    },
+    "handoff": {
+      "passed": 13,
+      "failed": 0,
+      "receipt": "prepared_handoff_tests.txt"
+    }
+  },
+  "core_gameplay_sources_changed_in_this_unit": false,
+  "warning": "These do not replace actual Unity PlayMode or physical-device acceptance."
+}

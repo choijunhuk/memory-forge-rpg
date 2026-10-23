@@ -1,0 +1,12 @@
+{
+  "score": 89,
+  "verdict": "revise",
+  "category_match": true,
+  "differences": [
+    "Sion B neutral pose has one empty bottom-left corner with alpha1; all other current 92 scene PNG targets now have zero-alpha corners."
+  ],
+  "suggestions": [
+    "Remove that single sprite's residual exterior alpha, preserving lectern/book/hand state."
+  ],
+  "reasoning": "Scene artwork is fully present; the last numerical empty-corner defect is isolated to Sion B neutral."
+}

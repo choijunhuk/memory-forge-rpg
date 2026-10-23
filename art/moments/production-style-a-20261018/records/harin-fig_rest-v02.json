@@ -1,0 +1,17 @@
+{
+  "character": "harin",
+  "key": "fig_rest",
+  "target": "harin/images/char_harin_fig_rest_styleA_v02.png",
+  "args": {
+    "prompt": "Use case: precise-object-edit. Correct ONLY the cat plush in FIRST image. Preserve EXACT A-style character face, mature age26, expression, all clothing/armor, hands except tiny toy-contact adjustment, shield SCREEN LEFT, chair, SCREEN-RIGHT rectangular table, runner, cream cloth, water glass and tool, their scale/coordinates/perspective. The SECOND image is a PROP-ONLY reference: use ONLY its existing small round stuffed CAT, not that character, pose, background, shield or furniture. Match that exact approved toy: dark NAVY-GRAY head/back/body, WHITE face blaze/bib/belly and round WHITE feet, small PINK paw pads, clear BLUE round bead eyes with dark pupils and tiny white catchlights, tiny pink nose and small mouth, GOLD STAR COLLAR, one viewer-left ear folded outward. Soft short matte fabric with seams, no fur/real kitten, no X/button eyes, no ripped stitches, no blue bow, no white-only body, no pillow-shaped substitute. Keep its original toy identity and small palm-sized scale, redraw only its rendering in the existing clean A cel style. The toy is currently MISSING: ADD the exact referenced toy sitting upright ON THE CREAM CLOTH at the SAME tabletop spot LEFT OF WATER GLASS. Keep BOTH BARE hands and the two removed gloves overlapped on her lap unchanged. Same 1024x1536 portrait, GENUINE RGBA transparency in all empty canvas, every corner alpha exactly 0; remove residual background haze/halo without altering subject. No floor or checkerboard or text.",
+    "referenced_image_paths": [
+      "/Users/choi/Documents/Memory_forge/art/moments/harin/images/char_harin_fig_rest_styleA_v01.png",
+      "/Users/choi/Documents/Memory_forge/art/moments/harin/images/char_harin_seated_worried_v02.png"
+    ],
+    "transparent_background": true
+  },
+  "cache_path": "/Users/choi/.codex/generated_images/01a14db0-4150-7f01-9240-82aaa185dd28/exec-3675a5ec-1423-46ae-827e-0db250f84cc2.png",
+  "status": "history_unselected",
+  "generation_status": "generated_pending_review",
+  "selected": false
+}

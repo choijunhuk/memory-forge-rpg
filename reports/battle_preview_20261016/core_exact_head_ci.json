@@ -1,0 +1,12 @@
+{
+  "head": "451698ff1f50087a0013e69af7f5d4f963b5be88",
+  "push": {
+    "run_id": 38832213629,
+    "conclusion": "success"
+  },
+  "pull_request": {
+    "run_id": 38832218518,
+    "conclusion": "success"
+  },
+  "scope": "Core-only exact head; later view commit needs its own CI"
+}

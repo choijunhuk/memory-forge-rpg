@@ -1,0 +1,6 @@
+aila aila_lobby_01 6 shots
+aila aila_bond_01 56 shots
+aila aila_victory_01 5 shots
+lumi lumi_lobby_01 6 shots
+lumi lumi_bond_01 55 shots
+lumi lumi_victory_01 6 shots

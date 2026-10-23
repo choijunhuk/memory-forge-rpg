@@ -1,0 +1,41 @@
+{
+  "status": "succeeded",
+  "job_id": "070f1fadec18446581bf790581771eda",
+  "summary": {
+    "total": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "durationSeconds": 0.7546677,
+    "resultState": "Passed"
+  },
+  "results": [
+    {
+      "name": "SavedSceneKeepsItsLinkedCanvasAndCamera",
+      "fullName": "MemoryForge.EditorTests.EditorBridgeTests.SavedSceneKeepsItsLinkedCanvasAndCamera",
+      "state": "Passed",
+      "durationSeconds": 0.0555139,
+      "message": null,
+      "stackTrace": null,
+      "output": ""
+    },
+    {
+      "name": "SerializedConnectionPrefabCanRenderAnOverlay",
+      "fullName": "MemoryForge.EditorTests.EditorBridgeTests.SerializedConnectionPrefabCanRenderAnOverlay",
+      "state": "Passed",
+      "durationSeconds": 0.0065374,
+      "message": null,
+      "stackTrace": null,
+      "output": ""
+    },
+    {
+      "name": "UniversalPipelineIncludesTheTwoDimensionalRenderer",
+      "fullName": "MemoryForge.EditorTests.EditorBridgeTests.UniversalPipelineIncludesTheTwoDimensionalRenderer",
+      "state": "Passed",
+      "durationSeconds": 0.0019367,
+      "message": null,
+      "stackTrace": null,
+      "output": ""
+    }
+  ]
+}

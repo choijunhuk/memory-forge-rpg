@@ -1,0 +1,12 @@
+{
+  "score": 94,
+  "verdict": "pass",
+  "category_match": true,
+  "differences": [],
+  "suggestions": [],
+  "reasoning": "Happy portraits retain separate character acting and annoyed variants show controlled brow/mouth changes without identity drift.",
+  "next_actions": [
+    "Inspect remaining emotion outputs.",
+    "Verify final resized files and scene assignments."
+  ]
+}

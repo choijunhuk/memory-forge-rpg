@@ -1,0 +1,7 @@
+step1: PASS
+step2: PASS
+step3: PASS
+step4: PASS
+step5: FAIL $.phase value VICTORY expected PLAYER
+{"Phase":"VICTORY","Block":0,"Draw":[],"Hand":["c5","c2","c4"],"Discard":["c1"],"Exhaust":["c3","c6"],"KilledMarked":2}
+Actual C# requests 5; full state/response mismatches 1; no restore/injection

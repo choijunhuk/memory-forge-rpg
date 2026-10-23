@@ -1,0 +1,111 @@
+{
+  "_meta": {
+    "fastmcp": {
+      "wrap_result": true
+    }
+  },
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Test job status retrieved.\",\"error\":null,\"data\":{\"job_id\":\"ff6df553185b49a4a081190896893bd7\",\"status\":\"failed\",\"mode\":\"PlayMode\",\"started_unix_ms\":1792123732355,\"finished_unix_ms\":1792123739756,\"last_update_unix_ms\":1792123739756,\"progress\":{\"completed\":5,\"total\":5,\"current_test_full_name\":null,\"current_test_started_unix_ms\":null,\"last_finished_test_full_name\":\"MemoryForge.Client.Tests.ExpeditionFailurePlayModeTests.UnknownBattleErrorQuarantinesEvenThoughTheBattleRolledBack\",\"last_finished_unix_ms\":1792123739740,\"stuck_suspected\":false,\"editor_is_focused\":true,\"run_in_background\":false,\"focus_nudge_attempts\":null,\"focus_nudge_limit\":null,\"focus_nudge_status\":null,\"blocked_reason\":null,\"failures_so_far\":[{\"full_name\":\"MemoryForge.Client.Tests.ExpeditionFailurePlayModeTests.FractionalOpaqueMetadataComparesExactlyWhereTheCanonicalHashRefuses\",\"message\":\"  one ulp of fractional metadata is a change\\n  Expected: False\\n  But was:  True\\n\"}],\"failures_capped\":false},\"error\":null,\"result\":{\"mode\":\"PlayMode\",\"summary\":{\"total\":5,\"passed\":4,\"failed\":1,\"skipped\":0,\"durationSeconds\":0.8806351,\"resultState\":\"Failed(Child)\"},\"results\":[{\"name\":\"FractionalOpaqueMetadataComparesExactlyWhereTheCanonicalHashRefuses\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionFailurePlayModeTests.FractionalOpaqueMetadataComparesExactlyWhereTheCanonicalHashRefuses\",\"state\":\"Failed\",\"durationSeconds\":0.1130438,\"message\":\"  one ulp of fractional metadata is a change\\n  Expected: False\\n  But was:  True\\n\",\"stackTrace\":\"at MemoryForge.Client.Tests.ExpeditionFailurePlayModeTests.FractionalOpaqueMetadataComparesExactlyWhereTheCanonicalHashRefuses () [0x000f1] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionFailurePlayModeTests.cs:267\\n\",\"output\":\"\"},{\"name\":\"OrdinaryUnchangedRejectionsStayToastsWithoutQuarantineOrErrorLog\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionFailurePlayModeTests.OrdinaryUnchangedRejectionsStayToastsWithoutQuarantineOrErrorLog\",\"state\":\"Passed\",\"durationSeconds\":0.2242716,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"PartialEnterFailureQuarantinesKeepsTheEarnedSaveAndTheDiscardDepartsFromIt\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionFailurePlayModeTests.PartialEnterFailureQuarantinesKeepsTheEarnedSaveAndTheDiscardDepartsFromIt\",\"state\":\"Passed\",\"durationSeconds\":0.3732363,\"message\":null,\"stackTrace\":null,\"output\":\"[MemoryForge] Practice expedition quarantined after a failed local Run calculation (UNKNOWN_ENEMY); the Run may be partly changed, so it will be discarded unsaved. Session memory version 1 is kept.\\nMemoryForge.Core.RuleException: UNKNOWN_ENEMY\\n  at MemoryForge.Core.Battle.AddEnemy (MemoryForge.Core.BattleState s, MemoryForge.Core.BattleData data, System.String id) [0x00134] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Battle.cs:76 \\n  at MemoryForge.Core.Battle.Create (MemoryForge.Core.BattleData data, MemoryForge.Core.BattleSetup setup) [0x004c2] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Battle.cs:62 \\n  at MemoryForge.Core.Run.StartBattle (System.String type) [0x00159] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Progression.cs:72 \\n  at MemoryForge.Core.Run+<>c__DisplayClass54_0.<Enter>b__0 () [0x00157] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Progression.cs:26 \\n  at MemoryForge.Core.Run.Guard (System.Action command) [0x00000] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Progression.cs:279 \\n  at MemoryForge.Core.Run.Enter (System.String nodeId) [0x00013] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Progression.cs:18 \\n  at MemoryForge.Client.MemoryForgeExpeditionClient+<>c__DisplayClass121_0.<EnterNode>b__0 () [0x00000] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:232 \\n  at MemoryForge.Client.MemoryForgeExpeditionClient.Do (System.Action command, System.String success, System.Boolean render) [0x00046] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:494 \\n\"},{\"name\":\"ThePrivateDoBoundaryQuarantinesNonRuleFailuresAndChangedRunsButKeepsUnchangedInputRejections\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionFailurePlayModeTests.ThePrivateDoBoundaryQuarantinesNonRuleFailuresAndChangedRunsButKeepsUnchangedInputRejections\",\"state\":\"Passed\",\"durationSeconds\":0.0539557,\"message\":null,\"stackTrace\":null,\"output\":\"[MemoryForge] Practice expedition quarantined after a failed local Run calculation (InvalidOperationException); the Run may be partly changed, so it will be discarded unsaved. Session memory version 0 is kept.\\nSystem.InvalidOperationException: test fault\\n  at MemoryForge.Client.Tests.ExpeditionFailurePlayModeTests+<>c.<ThePrivateDoBoundaryQuarantinesNonRuleFailuresAndChangedRunsButKeepsUnchangedInputRejections>b__11_2 () [0x00000] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionFailurePlayModeTests.cs:231 \\n  at MemoryForge.Client.MemoryForgeExpeditionClient.Do (System.Action command, System.String success, System.Boolean render) [0x00046] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:494 \\n[MemoryForge] Practice expedition quarantined after a failed local Run calculation (NOT_IN_HAND); the Run may be partly changed, so it will be discarded unsaved. Session memory version 0 is kept.\\nMemoryForge.Core.RuleException: NOT_IN_HAND\\n  at MemoryForge.Client.Tests.ExpeditionFailurePlayModeTests+<>c__DisplayClass11_0.<ThePrivateDoBoundaryQuarantinesNonRuleFailuresAndChangedRunsButKeepsUnchangedInputRejections>b__3 () [0x00011] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionFailurePlayModeTests.cs:241 \\n  at MemoryForge.Client.MemoryForgeExpeditionClient.Do (System.Action command, System.String success, System.Boolean render) [0x00046] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:494 \\n\"},{\"name\":\"UnknownBattleErrorQuarantinesEvenThoughTheBattleRolledBack\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionFailurePlayModeTests.UnknownBattleErrorQuarantinesEvenThoughTheBattleRolledBack\",\"state\":\"Passed\",\"durationSeconds\":0.0888603,\"message\":null,\"stackTrace\":null,\"output\":\"[MemoryForge] Practice expedition quarantined after a failed local Run calculation (BATTLE_ENEMY_MOVE_NOT_IMPLEMENTED); the Run may be partly changed, so it will be discarded unsaved. Session memory version 0 is kept.\\nMemoryForge.Core.RuleException: BATTLE_ENEMY_MOVE_NOT_IMPLEMENTED\\n  at MemoryForge.Core.Battle.EnemyMove (MemoryForge.Core.BattleEnemyState enemy, MemoryForge.Core.EnemyMoveDef move) [0x00d34] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Battle.cs:633 \\n  at MemoryForge.Core.Battle.EndTurn () [0x0021f] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Battle.cs:481 \\n  at MemoryForge.Core.Battle.Command (MemoryForge.Core.BattleRequest request) [0x000dd] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Battle.cs:135 \\n  at MemoryForge.Core.Run+<>c__DisplayClass55_0.<BattleCommand>b__0 () [0x00022] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Progression.cs:48 \\n  at MemoryForge.Core.Run.Guarded[T] (System.Func`1[TResult] command) [0x00000] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Progression.cs:284 \\n  at MemoryForge.Core.Run.BattleCommand (System.String kind, MemoryForge.Core.BattleArgument args) [0x0001a] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Progression.cs:44 \\n  at MemoryForge.Client.MemoryForgeExpeditionClient+<>c__DisplayClass134_0.<SendBattle>b__0 () [0x00000] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:289 \\n  at MemoryForge.Client.MemoryForgeExpeditionClient.Do (System.Action command, System.String success, System.Boolean render) [0x00046] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:494 \\n\"}]}},\"hint\":null}"
+    }
+  ],
+  "structuredContent": {
+    "result": {
+      "success": true,
+      "message": "Test job status retrieved.",
+      "error": null,
+      "data": {
+        "job_id": "ff6df553185b49a4a081190896893bd7",
+        "status": "failed",
+        "mode": "PlayMode",
+        "started_unix_ms": 1792123732355,
+        "finished_unix_ms": 1792123739756,
+        "last_update_unix_ms": 1792123739756,
+        "progress": {
+          "completed": 5,
+          "total": 5,
+          "current_test_full_name": null,
+          "current_test_started_unix_ms": null,
+          "last_finished_test_full_name": "MemoryForge.Client.Tests.ExpeditionFailurePlayModeTests.UnknownBattleErrorQuarantinesEvenThoughTheBattleRolledBack",
+          "last_finished_unix_ms": 1792123739740,
+          "stuck_suspected": false,
+          "editor_is_focused": true,
+          "run_in_background": false,
+          "focus_nudge_attempts": null,
+          "focus_nudge_limit": null,
+          "focus_nudge_status": null,
+          "blocked_reason": null,
+          "failures_so_far": [
+            {
+              "full_name": "MemoryForge.Client.Tests.ExpeditionFailurePlayModeTests.FractionalOpaqueMetadataComparesExactlyWhereTheCanonicalHashRefuses",
+              "message": "  one ulp of fractional metadata is a change\n  Expected: False\n  But was:  True\n"
+            }
+          ],
+          "failures_capped": false
+        },
+        "error": null,
+        "result": {
+          "mode": "PlayMode",
+          "summary": {
+            "total": 5,
+            "passed": 4,
+            "failed": 1,
+            "skipped": 0,
+            "durationSeconds": 0.8806351,
+            "resultState": "Failed(Child)"
+          },
+          "results": [
+            {
+              "name": "FractionalOpaqueMetadataComparesExactlyWhereTheCanonicalHashRefuses",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionFailurePlayModeTests.FractionalOpaqueMetadataComparesExactlyWhereTheCanonicalHashRefuses",
+              "state": "Failed",
+              "durationSeconds": 0.1130438,
+              "message": "  one ulp of fractional metadata is a change\n  Expected: False\n  But was:  True\n",
+              "stackTrace": "at MemoryForge.Client.Tests.ExpeditionFailurePlayModeTests.FractionalOpaqueMetadataComparesExactlyWhereTheCanonicalHashRefuses () [0x000f1] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionFailurePlayModeTests.cs:267\n",
+              "output": ""
+            },
+            {
+              "name": "OrdinaryUnchangedRejectionsStayToastsWithoutQuarantineOrErrorLog",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionFailurePlayModeTests.OrdinaryUnchangedRejectionsStayToastsWithoutQuarantineOrErrorLog",
+              "state": "Passed",
+              "durationSeconds": 0.2242716,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "PartialEnterFailureQuarantinesKeepsTheEarnedSaveAndTheDiscardDepartsFromIt",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionFailurePlayModeTests.PartialEnterFailureQuarantinesKeepsTheEarnedSaveAndTheDiscardDepartsFromIt",
+              "state": "Passed",
+              "durationSeconds": 0.3732363,
+              "message": null,
+              "stackTrace": null,
+              "output": "[MemoryForge] Practice expedition quarantined after a failed local Run calculation (UNKNOWN_ENEMY); the Run may be partly changed, so it will be discarded unsaved. Session memory version 1 is kept.\nMemoryForge.Core.RuleException: UNKNOWN_ENEMY\n  at MemoryForge.Core.Battle.AddEnemy (MemoryForge.Core.BattleState s, MemoryForge.Core.BattleData data, System.String id) [0x00134] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Battle.cs:76 \n  at MemoryForge.Core.Battle.Create (MemoryForge.Core.BattleData data, MemoryForge.Core.BattleSetup setup) [0x004c2] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Battle.cs:62 \n  at MemoryForge.Core.Run.StartBattle (System.String type) [0x00159] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Progression.cs:72 \n  at MemoryForge.Core.Run+<>c__DisplayClass54_0.<Enter>b__0 () [0x00157] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Progression.cs:26 \n  at MemoryForge.Core.Run.Guard (System.Action command) [0x00000] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Progression.cs:279 \n  at MemoryForge.Core.Run.Enter (System.String nodeId) [0x00013] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Progression.cs:18 \n  at MemoryForge.Client.MemoryForgeExpeditionClient+<>c__DisplayClass121_0.<EnterNode>b__0 () [0x00000] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:232 \n  at MemoryForge.Client.MemoryForgeExpeditionClient.Do (System.Action command, System.String success, System.Boolean render) [0x00046] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:494 \n"
+            },
+            {
+              "name": "ThePrivateDoBoundaryQuarantinesNonRuleFailuresAndChangedRunsButKeepsUnchangedInputRejections",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionFailurePlayModeTests.ThePrivateDoBoundaryQuarantinesNonRuleFailuresAndChangedRunsButKeepsUnchangedInputRejections",
+              "state": "Passed",
+              "durationSeconds": 0.0539557,
+              "message": null,
+              "stackTrace": null,
+              "output": "[MemoryForge] Practice expedition quarantined after a failed local Run calculation (InvalidOperationException); the Run may be partly changed, so it will be discarded unsaved. Session memory version 0 is kept.\nSystem.InvalidOperationException: test fault\n  at MemoryForge.Client.Tests.ExpeditionFailurePlayModeTests+<>c.<ThePrivateDoBoundaryQuarantinesNonRuleFailuresAndChangedRunsButKeepsUnchangedInputRejections>b__11_2 () [0x00000] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionFailurePlayModeTests.cs:231 \n  at MemoryForge.Client.MemoryForgeExpeditionClient.Do (System.Action command, System.String success, System.Boolean render) [0x00046] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:494 \n[MemoryForge] Practice expedition quarantined after a failed local Run calculation (NOT_IN_HAND); the Run may be partly changed, so it will be discarded unsaved. Session memory version 0 is kept.\nMemoryForge.Core.RuleException: NOT_IN_HAND\n  at MemoryForge.Client.Tests.ExpeditionFailurePlayModeTests+<>c__DisplayClass11_0.<ThePrivateDoBoundaryQuarantinesNonRuleFailuresAndChangedRunsButKeepsUnchangedInputRejections>b__3 () [0x00011] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionFailurePlayModeTests.cs:241 \n  at MemoryForge.Client.MemoryForgeExpeditionClient.Do (System.Action command, System.String success, System.Boolean render) [0x00046] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:494 \n"
+            },
+            {
+              "name": "UnknownBattleErrorQuarantinesEvenThoughTheBattleRolledBack",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionFailurePlayModeTests.UnknownBattleErrorQuarantinesEvenThoughTheBattleRolledBack",
+              "state": "Passed",
+              "durationSeconds": 0.0888603,
+              "message": null,
+              "stackTrace": null,
+              "output": "[MemoryForge] Practice expedition quarantined after a failed local Run calculation (BATTLE_ENEMY_MOVE_NOT_IMPLEMENTED); the Run may be partly changed, so it will be discarded unsaved. Session memory version 0 is kept.\nMemoryForge.Core.RuleException: BATTLE_ENEMY_MOVE_NOT_IMPLEMENTED\n  at MemoryForge.Core.Battle.EnemyMove (MemoryForge.Core.BattleEnemyState enemy, MemoryForge.Core.EnemyMoveDef move) [0x00d34] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Battle.cs:633 \n  at MemoryForge.Core.Battle.EndTurn () [0x0021f] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Battle.cs:481 \n  at MemoryForge.Core.Battle.Command (MemoryForge.Core.BattleRequest request) [0x000dd] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Battle.cs:135 \n  at MemoryForge.Core.Run+<>c__DisplayClass55_0.<BattleCommand>b__0 () [0x00022] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Progression.cs:48 \n  at MemoryForge.Core.Run.Guarded[T] (System.Func`1[TResult] command) [0x00000] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Progression.cs:284 \n  at MemoryForge.Core.Run.BattleCommand (System.String kind, MemoryForge.Core.BattleArgument args) [0x0001a] in /Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Run.Progression.cs:44 \n  at MemoryForge.Client.MemoryForgeExpeditionClient+<>c__DisplayClass134_0.<SendBattle>b__0 () [0x00000] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:289 \n  at MemoryForge.Client.MemoryForgeExpeditionClient.Do (System.Action command, System.String success, System.Boolean render) [0x00046] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:494 \n"
+            }
+          ]
+        }
+      },
+      "hint": null
+    }
+  },
+  "isError": false
+}

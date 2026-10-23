@@ -1,0 +1,153 @@
+{
+  "inputFileCount": 423,
+  "changedCount": 29,
+  "changed": [
+    {
+      "path": ".gitattributes",
+      "inputSha256": "92cd73a8f54b014f7994b26aeed127d06d1c11a1be6ceb5ff47242b1015cb02d",
+      "currentSha256": "67e5ba48f1a9dcc15c238694990d5464c7e683149c9b113d3deb92d63605c6e7"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "inputSha256": "6fd539b90a14444b1fe58997afd85b32bbf2f987af71ffeea741f4a645111c4b",
+      "currentSha256": "8f6fee6e910f2d73a87441bf262210b84d1f76eae3b844a20db2ba9adf999766"
+    },
+    {
+      "path": "AGENTS.md",
+      "inputSha256": "20ed115f468593afc0151d9efdadcb7deebf6b9ed142c0f8f85106914ba0652c",
+      "currentSha256": "a39f77d987b98b22f9d340fdf82f986e866b24687d89269cab5255b52efd45f8"
+    },
+    {
+      "path": "CLAUDE.md",
+      "inputSha256": "731f9a0d00f5becac355386661d5de30c0024d72e94fa3323792024f565476f6",
+      "currentSha256": "ecdaa5e4658f8d4cfcbfb45c7fd66919bfe73172c85b9b73e3abaa69eea0573c"
+    },
+    {
+      "path": "Memory_Forge_Complete_Design.pdf",
+      "inputSha256": "7b0f3329aea67743921950b32999260c03efd2cd089895ae74afacf084cc8791",
+      "currentSha256": "61d478db9905162924ec0dec1322689ac16008aa0e8142e72ce0af94a071eecc"
+    },
+    {
+      "path": "START_HERE.txt",
+      "inputSha256": "a06b8b8bbe6648fba56c88cc8e4ed8262c4ac6ea0a096aa53bbbcd9d48f2e9d2",
+      "currentSha256": "7cc6508f35d9f4eae1205ff3bb66445f724ad2cc7d0d3a4404d571a207aa3438"
+    },
+    {
+      "path": "core/MemoryForge.Core/ReservationBook.cs",
+      "inputSha256": "7f485f7eec6e45296d796c16be969d803f863b0c68c457da105963eea0ade5e9",
+      "currentSha256": "49ca7cec199e4951ac7ecc9075f8238a64977c7e9131e9784c764530f0a4e23e"
+    },
+    {
+      "path": "core/MemoryForge.CoreChecks/Program.cs",
+      "inputSha256": "7986855448bb5bf24fc571aab3641210e7458074be33853892ae111faa3ce27d",
+      "currentSha256": "5863294add891c356cc71c3392b818c299a19d3568c6bf8d661e5d6b6cded55a"
+    },
+    {
+      "path": "core/README.md",
+      "inputSha256": "01965585b6487e88defa2ad6164b44d475de7224687f158e02907a980ffcab24",
+      "currentSha256": "1a56b47c8477969ff33ad3f733dd8400612af7b6002dfd086971bcb2306960a0"
+    },
+    {
+      "path": "docs/AI_Start_Guide.md",
+      "inputSha256": "c46a17ba1487d60ea5f3b3d048f8736b237b8f2fb4f1bf0c69bc0d3375dd4de9",
+      "currentSha256": "edef0fd434243b897eaf970250ac2a7b2dc5be3c6b8165849c40ea438ff68506"
+    },
+    {
+      "path": "docs/AI_WORKFLOW.md",
+      "inputSha256": "585e1147b237f8d3713c091fb2d64383a8fa90701e80570b472202b271833941",
+      "currentSha256": "469390e56d64adf8c7b95bc6e2b2944ce69d66de21bc4a0a3827633b0b87c073"
+    },
+    {
+      "path": "docs/CURRENT.md",
+      "inputSha256": "81162e8e988aca23b5246d589aa36f55bd6a88fec892c2436ac4c5e097e8786e",
+      "currentSha256": "d3b42d7513fefaad35106814fd865b4125517b392214fb221880bcaad8247980"
+    },
+    {
+      "path": "docs/Memory_Forge_v0.8.1_Restored_Design.pdf",
+      "inputSha256": "c0e580dcb8db0b6f863220ca2d5b011332386ad44fab1c2e81a4a291b767b48a",
+      "currentSha256": "48eccb9972e4698cf3f9e0d8b0114b855ebf8eeaa53f81beea449f006e74e813"
+    },
+    {
+      "path": "docs/START_CLAUDE.md",
+      "inputSha256": "6daaac057b3a9ed4c2e89af3d17e3888c35a19e10e19cc4644378bce3d679819",
+      "currentSha256": "ee2d5ebc5db66b27d1068721c10a53b252cfa51dcaea7c5fbca64c54f3ac88b9"
+    },
+    {
+      "path": "docs/START_CODEX.md",
+      "inputSha256": "1f0eda1bfabcaa83bb4faf10ec38e026ac9cea6f326434c613f35353d1be3f57",
+      "currentSha256": "4e5e79492b5acd445ee98069408eea52205ff8d65c2028ede38704703ce8b30c"
+    },
+    {
+      "path": "docs/decisions_v0.8.1.md",
+      "inputSha256": "ba9a2ff9b6c0e5ed08b6dfd250ac766573f90b430d0e2aa27c0afe33a2ccd63a",
+      "currentSha256": "f768c45bd8bcbac986abb2e0eab9f17ac6194552e2172482c6dcf410f36a6fdc"
+    },
+    {
+      "path": "docs/design/gen/errors.md",
+      "inputSha256": "cb6a1a6e6e0c465e51bf5aabb66de65f2d7a79578446a394c164e10deb001420",
+      "currentSha256": "25b243a4c2e15097aa55613cff940a87445021fd6d28ecf536c69547bb8dd6c5"
+    },
+    {
+      "path": "engine/rules-core.js",
+      "inputSha256": "230e86a485dd860565739bc395c8bf028415d2b3e2b4b2ba99321657081581df",
+      "currentSha256": "dae99192bfa137762c1c863efda8207b3851e3a6e7ecf2ff029bed3585a33ab4"
+    },
+    {
+      "path": "engine/tests/balance_probe.mjs",
+      "inputSha256": "36775b922fd8720c33e754b5eca091ddba0c38e9cedd294c06a1dd327550db6b",
+      "currentSha256": "44126e4bef3c89646d1d4fd63f2cbbf28948bf783d970f403f4e98f49d8e8410"
+    },
+    {
+      "path": "engine/tests/fuzz_runs.mjs",
+      "inputSha256": "f7dd6019ffbde3a8441c6efaf848cf52324405a3d808c686557140e24630c7f0",
+      "currentSha256": "b2fb01ecd9f31951bb4c861c4ba8d596c1035bdc5a9302006764978c5bc29aa9"
+    },
+    {
+      "path": "engine/tests/review_v071.test.mjs",
+      "inputSha256": "60a94bb53373b5422a530785c547d65f8c97076579e3656a285ca83ddb43e5fb",
+      "currentSha256": "5afd1257c9937698109589f0cd5f18fed97fe6ccd9fd09e36fa2a8be9b02c1fb"
+    },
+    {
+      "path": "package.json",
+      "inputSha256": "a5cc0233e61b6032b5aa40243b48fd81932d63fb8f0885477505487a7b1546e4",
+      "currentSha256": "207cc336c30f0569a0f2a713da178f14aecdd9c5ec592758e175a8ff89d46b9c"
+    },
+    {
+      "path": "proposals/memory_v2.cjs",
+      "inputSha256": "50e1b7794e56365f2f2f902b331f32be97530ce9ff1bdf610329ae8b6b63bed5",
+      "currentSha256": "6ee5aa939e3169d034c99418ceebdc864473fe5cc9b4464fccf7e80dcbec308d"
+    },
+    {
+      "path": "prototype/index.html",
+      "inputSha256": "1ff3fcf8278f822e9eba0b6a374cc9001df7a242139de7896a374a08b1634049",
+      "currentSha256": "e2d917bb282bef88381f00c25c53edfe9cf17e4e2c53207a8ca9cb493cd6af60"
+    },
+    {
+      "path": "prototype/src/ui.js",
+      "inputSha256": "c82bd781b0e8aa536f07e6c94c319542ff1f29fd313af1e8942137878812683d",
+      "currentSha256": "7fe4dccfc49b33b6a16c5fd4867e4f4e6dd41ba19b3c7c14e3f89965e90a0f5e"
+    },
+    {
+      "path": "tools/ai/build_manifest.py",
+      "inputSha256": "1936ca643e82ff58c71e723ad8402142e25095249b6cf78897bda635bc273427",
+      "currentSha256": "ba6b162ebfb85e57979ad29085e74551bc2cded2fae40234398dc5feceb85ade"
+    },
+    {
+      "path": "tools/ai/test_handoff.py",
+      "inputSha256": "ad69dbe8190e28fbb27710a5c1bedb2fee3471f3372e3673b9b8549a48c4b5f1",
+      "currentSha256": "e89e74054d4ac564f1f72150a09161d983eddc858f79e696ed0b6cfd1d0456a1"
+    },
+    {
+      "path": "tools/build_prototype.mjs",
+      "inputSha256": "12ff392812e2ddfd5cdaef530e1c357f1add41a40b0e7c81e974bc0947e357a0",
+      "currentSha256": "b63920d2cb1aa253a5b7bb994fff63a3bd392780dca6bf1aff85f2e72a9981bc"
+    },
+    {
+      "path": "tools/gen_docs.mjs",
+      "inputSha256": "8636c624fabdddaf9730dcb2676616508656475866ec37dacf89ca79c3e209ec",
+      "currentSha256": "998420dff6a57d53e9e26fa36a4daec049a8e056a40b81e85add4b10c5d4cec8"
+    }
+  ],
+  "manifestRegenerated": false,
+  "context": "Historical development changes retained; current unit only C# code/tests/guidance/report additions."
+}

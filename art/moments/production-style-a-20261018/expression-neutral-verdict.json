@@ -1,0 +1,13 @@
+{
+  "score": 94,
+  "verdict": "pass",
+  "category_match": true,
+  "differences": [
+    "Portraits retain the authored lower-shoulder canvas crop; occupied bottom corners contain costume, not background residue."
+  ],
+  "suggestions": [
+    "Change only facial emotion from each same-character neutral master.",
+    "Preserve exact head framing, hair, scar/glasses, costume neckline and alpha; deliver each resized to 512x512."
+  ],
+  "reasoning": "All six neutral masters preserve adult identity and outfit motifs with clear A line/face/hair treatment. White/dark composites are clean and true empty top corners are alpha0; all files decode as 512x512 RGBA."
+}

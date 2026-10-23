@@ -1,0 +1,98 @@
+[
+  {
+    "policy": "legacy",
+    "initial": "56a6ba8623a1cb296f5a8c83f5c855464a04aea56aaeec9838b1455d272a1973",
+    "commonKey": "k5",
+    "ownKey": "k1",
+    "steps": [
+      {
+        "args": [
+          "k5",
+          "harin"
+        ],
+        "error": null,
+        "hash": "fb033004a615194a07a8cfdb36c4e3afaefff09af082776602aea141d66720c3"
+      },
+      {
+        "args": [
+          "k5",
+          "sera"
+        ],
+        "error": null,
+        "hash": "56a6ba8623a1cb296f5a8c83f5c855464a04aea56aaeec9838b1455d272a1973"
+      },
+      {
+        "args": [
+          "k1",
+          "harin"
+        ],
+        "error": "BAD_ASSIGN",
+        "hash": "56a6ba8623a1cb296f5a8c83f5c855464a04aea56aaeec9838b1455d272a1973"
+      },
+      {
+        "args": [
+          "k5",
+          "unknown"
+        ],
+        "error": "BAD_ASSIGN",
+        "hash": "56a6ba8623a1cb296f5a8c83f5c855464a04aea56aaeec9838b1455d272a1973"
+      },
+      {
+        "args": [
+          "missing",
+          "harin"
+        ],
+        "error": "BAD_ASSIGN",
+        "hash": "56a6ba8623a1cb296f5a8c83f5c855464a04aea56aaeec9838b1455d272a1973"
+      }
+    ]
+  },
+  {
+    "policy": "v2",
+    "initial": "11a43e7465dc0089d3b8fdfded7acc4b12c84ef0cd77d38a3df66acc075c7cc3",
+    "commonKey": "base:sera:4",
+    "ownKey": "base:sera:0",
+    "steps": [
+      {
+        "args": [
+          "base:sera:4",
+          "harin"
+        ],
+        "error": "REASSIGNMENT_REQUIRES_SEPARATE_FLOW",
+        "hash": "11a43e7465dc0089d3b8fdfded7acc4b12c84ef0cd77d38a3df66acc075c7cc3"
+      },
+      {
+        "args": [
+          "base:sera:4",
+          "sera"
+        ],
+        "error": "REASSIGNMENT_REQUIRES_SEPARATE_FLOW",
+        "hash": "11a43e7465dc0089d3b8fdfded7acc4b12c84ef0cd77d38a3df66acc075c7cc3"
+      },
+      {
+        "args": [
+          "base:sera:0",
+          "harin"
+        ],
+        "error": "BAD_ASSIGN",
+        "hash": "11a43e7465dc0089d3b8fdfded7acc4b12c84ef0cd77d38a3df66acc075c7cc3"
+      },
+      {
+        "args": [
+          "base:sera:4",
+          "unknown"
+        ],
+        "error": "BAD_ASSIGN",
+        "hash": "11a43e7465dc0089d3b8fdfded7acc4b12c84ef0cd77d38a3df66acc075c7cc3"
+      },
+      {
+        "args": [
+          "missing",
+          "harin"
+        ],
+        "error": "BAD_ASSIGN",
+        "hash": "11a43e7465dc0089d3b8fdfded7acc4b12c84ef0cd77d38a3df66acc075c7cc3"
+      }
+    ]
+  }
+]

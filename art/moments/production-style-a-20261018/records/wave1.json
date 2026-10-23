@@ -1,0 +1,104 @@
+[
+  {
+    "character": "sera",
+    "key": "fig_scope",
+    "path": "sera/images/char_sera_fig_scope_styleA_v01.png",
+    "args": {
+      "prompt": "Use case: style-transfer. Production transparent full-body sprite for Memory Forge. REDRAW rather than merely recolor. Direction A CLEAR CEL, exactly the rendering grammar of the last reference: crisp controlled ink contours, emphatic upper eyelids, tiny symbolic nose and short mouth, matte skin with large flat light areas and one hard-edged shadow step, large grouped hair locks with broad flat highlight bands, costume tailoring and flat color planes before details, restrained gold/metal highlights. NO photoreal/3D nose, glossy lips, airbrush skin, tiny sparkling hair strands or painterly gradients. First reference controls exact character identity, adult age, outfit structure, props, pose, composition and framing; last reference is STYLE ONLY and must not transfer its clothing/face. Preserve all outfit cutouts and existing adult silhouette. Keep original full body and equipment inside a 1024x1536 portrait with a little clear margin. GENUINELY TRANSPARENT empty canvas alpha=0 around the subject including corners, no colored backdrop, vignette, aura, halo, floor, cast shadow, checkerboard, text or watermark. Remove ALL inherited background haze.\nSpecific asset: 24-year-old Sera, silver low ponytail and amber eyes, looking down checking her hourglass-chamber long-rifle scope. Keep exact source pose.",
+      "referenced_image_paths": [
+        "/Users/choi/Documents/Memory_forge/art/moments/sera/images/char_sera_lobby_scope_v02.png",
+        "/Users/choi/Documents/Memory_forge/art/candidates/20261018/style-test/individuals/a_sera_v03.png"
+      ],
+      "transparent_background": true
+    },
+    "cache_path": "/Users/choi/.codex/generated_images/01a14db0-4150-7f01-9240-82aaa185dd28/exec-3fab97a4-710b-445f-8b2e-16f487640745.png",
+    "status": "ready",
+    "generation_status": "generated_pending_review",
+    "selected": true
+  },
+  {
+    "character": "ravien",
+    "key": "fig_default",
+    "path": "ravien/images/char_ravien_fig_default_styleA_v01.png",
+    "args": {
+      "prompt": "Use case: style-transfer. Production transparent full-body sprite for Memory Forge. REDRAW rather than merely recolor. Direction A CLEAR CEL, exactly the rendering grammar of the last reference: crisp controlled ink contours, emphatic upper eyelids, tiny symbolic nose and short mouth, matte skin with large flat light areas and one hard-edged shadow step, large grouped hair locks with broad flat highlight bands, costume tailoring and flat color planes before details, restrained gold/metal highlights. NO photoreal/3D nose, glossy lips, airbrush skin, tiny sparkling hair strands or painterly gradients. First reference controls exact character identity, adult age, outfit structure, props, pose, composition and framing; last reference is STYLE ONLY and must not transfer its clothing/face. Preserve all outfit cutouts and existing adult silhouette. Keep original full body and equipment inside a 1024x1536 portrait with a little clear margin. GENUINELY TRANSPARENT empty canvas alpha=0 around the subject including corners, no colored backdrop, vignette, aura, halo, floor, cast shadow, checkerboard, text or watermark. Remove ALL inherited background haze.\nSpecific asset: 28-year-old Ravien, long deep red hair, green eyes, clever composed adult smile; black sleeveless fitted vest dress and red tie, thigh slit/stockings/long gloves, closed burgundy gold folder at her side. Keep source costume and pose.",
+      "referenced_image_paths": [
+        "/Users/choi/Documents/Memory_forge/art/moments/ravien/images/char_ravien_stand_neutral_v01.png",
+        "/Users/choi/Documents/Memory_forge/art/candidates/20261018/style-test/individuals/a_sera_v03.png"
+      ],
+      "transparent_background": true
+    },
+    "cache_path": "/Users/choi/.codex/generated_images/01a14db0-4150-7f01-9240-82aaa185dd28/exec-8933128b-e7ad-4793-a6a5-e632bb4d0e4f.png",
+    "status": "ready",
+    "generation_status": "generated_pending_review",
+    "selected": true
+  },
+  {
+    "character": "harin",
+    "key": "fig_glove",
+    "path": "harin/images/char_harin_fig_glove_styleA_v01.png",
+    "args": {
+      "prompt": "Use case: style-transfer. Production transparent full-body sprite for Memory Forge. REDRAW rather than merely recolor. Direction A CLEAR CEL, exactly the rendering grammar of the last reference: crisp controlled ink contours, emphatic upper eyelids, tiny symbolic nose and short mouth, matte skin with large flat light areas and one hard-edged shadow step, large grouped hair locks with broad flat highlight bands, costume tailoring and flat color planes before details, restrained gold/metal highlights. NO photoreal/3D nose, glossy lips, airbrush skin, tiny sparkling hair strands or painterly gradients. First reference controls exact character identity, adult age, outfit structure, props, pose, composition and framing; last reference is STYLE ONLY and must not transfer its clothing/face. Preserve all outfit cutouts and existing adult silhouette. Keep original full body and equipment inside a 1024x1536 portrait with a little clear margin. GENUINELY TRANSPARENT empty canvas alpha=0 around the subject including corners, no colored backdrop, vignette, aura, halo, floor, cast shadow, checkerboard, text or watermark. Remove ALL inherited background haze.\nSpecific asset: 26-year-old Harin, short navy hair, slate-blue eyes, scar above left eyebrow, strong mature build. Adjusting her glove wrist with both hands; large white/brass shield standing on SCREEN LEFT, navy cape on SCREEN RIGHT; small plush cat ears in her screen-right hip pouch. Preserve source armor shape and white trousers.",
+      "referenced_image_paths": [
+        "/Users/choi/Documents/Memory_forge/art/moments/harin/images/char_harin_glove_determined_v01.png",
+        "/Users/choi/Documents/Memory_forge/art/candidates/20261018/style-test/individuals/a_harin_v03.png"
+      ],
+      "transparent_background": true
+    },
+    "cache_path": "/Users/choi/.codex/generated_images/01a14db0-4150-7f01-9240-82aaa185dd28/exec-600200b3-1393-4387-8c27-a405d8c956f9.png",
+    "status": "ready",
+    "generation_status": "generated_pending_review",
+    "selected": true
+  },
+  {
+    "character": "aila",
+    "key": "fig_neutral",
+    "path": "aila/images/char_aila_fig_neutral_styleA_v01.png",
+    "args": {
+      "prompt": "Use case: style-transfer. Production transparent full-body sprite for Memory Forge. REDRAW rather than merely recolor. Direction A CLEAR CEL, exactly the rendering grammar of the last reference: crisp controlled ink contours, emphatic upper eyelids, tiny symbolic nose and short mouth, matte skin with large flat light areas and one hard-edged shadow step, large grouped hair locks with broad flat highlight bands, costume tailoring and flat color planes before details, restrained gold/metal highlights. NO photoreal/3D nose, glossy lips, airbrush skin, tiny sparkling hair strands or painterly gradients. First reference controls exact character identity, adult age, outfit structure, props, pose, composition and framing; last reference is STYLE ONLY and must not transfer its clothing/face. Preserve all outfit cutouts and existing adult silhouette. Keep original full body and equipment inside a 1024x1536 portrait with a little clear margin. GENUINELY TRANSPARENT empty canvas alpha=0 around the subject including corners, no colored backdrop, vignette, aura, halo, floor, cast shadow, checkerboard, text or watermark. Remove ALL inherited background haze.\nSpecific asset: 23-year-old Aila, long silver-lilac braid with star ornaments, violet eyes, over-shoulder turn, open-backed white/lilac gown with original thigh slit and hanging bells, silver lantern hanging from lowered hand, closed ledger under other arm. Preserve adult elegance and exact source garment construction.",
+      "referenced_image_paths": [
+        "/Users/choi/Documents/Memory_forge/art/moments/aila/images/char_aila_moment_neutral_v02.png",
+        "/Users/choi/Documents/Memory_forge/art/candidates/20261018/style-test/individuals/a_sera_v03.png"
+      ],
+      "transparent_background": true
+    },
+    "cache_path": "/Users/choi/.codex/generated_images/01a14db0-4150-7f01-9240-82aaa185dd28/exec-87828b46-6656-4514-9a99-e2c98dca1355.png",
+    "status": "ready",
+    "generation_status": "generated_pending_review",
+    "selected": true
+  },
+  {
+    "character": "sion",
+    "key": "fig_neutral",
+    "path": "sion/images/char_sion_fig_neutral_styleA_v01.png",
+    "args": {
+      "prompt": "Use case: style-transfer. Production transparent full-body sprite for Memory Forge. REDRAW rather than merely recolor. Direction A CLEAR CEL, exactly the rendering grammar of the last reference: crisp controlled ink contours, emphatic upper eyelids, tiny symbolic nose and short mouth, matte skin with large flat light areas and one hard-edged shadow step, large grouped hair locks with broad flat highlight bands, costume tailoring and flat color planes before details, restrained gold/metal highlights. NO photoreal/3D nose, glossy lips, airbrush skin, tiny sparkling hair strands or painterly gradients. First reference controls exact character identity, adult age, outfit structure, props, pose, composition and framing; last reference is STYLE ONLY and must not transfer its clothing/face. Preserve all outfit cutouts and existing adult silhouette. Keep original full body and equipment inside a 1024x1536 portrait with a little clear margin. GENUINELY TRANSPARENT empty canvas alpha=0 around the subject including corners, no colored backdrop, vignette, aura, halo, floor, cast shadow, checkerboard, text or watermark. Remove ALL inherited background haze.\nSpecific asset: 27-year-old Sion, long black hair and fine glasses, restrained cool gaze, purple long coat, white blouse, black corset and short bottom, thigh boots and gold chains. Open dark-purple book held at chest and fingertips hovering above page exactly as source. No sword in this lobby pose.",
+      "referenced_image_paths": [
+        "/Users/choi/Documents/Memory_forge/art/moments/sion/images/char_sion_moment_neutral_v01.png",
+        "/Users/choi/Documents/Memory_forge/art/candidates/20261018/style-test/individuals/a_sera_v03.png"
+      ],
+      "transparent_background": true
+    },
+    "cache_path": "/Users/choi/.codex/generated_images/01a14db0-4150-7f01-9240-82aaa185dd28/exec-06fe860f-a5a8-472e-8d77-c8ef37754ee0.png",
+    "status": "ready",
+    "generation_status": "generated_pending_review",
+    "selected": true
+  },
+  {
+    "character": "lumi",
+    "key": "fig_neutral",
+    "path": "lumi/images/char_lumi_fig_neutral_styleA_v01.png",
+    "args": {
+      "prompt": "Use case: style-transfer. Production transparent full-body sprite for Memory Forge. REDRAW rather than merely recolor. Direction A CLEAR CEL, exactly the rendering grammar of the last reference: crisp controlled ink contours, emphatic upper eyelids, tiny symbolic nose and short mouth, matte skin with large flat light areas and one hard-edged shadow step, large grouped hair locks with broad flat highlight bands, costume tailoring and flat color planes before details, restrained gold/metal highlights. NO photoreal/3D nose, glossy lips, airbrush skin, tiny sparkling hair strands or painterly gradients. First reference controls exact character identity, adult age, outfit structure, props, pose, composition and framing; last reference is STYLE ONLY and must not transfer its clothing/face. Preserve all outfit cutouts and existing adult silhouette. Keep original full body and equipment inside a 1024x1536 portrait with a little clear margin. GENUINELY TRANSPARENT empty canvas alpha=0 around the subject including corners, no colored backdrop, vignette, aura, halo, floor, cast shadow, checkerboard, text or watermark. Remove ALL inherited background haze.\nSpecific asset: 22-year-old Lumi, short spiky blonde hair with electric-blue streaks and blue eyes, athletic adult, black-yellow circuit courier jacket off shoulders, white cropped sports top, black cycling shorts and sneakers. Source confident hip hand and black-blue helmet in lowered hand; no weapons.",
+      "referenced_image_paths": [
+        "/Users/choi/Documents/Memory_forge/art/moments/lumi/images/char_lumi_moment_neutral_v01.png",
+        "/Users/choi/Documents/Memory_forge/art/candidates/20261018/style-test/individuals/a_sera_v03.png"
+      ],
+      "transparent_background": true
+    },
+    "cache_path": "/Users/choi/.codex/generated_images/01a14db0-4150-7f01-9240-82aaa185dd28/exec-0c1696e7-a0bf-44ea-bb04-ebbe50b68da4.png",
+    "status": "ready",
+    "generation_status": "generated_pending_review",
+    "selected": true
+  }
+]

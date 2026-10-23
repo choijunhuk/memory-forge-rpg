@@ -1,0 +1,4 @@
+(node:2054) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/choi/Documents/Memory_forge/references/card-flow-study-20261016/package/Memory_Forge_Card_Flow_Review/review/independent-probes.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /Users/choi/Documents/Memory_forge/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)

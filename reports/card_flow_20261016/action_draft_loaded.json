@@ -1,0 +1,20 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"compiling\":false,\"actionDisplayLoaded\":true},\"compiler\":\"codedom\"}}"
+    }
+  ],
+  "structuredContent": {
+    "success": true,
+    "message": "Code executed successfully.",
+    "data": {
+      "result": {
+        "compiling": false,
+        "actionDisplayLoaded": true
+      },
+      "compiler": "codedom"
+    }
+  },
+  "isError": false
+}

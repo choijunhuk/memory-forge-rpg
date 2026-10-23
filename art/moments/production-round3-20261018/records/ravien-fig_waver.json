@@ -1,0 +1,27 @@
+{
+  "c": "ravien",
+  "key": "fig_waver",
+  "path": "ravien/images/char_ravien_seated_surprised_v01.png",
+  "refs": [
+    "/Users/choi/Documents/Memory_forge/art/moments/ravien/images/char_ravien_stand_neutral_v01.png"
+  ],
+  "pose": "Seated in a dark wooden red-upholstered chair at a small writing table, full seated body and heels visible. A single BLANK cream sheet and resting pen on table. One long-gloved fingertip touches the paper corner, other hand paused near the pen. Subtly raised inner brows, a tiny unguarded hesitation, green eyes toward viewer; lips parted just a little. No exaggerated shock, no wink. Closed folder lies aside on table, no text. Torso above tabletop, face at about x.50 y.16.",
+  "prompt": "Use case: identity-preserve. Locked character design reference. Make ONE new non-explicit narrative RPG key-pose, 1024x1536 full length transparent PNG. Preserve adult identity, age, hairstyle, face, exact costume/colors and painterly anime cel style. All head, fingers, shoes and important props inside canvas. No scene background, haze, labels, panels, other people or erotic posing. Character acting and prop contact are the focus. Acting: Seated in a dark wooden red-upholstered chair at a small writing table, full seated body and heels visible. A single BLANK cream sheet and resting pen on table. One long-gloved fingertip touches the paper corner, other hand paused near the pen. Subtly raised inner brows, a tiny unguarded hesitation, green eyes toward viewer; lips parted just a little. No exaggerated shock, no wink. Closed folder lies aside on table, no text. Torso above tabletop, face at about x.50 y.16.",
+  "source": "/Users/choi/.codex/generated_images/01a14d20-ffd5-7e81-9e47-85c1c8415e11/exec-04cd5b5b-e936-4799-8876-3bc3415f3664.png",
+  "tool": "Codex built-in image_gen; subscription-included; no API fallback",
+  "review": "pass",
+  "score": 92,
+  "review_notes": "Inspected rendered output against existing character reference. Face, age/design, grounded support and primary prop contact match the intended static key pose. Continuous acting is not claimed.",
+  "backend_model": "not exposed by tool",
+  "selected": true,
+  "sha256": "b4e2186669aea85290f85929549986ba0bcd627e6cbca1c76bd3c2d01ef6264d",
+  "size": [
+    1024,
+    1536
+  ],
+  "mode": "RGBA",
+  "alpha_extrema": [
+    0,
+    254
+  ]
+}

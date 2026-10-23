@@ -1,0 +1,28 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"sourceHead\":\"fcdc3e3\",\"seed\":1234,\"cardUid\":\"c15\",\"invalidUid\":\"not-a-displayed-current-option\",\"accepted\":true,\"pickerStillOpen\":false,\"stateUnchanged\":false,\"beforeVersion\":1,\"afterVersion\":2,\"expectedStateInjected\":false},\"compiler\":\"codedom\"}}"
+    }
+  ],
+  "structuredContent": {
+    "success": true,
+    "message": "Code executed successfully.",
+    "data": {
+      "result": {
+        "sourceHead": "fcdc3e3",
+        "seed": 1234,
+        "cardUid": "c15",
+        "invalidUid": "not-a-displayed-current-option",
+        "accepted": true,
+        "pickerStillOpen": false,
+        "stateUnchanged": false,
+        "beforeVersion": 1,
+        "afterVersion": 2,
+        "expectedStateInjected": false
+      },
+      "compiler": "codedom"
+    }
+  },
+  "isError": false
+}

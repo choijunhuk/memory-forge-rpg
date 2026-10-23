@@ -1,0 +1,16 @@
+{
+  "kind": "USER_REPORTED_PHYSICAL_MAC_INPUT",
+  "recorded_at": "2026-10-16T02:13:38.012879+00:00",
+  "application_title": "2D_URP",
+  "build_scope": "Previously opened MemoryForgeExpedition-Final-20261016.app; before the later Forecast and pending reservation/input improvements",
+  "question_action": "Move the real mouse and click a bright battle map node",
+  "user_answer": "전투 화면으로 전환됨",
+  "confirmed": "Physical mouse map-to-battle transition in that earlier native build",
+  "not_confirmed": [
+    "Later Forecast build launch/physical input",
+    "Full battle completion",
+    "Android or other device",
+    "Network/account/server restore"
+  ],
+  "automated_input_note": "Earlier CUA pointer-position stagnation did not establish a product physical-mouse defect"
+}

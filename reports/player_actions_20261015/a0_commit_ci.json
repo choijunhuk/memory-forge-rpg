@@ -1,0 +1,21 @@
+{
+  "headCommit": "3d33c4cb2e0c7cee14ced2c67c33b8fb55cef267",
+  "observedAt": "2026-10-15T00:50:39.657859+00:00",
+  "runs": [
+    {
+      "id": 38661104725,
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 38661109987,
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "repositoryPrivate": true,
+  "pr": 2,
+  "isDraft": true
+}

@@ -1,0 +1,7 @@
+{
+  "client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs": "bbaa80fcec29afa4791ff6cd3ed85caeee3b7198f19584bd65565dd708d6301d",
+  "client/MemoryForgeUnity/Assets/Tests/PlayMode/ActionPresentationPlayModeTests.cs": "e53e98740aaaa17d0e0c3a706ca47bc6bb8cbfd8e6f332c23320a43585a289d4",
+  "client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionClientPlayModeTests.cs": "8baa1c3c788c864b7cf2803733277aedbecc1d57442061531bc74013e6ed57a3",
+  "client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionTurnFlowPlayModeTests.cs": "b986019e43e51f5d787cc0ef99c4ba57b35379b161749ba5eacaba9bc7053fa7",
+  "client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionPickerGuardPlayModeTests.cs": "2e31f6a0dcdd8e295faee0dedb7ce18c3c4842aba3fafbdb9c6f6d0db727330d"
+}

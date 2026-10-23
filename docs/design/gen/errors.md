@@ -29,6 +29,7 @@
 | `IDENTITY_REQUIRED` | 카드 개체 키가 없거나 중복됐어요. |
 | `INVALID_ASSIGNMENT` | 공용 카드 배정이 올바르지 않아요. |
 | `INVALID_CARD` | 허용되지 않는 카드예요. |
+| `INVALID_ENEMY_MOVE` | 적 행동 데이터가 올바르지 않아요. 전투 상태를 유지하고 오류를 확인하세요. |
 | `INVALID_EVOLUTION` | 진화 계보가 올바르지 않아요. |
 | `INVALID_MODE` | 잘못된 사용 방식이에요. |
 | `INVALID_PART` | 영구 저장할 수 없는 부품이에요. |

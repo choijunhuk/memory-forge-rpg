@@ -1,0 +1,14 @@
+{
+  "result": "Succeeded",
+  "errors": 0,
+  "warnings": 0,
+  "bytes": 267436986,
+  "seconds": 13.6311562,
+  "scenePaths": [
+    "Assets/Scenes/MemoryForgeExpedition.unity",
+    "Assets/Scenes/MemoryForgeBattle.unity",
+    "Assets/Scenes/SampleScene.unity"
+  ],
+  "outputPath": "/Users/choi/Documents/Memory_forge/ops/ai/local/builds/MemoryForgeExpedition-Forecast-20261016.app",
+  "temporaryProbeIncluded": false
+}

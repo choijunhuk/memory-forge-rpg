@@ -1,0 +1,21 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"compiling\":false,\"hasRecovery\":true,\"playing\":false},\"compiler\":\"codedom\"}}"
+    }
+  ],
+  "structuredContent": {
+    "success": true,
+    "message": "Code executed successfully.",
+    "data": {
+      "result": {
+        "compiling": false,
+        "hasRecovery": true,
+        "playing": false
+      },
+      "compiler": "codedom"
+    }
+  },
+  "isError": false
+}

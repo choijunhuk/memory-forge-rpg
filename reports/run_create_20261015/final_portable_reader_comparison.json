@@ -1,0 +1,15 @@
+{
+  "allFactoryAndQueryRecordsIdentical": true,
+  "factories": 2131,
+  "queries": 45238,
+  "onlyChangedFields": [
+    "sources.generator.sha256",
+    "inputManifestAudit.preExistingChangedPaths (+.gitattributes)"
+  ],
+  "oldGenerator": "d26c4b3d7def9536a09c7524055e4bf63958baeb340d570591e04764702ce0d8",
+  "newGenerator": "4e38aa731491245f4af43e3e00e9ba6aeaa74fb9ee7a30fa05ed844d930f7565",
+  "inputManifestRegenerated": false,
+  "historicalChanges": 29,
+  "nativeErrorMessagesAndEveryOtherFieldExact": true,
+  "fixtureSha256": "70e215e6ecc9d105a17e4902283a69f62bfe621d076583aa7dc7d608ca30e15f"
+}

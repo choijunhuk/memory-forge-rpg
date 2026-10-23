@@ -1,0 +1,14 @@
+{
+  "core/MemoryForge.Core/BattleDefinitions.cs": "730320a063011d00b66f961a020a4922bb7d75080d0591193611035885c4f36e",
+  "core/MemoryForge.Core/BattleState.cs": "6a2e41b57c617e2ab408eeafbe11f2e77ec6f80fb901c199aa5a278f32c2bfe3",
+  "core/MemoryForge.Core/Battle.cs": "7e780cf4edb6c5eed1ca39678015f03943ef404b18a2cb52608df4b2090dc187",
+  "core/MemoryForge.Core/CanonicalState.cs": "e4849f0f24d5549503f6b5708ae6c35a5a11c2067c92244c1032a1027588b837",
+  "core/MemoryForge.CoreChecks/BattleDataLoader.cs": "f6b7530c0522a828b5790a907604c40017d421b1a39f6ad8f60e6cf635a3986e",
+  "core/MemoryForge.CoreChecks/BattleOpeningChecks.cs": "5bff53171e4c93c2067380726735ded99d3ef6dc8ac1eed84fd4488ec2593ec0",
+  "core/MemoryForge.CoreChecks/Program.cs": "64f0a43efff679fe918cdc270bf5ea009be273e7393e36b517641816fc461179",
+  "core/MemoryForge.CoreChecks/TraceHashChecks.cs": "5aeed3fc819f11d30ddd00c43dbd4a6d9abe964de5d04aa1f35c5fbfeaa8857d",
+  "client/MemoryForgeUnity/Assets/Tests/PlayMode/BattleOpeningPlayModeTests.cs": "7db00984f1a33799a4107cc13f4bb09e3edb1efbea546f65bdae221b7609f672",
+  "tools/gen_battle_opening_vectors.mjs": "71d0f37f23b23c62e2d4af47d7b04994922d4dda360db8898bee2d6c499e038c",
+  "engine/tests/battle_opening_vectors.test.mjs": "692bbb3b66d6cb113951843d657d161eb120f4cce02cb1be74b4b44eb2691f23",
+  "engine/tests/vectors/battle_opening_vectors.json.gz": "5ae7af8e616681f17b53011c27529d3f4ffd843100e8596dfab8e4a823e6e795"
+}

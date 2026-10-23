@@ -1,0 +1,26 @@
+[
+  {
+    "path": "client/MemoryForgeUnity/Assets/Screenshots/MemoryForgeMcpSmokeBefore.png.meta",
+    "rawSHA256": "f57cac58e990b1d695e1e693f0a9c3fb5632d24d4cfcb146bddecc0018f618c4",
+    "formattedSHA256": "701c6bc2b0242d825b55cc777eb2c00449fc2487a9729d433b4103b05ade7d1c",
+    "transformation": "trim trailing whitespace only; GUIDs and fields preserved"
+  },
+  {
+    "path": "client/MemoryForgeUnity/ProjectSettings/EditorSettings.asset",
+    "rawSHA256": "e3f3f549737729661a6ec16abc819a78d088ea98efa0b279f15956a675e5f925",
+    "formattedSHA256": "691af7b61d75e5dce6b6e923c8f83c6e32d73959bdfa5fa42ff51b6dba97561a",
+    "transformation": "trim trailing whitespace only; GUIDs and fields preserved"
+  },
+  {
+    "path": "client/MemoryForgeUnity/ProjectSettings/ProjectSettings.asset",
+    "rawSHA256": "589d38efc141ffc12a32558f0fe2d99e8f499687699ac50b9277c7511e674f76",
+    "formattedSHA256": "21b8b9135d5f4c87ae2b49a14309719557cdd7f1977badd5d5f0bd07c12f6a83",
+    "transformation": "trim trailing whitespace only; GUIDs and fields preserved"
+  },
+  {
+    "path": "client/MemoryForgeUnity/ProjectSettings/ShaderGraphSettings.asset",
+    "rawSHA256": "3593fe2681c549dc2476e02c686c96f2a61f1d2808bdac380b08262f3f2e0add",
+    "formattedSHA256": "e37f1980d3de447f5b4c1a7e2f5b629c2b3141fbf44bc0e6927228f9f207a44b",
+    "transformation": "trim trailing whitespace only; GUIDs and fields preserved"
+  }
+]

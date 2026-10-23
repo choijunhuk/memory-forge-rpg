@@ -1,0 +1,121 @@
+{
+  "task_id": "claude-native-desktop-probe-20261017",
+  "run_id": "claude-native-desktop-probe-20261017-20261017T062034968582Z",
+  "status": "RECEIVED_UNVERIFIED",
+  "requestedEffort": "high",
+  "requestedModel": "claude-opus-5-5",
+  "mcp_profile": "desktop",
+  "process_exit": 0,
+  "changes_verified": false,
+  "raw_output": "ops/ai/local/claude-native-desktop-probe-20261017-20261017T062034968582Z*",
+  "billing_verified_at": "2026-10-17T05:01:40.332532+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools plus fixed MCP tool names; MCP actions reach the Unity Editor project or macOS GUI outside the worktree; not an OS sandbox; managed policy still applies",
+  "branch": "codex/claude-ci-fixture-20261017",
+  "base_commit": "2b2d8ca9e5c2471247f47434001e832e0e948a0d",
+  "worktree": "/Users/choi/.codex/worktrees/claude-ci-fixture/Memory_forge",
+  "allowed_files": [],
+  "mcp": {
+    "servers": [
+      "peekaboo"
+    ],
+    "allowed_tools": [
+      "mcp__peekaboo__permissions",
+      "mcp__peekaboo__app",
+      "mcp__peekaboo__window",
+      "mcp__peekaboo__menu",
+      "mcp__peekaboo__dock",
+      "mcp__peekaboo__dialog",
+      "mcp__peekaboo__space",
+      "mcp__peekaboo__image",
+      "mcp__peekaboo__see",
+      "mcp__peekaboo__capture",
+      "mcp__peekaboo__inspect_ui",
+      "mcp__peekaboo__verify_state",
+      "mcp__peekaboo__click",
+      "mcp__peekaboo__type",
+      "mcp__peekaboo__press",
+      "mcp__peekaboo__scroll",
+      "mcp__peekaboo__drag",
+      "mcp__peekaboo__select_text",
+      "mcp__peekaboo__set_value",
+      "mcp__peekaboo__action",
+      "mcp__peekaboo__sleep"
+    ],
+    "denied_tools": [
+      "mcp__peekaboo__analyze",
+      "mcp__peekaboo__agent",
+      "mcp__peekaboo__clipboard",
+      "mcp__peekaboo__paste",
+      "mcp__peekaboo__browser"
+    ],
+    "exclusive_lock": "ops/ai/local/exclusive-control.lock",
+    "connection_observed": true,
+    "preflight": "macOS, npx on PATH, no Peekaboo credential or config file",
+    "observed": {
+      "servers": {
+        "peekaboo": "connected"
+      },
+      "exposed_tools": [
+        "mcp__peekaboo__action",
+        "mcp__peekaboo__app",
+        "mcp__peekaboo__capture",
+        "mcp__peekaboo__click",
+        "mcp__peekaboo__dialog",
+        "mcp__peekaboo__dock",
+        "mcp__peekaboo__drag",
+        "mcp__peekaboo__image",
+        "mcp__peekaboo__inspect_ui",
+        "mcp__peekaboo__menu",
+        "mcp__peekaboo__permissions",
+        "mcp__peekaboo__press",
+        "mcp__peekaboo__scroll",
+        "mcp__peekaboo__see",
+        "mcp__peekaboo__select_text",
+        "mcp__peekaboo__set_value",
+        "mcp__peekaboo__sleep",
+        "mcp__peekaboo__space",
+        "mcp__peekaboo__type",
+        "mcp__peekaboo__verify_state",
+        "mcp__peekaboo__window"
+      ],
+      "exposed_not_allowed": [],
+      "calls": [
+        {
+          "tool": "mcp__peekaboo__permissions",
+          "is_error": false
+        },
+        {
+          "tool": "mcp__peekaboo__app",
+          "is_error": false
+        },
+        {
+          "tool": "mcp__peekaboo__window",
+          "is_error": false
+        },
+        {
+          "tool": "mcp__peekaboo__see",
+          "is_error": false
+        },
+        {
+          "tool": "mcp__peekaboo__inspect_ui",
+          "is_error": false
+        }
+      ],
+      "permission_denials": [
+        "Glob"
+      ],
+      "api_key_source": "none",
+      "transport_connected": true
+    }
+  },
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "97555deb-0a11-4859-a9ce-6a355b0a5565",
+  "subtype": "success",
+  "is_error": false,
+  "result": "Unity 창 화면은 실제로 캡처했지만, 검색 필드 입력 조작(4단계)은 실행하지 않았습니다(NOT_RUN). Unity가 그 필드를 접근성(AX) 정보로 노출하지 않아서 대상을 확실히 식별할 수 없었습니다.\n\n**Task ID:** claude-native-desktop-probe-20261017 · Opus 5.5 High · 사용한 MCP 도구는 Peekaboo 4.9.5 하나뿐입니다. AI 분석, 셸, 파일 편집은 쓰지 않았습니다.\n\n| 항목 | 결과 | 근거 |\n|---|---|---|\n| 1. macOS 권한 | 확인 | Screen Recording, Accessibility, Event Synthesizing 모두 허용됨 |\n| 2. 대상 창 찾기 | 확인 | Unity PID 97768, 창 ID 32587 `MemoryForgeServerPractice - MemoryForgeUnity - … Unity 6 (6000.0.46f1) <Metal>`. 다른 앱 창은 캡처·조작하지 않음 |\n| 연결 | 확인 | permissions, app, window, see, inspect_ui 도구가 모두 응답함 (도구 응답일 뿐, GUI 조작 성공 증거는 아님) |\n| 3. 캡처 | 확인 | 이 창만 캡처함. 화면에 Hierarchy(`MemoryForgeServerPractice`), Game 뷰, Project/Console 탭(Console 0/0/0), Inspector가 보임. 저장 경로는 `/Users/choi/Documents/Memory_forge/ops/ai/local/claude-native-unity-probe-20261017.png`라고 Peekaboo가 보고함. 이 경로가 작업 폴더 밖이라 파일이 실제로 있는지는 직접 확인하지 못함 |\n| 4. 검색 필드 입력 | **NOT_RUN** | 캐시 없이 새로 읽은 AX 정보에도 요소가 8개뿐이었음(창 닫기·최소화·전체화면 버튼, 그룹, 제목 텍스트, 씬 아이콘). Hierarchy·Project·Console 검색 필드는 AX에 없음. 화면에는 보이지만 좌표로 클릭하거나 입력하는 것은 지시 범위를 벗어난 우회라서 하지 않음 |\n\n**원상복구:** 바꾼 것이 없어서 되돌릴 것도 없습니다. 씬·프리팹·프로젝트 파일은 수정하거나 저장하지 않았습니다.\n\n**플랫폼 한계:** Unity 6 Editor는 macOS 접근성 정보로 창 테두리 버튼과 제목만 내보냅니다. 패널 안의 컨트롤(IMGUI/UI Toolkit)은 AX로 잡히지 않습니다. 그래서 이 방식(Peekaboo AX)으로는 Editor 내부를 정확히 조작할 수 없고, 캡처와 로컬 OCR로 화면을 읽는 데까지만 쓸 수 있습니다. Editor 내부 조작이 필요하면 Unity MCP를 써야 합니다.\n\n**다음 작업:** Unity Editor 제어권을 Codex에 돌려드립니다.",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ]
+}

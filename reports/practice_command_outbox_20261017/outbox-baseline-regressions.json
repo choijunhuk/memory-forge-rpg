@@ -1,0 +1,26 @@
+{
+  "scope": "frozen a0e8c50 actual .NET+installed Newtonsoft, before fixes",
+  "cases": [
+    {
+      "case": "plain",
+      "exit": 0,
+      "error_code": "",
+      "record_exists": true,
+      "mode": "0o644"
+    },
+    {
+      "case": "high-surrogate",
+      "exit": 0,
+      "error_code": "",
+      "record_exists": true,
+      "mode": "0o644"
+    },
+    {
+      "case": "low-surrogate",
+      "exit": 0,
+      "error_code": "",
+      "record_exists": true,
+      "mode": "0o644"
+    }
+  ]
+}

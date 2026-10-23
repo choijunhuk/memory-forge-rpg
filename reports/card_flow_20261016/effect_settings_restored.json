@@ -1,0 +1,41 @@
+{
+  "precondition": "all test/build jobs completed, pending restore false, live API future options None0; initial whitespace-only guard correctly refused the authored temporary DisableDomainReload bit still serialized as1",
+  "allowed_semantic_restore": "only known Root-authored temporary m_EnterPlayModeOptions1\u2192original0, all other settings normalized-equal to HEAD",
+  "files": [
+    {
+      "path": "client/MemoryForgeUnity/ProjectSettings/EditorSettings.asset",
+      "owned_temporary_options_bit_restored": true,
+      "otherwise_only_whitespace": true,
+      "head_exact": true,
+      "sha256": "691af7b61d75e5dce6b6e923c8f83c6e32d73959bdfa5fa42ff51b6dba97561a"
+    },
+    {
+      "path": "client/MemoryForgeUnity/ProjectSettings/ProjectSettings.asset",
+      "owned_temporary_options_bit_restored": false,
+      "otherwise_only_whitespace": true,
+      "head_exact": true,
+      "sha256": "21b8b9135d5f4c87ae2b49a14309719557cdd7f1977badd5d5f0bd07c12f6a83"
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/Settings/UniversalRP.asset",
+      "owned_temporary_options_bit_restored": false,
+      "otherwise_only_whitespace": true,
+      "head_exact": true,
+      "sha256": "9fb41b6fbeaab7b09b56821d2afa77ce7b56e6dad38b9ccb7b5057b03cee91a5"
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/UniversalRenderPipelineGlobalSettings.asset",
+      "owned_temporary_options_bit_restored": false,
+      "otherwise_only_whitespace": true,
+      "head_exact": true,
+      "sha256": "31878add831fa42bcbe51c0050823cb817930f80d97a0b7bb7d77847b6e4a8cf"
+    },
+    {
+      "path": "client/MemoryForgeUnity/ProjectSettings/UnityConnectSettings.asset",
+      "owned_temporary_options_bit_restored": false,
+      "otherwise_only_whitespace": true,
+      "head_exact": true,
+      "sha256": "91a1feab5703108babeec96d61300b38d6d00544868457391038e605615ad750"
+    }
+  ]
+}

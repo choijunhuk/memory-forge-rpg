@@ -1,0 +1,19 @@
+{
+  "reviewer": "Codex native opening_core_review",
+  "model": "gpt-6.1-sol",
+  "effort": "max",
+  "scope": "Frozen Core source only",
+  "verdict": "APPROVE",
+  "evidence": "All12liveactions/terminalorder/reward/summons/curses/resets/atomicrollback source compared. Independent JSBigInt re-expression vs actual IEEE754bits on380935ratios passed; actualend6nearTiehealsmoth.",
+  "notRunByReviewer": [
+    "C#hostbuild/tests",
+    "oracleacceptance",
+    "Claude",
+    "Unity"
+  ],
+  "coreHashes": {
+    "core/MemoryForge.Core/Battle.cs": "01c562ba2557908e89f041113e65d613c8261dbdc8adc36def3008d4ee612501",
+    "core/MemoryForge.Core/BattleDefinitions.cs": "f60ad897f98dfc5b89d743b3969b3bb6623ab79aa2de0a9b0d2def8126d09137",
+    "core/MemoryForge.Core/BattleState.cs": "0f0632e2be8ce02ad9edb3e80606454606561ed67d908f95d67d3cc7a7ab1b33"
+  }
+}

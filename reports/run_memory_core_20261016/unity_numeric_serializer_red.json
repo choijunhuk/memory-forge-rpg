@@ -1,0 +1,22 @@
+{
+  "success": true,
+  "message": "Code executed successfully.",
+  "data": {
+    "result": {
+      "cases": 2088,
+      "failures": 41,
+      "examples": [
+        "44b52d02c7e14af5: 9.999999999999998e+22 vs 9.999999999999997e+22",
+        "37d5a74ac7f5767c: 9.942792609450542e-40 vs 9.942792609450541e-40",
+        "67215d1fc9e5aa46: 6.044094289514739e+188 vs 6.044094289514738e+188",
+        "145547af88d6f712: 1.011381768107175e-210 vs 1.0113817681071751e-210",
+        "063a277335cc1fdd: 1.1526669269016929e-278 vs 1.152666926901693e-278",
+        "1c098bb590f27dd3: 1.2910735537462089e-173 vs 1.291073553746209e-173",
+        "11fef5e4ce56e5db: 5.3531756123466607e-222 vs 5.353175612346661e-222",
+        "17e1f20fa0f5b54a: 1.229163325057434e-193 vs 1.2291633250574341e-193"
+      ],
+      "runtime": "Actual Unity Editor Mono private pure JsonText; no game state changed"
+    },
+    "compiler": "codedom"
+  }
+}

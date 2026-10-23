@@ -1,0 +1,127 @@
+{
+  "task_id": "claude-native-coordinate-probe-20261017",
+  "run_id": "claude-native-coordinate-probe-20261017-20261017T062443590342Z",
+  "status": "RECEIVED_UNVERIFIED",
+  "requestedEffort": "high",
+  "requestedModel": "claude-opus-5-5",
+  "mcp_profile": "desktop",
+  "process_exit": 0,
+  "changes_verified": false,
+  "raw_output": "ops/ai/local/claude-native-coordinate-probe-20261017-20261017T062443590342Z*",
+  "billing_verified_at": "2026-10-17T05:01:40.332532+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools plus fixed MCP tool names; MCP actions reach the Unity Editor project or macOS GUI outside the worktree; not an OS sandbox; managed policy still applies",
+  "branch": "codex/claude-ci-fixture-20261017",
+  "base_commit": "2b2d8ca9e5c2471247f47434001e832e0e948a0d",
+  "worktree": "/Users/choi/.codex/worktrees/claude-ci-fixture/Memory_forge",
+  "allowed_files": [],
+  "mcp": {
+    "servers": [
+      "peekaboo"
+    ],
+    "allowed_tools": [
+      "mcp__peekaboo__permissions",
+      "mcp__peekaboo__app",
+      "mcp__peekaboo__window",
+      "mcp__peekaboo__menu",
+      "mcp__peekaboo__dock",
+      "mcp__peekaboo__dialog",
+      "mcp__peekaboo__space",
+      "mcp__peekaboo__image",
+      "mcp__peekaboo__see",
+      "mcp__peekaboo__capture",
+      "mcp__peekaboo__inspect_ui",
+      "mcp__peekaboo__verify_state",
+      "mcp__peekaboo__click",
+      "mcp__peekaboo__type",
+      "mcp__peekaboo__press",
+      "mcp__peekaboo__scroll",
+      "mcp__peekaboo__drag",
+      "mcp__peekaboo__select_text",
+      "mcp__peekaboo__set_value",
+      "mcp__peekaboo__action",
+      "mcp__peekaboo__sleep"
+    ],
+    "denied_tools": [
+      "mcp__peekaboo__analyze",
+      "mcp__peekaboo__agent",
+      "mcp__peekaboo__clipboard",
+      "mcp__peekaboo__paste",
+      "mcp__peekaboo__browser"
+    ],
+    "exclusive_lock": "ops/ai/local/exclusive-control.lock",
+    "connection_observed": true,
+    "preflight": "macOS, npx on PATH, no Peekaboo credential or config file",
+    "observed": {
+      "servers": {
+        "peekaboo": "connected"
+      },
+      "exposed_tools": [
+        "mcp__peekaboo__action",
+        "mcp__peekaboo__app",
+        "mcp__peekaboo__capture",
+        "mcp__peekaboo__click",
+        "mcp__peekaboo__dialog",
+        "mcp__peekaboo__dock",
+        "mcp__peekaboo__drag",
+        "mcp__peekaboo__image",
+        "mcp__peekaboo__inspect_ui",
+        "mcp__peekaboo__menu",
+        "mcp__peekaboo__permissions",
+        "mcp__peekaboo__press",
+        "mcp__peekaboo__scroll",
+        "mcp__peekaboo__see",
+        "mcp__peekaboo__select_text",
+        "mcp__peekaboo__set_value",
+        "mcp__peekaboo__sleep",
+        "mcp__peekaboo__space",
+        "mcp__peekaboo__type",
+        "mcp__peekaboo__verify_state",
+        "mcp__peekaboo__window"
+      ],
+      "exposed_not_allowed": [],
+      "calls": [
+        {
+          "tool": "mcp__peekaboo__window",
+          "is_error": false
+        },
+        {
+          "tool": "mcp__peekaboo__see",
+          "is_error": false
+        },
+        {
+          "tool": "mcp__peekaboo__click",
+          "is_error": true
+        },
+        {
+          "tool": "mcp__peekaboo__see",
+          "is_error": false
+        },
+        {
+          "tool": "mcp__peekaboo__see",
+          "is_error": false
+        },
+        {
+          "tool": "mcp__peekaboo__click",
+          "is_error": true
+        },
+        {
+          "tool": "mcp__peekaboo__see",
+          "is_error": false
+        }
+      ],
+      "permission_denials": [],
+      "api_key_source": "none",
+      "transport_connected": true
+    }
+  },
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "97555deb-0a11-4859-a9ce-6a355b0a5565",
+  "subtype": "success",
+  "is_error": false,
+  "result": "Unity 창 관찰은 다시 됐지만, 좌표 클릭은 두 번 모두 검증하지 못했습니다(unverified). 그래서 입력과 복구 시험은 실행하지 않았습니다(NOT_RUN). GUI 조작은 PASS가 아닙니다.\n\n**Task ID:** claude-native-coordinate-probe-20261017 · Opus 5.5 High · Peekaboo MCP만 사용했습니다.\n\n| 항목 | 결과 | 근거 |\n|---|---|---|\n| 연결과 대상 창 | 확인 | 창 목록을 다시 받아 PID 97768, 창 ID 32587 `MemoryForgeServerPractice - MemoryForgeUnity`가 그대로인지 대조함. 이 창만 새로 캡처함 |\n| 시험할 필드 | 확인 | Console 검색 필드를 골랐고 화면상 빈 값이었음 (창 안 픽셀 약 1316,809). 기존 필터가 없어 잃을 내용도 없었음 |\n| 좌표 클릭 1회차 | unverified | normalized `0.64,0.6296`, 새 스냅샷을 기준으로 지정. 도구가 `returned without valid canonical result semantics ... update the runtime host` 오류를 반환함. 이어서 새로 캡처한 화면에서 포커스 표시가 생기는 등의 변화는 보이지 않음 |\n| 좌표 클릭 2회차 | unverified | 새 스냅샷 기준 image_pixels `1316,809`로 다시 시도함. 같은 오류였고, 필드 부분만 다시 캡처해 보니 여전히 빈 칸에 포커스 표시가 없음 |\n| 입력 `MemoryForgeMcpProbe` | **NOT_RUN** | 필드에 포커스가 갔는지 확인하지 못한 상태에서 키를 넣으면 Scene·Hierarchy 단축키로 들어갈 수 있음(W/E/R/T 도구 전환, F 프레임 등). 그래서 입력하지 않음 |\n| 복구 | 해당 없음 | 입력이 없었고, 확인한 범위에서 화면 변화도 없음 (마지막 캡처에서 검색 필드가 빈 값) |\n| 캡처 파일 | 만들지 않음 | 입력이 없었으므로 `…coordinate-input…`, `…coordinate-restored…` 파일을 만들지 않음. 관찰 캡처는 임시 폴더에만 남음 |\n\n씬·프리팹·프로젝트 파일, 다른 앱 창, Play 버튼은 건드리지 않았습니다.\n\n**남은 한계:** 도구 오류에 따르면 클릭 결과를 확인하지 못한 원인은 Peekaboo 4.9.5의 실행 호스트 쪽 문제입니다. 다만 Unity가 배경 클릭 이벤트를 받는지 여부는 이번 시험으로 가려지지 않았습니다. 두 번 실패해서 이 항목만 보류합니다. 다시 시도할 방법은 셋 중 하나입니다.\n- Peekaboo 실행 호스트를 갱신하거나 재시작한 뒤 같은 시험을 반복\n- 사용자 승인 아래 `foreground=true`로 마우스 포인터를 직접 쓰는 클릭\n- Unity MCP의 Editor 경로를 사용\n\n**다음 작업:** Unity Editor 제어권을 Codex에 돌려드립니다.",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ]
+}

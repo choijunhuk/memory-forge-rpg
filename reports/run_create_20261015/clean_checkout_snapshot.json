@@ -1,0 +1,10 @@
+{
+  "privateSnapshot": "/Users/choi/Documents/Memory_forge/ops/ai/local/r0-clean-checkout",
+  "realIndexUnchanged": true,
+  "rawOriginalCsvAllFourMatch": true,
+  "R0SourcesMatch": true,
+  "sourceManifestRegenerated": false,
+  "sourceInputs": 434,
+  "inputIgnoreExceptions": [],
+  "gitTree": "cfc5ce6db1fdfb0f8a899b22191e4c71baf18987"
+}

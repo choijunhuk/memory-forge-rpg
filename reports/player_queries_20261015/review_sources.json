@@ -1,0 +1,12 @@
+{
+  "core/MemoryForge.Core/Battle.cs": "658b27f8ee8342d4b788af1e23456be9523c06d6356817191382c4e1e2f8cdd0",
+  "core/MemoryForge.Core/BattleDefinitions.cs": "ce408b70946fe39112ea4ef7f9e14529d09330619deb896c8bfbc54cc3d75f36",
+  "core/MemoryForge.Core/BattleState.cs": "7ce6a7c58a5a82669cd1295d709262d68979b163685953ff8e9436ea2f5e3c70",
+  "core/MemoryForge.CoreChecks/BattleDataLoader.cs": "a9dfa1de5e10712f526c0775083ed49295a495b039975ddc6d812e82b5eb00ec",
+  "core/MemoryForge.CoreChecks/BattlePlayerQueryChecks.cs": "277d1a925441ddc8151eab5990e673a5dfad58c3e928f98ee5e99e2f6eef0a71",
+  "tools/gen_battle_player_query_vectors.mjs": "80a8aa39213cc530fe159103411a54450a25cf3ea61e87580bc1b9081de57408",
+  "engine/tests/battle_player_query_vectors.test.mjs": "b7e75eb1d70f8c1d93214ba4865c52f23ce17958c5cea9e502031262b6a12852",
+  "engine/tests/vectors/battle_player_query_vectors.json.gz": "213f32925513d69f6912bb51a72d46c7268dd76e452ac611050502389d33625c",
+  "core/MemoryForge.CoreChecks/Program.cs": "207203651749d946819f545c7d171e9a011940cd0623883c2c18aa7bdaa554ae",
+  "client/MemoryForgeUnity/Assets/Tests/PlayMode/BattleOpeningPlayModeTests.cs": "01a1be7f0699a4fff3242645f7b9e843c9707b6555193c1cbd620b49c2e8ea16"
+}

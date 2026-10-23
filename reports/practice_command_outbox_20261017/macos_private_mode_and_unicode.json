@@ -1,0 +1,27 @@
+{
+  "source": "4a62c02...",
+  "pass": true,
+  "cases": [
+    {
+      "case": "plain",
+      "exit": 0,
+      "code": "",
+      "record_exists": true,
+      "mode": "0o600"
+    },
+    {
+      "case": "high",
+      "exit": 3,
+      "code": "OUTBOX_INVALID_REQUEST",
+      "record_exists": false,
+      "mode": null
+    },
+    {
+      "case": "low",
+      "exit": 3,
+      "code": "OUTBOX_INVALID_REQUEST",
+      "record_exists": false,
+      "mode": null
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "scope": "Original serialized settings restored after actual Editor API None + SaveAssets; strict whole-file equality guard",
+  "records": [
+    {
+      "path": "client/MemoryForgeUnity/ProjectSettings/EditorSettings.asset",
+      "editor_api_called_and_returned_None": true,
+      "disk_already_persisted": true,
+      "known_test_runner_flag_restored_from_HEAD_only": false,
+      "all_other_fields_equal_HEAD": true,
+      "only_remaining_change_was_trailing_whitespace": true,
+      "raw_backup": "ops/ai/local/m0-settings-final-before/EditorSettings.asset",
+      "after_sha256": "691af7b61d75e5dce6b6e923c8f83c6e32d73959bdfa5fa42ff51b6dba97561a"
+    },
+    {
+      "path": "client/MemoryForgeUnity/ProjectSettings/ProjectSettings.asset",
+      "editor_api_called_and_returned_None": true,
+      "disk_already_persisted": true,
+      "known_test_runner_flag_restored_from_HEAD_only": false,
+      "all_other_fields_equal_HEAD": true,
+      "only_remaining_change_was_trailing_whitespace": true,
+      "raw_backup": "ops/ai/local/m0-settings-final-before/ProjectSettings.asset",
+      "after_sha256": "21b8b9135d5f4c87ae2b49a14309719557cdd7f1977badd5d5f0bd07c12f6a83"
+    }
+  ],
+  "getterEnabledFalseQuirkNotClaimedAsTruth": true,
+  "initialMissingReturnAttempt": "Rejected before execution; corrected with explicit return"
+}

@@ -1,0 +1,6 @@
+{
+  "client/MemoryForgeUnity/Assets/Scripts/PracticeCommandOutbox.cs": "60c5f32b3be9ddbb13799f4116eada01e198c150e511369a036dad360de0a4ba",
+  "client/MemoryForgeUnity/Assets/Scripts/PracticePublicSnapshot.cs": "a5086f5f98ae2756ee93c0c3c9c5a29a1e3a675593930bc62a6ebfa5437b5622",
+  "client/MemoryForgeUnity/Assets/Scripts/PracticeServerSession.cs": "20f84a378ccadf0938a8273306d9b5f20ddb39c2375dd4c03ffbc35a686f6117",
+  "client/MemoryForgeUnity/Assets/Tests/PlayMode/PracticeServerSessionPlayModeTests.cs": "4019f9604dc7b4c0937c65d8daf74ae09e6b2b126b499ec6fdca9b034780dddd"
+}

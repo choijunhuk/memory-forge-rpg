@@ -12,3 +12,49 @@ dotnet run --project core/MemoryForge.CoreChecks -c Release -- .
 
 
 현재 실행·구독·자동 호출·이미지 담당 지침은 `docs/AI_WORKFLOW.md`다. 위 과거 실행 예시는 새 실행 증거가 아니다.
+
+## 2026-10-15 검증 갱신
+
+원문·기존 실행 기록은 위에 보존한다. 현재 Core에는 canonical JSON/SHA-256도 추가됐으며 기존202개·canonical87개·시작/종료 스냅샷2000개·fixture13개 검사가 통과했다. **Battle/Run 명령 재생은 아직0개, 전체 이식은 미구현**이다. 현재 명령·출력은 `reports/csharp_checks.txt`와 `reports/cross_language_20261015/README.md`를 따른다.
+
+Unity6가 로컬 UPM으로 동일 Core 소스를 직접 컴파일했고 실제 PlayMode2개·EditMode3개가 통과했다. Android/IL2CPP·전투 UI·실기기는 이 검증에 포함하지 않는다. `Directory.Build.props`는 기본 .NET 명령도 `ops/ai/local/dotnet-artifacts`에 출력을 모으게 하므로 Unity 패키지 안에 DLL/생성소스를 만들지 않는다. CLI의 임시 `--artifacts-path` 옵션에만 안전성을 의존하지 않는다.
+
+## 실제 Battle 생성·시작 실행
+
+`BattleDefinitions`·`BattleState`·`Battle`에 typed 입력/분리된 상태 사본·원자적 `begin`·독립 영수증을 추가했다. [새 검증 기록](../reports/csharp_opening_20261015/)에서 실제267개 시작 명령과2,220검사, 기존202+87+2,000+13 PASS를 확인한다. Unity PlayMode5개 중3개는 이 전투 API를 실제 실행한다. 위의 명령 실행0개는 과거 스냅샷 기반 기록이며, 전체1,000 Run 트레이스 재생 명령 수는 여전히0개다.
+
+`play`/`ult`/`end`·다음 턴·Run/저장/복원은 명시적으로 미지원이다. 현재 전투의 HP·방어·AP 같은 정량 출력은 Int32, 스킬/필살기 상태 레벨은 `long`이며 표현 범위를 넘는 결과는 `BATTLE_NUMBER_OUT_OF_RANGE`로 거부한다. RNG는 기존 `uint32` 상태를 유지하고 플래그의 손실 없는 JSON 정수와 요청 인수는 JS-safe 정수다. 요청 분수는 `UNSUPPORTED_REQUEST_NUMBER`다. 이 범위를 전체 JS 입력·전투 이식 완료로 확대하지 않는다.
+
+## 실제 적 행동·반복 턴 실행
+
+`end`·라이브20종의12행동·다음 턴을 구현했고 [356사례/1740요청·29232검사](../reports/csharp_turns_20261015/)와 기존전체검사, Unity PlayMode7/EditMode3이 통과했다. 원문과 대조한 공식 Opus Max·별도 Sol Max는 APPROVE다. `StartTurn(first)`·적 생성/의도·RNG·원자적 후보 실행을 재사용하고 전체 그래프 비교기는 두 host검사가 공유한다.
+
+이 반복턴 단위 검증 당시 지원은 `Create/begin/end`였다. `play`/`ult`, 예약·부채·파워·균열을 생산하는 경로, Run/저장/복원·전체1000Run명령 재생은 남아 있다. unknown상태/태그/phase를 조용히 생략하지 않는다. 위의 과거 미지원 end 설명은 이 절로 갱신하며 게임 데이터·수치를 변경하지 않는다.
+
+## 전체 정의·순수 카드 질의
+
+`EffectiveCard(uid)`·`AllowedModes(uid)`·`CostOf(uid,mode)`·`NeedsTarget(uid)`가 실제 카드 개체를 조회한다. [A0 근거](../reports/player_queries_20261015/)는173카드·378기본모드·전체 저작 전투 정의,702개시작/8340질의·128244검사와 기존전체검사·UnityPlay8/Edit3 PASS 및 Opus Max 승인이다. 강화→공명을 사본에 적용하며 원본 정의·RNG·상태·영수증은 바뀌지 않는다. 편의 기본 mode는 now이고 실제 명령 구현에서는 mode를 명시한다.
+
+이 A0 단위에는 A1 play/ult·예약/부채/파워/복제·전체Run 실행을 포함하지 않았다. 원본§6.3/§9의 base0 충돌은 live base5를 유지하고 기록한다. A0를 효과 실행/전체 DSL 수용으로 취급하지 않는다.
+
+## 실제 카드·필살기와 생산 수명주기 A1
+
+현재 저작 Battle의 `Create/begin/end/play/ult`,173카드·378기본모드·39효과·10필살기와 예약/부채/파워/성장/복제/소멸/균열을 실제 실행한다. [992사례/3870명령·87991검사](../reports/player_actions_20261015/)와 기존전체검사·Node257·UnityPlay12/Edit3 및 독립 Sol/공식 Opus Max 승인을 확인했다. 기존 시작 전용 효과 처리는 공유 실행기로 합치고267기존 시작을 유지하며 BattleState만 예약/공유resSeq를 소유한다. 소멸 중 더미 교체와 raw picks 소비시점 두 결함을 실제 회귀로 고쳤다.
+
+이 절이 위 시점별 미지원 play/ult 설명을 갱신한다. 전체Run/기억저장/복원·제안 후반행동·양수silence·전체Unity게임UI/Android/기기/서버는 별도이며 전체1000Run C#명령은0이다. 정수표현/원자적 오류 범위와 base0 원본충돌은 그대로다. 새macOS기술씬 빌드와 Metal시작은 전체게임·정상종료 수용으로 확대하지 않는다. 다음M0/R0를 별도 worktree에서 이어간다.
+
+## 순수 기억 규칙 M0
+
+`MemoryV2`의 Inspect/Baseline/ListChanges/Cost/ApplyChanges/Apply/Recover/Migrate/CapacityOf가 현재 JS 규칙을 실행한다. Core는 JSON 라이브러리 없이 typed 모델과 분리된 JSON 그래프를 쓰며 Host가 기존 데이터/UTF16/유한 메타데이터를 연결한다. [1072호출·5451검사](../reports/memory_rules_20261015/)·29개 native 회귀·실제UnityPlay16/Edit3·양방향 검토를 확인했다. 전체저장결과비용과 키/이관원본을 보존하며 가격·용량을 바꾸지 않았다. JS own격리키, 정수키검사순서·빈pool지연평가·배열이관오류순서를 실제회귀로 고쳤다.
+
+M0는 순수 규칙이며 전체Run/원시바이트백업/실계정저장·이관/복원·서버가 아니다. 정해진 string ID/JSON수치 경계와 기존저작데이터를 수용하며 문서화된 비정상 강제변환·미래데이터까지 동치로 확대하지 않는다. R0생성/지도와 실제명령은 후속검증이다.
+
+## 실제 탐사 생성 R0
+
+`Run.Create`가 현재 legacy/v2의 Stats파생·안정키·출발기억·덱·기본무기·지도/개별난수를 실제 생성하고 `State`/`Available`/`NodeById`가 깊은 사본으로 순수 조회한다. [C#215645검사/2121생성·45130조회](../reports/run_create_20261015/)와 위조90/identity12/typed73, Node286, 실제UnityPlay18/Edit3 및 양방향 검토를 통과했다. 2131JS분모 중5JS고유·5typed진단은 parity와 구분한다.
+
+R0는 fresh생성/조회이며 전체Run진행/전투접합/보상/기억commit/저장복원·계정/서버가 아니다. 객체키는 canonical의미로, 배열은 순서까지 검증하고 own-undefined를 null로 바꾸지 않는다. boss위치available/미래무기타입/타입경계/공유data인덱스의 후속조건은 기록하고 R1도달경로에서 다룬다.
+
+## 콘텐츠 모드 C1
+
+`Battle.CreateMode`(웨이브·균열 규칙 6종, `BattleState.Mode`가 없으면 무동작)와 `ContentModes`(초기화 시계·파티 준비·단계 배율·성장 던전·주간 보스·기록 균열 정산·일일 활동)·`RiftRun`이 `engine/content-modes.js`를 실행한다. [60사례/2838 op·10141검사](../reports/content_modes_csharp_20261018/)와 기존 전체검사·Node357, Codex 읽기 전용 3회(최종 NO_BLOCKING_DEFECT)를 확인했다. 보류 데이터는 C#에서도 `CONTENT_NOT_AUTHORED`이며 서버 트랜잭션·`RiftRun` 저장 복원·Unity UI는 별도다.

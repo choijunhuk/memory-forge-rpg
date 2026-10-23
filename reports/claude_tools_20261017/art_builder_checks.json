@@ -1,0 +1,32 @@
+{
+  "scope": "full builder method body through actual non-batch Editor; fixture destinations only; no production scene overwrite",
+  "checks": [
+    {
+      "case": "file",
+      "status": "PASS",
+      "reason": "Review scene already exists on disk; do not overwrite it automatically: /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scenes/MemoryForgeGuardFixtured625d2eb-file.unity"
+    },
+    {
+      "case": "directory",
+      "status": "PASS",
+      "reason": "Review scene already exists on disk; do not overwrite it automatically: /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scenes/MemoryForgeGuardFixtured625d2eb-directory.unity"
+    },
+    {
+      "case": "dangling-link",
+      "status": "PASS",
+      "reason": "Review scene already exists on disk; do not overwrite it automatically: /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scenes/MemoryForgeGuardFixtured625d2eb-dangling-link.unity"
+    },
+    {
+      "case": "missing-font",
+      "status": "PASS",
+      "reason": "Existing Korean font not found."
+    },
+    {
+      "case": "missing-image",
+      "status": "PASS",
+      "reason": "Missing image: Assets/Art/MemoryForgeGuardFixtured625d2eb-missing/char_sera_sheet_default_v02.png"
+    }
+  ],
+  "nineTextureMetaHashesUnchanged": true,
+  "sourceScenePreserved": true
+}

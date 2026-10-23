@@ -1,0 +1,31 @@
+{
+  "task_id": "P1-CARD-FLOW-EXACT-COMPARISON-FIX",
+  "run_id": "P1-CARD-FLOW-EXACT-COMPARISON-FIX-20261016T041129398443Z",
+  "status": "VERIFIED",
+  "requestedEffort": "high",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "changes_verified": true,
+  "raw_output": "ops/ai/local/P1-CARD-FLOW-EXACT-COMPARISON-FIX-20261016T041129398443Z*",
+  "billing_verified_at": "2026-10-15T21:22:01.277612+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "claude/balance-audit",
+  "base_commit": "9be537f4c5ef59e890322cb2d1de914fb49bfed6",
+  "worktree": "/Users/choi/.codex/worktrees/claude-balance-audit/Memory_forge",
+  "allowed_files": [
+    "client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs",
+    "client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionFailurePlayModeTests.cs",
+    "reports/card_flow_20261016/failure_exact_comparison_report.md"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "d2bda3e6-a0ab-4f84-82e6-c15d5d12127f",
+  "subtype": "success",
+  "is_error": false,
+  "result": "I've made the failed-command comparison exact for fractional metadata; nothing has been compiled or run (NOT_RUN). The failing one-ulp test should now pass unchanged; I didn't weaken it. The fix rests on your receipts: 4 of 5 initial tests passed, and the Mono witness shows `JToken.DeepEquals` treats 0.1 and the next double as equal.\n\n**Fix (comparison only, in `MemoryForgeExpeditionClient.cs`):** `SameGraph` now uses a small recursive `SameToken` instead of `JToken.DeepEquals`.\n- Objects are compared by member name, so member order doesn't matter.\n- Arrays are compared item by item, in order.\n- Fractional numbers are compared exactly by their stored value, so a one-ulp difference counts as a change.\n- Other primitives keep Json.NET's normal comparison (an int and a long of the same value are equal), and any type mismatch counts as a change.\n- There's no tolerance, rounding, coercion or `CanonicalState.Hash`. Detached snapshots, unknown-error quarantine and the unchanged-rejection toast path are untouched.\n\n**Tests (`ExpeditionFailurePlayModeTests.cs`):**\n- **New exact-boundary test** on small explicit graphs:\n  - a reordered object counts as the same;\n  - swapped array items count as different;\n  - a one-ulp difference in a nested double counts as different;\n  - int and long of the same value count as the same;\n  - an integer versus a float counts as different;\n  - an added member counts as different;\n  - null versus null counts as the same.\n- **`StorePrint`** now reads the whole private session store (schema, memory, version, history, receipts), so every recovery and restart \"store unchanged\" check compares the complete store rather than just memory and version.\n- **`EarnSave`** now also checks that the store earned through real commands has one history entry and the commit's receipt.\n- My restart-fix code and tests, and both earlier reports, are kept as they were.\n\n**Remaining risk:**\n- Mixing CLR number types (decimal or float alongside double) would count as a change and fail closed; current graphs only use double.\n- `-0.0` and `0.0` count as equal, which also matches their JSON form.\n\n**Next for you:** run all 7 failure tests (initial 5, restart 1, comparison 1), re-run the restart RED witness, then the expedition and digest suites and full PlayMode/EditMode.\n\nFiles changed:\n- `client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs`\n- `client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionFailurePlayModeTests.cs`\n- `reports/card_flow_20261016/failure_exact_comparison_report.md`",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ],
+  "root_verification": "reports/card_flow_20261016/s2_root_acceptance.md"
+}

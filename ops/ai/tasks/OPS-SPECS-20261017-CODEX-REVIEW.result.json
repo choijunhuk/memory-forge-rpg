@@ -1,0 +1,50 @@
+{
+  "task_id": "OPS-SPECS-20261017-CODEX-REVIEW",
+  "status": "ACCEPTED_NO_BLOCKING_DEFECT",
+  "caller": "Claude Opus side session (claude-opus-5-5), branch claude/ops-specs-b89143",
+  "callee": "official Codex CLI 0.162.1, command codex exec -s read-only -m gpt-6.1-sol -c model_reasoning_effort=high",
+  "auth_checks": "ROOT_START_CHECK pass (codex_chatgpt_login true, provider_env_clean true) before both calls",
+  "files_reviewed": [
+    "ops/telemetry/events.schema.json",
+    "ops/telemetry/test_events_schema.py",
+    "ops/telemetry/EVENTS.md",
+    "docs/ops/backup_recovery.md",
+    "docs/ops/rehearse_file_store_restore.py",
+    "docs/ops/launch_checklist.md",
+    "docs/ops/product_acceptance.md",
+    "docs/IMPLEMENTATION_STATUS.md (rows §16.6, §18.3, §18.4, §19.3)",
+    "reports/ops_specs_20261017/"
+  ],
+  "rounds": [
+    {
+      "round": 1,
+      "thread_id": "01a14a64-d1e3-7b72-8c10-e41fec710a19",
+      "process_exit": 0,
+      "tokens_used": 137337,
+      "verdict": "BLOCKING",
+      "findings": [
+        "implementation_defect P1: rehearsal urlopen honours proxies (credential leak)",
+        "implementation_defect P2: rehearsal success gate too weak",
+        "implementation_defect P2: host shutdown/startup deadline not guaranteed",
+        "implementation_defect P2: --work exclusion missed other checkouts",
+        "implementation_defect P2: fallback validator ignored oneOf siblings",
+        "implementation_defect P2: source parser skipped rows without backticks",
+        "implementation_defect P2: EVENTS.md claimed CI reference validation",
+        "design_mismatch P2: B-2 reopened recruitment+shop switch scope",
+        "design_mismatch P2: target API 35 labelled confirmed noncompliance",
+        "implementation_defect P3: shop-route statement overbroad"
+      ]
+    },
+    {
+      "round": 2,
+      "thread_id": "01a14a6b-3eab-78c2-b646-f2d14723e30d",
+      "process_exit": 0,
+      "tokens_used": 112683,
+      "verdict": "NO_BLOCKING_DEFECT",
+      "resolved": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      "new_findings": ["implementation_defect LOW: README mutation count 15 vs 17 (fixed by Claude after the round)"]
+    }
+  ],
+  "not_rerun_by_reviewer": ["write-producing host rehearsal", "reference jsonschema validator", "CI wiring"],
+  "files_modified_by_codex": []
+}

@@ -1,0 +1,16 @@
+{
+  "c": "aila",
+  "key": "fig_victory_wait",
+  "path": "aila/images/char_aila_moment_victory_wait_v01.png",
+  "refs": [
+    "/Users/choi/Documents/Memory_forge/art/moments/aila/images/char_aila_moment_soft_v02.png"
+  ],
+  "pose": "Aila age23, preserve exact reference face/violet eyes/lavender silver braid/frost embroidered openback lavender white robe/detached wide sleeves/slit and heels. ONE silver bell lantern only, frame and bells SILVER. NO book, ledger, tea cup, desk, chair or extra handheld prop. Settled full-body three-quarter facing viewer, lantern steady at HER LEFT HIP in left hand, right empty hand lowered open naturally. Direct warm violet eye contact and small expectant private smile, feet still, one side left open for a companion. No repeated bell ringing or offering gesture.",
+  "prompt": "Use case: identity-preserve. Locked character design reference. Make ONE new non-explicit narrative RPG key-pose, 1024x1536 full length transparent PNG. Preserve adult identity, age, hairstyle, face, exact costume/colors and painterly anime cel style. All head, fingers, shoes and important props inside canvas. No scene background, haze, labels, panels, other people or erotic posing. Character acting and prop contact are the focus. Acting: Aila age23, preserve exact reference face/violet eyes/lavender silver braid/frost embroidered openback lavender white robe/detached wide sleeves/slit and heels. ONE silver bell lantern only, frame and bells SILVER. NO book, ledger, tea cup, desk, chair or extra handheld prop. Settled full-body three-quarter facing viewer, lantern steady at HER LEFT HIP in left hand, right empty hand lowered open naturally. Direct warm violet eye contact and small expectant private smile, feet still, one side left open for a companion. No repeated bell ringing or offering gesture.",
+  "error": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID 9e6b4c79-23e2-45ee-9ce0-391e8c896a54. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
+  "review": "real_constraint",
+  "previous_attempt": null,
+  "tool": "Codex built-in image_gen; subscription-included; no API fallback",
+  "backend_model": "not exposed by tool",
+  "selected": false
+}

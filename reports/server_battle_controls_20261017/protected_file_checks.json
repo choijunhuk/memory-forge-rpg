@@ -1,0 +1,17 @@
+{
+  "client/MemoryForgeUnity/ProjectSettings/EditorSettings.asset": {
+    "sha256": "691af7b61d75e5dce6b6e923c8f83c6e32d73959bdfa5fa42ff51b6dba97561a",
+    "expected_sha256": "691af7b61d75e5dce6b6e923c8f83c6e32d73959bdfa5fa42ff51b6dba97561a",
+    "unchanged": true
+  },
+  "client/MemoryForgeUnity/ProjectSettings/ProjectSettings.asset": {
+    "sha256": "21b8b9135d5f4c87ae2b49a14309719557cdd7f1977badd5d5f0bd07c12f6a83",
+    "expected_sha256": "21b8b9135d5f4c87ae2b49a14309719557cdd7f1977badd5d5f0bd07c12f6a83",
+    "unchanged": true
+  },
+  "tools/run_all_checks.sh": {
+    "sha256": "34f4b54447d4fdf6a1ced5cc3cb9076b505e81d4b292c78151ac91f79d4f7257",
+    "expected_sha256": "34f4b54447d4fdf6a1ced5cc3cb9076b505e81d4b292c78151ac91f79d4f7257",
+    "unchanged": true
+  }
+}

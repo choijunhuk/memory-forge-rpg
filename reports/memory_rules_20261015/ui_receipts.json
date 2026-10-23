@@ -1,0 +1,19 @@
+{
+  "at": "2026-10-15T05:49:46.694344+00:00",
+  "runs": [
+    {
+      "name": "memory",
+      "exit_code": 0,
+      "screenshots": 4,
+      "fresh_screens": "reports/memory_rules_20261015/memory_screens"
+    },
+    {
+      "name": "late",
+      "exit_code": 0,
+      "screenshots": 17,
+      "fresh_screens": "reports/memory_rules_20261015/late_screens"
+    }
+  ],
+  "historical_screens_byte_preserved": true,
+  "no_image_generation": true
+}

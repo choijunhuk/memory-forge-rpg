@@ -1,0 +1,16 @@
+{
+  "character": "ravien",
+  "key": "fig_lobby_soft",
+  "target": "ravien/images/char_ravien_fig_lobby_soft_styleA_v02.png",
+  "args": {
+    "prompt": "Use case: background-extraction. Preserve this ENTIRE clear-cel A adult character sprite exactly, including face/expression, every hair lock, hands, costume, prop/weapon geometry and full 1024x1536 framing. Change ONLY exterior transparency. Remove all faint remaining alpha haze from empty canvas and all four corners; every empty corner must be alpha exactly ZERO. Do not change the drawing or add background, floor, shadow, checkerboard or text. Preserve clean anti-aliasing at subject edges and genuinely transparent RGBA output.",
+    "referenced_image_paths": [
+      "/Users/choi/Documents/Memory_forge/art/moments/ravien/images/char_ravien_fig_lobby_soft_styleA_v01.png"
+    ],
+    "transparent_background": true
+  },
+  "cache_path": "/Users/choi/.codex/generated_images/01a14db0-4150-7f01-9240-82aaa185dd28/exec-1626150a-c089-4dbe-8f66-53013f9dee99.png",
+  "status": "ready",
+  "generation_status": "generated_pending_review",
+  "selected": true
+}

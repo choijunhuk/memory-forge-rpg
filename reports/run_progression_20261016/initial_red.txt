@@ -1,0 +1,33 @@
+✔ five fixed gen_traces inputs replay from a fresh Create through actual commands to DONE with complete states, returns and pure queries (1454.279917ms)
+✖ a newly earned AP bonus reaches only the next battle first turn, and begin-defeat closes through the normal finalizer (1.2185ms)
+✔ strict checks reject stale provenance, case identity, omission, forged outcomes, hashes, returns, coverage and query data (7415.661375ms)
+✔ gzip export is deterministic, rejects damaged containers, accepts other valid DEFLATE encodings and preserves output on unexpected execution (6203.310167ms)
+✔ checked-in artifact matches fresh actual JS execution and claims only the JS oracle scope (4008.650792ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 4
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 22767.150209
+
+✖ failing tests:
+
+test at engine/tests/run_progression_vectors.test.mjs:108:1
+✖ a newly earned AP bonus reaches only the next battle first turn, and begin-defeat closes through the normal finalizer (1.2185ms)
+  AssertionError [ERR_ASSERTION]: AP bonus must be earned in seed 2654 and independently in another seed: 2654
+      at TestContext.<anonymous> (file:///Users/choi/Documents/Memory_forge/engine/tests/run_progression_vectors.test.mjs:131:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

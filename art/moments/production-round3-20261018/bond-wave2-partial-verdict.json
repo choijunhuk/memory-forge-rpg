@@ -1,0 +1,14 @@
+{
+  "score": 93,
+  "verdict": "pass",
+  "category_match": true,
+  "differences": [
+    "Standalone bond poses contain small furniture/toy styling variations; continuous prop movement is unproduced."
+  ],
+  "suggestions": [],
+  "reasoning": "The returned seated soft and cat-offer key poses show the intended hand/prop relationship and preserve identity.",
+  "next_actions": [
+    "Inspect remaining queued output.",
+    "Continue victory sets."
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "scope": "exact prior held-part commit0623d61, not later battle UI work",
+  "runs": [
+    {
+      "conclusion": "success",
+      "databaseId": 39018616947,
+      "event": "pull_request",
+      "headSha": "0623d61bb1ee016b082281054bcd7165d8c01de2",
+      "startedAt": "2026-10-17T08:46:18Z",
+      "status": "completed",
+      "updatedAt": "2026-10-17T08:58:49Z",
+      "url": "https://github.com/choijunhuk/memory-forge-rpg/actions/runs/39018616947"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 39018612579,
+      "event": "push",
+      "headSha": "0623d61bb1ee016b082281054bcd7165d8c01de2",
+      "startedAt": "2026-10-17T08:46:14Z",
+      "status": "completed",
+      "updatedAt": "2026-10-17T09:07:13Z",
+      "url": "https://github.com/choijunhuk/memory-forge-rpg/actions/runs/39018612579"
+    }
+  ]
+}

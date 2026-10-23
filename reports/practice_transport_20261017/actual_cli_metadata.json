@@ -1,0 +1,46 @@
+{
+  "jobs": [
+    {
+      "task_id": "P1-PRACTICE-TRANSPORT-SOURCE-20261017",
+      "requestedModel": "claude-opus-5-5",
+      "requestedEffort": "xhigh",
+      "session_id": "cfcd60b9-d701-4abf-874b-b6915e50765e",
+      "process_exit": 0,
+      "status": "RECEIVED_UNVERIFIED",
+      "model_usage_keys": [
+        "claude-opus-5-5"
+      ],
+      "cli_version": "2.1.285 (Claude Code)",
+      "billing_account_matched": true,
+      "billing_verified_at": "2026-10-15T21:22:01.277612+00:00"
+    },
+    {
+      "task_id": "P1-PRACTICE-TRANSPORT-FIX-TEST-BATCH-20261017",
+      "requestedModel": "claude-opus-5-5",
+      "requestedEffort": "high",
+      "session_id": "cfcd60b9-d701-4abf-874b-b6915e50765e",
+      "process_exit": 0,
+      "status": "RECEIVED_UNVERIFIED",
+      "model_usage_keys": [
+        "claude-opus-5-5"
+      ],
+      "cli_version": "2.1.285 (Claude Code)",
+      "billing_account_matched": true,
+      "billing_verified_at": "2026-10-15T21:22:01.277612+00:00"
+    }
+  ],
+  "observed_assistant_effort_metadata": [
+    {
+      "effort": "xhigh",
+      "perTurnEffort": "xhigh",
+      "records": 69
+    },
+    {
+      "effort": "high",
+      "perTurnEffort": "high",
+      "records": 84
+    }
+  ],
+  "observed_utc": "2026-10-16T19:00:02.503752+00:00",
+  "scope": "CLI arguments and actual transcript scalar effort metadata; subscription attestation+auth/account match, no SDK token reuse"
+}

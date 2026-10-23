@@ -1,0 +1,30 @@
+{
+  "c": "sera",
+  "key": "expr_happy",
+  "path": "sera/images/char_sera_expr_happy_v01.png",
+  "refs": [
+    "/Users/choi/Documents/Memory_forge/art/moments/sera/images/char_sera_expr_neutral_v01.png"
+  ],
+  "common": "Use case: identity-preserve. Edit target is the supplied NEUTRAL master portrait, one adult dialogue expression. Keep EXACT same square canvas/framing, head angle/tilt, face proportions, iris colors, hairstyle, glasses/scar/ornaments, costume, lighting and true transparent alpha. Intended final 512x512. Change ONLY eyes/eyebrows/mouth and natural cheek muscles. No hands, props, extra face, text or panels. ",
+  "pose": "Sera, adult age24. Silver-white long hair, AMBER gold eyes, brass clock/star hair ornament, navy longcoat collar and black high-neck fitted suit. Calm precise presence. Expression HAPPY: A tiny dry knowing smile, one mouth corner just lifted, amber eyes quietly amused, no wink.",
+  "prompt": "Use case: identity-preserve. Edit target is the supplied NEUTRAL master portrait, one adult dialogue expression. Keep EXACT same square canvas/framing, head angle/tilt, face proportions, iris colors, hairstyle, glasses/scar/ornaments, costume, lighting and true transparent alpha. Intended final 512x512. Change ONLY eyes/eyebrows/mouth and natural cheek muscles. No hands, props, extra face, text or panels. Sera, adult age24. Silver-white long hair, AMBER gold eyes, brass clock/star hair ornament, navy longcoat collar and black high-neck fitted suit. Calm precise presence. Expression HAPPY: A tiny dry knowing smile, one mouth corner just lifted, amber eyes quietly amused, no wink.",
+  "source": "/Users/choi/.codex/generated_images/01a14d20-ffd5-7e81-9e47-85c1c8415e11/exec-a2c92c59-a7d4-4c8a-88e7-b6ecccdd288c.png",
+  "tool": "Codex built-in image_gen; subscription-included; no API fallback",
+  "review": "pass",
+  "previous_attempt": null,
+  "score": 94,
+  "review_notes": "Rendered output inspected beside its neutral master. Six readable adult expressions, stable face/eye/hair/glasses/scar/costume identity and framing. Only non-generative final resize remains.",
+  "backend_model": "not exposed by tool",
+  "selected": true,
+  "sha256": "db0a9c7430430b004ca8b7ca24890bfce2395a53d9312fe797563f72a49bbdd7",
+  "size": [
+    512,
+    512
+  ],
+  "mode": "RGBA",
+  "alpha_extrema": [
+    0,
+    255
+  ],
+  "postprocess": "sips -z 512 512; non-generative downsample only, alpha retained"
+}

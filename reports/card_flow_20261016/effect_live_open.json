@@ -1,0 +1,42 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"scene\":\"MemoryForgeExpedition\",\"confirmViaRealEventSystemRay\":true,\"picker\":true,\"offered\":[\"c7\",\"c1\",\"c13\",\"c2\"],\"independentEligible\":[\"c7\",\"c1\",\"c13\",\"c2\"],\"sourceRejected\":true,\"error\":\"PICK_INVALID\",\"wholeRunPure\":true,\"wholeStorePure\":true,\"ap\":4,\"version\":1,\"turn\":1,\"fixtureDefinitionsChanged\":false,\"physicalMouseTest\":false},\"compiler\":\"codedom\"}}"
+    }
+  ],
+  "structuredContent": {
+    "success": true,
+    "message": "Code executed successfully.",
+    "data": {
+      "result": {
+        "scene": "MemoryForgeExpedition",
+        "confirmViaRealEventSystemRay": true,
+        "picker": true,
+        "offered": [
+          "c7",
+          "c1",
+          "c13",
+          "c2"
+        ],
+        "independentEligible": [
+          "c7",
+          "c1",
+          "c13",
+          "c2"
+        ],
+        "sourceRejected": true,
+        "error": "PICK_INVALID",
+        "wholeRunPure": true,
+        "wholeStorePure": true,
+        "ap": 4,
+        "version": 1,
+        "turn": 1,
+        "fixtureDefinitionsChanged": false,
+        "physicalMouseTest": false
+      },
+      "compiler": "codedom"
+    }
+  },
+  "isError": false
+}

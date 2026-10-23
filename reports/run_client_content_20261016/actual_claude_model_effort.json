@@ -1,0 +1,11 @@
+{
+  "task": "P1-RUN-CLIENT-CONTENT",
+  "sessionId": "7ac2e4d1-bef6-4874-9e74-c799d39771e1",
+  "actualModels": {
+    "claude-opus-5-5": 124
+  },
+  "actualPerTurnEffort": {
+    "xhigh": 124
+  },
+  "rawReasoningCopied": false
+}

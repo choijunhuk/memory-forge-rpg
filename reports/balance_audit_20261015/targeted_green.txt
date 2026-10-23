@@ -1,0 +1,19 @@
+✔ tracing preserves battle result, input data, and prototype even on an error (43.037917ms)
+✔ independent aggregation and signed contributors reconcile all failed metrics (125.560375ms)
+✔ card reflection attribution uses actual HP loss and restores methods (4.421083ms)
+✔ phase counts both bars and six candidate normal encounters miss the preserved HP budget (1.511542ms)
+✔ atk stops later hits and effects after the fatal hit (4.351208ms)
+✔ atkdebuff stops later hits and effects after the fatal hit (1.758709ms)
+✔ a surviving party still receives every hit and the attack debuff (1.261666ms)
+✔ memory envelope survival permits the next hit before actual defeat stops the rest (1.0665ms)
+✔ sera ultimate damage does not trigger card-only reflect (4.811541ms)
+✔ lumi ultimate damage does not trigger card-only reflect (0.572708ms)
+✔ immediate and reserved card hits still trigger the unchanged reflect value (1.190625ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 281.956625

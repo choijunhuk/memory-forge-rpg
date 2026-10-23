@@ -1,0 +1,743 @@
+{
+  "status": "ACTUAL_JS_UNITY_REFERENCE",
+  "legacy": {
+    "setup": {
+      "party": [
+        {
+          "charId": "sera",
+          "level": 20
+        }
+      ],
+      "seed": 0
+    },
+    "party": [
+      {
+        "charId": "sera",
+        "level": 20,
+        "power4": 96,
+        "hp": 80,
+        "gearBps": 0,
+        "skillLv": 1,
+        "ultLv": 1
+      }
+    ],
+    "hp": 80,
+    "maxHp": 80,
+    "coins": 60,
+    "seqCard": 6,
+    "deck": [
+      {
+        "id": "sera_round",
+        "key": "k1",
+        "owner": "sera",
+        "assigned": null
+      },
+      {
+        "id": "sera_cover",
+        "key": "k2",
+        "owner": "sera",
+        "assigned": null
+      },
+      {
+        "id": "sera_aim",
+        "key": "k3",
+        "owner": "sera",
+        "assigned": null
+      },
+      {
+        "id": "sera_timed",
+        "key": "k4",
+        "owner": "sera",
+        "assigned": null
+      },
+      {
+        "id": "com_guard",
+        "assigned": "sera",
+        "key": "k5",
+        "owner": "common"
+      },
+      {
+        "id": "wc_basic_ranged",
+        "key": "k6",
+        "owner": "weapon",
+        "wielder": "sera",
+        "weapon": true
+      }
+    ],
+    "rng": [
+      4058753769,
+      2789522146,
+      1627861374,
+      3282270325
+    ],
+    "available": [
+      "z1f0n0",
+      "z1f0n1",
+      "z1f0n2"
+    ],
+    "map": {
+      "zone": 1,
+      "floors": [
+        [
+          {
+            "id": "z1f0n0",
+            "f": 0,
+            "i": 0,
+            "type": "battle",
+            "next": [
+              "z1f1n0"
+            ]
+          },
+          {
+            "id": "z1f0n1",
+            "f": 0,
+            "i": 1,
+            "type": "battle",
+            "next": [
+              "z1f1n1"
+            ]
+          },
+          {
+            "id": "z1f0n2",
+            "f": 0,
+            "i": 2,
+            "type": "battle",
+            "next": [
+              "z1f1n2"
+            ]
+          }
+        ],
+        [
+          {
+            "id": "z1f1n0",
+            "f": 1,
+            "i": 0,
+            "type": "event",
+            "next": [
+              "z1f2n0"
+            ]
+          },
+          {
+            "id": "z1f1n1",
+            "f": 1,
+            "i": 1,
+            "type": "battle",
+            "next": [
+              "z1f2n1"
+            ]
+          },
+          {
+            "id": "z1f1n2",
+            "f": 1,
+            "i": 2,
+            "type": "battle",
+            "next": [
+              "z1f2n1",
+              "z1f2n0"
+            ]
+          }
+        ],
+        [
+          {
+            "id": "z1f2n0",
+            "f": 2,
+            "i": 0,
+            "type": "battle",
+            "next": [
+              "z1f3n0"
+            ]
+          },
+          {
+            "id": "z1f2n1",
+            "f": 2,
+            "i": 1,
+            "type": "battle",
+            "next": [
+              "z1f3n1"
+            ]
+          }
+        ],
+        [
+          {
+            "id": "z1f3n0",
+            "f": 3,
+            "i": 0,
+            "type": "rest",
+            "next": [
+              "z1f4n0"
+            ]
+          },
+          {
+            "id": "z1f3n1",
+            "f": 3,
+            "i": 1,
+            "type": "battle",
+            "next": [
+              "z1f4n1"
+            ]
+          }
+        ],
+        [
+          {
+            "id": "z1f4n0",
+            "f": 4,
+            "i": 0,
+            "type": "battle",
+            "next": [
+              "z1f5n0"
+            ]
+          },
+          {
+            "id": "z1f4n1",
+            "f": 4,
+            "i": 1,
+            "type": "battle",
+            "next": [
+              "z1f5n1"
+            ]
+          }
+        ],
+        [
+          {
+            "id": "z1f5n0",
+            "f": 5,
+            "i": 0,
+            "type": "elite",
+            "next": [
+              "z1f6n0"
+            ]
+          },
+          {
+            "id": "z1f5n1",
+            "f": 5,
+            "i": 1,
+            "type": "battle",
+            "next": [
+              "z1f6n1",
+              "z1f6n0"
+            ]
+          }
+        ],
+        [
+          {
+            "id": "z1f6n0",
+            "f": 6,
+            "i": 0,
+            "type": "rest",
+            "next": [
+              "z1boss"
+            ]
+          },
+          {
+            "id": "z1f6n1",
+            "f": 6,
+            "i": 1,
+            "type": "forge",
+            "next": [
+              "z1boss"
+            ]
+          }
+        ]
+      ],
+      "boss": {
+        "id": "z1boss",
+        "type": "boss",
+        "f": 7,
+        "i": 0
+      }
+    }
+  },
+  "v2": {
+    "setup": {
+      "party": [
+        {
+          "charId": "sera"
+        }
+      ],
+      "memoryPolicy": "v2",
+      "runId": "unity",
+      "memoryVersion": 4,
+      "useMemory": false,
+      "memory": {
+        "sera": [
+          {
+            "id": "sera_round",
+            "key": "run:unity:1"
+          },
+          {
+            "id": "sera_cover",
+            "key": "base:sera:1"
+          },
+          {
+            "id": "sera_aim",
+            "key": "base:sera:2"
+          },
+          {
+            "id": "sera_timed",
+            "key": "base:sera:3"
+          },
+          {
+            "id": "com_guard",
+            "assigned": "sera",
+            "key": "base:sera:4"
+          }
+        ]
+      },
+      "seed": 0
+    },
+    "hp": 81,
+    "seqCard": 3,
+    "deck": [
+      {
+        "id": "sera_round",
+        "key": "run:unity:2",
+        "owner": "sera",
+        "assigned": null
+      },
+      {
+        "id": "sera_cover",
+        "key": "base:sera:1",
+        "owner": "sera",
+        "assigned": null
+      },
+      {
+        "id": "sera_aim",
+        "key": "base:sera:2",
+        "owner": "sera",
+        "assigned": null
+      },
+      {
+        "id": "sera_timed",
+        "key": "base:sera:3",
+        "owner": "sera",
+        "assigned": null
+      },
+      {
+        "id": "com_guard",
+        "assigned": "sera",
+        "key": "base:sera:4",
+        "owner": "common"
+      },
+      {
+        "id": "wc_basic_ranged",
+        "key": "run:unity:3",
+        "owner": "weapon",
+        "wielder": "sera",
+        "weapon": true
+      }
+    ],
+    "memoryBefore": {
+      "sera": [
+        {
+          "id": "sera_round",
+          "key": "run:unity:1"
+        },
+        {
+          "id": "sera_cover",
+          "key": "base:sera:1"
+        },
+        {
+          "id": "sera_aim",
+          "key": "base:sera:2"
+        },
+        {
+          "id": "sera_timed",
+          "key": "base:sera:3"
+        },
+        {
+          "id": "com_guard",
+          "assigned": "sera",
+          "key": "base:sera:4"
+        }
+      ]
+    },
+    "memoryBaseline": {
+      "sera": [
+        {
+          "id": "sera_round",
+          "key": "base:sera:0"
+        },
+        {
+          "id": "sera_cover",
+          "key": "base:sera:1"
+        },
+        {
+          "id": "sera_aim",
+          "key": "base:sera:2"
+        },
+        {
+          "id": "sera_timed",
+          "key": "base:sera:3"
+        },
+        {
+          "id": "com_guard",
+          "assigned": "sera",
+          "key": "base:sera:4"
+        }
+      ]
+    },
+    "playBefore": {
+      "sera": [
+        {
+          "key": "run:unity:2",
+          "id": "sera_round"
+        },
+        {
+          "key": "base:sera:1",
+          "id": "sera_cover"
+        },
+        {
+          "key": "base:sera:2",
+          "id": "sera_aim"
+        },
+        {
+          "key": "base:sera:3",
+          "id": "sera_timed"
+        },
+        {
+          "key": "base:sera:4",
+          "id": "com_guard",
+          "assigned": "sera"
+        }
+      ]
+    },
+    "runId": "unity",
+    "memoryVersion": 4,
+    "rng": [
+      4058753769,
+      2789522146,
+      1627861374,
+      3282270325
+    ]
+  },
+  "authored": {
+    "character": {
+      "id": "sera",
+      "name": "세라",
+      "en": "Sera",
+      "rarity": "SSR",
+      "pool": "standard",
+      "attr": "volt",
+      "weapon": "ranged",
+      "role": "예약 폭발 딜러",
+      "archetype": "A 시간 예약",
+      "age": 24,
+      "tier": "adult",
+      "oneLine": "미래의 한 발을 먼저 쏘아 두는 시간 저격수.",
+      "personality": "침착하고 건조한 농담을 한다. 미래는 보이는데 자기 과거는 군데군데 비어 있다.",
+      "storyHook": "사라진 기억 한 칸에 \"쏘지 못한 한 발\"이 남아 있다.",
+      "passive": {
+        "id": "sera_foresight",
+        "name": "선견",
+        "params": {
+          "bps": 2500
+        },
+        "text": "세라의 예약 공격이 균열 상태인 적에게 명중하면 피해 +25%."
+      },
+      "ult": {
+        "name": "시간 관통탄",
+        "eff": [
+          {
+            "op": "dmg",
+            "v": 28,
+            "brk": 4,
+            "pierce": 3000
+          },
+          {
+            "op": "slot",
+            "next": 1,
+            "after": 0
+          }
+        ],
+        "text": "적 1명에게 피해 28(관통 30%, 균열 4). 이번 턴 다음 턴 예약 칸 +1."
+      },
+      "resonance": [
+        {
+          "n": 1,
+          "text": "유리탄이 예약으로 해결되면 카드 1장 뽑기(턴당 1회).",
+          "fx": {
+            "type": "hook",
+            "id": "sera_r1"
+          }
+        },
+        {
+          "n": 2,
+          "text": "선견 보너스 +25% → +40%.",
+          "fx": {
+            "type": "passiveParam",
+            "param": "bps",
+            "value": 4000
+          }
+        },
+        {
+          "n": 3,
+          "text": "고유 카드 스킬 레벨 +2(피해·방어 ×1.08).",
+          "fx": {
+            "type": "skillLv",
+            "delta": 2
+          }
+        },
+        {
+          "n": 4,
+          "text": "시한 포격 균열 +2. 기억 용량 +1.",
+          "fx": {
+            "type": "multi",
+            "list": [
+              {
+                "type": "cardMod",
+                "cards": [
+                  "sera_timed"
+                ],
+                "prop": "brk",
+                "add": 2
+              },
+              {
+                "type": "capacity",
+                "n": 1
+              }
+            ]
+          }
+        },
+        {
+          "n": 5,
+          "text": "필살기 레벨 +2(필살기 수치 ×1.08).",
+          "fx": {
+            "type": "ultLv",
+            "delta": 2
+          }
+        },
+        {
+          "n": 6,
+          "text": "필살기를 쓴 다음 턴 시작에 해결되는 세라의 예약 공격 피해 +50%.",
+          "fx": {
+            "type": "hook",
+            "id": "sera_r6"
+          }
+        }
+      ],
+      "visual": {
+        "height": 170,
+        "build": "늘씬한 성인 체형",
+        "hair": "긴 은백색 머리, 낮게 묶은 포니테일",
+        "eyes": "시계 바늘 무늬가 비치는 호박색 눈",
+        "outfit": "몸에 붙는 검은 바디수트 위에 앞을 연 황동 톱니 장식 남색 롱코트, 허벅지 홀스터, 손가락 없는 장갑",
+        "weapon": "모래시계 약실이 달린 장거리 저격총",
+        "motif": "모래시계·시계 바늘",
+        "palette": [
+          "#1d2b4f",
+          "#d9dde6",
+          "#ffd84d"
+        ],
+        "expression": "차분하고 조용한 미소"
+      },
+      "voice": "낮고 또렷한 톤, 짧은 문장"
+    },
+    "weapon": {
+      "id": "w_basic_ranged",
+      "name": "훈련용 권총",
+      "type": "ranged",
+      "rarity": "R",
+      "pool": "craft",
+      "passive": {
+        "id": "w_none",
+        "name": "-",
+        "values": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "scope": "wielder",
+        "text": "패시브 없음(제련핵으로 정련 시 피해·방어 +{v}%).",
+        "refineAlt": [
+          0,
+          300,
+          600,
+          900,
+          1200
+        ]
+      },
+      "card": "wc_basic_ranged"
+    },
+    "cards": [
+      {
+        "id": "sera_round",
+        "name": "유리탄",
+        "owner": "sera",
+        "rar": "B",
+        "cost": 1,
+        "type": "atk",
+        "res": "y",
+        "eff": [
+          {
+            "op": "dmg",
+            "v": 8,
+            "rv": 12
+          }
+        ],
+        "kw": [],
+        "flavor": "깨지기 쉬운 탄환일수록 정확해야 한다.",
+        "start": true,
+        "attr": "volt"
+      },
+      {
+        "id": "sera_cover",
+        "name": "엄폐 사격",
+        "owner": "sera",
+        "rar": "B",
+        "cost": 1,
+        "type": "atk",
+        "res": "y",
+        "eff": [
+          {
+            "op": "blk",
+            "v": 5,
+            "rv": 7
+          },
+          {
+            "op": "dmg",
+            "v": 4,
+            "rv": 6
+          }
+        ],
+        "kw": [],
+        "start": true,
+        "attr": "volt"
+      },
+      {
+        "id": "sera_aim",
+        "name": "정조준",
+        "owner": "sera",
+        "rar": "B",
+        "cost": 1,
+        "type": "skl",
+        "res": "y",
+        "eff": [
+          {
+            "op": "buff",
+            "s": "charge",
+            "n": 4000,
+            "turns": 2
+          }
+        ],
+        "kw": [],
+        "start": true,
+        "attr": "volt"
+      },
+      {
+        "id": "sera_timed",
+        "name": "시한 포격",
+        "owner": "sera",
+        "rar": "A",
+        "cost": 2,
+        "type": "atk",
+        "res": "o",
+        "eff": [
+          {
+            "op": "dmg",
+            "v": 16,
+            "rv": 22,
+            "ra": 30,
+            "brk": 3
+          }
+        ],
+        "kw": [],
+        "flavor": "기다린 만큼 무거워지는 탄.",
+        "start": true,
+        "attr": "volt"
+      },
+      {
+        "id": "com_guard",
+        "name": "기본 방어",
+        "owner": "common",
+        "rar": "B",
+        "cost": 1,
+        "type": "skl",
+        "res": "y",
+        "eff": [
+          {
+            "op": "blk",
+            "v": 6,
+            "rv": 9
+          }
+        ],
+        "kw": [],
+        "attr": "none"
+      },
+      {
+        "id": "wc_basic_ranged",
+        "name": "권총 사격",
+        "owner": "weapon",
+        "rar": "B",
+        "cost": 1,
+        "type": "atk",
+        "res": "y",
+        "eff": [
+          {
+            "op": "dmg",
+            "v": 7,
+            "rv": 10
+          }
+        ],
+        "kw": [],
+        "attr": "wielder"
+      }
+    ],
+    "zone1": {
+      "normal": [
+        [
+          "e_moth",
+          "e_moth"
+        ],
+        [
+          "e_cog",
+          "e_smudge"
+        ],
+        [
+          "e_hound"
+        ],
+        [
+          "e_lantern",
+          "e_page",
+          "e_page"
+        ],
+        [
+          "e_cog",
+          "e_page"
+        ],
+        [
+          "e_smudge",
+          "e_smudge",
+          "e_moth"
+        ],
+        [
+          "e_hound",
+          "e_page"
+        ]
+      ],
+      "elite": [
+        [
+          "e_bellwarden"
+        ],
+        [
+          "e_mirrorclerk"
+        ],
+        [
+          "e_gardener"
+        ]
+      ],
+      "boss": [
+        [
+          "b_bell"
+        ],
+        [
+          "b_notary"
+        ],
+        [
+          "b_garden"
+        ]
+      ]
+    }
+  }
+}

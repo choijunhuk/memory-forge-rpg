@@ -1,0 +1,16 @@
+{
+  "result": "Succeeded",
+  "errors": 0,
+  "warnings": 0,
+  "bytes": 267455222,
+  "seconds": 13.0560206,
+  "scenePaths": [
+    "Assets/Scenes/MemoryForgeExpedition.unity",
+    "Assets/Scenes/MemoryForgeBattle.unity",
+    "Assets/Scenes/SampleScene.unity"
+  ],
+  "diagnosticOnly": true,
+  "outputPath": "/Users/choi/Documents/Memory_forge/ops/ai/local/builds/MemoryForgeExpedition-InputProbe-20261016.app",
+  "sourceSha256": "7e90cf39e8e3381f06834f18868952693d3a4dea3bad181cb128971e045f64fb",
+  "shippedProductionFeature": false
+}

@@ -1,0 +1,32 @@
+{
+  "reviewer": "Codex native subagent opening_core_review",
+  "model": "gpt-6.1-sol",
+  "reasoning": "max",
+  "verdict": "APPROVE_AFTER_REPAIR",
+  "scope": "Core source only; builds/host adapter/Unity not run by review lane",
+  "findings": [
+    {
+      "severity": "P2",
+      "issue": "Authored +2 resonance silently wraps accepted int.MaxValue skill/ultimate levels",
+      "source": "engine/rules-core.js:273-276,304-305; original16.2",
+      "repair": "Widen actor state levels to long with checked additions; accepted setup remains int",
+      "verification": "2 fresh accepted-input tests return2147483649 and actual begin PLAYER"
+    },
+    {
+      "severity": "P2",
+      "issue": "Rounded negative enemy HP narrows before lower bound",
+      "source": "engine/rules-core.js:326",
+      "repair": "Round in BigInteger, clamp to1, then narrow; oversized positive outputs explicit rule error before commit",
+      "verification": "Authored b_bell+int.MinValue difficulty yieldsHP1 andbegin PLAYER; positive oversizedenemyHP/block explicitreject androllback"
+    }
+  ],
+  "limits": [
+    "Typed Int32 output limit except actor levels, fractional request numbers unsupported",
+    "Inherited Object.prototype receipt IDs are a separate pre-existing JS reference defect, safely handled by C# Dictionary",
+    "Full Battle/Run and device acceptance remain unimplemented"
+  ],
+  "post_repair_hashes": {
+    "Battle.cs": "7e780cf4edb6c5eed1ca39678015f03943ef404b18a2cb52608df4b2090dc187",
+    "BattleState.cs": "6a2e41b57c617e2ab408eeafbe11f2e77ec6f80fb901c199aa5a278f32c2bfe3"
+  }
+}

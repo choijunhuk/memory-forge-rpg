@@ -1,0 +1,26 @@
+{
+  "scope": "P1 live-zone and P2 lazy-picks fixes; native source-only re-review APPROVE; final full oracle/opposite-AI review pending",
+  "files": [
+    {
+      "path": "core/MemoryForge.Core/Battle.cs",
+      "sha256": "4fdd520997b1965796ae6218f8c280d550109d8ce7ebacf1f39756b16fd5cd2e"
+    },
+    {
+      "path": "core/MemoryForge.Core/BattleState.cs",
+      "sha256": "bdc58054e3edcccf5fcc5f6ad6f43adb8548ad32c6d97491f50920627ec033c0"
+    },
+    {
+      "path": "core/MemoryForge.Core/Battle.PlayerActions.cs",
+      "sha256": "28e8bbdd8e149bc2eed1924ea3c1a8cc8403a2317c235dfaf3e0769acd688e41"
+    },
+    {
+      "path": "core/MemoryForge.Core/Battle.Effects.cs",
+      "sha256": "b2a59ace543623b62de2020466ec56c4db8cb4e85954de23d19649ddfc9373bb"
+    },
+    {
+      "path": "core/MemoryForge.Core/ReservationBook.cs",
+      "sha256": "49ca7cec199e4951ac7ecc9075f8238a64977c7e9131e9784c764530f0a4e23e"
+    }
+  ],
+  "oldSourcesPreservedPrivately": true
+}

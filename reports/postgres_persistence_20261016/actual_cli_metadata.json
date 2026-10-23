@@ -1,0 +1,19 @@
+{
+  "task": "P1-POSTGRES-TRANSACTIONAL-PRACTICE",
+  "session_id": "a1d7a222-69d8-4b5b-8137-fdcd8d5e2b39",
+  "actual_models": [
+    "claude-opus-5-5"
+  ],
+  "actual_per_turn_efforts": [
+    "max"
+  ],
+  "positive_output_records": 81,
+  "first_output": "2026-10-16T12:02:14.407Z",
+  "last_output": "2026-10-16T12:21:10.546Z",
+  "official_exit": 1,
+  "official_status": "FAILED",
+  "actual_stop": "included subscription session limit; no further Claude call or paid fallback",
+  "author_execution": "NOT_RUN",
+  "billing_account_matched": true,
+  "billing_evidence_kind": "account UI attestation, not server enforcement"
+}

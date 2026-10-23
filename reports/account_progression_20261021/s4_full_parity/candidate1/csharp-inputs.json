@@ -1,0 +1,8 @@
+{
+  "sourceRoot": "/Users/choi/.codex/worktrees/memoryforge-followup/Memory_forge",
+  "sourceManifestSha256": "44e19ab66f155b5624182cb8d2cade23b0f41ec90283e722b6cb1421a4df4a86",
+  "sourceFiles": 61,
+  "coreDllPath": "/Users/choi/.codex/worktrees/memoryforge-followup/Memory_forge/ops/ai/local/dotnet-artifacts/bin/MemoryForge.Core/debug/MemoryForge.Core.dll",
+  "coreDllSha256": "65bc74a134ee00da95c73d91e19fe8b42f855f9c8a81462b8959f9f745b801b8",
+  "coreBuildByThisTask": "NOT_RUN"
+}

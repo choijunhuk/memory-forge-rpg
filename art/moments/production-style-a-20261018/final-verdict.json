@@ -1,0 +1,13 @@
+{
+  "score": 94,
+  "verdict": "pass",
+  "category_match": true,
+  "differences": [
+    "Minor ornamental/embroidery line variation remains; continuous motion and live Unity framing are outside this source-only acceptance."
+  ],
+  "suggestions": [
+    "Keep STYLE-GUIDE.md and selected-assets.json as the next production reference.",
+    "Perform byte-preserving import and separate live acceptance when that implementation work is authorized."
+  ],
+  "reasoning": "All 128 selected PNGs and 130 image mappings are complete: 84 figures, 8 opaque backgrounds and 36 transparent 512x512 expressions. All required continuity corrections, source references/alpha checks, narrative preservation, frame order and 124 historical PNG/APNG hashes pass."
+}

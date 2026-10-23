@@ -1,0 +1,17 @@
+{
+  "score": 92,
+  "verdict": "pass",
+  "category_match": true,
+  "differences": [
+    "전신의 모자·땋은 머리·탐정 도구를 SD 비율로 유지"
+  ],
+  "suggestions": [
+    "실제 작은 HUD의 가장자리·명암 수용"
+  ],
+  "reasoning": "카야의 식별 요소와 전신 원본 배색을 보존하고 얼굴·도구가 작은 칸에 맞게 강조됐다.",
+  "iteration": 6,
+  "threshold_pass": true,
+  "next_actions": [
+    "Unity/PC 실제 화면 수용"
+  ]
+}

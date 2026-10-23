@@ -1,0 +1,28 @@
+{
+  "c": "harin",
+  "key": "fig_victory",
+  "path": "harin/images/char_harin_shield_open_relief_v01.png",
+  "refs": [
+    "/Users/choi/Documents/Memory_forge/art/moments/harin/images/char_harin_stand_neutral_v01.png"
+  ],
+  "pose": "Harin age26, exact reference design and muscular adult proportions. Full grounded three-quarter figure, immense white/navy/brass shield now moved OUTWARD at image left and supported upright by her right gauntlet hand. LEFT gloved hand gently OPEN toward viewer at waist height, natural fingers, offering the space BESIDE her, not behind her. Grayblue eyes meet viewer, tiny private relief and reluctant shy smile. Feet angled to walk beside a companion; one navy cape settled, white combat trousers, exposed shoulders/waist unchanged. No cat in hand.",
+  "prompt": "Use case: identity-preserve. Locked character design reference. Make ONE new non-explicit narrative RPG key-pose, 1024x1536 full length transparent PNG. Preserve adult identity, age, hairstyle, face, exact costume/colors and painterly anime cel style. All head, fingers, shoes and important props inside canvas. No scene background, haze, labels, panels, other people or erotic posing. Character acting and prop contact are the focus. Acting: Harin age26, exact reference design and muscular adult proportions. Full grounded three-quarter figure, immense white/navy/brass shield now moved OUTWARD at image left and supported upright by her right gauntlet hand. LEFT gloved hand gently OPEN toward viewer at waist height, natural fingers, offering the space BESIDE her, not behind her. Grayblue eyes meet viewer, tiny private relief and reluctant shy smile. Feet angled to walk beside a companion; one navy cape settled, white combat trousers, exposed shoulders/waist unchanged. No cat in hand.",
+  "source": "/Users/choi/.codex/generated_images/01a14d20-ffd5-7e81-9e47-85c1c8415e11/exec-7705b0cb-69e1-43c6-863f-af3a7f7f0622.png",
+  "tool": "Codex built-in image_gen; subscription-included; no API fallback",
+  "review": "pass",
+  "previous_attempt": null,
+  "score": 93,
+  "review_notes": "Rendered output inspected against design/source narrative. Face, age, outfit, primary hand/prop state and grounded support match the key-pose. No rig or live playback acceptance.",
+  "backend_model": "not exposed by tool",
+  "selected": true,
+  "sha256": "dbb9d90a5714da4e0156cde5b90177b3e50f51f897136b19362599267f9e3aea",
+  "size": [
+    1024,
+    1536
+  ],
+  "mode": "RGBA",
+  "alpha_extrema": [
+    0,
+    254
+  ]
+}

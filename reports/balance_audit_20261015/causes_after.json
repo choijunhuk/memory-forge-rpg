@@ -1,0 +1,7210 @@
+{
+  "method": {
+    "scenarios": 440,
+    "trials": 1320,
+    "replay": "all trials; unchanged fight and policy",
+    "hpAccounting": "actual post-begin loss minus actual post-begin healing",
+    "contributions": "signed group weight times distance from target boundary; sums to metric deviation"
+  },
+  "failedMetrics": 32,
+  "failed": [
+    {
+      "key": "1/normal/greedy",
+      "metric": "hpLossPct",
+      "status": "below",
+      "value": 3.7624926513815393,
+      "boundary": 4,
+      "deviation": 0.23750734861846068,
+      "contributions": [
+        {
+          "group": "1/normal/e_hound/greedy",
+          "attempts": 10,
+          "mean": 1.4814814814814814,
+          "weight": 0.14285714285714285,
+          "signedContribution": 0.35978835978835977,
+          "traceTotals": {
+            "grossLoss": 39,
+            "healing": 3,
+            "lossBySource": {
+              "enemy": 33,
+              "overload": 6
+            },
+            "lossByEnemy": {
+              "e_hound": 33
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 82,
+              "resolved": 82,
+              "dmg": 39,
+              "block": 37,
+              "hit": 12,
+              "hpLoss": 8,
+              "turn": 10,
+              "kill": 10,
+              "end": 10,
+              "loan": 1,
+              "exhaust": 4,
+              "restraintBroken": 2,
+              "repay": 1,
+              "status": 5,
+              "heal": 7,
+              "grow": 1,
+              "break": 3,
+              "tune": 1,
+              "reshuffle": 1
+            },
+            "eventAmounts": {},
+            "plays": {
+              "now": 82
+            }
+          }
+        },
+        {
+          "group": "1/normal/e_cog+e_page/greedy",
+          "attempts": 10,
+          "mean": 1.6872427983539093,
+          "weight": 0.14285714285714285,
+          "signedContribution": 0.33039388594944147,
+          "traceTotals": {
+            "grossLoss": 75,
+            "healing": 34,
+            "lossBySource": {
+              "overload": 15,
+              "enemy": 60
+            },
+            "lossByEnemy": {
+              "e_cog": 60
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 164,
+              "loan": 3,
+              "exhaust": 12,
+              "resolved": 164,
+              "dmg": 72,
+              "block": 79,
+              "kill": 20,
+              "status": 6,
+              "repay": 3,
+              "turn": 27,
+              "hpLoss": 16,
+              "hit": 22,
+              "break": 6,
+              "end": 10,
+              "heal": 18,
+              "reshuffle": 4,
+              "tune": 2,
+              "restraintBroken": 4,
+              "ult": 2,
+              "grow": 3
+            },
+            "eventAmounts": {},
+            "plays": {
+              "now": 164
+            }
+          }
+        },
+        {
+          "group": "1/normal/e_cog+e_smudge/greedy",
+          "attempts": 10,
+          "mean": 3.621399176954733,
+          "weight": 0.14285714285714285,
+          "signedContribution": 0.05408583186360958,
+          "traceTotals": {
+            "grossLoss": 103,
+            "healing": 15,
+            "lossBySource": {
+              "overload": 12,
+              "enemy": 91
+            },
+            "lossByEnemy": {
+              "e_cog": 91
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 152,
+              "block": 67,
+              "resolved": 152,
+              "dmg": 66,
+              "insert": 7,
+              "turn": 25,
+              "hpLoss": 14,
+              "kill": 20,
+              "heal": 10,
+              "hit": 13,
+              "break": 6,
+              "end": 10,
+              "exhaust": 14,
+              "grow": 2,
+              "status": 6,
+              "tune": 3,
+              "restraintBroken": 2,
+              "loan": 4,
+              "repay": 4,
+              "reshuffle": 4,
+              "stunSkip": 1,
+              "reserve": 1,
+              "restraintKept": 1
+            },
+            "eventAmounts": {},
+            "plays": {
+              "now": 151,
+              "next": 1
+            }
+          }
+        },
+        {
+          "group": "1/normal/e_lantern+e_page+e_page/greedy",
+          "attempts": 10,
+          "mean": 4.156378600823045,
+          "weight": 0.14285714285714285,
+          "signedContribution": -0.022339800117577822,
+          "traceTotals": {
+            "grossLoss": 137,
+            "healing": 36,
+            "lossBySource": {
+              "overload": 12,
+              "enemy": 125
+            },
+            "lossByEnemy": {
+              "e_lantern": 59,
+              "e_page": 66
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 183,
+              "status": 8,
+              "block": 71,
+              "resolved": 183,
+              "hpLoss": 23,
+              "dmg": 85,
+              "kill": 30,
+              "partyDebuff": 13,
+              "turn": 31,
+              "exhaust": 16,
+              "break": 9,
+              "end": 10,
+              "heal": 15,
+              "hit": 28,
+              "enemyHeal": 6,
+              "reshuffle": 8,
+              "tune": 5,
+              "loan": 1,
+              "restraintBroken": 2,
+              "repay": 1,
+              "grow": 2,
+              "stunSkip": 2
+            },
+            "eventAmounts": {},
+            "plays": {
+              "now": 183
+            }
+          }
+        },
+        {
+          "group": "1/normal/e_moth+e_moth/greedy",
+          "attempts": 10,
+          "mean": 4.444444444444445,
+          "weight": 0.14285714285714285,
+          "signedContribution": -0.06349206349206352,
+          "traceTotals": {
+            "grossLoss": 120,
+            "healing": 12,
+            "lossBySource": {
+              "enemy": 117,
+              "overload": 3
+            },
+            "lossByEnemy": {
+              "e_moth": 117
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 132,
+              "dmg": 64,
+              "resolved": 132,
+              "block": 59,
+              "heal": 8,
+              "kill": 20,
+              "hit": 34,
+              "turn": 21,
+              "tune": 1,
+              "end": 10,
+              "grow": 4,
+              "exhaust": 8,
+              "hpLoss": 21,
+              "break": 6,
+              "status": 5,
+              "reshuffle": 3,
+              "stunSkip": 1,
+              "loan": 2,
+              "repay": 2,
+              "restraintBroken": 2
+            },
+            "eventAmounts": {},
+            "plays": {
+              "now": 132
+            }
+          }
+        },
+        {
+          "group": "1/normal/e_hound+e_page/greedy",
+          "attempts": 10,
+          "mean": 4.8559670781893,
+          "weight": 0.14285714285714285,
+          "signedContribution": -0.1222810111699,
+          "traceTotals": {
+            "grossLoss": 127,
+            "healing": 9,
+            "lossBySource": {
+              "enemy": 121,
+              "overload": 6
+            },
+            "lossByEnemy": {
+              "e_hound": 107,
+              "e_page": 14
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 140,
+              "block": 52,
+              "resolved": 140,
+              "heal": 6,
+              "dmg": 58,
+              "kill": 20,
+              "hit": 27,
+              "turn": 20,
+              "status": 9,
+              "loan": 3,
+              "exhaust": 7,
+              "hpLoss": 19,
+              "repay": 2,
+              "tune": 4,
+              "restraintBroken": 4,
+              "reshuffle": 3,
+              "break": 4,
+              "stunSkip": 2,
+              "end": 10,
+              "restraintKept": 1
+            },
+            "eventAmounts": {},
+            "plays": {
+              "now": 140
+            }
+          }
+        },
+        {
+          "group": "1/normal/e_smudge+e_smudge+e_moth/greedy",
+          "attempts": 10,
+          "mean": 6.090534979423868,
+          "weight": 0.14285714285714285,
+          "signedContribution": -0.2986478542034097,
+          "traceTotals": {
+            "grossLoss": 165,
+            "healing": 17,
+            "lossBySource": {
+              "enemy": 159,
+              "overload": 6
+            },
+            "lossByEnemy": {
+              "e_moth": 136,
+              "e_smudge": 23
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 177,
+              "block": 73,
+              "resolved": 177,
+              "dmg": 87,
+              "insert": 14,
+              "hit": 38,
+              "turn": 29,
+              "status": 12,
+              "tune": 4,
+              "kill": 30,
+              "exhaust": 16,
+              "hpLoss": 29,
+              "reshuffle": 6,
+              "end": 10,
+              "grow": 2,
+              "break": 8,
+              "heal": 9,
+              "loan": 2,
+              "restraintBroken": 1,
+              "repay": 2,
+              "stunSkip": 2
+            },
+            "eventAmounts": {},
+            "plays": {
+              "now": 177
+            }
+          }
+        }
+      ],
+      "representative": {
+        "scenarioKey": "1/normal/e_moth+e_moth/0",
+        "policy": "greedy",
+        "outcome": "win",
+        "turns": 3,
+        "hpLossPct": 0,
+        "trace": {
+          "grossLoss": 0,
+          "healing": 0,
+          "lossBySource": {},
+          "lossByEnemy": {},
+          "reflectionByAction": {
+            "card": 0,
+            "ultimate": 0
+          },
+          "events": {
+            "play": 15,
+            "dmg": 5,
+            "resolved": 15,
+            "block": 8,
+            "heal": 2,
+            "kill": 2,
+            "hit": 3,
+            "turn": 2,
+            "tune": 1,
+            "end": 1
+          },
+          "eventAmounts": {},
+          "plays": {
+            "now": 15
+          }
+        }
+      }
+    },
+    {
+      "key": "1/normal/planner",
+      "metric": "hpLossPct",
+      "status": "below",
+      "value": 3.897707231040563,
+      "boundary": 4,
+      "deviation": 0.10229276895943684,
+      "contributions": [
+        {
+          "group": "1/normal/e_hound/planner",
+          "attempts": 10,
+          "mean": 1.4814814814814814,
+          "weight": 0.14285714285714285,
+          "signedContribution": 0.35978835978835977,
+          "traceTotals": {
+            "grossLoss": 39,
+            "healing": 3,
+            "lossBySource": {
+              "enemy": 33,
+              "overload": 6
+            },
+            "lossByEnemy": {
+              "e_hound": 33
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 82,
+              "resolved": 82,
+              "dmg": 39,
+              "block": 37,
+              "hit": 12,
+              "hpLoss": 8,
+              "turn": 10,
+              "kill": 10,
+              "end": 10,
+              "loan": 1,
+              "exhaust": 4,
+              "restraintBroken": 2,
+              "repay": 1,
+              "status": 5,
+              "heal": 7,
+              "grow": 1,
+              "break": 3,
+              "tune": 1,
+              "reshuffle": 1
+            },
+            "eventAmounts": {},
+            "plays": {
+              "now": 82
+            }
+          }
+        },
+        {
+          "group": "1/normal/e_cog+e_page/planner",
+          "attempts": 10,
+          "mean": 1.6872427983539093,
+          "weight": 0.14285714285714285,
+          "signedContribution": 0.33039388594944147,
+          "traceTotals": {
+            "grossLoss": 75,
+            "healing": 34,
+            "lossBySource": {
+              "overload": 15,
+              "enemy": 60
+            },
+            "lossByEnemy": {
+              "e_cog": 60
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 164,
+              "loan": 3,
+              "exhaust": 12,
+              "resolved": 164,
+              "dmg": 72,
+              "block": 79,
+              "kill": 20,
+              "status": 6,
+              "repay": 3,
+              "turn": 27,
+              "hpLoss": 16,
+              "hit": 22,
+              "break": 6,
+              "end": 10,
+              "heal": 18,
+              "reshuffle": 4,
+              "tune": 2,
+              "restraintBroken": 4,
+              "ult": 2,
+              "grow": 3
+            },
+            "eventAmounts": {},
+            "plays": {
+              "now": 164
+            }
+          }
+        },
+        {
+          "group": "1/normal/e_smudge+e_smudge+e_moth/planner",
+          "attempts": 10,
+          "mean": 3.5390946502057608,
+          "weight": 0.14285714285714285,
+          "signedContribution": 0.06584362139917703,
+          "traceTotals": {
+            "grossLoss": 114,
+            "healing": 28,
+            "lossBySource": {
+              "enemy": 108,
+              "overload": 6
+            },
+            "lossByEnemy": {
+              "e_moth": 103,
+              "e_smudge": 5
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 163,
+              "reserve": 22,
+              "block": 66,
+              "resolved": 163,
+              "insert": 19,
+              "hit": 35,
+              "dmg": 80,
+              "turn": 28,
+              "status": 8,
+              "tune": 3,
+              "kill": 30,
+              "exhaust": 13,
+              "hpLoss": 19,
+              "reshuffle": 6,
+              "end": 10,
+              "grow": 2,
+              "break": 10,
+              "heal": 8,
+              "stunSkip": 3,
+              "restraintBroken": 2,
+              "loan": 2,
+              "repay": 2
+            },
+            "eventAmounts": {},
+            "plays": {
+              "next": 22,
+              "now": 141
+            }
+          }
+        },
+        {
+          "group": "1/normal/e_cog+e_smudge/planner",
+          "attempts": 10,
+          "mean": 3.621399176954733,
+          "weight": 0.14285714285714285,
+          "signedContribution": 0.05408583186360958,
+          "traceTotals": {
+            "grossLoss": 103,
+            "healing": 15,
+            "lossBySource": {
+              "overload": 12,
+              "enemy": 91
+            },
+            "lossByEnemy": {
+              "e_cog": 91
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 152,
+              "block": 67,
+              "resolved": 152,
+              "dmg": 66,
+              "insert": 7,
+              "turn": 25,
+              "hpLoss": 14,
+              "kill": 20,
+              "heal": 10,
+              "hit": 13,
+              "break": 6,
+              "end": 10,
+              "exhaust": 14,
+              "grow": 2,
+              "status": 6,
+              "tune": 3,
+              "restraintBroken": 2,
+              "loan": 4,
+              "repay": 4,
+              "reshuffle": 4,
+              "stunSkip": 1,
+              "reserve": 1,
+              "restraintKept": 1
+            },
+            "eventAmounts": {},
+            "plays": {
+              "now": 151,
+              "next": 1
+            }
+          }
+        },
+        {
+          "group": "1/normal/e_moth+e_moth/planner",
+          "attempts": 10,
+          "mean": 4.444444444444445,
+          "weight": 0.14285714285714285,
+          "signedContribution": -0.06349206349206352,
+          "traceTotals": {
+            "grossLoss": 120,
+            "healing": 12,
+            "lossBySource": {
+              "enemy": 117,
+              "overload": 3
+            },
+            "lossByEnemy": {
+              "e_moth": 117
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 132,
+              "dmg": 64,
+              "resolved": 132,
+              "block": 59,
+              "heal": 8,
+              "kill": 20,
+              "hit": 34,
+              "turn": 21,
+              "tune": 1,
+              "end": 10,
+              "grow": 4,
+              "exhaust": 8,
+              "hpLoss": 21,
+              "break": 6,
+              "status": 5,
+              "reshuffle": 3,
+              "stunSkip": 1,
+              "loan": 2,
+              "repay": 2,
+              "restraintBroken": 2
+            },
+            "eventAmounts": {},
+            "plays": {
+              "now": 132
+            }
+          }
+        },
+        {
+          "group": "1/normal/e_hound+e_page/planner",
+          "attempts": 10,
+          "mean": 4.8559670781893,
+          "weight": 0.14285714285714285,
+          "signedContribution": -0.1222810111699,
+          "traceTotals": {
+            "grossLoss": 127,
+            "healing": 9,
+            "lossBySource": {
+              "enemy": 121,
+              "overload": 6
+            },
+            "lossByEnemy": {
+              "e_hound": 107,
+              "e_page": 14
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 140,
+              "block": 52,
+              "resolved": 140,
+              "heal": 6,
+              "dmg": 58,
+              "kill": 20,
+              "hit": 27,
+              "turn": 20,
+              "status": 9,
+              "loan": 3,
+              "exhaust": 7,
+              "hpLoss": 19,
+              "repay": 2,
+              "tune": 4,
+              "restraintBroken": 4,
+              "reshuffle": 3,
+              "break": 4,
+              "stunSkip": 2,
+              "end": 10,
+              "restraintKept": 1
+            },
+            "eventAmounts": {},
+            "plays": {
+              "now": 140
+            }
+          }
+        },
+        {
+          "group": "1/normal/e_lantern+e_page+e_page/planner",
+          "attempts": 10,
+          "mean": 7.654320987654321,
+          "weight": 0.14285714285714285,
+          "signedContribution": -0.5220458553791887,
+          "traceTotals": {
+            "grossLoss": 228,
+            "healing": 42,
+            "lossBySource": {
+              "overload": 9,
+              "enemy": 219
+            },
+            "lossByEnemy": {
+              "e_page": 195,
+              "e_lantern": 24
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 174,
+              "reserve": 20,
+              "status": 10,
+              "block": 71,
+              "resolved": 174,
+              "hpLoss": 40,
+              "dmg": 86,
+              "kill": 30,
+              "partyDebuff": 12,
+              "hit": 50,
+              "break": 9,
+              "turn": 28,
+              "exhaust": 15,
+              "end": 10,
+              "heal": 14,
+              "tune": 4,
+              "enemyHeal": 4,
+              "reshuffle": 7,
+              "loan": 1,
+              "restraintBroken": 2,
+              "repay": 1,
+              "grow": 4,
+              "stunSkip": 1
+            },
+            "eventAmounts": {},
+            "plays": {
+              "next": 20,
+              "now": 154
+            }
+          }
+        }
+      ],
+      "representative": {
+        "scenarioKey": "1/normal/e_moth+e_moth/0",
+        "policy": "planner",
+        "outcome": "win",
+        "turns": 3,
+        "hpLossPct": 0,
+        "trace": {
+          "grossLoss": 0,
+          "healing": 0,
+          "lossBySource": {},
+          "lossByEnemy": {},
+          "reflectionByAction": {
+            "card": 0,
+            "ultimate": 0
+          },
+          "events": {
+            "play": 15,
+            "dmg": 5,
+            "resolved": 15,
+            "block": 8,
+            "heal": 2,
+            "kill": 2,
+            "hit": 3,
+            "turn": 2,
+            "tune": 1,
+            "end": 1
+          },
+          "eventAmounts": {},
+          "plays": {
+            "now": 15
+          }
+        }
+      }
+    },
+    {
+      "key": "2/boss/planner",
+      "metric": "turns",
+      "status": "below",
+      "value": 13.1,
+      "boundary": 14,
+      "deviation": 0.9000000000000004,
+      "contributions": [
+        {
+          "group": "2/boss/b_archivist/planner",
+          "attempts": 10,
+          "mean": 13.1,
+          "weight": 1,
+          "signedContribution": 0.9000000000000004,
+          "traceTotals": {
+            "grossLoss": 950,
+            "healing": 216,
+            "lossBySource": {
+              "enemy": 893,
+              "overload": 39,
+              "smudge": 18
+            },
+            "lossByEnemy": {
+              "b_archivist": 893
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 560,
+              "reserve": 210,
+              "grow": 10,
+              "exhaust": 43,
+              "resolved": 560,
+              "block": 259,
+              "turn": 121,
+              "restraintBroken": 19,
+              "dmg": 296,
+              "heal": 40,
+              "hit": 41,
+              "hpLoss": 60,
+              "insert": 24,
+              "reshuffle": 36,
+              "loan": 5,
+              "charge": 24,
+              "repay": 5,
+              "break": 13,
+              "stunSkip": 10,
+              "ult": 27,
+              "recover": 8,
+              "kill": 10,
+              "end": 10,
+              "status": 23,
+              "fizzle": 2,
+              "tune": 3
+            },
+            "eventAmounts": {},
+            "plays": {
+              "next": 209,
+              "now": 350,
+              "after": 1
+            }
+          }
+        }
+      ],
+      "representative": {
+        "scenarioKey": "2/boss/b_archivist/3",
+        "policy": "planner",
+        "outcome": "win",
+        "turns": 9,
+        "hpLossPct": 38.68312757201646,
+        "trace": {
+          "grossLoss": 94,
+          "healing": 0,
+          "lossBySource": {
+            "enemy": 92,
+            "smudge": 2
+          },
+          "lossByEnemy": {
+            "b_archivist": 92
+          },
+          "reflectionByAction": {
+            "card": 0,
+            "ultimate": 0
+          },
+          "events": {
+            "play": 36,
+            "reserve": 14,
+            "block": 10,
+            "resolved": 36,
+            "dmg": 22,
+            "exhaust": 5,
+            "turn": 8,
+            "status": 4,
+            "hit": 3,
+            "hpLoss": 4,
+            "insert": 2,
+            "reshuffle": 2,
+            "charge": 1,
+            "break": 1,
+            "stunSkip": 1,
+            "recover": 1,
+            "ult": 1,
+            "kill": 1,
+            "end": 1
+          },
+          "eventAmounts": {},
+          "plays": {
+            "next": 14,
+            "now": 22
+          }
+        }
+      }
+    },
+    {
+      "key": "3/normal/greedy",
+      "metric": "hpLossPct",
+      "status": "below",
+      "value": 7.053497942386832,
+      "boundary": 8,
+      "deviation": 0.9465020576131682,
+      "contributions": [
+        {
+          "group": "3/normal/e_debtwraith+e_overdue/greedy",
+          "attempts": 10,
+          "mean": 4.444444444444445,
+          "weight": 0.2,
+          "signedContribution": 0.7111111111111111,
+          "traceTotals": {
+            "grossLoss": 152,
+            "healing": 44,
+            "lossBySource": {
+              "enemy": 143,
+              "overload": 9
+            },
+            "lossByEnemy": {
+              "e_debtwraith": 97,
+              "e_overdue": 46
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 268,
+              "exhaust": 17,
+              "resolved": 268,
+              "dmg": 112,
+              "heal": 22,
+              "block": 123,
+              "hit": 41,
+              "hpLoss": 29,
+              "insert": 12,
+              "turn": 52,
+              "break": 8,
+              "kill": 20,
+              "apDrain": 16,
+              "reshuffle": 15,
+              "end": 10,
+              "loan": 5,
+              "status": 16,
+              "restraintBroken": 8,
+              "repay": 5,
+              "ult": 2,
+              "stunSkip": 4,
+              "tune": 2,
+              "grow": 1,
+              "restraintKept": 1
+            },
+            "eventAmounts": {
+              "apDrain": 16
+            },
+            "plays": {
+              "now": 268
+            }
+          }
+        },
+        {
+          "group": "3/normal/e_scaleknight/greedy",
+          "attempts": 10,
+          "mean": 5.144032921810699,
+          "weight": 0.2,
+          "signedContribution": 0.5711934156378602,
+          "traceTotals": {
+            "grossLoss": 156,
+            "healing": 31,
+            "lossBySource": {
+              "enemy": 153,
+              "overload": 3
+            },
+            "lossByEnemy": {
+              "e_scaleknight": 153
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 224,
+              "resolved": 224,
+              "tune": 3,
+              "block": 104,
+              "dmg": 100,
+              "turn": 38,
+              "heal": 17,
+              "hit": 26,
+              "hpLoss": 19,
+              "status": 14,
+              "reshuffle": 10,
+              "break": 10,
+              "stunSkip": 7,
+              "kill": 10,
+              "end": 10,
+              "exhaust": 17,
+              "loan": 3,
+              "repay": 2,
+              "grow": 2,
+              "recover": 2,
+              "restraintBroken": 2,
+              "reserve": 1
+            },
+            "eventAmounts": {},
+            "plays": {
+              "now": 223,
+              "next": 1
+            }
+          }
+        },
+        {
+          "group": "3/normal/e_sealgolem+e_ratpack/greedy",
+          "attempts": 10,
+          "mean": 5.925925925925926,
+          "weight": 0.2,
+          "signedContribution": 0.4148148148148149,
+          "traceTotals": {
+            "grossLoss": 159,
+            "healing": 15,
+            "lossBySource": {
+              "overload": 30,
+              "enemy": 129
+            },
+            "lossByEnemy": {
+              "e_sealgolem": 129
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 195,
+              "dmg": 100,
+              "exhaust": 15,
+              "resolved": 195,
+              "kill": 20,
+              "heal": 10,
+              "block": 74,
+              "sealSlot": 18,
+              "turn": 32,
+              "hit": 20,
+              "hpLoss": 20,
+              "reshuffle": 10,
+              "end": 10,
+              "grow": 1,
+              "status": 8,
+              "tune": 3,
+              "break": 4,
+              "stunSkip": 3,
+              "restraintBroken": 2,
+              "loan": 2,
+              "repay": 2,
+              "recover": 1
+            },
+            "eventAmounts": {
+              "sealFallback": 3
+            },
+            "plays": {
+              "now": 195
+            }
+          }
+        },
+        {
+          "group": "3/normal/e_debtwraith+e_sealgolem/greedy",
+          "attempts": 10,
+          "mean": 9.382716049382717,
+          "weight": 0.2,
+          "signedContribution": -0.2765432098765434,
+          "traceTotals": {
+            "grossLoss": 252,
+            "healing": 24,
+            "lossBySource": {
+              "enemy": 237,
+              "overload": 15
+            },
+            "lossByEnemy": {
+              "e_debtwraith": 16,
+              "e_sealgolem": 221
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 249,
+              "status": 13,
+              "resolved": 249,
+              "dmg": 124,
+              "hit": 28,
+              "hpLoss": 25,
+              "sealSlot": 24,
+              "turn": 45,
+              "block": 98,
+              "kill": 20,
+              "reshuffle": 16,
+              "break": 12,
+              "stunSkip": 6,
+              "end": 10,
+              "grow": 3,
+              "exhaust": 25,
+              "heal": 13,
+              "loan": 2,
+              "repay": 2,
+              "restraintBroken": 4,
+              "apDrain": 3,
+              "tune": 5
+            },
+            "eventAmounts": {
+              "apDrain": 3
+            },
+            "plays": {
+              "now": 249
+            }
+          }
+        },
+        {
+          "group": "3/normal/e_ratpack+e_ratpack+e_ratpack/greedy",
+          "attempts": 10,
+          "mean": 10.37037037037037,
+          "weight": 0.2,
+          "signedContribution": -0.4740740740740741,
+          "traceTotals": {
+            "grossLoss": 291,
+            "healing": 39,
+            "lossBySource": {
+              "enemy": 273,
+              "overload": 18
+            },
+            "lossByEnemy": {
+              "e_ratpack": 273
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 189,
+              "resolved": 189,
+              "status": 11,
+              "dmg": 98,
+              "block": 81,
+              "heal": 14,
+              "hit": 81,
+              "hpLoss": 55,
+              "turn": 32,
+              "loan": 4,
+              "exhaust": 13,
+              "break": 4,
+              "kill": 30,
+              "restraintBroken": 5,
+              "repay": 4,
+              "reshuffle": 8,
+              "end": 10,
+              "tune": 3,
+              "grow": 1
+            },
+            "eventAmounts": {},
+            "plays": {
+              "now": 189
+            }
+          }
+        }
+      ],
+      "representative": {
+        "scenarioKey": "3/normal/e_debtwraith+e_overdue/5",
+        "policy": "greedy",
+        "outcome": "win",
+        "turns": 5,
+        "hpLossPct": 0,
+        "trace": {
+          "grossLoss": 3,
+          "healing": 3,
+          "lossBySource": {
+            "enemy": 3
+          },
+          "lossByEnemy": {
+            "e_debtwraith": 3
+          },
+          "reflectionByAction": {
+            "card": 0,
+            "ultimate": 0
+          },
+          "events": {
+            "play": 23,
+            "resolved": 23,
+            "dmg": 11,
+            "block": 11,
+            "heal": 2,
+            "hit": 3,
+            "hpLoss": 1,
+            "insert": 1,
+            "turn": 4,
+            "break": 1,
+            "apDrain": 1,
+            "stunSkip": 1,
+            "kill": 2,
+            "reshuffle": 1,
+            "status": 1,
+            "exhaust": 1,
+            "end": 1
+          },
+          "eventAmounts": {
+            "apDrain": 1
+          },
+          "plays": {
+            "now": 23
+          }
+        }
+      }
+    },
+    {
+      "key": "3/normal/planner",
+      "metric": "hpLossPct",
+      "status": "below",
+      "value": 7.440329218106997,
+      "boundary": 8,
+      "deviation": 0.5596707818930033,
+      "contributions": [
+        {
+          "group": "3/normal/e_scaleknight/planner",
+          "attempts": 10,
+          "mean": 2.880658436213992,
+          "weight": 0.2,
+          "signedContribution": 1.0238683127572017,
+          "traceTotals": {
+            "grossLoss": 86,
+            "healing": 16,
+            "lossBySource": {
+              "enemy": 83,
+              "overload": 3
+            },
+            "lossByEnemy": {
+              "e_scaleknight": 83
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 213,
+              "reserve": 41,
+              "resolved": 213,
+              "tune": 3,
+              "dmg": 95,
+              "block": 111,
+              "turn": 36,
+              "heal": 14,
+              "hit": 28,
+              "status": 12,
+              "hpLoss": 12,
+              "reshuffle": 10,
+              "break": 8,
+              "kill": 10,
+              "end": 10,
+              "exhaust": 15,
+              "grow": 10,
+              "stunSkip": 4,
+              "loan": 3,
+              "repay": 2,
+              "restraintBroken": 3,
+              "recover": 2
+            },
+            "eventAmounts": {},
+            "plays": {
+              "next": 41,
+              "now": 172
+            }
+          }
+        },
+        {
+          "group": "3/normal/e_debtwraith+e_sealgolem/planner",
+          "attempts": 10,
+          "mean": 6.337448559670781,
+          "weight": 0.2,
+          "signedContribution": 0.3325102880658438,
+          "traceTotals": {
+            "grossLoss": 186,
+            "healing": 32,
+            "lossBySource": {
+              "enemy": 171,
+              "overload": 15
+            },
+            "lossByEnemy": {
+              "e_debtwraith": 58,
+              "e_sealgolem": 113
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 246,
+              "reserve": 46,
+              "status": 12,
+              "resolved": 246,
+              "dmg": 119,
+              "hit": 28,
+              "hpLoss": 29,
+              "sealSlot": 25,
+              "turn": 45,
+              "kill": 20,
+              "block": 110,
+              "reshuffle": 14,
+              "break": 9,
+              "stunSkip": 6,
+              "end": 10,
+              "grow": 8,
+              "exhaust": 23,
+              "heal": 11,
+              "loan": 2,
+              "repay": 2,
+              "restraintBroken": 4,
+              "apDrain": 6,
+              "recover": 1,
+              "tune": 5
+            },
+            "eventAmounts": {
+              "apDrain": 6
+            },
+            "plays": {
+              "next": 46,
+              "now": 200
+            }
+          }
+        },
+        {
+          "group": "3/normal/e_sealgolem+e_ratpack/planner",
+          "attempts": 10,
+          "mean": 6.748971193415637,
+          "weight": 0.2,
+          "signedContribution": 0.25020576131687255,
+          "traceTotals": {
+            "grossLoss": 191,
+            "healing": 27,
+            "lossBySource": {
+              "enemy": 164,
+              "overload": 27
+            },
+            "lossByEnemy": {
+              "e_ratpack": 67,
+              "e_sealgolem": 97
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 187,
+              "reserve": 29,
+              "heal": 10,
+              "block": 66,
+              "resolved": 187,
+              "dmg": 95,
+              "sealSlot": 18,
+              "hit": 29,
+              "hpLoss": 30,
+              "kill": 20,
+              "exhaust": 17,
+              "turn": 31,
+              "reshuffle": 10,
+              "end": 10,
+              "grow": 1,
+              "status": 7,
+              "tune": 3,
+              "break": 4,
+              "stunSkip": 2,
+              "loan": 2,
+              "repay": 2,
+              "restraintBroken": 1
+            },
+            "eventAmounts": {
+              "sealFallback": 1
+            },
+            "plays": {
+              "next": 29,
+              "now": 158
+            }
+          }
+        },
+        {
+          "group": "3/normal/e_debtwraith+e_overdue/planner",
+          "attempts": 10,
+          "mean": 7.325102880658436,
+          "weight": 0.2,
+          "signedContribution": 0.13497942386831277,
+          "traceTotals": {
+            "grossLoss": 235,
+            "healing": 57,
+            "lossBySource": {
+              "enemy": 229,
+              "overload": 6
+            },
+            "lossByEnemy": {
+              "e_debtwraith": 162,
+              "e_overdue": 67
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 229,
+              "reserve": 44,
+              "exhaust": 17,
+              "resolved": 229,
+              "block": 94,
+              "hit": 38,
+              "hpLoss": 32,
+              "insert": 13,
+              "dmg": 101,
+              "turn": 46,
+              "apDrain": 14,
+              "break": 8,
+              "kill": 20,
+              "end": 10,
+              "heal": 16,
+              "loan": 5,
+              "restraintBroken": 4,
+              "status": 12,
+              "repay": 5,
+              "reshuffle": 13,
+              "grow": 3,
+              "stunSkip": 3,
+              "tune": 2,
+              "restraintKept": 1
+            },
+            "eventAmounts": {
+              "apDrain": 14
+            },
+            "plays": {
+              "next": 44,
+              "now": 185
+            }
+          }
+        },
+        {
+          "group": "3/normal/e_ratpack+e_ratpack+e_ratpack/planner",
+          "attempts": 10,
+          "mean": 13.909465020576135,
+          "weight": 0.2,
+          "signedContribution": -1.1818930041152271,
+          "traceTotals": {
+            "grossLoss": 369,
+            "healing": 31,
+            "lossBySource": {
+              "enemy": 357,
+              "overload": 12
+            },
+            "lossByEnemy": {
+              "e_ratpack": 357
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 184,
+              "reserve": 28,
+              "resolved": 184,
+              "status": 11,
+              "block": 80,
+              "heal": 9,
+              "hit": 84,
+              "hpLoss": 67,
+              "dmg": 91,
+              "turn": 33,
+              "loan": 4,
+              "exhaust": 14,
+              "repay": 4,
+              "fizzle": 1,
+              "kill": 30,
+              "reshuffle": 7,
+              "restraintBroken": 4,
+              "break": 3,
+              "end": 10,
+              "tune": 4,
+              "grow": 3
+            },
+            "eventAmounts": {},
+            "plays": {
+              "next": 28,
+              "now": 156
+            }
+          }
+        }
+      ],
+      "representative": {
+        "scenarioKey": "3/normal/e_scaleknight/3",
+        "policy": "planner",
+        "outcome": "win",
+        "turns": 5,
+        "hpLossPct": 0,
+        "trace": {
+          "grossLoss": 3,
+          "healing": 3,
+          "lossBySource": {
+            "enemy": 3
+          },
+          "lossByEnemy": {
+            "e_scaleknight": 3
+          },
+          "reflectionByAction": {
+            "card": 0,
+            "ultimate": 0
+          },
+          "events": {
+            "play": 22,
+            "reserve": 2,
+            "status": 4,
+            "resolved": 22,
+            "dmg": 12,
+            "block": 11,
+            "grow": 1,
+            "turn": 4,
+            "exhaust": 1,
+            "hit": 3,
+            "hpLoss": 1,
+            "heal": 1,
+            "reshuffle": 1,
+            "break": 1,
+            "stunSkip": 1,
+            "kill": 1,
+            "end": 1
+          },
+          "eventAmounts": {},
+          "plays": {
+            "next": 2,
+            "now": 20
+          }
+        }
+      }
+    },
+    {
+      "key": "3/elite/random",
+      "metric": "turns",
+      "status": "above",
+      "value": 8.85,
+      "boundary": 8.8,
+      "deviation": 0.049999999999998934,
+      "contributions": [
+        {
+          "group": "3/elite/e_collector/random",
+          "attempts": 10,
+          "mean": 9.5,
+          "weight": 0.5,
+          "signedContribution": 0.34999999999999964,
+          "traceTotals": {
+            "grossLoss": 748,
+            "healing": 109,
+            "lossBySource": {
+              "overload": 12,
+              "enemy": 736
+            },
+            "lossByEnemy": {
+              "e_collector": 736
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 373,
+              "block": 166,
+              "resolved": 357,
+              "reserve": 152,
+              "status": 22,
+              "apDrain": 24,
+              "dmg": 150,
+              "turn": 82,
+              "charge": 23,
+              "hpLoss": 23,
+              "hit": 19,
+              "heal": 21,
+              "reshuffle": 30,
+              "break": 5,
+              "stunSkip": 4,
+              "fizzle": 4,
+              "exhaust": 49,
+              "recover": 3,
+              "ult": 15,
+              "kill": 10,
+              "end": 10,
+              "tune": 5,
+              "loan": 4,
+              "repay": 4,
+              "grow": 5,
+              "restraintKept": 1,
+              "restraintBroken": 3
+            },
+            "eventAmounts": {
+              "apDrain": 48
+            },
+            "plays": {
+              "now": 221,
+              "after": 68,
+              "next": 84
+            }
+          }
+        },
+        {
+          "group": "3/elite/e_notarytwin+e_notarytwin/random",
+          "attempts": 10,
+          "mean": 8.2,
+          "weight": 0.5,
+          "signedContribution": -0.3000000000000007,
+          "traceTotals": {
+            "grossLoss": 941,
+            "healing": 98,
+            "lossBySource": {
+              "enemy": 855,
+              "reflect": 74,
+              "overload": 12
+            },
+            "lossByEnemy": {
+              "e_notarytwin": 929
+            },
+            "reflectionByAction": {
+              "card": 74,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 360,
+              "reserve": 136,
+              "block": 175,
+              "resolved": 341,
+              "exhaust": 34,
+              "turn": 68,
+              "status": 20,
+              "dmg": 153,
+              "hit": 74,
+              "hpLoss": 94,
+              "break": 18,
+              "kill": 20,
+              "heal": 26,
+              "enemyHeal": 24,
+              "reshuffle": 25,
+              "grow": 21,
+              "stunSkip": 10,
+              "end": 10,
+              "ult": 11,
+              "tune": 4,
+              "loan": 2,
+              "repay": 2,
+              "restraintBroken": 2,
+              "recover": 2
+            },
+            "eventAmounts": {},
+            "plays": {
+              "after": 64,
+              "now": 224,
+              "next": 72
+            }
+          }
+        }
+      ],
+      "representative": {
+        "scenarioKey": "3/elite/e_collector/2",
+        "policy": "random",
+        "outcome": "win",
+        "turns": 12,
+        "hpLossPct": 30.45267489711934,
+        "trace": {
+          "grossLoss": 114,
+          "healing": 40,
+          "lossBySource": {
+            "enemy": 114
+          },
+          "lossByEnemy": {
+            "e_collector": 114
+          },
+          "reflectionByAction": {
+            "card": 0,
+            "ultimate": 0
+          },
+          "events": {
+            "play": 44,
+            "reserve": 17,
+            "status": 5,
+            "resolved": 42,
+            "block": 16,
+            "apDrain": 3,
+            "dmg": 14,
+            "turn": 10,
+            "charge": 3,
+            "fizzle": 2,
+            "loan": 1,
+            "exhaust": 1,
+            "hit": 3,
+            "hpLoss": 3,
+            "repay": 1,
+            "heal": 5,
+            "reshuffle": 3,
+            "ult": 2,
+            "kill": 1,
+            "end": 1
+          },
+          "eventAmounts": {
+            "apDrain": 6
+          },
+          "plays": {
+            "next": 8,
+            "now": 27,
+            "after": 9
+          }
+        }
+      }
+    },
+    {
+      "key": "3/elite/greedy",
+      "metric": "turns",
+      "status": "above",
+      "value": 8.85,
+      "boundary": 8.8,
+      "deviation": 0.049999999999998934,
+      "contributions": [
+        {
+          "group": "3/elite/e_notarytwin+e_notarytwin/greedy",
+          "attempts": 10,
+          "mean": 9.3,
+          "weight": 0.5,
+          "signedContribution": 0.25,
+          "traceTotals": {
+            "grossLoss": 935,
+            "healing": 145,
+            "lossBySource": {
+              "reflect": 123,
+              "enemy": 797,
+              "overload": 15
+            },
+            "lossByEnemy": {
+              "e_notarytwin": 920
+            },
+            "reflectionByAction": {
+              "card": 123,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 410,
+              "grow": 13,
+              "exhaust": 44,
+              "resolved": 410,
+              "dmg": 185,
+              "block": 205,
+              "turn": 83,
+              "status": 25,
+              "hpLoss": 104,
+              "break": 16,
+              "stunSkip": 13,
+              "hit": 74,
+              "kill": 20,
+              "heal": 40,
+              "enemyHeal": 29,
+              "reshuffle": 29,
+              "recover": 5,
+              "ult": 18,
+              "end": 10,
+              "tune": 6,
+              "loan": 2,
+              "repay": 2,
+              "restraintBroken": 6
+            },
+            "eventAmounts": {},
+            "plays": {
+              "now": 410
+            }
+          }
+        },
+        {
+          "group": "3/elite/e_collector/greedy",
+          "attempts": 10,
+          "mean": 8.4,
+          "weight": 0.5,
+          "signedContribution": -0.20000000000000018,
+          "traceTotals": {
+            "grossLoss": 598,
+            "healing": 96,
+            "lossBySource": {
+              "overload": 15,
+              "enemy": 583
+            },
+            "lossByEnemy": {
+              "e_collector": 583
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 354,
+              "resolved": 354,
+              "status": 22,
+              "block": 145,
+              "dmg": 166,
+              "apDrain": 22,
+              "turn": 74,
+              "charge": 18,
+              "hpLoss": 22,
+              "heal": 21,
+              "hit": 17,
+              "reshuffle": 24,
+              "break": 7,
+              "stunSkip": 6,
+              "recover": 3,
+              "exhaust": 41,
+              "kill": 10,
+              "end": 10,
+              "tune": 6,
+              "ult": 13,
+              "restraintBroken": 12,
+              "loan": 5,
+              "repay": 5,
+              "grow": 3,
+              "reserve": 1,
+              "restraintKept": 1
+            },
+            "eventAmounts": {
+              "apDrain": 44
+            },
+            "plays": {
+              "now": 353,
+              "next": 1
+            }
+          }
+        }
+      ],
+      "representative": {
+        "scenarioKey": "3/elite/e_notarytwin+e_notarytwin/6",
+        "policy": "greedy",
+        "outcome": "win",
+        "turns": 14,
+        "hpLossPct": 33.333333333333336,
+        "trace": {
+          "grossLoss": 138,
+          "healing": 57,
+          "lossBySource": {
+            "reflect": 12,
+            "enemy": 126
+          },
+          "lossByEnemy": {
+            "e_notarytwin": 138
+          },
+          "reflectionByAction": {
+            "card": 12,
+            "ultimate": 0
+          },
+          "events": {
+            "play": 64,
+            "tune": 2,
+            "resolved": 64,
+            "exhaust": 2,
+            "block": 35,
+            "heal": 12,
+            "turn": 13,
+            "dmg": 23,
+            "hpLoss": 13,
+            "status": 4,
+            "hit": 12,
+            "enemyHeal": 6,
+            "reshuffle": 5,
+            "break": 2,
+            "stunSkip": 2,
+            "recover": 1,
+            "ult": 3,
+            "kill": 2,
+            "grow": 2,
+            "end": 1
+          },
+          "eventAmounts": {},
+          "plays": {
+            "now": 64
+          }
+        }
+      }
+    },
+    {
+      "key": "4/normal/random",
+      "metric": "turns",
+      "status": "above",
+      "value": 6.88,
+      "boundary": 6.6000000000000005,
+      "deviation": 0.27999999999999936,
+      "contributions": [
+        {
+          "group": "4/normal/e_stagerg+e_prompter/random",
+          "attempts": 10,
+          "mean": 9.5,
+          "weight": 0.2,
+          "signedContribution": 0.58,
+          "traceTotals": {
+            "grossLoss": 679,
+            "healing": 152,
+            "lossBySource": {
+              "enemy": 673,
+              "overload": 6
+            },
+            "lossByEnemy": {
+              "e_stagerg": 438,
+              "e_prompter": 235
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 413,
+              "reserve": 145,
+              "dmg": 170,
+              "resolved": 397,
+              "restraintBroken": 6,
+              "loan": 7,
+              "exhaust": 29,
+              "delayRes": 17,
+              "repay": 7,
+              "block": 207,
+              "turn": 83,
+              "hit": 52,
+              "hpLoss": 47,
+              "reshuffle": 29,
+              "break": 9,
+              "stunSkip": 5,
+              "kill": 20,
+              "ult": 18,
+              "end": 10,
+              "heal": 32,
+              "status": 22,
+              "grow": 16,
+              "tune": 3,
+              "recover": 2
+            },
+            "eventAmounts": {},
+            "plays": {
+              "next": 78,
+              "now": 268,
+              "after": 67
+            }
+          }
+        },
+        {
+          "group": "4/normal/e_stagerg+e_ghostguest/random",
+          "attempts": 10,
+          "mean": 7.2,
+          "weight": 0.2,
+          "signedContribution": 0.11999999999999994,
+          "traceTotals": {
+            "grossLoss": 510,
+            "healing": 129,
+            "lossBySource": {
+              "overload": 9,
+              "enemy": 501
+            },
+            "lossByEnemy": {
+              "e_ghostguest": 142,
+              "e_stagerg": 359
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 324,
+              "hpLoss": 51,
+              "dmg": 142,
+              "resolved": 307,
+              "reserve": 126,
+              "block": 120,
+              "exhaust": 27,
+              "hit": 51,
+              "break": 10,
+              "kill": 20,
+              "turn": 57,
+              "status": 15,
+              "reshuffle": 19,
+              "end": 10,
+              "heal": 23,
+              "tune": 4,
+              "stunSkip": 5,
+              "ult": 6,
+              "loan": 1,
+              "repay": 1,
+              "restraintBroken": 1,
+              "restraintKept": 1,
+              "grow": 3,
+              "fizzle": 1
+            },
+            "eventAmounts": {},
+            "plays": {
+              "now": 198,
+              "next": 69,
+              "after": 57
+            }
+          }
+        },
+        {
+          "group": "4/normal/e_choir+e_shadowlamp/random",
+          "attempts": 10,
+          "mean": 6.5,
+          "weight": 0.2,
+          "signedContribution": -0.020000000000000108,
+          "traceTotals": {
+            "grossLoss": 541,
+            "healing": 75,
+            "lossBySource": {
+              "enemy": 517,
+              "overload": 24
+            },
+            "lossByEnemy": {
+              "e_choir": 110,
+              "e_shadowlamp": 407
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 268,
+              "reserve": 99,
+              "dmg": 137,
+              "resolved": 250,
+              "block": 102,
+              "silence": 14,
+              "partyDebuff": 27,
+              "turn": 50,
+              "heal": 22,
+              "hit": 57,
+              "hpLoss": 59,
+              "break": 14,
+              "kill": 20,
+              "reshuffle": 15,
+              "exhaust": 19,
+              "stunSkip": 8,
+              "end": 10,
+              "loan": 4,
+              "repay": 4,
+              "restraintBroken": 2,
+              "restraintKept": 2,
+              "tune": 2,
+              "status": 4,
+              "recover": 2,
+              "grow": 3
+            },
+            "eventAmounts": {},
+            "plays": {
+              "after": 48,
+              "now": 169,
+              "next": 51
+            }
+          }
+        },
+        {
+          "group": "4/normal/e_prompter+e_choir/random",
+          "attempts": 10,
+          "mean": 6.5,
+          "weight": 0.2,
+          "signedContribution": -0.020000000000000108,
+          "traceTotals": {
+            "grossLoss": 373,
+            "healing": 48,
+            "lossBySource": {
+              "enemy": 352,
+              "overload": 21
+            },
+            "lossByEnemy": {
+              "e_choir": 143,
+              "e_prompter": 209
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 265,
+              "reserve": 89,
+              "tune": 9,
+              "resolved": 248,
+              "block": 89,
+              "delayRes": 31,
+              "silence": 12,
+              "turn": 50,
+              "exhaust": 15,
+              "hit": 31,
+              "dmg": 117,
+              "hpLoss": 33,
+              "status": 17,
+              "kill": 20,
+              "reshuffle": 14,
+              "end": 10,
+              "loan": 4,
+              "repay": 4,
+              "heal": 13,
+              "ult": 1,
+              "break": 12,
+              "stunSkip": 3,
+              "restraintBroken": 3,
+              "fizzle": 1
+            },
+            "eventAmounts": {},
+            "plays": {
+              "next": 52,
+              "now": 176,
+              "after": 37
+            }
+          }
+        },
+        {
+          "group": "4/normal/e_ghostguest+e_ghostguest+e_ghostguest/random",
+          "attempts": 10,
+          "mean": 4.7,
+          "weight": 0.2,
+          "signedContribution": -0.3800000000000001,
+          "traceTotals": {
+            "grossLoss": 866,
+            "healing": 46,
+            "lossBySource": {
+              "overload": 9,
+              "enemy": 857
+            },
+            "lossByEnemy": {
+              "e_ghostguest": 857
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 202,
+              "reserve": 73,
+              "hpLoss": 115,
+              "dmg": 124,
+              "resolved": 182,
+              "block": 87,
+              "kill": 30,
+              "hit": 141,
+              "turn": 34,
+              "loan": 3,
+              "exhaust": 16,
+              "repay": 3,
+              "heal": 13,
+              "reshuffle": 10,
+              "end": 10,
+              "status": 11,
+              "break": 16,
+              "stunSkip": 5,
+              "grow": 9,
+              "recover": 1,
+              "fizzle": 1,
+              "restraintBroken": 1
+            },
+            "eventAmounts": {},
+            "plays": {
+              "next": 32,
+              "after": 41,
+              "now": 129
+            }
+          }
+        }
+      ],
+      "representative": {
+        "scenarioKey": "4/normal/e_stagerg+e_prompter/4",
+        "policy": "random",
+        "outcome": "win",
+        "turns": 13,
+        "hpLossPct": 29.218106995884774,
+        "trace": {
+          "grossLoss": 121,
+          "healing": 50,
+          "lossBySource": {
+            "enemy": 121
+          },
+          "lossByEnemy": {
+            "e_stagerg": 81,
+            "e_prompter": 40
+          },
+          "reflectionByAction": {
+            "card": 0,
+            "ultimate": 0
+          },
+          "events": {
+            "play": 57,
+            "loan": 1,
+            "exhaust": 2,
+            "resolved": 56,
+            "block": 27,
+            "heal": 8,
+            "reserve": 15,
+            "delayRes": 2,
+            "repay": 1,
+            "turn": 11,
+            "dmg": 21,
+            "hit": 8,
+            "hpLoss": 7,
+            "restraintBroken": 2,
+            "reshuffle": 4,
+            "break": 1,
+            "stunSkip": 1,
+            "kill": 2,
+            "ult": 3,
+            "end": 1
+          },
+          "eventAmounts": {},
+          "plays": {
+            "now": 42,
+            "next": 5,
+            "after": 10
+          }
+        }
+      }
+    },
+    {
+      "key": "4/normal/random",
+      "metric": "hpLossPct",
+      "status": "above",
+      "value": 20.732510288065846,
+      "boundary": 20,
+      "deviation": 0.7325102880658463,
+      "contributions": [
+        {
+          "group": "4/normal/e_ghostguest+e_ghostguest+e_ghostguest/random",
+          "attempts": 10,
+          "mean": 33.74485596707819,
+          "weight": 0.2,
+          "signedContribution": 2.748971193415638,
+          "traceTotals": {
+            "grossLoss": 866,
+            "healing": 46,
+            "lossBySource": {
+              "overload": 9,
+              "enemy": 857
+            },
+            "lossByEnemy": {
+              "e_ghostguest": 857
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 202,
+              "reserve": 73,
+              "hpLoss": 115,
+              "dmg": 124,
+              "resolved": 182,
+              "block": 87,
+              "kill": 30,
+              "hit": 141,
+              "turn": 34,
+              "loan": 3,
+              "exhaust": 16,
+              "repay": 3,
+              "heal": 13,
+              "reshuffle": 10,
+              "end": 10,
+              "status": 11,
+              "break": 16,
+              "stunSkip": 5,
+              "grow": 9,
+              "recover": 1,
+              "fizzle": 1,
+              "restraintBroken": 1
+            },
+            "eventAmounts": {},
+            "plays": {
+              "next": 32,
+              "after": 41,
+              "now": 129
+            }
+          }
+        },
+        {
+          "group": "4/normal/e_stagerg+e_prompter/random",
+          "attempts": 10,
+          "mean": 21.68724279835391,
+          "weight": 0.2,
+          "signedContribution": 0.33744855967078213,
+          "traceTotals": {
+            "grossLoss": 679,
+            "healing": 152,
+            "lossBySource": {
+              "enemy": 673,
+              "overload": 6
+            },
+            "lossByEnemy": {
+              "e_stagerg": 438,
+              "e_prompter": 235
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 413,
+              "reserve": 145,
+              "dmg": 170,
+              "resolved": 397,
+              "restraintBroken": 6,
+              "loan": 7,
+              "exhaust": 29,
+              "delayRes": 17,
+              "repay": 7,
+              "block": 207,
+              "turn": 83,
+              "hit": 52,
+              "hpLoss": 47,
+              "reshuffle": 29,
+              "break": 9,
+              "stunSkip": 5,
+              "kill": 20,
+              "ult": 18,
+              "end": 10,
+              "heal": 32,
+              "status": 22,
+              "grow": 16,
+              "tune": 3,
+              "recover": 2
+            },
+            "eventAmounts": {},
+            "plays": {
+              "next": 78,
+              "now": 268,
+              "after": 67
+            }
+          }
+        },
+        {
+          "group": "4/normal/e_choir+e_shadowlamp/random",
+          "attempts": 10,
+          "mean": 19.176954732510286,
+          "weight": 0.2,
+          "signedContribution": -0.1646090534979429,
+          "traceTotals": {
+            "grossLoss": 541,
+            "healing": 75,
+            "lossBySource": {
+              "enemy": 517,
+              "overload": 24
+            },
+            "lossByEnemy": {
+              "e_choir": 110,
+              "e_shadowlamp": 407
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 268,
+              "reserve": 99,
+              "dmg": 137,
+              "resolved": 250,
+              "block": 102,
+              "silence": 14,
+              "partyDebuff": 27,
+              "turn": 50,
+              "heal": 22,
+              "hit": 57,
+              "hpLoss": 59,
+              "break": 14,
+              "kill": 20,
+              "reshuffle": 15,
+              "exhaust": 19,
+              "stunSkip": 8,
+              "end": 10,
+              "loan": 4,
+              "repay": 4,
+              "restraintBroken": 2,
+              "restraintKept": 2,
+              "tune": 2,
+              "status": 4,
+              "recover": 2,
+              "grow": 3
+            },
+            "eventAmounts": {},
+            "plays": {
+              "after": 48,
+              "now": 169,
+              "next": 51
+            }
+          }
+        },
+        {
+          "group": "4/normal/e_stagerg+e_ghostguest/random",
+          "attempts": 10,
+          "mean": 15.67901234567901,
+          "weight": 0.2,
+          "signedContribution": -0.8641975308641983,
+          "traceTotals": {
+            "grossLoss": 510,
+            "healing": 129,
+            "lossBySource": {
+              "overload": 9,
+              "enemy": 501
+            },
+            "lossByEnemy": {
+              "e_ghostguest": 142,
+              "e_stagerg": 359
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 324,
+              "hpLoss": 51,
+              "dmg": 142,
+              "resolved": 307,
+              "reserve": 126,
+              "block": 120,
+              "exhaust": 27,
+              "hit": 51,
+              "break": 10,
+              "kill": 20,
+              "turn": 57,
+              "status": 15,
+              "reshuffle": 19,
+              "end": 10,
+              "heal": 23,
+              "tune": 4,
+              "stunSkip": 5,
+              "ult": 6,
+              "loan": 1,
+              "repay": 1,
+              "restraintBroken": 1,
+              "restraintKept": 1,
+              "grow": 3,
+              "fizzle": 1
+            },
+            "eventAmounts": {},
+            "plays": {
+              "now": 198,
+              "next": 69,
+              "after": 57
+            }
+          }
+        },
+        {
+          "group": "4/normal/e_prompter+e_choir/random",
+          "attempts": 10,
+          "mean": 13.37448559670782,
+          "weight": 0.2,
+          "signedContribution": -1.3251028806584362,
+          "traceTotals": {
+            "grossLoss": 373,
+            "healing": 48,
+            "lossBySource": {
+              "enemy": 352,
+              "overload": 21
+            },
+            "lossByEnemy": {
+              "e_choir": 143,
+              "e_prompter": 209
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 265,
+              "reserve": 89,
+              "tune": 9,
+              "resolved": 248,
+              "block": 89,
+              "delayRes": 31,
+              "silence": 12,
+              "turn": 50,
+              "exhaust": 15,
+              "hit": 31,
+              "dmg": 117,
+              "hpLoss": 33,
+              "status": 17,
+              "kill": 20,
+              "reshuffle": 14,
+              "end": 10,
+              "loan": 4,
+              "repay": 4,
+              "heal": 13,
+              "ult": 1,
+              "break": 12,
+              "stunSkip": 3,
+              "restraintBroken": 3,
+              "fizzle": 1
+            },
+            "eventAmounts": {},
+            "plays": {
+              "next": 52,
+              "now": 176,
+              "after": 37
+            }
+          }
+        }
+      ],
+      "representative": {
+        "scenarioKey": "4/normal/e_ghostguest+e_ghostguest+e_ghostguest/8",
+        "policy": "random",
+        "outcome": "win",
+        "turns": 6,
+        "hpLossPct": 52.674897119341566,
+        "trace": {
+          "grossLoss": 131,
+          "healing": 3,
+          "lossBySource": {
+            "enemy": 131
+          },
+          "lossByEnemy": {
+            "e_ghostguest": 131
+          },
+          "reflectionByAction": {
+            "card": 0,
+            "ultimate": 0
+          },
+          "events": {
+            "play": 26,
+            "dmg": 9,
+            "resolved": 23,
+            "break": 3,
+            "reserve": 12,
+            "exhaust": 3,
+            "stunSkip": 1,
+            "hit": 20,
+            "hpLoss": 17,
+            "block": 12,
+            "grow": 3,
+            "turn": 5,
+            "status": 2,
+            "recover": 1,
+            "kill": 3,
+            "fizzle": 1,
+            "reshuffle": 2,
+            "heal": 1,
+            "end": 1
+          },
+          "eventAmounts": {},
+          "plays": {
+            "now": 14,
+            "after": 6,
+            "next": 6
+          }
+        }
+      }
+    },
+    {
+      "key": "4/normal/greedy",
+      "metric": "turns",
+      "status": "above",
+      "value": 7,
+      "boundary": 6.6000000000000005,
+      "deviation": 0.39999999999999947,
+      "contributions": [
+        {
+          "group": "4/normal/e_stagerg+e_prompter/greedy",
+          "attempts": 10,
+          "mean": 10.4,
+          "weight": 0.2,
+          "signedContribution": 0.76,
+          "traceTotals": {
+            "grossLoss": 672,
+            "healing": 177,
+            "lossBySource": {
+              "enemy": 666,
+              "overload": 6
+            },
+            "lossByEnemy": {
+              "e_stagerg": 434,
+              "e_prompter": 232
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 469,
+              "resolved": 469,
+              "loan": 6,
+              "exhaust": 40,
+              "block": 253,
+              "restraintBroken": 20,
+              "dmg": 193,
+              "delayRes": 17,
+              "repay": 6,
+              "turn": 94,
+              "hit": 55,
+              "hpLoss": 49,
+              "reshuffle": 32,
+              "kill": 20,
+              "break": 10,
+              "stunSkip": 9,
+              "ult": 27,
+              "end": 10,
+              "heal": 44,
+              "status": 22,
+              "grow": 12,
+              "tune": 4,
+              "recover": 3
+            },
+            "eventAmounts": {},
+            "plays": {
+              "now": 469
+            }
+          }
+        },
+        {
+          "group": "4/normal/e_stagerg+e_ghostguest/greedy",
+          "attempts": 10,
+          "mean": 7.8,
+          "weight": 0.2,
+          "signedContribution": 0.23999999999999988,
+          "traceTotals": {
+            "grossLoss": 417,
+            "healing": 150,
+            "lossBySource": {
+              "overload": 9,
+              "enemy": 408
+            },
+            "lossByEnemy": {
+              "e_stagerg": 380,
+              "e_ghostguest": 28
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 370,
+              "hpLoss": 37,
+              "dmg": 171,
+              "resolved": 370,
+              "exhaust": 43,
+              "break": 12,
+              "kill": 20,
+              "turn": 67,
+              "status": 17,
+              "block": 158,
+              "hit": 39,
+              "reshuffle": 24,
+              "end": 10,
+              "tune": 4,
+              "heal": 32,
+              "stunSkip": 4,
+              "ult": 14,
+              "loan": 1,
+              "repay": 1,
+              "restraintBroken": 3,
+              "grow": 2,
+              "recover": 1,
+              "reserve": 1
+            },
+            "eventAmounts": {},
+            "plays": {
+              "now": 369,
+              "next": 1
+            }
+          }
+        },
+        {
+          "group": "4/normal/e_choir+e_shadowlamp/greedy",
+          "attempts": 10,
+          "mean": 6.4,
+          "weight": 0.2,
+          "signedContribution": -0.040000000000000036,
+          "traceTotals": {
+            "grossLoss": 377,
+            "healing": 86,
+            "lossBySource": {
+              "enemy": 356,
+              "overload": 21
+            },
+            "lossByEnemy": {
+              "e_shadowlamp": 340,
+              "e_choir": 16
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 290,
+              "block": 134,
+              "resolved": 290,
+              "dmg": 154,
+              "silence": 11,
+              "partyDebuff": 26,
+              "turn": 54,
+              "heal": 23,
+              "hit": 55,
+              "hpLoss": 49,
+              "exhaust": 18,
+              "break": 12,
+              "kill": 20,
+              "reshuffle": 17,
+              "stunSkip": 10,
+              "recover": 4,
+              "end": 10,
+              "loan": 4,
+              "repay": 4,
+              "restraintBroken": 4,
+              "ult": 2,
+              "status": 6,
+              "tune": 2,
+              "reserve": 1,
+              "restraintKept": 1,
+              "grow": 1
+            },
+            "eventAmounts": {},
+            "plays": {
+              "now": 289,
+              "next": 1
+            }
+          }
+        },
+        {
+          "group": "4/normal/e_prompter+e_choir/greedy",
+          "attempts": 10,
+          "mean": 5.8,
+          "weight": 0.2,
+          "signedContribution": -0.16000000000000014,
+          "traceTotals": {
+            "grossLoss": 279,
+            "healing": 67,
+            "lossBySource": {
+              "enemy": 258,
+              "overload": 21
+            },
+            "lossByEnemy": {
+              "e_prompter": 140,
+              "e_choir": 118
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 268,
+              "tune": 10,
+              "resolved": 268,
+              "block": 103,
+              "dmg": 124,
+              "delayRes": 24,
+              "silence": 11,
+              "turn": 48,
+              "exhaust": 15,
+              "hit": 28,
+              "hpLoss": 28,
+              "kill": 20,
+              "status": 19,
+              "reshuffle": 13,
+              "break": 13,
+              "end": 10,
+              "loan": 4,
+              "heal": 18,
+              "repay": 4,
+              "restraintBroken": 7,
+              "ult": 3,
+              "stunSkip": 5
+            },
+            "eventAmounts": {},
+            "plays": {
+              "now": 268
+            }
+          }
+        },
+        {
+          "group": "4/normal/e_ghostguest+e_ghostguest+e_ghostguest/greedy",
+          "attempts": 10,
+          "mean": 4.6,
+          "weight": 0.2,
+          "signedContribution": -0.4000000000000002,
+          "traceTotals": {
+            "grossLoss": 643,
+            "healing": 67,
+            "lossBySource": {
+              "overload": 9,
+              "enemy": 634
+            },
+            "lossByEnemy": {
+              "e_ghostguest": 634
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 214,
+              "dmg": 129,
+              "resolved": 214,
+              "hpLoss": 88,
+              "block": 89,
+              "kill": 30,
+              "hit": 121,
+              "turn": 35,
+              "restraintBroken": 5,
+              "heal": 19,
+              "loan": 3,
+              "exhaust": 19,
+              "repay": 3,
+              "reshuffle": 9,
+              "end": 10,
+              "break": 16,
+              "status": 13,
+              "tune": 1,
+              "reserve": 2,
+              "stunSkip": 3,
+              "restraintKept": 1,
+              "grow": 1
+            },
+            "eventAmounts": {},
+            "plays": {
+              "now": 212,
+              "next": 2
+            }
+          }
+        }
+      ],
+      "representative": {
+        "scenarioKey": "4/normal/e_stagerg+e_prompter/4",
+        "policy": "greedy",
+        "outcome": "win",
+        "turns": 16,
+        "hpLossPct": 13.580246913580247,
+        "trace": {
+          "grossLoss": 125,
+          "healing": 92,
+          "lossBySource": {
+            "enemy": 125
+          },
+          "lossByEnemy": {
+            "e_stagerg": 85,
+            "e_prompter": 40
+          },
+          "reflectionByAction": {
+            "card": 0,
+            "ultimate": 0
+          },
+          "events": {
+            "play": 78,
+            "resolved": 78,
+            "loan": 1,
+            "exhaust": 2,
+            "block": 41,
+            "heal": 16,
+            "delayRes": 3,
+            "repay": 1,
+            "turn": 15,
+            "dmg": 24,
+            "hit": 9,
+            "hpLoss": 8,
+            "restraintBroken": 5,
+            "reshuffle": 5,
+            "break": 2,
+            "stunSkip": 2,
+            "kill": 2,
+            "ult": 4,
+            "end": 1
+          },
+          "eventAmounts": {},
+          "plays": {
+            "now": 78
+          }
+        }
+      }
+    },
+    {
+      "key": "4/elite/random",
+      "metric": "turns",
+      "status": "above",
+      "value": 9.35,
+      "boundary": 8.8,
+      "deviation": 0.5499999999999989,
+      "contributions": [
+        {
+          "group": "4/elite/e_primadonna/random",
+          "attempts": 10,
+          "mean": 9.9,
+          "weight": 0.5,
+          "signedContribution": 0.5499999999999998,
+          "traceTotals": {
+            "grossLoss": 646,
+            "healing": 108,
+            "lossBySource": {
+              "enemy": 492,
+              "reflect": 148,
+              "overload": 6
+            },
+            "lossByEnemy": {
+              "e_primadonna": 640
+            },
+            "reflectionByAction": {
+              "card": 148,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 394,
+              "reserve": 160,
+              "status": 27,
+              "resolved": 381,
+              "block": 198,
+              "loan": 4,
+              "exhaust": 16,
+              "repay": 4,
+              "turn": 85,
+              "hit": 28,
+              "hpLoss": 61,
+              "dmg": 178,
+              "restraintBroken": 4,
+              "enemyHeal": 25,
+              "reshuffle": 30,
+              "ult": 14,
+              "break": 4,
+              "kill": 10,
+              "end": 10,
+              "heal": 26,
+              "tune": 6,
+              "grow": 15,
+              "stunSkip": 2
+            },
+            "eventAmounts": {},
+            "plays": {
+              "after": 80,
+              "now": 234,
+              "next": 80
+            }
+          }
+        },
+        {
+          "group": "4/elite/e_baton/random",
+          "attempts": 10,
+          "mean": 8.8,
+          "weight": 0.5,
+          "signedContribution": 0,
+          "traceTotals": {
+            "grossLoss": 1338,
+            "healing": 101,
+            "lossBySource": {
+              "enemy": 1323,
+              "overload": 15
+            },
+            "lossByEnemy": {
+              "e_baton": 1323
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 345,
+              "reserve": 141,
+              "block": 169,
+              "resolved": 331,
+              "silence": 19,
+              "dmg": 152,
+              "turn": 75,
+              "hit": 71,
+              "hpLoss": 69,
+              "exhaust": 37,
+              "charge": 19,
+              "reshuffle": 27,
+              "ult": 12,
+              "kill": 10,
+              "end": 10,
+              "heal": 29,
+              "grow": 11,
+              "break": 7,
+              "stunSkip": 5,
+              "tune": 3,
+              "status": 6,
+              "loan": 4,
+              "repay": 4,
+              "restraintBroken": 2,
+              "recover": 2,
+              "restraintKept": 1
+            },
+            "eventAmounts": {},
+            "plays": {
+              "next": 79,
+              "after": 62,
+              "now": 204
+            }
+          }
+        }
+      ],
+      "representative": {
+        "scenarioKey": "4/elite/e_primadonna/9",
+        "policy": "random",
+        "outcome": "win",
+        "turns": 16,
+        "hpLossPct": 17.28395061728395,
+        "trace": {
+          "grossLoss": 73,
+          "healing": 31,
+          "lossBySource": {
+            "reflect": 15,
+            "enemy": 58
+          },
+          "lossByEnemy": {
+            "e_primadonna": 73
+          },
+          "reflectionByAction": {
+            "card": 15,
+            "ultimate": 0
+          },
+          "events": {
+            "play": 67,
+            "reserve": 25,
+            "block": 48,
+            "resolved": 65,
+            "dmg": 25,
+            "hpLoss": 7,
+            "heal": 9,
+            "turn": 14,
+            "exhaust": 3,
+            "loan": 1,
+            "hit": 5,
+            "repay": 1,
+            "enemyHeal": 4,
+            "reshuffle": 6,
+            "grow": 5,
+            "ult": 3,
+            "restraintBroken": 1,
+            "break": 1,
+            "stunSkip": 1,
+            "kill": 1,
+            "end": 1
+          },
+          "eventAmounts": {},
+          "plays": {
+            "next": 14,
+            "now": 42,
+            "after": 11
+          }
+        }
+      }
+    },
+    {
+      "key": "4/elite/random",
+      "metric": "hpLossPct",
+      "status": "above",
+      "value": 36.52263374485598,
+      "boundary": 33,
+      "deviation": 3.5226337448559804,
+      "contributions": [
+        {
+          "group": "4/elite/e_baton/random",
+          "attempts": 10,
+          "mean": 50.90534979423869,
+          "weight": 0.5,
+          "signedContribution": 8.952674897119344,
+          "traceTotals": {
+            "grossLoss": 1338,
+            "healing": 101,
+            "lossBySource": {
+              "enemy": 1323,
+              "overload": 15
+            },
+            "lossByEnemy": {
+              "e_baton": 1323
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 345,
+              "reserve": 141,
+              "block": 169,
+              "resolved": 331,
+              "silence": 19,
+              "dmg": 152,
+              "turn": 75,
+              "hit": 71,
+              "hpLoss": 69,
+              "exhaust": 37,
+              "charge": 19,
+              "reshuffle": 27,
+              "ult": 12,
+              "kill": 10,
+              "end": 10,
+              "heal": 29,
+              "grow": 11,
+              "break": 7,
+              "stunSkip": 5,
+              "tune": 3,
+              "status": 6,
+              "loan": 4,
+              "repay": 4,
+              "restraintBroken": 2,
+              "recover": 2,
+              "restraintKept": 1
+            },
+            "eventAmounts": {},
+            "plays": {
+              "next": 79,
+              "after": 62,
+              "now": 204
+            }
+          }
+        },
+        {
+          "group": "4/elite/e_primadonna/random",
+          "attempts": 10,
+          "mean": 22.13991769547325,
+          "weight": 0.5,
+          "signedContribution": -5.4300411522633745,
+          "traceTotals": {
+            "grossLoss": 646,
+            "healing": 108,
+            "lossBySource": {
+              "enemy": 492,
+              "reflect": 148,
+              "overload": 6
+            },
+            "lossByEnemy": {
+              "e_primadonna": 640
+            },
+            "reflectionByAction": {
+              "card": 148,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 394,
+              "reserve": 160,
+              "status": 27,
+              "resolved": 381,
+              "block": 198,
+              "loan": 4,
+              "exhaust": 16,
+              "repay": 4,
+              "turn": 85,
+              "hit": 28,
+              "hpLoss": 61,
+              "dmg": 178,
+              "restraintBroken": 4,
+              "enemyHeal": 25,
+              "reshuffle": 30,
+              "ult": 14,
+              "break": 4,
+              "kill": 10,
+              "end": 10,
+              "heal": 26,
+              "tune": 6,
+              "grow": 15,
+              "stunSkip": 2
+            },
+            "eventAmounts": {},
+            "plays": {
+              "after": 80,
+              "now": 234,
+              "next": 80
+            }
+          }
+        }
+      ],
+      "representative": {
+        "scenarioKey": "4/elite/e_baton/8",
+        "policy": "random",
+        "outcome": "win",
+        "turns": 10,
+        "hpLossPct": 67.07818930041152,
+        "trace": {
+          "grossLoss": 170,
+          "healing": 7,
+          "lossBySource": {
+            "enemy": 170
+          },
+          "lossByEnemy": {
+            "e_baton": 170
+          },
+          "reflectionByAction": {
+            "card": 0,
+            "ultimate": 0
+          },
+          "events": {
+            "play": 33,
+            "reserve": 17,
+            "heal": 3,
+            "block": 17,
+            "resolved": 32,
+            "silence": 3,
+            "dmg": 14,
+            "turn": 9,
+            "hit": 8,
+            "hpLoss": 8,
+            "exhaust": 9,
+            "loan": 1,
+            "charge": 2,
+            "repay": 1,
+            "reshuffle": 4,
+            "restraintBroken": 1,
+            "ult": 1,
+            "kill": 1,
+            "end": 1
+          },
+          "eventAmounts": {},
+          "plays": {
+            "next": 12,
+            "now": 16,
+            "after": 5
+          }
+        }
+      }
+    },
+    {
+      "key": "4/elite/greedy",
+      "metric": "turns",
+      "status": "above",
+      "value": 9.75,
+      "boundary": 8.8,
+      "deviation": 0.9499999999999993,
+      "contributions": [
+        {
+          "group": "4/elite/e_primadonna/greedy",
+          "attempts": 10,
+          "mean": 11.1,
+          "weight": 0.5,
+          "signedContribution": 1.1499999999999995,
+          "traceTotals": {
+            "grossLoss": 823,
+            "healing": 173,
+            "lossBySource": {
+              "enemy": 644,
+              "reflect": 167,
+              "overload": 12
+            },
+            "lossByEnemy": {
+              "e_primadonna": 811
+            },
+            "reflectionByAction": {
+              "card": 167,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 474,
+              "block": 225,
+              "resolved": 474,
+              "loan": 4,
+              "exhaust": 23,
+              "status": 28,
+              "dmg": 221,
+              "repay": 4,
+              "turn": 101,
+              "hit": 32,
+              "hpLoss": 73,
+              "restraintBroken": 16,
+              "enemyHeal": 30,
+              "reshuffle": 35,
+              "ult": 25,
+              "break": 8,
+              "stunSkip": 6,
+              "recover": 4,
+              "kill": 10,
+              "end": 10,
+              "tune": 8,
+              "heal": 40,
+              "reserve": 2,
+              "restraintKept": 1,
+              "grow": 6
+            },
+            "eventAmounts": {},
+            "plays": {
+              "now": 472,
+              "next": 2
+            }
+          }
+        },
+        {
+          "group": "4/elite/e_baton/greedy",
+          "attempts": 10,
+          "mean": 8.4,
+          "weight": 0.5,
+          "signedContribution": -0.20000000000000018,
+          "traceTotals": {
+            "grossLoss": 1244,
+            "healing": 72,
+            "lossBySource": {
+              "enemy": 1226,
+              "overload": 18
+            },
+            "lossByEnemy": {
+              "e_baton": 1226
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 368,
+              "block": 168,
+              "resolved": 368,
+              "dmg": 184,
+              "silence": 19,
+              "turn": 74,
+              "exhaust": 39,
+              "hit": 65,
+              "hpLoss": 66,
+              "charge": 17,
+              "reshuffle": 27,
+              "status": 10,
+              "kill": 10,
+              "end": 10,
+              "heal": 24,
+              "ult": 13,
+              "break": 7,
+              "stunSkip": 7,
+              "recover": 5,
+              "grow": 5,
+              "tune": 4,
+              "loan": 3,
+              "restraintBroken": 8,
+              "repay": 3,
+              "restraintKept": 1
+            },
+            "eventAmounts": {},
+            "plays": {
+              "now": 368
+            }
+          }
+        }
+      ],
+      "representative": {
+        "scenarioKey": "4/elite/e_primadonna/9",
+        "policy": "greedy",
+        "outcome": "win",
+        "turns": 17,
+        "hpLossPct": 19.34156378600823,
+        "trace": {
+          "grossLoss": 71,
+          "healing": 24,
+          "lossBySource": {
+            "enemy": 66,
+            "reflect": 5
+          },
+          "lossByEnemy": {
+            "e_primadonna": 71
+          },
+          "reflectionByAction": {
+            "card": 5,
+            "ultimate": 0
+          },
+          "events": {
+            "play": 78,
+            "resolved": 78,
+            "dmg": 29,
+            "restraintBroken": 6,
+            "heal": 9,
+            "block": 48,
+            "turn": 16,
+            "exhaust": 3,
+            "loan": 1,
+            "hit": 5,
+            "hpLoss": 7,
+            "repay": 1,
+            "enemyHeal": 5,
+            "reshuffle": 6,
+            "ult": 4,
+            "grow": 2,
+            "kill": 1,
+            "end": 1
+          },
+          "eventAmounts": {},
+          "plays": {
+            "now": 78
+          }
+        }
+      }
+    },
+    {
+      "key": "4/elite/greedy",
+      "metric": "hpLossPct",
+      "status": "above",
+      "value": 37.48971193415638,
+      "boundary": 33,
+      "deviation": 4.489711934156382,
+      "contributions": [
+        {
+          "group": "4/elite/e_baton/greedy",
+          "attempts": 10,
+          "mean": 48.23045267489711,
+          "weight": 0.5,
+          "signedContribution": 7.615226337448554,
+          "traceTotals": {
+            "grossLoss": 1244,
+            "healing": 72,
+            "lossBySource": {
+              "enemy": 1226,
+              "overload": 18
+            },
+            "lossByEnemy": {
+              "e_baton": 1226
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 368,
+              "block": 168,
+              "resolved": 368,
+              "dmg": 184,
+              "silence": 19,
+              "turn": 74,
+              "exhaust": 39,
+              "hit": 65,
+              "hpLoss": 66,
+              "charge": 17,
+              "reshuffle": 27,
+              "status": 10,
+              "kill": 10,
+              "end": 10,
+              "heal": 24,
+              "ult": 13,
+              "break": 7,
+              "stunSkip": 7,
+              "recover": 5,
+              "grow": 5,
+              "tune": 4,
+              "loan": 3,
+              "restraintBroken": 8,
+              "repay": 3,
+              "restraintKept": 1
+            },
+            "eventAmounts": {},
+            "plays": {
+              "now": 368
+            }
+          }
+        },
+        {
+          "group": "4/elite/e_primadonna/greedy",
+          "attempts": 10,
+          "mean": 26.74897119341564,
+          "weight": 0.5,
+          "signedContribution": -3.125514403292181,
+          "traceTotals": {
+            "grossLoss": 823,
+            "healing": 173,
+            "lossBySource": {
+              "enemy": 644,
+              "reflect": 167,
+              "overload": 12
+            },
+            "lossByEnemy": {
+              "e_primadonna": 811
+            },
+            "reflectionByAction": {
+              "card": 167,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 474,
+              "block": 225,
+              "resolved": 474,
+              "loan": 4,
+              "exhaust": 23,
+              "status": 28,
+              "dmg": 221,
+              "repay": 4,
+              "turn": 101,
+              "hit": 32,
+              "hpLoss": 73,
+              "restraintBroken": 16,
+              "enemyHeal": 30,
+              "reshuffle": 35,
+              "ult": 25,
+              "break": 8,
+              "stunSkip": 6,
+              "recover": 4,
+              "kill": 10,
+              "end": 10,
+              "tune": 8,
+              "heal": 40,
+              "reserve": 2,
+              "restraintKept": 1,
+              "grow": 6
+            },
+            "eventAmounts": {},
+            "plays": {
+              "now": 472,
+              "next": 2
+            }
+          }
+        }
+      ],
+      "representative": {
+        "scenarioKey": "4/elite/e_baton/4",
+        "policy": "greedy",
+        "outcome": "win",
+        "turns": 9,
+        "hpLossPct": 68.3127572016461,
+        "trace": {
+          "grossLoss": 169,
+          "healing": 3,
+          "lossBySource": {
+            "enemy": 169
+          },
+          "lossByEnemy": {
+            "e_baton": 169
+          },
+          "reflectionByAction": {
+            "card": 0,
+            "ultimate": 0
+          },
+          "events": {
+            "play": 37,
+            "resolved": 37,
+            "dmg": 18,
+            "heal": 2,
+            "block": 16,
+            "silence": 2,
+            "turn": 8,
+            "loan": 1,
+            "exhaust": 10,
+            "status": 1,
+            "restraintBroken": 2,
+            "hit": 8,
+            "hpLoss": 8,
+            "repay": 1,
+            "charge": 2,
+            "reshuffle": 3,
+            "ult": 2,
+            "kill": 1,
+            "end": 1
+          },
+          "eventAmounts": {},
+          "plays": {
+            "now": 37
+          }
+        }
+      }
+    },
+    {
+      "key": "4/elite/planner",
+      "metric": "turns",
+      "status": "above",
+      "value": 8.9,
+      "boundary": 8.8,
+      "deviation": 0.09999999999999964,
+      "contributions": [
+        {
+          "group": "4/elite/e_primadonna/planner",
+          "attempts": 10,
+          "mean": 9.7,
+          "weight": 0.5,
+          "signedContribution": 0.4499999999999993,
+          "traceTotals": {
+            "grossLoss": 733,
+            "healing": 149,
+            "lossBySource": {
+              "reflect": 184,
+              "enemy": 540,
+              "overload": 9
+            },
+            "lossByEnemy": {
+              "e_primadonna": 724
+            },
+            "reflectionByAction": {
+              "card": 184,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 414,
+              "reserve": 136,
+              "block": 218,
+              "resolved": 414,
+              "loan": 4,
+              "exhaust": 17,
+              "status": 21,
+              "repay": 4,
+              "dmg": 182,
+              "hpLoss": 72,
+              "turn": 86,
+              "hit": 28,
+              "restraintBroken": 10,
+              "enemyHeal": 23,
+              "reshuffle": 27,
+              "fizzle": 2,
+              "break": 6,
+              "ult": 16,
+              "stunSkip": 6,
+              "kill": 10,
+              "end": 10,
+              "tune": 8,
+              "heal": 34,
+              "grow": 19,
+              "recover": 1
+            },
+            "eventAmounts": {},
+            "plays": {
+              "next": 136,
+              "now": 278
+            }
+          }
+        },
+        {
+          "group": "4/elite/e_baton/planner",
+          "attempts": 10,
+          "mean": 8.1,
+          "weight": 0.5,
+          "signedContribution": -0.35000000000000053,
+          "traceTotals": {
+            "grossLoss": 1077,
+            "healing": 85,
+            "lossBySource": {
+              "enemy": 1062,
+              "overload": 15
+            },
+            "lossByEnemy": {
+              "e_baton": 1062
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 337,
+              "reserve": 121,
+              "block": 171,
+              "resolved": 337,
+              "dmg": 159,
+              "silence": 20,
+              "turn": 70,
+              "hit": 64,
+              "hpLoss": 63,
+              "exhaust": 35,
+              "charge": 16,
+              "reshuffle": 24,
+              "status": 7,
+              "kill": 10,
+              "end": 10,
+              "heal": 23,
+              "grow": 13,
+              "break": 8,
+              "ult": 10,
+              "stunSkip": 7,
+              "recover": 3,
+              "tune": 4,
+              "restraintBroken": 5,
+              "loan": 4,
+              "repay": 4,
+              "restraintKept": 2
+            },
+            "eventAmounts": {},
+            "plays": {
+              "next": 121,
+              "now": 216
+            }
+          }
+        }
+      ],
+      "representative": {
+        "scenarioKey": "4/elite/e_primadonna/9",
+        "policy": "planner",
+        "outcome": "win",
+        "turns": 15,
+        "hpLossPct": 34.15637860082305,
+        "trace": {
+          "grossLoss": 108,
+          "healing": 25,
+          "lossBySource": {
+            "reflect": 36,
+            "enemy": 72
+          },
+          "lossByEnemy": {
+            "e_primadonna": 108
+          },
+          "reflectionByAction": {
+            "card": 36,
+            "ultimate": 0
+          },
+          "events": {
+            "play": 68,
+            "reserve": 16,
+            "resolved": 68,
+            "restraintBroken": 4,
+            "heal": 9,
+            "block": 54,
+            "dmg": 24,
+            "hpLoss": 12,
+            "grow": 7,
+            "turn": 14,
+            "exhaust": 3,
+            "loan": 1,
+            "hit": 4,
+            "repay": 1,
+            "enemyHeal": 4,
+            "reshuffle": 5,
+            "ult": 4,
+            "break": 1,
+            "stunSkip": 1,
+            "kill": 1,
+            "end": 1
+          },
+          "eventAmounts": {},
+          "plays": {
+            "next": 16,
+            "now": 52
+          }
+        }
+      }
+    },
+    {
+      "key": "4/boss/random",
+      "metric": "hpLossPct",
+      "status": "above",
+      "value": 59.83539094650206,
+      "boundary": 55,
+      "deviation": 4.835390946502059,
+      "contributions": [
+        {
+          "group": "4/boss/b_overture/random",
+          "attempts": 10,
+          "mean": 59.83539094650206,
+          "weight": 1,
+          "signedContribution": 4.835390946502059,
+          "traceTotals": {
+            "grossLoss": 1809,
+            "healing": 355,
+            "lossBySource": {
+              "enemy": 1803,
+              "overload": 6
+            },
+            "lossByEnemy": {
+              "b_overture": 1803
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 726,
+              "reserve": 266,
+              "exhaust": 66,
+              "resolved": 715,
+              "dmg": 325,
+              "silence": 38,
+              "block": 376,
+              "heal": 70,
+              "turn": 167,
+              "hit": 63,
+              "hpLoss": 61,
+              "delayRes": 32,
+              "reshuffle": 90,
+              "charge": 31,
+              "grow": 21,
+              "ult": 43,
+              "break": 11,
+              "stunSkip": 8,
+              "kill": 10,
+              "end": 10,
+              "status": 42,
+              "tune": 1,
+              "recover": 6,
+              "restraintBroken": 5,
+              "loan": 2,
+              "repay": 2,
+              "fizzle": 3
+            },
+            "eventAmounts": {},
+            "plays": {
+              "next": 148,
+              "now": 460,
+              "after": 118
+            }
+          }
+        }
+      ],
+      "representative": {
+        "scenarioKey": "4/boss/b_overture/3",
+        "policy": "random",
+        "outcome": "win",
+        "turns": 25,
+        "hpLossPct": 95.47325102880659,
+        "trace": {
+          "grossLoss": 250,
+          "healing": 18,
+          "lossBySource": {
+            "enemy": 250
+          },
+          "lossByEnemy": {
+            "b_overture": 250
+          },
+          "reflectionByAction": {
+            "card": 0,
+            "ultimate": 0
+          },
+          "events": {
+            "play": 69,
+            "dmg": 33,
+            "exhaust": 16,
+            "resolved": 68,
+            "block": 50,
+            "reserve": 28,
+            "silence": 5,
+            "turn": 23,
+            "hit": 9,
+            "hpLoss": 9,
+            "heal": 4,
+            "delayRes": 5,
+            "reshuffle": 24,
+            "charge": 5,
+            "ult": 4,
+            "grow": 6,
+            "break": 1,
+            "kill": 1,
+            "end": 1
+          },
+          "eventAmounts": {},
+          "plays": {
+            "now": 41,
+            "after": 12,
+            "next": 16
+          }
+        }
+      }
+    },
+    {
+      "key": "5/normal/random",
+      "metric": "turns",
+      "status": "above",
+      "value": 6.84,
+      "boundary": 6.6000000000000005,
+      "deviation": 0.23999999999999932,
+      "contributions": [
+        {
+          "group": "5/normal/e_springguard+e_echo/random",
+          "attempts": 10,
+          "mean": 7.9,
+          "weight": 0.2,
+          "signedContribution": 0.25999999999999995,
+          "traceTotals": {
+            "grossLoss": 710,
+            "healing": 91,
+            "lossBySource": {
+              "enemy": 683,
+              "overload": 27
+            },
+            "lossByEnemy": {
+              "e_springguard": 463,
+              "e_echo": 220
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 350,
+              "reserve": 135,
+              "resolved": 333,
+              "block": 155,
+              "dmg": 169,
+              "exhaust": 32,
+              "eatName": 15,
+              "heal": 22,
+              "turn": 65,
+              "status": 17,
+              "hit": 43,
+              "hpLoss": 49,
+              "break": 13,
+              "kill": 20,
+              "reshuffle": 25,
+              "end": 10,
+              "stunSkip": 7,
+              "recover": 2,
+              "grow": 10,
+              "ult": 8,
+              "tune": 5,
+              "restraintBroken": 1,
+              "loan": 2,
+              "repay": 2,
+              "restraintKept": 1
+            },
+            "eventAmounts": {},
+            "plays": {
+              "after": 63,
+              "next": 72,
+              "now": 215
+            }
+          }
+        },
+        {
+          "group": "5/normal/e_springguard+e_rustgear/random",
+          "attempts": 10,
+          "mean": 7.6,
+          "weight": 0.2,
+          "signedContribution": 0.19999999999999984,
+          "traceTotals": {
+            "grossLoss": 669,
+            "healing": 128,
+            "lossBySource": {
+              "enemy": 651,
+              "overload": 18
+            },
+            "lossByEnemy": {
+              "e_springguard": 405,
+              "e_rustgear": 246
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 319,
+              "dmg": 131,
+              "break": 12,
+              "resolved": 308,
+              "reserve": 119,
+              "block": 124,
+              "stunSkip": 6,
+              "kill": 20,
+              "turn": 62,
+              "loan": 5,
+              "exhaust": 17,
+              "status": 21,
+              "hit": 61,
+              "hpLoss": 61,
+              "repay": 5,
+              "restraintBroken": 7,
+              "reshuffle": 20,
+              "end": 10,
+              "heal": 25,
+              "tune": 3,
+              "fizzle": 1,
+              "recover": 3,
+              "ult": 7
+            },
+            "eventAmounts": {},
+            "plays": {
+              "now": 200,
+              "after": 54,
+              "next": 65
+            }
+          }
+        },
+        {
+          "group": "5/normal/e_pendulum+e_timeshard/random",
+          "attempts": 10,
+          "mean": 7.4,
+          "weight": 0.2,
+          "signedContribution": 0.15999999999999998,
+          "traceTotals": {
+            "grossLoss": 1244,
+            "healing": 143,
+            "lossBySource": {
+              "enemy": 1229,
+              "overload": 15
+            },
+            "lossByEnemy": {
+              "e_pendulum": 943,
+              "e_timeshard": 286
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 315,
+              "reserve": 100,
+              "block": 130,
+              "resolved": 298,
+              "dmg": 121,
+              "heal": 34,
+              "hit": 109,
+              "hpLoss": 100,
+              "sealSlot": 20,
+              "turn": 60,
+              "reshuffle": 19,
+              "kill": 20,
+              "exhaust": 18,
+              "end": 10,
+              "tune": 7,
+              "status": 17,
+              "break": 4,
+              "stunSkip": 2,
+              "ult": 4,
+              "fizzle": 1,
+              "loan": 4,
+              "repay": 4,
+              "restraintBroken": 3,
+              "grow": 7
+            },
+            "eventAmounts": {
+              "sealFallback": 1
+            },
+            "plays": {
+              "after": 56,
+              "now": 215,
+              "next": 44
+            }
+          }
+        },
+        {
+          "group": "5/normal/e_echo+e_timeshard/random",
+          "attempts": 10,
+          "mean": 6.9,
+          "weight": 0.2,
+          "signedContribution": 0.05999999999999997,
+          "traceTotals": {
+            "grossLoss": 545,
+            "healing": 98,
+            "lossBySource": {
+              "overload": 9,
+              "enemy": 536
+            },
+            "lossByEnemy": {
+              "e_echo": 205,
+              "e_timeshard": 331
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 284,
+              "reserve": 109,
+              "dmg": 128,
+              "resolved": 266,
+              "hpLoss": 35,
+              "block": 117,
+              "exhaust": 40,
+              "eatName": 30,
+              "sealSlot": 16,
+              "turn": 53,
+              "loan": 4,
+              "hit": 35,
+              "repay": 4,
+              "kill": 20,
+              "restraintKept": 3,
+              "reshuffle": 19,
+              "break": 11,
+              "stunSkip": 7,
+              "restraintBroken": 2,
+              "recover": 2,
+              "end": 10,
+              "status": 11,
+              "heal": 26,
+              "tune": 4,
+              "ult": 3,
+              "grow": 1
+            },
+            "eventAmounts": {
+              "sealFallback": 2
+            },
+            "plays": {
+              "after": 53,
+              "next": 56,
+              "now": 175
+            }
+          }
+        },
+        {
+          "group": "5/normal/e_rustgear+e_rustgear+e_rustgear/random",
+          "attempts": 10,
+          "mean": 4.4,
+          "weight": 0.2,
+          "signedContribution": -0.44000000000000006,
+          "traceTotals": {
+            "grossLoss": 1022,
+            "healing": 38,
+            "lossBySource": {
+              "enemy": 1007,
+              "overload": 15
+            },
+            "lossByEnemy": {
+              "e_rustgear": 1007
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 192,
+              "reserve": 76,
+              "block": 79,
+              "resolved": 171,
+              "heal": 12,
+              "hit": 139,
+              "hpLoss": 117,
+              "dmg": 101,
+              "grow": 8,
+              "turn": 31,
+              "kill": 30,
+              "tune": 1,
+              "status": 11,
+              "exhaust": 12,
+              "reshuffle": 9,
+              "break": 16,
+              "end": 10,
+              "stunSkip": 4,
+              "loan": 2,
+              "repay": 2,
+              "restraintBroken": 1,
+              "recover": 1
+            },
+            "eventAmounts": {},
+            "plays": {
+              "next": 43,
+              "after": 33,
+              "now": 116
+            }
+          }
+        }
+      ],
+      "representative": {
+        "scenarioKey": "5/normal/e_springguard+e_rustgear/8",
+        "policy": "random",
+        "outcome": "win",
+        "turns": 11,
+        "hpLossPct": 5.761316872427984,
+        "trace": {
+          "grossLoss": 60,
+          "healing": 46,
+          "lossBySource": {
+            "enemy": 60
+          },
+          "lossByEnemy": {
+            "e_rustgear": 39,
+            "e_springguard": 21
+          },
+          "reflectionByAction": {
+            "card": 0,
+            "ultimate": 0
+          },
+          "events": {
+            "play": 52,
+            "reserve": 16,
+            "block": 23,
+            "resolved": 50,
+            "tune": 1,
+            "loan": 1,
+            "exhaust": 2,
+            "hit": 10,
+            "hpLoss": 7,
+            "repay": 1,
+            "dmg": 14,
+            "turn": 10,
+            "heal": 7,
+            "status": 3,
+            "reshuffle": 4,
+            "restraintBroken": 1,
+            "kill": 2,
+            "ult": 2,
+            "break": 1,
+            "stunSkip": 1,
+            "recover": 1,
+            "end": 1
+          },
+          "eventAmounts": {},
+          "plays": {
+            "next": 8,
+            "after": 8,
+            "now": 36
+          }
+        }
+      }
+    },
+    {
+      "key": "5/normal/random",
+      "metric": "hpLossPct",
+      "status": "above",
+      "value": 30.38683127572016,
+      "boundary": 20,
+      "deviation": 10.386831275720159,
+      "contributions": [
+        {
+          "group": "5/normal/e_pendulum+e_timeshard/random",
+          "attempts": 10,
+          "mean": 45.308641975308646,
+          "weight": 0.2,
+          "signedContribution": 5.06172839506173,
+          "traceTotals": {
+            "grossLoss": 1244,
+            "healing": 143,
+            "lossBySource": {
+              "enemy": 1229,
+              "overload": 15
+            },
+            "lossByEnemy": {
+              "e_pendulum": 943,
+              "e_timeshard": 286
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 315,
+              "reserve": 100,
+              "block": 130,
+              "resolved": 298,
+              "dmg": 121,
+              "heal": 34,
+              "hit": 109,
+              "hpLoss": 100,
+              "sealSlot": 20,
+              "turn": 60,
+              "reshuffle": 19,
+              "kill": 20,
+              "exhaust": 18,
+              "end": 10,
+              "tune": 7,
+              "status": 17,
+              "break": 4,
+              "stunSkip": 2,
+              "ult": 4,
+              "fizzle": 1,
+              "loan": 4,
+              "repay": 4,
+              "restraintBroken": 3,
+              "grow": 7
+            },
+            "eventAmounts": {
+              "sealFallback": 1
+            },
+            "plays": {
+              "after": 56,
+              "now": 215,
+              "next": 44
+            }
+          }
+        },
+        {
+          "group": "5/normal/e_rustgear+e_rustgear+e_rustgear/random",
+          "attempts": 10,
+          "mean": 40.49382716049383,
+          "weight": 0.2,
+          "signedContribution": 4.098765432098766,
+          "traceTotals": {
+            "grossLoss": 1022,
+            "healing": 38,
+            "lossBySource": {
+              "enemy": 1007,
+              "overload": 15
+            },
+            "lossByEnemy": {
+              "e_rustgear": 1007
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 192,
+              "reserve": 76,
+              "block": 79,
+              "resolved": 171,
+              "heal": 12,
+              "hit": 139,
+              "hpLoss": 117,
+              "dmg": 101,
+              "grow": 8,
+              "turn": 31,
+              "kill": 30,
+              "tune": 1,
+              "status": 11,
+              "exhaust": 12,
+              "reshuffle": 9,
+              "break": 16,
+              "end": 10,
+              "stunSkip": 4,
+              "loan": 2,
+              "repay": 2,
+              "restraintBroken": 1,
+              "recover": 1
+            },
+            "eventAmounts": {},
+            "plays": {
+              "next": 43,
+              "after": 33,
+              "now": 116
+            }
+          }
+        },
+        {
+          "group": "5/normal/e_springguard+e_echo/random",
+          "attempts": 10,
+          "mean": 25.473251028806583,
+          "weight": 0.2,
+          "signedContribution": 1.0946502057613168,
+          "traceTotals": {
+            "grossLoss": 710,
+            "healing": 91,
+            "lossBySource": {
+              "enemy": 683,
+              "overload": 27
+            },
+            "lossByEnemy": {
+              "e_springguard": 463,
+              "e_echo": 220
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 350,
+              "reserve": 135,
+              "resolved": 333,
+              "block": 155,
+              "dmg": 169,
+              "exhaust": 32,
+              "eatName": 15,
+              "heal": 22,
+              "turn": 65,
+              "status": 17,
+              "hit": 43,
+              "hpLoss": 49,
+              "break": 13,
+              "kill": 20,
+              "reshuffle": 25,
+              "end": 10,
+              "stunSkip": 7,
+              "recover": 2,
+              "grow": 10,
+              "ult": 8,
+              "tune": 5,
+              "restraintBroken": 1,
+              "loan": 2,
+              "repay": 2,
+              "restraintKept": 1
+            },
+            "eventAmounts": {},
+            "plays": {
+              "after": 63,
+              "next": 72,
+              "now": 215
+            }
+          }
+        },
+        {
+          "group": "5/normal/e_springguard+e_rustgear/random",
+          "attempts": 10,
+          "mean": 22.263374485596707,
+          "weight": 0.2,
+          "signedContribution": 0.45267489711934134,
+          "traceTotals": {
+            "grossLoss": 669,
+            "healing": 128,
+            "lossBySource": {
+              "enemy": 651,
+              "overload": 18
+            },
+            "lossByEnemy": {
+              "e_springguard": 405,
+              "e_rustgear": 246
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 319,
+              "dmg": 131,
+              "break": 12,
+              "resolved": 308,
+              "reserve": 119,
+              "block": 124,
+              "stunSkip": 6,
+              "kill": 20,
+              "turn": 62,
+              "loan": 5,
+              "exhaust": 17,
+              "status": 21,
+              "hit": 61,
+              "hpLoss": 61,
+              "repay": 5,
+              "restraintBroken": 7,
+              "reshuffle": 20,
+              "end": 10,
+              "heal": 25,
+              "tune": 3,
+              "fizzle": 1,
+              "recover": 3,
+              "ult": 7
+            },
+            "eventAmounts": {},
+            "plays": {
+              "now": 200,
+              "after": 54,
+              "next": 65
+            }
+          }
+        },
+        {
+          "group": "5/normal/e_echo+e_timeshard/random",
+          "attempts": 10,
+          "mean": 18.395061728395063,
+          "weight": 0.2,
+          "signedContribution": -0.3209876543209873,
+          "traceTotals": {
+            "grossLoss": 545,
+            "healing": 98,
+            "lossBySource": {
+              "overload": 9,
+              "enemy": 536
+            },
+            "lossByEnemy": {
+              "e_echo": 205,
+              "e_timeshard": 331
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 284,
+              "reserve": 109,
+              "dmg": 128,
+              "resolved": 266,
+              "hpLoss": 35,
+              "block": 117,
+              "exhaust": 40,
+              "eatName": 30,
+              "sealSlot": 16,
+              "turn": 53,
+              "loan": 4,
+              "hit": 35,
+              "repay": 4,
+              "kill": 20,
+              "restraintKept": 3,
+              "reshuffle": 19,
+              "break": 11,
+              "stunSkip": 7,
+              "restraintBroken": 2,
+              "recover": 2,
+              "end": 10,
+              "status": 11,
+              "heal": 26,
+              "tune": 4,
+              "ult": 3,
+              "grow": 1
+            },
+            "eventAmounts": {
+              "sealFallback": 2
+            },
+            "plays": {
+              "after": 53,
+              "next": 56,
+              "now": 175
+            }
+          }
+        }
+      ],
+      "representative": {
+        "scenarioKey": "5/normal/e_rustgear+e_rustgear+e_rustgear/5",
+        "policy": "random",
+        "outcome": "win",
+        "turns": 7,
+        "hpLossPct": 64.60905349794238,
+        "trace": {
+          "grossLoss": 160,
+          "healing": 3,
+          "lossBySource": {
+            "enemy": 160
+          },
+          "lossByEnemy": {
+            "e_rustgear": 160
+          },
+          "reflectionByAction": {
+            "card": 0,
+            "ultimate": 0
+          },
+          "events": {
+            "play": 25,
+            "reserve": 9,
+            "dmg": 9,
+            "resolved": 24,
+            "heal": 2,
+            "block": 13,
+            "hit": 22,
+            "hpLoss": 18,
+            "turn": 5,
+            "loan": 1,
+            "exhaust": 2,
+            "repay": 1,
+            "break": 3,
+            "kill": 3,
+            "reshuffle": 2,
+            "grow": 2,
+            "restraintBroken": 1,
+            "end": 1
+          },
+          "eventAmounts": {},
+          "plays": {
+            "next": 4,
+            "now": 16,
+            "after": 5
+          }
+        }
+      }
+    },
+    {
+      "key": "5/normal/greedy",
+      "metric": "turns",
+      "status": "above",
+      "value": 7.04,
+      "boundary": 6.6000000000000005,
+      "deviation": 0.4399999999999995,
+      "contributions": [
+        {
+          "group": "5/normal/e_springguard+e_echo/greedy",
+          "attempts": 10,
+          "mean": 8.2,
+          "weight": 0.2,
+          "signedContribution": 0.3199999999999998,
+          "traceTotals": {
+            "grossLoss": 701,
+            "healing": 81,
+            "lossBySource": {
+              "enemy": 671,
+              "overload": 30
+            },
+            "lossByEnemy": {
+              "e_springguard": 495,
+              "e_echo": 176
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 362,
+              "dmg": 196,
+              "resolved": 362,
+              "heal": 24,
+              "block": 165,
+              "exhaust": 33,
+              "eatName": 10,
+              "turn": 72,
+              "status": 16,
+              "hit": 41,
+              "hpLoss": 50,
+              "break": 14,
+              "kill": 20,
+              "reshuffle": 25,
+              "ult": 15,
+              "end": 10,
+              "grow": 7,
+              "stunSkip": 8,
+              "tune": 6,
+              "restraintBroken": 5,
+              "loan": 2,
+              "repay": 2,
+              "recover": 1
+            },
+            "eventAmounts": {},
+            "plays": {
+              "now": 362
+            }
+          }
+        },
+        {
+          "group": "5/normal/e_springguard+e_rustgear/greedy",
+          "attempts": 10,
+          "mean": 7.8,
+          "weight": 0.2,
+          "signedContribution": 0.23999999999999988,
+          "traceTotals": {
+            "grossLoss": 490,
+            "healing": 98,
+            "lossBySource": {
+              "enemy": 463,
+              "overload": 27
+            },
+            "lossByEnemy": {
+              "e_springguard": 401,
+              "e_rustgear": 62
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 353,
+              "block": 141,
+              "resolved": 353,
+              "dmg": 161,
+              "break": 11,
+              "status": 22,
+              "stunSkip": 7,
+              "turn": 68,
+              "loan": 5,
+              "exhaust": 19,
+              "tune": 8,
+              "kill": 20,
+              "hit": 46,
+              "hpLoss": 47,
+              "repay": 5,
+              "restraintBroken": 14,
+              "reshuffle": 20,
+              "end": 10,
+              "heal": 22,
+              "ult": 10,
+              "reserve": 1,
+              "recover": 4
+            },
+            "eventAmounts": {},
+            "plays": {
+              "now": 352,
+              "next": 1
+            }
+          }
+        },
+        {
+          "group": "5/normal/e_pendulum+e_timeshard/greedy",
+          "attempts": 10,
+          "mean": 7.7,
+          "weight": 0.2,
+          "signedContribution": 0.21999999999999995,
+          "traceTotals": {
+            "grossLoss": 1304,
+            "healing": 126,
+            "lossBySource": {
+              "enemy": 1292,
+              "overload": 12
+            },
+            "lossByEnemy": {
+              "e_pendulum": 928,
+              "e_timeshard": 364
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 342,
+              "dmg": 137,
+              "resolved": 342,
+              "block": 154,
+              "heal": 33,
+              "hit": 114,
+              "hpLoss": 104,
+              "sealSlot": 17,
+              "turn": 67,
+              "reshuffle": 20,
+              "kill": 20,
+              "end": 10,
+              "tune": 8,
+              "status": 19,
+              "break": 5,
+              "exhaust": 17,
+              "ult": 8,
+              "loan": 4,
+              "restraintBroken": 9,
+              "repay": 4,
+              "grow": 6,
+              "stunSkip": 2
+            },
+            "eventAmounts": {
+              "sealFallback": 1
+            },
+            "plays": {
+              "now": 342
+            }
+          }
+        },
+        {
+          "group": "5/normal/e_echo+e_timeshard/greedy",
+          "attempts": 10,
+          "mean": 7.3,
+          "weight": 0.2,
+          "signedContribution": 0.13999999999999987,
+          "traceTotals": {
+            "grossLoss": 569,
+            "healing": 157,
+            "lossBySource": {
+              "overload": 21,
+              "enemy": 548
+            },
+            "lossByEnemy": {
+              "e_echo": 220,
+              "e_timeshard": 328
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 320,
+              "block": 145,
+              "resolved": 320,
+              "hpLoss": 45,
+              "dmg": 147,
+              "exhaust": 40,
+              "eatName": 28,
+              "sealSlot": 17,
+              "turn": 62,
+              "loan": 4,
+              "hit": 40,
+              "kill": 20,
+              "repay": 4,
+              "restraintBroken": 9,
+              "reshuffle": 21,
+              "break": 12,
+              "end": 10,
+              "heal": 34,
+              "stunSkip": 8,
+              "recover": 2,
+              "ult": 9,
+              "status": 12,
+              "restraintKept": 1,
+              "tune": 3,
+              "grow": 1,
+              "reserve": 1
+            },
+            "eventAmounts": {
+              "sealFallback": 2
+            },
+            "plays": {
+              "now": 319,
+              "next": 1
+            }
+          }
+        },
+        {
+          "group": "5/normal/e_rustgear+e_rustgear+e_rustgear/greedy",
+          "attempts": 10,
+          "mean": 4.2,
+          "weight": 0.2,
+          "signedContribution": -0.4800000000000001,
+          "traceTotals": {
+            "grossLoss": 735,
+            "healing": 29,
+            "lossBySource": {
+              "enemy": 717,
+              "overload": 18
+            },
+            "lossByEnemy": {
+              "e_rustgear": 717
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 189,
+              "block": 82,
+              "resolved": 189,
+              "dmg": 115,
+              "hit": 111,
+              "hpLoss": 90,
+              "turn": 32,
+              "kill": 30,
+              "tune": 3,
+              "exhaust": 14,
+              "status": 14,
+              "reshuffle": 9,
+              "break": 15,
+              "end": 10,
+              "stunSkip": 5,
+              "grow": 3,
+              "heal": 13,
+              "loan": 2,
+              "repay": 2,
+              "restraintBroken": 3,
+              "reserve": 1
+            },
+            "eventAmounts": {},
+            "plays": {
+              "now": 188,
+              "next": 1
+            }
+          }
+        }
+      ],
+      "representative": {
+        "scenarioKey": "5/normal/e_springguard+e_echo/1",
+        "policy": "greedy",
+        "outcome": "win",
+        "turns": 12,
+        "hpLossPct": 13.168724279835391,
+        "trace": {
+          "grossLoss": 83,
+          "healing": 51,
+          "lossBySource": {
+            "enemy": 83
+          },
+          "lossByEnemy": {
+            "e_springguard": 61,
+            "e_echo": 22
+          },
+          "reflectionByAction": {
+            "card": 0,
+            "ultimate": 0
+          },
+          "events": {
+            "play": 58,
+            "resolved": 58,
+            "block": 37,
+            "heal": 12,
+            "dmg": 23,
+            "exhaust": 2,
+            "eatName": 1,
+            "turn": 11,
+            "grow": 3,
+            "hit": 6,
+            "hpLoss": 6,
+            "reshuffle": 4,
+            "break": 2,
+            "stunSkip": 2,
+            "kill": 2,
+            "ult": 3,
+            "end": 1
+          },
+          "eventAmounts": {},
+          "plays": {
+            "now": 58
+          }
+        }
+      }
+    },
+    {
+      "key": "5/normal/greedy",
+      "metric": "hpLossPct",
+      "status": "above",
+      "value": 27.22633744855968,
+      "boundary": 20,
+      "deviation": 7.226337448559679,
+      "contributions": [
+        {
+          "group": "5/normal/e_pendulum+e_timeshard/greedy",
+          "attempts": 10,
+          "mean": 48.477366255144034,
+          "weight": 0.2,
+          "signedContribution": 5.695473251028807,
+          "traceTotals": {
+            "grossLoss": 1304,
+            "healing": 126,
+            "lossBySource": {
+              "enemy": 1292,
+              "overload": 12
+            },
+            "lossByEnemy": {
+              "e_pendulum": 928,
+              "e_timeshard": 364
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 342,
+              "dmg": 137,
+              "resolved": 342,
+              "block": 154,
+              "heal": 33,
+              "hit": 114,
+              "hpLoss": 104,
+              "sealSlot": 17,
+              "turn": 67,
+              "reshuffle": 20,
+              "kill": 20,
+              "end": 10,
+              "tune": 8,
+              "status": 19,
+              "break": 5,
+              "exhaust": 17,
+              "ult": 8,
+              "loan": 4,
+              "restraintBroken": 9,
+              "repay": 4,
+              "grow": 6,
+              "stunSkip": 2
+            },
+            "eventAmounts": {
+              "sealFallback": 1
+            },
+            "plays": {
+              "now": 342
+            }
+          }
+        },
+        {
+          "group": "5/normal/e_rustgear+e_rustgear+e_rustgear/greedy",
+          "attempts": 10,
+          "mean": 29.053497942386834,
+          "weight": 0.2,
+          "signedContribution": 1.810699588477367,
+          "traceTotals": {
+            "grossLoss": 735,
+            "healing": 29,
+            "lossBySource": {
+              "enemy": 717,
+              "overload": 18
+            },
+            "lossByEnemy": {
+              "e_rustgear": 717
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 189,
+              "block": 82,
+              "resolved": 189,
+              "dmg": 115,
+              "hit": 111,
+              "hpLoss": 90,
+              "turn": 32,
+              "kill": 30,
+              "tune": 3,
+              "exhaust": 14,
+              "status": 14,
+              "reshuffle": 9,
+              "break": 15,
+              "end": 10,
+              "stunSkip": 5,
+              "grow": 3,
+              "heal": 13,
+              "loan": 2,
+              "repay": 2,
+              "restraintBroken": 3,
+              "reserve": 1
+            },
+            "eventAmounts": {},
+            "plays": {
+              "now": 188,
+              "next": 1
+            }
+          }
+        },
+        {
+          "group": "5/normal/e_springguard+e_echo/greedy",
+          "attempts": 10,
+          "mean": 25.514403292181072,
+          "weight": 0.2,
+          "signedContribution": 1.1028806584362145,
+          "traceTotals": {
+            "grossLoss": 701,
+            "healing": 81,
+            "lossBySource": {
+              "enemy": 671,
+              "overload": 30
+            },
+            "lossByEnemy": {
+              "e_springguard": 495,
+              "e_echo": 176
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 362,
+              "dmg": 196,
+              "resolved": 362,
+              "heal": 24,
+              "block": 165,
+              "exhaust": 33,
+              "eatName": 10,
+              "turn": 72,
+              "status": 16,
+              "hit": 41,
+              "hpLoss": 50,
+              "break": 14,
+              "kill": 20,
+              "reshuffle": 25,
+              "ult": 15,
+              "end": 10,
+              "grow": 7,
+              "stunSkip": 8,
+              "tune": 6,
+              "restraintBroken": 5,
+              "loan": 2,
+              "repay": 2,
+              "recover": 1
+            },
+            "eventAmounts": {},
+            "plays": {
+              "now": 362
+            }
+          }
+        },
+        {
+          "group": "5/normal/e_echo+e_timeshard/greedy",
+          "attempts": 10,
+          "mean": 16.954732510288064,
+          "weight": 0.2,
+          "signedContribution": -0.6090534979423872,
+          "traceTotals": {
+            "grossLoss": 569,
+            "healing": 157,
+            "lossBySource": {
+              "overload": 21,
+              "enemy": 548
+            },
+            "lossByEnemy": {
+              "e_echo": 220,
+              "e_timeshard": 328
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 320,
+              "block": 145,
+              "resolved": 320,
+              "hpLoss": 45,
+              "dmg": 147,
+              "exhaust": 40,
+              "eatName": 28,
+              "sealSlot": 17,
+              "turn": 62,
+              "loan": 4,
+              "hit": 40,
+              "kill": 20,
+              "repay": 4,
+              "restraintBroken": 9,
+              "reshuffle": 21,
+              "break": 12,
+              "end": 10,
+              "heal": 34,
+              "stunSkip": 8,
+              "recover": 2,
+              "ult": 9,
+              "status": 12,
+              "restraintKept": 1,
+              "tune": 3,
+              "grow": 1,
+              "reserve": 1
+            },
+            "eventAmounts": {
+              "sealFallback": 2
+            },
+            "plays": {
+              "now": 319,
+              "next": 1
+            }
+          }
+        },
+        {
+          "group": "5/normal/e_springguard+e_rustgear/greedy",
+          "attempts": 10,
+          "mean": 16.131687242798357,
+          "weight": 0.2,
+          "signedContribution": -0.7736625514403287,
+          "traceTotals": {
+            "grossLoss": 490,
+            "healing": 98,
+            "lossBySource": {
+              "enemy": 463,
+              "overload": 27
+            },
+            "lossByEnemy": {
+              "e_springguard": 401,
+              "e_rustgear": 62
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 353,
+              "block": 141,
+              "resolved": 353,
+              "dmg": 161,
+              "break": 11,
+              "status": 22,
+              "stunSkip": 7,
+              "turn": 68,
+              "loan": 5,
+              "exhaust": 19,
+              "tune": 8,
+              "kill": 20,
+              "hit": 46,
+              "hpLoss": 47,
+              "repay": 5,
+              "restraintBroken": 14,
+              "reshuffle": 20,
+              "end": 10,
+              "heal": 22,
+              "ult": 10,
+              "reserve": 1,
+              "recover": 4
+            },
+            "eventAmounts": {},
+            "plays": {
+              "now": 352,
+              "next": 1
+            }
+          }
+        }
+      ],
+      "representative": {
+        "scenarioKey": "5/normal/e_pendulum+e_timeshard/4",
+        "policy": "greedy",
+        "outcome": "win",
+        "turns": 10,
+        "hpLossPct": 74.48559670781893,
+        "trace": {
+          "grossLoss": 190,
+          "healing": 9,
+          "lossBySource": {
+            "enemy": 190
+          },
+          "lossByEnemy": {
+            "e_pendulum": 138,
+            "e_timeshard": 52
+          },
+          "reflectionByAction": {
+            "card": 0,
+            "ultimate": 0
+          },
+          "events": {
+            "play": 35,
+            "dmg": 13,
+            "resolved": 35,
+            "block": 17,
+            "hit": 16,
+            "hpLoss": 15,
+            "sealSlot": 2,
+            "turn": 9,
+            "restraintBroken": 3,
+            "exhaust": 2,
+            "loan": 1,
+            "heal": 3,
+            "repay": 1,
+            "reshuffle": 3,
+            "kill": 2,
+            "ult": 1,
+            "end": 1
+          },
+          "eventAmounts": {},
+          "plays": {
+            "now": 35
+          }
+        }
+      }
+    },
+    {
+      "key": "5/normal/planner",
+      "metric": "hpLossPct",
+      "status": "above",
+      "value": 24.106995884773664,
+      "boundary": 20,
+      "deviation": 4.106995884773664,
+      "contributions": [
+        {
+          "group": "5/normal/e_pendulum+e_timeshard/planner",
+          "attempts": 10,
+          "mean": 38.51851851851852,
+          "weight": 0.2,
+          "signedContribution": 3.703703703703704,
+          "traceTotals": {
+            "grossLoss": 1136,
+            "healing": 200,
+            "lossBySource": {
+              "enemy": 1124,
+              "overload": 12
+            },
+            "lossByEnemy": {
+              "e_pendulum": 828,
+              "e_timeshard": 296
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 333,
+              "reserve": 73,
+              "dmg": 126,
+              "resolved": 333,
+              "block": 163,
+              "heal": 37,
+              "hit": 108,
+              "hpLoss": 95,
+              "sealSlot": 18,
+              "turn": 65,
+              "reshuffle": 20,
+              "kill": 20,
+              "ult": 9,
+              "break": 7,
+              "end": 10,
+              "tune": 8,
+              "status": 20,
+              "exhaust": 17,
+              "fizzle": 1,
+              "restraintBroken": 4,
+              "loan": 4,
+              "repay": 4,
+              "grow": 12,
+              "restraintKept": 2,
+              "stunSkip": 2,
+              "recover": 1
+            },
+            "eventAmounts": {},
+            "plays": {
+              "next": 73,
+              "now": 260
+            }
+          }
+        },
+        {
+          "group": "5/normal/e_rustgear+e_rustgear+e_rustgear/planner",
+          "attempts": 10,
+          "mean": 33.04526748971194,
+          "weight": 0.2,
+          "signedContribution": 2.609053497942388,
+          "traceTotals": {
+            "grossLoss": 848,
+            "healing": 45,
+            "lossBySource": {
+              "enemy": 830,
+              "overload": 18
+            },
+            "lossByEnemy": {
+              "e_rustgear": 830
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 181,
+              "reserve": 33,
+              "dmg": 112,
+              "resolved": 181,
+              "block": 77,
+              "hit": 123,
+              "hpLoss": 101,
+              "grow": 4,
+              "turn": 32,
+              "tune": 3,
+              "kill": 30,
+              "exhaust": 13,
+              "status": 12,
+              "reshuffle": 9,
+              "heal": 14,
+              "break": 16,
+              "end": 10,
+              "stunSkip": 4,
+              "loan": 2,
+              "repay": 2,
+              "restraintBroken": 3
+            },
+            "eventAmounts": {},
+            "plays": {
+              "next": 33,
+              "now": 148
+            }
+          }
+        },
+        {
+          "group": "5/normal/e_springguard+e_echo/planner",
+          "attempts": 10,
+          "mean": 19.218106995884774,
+          "weight": 0.2,
+          "signedContribution": -0.15637860082304514,
+          "traceTotals": {
+            "grossLoss": 586,
+            "healing": 119,
+            "lossBySource": {
+              "enemy": 553,
+              "overload": 33
+            },
+            "lossByEnemy": {
+              "e_springguard": 336,
+              "e_echo": 217
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 346,
+              "reserve": 88,
+              "dmg": 178,
+              "resolved": 346,
+              "block": 176,
+              "exhaust": 29,
+              "eatName": 14,
+              "heal": 31,
+              "turn": 68,
+              "status": 14,
+              "hit": 41,
+              "hpLoss": 46,
+              "break": 14,
+              "kill": 20,
+              "reshuffle": 24,
+              "end": 10,
+              "grow": 11,
+              "stunSkip": 7,
+              "recover": 1,
+              "ult": 9,
+              "tune": 5,
+              "restraintBroken": 3,
+              "loan": 2,
+              "repay": 2
+            },
+            "eventAmounts": {},
+            "plays": {
+              "next": 88,
+              "now": 258
+            }
+          }
+        },
+        {
+          "group": "5/normal/e_springguard+e_rustgear/planner",
+          "attempts": 10,
+          "mean": 16.17283950617284,
+          "weight": 0.2,
+          "signedContribution": -0.7654320987654324,
+          "traceTotals": {
+            "grossLoss": 521,
+            "healing": 128,
+            "lossBySource": {
+              "enemy": 503,
+              "overload": 18
+            },
+            "lossByEnemy": {
+              "e_rustgear": 227,
+              "e_springguard": 276
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 300,
+              "reserve": 76,
+              "block": 123,
+              "resolved": 300,
+              "status": 22,
+              "hit": 53,
+              "hpLoss": 55,
+              "dmg": 124,
+              "break": 10,
+              "kill": 20,
+              "turn": 58,
+              "loan": 5,
+              "exhaust": 25,
+              "tune": 8,
+              "repay": 5,
+              "reshuffle": 19,
+              "restraintBroken": 7,
+              "ult": 7,
+              "end": 10,
+              "stunSkip": 6,
+              "heal": 25,
+              "recover": 3
+            },
+            "eventAmounts": {},
+            "plays": {
+              "next": 75,
+              "now": 224,
+              "after": 1
+            }
+          }
+        },
+        {
+          "group": "5/normal/e_echo+e_timeshard/planner",
+          "attempts": 10,
+          "mean": 13.580246913580245,
+          "weight": 0.2,
+          "signedContribution": -1.283950617283951,
+          "traceTotals": {
+            "grossLoss": 420,
+            "healing": 90,
+            "lossBySource": {
+              "overload": 18,
+              "enemy": 402
+            },
+            "lossByEnemy": {
+              "e_echo": 149,
+              "e_timeshard": 253
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 277,
+              "reserve": 64,
+              "block": 121,
+              "resolved": 277,
+              "hpLoss": 34,
+              "dmg": 129,
+              "exhaust": 39,
+              "eatName": 27,
+              "sealSlot": 15,
+              "turn": 54,
+              "loan": 4,
+              "hit": 32,
+              "kill": 20,
+              "repay": 4,
+              "restraintBroken": 5,
+              "reshuffle": 18,
+              "break": 8,
+              "stunSkip": 5,
+              "end": 10,
+              "heal": 23,
+              "status": 12,
+              "restraintKept": 1,
+              "tune": 3,
+              "ult": 3,
+              "grow": 1
+            },
+            "eventAmounts": {
+              "sealFallback": 1
+            },
+            "plays": {
+              "next": 64,
+              "now": 213
+            }
+          }
+        }
+      ],
+      "representative": {
+        "scenarioKey": "5/normal/e_rustgear+e_rustgear+e_rustgear/5",
+        "policy": "planner",
+        "outcome": "win",
+        "turns": 6,
+        "hpLossPct": 58.43621399176955,
+        "trace": {
+          "grossLoss": 149,
+          "healing": 7,
+          "lossBySource": {
+            "enemy": 149
+          },
+          "lossByEnemy": {
+            "e_rustgear": 149
+          },
+          "reflectionByAction": {
+            "card": 0,
+            "ultimate": 0
+          },
+          "events": {
+            "play": 23,
+            "reserve": 5,
+            "block": 12,
+            "resolved": 23,
+            "hit": 20,
+            "hpLoss": 16,
+            "heal": 2,
+            "dmg": 8,
+            "turn": 5,
+            "loan": 1,
+            "exhaust": 2,
+            "repay": 1,
+            "break": 3,
+            "kill": 3,
+            "grow": 1,
+            "restraintBroken": 2,
+            "reshuffle": 1,
+            "stunSkip": 1,
+            "end": 1
+          },
+          "eventAmounts": {},
+          "plays": {
+            "next": 5,
+            "now": 18
+          }
+        }
+      }
+    },
+    {
+      "key": "5/elite/random",
+      "metric": "turns",
+      "status": "above",
+      "value": 9,
+      "boundary": 8.8,
+      "deviation": 0.1999999999999993,
+      "contributions": [
+        {
+          "group": "5/elite/e_archbell/random",
+          "attempts": 10,
+          "mean": 9,
+          "weight": 1,
+          "signedContribution": 0.1999999999999993,
+          "traceTotals": {
+            "grossLoss": 1138,
+            "healing": 131,
+            "lossBySource": {
+              "enemy": 1132,
+              "overload": 6
+            },
+            "lossByEnemy": {
+              "e_archbell": 1132
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 396,
+              "heal": 35,
+              "block": 194,
+              "resolved": 378,
+              "reserve": 140,
+              "exhaust": 19,
+              "charge": 23,
+              "turn": 77,
+              "dmg": 180,
+              "hit": 53,
+              "hpLoss": 40,
+              "sealSlot": 15,
+              "reshuffle": 26,
+              "ult": 14,
+              "kill": 10,
+              "end": 10,
+              "loan": 3,
+              "repay": 3,
+              "status": 18,
+              "restraintBroken": 5,
+              "grow": 12,
+              "break": 5,
+              "stunSkip": 5,
+              "recover": 5,
+              "tune": 3
+            },
+            "eventAmounts": {
+              "sealFallback": 2
+            },
+            "plays": {
+              "now": 256,
+              "next": 67,
+              "after": 73
+            }
+          }
+        }
+      ],
+      "representative": {
+        "scenarioKey": "5/elite/e_archbell/1",
+        "policy": "random",
+        "outcome": "win",
+        "turns": 11,
+        "hpLossPct": 58.8477366255144,
+        "trace": {
+          "grossLoss": 154,
+          "healing": 11,
+          "lossBySource": {
+            "enemy": 154
+          },
+          "lossByEnemy": {
+            "e_archbell": 154
+          },
+          "reflectionByAction": {
+            "card": 0,
+            "ultimate": 0
+          },
+          "events": {
+            "play": 49,
+            "block": 30,
+            "resolved": 46,
+            "reserve": 15,
+            "loan": 1,
+            "exhaust": 2,
+            "charge": 3,
+            "repay": 1,
+            "dmg": 15,
+            "turn": 10,
+            "hit": 5,
+            "hpLoss": 4,
+            "heal": 3,
+            "status": 5,
+            "sealSlot": 2,
+            "reshuffle": 3,
+            "restraintBroken": 2,
+            "grow": 4,
+            "break": 1,
+            "stunSkip": 1,
+            "ult": 2,
+            "recover": 1,
+            "kill": 1,
+            "end": 1
+          },
+          "eventAmounts": {
+            "sealFallback": 1
+          },
+          "plays": {
+            "now": 34,
+            "after": 11,
+            "next": 4
+          }
+        }
+      }
+    },
+    {
+      "key": "5/elite/random",
+      "metric": "hpLossPct",
+      "status": "above",
+      "value": 41.44032921810699,
+      "boundary": 33,
+      "deviation": 8.440329218106989,
+      "contributions": [
+        {
+          "group": "5/elite/e_archbell/random",
+          "attempts": 10,
+          "mean": 41.44032921810699,
+          "weight": 1,
+          "signedContribution": 8.440329218106989,
+          "traceTotals": {
+            "grossLoss": 1138,
+            "healing": 131,
+            "lossBySource": {
+              "enemy": 1132,
+              "overload": 6
+            },
+            "lossByEnemy": {
+              "e_archbell": 1132
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 396,
+              "heal": 35,
+              "block": 194,
+              "resolved": 378,
+              "reserve": 140,
+              "exhaust": 19,
+              "charge": 23,
+              "turn": 77,
+              "dmg": 180,
+              "hit": 53,
+              "hpLoss": 40,
+              "sealSlot": 15,
+              "reshuffle": 26,
+              "ult": 14,
+              "kill": 10,
+              "end": 10,
+              "loan": 3,
+              "repay": 3,
+              "status": 18,
+              "restraintBroken": 5,
+              "grow": 12,
+              "break": 5,
+              "stunSkip": 5,
+              "recover": 5,
+              "tune": 3
+            },
+            "eventAmounts": {
+              "sealFallback": 2
+            },
+            "plays": {
+              "now": 256,
+              "next": 67,
+              "after": 73
+            }
+          }
+        }
+      ],
+      "representative": {
+        "scenarioKey": "5/elite/e_archbell/1",
+        "policy": "random",
+        "outcome": "win",
+        "turns": 11,
+        "hpLossPct": 58.8477366255144,
+        "trace": {
+          "grossLoss": 154,
+          "healing": 11,
+          "lossBySource": {
+            "enemy": 154
+          },
+          "lossByEnemy": {
+            "e_archbell": 154
+          },
+          "reflectionByAction": {
+            "card": 0,
+            "ultimate": 0
+          },
+          "events": {
+            "play": 49,
+            "block": 30,
+            "resolved": 46,
+            "reserve": 15,
+            "loan": 1,
+            "exhaust": 2,
+            "charge": 3,
+            "repay": 1,
+            "dmg": 15,
+            "turn": 10,
+            "hit": 5,
+            "hpLoss": 4,
+            "heal": 3,
+            "status": 5,
+            "sealSlot": 2,
+            "reshuffle": 3,
+            "restraintBroken": 2,
+            "grow": 4,
+            "break": 1,
+            "stunSkip": 1,
+            "ult": 2,
+            "recover": 1,
+            "kill": 1,
+            "end": 1
+          },
+          "eventAmounts": {
+            "sealFallback": 1
+          },
+          "plays": {
+            "now": 34,
+            "after": 11,
+            "next": 4
+          }
+        }
+      }
+    },
+    {
+      "key": "5/elite/greedy",
+      "metric": "turns",
+      "status": "above",
+      "value": 8.9,
+      "boundary": 8.8,
+      "deviation": 0.09999999999999964,
+      "contributions": [
+        {
+          "group": "5/elite/e_archbell/greedy",
+          "attempts": 10,
+          "mean": 8.9,
+          "weight": 1,
+          "signedContribution": 0.09999999999999964,
+          "traceTotals": {
+            "grossLoss": 1176,
+            "healing": 123,
+            "lossBySource": {
+              "enemy": 1167,
+              "overload": 9
+            },
+            "lossByEnemy": {
+              "e_archbell": 1167
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 401,
+              "resolved": 401,
+              "exhaust": 33,
+              "heal": 35,
+              "block": 194,
+              "dmg": 203,
+              "charge": 23,
+              "turn": 79,
+              "hit": 51,
+              "hpLoss": 44,
+              "sealSlot": 16,
+              "reshuffle": 26,
+              "ult": 19,
+              "kill": 10,
+              "end": 10,
+              "loan": 3,
+              "restraintBroken": 7,
+              "repay": 3,
+              "grow": 9,
+              "status": 22,
+              "break": 5,
+              "stunSkip": 5,
+              "recover": 5,
+              "tune": 5
+            },
+            "eventAmounts": {},
+            "plays": {
+              "now": 401
+            }
+          }
+        }
+      ],
+      "representative": {
+        "scenarioKey": "5/elite/e_archbell/2",
+        "policy": "greedy",
+        "outcome": "win",
+        "turns": 11,
+        "hpLossPct": 53.49794238683128,
+        "trace": {
+          "grossLoss": 181,
+          "healing": 51,
+          "lossBySource": {
+            "enemy": 181
+          },
+          "lossByEnemy": {
+            "e_archbell": 181
+          },
+          "reflectionByAction": {
+            "card": 0,
+            "ultimate": 0
+          },
+          "events": {
+            "play": 56,
+            "resolved": 56,
+            "tune": 2,
+            "block": 26,
+            "heal": 12,
+            "dmg": 20,
+            "charge": 3,
+            "turn": 10,
+            "hit": 7,
+            "hpLoss": 6,
+            "sealSlot": 2,
+            "reshuffle": 4,
+            "exhaust": 2,
+            "status": 2,
+            "ult": 3,
+            "kill": 1,
+            "end": 1
+          },
+          "eventAmounts": {},
+          "plays": {
+            "now": 56
+          }
+        }
+      }
+    },
+    {
+      "key": "5/elite/greedy",
+      "metric": "hpLossPct",
+      "status": "above",
+      "value": 43.333333333333336,
+      "boundary": 33,
+      "deviation": 10.333333333333336,
+      "contributions": [
+        {
+          "group": "5/elite/e_archbell/greedy",
+          "attempts": 10,
+          "mean": 43.333333333333336,
+          "weight": 1,
+          "signedContribution": 10.333333333333336,
+          "traceTotals": {
+            "grossLoss": 1176,
+            "healing": 123,
+            "lossBySource": {
+              "enemy": 1167,
+              "overload": 9
+            },
+            "lossByEnemy": {
+              "e_archbell": 1167
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 401,
+              "resolved": 401,
+              "exhaust": 33,
+              "heal": 35,
+              "block": 194,
+              "dmg": 203,
+              "charge": 23,
+              "turn": 79,
+              "hit": 51,
+              "hpLoss": 44,
+              "sealSlot": 16,
+              "reshuffle": 26,
+              "ult": 19,
+              "kill": 10,
+              "end": 10,
+              "loan": 3,
+              "restraintBroken": 7,
+              "repay": 3,
+              "grow": 9,
+              "status": 22,
+              "break": 5,
+              "stunSkip": 5,
+              "recover": 5,
+              "tune": 5
+            },
+            "eventAmounts": {},
+            "plays": {
+              "now": 401
+            }
+          }
+        }
+      ],
+      "representative": {
+        "scenarioKey": "5/elite/e_archbell/8",
+        "policy": "greedy",
+        "outcome": "win",
+        "turns": 9,
+        "hpLossPct": 57.20164609053498,
+        "trace": {
+          "grossLoss": 139,
+          "healing": 0,
+          "lossBySource": {
+            "enemy": 139
+          },
+          "lossByEnemy": {
+            "e_archbell": 139
+          },
+          "reflectionByAction": {
+            "card": 0,
+            "ultimate": 0
+          },
+          "events": {
+            "play": 34,
+            "status": 5,
+            "resolved": 34,
+            "block": 14,
+            "dmg": 23,
+            "charge": 1,
+            "turn": 8,
+            "hit": 6,
+            "hpLoss": 5,
+            "loan": 1,
+            "exhaust": 1,
+            "restraintBroken": 2,
+            "sealSlot": 2,
+            "repay": 1,
+            "reshuffle": 2,
+            "break": 1,
+            "stunSkip": 1,
+            "recover": 1,
+            "ult": 1,
+            "kill": 1,
+            "end": 1
+          },
+          "eventAmounts": {},
+          "plays": {
+            "now": 34
+          }
+        }
+      }
+    },
+    {
+      "key": "5/elite/planner",
+      "metric": "hpLossPct",
+      "status": "above",
+      "value": 41.39917695473251,
+      "boundary": 33,
+      "deviation": 8.39917695473251,
+      "contributions": [
+        {
+          "group": "5/elite/e_archbell/planner",
+          "attempts": 10,
+          "mean": 41.39917695473251,
+          "weight": 1,
+          "signedContribution": 8.39917695473251,
+          "traceTotals": {
+            "grossLoss": 1100,
+            "healing": 94,
+            "lossBySource": {
+              "enemy": 1094,
+              "overload": 6
+            },
+            "lossByEnemy": {
+              "e_archbell": 1094
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 377,
+              "reserve": 113,
+              "resolved": 377,
+              "exhaust": 28,
+              "block": 193,
+              "dmg": 176,
+              "charge": 22,
+              "heal": 29,
+              "turn": 75,
+              "hit": 48,
+              "hpLoss": 43,
+              "sealSlot": 15,
+              "reshuffle": 23,
+              "kill": 10,
+              "end": 10,
+              "loan": 3,
+              "repay": 3,
+              "grow": 12,
+              "restraintBroken": 7,
+              "status": 20,
+              "break": 5,
+              "stunSkip": 5,
+              "ult": 14,
+              "tune": 5,
+              "recover": 2
+            },
+            "eventAmounts": {
+              "sealFallback": 1
+            },
+            "plays": {
+              "next": 113,
+              "now": 264
+            }
+          }
+        }
+      ],
+      "representative": {
+        "scenarioKey": "5/elite/e_archbell/4",
+        "policy": "planner",
+        "outcome": "win",
+        "turns": 7,
+        "hpLossPct": 50.617283950617285,
+        "trace": {
+          "grossLoss": 129,
+          "healing": 6,
+          "lossBySource": {
+            "overload": 6,
+            "enemy": 123
+          },
+          "lossByEnemy": {
+            "e_archbell": 123
+          },
+          "reflectionByAction": {
+            "card": 0,
+            "ultimate": 0
+          },
+          "events": {
+            "play": 30,
+            "reserve": 7,
+            "resolved": 30,
+            "hpLoss": 6,
+            "dmg": 18,
+            "block": 12,
+            "charge": 2,
+            "turn": 6,
+            "heal": 2,
+            "hit": 4,
+            "sealSlot": 1,
+            "reshuffle": 2,
+            "exhaust": 1,
+            "ult": 1,
+            "kill": 1,
+            "end": 1
+          },
+          "eventAmounts": {},
+          "plays": {
+            "next": 7,
+            "now": 23
+          }
+        }
+      }
+    },
+    {
+      "key": "5/boss/random",
+      "metric": "turns",
+      "status": "above",
+      "value": 20.5,
+      "boundary": 19.8,
+      "deviation": 0.6999999999999993,
+      "contributions": [
+        {
+          "group": "5/boss/b_nameless/random",
+          "attempts": 10,
+          "mean": 20.5,
+          "weight": 1,
+          "signedContribution": 0.6999999999999993,
+          "traceTotals": {
+            "grossLoss": 2337,
+            "healing": 552,
+            "lossBySource": {
+              "enemy": 2328,
+              "overload": 9
+            },
+            "lossByEnemy": {
+              "b_nameless": 2328
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 848,
+              "block": 467,
+              "resolved": 831,
+              "reserve": 322,
+              "exhaust": 49,
+              "eatName": 23,
+              "turn": 190,
+              "dmg": 410,
+              "hit": 97,
+              "apDrain": 20,
+              "reshuffle": 92,
+              "loan": 4,
+              "charge": 33,
+              "repay": 4,
+              "hpLoss": 87,
+              "ult": 51,
+              "phase": 10,
+              "sealSlot": 20,
+              "restraintBroken": 9,
+              "delayRes": 14,
+              "silence": 13,
+              "status": 32,
+              "kill": 9,
+              "end": 10,
+              "heal": 103,
+              "break": 8,
+              "stunSkip": 7,
+              "grow": 21,
+              "recover": 3,
+              "tune": 2,
+              "restraintKept": 1,
+              "fizzle": 2
+            },
+            "eventAmounts": {
+              "apDrain": 40
+            },
+            "plays": {
+              "now": 526,
+              "after": 161,
+              "next": 161
+            }
+          }
+        }
+      ],
+      "representative": {
+        "scenarioKey": "5/boss/b_nameless/2",
+        "policy": "random",
+        "outcome": "win",
+        "turns": 34,
+        "hpLossPct": 75.7201646090535,
+        "trace": {
+          "grossLoss": 407,
+          "healing": 223,
+          "lossBySource": {
+            "enemy": 407
+          },
+          "lossByEnemy": {
+            "b_nameless": 407
+          },
+          "reflectionByAction": {
+            "card": 0,
+            "ultimate": 0
+          },
+          "events": {
+            "play": 147,
+            "block": 116,
+            "resolved": 146,
+            "reserve": 57,
+            "grow": 9,
+            "exhaust": 5,
+            "dmg": 52,
+            "eatName": 3,
+            "heal": 45,
+            "turn": 32,
+            "hit": 17,
+            "hpLoss": 14,
+            "apDrain": 3,
+            "reshuffle": 16,
+            "charge": 6,
+            "ult": 10,
+            "break": 1,
+            "stunSkip": 1,
+            "recover": 1,
+            "phase": 1,
+            "sealSlot": 3,
+            "delayRes": 3,
+            "silence": 3,
+            "kill": 1,
+            "end": 1
+          },
+          "eventAmounts": {
+            "apDrain": 6
+          },
+          "plays": {
+            "now": 90,
+            "next": 32,
+            "after": 25
+          }
+        }
+      }
+    },
+    {
+      "key": "5/boss/random",
+      "metric": "hpLossPct",
+      "status": "above",
+      "value": 73.45679012345678,
+      "boundary": 55,
+      "deviation": 18.456790123456784,
+      "contributions": [
+        {
+          "group": "5/boss/b_nameless/random",
+          "attempts": 10,
+          "mean": 73.45679012345678,
+          "weight": 1,
+          "signedContribution": 18.456790123456784,
+          "traceTotals": {
+            "grossLoss": 2337,
+            "healing": 552,
+            "lossBySource": {
+              "enemy": 2328,
+              "overload": 9
+            },
+            "lossByEnemy": {
+              "b_nameless": 2328
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 848,
+              "block": 467,
+              "resolved": 831,
+              "reserve": 322,
+              "exhaust": 49,
+              "eatName": 23,
+              "turn": 190,
+              "dmg": 410,
+              "hit": 97,
+              "apDrain": 20,
+              "reshuffle": 92,
+              "loan": 4,
+              "charge": 33,
+              "repay": 4,
+              "hpLoss": 87,
+              "ult": 51,
+              "phase": 10,
+              "sealSlot": 20,
+              "restraintBroken": 9,
+              "delayRes": 14,
+              "silence": 13,
+              "status": 32,
+              "kill": 9,
+              "end": 10,
+              "heal": 103,
+              "break": 8,
+              "stunSkip": 7,
+              "grow": 21,
+              "recover": 3,
+              "tune": 2,
+              "restraintKept": 1,
+              "fizzle": 2
+            },
+            "eventAmounts": {
+              "apDrain": 40
+            },
+            "plays": {
+              "now": 526,
+              "after": 161,
+              "next": 161
+            }
+          }
+        }
+      ],
+      "representative": {
+        "scenarioKey": "5/boss/b_nameless/8",
+        "policy": "random",
+        "outcome": "defeat",
+        "turns": 20,
+        "hpLossPct": 100,
+        "trace": {
+          "grossLoss": 256,
+          "healing": 13,
+          "lossBySource": {
+            "enemy": 256
+          },
+          "lossByEnemy": {
+            "b_nameless": 256
+          },
+          "reflectionByAction": {
+            "card": 0,
+            "ultimate": 0
+          },
+          "events": {
+            "play": 87,
+            "resolved": 84,
+            "reserve": 33,
+            "restraintBroken": 4,
+            "block": 55,
+            "exhaust": 5,
+            "eatName": 3,
+            "grow": 5,
+            "dmg": 44,
+            "turn": 19,
+            "loan": 1,
+            "hit": 11,
+            "repay": 1,
+            "apDrain": 2,
+            "reshuffle": 9,
+            "restraintKept": 1,
+            "charge": 3,
+            "heal": 5,
+            "hpLoss": 9,
+            "ult": 4,
+            "phase": 1,
+            "sealSlot": 1,
+            "status": 1,
+            "delayRes": 1,
+            "silence": 1,
+            "break": 1,
+            "stunSkip": 1,
+            "end": 1
+          },
+          "eventAmounts": {
+            "apDrain": 4
+          },
+          "plays": {
+            "now": 54,
+            "after": 15,
+            "next": 18
+          }
+        }
+      }
+    },
+    {
+      "key": "5/boss/greedy",
+      "metric": "turns",
+      "status": "above",
+      "value": 21.3,
+      "boundary": 19.8,
+      "deviation": 1.5,
+      "contributions": [
+        {
+          "group": "5/boss/b_nameless/greedy",
+          "attempts": 10,
+          "mean": 21.3,
+          "weight": 1,
+          "signedContribution": 1.5,
+          "traceTotals": {
+            "grossLoss": 2392,
+            "healing": 414,
+            "lossBySource": {
+              "enemy": 2377,
+              "overload": 15
+            },
+            "lossByEnemy": {
+              "b_nameless": 2377
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 905,
+              "dmg": 457,
+              "resolved": 905,
+              "block": 471,
+              "exhaust": 50,
+              "eatName": 24,
+              "turn": 202,
+              "restraintBroken": 34,
+              "hit": 106,
+              "hpLoss": 100,
+              "reserve": 6,
+              "apDrain": 21,
+              "reshuffle": 88,
+              "loan": 5,
+              "charge": 34,
+              "repay": 5,
+              "status": 38,
+              "ult": 59,
+              "break": 10,
+              "phase": 10,
+              "sealSlot": 19,
+              "delayRes": 14,
+              "silence": 15,
+              "kill": 8,
+              "end": 10,
+              "heal": 84,
+              "grow": 14,
+              "stunSkip": 6,
+              "recover": 5,
+              "restraintKept": 1,
+              "tune": 2
+            },
+            "eventAmounts": {
+              "apDrain": 42,
+              "sealFallback": 2
+            },
+            "plays": {
+              "now": 899,
+              "next": 6
+            }
+          }
+        }
+      ],
+      "representative": {
+        "scenarioKey": "5/boss/b_nameless/8",
+        "policy": "greedy",
+        "outcome": "win",
+        "turns": 28,
+        "hpLossPct": 94.23868312757202,
+        "trace": {
+          "grossLoss": 232,
+          "healing": 3,
+          "lossBySource": {
+            "enemy": 232
+          },
+          "lossByEnemy": {
+            "b_nameless": 232
+          },
+          "reflectionByAction": {
+            "card": 0,
+            "ultimate": 0
+          },
+          "events": {
+            "play": 117,
+            "resolved": 117,
+            "block": 71,
+            "dmg": 63,
+            "restraintBroken": 8,
+            "exhaust": 5,
+            "eatName": 3,
+            "turn": 27,
+            "loan": 1,
+            "hit": 14,
+            "hpLoss": 11,
+            "repay": 1,
+            "apDrain": 3,
+            "reshuffle": 12,
+            "charge": 5,
+            "status": 6,
+            "ult": 8,
+            "heal": 1,
+            "phase": 1,
+            "sealSlot": 1,
+            "grow": 2,
+            "delayRes": 2,
+            "silence": 2,
+            "break": 1,
+            "stunSkip": 1,
+            "recover": 1,
+            "kill": 1,
+            "end": 1
+          },
+          "eventAmounts": {
+            "apDrain": 6,
+            "sealFallback": 1
+          },
+          "plays": {
+            "now": 117
+          }
+        }
+      }
+    },
+    {
+      "key": "5/boss/greedy",
+      "metric": "hpLossPct",
+      "status": "above",
+      "value": 81.3991769547325,
+      "boundary": 55,
+      "deviation": 26.399176954732496,
+      "contributions": [
+        {
+          "group": "5/boss/b_nameless/greedy",
+          "attempts": 10,
+          "mean": 81.3991769547325,
+          "weight": 1,
+          "signedContribution": 26.399176954732496,
+          "traceTotals": {
+            "grossLoss": 2392,
+            "healing": 414,
+            "lossBySource": {
+              "enemy": 2377,
+              "overload": 15
+            },
+            "lossByEnemy": {
+              "b_nameless": 2377
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 905,
+              "dmg": 457,
+              "resolved": 905,
+              "block": 471,
+              "exhaust": 50,
+              "eatName": 24,
+              "turn": 202,
+              "restraintBroken": 34,
+              "hit": 106,
+              "hpLoss": 100,
+              "reserve": 6,
+              "apDrain": 21,
+              "reshuffle": 88,
+              "loan": 5,
+              "charge": 34,
+              "repay": 5,
+              "status": 38,
+              "ult": 59,
+              "break": 10,
+              "phase": 10,
+              "sealSlot": 19,
+              "delayRes": 14,
+              "silence": 15,
+              "kill": 8,
+              "end": 10,
+              "heal": 84,
+              "grow": 14,
+              "stunSkip": 6,
+              "recover": 5,
+              "restraintKept": 1,
+              "tune": 2
+            },
+            "eventAmounts": {
+              "apDrain": 42,
+              "sealFallback": 2
+            },
+            "plays": {
+              "now": 899,
+              "next": 6
+            }
+          }
+        }
+      ],
+      "representative": {
+        "scenarioKey": "5/boss/b_nameless/2",
+        "policy": "greedy",
+        "outcome": "defeat",
+        "turns": 27,
+        "hpLossPct": 100,
+        "trace": {
+          "grossLoss": 398,
+          "healing": 155,
+          "lossBySource": {
+            "enemy": 398
+          },
+          "lossByEnemy": {
+            "b_nameless": 398
+          },
+          "reflectionByAction": {
+            "card": 0,
+            "ultimate": 0
+          },
+          "events": {
+            "play": 123,
+            "grow": 7,
+            "exhaust": 5,
+            "resolved": 123,
+            "block": 87,
+            "dmg": 48,
+            "heal": 38,
+            "eatName": 3,
+            "turn": 26,
+            "hit": 13,
+            "hpLoss": 13,
+            "reshuffle": 13,
+            "apDrain": 3,
+            "charge": 5,
+            "ult": 8,
+            "break": 1,
+            "stunSkip": 1,
+            "recover": 1,
+            "phase": 1,
+            "sealSlot": 2,
+            "delayRes": 2,
+            "silence": 2,
+            "end": 1
+          },
+          "eventAmounts": {
+            "apDrain": 6
+          },
+          "plays": {
+            "now": 123
+          }
+        }
+      }
+    },
+    {
+      "key": "5/boss/planner",
+      "metric": "turns",
+      "status": "above",
+      "value": 19.9,
+      "boundary": 19.8,
+      "deviation": 0.09999999999999787,
+      "contributions": [
+        {
+          "group": "5/boss/b_nameless/planner",
+          "attempts": 10,
+          "mean": 19.9,
+          "weight": 1,
+          "signedContribution": 0.09999999999999787,
+          "traceTotals": {
+            "grossLoss": 2232,
+            "healing": 490,
+            "lossBySource": {
+              "enemy": 2220,
+              "overload": 12
+            },
+            "lossByEnemy": {
+              "b_nameless": 2220
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 775,
+              "reserve": 279,
+              "block": 433,
+              "resolved": 775,
+              "exhaust": 48,
+              "eatName": 22,
+              "dmg": 394,
+              "turn": 189,
+              "restraintBroken": 14,
+              "hit": 105,
+              "hpLoss": 99,
+              "apDrain": 19,
+              "reshuffle": 72,
+              "loan": 5,
+              "charge": 30,
+              "repay": 5,
+              "status": 35,
+              "ult": 44,
+              "phase": 10,
+              "sealSlot": 19,
+              "delayRes": 13,
+              "silence": 13,
+              "break": 9,
+              "stunSkip": 8,
+              "kill": 8,
+              "end": 10,
+              "heal": 91,
+              "restraintKept": 3,
+              "grow": 18,
+              "recover": 3,
+              "tune": 2
+            },
+            "eventAmounts": {
+              "apDrain": 38,
+              "sealFallback": 2
+            },
+            "plays": {
+              "next": 277,
+              "now": 496,
+              "after": 2
+            }
+          }
+        }
+      ],
+      "representative": {
+        "scenarioKey": "5/boss/b_nameless/2",
+        "policy": "planner",
+        "outcome": "win",
+        "turns": 27,
+        "hpLossPct": 72.42798353909465,
+        "trace": {
+          "grossLoss": 324,
+          "healing": 148,
+          "lossBySource": {
+            "enemy": 324
+          },
+          "lossByEnemy": {
+            "b_nameless": 324
+          },
+          "reflectionByAction": {
+            "card": 0,
+            "ultimate": 0
+          },
+          "events": {
+            "play": 117,
+            "reserve": 40,
+            "exhaust": 5,
+            "resolved": 117,
+            "block": 89,
+            "heal": 29,
+            "dmg": 49,
+            "eatName": 3,
+            "grow": 7,
+            "turn": 26,
+            "hit": 15,
+            "hpLoss": 12,
+            "reshuffle": 13,
+            "apDrain": 2,
+            "charge": 4,
+            "ult": 7,
+            "break": 2,
+            "stunSkip": 2,
+            "phase": 1,
+            "sealSlot": 2,
+            "delayRes": 2,
+            "silence": 2,
+            "recover": 1,
+            "kill": 1,
+            "end": 1
+          },
+          "eventAmounts": {
+            "apDrain": 4
+          },
+          "plays": {
+            "next": 40,
+            "now": 77
+          }
+        }
+      }
+    },
+    {
+      "key": "5/boss/planner",
+      "metric": "hpLossPct",
+      "status": "above",
+      "value": 71.68724279835389,
+      "boundary": 55,
+      "deviation": 16.687242798353893,
+      "contributions": [
+        {
+          "group": "5/boss/b_nameless/planner",
+          "attempts": 10,
+          "mean": 71.68724279835389,
+          "weight": 1,
+          "signedContribution": 16.687242798353893,
+          "traceTotals": {
+            "grossLoss": 2232,
+            "healing": 490,
+            "lossBySource": {
+              "enemy": 2220,
+              "overload": 12
+            },
+            "lossByEnemy": {
+              "b_nameless": 2220
+            },
+            "reflectionByAction": {
+              "card": 0,
+              "ultimate": 0
+            },
+            "events": {
+              "play": 775,
+              "reserve": 279,
+              "block": 433,
+              "resolved": 775,
+              "exhaust": 48,
+              "eatName": 22,
+              "dmg": 394,
+              "turn": 189,
+              "restraintBroken": 14,
+              "hit": 105,
+              "hpLoss": 99,
+              "apDrain": 19,
+              "reshuffle": 72,
+              "loan": 5,
+              "charge": 30,
+              "repay": 5,
+              "status": 35,
+              "ult": 44,
+              "phase": 10,
+              "sealSlot": 19,
+              "delayRes": 13,
+              "silence": 13,
+              "break": 9,
+              "stunSkip": 8,
+              "kill": 8,
+              "end": 10,
+              "heal": 91,
+              "restraintKept": 3,
+              "grow": 18,
+              "recover": 3,
+              "tune": 2
+            },
+            "eventAmounts": {
+              "apDrain": 38,
+              "sealFallback": 2
+            },
+            "plays": {
+              "next": 277,
+              "now": 496,
+              "after": 2
+            }
+          }
+        }
+      ],
+      "representative": {
+        "scenarioKey": "5/boss/b_nameless/1",
+        "policy": "planner",
+        "outcome": "defeat",
+        "turns": 18,
+        "hpLossPct": 100,
+        "trace": {
+          "grossLoss": 257,
+          "healing": 14,
+          "lossBySource": {
+            "enemy": 257
+          },
+          "lossByEnemy": {
+            "b_nameless": 257
+          },
+          "reflectionByAction": {
+            "card": 0,
+            "ultimate": 0
+          },
+          "events": {
+            "play": 69,
+            "reserve": 32,
+            "dmg": 31,
+            "resolved": 69,
+            "heal": 5,
+            "block": 36,
+            "exhaust": 4,
+            "eatName": 2,
+            "turn": 17,
+            "loan": 1,
+            "hit": 11,
+            "hpLoss": 10,
+            "repay": 1,
+            "apDrain": 2,
+            "reshuffle": 6,
+            "charge": 3,
+            "restraintBroken": 3,
+            "restraintKept": 1,
+            "ult": 3,
+            "break": 1,
+            "phase": 1,
+            "sealSlot": 2,
+            "delayRes": 1,
+            "silence": 1,
+            "end": 1
+          },
+          "eventAmounts": {
+            "apDrain": 4
+          },
+          "plays": {
+            "next": 31,
+            "now": 37,
+            "after": 1
+          }
+        }
+      }
+    }
+  ],
+  "encounterBudgets": [
+    {
+      "zone": 1,
+      "tier": "normal",
+      "encounter": "e_moth+e_moth",
+      "hp": 36,
+      "min": 22,
+      "max": 48,
+      "status": "pass"
+    },
+    {
+      "zone": 1,
+      "tier": "normal",
+      "encounter": "e_cog+e_smudge",
+      "hp": 39,
+      "min": 22,
+      "max": 48,
+      "status": "pass"
+    },
+    {
+      "zone": 1,
+      "tier": "normal",
+      "encounter": "e_hound",
+      "hp": 22,
+      "min": 22,
+      "max": 48,
+      "status": "pass"
+    },
+    {
+      "zone": 1,
+      "tier": "normal",
+      "encounter": "e_lantern+e_page+e_page",
+      "hp": 44,
+      "min": 22,
+      "max": 48,
+      "status": "pass"
+    },
+    {
+      "zone": 1,
+      "tier": "normal",
+      "encounter": "e_cog+e_page",
+      "hp": 36,
+      "min": 22,
+      "max": 48,
+      "status": "pass"
+    },
+    {
+      "zone": 1,
+      "tier": "normal",
+      "encounter": "e_smudge+e_smudge+e_moth",
+      "hp": 48,
+      "min": 22,
+      "max": 48,
+      "status": "pass"
+    },
+    {
+      "zone": 1,
+      "tier": "normal",
+      "encounter": "e_hound+e_page",
+      "hp": 34,
+      "min": 22,
+      "max": 48,
+      "status": "pass"
+    },
+    {
+      "zone": 1,
+      "tier": "elite",
+      "encounter": "e_bellwarden",
+      "hp": 60,
+      "min": 52,
+      "max": 67,
+      "status": "pass"
+    },
+    {
+      "zone": 1,
+      "tier": "elite",
+      "encounter": "e_mirrorclerk",
+      "hp": 52,
+      "min": 52,
+      "max": 67,
+      "status": "pass"
+    },
+    {
+      "zone": 1,
+      "tier": "elite",
+      "encounter": "e_gardener",
+      "hp": 55,
+      "min": 52,
+      "max": 67,
+      "status": "pass"
+    },
+    {
+      "zone": 1,
+      "tier": "boss",
+      "encounter": "b_bell",
+      "hp": 130,
+      "min": 125,
+      "max": 140,
+      "status": "pass"
+    },
+    {
+      "zone": 1,
+      "tier": "boss",
+      "encounter": "b_notary",
+      "hp": 125,
+      "min": 125,
+      "max": 140,
+      "status": "pass"
+    },
+    {
+      "zone": 1,
+      "tier": "boss",
+      "encounter": "b_garden",
+      "hp": 125,
+      "min": 125,
+      "max": 140,
+      "status": "pass"
+    },
+    {
+      "zone": 2,
+      "tier": "normal",
+      "encounter": "e_scribe+e_inkswarm",
+      "hp": 50,
+      "min": 46,
+      "max": 68,
+      "status": "pass"
+    },
+    {
+      "zone": 2,
+      "tier": "normal",
+      "encounter": "e_shelf",
+      "hp": 46,
+      "min": 46,
+      "max": 68,
+      "status": "pass"
+    },
+    {
+      "zone": 2,
+      "tier": "normal",
+      "encounter": "e_keeper+e_inkswarm",
+      "hp": 54,
+      "min": 46,
+      "max": 68,
+      "status": "pass"
+    },
+    {
+      "zone": 2,
+      "tier": "normal",
+      "encounter": "e_scribe+e_scribe",
+      "hp": 68,
+      "min": 46,
+      "max": 68,
+      "status": "pass"
+    },
+    {
+      "zone": 2,
+      "tier": "normal",
+      "encounter": "e_inkswarm+e_inkswarm+e_inkswarm",
+      "hp": 48,
+      "min": 46,
+      "max": 68,
+      "status": "pass"
+    },
+    {
+      "zone": 2,
+      "tier": "elite",
+      "encounter": "e_censor",
+      "hp": 95,
+      "min": 80,
+      "max": 95,
+      "status": "pass"
+    },
+    {
+      "zone": 2,
+      "tier": "elite",
+      "encounter": "e_twinink",
+      "hp": 80,
+      "min": 80,
+      "max": 95,
+      "status": "pass"
+    },
+    {
+      "zone": 2,
+      "tier": "boss",
+      "encounter": "b_archivist",
+      "hp": 230,
+      "min": 230,
+      "max": 230,
+      "status": "pass"
+    },
+    {
+      "zone": 3,
+      "tier": "normal",
+      "encounter": "e_debtwraith+e_overdue",
+      "hp": 73,
+      "min": 60,
+      "max": 85,
+      "status": "pass"
+    },
+    {
+      "zone": 3,
+      "tier": "normal",
+      "encounter": "e_scaleknight",
+      "hp": 52,
+      "min": 60,
+      "max": 85,
+      "status": "below"
+    },
+    {
+      "zone": 3,
+      "tier": "normal",
+      "encounter": "e_sealgolem+e_ratpack",
+      "hp": 64,
+      "min": 60,
+      "max": 85,
+      "status": "pass"
+    },
+    {
+      "zone": 3,
+      "tier": "normal",
+      "encounter": "e_ratpack+e_ratpack+e_ratpack",
+      "hp": 54,
+      "min": 60,
+      "max": 85,
+      "status": "below"
+    },
+    {
+      "zone": 3,
+      "tier": "normal",
+      "encounter": "e_debtwraith+e_sealgolem",
+      "hp": 84,
+      "min": 60,
+      "max": 85,
+      "status": "pass"
+    },
+    {
+      "zone": 3,
+      "tier": "elite",
+      "encounter": "e_collector",
+      "hp": 110,
+      "min": 105,
+      "max": 120,
+      "status": "pass"
+    },
+    {
+      "zone": 3,
+      "tier": "elite",
+      "encounter": "e_notarytwin+e_notarytwin",
+      "hp": 110,
+      "min": 105,
+      "max": 120,
+      "status": "pass"
+    },
+    {
+      "zone": 3,
+      "tier": "boss",
+      "encounter": "b_usurer",
+      "hp": 260,
+      "min": 260,
+      "max": 260,
+      "status": "pass"
+    },
+    {
+      "zone": 4,
+      "tier": "normal",
+      "encounter": "e_choir+e_shadowlamp",
+      "hp": 82,
+      "min": 70,
+      "max": 95,
+      "status": "pass"
+    },
+    {
+      "zone": 4,
+      "tier": "normal",
+      "encounter": "e_stagerg+e_ghostguest",
+      "hp": 80,
+      "min": 70,
+      "max": 95,
+      "status": "pass"
+    },
+    {
+      "zone": 4,
+      "tier": "normal",
+      "encounter": "e_prompter+e_choir",
+      "hp": 85,
+      "min": 70,
+      "max": 95,
+      "status": "pass"
+    },
+    {
+      "zone": 4,
+      "tier": "normal",
+      "encounter": "e_ghostguest+e_ghostguest+e_ghostguest",
+      "hp": 66,
+      "min": 70,
+      "max": 95,
+      "status": "below"
+    },
+    {
+      "zone": 4,
+      "tier": "normal",
+      "encounter": "e_stagerg+e_prompter",
+      "hp": 103,
+      "min": 70,
+      "max": 95,
+      "status": "above"
+    },
+    {
+      "zone": 4,
+      "tier": "elite",
+      "encounter": "e_baton",
+      "hp": 125,
+      "min": 120,
+      "max": 135,
+      "status": "pass"
+    },
+    {
+      "zone": 4,
+      "tier": "elite",
+      "encounter": "e_primadonna",
+      "hp": 120,
+      "min": 120,
+      "max": 135,
+      "status": "pass"
+    },
+    {
+      "zone": 4,
+      "tier": "boss",
+      "encounter": "b_overture",
+      "hp": 290,
+      "min": 290,
+      "max": 290,
+      "status": "pass"
+    },
+    {
+      "zone": 5,
+      "tier": "normal",
+      "encounter": "e_springguard+e_rustgear",
+      "hp": 75,
+      "min": 80,
+      "max": 105,
+      "status": "below"
+    },
+    {
+      "zone": 5,
+      "tier": "normal",
+      "encounter": "e_pendulum+e_timeshard",
+      "hp": 93,
+      "min": 80,
+      "max": 105,
+      "status": "pass"
+    },
+    {
+      "zone": 5,
+      "tier": "normal",
+      "encounter": "e_echo+e_timeshard",
+      "hp": 95,
+      "min": 80,
+      "max": 105,
+      "status": "pass"
+    },
+    {
+      "zone": 5,
+      "tier": "normal",
+      "encounter": "e_rustgear+e_rustgear+e_rustgear",
+      "hp": 60,
+      "min": 80,
+      "max": 105,
+      "status": "below"
+    },
+    {
+      "zone": 5,
+      "tier": "normal",
+      "encounter": "e_springguard+e_echo",
+      "hp": 105,
+      "min": 80,
+      "max": 105,
+      "status": "pass"
+    },
+    {
+      "zone": 5,
+      "tier": "elite",
+      "encounter": "e_archbell",
+      "hp": 140,
+      "min": 140,
+      "max": 140,
+      "status": "pass"
+    },
+    {
+      "zone": 5,
+      "tier": "boss",
+      "encounter": "b_nameless",
+      "hp": 340,
+      "min": 340,
+      "max": 340,
+      "status": "pass"
+    }
+  ]
+}

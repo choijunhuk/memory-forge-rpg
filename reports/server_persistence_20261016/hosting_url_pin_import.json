@@ -1,0 +1,23 @@
+{
+  "parent": "7e38544bacafa84e4bc6eb4caa85bf2e4a0e88ea",
+  "scope": "narrow host/bootstrap and regression fix; pending Root validation",
+  "files": {
+    "server/MemoryForge.Server/Program.cs": {
+      "before": "56afd1190c2df7e9cd7dc8f2370211f9c5931293ec382787876d0a0319fd366a",
+      "after": "17691e06f25da6bacb5db58f8222674d147fdb8224e124415df7d6d148110454"
+    },
+    "server/MemoryForge.Server/README.md": {
+      "before": "2f236efcf2de1b9fbcfa9f13484df0a3a12f312f1d63e3a0956d9ab2e5b422ca",
+      "after": "21cde9f4d98b40ca9cac71035b3a053045f9276be42fe6ba4d8cb2afe1950792"
+    },
+    "server/MemoryForge.ServerChecks/Program.cs": {
+      "before": "a0a09181b399235ace27919e460add0f97192231bbba64287405f54b350cb8b3",
+      "after": "a550af1f9170820deffbe5c254b25d92b513bfbb47fee1dfcdff6f1d0d1a9ce2"
+    },
+    "reports/server_persistence_20261016/author_report.md": {
+      "before": "6a02081483d7b7f2161cdf18d656b473bcc4f8f7f69db01edc30accb2c776c69",
+      "after": "0dc4af11726cd3a27788142ef42187a1446b5da7f253604c5e40bf75a3cd1a90"
+    }
+  },
+  "equal_author": true
+}

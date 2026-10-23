@@ -1,0 +1,80 @@
+{
+  "schema": "memory-forge/cute-character-validation/1",
+  "date": "2026-10-18",
+  "status": "PASS",
+  "png_files": [
+    {
+      "file": "yuri-cute-board-v1.png",
+      "status": "PASS",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "sha256": "74e7bf2ad686e1c7acfd4eb184adba87c7c504e3408c60f1d5fdd5d057d3e1ed",
+      "chunk_crc": "PASS",
+      "zlib_decode": "PASS",
+      "pillow_decode": "PASS",
+      "decoded_bytes": 4719616
+    },
+    {
+      "file": "rien-cute-board-v1.png",
+      "status": "PASS",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "sha256": "00ebe35ec87c30ba93dd767b830c269fcd5a6165be3e261fe74386d741c5b793",
+      "chunk_crc": "PASS",
+      "zlib_decode": "PASS",
+      "pillow_decode": "PASS",
+      "decoded_bytes": 4719616
+    },
+    {
+      "file": "kaya-cute-board-v1.png",
+      "status": "PASS",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "sha256": "c5648c552927ca9616e6377532bf819ec31ec9d3e611ac4288828600154fc828",
+      "chunk_crc": "PASS",
+      "zlib_decode": "PASS",
+      "pillow_decode": "PASS",
+      "decoded_bytes": 4719616
+    },
+    {
+      "file": "rien-cute-board-v2.png",
+      "status": "PASS",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "sha256": "f48fdcf30664cd844d93d80420d07cefa646097e1bb1fd300cac878139e0a827",
+      "chunk_crc": "PASS",
+      "zlib_decode": "PASS",
+      "pillow_decode": "PASS",
+      "decoded_bytes": 4719616
+    }
+  ],
+  "selected_count": 3,
+  "selected": {
+    "yuri": "yuri-cute-board-v1.png",
+    "rien": "rien-cute-board-v2.png",
+    "kaya": "kaya-cute-board-v1.png"
+  },
+  "source_ages": {
+    "yuri": 16,
+    "rien": 17,
+    "kaya": 17
+  },
+  "prompt_json": "PASS",
+  "visual_verdict": "PASS_AS_CANDIDATES",
+  "game_code_tests": "NOT_RUN; art-only scope",
+  "unity": "NOT_RUN; prohibited by request",
+  "independent_review": "NOT_RUN; no Claude or subagent calls",
+  "billing": "Built-in image tool only; account billing dashboard not inspected",
+  "readme_local_links": {
+    "status": "PASS",
+    "count": 12
+  }
+}

@@ -1,0 +1,11 @@
+# Bounded read-only diagnosis of native pointer input
+
+Official Opus5.5 xhigh, included subscription only. No API/credits/extra/fallback/Bash/MCP/agents/images. Separate A worktree, code readonly. Own only reports/expedition_client_20261016/native_input_review.md. Do not alter code, data, scenes, settings or tests. Other work is ongoing; do not revert anything.
+
+Requirement v0.8.1 §14.3: actual usable Unity exploration UI. Root has integrated/reviewed your card info client and corrected the SHOP test seed to1235 because real map1234 has no shop. Full actual PlayMode86/86 and Edit3/3PASS. These use public real commands/EventSystem raycasts, NOT OS mouse input.
+
+Fresh native macOS Development build of the actual new first Expedition scene succeeded0warnings/0errors (267430167bytes,12.35s), launched exact new .app. Mono/Metal native screen shows correct Korean actual map243HP/60coins/18deck. ProductName remains original2D_URP; no rename. ActiveInputHandler2(Both), PlayerSettings.runInBackgroundfalse. Native Player.log initialization clean, no exception/errors.
+
+Root's CUA actual OS pointer is visibly positioned over the first reachable gold battle node in a4112x2580fullscreen screenshot at(330,970). Earlier(160,490)hit HP header (no effect, calibration). Clicks at observed node with native duration180ms/400ms and AXRaise are being tested; screenshots initially remainMAP. Cursor visibly matches target, which is not proof button events arrived. Editor actual Raycast+ExecuteHierarchy click at node DOES enterBATTLE, show CardInfo, selectnow and confirmAP4->3/block8/V2. Actual keyboard/native-menu controls not yet checked. No claim the product is broken: automation delivery/focus/coordinate/time issues remain possible.
+
+Read current client OnEnable/Render/RemoveView/FitView/eventsystem/button creation, compare existing Battle practice, settings/input handling. Identify concrete source defect IF supported, otherwise say inconclusive and propose the smallest reversible diagnostic capturing actual EventSystem/Input.mousePosition/buttonDown/Up/raycast at target in native. Do not invent APIs, assert CUA fault without evidence or change InputSystem/deps. Distinguish facts, hypotheses and what observation would discriminate. Keep this bounded; no whole-game planning. Root will own all Editor writes and native checks.

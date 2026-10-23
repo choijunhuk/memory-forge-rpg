@@ -1,0 +1,23 @@
+{
+  "character": "lumi",
+  "key": "fig_action1",
+  "old_path": "moments/lumi/images/char_lumi_moment_action1_v01.png",
+  "target": "lumi/images/char_lumi_fig_action1_styleA_v01.png",
+  "master": "lumi/images/char_lumi_fig_neutral_styleA_v01.png",
+  "background": false,
+  "beats": [
+    "헬멧을 손목 위에서 짧게 돌려 잡는다. 팔에 끼우고 손을 비우자, 뒤따라 흔들리던 재킷 자락도 가라앉는다."
+  ],
+  "args": {
+    "prompt": "Use case: style-transfer. Production transparent full-body sprite for Memory Forge. REDRAW rather than merely recolor. Direction A CLEAR CEL, exactly the rendering grammar of the last reference: crisp controlled ink contours, emphatic upper eyelids, tiny symbolic nose and short mouth, matte skin with large flat light areas and one hard-edged shadow step, large grouped hair locks with broad flat highlight bands, costume tailoring and flat color planes before details, restrained gold/metal highlights. NO photoreal/3D nose, glossy lips, airbrush skin, tiny sparkling hair strands or painterly gradients. First reference controls exact character identity, adult age, outfit structure, props, pose, composition and framing; last reference is STYLE ONLY and must not transfer its clothing/face. Preserve all outfit cutouts and existing adult silhouette. Keep original full body and equipment inside a 1024x1536 portrait with a little clear margin. GENUINELY TRANSPARENT empty canvas alpha=0 around the subject including corners, no colored backdrop, vignette, aura, halo, floor, cast shadow, checkerboard, text or watermark. Remove ALL inherited background haze.\nThe SECOND reference is this SAME character already redrawn in A: match its face and rendering while using FIRST reference for pose/furniture/props. 22-year-old athletic Lumi has raised SAME black/blue helmet onto open palm after short spin, playful confident blue-eyed gaze. No daggers.\nPreserve intent of these authored beats without putting text into the image: 헬멧을 손목 위에서 짧게 돌려 잡는다. 팔에 끼우고 손을 비우자, 뒤따라 흔들리던 재킷 자락도 가라앉는다.",
+    "referenced_image_paths": [
+      "/Users/choi/Documents/Memory_forge/art/moments/lumi/images/char_lumi_moment_action1_v01.png",
+      "/Users/choi/Documents/Memory_forge/art/moments/lumi/images/char_lumi_fig_neutral_styleA_v01.png"
+    ],
+    "transparent_background": true
+  },
+  "cache_path": "/Users/choi/.codex/generated_images/01a14db0-4150-7f01-9240-82aaa185dd28/exec-d72d1c2a-a42a-4f07-9fb8-1fe9a663fb5d.png",
+  "status": "ready",
+  "generation_status": "generated_pending_review",
+  "selected": true
+}

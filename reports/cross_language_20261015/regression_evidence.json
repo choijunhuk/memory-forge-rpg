@@ -1,0 +1,31 @@
+{
+  "regression": "reserve-only card combined with a noReserve circuit has no legal modes",
+  "scenario": {
+    "seed": 1135,
+    "length": "short",
+    "memoryPolicy": "legacy",
+    "card": "com_overwatch",
+    "circuit": "c_quick",
+    "turn": 3
+  },
+  "red": {
+    "status": "FAIL",
+    "command": "node tools/gen_traces.mjs --output engine/tests/vectors/traces.jsonl.gz",
+    "stderr": "original_empty_modes_failure.txt",
+    "error": "Trace policy cannot pick an empty list",
+    "note": "Historical pre-fix failure; the isolated seed regression also failed before the fix in the current chat, but its raw test output was not saved."
+  },
+  "fix": "Skip the selected card when allowedModes returns an empty list before choosing a mode; keep unknown errors fatal.",
+  "green": {
+    "status": "PASS",
+    "command": "node --test engine/tests/trace_export.test.mjs",
+    "evidence": "trace_tests.txt",
+    "tests": 8,
+    "failures": 0,
+    "includesRealSeedRegression": true
+  },
+  "finalSources": {
+    "engine": "b1ba35f433197072200825ffa85cac49cf3d4812c4bf02032793fef8491d63eb",
+    "generator": "f071d6d815e7fe3f41d602824d6437fa0e2c9d9b043f33c929e7b7b600a05963"
+  }
+}

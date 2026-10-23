@@ -1,0 +1,79 @@
+{
+  "codex_cli": "0.162.1",
+  "codex_effective_project": {
+    "model": "gpt-6.1-sol",
+    "model_reasoning_effort": "high",
+    "forced_login_method": "chatgpt"
+  },
+  "active_codex_turn": {
+    "model": "gpt-6.1-sol",
+    "effort": "max",
+    "evidence": "current turn_context metadata; core work, not an implied hot switch"
+  },
+  "claude_cli": "2.1.285",
+  "claude_observed_model": "claude-opus-5-5",
+  "claude_settings_default": "high",
+  "claude_max_application": "--effort max per session; not persisted as invalid max setting",
+  "fallbacks": [],
+  "model_auth_only": "ChatGPT / claude.ai subscriptions",
+  "codex_provider_customization": false,
+  "unity_editor": "6000.0.46f1",
+  "unity_template": "official Universal2D5.1.0, URP17.0.3",
+  "unity_mcp_server": "10.3.0 pinnedMIT localhostonly",
+  "editor_connection": "VERIFIED",
+  "telemetry_env_disabled": true,
+  "paid_asset_generation": false,
+  "image_owner": "Codex",
+  "references": [
+    "https://learn.chatgpt.com/docs/config-file/config-reference",
+    "https://learn.chatgpt.com/docs/config-file/config-advanced",
+    "https://code.claude.com/docs/en/model-config",
+    "https://github.com/CoplayDev/unity-mcp/tree/v10.3.0"
+  ],
+  "claude_automatic_collaboration": "VERIFIED official CLI; all scoped cross reviews received and accepted after fixes",
+  "claude_observed_effort": {
+    "review": "max via effort/perTurnEffort metadata",
+    "mcp_smoke": "high via session metadata"
+  },
+  "claude_account_ui_cli_matched": true,
+  "subscription_only": {
+    "codex": "ChatGPT included allowance available; separate credit balance unchanged",
+    "claude": "claude.ai Max5x, usage credits and auto reload OFF verified; account matched"
+  },
+  "unity_writer": "Codex only",
+  "claude_unity_mcp": "VERIFIED two read-only calls",
+  "unity_editmode": {
+    "passed": 3,
+    "failed": 0,
+    "proof": "unity_editmode_final.json"
+  },
+  "unity_playmode": {
+    "passed": 2,
+    "failed": 0,
+    "proof": "unity_core_playmode.json"
+  },
+  "unity_mac_build": {
+    "status": "PASS after shared-core package",
+    "proof": "unity_build_final.json",
+    "errors": 0,
+    "warnings": 0
+  },
+  "android": "NOT_RUN: Android/IL2CPP/ARM64 build support modules absent",
+  "full_csharp_battle_run": "NOT_IMPLEMENTED; zero C# commands executed",
+  "core_checks": {
+    "original": 202,
+    "canonical": 87,
+    "snapshots": 2000,
+    "fixture": 13
+  },
+  "full_game_client": "NOT_IMPLEMENTED",
+  "unity_default_dotnet_build": "PASS; shared_core_layout.json and default_dotnet_run.txt",
+  "unity_console": {
+    "errors": 0,
+    "mcp_reload_warning": 1,
+    "proof": [
+      "shared_core_errors_only.json",
+      "shared_core_console.json"
+    ]
+  }
+}

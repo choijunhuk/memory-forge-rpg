@@ -1,0 +1,15 @@
+{
+  "score": 93,
+  "verdict": "pass",
+  "category_match": true,
+  "differences": [
+    "B pose cuts retain small furniture/prop/ornament variations; no articulated continuity is claimed.",
+    "Aila final C intentionally holds the accepted return-look PNG rather than a separate rejected fourth candidate.",
+    "Background files are native 1672x941, below the full-master specification."
+  ],
+  "suggestions": [],
+  "reasoning": "The reported lobby ending states now have matching chair/hand/folder assignments, all scene images exist, and six distinct 512px expressions per adult preserve design. This is source-readiness QA only.",
+  "next_actions": [
+    "Import current source bytes and review new runtime captures in the implementation lane; not executed in this task."
+  ]
+}

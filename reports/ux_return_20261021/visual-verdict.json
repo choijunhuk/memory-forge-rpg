@@ -1,0 +1,28 @@
+{
+  "score": 92,
+  "verdict": "pass",
+  "category_match": true,
+  "differences": [
+    "Known three missing character originals remain labelled; no placeholder ownership or rewards."
+  ],
+  "suggestions": [],
+  "reasoning": "Final actual-scene captures show a readable dark return notice without covering controls or the authored figure. Centered portraits, aligned destination/catalogue/preparation and adaptive144touch satisfy the intended repository design; victory counters are labelled accurately.",
+  "threshold": 90,
+  "threshold_pass": true,
+  "next_actions": [
+    "Verify native fresh Development app render; integrate and complete exact-headCI."
+  ],
+  "reference_images": [
+    "ops/ai/local/ux-return-20261021/before/home.jpg",
+    "ops/ai/local/ux-return-20261021/pc-abandon-before.png"
+  ],
+  "generated_images": [
+    "after5/home.jpg",
+    "after5/companions.jpg",
+    "after5/home_sortie.jpg",
+    "after5/home_touch144.jpg",
+    "actual-scene-final/actual-home-abandon-return-notice.jpg",
+    "actual-scene-final/actual-expedition-result-saved.png"
+  ],
+  "limitation": "Assessment is against the repository DESIGN and before captures; no claim of pixel identity to another game. Remaining character originals are outside this UI unit."
+}

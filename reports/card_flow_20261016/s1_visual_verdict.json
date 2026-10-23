@@ -1,0 +1,17 @@
+{
+  "score": 94,
+  "verdict": "pass",
+  "scope": "Actual committed-turn summary before fail-closed recovery work",
+  "evidence": "reports/card_flow_20261016/live_turn_summary.png",
+  "checks": [
+    "Previous intent is labelled separately from actual events",
+    "Enemy attacks, card block, time-reservation resolution and next-turn AP are distinct",
+    "Korean text, scroll content and skip/continue readable at captured viewport",
+    "Continue is separated from the underlying end/save/proceed area",
+    "Actual fullscreen blocker and public-command rejection preserve Run/version separately recorded"
+  ],
+  "limits": [
+    "Final art/animations and device130percent worst-case are not accepted",
+    "Player-card nonbarrier preparation and server recovery remain separate work"
+  ]
+}

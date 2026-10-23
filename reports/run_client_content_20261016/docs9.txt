@@ -1,0 +1,14 @@
+test_actual_broken_v08_fails (__main__.DocumentContractTests.test_actual_broken_v08_fails) ... ok
+test_character_numbers_cannot_replace_chapters (__main__.DocumentContractTests.test_character_numbers_cannot_replace_chapters) ... ok
+test_complete_current_passes (__main__.DocumentContractTests.test_complete_current_passes) ... ok
+test_duplicate_chapter_fails (__main__.DocumentContractTests.test_duplicate_chapter_fails) ... ok
+test_missing_combat_chapter_fails (__main__.DocumentContractTests.test_missing_combat_chapter_fails) ... ok
+test_missing_prompt_fails (__main__.DocumentContractTests.test_missing_prompt_fails) ... ok
+test_missing_sera_sheet_fails_even_with_card_index (__main__.DocumentContractTests.test_missing_sera_sheet_fails_even_with_card_index) ... ok
+test_missing_sion_specific_card_fails (__main__.DocumentContractTests.test_missing_sion_specific_card_fails) ... ok
+test_relic_listing_cannot_be_replaced_by_name_only (__main__.DocumentContractTests.test_relic_listing_cannot_be_replaced_by_name_only) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.093s
+
+OK

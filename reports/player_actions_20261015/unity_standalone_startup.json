@@ -1,0 +1,18 @@
+{
+  "scope": "Fresh macOS technical scene startup with graphics; controlled stop of this owned test process only; not full gameplay/Android acceptance",
+  "at": "2026-10-15T02:08:30.845281+00:00",
+  "buildJob": "build-ef4590be2e",
+  "startupReady": true,
+  "earlyExitCode": null,
+  "controlledFinalExitCode": -9,
+  "graphicsDeviceMetal": true,
+  "nullGraphicsDevice": false,
+  "runtimeErrorLines": 0,
+  "rawLogsPrivate": true,
+  "firstAttempt": {
+    "mode": "batchmode+nographics+quit",
+    "result": "TIMEOUT after60s; Null device shader errors; no graphics acceptance",
+    "ownedProcessKilledByTimeout": true
+  },
+  "status": "PASS_GRAPHICS_TECHNICAL_STARTUP"
+}

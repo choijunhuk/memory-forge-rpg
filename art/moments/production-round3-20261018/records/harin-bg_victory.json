@@ -1,0 +1,24 @@
+{
+  "c": "harin",
+  "key": "bg_victory",
+  "path": "harin/images/char_harin_background_quiet_afterbattle_v01.png",
+  "transparent": false,
+  "common": "Use case: stylized-concept. One EMPTY landscape background for a narrative anime RPG, 16:9 2560x1440 PNG, no characters, no people, no text or UI. Fine painterly cel-art matching Memory Forge: night workshop, brass instruments, stopped clocks, dark calm atmosphere, small teal memory lights, character overlays must stay brightest. ",
+  "pose": "Quiet froststone courtyard adjoining workshop after battle, huge gate standing safely open toward a lamplit street, subtle frost remaining only at stone edges, a few broken ink-paper/brass enemy fragments near distant wall, no human faces/bodies/blood. Empty broad flat foreground inviting someone to stand side by side, dim blue evening, restrained warm window light and teal memory flecks. No shield painted into background.",
+  "prompt": "Use case: stylized-concept. One EMPTY landscape background for a narrative anime RPG, 16:9 2560x1440 PNG, no characters, no people, no text or UI. Fine painterly cel-art matching Memory Forge: night workshop, brass instruments, stopped clocks, dark calm atmosphere, small teal memory lights, character overlays must stay brightest. Quiet froststone courtyard adjoining workshop after battle, huge gate standing safely open toward a lamplit street, subtle frost remaining only at stone edges, a few broken ink-paper/brass enemy fragments near distant wall, no human faces/bodies/blood. Empty broad flat foreground inviting someone to stand side by side, dim blue evening, restrained warm window light and teal memory flecks. No shield painted into background.",
+  "source": "/Users/choi/.codex/generated_images/01a14d20-ffd5-7e81-9e47-85c1c8415e11/exec-f36eda20-d446-4d89-9897-cd63d19ee293.png",
+  "tool": "Codex built-in image_gen; subscription-included; no API fallback",
+  "review": "pass",
+  "previous_attempt": null,
+  "score": 93,
+  "review_notes": "Rendered output inspected against design/source narrative. Face, age, outfit, primary hand/prop state and grounded support match the key-pose. No rig or live playback acceptance.",
+  "backend_model": "not exposed by tool",
+  "selected": true,
+  "sha256": "f74f914a801a5f15293cbed31141b06fd274a4095820db97a628c46d2bae930a",
+  "size": [
+    1672,
+    941
+  ],
+  "mode": "RGB",
+  "alpha_extrema": null
+}

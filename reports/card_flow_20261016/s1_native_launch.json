@@ -1,0 +1,21 @@
+{
+  "observed_at": "2026-10-16T03:52:06.304975+00:00",
+  "app_path": "/Users/choi/Documents/Memory_forge/ops/ai/local/builds/MemoryForgeExpedition-CardFlow-20261016.app",
+  "binary_sha256": "180ed7c6d27d29146b75134b9ff5659655c21c89ddd5e2686c4c34b60ab9d203",
+  "method": "CUA getApp by exact app path, then getScreenshot",
+  "visible_window": "2D_URP",
+  "observed": [
+    "Korean expedition map",
+    "Reference party Sera/Harin/Nia",
+    "HP243/243,coins60,deck18",
+    "Three available first-floor battle nodes",
+    "Session-only practice note"
+  ],
+  "status": "NATIVE_LAUNCH_AND_MAP_PASS",
+  "not_checked": [
+    "new native physical mouse transition",
+    "Android/IL2CPP/device",
+    "server reconnect"
+  ],
+  "previous_user_physical_acceptance": "Earlier Final build only; reports/expedition_client_20261016/native_user_mouse_acceptance.json"
+}

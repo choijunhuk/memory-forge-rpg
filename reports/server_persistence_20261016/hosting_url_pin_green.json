@@ -1,0 +1,26 @@
+{
+  "scope": "Root independent real-process probe; only safe loopback addresses, temporary labelled fixtures",
+  "server_assembly_sha256": "997655401beaa1fa8f991d3f93348dcf11c5cd46b1618c40fc4d7fbb41c3ea72",
+  "operator_probe_sha256": "6e9fb60cb33aa44a0549b7e0e5085aecdd7d9623000e1220cb063e0f3924090b",
+  "status": "PASS",
+  "cases": [
+    {
+      "source": "command_line",
+      "approved_port": 53985,
+      "conflicting_loopback_port": 53986,
+      "actual_uri": "http://127.0.0.1:53985",
+      "authenticated_status": 200,
+      "conflicting_port_closed": true,
+      "passed": true
+    },
+    {
+      "source": "environment",
+      "approved_port": 53991,
+      "conflicting_loopback_port": 53992,
+      "actual_uri": "http://127.0.0.1:53991",
+      "authenticated_status": 200,
+      "conflicting_port_closed": true,
+      "passed": true
+    }
+  ]
+}

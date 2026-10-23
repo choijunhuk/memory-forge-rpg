@@ -1,0 +1,22 @@
+[
+  {
+    "path": "client/MemoryForgeUnity/ProjectSettings/EditorSettings.asset",
+    "restoredExactly": true
+  },
+  {
+    "path": "client/MemoryForgeUnity/ProjectSettings/ProjectSettings.asset",
+    "restoredExactly": true
+  },
+  {
+    "path": "client/MemoryForgeUnity/Assets/Settings/UniversalRP.asset",
+    "restoredExactly": true
+  },
+  {
+    "path": "client/MemoryForgeUnity/Assets/UniversalRenderPipelineGlobalSettings.asset",
+    "restoredExactly": true
+  },
+  {
+    "path": "client/MemoryForgeUnity/ProjectSettings/UnityConnectSettings.asset",
+    "restoredExactly": true
+  }
+]

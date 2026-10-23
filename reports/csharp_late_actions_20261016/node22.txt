@@ -1,0 +1,45 @@
+TAP version 13
+# Subtest: the overlay is the unchanged candidate proposal, test-local enemies stay separate and live content gains nothing
+ok 1 - the overlay is the unchanged candidate proposal, test-local enemies stay separate and live content gains nothing
+  ---
+  duration_ms: 1.855459
+  ...
+# Subtest: all 23 candidate patterns run two full cycles alive and all 23 candidate encounter groups run
+ok 2 - all 23 candidate patterns run two full cycles alive and all 23 candidate encounter groups run
+  ---
+  duration_ms: 0.841375
+  ...
+# Subtest: every checkpoint is reproduced by fresh creation and the recorded real commands with independent hashes
+ok 3 - every checkpoint is reproduced by fresh creation and the recorded real commands with independent hashes
+  ---
+  duration_ms: 368.967375
+  ...
+# Subtest: the six behaviors keep the exact original rules at their boundaries
+ok 4 - the six behaviors keep the exact original rules at their boundaries
+  ---
+  duration_ms: 0.568084
+  ...
+# Subtest: fixture freshness rejects stale pins, overlay or test-local edits, missing/duplicate cases and diagnostic tampering
+ok 5 - fixture freshness rejects stale pins, overlay or test-local edits, missing/duplicate cases and diagnostic tampering
+  ---
+  duration_ms: 954.798167
+  ...
+# Subtest: exports pass only the existing strict single-member decoder, are byte deterministic and preserve the old fixture on failure
+ok 6 - exports pass only the existing strict single-member decoder, are byte deterministic and preserve the old fixture on failure
+  ---
+  duration_ms: 646.086542
+  ...
+# Subtest: the checked-in late-action fixture is a lossless fresh command oracle through the strict decoder
+ok 7 - the checked-in late-action fixture is a lossless fresh command oracle through the strict decoder
+  ---
+  duration_ms: 297.152208
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2593.645292

@@ -1,0 +1,43 @@
+{
+  "task_id": "ENV-CLAUDE-UNITY-MCP",
+  "session_id": "ffe870b3-e533-4e81-9bc3-f53331360727",
+  "model": [
+    "claude-opus-5-5"
+  ],
+  "observedSessionEffort": [
+    "high"
+  ],
+  "calls": [
+    {
+      "id": "toolu_01XSAyqmtLDh7CuQAYd6g22R",
+      "name": "mcp__unityMCP__set_active_instance",
+      "input": {
+        "instance": "MemoryForgeUnity@4034a4e2fe236d6e"
+      }
+    },
+    {
+      "id": "toolu_01VrrEe9y1uWZBFc9i3nWbXZ",
+      "name": "mcp__unityMCP__read_console",
+      "input": {
+        "action": "get",
+        "types": [
+          "error"
+        ],
+        "count": 10
+      }
+    }
+  ],
+  "tool_results": [
+    {
+      "id": "toolu_01XSAyqmtLDh7CuQAYd6g22R",
+      "is_error": false,
+      "content": "{\"success\":true,\"message\":\"Active instance set to MemoryForgeUnity@4034a4e2fe236d6e\",\"data\":{\"instance\":\"MemoryForgeUnity@4034a4e2fe236d6e\",\"session_id\":\"c6d4016131fd42c9a35688fb13c5f93c\"}}"
+    },
+    {
+      "id": "toolu_01VrrEe9y1uWZBFc9i3nWbXZ",
+      "is_error": false,
+      "content": "{\"success\":true,\"message\":\"Retrieved 0 log entries.\",\"data\":[]}"
+    }
+  ],
+  "scope": "Actual official CLI + localhost MCP read calls; Codex retains Editor write ownership"
+}
