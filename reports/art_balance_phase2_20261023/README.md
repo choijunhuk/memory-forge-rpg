@@ -8,7 +8,7 @@
 
 재현: `node tools/review/expedition_balance.mjs`. 잘못된 설정·기존 목표 이탈·진행 가능한 전략 증인이 없는 중단은 비영 종료로 CI를 막는다. 기존 `balance_probe`와 고정 참조 데이터는 변경하지 않았다. 사람 플레이 균형 인증으로 확대하지 않는다.
 
-[서버·저장 검증](balance-verification.json), [양방향 독립 검토](balance-independent-review.json)를 참고한다. 튜토리얼/성장/주간보스/기존 연습 경로는 원래 배율이다. 폰은 사용자 요청으로 제외했으며 실제 Android 에뮬레이터의 익명 화면 입력과 PC 네이티브 홈 표시를 확인했다. PC 자동 포인터 입력은 도구 제약으로 수용하지 못했다.
+[서버·저장 검증](balance-verification.json), [양방향 독립 검토](balance-independent-review.json)를 참고한다. 튜토리얼/성장/주간보스/기존 연습 경로는 원래 배율이다. 폰은 사용자 요청으로 제외했으며 실제 Android 에뮬레이터의 익명 화면 입력과 PC 네이티브 목록/상세/홈 입력을 확인했다. 첫 CUA 입력 차단 뒤 기존 Peekaboo4.9.5의 문서화된 로컬 입력으로 추가 수용했고, [실행 증거](native-macos-acceptance.json)에 별도 기록했다.
 
 ## 기존 저장에 쓸 실행기
 

@@ -29,7 +29,7 @@
   "python": 82,
   "docs": 9,
   "handoff": 33,
-  "native_pc": "build/home PASS; pointer interaction tool blocked; see computer-acceptance.json",
+  "native_pc": "build + actual native roster/detail/home input PASS; tiny and960x568 windows; see native-macos-acceptance.json",
   "phone": "excluded by user",
   "user_visual_acceptance": "NOT_RUN",
   "independent_review": "PASS; art-independent-review.json",

@@ -35,10 +35,21 @@
     "PC native pointer delivery blocked; nativeMac anonymoushome only, authoredUnity andemulator coverinteraction"
   ],
   "mac_native": {
+    "result": "PASS",
     "build": "PASS",
-    "anonymous_home": "PASS",
-    "pointer_interaction": "NOT_RUN: native automation event delivery blocked",
-    "own_app_cleanup": "complete",
+    "anonymous_roster_details_home": "PASS for yuri/rien/kaya/nia",
+    "windows_points": [
+      [
+        480,
+        298
+      ],
+      [
+        960,
+        568
+      ]
+    ],
+    "input": "existing Peekaboo4.9.5 foreground synthOnly; no app modification",
+    "pointer_initial_attempt": "CUA tool delivery blocked, superseded by native-macos-acceptance.json",
     "clientSha256": "869ea398c2917adf010162e92c31072df61dd4d58cefeafe45f6993bd5ce33bc"
   },
   "fresh_avd_cleanup": "own emulator stopped and own fresh AVD deleted; shared AVD application data retained"
