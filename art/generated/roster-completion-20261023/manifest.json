@@ -1,0 +1,104 @@
+[
+  {
+    "character": "kaya",
+    "kind": "cutin",
+    "source": "art/generated/roster-completion-20261023/char_kaya_cutin_v01.png",
+    "copy": "client/MemoryForgeUnity/Assets/Resources/Art/Characters/char_kaya_cutin.png",
+    "sha256": "09f62811560b74a46958dca88dac692a8a6fadb56dcf4441cb7a0627641738b9",
+    "bytes": 2003397,
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGBA",
+    "transparent_pixels": 1025655,
+    "total_pixels": 1572864,
+    "tool": "Codex built-in image_gen; backend model not exposed",
+    "source_review": "Codex visual + official Opus5.5 xhigh independent R2 PASS; actual Unity PlayMode resource/UI/aspect PASS; native PC pending"
+  },
+  {
+    "character": "kaya",
+    "kind": "sd",
+    "source": "art/generated/roster-completion-20261023/char_kaya_sd_v01.png",
+    "copy": "client/MemoryForgeUnity/Assets/Resources/Art/Characters/char_kaya_sd.png",
+    "sha256": "d9ba451867af21f323171fe0a9325dfaffc4deccfebd74e5c4718fd0e31955f8",
+    "bytes": 1815058,
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGBA",
+    "transparent_pixels": 858022,
+    "total_pixels": 1572516,
+    "tool": "Codex built-in image_gen; backend model not exposed",
+    "source_review": "Codex visual + official Opus5.5 xhigh independent R2 PASS; actual Unity PlayMode resource/UI/aspect PASS; native PC pending"
+  },
+  {
+    "character": "rien",
+    "kind": "cutin",
+    "source": "art/generated/roster-completion-20261023/char_rien_cutin_v01.png",
+    "copy": "client/MemoryForgeUnity/Assets/Resources/Art/Characters/char_rien_cutin.png",
+    "sha256": "e3775ae6c7d4f7a56567665b92c30dfceab27b4e8ca376747f96abab5e338167",
+    "bytes": 2428729,
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGBA",
+    "transparent_pixels": 800470,
+    "total_pixels": 1572864,
+    "tool": "Codex built-in image_gen; backend model not exposed",
+    "source_review": "Codex visual + official Opus5.5 xhigh independent R2 PASS; actual Unity PlayMode resource/UI/aspect PASS; native PC pending"
+  },
+  {
+    "character": "rien",
+    "kind": "sd",
+    "source": "art/generated/roster-completion-20261023/char_rien_sd_v01.png",
+    "copy": "client/MemoryForgeUnity/Assets/Resources/Art/Characters/char_rien_sd.png",
+    "sha256": "6e93034c1c16049d4d5ead9085cf669a5e59583ea3def5c18de95101fec475fd",
+    "bytes": 2141800,
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGBA",
+    "transparent_pixels": 710257,
+    "total_pixels": 1572516,
+    "tool": "Codex built-in image_gen; backend model not exposed",
+    "source_review": "Codex visual + official Opus5.5 xhigh independent R2 PASS; actual Unity PlayMode resource/UI/aspect PASS; native PC pending"
+  },
+  {
+    "character": "yuri",
+    "kind": "cutin",
+    "source": "art/generated/roster-completion-20261023/char_yuri_cutin_v01.png",
+    "copy": "client/MemoryForgeUnity/Assets/Resources/Art/Characters/char_yuri_cutin.png",
+    "sha256": "59c55d328f89e2266a31f2307020f586bc74099a63ecf1635588dd33730a79d0",
+    "bytes": 2405554,
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGBA",
+    "transparent_pixels": 800682,
+    "total_pixels": 1572864,
+    "tool": "Codex built-in image_gen; backend model not exposed",
+    "source_review": "Codex visual + official Opus5.5 xhigh independent R2 PASS; actual Unity PlayMode resource/UI/aspect PASS; native PC pending"
+  },
+  {
+    "character": "yuri",
+    "kind": "sd",
+    "source": "art/generated/roster-completion-20261023/char_yuri_sd_v01.png",
+    "copy": "client/MemoryForgeUnity/Assets/Resources/Art/Characters/char_yuri_sd.png",
+    "sha256": "5d5c8ed586db044cc887e2a508d931c4ba5396585485da75864e8c348d8d85fe",
+    "bytes": 2251800,
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGBA",
+    "transparent_pixels": 724203,
+    "total_pixels": 1572516,
+    "tool": "Codex built-in image_gen; backend model not exposed",
+    "source_review": "Codex visual + official Opus5.5 xhigh independent R2 PASS; actual Unity PlayMode resource/UI/aspect PASS; native PC pending"
+  }
+]

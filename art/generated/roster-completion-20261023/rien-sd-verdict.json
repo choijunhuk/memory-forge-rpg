@@ -1,0 +1,17 @@
+{
+  "score": 91,
+  "verdict": "pass",
+  "category_match": true,
+  "differences": [
+    "전신의 연주 포즈·헤드폰·배색을 SD 비율로 변환"
+  ],
+  "suggestions": [
+    "실제 작은 HUD에서 가장자리와 얼굴 읽기 확인"
+  ],
+  "reasoning": "전신 원본의 리엔 정체성과 실제 연주 자세를 보존하며 얼굴이 커진 SD 표식이다.",
+  "iteration": 5,
+  "threshold_pass": true,
+  "next_actions": [
+    "Unity 축소 수용"
+  ]
+}

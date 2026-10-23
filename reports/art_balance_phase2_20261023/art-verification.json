@@ -1,0 +1,41 @@
+{
+  "base_commit": "da6c725b1d69e5122fc85eb25d5c3bdc2f8e9a32",
+  "originals": 6,
+  "copies": 6,
+  "source_copy_sha_equal": true,
+  "unity": {
+    "red_missing_art": {
+      "passed": 0,
+      "failed": 4
+    },
+    "final_target": {
+      "passed": 21,
+      "failed": 0
+    },
+    "full_playmode": {
+      "total": 767,
+      "passed": 756,
+      "failed": 0,
+      "explicit_not_run": 11
+    },
+    "editmode": {
+      "passed": 10,
+      "failed": 0
+    },
+    "note": "An old test requiring missing Yuri art now checks dedicated texture. An interrupted screenshot-heavy full pass is NOT_RUN; final plain full pass completed."
+  },
+  "node": 396,
+  "proposals": 14,
+  "python": 82,
+  "docs": 9,
+  "handoff": 33,
+  "native_pc": "pending final build",
+  "phone": "excluded by user",
+  "user_visual_acceptance": "NOT_RUN",
+  "independent_review": "PASS; art-independent-review.json",
+  "input_manifest": {
+    "entries": 423,
+    "preexisting_changed": 41,
+    "regenerated": false
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "score": 91,
+  "verdict": "pass",
+  "category_match": true,
+  "differences": [
+    "승인 전신을 전투 표식에 맞춘 SD 비율로 제작"
+  ],
+  "suggestions": [
+    "Unity 축소 표시에서 얇은 가장자리와 여백 확인"
+  ],
+  "reasoning": "얼굴·등불·의상·머리색이 전신 원본과 일치하고 작은 전투 칸에서 구분되는 비율이다.",
+  "iteration": 4,
+  "threshold_pass": true,
+  "next_actions": [
+    "실제 HUD에서 축소 표시 확인"
+  ]
+}

@@ -1,5 +1,11 @@
 # 현재 기준 — ALL-IN-ONE
 
+## 2026-10-23 전용 아트 완료·밸런스2 진행 중
+
+유리·리엔·카야 전신3/SD3를 제작하고 기존 목록·상세·홈·모집·전투/성장 로더에 연결했다. 니아는 기존 SD로 홈 선택이 가능하며 기존6명의 고유 모먼트는 우선한다. [제작 원본](../art/generated/roster-completion-20261023/README.md), [검증](../reports/art_balance_phase2_20261023/art-verification.json), [공식 Opus 독립 검토 PASS](../reports/art_balance_phase2_20261023/art-independent-review.json).
+
+실제 Unity 전체756 PASS/0 FAIL/11 Explicit NOT_RUN(767), Edit10/10·표적21/21, Node396·제안14·Python82·문서9·인계33 PASS. 원본/복사6쌍의 바이트를 확인했다. 이 단위의 최신 native PC 빌드·최종 사용자 시각 판정은 아직 미완료이며 폰은 사용자 요청으로 제외한다. 밸런스2는 기존 Core/데이터/계정 정책을 보존하는 새 탐사 전용 버전 설정으로 구현·검증 중이다. 아래는 이전 단위의 이력이다.
+
 ## 2026-10-23 CI 후속 — 계정 이관·지원 실패 단계 기록 보강
 
 7bcb69f PR CI는 PostgreSQL1722 판정 통과 뒤 계정 이관/지원 하위 과정에서 실패했다. 원시 로그를 비공개로 유지하면서14개 고정 단계·숫자 종료 코드·고정 원인 코드만 공개하도록 보강했다. Python18/18·전체82/82와 공식 Opus5.5 Max 독립 검토가 PASS다. 동일 합성 번들의 macOS 파일/HTTP와 격리 Docker PostgreSQL16.15 등록 소유자 CLI/지원 HTTP 하위 재현도 PASS했으나 최초 Linux 실패 원인은 확정하지 않았다. 서버·Core·SQL·번들·게임 UI·검증 판정은 변경하지 않았으며 최신 head 전체 CI 결과를 별도로 확인한다. [CI 후속 보고서](../reports/ci_child_diagnostics_20261023/README.md)를 따른다.

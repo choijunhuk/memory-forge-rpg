@@ -116,7 +116,7 @@ namespace MemoryForge.Client
             }
             foreach (var id in order.Concat(files.Keys.Except(order)))
             {
-                var still = SpriteAt("Art/Characters/char_" + id + "_cutin");
+                var still = SpriteAt("Art/Characters/char_" + id + "_cutin") ?? SpriteAt("Art/Characters/char_" + id + "_sd");
                 files.TryGetValue(id, out var moments);
                 if (moments == null && still == null) continue;
                 companions.Add(new Companion { Id = id, Name = names.TryGetValue(id, out var n) ? n : id, Moments = moments, Still = still });

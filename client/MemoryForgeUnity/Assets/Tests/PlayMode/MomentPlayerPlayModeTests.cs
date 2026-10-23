@@ -377,8 +377,10 @@ namespace MemoryForge.Client.Tests
             yield return null;
             roster.GetComponentsInChildren<Button>().Single(b => b.name == "Companion:yuri").onClick.Invoke();
             yield return null;
-            Assert.That(detail.GetComponentsInChildren<Button>().Single(b => b.name == "UseAsLobby").interactable, Is.False);
-            StringAssert.Contains("그림 준비 중", string.Join("\n", detail.GetComponentsInChildren<Text>().Select(t => t.text)));
+            Assert.That(detail.GetComponentsInChildren<Button>().Single(b => b.name == "UseAsLobby").interactable, Is.True);
+            StringAssert.DoesNotContain("그림 준비 중", string.Join("\n", detail.GetComponentsInChildren<Text>().Select(t => t.text)));
+            Assert.That(detail.GetComponentsInChildren<Image>().Single(i => i.name == "CharacterArt").sprite.texture,
+                Is.SameAs(Resources.Load<Texture2D>("Art/Characters/char_yuri_cutin")), "Yuri now has her own imported illustration");
             detail.GetComponentsInChildren<Button>().Single(b => b.name == "BackToRoster").onClick.Invoke();
             yield return null;
             roster.GetComponentsInChildren<Button>().Single(b => b.name == "Companion:harin").onClick.Invoke();
