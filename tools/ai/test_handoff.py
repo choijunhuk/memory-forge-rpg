@@ -384,7 +384,7 @@ class ClaudeMcpProfileTests(unittest.TestCase):
   self.assertEqual(policy['models'],{'codex':'gpt-6.1-sol','claude':'claude-opus-5-5'});self.assertEqual(policy['fallbacks'],[])
   self.assertEqual(policy['billing'],'existing_subscription_included_allowance_only');self.assertEqual(policy['image_generation_owner'],'Codex')
   for field in ('api_auth_allowed','extra_usage_allowed','purchased_credit_spend_allowed','auto_recharge_allowed'):self.assertIs(policy[field],False,field)
-  self.assertIs(policy['private_repository'],True);self.assertIs(policy['unity']['paid_asset_generation'],False)
+  self.assertIs(policy['private_repository'],False);self.assertIs(policy['unity']['paid_asset_generation'],False)
   self.assertEqual(creative['claude_must_not_change'],['outfit, body, expression, character age','dialogue, relationships, speech style, scene emotion','core intent of poses, motion, camera and staging timing','expressive purpose of per-character physics, shaders and VFX'])
   self.assertIs(creative['adult_charm_as_real_scenes'],True)
   self.assertLessEqual({'mcp__unityMCP__'+t for t in ('generate_image','generate_model','generate_audio','import_model','import_model_file','asset_gen')},set(route['root_denied_tools']))
@@ -505,7 +505,14 @@ class ClaudeMcpProfileTests(unittest.TestCase):
   for key in ('purchased_or_paid_balance_allowed','auto_recharge_allowed','additional_payment_allowed','claude_tool_exposure'):self.assertIs(image[key],False,key)
   self.assertIs(image['hold_when_free_balance_or_deduction_unverified'],True)
   for key in ('api_auth_allowed','extra_usage_allowed','purchased_credit_spend_allowed','auto_recharge_allowed'):self.assertIs(policy[key],False,key)
-  self.assertEqual((policy['fallbacks'],policy['models'],policy['private_repository']),([],{'codex':'gpt-6.1-sol','claude':RUNNER.MODEL},True))
+  self.assertEqual((policy['fallbacks'],policy['models'],policy['private_repository']),([],{'codex':'gpt-6.1-sol','claude':RUNNER.MODEL},False))
+ def test_public_visibility_is_an_explicit_repository_only_user_approval(self):
+  policy=json.loads((ROOT/'ops/ai/runtime-policy.json').read_text())
+  self.assertIs(policy['private_repository'],False)
+  self.assertEqual(policy['repository_visibility_approval'],{'repository':'choijunhuk/memory-forge-rpg','visibility':'public','approved_by':'user','approved_on':'2026-10-23','scope':'repository_visibility_only'})
+  self.assertIs(json.loads((ROOT/'package.json').read_text())['private'],True)
+  for r in ['AGENTS.md','CLAUDE.md','OWNERSHIP.md','docs/AI_WORKFLOW.md','docs/START_CODEX.md','docs/START_CLAUDE.md','START_HERE.txt','docs/AI_ENVIRONMENT.md','README.md']:
+   self.assertIn('2026-10-23 사용자 승인 — GitHub 공개',(ROOT/r).read_text(),r)
  def test_active_entrypoints_record_mcp_profiles_and_free_imagineart_exception(self):
   for r in ['AGENTS.md','CLAUDE.md','docs/AI_WORKFLOW.md','docs/AI_ENVIRONMENT.md']:
    s=(ROOT/r).read_text()

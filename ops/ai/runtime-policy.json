@@ -618,5 +618,12 @@
   "continuous_scope": "current execution session; no claim of work after session exit",
   "reviews_max_unresolved_rounds": 2,
   "protected_design": "v0.8.1 complete original, numbers and live data preserved",
-  "private_repository": true
+  "private_repository": false,
+  "repository_visibility_approval": {
+    "repository": "choijunhuk/memory-forge-rpg",
+    "visibility": "public",
+    "approved_by": "user",
+    "approved_on": "2026-10-23",
+    "scope": "repository_visibility_only"
+  }
 }

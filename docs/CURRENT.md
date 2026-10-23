@@ -1,5 +1,11 @@
 # 현재 기준 — ALL-IN-ONE
 
+## 2026-10-23 사용자 승인 — 공개 저장소·최신 CI 재개
+
+사용자 직접 지시로 [기존 저장소](https://github.com/choijunhuk/memory-forge-rpg)를 PUBLIC으로 전환하고 실제 `isPrivate:false`를 확인했다. 저장소 공개에 한해 과거 Private 지침보다 우선한다. npm 배포·추가 결제·상용 출시·운영 배포는 포함하지 않는다. 원격5개 브랜치116개 커밋의 이력과 주요 CI 로그를 제한된 패턴 검사로 점검했고 알려진 비밀값/실제 계정 저장소 노출은 찾지 못했다. 이미지·PDF·DLL 내부 등 미검사 범위는 [공개 전환 기록](../reports/art_balance_phase2_20261023/public-visibility.json)에 남겼다.
+
+구현 `207406c`의 push·PR 전체 CI는 PostgreSQL 이관/지원 HTTP까지 성공했다. 문서/화면 증거 `5d17ab9`의 검사는 GitHub 계정 결제/지출 제한으로 시작 전에 차단됐고, 공개 전환 후 동일 SHA를 재실행해 실제 검사 단계 진입을 확인했다. 이번 정책 변경은 Python82·문서9·인계34와 공식 Opus R1·R2 독립 검토 PASS다. 최종 커밋의 원격 결과는 PR #2의 정확한 SHA 검사로 확인하며 이 문서의 로컬 PASS로 대신하지 않는다. 아래는 각 단위 당시 이력이다.
+
 ## 2026-10-23 전용 아트·새 스토리 탐사 균형2
 
 아트 `d78e448` 이후 새 탐사 전용 불변 설정(HP130%/피해110%)을 연결했다. 과거 기록은100/100으로 재생하며 새 설정을 출발 기록/진행 원장 양쪽에 고정한다. Core·본문 데이터·기존 계정 정책·게이지20/50·경제는 유지한다. [범위와 실행기 주의](../reports/art_balance_phase2_20261023/README.md), [전후 지표](../reports/art_balance_phase2_20261023/balance-validation.json), [서버 검증](../reports/art_balance_phase2_20261023/balance-verification.json), [독립 검토](../reports/art_balance_phase2_20261023/balance-independent-review.json)를 분리한다.

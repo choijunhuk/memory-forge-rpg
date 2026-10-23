@@ -1,5 +1,9 @@
 # AI·Unity 실행 환경과 확인 경계 — 2026-10-15
 
+## 2026-10-23 사용자 승인 — GitHub 공개
+
+사용자 직접 지시로 `choijunhuk/memory-forge-rpg`의 공개 전환을 승인했다. 저장소 공개 여부에 한해 아래의 GitHub Private·비공개 유지 지침보다 이 결정이 우선한다. 실제 계정·인증·비공개 로그의 커밋 금지, 창작 원본 보호, 모델·구독 과금·게임 수치·운영 배포 경계는 유지한다. 공개 전환은 npm 패키지 배포나 상용 출시 승인이 아니다.
+
 실행 계약은 [AI_WORKFLOW.md §10](AI_WORKFLOW.md), 요구사항별 상태는 [IMPLEMENTATION_STATUS.md](IMPLEMENTATION_STATUS.md)다. 이 문서는 실제 프로젝트 설정·정제된 실행 결과의 안내이며, 원본 설계나 계정 인증 자료를 대체하지 않는다. 원본 배포의 `ops/ai/policy.json`은 당시 미호출 기준선으로 보존하고 현재 계약은 [runtime-policy.json](../ops/ai/runtime-policy.json)으로 구분한다.
 
 ## 허용 모델·과금·노력

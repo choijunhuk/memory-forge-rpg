@@ -1,0 +1,100 @@
+{
+  "repository": "choijunhuk/memory-forge-rpg",
+  "user_authorization_date": "2026-10-23",
+  "scope": "repository_visibility_only",
+  "verified_visibility": "PUBLIC",
+  "verified_is_private": false,
+  "baseline_commit": "5d17ab9a0b594910707d6823dbdc0c995d305329",
+  "exposure_check": {
+    "remote_heads": 5,
+    "commits": 116,
+    "unique_blobs": 5848,
+    "text_blobs_scanned": 4806,
+    "archive_members_scanned": 46,
+    "current_prs": 2,
+    "pr_comments": 0,
+    "actions_artifacts": 0,
+    "representative_ci_runs": 4,
+    "ci_log_files_scanned": 72,
+    "known_secret_or_actual_account_store_exposure_found": false,
+    "limits": [
+      "Pattern-based bounded assessment, not a guarantee that all secrets are detectable",
+      "Image/PDF/DLL payloads and large generated engine vectors not exhaustively content-scanned",
+      "PR heads covered by remote heads; ephemeral merge objects not independently scanned",
+      "Only four representative successful CI logs scanned, not every historical run"
+    ]
+  },
+  "independent_review": {
+    "tool": "official Claude Code",
+    "cli_version": "2.1.304",
+    "model": "claude-opus-5-5",
+    "effort": "xhigh",
+    "session_id": "7fc5d77a-fdfe-4ab9-b79e-21b18a787e33",
+    "process_exit": 0,
+    "billing_account_matched": true,
+    "verdict": "PASS",
+    "P1_P2_remaining": 0,
+    "scope": "Read-only visibility policy/test/document diff, not GitHub visibility or secret-scan certification",
+    "rounds": [
+      {
+        "round": "R1",
+        "task": "PUBLIC-VISIBILITY-INDEPENDENT-REVIEW-20261023",
+        "verdict": "PASS",
+        "scope": "Original visibility policy, tests and seven entrypoint documents"
+      },
+      {
+        "round": "R2",
+        "task": "PUBLIC-VISIBILITY-INDEPENDENT-REVIEW-R2-20261023",
+        "verdict": "PASS",
+        "scope": "Final diff including README, AI_ENVIRONMENT, CURRENT and nine-entrypoint test; sanitized visibility record",
+        "reviewed_record_sha256": "c0c41276230dc748bfc429611f050965fc77a1bd4ad5b0ce04f035c91d2f8fa3",
+        "session_id": "7fc5d77a-fdfe-4ab9-b79e-21b18a787e33",
+        "actual_model_usage": [
+          "claude-opus-5-5"
+        ],
+        "process_exit": 0,
+        "is_error": false
+      }
+    ]
+  },
+  "local_checks": {
+    "python": 82,
+    "document_contract": 9,
+    "handoff": 34,
+    "status": "PASS"
+  },
+  "ci": {
+    "implementation_commit": "207406cd40ab7c150c444ea89c7da93bcee37913",
+    "implementation_push": 39893842426,
+    "implementation_pr": 39893852565,
+    "implementation_status": "SUCCESS",
+    "docs_commit": "5d17ab9a0b594910707d6823dbdc0c995d305329",
+    "docs_push": 39897424763,
+    "docs_pr": 39897432801,
+    "docs_prior_status": "FAILED_BEFORE_START due GitHub billing",
+    "docs_after_public_status_at_recording": "IN_PROGRESS; actual steps started",
+    "final_policy_commit": "Use exact latest PR head checks; not certified by this local record"
+  },
+  "unchanged": [
+    "Git history (no rewrite)",
+    "gameplay/runtime source",
+    "npm package private:true",
+    "model/billing and creative-original guards",
+    "actual account store and credentials excluded",
+    "payment/spending settings",
+    "production deployment"
+  ],
+  "workflow_exposure_check": {
+    "events": [
+      "push",
+      "pull_request"
+    ],
+    "permissions": {
+      "contents": "read"
+    },
+    "runner": "GitHub-hosted ubuntu-latest",
+    "pull_request_target": false,
+    "self_hosted_runner": false,
+    "secret_references_in_workflow": false
+  }
+}
