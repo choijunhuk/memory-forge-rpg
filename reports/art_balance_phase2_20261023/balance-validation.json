@@ -1,0 +1,4631 @@
+{
+  "mode": "new story expedition preset; historical launches and non-story content unchanged",
+  "policy": {
+    "path": "server/MemoryForge.Server/Policies/expedition-balance-20261023-v1.json",
+    "sha256": "da8a49e5a31a46e303ec3456b078d8c7c76ce8072e467f43ca847cc293f729d4",
+    "version": "expedition-balance-20261023-v1",
+    "mainContentSha256": "b6d3543a1d87f0a28e4824e0c1ae45a1eabc676d7abefcd2e57e23b4abc0054a",
+    "modes": [
+      "story"
+    ],
+    "difficulty": {
+      "hp": 130,
+      "dmg": 110
+    }
+  },
+  "hashes": {
+    "content": "b6d3543a1d87f0a28e4824e0c1ae45a1eabc676d7abefcd2e57e23b4abc0054a",
+    "engine": "0d116c2c38e68f6577aadb9eb73c08903df4cd7b9cbb33101da2beffa78ad01d",
+    "probe": "44126e4bef3c89646d1d4fd63f2cbbf28948bf783d970f403f4e98f49d8e8410"
+  },
+  "method": {
+    "scenarioSeed": 777,
+    "baselineRequestedN": 1200,
+    "trainingRepeats": "0–13",
+    "heldOutRepeats": "14–56",
+    "policies": [
+      "random",
+      "greedy",
+      "planner"
+    ],
+    "independentPolicies": [
+      "random",
+      "greedy"
+    ],
+    "note": "planner is a legacy alias of greedy under now-only cards; random defeats/timeouts remain in every metric denominator; passing bands do not certify human balance"
+  },
+  "training": {
+    "scenarios": 294,
+    "before": {
+      "trials": 882,
+      "byZoneTierPolicy": {
+        "1/normal/random": {
+          "attempts": 98,
+          "wins": 98,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 3.377551020408163,
+            "p50": 3,
+            "p90": 5
+          },
+          "hpLossPct": {
+            "mean": 3.5651297556059447,
+            "p50": 2.880658436213992,
+            "p90": 8.23045267489712
+          }
+        },
+        "1/normal/greedy": {
+          "attempts": 98,
+          "wins": 98,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 3.3979591836734695,
+            "p50": 3,
+            "p90": 5
+          },
+          "hpLossPct": {
+            "mean": 3.7960863357688743,
+            "p50": 2.880658436213992,
+            "p90": 8.641975308641975
+          }
+        },
+        "1/normal/planner": {
+          "attempts": 98,
+          "wins": 98,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 3.3979591836734695,
+            "p50": 3,
+            "p90": 5
+          },
+          "hpLossPct": {
+            "mean": 3.7960863357688743,
+            "p50": 2.880658436213992,
+            "p90": 8.641975308641975
+          }
+        },
+        "1/elite/random": {
+          "attempts": 42,
+          "wins": 42,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 4.619047619047619,
+            "p50": 4,
+            "p90": 6
+          },
+          "hpLossPct": {
+            "mean": 11.111111111111109,
+            "p50": 11.11111111111111,
+            "p90": 17.695473251028808
+          }
+        },
+        "1/elite/greedy": {
+          "attempts": 42,
+          "wins": 42,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 4.642857142857143,
+            "p50": 4,
+            "p90": 6
+          },
+          "hpLossPct": {
+            "mean": 10.650597687634722,
+            "p50": 9.465020576131687,
+            "p90": 18.930041152263374
+          }
+        },
+        "1/elite/planner": {
+          "attempts": 42,
+          "wins": 42,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 4.642857142857143,
+            "p50": 4,
+            "p90": 6
+          },
+          "hpLossPct": {
+            "mean": 10.650597687634722,
+            "p50": 9.465020576131687,
+            "p90": 18.930041152263374
+          }
+        },
+        "1/boss/random": {
+          "attempts": 42,
+          "wins": 42,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 8.571428571428571,
+            "p50": 8,
+            "p90": 12
+          },
+          "hpLossPct": {
+            "mean": 18.783068783068785,
+            "p50": 14.814814814814815,
+            "p90": 39.09465020576132
+          }
+        },
+        "1/boss/greedy": {
+          "attempts": 42,
+          "wins": 42,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 8.5,
+            "p50": 8,
+            "p90": 11
+          },
+          "hpLossPct": {
+            "mean": 18.636096413874185,
+            "p50": 13.580246913580247,
+            "p90": 36.21399176954733
+          }
+        },
+        "1/boss/planner": {
+          "attempts": 42,
+          "wins": 42,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 8.5,
+            "p50": 8,
+            "p90": 11
+          },
+          "hpLossPct": {
+            "mean": 18.636096413874185,
+            "p50": 13.580246913580247,
+            "p90": 36.21399176954733
+          }
+        },
+        "2/normal/random": {
+          "attempts": 70,
+          "wins": 70,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 4.485714285714286,
+            "p50": 4,
+            "p90": 6
+          },
+          "hpLossPct": {
+            "mean": 7.084068195179304,
+            "p50": 7.407407407407407,
+            "p90": 13.168724279835391
+          }
+        },
+        "2/normal/greedy": {
+          "attempts": 70,
+          "wins": 70,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 4.485714285714286,
+            "p50": 4,
+            "p90": 6
+          },
+          "hpLossPct": {
+            "mean": 8.212815990593764,
+            "p50": 8.23045267489712,
+            "p90": 15.22633744855967
+          }
+        },
+        "2/normal/planner": {
+          "attempts": 70,
+          "wins": 70,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 4.485714285714286,
+            "p50": 4,
+            "p90": 6
+          },
+          "hpLossPct": {
+            "mean": 8.212815990593764,
+            "p50": 8.23045267489712,
+            "p90": 15.22633744855967
+          }
+        },
+        "2/elite/random": {
+          "attempts": 28,
+          "wins": 28,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 5.75,
+            "p50": 5,
+            "p90": 8
+          },
+          "hpLossPct": {
+            "mean": 15.064667842445617,
+            "p50": 15.22633744855967,
+            "p90": 24.691358024691358
+          }
+        },
+        "2/elite/greedy": {
+          "attempts": 28,
+          "wins": 28,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 5.357142857142857,
+            "p50": 5,
+            "p90": 6
+          },
+          "hpLossPct": {
+            "mean": 15.196942974720754,
+            "p50": 16.46090534979424,
+            "p90": 24.691358024691358
+          }
+        },
+        "2/elite/planner": {
+          "attempts": 28,
+          "wins": 28,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 5.357142857142857,
+            "p50": 5,
+            "p90": 6
+          },
+          "hpLossPct": {
+            "mean": 15.196942974720754,
+            "p50": 16.46090534979424,
+            "p90": 24.691358024691358
+          }
+        },
+        "2/boss/random": {
+          "attempts": 14,
+          "wins": 13,
+          "defeats": 1,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 13.214285714285714,
+            "p50": 11,
+            "p90": 22
+          },
+          "hpLossPct": {
+            "mean": 27.454438565549676,
+            "p50": 19.753086419753085,
+            "p90": 62.55144032921811
+          }
+        },
+        "2/boss/greedy": {
+          "attempts": 14,
+          "wins": 14,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 12.357142857142858,
+            "p50": 11,
+            "p90": 18
+          },
+          "hpLossPct": {
+            "mean": 31.069958847736622,
+            "p50": 32.510288065843625,
+            "p90": 53.08641975308642
+          }
+        },
+        "2/boss/planner": {
+          "attempts": 14,
+          "wins": 14,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 12.357142857142858,
+            "p50": 11,
+            "p90": 18
+          },
+          "hpLossPct": {
+            "mean": 31.069958847736622,
+            "p50": 32.510288065843625,
+            "p90": 53.08641975308642
+          }
+        }
+      },
+      "assessment": {
+        "overall": "failed",
+        "failedMetrics": 26,
+        "interpretation": "zones 3-5 use zone 2 lower bounds unchanged and only upper bounds of turns +10% and HP loss +5 percentage points (docs §20.9); win threshold applies only to random",
+        "note": "Automated bot targets are informational; passing bands do not certify balance or human play.",
+        "metrics": {
+          "1/normal/random": {
+            "turns": {
+              "value": 3.377551020408163,
+              "min": 3,
+              "max": 5,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 3.5651297556059447,
+              "min": 4,
+              "max": 12,
+              "status": "below"
+            },
+            "winPct": {
+              "value": 100,
+              "min": 98,
+              "max": 100,
+              "status": "pass"
+            }
+          },
+          "1/normal/greedy": {
+            "turns": {
+              "value": 3.3979591836734695,
+              "min": 3,
+              "max": 5,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 3.7960863357688743,
+              "min": 4,
+              "max": 12,
+              "status": "below"
+            }
+          },
+          "1/normal/planner": {
+            "turns": {
+              "value": 3.3979591836734695,
+              "min": 3,
+              "max": 5,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 3.7960863357688743,
+              "min": 4,
+              "max": 12,
+              "status": "below"
+            }
+          },
+          "1/elite/random": {
+            "turns": {
+              "value": 4.619047619047619,
+              "min": 5,
+              "max": 7,
+              "status": "below"
+            },
+            "hpLossPct": {
+              "value": 11.111111111111109,
+              "min": 12,
+              "max": 22,
+              "status": "below"
+            },
+            "winPct": {
+              "value": 100,
+              "min": 95,
+              "max": 100,
+              "status": "pass"
+            }
+          },
+          "1/elite/greedy": {
+            "turns": {
+              "value": 4.642857142857143,
+              "min": 5,
+              "max": 7,
+              "status": "below"
+            },
+            "hpLossPct": {
+              "value": 10.650597687634722,
+              "min": 12,
+              "max": 22,
+              "status": "below"
+            }
+          },
+          "1/elite/planner": {
+            "turns": {
+              "value": 4.642857142857143,
+              "min": 5,
+              "max": 7,
+              "status": "below"
+            },
+            "hpLossPct": {
+              "value": 10.650597687634722,
+              "min": 12,
+              "max": 22,
+              "status": "below"
+            }
+          },
+          "1/boss/random": {
+            "turns": {
+              "value": 8.571428571428571,
+              "min": 9,
+              "max": 12,
+              "status": "below"
+            },
+            "hpLossPct": {
+              "value": 18.783068783068785,
+              "min": 25,
+              "max": 40,
+              "status": "below"
+            },
+            "winPct": {
+              "value": 100,
+              "min": 85,
+              "max": 100,
+              "status": "pass"
+            }
+          },
+          "1/boss/greedy": {
+            "turns": {
+              "value": 8.5,
+              "min": 9,
+              "max": 12,
+              "status": "below"
+            },
+            "hpLossPct": {
+              "value": 18.636096413874185,
+              "min": 25,
+              "max": 40,
+              "status": "below"
+            }
+          },
+          "1/boss/planner": {
+            "turns": {
+              "value": 8.5,
+              "min": 9,
+              "max": 12,
+              "status": "below"
+            },
+            "hpLossPct": {
+              "value": 18.636096413874185,
+              "min": 25,
+              "max": 40,
+              "status": "below"
+            }
+          },
+          "2/normal/random": {
+            "turns": {
+              "value": 4.485714285714286,
+              "min": 4,
+              "max": 6,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 7.084068195179304,
+              "min": 8,
+              "max": 15,
+              "status": "below"
+            },
+            "winPct": {
+              "value": 100,
+              "min": 95,
+              "max": 100,
+              "status": "pass"
+            }
+          },
+          "2/normal/greedy": {
+            "turns": {
+              "value": 4.485714285714286,
+              "min": 4,
+              "max": 6,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 8.212815990593764,
+              "min": 8,
+              "max": 15,
+              "status": "pass"
+            }
+          },
+          "2/normal/planner": {
+            "turns": {
+              "value": 4.485714285714286,
+              "min": 4,
+              "max": 6,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 8.212815990593764,
+              "min": 8,
+              "max": 15,
+              "status": "pass"
+            }
+          },
+          "2/elite/random": {
+            "turns": {
+              "value": 5.75,
+              "min": 6,
+              "max": 8,
+              "status": "below"
+            },
+            "hpLossPct": {
+              "value": 15.064667842445617,
+              "min": 18,
+              "max": 28,
+              "status": "below"
+            },
+            "winPct": {
+              "value": 100,
+              "min": 90,
+              "max": 100,
+              "status": "pass"
+            }
+          },
+          "2/elite/greedy": {
+            "turns": {
+              "value": 5.357142857142857,
+              "min": 6,
+              "max": 8,
+              "status": "below"
+            },
+            "hpLossPct": {
+              "value": 15.196942974720754,
+              "min": 18,
+              "max": 28,
+              "status": "below"
+            }
+          },
+          "2/elite/planner": {
+            "turns": {
+              "value": 5.357142857142857,
+              "min": 6,
+              "max": 8,
+              "status": "below"
+            },
+            "hpLossPct": {
+              "value": 15.196942974720754,
+              "min": 18,
+              "max": 28,
+              "status": "below"
+            }
+          },
+          "2/boss/random": {
+            "turns": {
+              "value": 13.214285714285714,
+              "min": 14,
+              "max": 18,
+              "status": "below"
+            },
+            "hpLossPct": {
+              "value": 27.454438565549676,
+              "min": 30,
+              "max": 50,
+              "status": "below"
+            },
+            "winPct": {
+              "value": 92.85714285714286,
+              "min": 80,
+              "max": 100,
+              "status": "pass"
+            }
+          },
+          "2/boss/greedy": {
+            "turns": {
+              "value": 12.357142857142858,
+              "min": 14,
+              "max": 18,
+              "status": "below"
+            },
+            "hpLossPct": {
+              "value": 31.069958847736622,
+              "min": 30,
+              "max": 50,
+              "status": "pass"
+            }
+          },
+          "2/boss/planner": {
+            "turns": {
+              "value": 12.357142857142858,
+              "min": 14,
+              "max": 18,
+              "status": "below"
+            },
+            "hpLossPct": {
+              "value": 31.069958847736622,
+              "min": 30,
+              "max": 50,
+              "status": "pass"
+            }
+          }
+        }
+      }
+    },
+    "after": {
+      "trials": 882,
+      "byZoneTierPolicy": {
+        "1/normal/random": {
+          "attempts": 98,
+          "wins": 98,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 4.051020408163265,
+            "p50": 4,
+            "p90": 5
+          },
+          "hpLossPct": {
+            "mean": 5.7529184513311495,
+            "p50": 5.349794238683128,
+            "p90": 12.345679012345679
+          }
+        },
+        "1/normal/greedy": {
+          "attempts": 98,
+          "wins": 98,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 3.9285714285714284,
+            "p50": 4,
+            "p90": 5
+          },
+          "hpLossPct": {
+            "mean": 5.946082136558324,
+            "p50": 4.938271604938271,
+            "p90": 11.934156378600823
+          }
+        },
+        "1/normal/planner": {
+          "attempts": 98,
+          "wins": 98,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 3.9285714285714284,
+            "p50": 4,
+            "p90": 5
+          },
+          "hpLossPct": {
+            "mean": 5.946082136558324,
+            "p50": 4.938271604938271,
+            "p90": 11.934156378600823
+          }
+        },
+        "1/elite/random": {
+          "attempts": 42,
+          "wins": 42,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 5.714285714285714,
+            "p50": 5,
+            "p90": 7
+          },
+          "hpLossPct": {
+            "mean": 13.805604546345283,
+            "p50": 12.345679012345679,
+            "p90": 23.868312757201647
+          }
+        },
+        "1/elite/greedy": {
+          "attempts": 42,
+          "wins": 42,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 5.904761904761905,
+            "p50": 5,
+            "p90": 9
+          },
+          "hpLossPct": {
+            "mean": 13.345091122868899,
+            "p50": 11.934156378600823,
+            "p90": 23.45679012345679
+          }
+        },
+        "1/elite/planner": {
+          "attempts": 42,
+          "wins": 42,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 5.904761904761905,
+            "p50": 5,
+            "p90": 9
+          },
+          "hpLossPct": {
+            "mean": 13.345091122868899,
+            "p50": 11.934156378600823,
+            "p90": 23.45679012345679
+          }
+        },
+        "1/boss/random": {
+          "attempts": 42,
+          "wins": 41,
+          "defeats": 1,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 11.261904761904763,
+            "p50": 11,
+            "p90": 16
+          },
+          "hpLossPct": {
+            "mean": 31.040564373897706,
+            "p50": 23.868312757201647,
+            "p90": 58.02469135802469
+          }
+        },
+        "1/boss/greedy": {
+          "attempts": 42,
+          "wins": 40,
+          "defeats": 2,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 11.095238095238095,
+            "p50": 10,
+            "p90": 16
+          },
+          "hpLossPct": {
+            "mean": 30.305702527924762,
+            "p50": 23.45679012345679,
+            "p90": 56.37860082304527
+          }
+        },
+        "1/boss/planner": {
+          "attempts": 42,
+          "wins": 40,
+          "defeats": 2,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 11.095238095238095,
+            "p50": 10,
+            "p90": 16
+          },
+          "hpLossPct": {
+            "mean": 30.305702527924762,
+            "p50": 23.45679012345679,
+            "p90": 56.37860082304527
+          }
+        },
+        "2/normal/random": {
+          "attempts": 70,
+          "wins": 70,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 5.071428571428571,
+            "p50": 5,
+            "p90": 6
+          },
+          "hpLossPct": {
+            "mean": 9.753086419753089,
+            "p50": 9.465020576131687,
+            "p90": 17.695473251028808
+          }
+        },
+        "2/normal/greedy": {
+          "attempts": 70,
+          "wins": 70,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 4.985714285714286,
+            "p50": 5,
+            "p90": 6
+          },
+          "hpLossPct": {
+            "mean": 10.499706055261614,
+            "p50": 9.465020576131687,
+            "p90": 19.753086419753085
+          }
+        },
+        "2/normal/planner": {
+          "attempts": 70,
+          "wins": 70,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 4.985714285714286,
+            "p50": 5,
+            "p90": 6
+          },
+          "hpLossPct": {
+            "mean": 10.499706055261614,
+            "p50": 9.465020576131687,
+            "p90": 19.753086419753085
+          }
+        },
+        "2/elite/random": {
+          "attempts": 28,
+          "wins": 28,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 6.785714285714286,
+            "p50": 6,
+            "p90": 9
+          },
+          "hpLossPct": {
+            "mean": 18.03350970017637,
+            "p50": 16.872427983539094,
+            "p90": 29.218106995884774
+          }
+        },
+        "2/elite/greedy": {
+          "attempts": 28,
+          "wins": 28,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 6.357142857142857,
+            "p50": 6,
+            "p90": 9
+          },
+          "hpLossPct": {
+            "mean": 19.547325102880656,
+            "p50": 19.753086419753085,
+            "p90": 28.80658436213992
+          }
+        },
+        "2/elite/planner": {
+          "attempts": 28,
+          "wins": 28,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 6.357142857142857,
+            "p50": 6,
+            "p90": 9
+          },
+          "hpLossPct": {
+            "mean": 19.547325102880656,
+            "p50": 19.753086419753085,
+            "p90": 28.80658436213992
+          }
+        },
+        "2/boss/random": {
+          "attempts": 14,
+          "wins": 13,
+          "defeats": 1,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 15.571428571428571,
+            "p50": 14,
+            "p90": 21
+          },
+          "hpLossPct": {
+            "mean": 38.447971781305114,
+            "p50": 32.098765432098766,
+            "p90": 94.23868312757202
+          }
+        },
+        "2/boss/greedy": {
+          "attempts": 14,
+          "wins": 14,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 16.357142857142858,
+            "p50": 15,
+            "p90": 23
+          },
+          "hpLossPct": {
+            "mean": 49.17695473251029,
+            "p50": 46.91358024691358,
+            "p90": 81.89300411522633
+          }
+        },
+        "2/boss/planner": {
+          "attempts": 14,
+          "wins": 14,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 16.357142857142858,
+            "p50": 15,
+            "p90": 23
+          },
+          "hpLossPct": {
+            "mean": 49.17695473251029,
+            "p50": 46.91358024691358,
+            "p90": 81.89300411522633
+          }
+        }
+      },
+      "assessment": {
+        "overall": "not_certified",
+        "failedMetrics": 0,
+        "interpretation": "zones 3-5 use zone 2 lower bounds unchanged and only upper bounds of turns +10% and HP loss +5 percentage points (docs §20.9); win threshold applies only to random",
+        "note": "Automated bot targets are informational; passing bands do not certify balance or human play.",
+        "metrics": {
+          "1/normal/random": {
+            "turns": {
+              "value": 4.051020408163265,
+              "min": 3,
+              "max": 5,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 5.7529184513311495,
+              "min": 4,
+              "max": 12,
+              "status": "pass"
+            },
+            "winPct": {
+              "value": 100,
+              "min": 98,
+              "max": 100,
+              "status": "pass"
+            }
+          },
+          "1/normal/greedy": {
+            "turns": {
+              "value": 3.9285714285714284,
+              "min": 3,
+              "max": 5,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 5.946082136558324,
+              "min": 4,
+              "max": 12,
+              "status": "pass"
+            }
+          },
+          "1/normal/planner": {
+            "turns": {
+              "value": 3.9285714285714284,
+              "min": 3,
+              "max": 5,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 5.946082136558324,
+              "min": 4,
+              "max": 12,
+              "status": "pass"
+            }
+          },
+          "1/elite/random": {
+            "turns": {
+              "value": 5.714285714285714,
+              "min": 5,
+              "max": 7,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 13.805604546345283,
+              "min": 12,
+              "max": 22,
+              "status": "pass"
+            },
+            "winPct": {
+              "value": 100,
+              "min": 95,
+              "max": 100,
+              "status": "pass"
+            }
+          },
+          "1/elite/greedy": {
+            "turns": {
+              "value": 5.904761904761905,
+              "min": 5,
+              "max": 7,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 13.345091122868899,
+              "min": 12,
+              "max": 22,
+              "status": "pass"
+            }
+          },
+          "1/elite/planner": {
+            "turns": {
+              "value": 5.904761904761905,
+              "min": 5,
+              "max": 7,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 13.345091122868899,
+              "min": 12,
+              "max": 22,
+              "status": "pass"
+            }
+          },
+          "1/boss/random": {
+            "turns": {
+              "value": 11.261904761904763,
+              "min": 9,
+              "max": 12,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 31.040564373897706,
+              "min": 25,
+              "max": 40,
+              "status": "pass"
+            },
+            "winPct": {
+              "value": 97.61904761904762,
+              "min": 85,
+              "max": 100,
+              "status": "pass"
+            }
+          },
+          "1/boss/greedy": {
+            "turns": {
+              "value": 11.095238095238095,
+              "min": 9,
+              "max": 12,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 30.305702527924762,
+              "min": 25,
+              "max": 40,
+              "status": "pass"
+            }
+          },
+          "1/boss/planner": {
+            "turns": {
+              "value": 11.095238095238095,
+              "min": 9,
+              "max": 12,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 30.305702527924762,
+              "min": 25,
+              "max": 40,
+              "status": "pass"
+            }
+          },
+          "2/normal/random": {
+            "turns": {
+              "value": 5.071428571428571,
+              "min": 4,
+              "max": 6,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 9.753086419753089,
+              "min": 8,
+              "max": 15,
+              "status": "pass"
+            },
+            "winPct": {
+              "value": 100,
+              "min": 95,
+              "max": 100,
+              "status": "pass"
+            }
+          },
+          "2/normal/greedy": {
+            "turns": {
+              "value": 4.985714285714286,
+              "min": 4,
+              "max": 6,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 10.499706055261614,
+              "min": 8,
+              "max": 15,
+              "status": "pass"
+            }
+          },
+          "2/normal/planner": {
+            "turns": {
+              "value": 4.985714285714286,
+              "min": 4,
+              "max": 6,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 10.499706055261614,
+              "min": 8,
+              "max": 15,
+              "status": "pass"
+            }
+          },
+          "2/elite/random": {
+            "turns": {
+              "value": 6.785714285714286,
+              "min": 6,
+              "max": 8,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 18.03350970017637,
+              "min": 18,
+              "max": 28,
+              "status": "pass"
+            },
+            "winPct": {
+              "value": 100,
+              "min": 90,
+              "max": 100,
+              "status": "pass"
+            }
+          },
+          "2/elite/greedy": {
+            "turns": {
+              "value": 6.357142857142857,
+              "min": 6,
+              "max": 8,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 19.547325102880656,
+              "min": 18,
+              "max": 28,
+              "status": "pass"
+            }
+          },
+          "2/elite/planner": {
+            "turns": {
+              "value": 6.357142857142857,
+              "min": 6,
+              "max": 8,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 19.547325102880656,
+              "min": 18,
+              "max": 28,
+              "status": "pass"
+            }
+          },
+          "2/boss/random": {
+            "turns": {
+              "value": 15.571428571428571,
+              "min": 14,
+              "max": 18,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 38.447971781305114,
+              "min": 30,
+              "max": 50,
+              "status": "pass"
+            },
+            "winPct": {
+              "value": 92.85714285714286,
+              "min": 80,
+              "max": 100,
+              "status": "pass"
+            }
+          },
+          "2/boss/greedy": {
+            "turns": {
+              "value": 16.357142857142858,
+              "min": 14,
+              "max": 18,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 49.17695473251029,
+              "min": 30,
+              "max": 50,
+              "status": "pass"
+            }
+          },
+          "2/boss/planner": {
+            "turns": {
+              "value": 16.357142857142858,
+              "min": 14,
+              "max": 18,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 49.17695473251029,
+              "min": 30,
+              "max": 50,
+              "status": "pass"
+            }
+          }
+        }
+      }
+    },
+    "randomStrategyStalls": []
+  },
+  "heldOut": {
+    "scenarios": 903,
+    "before": {
+      "trials": 2709,
+      "byZoneTierPolicy": {
+        "1/normal/random": {
+          "attempts": 301,
+          "wins": 301,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 3.2358803986710964,
+            "p50": 3,
+            "p90": 5
+          },
+          "hpLossPct": {
+            "mean": 3.758391096892393,
+            "p50": 2.880658436213992,
+            "p90": 8.641975308641975
+          }
+        },
+        "1/normal/greedy": {
+          "attempts": 301,
+          "wins": 301,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 3.299003322259136,
+            "p50": 3,
+            "p90": 5
+          },
+          "hpLossPct": {
+            "mean": 3.896476764693822,
+            "p50": 2.880658436213992,
+            "p90": 9.465020576131687
+          }
+        },
+        "1/normal/planner": {
+          "attempts": 301,
+          "wins": 301,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 3.299003322259136,
+            "p50": 3,
+            "p90": 5
+          },
+          "hpLossPct": {
+            "mean": 3.896476764693822,
+            "p50": 2.880658436213992,
+            "p90": 9.465020576131687
+          }
+        },
+        "1/elite/random": {
+          "attempts": 129,
+          "wins": 129,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 4.868217054263566,
+            "p50": 5,
+            "p90": 6
+          },
+          "hpLossPct": {
+            "mean": 10.792101317510443,
+            "p50": 10.699588477366255,
+            "p90": 19.34156378600823
+          }
+        },
+        "1/elite/greedy": {
+          "attempts": 129,
+          "wins": 129,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 4.89922480620155,
+            "p50": 5,
+            "p90": 6
+          },
+          "hpLossPct": {
+            "mean": 11.51625354898395,
+            "p50": 10.699588477366255,
+            "p90": 20.5761316872428
+          }
+        },
+        "1/elite/planner": {
+          "attempts": 129,
+          "wins": 129,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 4.89922480620155,
+            "p50": 5,
+            "p90": 6
+          },
+          "hpLossPct": {
+            "mean": 11.51625354898395,
+            "p50": 10.699588477366255,
+            "p90": 20.5761316872428
+          }
+        },
+        "1/boss/random": {
+          "attempts": 129,
+          "wins": 128,
+          "defeats": 1,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 8.310077519379846,
+            "p50": 8,
+            "p90": 13
+          },
+          "hpLossPct": {
+            "mean": 17.80712667878904,
+            "p50": 16.46090534979424,
+            "p90": 33.74485596707819
+          }
+        },
+        "1/boss/greedy": {
+          "attempts": 129,
+          "wins": 128,
+          "defeats": 1,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 8.418604651162791,
+            "p50": 8,
+            "p90": 11
+          },
+          "hpLossPct": {
+            "mean": 18.521708616454536,
+            "p50": 17.695473251028808,
+            "p90": 34.15637860082305
+          }
+        },
+        "1/boss/planner": {
+          "attempts": 129,
+          "wins": 128,
+          "defeats": 1,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 8.418604651162791,
+            "p50": 8,
+            "p90": 11
+          },
+          "hpLossPct": {
+            "mean": 18.521708616454536,
+            "p50": 17.695473251028808,
+            "p90": 34.15637860082305
+          }
+        },
+        "2/normal/random": {
+          "attempts": 215,
+          "wins": 215,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 4.330232558139535,
+            "p50": 4,
+            "p90": 6
+          },
+          "hpLossPct": {
+            "mean": 6.502057613168727,
+            "p50": 6.584362139917696,
+            "p90": 11.934156378600823
+          }
+        },
+        "2/normal/greedy": {
+          "attempts": 215,
+          "wins": 215,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 4.367441860465116,
+            "p50": 4,
+            "p90": 6
+          },
+          "hpLossPct": {
+            "mean": 6.928892717006415,
+            "p50": 6.584362139917696,
+            "p90": 13.580246913580247
+          }
+        },
+        "2/normal/planner": {
+          "attempts": 215,
+          "wins": 215,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 4.367441860465116,
+            "p50": 4,
+            "p90": 6
+          },
+          "hpLossPct": {
+            "mean": 6.928892717006415,
+            "p50": 6.584362139917696,
+            "p90": 13.580246913580247
+          }
+        },
+        "2/elite/random": {
+          "attempts": 86,
+          "wins": 86,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 5.348837209302325,
+            "p50": 5,
+            "p90": 7
+          },
+          "hpLossPct": {
+            "mean": 15.34596612115992,
+            "p50": 15.22633744855967,
+            "p90": 23.868312757201647
+          }
+        },
+        "2/elite/greedy": {
+          "attempts": 86,
+          "wins": 86,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 5.6976744186046515,
+            "p50": 5,
+            "p90": 8
+          },
+          "hpLossPct": {
+            "mean": 14.833955402430854,
+            "p50": 14.814814814814815,
+            "p90": 23.868312757201647
+          }
+        },
+        "2/elite/planner": {
+          "attempts": 86,
+          "wins": 86,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 5.6976744186046515,
+            "p50": 5,
+            "p90": 8
+          },
+          "hpLossPct": {
+            "mean": 14.833955402430854,
+            "p50": 14.814814814814815,
+            "p90": 23.868312757201647
+          }
+        },
+        "2/boss/random": {
+          "attempts": 43,
+          "wins": 43,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 12.767441860465116,
+            "p50": 13,
+            "p90": 19
+          },
+          "hpLossPct": {
+            "mean": 27.457172935209112,
+            "p50": 25.925925925925927,
+            "p90": 48.148148148148145
+          }
+        },
+        "2/boss/greedy": {
+          "attempts": 43,
+          "wins": 42,
+          "defeats": 1,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 12.953488372093023,
+            "p50": 12,
+            "p90": 19
+          },
+          "hpLossPct": {
+            "mean": 26.12690209589434,
+            "p50": 23.868312757201647,
+            "p90": 45.267489711934154
+          }
+        },
+        "2/boss/planner": {
+          "attempts": 43,
+          "wins": 42,
+          "defeats": 1,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 12.953488372093023,
+            "p50": 12,
+            "p90": 19
+          },
+          "hpLossPct": {
+            "mean": 26.12690209589434,
+            "p50": 23.868312757201647,
+            "p90": 45.267489711934154
+          }
+        }
+      },
+      "assessment": {
+        "overall": "failed",
+        "failedMetrics": 30,
+        "interpretation": "zones 3-5 use zone 2 lower bounds unchanged and only upper bounds of turns +10% and HP loss +5 percentage points (docs §20.9); win threshold applies only to random",
+        "note": "Automated bot targets are informational; passing bands do not certify balance or human play.",
+        "metrics": {
+          "1/normal/random": {
+            "turns": {
+              "value": 3.2358803986710964,
+              "min": 3,
+              "max": 5,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 3.758391096892393,
+              "min": 4,
+              "max": 12,
+              "status": "below"
+            },
+            "winPct": {
+              "value": 100,
+              "min": 98,
+              "max": 100,
+              "status": "pass"
+            }
+          },
+          "1/normal/greedy": {
+            "turns": {
+              "value": 3.299003322259136,
+              "min": 3,
+              "max": 5,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 3.896476764693822,
+              "min": 4,
+              "max": 12,
+              "status": "below"
+            }
+          },
+          "1/normal/planner": {
+            "turns": {
+              "value": 3.299003322259136,
+              "min": 3,
+              "max": 5,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 3.896476764693822,
+              "min": 4,
+              "max": 12,
+              "status": "below"
+            }
+          },
+          "1/elite/random": {
+            "turns": {
+              "value": 4.868217054263566,
+              "min": 5,
+              "max": 7,
+              "status": "below"
+            },
+            "hpLossPct": {
+              "value": 10.792101317510443,
+              "min": 12,
+              "max": 22,
+              "status": "below"
+            },
+            "winPct": {
+              "value": 100,
+              "min": 95,
+              "max": 100,
+              "status": "pass"
+            }
+          },
+          "1/elite/greedy": {
+            "turns": {
+              "value": 4.89922480620155,
+              "min": 5,
+              "max": 7,
+              "status": "below"
+            },
+            "hpLossPct": {
+              "value": 11.51625354898395,
+              "min": 12,
+              "max": 22,
+              "status": "below"
+            }
+          },
+          "1/elite/planner": {
+            "turns": {
+              "value": 4.89922480620155,
+              "min": 5,
+              "max": 7,
+              "status": "below"
+            },
+            "hpLossPct": {
+              "value": 11.51625354898395,
+              "min": 12,
+              "max": 22,
+              "status": "below"
+            }
+          },
+          "1/boss/random": {
+            "turns": {
+              "value": 8.310077519379846,
+              "min": 9,
+              "max": 12,
+              "status": "below"
+            },
+            "hpLossPct": {
+              "value": 17.80712667878904,
+              "min": 25,
+              "max": 40,
+              "status": "below"
+            },
+            "winPct": {
+              "value": 99.2248062015504,
+              "min": 85,
+              "max": 100,
+              "status": "pass"
+            }
+          },
+          "1/boss/greedy": {
+            "turns": {
+              "value": 8.418604651162791,
+              "min": 9,
+              "max": 12,
+              "status": "below"
+            },
+            "hpLossPct": {
+              "value": 18.521708616454536,
+              "min": 25,
+              "max": 40,
+              "status": "below"
+            }
+          },
+          "1/boss/planner": {
+            "turns": {
+              "value": 8.418604651162791,
+              "min": 9,
+              "max": 12,
+              "status": "below"
+            },
+            "hpLossPct": {
+              "value": 18.521708616454536,
+              "min": 25,
+              "max": 40,
+              "status": "below"
+            }
+          },
+          "2/normal/random": {
+            "turns": {
+              "value": 4.330232558139535,
+              "min": 4,
+              "max": 6,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 6.502057613168727,
+              "min": 8,
+              "max": 15,
+              "status": "below"
+            },
+            "winPct": {
+              "value": 100,
+              "min": 95,
+              "max": 100,
+              "status": "pass"
+            }
+          },
+          "2/normal/greedy": {
+            "turns": {
+              "value": 4.367441860465116,
+              "min": 4,
+              "max": 6,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 6.928892717006415,
+              "min": 8,
+              "max": 15,
+              "status": "below"
+            }
+          },
+          "2/normal/planner": {
+            "turns": {
+              "value": 4.367441860465116,
+              "min": 4,
+              "max": 6,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 6.928892717006415,
+              "min": 8,
+              "max": 15,
+              "status": "below"
+            }
+          },
+          "2/elite/random": {
+            "turns": {
+              "value": 5.348837209302325,
+              "min": 6,
+              "max": 8,
+              "status": "below"
+            },
+            "hpLossPct": {
+              "value": 15.34596612115992,
+              "min": 18,
+              "max": 28,
+              "status": "below"
+            },
+            "winPct": {
+              "value": 100,
+              "min": 90,
+              "max": 100,
+              "status": "pass"
+            }
+          },
+          "2/elite/greedy": {
+            "turns": {
+              "value": 5.6976744186046515,
+              "min": 6,
+              "max": 8,
+              "status": "below"
+            },
+            "hpLossPct": {
+              "value": 14.833955402430854,
+              "min": 18,
+              "max": 28,
+              "status": "below"
+            }
+          },
+          "2/elite/planner": {
+            "turns": {
+              "value": 5.6976744186046515,
+              "min": 6,
+              "max": 8,
+              "status": "below"
+            },
+            "hpLossPct": {
+              "value": 14.833955402430854,
+              "min": 18,
+              "max": 28,
+              "status": "below"
+            }
+          },
+          "2/boss/random": {
+            "turns": {
+              "value": 12.767441860465116,
+              "min": 14,
+              "max": 18,
+              "status": "below"
+            },
+            "hpLossPct": {
+              "value": 27.457172935209112,
+              "min": 30,
+              "max": 50,
+              "status": "below"
+            },
+            "winPct": {
+              "value": 100,
+              "min": 80,
+              "max": 100,
+              "status": "pass"
+            }
+          },
+          "2/boss/greedy": {
+            "turns": {
+              "value": 12.953488372093023,
+              "min": 14,
+              "max": 18,
+              "status": "below"
+            },
+            "hpLossPct": {
+              "value": 26.12690209589434,
+              "min": 30,
+              "max": 50,
+              "status": "below"
+            }
+          },
+          "2/boss/planner": {
+            "turns": {
+              "value": 12.953488372093023,
+              "min": 14,
+              "max": 18,
+              "status": "below"
+            },
+            "hpLossPct": {
+              "value": 26.12690209589434,
+              "min": 30,
+              "max": 50,
+              "status": "below"
+            }
+          }
+        }
+      }
+    },
+    "after": {
+      "trials": 2709,
+      "byZoneTierPolicy": {
+        "1/normal/random": {
+          "attempts": 301,
+          "wins": 301,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 3.8637873754152823,
+            "p50": 4,
+            "p90": 5
+          },
+          "hpLossPct": {
+            "mean": 6.164636397194541,
+            "p50": 5.349794238683128,
+            "p90": 12.757201646090534
+          }
+        },
+        "1/normal/greedy": {
+          "attempts": 301,
+          "wins": 301,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 3.9069767441860463,
+            "p50": 4,
+            "p90": 5
+          },
+          "hpLossPct": {
+            "mean": 6.449010841775701,
+            "p50": 5.349794238683128,
+            "p90": 13.580246913580247
+          }
+        },
+        "1/normal/planner": {
+          "attempts": 301,
+          "wins": 301,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 3.9069767441860463,
+            "p50": 4,
+            "p90": 5
+          },
+          "hpLossPct": {
+            "mean": 6.449010841775701,
+            "p50": 5.349794238683128,
+            "p90": 13.580246913580247
+          }
+        },
+        "1/elite/random": {
+          "attempts": 129,
+          "wins": 129,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 5.922480620155039,
+            "p50": 5,
+            "p90": 8
+          },
+          "hpLossPct": {
+            "mean": 14.074712093661272,
+            "p50": 13.580246913580247,
+            "p90": 24.691358024691358
+          }
+        },
+        "1/elite/greedy": {
+          "attempts": 129,
+          "wins": 129,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 5.89922480620155,
+            "p50": 5,
+            "p90": 8
+          },
+          "hpLossPct": {
+            "mean": 14.521325804702208,
+            "p50": 14.40329218106996,
+            "p90": 24.691358024691358
+          }
+        },
+        "1/elite/planner": {
+          "attempts": 129,
+          "wins": 129,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 5.89922480620155,
+            "p50": 5,
+            "p90": 8
+          },
+          "hpLossPct": {
+            "mean": 14.521325804702208,
+            "p50": 14.40329218106996,
+            "p90": 24.691358024691358
+          }
+        },
+        "1/boss/random": {
+          "attempts": 129,
+          "wins": 124,
+          "defeats": 4,
+          "timeouts": 1,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 11.589147286821705,
+            "p50": 10,
+            "p90": 17
+          },
+          "hpLossPct": {
+            "mean": 28.918237789900154,
+            "p50": 27.160493827160494,
+            "p90": 49.794238683127574
+          }
+        },
+        "1/boss/greedy": {
+          "attempts": 129,
+          "wins": 127,
+          "defeats": 2,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 10.728682170542635,
+            "p50": 10,
+            "p90": 14
+          },
+          "hpLossPct": {
+            "mean": 26.251315915398603,
+            "p50": 25.925925925925927,
+            "p90": 49.382716049382715
+          }
+        },
+        "1/boss/planner": {
+          "attempts": 129,
+          "wins": 127,
+          "defeats": 2,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 10.728682170542635,
+            "p50": 10,
+            "p90": 14
+          },
+          "hpLossPct": {
+            "mean": 26.251315915398603,
+            "p50": 25.925925925925927,
+            "p90": 49.382716049382715
+          }
+        },
+        "2/normal/random": {
+          "attempts": 215,
+          "wins": 215,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 4.962790697674419,
+            "p50": 5,
+            "p90": 6
+          },
+          "hpLossPct": {
+            "mean": 8.915685711551342,
+            "p50": 8.23045267489712,
+            "p90": 17.28395061728395
+          }
+        },
+        "2/normal/greedy": {
+          "attempts": 215,
+          "wins": 215,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 5.027906976744186,
+            "p50": 5,
+            "p90": 6
+          },
+          "hpLossPct": {
+            "mean": 9.487989281270936,
+            "p50": 9.465020576131687,
+            "p90": 16.872427983539094
+          }
+        },
+        "2/normal/planner": {
+          "attempts": 215,
+          "wins": 215,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 5.027906976744186,
+            "p50": 5,
+            "p90": 6
+          },
+          "hpLossPct": {
+            "mean": 9.487989281270936,
+            "p50": 9.465020576131687,
+            "p90": 16.872427983539094
+          }
+        },
+        "2/elite/random": {
+          "attempts": 86,
+          "wins": 86,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 6.27906976744186,
+            "p50": 6,
+            "p90": 9
+          },
+          "hpLossPct": {
+            "mean": 19.169298497463867,
+            "p50": 18.51851851851852,
+            "p90": 29.62962962962963
+          }
+        },
+        "2/elite/greedy": {
+          "attempts": 86,
+          "wins": 86,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 6.383720930232558,
+            "p50": 6,
+            "p90": 9
+          },
+          "hpLossPct": {
+            "mean": 18.02086324050148,
+            "p50": 17.695473251028808,
+            "p90": 29.218106995884774
+          }
+        },
+        "2/elite/planner": {
+          "attempts": 86,
+          "wins": 86,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 6.383720930232558,
+            "p50": 6,
+            "p90": 9
+          },
+          "hpLossPct": {
+            "mean": 18.02086324050148,
+            "p50": 17.695473251028808,
+            "p90": 29.218106995884774
+          }
+        },
+        "2/boss/random": {
+          "attempts": 43,
+          "wins": 37,
+          "defeats": 6,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 16.58139534883721,
+            "p50": 15,
+            "p90": 24
+          },
+          "hpLossPct": {
+            "mean": 49.55498133792708,
+            "p50": 48.559670781893004,
+            "p90": 100
+          }
+        },
+        "2/boss/greedy": {
+          "attempts": 43,
+          "wins": 38,
+          "defeats": 5,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 16.86046511627907,
+            "p50": 15,
+            "p90": 25
+          },
+          "hpLossPct": {
+            "mean": 44.15733563020385,
+            "p50": 38.68312757201646,
+            "p90": 100
+          }
+        },
+        "2/boss/planner": {
+          "attempts": 43,
+          "wins": 38,
+          "defeats": 5,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 16.86046511627907,
+            "p50": 15,
+            "p90": 25
+          },
+          "hpLossPct": {
+            "mean": 44.15733563020385,
+            "p50": 38.68312757201646,
+            "p90": 100
+          }
+        }
+      },
+      "assessment": {
+        "overall": "not_certified",
+        "failedMetrics": 0,
+        "interpretation": "zones 3-5 use zone 2 lower bounds unchanged and only upper bounds of turns +10% and HP loss +5 percentage points (docs §20.9); win threshold applies only to random",
+        "note": "Automated bot targets are informational; passing bands do not certify balance or human play.",
+        "metrics": {
+          "1/normal/random": {
+            "turns": {
+              "value": 3.8637873754152823,
+              "min": 3,
+              "max": 5,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 6.164636397194541,
+              "min": 4,
+              "max": 12,
+              "status": "pass"
+            },
+            "winPct": {
+              "value": 100,
+              "min": 98,
+              "max": 100,
+              "status": "pass"
+            }
+          },
+          "1/normal/greedy": {
+            "turns": {
+              "value": 3.9069767441860463,
+              "min": 3,
+              "max": 5,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 6.449010841775701,
+              "min": 4,
+              "max": 12,
+              "status": "pass"
+            }
+          },
+          "1/normal/planner": {
+            "turns": {
+              "value": 3.9069767441860463,
+              "min": 3,
+              "max": 5,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 6.449010841775701,
+              "min": 4,
+              "max": 12,
+              "status": "pass"
+            }
+          },
+          "1/elite/random": {
+            "turns": {
+              "value": 5.922480620155039,
+              "min": 5,
+              "max": 7,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 14.074712093661272,
+              "min": 12,
+              "max": 22,
+              "status": "pass"
+            },
+            "winPct": {
+              "value": 100,
+              "min": 95,
+              "max": 100,
+              "status": "pass"
+            }
+          },
+          "1/elite/greedy": {
+            "turns": {
+              "value": 5.89922480620155,
+              "min": 5,
+              "max": 7,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 14.521325804702208,
+              "min": 12,
+              "max": 22,
+              "status": "pass"
+            }
+          },
+          "1/elite/planner": {
+            "turns": {
+              "value": 5.89922480620155,
+              "min": 5,
+              "max": 7,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 14.521325804702208,
+              "min": 12,
+              "max": 22,
+              "status": "pass"
+            }
+          },
+          "1/boss/random": {
+            "turns": {
+              "value": 11.589147286821705,
+              "min": 9,
+              "max": 12,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 28.918237789900154,
+              "min": 25,
+              "max": 40,
+              "status": "pass"
+            },
+            "winPct": {
+              "value": 96.12403100775194,
+              "min": 85,
+              "max": 100,
+              "status": "pass"
+            }
+          },
+          "1/boss/greedy": {
+            "turns": {
+              "value": 10.728682170542635,
+              "min": 9,
+              "max": 12,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 26.251315915398603,
+              "min": 25,
+              "max": 40,
+              "status": "pass"
+            }
+          },
+          "1/boss/planner": {
+            "turns": {
+              "value": 10.728682170542635,
+              "min": 9,
+              "max": 12,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 26.251315915398603,
+              "min": 25,
+              "max": 40,
+              "status": "pass"
+            }
+          },
+          "2/normal/random": {
+            "turns": {
+              "value": 4.962790697674419,
+              "min": 4,
+              "max": 6,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 8.915685711551342,
+              "min": 8,
+              "max": 15,
+              "status": "pass"
+            },
+            "winPct": {
+              "value": 100,
+              "min": 95,
+              "max": 100,
+              "status": "pass"
+            }
+          },
+          "2/normal/greedy": {
+            "turns": {
+              "value": 5.027906976744186,
+              "min": 4,
+              "max": 6,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 9.487989281270936,
+              "min": 8,
+              "max": 15,
+              "status": "pass"
+            }
+          },
+          "2/normal/planner": {
+            "turns": {
+              "value": 5.027906976744186,
+              "min": 4,
+              "max": 6,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 9.487989281270936,
+              "min": 8,
+              "max": 15,
+              "status": "pass"
+            }
+          },
+          "2/elite/random": {
+            "turns": {
+              "value": 6.27906976744186,
+              "min": 6,
+              "max": 8,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 19.169298497463867,
+              "min": 18,
+              "max": 28,
+              "status": "pass"
+            },
+            "winPct": {
+              "value": 100,
+              "min": 90,
+              "max": 100,
+              "status": "pass"
+            }
+          },
+          "2/elite/greedy": {
+            "turns": {
+              "value": 6.383720930232558,
+              "min": 6,
+              "max": 8,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 18.02086324050148,
+              "min": 18,
+              "max": 28,
+              "status": "pass"
+            }
+          },
+          "2/elite/planner": {
+            "turns": {
+              "value": 6.383720930232558,
+              "min": 6,
+              "max": 8,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 18.02086324050148,
+              "min": 18,
+              "max": 28,
+              "status": "pass"
+            }
+          },
+          "2/boss/random": {
+            "turns": {
+              "value": 16.58139534883721,
+              "min": 14,
+              "max": 18,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 49.55498133792708,
+              "min": 30,
+              "max": 50,
+              "status": "pass"
+            },
+            "winPct": {
+              "value": 86.04651162790698,
+              "min": 80,
+              "max": 100,
+              "status": "pass"
+            }
+          },
+          "2/boss/greedy": {
+            "turns": {
+              "value": 16.86046511627907,
+              "min": 14,
+              "max": 18,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 44.15733563020385,
+              "min": 30,
+              "max": 50,
+              "status": "pass"
+            }
+          },
+          "2/boss/planner": {
+            "turns": {
+              "value": 16.86046511627907,
+              "min": 14,
+              "max": 18,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 44.15733563020385,
+              "min": 30,
+              "max": 50,
+              "status": "pass"
+            }
+          }
+        }
+      }
+    },
+    "randomStrategyStalls": [
+      {
+        "scenarioKey": "1/boss/b_garden/55",
+        "seed": 1573514597,
+        "party": [
+          "sion",
+          "kaya",
+          "aila"
+        ],
+        "stalled": {
+          "scenarioKey": "1/boss/b_garden/55",
+          "setupHash": "e19914a8def81417a35f8fe694c2ee172401141198c6902d987208f0428549d3",
+          "initialStateHash": "9b28d8f56a115f816e4be28755777af0b03b10a1b28879257f3bec0bb66e45ae",
+          "seed": 1573514597,
+          "policySeed": 1401117350,
+          "policy": "random",
+          "outcome": "timeout",
+          "turns": 61,
+          "processedPlayerTurns": 60,
+          "hpLoss": 7,
+          "hpLossPct": 2.880658436213992
+        },
+        "winningStrategy": {
+          "scenarioKey": "1/boss/b_garden/55",
+          "setupHash": "e19914a8def81417a35f8fe694c2ee172401141198c6902d987208f0428549d3",
+          "initialStateHash": "9b28d8f56a115f816e4be28755777af0b03b10a1b28879257f3bec0bb66e45ae",
+          "seed": 1573514597,
+          "policySeed": 2939785089,
+          "policy": "greedy",
+          "outcome": "win",
+          "turns": 10,
+          "processedPlayerTurns": 10,
+          "hpLoss": 1,
+          "hpLossPct": 0.411522633744856
+        }
+      }
+    ]
+  },
+  "lateLive": {
+    "scenarios": 210,
+    "before": {
+      "trials": 630,
+      "byZoneTierPolicy": {
+        "1/normal/random": {
+          "attempts": 70,
+          "wins": 70,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 3.2714285714285714,
+            "p50": 3,
+            "p90": 4
+          },
+          "hpLossPct": {
+            "mean": 3.6919459141681363,
+            "p50": 2.880658436213992,
+            "p90": 7.407407407407407
+          }
+        },
+        "1/normal/greedy": {
+          "attempts": 70,
+          "wins": 70,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 3.3285714285714287,
+            "p50": 3,
+            "p90": 5
+          },
+          "hpLossPct": {
+            "mean": 3.6213991769547316,
+            "p50": 2.4691358024691357,
+            "p90": 7.407407407407407
+          }
+        },
+        "1/normal/planner": {
+          "attempts": 70,
+          "wins": 70,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 3.3285714285714287,
+            "p50": 3,
+            "p90": 5
+          },
+          "hpLossPct": {
+            "mean": 3.6213991769547316,
+            "p50": 2.4691358024691357,
+            "p90": 7.407407407407407
+          }
+        },
+        "1/elite/random": {
+          "attempts": 30,
+          "wins": 30,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 4.7,
+            "p50": 4,
+            "p90": 6
+          },
+          "hpLossPct": {
+            "mean": 11.111111111111109,
+            "p50": 11.11111111111111,
+            "p90": 16.872427983539094
+          }
+        },
+        "1/elite/greedy": {
+          "attempts": 30,
+          "wins": 30,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 4.733333333333333,
+            "p50": 5,
+            "p90": 5
+          },
+          "hpLossPct": {
+            "mean": 10.809327846364884,
+            "p50": 9.465020576131687,
+            "p90": 17.695473251028808
+          }
+        },
+        "1/elite/planner": {
+          "attempts": 30,
+          "wins": 30,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 4.733333333333333,
+            "p50": 5,
+            "p90": 5
+          },
+          "hpLossPct": {
+            "mean": 10.809327846364884,
+            "p50": 9.465020576131687,
+            "p90": 17.695473251028808
+          }
+        },
+        "1/boss/random": {
+          "attempts": 30,
+          "wins": 30,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 8.7,
+            "p50": 8,
+            "p90": 12
+          },
+          "hpLossPct": {
+            "mean": 18.44993141289438,
+            "p50": 14.814814814814815,
+            "p90": 39.09465020576132
+          }
+        },
+        "1/boss/greedy": {
+          "attempts": 30,
+          "wins": 30,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 8.4,
+            "p50": 8,
+            "p90": 11
+          },
+          "hpLossPct": {
+            "mean": 18.285322359396435,
+            "p50": 10.699588477366255,
+            "p90": 36.21399176954733
+          }
+        },
+        "1/boss/planner": {
+          "attempts": 30,
+          "wins": 30,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 8.4,
+            "p50": 8,
+            "p90": 11
+          },
+          "hpLossPct": {
+            "mean": 18.285322359396435,
+            "p50": 10.699588477366255,
+            "p90": 36.21399176954733
+          }
+        },
+        "2/normal/random": {
+          "attempts": 50,
+          "wins": 50,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 4.48,
+            "p50": 5,
+            "p90": 6
+          },
+          "hpLossPct": {
+            "mean": 6.930041152263374,
+            "p50": 6.584362139917696,
+            "p90": 13.168724279835391
+          }
+        },
+        "2/normal/greedy": {
+          "attempts": 50,
+          "wins": 50,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 4.46,
+            "p50": 4,
+            "p90": 6
+          },
+          "hpLossPct": {
+            "mean": 7.851851851851851,
+            "p50": 7.407407407407407,
+            "p90": 14.40329218106996
+          }
+        },
+        "2/normal/planner": {
+          "attempts": 50,
+          "wins": 50,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 4.46,
+            "p50": 4,
+            "p90": 6
+          },
+          "hpLossPct": {
+            "mean": 7.851851851851851,
+            "p50": 7.407407407407407,
+            "p90": 14.40329218106996
+          }
+        },
+        "2/elite/random": {
+          "attempts": 20,
+          "wins": 20,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 5.7,
+            "p50": 5,
+            "p90": 8
+          },
+          "hpLossPct": {
+            "mean": 14.794238683127569,
+            "p50": 17.28395061728395,
+            "p90": 22.633744855967077
+          }
+        },
+        "2/elite/greedy": {
+          "attempts": 20,
+          "wins": 20,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 5.3,
+            "p50": 5,
+            "p90": 6
+          },
+          "hpLossPct": {
+            "mean": 15,
+            "p50": 16.46090534979424,
+            "p90": 20.987654320987655
+          }
+        },
+        "2/elite/planner": {
+          "attempts": 20,
+          "wins": 20,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 5.3,
+            "p50": 5,
+            "p90": 6
+          },
+          "hpLossPct": {
+            "mean": 15,
+            "p50": 16.46090534979424,
+            "p90": 20.987654320987655
+          }
+        },
+        "2/boss/random": {
+          "attempts": 10,
+          "wins": 10,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 11.6,
+            "p50": 11,
+            "p90": 15
+          },
+          "hpLossPct": {
+            "mean": 20.164609053497944,
+            "p50": 16.049382716049383,
+            "p90": 27.160493827160494
+          }
+        },
+        "2/boss/greedy": {
+          "attempts": 10,
+          "wins": 10,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 11.5,
+            "p50": 10,
+            "p90": 16
+          },
+          "hpLossPct": {
+            "mean": 30.74074074074074,
+            "p50": 25.102880658436213,
+            "p90": 53.08641975308642
+          }
+        },
+        "2/boss/planner": {
+          "attempts": 10,
+          "wins": 10,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 11.5,
+            "p50": 10,
+            "p90": 16
+          },
+          "hpLossPct": {
+            "mean": 30.74074074074074,
+            "p50": 25.102880658436213,
+            "p90": 53.08641975308642
+          }
+        }
+      },
+      "assessment": {
+        "overall": "failed",
+        "failedMetrics": 28,
+        "interpretation": "zones 3-5 use zone 2 lower bounds unchanged and only upper bounds of turns +10% and HP loss +5 percentage points (docs §20.9); win threshold applies only to random",
+        "note": "Automated bot targets are informational; passing bands do not certify balance or human play.",
+        "metrics": {
+          "1/normal/random": {
+            "turns": {
+              "value": 3.2714285714285714,
+              "min": 3,
+              "max": 5,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 3.6919459141681363,
+              "min": 4,
+              "max": 12,
+              "status": "below"
+            },
+            "winPct": {
+              "value": 100,
+              "min": 98,
+              "max": 100,
+              "status": "pass"
+            }
+          },
+          "1/normal/greedy": {
+            "turns": {
+              "value": 3.3285714285714287,
+              "min": 3,
+              "max": 5,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 3.6213991769547316,
+              "min": 4,
+              "max": 12,
+              "status": "below"
+            }
+          },
+          "1/normal/planner": {
+            "turns": {
+              "value": 3.3285714285714287,
+              "min": 3,
+              "max": 5,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 3.6213991769547316,
+              "min": 4,
+              "max": 12,
+              "status": "below"
+            }
+          },
+          "1/elite/random": {
+            "turns": {
+              "value": 4.7,
+              "min": 5,
+              "max": 7,
+              "status": "below"
+            },
+            "hpLossPct": {
+              "value": 11.111111111111109,
+              "min": 12,
+              "max": 22,
+              "status": "below"
+            },
+            "winPct": {
+              "value": 100,
+              "min": 95,
+              "max": 100,
+              "status": "pass"
+            }
+          },
+          "1/elite/greedy": {
+            "turns": {
+              "value": 4.733333333333333,
+              "min": 5,
+              "max": 7,
+              "status": "below"
+            },
+            "hpLossPct": {
+              "value": 10.809327846364884,
+              "min": 12,
+              "max": 22,
+              "status": "below"
+            }
+          },
+          "1/elite/planner": {
+            "turns": {
+              "value": 4.733333333333333,
+              "min": 5,
+              "max": 7,
+              "status": "below"
+            },
+            "hpLossPct": {
+              "value": 10.809327846364884,
+              "min": 12,
+              "max": 22,
+              "status": "below"
+            }
+          },
+          "1/boss/random": {
+            "turns": {
+              "value": 8.7,
+              "min": 9,
+              "max": 12,
+              "status": "below"
+            },
+            "hpLossPct": {
+              "value": 18.44993141289438,
+              "min": 25,
+              "max": 40,
+              "status": "below"
+            },
+            "winPct": {
+              "value": 100,
+              "min": 85,
+              "max": 100,
+              "status": "pass"
+            }
+          },
+          "1/boss/greedy": {
+            "turns": {
+              "value": 8.4,
+              "min": 9,
+              "max": 12,
+              "status": "below"
+            },
+            "hpLossPct": {
+              "value": 18.285322359396435,
+              "min": 25,
+              "max": 40,
+              "status": "below"
+            }
+          },
+          "1/boss/planner": {
+            "turns": {
+              "value": 8.4,
+              "min": 9,
+              "max": 12,
+              "status": "below"
+            },
+            "hpLossPct": {
+              "value": 18.285322359396435,
+              "min": 25,
+              "max": 40,
+              "status": "below"
+            }
+          },
+          "2/normal/random": {
+            "turns": {
+              "value": 4.48,
+              "min": 4,
+              "max": 6,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 6.930041152263374,
+              "min": 8,
+              "max": 15,
+              "status": "below"
+            },
+            "winPct": {
+              "value": 100,
+              "min": 95,
+              "max": 100,
+              "status": "pass"
+            }
+          },
+          "2/normal/greedy": {
+            "turns": {
+              "value": 4.46,
+              "min": 4,
+              "max": 6,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 7.851851851851851,
+              "min": 8,
+              "max": 15,
+              "status": "below"
+            }
+          },
+          "2/normal/planner": {
+            "turns": {
+              "value": 4.46,
+              "min": 4,
+              "max": 6,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 7.851851851851851,
+              "min": 8,
+              "max": 15,
+              "status": "below"
+            }
+          },
+          "2/elite/random": {
+            "turns": {
+              "value": 5.7,
+              "min": 6,
+              "max": 8,
+              "status": "below"
+            },
+            "hpLossPct": {
+              "value": 14.794238683127569,
+              "min": 18,
+              "max": 28,
+              "status": "below"
+            },
+            "winPct": {
+              "value": 100,
+              "min": 90,
+              "max": 100,
+              "status": "pass"
+            }
+          },
+          "2/elite/greedy": {
+            "turns": {
+              "value": 5.3,
+              "min": 6,
+              "max": 8,
+              "status": "below"
+            },
+            "hpLossPct": {
+              "value": 15,
+              "min": 18,
+              "max": 28,
+              "status": "below"
+            }
+          },
+          "2/elite/planner": {
+            "turns": {
+              "value": 5.3,
+              "min": 6,
+              "max": 8,
+              "status": "below"
+            },
+            "hpLossPct": {
+              "value": 15,
+              "min": 18,
+              "max": 28,
+              "status": "below"
+            }
+          },
+          "2/boss/random": {
+            "turns": {
+              "value": 11.6,
+              "min": 14,
+              "max": 18,
+              "status": "below"
+            },
+            "hpLossPct": {
+              "value": 20.164609053497944,
+              "min": 30,
+              "max": 50,
+              "status": "below"
+            },
+            "winPct": {
+              "value": 100,
+              "min": 80,
+              "max": 100,
+              "status": "pass"
+            }
+          },
+          "2/boss/greedy": {
+            "turns": {
+              "value": 11.5,
+              "min": 14,
+              "max": 18,
+              "status": "below"
+            },
+            "hpLossPct": {
+              "value": 30.74074074074074,
+              "min": 30,
+              "max": 50,
+              "status": "pass"
+            }
+          },
+          "2/boss/planner": {
+            "turns": {
+              "value": 11.5,
+              "min": 14,
+              "max": 18,
+              "status": "below"
+            },
+            "hpLossPct": {
+              "value": 30.74074074074074,
+              "min": 30,
+              "max": 50,
+              "status": "pass"
+            }
+          }
+        }
+      }
+    },
+    "after": {
+      "trials": 630,
+      "byZoneTierPolicy": {
+        "1/normal/random": {
+          "attempts": 70,
+          "wins": 70,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 4.014285714285714,
+            "p50": 4,
+            "p90": 5
+          },
+          "hpLossPct": {
+            "mean": 6.131687242798352,
+            "p50": 6.172839506172839,
+            "p90": 12.345679012345679
+          }
+        },
+        "1/normal/greedy": {
+          "attempts": 70,
+          "wins": 70,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 3.914285714285714,
+            "p50": 4,
+            "p90": 5
+          },
+          "hpLossPct": {
+            "mean": 5.890652557319222,
+            "p50": 4.11522633744856,
+            "p90": 11.934156378600823
+          }
+        },
+        "1/normal/planner": {
+          "attempts": 70,
+          "wins": 70,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 3.914285714285714,
+            "p50": 4,
+            "p90": 5
+          },
+          "hpLossPct": {
+            "mean": 5.890652557319222,
+            "p50": 4.11522633744856,
+            "p90": 11.934156378600823
+          }
+        },
+        "1/elite/random": {
+          "attempts": 30,
+          "wins": 30,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 5.833333333333333,
+            "p50": 5,
+            "p90": 7
+          },
+          "hpLossPct": {
+            "mean": 13.950617283950614,
+            "p50": 12.345679012345679,
+            "p90": 22.633744855967077
+          }
+        },
+        "1/elite/greedy": {
+          "attempts": 30,
+          "wins": 30,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 5.966666666666667,
+            "p50": 5,
+            "p90": 7
+          },
+          "hpLossPct": {
+            "mean": 14.14266117969822,
+            "p50": 12.345679012345679,
+            "p90": 22.22222222222222
+          }
+        },
+        "1/elite/planner": {
+          "attempts": 30,
+          "wins": 30,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 5.966666666666667,
+            "p50": 5,
+            "p90": 7
+          },
+          "hpLossPct": {
+            "mean": 14.14266117969822,
+            "p50": 12.345679012345679,
+            "p90": 22.22222222222222
+          }
+        },
+        "1/boss/random": {
+          "attempts": 30,
+          "wins": 29,
+          "defeats": 1,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 11.433333333333334,
+            "p50": 11,
+            "p90": 16
+          },
+          "hpLossPct": {
+            "mean": 32.908093278463646,
+            "p50": 24.279835390946502,
+            "p90": 58.02469135802469
+          }
+        },
+        "1/boss/greedy": {
+          "attempts": 30,
+          "wins": 29,
+          "defeats": 1,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 10.766666666666667,
+            "p50": 10,
+            "p90": 16
+          },
+          "hpLossPct": {
+            "mean": 30.150891632373114,
+            "p50": 27.160493827160494,
+            "p90": 55.55555555555556
+          }
+        },
+        "1/boss/planner": {
+          "attempts": 30,
+          "wins": 29,
+          "defeats": 1,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 10.766666666666667,
+            "p50": 10,
+            "p90": 16
+          },
+          "hpLossPct": {
+            "mean": 30.150891632373114,
+            "p50": 27.160493827160494,
+            "p90": 55.55555555555556
+          }
+        },
+        "2/normal/random": {
+          "attempts": 50,
+          "wins": 50,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 5.08,
+            "p50": 5,
+            "p90": 6
+          },
+          "hpLossPct": {
+            "mean": 9.794238683127572,
+            "p50": 8.641975308641975,
+            "p90": 17.695473251028808
+          }
+        },
+        "2/normal/greedy": {
+          "attempts": 50,
+          "wins": 50,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 5.02,
+            "p50": 5,
+            "p90": 6
+          },
+          "hpLossPct": {
+            "mean": 9.950617283950617,
+            "p50": 9.465020576131687,
+            "p90": 17.695473251028808
+          }
+        },
+        "2/normal/planner": {
+          "attempts": 50,
+          "wins": 50,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 5.02,
+            "p50": 5,
+            "p90": 6
+          },
+          "hpLossPct": {
+            "mean": 9.950617283950617,
+            "p50": 9.465020576131687,
+            "p90": 17.695473251028808
+          }
+        },
+        "2/elite/random": {
+          "attempts": 20,
+          "wins": 20,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 6.8,
+            "p50": 6,
+            "p90": 9
+          },
+          "hpLossPct": {
+            "mean": 17.798353909465018,
+            "p50": 16.872427983539094,
+            "p90": 27.983539094650205
+          }
+        },
+        "2/elite/greedy": {
+          "attempts": 20,
+          "wins": 20,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 6.45,
+            "p50": 6,
+            "p90": 8
+          },
+          "hpLossPct": {
+            "mean": 20.102880658436213,
+            "p50": 20.5761316872428,
+            "p90": 28.80658436213992
+          }
+        },
+        "2/elite/planner": {
+          "attempts": 20,
+          "wins": 20,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 6.45,
+            "p50": 6,
+            "p90": 8
+          },
+          "hpLossPct": {
+            "mean": 20.102880658436213,
+            "p50": 20.5761316872428,
+            "p90": 28.80658436213992
+          }
+        },
+        "2/boss/random": {
+          "attempts": 10,
+          "wins": 10,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 14.2,
+            "p50": 14,
+            "p90": 19
+          },
+          "hpLossPct": {
+            "mean": 30.493827160493822,
+            "p50": 22.22222222222222,
+            "p90": 43.20987654320987
+          }
+        },
+        "2/boss/greedy": {
+          "attempts": 10,
+          "wins": 10,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 14.9,
+            "p50": 13,
+            "p90": 19
+          },
+          "hpLossPct": {
+            "mean": 45.26748971193416,
+            "p50": 44.03292181069959,
+            "p90": 61.31687242798354
+          }
+        },
+        "2/boss/planner": {
+          "attempts": 10,
+          "wins": 10,
+          "defeats": 0,
+          "timeouts": 0,
+          "denominator": "all attempts, including defeats and timeouts",
+          "turns": {
+            "mean": 14.9,
+            "p50": 13,
+            "p90": 19
+          },
+          "hpLossPct": {
+            "mean": 45.26748971193416,
+            "p50": 44.03292181069959,
+            "p90": 61.31687242798354
+          }
+        }
+      },
+      "assessment": {
+        "overall": "failed",
+        "failedMetrics": 1,
+        "interpretation": "zones 3-5 use zone 2 lower bounds unchanged and only upper bounds of turns +10% and HP loss +5 percentage points (docs §20.9); win threshold applies only to random",
+        "note": "Automated bot targets are informational; passing bands do not certify balance or human play.",
+        "metrics": {
+          "1/normal/random": {
+            "turns": {
+              "value": 4.014285714285714,
+              "min": 3,
+              "max": 5,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 6.131687242798352,
+              "min": 4,
+              "max": 12,
+              "status": "pass"
+            },
+            "winPct": {
+              "value": 100,
+              "min": 98,
+              "max": 100,
+              "status": "pass"
+            }
+          },
+          "1/normal/greedy": {
+            "turns": {
+              "value": 3.914285714285714,
+              "min": 3,
+              "max": 5,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 5.890652557319222,
+              "min": 4,
+              "max": 12,
+              "status": "pass"
+            }
+          },
+          "1/normal/planner": {
+            "turns": {
+              "value": 3.914285714285714,
+              "min": 3,
+              "max": 5,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 5.890652557319222,
+              "min": 4,
+              "max": 12,
+              "status": "pass"
+            }
+          },
+          "1/elite/random": {
+            "turns": {
+              "value": 5.833333333333333,
+              "min": 5,
+              "max": 7,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 13.950617283950614,
+              "min": 12,
+              "max": 22,
+              "status": "pass"
+            },
+            "winPct": {
+              "value": 100,
+              "min": 95,
+              "max": 100,
+              "status": "pass"
+            }
+          },
+          "1/elite/greedy": {
+            "turns": {
+              "value": 5.966666666666667,
+              "min": 5,
+              "max": 7,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 14.14266117969822,
+              "min": 12,
+              "max": 22,
+              "status": "pass"
+            }
+          },
+          "1/elite/planner": {
+            "turns": {
+              "value": 5.966666666666667,
+              "min": 5,
+              "max": 7,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 14.14266117969822,
+              "min": 12,
+              "max": 22,
+              "status": "pass"
+            }
+          },
+          "1/boss/random": {
+            "turns": {
+              "value": 11.433333333333334,
+              "min": 9,
+              "max": 12,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 32.908093278463646,
+              "min": 25,
+              "max": 40,
+              "status": "pass"
+            },
+            "winPct": {
+              "value": 96.66666666666667,
+              "min": 85,
+              "max": 100,
+              "status": "pass"
+            }
+          },
+          "1/boss/greedy": {
+            "turns": {
+              "value": 10.766666666666667,
+              "min": 9,
+              "max": 12,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 30.150891632373114,
+              "min": 25,
+              "max": 40,
+              "status": "pass"
+            }
+          },
+          "1/boss/planner": {
+            "turns": {
+              "value": 10.766666666666667,
+              "min": 9,
+              "max": 12,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 30.150891632373114,
+              "min": 25,
+              "max": 40,
+              "status": "pass"
+            }
+          },
+          "2/normal/random": {
+            "turns": {
+              "value": 5.08,
+              "min": 4,
+              "max": 6,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 9.794238683127572,
+              "min": 8,
+              "max": 15,
+              "status": "pass"
+            },
+            "winPct": {
+              "value": 100,
+              "min": 95,
+              "max": 100,
+              "status": "pass"
+            }
+          },
+          "2/normal/greedy": {
+            "turns": {
+              "value": 5.02,
+              "min": 4,
+              "max": 6,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 9.950617283950617,
+              "min": 8,
+              "max": 15,
+              "status": "pass"
+            }
+          },
+          "2/normal/planner": {
+            "turns": {
+              "value": 5.02,
+              "min": 4,
+              "max": 6,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 9.950617283950617,
+              "min": 8,
+              "max": 15,
+              "status": "pass"
+            }
+          },
+          "2/elite/random": {
+            "turns": {
+              "value": 6.8,
+              "min": 6,
+              "max": 8,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 17.798353909465018,
+              "min": 18,
+              "max": 28,
+              "status": "below"
+            },
+            "winPct": {
+              "value": 100,
+              "min": 90,
+              "max": 100,
+              "status": "pass"
+            }
+          },
+          "2/elite/greedy": {
+            "turns": {
+              "value": 6.45,
+              "min": 6,
+              "max": 8,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 20.102880658436213,
+              "min": 18,
+              "max": 28,
+              "status": "pass"
+            }
+          },
+          "2/elite/planner": {
+            "turns": {
+              "value": 6.45,
+              "min": 6,
+              "max": 8,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 20.102880658436213,
+              "min": 18,
+              "max": 28,
+              "status": "pass"
+            }
+          },
+          "2/boss/random": {
+            "turns": {
+              "value": 14.2,
+              "min": 14,
+              "max": 18,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 30.493827160493822,
+              "min": 30,
+              "max": 50,
+              "status": "pass"
+            },
+            "winPct": {
+              "value": 100,
+              "min": 80,
+              "max": 100,
+              "status": "pass"
+            }
+          },
+          "2/boss/greedy": {
+            "turns": {
+              "value": 14.9,
+              "min": 14,
+              "max": 18,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 45.26748971193416,
+              "min": 30,
+              "max": 50,
+              "status": "pass"
+            }
+          },
+          "2/boss/planner": {
+            "turns": {
+              "value": 14.9,
+              "min": 14,
+              "max": 18,
+              "status": "pass"
+            },
+            "hpLossPct": {
+              "value": 45.26748971193416,
+              "min": 30,
+              "max": 50,
+              "status": "pass"
+            }
+          }
+        }
+      }
+    },
+    "randomStrategyStalls": []
+  },
+  "unchangedLateProposal": {
+    "trials": 690,
+    "byZoneTierPolicy": {
+      "3/normal/random": {
+        "attempts": 50,
+        "wins": 50,
+        "defeats": 0,
+        "timeouts": 0,
+        "denominator": "all attempts, including defeats and timeouts",
+        "turns": {
+          "mean": 4.58,
+          "p50": 5,
+          "p90": 6
+        },
+        "hpLossPct": {
+          "mean": 5.950617283950617,
+          "p50": 5.761316872427984,
+          "p90": 9.876543209876543
+        }
+      },
+      "3/normal/greedy": {
+        "attempts": 50,
+        "wins": 50,
+        "defeats": 0,
+        "timeouts": 0,
+        "denominator": "all attempts, including defeats and timeouts",
+        "turns": {
+          "mean": 4.56,
+          "p50": 4,
+          "p90": 6
+        },
+        "hpLossPct": {
+          "mean": 5.80246913580247,
+          "p50": 4.938271604938271,
+          "p90": 10.2880658436214
+        }
+      },
+      "3/normal/planner": {
+        "attempts": 50,
+        "wins": 50,
+        "defeats": 0,
+        "timeouts": 0,
+        "denominator": "all attempts, including defeats and timeouts",
+        "turns": {
+          "mean": 4.56,
+          "p50": 4,
+          "p90": 6
+        },
+        "hpLossPct": {
+          "mean": 5.80246913580247,
+          "p50": 4.938271604938271,
+          "p90": 10.2880658436214
+        }
+      },
+      "3/elite/random": {
+        "attempts": 20,
+        "wins": 20,
+        "defeats": 0,
+        "timeouts": 0,
+        "denominator": "all attempts, including defeats and timeouts",
+        "turns": {
+          "mean": 7.05,
+          "p50": 7,
+          "p90": 10
+        },
+        "hpLossPct": {
+          "mean": 17.901234567901234,
+          "p50": 16.049382716049383,
+          "p90": 32.510288065843625
+        }
+      },
+      "3/elite/greedy": {
+        "attempts": 20,
+        "wins": 20,
+        "defeats": 0,
+        "timeouts": 0,
+        "denominator": "all attempts, including defeats and timeouts",
+        "turns": {
+          "mean": 7.1,
+          "p50": 6,
+          "p90": 10
+        },
+        "hpLossPct": {
+          "mean": 16.85185185185185,
+          "p50": 18.106995884773664,
+          "p90": 28.395061728395063
+        }
+      },
+      "3/elite/planner": {
+        "attempts": 20,
+        "wins": 20,
+        "defeats": 0,
+        "timeouts": 0,
+        "denominator": "all attempts, including defeats and timeouts",
+        "turns": {
+          "mean": 7.1,
+          "p50": 6,
+          "p90": 10
+        },
+        "hpLossPct": {
+          "mean": 16.85185185185185,
+          "p50": 18.106995884773664,
+          "p90": 28.395061728395063
+        }
+      },
+      "3/boss/random": {
+        "attempts": 10,
+        "wins": 8,
+        "defeats": 2,
+        "timeouts": 0,
+        "denominator": "all attempts, including defeats and timeouts",
+        "turns": {
+          "mean": 17.4,
+          "p50": 14,
+          "p90": 25
+        },
+        "hpLossPct": {
+          "mean": 43.37448559670782,
+          "p50": 28.80658436213992,
+          "p90": 100
+        }
+      },
+      "3/boss/greedy": {
+        "attempts": 10,
+        "wins": 8,
+        "defeats": 2,
+        "timeouts": 0,
+        "denominator": "all attempts, including defeats and timeouts",
+        "turns": {
+          "mean": 14.6,
+          "p50": 12,
+          "p90": 22
+        },
+        "hpLossPct": {
+          "mean": 43.58024691358025,
+          "p50": 35.80246913580247,
+          "p90": 100
+        }
+      },
+      "3/boss/planner": {
+        "attempts": 10,
+        "wins": 8,
+        "defeats": 2,
+        "timeouts": 0,
+        "denominator": "all attempts, including defeats and timeouts",
+        "turns": {
+          "mean": 14.6,
+          "p50": 12,
+          "p90": 22
+        },
+        "hpLossPct": {
+          "mean": 43.58024691358025,
+          "p50": 35.80246913580247,
+          "p90": 100
+        }
+      },
+      "4/normal/random": {
+        "attempts": 50,
+        "wins": 50,
+        "defeats": 0,
+        "timeouts": 0,
+        "denominator": "all attempts, including defeats and timeouts",
+        "turns": {
+          "mean": 5.96,
+          "p50": 5,
+          "p90": 9
+        },
+        "hpLossPct": {
+          "mean": 12.329218106995883,
+          "p50": 11.522633744855968,
+          "p90": 23.868312757201647
+        }
+      },
+      "4/normal/greedy": {
+        "attempts": 50,
+        "wins": 50,
+        "defeats": 0,
+        "timeouts": 0,
+        "denominator": "all attempts, including defeats and timeouts",
+        "turns": {
+          "mean": 5.74,
+          "p50": 5,
+          "p90": 7
+        },
+        "hpLossPct": {
+          "mean": 10.716049382716049,
+          "p50": 9.465020576131687,
+          "p90": 21.810699588477366
+        }
+      },
+      "4/normal/planner": {
+        "attempts": 50,
+        "wins": 50,
+        "defeats": 0,
+        "timeouts": 0,
+        "denominator": "all attempts, including defeats and timeouts",
+        "turns": {
+          "mean": 5.74,
+          "p50": 5,
+          "p90": 7
+        },
+        "hpLossPct": {
+          "mean": 10.716049382716049,
+          "p50": 9.465020576131687,
+          "p90": 21.810699588477366
+        }
+      },
+      "4/elite/random": {
+        "attempts": 20,
+        "wins": 20,
+        "defeats": 0,
+        "timeouts": 0,
+        "denominator": "all attempts, including defeats and timeouts",
+        "turns": {
+          "mean": 7.65,
+          "p50": 6,
+          "p90": 13
+        },
+        "hpLossPct": {
+          "mean": 24.506172839506167,
+          "p50": 20.987654320987655,
+          "p90": 37.44855967078189
+        }
+      },
+      "4/elite/greedy": {
+        "attempts": 20,
+        "wins": 20,
+        "defeats": 0,
+        "timeouts": 0,
+        "denominator": "all attempts, including defeats and timeouts",
+        "turns": {
+          "mean": 7.15,
+          "p50": 6,
+          "p90": 11
+        },
+        "hpLossPct": {
+          "mean": 24.50617283950618,
+          "p50": 20.5761316872428,
+          "p90": 43.20987654320987
+        }
+      },
+      "4/elite/planner": {
+        "attempts": 20,
+        "wins": 20,
+        "defeats": 0,
+        "timeouts": 0,
+        "denominator": "all attempts, including defeats and timeouts",
+        "turns": {
+          "mean": 7.15,
+          "p50": 6,
+          "p90": 11
+        },
+        "hpLossPct": {
+          "mean": 24.50617283950618,
+          "p50": 20.5761316872428,
+          "p90": 43.20987654320987
+        }
+      },
+      "4/boss/random": {
+        "attempts": 10,
+        "wins": 9,
+        "defeats": 1,
+        "timeouts": 0,
+        "denominator": "all attempts, including defeats and timeouts",
+        "turns": {
+          "mean": 15.6,
+          "p50": 14,
+          "p90": 19
+        },
+        "hpLossPct": {
+          "mean": 36.04938271604938,
+          "p50": 31.275720164609055,
+          "p90": 54.32098765432099
+        }
+      },
+      "4/boss/greedy": {
+        "attempts": 10,
+        "wins": 7,
+        "defeats": 3,
+        "timeouts": 0,
+        "denominator": "all attempts, including defeats and timeouts",
+        "turns": {
+          "mean": 17.8,
+          "p50": 16,
+          "p90": 20
+        },
+        "hpLossPct": {
+          "mean": 48.27160493827161,
+          "p50": 43.20987654320987,
+          "p90": 100
+        }
+      },
+      "4/boss/planner": {
+        "attempts": 10,
+        "wins": 7,
+        "defeats": 3,
+        "timeouts": 0,
+        "denominator": "all attempts, including defeats and timeouts",
+        "turns": {
+          "mean": 17.8,
+          "p50": 16,
+          "p90": 20
+        },
+        "hpLossPct": {
+          "mean": 48.27160493827161,
+          "p50": 43.20987654320987,
+          "p90": 100
+        }
+      },
+      "5/normal/random": {
+        "attempts": 50,
+        "wins": 50,
+        "defeats": 0,
+        "timeouts": 0,
+        "denominator": "all attempts, including defeats and timeouts",
+        "turns": {
+          "mean": 5.62,
+          "p50": 5,
+          "p90": 7
+        },
+        "hpLossPct": {
+          "mean": 18.172839506172842,
+          "p50": 16.049382716049383,
+          "p90": 33.74485596707819
+        }
+      },
+      "5/normal/greedy": {
+        "attempts": 50,
+        "wins": 50,
+        "defeats": 0,
+        "timeouts": 0,
+        "denominator": "all attempts, including defeats and timeouts",
+        "turns": {
+          "mean": 5.56,
+          "p50": 5,
+          "p90": 8
+        },
+        "hpLossPct": {
+          "mean": 19.925925925925934,
+          "p50": 18.106995884773664,
+          "p90": 37.44855967078189
+        }
+      },
+      "5/normal/planner": {
+        "attempts": 50,
+        "wins": 50,
+        "defeats": 0,
+        "timeouts": 0,
+        "denominator": "all attempts, including defeats and timeouts",
+        "turns": {
+          "mean": 5.56,
+          "p50": 5,
+          "p90": 8
+        },
+        "hpLossPct": {
+          "mean": 19.925925925925934,
+          "p50": 18.106995884773664,
+          "p90": 37.44855967078189
+        }
+      },
+      "5/elite/random": {
+        "attempts": 10,
+        "wins": 10,
+        "defeats": 0,
+        "timeouts": 0,
+        "denominator": "all attempts, including defeats and timeouts",
+        "turns": {
+          "mean": 7.9,
+          "p50": 8,
+          "p90": 10
+        },
+        "hpLossPct": {
+          "mean": 34.32098765432099,
+          "p50": 30.041152263374485,
+          "p90": 51.02880658436214
+        }
+      },
+      "5/elite/greedy": {
+        "attempts": 10,
+        "wins": 10,
+        "defeats": 0,
+        "timeouts": 0,
+        "denominator": "all attempts, including defeats and timeouts",
+        "turns": {
+          "mean": 7.9,
+          "p50": 8,
+          "p90": 10
+        },
+        "hpLossPct": {
+          "mean": 29.67078189300412,
+          "p50": 28.395061728395063,
+          "p90": 51.02880658436214
+        }
+      },
+      "5/elite/planner": {
+        "attempts": 10,
+        "wins": 10,
+        "defeats": 0,
+        "timeouts": 0,
+        "denominator": "all attempts, including defeats and timeouts",
+        "turns": {
+          "mean": 7.9,
+          "p50": 8,
+          "p90": 10
+        },
+        "hpLossPct": {
+          "mean": 29.67078189300412,
+          "p50": 28.395061728395063,
+          "p90": 51.02880658436214
+        }
+      },
+      "5/boss/random": {
+        "attempts": 10,
+        "wins": 9,
+        "defeats": 1,
+        "timeouts": 0,
+        "denominator": "all attempts, including defeats and timeouts",
+        "turns": {
+          "mean": 18.1,
+          "p50": 17,
+          "p90": 25
+        },
+        "hpLossPct": {
+          "mean": 52.88065843621399,
+          "p50": 47.325102880658434,
+          "p90": 74.48559670781893
+        }
+      },
+      "5/boss/greedy": {
+        "attempts": 10,
+        "wins": 9,
+        "defeats": 1,
+        "timeouts": 0,
+        "denominator": "all attempts, including defeats and timeouts",
+        "turns": {
+          "mean": 17.8,
+          "p50": 17,
+          "p90": 23
+        },
+        "hpLossPct": {
+          "mean": 47.6954732510288,
+          "p50": 39.09465020576132,
+          "p90": 70.37037037037037
+        }
+      },
+      "5/boss/planner": {
+        "attempts": 10,
+        "wins": 9,
+        "defeats": 1,
+        "timeouts": 0,
+        "denominator": "all attempts, including defeats and timeouts",
+        "turns": {
+          "mean": 17.8,
+          "p50": 17,
+          "p90": 23
+        },
+        "hpLossPct": {
+          "mean": 47.6954732510288,
+          "p50": 39.09465020576132,
+          "p90": 70.37037037037037
+        }
+      }
+    },
+    "assessment": {
+      "overall": "failed",
+      "failedMetrics": 7,
+      "interpretation": "zones 3-5 use zone 2 lower bounds unchanged and only upper bounds of turns +10% and HP loss +5 percentage points (docs §20.9); win threshold applies only to random",
+      "note": "Automated bot targets are informational; passing bands do not certify balance or human play.",
+      "metrics": {
+        "3/normal/random": {
+          "turns": {
+            "value": 4.58,
+            "min": 4,
+            "max": 6.6000000000000005,
+            "status": "pass"
+          },
+          "hpLossPct": {
+            "value": 5.950617283950617,
+            "min": 8,
+            "max": 20,
+            "status": "below"
+          },
+          "winPct": {
+            "value": 100,
+            "min": 95,
+            "max": 100,
+            "status": "pass"
+          }
+        },
+        "3/normal/greedy": {
+          "turns": {
+            "value": 4.56,
+            "min": 4,
+            "max": 6.6000000000000005,
+            "status": "pass"
+          },
+          "hpLossPct": {
+            "value": 5.80246913580247,
+            "min": 8,
+            "max": 20,
+            "status": "below"
+          }
+        },
+        "3/normal/planner": {
+          "turns": {
+            "value": 4.56,
+            "min": 4,
+            "max": 6.6000000000000005,
+            "status": "pass"
+          },
+          "hpLossPct": {
+            "value": 5.80246913580247,
+            "min": 8,
+            "max": 20,
+            "status": "below"
+          }
+        },
+        "3/elite/random": {
+          "turns": {
+            "value": 7.05,
+            "min": 6,
+            "max": 8.8,
+            "status": "pass"
+          },
+          "hpLossPct": {
+            "value": 17.901234567901234,
+            "min": 18,
+            "max": 33,
+            "status": "below"
+          },
+          "winPct": {
+            "value": 100,
+            "min": 90,
+            "max": 100,
+            "status": "pass"
+          }
+        },
+        "3/elite/greedy": {
+          "turns": {
+            "value": 7.1,
+            "min": 6,
+            "max": 8.8,
+            "status": "pass"
+          },
+          "hpLossPct": {
+            "value": 16.85185185185185,
+            "min": 18,
+            "max": 33,
+            "status": "below"
+          }
+        },
+        "3/elite/planner": {
+          "turns": {
+            "value": 7.1,
+            "min": 6,
+            "max": 8.8,
+            "status": "pass"
+          },
+          "hpLossPct": {
+            "value": 16.85185185185185,
+            "min": 18,
+            "max": 33,
+            "status": "below"
+          }
+        },
+        "3/boss/random": {
+          "turns": {
+            "value": 17.4,
+            "min": 14,
+            "max": 19.8,
+            "status": "pass"
+          },
+          "hpLossPct": {
+            "value": 43.37448559670782,
+            "min": 30,
+            "max": 55,
+            "status": "pass"
+          },
+          "winPct": {
+            "value": 80,
+            "min": 80,
+            "max": 100,
+            "status": "pass"
+          }
+        },
+        "3/boss/greedy": {
+          "turns": {
+            "value": 14.6,
+            "min": 14,
+            "max": 19.8,
+            "status": "pass"
+          },
+          "hpLossPct": {
+            "value": 43.58024691358025,
+            "min": 30,
+            "max": 55,
+            "status": "pass"
+          }
+        },
+        "3/boss/planner": {
+          "turns": {
+            "value": 14.6,
+            "min": 14,
+            "max": 19.8,
+            "status": "pass"
+          },
+          "hpLossPct": {
+            "value": 43.58024691358025,
+            "min": 30,
+            "max": 55,
+            "status": "pass"
+          }
+        },
+        "4/normal/random": {
+          "turns": {
+            "value": 5.96,
+            "min": 4,
+            "max": 6.6000000000000005,
+            "status": "pass"
+          },
+          "hpLossPct": {
+            "value": 12.329218106995883,
+            "min": 8,
+            "max": 20,
+            "status": "pass"
+          },
+          "winPct": {
+            "value": 100,
+            "min": 95,
+            "max": 100,
+            "status": "pass"
+          }
+        },
+        "4/normal/greedy": {
+          "turns": {
+            "value": 5.74,
+            "min": 4,
+            "max": 6.6000000000000005,
+            "status": "pass"
+          },
+          "hpLossPct": {
+            "value": 10.716049382716049,
+            "min": 8,
+            "max": 20,
+            "status": "pass"
+          }
+        },
+        "4/normal/planner": {
+          "turns": {
+            "value": 5.74,
+            "min": 4,
+            "max": 6.6000000000000005,
+            "status": "pass"
+          },
+          "hpLossPct": {
+            "value": 10.716049382716049,
+            "min": 8,
+            "max": 20,
+            "status": "pass"
+          }
+        },
+        "4/elite/random": {
+          "turns": {
+            "value": 7.65,
+            "min": 6,
+            "max": 8.8,
+            "status": "pass"
+          },
+          "hpLossPct": {
+            "value": 24.506172839506167,
+            "min": 18,
+            "max": 33,
+            "status": "pass"
+          },
+          "winPct": {
+            "value": 100,
+            "min": 90,
+            "max": 100,
+            "status": "pass"
+          }
+        },
+        "4/elite/greedy": {
+          "turns": {
+            "value": 7.15,
+            "min": 6,
+            "max": 8.8,
+            "status": "pass"
+          },
+          "hpLossPct": {
+            "value": 24.50617283950618,
+            "min": 18,
+            "max": 33,
+            "status": "pass"
+          }
+        },
+        "4/elite/planner": {
+          "turns": {
+            "value": 7.15,
+            "min": 6,
+            "max": 8.8,
+            "status": "pass"
+          },
+          "hpLossPct": {
+            "value": 24.50617283950618,
+            "min": 18,
+            "max": 33,
+            "status": "pass"
+          }
+        },
+        "4/boss/random": {
+          "turns": {
+            "value": 15.6,
+            "min": 14,
+            "max": 19.8,
+            "status": "pass"
+          },
+          "hpLossPct": {
+            "value": 36.04938271604938,
+            "min": 30,
+            "max": 55,
+            "status": "pass"
+          },
+          "winPct": {
+            "value": 90,
+            "min": 80,
+            "max": 100,
+            "status": "pass"
+          }
+        },
+        "4/boss/greedy": {
+          "turns": {
+            "value": 17.8,
+            "min": 14,
+            "max": 19.8,
+            "status": "pass"
+          },
+          "hpLossPct": {
+            "value": 48.27160493827161,
+            "min": 30,
+            "max": 55,
+            "status": "pass"
+          }
+        },
+        "4/boss/planner": {
+          "turns": {
+            "value": 17.8,
+            "min": 14,
+            "max": 19.8,
+            "status": "pass"
+          },
+          "hpLossPct": {
+            "value": 48.27160493827161,
+            "min": 30,
+            "max": 55,
+            "status": "pass"
+          }
+        },
+        "5/normal/random": {
+          "turns": {
+            "value": 5.62,
+            "min": 4,
+            "max": 6.6000000000000005,
+            "status": "pass"
+          },
+          "hpLossPct": {
+            "value": 18.172839506172842,
+            "min": 8,
+            "max": 20,
+            "status": "pass"
+          },
+          "winPct": {
+            "value": 100,
+            "min": 95,
+            "max": 100,
+            "status": "pass"
+          }
+        },
+        "5/normal/greedy": {
+          "turns": {
+            "value": 5.56,
+            "min": 4,
+            "max": 6.6000000000000005,
+            "status": "pass"
+          },
+          "hpLossPct": {
+            "value": 19.925925925925934,
+            "min": 8,
+            "max": 20,
+            "status": "pass"
+          }
+        },
+        "5/normal/planner": {
+          "turns": {
+            "value": 5.56,
+            "min": 4,
+            "max": 6.6000000000000005,
+            "status": "pass"
+          },
+          "hpLossPct": {
+            "value": 19.925925925925934,
+            "min": 8,
+            "max": 20,
+            "status": "pass"
+          }
+        },
+        "5/elite/random": {
+          "turns": {
+            "value": 7.9,
+            "min": 6,
+            "max": 8.8,
+            "status": "pass"
+          },
+          "hpLossPct": {
+            "value": 34.32098765432099,
+            "min": 18,
+            "max": 33,
+            "status": "above"
+          },
+          "winPct": {
+            "value": 100,
+            "min": 90,
+            "max": 100,
+            "status": "pass"
+          }
+        },
+        "5/elite/greedy": {
+          "turns": {
+            "value": 7.9,
+            "min": 6,
+            "max": 8.8,
+            "status": "pass"
+          },
+          "hpLossPct": {
+            "value": 29.67078189300412,
+            "min": 18,
+            "max": 33,
+            "status": "pass"
+          }
+        },
+        "5/elite/planner": {
+          "turns": {
+            "value": 7.9,
+            "min": 6,
+            "max": 8.8,
+            "status": "pass"
+          },
+          "hpLossPct": {
+            "value": 29.67078189300412,
+            "min": 18,
+            "max": 33,
+            "status": "pass"
+          }
+        },
+        "5/boss/random": {
+          "turns": {
+            "value": 18.1,
+            "min": 14,
+            "max": 19.8,
+            "status": "pass"
+          },
+          "hpLossPct": {
+            "value": 52.88065843621399,
+            "min": 30,
+            "max": 55,
+            "status": "pass"
+          },
+          "winPct": {
+            "value": 90,
+            "min": 80,
+            "max": 100,
+            "status": "pass"
+          }
+        },
+        "5/boss/greedy": {
+          "turns": {
+            "value": 17.8,
+            "min": 14,
+            "max": 19.8,
+            "status": "pass"
+          },
+          "hpLossPct": {
+            "value": 47.6954732510288,
+            "min": 30,
+            "max": 55,
+            "status": "pass"
+          }
+        },
+        "5/boss/planner": {
+          "turns": {
+            "value": 17.8,
+            "min": 14,
+            "max": 19.8,
+            "status": "pass"
+          },
+          "hpLossPct": {
+            "value": 47.6954732510288,
+            "min": 30,
+            "max": 55,
+            "status": "pass"
+          }
+        }
+      }
+    }
+  }
+}

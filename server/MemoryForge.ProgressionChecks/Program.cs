@@ -68,7 +68,14 @@ static class ProgressionChecks
             await store.Mutate(account, story.RequestId, story.Identity, (e, r) => ProgressionCommands.Launch(content, account, e, r, story));
             var storyStored = Envelopes.Decode((await persistence.ReadAsync(account))!, account, content);
             Check(storyStored.Run!.Launch!.StageLevel == 8 && storyStored.Run.Launch.Party.All(p => (long)Convert.ToInt64(p["level"]) == 1), "story uses stage8 explicit Lv1 and frozen build");
-            await store.Read(account, (e, run) => { Check(run!.State.MaxHp == 183 && run.State.Difficulty.Hp == 55, "stage scaling applied once"); return Reply.Json(200, null); });
+            var storyPreset = storyStored.Run.Launch.BalancePolicy;
+            var storyFactPreset = storyStored.Progression!.Ledger.Single(f => f.Kind == "launch" && f.RunId == storyStored.Run.RunId).BalancePolicy;
+            Check(storyPreset != null && storyPreset.Id == ExpeditionBalancePolicy.Version && storyPreset.Sha256 == ExpeditionBalancePolicy.Hash
+                && storyFactPreset != null && storyFactPreset.Id == ExpeditionBalancePolicy.Version && storyFactPreset.Sha256 == ExpeditionBalancePolicy.Hash,
+                "a fresh story launch pins the phase2 preset in its Run record and its launch fact");
+            // Core Stats.StageScale(stage 8) = (hp 55, dmg 84): power ref 20+⌊14·8/60⌋ + 1+⌊5·8/60⌋ = 22, hp 100×22/40 = 55; dmg
+            // 100×(60+8)/81 = 83.95 → 84. Run.Create then rounds half up: hp 130×55/100 = 71.5 → 72, dmg 110×84/100 = 92.4 → 92.
+            await store.Read(account, (e, run) => { Check(run!.State.MaxHp == 183 && run.State.Difficulty.Hp == 72 && run.State.Difficulty.Damage == 92, "stage scaling applied once to the phase2 preset 130/110"); return Reply.Json(200, null); });
             Check(await PlayToSave(store, persistence, account, content), "actual owned stage8 story clear");
             var storyBeforeSave = Envelopes.Decode((await persistence.ReadAsync(account))!, account, content); var storyRecord = storyBeforeSave.Run!;
             string storyCommit = Id(); var storyArgs = GraphJson.Object("requestId", storyCommit, "expectedMemoryVersion", storyRecord.MemoryVersion, "selectedChangeIds", new List<object?>());

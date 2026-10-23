@@ -151,6 +151,10 @@ namespace MemoryForge.Server
             try { GrowthPolicy.Require(EquipmentPolicy.Version, EquipmentPolicy.Hash); }
             catch (InvalidDataException) { throw new StartupRefusal("the account equipment policy is invalid"); }
             try{GrowthPolicy.Require(SupportPolicy.Version,SupportPolicy.Hash);}catch(InvalidDataException){throw new StartupRefusal("the account support policy is invalid");}
+            // Only the embedded preset's identity is verified here; its content binding is checked when a story launch records it, so a
+            // host on other (test) content still starts and refuses its stores by the existing content binding.
+            try { ExpeditionBalancePolicy.Verify(); }
+            catch (InvalidDataException) { throw new StartupRefusal("the expedition balance policy is invalid"); }
             var practiceFixture = PracticeFixture.Load(fixture, content);
             if (!postgresBackend)
             {

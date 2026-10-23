@@ -1,0 +1,45 @@
+{
+  "device": "isolated Android API36 arm64 ps16k emulator",
+  "serial": "emulator-5556",
+  "physical_phone": "EXCLUDED",
+  "viewport": [
+    1280,
+    720
+  ],
+  "density": 320,
+  "fontScale": 1.3,
+  "apkSha256": "37ce561347b30523d1e706cd7e3ba380e428848bd70769503b4046597452dee4",
+  "apkBytes": 134772050,
+  "install": "PASS",
+  "startup": "PASS",
+  "account": "anonymous; no connection or economic commands",
+  "screens": [
+    "home",
+    "roster10",
+    "yuri detail/home",
+    "rien detail/home",
+    "kaya detail/home",
+    "nia existingSD detail/home"
+  ],
+  "new_sd_preview": [
+    "yuri",
+    "rien",
+    "kaya"
+  ],
+  "result": "PASS",
+  "unity_errors": 0,
+  "android_runtime_errors": 0,
+  "scope": "actual packaged native application UI; not a physical phone or live-account test",
+  "limits": [
+    "existing footer overlays lower part of home figure by design",
+    "PC native pointer delivery blocked; nativeMac anonymoushome only, authoredUnity andemulator coverinteraction"
+  ],
+  "mac_native": {
+    "build": "PASS",
+    "anonymous_home": "PASS",
+    "pointer_interaction": "NOT_RUN: native automation event delivery blocked",
+    "own_app_cleanup": "complete",
+    "clientSha256": "869ea398c2917adf010162e92c31072df61dd4d58cefeafe45f6993bd5ce33bc"
+  },
+  "fresh_avd_cleanup": "own emulator stopped and own fresh AVD deleted; shared AVD application data retained"
+}

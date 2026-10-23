@@ -25,6 +25,8 @@ jobs:
       - run: pip install openapi-spec-validator -r tools/audit/requirements-docs.txt -r tools/ai/requirements.txt
       - run: sudo apt-get update && sudo apt-get install -y postgresql-16 poppler-utils fonts-nanum
       - run: node content/build.mjs data && git diff --exit-code data/
+      - name: New expedition balance preset and held-out calibration
+        run: node tools/review/expedition_balance.mjs
       - run: node tools/gen_vectors.mjs && git diff --exit-code engine/tests/vectors/
       - run: node tools/gen_hash_vectors.mjs && git diff --exit-code engine/tests/vectors/canonical_hash_vectors.json
       - run: bash tools/run_all_checks.sh

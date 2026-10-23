@@ -14,7 +14,7 @@
     "transparent_pixels": 1025655,
     "total_pixels": 1572864,
     "tool": "Codex built-in image_gen; backend model not exposed",
-    "source_review": "Codex visual + official Opus5.5 xhigh independent R2 PASS; actual Unity PlayMode resource/UI/aspect PASS; native PC pending"
+    "source_review": "Codex visual + official Opus5.5 xhigh R2 PASS; actual Unity + Android emulator UI PASS; Mac native build/home PASS, pointer automation blocked; phone excluded"
   },
   {
     "character": "kaya",
@@ -31,7 +31,7 @@
     "transparent_pixels": 858022,
     "total_pixels": 1572516,
     "tool": "Codex built-in image_gen; backend model not exposed",
-    "source_review": "Codex visual + official Opus5.5 xhigh independent R2 PASS; actual Unity PlayMode resource/UI/aspect PASS; native PC pending"
+    "source_review": "Codex visual + official Opus5.5 xhigh R2 PASS; actual Unity + Android emulator UI PASS; Mac native build/home PASS, pointer automation blocked; phone excluded"
   },
   {
     "character": "rien",
@@ -48,7 +48,7 @@
     "transparent_pixels": 800470,
     "total_pixels": 1572864,
     "tool": "Codex built-in image_gen; backend model not exposed",
-    "source_review": "Codex visual + official Opus5.5 xhigh independent R2 PASS; actual Unity PlayMode resource/UI/aspect PASS; native PC pending"
+    "source_review": "Codex visual + official Opus5.5 xhigh R2 PASS; actual Unity + Android emulator UI PASS; Mac native build/home PASS, pointer automation blocked; phone excluded"
   },
   {
     "character": "rien",
@@ -65,7 +65,7 @@
     "transparent_pixels": 710257,
     "total_pixels": 1572516,
     "tool": "Codex built-in image_gen; backend model not exposed",
-    "source_review": "Codex visual + official Opus5.5 xhigh independent R2 PASS; actual Unity PlayMode resource/UI/aspect PASS; native PC pending"
+    "source_review": "Codex visual + official Opus5.5 xhigh R2 PASS; actual Unity + Android emulator UI PASS; Mac native build/home PASS, pointer automation blocked; phone excluded"
   },
   {
     "character": "yuri",
@@ -82,7 +82,7 @@
     "transparent_pixels": 800682,
     "total_pixels": 1572864,
     "tool": "Codex built-in image_gen; backend model not exposed",
-    "source_review": "Codex visual + official Opus5.5 xhigh independent R2 PASS; actual Unity PlayMode resource/UI/aspect PASS; native PC pending"
+    "source_review": "Codex visual + official Opus5.5 xhigh R2 PASS; actual Unity + Android emulator UI PASS; Mac native build/home PASS, pointer automation blocked; phone excluded"
   },
   {
     "character": "yuri",
@@ -99,6 +99,6 @@
     "transparent_pixels": 724203,
     "total_pixels": 1572516,
     "tool": "Codex built-in image_gen; backend model not exposed",
-    "source_review": "Codex visual + official Opus5.5 xhigh independent R2 PASS; actual Unity PlayMode resource/UI/aspect PASS; native PC pending"
+    "source_review": "Codex visual + official Opus5.5 xhigh R2 PASS; actual Unity + Android emulator UI PASS; Mac native build/home PASS, pointer automation blocked; phone excluded"
   }
 ]

@@ -1,0 +1,35 @@
+{
+  "verdict": "PASS",
+  "server_author": {
+    "tool": "official Claude Code",
+    "model": "claude-opus-5-5",
+    "session_id": "21d93349-65fa-4887-b145-79156a0d7e49",
+    "effort": "xhigh",
+    "process_exit": 0
+  },
+  "server_reviewer": "Codex root; source/diff + actual3540 server checks; downgrade counterexample fixed by independent ledger pin",
+  "root_calibration_reviewer": {
+    "tool": "official Claude Code",
+    "model": "claude-opus-5-5",
+    "effort": "xhigh",
+    "session_id": "bf7acf16-7b6f-4d35-b5e9-fe63cd27fd08",
+    "process_exit": 0,
+    "billing_account_matched": true,
+    "verdict": "PASS"
+  },
+  "P1_P2_remaining": 0,
+  "unchanged": [
+    "Core sources",
+    "engine/rules-core.js",
+    "data/game_data.json",
+    "account policiesv1-v4",
+    "original targets and bot policies",
+    "economic rules and rewards"
+  ],
+  "limits": [
+    "No human balance certification",
+    "Planner aliases greedy",
+    "One random exhaust stall retained in denominators with same-start winning-strategy witness",
+    "Proposal late subset1 and future candidate7 deviations stay visible"
+  ]
+}

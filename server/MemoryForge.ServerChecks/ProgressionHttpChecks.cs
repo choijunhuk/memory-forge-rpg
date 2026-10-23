@@ -124,9 +124,11 @@ sealed partial class ServerChecks
         string nextId = S(next.Json, "runId"); RememberProgressionSeed(file);
         var record = ReadBody(file).GetProperty("run");
         string frozen = Raw(record, "launch"), beforePullRun = Raw(next.Json, "state");
-        Check(A(record.GetProperty("launch"), "party").Select(p => S(p, "charId")).SequenceEqual(ordered)
-            && I(record.GetProperty("launch"), "stageLevel") == 8 && I(record.GetProperty("launch").GetProperty("difficulty"), "hp") == 100,
-            "the HTTP owned launch pins party order, stage8 and unscaled base difficulty");
+        var nextLaunch = record.GetProperty("launch");
+        Check(A(nextLaunch, "party").Select(p => S(p, "charId")).SequenceEqual(ordered)
+            && I(nextLaunch, "stageLevel") == 8 && I(nextLaunch.GetProperty("difficulty"), "hp") == 130 && I(nextLaunch.GetProperty("difficulty"), "dmg") == 110
+            && IsPresetPin(nextLaunch) && IsPresetPin(LaunchFactOf(ReadBody(file), nextId)),
+            "the HTTP owned launch pins party order, stage8 and the registered phase2 preset's 130/110 in both its Run record and its launch fact");
         var known = await RecruitRead(recruitApi, token);
         Status(known, 200, null, "HTTP recruitment revision before later pull");
         var pulled = await RecruitPull(recruitApi, token, PullBody(Id(), N64(known.Json, "revision"), "standard", 1));

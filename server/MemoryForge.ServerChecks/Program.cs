@@ -246,7 +246,7 @@ sealed partial class ServerChecks
     readonly List<long> seeds = new List<long>();
     // Scenarios that must all have completed before the final leak scan counts as covering the suite.
     static readonly string[] RequiredScenarios = { "refusals", "auth-input", "expedition", "concurrency", "ownership", "write-failure", "battle-query", "kestrel-reload", "hosting-url-pin", "partial-mutation", "corrupt-stores",
-        "recruitment", "verify-store", "progression-http", "growth-http" };
+        "recruitment", "verify-store", "expedition-balance", "progression-http", "growth-http" };
     readonly HashSet<string> completed = new HashSet<string>(StringComparer.Ordinal);
     string serverDll = "", fixture = "", store = "", alphaRunId = "", lockedDirectory = "";
     byte[] alphaDone = Array.Empty<byte>();
@@ -285,6 +285,7 @@ sealed partial class ServerChecks
         await CorruptStores();
         await RecruitmentFile();
         await VerifyStoreFile();
+        await ExpeditionBalanceFile();
         await ProgressionHttpFile();
         await GrowthHttpFile();
         RecruitmentLeakScan();

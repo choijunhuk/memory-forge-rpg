@@ -1,5 +1,13 @@
 # 현재 기준 — ALL-IN-ONE
 
+## 2026-10-23 전용 아트·새 스토리 탐사 균형2
+
+아트 `d78e448` 이후 새 탐사 전용 불변 설정(HP130%/피해110%)을 연결했다. 과거 기록은100/100으로 재생하며 새 설정을 출발 기록/진행 원장 양쪽에 고정한다. Core·본문 데이터·기존 계정 정책·게이지20/50·경제는 유지한다. [범위와 실행기 주의](../reports/art_balance_phase2_20261023/README.md), [전후 지표](../reports/art_balance_phase2_20261023/balance-validation.json), [서버 검증](../reports/art_balance_phase2_20261023/balance-verification.json), [독립 검토](../reports/art_balance_phase2_20261023/balance-independent-review.json)를 분리한다.
+
+서버3540·진행65·성장175·장비54·새HEAD 이관 후보 증명1415·실제 지원 HTTP48 및 전체 CoreChecks(지원1065/trace1000) PASS. 새서버와 등록된 정확한Core로 기존 개발 저장의 읽기 전용 검증을 통과했고 바이트/수정 시각을 유지했다. 미등록Core 이관은 승인하지 않는다.
+
+Unity756/0/11Explicit, Edit10, 표적21 및 새PC/Android빌드 PASS. 실제 에뮬레이터1280×720/글자130%에서 새세명+니아 목록/상세/홈과 SD 미리보기 PASS, 오류0이다. PC 네이티브는 홈 표시까지 PASS이고 자동 포인터 입력은 도구 제약으로 NOT_RUN이다. 폰·최종 사용자 화질/사람 균형 판정은 이번 범위에 포함하지 않는다. 원격 검사는 PR #2 최신 SHA의 push·PR 결과로 확인한다. 아래는 각 단위 당시의 이력이다.
+
 ## 2026-10-23 전용 아트 완료·밸런스2 진행 중
 
 유리·리엔·카야 전신3/SD3를 제작하고 기존 목록·상세·홈·모집·전투/성장 로더에 연결했다. 니아는 기존 SD로 홈 선택이 가능하며 기존6명의 고유 모먼트는 우선한다. [제작 원본](../art/generated/roster-completion-20261023/README.md), [검증](../reports/art_balance_phase2_20261023/art-verification.json), [공식 Opus 독립 검토 PASS](../reports/art_balance_phase2_20261023/art-independent-review.json).

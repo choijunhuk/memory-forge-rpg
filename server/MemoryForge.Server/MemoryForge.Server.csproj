@@ -35,4 +35,8 @@
     <EmbeddedResource Include="Policies/account-progression-20261021-v4.json" LogicalName="MemoryForge.Server.AccountPolicyV4.json" />
     <Compile Include="../../core/MemoryForge.CoreChecks/ContentModesDataLoader.cs" Link="Linked/ContentModesDataLoader.cs" />
   </ItemGroup>
+  <!-- Phase2 balance: the immutable launch-only story preset, verified by exact SHA-256 in ExpeditionBalancePolicy.cs. -->
+  <ItemGroup>
+    <EmbeddedResource Include="Policies/expedition-balance-20261023-v1.json" LogicalName="MemoryForge.Server.ExpeditionBalanceV1.json" />
+  </ItemGroup>
 </Project>

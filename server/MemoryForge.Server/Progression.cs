@@ -56,19 +56,24 @@ namespace MemoryForge.Server
         public List<Dictionary<string, object?>> Party = new List<Dictionary<string, object?>>();
         public List<string> WeaponInstances = new List<string>();
         public FrozenSupport? Support;
+        // Phase2: the registered launch-only balance preset (ExpeditionBalancePolicy.cs). Null is a legacy launch with the original 100/100.
+        public LaunchBalancePolicy? BalancePolicy;
         public Dictionary<string, object?> ToGraph()
         {
+            var difficulty = BalancePolicy == null ? GraphJson.Object("hp", 100, "dmg", 100) : ExpeditionBalancePolicy.DifficultyGraph(BalancePolicy);
             var graph = GraphJson.Object("mode", Mode, "chapter", Chapter, "policyVersion", PolicyVersion, "revision", Revision,
             "coreModule", CoreModule, "contentSha256", ContentSha256, "stageLevel", StageLevel, "zones", new List<object?> { 1 }, "bosses", new List<object?> { "b_bell" },
-            "difficulty", GraphJson.Object("hp", 100, "dmg", 100), "length", "short", "useMemory", UseMemory,
+            "difficulty", difficulty, "length", "short", "useMemory", UseMemory,
             "party", Party.Cast<object?>().ToList(), "weaponInstances", WeaponInstances.Cast<object?>().ToList());
             if (PolicyVersion != AccountPolicy.Version) graph.Add("policyHash", PolicyHash);
             if(Support!=null)graph.Add("support",Support.ToGraph());
+            // Absent: exactly the legacy member set and order. Present: one more trailing member.
+            if (BalancePolicy != null) graph.Add("balancePolicy", BalancePolicy.ToGraph());
             return graph;
         }
         public static ExpeditionLaunch Parse(JsonElement j)
         {
-            BattleDataLoader.Fields(j, "mode", "chapter", "policyVersion", "revision", "coreModule", "contentSha256", "stageLevel", "zones", "bosses", "difficulty", "length", "useMemory", "party", "weaponInstances", "policyHash","support");
+            BattleDataLoader.Fields(j, "mode", "chapter", "policyVersion", "revision", "coreModule", "contentSha256", "stageLevel", "zones", "bosses", "difficulty", "length", "useMemory", "party", "weaponInstances", "policyHash","support", "balancePolicy");
             var x = new ExpeditionLaunch { Mode = Envelopes.Text(j, "mode"), Chapter = RecruitmentJson.Small(j, "chapter"), PolicyVersion = Envelopes.Text(j, "policyVersion"),
                 Revision = RecruitmentJson.Amount(j, "revision"), CoreModule = Envelopes.Text(j, "coreModule"), ContentSha256 = Envelopes.Text(j, "contentSha256"),
                 StageLevel = RecruitmentJson.Small(j, "stageLevel"), UseMemory = RecruitmentJson.Flag(j, "useMemory") };
@@ -78,12 +83,21 @@ namespace MemoryForge.Server
             foreach (var p in j.GetProperty("party").EnumerateArray()) x.Party.Add((Dictionary<string, object?>)MemoryV2DataLoader.Graph(p)!);
             foreach (var p in j.GetProperty("weaponInstances").EnumerateArray()) x.WeaponInstances.Add(p.GetString() ?? throw new InvalidDataException("instance"));
             if(j.TryGetProperty("support",out var support)){if(x.PolicyVersion!=SupportPolicy.Version||x.Mode=="tutorial")throw new InvalidDataException("support launch policy");x.Support=FrozenSupport.Parse(support);}
+            // A present member (null included) must name exactly the registered preset on a v4 story launch of its bound content. Its
+            // difficulty is then fixed by the canonical comparison below: any other stored multiplier, or the preset's difficulty without
+            // the member, is noncanonical.
+            if (j.TryGetProperty("balancePolicy", out var balance))
+            {
+                x.BalancePolicy = LaunchBalancePolicy.Parse(balance);
+                ExpeditionBalancePolicy.RequireLaunch(x);
+            }
             if (GraphJson.Digest(MemoryV2DataLoader.Graph(j)) != GraphJson.Digest(x.ToGraph())) throw new InvalidDataException("noncanonical launch");
             return x;
         }
         public RunSetup Setup(RunRecord r) => new RunSetup { Seed = r.Seed, RunId = r.RunId, MemoryVersion = r.MemoryVersion, Memory = GraphJson.Copy(r.StartMemory),
             MemoryPolicy = "v2", UseMemory = UseMemory ? null : false, Length = "short", Zones = new List<int> { 1 }, Bosses = new List<object?> { "b_bell" },
-            StageLevel = StageLevel, Difficulty = new RunDifficulty { Hp = 100, Damage = 100 }, Party = Party.Select(p => RunPartyEntry.FromJsonGraph(GraphJson.Copy(p))).ToList(),Support=Support?.ToCore() };
+            StageLevel = StageLevel, Difficulty = BalancePolicy == null ? new RunDifficulty { Hp = 100, Damage = 100 } : ExpeditionBalancePolicy.Difficulty(BalancePolicy),
+            Party = Party.Select(p => RunPartyEntry.FromJsonGraph(GraphJson.Copy(p))).ToList(),Support=Support?.ToCore() };
     }
     sealed class ExpeditionEnd
     {
@@ -102,12 +116,16 @@ namespace MemoryForge.Server
     {
         public string Kind = "", RequestId = "", RunId = "", PolicyVersion = AccountPolicy.Version, PolicyHash = "", StateSha256 = "";
         public long Revision; public int Chapter, JournalIndex; public ExpeditionRequest? Request;
+        // Phase2: the launch fact's own independent pin of its Run's preset (ExpeditionBalancePolicy.cs). Null on every legacy fact and grant.
+        public LaunchBalancePolicy? BalancePolicy;
         public Dictionary<string, object?> ToGraph()
         {
             var g = GraphJson.Object("kind", Kind, "requestId", RequestId, "runId", RunId, "policyVersion", PolicyVersion, "revision", Revision);
             if (PolicyVersion != AccountPolicy.Version) g.Add("policyHash", PolicyHash);
             if (Kind == "launch") g.Add("request", Request!.ToGraph());
             else { g.Add("chapter", Chapter); g.Add("journalIndex", JournalIndex); g.Add("stateSha256", StateSha256); g.Add("grant", AccountPolicy.Grant(Chapter)); }
+            // Absent: exactly the legacy member set and order. Present: one more trailing member.
+            if (BalancePolicy != null) g.Add("balancePolicy", BalancePolicy.ToGraph());
             return g;
         }
         public static ProgressionFact Parse(JsonElement j)
@@ -119,12 +137,18 @@ namespace MemoryForge.Server
             if (!Contracts.IsRequestId(f.RequestId) || !PracticeRunStore.IsRunId(f.RunId)) throw new InvalidDataException("progression identity");
             if (f.Kind == "launch")
             {
-                BattleDataLoader.Fields(j, "kind", "requestId", "runId", "policyVersion", "revision", "request", "policyHash");
+                BattleDataLoader.Fields(j, "kind", "requestId", "runId", "policyVersion", "revision", "request", "policyHash", "balancePolicy");
                 // Stored requests contain explicit nullable optional fields; normalize them through the public parser without accepting public nulls.
                 var q = j.GetProperty("request"); BattleDataLoader.Fields(q, "requestId", "expectedRevision", "mode", "chapter", "party", "useMemory");
                 var g = (Dictionary<string, object?>)MemoryV2DataLoader.Graph(q)!;
                 foreach (string key in new[] { "chapter", "party" }) if (g[key] == null) g.Remove(key);
                 f.Request = Contracts.ParseExpedition(GraphJson.Bytes(g, false));
+                // A present member (null included) must name exactly the registered preset on a v4 story launch fact.
+                if (j.TryGetProperty("balancePolicy", out var balance))
+                {
+                    f.BalancePolicy = LaunchBalancePolicy.Parse(balance);
+                    ExpeditionBalancePolicy.RequireFact(f);
+                }
             }
             else if (f.Kind == "grant")
             {
@@ -211,12 +235,15 @@ namespace MemoryForge.Server
             if (e.Run != null && (current == null || current.State.Phase != "DONE")) throw new ApiError(409, "RUN_ACTIVE");
             GrowthCommands.NoEncounter(e);
             var launch = q.Mode == "tutorial" ? Build(content,e,q) : GrowthCommands.BuildLaunchV4(content,e,q);
+            // Phase2: only a fresh story launch records the preset, after the unchanged v4 builder. The public request cannot choose it.
+            if (q.Mode == ExpeditionBalancePolicy.Mode) ExpeditionBalancePolicy.Stamp(content, launch);
             var r = new RunRecord { RunId = "pr-" + Convert.ToHexStringLower(RandomNumberGenerator.GetBytes(16)), Seed = BitConverter.ToUInt32(RandomNumberGenerator.GetBytes(4)),
                 MemoryVersion = AccountEnvelope.MemoryVersion(e.Memory), StartMemory = GraphJson.Copy(e.Memory["memory"]), UseMemory = q.UseMemory, Launch = launch };
             Run run; try { run = r.CreateRun(account, content); } catch (RuleException ex) { throw new ApiError(422, ex.Code); }
             if (e.Run != null) e.Archive.Add(e.Run);
             e.Run = r; e.Progression ??= new ProgressionRecord();
-            e.Progression.Ledger.Add(new ProgressionFact { Kind = "launch", RequestId = q.RequestId, RunId = r.RunId, Revision = q.ExpectedRevision, Request = q, PolicyVersion = launch.PolicyVersion, PolicyHash = launch.PolicyHash });
+            e.Progression.Ledger.Add(new ProgressionFact { Kind = "launch", RequestId = q.RequestId, RunId = r.RunId, Revision = q.ExpectedRevision, Request = q, PolicyVersion = launch.PolicyVersion, PolicyHash = launch.PolicyHash,
+                BalancePolicy = ExpeditionBalancePolicy.Copy(launch.BalancePolicy) });
             r.CreatedSha256 = PracticeRunStore.StateDigest(run);
             return CreationReply(content, r, run);
         }
@@ -271,6 +298,14 @@ namespace MemoryForge.Server
                     var q = f.Request!; Require(q.RequestId == f.RequestId && q.ExpectedRevision == f.Revision && r!.Launch!.Revision == f.Revision);
                     var expected = f.PolicyVersion == AccountPolicy.Version ? Build(content, e, q) :f.PolicyVersion==SupportPolicy.Version?GrowthCommands.BuildLaunchV4(content,e,q): f.PolicyVersion == EquipmentPolicy.Version ? GrowthCommands.BuildLaunchV3(content, e, q) : GrowthCommands.BuildLaunch(content, e, q);
                     if(f.PolicyVersion==SupportPolicy.Version)Require(q.Mode=="story");else if (f.PolicyVersion == EquipmentPolicy.Version) Require(q.Mode=="story"&&!GrowthCommands.SupportActive(e,f.Revision)); else Require(!GrowthCommands.Active(e, f.Revision));
+                    // The historical builder stays the oracle and the expected preset comes from the launch FACT, not from the Run record:
+                    // a record whose preset was removed (or added) without the fact differs in the full graph below. The created digest,
+                    // creation receipt and journal checks still prove every other launch input.
+                    if (f.BalancePolicy != null)
+                    {
+                        Require(f.PolicyVersion == SupportPolicy.Version && q.Mode == ExpeditionBalancePolicy.Mode);
+                        ExpeditionBalancePolicy.Apply(content, expected, f.BalancePolicy);
+                    }
                     Require(GraphJson.Digest(expected.ToGraph()) == GraphJson.Digest(r.Launch.ToGraph()));
                     Require(e.Receipts.TryGetValue(f.RequestId, out var receipt) && receipt.Status == 200 && receipt.Identity == q.Identity
                         && receipt.Body == CreationReply(content, r, r.CreateRun(account, content)).Body);
