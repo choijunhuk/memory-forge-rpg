@@ -1,0 +1,18 @@
+{
+  "character": "sion",
+  "key": "expr_surprised",
+  "target": "sion/images/char_sion_expr_surprised_styleA_v01.png",
+  "args": {
+    "prompt": "Use case: identity-preserve. One facial expression variant from this SAME-CHARACTER A-style neutral portrait. Clearly ADULT sion age 27. Preserve EXACT head angle/tilt, face proportions/identity, iris color, hairstyle and all accessories, scar/glasses when present, original costume neckline/shoulder crop, canvas composition, neutral lighting, palette, crisp line art and clear-cel A rendering. Identity: Long black hair, cool gray-violet eyes, SAME fine half-rim glasses, original earrings, white blouse collar, black corset edge and purple/gold coat. Change ONLY eyes/eyelids/eyebrows/mouth and natural facial muscles. Target expression SURPRISED: Slightly widened eyes behind unchanged glasses, raised brow and tiny parted mouth. Make that emotion distinctly readable at 512x512 while respecting character's restrained or energetic personality. Keep skin matte, tiny symbolic nose and short stylized mouth, no added lip gloss, no realistic nose/skin rendering, no new texture or micro-hair detail. Same square head-and-shoulders portrait, no hands/props/second face/labels. Preserve the existing intentional lower shoulder crop; don't erase costume at bottom. All actual EMPTY space (especially top corners) must be genuinely transparent alpha exactly0, no rectangular backdrop, halo, haze, checkerboard, floor or watermark. Output clean larger square master for non-generative 512x512 resize.",
+    "referenced_image_paths": [
+      "/Users/choi/Documents/Memory_forge/art/moments/sion/images/char_sion_expr_neutral_styleA_v01.png"
+    ],
+    "transparent_background": true
+  },
+  "cache_path": "/Users/choi/.codex/generated_images/01a14db0-4150-7f01-9240-82aaa185dd28/exec-3391f24c-0643-430f-8ce1-a053b193c102.png",
+  "hires": "production-style-a-20261018/expression-hires/sion-expr_surprised.png",
+  "postprocess": "sips -z 512 512; non-generative resize only",
+  "status": "ready",
+  "generation_status": "generated_pending_review",
+  "selected": true
+}

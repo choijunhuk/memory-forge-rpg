@@ -1,0 +1,28 @@
+{
+  "c": "aila",
+  "key": "fig_determined",
+  "path": "aila/images/char_aila_moment_determined_v01.png",
+  "refs": [
+    "/Users/choi/Documents/Memory_forge/art/moments/aila/images/char_aila_moment_neutral_v02.png"
+  ],
+  "pose": "Aila age23, at narrow archive desk, CLOSED ledger lying on desktop beside one cream note sheet, slender pen and two tea cups. Hands empty, one hand rests beside the closed ledger and other palm loosely open at waist. Violet eyes meet viewer steadily, warm initiative with a calm determined mouth, not a battle glare. Silver bell lantern stationary on hook at desk side. Full standing figure with exact lavender silver braid, frost embroidered white/lavender openback robe, detached sleeves, slit, silver bells/lantern unchanged. No weapon or magic aura.",
+  "prompt": "Use case: identity-preserve. Locked character design reference. Make ONE new non-explicit narrative RPG key-pose, 1024x1536 full length transparent PNG. Preserve adult identity, age, hairstyle, face, exact costume/colors and painterly anime cel style. All head, fingers, shoes and important props inside canvas. No scene background, haze, labels, panels, other people or erotic posing. Character acting and prop contact are the focus. Acting: Aila age23, at narrow archive desk, CLOSED ledger lying on desktop beside one cream note sheet, slender pen and two tea cups. Hands empty, one hand rests beside the closed ledger and other palm loosely open at waist. Violet eyes meet viewer steadily, warm initiative with a calm determined mouth, not a battle glare. Silver bell lantern stationary on hook at desk side. Full standing figure with exact lavender silver braid, frost embroidered white/lavender openback robe, detached sleeves, slit, silver bells/lantern unchanged. No weapon or magic aura.",
+  "source": "/Users/choi/.codex/generated_images/01a14d20-ffd5-7e81-9e47-85c1c8415e11/exec-321b0e7d-9207-49c5-9de6-bdb0444789b7.png",
+  "tool": "Codex built-in image_gen; subscription-included; no API fallback",
+  "review": "pass",
+  "previous_attempt": null,
+  "score": 92,
+  "review_notes": "Rendered output compared with reference: adult design preserved, clear pose/prop contact and face; B determined poses use narrative props, no unintended weapons. Static pose cuts and small furniture variations remain.",
+  "backend_model": "not exposed by tool",
+  "selected": true,
+  "sha256": "593d816ee1a6cddb801b2d1b021cd2692781b5a6c709c7cbd9185e248a4d97a8",
+  "size": [
+    1024,
+    1536
+  ],
+  "mode": "RGBA",
+  "alpha_extrema": [
+    0,
+    254
+  ]
+}

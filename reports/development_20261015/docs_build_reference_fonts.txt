@@ -1,0 +1,8 @@
+
+> memory-forge-rpg@0.8.1-aio.2 docs
+> python3 tools/ai/build_delivery_pdf.py --rebuild-base
+
+prompts: 10 characters / 50 prompts; aliases explicit
+PDF: /Users/choi/Documents/Memory_forge/docs/Memory_Forge_v0.8.1_Restored_Design.pdf
+Full Markdown: 234436 characters; 24 chapter anchors
+{"output": "/Users/choi/Documents/Memory_forge/Memory_Forge_Complete_Design.pdf", "front_pages": 5, "original_pages": 154, "total_pages": 159, "user_cli_executed": false}

@@ -1,0 +1,16 @@
+{
+  "core/MemoryForge.Core/Battle.PresentationQueries.cs": "3ca7252d9f24f781592cc9e3b966e5f80a35f625d1b3ef8c1fff6b4b6fb5d003",
+  "core/MemoryForge.Core/BattleChoicePolicy.cs": "a14de758821b2fe79f112820e432cf3148a68d6fcde898cce8a423318b51b0fc",
+  "core/MemoryForge.Core/Run.BattleQueries.cs": "3143d094321789a72f8cbbee0ad32db585bca604df2097ef03ebc05333764aab",
+  "core/MemoryForge.CoreChecks/BattlePresentationQueryChecks.cs": "b55d686eb02e1d3ed59be834933330963926c354ef22eecca924d1e294da0c09",
+  "core/MemoryForge.CoreChecks/Program.cs": "d045978f522560070fc6501e4c31fdc321ce29d05d97517f7c906981a55554a3",
+  "client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs": "62767652fa90aea65748fdfd447b436be62153ed3428f449e42c800a6c87e193",
+  "client/MemoryForgeUnity/Assets/Tests/PlayMode/BattlePresentationQueryPlayModeTests.cs": "9f2deafe9f89e111b8378d2e06a009c1f64053b5d25cdc77c5083b95683d46ef",
+  "server/MemoryForge.Server/Contracts.cs": "6ac85c304979855d320f4c46607af45620a5bf66b9d45684ccc1731de8c775f3",
+  "server/MemoryForge.Server/PublicView.cs": "4c8963774596a37fb1dffe12715e4a1e14e6e97431c7e96170057a1aabbd4dcd",
+  "server/MemoryForge.Server/Program.cs": "6fc2ec0c145e086cc8aad5b28b6338caec20b1e724705f5590b11b7016cb1e86",
+  "server/MemoryForge.Server/README.md": "bb100e8e282326852dcd047227d9698612e9b889db6fc1c2bdd9d172ca3e767f",
+  "server/MemoryForge.ServerChecks/BattleQueryChecks.cs": "b31ce494e1da2d972fdd2271f5bfd4420a705e7cdaaefb6c2ec66c55743848c3",
+  "server/MemoryForge.ServerChecks/Program.cs": "a110e646d1fac09309f90031d5acfc8cc5cd809dc81ede82426c79836a863008",
+  "server/MemoryForge.ServerChecks/PostgresChecks.cs": "e64681b525bcb77ebac8164a0e26273ecbbea95546405a8f3df010edaa21012d"
+}

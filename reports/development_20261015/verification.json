@@ -1,0 +1,127 @@
+{
+  "generated": "2026-10-15T02:50:23.651060+09:00",
+  "root": "/Users/choi/Documents/Memory_forge",
+  "baseline_commit": "f4077c8",
+  "branch": "codex/storage-v2",
+  "mode": "Codex App solo owner with bounded native subagents and official Claude CLI",
+  "scope": "P0 preservation memory v2 connected to JS Run and HTML; legacy route retained",
+  "claude_calls": [
+    {
+      "task_id": "P0-SAVE-V2-CLI-CHECK",
+      "session_id": "9a179c4c-7d56-49fd-a362-d9ccfc3f4384",
+      "exit": 0
+    },
+    {
+      "task_id": "P0-SAVE-V2-UI",
+      "session_id": "c682bdde-4177-4f10-9f94-c6dd192537ff",
+      "exit": 0
+    }
+  ],
+  "billing": {
+    "claude": "Verified claude.ai Max authentication and account Usage credits OFF before inference",
+    "codex": "Verified ChatGPT login and included allowance; auto recharge OFF; purchased credit balance unchanged at post-check",
+    "api_or_paid_fallback_used": false,
+    "tokens_extracted": false,
+    "image_generation_owner": "Codex",
+    "images_generated": false
+  },
+  "checks": [
+    {
+      "name": "Input manifest",
+      "status": "PASS",
+      "evidence": "423/423 before edits; original ZIP-byte restoration of 3 missing dotfiles"
+    },
+    {
+      "name": "JS engine",
+      "status": "PASS",
+      "evidence": "73/73, including 22 new integration/edge cases"
+    },
+    {
+      "name": "Original proposal",
+      "status": "PASS",
+      "evidence": "14/14"
+    },
+    {
+      "name": "Python economy",
+      "status": "PASS",
+      "evidence": "23/23"
+    },
+    {
+      "name": "Document contract",
+      "status": "PASS",
+      "evidence": "9/9 plus full inventory: 24 anchors, 10 sheets, 50 prompts"
+    },
+    {
+      "name": "Handoff/PDF",
+      "status": "PASS",
+      "evidence": "13/13; full 154-page body + 5-page guide = 159"
+    },
+    {
+      "name": "Browser v2",
+      "status": "PASS",
+      "evidence": "13/13 on real local HTTP origin; fixture-only save cases explicitly named"
+    },
+    {
+      "name": "Existing UI smoke",
+      "status": "PASS",
+      "evidence": "2 completed UI runs, 723 clicks, 15 screens, no page/render errors"
+    },
+    {
+      "name": "Legacy run fuzz",
+      "status": "PASS",
+      "evidence": "100 short + 40 full; unexpected errors 0 (does not certify v2 or human balance)"
+    },
+    {
+      "name": "Static checks",
+      "status": "PASS",
+      "evidence": "node --check core/module/UI; git diff --check; strict error-code documentation coverage"
+    },
+    {
+      "name": "Full PDF rebuild",
+      "status": "PASS",
+      "evidence": "npm --script-shell=/bin/bash run docs with task-local BASH_ENV; initial macOS dependency/font failures retained"
+    },
+    {
+      "name": "Visual verdict",
+      "status": "PASS",
+      "evidence": "94/100; original style retained, 1280/390 widths and 130% text"
+    },
+    {
+      "name": "C# Battle/Run",
+      "status": "NOT_RUN",
+      "evidence": "Full port remains unimplemented"
+    },
+    {
+      "name": "Server/DB concurrency",
+      "status": "NOT_RUN",
+      "evidence": "Local version check is not transactional CAS/DB locking"
+    },
+    {
+      "name": "Unity/Android/payment/production",
+      "status": "NOT_RUN",
+      "evidence": "No claim of device, payment, deployment or Unity acceptance"
+    }
+  ],
+  "known_limits": [
+    "Local storage is a prototype adapter, not server authority or multi-tab atomic CAS",
+    "Original source/design data remain v0.8.1/0.7.0; free capacity migration and later policies remain pending",
+    "PDF source unchanged; task-local fonts/dependencies outside project were required to match original pagination"
+  ],
+  "next": [
+    "Late-game enemy actions and paired-condition balance runner",
+    "C# Battle/Run and v2 trace equivalence",
+    "Server memory DTO, history, ownership, idempotency and transactional concurrency",
+    "Unity/Android vertical slice, art pipeline and device acceptance",
+    "Keep unresolved achievements, pass 50-level allocation and weapon inheritance decisions in queue"
+  ],
+  "ci_attempts": [
+    {
+      "run_id": 38610287262,
+      "status": "FAIL",
+      "stage": "Before test runner",
+      "reason": "ZIP-imported script had no executable bit; exit 126",
+      "fix": "Invoke identical runner with bash; no test changes"
+    }
+  ],
+  "github_ci_current": "See head checks at https://github.com/choijunhuk/memory-forge-rpg/pull/1"
+}

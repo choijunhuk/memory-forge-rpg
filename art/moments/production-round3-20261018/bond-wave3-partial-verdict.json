@@ -1,0 +1,14 @@
+{
+  "score": 92,
+  "verdict": "pass",
+  "category_match": true,
+  "differences": [
+    "Harin furniture/toy styling varies across independently generated pose cuts."
+  ],
+  "suggestions": [],
+  "reasoning": "New narrative key poses preserve adult designs and depict the correct book/helmet/glove state.",
+  "next_actions": [
+    "Create targeted corrections for the blocked desk poses.",
+    "Finish inspecting C images."
+  ]
+}

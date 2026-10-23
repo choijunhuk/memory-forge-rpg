@@ -1,0 +1,21 @@
+✔ immutable witnesses: frozen original data, three real full runs, self-consistent recorded outcomes (1.641792ms)
+✔ seed1036: ev_rift AP+2 reaches only the next battle first turn and afterBattle no longer refunds it (46.060667ms)
+✔ seed1020: a shop sells its single card removal once; a second public removal is NOT_FOR_SALE with no mutation (36.176958ms)
+✔ seed1000: a resolved ev_archive rejects reselection with BAD_CHOICE before effects or RNG; phase order kept (11.57675ms)
+✔ seed1000: a key-array first ev_archive choice removes exactly the chosen cards, once (11.602291ms)
+✔ every witnessed event resolves once; rejected reselections leave all later recorded commands reproducible (237.913959ms)
+✔ continuation witnesses: separate real full runs recorded on engine 3ad, self-consistent outcomes (0.198542ms)
+✔ seed1102: a battle that ends inside begin finishes the run once through the defeat save, after the node entry (27.702625ms)
+✔ seed1000 continuation: repeats of a done ev_archive change nothing, and the next ev_promise still commits once (23.854834ms)
+✔ seed2654 packet: each newly earned ev_rift +2 reaches only its next battle; the battles between keep the base AP (657.733208ms)
+✔ seed1102 generated legacy trace: the opening defeat finishes through its save to DONE (139.654291ms)
+✔ seed1102 generated v2 trace: the opening defeat finishes through its save to DONE (140.32175ms)
+✔ seed1102: a fixed boss that throws inside startBattle writes no entry log, as in the original order (9.456417ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1469.810875

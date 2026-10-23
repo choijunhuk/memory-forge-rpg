@@ -1,0 +1,27 @@
+{
+  "c": "sion",
+  "key": "fig_worried",
+  "path": "sion/images/char_sion_moment_worried_v01.png",
+  "refs": [
+    "/Users/choi/Documents/Memory_forge/art/moments/sion/images/char_sion_moment_neutral_v01.png"
+  ],
+  "pose": "Sion age27, standing beside a small narrow reading desk. Open dark purple book lies on desk. Her left palm lightly covers a small cream personal note tucked in the book, right fingertips hesitate at its corner. Silver-gray eyes glance toward viewer through half-rim glasses, lips restrained, tiny tension in eyebrows, cool composure with a private emotional crack. Preserve black waist-length straight hair, fitted deep-purple long coat/chains, white blouse, high waist black miniskirt and thigh-high heeled boots. No sword. No legible writing. Entire head/hands/boots/desk inside canvas.",
+  "prompt": "Use case: identity-preserve. Locked character design reference. Make ONE new non-explicit narrative RPG key-pose, 1024x1536 full length transparent PNG. Preserve adult identity, age, hairstyle, face, exact costume/colors and painterly anime cel style. All head, fingers, shoes and important props inside canvas. No scene background, haze, labels, panels, other people or erotic posing. Character acting and prop contact are the focus. Acting: Sion age27, standing beside a small narrow reading desk. Open dark purple book lies on desk. Her left palm lightly covers a small cream personal note tucked in the book, right fingertips hesitate at its corner. Silver-gray eyes glance toward viewer through half-rim glasses, lips restrained, tiny tension in eyebrows, cool composure with a private emotional crack. Preserve black waist-length straight hair, fitted deep-purple long coat/chains, white blouse, high waist black miniskirt and thigh-high heeled boots. No sword. No legible writing. Entire head/hands/boots/desk inside canvas.",
+  "source": "/Users/choi/.codex/generated_images/01a14d20-ffd5-7e81-9e47-85c1c8415e11/exec-f42146f9-37dd-4148-9c7f-01d13d899d9e.png",
+  "tool": "Codex built-in image_gen; subscription-included; no API fallback",
+  "review": "pass",
+  "score": 92,
+  "review_notes": "Inspected rendered output against existing character reference. Face, age/design, grounded support and primary prop contact match the intended static key pose. Continuous acting is not claimed.",
+  "backend_model": "not exposed by tool",
+  "selected": true,
+  "sha256": "f7562bce4f19758a25bdb01631522853df16aafefc13499818647864463899ec",
+  "size": [
+    1024,
+    1536
+  ],
+  "mode": "RGBA",
+  "alpha_extrema": [
+    0,
+    254
+  ]
+}

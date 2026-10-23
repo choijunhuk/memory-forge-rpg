@@ -1,0 +1,1349 @@
+{
+  "status": "PASS",
+  "scope": "Current creative-source static verification: Unity visual review findings 3 and 4. Post-fix Unity import/playback/visual acceptance NOT_RUN.",
+  "characters": [
+    {
+      "character": "sera",
+      "age_unchanged": 24,
+      "moments_sha256": "faac3579ba6bdff2942931aaf629f779eac003bc99cd0444d1972430cd9fa965",
+      "mapped_images": 15,
+      "ready_pngs": 9,
+      "todo_pngs": 6,
+      "bond_characters_including_spaces": 2378,
+      "idle_figure": "fig_smile",
+      "scene_images": [
+        {
+          "scene": "sera_lobby_01",
+          "missing_image_keys": []
+        },
+        {
+          "scene": "sera_bond_01",
+          "missing_image_keys": []
+        },
+        {
+          "scene": "sera_victory_01",
+          "missing_image_keys": []
+        }
+      ],
+      "moments_sha256_before_review_fixes": "faac3579ba6bdff2942931aaf629f779eac003bc99cd0444d1972430cd9fa965",
+      "image_pass2_protected_scene_data_reconstruction": "PASS",
+      "review_fixes_protected_data_reconstruction": "PASS"
+    },
+    {
+      "character": "ravien",
+      "age_unchanged": 28,
+      "moments_sha256": "fa9802ce5685b304051ab60c559eb554e5fd3e19a47309aae7887cf707a942c1",
+      "mapped_images": 14,
+      "ready_pngs": 7,
+      "todo_pngs": 7,
+      "bond_characters_including_spaces": 2673,
+      "idle_figure": "fig_lobby_soft",
+      "scene_images": [
+        {
+          "scene": "ravien_lobby_01",
+          "missing_image_keys": []
+        },
+        {
+          "scene": "ravien_bond_01",
+          "missing_image_keys": [
+            "fig_bond_turn",
+            "fig_resolve",
+            "fig_soft",
+            "fig_waver"
+          ]
+        },
+        {
+          "scene": "ravien_victory_01",
+          "missing_image_keys": [
+            "bg_victory",
+            "fig_resolve",
+            "fig_seal",
+            "fig_victory"
+          ]
+        }
+      ],
+      "moments_sha256_before_review_fixes": "1ef11367ace8ed1bc02f4d8af967866b5dea06eb52ca332cb16f917a46b831d5",
+      "image_pass2_protected_scene_data_reconstruction": "PASS",
+      "review_fixes_protected_data_reconstruction": "PASS"
+    },
+    {
+      "character": "harin",
+      "age_unchanged": 26,
+      "moments_sha256": "0252cecb3a81fac4cce880487fa0ada1a99ff0129eb8168e40c14283ee0fbbdd",
+      "mapped_images": 15,
+      "ready_pngs": 8,
+      "todo_pngs": 7,
+      "bond_characters_including_spaces": 2603,
+      "idle_figure": "fig_lobby_soft",
+      "scene_images": [
+        {
+          "scene": "harin_lobby_01",
+          "missing_image_keys": []
+        },
+        {
+          "scene": "harin_bond_01",
+          "missing_image_keys": [
+            "fig_cat",
+            "fig_rest",
+            "fig_soft",
+            "fig_worry"
+          ]
+        },
+        {
+          "scene": "harin_victory_01",
+          "missing_image_keys": [
+            "bg_victory",
+            "fig_guard",
+            "fig_victory"
+          ]
+        }
+      ],
+      "moments_sha256_before_review_fixes": "f2e9ae20244702cb52f02677cf067e61cb3e10c0561e9af9e840e524675a4f28",
+      "image_pass2_protected_scene_data_reconstruction": "PASS",
+      "review_fixes_protected_data_reconstruction": "PASS"
+    },
+    {
+      "character": "aila",
+      "age_unchanged": 23,
+      "moments_sha256": "d965d77d33a86c437f958b175a803e41370a5345905fae18da399d966018c779",
+      "mapped_images": 19,
+      "ready_pngs": 6,
+      "todo_pngs": 13,
+      "bond_characters_including_spaces": 2509,
+      "idle_figure": "fig_soft",
+      "scene_images": [
+        {
+          "scene": "aila_lobby_01",
+          "missing_image_keys": []
+        },
+        {
+          "scene": "aila_bond_01",
+          "missing_image_keys": [
+            "fig_determined",
+            "fig_surprised",
+            "fig_worried"
+          ]
+        },
+        {
+          "scene": "aila_victory_01",
+          "missing_image_keys": [
+            "fig_victory_check",
+            "fig_victory_turn",
+            "fig_victory_notice",
+            "fig_victory_wait"
+          ]
+        }
+      ],
+      "moments_sha256_before_review_fixes": "fb9d62fe6e8e3c5e17f84691c98dd80243268acf418ea2be95f2d2a3b0cb421a",
+      "image_pass2_protected_scene_data_reconstruction": "PASS",
+      "review_fixes_protected_data_reconstruction": "PASS"
+    },
+    {
+      "character": "sion",
+      "age_unchanged": 27,
+      "moments_sha256": "716f958b157449201f128235b89c4ce0928d219a9850bf578c541893e5e4989b",
+      "mapped_images": 19,
+      "ready_pngs": 6,
+      "todo_pngs": 13,
+      "bond_characters_including_spaces": 2575,
+      "idle_figure": "fig_soft",
+      "scene_images": [
+        {
+          "scene": "sion_lobby_01",
+          "missing_image_keys": []
+        },
+        {
+          "scene": "sion_bond_01",
+          "missing_image_keys": [
+            "fig_determined",
+            "fig_surprised",
+            "fig_worried"
+          ]
+        },
+        {
+          "scene": "sion_victory_01",
+          "missing_image_keys": [
+            "fig_victory_check",
+            "fig_victory_turn",
+            "fig_victory_glasses",
+            "fig_victory_wait"
+          ]
+        }
+      ],
+      "moments_sha256_before_review_fixes": "490b12d4fb4783709f3d446d9a306bee65a1cc68bf8fd8579f45a8db4f05275a",
+      "image_pass2_protected_scene_data_reconstruction": "PASS",
+      "review_fixes_protected_data_reconstruction": "PASS"
+    },
+    {
+      "character": "lumi",
+      "age_unchanged": 22,
+      "moments_sha256": "ba1d86d78b725f35678143b24a005e6c1eb141c1a3858a21af6fc10f35f054b6",
+      "mapped_images": 19,
+      "ready_pngs": 6,
+      "todo_pngs": 13,
+      "bond_characters_including_spaces": 2597,
+      "idle_figure": "fig_neutral",
+      "scene_images": [
+        {
+          "scene": "lumi_lobby_01",
+          "missing_image_keys": []
+        },
+        {
+          "scene": "lumi_bond_01",
+          "missing_image_keys": [
+            "fig_determined",
+            "fig_surprised",
+            "fig_worried"
+          ]
+        },
+        {
+          "scene": "lumi_victory_01",
+          "missing_image_keys": [
+            "fig_victory_land",
+            "fig_victory_turn",
+            "fig_victory_grin",
+            "fig_victory_wait"
+          ]
+        }
+      ],
+      "moments_sha256_before_review_fixes": "555538fd012ae269cadaff27a1f1bef8dcb6a04c0a028cae4f8cd983d45768e1",
+      "image_pass2_protected_scene_data_reconstruction": "PASS",
+      "review_fixes_protected_data_reconstruction": "PASS"
+    }
+  ],
+  "pngs": [
+    {
+      "character": "sera",
+      "key": "fig_scope",
+      "path": "sera/images/char_sera_lobby_scope_v02.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "0025e262e4ef2a8c21e680323839ac5791628882832b963b2e669264a03e6100",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "transparent_pixels": 889804
+    },
+    {
+      "character": "sera",
+      "key": "fig_watch",
+      "path": "sera/images/char_sera_lobby_watch_v02.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "cf476519a0d833fdd8874c6aed6f4d1a2bccbc8d8b07c5e630d1efeff08411b9",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "transparent_pixels": 872355
+    },
+    {
+      "character": "sera",
+      "key": "fig_smile",
+      "path": "sera/images/char_sera_lobby_smile_v01.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "03f5074681a1bdc7639b39e8cb2c24d6b2146b3aaa6759bcf2eaa98fb2ece236",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "transparent_pixels": 875143
+    },
+    {
+      "character": "sera",
+      "key": "fig_bond_notes",
+      "path": "sera/images/char_sera_bond_notes_v01.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "36877a722f9de77bbe79797744fd3b7a8c92a59d273fa36b208a37498bcd24f8",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "transparent_pixels": 943951
+    },
+    {
+      "character": "sera",
+      "key": "fig_bond_listen",
+      "path": "sera/images/char_sera_bond_listen_v01.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "e8d24e4cd5cd19fad036d943065a6691f632b263ac764b62a0be3577fee118dd",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "transparent_pixels": 815234
+    },
+    {
+      "character": "sera",
+      "key": "fig_bond_offer",
+      "path": "sera/images/char_sera_bond_offer_v01.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "69d2738409b0482337b0a54429a2c77676455869ecb010fb62c8ba5cdbf4d474",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "transparent_pixels": 692543
+    },
+    {
+      "character": "sera",
+      "key": "fig_victory_scope",
+      "path": "sera/images/char_sera_victory_scope_v01.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "a81a2927d83f1ac8d1bc7f4ce7ef69347c3373602c69656ac7f8171996c25feb",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "transparent_pixels": 892263
+    },
+    {
+      "character": "sera",
+      "key": "fig_victory_turn",
+      "path": "sera/images/char_sera_victory_turn_v01.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "9391666104d596d54ec9b8f0b040138eb96bb68b29a1e34da323790163d8b9a0",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "transparent_pixels": 887238
+    },
+    {
+      "character": "sera",
+      "key": "bg_tower",
+      "path": "sera/images/bg_sera_clocktower_evening_v01.png",
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB",
+      "sha256": "ced267fa566216855f1b2513a7f5c5d249ec99dd26e6578cc050424241aba070"
+    },
+    {
+      "character": "ravien",
+      "key": "fig_default",
+      "path": "ravien/images/char_ravien_stand_neutral_v01.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "36d32168b79245642ba4db63cbe952c19d452d1dc44485b927197f53784e6367",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "transparent_pixels": 1134070
+    },
+    {
+      "character": "ravien",
+      "key": "fig_stamp",
+      "path": "ravien/images/char_ravien_stamp_focused_v01.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "7c31332f513b93bed93c2098bba614d7382564ac806295905433803c73b6378a",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "transparent_pixels": 1033153
+    },
+    {
+      "character": "ravien",
+      "key": "fig_turn",
+      "path": "ravien/images/char_ravien_paper_turn_playful_v01.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "a7dd2bdcaa533aecc7c5dd0252bbf9c7e619d219e1e4e25cc4ba421885a6e7ca",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "transparent_pixels": 1147711
+    },
+    {
+      "character": "ravien",
+      "key": "fig_offer",
+      "path": "ravien/images/char_ravien_chair_offer_happy_v01.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "b31c5dba5a887e81cd02941cfc9bb0e4592d5031632fc3853bb45c7ef2ff3b63",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "transparent_pixels": 865547
+    },
+    {
+      "character": "ravien",
+      "key": "fig_lobby_soft",
+      "path": "ravien/images/char_ravien_stand_soft_v01.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "cc9d6c0d7a5d51c00a1a3aaebcba1a343393791dc4d1936c1159f07250d535cf",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "transparent_pixels": 1142070
+    },
+    {
+      "character": "ravien",
+      "key": "fig_annoyed",
+      "path": "ravien/images/char_ravien_stand_annoyed_v01.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "2c85c8a6e99a6eccdae34662189b554f7a75a01e20dac727dadcded15a58ac2d",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "transparent_pixels": 1129993
+    },
+    {
+      "character": "ravien",
+      "key": "bg_room",
+      "path": "ravien/images/char_ravien_background_workshop_evening_v01.png",
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB",
+      "sha256": "a049b8449d5d04312f05a4c60bb01aa4b770f2cf9394e0b11d4b4fcdb4bf8214"
+    },
+    {
+      "character": "harin",
+      "key": "fig_default",
+      "path": "harin/images/char_harin_stand_neutral_v01.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "bc0d480879c54124365bbc1630a1dda13d2755a075225c7e1927171fd1964cf3",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "transparent_pixels": 669985
+    },
+    {
+      "character": "harin",
+      "key": "fig_glove",
+      "path": "harin/images/char_harin_glove_determined_v01.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "9977a4978842b9184bd81ea9d42d037defc3507ab2ddeb409976fdd4ac557e14",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "transparent_pixels": 652332
+    },
+    {
+      "character": "harin",
+      "key": "fig_lobby_cat",
+      "path": "harin/images/char_harin_pocket_reveal_soft_v01.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "aa0224ba6a5f7e616932af65451ffe0f987f3f15980bd7922078f0facfd829c4",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "transparent_pixels": 646211
+    },
+    {
+      "character": "harin",
+      "key": "fig_hide",
+      "path": "harin/images/char_harin_pocket_surprised_v01.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "041d906435edf1bdc8f47f184ba4989652b5e3783632aec8e37f28b3993fdc1f",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "transparent_pixels": 658233
+    },
+    {
+      "character": "harin",
+      "key": "fig_cough",
+      "path": "harin/images/char_harin_cough_annoyed_v01.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "515d23787581c0b6ce3f3aaf71d630291f31f018104d15a796a401a163c3118e",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "transparent_pixels": 559232
+    },
+    {
+      "character": "harin",
+      "key": "fig_lobby_soft",
+      "path": "harin/images/char_harin_stand_soft_v01.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "65bd76c8831fa87601720b1bd0c500980fde00cfc200998bd2dc86ed63afd584",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "transparent_pixels": 647013
+    },
+    {
+      "character": "harin",
+      "key": "fig_resolve",
+      "path": "harin/images/char_harin_stand_determined_v01.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "a1b89efe43746b4767313ed0495da76c2f9c76b40a3e47a986262578ad8c19fd",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "transparent_pixels": 669561
+    },
+    {
+      "character": "harin",
+      "key": "bg_room",
+      "path": "harin/images/char_harin_background_workshop_evening_v01.png",
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB",
+      "sha256": "a049b8449d5d04312f05a4c60bb01aa4b770f2cf9394e0b11d4b4fcdb4bf8214"
+    },
+    {
+      "character": "aila",
+      "key": "fig_neutral",
+      "path": "aila/images/char_aila_moment_neutral_v02.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "84d1468e00ecd54ea1372c1315f3680dc18653416029ac272242a67658c74ad1",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "transparent_pixels": 822884
+    },
+    {
+      "character": "aila",
+      "key": "fig_action1",
+      "path": "aila/images/char_aila_moment_action1_v02.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "0ca39b9c89a059834c18bf6f4b4727b3ba650a5456603a3147cdd29c23e4e9c7",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "transparent_pixels": 745325
+    },
+    {
+      "character": "aila",
+      "key": "fig_action2",
+      "path": "aila/images/char_aila_moment_action2_v02.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "a408081bc494b4482bea92ee19cca4d435cffc97ff9793e9db5b5b5008dceb43",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "transparent_pixels": 758036
+    },
+    {
+      "character": "aila",
+      "key": "fig_happy",
+      "path": "aila/images/char_aila_moment_happy_v02.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "a455b6dd4f6c10d08a4c1dfeef6e42996587cd25df722239c08bb3fe03bc4b46",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "transparent_pixels": 694073
+    },
+    {
+      "character": "aila",
+      "key": "fig_soft",
+      "path": "aila/images/char_aila_moment_soft_v02.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "9a7267fb110261c63fccab90e7c429ab48d0ac6a4b4597d2397ba960077eafa9",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "transparent_pixels": 766076
+    },
+    {
+      "character": "aila",
+      "key": "bg",
+      "path": "aila/images/char_aila_background_archive_evening_v01.png",
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB",
+      "sha256": "6beabfcd1ca8f597ec2db11afd8cd5bc25efd89c7a535d89cbfc7c03b68a398e"
+    },
+    {
+      "character": "sion",
+      "key": "fig_neutral",
+      "path": "sion/images/char_sion_moment_neutral_v01.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "8f1325f20daf44f869c3337bb37f230101cab532028fae27d8411d05f5ba826c",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "transparent_pixels": 838275
+    },
+    {
+      "character": "sion",
+      "key": "fig_action1",
+      "path": "sion/images/char_sion_moment_action1_v01.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "abd352b5d984b4718cd3f06bef6b7c7681891c3b5a8baaf0f0d7d38b27cb8b22",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "transparent_pixels": 805466
+    },
+    {
+      "character": "sion",
+      "key": "fig_action2",
+      "path": "sion/images/char_sion_moment_action2_v01.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "ef8c114fa46c5033c14b4514c59c0ae7e6144596978b3ff2928389612f46c6a7",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "transparent_pixels": 805384
+    },
+    {
+      "character": "sion",
+      "key": "fig_happy",
+      "path": "sion/images/char_sion_moment_happy_v01.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "ae57ba677e543b6023297706e5fed857527af1c0c2164bd128e9b793694fbc38",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "transparent_pixels": 823710
+    },
+    {
+      "character": "sion",
+      "key": "fig_soft",
+      "path": "sion/images/char_sion_moment_soft_v01.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "f11353244a43bc528c5d232f567b95c8fb39222f74ca7ba5c0f8fbc162f3b350",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "transparent_pixels": 801063
+    },
+    {
+      "character": "sion",
+      "key": "bg",
+      "path": "sion/images/char_sion_background_library_lamplight_v01.png",
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB",
+      "sha256": "5b79cc835a8cb3160a306ec13e13dc674887b3ab5118bbd382212760e61c6750"
+    },
+    {
+      "character": "lumi",
+      "key": "fig_neutral",
+      "path": "lumi/images/char_lumi_moment_neutral_v01.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "ee0eb2f06b8498227bd93b3371bd193c35a638c62f30543b585aa8a7e1a651d9",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "transparent_pixels": 1015792
+    },
+    {
+      "character": "lumi",
+      "key": "fig_action1",
+      "path": "lumi/images/char_lumi_moment_action1_v01.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "0c995339841469ccea50fb5076722fb86a8fc9f0e816dfe5f7d71b2942b26cf9",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "transparent_pixels": 1042415
+    },
+    {
+      "character": "lumi",
+      "key": "fig_action2",
+      "path": "lumi/images/char_lumi_moment_action2_v01.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "30a55603c9cca90223997307f61de0293eefd987d351ffc3a5c0d94ae3dee963",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "transparent_pixels": 1051048
+    },
+    {
+      "character": "lumi",
+      "key": "fig_happy",
+      "path": "lumi/images/char_lumi_moment_happy_v01.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "a28b2ea95c984034b3cf5caebf8f0232870359e35a43593d3ece61edbae968e8",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "transparent_pixels": 1032129
+    },
+    {
+      "character": "lumi",
+      "key": "fig_soft",
+      "path": "lumi/images/char_lumi_moment_soft_v01.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "6c25868d210f42984db596a352b527829606c7e83c3bbed96fa7b39d8d90816b",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "transparent_pixels": 1063656
+    },
+    {
+      "character": "lumi",
+      "key": "bg",
+      "path": "lumi/images/char_lumi_background_workshop_street_evening_v01.png",
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB",
+      "sha256": "732403540d1e46d091da43736e8115d1f7a6e3e8d0342b4f26dded58b19a9c4c"
+    }
+  ],
+  "totals": {
+    "scenes": 18,
+    "beats": 215,
+    "mapped_pngs": 101,
+    "ready_pngs": 42,
+    "todo_pngs": 59,
+    "fully_image_backed_scenes": [
+      "sera_lobby_01",
+      "sera_bond_01",
+      "sera_victory_01",
+      "ravien_lobby_01",
+      "harin_lobby_01",
+      "aila_lobby_01",
+      "sion_lobby_01",
+      "lumi_lobby_01"
+    ],
+    "new_selected_files": 39,
+    "new_imagegen_calls": 42,
+    "new_unselected_candidates": 5,
+    "existing_background_byte_copies": 2,
+    "motion_data": 16
+  },
+  "not_run": [
+    "Post-review-fix source import / Unity replay / face, pointing hand and empty-seat composition / dialogue clearance",
+    "New image Unity import / Editor playback / device acceptance / camera and prop alignment",
+    "Idle return, repeated taps, skip and accessibility runtime acceptance",
+    "Claude independent review (user prohibited calls)",
+    "Game code tests / lint / typecheck / build (no game code changed)",
+    "Articulated rig, in-between frame animation, voice, PSD, AnimationClip, Timeline or VFX creation"
+  ],
+  "real_constraint": [],
+  "apng": {
+    "path": "sera/char_sera_lobby_check_time_v01.apng",
+    "unchanged_from_pass1": true,
+    "decoded_frames": 5,
+    "duration_ms": 2500,
+    "sha256": "f969203b01b1b2c154d779da78ff110d9b1a56d2bcda0489cb7cd1c7747ff20f"
+  },
+  "preexisting_release_manifest_check": {
+    "status": "FAIL",
+    "exit_code": 1,
+    "entries": 423,
+    "changed_entries": 32,
+    "timing": "Before source edits; manifest not regenerated",
+    "command": "python3 tools/ai/verify_manifest.py",
+    "reason": "32 pre-existing changed entries out of 423, checked before creative edits. Release manifests were not modified or regenerated."
+  },
+  "external_unity_evidence_reviewed": {
+    "capture": "reports/ui_skin_20261018/sera_lobby_01_4.png",
+    "log": "reports/ui_skin_20261018/sera_lobby_01_log.txt",
+    "read_only": true,
+    "observed": "Existing Sera A watch gesture, smile and first line visible; log shows first line at 4.2/6/8.6 and next at11.5s.",
+    "not_proven": [
+      "New five adults A and Sera B/C runtime playback",
+      "Scene-end idle return, tap/hold waiting and skip races"
+    ]
+  },
+  "image_pass2_evidence_note": "image_pass2_checks, PNG/APNG inspection, generation totals and external_unity_evidence_reviewed are historical image-pass-2 evidence, not rerun claims. Current JSON hashes and bond-script lengths are refreshed; review_fixes_20261018 records this pass.",
+  "image_pass2_checks": [
+    "Existing importer referenced()/clean()/contained() read-only helpers; no importer main/import_one execution",
+    "All six schemas, required scene/beat fields, unique IDs, speakers and internal image/motion/background references",
+    "Every declared image asset ready iff its file exists; six idle figures exist",
+    "All six lobby scenes and Sera B/C have every declared image file",
+    "42 selected PNGs decoded and verified; 36 figure PNGs genuine alpha; six landscape backgrounds",
+    "All six manifests reconstruct exact pre-pass SHA256 after undoing image mapping/status/anchor/idle-only edits; dialogue, timing, input, intent and motion data preserved",
+    "18 scenes / 215 beats; all six bond scripts remain 2000–3000 characters",
+    "Original selected Sera PNG/APNG bytes unchanged; APNG five frames decoded",
+    "All new generation/reuse records verified against saved file hashes"
+  ],
+  "checks": [
+    "All 18 scenes / 215 beats / 102 null-speaker narration passages manually reviewed sentence by sentence",
+    "18 production-direction passages rewritten as player-facing prose; displaced directions retained by scene ID and 1-based beat in five character READMEs",
+    "108 spoken line objects unchanged, including speaker, text and tone",
+    "Exactly 20 changed JSON leaves: 18 null-speaker line.text and Ravien lobby 4/5 camera.shot; undoing only those leaves reconstructs all six exact pre-edit SHA256 hashes",
+    "Existing fields only; no schema additions; image/motion references, ready/file existence, idle figures and all six 2000-3000-character bond scripts checked",
+    "All existing image and animation bytes, age/design intent, hold/input/motion/gaze/line.tone preserved",
+    "Ravien lobby 4/5 both fig_offer full/face/none/0; bust retained only after figure changes to fig_lobby_soft at beat 6"
+  ],
+  "review_fixes_20261018": {
+    "status": "PASS",
+    "scope": "Creative-source static verification only; post-fix Unity visual acceptance NOT_RUN",
+    "reviewed_scenes": 18,
+    "beats": 215,
+    "narration_lines_reviewed": 102,
+    "rewritten_narration_lines": 18,
+    "unchanged_spoken_line_objects": 108,
+    "spoken_line_objects_sha256": "31c8952ba26d439b0456d3c09b22c3d9b209a7d1fdf2c2eb42d53d2137967afe",
+    "changed_json_leaves": 20,
+    "allowed_changes": "18 null-speaker line.text values and Ravien lobby beats 4/5 camera.shot only; exact pre-edit JSON SHA256 reconstructed after undoing these leaves",
+    "no_new_schema_fields": true,
+    "all_existing_image_and_animation_bytes_unchanged": true,
+    "characters": [
+      {
+        "character": "aila",
+        "moments_sha256_before": "fb9d62fe6e8e3c5e17f84691c98dd80243268acf418ea2be95f2d2a3b0cb421a",
+        "moments_sha256_after": "d965d77d33a86c437f958b175a803e41370a5345905fae18da399d966018c779",
+        "bond_characters_including_spaces": 2509,
+        "protected_data_reconstruction": "PASS"
+      },
+      {
+        "character": "harin",
+        "moments_sha256_before": "f2e9ae20244702cb52f02677cf067e61cb3e10c0561e9af9e840e524675a4f28",
+        "moments_sha256_after": "0252cecb3a81fac4cce880487fa0ada1a99ff0129eb8168e40c14283ee0fbbdd",
+        "bond_characters_including_spaces": 2603,
+        "protected_data_reconstruction": "PASS"
+      },
+      {
+        "character": "lumi",
+        "moments_sha256_before": "555538fd012ae269cadaff27a1f1bef8dcb6a04c0a028cae4f8cd983d45768e1",
+        "moments_sha256_after": "ba1d86d78b725f35678143b24a005e6c1eb141c1a3858a21af6fc10f35f054b6",
+        "bond_characters_including_spaces": 2597,
+        "protected_data_reconstruction": "PASS"
+      },
+      {
+        "character": "ravien",
+        "moments_sha256_before": "1ef11367ace8ed1bc02f4d8af967866b5dea06eb52ca332cb16f917a46b831d5",
+        "moments_sha256_after": "fa9802ce5685b304051ab60c559eb554e5fd3e19a47309aae7887cf707a942c1",
+        "bond_characters_including_spaces": 2673,
+        "protected_data_reconstruction": "PASS"
+      },
+      {
+        "character": "sera",
+        "moments_sha256_before": "faac3579ba6bdff2942931aaf629f779eac003bc99cd0444d1972430cd9fa965",
+        "moments_sha256_after": "faac3579ba6bdff2942931aaf629f779eac003bc99cd0444d1972430cd9fa965",
+        "bond_characters_including_spaces": 2378,
+        "protected_data_reconstruction": "PASS"
+      },
+      {
+        "character": "sion",
+        "moments_sha256_before": "490b12d4fb4783709f3d446d9a306bee65a1cc68bf8fd8579f45a8db4f05275a",
+        "moments_sha256_after": "716f958b157449201f128235b89c4ce0928d219a9850bf578c541893e5e4989b",
+        "bond_characters_including_spaces": 2575,
+        "protected_data_reconstruction": "PASS"
+      }
+    ],
+    "scenes": [
+      {
+        "scene": "aila_lobby_01",
+        "beats": 5,
+        "narration_lines_reviewed": 2,
+        "rewritten_narration_beats_1based": [
+          1
+        ],
+        "review": "All narration read sentence by sentence; remaining passages are diegetic action, thought, setting or player response."
+      },
+      {
+        "scene": "aila_bond_01",
+        "beats": 22,
+        "narration_lines_reviewed": 11,
+        "rewritten_narration_beats_1based": [],
+        "review": "All narration read sentence by sentence; remaining passages are diegetic action, thought, setting or player response."
+      },
+      {
+        "scene": "aila_victory_01",
+        "beats": 4,
+        "narration_lines_reviewed": 1,
+        "rewritten_narration_beats_1based": [],
+        "review": "All narration read sentence by sentence; remaining passages are diegetic action, thought, setting or player response."
+      },
+      {
+        "scene": "harin_lobby_01",
+        "beats": 7,
+        "narration_lines_reviewed": 4,
+        "rewritten_narration_beats_1based": [
+          3,
+          5
+        ],
+        "review": "All narration read sentence by sentence; remaining passages are diegetic action, thought, setting or player response."
+      },
+      {
+        "scene": "harin_bond_01",
+        "beats": 33,
+        "narration_lines_reviewed": 17,
+        "rewritten_narration_beats_1based": [
+          33
+        ],
+        "review": "All narration read sentence by sentence; remaining passages are diegetic action, thought, setting or player response."
+      },
+      {
+        "scene": "harin_victory_01",
+        "beats": 5,
+        "narration_lines_reviewed": 3,
+        "rewritten_narration_beats_1based": [
+          1,
+          3,
+          5
+        ],
+        "review": "All narration read sentence by sentence; remaining passages are diegetic action, thought, setting or player response."
+      },
+      {
+        "scene": "lumi_lobby_01",
+        "beats": 5,
+        "narration_lines_reviewed": 2,
+        "rewritten_narration_beats_1based": [
+          2,
+          5
+        ],
+        "review": "All narration read sentence by sentence; remaining passages are diegetic action, thought, setting or player response."
+      },
+      {
+        "scene": "lumi_bond_01",
+        "beats": 22,
+        "narration_lines_reviewed": 11,
+        "rewritten_narration_beats_1based": [],
+        "review": "All narration read sentence by sentence; remaining passages are diegetic action, thought, setting or player response."
+      },
+      {
+        "scene": "lumi_victory_01",
+        "beats": 4,
+        "narration_lines_reviewed": 1,
+        "rewritten_narration_beats_1based": [
+          2
+        ],
+        "review": "All narration read sentence by sentence; remaining passages are diegetic action, thought, setting or player response."
+      },
+      {
+        "scene": "ravien_lobby_01",
+        "beats": 7,
+        "narration_lines_reviewed": 4,
+        "rewritten_narration_beats_1based": [
+          1,
+          3,
+          5,
+          7
+        ],
+        "review": "All narration read sentence by sentence; remaining passages are diegetic action, thought, setting or player response."
+      },
+      {
+        "scene": "ravien_bond_01",
+        "beats": 33,
+        "narration_lines_reviewed": 17,
+        "rewritten_narration_beats_1based": [
+          17,
+          33
+        ],
+        "review": "All narration read sentence by sentence; remaining passages are diegetic action, thought, setting or player response."
+      },
+      {
+        "scene": "ravien_victory_01",
+        "beats": 5,
+        "narration_lines_reviewed": 3,
+        "rewritten_narration_beats_1based": [
+          5
+        ],
+        "review": "All narration read sentence by sentence; remaining passages are diegetic action, thought, setting or player response."
+      },
+      {
+        "scene": "sera_lobby_01",
+        "beats": 5,
+        "narration_lines_reviewed": 0,
+        "rewritten_narration_beats_1based": [],
+        "review": "All narration read sentence by sentence; remaining passages are diegetic action, thought, setting or player response."
+      },
+      {
+        "scene": "sera_bond_01",
+        "beats": 23,
+        "narration_lines_reviewed": 12,
+        "rewritten_narration_beats_1based": [],
+        "review": "All narration read sentence by sentence; remaining passages are diegetic action, thought, setting or player response."
+      },
+      {
+        "scene": "sera_victory_01",
+        "beats": 4,
+        "narration_lines_reviewed": 0,
+        "rewritten_narration_beats_1based": [],
+        "review": "All narration read sentence by sentence; remaining passages are diegetic action, thought, setting or player response."
+      },
+      {
+        "scene": "sion_lobby_01",
+        "beats": 5,
+        "narration_lines_reviewed": 2,
+        "rewritten_narration_beats_1based": [
+          1
+        ],
+        "review": "All narration read sentence by sentence; remaining passages are diegetic action, thought, setting or player response."
+      },
+      {
+        "scene": "sion_bond_01",
+        "beats": 22,
+        "narration_lines_reviewed": 11,
+        "rewritten_narration_beats_1based": [],
+        "review": "All narration read sentence by sentence; remaining passages are diegetic action, thought, setting or player response."
+      },
+      {
+        "scene": "sion_victory_01",
+        "beats": 4,
+        "narration_lines_reviewed": 1,
+        "rewritten_narration_beats_1based": [],
+        "review": "All narration read sentence by sentence; remaining passages are diegetic action, thought, setting or player response."
+      }
+    ],
+    "narration_edits": [
+      {
+        "character": "ravien",
+        "scene": "ravien_lobby_01",
+        "beat_1based": 1,
+        "before": "서류철을 팔에 받친 라비엔이 도장을 한 번 누른다. 몸 전체는 거의 움직이지 않고 손과 눈의 순서로 업무를 끝낸다.",
+        "after": "서류철을 팔에 받친 라비엔이 도장을 한 번 누른다. 도장 자국을 확인하고 서류에서 손을 뗀다.",
+        "non_displayed_direction": "몸 전체는 거의 움직이지 않고 손과 눈의 순서로 업무를 끝낸다.",
+        "direction_location": "ravien/README.md"
+      },
+      {
+        "character": "ravien",
+        "scene": "ravien_lobby_01",
+        "beat_1based": 3,
+        "before": "종이 끝을 손끝으로 반 바퀴 돌려 서류철 안으로 넣는다. 고개가 종이보다 반 박자 늦게 돌아오며 초록 눈이 공방장을 붙든다.",
+        "after": "종이 끝을 손끝으로 반 바퀴 돌려 서류철 안으로 넣는다. 종이를 내려놓고서야 고개를 든다. 초록 눈이 공방장을 붙든다.",
+        "non_displayed_direction": "고개가 종이보다 반 박자 늦게 돌아오도록 한다.",
+        "direction_location": "ravien/README.md"
+      },
+      {
+        "character": "ravien",
+        "scene": "ravien_lobby_01",
+        "beat_1based": 5,
+        "before": "손끝으로 옆 의자를 가리킨 뒤 손을 내린다. 대답을 재촉하지 않고 자기 자리는 그대로 둔다.",
+        "after": "손끝으로 옆 의자를 가리킨 뒤 손을 내린다. 비워 둔 자리를 사이에 두고 공방장의 대답을 기다린다.",
+        "non_displayed_direction": "대답을 재촉하지 않고 자기 자리는 그대로 둔다. 4·5박자는 얼굴·가리키는 손·빈 의자 좌판이 함께 보이는 full/face/none을 유지한다.",
+        "direction_location": "ravien/README.md"
+      },
+      {
+        "character": "ravien",
+        "scene": "ravien_lobby_01",
+        "beat_1based": 7,
+        "before": "라비엔은 몸을 제자리로 돌리고 서류철을 닫아 둔다. 옆 의자는 비워 둔 채, 응답을 받아도 업무 동작으로 되돌리지 않는다.",
+        "after": "라비엔은 몸을 제자리로 돌리고 서류철을 닫아 둔다. 옆 의자는 비워 둔 채, 닫힌 서류철에는 손을 대지 않고 공방장에게 시선을 둔다.",
+        "non_displayed_direction": "응답을 받아도 업무 동작으로 되돌리지 않는다.",
+        "direction_location": "ravien/README.md"
+      },
+      {
+        "character": "ravien",
+        "scene": "ravien_bond_01",
+        "beat_1based": 17,
+        "before": "저울 펜던트를 만지던 손이 멈춘다. 붉은 넥타이의 매듭은 원래처럼 느슨하고, 드러난 목선 위로 저녁빛이 옅게 걸린다. 카메라는 얼굴과 손을 함께 두고, 그녀가 말을 고르는 시간을 자르지 않는다.",
+        "after": "저울 펜던트를 만지던 손이 멈춘다. 붉은 넥타이의 매듭은 원래처럼 느슨하고, 드러난 목선 위로 저녁빛이 옅게 걸린다. 그녀는 대답을 서두르지 않고 공방장의 눈을 보며 다음 말을 고른다.",
+        "non_displayed_direction": "카메라는 얼굴과 손을 함께 두고, 그녀가 말을 고르는 시간을 자르지 않는다.",
+        "direction_location": "ravien/README.md"
+      },
+      {
+        "character": "ravien",
+        "scene": "ravien_bond_01",
+        "beat_1based": 33,
+        "before": "공방장의 대답을 듣는 동안 라비엔의 눈가가 부드러워진다. 그녀는 이제 새로운 조건을 찾지 않는다. 나란한 두 사람이 문으로 향하는 데서 장면이 닫힌다. 책상 위 빈 종이는 어떤 약속도 대신하지 않은 채 남는다.",
+        "after": "공방장의 대답을 듣는 동안 라비엔의 눈가가 부드러워진다. 그녀는 이제 새로운 조건을 찾지 않는다. 두 사람은 나란히 문으로 향한다. 책상 위 빈 종이는 어떤 약속도 대신하지 않은 채 남는다.",
+        "non_displayed_direction": "나란한 두 사람이 문으로 향하는 데서 장면이 닫힌다.",
+        "direction_location": "ravien/README.md"
+      },
+      {
+        "character": "ravien",
+        "scene": "ravien_victory_01",
+        "beat_1based": 5,
+        "before": "라비엔은 서류철을 옆구리에 끼우고 열린 손을 편하게 내린다. 기다리는 눈웃음으로 끝내며 윙크하거나 카메라에 입술을 들이밀지 않는다.",
+        "after": "라비엔은 서류철을 옆구리에 끼우고 열린 손을 편하게 내린다. 눈가에 옅은 웃음을 남긴 채 공방장의 대답을 기다린다.",
+        "non_displayed_direction": "기다리는 눈웃음으로 끝내며 윙크하거나 카메라에 입술을 들이밀지 않는다.",
+        "direction_location": "ravien/README.md"
+      },
+      {
+        "character": "harin",
+        "scene": "harin_lobby_01",
+        "beat_1based": 3,
+        "before": "인형을 손으로 덮었다가 급히 넣는 핵심 포즈로 전환한다. 눈은 공방장을 피하고 손을 뗀 뒤 낮게 헛기침한다.",
+        "after": "인형을 손으로 덮었다가 급히 주머니 안으로 밀어 넣는다. 공방장의 눈길을 피한 채 손을 떼고 낮게 헛기침한다.",
+        "non_displayed_direction": "인형을 손으로 덮었다가 급히 넣는 핵심 포즈로 전환한다. 눈은 공방장을 피하고 손을 뗀 뒤 낮게 헛기침한다.",
+        "direction_location": "harin/README.md"
+      },
+      {
+        "character": "harin",
+        "scene": "harin_lobby_01",
+        "beat_1based": 5,
+        "before": "인형 귀를 다시 조금 내놓고 손을 내린다. 굳은 입매가 아주 짧게 풀린다. 몸을 숙여 어려 보이게 하지 않는다.",
+        "after": "인형 귀를 다시 조금 내놓고 손을 내린다. 굳은 입매가 아주 짧게 풀린다.",
+        "non_displayed_direction": "몸을 숙여 어려 보이게 하지 않는다.",
+        "direction_location": "harin/README.md"
+      },
+      {
+        "character": "harin",
+        "scene": "harin_bond_01",
+        "beat_1based": 33,
+        "before": "하린은 두 장갑을 벗어 무릎 위에 포갠다. 문 옆 방패와 테이블 위 고양이가 같은 화면에 들어온다. 그녀는 둘 중 어느 쪽도 감추지 않고, 공방장과 마주 앉은 채 짧지만 분명한 미소를 짓는다.",
+        "after": "하린은 두 장갑을 벗어 무릎 위에 포갠다. 문 옆에는 방패가, 테이블 위에는 고양이가 놓여 있다. 그녀는 둘 중 어느 쪽도 감추지 않고, 공방장과 마주 앉은 채 짧지만 분명한 미소를 짓는다.",
+        "non_displayed_direction": "문 옆 방패와 테이블 위 고양이가 같은 화면에 들어온다.",
+        "direction_location": "harin/README.md"
+      },
+      {
+        "character": "harin",
+        "scene": "harin_victory_01",
+        "beat_1based": 1,
+        "before": "하린이 방패로 전방을 가린 자세에서 시작한다. 마지막 충격 뒤 발을 옮기지 않고 먼저 어깨의 힘을 풀며 공방장 쪽을 확인한다.",
+        "after": "하린은 방패로 전방을 가리고 서 있다. 마지막 충격 뒤 발을 옮기지 않고 먼저 어깨의 힘을 풀며 공방장 쪽을 확인한다.",
+        "non_displayed_direction": "방패로 전방을 가린 자세에서 시작한다. 마지막 충격 뒤 발을 고정하고 어깨의 힘을 먼저 푼다.",
+        "direction_location": "harin/README.md"
+      },
+      {
+        "character": "harin",
+        "scene": "harin_victory_01",
+        "beat_1based": 3,
+        "before": "방패를 바깥쪽으로 치워 자기 옆의 길을 연다. 열린 손은 잡아끄는 자세가 아니라, 필요하면 잡을 수 있도록 허리 높이에서 멈춘다.",
+        "after": "방패를 바깥쪽으로 치워 자기 옆의 길을 연다. 다른 손은 허리 높이에서 멈춘 채 공방장을 향해 열린다.",
+        "non_displayed_direction": "열린 손은 잡아끄는 자세가 아니라, 필요하면 잡을 수 있도록 허리 높이에서 멈춘다.",
+        "direction_location": "harin/README.md"
+      },
+      {
+        "character": "harin",
+        "scene": "harin_victory_01",
+        "beat_1based": 5,
+        "before": "하린은 손을 천천히 거두고 나란히 걸을 자세로 발끝을 돌린다. 어깨와 허리가 드러나는 기본 갑주 실루엣, 탄탄한 팔과 긴 망토가 전신 구도에서 함께 읽힌다.",
+        "after": "하린은 손을 천천히 거두고 나란히 걸을 자세로 발끝을 돌린다. 어깨와 허리가 드러나는 갑주 위로 긴 망토가 가라앉고, 탄탄한 팔의 긴장이 풀린다.",
+        "non_displayed_direction": "어깨와 허리가 드러나는 기본 갑주 실루엣, 탄탄한 팔과 긴 망토가 전신 구도에서 함께 읽힌다.",
+        "direction_location": "harin/README.md"
+      },
+      {
+        "character": "aila",
+        "scene": "aila_lobby_01",
+        "beat_1based": 1,
+        "before": "에일라는 장부를 덮고 손끝으로 종을 고른다. 등불을 든 팔은 낮게, 열린 등과 서리 자수는 측후면에서 한 번 읽힌다.",
+        "after": "에일라는 장부를 덮고 손끝으로 종을 고른다. 등불을 낮게 든 채 고개를 돌리자, 열린 등과 서리 자수가 저녁빛을 받는다.",
+        "non_displayed_direction": "등불을 든 팔은 낮게, 열린 등과 서리 자수는 측후면에서 한 번 읽힌다.",
+        "direction_location": "aila/README.md"
+      },
+      {
+        "character": "sion",
+        "scene": "sion_lobby_01",
+        "beat_1based": 1,
+        "before": "시온은 페이지 끝을 들어 올린 채 멈춘다. 장검은 무대 밖 안전한 거치 상태이며 코트 사슬만 작게 흔들린다.",
+        "after": "시온은 페이지 끝을 들어 올린 채 멈춘다. 코트 사슬이 작게 흔들리다가 멎는다.",
+        "non_displayed_direction": "장검은 무대 밖 안전한 거치 상태이며 코트 사슬만 작게 흔들린다.",
+        "direction_location": "sion/README.md"
+      },
+      {
+        "character": "lumi",
+        "scene": "lumi_lobby_01",
+        "beat_1based": 2,
+        "before": "헬멧을 손목 위에서 짧게 돌려 잡는다. 팔에 끼우자 빈손이 생기고, 재킷 자락은 한 박자 늦게 멈춘다.",
+        "after": "헬멧을 손목 위에서 짧게 돌려 잡는다. 팔에 끼우고 손을 비우자, 뒤따라 흔들리던 재킷 자락도 가라앉는다.",
+        "non_displayed_direction": "헬멧을 팔에 끼운 뒤 재킷 자락은 한 박자 늦게 멈춘다.",
+        "direction_location": "lumi/README.md"
+      },
+      {
+        "character": "lumi",
+        "scene": "lumi_lobby_01",
+        "beat_1based": 5,
+        "before": "손바닥을 위로 내밀고 기다린다. 발은 움직이지 않는다. 상대의 답을 재촉하는 끌어당김은 없다.",
+        "after": "손바닥을 위로 내민 루미는 발을 움직이지 않은 채 공방장의 대답을 기다린다.",
+        "non_displayed_direction": "발은 움직이지 않는다. 상대의 답을 재촉하는 끌어당김은 없다.",
+        "direction_location": "lumi/README.md"
+      },
+      {
+        "character": "lumi",
+        "scene": "lumi_victory_01",
+        "beat_1based": 2,
+        "before": "양발이 지면을 잡고 단검은 화면 바깥 안전한 방향으로 낮아진다. 뻗친 머리와 재킷 자락의 잔움직임 뒤에 루미가 돌아본다.",
+        "after": "양발이 지면을 딛자 루미가 두 단검을 몸 바깥쪽으로 낮춘다. 뻗친 머리와 재킷 자락이 가라앉은 뒤, 루미가 고개를 돌려 공방장을 본다.",
+        "non_displayed_direction": "양발이 지면을 잡고 단검은 화면 바깥 안전한 방향으로 낮아진다. 뻗친 머리와 재킷 자락의 잔움직임 뒤에 돌아본다.",
+        "direction_location": "lumi/README.md"
+      }
+    ],
+    "deliberately_preserved_narration": [
+      {
+        "scene": "sera_bond_01",
+        "beat_1based": 11,
+        "reason": "An in-world rifle rack is observable setting, unlike an off-stage production direction."
+      },
+      {
+        "scene": "sera_bond_01",
+        "beat_1based": 15,
+        "reason": "Sera refrains from describing a future scene: foresight and relationship, not camera editing."
+      },
+      {
+        "scene": "lumi_bond_01",
+        "beat_1based": 15,
+        "reason": "Half the alley remaining is story distance, not an acting beat or timing instruction."
+      }
+    ],
+    "not_run": [
+      "Unity import and playback",
+      "Post-fix face/hand/empty-seat visual acceptance and dialogue clearance",
+      "Game code tests, lint, typecheck and build",
+      "Claude independent review (calls explicitly prohibited)"
+    ],
+    "preexisting_release_manifest_check": {
+      "status": "FAIL",
+      "exit_code": 1,
+      "entries": 423,
+      "changed_entries": 32,
+      "timing": "Before source edits; manifest not regenerated"
+    },
+    "evidence_reviewed": [
+      "art/requests/moments-visual-review-20261018.md",
+      "reports/lobby_moments_20261018/all_lobby/ravien_3.png",
+      "art/moments/ravien/images/char_ravien_chair_offer_happy_v01.png"
+    ]
+  }
+}

@@ -1,0 +1,174 @@
+Time: 2026-10-14T23:24:11.259720+00:00
+Command: node --test --test-reporter=tap engine/tests/battle_receipt_keys.test.mjs
+Exit: 0
+
+TAP version 13
+# Subtest: request ID "ordinary-request" stores and replays a detached response after version advance
+ok 1 - request ID "ordinary-request" stores and replays a detached response after version advance
+  ---
+  duration_ms: 3.8155
+  type: 'test'
+  ...
+# Subtest: rejected request ID "ordinary-request" remains available for a corrected command
+ok 2 - rejected request ID "ordinary-request" remains available for a corrected command
+  ---
+  duration_ms: 0.452334
+  type: 'test'
+  ...
+# Subtest: request ID "constructor" stores and replays a detached response after version advance
+ok 3 - request ID "constructor" stores and replays a detached response after version advance
+  ---
+  duration_ms: 0.57475
+  type: 'test'
+  ...
+# Subtest: rejected request ID "constructor" remains available for a corrected command
+ok 4 - rejected request ID "constructor" remains available for a corrected command
+  ---
+  duration_ms: 0.340125
+  type: 'test'
+  ...
+# Subtest: request ID "__defineGetter__" stores and replays a detached response after version advance
+ok 5 - request ID "__defineGetter__" stores and replays a detached response after version advance
+  ---
+  duration_ms: 1.439416
+  type: 'test'
+  ...
+# Subtest: rejected request ID "__defineGetter__" remains available for a corrected command
+ok 6 - rejected request ID "__defineGetter__" remains available for a corrected command
+  ---
+  duration_ms: 0.253875
+  type: 'test'
+  ...
+# Subtest: request ID "__defineSetter__" stores and replays a detached response after version advance
+ok 7 - request ID "__defineSetter__" stores and replays a detached response after version advance
+  ---
+  duration_ms: 0.336458
+  type: 'test'
+  ...
+# Subtest: rejected request ID "__defineSetter__" remains available for a corrected command
+ok 8 - rejected request ID "__defineSetter__" remains available for a corrected command
+  ---
+  duration_ms: 0.192209
+  type: 'test'
+  ...
+# Subtest: request ID "hasOwnProperty" stores and replays a detached response after version advance
+ok 9 - request ID "hasOwnProperty" stores and replays a detached response after version advance
+  ---
+  duration_ms: 0.328125
+  type: 'test'
+  ...
+# Subtest: rejected request ID "hasOwnProperty" remains available for a corrected command
+ok 10 - rejected request ID "hasOwnProperty" remains available for a corrected command
+  ---
+  duration_ms: 0.250416
+  type: 'test'
+  ...
+# Subtest: request ID "__lookupGetter__" stores and replays a detached response after version advance
+ok 11 - request ID "__lookupGetter__" stores and replays a detached response after version advance
+  ---
+  duration_ms: 0.296084
+  type: 'test'
+  ...
+# Subtest: rejected request ID "__lookupGetter__" remains available for a corrected command
+ok 12 - rejected request ID "__lookupGetter__" remains available for a corrected command
+  ---
+  duration_ms: 0.185
+  type: 'test'
+  ...
+# Subtest: request ID "__lookupSetter__" stores and replays a detached response after version advance
+ok 13 - request ID "__lookupSetter__" stores and replays a detached response after version advance
+  ---
+  duration_ms: 0.273791
+  type: 'test'
+  ...
+# Subtest: rejected request ID "__lookupSetter__" remains available for a corrected command
+ok 14 - rejected request ID "__lookupSetter__" remains available for a corrected command
+  ---
+  duration_ms: 0.204458
+  type: 'test'
+  ...
+# Subtest: request ID "isPrototypeOf" stores and replays a detached response after version advance
+ok 15 - request ID "isPrototypeOf" stores and replays a detached response after version advance
+  ---
+  duration_ms: 0.30975
+  type: 'test'
+  ...
+# Subtest: rejected request ID "isPrototypeOf" remains available for a corrected command
+ok 16 - rejected request ID "isPrototypeOf" remains available for a corrected command
+  ---
+  duration_ms: 1.3545
+  type: 'test'
+  ...
+# Subtest: request ID "propertyIsEnumerable" stores and replays a detached response after version advance
+ok 17 - request ID "propertyIsEnumerable" stores and replays a detached response after version advance
+  ---
+  duration_ms: 0.47325
+  type: 'test'
+  ...
+# Subtest: rejected request ID "propertyIsEnumerable" remains available for a corrected command
+ok 18 - rejected request ID "propertyIsEnumerable" remains available for a corrected command
+  ---
+  duration_ms: 0.2885
+  type: 'test'
+  ...
+# Subtest: request ID "toString" stores and replays a detached response after version advance
+ok 19 - request ID "toString" stores and replays a detached response after version advance
+  ---
+  duration_ms: 0.406541
+  type: 'test'
+  ...
+# Subtest: rejected request ID "toString" remains available for a corrected command
+ok 20 - rejected request ID "toString" remains available for a corrected command
+  ---
+  duration_ms: 0.221417
+  type: 'test'
+  ...
+# Subtest: request ID "valueOf" stores and replays a detached response after version advance
+ok 21 - request ID "valueOf" stores and replays a detached response after version advance
+  ---
+  duration_ms: 0.853834
+  type: 'test'
+  ...
+# Subtest: rejected request ID "valueOf" remains available for a corrected command
+ok 22 - rejected request ID "valueOf" remains available for a corrected command
+  ---
+  duration_ms: 0.229084
+  type: 'test'
+  ...
+# Subtest: request ID "__proto__" stores and replays a detached response after version advance
+ok 23 - request ID "__proto__" stores and replays a detached response after version advance
+  ---
+  duration_ms: 0.287208
+  type: 'test'
+  ...
+# Subtest: rejected request ID "__proto__" remains available for a corrected command
+ok 24 - rejected request ID "__proto__" remains available for a corrected command
+  ---
+  duration_ms: 0.816625
+  type: 'test'
+  ...
+# Subtest: request ID "toLocaleString" stores and replays a detached response after version advance
+ok 25 - request ID "toLocaleString" stores and replays a detached response after version advance
+  ---
+  duration_ms: 0.338542
+  type: 'test'
+  ...
+# Subtest: rejected request ID "toLocaleString" remains available for a corrected command
+ok 26 - rejected request ID "toLocaleString" remains available for a corrected command
+  ---
+  duration_ms: 0.187917
+  type: 'test'
+  ...
+1..26
+# tests 26
+# suites 0
+# pass 26
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 122.078583
+
+Command: node --check engine/rules-core.js
+Exit: 0
+Output: (empty)

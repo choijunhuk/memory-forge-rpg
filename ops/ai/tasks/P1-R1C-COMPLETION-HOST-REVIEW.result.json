@@ -1,0 +1,28 @@
+{
+  "task_id": "P1-R1C-COMPLETION-HOST-REVIEW",
+  "run_id": "P1-R1C-COMPLETION-HOST-REVIEW-20261015T201622320571Z",
+  "status": "RECEIVED_UNVERIFIED",
+  "requestedEffort": "xhigh",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "changes_verified": false,
+  "raw_output": "ops/ai/local/P1-R1C-COMPLETION-HOST-REVIEW-20261015T201622320571Z*",
+  "billing_verified_at": "2026-10-14T21:44:57.439760+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "codex/csharp-battle-opening",
+  "base_commit": "2ffc29ecdbdeee5027258ad6f73302b98820fc35",
+  "worktree": "/Users/choi/.codex/worktrees/csharp-battle-opening/Memory_forge",
+  "allowed_files": [
+    "reports/run_memory_core_20261016/host_opposite_review.md"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "c1b34a4b-d227-4de8-9504-bb76ae06d41a",
+  "subtype": "success",
+  "is_error": false,
+  "result": "I'm not approving this yet: there's one blocker, and the v2 save case can't finish with the current host. I ran nothing (no build, tests, JS or Unity); every finding comes from reading the code. The full review is in `reports/run_memory_core_20261016/host_opposite_review.md`, the only file I edited.\n\n**P1 (blocker, a host problem, not a Core defect)**\n- **What's wrong:** for v2, the recorded `commitMemory` command has two arguments: the request and the store. The generator records it that way (`tools/gen_traces.mjs:169-170`), and JS takes both (`rules-core.js:1977`).\n- **Where the host breaks:** it only accepts one argument (`RunProgressionChecks.cs:583-585`). The error it throws isn't caught at :494, so case `seed1102-full-v2` fails at its last step (#221).\n- **What the run will show:** matched 2683/2684, committed 1369/1370, completed cases 4/5, save-derived reloads 4/5. The v2 store and reload paths never run. This shows up as a failure, not a false pass.\n- **Fix:**\n  - Pick the argument count by memory policy: 2 for v2, 1 for legacy.\n  - Use the second argument only for comparison: check it equals the host's actual store.\n  - Keep passing the host's actual store to `CommitMemory`, never the recorded one.\n\n**P2**\n- **Unsupported Unity claim:** the new report line at :163 says \"Assign separately checked in Unity\", but nothing in this tree calls `Run.Assign`, Unity tests included. Restore the earlier wording (\"Assign 0 attempts (not in the gen_traces vocabulary)\") or cite a real Unity test.\n- **Dropped disclaimer:** \"RuleError name/message/detail unclaimed (code only)\" was removed, but the host still checks only error codes. Put it back.\n\n**P3 (not blocking)**\n- Nothing checks that a commit leaves the caller's input store unchanged. Core is correct today because it deep-copies, but a future regression would go unnoticed.\n- The new commit-result and reload comparisons have no negative test proving they reject a forged value. All 22 existing probes are kept; this fits the planned Run-memory negative test task.\n- Several comments and labels are stale or contradictory, e.g. :49 still says \"commitMemory alone still stops a case\".\n- JS returns the saved memory as the same object it stores; C# returns a copy. Core documents this, but the host comment doesn't.\n- The legacy committed/rejected split (182528/90976), battle and archive counts are printed but not checked against fixed values. Report them as observed counts.\n\n**Checked and fine:** the count literals add up and weren't weakened. No expected value is used as actual state or store input. The v2 store is copied before the mutation probe, so the host's own alias can't cause a false failure. The reload input comes from the actual saved memory and store version, and the JS reload data is only compared. Completion counting requires every command to pass. The legacy final state is compared in canonical form (log/ev dropped). Schema, status and contract stay unchanged.\n\n**Couldn't check:** this worktree has an older `TraceHashChecks.cs` without the callback version of `ReadSnapshots` that the host calls at :789-791. So I couldn't confirm the legacy trace reaches the host with `finalState` intact. If it doesn't, all 1000 traces would fail rather than falsely pass.\n\n**Next:** fix P1 (and P2), rebuild fresh, re-run, and send the P1 change back for a short re-review. I can't see this session's ID or the effort level actually applied; Root's CLI record has both.",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ]
+}

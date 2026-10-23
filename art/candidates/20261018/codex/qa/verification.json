@@ -1,0 +1,27 @@
+{
+  "status": "PASS",
+  "checks": [
+    "All13 zone1 definitions have matching sprites",
+    "All3 selected backgrounds exist",
+    "Named controls present in layout",
+    "Enemy geometry for counts1–5 inside canvas",
+    "Core vertical battle bands do not overlap",
+    "All14 preview text-fit logs empty",
+    "Every image decodes",
+    "Enemy alpha spans0–255 with transparent pixels",
+    "Six approved reference copies byte-identical",
+    "Text/panel colour contrast>=4.5"
+  ],
+  "contrast_ratios": {
+    "ink": 14.55,
+    "muted": 6.84,
+    "brass": 8.81,
+    "memory": 9.64,
+    "danger": 6.25
+  },
+  "files_hashed": 65,
+  "not_run": [
+    "Unity, device, gameplay tests, physical dp/sp,115/130% runtime text"
+  ],
+  "check_scope": "art handoff only; no game code or root tests executed"
+}

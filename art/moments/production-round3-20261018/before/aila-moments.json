@@ -1,0 +1,937 @@
+{
+  "format": "memory-forge-moments/1",
+  "character": "aila",
+  "status": "draft",
+  "images": {
+    "fig_neutral": "moments/aila/images/char_aila_moment_neutral_v02.png",
+    "fig_action1": "moments/aila/images/char_aila_moment_action1_v02.png",
+    "fig_action2": "moments/aila/images/char_aila_moment_action2_v02.png",
+    "fig_happy": "moments/aila/images/char_aila_moment_happy_v02.png",
+    "fig_worried": "moments/aila/images/char_aila_moment_worried_v01.png",
+    "fig_surprised": "moments/aila/images/char_aila_moment_surprised_v01.png",
+    "fig_determined": "moments/aila/images/char_aila_moment_determined_v01.png",
+    "fig_soft": "moments/aila/images/char_aila_moment_soft_v02.png",
+    "expr_neutral": "moments/aila/images/char_aila_expression_neutral_v01.png",
+    "expr_happy": "moments/aila/images/char_aila_expression_happy_v01.png",
+    "expr_annoyed": "moments/aila/images/char_aila_expression_annoyed_v01.png",
+    "expr_surprised": "moments/aila/images/char_aila_expression_surprised_v01.png",
+    "expr_worried": "moments/aila/images/char_aila_expression_worried_v01.png",
+    "expr_determined": "moments/aila/images/char_aila_expression_determined_v01.png",
+    "bg": "moments/aila/images/char_aila_background_archive_evening_v01.png",
+    "fig_victory_check": "moments/aila/images/char_aila_moment_victory_check_v01.png",
+    "fig_victory_turn": "moments/aila/images/char_aila_moment_victory_turn_v01.png",
+    "fig_victory_notice": "moments/aila/images/char_aila_moment_victory_notice_v01.png",
+    "fig_victory_wait": "moments/aila/images/char_aila_moment_victory_wait_v01.png"
+  },
+  "anchors": {
+    "fig_neutral": {
+      "face": [
+        0.53,
+        0.1
+      ],
+      "body": [
+        0.53,
+        0.5
+      ],
+      "hands": [
+        0.42,
+        0.51
+      ]
+    },
+    "fig_action1": {
+      "face": [
+        0.51,
+        0.09
+      ],
+      "body": [
+        0.51,
+        0.5
+      ],
+      "hands": [
+        0.8,
+        0.14
+      ]
+    },
+    "fig_action2": {
+      "face": [
+        0.43,
+        0.105
+      ],
+      "body": [
+        0.43,
+        0.5
+      ],
+      "hands": [
+        0.27,
+        0.28
+      ]
+    },
+    "fig_happy": {
+      "face": [
+        0.53,
+        0.105
+      ],
+      "body": [
+        0.53,
+        0.5
+      ],
+      "hands": [
+        0.29,
+        0.41
+      ]
+    },
+    "fig_worried": {
+      "face": [
+        0.5,
+        0.17
+      ],
+      "body": [
+        0.5,
+        0.5
+      ],
+      "hands": [
+        0.48,
+        0.55
+      ]
+    },
+    "fig_surprised": {
+      "face": [
+        0.5,
+        0.17
+      ],
+      "body": [
+        0.5,
+        0.5
+      ],
+      "hands": [
+        0.48,
+        0.55
+      ]
+    },
+    "fig_determined": {
+      "face": [
+        0.5,
+        0.17
+      ],
+      "body": [
+        0.5,
+        0.5
+      ],
+      "hands": [
+        0.48,
+        0.55
+      ]
+    },
+    "fig_soft": {
+      "face": [
+        0.53,
+        0.105
+      ],
+      "body": [
+        0.53,
+        0.5
+      ],
+      "hands": [
+        0.43,
+        0.49
+      ]
+    },
+    "fig_victory_check": {
+      "face": [
+        0.5,
+        0.17
+      ],
+      "body": [
+        0.5,
+        0.5
+      ],
+      "hands": [
+        0.48,
+        0.55
+      ]
+    },
+    "fig_victory_turn": {
+      "face": [
+        0.5,
+        0.17
+      ],
+      "body": [
+        0.5,
+        0.5
+      ],
+      "hands": [
+        0.48,
+        0.55
+      ]
+    },
+    "fig_victory_notice": {
+      "face": [
+        0.5,
+        0.17
+      ],
+      "body": [
+        0.5,
+        0.5
+      ],
+      "hands": [
+        0.48,
+        0.55
+      ]
+    },
+    "fig_victory_wait": {
+      "face": [
+        0.5,
+        0.17
+      ],
+      "body": [
+        0.5,
+        0.5
+      ],
+      "hands": [
+        0.48,
+        0.55
+      ]
+    }
+  },
+  "motions": {
+    "stage_settle": {
+      "tracks": {
+        "figure": [
+          {
+            "t": 0,
+            "x": 0,
+            "y": 0,
+            "rot": 0,
+            "scale": 1,
+            "alpha": 1
+          },
+          {
+            "t": 0.35,
+            "x": 0,
+            "y": -3,
+            "rot": 0,
+            "scale": 1,
+            "alpha": 1
+          },
+          {
+            "t": 0.75,
+            "x": 0,
+            "y": 0,
+            "rot": 0,
+            "scale": 1,
+            "alpha": 1
+          }
+        ]
+      },
+      "loop": false,
+      "ease": "inOut"
+    }
+  },
+  "scenes": [
+    {
+      "id": "aila_lobby_01",
+      "kind": "lobby",
+      "title": "차보다 먼저 고른 자리",
+      "trigger": {
+        "on": "tap",
+        "note": "로비의 캐릭터 선택 후 명시적 반응 재생. 반복 탭으로 신체를 평가하는 분기 없음."
+      },
+      "why": "업무를 핑계로 쉬게 해 주는 대신 자신이 같이 있고 싶어서 상대를 불러 세운다.",
+      "intent": "시작: 장부를 덮고 측후면에서 종을 고른다. 핵심: 종 한 번→옆자리로 찻잔→눈맞춤. 끝: 의자 등받이에 손을 얹은 초대 자세. 등 노출 로브와 옆트임은 원형 유지, 시선의 종착점은 얼굴. 의상 확인용 측후면은 짧게, 카메라는 얼굴·손·찻잔의 관계를 읽는다.",
+      "assets": [
+        {
+          "key": "bg",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_action1",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_action2",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_happy",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_neutral",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_soft",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "stage_settle",
+          "type": "motion",
+          "status": "ready"
+        },
+        {
+          "key": "voice_aila_short_recording",
+          "type": "voice",
+          "status": "todo"
+        }
+      ],
+      "input": {
+        "skippable": true,
+        "advance": "tap",
+        "repeatable": true,
+        "cooldown_s": 10
+      },
+      "stage": {
+        "background": "bg",
+        "music": "silence"
+      },
+      "beats": [
+        {
+          "figure": "fig_neutral",
+          "gaze": "down",
+          "camera": {
+            "shot": "full",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": null,
+            "text": "에일라는 장부를 덮고 손끝으로 종을 고른다. 등불을 낮게 든 채 고개를 돌리자, 열린 등과 서리 자수가 저녁빛을 받는다.",
+            "tone": "무성 지문. 장부를 덮은 정면 3/4, 어깨 편안, 입가 중립"
+          },
+          "hold": 0.55
+        },
+        {
+          "figure": "fig_action1",
+          "gaze": "side",
+          "camera": {
+            "shot": "medium",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": "aila",
+            "text": "잠깐만요. 이번에는 기록 때문이 아니에요.",
+            "tone": "차분한 중음, 종이 그친 뒤 말 시작"
+          },
+          "hold": 0.9
+        },
+        {
+          "figure": "fig_action2",
+          "gaze": "down",
+          "camera": {
+            "shot": "medium",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": null,
+            "text": "찻잔을 빈 옆자리 앞으로 옮긴다. 손을 거둔 뒤에도 기다리고, 어깨보다 먼저 눈이 공방장에게 돌아간다.",
+            "tone": "무성 지문. 손가락과 찻잔 받침을 분리해 읽을 수 있는 책상 옆 자세, 잔을 옆자리 쪽으로 옮기는 키포즈"
+          },
+          "hold": 0.55
+        },
+        {
+          "figure": "fig_happy",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "push_in",
+            "duration": 0.55
+          },
+          "line": {
+            "speaker": "aila",
+            "text": "제가 같이 있고 싶어서 불렀어요. 이 자리는 공방장이 앉아 줬으면 해요.",
+            "tone": "미소를 크게 올리지 않고 이유를 또렷하게"
+          },
+          "hold": 0.9,
+          "motion": "stage_settle"
+        },
+        {
+          "figure": "fig_soft",
+          "gaze": "player",
+          "camera": {
+            "shot": "medium",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": "aila",
+            "text": "차가 식는 건 괜찮아요. 대답은 기다릴 수 있으니까.",
+            "tone": "조금 장난스럽게, 선택을 재촉하지 않는 끝맺음"
+          },
+          "hold": 0.9
+        }
+      ]
+    },
+    {
+      "id": "aila_bond_01",
+      "kind": "bond",
+      "title": "비어 있는 서랍",
+      "trigger": {
+        "on": "event",
+        "note": "기존 인연 에피소드 「비어 있는 서랍」를 현재 구현의 해금 상태에서 선택할 때. 새 인연 레벨·소모·보상·해금 정책을 정하지 않는다."
+      },
+      "why": "비어 있는 자기 서랍 앞에서 설명을 강요받지 않고, 자신이 고른 평범한 저녁 한 장을 먼저 남겨 본다.",
+      "intent": "기존 인연 1화 제목 안의 완결 초안. 시작: 에일라가 먼저 의자를 당겨 차에 초대. 핵심: 빈 서랍의 불편함을 말하고 자신이 먼저 초대한 오늘의 문장을 쓴다. 끝: 한 장을 보관한 뒤 옆자리에서 다음 잔을 청한다. 서랍이 빈 과거의 이유·상실의 정답·기억 회복은 새로 확정하지 않는다.",
+      "assets": [
+        {
+          "key": "bg",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_action1",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_action2",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_determined",
+          "type": "image",
+          "status": "todo"
+        },
+        {
+          "key": "fig_happy",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_neutral",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_soft",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_surprised",
+          "type": "image",
+          "status": "todo"
+        },
+        {
+          "key": "fig_worried",
+          "type": "image",
+          "status": "todo"
+        },
+        {
+          "key": "stage_settle",
+          "type": "motion",
+          "status": "ready"
+        },
+        {
+          "key": "voice_aila_bond_recording",
+          "type": "voice",
+          "status": "todo"
+        }
+      ],
+      "input": {
+        "skippable": true,
+        "advance": "tap",
+        "repeatable": true,
+        "cooldown_s": 0
+      },
+      "stage": {
+        "background": "bg",
+        "music": "silence"
+      },
+      "beats": [
+        {
+          "figure": "fig_neutral",
+          "gaze": "side",
+          "camera": {
+            "shot": "full",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": null,
+            "text": "기록소의 마지막 창에 저녁빛이 걸렸다. 에일라는 정리하던 장부를 덮고 공방장을 불렀다. 평소라면 돌려보냈을 시간이었다. 오늘은 책상 옆 의자를 먼저 당겼다. 넓은 소매가 손등에서 흘러내리자, 그녀는 손목으로 천을 가볍게 모았다.",
+            "tone": "무성 지문. 장부를 덮은 정면 3/4, 어깨 편안, 입가 중립"
+          },
+          "hold": 0.8
+        },
+        {
+          "figure": "fig_happy",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": "aila",
+            "text": "잠깐만요. 오늘은 제가 먼저 붙잡을게요. 다친 곳을 보려는 건 아니에요. 기록을 도와 달라는 것도 아니고요. 별일이 있어야만 같이 있을 수 있는 건 아니잖아요. 차가 식기 전에, 여기 앉아 줄래요?",
+            "tone": "따뜻한 중음. 자기 선택을 또렷이, 명령처럼 누르지 않음."
+          },
+          "hold": 1.0
+        },
+        {
+          "figure": "fig_action2",
+          "gaze": "side",
+          "camera": {
+            "shot": "medium",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": null,
+            "text": "등불은 책상 가운데에 놓였다. 에일라가 의자를 돌리는 동안 땋은 머리가 어깨 앞으로 넘어왔다. 열린 등 로브의 서리 자수가 창빛을 받았다가 사라졌다. 그녀는 그 시선을 피하지 않고 찻잔 두 개의 간격을 조금 좁혔다.",
+            "tone": "무성 지문. 손가락과 찻잔 받침을 분리해 읽을 수 있는 책상 옆 자세, 잔을 옆자리 쪽으로 옮기는 키포즈"
+          },
+          "hold": 0.8
+        },
+        {
+          "figure": "fig_happy",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": "aila",
+            "text": "그렇게 어려운 부탁을 들은 얼굴은 하지 말아요. 오늘 기록은 여기까지예요. 제가 정했어요. 공방장이 쉬어야 해서가 아니라, 제가 공방장과 차를 마시고 싶어서요. 두 이유는 조금 다르죠?",
+            "tone": "따뜻한 중음. 상대의 반응을 기다리는 쉼 0.4초, 눈이 먼저 웃고 입가가 따름"
+          },
+          "hold": 1.0
+        },
+        {
+          "figure": "fig_worried",
+          "gaze": "down",
+          "camera": {
+            "shot": "medium",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": null,
+            "text": "의자가 바닥을 짧게 스쳤다. 공방장이 맞은편에 앉자 에일라는 아래쪽 서랍에 닿아 있던 손을 거두었다. 반쯤 열린 칸에는 종이 한 장 없었다. 공방장은 들여다보려 몸을 기울이는 대신, 제 찻잔을 조용히 옆으로 옮겼다.",
+            "tone": "무성 지문. 자기 서랍 앞에서 손끝이 멈춘 모습, 눈썹 안쪽만 모이는 걱정"
+          },
+          "hold": 0.8
+        },
+        {
+          "figure": "fig_worried",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": "aila",
+            "text": "봤네요. 제 서랍이에요. 비어 있다는 것까지는 숨길 생각이 없었는데, 보여 드리는 건 조금 떨리네요. 무슨 일이 있었는지 지금 다 설명할 자신은 없어요. 오늘은 모르는 채로 옆에 있어도 괜찮을까요?",
+            "tone": "따뜻한 중음. 상대의 반응을 기다리는 쉼 0.4초, 자기 서랍 앞에서 눈썹 안쪽만 모임"
+          },
+          "hold": 1.0
+        },
+        {
+          "figure": "fig_worried",
+          "gaze": "player",
+          "camera": {
+            "shot": "medium",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": null,
+            "text": "공방장은 고개를 끄덕이고 서랍의 손잡이에서 눈을 뗐다. 무언가 답해야 한다는 기색도 없었다. 에일라의 손끝이 손잡이를 한 번 따라갔다. 웃음은 남아 있었지만 눈썹 안쪽이 작게 모였다. 등불의 종은 울리지 않았다.",
+            "tone": "무성 지문. 자기 서랍 앞에서 손끝이 멈춘 모습, 눈썹 안쪽만 모이는 걱정"
+          },
+          "hold": 0.8
+        },
+        {
+          "figure": "fig_worried",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": "aila",
+            "text": "다른 사람의 기록을 정리할 때는, 남겨 둘 자리를 잘 찾아요. 그런데 제 것 앞에서는 자꾸 손이 멈춰요. 빈칸을 채워야 한다는 말부터 떠올라서요. 무엇을 적고 싶은지는 아직 묻지도 않았는데.",
+            "tone": "따뜻한 중음. 상대의 반응을 기다리는 쉼 0.4초, 자기 서랍 앞에서 눈썹 안쪽만 모임"
+          },
+          "hold": 1.0
+        },
+        {
+          "figure": "fig_action1",
+          "gaze": "down",
+          "camera": {
+            "shot": "medium",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": null,
+            "text": "공방장은 책상 위에 있던 빈 종이를 그녀 쪽으로 밀었다가, 손을 멈췄다. 허락을 기다리는 거리였다. 에일라는 종이 끝에 손가락을 대고 자기 쪽으로 가져왔다. 누군가 정답을 써 주지 않은 것이 오히려 마음을 놓이게 했다.",
+            "tone": "무성 지문. 등불 손잡이의 작은 종을 손목으로 한 번 흔드는 3/4 측후면, 고개만 상대 방향"
+          },
+          "hold": 0.8
+        },
+        {
+          "figure": "fig_soft",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "push_in",
+            "duration": 0.55
+          },
+          "line": {
+            "speaker": "aila",
+            "text": "고마워요. 대신 쓰지 않고 기다려 줘서요. 기록관이니까 첫 문장쯤은 근사하게 고를 줄 알았는데, 막상 제 차례가 되니 어렵네요. 지금 차가 조금 진하다는 이야기부터 적으면 너무 사소할까요?",
+            "tone": "따뜻한 중음. 상대의 반응을 기다리는 쉼 0.4초, 눈이 먼저 웃고 입가가 따름"
+          },
+          "hold": 1.0
+        },
+        {
+          "figure": "fig_surprised",
+          "gaze": "side",
+          "camera": {
+            "shot": "medium",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": null,
+            "text": "공방장이 찻잔을 들어 맛을 보더니 작게 눈을 찡그렸다. 에일라는 입술을 다물어 웃음을 참다가 결국 어깨를 한 번 떨었다. 엄숙해질 뻔한 책상에 잠깐 가벼운 숨이 돌았다. 그녀는 찻주전자를 들어 두 잔에 물을 조금씩 더했다.",
+            "tone": "무성 지문. 칭찬 뒤 눈이 조금 커지고 입술이 열렸다 닫히는 놀람"
+          },
+          "hold": 0.8
+        },
+        {
+          "figure": "fig_happy",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": "aila",
+            "text": "그 표정은 기록해야겠어요. 아, 놀리는 건 아니에요. 저만 긴장하고 있는 줄 알았는데 공방장도 차 앞에서는 솔직하네요. 완벽하게 준비한 저녁이 아니어도, 같이 웃을 수는 있겠어요.",
+            "tone": "따뜻한 중음. 상대의 반응을 기다리는 쉼 0.4초, 눈이 먼저 웃고 입가가 따름"
+          },
+          "hold": 1.0
+        },
+        {
+          "figure": "fig_action2",
+          "gaze": "player",
+          "camera": {
+            "shot": "medium",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": null,
+            "text": "펜을 든 손이 종이 위에서 머뭇거렸다. 에일라는 잔을 고치느라 빠져나온 머리 한 가닥을 귀 뒤로 넘겼다. 이번에는 서랍을 보지 않고 공방장을 보았다. 다정한 눈빛 안에 답을 기다리는 단호함이 조금 섞였다.",
+            "tone": "무성 지문. 손가락과 찻잔 받침을 분리해 읽을 수 있는 책상 옆 자세, 잔을 옆자리 쪽으로 옮기는 키포즈"
+          },
+          "hold": 0.8
+        },
+        {
+          "figure": "fig_determined",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": "aila",
+            "text": "한 가지 부탁을 더 해도 될까요? 제가 오늘을 적는 동안 돌아갈 시간부터 세지 말아 줘요. 오래 붙잡겠다는 뜻은 아니에요. 다만 이 시간이 다른 일 사이에 끼인 빈칸은 아니었으면 해요. 저는 일부러 골랐거든요.",
+            "tone": "따뜻한 중음. 자기 선택을 또렷이, 명령처럼 누르지 않음."
+          },
+          "hold": 1.0
+        },
+        {
+          "figure": "fig_soft",
+          "gaze": "down",
+          "camera": {
+            "shot": "medium",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": null,
+            "text": "공방장은 소매를 정리하고 의자 깊숙이 앉았다. 에일라는 그 작은 움직임을 오래 보았다. 서두르지 않겠다는 대답이 말보다 먼저 전해졌다. 그녀의 입가에서 힘이 풀리고, 펜촉이 마침내 종이에 닿았다.",
+            "tone": "무성 지문. 마주 보는 옆자리에서 긴장이 풀린 미소, 잔은 안전하게 내려놓음"
+          },
+          "hold": 0.8
+        },
+        {
+          "figure": "fig_surprised",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": "aila",
+            "text": "오늘, 같이 차를 마시자고 먼저 말했다. 이렇게 시작할래요. 상대가 왜냐고 묻기 전에 이유도 말했다. 쓰고 보니 조금 용감해 보이네요. 실제로는 지금도 떨리는데요. 그건 공방장만 알고 있어요.",
+            "tone": "따뜻한 중음. 상대의 반응을 기다리는 쉼 0.4초, 편안한 중립, 눈꼬리 부드러움"
+          },
+          "hold": 1.0
+        },
+        {
+          "figure": "fig_worried",
+          "gaze": "player",
+          "camera": {
+            "shot": "medium",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": null,
+            "text": "그녀는 적은 문장을 가리지 않았다. 종이를 돌려 내밀자 펜 끝에 맺힌 잉크가 작게 빛났다. 공방장이 읽는 동안 에일라는 찻잔 손잡이만 바라보았다. 아까 먼저 앉으라고 했던 사람이 이번에는 반응을 기다리고 있었다.",
+            "tone": "무성 지문. 자기 서랍 앞에서 손끝이 멈춘 모습, 눈썹 안쪽만 모이는 걱정"
+          },
+          "hold": 0.8
+        },
+        {
+          "figure": "fig_soft",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "push_in",
+            "duration": 0.55
+          },
+          "line": {
+            "speaker": "aila",
+            "text": "마음에 든다는 얼굴이네요. 말하지 않아도 알아요. 그렇다고 너무 오래 보지는 말아요. 제가 먼저 불러 놓고 이런 말을 하는 게 우습지만, 칭찬을 받을 준비까지 한 건 아니었나 봐요.",
+            "tone": "따뜻한 중음. 상대의 반응을 기다리는 쉼 0.4초, 눈이 먼저 웃고 입가가 따름"
+          },
+          "hold": 1.0
+        },
+        {
+          "figure": "fig_soft",
+          "gaze": "down",
+          "camera": {
+            "shot": "medium",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": null,
+            "text": "공방장은 종이를 돌려주며 모서리를 손가락으로 짚었다. 접히지 않게 조심한 손이었다. 에일라는 그 자리에 시선을 두었다가 잔잔하게 숨을 내쉬었다. 방금 생긴 기록이 오래된 비밀을 대신한 것은 아니었다. 그래도 오늘의 자리는 생겼다.",
+            "tone": "무성 지문. 마주 보는 옆자리에서 긴장이 풀린 미소, 잔은 안전하게 내려놓음"
+          },
+          "hold": 0.8
+        },
+        {
+          "figure": "fig_determined",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": "aila",
+            "text": "이 한 장으로 전부 채워지지는 않겠죠. 그래도 빈 서랍을 볼 때마다 미뤄 둔 숙제처럼 생각하지는 않을 것 같아요. 안에 제가 고른 저녁이 있으니까요. 누가 시켜서가 아니라 제가 남긴, 아주 평범한 저녁이요.",
+            "tone": "따뜻한 중음. 상대의 반응을 기다리는 쉼 0.4초, 편안한 중립, 눈꼬리 부드러움"
+          },
+          "hold": 1.0
+        },
+        {
+          "figure": "fig_action2",
+          "gaze": "player",
+          "camera": {
+            "shot": "full",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": null,
+            "text": "에일라는 잉크가 마를 때까지 종이를 펼쳐 두었다가 아래 칸에 넣었다. 서랍을 닫는 손은 시작할 때보다 가벼웠다. 작은 종이 한 번 맑게 울렸다. 그녀는 종을 멈춘 뒤 의자를 책상 반대편이 아니라 공방장 옆으로 옮겼다.",
+            "tone": "무성 지문. 손가락과 찻잔 받침을 분리해 읽을 수 있는 책상 옆 자세, 잔을 옆자리 쪽으로 옮기는 키포즈"
+          },
+          "hold": 0.8
+        },
+        {
+          "figure": "fig_soft",
+          "gaze": "player",
+          "camera": {
+            "shot": "medium",
+            "focus": "body",
+            "move": "pull_out",
+            "duration": 0.55
+          },
+          "line": {
+            "speaker": "aila",
+            "text": "기록은 끝났어요. 그러니까 이제는 아무것도 적지 않고 있어도 되겠네요. 한 잔만 더 같이 마셔요. 이번에는 제가 고른 차 말고, 공방장이 고른 차로요. 오늘 제 기억에 들어올 다음 일이 조금 궁금해졌어요.",
+            "tone": "따뜻한 중음. 자기 선택을 또렷이, 명령처럼 누르지 않음."
+          },
+          "hold": 1.0,
+          "motion": "stage_settle"
+        }
+      ]
+    },
+    {
+      "id": "aila_victory_01",
+      "kind": "victory",
+      "title": "무사하다는 말 다음",
+      "trigger": {
+        "on": "event",
+        "note": "전투 종료 후 승리 연출을 볼 때만. 보상·판정·체력 변화 없음."
+      },
+      "why": "전투 후 안심을 확인한 뒤, 동료를 치료하는 역할 밖의 개인적인 기쁨을 직접 표현한다.",
+      "intent": "시작: 장부·찻잔 없이 등불만 몸 앞에 든 전신에서 상태를 확인. 핵심: 등불을 왼쪽 골반 옆으로 낮추고 돌아서다 공방장에게 한 번 더 시선을 돌린다. 끝: 등불을 안정적으로 유지한 채 따뜻한 눈맞춤으로 기다림. 로비의 종 흔들기·찻잔·의자 동작을 재사용하지 않는다. 회복 수치·전투 보상과 무관하며 등 노출 로브·넓은 소매·옆트임을 유지한다.",
+      "assets": [
+        {
+          "key": "bg",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_victory_check",
+          "type": "image",
+          "status": "todo"
+        },
+        {
+          "key": "fig_victory_turn",
+          "type": "image",
+          "status": "todo"
+        },
+        {
+          "key": "fig_victory_notice",
+          "type": "image",
+          "status": "todo"
+        },
+        {
+          "key": "fig_victory_wait",
+          "type": "image",
+          "status": "todo"
+        },
+        {
+          "key": "stage_settle",
+          "type": "motion",
+          "status": "ready"
+        },
+        {
+          "key": "voice_aila_short_recording",
+          "type": "voice",
+          "status": "todo"
+        }
+      ],
+      "input": {
+        "skippable": true,
+        "advance": "tap",
+        "repeatable": true,
+        "cooldown_s": 0
+      },
+      "stage": {
+        "background": "bg",
+        "music": "silence"
+      },
+      "beats": [
+        {
+          "figure": "fig_victory_check",
+          "gaze": "side",
+          "camera": {
+            "shot": "full",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": "aila",
+            "text": "모두 무사해요.",
+            "tone": "안도는 작게, 확인은 분명하게 포즈: 등불을 몸 앞에 든 안정된 전신, 장부·찻잔 없이 주위를 확인하는 단호한 표정"
+          },
+          "hold": 0.9
+        },
+        {
+          "figure": "fig_victory_turn",
+          "gaze": "away",
+          "camera": {
+            "shot": "medium",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": null,
+            "text": "등불을 내리고 돌아서다가 공방장을 다시 본다. 로브와 땋은 머리의 회전이 멈춘 뒤 눈을 맞춘다.",
+            "tone": "무성 지문. 등불을 왼쪽 골반 옆으로 낮춘 3/4 회전 자세, 종을 흔들지 않고 땋은 머리와 로브의 잔움직임이 멈춤"
+          },
+          "hold": 0.55
+        },
+        {
+          "figure": "fig_victory_notice",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "push_in",
+            "duration": 0.55
+          },
+          "line": {
+            "speaker": "aila",
+            "text": "아, 하나 더 말해도 되죠.",
+            "tone": "전투의 단호함이 풀리는 짧은 숨 포즈: 등불은 왼쪽 낮은 위치 그대로, 고개를 돌려 공방장을 보고 눈이 조금 커지는 사적인 한마디 직전"
+          },
+          "hold": 0.9
+        },
+        {
+          "figure": "fig_victory_wait",
+          "gaze": "player",
+          "camera": {
+            "shot": "medium",
+            "focus": "body",
+            "move": "none",
+            "duration": 0
+          },
+          "line": {
+            "speaker": "aila",
+            "text": "돌아가면 제 옆에 앉아요. 오늘 무사했던 이야기는, 좀 더 가까이서 듣고 싶어요.",
+            "tone": "말끝을 흐리지 않는 사적인 기쁨 포즈: 등불을 왼쪽 골반 옆에 안정적으로 든 3/4 전신, 오른손은 편안히 내려두고 따뜻한 눈맞춤으로 기다림; 찻잔·의자 없음"
+          },
+          "hold": 0.9,
+          "motion": "stage_settle"
+        }
+      ]
+    }
+  ],
+  "idle_figure": "fig_soft"
+}

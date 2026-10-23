@@ -1,0 +1,30 @@
+[
+  {
+    "path": "client/MemoryForgeUnity/ProjectSettings/EditorSettings.asset",
+    "restoredExactlyToHead": true,
+    "onlyRunnerOptionsAndTrailingWhitespace": true,
+    "beforeSha256": "e3f3f549737729661a6ec16abc819a78d088ea98efa0b279f15956a675e5f925",
+    "restoredSha256": "691af7b61d75e5dce6b6e923c8f83c6e32d73959bdfa5fa42ff51b6dba97561a"
+  },
+  {
+    "path": "client/MemoryForgeUnity/ProjectSettings/ProjectSettings.asset",
+    "restoredExactlyToHead": true,
+    "onlyRunnerOptionsAndTrailingWhitespace": true,
+    "beforeSha256": "589d38efc141ffc12a32558f0fe2d99e8f499687699ac50b9277c7511e674f76",
+    "restoredSha256": "21b8b9135d5f4c87ae2b49a14309719557cdd7f1977badd5d5f0bd07c12f6a83"
+  },
+  {
+    "path": "client/MemoryForgeUnity/Assets/Settings/UniversalRP.asset",
+    "restoredExactlyToHead": true,
+    "onlyRunnerOptionsAndTrailingWhitespace": true,
+    "beforeSha256": "38a71ac4457c5fd100c29356c62b5edbb574350db4f5fca4111ea2091ea1356e",
+    "restoredSha256": "9fb41b6fbeaab7b09b56821d2afa77ce7b56e6dad38b9ccb7b5057b03cee91a5"
+  },
+  {
+    "path": "client/MemoryForgeUnity/Assets/UniversalRenderPipelineGlobalSettings.asset",
+    "restoredExactlyToHead": true,
+    "onlyRunnerOptionsAndTrailingWhitespace": true,
+    "beforeSha256": "a8cd3cb6934de9102431839e0e4ed5ce246ec0a79b7e6c3daf7ec8085b471b4d",
+    "restoredSha256": "31878add831fa42bcbe51c0050823cb817930f80d97a0b7bb7d77847b6e4a8cf"
+  }
+]

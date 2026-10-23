@@ -1,0 +1,15 @@
+{
+  "score": 91,
+  "verdict": "pass",
+  "category_match": true,
+  "differences": [
+    "밝은 공연 자세와 악기를 유지하며 후드·플리츠·불투명 레깅스의 기존 영문 브리프를 적용"
+  ],
+  "suggestions": [],
+  "reasoning": "리엔의 분홍빛 트윈테일·황색 눈·헤드폰·연주 동작과 전신 실루엣이 명확하다. UI 축소·투명도는 별도 검사한다.",
+  "iteration": 2,
+  "threshold_pass": true,
+  "next_actions": [
+    "PNG alpha 및 실제 화면 검증"
+  ]
+}

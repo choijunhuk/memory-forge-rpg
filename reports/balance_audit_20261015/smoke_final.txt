@@ -1,0 +1,67 @@
+gacha ok {"pulls":185,"chars":5,"weapons":7}
+gacha ok {"pulls":185,"chars":5,"weapons":7}
+{
+ "clicks": 723,
+ "battles": 5,
+ "turns": 38,
+ "plays": 204,
+ "picks": 7,
+ "runs": [
+  {
+   "viewport": 1280,
+   "party": [
+    "sera",
+    "harin",
+    "rien"
+   ],
+   "length": "short",
+   "diff": "normal",
+   "archive": "continue",
+   "outcome": "clear",
+   "hp": 115,
+   "battles": 5,
+   "memory": [
+    "sera",
+    "harin",
+    "rien"
+   ]
+  },
+  {
+   "viewport": 390,
+   "party": [
+    "ravien",
+    "yuri",
+    "lumi"
+   ],
+   "length": "short",
+   "diff": "normal",
+   "archive": "return",
+   "outcome": "clear",
+   "hp": 87,
+   "battles": 4,
+   "memory": [
+    "ravien",
+    "yuri",
+    "lumi"
+   ]
+  }
+ ],
+ "screens": [
+  "party",
+  "gacha",
+  "codex",
+  "memory",
+  "settings",
+  "home",
+  "map",
+  "battle",
+  "reward",
+  "rest",
+  "forge",
+  "save",
+  "result",
+  "event",
+  "shop"
+ ]
+}
+SMOKE OK

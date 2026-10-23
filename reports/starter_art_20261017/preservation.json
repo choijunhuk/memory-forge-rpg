@@ -1,0 +1,10 @@
+{
+  "baseline": "reports/run_progression_core_20261016/preservation47.json",
+  "unchanged": 46,
+  "approved_append_only_art_provenance": 14,
+  "changed": [
+    "art/provenance.csv"
+  ],
+  "protected_runner_unchanged": true,
+  "release_manifests_regenerated": false
+}

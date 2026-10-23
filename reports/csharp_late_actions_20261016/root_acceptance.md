@@ -1,0 +1,13 @@
+# Six late enemy behaviors — shared Core parity accepted, candidates inactive
+
+Original approved JS behavior and unchanged candidate definitions are preserved. Official Opus Max/xhigh authored the Core, producer and checker; High corrected a checker-only legal setup guard; Codex independently reviewed the changes and executed every validation. Author reports explicitly mark their own execution NOT_RUN; the results below are Root's actual runs.
+
+`Battle.cs`, `BattleDefinitions.cs`, `BattleState.cs` implement apDrain, sealSlot, delayRes, silence, eatName and phase through existing command/rollback/hooks. AP drain stays separate from debt, silence is nonstacking with free precedence, delayed reservations retain their original power and lose overflow without refunds, eaten names use existing RNG/exhaust hooks, and first-body replacement preserves identity while deferring kill hooks. Phase/attribute metadata use explicit setters to keep existing Unity export shape. Existing content and all20 live enemies stay unchanged; all23 candidates remain test-only/inactive.
+
+The independent original-JS corpus has81 cases/473 real requests:445 committed,2 replayed,26 rejected. This includes23 duels,23 candidate encounters,34 edges and1 protocol case. Exact states/logs/events/public results/receipts/RNG and copy boundaries are compared from fresh Create, never by injecting expected states. The initial checker rejected legal common-card `assigned`; Root caught it before integration. The fix allows id plus an optional assigned string and retains all other trust-boundary rejects/tamper controls. Growth is legal elsewhere in Create, but outside this bounded fixture schema.
+
+Fresh Node22/25 each7/7; full Node22 333/333; .NET build0/0, late7589/7589,473 requests/470 receipts/473 copy probes. Preview1194, Run21902/Create215677 and1000 legacy completions/273504 commands remain passing.
+
+The actual Unity Mono test adds a test-only explicit definition bridge. It passed8459/8459 checks over81 fresh Creates/473 real requests/554 checkpoints in the full112/112 PlayMode run (0skips). Fresh Resources are required to remain20 live enemies, unchanged, before and after the corpus. The Mono gzip reader is deliberately weaker than the strict Core/Node byte decoder; it is not claimed to replace their negative-input coverage. EditMode3/3 and a fresh macOS build0/0 passed.
+
+Candidate auto-export/loading/activation, Android/IL2CPP/device and server acceptance are NOT_IMPLEMENTED/NOT_RUN. Native JS-only diagnostic differences and Int32 limits remain documented, not silently redefined as identical. Original1320/32 and expanded5280/21 balance misses remain separate and unresolved; no retuning occurred.

@@ -1,0 +1,16 @@
+{
+  "score": 94,
+  "verdict": "pass",
+  "scope": "Actual expedition current-state reservation preview, before turn-barrier UI integration",
+  "evidence": "reports/battle_preview_20261016/reserved_live.png",
+  "checks": [
+    "Korean glyphs and dark palette readable",
+    "current-state reservation label shown with absolute turn and block11",
+    "AP4 unchanged by selection; actual rays and pure state separately recorded",
+    "existing scene/card/target/time-reservation layout preserved"
+  ],
+  "limits": [
+    "Final art and 130percent worst-case density not accepted by this image",
+    "Native physical input applies only to earlier user-confirmed build"
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "author_cli_status": "FAILED: included-subscription session quota, reset19:00Asia/Seoul; no retries/API/credits/fallback",
+  "source_components": "written source received for independent verification only, NOT_YET_ACCEPTED",
+  "files": [
+    {
+      "path": "core/MemoryForge.Core/Battle.cs",
+      "sha256": "b7ef94c9186f1d48578cdd0e3850a3787799ce8628fc7aed1bfa79ea588d3394",
+      "authored_by": "official Opus before session quota",
+      "copied_exactly": true
+    },
+    {
+      "path": "core/MemoryForge.Core/Run.BattleQueries.cs",
+      "sha256": "e6ed5d13e0f311519277b3645e5aa55e5aca48176a2a7ec96ea33491f287cbc0",
+      "authored_by": "official Opus before session quota",
+      "copied_exactly": true
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs",
+      "sha256": "89033af3d9b3d0f17c95466b75a13ba578cacdd5a02ded239db9e6380b358267",
+      "authored_by": "official Opus before session quota",
+      "copied_exactly": true
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/Tests/PlayMode/EffectCandidatePlayModeTests.cs",
+      "sha256": "707d1a39c555788842fdeb51555efb9b713d2efc26a2177ddfeee32eb0a9fe16",
+      "authored_by": "official Opus before session quota",
+      "copied_exactly": true
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionPickerGuardPlayModeTests.cs",
+      "sha256": "e57c1f3feb945af8d9d7d8bb64f71d7604a2b746e02a2853fab7a700dc0a1e42",
+      "authored_by": "official Opus before session quota",
+      "copied_exactly": true
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/Tests/PlayMode/PreparedIntentPlayModeTests.cs",
+      "sha256": "2d806c43c16221f9c3cb973b8a19bfb12540c9a4f01c714073f18a92aa554e33",
+      "authored_by": "official Opus before session quota",
+      "copied_exactly": true
+    }
+  ],
+  "missing_author_outputs": [
+    "EffectCandidateCoreWitnessTests.cs",
+    "effect_candidates_cost_query_report.md"
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "task_id": "P1-LOCAL-PERSISTENCE-IMPLEMENTATION-FINISH",
+  "run_id": "P1-LOCAL-PERSISTENCE-IMPLEMENTATION-FINISH-20261016T104335375930Z",
+  "status": "RECEIVED_UNVERIFIED",
+  "requestedEffort": "xhigh",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "changes_verified": false,
+  "raw_output": "ops/ai/local/P1-LOCAL-PERSISTENCE-IMPLEMENTATION-FINISH-20261016T104335375930Z*",
+  "billing_verified_at": "2026-10-15T21:22:01.277612+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "claude/balance-audit",
+  "base_commit": "9be537f4c5ef59e890322cb2d1de914fb49bfed6",
+  "worktree": "/Users/choi/.codex/worktrees/claude-balance-audit/Memory_forge",
+  "allowed_files": [
+    "reports/server_persistence_20261016/author_report.md",
+    "server/MemoryForge.Server/Content.cs",
+    "server/MemoryForge.Server/Contracts.cs",
+    "server/MemoryForge.Server/MemoryForge.Server.csproj",
+    "server/MemoryForge.Server/PracticeRunStore.cs",
+    "server/MemoryForge.Server/Program.cs",
+    "server/MemoryForge.Server/PublicView.cs",
+    "server/MemoryForge.Server/README.md",
+    "server/MemoryForge.ServerChecks/MemoryForge.ServerChecks.csproj",
+    "server/MemoryForge.ServerChecks/Program.cs"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "a1d7a222-69d8-4b5b-8137-fdcd8d5e2b39",
+  "subtype": "success",
+  "is_error": false,
+  "result": "The local persistence slice is written in all ten allowed files, but I have not compiled or run any of it. This session had no shell, so author runtime is **NOT_RUN** and nothing here is a verified result.\n\n**Server (`server/MemoryForge.Server`)**\n- **Startup and access:** the host only runs in Development and binds 127.0.0.1 only. It refuses to start without an owner-only fixture (development label, credential stored as a SHA-256 digest, no built-in account or key) and an owner-only store outside the repository. Requests need a bearer credential compared in constant time, and the account comes only from that match. Request bodies are strict allowlists, so a client seed, state, party or HP is rejected with 400.\n- **Durable state:**\n  - Each account has one private envelope file. Every request rebuilds the run with real `Run.Create` and replays the command journal, checking a full-state hash after each step. There is no restore API and no Core, schema or data change.\n  - Stored receipts are checked before the stale-version check and return the original response bytes.\n  - Each command runs on a freshly replayed copy. The file is written to a private temp file, flushed to disk, then renamed over the old one; a failure before the rename changes nothing and doesn't use up the request ID.\n  - Concurrent writers are serialised by an in-process gate plus a permanent lock file opened exclusively. That lock file is never deleted, and the data file itself is never locked.\n- **Refusals:** corrupt, tampered or differently bound envelopes (other content, Core build or fixture) are refused and left byte-for-byte as they were.\n- **Public view:** an explicit allowlist. Card cost, modes, target and usability come from Core queries; piles are counts only. Seed, RNG, enemy patterns, receipts and journal are never returned.\n- **Commands:** create, read, enter, play, ult, end, rewards, rest/forge/shop/event, proceed, archive, assign, plus the v2 memory preview and commit. Any other kind is rejected as unsupported. The service commands (rest/forge/shop/event and similar) are wired to Core but no check exercises them yet.\n\n**Checks (`server/MemoryForge.ServerChecks`)**\nThey launch the real host as separate processes with a throwaway fixture, credentials and stores. Covered:\n- startup refusals, auth failures and invalid input that writes nothing;\n- kill-and-restart with retries;\n- duplicate, different-payload and stale requests;\n- Core rejections and a real write failure (read-only store directory), both leaving the file unchanged;\n- a genuine partial Core mutation from a deliberately broken encounter that gets rolled back;\n- a bot played to defeat, followed by the v2 save, a restart, and the next run starting from the saved deck;\n- 16-way races within one process and across two processes sharing one store;\n- ownership, eight tampered stores, and a final scan of every response and log for credentials, seeds and private fields.\n\n**Commands to run:**\n```sh\ndotnet build server/MemoryForge.Server/MemoryForge.Server.csproj\ndotnet run --project server/MemoryForge.ServerChecks -- \"$PWD\" [--server-dll <dll>]\n```\nThe checks build the host into a temp directory themselves unless `--server-dll` is given. Run them as a normal user on macOS/Linux: the write-failure check deliberately fails, rather than skips, when run as root.\n\n**Risks for the first build**\n- Warnings are treated as errors and I couldn't compile, so a nullability or analyzer warning I missed would break the build. In particular, I relied on an assembly-level \"not supported on Windows\" attribute to keep the POSIX-only file APIs from warning.\n- The end-to-end check assumes its simple bot wins a first battle within four runs. §19.4 reports a 100% win rate for a random bot, and a failure is reported as a bot limit, not a server fault.\n\n**Not done:** PostgreSQL, real auth, account/gacha APIs, OpenAPI contract tests, Unity transport and production. Directory fsync and macOS full-fsync are not claimed. Journals and receipts are never pruned, so cost grows with history; that needs an approved retention policy. Pinning to the exact Core build means any Core rebuild refuses existing saves until a migration step exists. The §17.4 slot `cap` needs a public Core capacity query. The server still links the loaders from `core/MemoryForge.CoreChecks`.\n\nDetails and assertion list are in `reports/server_persistence_20261016/author_report.md` and `server/MemoryForge.Server/README.md`. Session: `a1d7a222-69d8-4b5b-8137-fdcd8d5e2b39`.",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ]
+}

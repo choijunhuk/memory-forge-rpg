@@ -1,0 +1,62 @@
+{
+  "status": "PASS",
+  "source_sha256": "bac1214aa00e4d2b084e1bc7627df20b09969f8f57c9c059e3779ef77f885a29",
+  "segments": [
+    {
+      "name": "ordinary action / one unsent preparation / lifecycle",
+      "checks": [
+        "raycast selections and pure query spend nothing",
+        "approved ordinary play opens nonterminal presentation",
+        "already consumed UID cannot be selected twice",
+        "one confirmed next play stays unsent during presentation",
+        "second preparation does not create a request",
+        "disable drops only unsent UI and presentation",
+        "reenable refreshes without dispatch or replay"
+      ],
+      "scope": "valid successful assertions before the test harness needed explicit target reselection after lifecycle; that interrupted attempt is not a successful full run"
+    },
+    {
+      "name": "real503 / full recovery / exact retry / corrected gate",
+      "result": {
+        "status": "PASS",
+        "checks": [
+          "select published hand card again after lifecycle cleared unsent selection",
+          "explicitly reselect live target after lifecycle cleared it",
+          "server approves exact target-bound request before send",
+          "real committed reply replaced by503 keeps exact pending and locks new commands",
+          "unresolved pending refuses old-hand selection",
+          "reconnect reads committed full state without auto retry or event replay",
+          "explicit exact retry clears record with whole envelope unchanged and no old events",
+          "selection locked while end-turn request is in flight",
+          "committed end opens full turn barrier",
+          "turn barrier rejects target selection",
+          "skip and continue are presentation-only"
+        ],
+        "before_version": 9,
+        "after_version": 11,
+        "actual_editor_play": true,
+        "actual_core_http": true,
+        "scope": "final UI hash recovery/gate continuation; physical-device acceptance separate"
+      }
+    },
+    {
+      "name": "fresh account no-row / explicit create / map-to-battle uGUI",
+      "result": {
+        "status": "PASS",
+        "checks": [
+          "connect verifies owner without automatically creating a run or row",
+          "raycast reaches CreateRun",
+          "explicit create produces authoritative full map at journal version0",
+          "raycast reaches Node",
+          "clicked available map node enters real Core battle exactly once",
+          "actual server battle AP and hand shown in usable UI"
+        ],
+        "server_version": 1,
+        "scene": "Assets/Scenes/MemoryForgeServerPractice.unity",
+        "input_kind": "actual Editor uGUI raycast/Pointer events; not physical device"
+      }
+    }
+  ],
+  "passed_assertions": 24,
+  "limits": "actual Editor Play and uGUI raycast/API actions; physical mouse, standalone, Android and full network-game acceptance are separate"
+}

@@ -1,0 +1,68 @@
+{
+  "sourceCommit": "8c6d764c767f7fed9573e832309922bc17838ecc",
+  "method": "Actual Editor uGUI EventSystem.RaycastAll at each widget center; top Button equality asserted before pointerClickHandler; no live-state injection",
+  "steps": [
+    {
+      "hit": "e19",
+      "SelectedCard": "c4",
+      "SelectedMode": null,
+      "V": 1,
+      "Turn": 1,
+      "Hp": 243,
+      "Ap": 4,
+      "reservations": 0,
+      "enemies": [
+        18,
+        18
+      ],
+      "LastError": null
+    },
+    {
+      "hit": "다음 턴 · 비용 2\n행동력 2 지불 · 다음 턴에 해결",
+      "SelectedCard": "c4",
+      "SelectedMode": "next",
+      "V": 1,
+      "Turn": 1,
+      "Hp": 243,
+      "Ap": 4,
+      "reservations": 0,
+      "enemies": [
+        18,
+        18
+      ],
+      "LastError": null
+    },
+    {
+      "hit": "사용 확정",
+      "SelectedCard": "c11",
+      "SelectedMode": null,
+      "V": 2,
+      "Turn": 1,
+      "Hp": 243,
+      "Ap": 2,
+      "reservations": 1,
+      "enemies": [
+        18,
+        18
+      ],
+      "LastError": null
+    },
+    {
+      "hit": "턴 종료\n1턴",
+      "SelectedCard": "c7",
+      "SelectedMode": null,
+      "V": 3,
+      "Turn": 2,
+      "Hp": 219,
+      "Ap": 4,
+      "reservations": 0,
+      "enemies": [
+        0,
+        18
+      ],
+      "LastError": null
+    }
+  ],
+  "acceptance": "Selection keeps V1/AP4; explicit confirmation alone commits V2/AP2/reservation1; end commits V3/turn2/HP219/reservation0/enemyHP[0,18].",
+  "scope": "Editor practice flow only; native desktop command flow remains unconfirmed."
+}

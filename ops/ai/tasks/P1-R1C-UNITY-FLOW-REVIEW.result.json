@@ -1,0 +1,28 @@
+{
+  "task_id": "P1-R1C-UNITY-FLOW-REVIEW",
+  "run_id": "P1-R1C-UNITY-FLOW-REVIEW-20261015T214156540811Z",
+  "status": "RECEIVED_UNVERIFIED",
+  "requestedEffort": "high",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "changes_verified": false,
+  "raw_output": "ops/ai/local/P1-R1C-UNITY-FLOW-REVIEW-20261015T214156540811Z*",
+  "billing_verified_at": "2026-10-15T21:22:01.277612+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "codex/csharp-memory-v2",
+  "base_commit": "3d33c4cb2e0c7cee14ced2c67c33b8fb55cef267",
+  "worktree": "/Users/choi/.codex/worktrees/csharp-memory-v2/Memory_forge",
+  "allowed_files": [
+    "reports/run_memory_core_20261016/unity_full_flow_opposite_review.md"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "b296970c-01d0-4c95-a02e-29b6cf259989",
+  "subtype": "success",
+  "is_error": false,
+  "result": "**Verdict: APPROVE, for state, error codes and memory queries only.** I found no real bug, no way for the test to pass falsely, and no command that gets silently skipped. Two missing checks (F1, F2) mean the PASS should not be described as covering full state or all results.\n\n**Confirmed:**\n- **Bound to the original fixture:** the generator replays every command from a fresh `Run.create`. It checks the created hash, every step's error code and hash, the DONE phase and the reload hash against the original fixture.\n- **Memory queries:** `memoryChanges` and `previewMemory` come from the real JS run and are checked to leave state unchanged.\n- **v2 store:** the recorded store is only compared. The actual store is what gets passed in and updated (test lines 89–91).\n- **Restart:** it uses only the actual C# `SavedMemory`, seed +99, `runId + \"-reload\"` and the actual store version. No expected state is injected.\n- **No silent skips:** all 16 run methods are handled, anything else hits `Assert.Fail`, and the 592/3/4 counts are asserted.\n- **JSON types:** integer, float and null are preserved, and `DeepEquals` is type-strict.\n- **Content:** Unity loads the full content, including costs and events, fresh for each case.\n\n**Findings:**\n- **F1 (medium):** the state hash ignores every `log` and `ev` field (`tools/gen_traces.mjs:54`, `CanonicalState.cs:96`). So Unity never checks the Run/battle log text or the UI event stream. Host .NET checks them through `jsonHash`, but Unity doesn't. To reproduce: change any C# `Log.Add` text and this test still passes.\n- **F2 (low–medium):** the fixture records each step's return value, but the generator drops it and Unity never compares it. That covers battle command returns, the legacy `CommitMemory` return, and v2 result fields other than `state`.\n- **F3 (low):** nothing re-checks that the reference JSON is current or where it came from. Unity also doesn't assert the three case ids or how each run ended.\n- **F4 (low):** the generator's printed counts of 4 queries and 3 restarts are hardcoded, not measured. Only the Unity-side assertions count as evidence.\n- **F5 (note):** argument casts convert wrong types before they reach the C# API, so type-rejection behaviour isn't exercised.\n\nThis is Editor Play Mode evidence only, because the test reads the reference file from a repo-relative path. It is not standalone, IL2CPP or Android device acceptance.\n\n**Verification:** I did not run anything myself (NOT_RUN). The 1/1 PASS in 0.698s is Root's run. I only edited the review file; no product code changed. My session ID isn't visible to me, so take it from the CLI session metadata.\n\n**Next:** close F1 and F2 by carrying the fixture's full JSON hash and per-step return values into the reference and comparing them in Unity. Until then, the report should say \"state, errors and memory queries\", not \"full state\" or \"all results\".\n\nDetails with line numbers are in `reports/run_memory_core_20261016/unity_full_flow_opposite_review.md`.",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ]
+}

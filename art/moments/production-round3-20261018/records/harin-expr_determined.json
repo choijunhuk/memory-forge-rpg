@@ -1,0 +1,30 @@
+{
+  "c": "harin",
+  "key": "expr_determined",
+  "path": "harin/images/char_harin_expression_determined_v01.png",
+  "refs": [
+    "/Users/choi/Documents/Memory_forge/art/moments/harin/images/char_harin_expression_neutral_v01.png"
+  ],
+  "common": "Use case: identity-preserve. Edit target is the supplied NEUTRAL master portrait, one adult dialogue expression. Keep EXACT same square canvas/framing, head angle/tilt, face proportions, iris colors, hairstyle, glasses/scar/ornaments, costume, lighting and true transparent alpha. Intended final 512x512. Change ONLY eyes/eyebrows/mouth and natural cheek muscles. No hands, props, extra face, text or panels. ",
+  "pose": "Harin, adult age26. Short NAVY bob, gray-blue eyes, scar ABOVE HER LEFT eyebrow, strong adult facial structure, white/navy/brass frost armor collar and broad athletic shoulders. Stoic presence. Expression DETERMINED: Strong unwavering grayblue eyes and grounded jaw, brows firm and lips resolved, protective focus without aggressive snarl.",
+  "prompt": "Use case: identity-preserve. Edit target is the supplied NEUTRAL master portrait, one adult dialogue expression. Keep EXACT same square canvas/framing, head angle/tilt, face proportions, iris colors, hairstyle, glasses/scar/ornaments, costume, lighting and true transparent alpha. Intended final 512x512. Change ONLY eyes/eyebrows/mouth and natural cheek muscles. No hands, props, extra face, text or panels. Harin, adult age26. Short NAVY bob, gray-blue eyes, scar ABOVE HER LEFT eyebrow, strong adult facial structure, white/navy/brass frost armor collar and broad athletic shoulders. Stoic presence. Expression DETERMINED: Strong unwavering grayblue eyes and grounded jaw, brows firm and lips resolved, protective focus without aggressive snarl.",
+  "source": "/Users/choi/.codex/generated_images/01a14d20-ffd5-7e81-9e47-85c1c8415e11/exec-9806adf9-89e5-4b2f-9a9f-558ccb30dee9.png",
+  "tool": "Codex built-in image_gen; subscription-included; no API fallback",
+  "review": "pass",
+  "previous_attempt": null,
+  "score": 94,
+  "review_notes": "Rendered output inspected beside its neutral master. Six readable adult expressions, stable face/eye/hair/glasses/scar/costume identity and framing. Only non-generative final resize remains.",
+  "backend_model": "not exposed by tool",
+  "selected": true,
+  "sha256": "88a5feb36736735cc9d76ab9794c876253e743392922975d84a18dc5daa7fffb",
+  "size": [
+    512,
+    512
+  ],
+  "mode": "RGBA",
+  "alpha_extrema": [
+    0,
+    255
+  ],
+  "postprocess": "sips -z 512 512; non-generative downsample only, alpha retained"
+}

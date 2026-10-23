@@ -1,0 +1,151 @@
+{
+  "scope": "art/moments only; no integration or approvals",
+  "sources": [
+    {
+      "path": "art/requests/character-moments-20261018.md",
+      "sha256": "a7f0681d74edf4fb5c1ef531c55d60c634b2ff6b2e1be261c7b18ca12698cdb5",
+      "final_sha256": "a7f0681d74edf4fb5c1ef531c55d60c634b2ff6b2e1be261c7b18ca12698cdb5"
+    },
+    {
+      "path": "docs/MOMENTS_FORMAT.md",
+      "sha256": "57998aabd80b539a94bd04f3085f8c4054458a2defa03f86eeab6af8a9b1ffa3",
+      "final_sha256": "04b40219fa020239dfccad1bc702bc6915e091afbad39ddca97f0a95fbb7e8bd",
+      "refresh_note": "작업 중 외부에서 형식 문서가 갱신됨. 최종 문서를 다시 읽어 idle_figure 및 motion.slot 선택 필드 추가를 확인. 기존 /1 데이터와 호환; 세라 idle_figure만 적용. 이 세션이 해당 문서를 수정하지 않음."
+    },
+    {
+      "path": "docs/AI_WORKFLOW.md",
+      "sha256": "6e9fa9b35decec9e8927d72ade768cb178478ffae63ca4bbf44dbb32808494c2",
+      "final_sha256": "6e9fa9b35decec9e8927d72ade768cb178478ffae63ca4bbf44dbb32808494c2"
+    },
+    {
+      "path": "OWNERSHIP.md",
+      "sha256": "94a2ecd25be311d92ce4fee13081eaf7426ea5d06070cd81dbc58bf8dd58e634",
+      "final_sha256": "94a2ecd25be311d92ce4fee13081eaf7426ea5d06070cd81dbc58bf8dd58e634"
+    },
+    {
+      "path": "docs/design_v0.8.1.md",
+      "sha256": "1eabb524cc0e5593f88c930edf7bade2ab00825cd72212b05a50dfa5a77959a8",
+      "final_sha256": "1eabb524cc0e5593f88c930edf7bade2ab00825cd72212b05a50dfa5a77959a8"
+    },
+    {
+      "path": "content/characters.mjs",
+      "sha256": "5e393b0437512134130571106e8ed25aed346ac8115746a6c1ab1fdb90d62c3f",
+      "final_sha256": "5e393b0437512134130571106e8ed25aed346ac8115746a6c1ab1fdb90d62c3f"
+    },
+    {
+      "path": "content/character_notes.mjs",
+      "sha256": "d4b31d00021f97650cf5f4397cdb963dcf5519f9d5e8f93308dc563c0b865f15",
+      "final_sha256": "d4b31d00021f97650cf5f4397cdb963dcf5519f9d5e8f93308dc563c0b865f15"
+    },
+    {
+      "path": "art/briefs/characters_v0.8.json",
+      "sha256": "1ce144b7727aac238899e340feb6f13bbb6f141c07c80189a3d525bf20447a7d",
+      "final_sha256": "1ce144b7727aac238899e340feb6f13bbb6f141c07c80189a3d525bf20447a7d"
+    },
+    {
+      "path": "art/briefs/prompts_v0.8.1.json",
+      "sha256": "68a610f6a8cadb5f3d3dc0285495e87d800c7a02866cd6473db885708ec13da3",
+      "final_sha256": "68a610f6a8cadb5f3d3dc0285495e87d800c7a02866cd6473db885708ec13da3"
+    }
+  ],
+  "visual_inputs": [
+    {
+      "path": "art/generated/starter-20261017/char_harin_cutin_default_v01.png",
+      "sha256": "1ef0e9dc0ff40f8817eaa83abd4d1d758dc6391e13ceddecef11a834285ef381",
+      "viewed_this_session": true
+    },
+    {
+      "path": "art/generated/starter-20261017/char_harin_sd_default_v02.png",
+      "sha256": "a36236fa000ee8c6d169c3c0264f8f9c2728d69e4fa76cdd8f588843a0b98745",
+      "viewed_this_session": true
+    },
+    {
+      "path": "art/generated/starter-20261017/char_harin_sheet_default_v01.png",
+      "sha256": "2c736b1ef79868dfa8dd8150750f9339469f54df25ccea7f5358edbd7ddefce1",
+      "viewed_this_session": true
+    },
+    {
+      "path": "art/generated/starter-20261017/char_nia_cutin_default_v01.png",
+      "sha256": "42b023d250ddd25a7915161c47cdae9835837f0810cf453e1db01dd7db865a1b",
+      "viewed_this_session": true
+    },
+    {
+      "path": "art/generated/starter-20261017/char_nia_sd_default_v02.png",
+      "sha256": "f92e9e99cb089c68e251dffa58d2bae50f0480edb7f09fed494dedd601862ca5",
+      "viewed_this_session": true
+    },
+    {
+      "path": "art/generated/starter-20261017/char_nia_sheet_default_v01.png",
+      "sha256": "571e4204be0630e902f27c573596ae038810dc24510e2f5749d9a2330b6b63f2",
+      "viewed_this_session": true
+    },
+    {
+      "path": "art/generated/starter-20261017/char_sera_cutin_default_v01.png",
+      "sha256": "5705d9152e21db67b4e2abda04ef77f97e7d404ea6ff713421e3e69ab681cfc1",
+      "viewed_this_session": true
+    },
+    {
+      "path": "art/generated/starter-20261017/char_sera_sd_default_v02.png",
+      "sha256": "6c0fb935031e3fce1a9039d7c6771e2cbd3f41526ef3313e17f865bd9ee9cced",
+      "viewed_this_session": true
+    },
+    {
+      "path": "art/generated/starter-20261017/char_sera_sheet_default_v02.png",
+      "sha256": "d895e00377ed5b56f7dca20be23adda59b0de186eae2fd02e720039d1b0f4477",
+      "viewed_this_session": true
+    }
+  ],
+  "continuation_passes": [
+    {
+      "id": "character-moments-images-pass2-20261018",
+      "scope": "art/moments only; image generation and source metadata; no game code / Unity / commits / push / Claude",
+      "success_criteria": "all six A plus Sera B/C declared image assets exist; ready honest; idle files; protected narrative data preserved",
+      "sources": [
+        {
+          "path": "art/requests/character-moments-20261018.md",
+          "sha256": "a7f0681d74edf4fb5c1ef531c55d60c634b2ff6b2e1be261c7b18ca12698cdb5"
+        },
+        {
+          "path": "docs/MOMENTS_FORMAT.md",
+          "sha256": "523f276c5b8c721d6a3eda06dfabb17cef020f342143224f68abcd592c513d82"
+        },
+        {
+          "path": "docs/AI_WORKFLOW.md",
+          "sha256": "6e9fa9b35decec9e8927d72ade768cb178478ffae63ca4bbf44dbb32808494c2"
+        },
+        {
+          "path": "OWNERSHIP.md",
+          "sha256": "94a2ecd25be311d92ce4fee13081eaf7426ea5d06070cd81dbc58bf8dd58e634"
+        },
+        {
+          "path": "reports/ui_skin_20261018/sera_lobby_01_log.txt",
+          "sha256": "3ab89eb4816debca4677139f8360efff60a9f61893ab3d6f4c4829345489f854"
+        },
+        {
+          "path": "reports/ui_skin_20261018/sera_lobby_01_4.png",
+          "sha256": "69a9935266a1f1b409f1115c917249483abc09da733805643aff4c1838c95a88"
+        },
+        {
+          "path": "art/generated/starter-20261017/char_harin_sheet_default_v01.png",
+          "sha256": "2c736b1ef79868dfa8dd8150750f9339469f54df25ccea7f5358edbd7ddefce1"
+        },
+        {
+          "path": "art/candidates/20261018/codex/assets/backgrounds/bg_zone1_event_workshop_v02.png",
+          "sha256": "a049b8449d5d04312f05a4c60bb01aa4b770f2cf9394e0b11d4b4fcdb4bf8214"
+        },
+        {
+          "path": "art/moments/sera/images/char_sera_lobby_smile_v01.png",
+          "sha256": "03f5074681a1bdc7639b39e8cb2c24d6b2146b3aaa6759bcf2eaa98fb2ece236"
+        }
+      ],
+      "notes": [
+        "Old source records describe the preceding pass; not all earlier visual inputs were viewed again.",
+        "Current actual views: Harin sheet, Sera smile, existing workshop background, provided Sera A capture4; generated outputs inspected inline.",
+        "New background reuse is exact file copying. No source files outside moments edited."
+      ],
+      "generation_records": "production-20261018/generation-records.json",
+      "validation": "VALIDATION.json",
+      "input_snapshot": "production-20261018/input-hashes.json"
+    }
+  ]
+}

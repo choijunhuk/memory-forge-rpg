@@ -1,0 +1,42 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <!-- P1-LOCAL-AUTHORITATIVE-PERSISTENCE: loopback-only Development practice host over the shared Core (§16.5/§17.2/§17.4/§17.5/§20.9 P1-2).
+       Initial file slice used ASP.NET Core + BCL only. The user approved Npgsql10.0.3 for the optional local PostgreSQL backend;
+       no ORM, paid service or production mode is added. -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <RollForward>Major</RollForward>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <RootNamespace>MemoryForge.Server</RootNamespace>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Policies/account-progression-20261021-v1.json" LogicalName="MemoryForge.Server.AccountPolicyV1.json" />
+    <ProjectReference Include="../../core/MemoryForge.Core/MemoryForge.Core.csproj" />
+    <PackageReference Include="Npgsql" Version="10.0.3" />
+  </ItemGroup>
+  <!-- The reviewed host JSON loaders are linked, not copied, moved or rewritten (the same files CoreChecks and the Unity content export
+       compile). MemoryV2DataLoader.Difference names JsonGraphComparison, so that one helper is linked with them. This couples the server to
+       the loaders' location under core/MemoryForge.CoreChecks; moving them into a shared host library is a separate, reviewed change. -->
+  <ItemGroup>
+    <Compile Include="../../core/MemoryForge.CoreChecks/BattleDataLoader.cs" Link="Linked/BattleDataLoader.cs" />
+    <Compile Include="../../core/MemoryForge.CoreChecks/MemoryV2DataLoader.cs" Link="Linked/MemoryV2DataLoader.cs" />
+    <Compile Include="../../core/MemoryForge.CoreChecks/RunDataLoader.cs" Link="Linked/RunDataLoader.cs" />
+    <Compile Include="../../core/MemoryForge.CoreChecks/StatsDataLoader.cs" Link="Linked/StatsDataLoader.cs" />
+    <Compile Include="../../core/MemoryForge.CoreChecks/JsonGraphComparison.cs" Link="Linked/JsonGraphComparison.cs" />
+    <!-- RECRUIT-SERVER-20261021: the one gacha loader CoreChecks verifies against the vectors. -->
+    <Compile Include="../../core/MemoryForge.CoreChecks/GachaDataLoader.cs" Link="Linked/GachaDataLoader.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Policies/account-progression-20261021-v2.json" LogicalName="MemoryForge.Server.AccountPolicyV2.json" />
+    <EmbeddedResource Include="Policies/account-progression-20261021-v3.json" LogicalName="MemoryForge.Server.AccountPolicyV3.json" />
+    <EmbeddedResource Include="Policies/account-progression-20261021-v4.json" LogicalName="MemoryForge.Server.AccountPolicyV4.json" />
+    <Compile Include="../../core/MemoryForge.CoreChecks/ContentModesDataLoader.cs" Link="Linked/ContentModesDataLoader.cs" />
+  </ItemGroup>
+  <!-- Phase2 balance: the immutable launch-only story preset, verified by exact SHA-256 in ExpeditionBalancePolicy.cs. -->
+  <ItemGroup>
+    <EmbeddedResource Include="Policies/expedition-balance-20261023-v1.json" LogicalName="MemoryForge.Server.ExpeditionBalanceV1.json" />
+  </ItemGroup>
+</Project>

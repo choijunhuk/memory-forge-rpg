@@ -1,0 +1,209 @@
+[
+  {
+    "character": "sera",
+    "key": "fig_victory_scope",
+    "path": "moments/sera/images/char_sera_fig_victory_scope_styleA_v01.png",
+    "status": "todo",
+    "target": "sera/images/char_sera_fig_victory_scope_styleA_v01.png",
+    "old_path": "moments/sera/images/char_sera_victory_scope_v01.png",
+    "background": false
+  },
+  {
+    "character": "sera",
+    "key": "fig_victory_turn",
+    "path": "moments/sera/images/char_sera_fig_victory_turn_styleA_v01.png",
+    "status": "todo",
+    "target": "sera/images/char_sera_fig_victory_turn_styleA_v01.png",
+    "old_path": "moments/sera/images/char_sera_victory_turn_v01.png",
+    "background": false
+  },
+  {
+    "character": "ravien",
+    "key": "fig_lobby_soft",
+    "path": "moments/ravien/images/char_ravien_fig_lobby_soft_styleA_v01.png",
+    "status": "todo",
+    "target": "ravien/images/char_ravien_fig_lobby_soft_styleA_v01.png",
+    "old_path": "moments/ravien/images/char_ravien_stand_soft_v01.png",
+    "background": false
+  },
+  {
+    "character": "ravien",
+    "key": "fig_resolve",
+    "path": "moments/ravien/images/char_ravien_fig_resolve_styleA_v01.png",
+    "status": "todo",
+    "target": "ravien/images/char_ravien_fig_resolve_styleA_v01.png",
+    "old_path": "moments/ravien/images/char_ravien_stand_determined_v01.png",
+    "background": false
+  },
+  {
+    "character": "ravien",
+    "key": "fig_annoyed",
+    "path": "moments/ravien/images/char_ravien_fig_annoyed_styleA_v01.png",
+    "status": "todo",
+    "target": "ravien/images/char_ravien_fig_annoyed_styleA_v01.png",
+    "old_path": "moments/ravien/images/char_ravien_stand_annoyed_v01.png",
+    "background": false
+  },
+  {
+    "character": "ravien",
+    "key": "fig_seal",
+    "path": "moments/ravien/images/char_ravien_fig_seal_styleA_v01.png",
+    "status": "todo",
+    "target": "ravien/images/char_ravien_fig_seal_styleA_v01.png",
+    "old_path": "moments/ravien/images/char_ravien_battle_seal_determined_v01.png",
+    "background": false
+  },
+  {
+    "character": "ravien",
+    "key": "fig_victory",
+    "path": "moments/ravien/images/char_ravien_fig_victory_styleA_v01.png",
+    "status": "todo",
+    "target": "ravien/images/char_ravien_fig_victory_styleA_v01.png",
+    "old_path": "moments/ravien/images/char_ravien_seal_return_relaxed_v01.png",
+    "background": false
+  },
+  {
+    "character": "ravien",
+    "key": "bg_victory",
+    "path": "moments/ravien/images/char_ravien_bg_victory_styleA_v01.png",
+    "status": "todo",
+    "target": "ravien/images/char_ravien_bg_victory_styleA_v01.png",
+    "old_path": "moments/ravien/images/char_ravien_background_quiet_afterbattle_v01.png",
+    "background": true
+  },
+  {
+    "character": "harin",
+    "key": "fig_default",
+    "path": "moments/harin/images/char_harin_fig_default_styleA_v01.png",
+    "status": "todo",
+    "target": "harin/images/char_harin_fig_default_styleA_v01.png",
+    "old_path": "moments/harin/images/char_harin_stand_neutral_v01.png",
+    "background": false
+  },
+  {
+    "character": "harin",
+    "key": "fig_guard",
+    "path": "moments/harin/images/char_harin_fig_guard_styleA_v01.png",
+    "status": "todo",
+    "target": "harin/images/char_harin_fig_guard_styleA_v01.png",
+    "old_path": "moments/harin/images/char_harin_shield_guard_determined_v01.png",
+    "background": false
+  },
+  {
+    "character": "harin",
+    "key": "fig_victory",
+    "path": "moments/harin/images/char_harin_fig_victory_styleA_v01.png",
+    "status": "todo",
+    "target": "harin/images/char_harin_fig_victory_styleA_v01.png",
+    "old_path": "moments/harin/images/char_harin_shield_open_relief_v01.png",
+    "background": false
+  },
+  {
+    "character": "harin",
+    "key": "bg_victory",
+    "path": "moments/harin/images/char_harin_bg_victory_styleA_v01.png",
+    "status": "todo",
+    "target": "harin/images/char_harin_bg_victory_styleA_v01.png",
+    "old_path": "moments/harin/images/char_harin_background_quiet_afterbattle_v01.png",
+    "background": true
+  },
+  {
+    "character": "aila",
+    "key": "fig_victory_check",
+    "path": "moments/aila/images/char_aila_fig_victory_check_styleA_v01.png",
+    "status": "todo",
+    "target": "aila/images/char_aila_fig_victory_check_styleA_v01.png",
+    "old_path": "moments/aila/images/char_aila_moment_victory_check_v01.png",
+    "background": false
+  },
+  {
+    "character": "aila",
+    "key": "fig_victory_turn",
+    "path": "moments/aila/images/char_aila_fig_victory_turn_styleA_v01.png",
+    "status": "todo",
+    "target": "aila/images/char_aila_fig_victory_turn_styleA_v01.png",
+    "old_path": "moments/aila/images/char_aila_moment_victory_turn_v01.png",
+    "background": false
+  },
+  {
+    "character": "aila",
+    "key": "fig_victory_notice",
+    "path": "moments/aila/images/char_aila_fig_victory_notice_styleA_v01.png",
+    "status": "todo",
+    "target": "aila/images/char_aila_fig_victory_notice_styleA_v01.png",
+    "old_path": "moments/aila/images/char_aila_moment_victory_notice_v01.png",
+    "background": false
+  },
+  {
+    "character": "sion",
+    "key": "fig_victory_check",
+    "path": "moments/sion/images/char_sion_fig_victory_check_styleA_v01.png",
+    "status": "todo",
+    "target": "sion/images/char_sion_fig_victory_check_styleA_v01.png",
+    "old_path": "moments/sion/images/char_sion_moment_victory_check_v01.png",
+    "background": false
+  },
+  {
+    "character": "sion",
+    "key": "fig_victory_turn",
+    "path": "moments/sion/images/char_sion_fig_victory_turn_styleA_v01.png",
+    "status": "todo",
+    "target": "sion/images/char_sion_fig_victory_turn_styleA_v01.png",
+    "old_path": "moments/sion/images/char_sion_moment_victory_turn_v01.png",
+    "background": false
+  },
+  {
+    "character": "sion",
+    "key": "fig_victory_glasses",
+    "path": "moments/sion/images/char_sion_fig_victory_glasses_styleA_v01.png",
+    "status": "todo",
+    "target": "sion/images/char_sion_fig_victory_glasses_styleA_v01.png",
+    "old_path": "moments/sion/images/char_sion_moment_victory_glasses_v01.png",
+    "background": false
+  },
+  {
+    "character": "sion",
+    "key": "fig_victory_wait",
+    "path": "moments/sion/images/char_sion_fig_victory_wait_styleA_v01.png",
+    "status": "todo",
+    "target": "sion/images/char_sion_fig_victory_wait_styleA_v01.png",
+    "old_path": "moments/sion/images/char_sion_moment_victory_wait_v02.png",
+    "background": false
+  },
+  {
+    "character": "lumi",
+    "key": "fig_victory_land",
+    "path": "moments/lumi/images/char_lumi_fig_victory_land_styleA_v01.png",
+    "status": "todo",
+    "target": "lumi/images/char_lumi_fig_victory_land_styleA_v01.png",
+    "old_path": "moments/lumi/images/char_lumi_moment_victory_land_v01.png",
+    "background": false
+  },
+  {
+    "character": "lumi",
+    "key": "fig_victory_turn",
+    "path": "moments/lumi/images/char_lumi_fig_victory_turn_styleA_v01.png",
+    "status": "todo",
+    "target": "lumi/images/char_lumi_fig_victory_turn_styleA_v01.png",
+    "old_path": "moments/lumi/images/char_lumi_moment_victory_turn_v01.png",
+    "background": false
+  },
+  {
+    "character": "lumi",
+    "key": "fig_victory_grin",
+    "path": "moments/lumi/images/char_lumi_fig_victory_grin_styleA_v01.png",
+    "status": "todo",
+    "target": "lumi/images/char_lumi_fig_victory_grin_styleA_v01.png",
+    "old_path": "moments/lumi/images/char_lumi_moment_victory_grin_v01.png",
+    "background": false
+  },
+  {
+    "character": "lumi",
+    "key": "fig_victory_wait",
+    "path": "moments/lumi/images/char_lumi_fig_victory_wait_styleA_v01.png",
+    "status": "todo",
+    "target": "lumi/images/char_lumi_fig_victory_wait_styleA_v01.png",
+    "old_path": "moments/lumi/images/char_lumi_moment_victory_wait_v01.png",
+    "background": false
+  }
+]

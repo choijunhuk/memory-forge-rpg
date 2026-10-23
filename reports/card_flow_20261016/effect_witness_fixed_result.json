@@ -1,0 +1,151 @@
+{
+  "_meta": {
+    "fastmcp": {
+      "wrap_result": true
+    }
+  },
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Test job status retrieved.\",\"error\":null,\"data\":{\"job_id\":\"aaa250a25d5944f9a422a58401f5df21\",\"status\":\"succeeded\",\"mode\":\"PlayMode\",\"started_unix_ms\":1792139097669,\"finished_unix_ms\":1792139099233,\"last_update_unix_ms\":1792139099233,\"progress\":{\"completed\":10,\"total\":10,\"current_test_full_name\":null,\"current_test_started_unix_ms\":null,\"last_finished_test_full_name\":\"MemoryForge.Client.Tests.EffectCandidateCoreWitnessTests.UnknownConditionalOrNonLeadingCostsRetainTheExistingManualPath\",\"last_finished_unix_ms\":1792139099199,\"stuck_suspected\":false,\"editor_is_focused\":true,\"run_in_background\":false,\"focus_nudge_attempts\":null,\"focus_nudge_limit\":null,\"focus_nudge_status\":null,\"blocked_reason\":null,\"failures_so_far\":[],\"failures_capped\":false},\"error\":null,\"result\":{\"mode\":\"PlayMode\",\"summary\":{\"total\":10,\"passed\":10,\"failed\":0,\"skipped\":0,\"durationSeconds\":0.2567096,\"resultState\":\"Passed\"},\"results\":[{\"name\":\"ChoiceRulesNameTheCoreEffectOfEveryRequestInOrder\",\"fullName\":\"MemoryForge.Client.Tests.EffectCandidateCoreWitnessTests.ChoiceRulesNameTheCoreEffectOfEveryRequestInOrder\",\"state\":\"Passed\",\"durationSeconds\":0.0571218,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"ConditionalCostsAndNumberErrorsUseTheSameCalculation\",\"fullName\":\"MemoryForge.Client.Tests.EffectCandidateCoreWitnessTests.ConditionalCostsAndNumberErrorsUseTheSameCalculation\",\"state\":\"Passed\",\"durationSeconds\":0.0590786,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"CopyPickOffersEvolvedGrowthInstancesAndItsFreeCopyLeavesCostdown\",\"fullName\":\"MemoryForge.Client.Tests.EffectCandidateCoreWitnessTests.CopyPickOffersEvolvedGrowthInstancesAndItsFreeCopyLeavesCostdown\",\"state\":\"Passed\",\"durationSeconds\":0.0180746,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"CostdownOffersOnlyHandCardsWhoseActualCurrentCostIsAboveZero\",\"fullName\":\"MemoryForge.Client.Tests.EffectCandidateCoreWitnessTests.CostdownOffersOnlyHandCardsWhoseActualCurrentCostIsAboveZero\",\"state\":\"Passed\",\"durationSeconds\":0.0133838,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"CostdownPreservesAManualTargetAfterTheLastFreeCharge\",\"fullName\":\"MemoryForge.Client.Tests.EffectCandidateCoreWitnessTests.CostdownPreservesAManualTargetAfterTheLastFreeCharge\",\"state\":\"Passed\",\"durationSeconds\":0.0165816,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"GrowPickOffersGrowthCardsBelowThreeAndNothingAtTheBattleCap\",\"fullName\":\"MemoryForge.Client.Tests.EffectCandidateCoreWitnessTests.GrowPickOffersGrowthCardsBelowThreeAndNothingAtTheBattleCap\",\"state\":\"Passed\",\"durationSeconds\":0.0137781,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"PricesRetainPartsModesCostModsAndZeroOneTwoFreeChargesWithoutMutation\",\"fullName\":\"MemoryForge.Client.Tests.EffectCandidateCoreWitnessTests.PricesRetainPartsModesCostModsAndZeroOneTwoFreeChargesWithoutMutation\",\"state\":\"Passed\",\"durationSeconds\":0.0145045,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"RecallSkipsCursesWhileExhaustPickTakesAnyDiscardCard\",\"fullName\":\"MemoryForge.Client.Tests.EffectCandidateCoreWitnessTests.RecallSkipsCursesWhileExhaustPickTakesAnyDiscardCard\",\"state\":\"Passed\",\"durationSeconds\":0.01251,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"TuneTakesNeitherACurseNorACardAlreadyCarryingItsPart\",\"fullName\":\"MemoryForge.Client.Tests.EffectCandidateCoreWitnessTests.TuneTakesNeitherACurseNorACardAlreadyCarryingItsPart\",\"state\":\"Passed\",\"durationSeconds\":0.0151377,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"UnknownConditionalOrNonLeadingCostsRetainTheExistingManualPath\",\"fullName\":\"MemoryForge.Client.Tests.EffectCandidateCoreWitnessTests.UnknownConditionalOrNonLeadingCostsRetainTheExistingManualPath\",\"state\":\"Passed\",\"durationSeconds\":0.0120283,\"message\":null,\"stackTrace\":null,\"output\":\"\"}]}},\"hint\":null}"
+    }
+  ],
+  "structuredContent": {
+    "result": {
+      "success": true,
+      "message": "Test job status retrieved.",
+      "error": null,
+      "data": {
+        "job_id": "aaa250a25d5944f9a422a58401f5df21",
+        "status": "succeeded",
+        "mode": "PlayMode",
+        "started_unix_ms": 1792139097669,
+        "finished_unix_ms": 1792139099233,
+        "last_update_unix_ms": 1792139099233,
+        "progress": {
+          "completed": 10,
+          "total": 10,
+          "current_test_full_name": null,
+          "current_test_started_unix_ms": null,
+          "last_finished_test_full_name": "MemoryForge.Client.Tests.EffectCandidateCoreWitnessTests.UnknownConditionalOrNonLeadingCostsRetainTheExistingManualPath",
+          "last_finished_unix_ms": 1792139099199,
+          "stuck_suspected": false,
+          "editor_is_focused": true,
+          "run_in_background": false,
+          "focus_nudge_attempts": null,
+          "focus_nudge_limit": null,
+          "focus_nudge_status": null,
+          "blocked_reason": null,
+          "failures_so_far": [],
+          "failures_capped": false
+        },
+        "error": null,
+        "result": {
+          "mode": "PlayMode",
+          "summary": {
+            "total": 10,
+            "passed": 10,
+            "failed": 0,
+            "skipped": 0,
+            "durationSeconds": 0.2567096,
+            "resultState": "Passed"
+          },
+          "results": [
+            {
+              "name": "ChoiceRulesNameTheCoreEffectOfEveryRequestInOrder",
+              "fullName": "MemoryForge.Client.Tests.EffectCandidateCoreWitnessTests.ChoiceRulesNameTheCoreEffectOfEveryRequestInOrder",
+              "state": "Passed",
+              "durationSeconds": 0.0571218,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "ConditionalCostsAndNumberErrorsUseTheSameCalculation",
+              "fullName": "MemoryForge.Client.Tests.EffectCandidateCoreWitnessTests.ConditionalCostsAndNumberErrorsUseTheSameCalculation",
+              "state": "Passed",
+              "durationSeconds": 0.0590786,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "CopyPickOffersEvolvedGrowthInstancesAndItsFreeCopyLeavesCostdown",
+              "fullName": "MemoryForge.Client.Tests.EffectCandidateCoreWitnessTests.CopyPickOffersEvolvedGrowthInstancesAndItsFreeCopyLeavesCostdown",
+              "state": "Passed",
+              "durationSeconds": 0.0180746,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "CostdownOffersOnlyHandCardsWhoseActualCurrentCostIsAboveZero",
+              "fullName": "MemoryForge.Client.Tests.EffectCandidateCoreWitnessTests.CostdownOffersOnlyHandCardsWhoseActualCurrentCostIsAboveZero",
+              "state": "Passed",
+              "durationSeconds": 0.0133838,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "CostdownPreservesAManualTargetAfterTheLastFreeCharge",
+              "fullName": "MemoryForge.Client.Tests.EffectCandidateCoreWitnessTests.CostdownPreservesAManualTargetAfterTheLastFreeCharge",
+              "state": "Passed",
+              "durationSeconds": 0.0165816,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "GrowPickOffersGrowthCardsBelowThreeAndNothingAtTheBattleCap",
+              "fullName": "MemoryForge.Client.Tests.EffectCandidateCoreWitnessTests.GrowPickOffersGrowthCardsBelowThreeAndNothingAtTheBattleCap",
+              "state": "Passed",
+              "durationSeconds": 0.0137781,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "PricesRetainPartsModesCostModsAndZeroOneTwoFreeChargesWithoutMutation",
+              "fullName": "MemoryForge.Client.Tests.EffectCandidateCoreWitnessTests.PricesRetainPartsModesCostModsAndZeroOneTwoFreeChargesWithoutMutation",
+              "state": "Passed",
+              "durationSeconds": 0.0145045,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "RecallSkipsCursesWhileExhaustPickTakesAnyDiscardCard",
+              "fullName": "MemoryForge.Client.Tests.EffectCandidateCoreWitnessTests.RecallSkipsCursesWhileExhaustPickTakesAnyDiscardCard",
+              "state": "Passed",
+              "durationSeconds": 0.01251,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "TuneTakesNeitherACurseNorACardAlreadyCarryingItsPart",
+              "fullName": "MemoryForge.Client.Tests.EffectCandidateCoreWitnessTests.TuneTakesNeitherACurseNorACardAlreadyCarryingItsPart",
+              "state": "Passed",
+              "durationSeconds": 0.0151377,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "UnknownConditionalOrNonLeadingCostsRetainTheExistingManualPath",
+              "fullName": "MemoryForge.Client.Tests.EffectCandidateCoreWitnessTests.UnknownConditionalOrNonLeadingCostsRetainTheExistingManualPath",
+              "state": "Passed",
+              "durationSeconds": 0.0120283,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            }
+          ]
+        }
+      },
+      "hint": null
+    }
+  },
+  "isError": false
+}

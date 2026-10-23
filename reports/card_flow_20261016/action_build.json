@@ -1,0 +1,25 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Build Succeeded.\",\"data\":{\"job_id\":\"build-97089a28ef\",\"result\":\"succeeded\",\"platform\":\"StandaloneOSX\",\"output_path\":\"/Users/choi/Documents/Memory_forge/ops/ai/local/builds/MemoryForgeExpedition-Pacing-20261016.app\",\"started_at\":\"2026-10-16T05:41:54.346407Z\",\"duration_seconds\":13.777244999999999,\"completed_at\":\"2026-10-16T05:42:08.123652Z\",\"total_size_mb\":255.1,\"errors\":0,\"warnings\":0}}"
+    }
+  ],
+  "structuredContent": {
+    "success": true,
+    "message": "Build Succeeded.",
+    "data": {
+      "job_id": "build-97089a28ef",
+      "result": "succeeded",
+      "platform": "StandaloneOSX",
+      "output_path": "/Users/choi/Documents/Memory_forge/ops/ai/local/builds/MemoryForgeExpedition-Pacing-20261016.app",
+      "started_at": "2026-10-16T05:41:54.346407Z",
+      "duration_seconds": 13.777244999999999,
+      "completed_at": "2026-10-16T05:42:08.123652Z",
+      "total_size_mb": 255.1,
+      "errors": 0,
+      "warnings": 0
+    }
+  },
+  "isError": false
+}

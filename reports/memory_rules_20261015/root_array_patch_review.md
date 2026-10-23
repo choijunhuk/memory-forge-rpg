@@ -1,0 +1,5 @@
+# Independent Codex review of Claude array-row patch
+
+Source-only APPROVE for the narrow patch4408717c1d0ee3167a7b8f108c40c86be5de48a6385c292b39c251a6b3e03f23. Compared exact Root-before/Claude-after source; only a why-comment and IList-to-empty-dictionary mapping inside Migrate were added. The original backup/quarantine still uses untouched source[cid]. Direct Inspect, primitive/null rejection, key allocation, baseline consumption and successful current-data paths remain unchanged. Invalid arrays obtain the same temporary key before row-ordered validation as JS; this resolves the independently JS-executed INVALID_UPGRADE and IDENTITY_REQUIRED cases. All current characters have startingCommon; exotic malformed ID coercion/future data are outside this acceptance scope.
+
+Codex authored and independently JS-confirmed the new Host10/Unity2 regression cases; Claude checked their source expectations while authoring the Core patch. Actual .NET RED5449/5451 and Play RED14/16 prove the original issue. Final GREEN .NET/Unity execution is pending separately and is required before integration. No whole Run/server/account migration acceptance is implied.

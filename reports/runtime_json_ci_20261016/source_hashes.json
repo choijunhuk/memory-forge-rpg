@@ -1,0 +1,16 @@
+{
+  "files": [
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "7357f3ba41e42fa07c101e29b83fade3954d6542c2572e36f975419bc365f285"
+    },
+    {
+      "path": "client/MemoryForgeUnity/Packages/manifest.json",
+      "sha256": "624c2fc73788ba2fe2ff1df85e415bb175eab75c589073bfbe6dc358bba3069a"
+    },
+    {
+      "path": "client/MemoryForgeUnity/Packages/packages-lock.json",
+      "sha256": "4952cf1e089cb33acd0068fc1fe16383da8982d5fe1ade033d6b7b7be013f9f1"
+    }
+  ]
+}

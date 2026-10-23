@@ -1,0 +1,15 @@
+{
+  "version": "account-progression-20261021-v4",
+  "baseEquipmentPolicyVersion": "account-progression-20261021-v3",
+  "baseEquipmentPolicySha256": "b13963c1cc6a25e90bfae1d98ed471ad8cd0b8a6e6510e601d32322542a7d924",
+  "mainContentSha256": "b6d3543a1d87f0a28e4824e0c1ae45a1eabc676d7abefcd2e57e23b4abc0054a",
+  "support": {
+    "slots": 1,
+    "gaugeCost": 100,
+    "usesPerBattle": 1,
+    "owned": true,
+    "explicitWeapon": true,
+    "disjointAtLaunch": true,
+    "temporaryTutorial": false
+  }
+}

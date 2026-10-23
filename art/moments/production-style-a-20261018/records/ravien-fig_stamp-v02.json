@@ -1,0 +1,16 @@
+{
+  "character": "ravien",
+  "key": "fig_stamp",
+  "target": "ravien/images/char_ravien_fig_stamp_styleA_v02.png",
+  "args": {
+    "prompt": "Use case: background-extraction. This is an already approved clear-cel full-body sprite of adult Ravien age 28 stamping a document. Preserve the ENTIRE drawing exactly: all ink contours, face, red hair, costume, hands, folder, stamp, paper and narrow wooden table. Change ONLY transparency outside the illustrated character/equipment/furniture. Remove ALL remaining vignette/haze/halo/background color and all near-transparent residual pixels in empty canvas; blank margins and all four corners must have alpha exactly zero. Keep fine hair ends and anti-aliased subject contours. No opaque backdrop, no floor or shadow, no checkerboard. Actual RGBA transparent background. Same 1024x1536 canvas and framing.",
+    "referenced_image_paths": [
+      "/Users/choi/Documents/Memory_forge/art/moments/ravien/images/char_ravien_fig_stamp_styleA_v01.png"
+    ],
+    "transparent_background": true
+  },
+  "cache_path": "/Users/choi/.codex/generated_images/01a14db0-4150-7f01-9240-82aaa185dd28/exec-28970c0c-35ea-445a-a0b0-bdbbfa1e844d.png",
+  "status": "ready",
+  "generation_status": "generated_pending_review",
+  "selected": true
+}

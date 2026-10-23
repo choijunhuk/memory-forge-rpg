@@ -1,0 +1,545 @@
+{
+  "recorded_at": "2026-10-17T06:36:37.629087+00:00",
+  "scope": "official subscription CLI; raw authentication, prompts and stream bodies remain private; statuses are original, not rewritten as success",
+  "runs": [
+    {
+      "task_id": "claude-mcp-profile-20261017",
+      "run_id": "claude-mcp-profile-20261017-20261017T051519793132Z",
+      "status": "TIMED_OUT",
+      "requestedEffort": "max",
+      "requestedModel": "claude-opus-5-5",
+      "process_exit": null,
+      "session_id": null,
+      "subtype": null,
+      "is_error": null,
+      "model_usage_keys": null,
+      "billing_account_matched": true,
+      "billing_verified_at": "2026-10-17T05:01:40.332532+00:00",
+      "billing_evidence_kind": "account UI attestation; not server enforcement",
+      "blocking_reason": "CLI timeout; local checkpoint saved; no retry"
+    },
+    {
+      "task_id": "claude-autonomy-tools-followup-20261017",
+      "run_id": "claude-autonomy-tools-followup-20261017-20261017T054757677692Z",
+      "status": "RECEIVED_UNVERIFIED",
+      "requestedEffort": "xhigh",
+      "requestedModel": "claude-opus-5-5",
+      "process_exit": 0,
+      "session_id": "661da8bf-ab0e-406b-9352-2308a327aee9",
+      "subtype": "success",
+      "is_error": false,
+      "model_usage_keys": [
+        "claude-opus-5-5"
+      ],
+      "billing_account_matched": true,
+      "billing_verified_at": "2026-10-17T05:01:40.332532+00:00",
+      "billing_evidence_kind": "account UI attestation; not server enforcement",
+      "blocking_reason": null
+    },
+    {
+      "task_id": "claude-live-tools-readcheck-20261017",
+      "run_id": "claude-live-tools-readcheck-20261017-20261017T060451900837Z",
+      "status": "RECEIVED_UNVERIFIED",
+      "requestedEffort": "high",
+      "requestedModel": "claude-opus-5-5",
+      "process_exit": 0,
+      "session_id": "ab266f26-8e4e-49d9-9745-cc4047c562de",
+      "subtype": "success",
+      "is_error": false,
+      "model_usage_keys": [
+        "claude-opus-5-5"
+      ],
+      "billing_account_matched": true,
+      "billing_verified_at": "2026-10-17T05:01:40.332532+00:00",
+      "billing_evidence_kind": "account UI attestation; not server enforcement",
+      "blocking_reason": null,
+      "tests": {
+        "allowed": [
+          "npm run test:handoff"
+        ],
+        "runs": [
+          {
+            "command": "npm run test:handoff",
+            "is_error": false
+          }
+        ],
+        "not_run": []
+      },
+      "mcp": {
+        "connection_observed": true,
+        "preflight": "local Unity MCP port listening",
+        "observed": {
+          "servers": {
+            "unityMCP": "connected"
+          },
+          "exposed_tools": [
+            "mcp__unityMCP__blender_bridge",
+            "mcp__unityMCP__debug_request_context",
+            "mcp__unityMCP__find_gameobjects",
+            "mcp__unityMCP__find_in_file",
+            "mcp__unityMCP__generate_audio",
+            "mcp__unityMCP__generate_image",
+            "mcp__unityMCP__generate_model",
+            "mcp__unityMCP__get_sha",
+            "mcp__unityMCP__get_test_job",
+            "mcp__unityMCP__import_model",
+            "mcp__unityMCP__import_model_file",
+            "mcp__unityMCP__manage_camera",
+            "mcp__unityMCP__manage_graphics",
+            "mcp__unityMCP__manage_physics",
+            "mcp__unityMCP__manage_probuilder",
+            "mcp__unityMCP__manage_profiler",
+            "mcp__unityMCP__manage_script_capabilities",
+            "mcp__unityMCP__manage_tools",
+            "mcp__unityMCP__read_console",
+            "mcp__unityMCP__set_active_instance",
+            "mcp__unityMCP__unity_docs",
+            "mcp__unityMCP__unity_reflect",
+            "mcp__unityMCP__validate_script"
+          ],
+          "exposed_not_allowed": [
+            "mcp__unityMCP__blender_bridge",
+            "mcp__unityMCP__debug_request_context",
+            "mcp__unityMCP__find_in_file",
+            "mcp__unityMCP__generate_audio",
+            "mcp__unityMCP__generate_image",
+            "mcp__unityMCP__generate_model",
+            "mcp__unityMCP__import_model",
+            "mcp__unityMCP__import_model_file",
+            "mcp__unityMCP__manage_camera",
+            "mcp__unityMCP__manage_graphics",
+            "mcp__unityMCP__manage_physics",
+            "mcp__unityMCP__manage_probuilder",
+            "mcp__unityMCP__manage_profiler",
+            "mcp__unityMCP__manage_script_capabilities",
+            "mcp__unityMCP__manage_tools",
+            "mcp__unityMCP__unity_docs",
+            "mcp__unityMCP__unity_reflect"
+          ],
+          "calls": [
+            {
+              "tool": "mcp__unityMCP__read_console",
+              "is_error": false
+            }
+          ],
+          "permission_denials": [],
+          "api_key_source": "none"
+        }
+      }
+    },
+    {
+      "task_id": "claude-live-tool-boundary-fix-20261017",
+      "run_id": "claude-live-tool-boundary-fix-20261017-20261017T060933696944Z",
+      "status": "FAILED",
+      "requestedEffort": "xhigh",
+      "requestedModel": "claude-opus-5-5",
+      "process_exit": 0,
+      "session_id": "661da8bf-ab0e-406b-9352-2308a327aee9",
+      "subtype": "success",
+      "is_error": false,
+      "model_usage_keys": [
+        "claude-opus-5-5"
+      ],
+      "billing_account_matched": true,
+      "billing_verified_at": "2026-10-17T05:01:40.332532+00:00",
+      "billing_evidence_kind": "account UI attestation; not server enforcement",
+      "blocking_reason": "A shell command outside the named tests ran; review the local checkpoint",
+      "tests": {
+        "allowed": [
+          "npm run test:handoff",
+          "python3 -m unittest discover -s tests -v"
+        ],
+        "runs": [
+          {
+            "command": "git status --short && git log --oneline -3 && grep -n \"UNITY_DENY\\|UNITY_WRITE\\b\\|exposed_not_allowed\\|connected = \\|violation = \" tools/ai/run_claude.py",
+            "is_error": false
+          },
+          {
+            "command": "grep -n '\"manage_shader\"' ops/ai/runtime-policy.json; grep -n '\"fail_closed_audit\"' ops/ai/runtime-policy.json; grep -n '\"unity_tools_list\"\\|\"unity_profile_connection\"' ops/ai/runtime-policy.json",
+            "is_error": false
+          },
+          {
+            "command": "python3 -c \"import json;json.load(open('ops/ai/runtime-policy.json'));print('json ok')\" && python3 -m py_compile tools/ai/run_claude.py tools/ai/test_handoff.py && echo compile ok",
+            "is_error": true
+          },
+          {
+            "command": "npm run test:handoff",
+            "is_error": false
+          },
+          {
+            "command": "python3 -m unittest discover -s tests -v",
+            "is_error": false
+          }
+        ],
+        "not_run": []
+      }
+    },
+    {
+      "task_id": "claude-native-desktop-probe-20261017",
+      "run_id": "claude-native-desktop-probe-20261017-20261017T062034968582Z",
+      "status": "RECEIVED_UNVERIFIED",
+      "requestedEffort": "high",
+      "requestedModel": "claude-opus-5-5",
+      "process_exit": 0,
+      "session_id": "97555deb-0a11-4859-a9ce-6a355b0a5565",
+      "subtype": "success",
+      "is_error": false,
+      "model_usage_keys": [
+        "claude-opus-5-5"
+      ],
+      "billing_account_matched": true,
+      "billing_verified_at": "2026-10-17T05:01:40.332532+00:00",
+      "billing_evidence_kind": "account UI attestation; not server enforcement",
+      "blocking_reason": null,
+      "mcp": {
+        "connection_observed": true,
+        "preflight": "macOS, npx on PATH, no Peekaboo credential or config file",
+        "observed": {
+          "servers": {
+            "peekaboo": "connected"
+          },
+          "exposed_tools": [
+            "mcp__peekaboo__action",
+            "mcp__peekaboo__app",
+            "mcp__peekaboo__capture",
+            "mcp__peekaboo__click",
+            "mcp__peekaboo__dialog",
+            "mcp__peekaboo__dock",
+            "mcp__peekaboo__drag",
+            "mcp__peekaboo__image",
+            "mcp__peekaboo__inspect_ui",
+            "mcp__peekaboo__menu",
+            "mcp__peekaboo__permissions",
+            "mcp__peekaboo__press",
+            "mcp__peekaboo__scroll",
+            "mcp__peekaboo__see",
+            "mcp__peekaboo__select_text",
+            "mcp__peekaboo__set_value",
+            "mcp__peekaboo__sleep",
+            "mcp__peekaboo__space",
+            "mcp__peekaboo__type",
+            "mcp__peekaboo__verify_state",
+            "mcp__peekaboo__window"
+          ],
+          "exposed_not_allowed": [],
+          "calls": [
+            {
+              "tool": "mcp__peekaboo__permissions",
+              "is_error": false
+            },
+            {
+              "tool": "mcp__peekaboo__app",
+              "is_error": false
+            },
+            {
+              "tool": "mcp__peekaboo__window",
+              "is_error": false
+            },
+            {
+              "tool": "mcp__peekaboo__see",
+              "is_error": false
+            },
+            {
+              "tool": "mcp__peekaboo__inspect_ui",
+              "is_error": false
+            }
+          ],
+          "permission_denials": [
+            "Glob"
+          ],
+          "api_key_source": "none",
+          "transport_connected": true
+        }
+      }
+    },
+    {
+      "task_id": "claude-native-coordinate-probe-20261017",
+      "run_id": "claude-native-coordinate-probe-20261017-20261017T062443590342Z",
+      "status": "RECEIVED_UNVERIFIED",
+      "requestedEffort": "high",
+      "requestedModel": "claude-opus-5-5",
+      "process_exit": 0,
+      "session_id": "97555deb-0a11-4859-a9ce-6a355b0a5565",
+      "subtype": "success",
+      "is_error": false,
+      "model_usage_keys": [
+        "claude-opus-5-5"
+      ],
+      "billing_account_matched": true,
+      "billing_verified_at": "2026-10-17T05:01:40.332532+00:00",
+      "billing_evidence_kind": "account UI attestation; not server enforcement",
+      "blocking_reason": null,
+      "mcp": {
+        "connection_observed": true,
+        "preflight": "macOS, npx on PATH, no Peekaboo credential or config file",
+        "observed": {
+          "servers": {
+            "peekaboo": "connected"
+          },
+          "exposed_tools": [
+            "mcp__peekaboo__action",
+            "mcp__peekaboo__app",
+            "mcp__peekaboo__capture",
+            "mcp__peekaboo__click",
+            "mcp__peekaboo__dialog",
+            "mcp__peekaboo__dock",
+            "mcp__peekaboo__drag",
+            "mcp__peekaboo__image",
+            "mcp__peekaboo__inspect_ui",
+            "mcp__peekaboo__menu",
+            "mcp__peekaboo__permissions",
+            "mcp__peekaboo__press",
+            "mcp__peekaboo__scroll",
+            "mcp__peekaboo__see",
+            "mcp__peekaboo__select_text",
+            "mcp__peekaboo__set_value",
+            "mcp__peekaboo__sleep",
+            "mcp__peekaboo__space",
+            "mcp__peekaboo__type",
+            "mcp__peekaboo__verify_state",
+            "mcp__peekaboo__window"
+          ],
+          "exposed_not_allowed": [],
+          "calls": [
+            {
+              "tool": "mcp__peekaboo__window",
+              "is_error": false
+            },
+            {
+              "tool": "mcp__peekaboo__see",
+              "is_error": false
+            },
+            {
+              "tool": "mcp__peekaboo__click",
+              "is_error": true
+            },
+            {
+              "tool": "mcp__peekaboo__see",
+              "is_error": false
+            },
+            {
+              "tool": "mcp__peekaboo__see",
+              "is_error": false
+            },
+            {
+              "tool": "mcp__peekaboo__click",
+              "is_error": true
+            },
+            {
+              "tool": "mcp__peekaboo__see",
+              "is_error": false
+            }
+          ],
+          "permission_denials": [],
+          "api_key_source": "none",
+          "transport_connected": true
+        }
+      }
+    },
+    {
+      "task_id": "claude-node-services-ui-20261017",
+      "run_id": "claude-node-services-ui-20261017-20261017T050719596070Z",
+      "status": "RECEIVED_UNVERIFIED",
+      "requestedEffort": "xhigh",
+      "requestedModel": "claude-opus-5-5",
+      "process_exit": 0,
+      "session_id": "90797540-ec4b-4894-bbc7-d91116205f7a",
+      "subtype": "success",
+      "is_error": false,
+      "model_usage_keys": [
+        "claude-opus-5-5"
+      ],
+      "billing_account_matched": true,
+      "billing_verified_at": "2026-10-17T05:01:40.332532+00:00",
+      "billing_evidence_kind": "account UI attestation; not server enforcement",
+      "blocking_reason": null
+    },
+    {
+      "task_id": "claude-event-archive-ui-20261017",
+      "run_id": "claude-event-archive-ui-20261017-20261017T055050026753Z",
+      "status": "RECEIVED_UNVERIFIED",
+      "requestedEffort": "xhigh",
+      "requestedModel": "claude-opus-5-5",
+      "process_exit": 0,
+      "session_id": "90797540-ec4b-4894-bbc7-d91116205f7a",
+      "subtype": "success",
+      "is_error": false,
+      "model_usage_keys": [
+        "claude-opus-5-5"
+      ],
+      "billing_account_matched": true,
+      "billing_verified_at": "2026-10-17T05:01:40.332532+00:00",
+      "billing_evidence_kind": "account UI attestation; not server enforcement",
+      "blocking_reason": null
+    },
+    {
+      "task_id": "claude-event-archive-wording-20261017",
+      "run_id": "claude-event-archive-wording-20261017-20261017T061121608341Z",
+      "status": "RECEIVED_UNVERIFIED",
+      "requestedEffort": "high",
+      "requestedModel": "claude-opus-5-5",
+      "process_exit": 0,
+      "session_id": "90797540-ec4b-4894-bbc7-d91116205f7a",
+      "subtype": "success",
+      "is_error": false,
+      "model_usage_keys": [
+        "claude-opus-5-5"
+      ],
+      "billing_account_matched": true,
+      "billing_verified_at": "2026-10-17T05:01:40.332532+00:00",
+      "billing_evidence_kind": "account UI attestation; not server enforcement",
+      "blocking_reason": null
+    },
+    {
+      "task_id": "claude-ci-fixture-20261017",
+      "run_id": "claude-ci-fixture-20261017-20261017T053420326478Z",
+      "status": "RECEIVED_UNVERIFIED",
+      "requestedEffort": "xhigh",
+      "requestedModel": "claude-opus-5-5",
+      "process_exit": 0,
+      "session_id": "dd75f3c7-8225-427b-8c0c-51e17a0ebcd7",
+      "subtype": "success",
+      "is_error": false,
+      "model_usage_keys": [
+        "claude-opus-5-5"
+      ],
+      "billing_account_matched": true,
+      "billing_verified_at": "2026-10-17T05:01:40.332532+00:00",
+      "billing_evidence_kind": "account UI attestation; not server enforcement",
+      "blocking_reason": null
+    },
+    {
+      "task_id": "claude-starter-art-review-20261017",
+      "run_id": "claude-starter-art-review-20261017-20261017T053810062636Z",
+      "status": "RECEIVED_UNVERIFIED",
+      "requestedEffort": "high",
+      "requestedModel": "claude-opus-5-5",
+      "process_exit": 0,
+      "session_id": "90797540-ec4b-4894-bbc7-d91116205f7a",
+      "subtype": "success",
+      "is_error": false,
+      "model_usage_keys": [
+        "claude-opus-5-5"
+      ],
+      "billing_account_matched": true,
+      "billing_verified_at": "2026-10-17T05:01:40.332532+00:00",
+      "billing_evidence_kind": "account UI attestation; not server enforcement",
+      "blocking_reason": null
+    },
+    {
+      "task_id": "claude-art-tools-fixes-20261017",
+      "run_id": "claude-art-tools-fixes-20261017-20261017T054716988648Z",
+      "status": "RECEIVED_UNVERIFIED",
+      "requestedEffort": "xhigh",
+      "requestedModel": "claude-opus-5-5",
+      "process_exit": 0,
+      "session_id": "dd75f3c7-8225-427b-8c0c-51e17a0ebcd7",
+      "subtype": "success",
+      "is_error": false,
+      "model_usage_keys": [
+        "claude-opus-5-5"
+      ],
+      "billing_account_matched": true,
+      "billing_verified_at": "2026-10-17T05:01:40.332532+00:00",
+      "billing_evidence_kind": "account UI attestation; not server enforcement",
+      "blocking_reason": null
+    },
+    {
+      "task_id": "claude-unity-editor-control-probe-20261017",
+      "run_id": "claude-unity-editor-control-probe-20261017-20261017T063636307870Z",
+      "status": "RECEIVED_UNVERIFIED",
+      "requestedEffort": "high",
+      "requestedModel": "claude-opus-5-5",
+      "process_exit": 0,
+      "session_id": "71bbcd5c-6cdf-41d5-b37e-538628940366",
+      "subtype": "success",
+      "is_error": false,
+      "model_usage_keys": [
+        "claude-opus-5-5"
+      ],
+      "billing_account_matched": true,
+      "billing_verified_at": "2026-10-17T05:01:40.332532+00:00",
+      "billing_evidence_kind": "account UI attestation; not server enforcement",
+      "blocking_reason": null,
+      "mcp": {
+        "connection_observed": true,
+        "preflight": "local Unity MCP port listening",
+        "observed": {
+          "servers": {
+            "unityMCP": "connected"
+          },
+          "exposed_tools": [
+            "mcp__unityMCP__execute_code",
+            "mcp__unityMCP__find_gameobjects",
+            "mcp__unityMCP__get_sha",
+            "mcp__unityMCP__get_test_job",
+            "mcp__unityMCP__manage_animation",
+            "mcp__unityMCP__manage_asset",
+            "mcp__unityMCP__manage_build",
+            "mcp__unityMCP__manage_components",
+            "mcp__unityMCP__manage_editor",
+            "mcp__unityMCP__manage_gameobject",
+            "mcp__unityMCP__manage_material",
+            "mcp__unityMCP__manage_prefabs",
+            "mcp__unityMCP__manage_scene",
+            "mcp__unityMCP__manage_scriptable_object",
+            "mcp__unityMCP__manage_texture",
+            "mcp__unityMCP__manage_ui",
+            "mcp__unityMCP__manage_vfx",
+            "mcp__unityMCP__read_console",
+            "mcp__unityMCP__refresh_unity",
+            "mcp__unityMCP__run_tests",
+            "mcp__unityMCP__set_active_instance",
+            "mcp__unityMCP__validate_script"
+          ],
+          "exposed_not_allowed": [],
+          "calls": [
+            {
+              "tool": "mcp__unityMCP__execute_code",
+              "is_error": false
+            },
+            {
+              "tool": "mcp__unityMCP__manage_editor",
+              "is_error": false
+            },
+            {
+              "tool": "mcp__unityMCP__execute_code",
+              "is_error": false
+            },
+            {
+              "tool": "mcp__unityMCP__manage_editor",
+              "is_error": false
+            },
+            {
+              "tool": "mcp__unityMCP__execute_code",
+              "is_error": false
+            },
+            {
+              "tool": "mcp__unityMCP__manage_editor",
+              "is_error": false
+            },
+            {
+              "tool": "mcp__unityMCP__execute_code",
+              "is_error": false
+            },
+            {
+              "tool": "mcp__unityMCP__manage_editor",
+              "is_error": false
+            },
+            {
+              "tool": "mcp__unityMCP__execute_code",
+              "is_error": false
+            },
+            {
+              "tool": "mcp__unityMCP__read_console",
+              "is_error": false
+            }
+          ],
+          "permission_denials": [],
+          "api_key_source": "none",
+          "transport_connected": true
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "c": "harin",
+  "key": "fig_soft",
+  "path": "harin/images/char_harin_seated_happy_v01.png",
+  "refs": [
+    "/Users/choi/Documents/Memory_forge/art/moments/harin/images/char_harin_stand_neutral_v01.png"
+  ],
+  "pose": "Age26 Harin seated on sturdy workshop chair at small wooden table, full seated body and grounded boots. Two gloved hands rest gently on knees, not covering her pocket or face. Tiny dark gray stuffed toy cat with folded ear sits on cloth ON TABLE, shield upright separately behind left side. She meets viewer's eyes with small awkward but unmistakably pleased closed-mouth smile, shoulders finally relaxed; retain strong athletic adult build and exact white/navy/brass armor, combat trousers, one navy cape, navy bob, scar above HER LEFT brow.",
+  "prompt": "Use case: identity-preserve. Locked character design reference. Make ONE new non-explicit narrative RPG key-pose, 1024x1536 full length transparent PNG. Preserve adult identity, age, hairstyle, face, exact costume/colors and painterly anime cel style. All head, fingers, shoes and important props inside canvas. No scene background, haze, labels, panels, other people or erotic posing. Character acting and prop contact are the focus. Acting: Age26 Harin seated on sturdy workshop chair at small wooden table, full seated body and grounded boots. Two gloved hands rest gently on knees, not covering her pocket or face. Tiny dark gray stuffed toy cat with folded ear sits on cloth ON TABLE, shield upright separately behind left side. She meets viewer's eyes with small awkward but unmistakably pleased closed-mouth smile, shoulders finally relaxed; retain strong athletic adult build and exact white/navy/brass armor, combat trousers, one navy cape, navy bob, scar above HER LEFT brow.",
+  "source": "/Users/choi/.codex/generated_images/01a14d20-ffd5-7e81-9e47-85c1c8415e11/exec-e515e8bd-1aed-461c-82ac-acaeddd68aad.png",
+  "tool": "Codex built-in image_gen; subscription-included; no API fallback",
+  "review": "pass",
+  "score": 93,
+  "review_notes": "Rendered output inspected: adult identity and costume match; seated support, empty/resting hands or toy-cat contact are clear. Static key-pose only. Furniture and toy styling vary between standalone poses and require screen review.",
+  "backend_model": "not exposed by tool",
+  "selected": true,
+  "sha256": "345021f546331638dd7cb64f246c146e4b71a312910bc6015c5345e5731ecc08",
+  "size": [
+    1024,
+    1536
+  ],
+  "mode": "RGBA",
+  "alpha_extrema": [
+    0,
+    254
+  ]
+}

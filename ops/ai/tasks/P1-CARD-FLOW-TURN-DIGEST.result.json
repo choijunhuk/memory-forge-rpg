@@ -1,0 +1,31 @@
+{
+  "task_id": "P1-CARD-FLOW-TURN-DIGEST",
+  "run_id": "P1-CARD-FLOW-TURN-DIGEST-20261016T023203239837Z",
+  "status": "VERIFIED",
+  "requestedEffort": "xhigh",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "changes_verified": true,
+  "raw_output": "ops/ai/local/P1-CARD-FLOW-TURN-DIGEST-20261016T023203239837Z*",
+  "billing_verified_at": "2026-10-15T21:22:01.277612+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "claude/balance-audit",
+  "base_commit": "9be537f4c5ef59e890322cb2d1de914fb49bfed6",
+  "worktree": "/Users/choi/.codex/worktrees/claude-balance-audit/Memory_forge",
+  "allowed_files": [
+    "client/MemoryForgeUnity/Assets/Scripts/BattleTurnDigest.cs",
+    "client/MemoryForgeUnity/Assets/Tests/PlayMode/BattleTurnDigestPlayModeTests.cs",
+    "reports/card_flow_20261016/turn_digest_author_report.md"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "d2bda3e6-a0ab-4f84-82e6-c15d5d12127f",
+  "subtype": "success",
+  "is_error": false,
+  "result": "I implemented the turn-digest helper, its tests and the author report, using only the three allowed files. Nothing was compiled or run: compile, Unity PlayMode and the existing test suites are all **NOT_RUN**, because I had no shell or Editor here. My only check was by hand: I matched every expected Korean string against the code branch that produces it. I confirmed the event names, fields and source values against the current C# Core and the JS event list.\n\n**What it does.** `BattleTurnDigest.Build(before, events, after)` turns one committed `end` into read-only display rows. It works only from small public snapshots that Main fills in and from that command's Core events. It never calls the Run or Battle, has no timer, keeps none of its inputs, and never sees draw order or the random-number state. The rows come in four groups:\n- **Summary:** two rows with turn, party HP, block, action points and time-reservation count, before and after.\n- **Previous intents:** each enemy's announced intent, labelled \"직전 예고\", never reported as something that happened.\n- **Events:** one row per event, in Core's order.\n- **Enemy results:** final values for enemies that changed, died or newly appeared.\n\n**What the rows distinguish.** They separate card use from time-reservation registration and resolution, and copies from card plays. Each damage, HP-loss or block row names its source: card, ultimate, counter, relic, burn, reflect, overload, and so on. Reflect and overload are shown as party HP loss, not as card damage. Missing fields or unknown events (including A's late-enemy events, for now) produce a generic row instead of an error. `IsReservedResolution` marks only actual reservation resolutions, which are the rows the approved 0.3 s per card applies to.\n\n**Tests.** The 8 NUnit tests use only explicit inputs and literal expected text. They cover:\n- immediate use vs. reservation registration vs. reservation resolution;\n- copies;\n- the source label on each damage, HP-loss and block row;\n- null and unknown inputs;\n- announced intent vs. what actually happened;\n- the summary in a normal turn, a victory and a defeat;\n- event order;\n- that the rows stay unchanged and read-only after the caller mutates its inputs.\n\n**Limits.**\n- Card names in damage rows appear only when another event in the same command connects the card to its name.\n- Some enemy moves (defend, buff, reflect, block all, summon, and the weaken part of attack-and-weaken) emit no Core event. They show up only through the announced intent and the final values.\n- The Korean wording is a draft awaiting UX review.\n- There are no `.meta` files; Unity creates them when you import.\n- Nothing in Main is wired up yet.\n\n**Main integration (after B finishes).** The report spells out the steps:\n1. Fill in the \"before\" snapshot before `end`.\n2. Keep the `BattleResponse` that `SendBattle` currently throws away.\n3. Name event cards from their definition id or from public zones only.\n4. After a victory or defeat, fill \"after\" with only the result phase and the Run's HP.\n5. Show the rows in a blocking overlay.\n6. Make every public command entry point refuse while the summary is open, as you decided, rather than closing it and running the command.\n\nFiles are in `client/MemoryForgeUnity/Assets/`:\n- `Scripts/BattleTurnDigest.cs`\n- `Tests/PlayMode/BattleTurnDigestPlayModeTests.cs`\n\nand in `reports/card_flow_20261016/`:\n- `turn_digest_author_report.md`",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ],
+  "root_verification": "reports/card_flow_20261016/root_acceptance.md"
+}

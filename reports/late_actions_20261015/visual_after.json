@@ -1,0 +1,19 @@
+{
+  "score": 94,
+  "verdict": "pass",
+  "category_match": true,
+  "differences": [],
+  "suggestions": [],
+  "reasoning": "실제 HTML의 착취·부채 예상 행동력, 기절 제외, 지연 버림/환급 없음 사전 안내와 페이즈 상세를 확인했다. 데스크톱 1280·모바일 390·130% 글자에서 5적·5예약·10손패가 스크롤로 가려지지 않게 접근된다. 기존 그리드·서체·색상은 유지했다.",
+  "evidence": [
+    "screens/candidate-ap-preview-before.png",
+    "screens/candidate-ap-preview-stunned.png",
+    "screens/candidate-delay-warning-before.png",
+    "screens/candidate-phase-detail.png",
+    "screens/candidate-crowded-mobile-130-scrolled.png"
+  ],
+  "limits": [
+    "폭 390의 모든 요소가 한 화면에 동시에 보인다는 뜻은 아니다. 가로 손패와 세로 전투 영역은 스크롤로 접근한다.",
+    "브라우저 합성 입력 검증이며 실제 휴대폰 입력 검증은 아니다."
+  ]
+}

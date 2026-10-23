@@ -1,0 +1,25 @@
+{
+  "scope": "one-unsent-intent",
+  "reference": "Original v0.8.1 section14.2/14.3 plus existing expedition UI; reference ZIP is supplemental",
+  "image": "reports/card_flow_20261016/prepared_final_live_pending.png",
+  "verdict": "PASS",
+  "score": 94,
+  "observed": [
+    "Korean waiting1/1 label and explicit cancel visible separately from timeline",
+    "Committed block8/AP3/turn1 remain visible during waiting",
+    "Frozen card and enemy names visible; End button visibly disabled",
+    "Pace and skip controls stay visible; no overlap in captured 1180x665 view",
+    "Final image after P2 repair: Cancel is left in former pure-info rect; pure card info is right in former Confirm rect; labels do not overlap."
+  ],
+  "not_checked": [
+    "130% text",
+    "48dp mobile targets",
+    "Android/physical native battle input",
+    "final VFX/audio"
+  ],
+  "state_evidence": [
+    "prepared_final_live_before_send.json",
+    "prepared_final_live_after_send.json"
+  ],
+  "pre_P2_image": "reports/card_flow_20261016/prepared_live_pending.png"
+}

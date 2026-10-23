@@ -1,0 +1,11 @@
+{
+  "files": [
+    "core/MemoryForge.CoreChecks/TraceHashChecks.cs",
+    "core/MemoryForge.CoreChecks/BattleTurnChecks.cs",
+    "core/MemoryForge.CoreChecks/BattlePlayerActionChecks.cs",
+    "core/MemoryForge.CoreChecks/RunCreateChecks.cs"
+  ],
+  "onlyOneScopeDiagnosticLiteralChangedPerFile": true,
+  "checksCountersAndControlFlowIdentical": true,
+  "historicalReportsRewritten": false
+}

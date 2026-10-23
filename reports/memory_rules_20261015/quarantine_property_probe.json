@@ -1,0 +1,53 @@
+{
+  "scope": "Read-only source diagnostic; no migration of real account or product changes",
+  "input": {
+    "__proto__": [
+      {
+        "id": "legacy_unknown",
+        "note": "keep complete original"
+      }
+    ],
+    "unknown": [
+      {
+        "id": "legacy_unknown"
+      }
+    ]
+  },
+  "output": {
+    "schema": "mf-memory-v2",
+    "version": 0,
+    "memory": {},
+    "quarantine": {
+      "unknown": {
+        "code": "INVALID_SNAPSHOT",
+        "original": [
+          {
+            "id": "legacy_unknown"
+          }
+        ]
+      }
+    },
+    "legacyBackup": {
+      "__proto__": [
+        {
+          "id": "legacy_unknown",
+          "note": "keep complete original"
+        }
+      ],
+      "unknown": [
+        {
+          "id": "legacy_unknown"
+        }
+      ]
+    },
+    "history": [],
+    "receipts": {}
+  },
+  "observations": {
+    "protoInputOwn": true,
+    "protoQuarantineOwn": false,
+    "ordinaryQuarantineOwn": true,
+    "protoBackupOwn": true,
+    "quarantinePrototypeChanged": true
+  }
+}

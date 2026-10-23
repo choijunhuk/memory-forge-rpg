@@ -1,0 +1,30 @@
+{
+  "task_id": "P1-PUBLIC-QUERY-PURITY-TEST-FIX-20261017",
+  "run_id": "P1-PUBLIC-QUERY-PURITY-TEST-FIX-20261017-20261016T164048599316Z",
+  "status": "RECEIVED_UNVERIFIED",
+  "requestedEffort": "xhigh",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "changes_verified": false,
+  "raw_output": "ops/ai/local/P1-PUBLIC-QUERY-PURITY-TEST-FIX-20261017-20261016T164048599316Z*",
+  "billing_verified_at": "2026-10-15T21:22:01.277612+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "claude/balance-audit",
+  "base_commit": "9be537f4c5ef59e890322cb2d1de914fb49bfed6",
+  "worktree": "/Users/choi/.codex/worktrees/claude-balance-audit/Memory_forge",
+  "allowed_files": [
+    "client/MemoryForgeUnity/Assets/Tests/PlayMode/BattlePresentationQueryPlayModeTests.cs",
+    "core/MemoryForge.CoreChecks/BattlePresentationQueryChecks.cs",
+    "reports/public_battle_query_20261017/core_tests_author.md"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "b727f1dc-15a0-4976-afb8-eb71ff77367e",
+  "subtype": "success",
+  "is_error": false,
+  "result": "두 증명 공백을 모두 메웠습니다. 수정한 것은 지정된 테스트 파일 2개와 보고서뿐이고, 소스는 건드리지 않았습니다. 저는 빌드나 실행을 하지 않았으므로(NOT_RUN) 컴파일과 실행 확인은 Root 몫입니다.\n\n**1. receipt 맵을 순수성 검사에 포함**\n- Core와 Mono에 `ReceiptMap(Battle)`을 추가했습니다. Battle 내부의 receipt 맵 전체(개수, 각 키의 identity와 response)를 읽기만 하는 reflection으로 출력합니다.\n- 이 맵은 상태 그래프 밖에 있어서 예전 검사에서 빠져 있었습니다. 이제 다음 검사들이 전후로 이 맵까지 비교합니다:\n  - Core: `Pure`(조회 전후), `Rejects`(거절된 명령이 receipt를 저장하지 않는지), `Receipts`(재전송 후 맵이 그대로인지).\n  - Mono: `Fingerprint`에 맵을 붙였으므로 Slots, Choices, Rejects, ReceiptsReplay 검사 모두에 적용됩니다.\n- reflection이 실제 맵을 읽는다는 증명으로, 맵의 키 집합이 테스트가 저장한 rid 집합과 정확히 같은지 확인하는 검사를 Core와 Mono 양쪽에 넣었습니다.\n- 기존의 정확한 재전송 검사는 그대로 둡니다. 운영 코드용 접근자나 복원 API는 쓰지 않았고, receipt를 쓰는 일도 없습니다.\n\n**2. 원본 응답의 분리 확인 (다음 조회 전에)**\n- `Slots`: 두 번째 응답이 목록, `Next`, `After`, 각 예약까지 모두 새 객체인지 확인합니다. 그 응답의 모든 필드를 바꾼 직후, 다음 조회를 하기 전에 첫 응답의 출력이 그대로인지 확인합니다. 목록을 비운 뒤에도 한 번 더 확인합니다.\n- `Choices`: 두 번째 응답이 두 목록과 각 요청까지 새 객체인지 확인합니다. 값, 후보, 요청의 모든 필드를 바꾼 직후 첫 응답이 그대로인지 확인합니다. Mono는 요청을 하나 추가한 뒤에도 확인합니다.\n- 이렇게 하면 내부에 캐시된 객체를 다음 조회가 다시 채우는 구현도 잡아냅니다.\n- 기존 453개 검사와 모든 케이스는 남아 있고, 약해지거나 빠진 검사는 없습니다. 검사 수는 늘어납니다.\n\n**남은 한계**\n- 턴 수가 Int32 최대값 근처인 경우와, 플레이어 턴에 T+3 예약이 보이는 경우는 여전히 NOT_COVERED입니다.\n- receipt 지문은 내부 필드 이름(`receipts`, `Identity`, `Response`)에 의존합니다. 이름이 바뀌면 그 시나리오가 실패하므로 조용히 통과하는 일은 없습니다.\n- Native가 지적한 Core의 가격 오류 XML 주석이 너무 넓다는 점은, 소스가 읽기 전용이라 고치지 않았습니다. 막는 문제는 아닙니다.\n\n**다음 작업 (Root)**: CoreChecks와 PlayMode 테스트를 컴파일·실행하고, 이번 변경분을 다시 검토해 주세요.",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ]
+}

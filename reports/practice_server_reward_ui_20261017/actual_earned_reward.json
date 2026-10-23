@@ -1,0 +1,68 @@
+{
+  "status": "PASS",
+  "phase": "REWARD",
+  "start_version": 1,
+  "final_version": 9,
+  "commands": [
+    {
+      "kind": "play",
+      "uid": "c6",
+      "from_version": 1,
+      "to_version": 2
+    },
+    {
+      "kind": "play",
+      "uid": "c5",
+      "from_version": 2,
+      "to_version": 3
+    },
+    {
+      "kind": "play",
+      "uid": "c13",
+      "from_version": 3,
+      "to_version": 4
+    },
+    {
+      "kind": "play",
+      "uid": "c7",
+      "from_version": 4,
+      "to_version": 5
+    },
+    {
+      "kind": "end",
+      "from_version": 5,
+      "to_version": 6
+    },
+    {
+      "kind": "play",
+      "uid": "c3",
+      "from_version": 6,
+      "to_version": 7
+    },
+    {
+      "kind": "play",
+      "uid": "c10",
+      "from_version": 7,
+      "to_version": 8
+    },
+    {
+      "kind": "play",
+      "uid": "c1",
+      "from_version": 8,
+      "to_version": 9
+    }
+  ],
+  "pending_reward": {
+    "type": "reward",
+    "coins": 30,
+    "cards": [
+      "sera_reload",
+      "sera_calc",
+      "sera_cover"
+    ],
+    "relic": null,
+    "part": null,
+    "evolutions": []
+  },
+  "scope": "actual Editor UI public actions and real Core HTTP; no snapshot/seed/RNG injection or physical-device claim"
+}

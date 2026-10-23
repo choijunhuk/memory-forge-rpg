@@ -1,0 +1,54 @@
+{
+  "success": true,
+  "message": "Test job status retrieved.",
+  "error": null,
+  "data": {
+    "job_id": "327f15778bf349c6bbe5eb5b94544dd1",
+    "status": "succeeded",
+    "mode": "PlayMode",
+    "started_unix_ms": 1792099116046,
+    "finished_unix_ms": 1792099117759,
+    "last_update_unix_ms": 1792099117759,
+    "progress": {
+      "completed": 1,
+      "total": 1,
+      "current_test_full_name": null,
+      "current_test_started_unix_ms": null,
+      "last_finished_test_full_name": "MemoryForge.PlayModeTests.RunMemoryFlowPlayModeTests.OriginalLegacyAndV2RunsSaveAndRestartThroughActualUnityCore",
+      "last_finished_unix_ms": 1792099117745,
+      "stuck_suspected": false,
+      "editor_is_focused": true,
+      "run_in_background": false,
+      "focus_nudge_attempts": null,
+      "focus_nudge_limit": null,
+      "focus_nudge_status": null,
+      "blocked_reason": null,
+      "failures_so_far": [],
+      "failures_capped": false
+    },
+    "error": null,
+    "result": {
+      "mode": "PlayMode",
+      "summary": {
+        "total": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "durationSeconds": 0.698279,
+        "resultState": "Passed"
+      },
+      "results": [
+        {
+          "name": "OriginalLegacyAndV2RunsSaveAndRestartThroughActualUnityCore",
+          "fullName": "MemoryForge.PlayModeTests.RunMemoryFlowPlayModeTests.OriginalLegacyAndV2RunsSaveAndRestartThroughActualUnityCore",
+          "state": "Passed",
+          "durationSeconds": 0.678894,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        }
+      ]
+    }
+  },
+  "hint": null
+}

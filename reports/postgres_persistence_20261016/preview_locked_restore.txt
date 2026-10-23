@@ -1,0 +1,3 @@
+  복원할 프로젝트를 확인하는 중...
+  /Users/choi/.codex/worktrees/claude-balance-audit/Memory_forge/core/MemoryForge.Core/MemoryForge.Core.csproj을(를) 64밀리초 동안 복원했습니다.
+  /Users/choi/.codex/worktrees/claude-balance-audit/Memory_forge/server/MemoryForge.Server/MemoryForge.Server.csproj을(를) 74밀리초 동안 복원했습니다.

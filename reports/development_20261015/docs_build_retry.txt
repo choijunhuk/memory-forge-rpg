@@ -1,0 +1,57 @@
+
+> memory-forge-rpg@0.8.1-aio.2 docs
+> python3 tools/ai/build_delivery_pdf.py --rebuild-base
+
+prompts: 10 characters / 50 prompts; aliases explicit
+
+-----
+
+WeasyPrint could not import some external libraries. Please carefully follow the installation steps before reporting an issue:
+https://doc.courtbouillon.org/weasyprint/stable/first_steps.html#installation
+https://doc.courtbouillon.org/weasyprint/stable/first_steps.html#troubleshooting 
+
+-----
+
+Traceback (most recent call last):
+  File "/Users/choi/Documents/Memory_forge/tools/build_integrated_design.py", line 114, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "/Users/choi/Documents/Memory_forge/tools/build_integrated_design.py", line 108, in main
+    from weasyprint import HTML
+  File "/Users/choi/.codex/tmp/memory-forge-python-20261015/lib/python3.14/site-packages/weasyprint/__init__.py", line 372, in <module>
+    from .css import preprocess_stylesheet  # noqa: I001, E402
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/choi/.codex/tmp/memory-forge-python-20261015/lib/python3.14/site-packages/weasyprint/css/__init__.py", line 29, in <module>
+    from ..text.fonts import FontConfiguration
+  File "/Users/choi/.codex/tmp/memory-forge-python-20261015/lib/python3.14/site-packages/weasyprint/text/fonts.py", line 17, in <module>
+    from .constants import (  # isort:skip
+        CAPS_KEYS, EAST_ASIAN_KEYS, FONTCONFIG_STRETCH, FONTCONFIG_STYLE, FONTCONFIG_WEIGHT,
+        LIGATURE_KEYS, NUMERIC_KEYS, PANGO_STRETCH, PANGO_STYLE, PANGO_VARIANT)
+  File "/Users/choi/.codex/tmp/memory-forge-python-20261015/lib/python3.14/site-packages/weasyprint/text/constants.py", line 5, in <module>
+    from .ffi import pango
+  File "/Users/choi/.codex/tmp/memory-forge-python-20261015/lib/python3.14/site-packages/weasyprint/text/ffi.py", line 476, in <module>
+    gobject = _dlopen(
+        ffi, 'libgobject-2.0-0', 'gobject-2.0-0', 'gobject-2.0',
+        'libgobject-2.0.so.0', 'libgobject-2.0.0.dylib', 'libgobject-2.0-0.dll')
+  File "/Users/choi/.codex/tmp/memory-forge-python-20261015/lib/python3.14/site-packages/weasyprint/text/ffi.py", line 464, in _dlopen
+    return ffi.dlopen(names[0], flags)  # pragma: no cover
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/choi/.codex/tmp/memory-forge-python-20261015/lib/python3.14/site-packages/cffi/api.py", line 143, in dlopen
+    lib, function_cache = _make_ffi_library(self, name, flags)
+                          ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Users/choi/.codex/tmp/memory-forge-python-20261015/lib/python3.14/site-packages/cffi/api.py", line 827, in _make_ffi_library
+    backendlib = _load_backend_lib(backend, libname, flags)
+  File "/Users/choi/.codex/tmp/memory-forge-python-20261015/lib/python3.14/site-packages/cffi/api.py", line 822, in _load_backend_lib
+    raise OSError(msg)
+OSError: cannot load library 'libgobject-2.0-0': dlopen(libgobject-2.0-0, 0x0002): tried: 'libgobject-2.0-0' (no such file), '/System/Volumes/Preboot/Cryptexes/OSlibgobject-2.0-0' (no such file), '/usr/lib/libgobject-2.0-0' (no such file, not in dyld cache), 'libgobject-2.0-0' (no such file).  Additionally, ctypes.util.find_library() did not manage to locate a library called 'libgobject-2.0-0'
+Traceback (most recent call last):
+  File "/Users/choi/Documents/Memory_forge/tools/ai/build_delivery_pdf.py", line 126, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "/Users/choi/Documents/Memory_forge/tools/ai/build_delivery_pdf.py", line 28, in main
+    subprocess.run([sys.executable,str(ROOT/'tools/build_integrated_design.py'),'--pdf'],cwd=ROOT,check=True)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py", line 578, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['/Users/choi/.codex/tmp/memory-forge-python-20261015/bin/python3', '/Users/choi/Documents/Memory_forge/tools/build_integrated_design.py', '--pdf']' returned non-zero exit status 1.

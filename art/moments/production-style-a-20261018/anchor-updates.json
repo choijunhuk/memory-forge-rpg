@@ -1,0 +1,524 @@
+{
+  "harin": {
+    "fig_worry": {
+      "face": [
+        0.51,
+        0.105
+      ],
+      "hands": [
+        0.66,
+        0.415
+      ],
+      "body": [
+        0.51,
+        0.53
+      ]
+    },
+    "fig_cat": {
+      "face": [
+        0.51,
+        0.105
+      ],
+      "hands": [
+        0.61,
+        0.325
+      ],
+      "body": [
+        0.51,
+        0.53
+      ]
+    },
+    "fig_cat_placed": {
+      "face": [
+        0.51,
+        0.105
+      ],
+      "hands": [
+        0.53,
+        0.485
+      ],
+      "body": [
+        0.51,
+        0.53
+      ]
+    },
+    "fig_soft": {
+      "face": [
+        0.51,
+        0.105
+      ],
+      "hands": [
+        0.53,
+        0.485
+      ],
+      "body": [
+        0.51,
+        0.53
+      ]
+    },
+    "fig_rest": {
+      "face": [
+        0.51,
+        0.105
+      ],
+      "hands": [
+        0.58,
+        0.46
+      ],
+      "body": [
+        0.51,
+        0.53
+      ]
+    },
+    "expr_neutral": {
+      "face": [
+        0.51,
+        0.44
+      ]
+    },
+    "expr_happy": {
+      "face": [
+        0.51,
+        0.44
+      ]
+    },
+    "expr_annoyed": {
+      "face": [
+        0.51,
+        0.44
+      ]
+    },
+    "expr_surprised": {
+      "face": [
+        0.51,
+        0.44
+      ]
+    },
+    "expr_worried": {
+      "face": [
+        0.51,
+        0.44
+      ]
+    },
+    "expr_determined": {
+      "face": [
+        0.51,
+        0.44
+      ]
+    }
+  },
+  "ravien": {
+    "fig_waver": {
+      "face": [
+        0.51,
+        0.105
+      ],
+      "hands": [
+        0.53,
+        0.46
+      ],
+      "body": [
+        0.51,
+        0.5
+      ]
+    },
+    "fig_bond_turn": {
+      "face": [
+        0.51,
+        0.105
+      ],
+      "hands": [
+        0.53,
+        0.46
+      ],
+      "body": [
+        0.51,
+        0.5
+      ]
+    },
+    "fig_soft": {
+      "face": [
+        0.51,
+        0.105
+      ],
+      "hands": [
+        0.53,
+        0.46
+      ],
+      "body": [
+        0.51,
+        0.5
+      ]
+    },
+    "fig_bond_end": {
+      "face": [
+        0.71,
+        0.105
+      ],
+      "hands": [
+        0.75,
+        0.52
+      ],
+      "body": [
+        0.71,
+        0.5
+      ]
+    },
+    "expr_neutral": {
+      "face": [
+        0.53,
+        0.43
+      ]
+    },
+    "expr_happy": {
+      "face": [
+        0.53,
+        0.43
+      ]
+    },
+    "expr_annoyed": {
+      "face": [
+        0.53,
+        0.43
+      ]
+    },
+    "expr_surprised": {
+      "face": [
+        0.53,
+        0.43
+      ]
+    },
+    "expr_worried": {
+      "face": [
+        0.53,
+        0.43
+      ]
+    },
+    "expr_determined": {
+      "face": [
+        0.53,
+        0.43
+      ]
+    }
+  },
+  "aila": {
+    "fig_bond_table": {
+      "face": [
+        0.51,
+        0.105
+      ],
+      "hands": [
+        0.32,
+        0.38
+      ],
+      "body": [
+        0.5,
+        0.5
+      ]
+    },
+    "fig_bond_paper": {
+      "face": [
+        0.51,
+        0.105
+      ],
+      "hands": [
+        0.68,
+        0.45
+      ],
+      "body": [
+        0.5,
+        0.5
+      ]
+    },
+    "fig_bond_hover": {
+      "face": [
+        0.52,
+        0.105
+      ],
+      "hands": [
+        0.73,
+        0.445
+      ],
+      "body": [
+        0.5,
+        0.5
+      ]
+    },
+    "fig_bond_write": {
+      "face": [
+        0.59,
+        0.115
+      ],
+      "hands": [
+        0.73,
+        0.445
+      ],
+      "body": [
+        0.5,
+        0.5
+      ]
+    },
+    "fig_bond_present": {
+      "face": [
+        0.52,
+        0.105
+      ],
+      "hands": [
+        0.7,
+        0.25
+      ],
+      "body": [
+        0.5,
+        0.5
+      ]
+    },
+    "fig_bond_return": {
+      "face": [
+        0.51,
+        0.105
+      ],
+      "hands": [
+        0.7,
+        0.36
+      ],
+      "body": [
+        0.5,
+        0.5
+      ]
+    },
+    "fig_bond_store": {
+      "face": [
+        0.51,
+        0.105
+      ],
+      "hands": [
+        0.69,
+        0.5
+      ],
+      "body": [
+        0.5,
+        0.5
+      ]
+    },
+    "expr_neutral": {
+      "face": [
+        0.53,
+        0.43
+      ]
+    },
+    "expr_happy": {
+      "face": [
+        0.53,
+        0.43
+      ]
+    },
+    "expr_annoyed": {
+      "face": [
+        0.53,
+        0.43
+      ]
+    },
+    "expr_surprised": {
+      "face": [
+        0.53,
+        0.43
+      ]
+    },
+    "expr_worried": {
+      "face": [
+        0.53,
+        0.43
+      ]
+    },
+    "expr_determined": {
+      "face": [
+        0.53,
+        0.43
+      ]
+    }
+  },
+  "sion": {
+    "fig_bond_neutral": {
+      "face": [
+        0.52,
+        0.105
+      ],
+      "hands": [
+        0.67,
+        0.265
+      ],
+      "body": [
+        0.5,
+        0.5
+      ]
+    },
+    "fig_bond_adjust": {
+      "face": [
+        0.52,
+        0.105
+      ],
+      "hands": [
+        0.63,
+        0.14
+      ],
+      "body": [
+        0.5,
+        0.5
+      ]
+    },
+    "fig_bond_soft": {
+      "face": [
+        0.52,
+        0.105
+      ],
+      "hands": [
+        0.73,
+        0.42
+      ],
+      "body": [
+        0.5,
+        0.5
+      ]
+    },
+    "fig_bond_page": {
+      "face": [
+        0.52,
+        0.105
+      ],
+      "hands": [
+        0.7,
+        0.42
+      ],
+      "body": [
+        0.5,
+        0.5
+      ]
+    },
+    "fig_bond_hidden": {
+      "face": [
+        0.52,
+        0.105
+      ],
+      "hands": [
+        0.52,
+        0.23
+      ],
+      "body": [
+        0.5,
+        0.5
+      ]
+    },
+    "expr_neutral": {
+      "face": [
+        0.53,
+        0.43
+      ]
+    },
+    "expr_happy": {
+      "face": [
+        0.53,
+        0.43
+      ]
+    },
+    "expr_annoyed": {
+      "face": [
+        0.53,
+        0.43
+      ]
+    },
+    "expr_surprised": {
+      "face": [
+        0.53,
+        0.43
+      ]
+    },
+    "expr_worried": {
+      "face": [
+        0.53,
+        0.43
+      ]
+    },
+    "expr_determined": {
+      "face": [
+        0.53,
+        0.43
+      ]
+    }
+  },
+  "sera": {
+    "expr_neutral": {
+      "face": [
+        0.56,
+        0.4
+      ]
+    },
+    "expr_happy": {
+      "face": [
+        0.56,
+        0.4
+      ]
+    },
+    "expr_annoyed": {
+      "face": [
+        0.56,
+        0.4
+      ]
+    },
+    "expr_surprised": {
+      "face": [
+        0.56,
+        0.4
+      ]
+    },
+    "expr_worried": {
+      "face": [
+        0.56,
+        0.4
+      ]
+    },
+    "expr_determined": {
+      "face": [
+        0.56,
+        0.4
+      ]
+    }
+  },
+  "lumi": {
+    "expr_neutral": {
+      "face": [
+        0.54,
+        0.45
+      ]
+    },
+    "expr_happy": {
+      "face": [
+        0.54,
+        0.45
+      ]
+    },
+    "expr_annoyed": {
+      "face": [
+        0.54,
+        0.45
+      ]
+    },
+    "expr_surprised": {
+      "face": [
+        0.54,
+        0.45
+      ]
+    },
+    "expr_worried": {
+      "face": [
+        0.54,
+        0.45
+      ]
+    },
+    "expr_determined": {
+      "face": [
+        0.54,
+        0.45
+      ]
+    }
+  }
+}

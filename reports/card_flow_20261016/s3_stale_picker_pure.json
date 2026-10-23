@@ -1,0 +1,26 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"externalChange\":\"real public Core Run.BattleCommand(end), no state injection\",\"autoAccepted\":false,\"error\":\"PICK_STALE\",\"pickerRetired\":true,\"fullStateUnchanged\":true,\"version\":2,\"turn\":2,\"expectedStateInjected\":false},\"compiler\":\"codedom\"}}"
+    }
+  ],
+  "structuredContent": {
+    "success": true,
+    "message": "Code executed successfully.",
+    "data": {
+      "result": {
+        "externalChange": "real public Core Run.BattleCommand(end), no state injection",
+        "autoAccepted": false,
+        "error": "PICK_STALE",
+        "pickerRetired": true,
+        "fullStateUnchanged": true,
+        "version": 2,
+        "turn": 2,
+        "expectedStateInjected": false
+      },
+      "compiler": "codedom"
+    }
+  },
+  "isError": false
+}

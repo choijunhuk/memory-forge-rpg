@@ -1,0 +1,70 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Test job status retrieved.\",\"error\":null,\"data\":{\"job_id\":\"7eb18a2efaf74cb99432e4b56587ec73\",\"status\":\"failed\",\"mode\":\"PlayMode\",\"started_unix_ms\":1792112550724,\"finished_unix_ms\":1792112556910,\"last_update_unix_ms\":1792112556910,\"progress\":{\"completed\":1,\"total\":1,\"current_test_full_name\":null,\"current_test_started_unix_ms\":null,\"last_finished_test_full_name\":\"MemoryForge.Client.Tests.ExpeditionClientPlayModeTests.NextIntentShowsItsForecastImmediatelyWhileThePreviousToastWouldStillBeActive\",\"last_finished_unix_ms\":1792112556897,\"stuck_suspected\":false,\"editor_is_focused\":false,\"run_in_background\":false,\"focus_nudge_attempts\":null,\"focus_nudge_limit\":null,\"focus_nudge_status\":null,\"blocked_reason\":null,\"failures_so_far\":[{\"full_name\":\"MemoryForge.Client.Tests.ExpeditionClientPlayModeTests.NextIntentShowsItsForecastImmediatelyWhileThePreviousToastWouldStillBeActive\",\"message\":\"  the new intent retired the stale toast\\n  Expected: <empty>\\n  But was:  \\\"경계 방패 사용\\\"\\n\"}],\"failures_capped\":false},\"error\":null,\"result\":{\"mode\":\"PlayMode\",\"summary\":{\"total\":1,\"passed\":0,\"failed\":1,\"skipped\":0,\"durationSeconds\":0.1982422,\"resultState\":\"Failed(Child)\"},\"results\":[{\"name\":\"NextIntentShowsItsForecastImmediatelyWhileThePreviousToastWouldStillBeActive\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionClientPlayModeTests.NextIntentShowsItsForecastImmediatelyWhileThePreviousToastWouldStillBeActive\",\"state\":\"Failed\",\"durationSeconds\":0.1824751,\"message\":\"  the new intent retired the stale toast\\n  Expected: <empty>\\n  But was:  \\\"경계 방패 사용\\\"\\n\",\"stackTrace\":\"at MemoryForge.Client.Tests.ExpeditionClientPlayModeTests+<NextIntentShowsItsForecastImmediatelyWhileThePreviousToastWouldStillBeActive>d__15.MoveNext () [0x004f2] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionClientPlayModeTests.cs:641\\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@388540dd9ce6/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:44\\n\",\"output\":\"\"}]}},\"hint\":null}"
+    }
+  ],
+  "structuredContent": {
+    "result": {
+      "success": true,
+      "message": "Test job status retrieved.",
+      "error": null,
+      "data": {
+        "job_id": "7eb18a2efaf74cb99432e4b56587ec73",
+        "status": "failed",
+        "mode": "PlayMode",
+        "started_unix_ms": 1792112550724,
+        "finished_unix_ms": 1792112556910,
+        "last_update_unix_ms": 1792112556910,
+        "progress": {
+          "completed": 1,
+          "total": 1,
+          "current_test_full_name": null,
+          "current_test_started_unix_ms": null,
+          "last_finished_test_full_name": "MemoryForge.Client.Tests.ExpeditionClientPlayModeTests.NextIntentShowsItsForecastImmediatelyWhileThePreviousToastWouldStillBeActive",
+          "last_finished_unix_ms": 1792112556897,
+          "stuck_suspected": false,
+          "editor_is_focused": false,
+          "run_in_background": false,
+          "focus_nudge_attempts": null,
+          "focus_nudge_limit": null,
+          "focus_nudge_status": null,
+          "blocked_reason": null,
+          "failures_so_far": [
+            {
+              "full_name": "MemoryForge.Client.Tests.ExpeditionClientPlayModeTests.NextIntentShowsItsForecastImmediatelyWhileThePreviousToastWouldStillBeActive",
+              "message": "  the new intent retired the stale toast\n  Expected: <empty>\n  But was:  \"경계 방패 사용\"\n"
+            }
+          ],
+          "failures_capped": false
+        },
+        "error": null,
+        "result": {
+          "mode": "PlayMode",
+          "summary": {
+            "total": 1,
+            "passed": 0,
+            "failed": 1,
+            "skipped": 0,
+            "durationSeconds": 0.1982422,
+            "resultState": "Failed(Child)"
+          },
+          "results": [
+            {
+              "name": "NextIntentShowsItsForecastImmediatelyWhileThePreviousToastWouldStillBeActive",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionClientPlayModeTests.NextIntentShowsItsForecastImmediatelyWhileThePreviousToastWouldStillBeActive",
+              "state": "Failed",
+              "durationSeconds": 0.1824751,
+              "message": "  the new intent retired the stale toast\n  Expected: <empty>\n  But was:  \"경계 방패 사용\"\n",
+              "stackTrace": "at MemoryForge.Client.Tests.ExpeditionClientPlayModeTests+<NextIntentShowsItsForecastImmediatelyWhileThePreviousToastWouldStillBeActive>d__15.MoveNext () [0x004f2] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionClientPlayModeTests.cs:641\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@388540dd9ce6/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:44\n",
+              "output": ""
+            }
+          ]
+        }
+      },
+      "hint": null
+    }
+  },
+  "isError": false
+}

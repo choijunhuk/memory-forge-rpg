@@ -1,0 +1,28 @@
+{
+  "task_id": "P1-R1A-UNITY-TEST-REVIEW",
+  "run_id": "P1-R1A-UNITY-TEST-REVIEW-20261015T192141950336Z",
+  "status": "RECEIVED_UNVERIFIED",
+  "requestedEffort": "high",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "changes_verified": false,
+  "raw_output": "ops/ai/local/P1-R1A-UNITY-TEST-REVIEW-20261015T192141950336Z*",
+  "billing_verified_at": "2026-10-14T21:44:57.439760+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "codex/csharp-battle-opening",
+  "base_commit": "2ffc29ecdbdeee5027258ad6f73302b98820fc35",
+  "worktree": "/Users/choi/.codex/worktrees/csharp-battle-opening/Memory_forge",
+  "allowed_files": [
+    "reports/run_progression_core_20261016/unity_opposite_review.md"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "75a653c3-1d0e-4276-aab2-0fdfd987fc34",
+  "subtype": "success",
+  "is_error": false,
+  "result": "**APPROVE.** 이 리뷰에서 막는 문제는 없습니다. 원본 코드만 읽고 검토했으며, 저는 아무것도 실행하지 않았습니다(**NOT_RUN**). Unity PlayMode 27/27 결과는 Root가 실행한 증거입니다.\n\n**확인한 것**\n- **참조값 일치:** 테스트에 넣어 둔 해시 18개(초기 1개 + 명령 17개)가 `unity_reference_actual_js.json`의 해시와 같고 순서도 같습니다. 파티 설정·명령 인자·최종 카드 키도 같습니다.\n- **해시 방식:** 해시는 `{run, memory:null}` 구조로 만들어지며, 기존 trace 검사 기준(`TraceHashChecks.cs:227-230`)과 같습니다. 해시에는 난수 상태·덱·전투·보상 대기·체력·코인·파티 수치가 모두 들어갑니다.\n- **파티·수치 전제:** 세라·하린·니아, res 0 설정과 기본 수치는 초기 해시와 첫 전투 진입 시 체력 243으로 확인됩니다. 테스트에 넘긴 파티 설정이 바뀌지 않는다는 것도 검사합니다(`:88`).\n- **데이터 변경 없음:** `ClientBattleContent.Load()`가 매번 새 객체를 만들기 때문에 테스트 사이에 데이터가 공유·변경되지 않습니다.\n- **상태 분리 검사:** `Run.State`가 깊은 복사본을 돌려줍니다. 테스트는 그 복사본의 전투 체력·난수·덱을 바꿔 보는데, 이 셋이 모두 해시에 들어가므로 실제 상태가 새어 나오면 테스트가 실패합니다. 잘못 통과할 수는 없습니다.\n- **전투 명령 처리:** 매 명령 전에 전투 버전 `v`를 확인합니다. 해시 18개가 모두 서로 달라서, 명령이 조용히 거부되면 바로 다음 해시 비교에서 실패합니다.\n- **최종 상태:** 체력 233, 코인 86, 전투 1회, 덱 19장(k1~k19), 지도(MAP) 상태, 전투 없음으로 참조값과 같습니다.\n- **원본 기준에 맞는 실행인지:** 7장의 전투 노드 → 보상(카드·부품) → 지도 복귀를 실제 공개 명령으로 실행하고, 16.2장 JS→C# 동일성을 확인합니다. 테스트 쪽에서 상태를 만들어 넣는 부분은 없습니다. 이벤트·상점·탐사 완주 같은 범위 밖 기능은 테스트가 스스로 범위 밖이라고 밝히고 있습니다.\n\n**막힌 점:** 없습니다. 고치지 않아도 되는 사항 5개는 리뷰 문서에 적었습니다.\n- 공개 화면 정보 검사(`:80`)는 최상위 목록만 비워서 사실상 검증하는 게 없습니다.\n- `BattleResponse` 반환값을 확인하지 않습니다.\n- 보상 후보 목록(`offered`)을 직접 검사하지 않습니다.\n- 참조 JSON을 만든 명령과 원본 파일 해시가 기록되어 있지 않아, 실제 JS 실행 결과라는 점은 Root의 실행 기록에만 의존합니다. Root 보고서에 그 명령과 `engine/rules-core.js` 등의 sha256을 남기면 됩니다.\n- 참조값이 테스트 코드와 JSON 파일 두 곳에 있어 나중에 어긋날 수 있습니다.\n\n**다음 작업:** Root가 참조 JSON을 만든 명령과 원본 파일 해시를 보고서에 기록하면 됩니다. 나머지는 선택 사항입니다.\n\n**변경 파일:** `reports/run_progression_core_20261016/unity_opposite_review.md` 하나만 수정했습니다. session_id는 이 세션에서 볼 수 없으니 Root의 CLI 기록을 사용하세요.",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ]
+}

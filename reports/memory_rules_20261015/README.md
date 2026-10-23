@@ -1,0 +1,16 @@
+# M0 — pure stable-memory rules / current verification
+
+Current status: Root automated and actual Unity checks passed after the independent Opus xhigh finding was repaired by Claude and independently verified by Codex. Commit/push/exact-head CI remain pending. R0 checker authoring continues separately; FullRun commands remain0.
+
+- Original v0.8.1 §8/§16.2/§17.5/§20.9 and current JS pure memory/capacity behavior are the source. Actual Run commands, persistence/account migration, raw-byte backup, server and device acceptance remain outside M0.
+- Actual Root: Core202, canonical87, snapshots2000, fixture13, opening2221, turn29232, query128244 and player87991 assertions retained. New M0:1072 actual source calls and5451 assertions PASS, including permanent29 native raw-key-order/lazy-cost regressions. Node269, focused12, proposals14, Python49, docs9, handoff13 PASS; browser memory13/late10 PASS with fresh21 screenshots and historical screenshots restored byte-for-byte.
+- One JS source fix preserves an own __proto__ quarantine entry and its entire original. It changes no costs/capacity/game content/account data. Native P2 fixes preserve JS integer-key error order and empty-pool FindIndex laziness. Original RED and fixed-source receipts remain in this folder/private checkpoints.
+- All five existing source-pinned corpora were actually regenerated. Complete Battle case records and all1000 legacy exploration records/273748 commands/275748 hashes match exactly apart from the explicit memory SHA256 provenance paths. See corpus_comparison.json; no arbitrary sources fields were removed.
+- preservation.json accounts for47 prior protected files:42 byte-identical and5 explicitly planned source/provenance changes. The newer A1 player corpus is additionally compared. Input manifests were not regenerated; game source/data/art/PDF have no unexpected changes.
+- Actual Unity Play16/16 passed, including the two Claude-authored memory tests and the two JS-confirmed migration-array regressions. Edit3/3 and Console/setting restoration are recorded separately. The original RED14/16 and C#5449/5451 are preserved. This is a selected Core runtime subset, not whole-game/Run/device acceptance.
+
+The new Claude-primary routing retains GPT-6.1 Sol/Opus only, autonomous High/xhigh/Max, included subscriptions only, independent opposite-AI review, Codex image ownership and one Editor writer. No new dependency, actual account migration or operational deployment occurred.
+
+Opus xhigh found that a later array card masked an earlier INVALID_UPGRADE or IDENTITY_REQUIRED during migration. Actual JS, .NET and Unity reproduced it. Claude added only a validation-time IList-to-empty-dictionary mapping inside Migrate; originals and backups remain untouched. Codex independently reviewed the patch and confirmed .NET5451/5451 and actualPlay16/16. No JS/generator/corpus change was needed for this C#-only error-order repair. See initial_opus_source_review.json, root_array_patch_review.md and array_order_* receipts.
+
+Environment note: the first isolated worktree SDK run previously reported installing an HTTPS development certificate before task CLI-home/first-run flags were fully supplied. The original diagnostic is retained privately. Later builds used all isolation/telemetry/certificate/workload flags; no server or trust operation was performed by this unit.

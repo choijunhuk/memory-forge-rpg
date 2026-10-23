@@ -1,0 +1,30 @@
+{
+  "task_id": "P1-UNITY-BATTLE-PRESENTATION-FIX",
+  "run_id": "P1-UNITY-BATTLE-PRESENTATION-FIX-20261015T151828630796Z",
+  "status": "RECEIVED_UNVERIFIED",
+  "requestedEffort": "high",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "changes_verified": false,
+  "raw_output": "ops/ai/local/P1-UNITY-BATTLE-PRESENTATION-FIX-20261015T151828630796Z*",
+  "billing_verified_at": "2026-10-14T21:44:57.439760+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "codex/csharp-battle-opening",
+  "base_commit": "2ffc29ecdbdeee5027258ad6f73302b98820fc35",
+  "worktree": "/Users/choi/.codex/worktrees/csharp-battle-opening/Memory_forge",
+  "allowed_files": [
+    "client/MemoryForgeUnity/Assets/Scripts/MemoryForgeBattleClient.cs",
+    "client/MemoryForgeUnity/Assets/Tests/PlayMode/BattleClientPlayModeTests.cs",
+    "ops/ai/tasks/P1-UNITY-BATTLE-PRESENTATION-FIX.md"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "9a03463c-7b87-4745-9421-fd26022b41b5",
+  "subtype": "success",
+  "is_error": false,
+  "result": "B1과 B2 수정을 컨트롤러에 반영했고, 회귀 시험 2개를 추가하고 시험 5를 보강했습니다. 컴파일·Play·시험은 Bash와 Editor가 없어 전부 실행하지 못했습니다(NOT_RUN). 실제 확인은 Root가 맡아 주셔야 합니다.\n\n**B1 — 시간표**\n- 새 표시 함수 `TimelineCells`가 칸 수를 계산합니다. 입력은 기본·임시 칸 수, 실제 규칙의 최대치, 현재 봉인 상태입니다.\n- 계산 방식은 Core 용량 규칙(`ReservationBook.cs:52–62`, internal이라 직접 부를 수 없음)과 HTML 참조의 `slotsView`(`prototype/src/ui.js:518–538`)를 그대로 따랐습니다.\n- 예약은 하나도 잘리지 않고 만기 → 순서대로 표시됩니다. 칸은 카드 이름 / 빈 칸 / 봉인 / `-` 중 하나로 보입니다.\n- 원본 최대 5칸이면 기존 패널 폭 안에 들어갑니다. 기존 `\"다음  {카드}\"` 표기도 유지했습니다.\n\n**B2 — 적 의도와 상태**\n- 공격 수치는 Core `EnemyHit`(`Battle.cs:608–611`) 공식을 그대로 옮겼습니다. 난이도, 적의 힘, 적의 약화가 실제와 같은 정수 반올림으로 반영됩니다.\n- '이번' 줄은 현재 상태 기준 예상값을 보여 줍니다(예: `공격 9`). 약점 노출 뒤 공격 피해와 원본 라벨도 함께 나옵니다.\n- '다음' 줄은 그 사이 힘·약화가 바뀔 수 있어서 `기본 공격 N`으로 구분해 표시합니다. 충전 뒤에 오는 공격도 이 줄에 나옵니다.\n- 적 패널에 상태칩(균열·취약·약화·표식·화상·힘·반사)을 추가했고, 상단 바에 파티 약화와 활성 버프를 표시합니다. 이름과 순서는 HTML 참조와 같습니다.\n- Core·데이터는 바꾸지 않았고, 이전에 고친 확정 단계·모달·미리보기 수정과 버튼 위치는 그대로입니다.\n\n**시험 (기존 6개 유지)**\n- **시험 5 보강:** 기록 오버레이를 열기 전에, 같은 화면 좌표가 실제 확정 버튼에 닿는지 먼저 확인합니다.\n- **시험 7 (시간표):** 정당한 전투 설정 입력으로 만든 독립 Core 전투를 사용합니다. 실행 중인 UI 전투를 조작하지 않으므로, 연습 화면 흐름 자체의 검증이 아니라 표시 계산의 증거입니다.\n  - 원본의 세라 필살기 슬롯 효과를 근거로 단언합니다.\n  - 필살기 후 다음 턴 예약 3장을 Core가 받고, 3장 모두 순서대로 시간표에 나오는지 확인합니다.\n  - 라비엔 `담보 계약`으로 실제 봉인을 만든 뒤, Core가 다음 예약을 `SLOT_FULL`로 거절하는지와 봉인 칸이 '봉인'으로 표시되는지 확인합니다.\n- **시험 8 (의도·상태):**\n  - 독립 Core 전투에서 실제로 구조 분석·도발·정조준을 사용한 뒤 취약·약화 값이 원본 카드 값과 같은지, '충전'이 표시되는지 확인합니다.\n  - 4턴 동안 매 턴 예상 피해가 Core의 실제 피해와 일치하는지 봅니다. 1턴에는 약화, 4턴에는 나방이 원본 패턴으로 얻은 힘 +1이 반영됩니다.\n  - 이어서 실제 연습 화면 흐름(카드 → 방식 → 대상 → 확정)으로 구조 분석을 쓰고, 적 패널의 상태칩과 의도 두 줄이 정확한 문자열로 잘리지 않고 보이는지 확인합니다.\n\n**Root에게 확인을 부탁드리는 것**\n- 컴파일: 튜플 반환, 시험 안의 로컬 함수, nullable 경고 확인이 필요합니다.\n- 시험 8개 실행.\n- 적 5체일 때 상태칩과 의도 두 줄이 읽히는지 스크린샷 확인.\n- 봉인 칸과 5칸 시간표의 시각 확인.\n\nM2·M7·Edit 모드 수명주기(R1)·L4–L12·접근성·Run·아트 범위는 계속 보류로 남겨 두었습니다. 시험 2의 주석 행 번호 두 곳은 실제 행과 어긋나 있지만 표시상 문제라 이번 범위에서는 고치지 않았습니다. 상세 근거는 보고서에 정리했고, 자체 승인은 하지 않습니다.\n\nFiles:\n- client/MemoryForgeUnity/Assets/Scripts/MemoryForgeBattleClient.cs\n- client/MemoryForgeUnity/Assets/Tests/PlayMode/BattleClientPlayModeTests.cs\n- ops/ai/tasks/P1-UNITY-BATTLE-PRESENTATION-FIX.md",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ]
+}

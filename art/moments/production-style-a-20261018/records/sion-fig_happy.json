@@ -1,0 +1,23 @@
+{
+  "character": "sion",
+  "key": "fig_happy",
+  "old_path": "moments/sion/images/char_sion_moment_happy_v01.png",
+  "target": "sion/images/char_sion_fig_happy_styleA_v01.png",
+  "master": "sion/images/char_sion_fig_neutral_styleA_v01.png",
+  "background": false,
+  "beats": [
+    "안경을 바로잡고 책을 입가까지 올린다. 눈만큼은 숨기지 못하고 공방장에게 돌아온다."
+  ],
+  "args": {
+    "prompt": "Use case: style-transfer. Production transparent full-body sprite for Memory Forge. REDRAW rather than merely recolor. Direction A CLEAR CEL, exactly the rendering grammar of the last reference: crisp controlled ink contours, emphatic upper eyelids, tiny symbolic nose and short mouth, matte skin with large flat light areas and one hard-edged shadow step, large grouped hair locks with broad flat highlight bands, costume tailoring and flat color planes before details, restrained gold/metal highlights. NO photoreal/3D nose, glossy lips, airbrush skin, tiny sparkling hair strands or painterly gradients. First reference controls exact character identity, adult age, outfit structure, props, pose, composition and framing; last reference is STYLE ONLY and must not transfer its clothing/face. Preserve all outfit cutouts and existing adult silhouette. Keep original full body and equipment inside a 1024x1536 portrait with a little clear margin. GENUINELY TRANSPARENT empty canvas alpha=0 around the subject including corners, no colored backdrop, vignette, aura, halo, floor, cast shadow, checkerboard, text or watermark. Remove ALL inherited background haze.\nThe SECOND reference is this SAME character already redrawn in A: match its face and rendering while using FIRST reference for pose/furniture/props. 27-year-old Sion raises SAME purple book over her MOUTH to conceal emotional smile, EYES VISIBLE above it and looking at player. Both hands grasp book, no sword.\nPreserve intent of these authored beats without putting text into the image: 안경을 바로잡고 책을 입가까지 올린다. 눈만큼은 숨기지 못하고 공방장에게 돌아온다.",
+    "referenced_image_paths": [
+      "/Users/choi/Documents/Memory_forge/art/moments/sion/images/char_sion_moment_happy_v01.png",
+      "/Users/choi/Documents/Memory_forge/art/moments/sion/images/char_sion_fig_neutral_styleA_v01.png"
+    ],
+    "transparent_background": true
+  },
+  "cache_path": "/Users/choi/.codex/generated_images/01a14db0-4150-7f01-9240-82aaa185dd28/exec-f9194131-13f9-4966-9a23-9aca7e02844f.png",
+  "status": "ready",
+  "generation_status": "generated_pending_review",
+  "selected": true
+}

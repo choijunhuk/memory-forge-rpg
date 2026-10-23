@@ -1,0 +1,60 @@
+{
+  "_meta": {
+    "fastmcp": {
+      "wrap_result": true
+    }
+  },
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Test job status retrieved.\",\"error\":null,\"data\":{\"job_id\":\"23a68a1122a74b80a4a544b79aa78d19\",\"status\":\"succeeded\",\"mode\":\"PlayMode\",\"started_unix_ms\":1792180639743,\"finished_unix_ms\":1792180695808,\"last_update_unix_ms\":1792180695808,\"progress\":{\"completed\":248,\"total\":248,\"current_test_full_name\":null,\"current_test_started_unix_ms\":null,\"last_finished_test_full_name\":\"MemoryForge.PlayModeTests.SharedCorePlayModeTests.SharedRngAndReservationsKeepTheirStateAcrossARealTurn\",\"last_finished_unix_ms\":1792180695750,\"stuck_suspected\":false,\"editor_is_focused\":true,\"run_in_background\":false,\"focus_nudge_attempts\":null,\"focus_nudge_limit\":null,\"focus_nudge_status\":null,\"blocked_reason\":null,\"failures_so_far\":[],\"failures_capped\":false},\"error\":null,\"result\":{\"mode\":\"PlayMode\",\"summary\":{\"total\":248,\"passed\":248,\"failed\":0,\"skipped\":0,\"durationSeconds\":54.8704609,\"resultState\":\"Passed\"},\"results\":[]}},\"hint\":null}"
+    }
+  ],
+  "structuredContent": {
+    "result": {
+      "success": true,
+      "message": "Test job status retrieved.",
+      "error": null,
+      "data": {
+        "job_id": "23a68a1122a74b80a4a544b79aa78d19",
+        "status": "succeeded",
+        "mode": "PlayMode",
+        "started_unix_ms": 1792180639743,
+        "finished_unix_ms": 1792180695808,
+        "last_update_unix_ms": 1792180695808,
+        "progress": {
+          "completed": 248,
+          "total": 248,
+          "current_test_full_name": null,
+          "current_test_started_unix_ms": null,
+          "last_finished_test_full_name": "MemoryForge.PlayModeTests.SharedCorePlayModeTests.SharedRngAndReservationsKeepTheirStateAcrossARealTurn",
+          "last_finished_unix_ms": 1792180695750,
+          "stuck_suspected": false,
+          "editor_is_focused": true,
+          "run_in_background": false,
+          "focus_nudge_attempts": null,
+          "focus_nudge_limit": null,
+          "focus_nudge_status": null,
+          "blocked_reason": null,
+          "failures_so_far": [],
+          "failures_capped": false
+        },
+        "error": null,
+        "result": {
+          "mode": "PlayMode",
+          "summary": {
+            "total": 248,
+            "passed": 248,
+            "failed": 0,
+            "skipped": 0,
+            "durationSeconds": 54.8704609,
+            "resultState": "Passed"
+          },
+          "results": []
+        }
+      },
+      "hint": null
+    }
+  },
+  "isError": false
+}

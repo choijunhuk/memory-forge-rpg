@@ -1,0 +1,7 @@
+{
+  "problem": "CS1061 at original QA lines213/375, internal CardOrder inaccessible from Unity test assembly",
+  "scope": "test-only two public-collection lookups; no production edits, no assertion weakening",
+  "review": "independent native GPT-6.1 Sol Max approved both replacements and retracted earlier accessibility assertion; actual execution pending",
+  "fixed_sha256": "27b491b5900b0ab691cc0696985582025017084f7052600a1bd38d94a253dc69",
+  "terminal_before_edit": "37fbc51ffcd94608b52ad56554a5259f failed initialization; UI Cancel Run used; no tests executed"
+}

@@ -1,0 +1,30 @@
+{
+  "c": "lumi",
+  "key": "expr_happy",
+  "path": "lumi/images/char_lumi_expression_happy_v01.png",
+  "refs": [
+    "/Users/choi/Documents/Memory_forge/art/moments/lumi/images/char_lumi_expression_neutral_v01.png"
+  ],
+  "common": "Use case: identity-preserve. Edit target is the supplied NEUTRAL master portrait, one adult dialogue expression. Keep EXACT same square canvas/framing, head angle/tilt, face proportions, iris colors, hairstyle, glasses/scar/ornaments, costume, lighting and true transparent alpha. Intended final 512x512. Change ONLY eyes/eyebrows/mouth and natural cheek muscles. No hands, props, extra face, text or panels. ",
+  "pose": "Lumi, adult age22. Spiky short BLOND hair with vivid electric BLUE streak, SKY BLUE eyes, black/yellow circuit jacket slipped from shoulders and white sports-top upper edge. Bright athletic adult presence. Expression HAPPY: A bold bright TOOTHY grin with open lively skyblue eyes, athletic energy and confident fun, no wink.",
+  "prompt": "Use case: identity-preserve. Edit target is the supplied NEUTRAL master portrait, one adult dialogue expression. Keep EXACT same square canvas/framing, head angle/tilt, face proportions, iris colors, hairstyle, glasses/scar/ornaments, costume, lighting and true transparent alpha. Intended final 512x512. Change ONLY eyes/eyebrows/mouth and natural cheek muscles. No hands, props, extra face, text or panels. Lumi, adult age22. Spiky short BLOND hair with vivid electric BLUE streak, SKY BLUE eyes, black/yellow circuit jacket slipped from shoulders and white sports-top upper edge. Bright athletic adult presence. Expression HAPPY: A bold bright TOOTHY grin with open lively skyblue eyes, athletic energy and confident fun, no wink.",
+  "source": "/Users/choi/.codex/generated_images/01a14d20-ffd5-7e81-9e47-85c1c8415e11/exec-b2102b1f-0792-4d14-8491-07a948fba7af.png",
+  "tool": "Codex built-in image_gen; subscription-included; no API fallback",
+  "review": "pass",
+  "previous_attempt": null,
+  "score": 94,
+  "review_notes": "Rendered output inspected beside its neutral master. Six readable adult expressions, stable face/eye/hair/glasses/scar/costume identity and framing. Only non-generative final resize remains.",
+  "backend_model": "not exposed by tool",
+  "selected": true,
+  "sha256": "fd3b972245d48b608bde4bb0125e051a3a41f442fdd7fcc3a93d035c6230a982",
+  "size": [
+    512,
+    512
+  ],
+  "mode": "RGBA",
+  "alpha_extrema": [
+    0,
+    255
+  ],
+  "postprocess": "sips -z 512 512; non-generative downsample only, alpha retained"
+}

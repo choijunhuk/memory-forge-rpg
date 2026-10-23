@@ -1,0 +1,15 @@
+{
+  "score": 93,
+  "verdict": "pass",
+  "category_match": true,
+  "differences": [
+    "발견의 포즈를 돋보기와 내려든 석궁으로 구체화"
+  ],
+  "suggestions": [],
+  "reasoning": "카야의 적갈색 땋은 머리·깃털 모자·돋보기·석궁·모험복이 기존 브리프에 맞고 손·얼굴·신발이 읽힌다. 실제 UI 수용은 별도 단계다.",
+  "iteration": 3,
+  "threshold_pass": true,
+  "next_actions": [
+    "원본/복사 해시 및 실제 UI 수용"
+  ]
+}

@@ -1,0 +1,11 @@
+  복원할 프로젝트를 확인하는 중...
+  /Users/choi/Documents/Memory_forge/ops/ai/local/transport-real-client/Client.csproj을(를) 40밀리초 동안 복원했습니다.
+  /Users/choi/Documents/Memory_forge/ops/ai/local/transport-source-fixed-1/Source.csproj을(를) 68밀리초 동안 복원했습니다.
+  Source -> /Users/choi/Documents/Memory_forge/ops/ai/local/transport-source-fixed-1/bin/Debug/netstandard2.1/Source.dll
+  Client -> /Users/choi/Documents/Memory_forge/ops/ai/local/transport-real-client/bin/Debug/net10.0/Client.dll
+
+빌드했습니다.
+    경고 0개
+    오류 0개
+
+경과 시간: 00:00:02.03

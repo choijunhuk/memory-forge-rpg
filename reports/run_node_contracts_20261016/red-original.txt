@@ -1,0 +1,111 @@
+✔ immutable witnesses: frozen original data, three real full runs, self-consistent recorded outcomes (1.956708ms)
+✖ seed1036: ev_rift AP+2 reaches only the next battle first turn and afterBattle no longer refunds it (45.915709ms)
+✖ seed1020: a shop sells its single card removal once; a second public removal is NOT_FOR_SALE with no mutation (73.830166ms)
+✖ seed1000: a resolved ev_archive rejects reselection with BAD_CHOICE before effects or RNG; phase order kept (10.718792ms)
+✖ seed1000: a key-array first ev_archive choice removes exactly the chosen cards, once (18.852125ms)
+✖ every witnessed event resolves once; rejected reselections leave all later recorded commands reproducible (12.322958ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 1
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 307.768792
+
+✖ failing tests:
+
+test at engine/tests/run_node_contracts.test.mjs:65:1
+✖ seed1036: ev_rift AP+2 reaches only the next battle first turn and afterBattle no longer refunds it (45.915709ms)
+  AssertionError [ERR_ASSERTION]: afterBattle refunded the consumed event AP bonus
+
+  2 !== 0
+
+      at TestContext.<anonymous> (file:///Users/choi/Documents/Memory_forge/engine/tests/run_node_contracts.test.mjs:103:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 2,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at engine/tests/run_node_contracts.test.mjs:122:1
+✖ seed1020: a shop sells its single card removal once; a second public removal is NOT_FOR_SALE with no mutation (73.830166ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception.
+      at rejects (file:///Users/choi/Documents/Memory_forge/engine/tests/run_node_contracts.test.mjs:34:10)
+      at TestContext.<anonymous> (file:///Users/choi/Documents/Memory_forge/engine/tests/run_node_contracts.test.mjs:139:3)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    operator: 'throws',
+    diff: 'simple'
+  }
+
+test at engine/tests/run_node_contracts.test.mjs:154:1
+✖ seed1000: a resolved ev_archive rejects reselection with BAD_CHOICE before effects or RNG; phase order kept (10.718792ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception.
+      at rejects (file:///Users/choi/Documents/Memory_forge/engine/tests/run_node_contracts.test.mjs:34:10)
+      at TestContext.<anonymous> (file:///Users/choi/Documents/Memory_forge/engine/tests/run_node_contracts.test.mjs:174:3)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    operator: 'throws',
+    diff: 'simple'
+  }
+
+test at engine/tests/run_node_contracts.test.mjs:184:1
+✖ seed1000: a key-array first ev_archive choice removes exactly the chosen cards, once (18.852125ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception.
+      at rejects (file:///Users/choi/Documents/Memory_forge/engine/tests/run_node_contracts.test.mjs:34:10)
+      at TestContext.<anonymous> (file:///Users/choi/Documents/Memory_forge/engine/tests/run_node_contracts.test.mjs:194:3)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    operator: 'throws',
+    diff: 'simple'
+  }
+
+test at engine/tests/run_node_contracts.test.mjs:197:1
+✖ every witnessed event resolves once; rejected reselections leave all later recorded commands reproducible (12.322958ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception.
+      at rejects (file:///Users/choi/Documents/Memory_forge/engine/tests/run_node_contracts.test.mjs:34:10)
+      at after (file:///Users/choi/Documents/Memory_forge/engine/tests/run_node_contracts.test.mjs:205:69)
+      at file:///Users/choi/Documents/Memory_forge/engine/tests/run_node_contracts.test.mjs:52:12
+      at Array.forEach (<anonymous>)
+      at replay (file:///Users/choi/Documents/Memory_forge/engine/tests/run_node_contracts.test.mjs:49:27)
+      at TestContext.<anonymous> (file:///Users/choi/Documents/Memory_forge/engine/tests/run_node_contracts.test.mjs:200:5)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    operator: 'throws',
+    diff: 'simple'
+  }

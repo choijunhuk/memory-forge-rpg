@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "source": "docs/source_v0.8.1/11_chapter.md §11.1·§11.4–§11.7·§11.9·§11.11·§11.13, 13_chapter.md §13.3",
+  "note": "Supplements data/game_data.json → progression (unchanged). Only rules and numbers written in the source; anything the source leaves open is DECISION_PENDING and the engine throws CONTENT_NOT_AUTHORED instead of inventing it.",
+  "resets": {
+    "source": "§13.3 일일 초기화 05:00 KST, 주간 초기화 월요일 05:00 KST",
+    "utcOffsetMinutes": 540,
+    "dailyHour": 5,
+    "weeklyWeekday": 1,
+    "weeklyHour": 5
+  },
+  "dungeon": {
+    "stars": { "source": "§11.5 별 3개 = 승리 + 4턴 이내 + 체력 50% 이상", "maxTurns": 4, "minHpPct": 50 },
+    "waves": {
+      "source": "§11.5 저장 덱으로 단일 전투(1~3웨이브)",
+      "minWaves": 1,
+      "maxWaves": 3,
+      "status": "DECISION_PENDING",
+      "reason": "No enemy composition per dungeon and tier exists in the source or data.",
+      "encounters": null
+    },
+    "defeatStamina": {
+      "status": "DECISION_PENDING",
+      "reason": "§11.4/§11.5 give 20 집중 per run and per sweep but do not say whether a lost battle spends it. A victory settles and spends 20; a defeat cannot settle (CONTENT_NOT_AUTHORED) until this is authored."
+    },
+    "tierGate": {
+      "status": "NO_RULE_IN_SOURCE",
+      "reading": "§11.5 gates each dungeon by account level only and names no per-tier gate, so none is added; every tier of an unlocked dungeon is open and harder tiers are limited by stage-level scaling (§11.1)."
+    }
+  },
+  "weeklyBoss": {
+    "source": "§11.6 구역 보스 3종(종을 삼킨 기록관·거울의 공증인·잠든 정원) + 기록소의 대사서",
+    "bosses": ["b_bell", "b_notary", "b_garden", "b_archivist"]
+  },
+  "rift": {
+    "battles": { "source": "§11.7 층마다 3연전: 1전·3전은 1파티, 2전은 2파티", "twoTeamOrder": [0, 1, 0], "oneTeamOrder": [0, 0, 0] },
+    "distinctCharacters": 6,
+    "smallRosterMaxStars": 2,
+    "starPortionsPct": [60, 20, 20],
+    "cycleStartHour": 11,
+    "cycleStartHourSource": "§13.3 기록 균열: 시즌 1일·15일·29일 11:00 시작(14일 주기)",
+    "teamsByFloor": {
+      "source": "§11.7 (v0.8.1 active text) and §11.13 / data/design_policy_v0.8.json rift target",
+      "v0.8.1": [2, 2, 2, 2, 2, 2],
+      "target": [1, 1, 1, 2, 2, 2]
+    },
+    "activeTeamPolicy": "v0.8.1",
+    "stars": {
+      "source": "§11.7 별 3개 기준: 3전 모두 승리 / 총 턴 수 / 남은 체력",
+      "status": "DECISION_PENDING",
+      "reason": "The source names the total-turn and remaining-HP criteria without thresholds; a cleared floor cannot be scored or settled (CONTENT_NOT_AUTHORED) until both exist.",
+      "maxTotalTurns": null,
+      "minHpPct": null
+    },
+    "rotation": {
+      "source": "§11.7 14일마다 층별 규칙(표)과 적 조합이 바뀐다",
+      "status": "DECISION_PENDING",
+      "reason": "No per-cycle assignment of the six rules to floors and no enemy lineups exist in the source or data.",
+      "cycles": null
+    },
+    "floorOrder": {
+      "status": "NO_RULE_IN_SOURCE",
+      "reading": "§11.7 gives the floors, their levels and rewards but no requirement to clear floor n-1 first, so floors are not gated on each other."
+    },
+    "modifiers": {
+      "source": "§11.1 기록 균열 규칙 표",
+      "rift_reserve": { "reservedBps": 3000, "immediateBps": -1000 },
+      "rift_break": { "gaugeBps": 15000, "brokenDamageBps": 5000 },
+      "rift_ink": { "smudgePerTurn": 1, "perExhaustBps": 300 },
+      "rift_debt": { "debtCapAdd": 2, "debtDamageBps": 1500 },
+      "rift_bloom": { "growthCapAdd": 2, "growthBlock": 3 },
+      "rift_echo": { "echoMaxAdd": 2, "distinctChain": 3, "apGain": 1 }
+    }
+  },
+  "daily": {
+    "source": "§11.1 계정 레벨 5 일일 임무, §11.11 일일 100점(5개 × 20), §11.13 선택형 100점 목표",
+    "unlock": 5,
+    "pointsCap": 100,
+    "goals": {
+      "d_login": { "event": "login", "n": 1 },
+      "d_stamina": { "event": "staminaSpent", "n": 120 },
+      "d_battle": { "event": "battleWin", "n": 3 },
+      "d_level": { "event": "levelUp", "n": 1 },
+      "d_affinity": { "event": "affinity", "n": 1 }
+    },
+    "activePolicy": "v0.8.1",
+    "targetPool": {
+      "source": "§11.13 콘텐츠 완료·집중 정산·교류 등 대체 행동으로 달성",
+      "status": "DECISION_PENDING",
+      "reason": "The selectable task list, its events, goals and points are not authored.",
+      "tasks": null
+    }
+  }
+}

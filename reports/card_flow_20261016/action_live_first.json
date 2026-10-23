@@ -1,0 +1,38 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"actualScene\":\"MemoryForgeExpedition\",\"accepted\":true,\"actionDisplay\":true,\"rows\":[\"[사용] 카드 사용 · 경계 방패 · 행동력 1\",\"· 방어 +8 · 카드\",\"[해결] 효과 처리 끝 · 경계 방패\"],\"shown\":1,\"pace\":\"Normal\",\"fullRunJsonMatchesMirror\":true,\"endAccepted\":false,\"endError\":\"ACTION_SHOWING\",\"nextCard\":\"c1\",\"nextSelectionPure\":true,\"ap\":3,\"block\":8,\"version\":2,\"turn\":1,\"expectedStateInjected\":false},\"compiler\":\"codedom\"}}"
+    }
+  ],
+  "structuredContent": {
+    "success": true,
+    "message": "Code executed successfully.",
+    "data": {
+      "result": {
+        "actualScene": "MemoryForgeExpedition",
+        "accepted": true,
+        "actionDisplay": true,
+        "rows": [
+          "[사용] 카드 사용 · 경계 방패 · 행동력 1",
+          "· 방어 +8 · 카드",
+          "[해결] 효과 처리 끝 · 경계 방패"
+        ],
+        "shown": 1,
+        "pace": "Normal",
+        "fullRunJsonMatchesMirror": true,
+        "endAccepted": false,
+        "endError": "ACTION_SHOWING",
+        "nextCard": "c1",
+        "nextSelectionPure": true,
+        "ap": 3,
+        "block": 8,
+        "version": 2,
+        "turn": 1,
+        "expectedStateInjected": false
+      },
+      "compiler": "codedom"
+    }
+  },
+  "isError": false
+}

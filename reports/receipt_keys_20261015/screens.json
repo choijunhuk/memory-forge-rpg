@@ -1,0 +1,107 @@
+[
+  {
+    "freshScreenshot": "reports/receipt_keys_20261015/screens/memory/memory-v2-130-390.png",
+    "sha256": "82949a25c7358966234c802585885f7be9c8ef33aa0156f626c9004337c7d567",
+    "historicalPathRestored": true
+  },
+  {
+    "freshScreenshot": "reports/receipt_keys_20261015/screens/memory/memory-v2-save-390.png",
+    "sha256": "f8ad0e444fd4e6d19cf8f89af35047c2ca477675828ede6810de3f6a748f9396",
+    "historicalPathRestored": true
+  },
+  {
+    "freshScreenshot": "reports/receipt_keys_20261015/screens/memory/memory-v2-130-1280.png",
+    "sha256": "83bb3ecf2c6031b72e1cdb81522bf8fb46cde44f8d9e0407b2580ef4510d1cd4",
+    "historicalPathRestored": true
+  },
+  {
+    "freshScreenshot": "reports/receipt_keys_20261015/screens/memory/memory-v2-save-1280.png",
+    "sha256": "5178e3ea9a41ac633dea8b0aca7119fa9402b557c2699f71d950a03d4c6baf0d",
+    "historicalPathRestored": true
+  },
+  {
+    "freshScreenshot": "reports/receipt_keys_20261015/screens/late/candidate-delayed-reservation.png",
+    "sha256": "619de11738a80c294d1d3ae2a375c5426c53de4a866687eea90a567ddb09d028",
+    "historicalPathRestored": true
+  },
+  {
+    "freshScreenshot": "reports/receipt_keys_20261015/screens/late/candidate-five-after.png",
+    "sha256": "8e246f327522c53af50666b070ccfb48d3c1f2e972c5dbec79a80107bd0ff848",
+    "historicalPathRestored": true
+  },
+  {
+    "freshScreenshot": "reports/receipt_keys_20261015/screens/late/candidate-crowded-mobile.png",
+    "sha256": "b9b7aa3daaca0315332fa751a6dd194bfc6eb39ea54524f314e77ab88d03a5e1",
+    "historicalPathRestored": true
+  },
+  {
+    "freshScreenshot": "reports/receipt_keys_20261015/screens/late/candidate-delay-overflow.png",
+    "sha256": "b40d17ebfafd5d8afb08c620bdf8dbd0678f7ea8199873b1088de9482f5cdecc",
+    "historicalPathRestored": true
+  },
+  {
+    "freshScreenshot": "reports/receipt_keys_20261015/screens/late/candidate-crowded-desktop.png",
+    "sha256": "6f8284b0ae31d577c7e1a904fb86af8d073e9039bf751ffc1c83f71752306cd4",
+    "historicalPathRestored": true
+  },
+  {
+    "freshScreenshot": "reports/receipt_keys_20261015/screens/late/candidate-phase-detail.png",
+    "sha256": "8b71339d12ed64e509aa479422fb520e1f89acb75a595fa44e6f6f8ac2f4691f",
+    "historicalPathRestored": true
+  },
+  {
+    "freshScreenshot": "reports/receipt_keys_20261015/screens/late/candidate-ap-preview-stunned.png",
+    "sha256": "da05a7a1392c30edd30bb888aa1c975d4e7765df87470793d6fc63f50211c8e1",
+    "historicalPathRestored": true
+  },
+  {
+    "freshScreenshot": "reports/receipt_keys_20261015/screens/late/candidate-crowded-mobile-130-scrolled.png",
+    "sha256": "af25b5d133b1a6ef4d2a0de2547833e4e6fc31230d39baf478326d4c2c75c33e",
+    "historicalPathRestored": true
+  },
+  {
+    "freshScreenshot": "reports/receipt_keys_20261015/screens/late/candidate-ordinary-after-rollover.png",
+    "sha256": "0f8d438995695a00032eec1cb67cd140b907561988010675062edb3e3eaf50f2",
+    "historicalPathRestored": true
+  },
+  {
+    "freshScreenshot": "reports/receipt_keys_20261015/screens/late/candidate-five-before.png",
+    "sha256": "7ee8ba55072a1368a4616644a148242acd190e58097533551da99d5e5dd2b006",
+    "historicalPathRestored": true
+  },
+  {
+    "freshScreenshot": "reports/receipt_keys_20261015/screens/late/candidate-phase-after.png",
+    "sha256": "bd8d1e6ed1c5276d1c5d79f52d54e0d73549a6ff7b7f0208e4c6f5e0305ee823",
+    "historicalPathRestored": true
+  },
+  {
+    "freshScreenshot": "reports/receipt_keys_20261015/screens/late/candidate-crowded-mobile-130.png",
+    "sha256": "0848f2d102485201cc92d94b5a542f4409dedbbfe2a3ba65d76d762889ec2d1a",
+    "historicalPathRestored": true
+  },
+  {
+    "freshScreenshot": "reports/receipt_keys_20261015/screens/late/candidate-delay-warning-before.png",
+    "sha256": "1f7d83933446beae4eafe1655732a26b9ede63cef1e7fefc1863e2c88c5e90e7",
+    "historicalPathRestored": true
+  },
+  {
+    "freshScreenshot": "reports/receipt_keys_20261015/screens/late/candidate-delay-warning-after.png",
+    "sha256": "b40d17ebfafd5d8afb08c620bdf8dbd0678f7ea8199873b1088de9482f5cdecc",
+    "historicalPathRestored": true
+  },
+  {
+    "freshScreenshot": "reports/receipt_keys_20261015/screens/late/candidate-phase-before.png",
+    "sha256": "616b663feaf0d7e826f7cbf043b67990d14fa07b05ebcbdf011c6f8c31e7800d",
+    "historicalPathRestored": true
+  },
+  {
+    "freshScreenshot": "reports/receipt_keys_20261015/screens/late/candidate-empty-delay.png",
+    "sha256": "e06957f1548956f6fee15db5ed7373ba981ad41bbd1c99362f08fbaa701862b6",
+    "historicalPathRestored": true
+  },
+  {
+    "freshScreenshot": "reports/receipt_keys_20261015/screens/late/candidate-ap-preview-before.png",
+    "sha256": "bb36355a54e7a67ce76d63980fb8a80415dc586c997482d2cb9c4af0cf8a2f84",
+    "historicalPathRestored": true
+  }
+]

@@ -1,0 +1,86 @@
+{
+  "scope": "Actual JS commands from existing setup only; no state/data injection",
+  "engineSha256": "1de10fff56242ebfe711d0f8165adf69fd418c423b810c340a9ba0c2400fab0c",
+  "probes": [
+    {
+      "suite": "opening",
+      "id": "harin-opening-preserved",
+      "stage": "created",
+      "kind": "play",
+      "error": "WRONG_PHASE",
+      "phase": "CREATED",
+      "v": 0,
+      "allStateAndReceiptsUnchanged": true
+    },
+    {
+      "suite": "opening",
+      "id": "harin-opening-preserved",
+      "stage": "created",
+      "kind": "ult",
+      "error": "WRONG_PHASE",
+      "phase": "CREATED",
+      "v": 0,
+      "allStateAndReceiptsUnchanged": true
+    },
+    {
+      "suite": "opening",
+      "id": "harin-opening-preserved",
+      "stage": "player",
+      "kind": "play",
+      "error": "NOT_IN_HAND",
+      "phase": "PLAYER",
+      "v": 1,
+      "allStateAndReceiptsUnchanged": true
+    },
+    {
+      "suite": "opening",
+      "id": "harin-opening-preserved",
+      "stage": "player",
+      "kind": "ult",
+      "error": "UNKNOWN_ACTOR",
+      "phase": "PLAYER",
+      "v": 1,
+      "allStateAndReceiptsUnchanged": true
+    },
+    {
+      "suite": "turn",
+      "id": "edge-small-deck",
+      "stage": "player",
+      "kind": "play",
+      "error": "NOT_IN_HAND",
+      "phase": "PLAYER",
+      "v": 3,
+      "allStateAndReceiptsUnchanged": true
+    },
+    {
+      "suite": "turn",
+      "id": "edge-small-deck",
+      "stage": "player",
+      "kind": "ult",
+      "error": "UNKNOWN_ACTOR",
+      "phase": "PLAYER",
+      "v": 3,
+      "allStateAndReceiptsUnchanged": true
+    },
+    {
+      "suite": "query",
+      "id": "part-c_lite",
+      "stage": "player",
+      "kind": "play",
+      "error": "NOT_IN_HAND",
+      "phase": "PLAYER",
+      "v": 1,
+      "allStateAndReceiptsUnchanged": true
+    },
+    {
+      "suite": "query",
+      "id": "part-c_lite",
+      "stage": "player",
+      "kind": "ult",
+      "error": "UNKNOWN_ACTOR",
+      "phase": "PLAYER",
+      "v": 1,
+      "allStateAndReceiptsUnchanged": true
+    }
+  ]
+}

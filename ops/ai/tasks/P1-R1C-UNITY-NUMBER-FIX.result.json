@@ -1,0 +1,29 @@
+{
+  "task_id": "P1-R1C-UNITY-NUMBER-FIX",
+  "run_id": "P1-R1C-UNITY-NUMBER-FIX-20261015T204307314617Z",
+  "status": "RECEIVED_UNVERIFIED",
+  "requestedEffort": "max",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "changes_verified": false,
+  "raw_output": "ops/ai/local/P1-R1C-UNITY-NUMBER-FIX-20261015T204307314617Z*",
+  "billing_verified_at": "2026-10-14T21:44:57.439760+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "codex/csharp-battle-opening",
+  "base_commit": "2ffc29ecdbdeee5027258ad6f73302b98820fc35",
+  "worktree": "/Users/choi/.codex/worktrees/csharp-battle-opening/Memory_forge",
+  "allowed_files": [
+    "core/MemoryForge.Core/Run.Memory.cs",
+    "reports/run_memory_core_20261016/numeric_fix_author.md"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "083875e9-7bf8-49ed-8179-41bae9320b96",
+  "subtype": "success",
+  "is_error": false,
+  "result": "I replaced the Mono-dependent digit search in `JsNumber` with an exact formatter. **Nothing was compiled or run (NOT_RUN):** I only had read/search/edit tools, so every result below is worked out by hand until you compile and test.\n\n**What changed** (only `Run.Memory.cs` and the author note were edited):\n- **`JsNumber`** (`core/MemoryForge.Core/Run.Memory.cs:370`): the old `ToString(\"E\"+p)` + `double.TryParse` round-trip search is gone. It now calls a new private `ShortestDigits` (`:390`).\n- **Kept as is:** the safe-integer fast path, NaN/Infinity → `null`, ±0 → `0`, the sign handling and all four plain/exponent layout branches.\n- **Added** `using System.Numerics;` for the existing `BigInteger`. No package, public API or signature changes, and no change to what inputs are accepted.\n- **How `ShortestDigits` works:** it reads the double's IEEE bits and decides everything with exact integer comparisons. It makes no runtime formatting, parsing or `Math.Log10` call; the decimal exponent comes from integer arithmetic and an exact settle loop.\n  - **Interval:** the numbers that round back to x lie between the midpoints to its neighbours. The midpoints count only when the significand is even.\n  - **Edge cases:** the lower midpoint is closer at powers of two above the smallest normal. The smallest normal stays symmetric, and the maximum's upper midpoint is the one toward 2^1024.\n  - **Selection:** for k = 1..17 it tests only the two k-digit decimals on either side of x. The first k with one inside wins; if both are inside, the closer wins, and an exact tie goes to the even one. A carry like 9→10 is handled before trailing zeros are trimmed.\n  - **Proof:** why checking two candidates per k finds the shortest, and why it always ends by 17 digits, is in the author note.\n\n**Hand-derived checks** (worked out on paper, not executed):\n- `44b52d02c7e14af5` → `9.999999999999997e+22`, which matches Node. So the public witness's receipt body should match and replay to DONE instead of REQUEST_CONFLICT.\n- `2^-44` → `5.684341886080802e-14`. This one tests the closer lower midpoint at a power of two; a symmetric interval would give the wrong last digit.\n- `1e23` → `1e+23` (tests the 9→10 carry).\n- `2^50+0.25` → `1125899906842624.2` (exact tie, goes to even).\n- The author note has six more cases.\n\n**Blocked / not done:**\n- I couldn't find the `ops/ai/local/run-*` oracle and witness files in this worktree, so I didn't use them.\n- I can't see my session ID or the applied effort level from inside the session; your CLI record has them.\n- No usage limit was hit.\n\n**Outside my allowed files (not edited):** `JsKey` at `core/MemoryForge.Core/Run.Progression.cs:150` still formats non-integer or ≥1e21 doubles with `ToString(\"R\")`. Its digits depend on the runtime, and it writes `1E+21` where JS writes `1e+21`. `BossId` and `PropertyKey` use it, but it only matters if a numeric key's text actually reaches a comparison or error detail. It could be routed through `JsNumber` in a separate task.\n\n**Next, for you:** compile with warnings-as-errors, then rerun the .NET checks, the 1000 full runs and forgery tests, the 2088 Unity Mono cases, the public witness and PlayMode.\n\nThe full explanation is in `reports/run_memory_core_20261016/numeric_fix_author.md`.",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ]
+}

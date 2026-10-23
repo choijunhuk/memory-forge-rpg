@@ -1,0 +1,16 @@
+✔ trace canonical JSON sorts even numeric keys, excludes diagnostics, and never changes RNG or array order (1.767ms)
+✔ default plan contains all 1000 distinct seeds with 700 short and 300 full scenarios (0.787167ms)
+✔ real short/full Run commands replay every committed and rejected state hash deterministically (341.955ms)
+✔ seed 1135 skips a real reserve-only card disabled by c_quick and completes the run (179.564916ms)
+✔ replay refuses tampered command envelopes, hashes, setup, snapshots, or source provenance (67.38625ms)
+✔ opt-in v2 runs use the existing migration and real terminal memory commit without forced state edits (73.972958ms)
+✔ unexpected exceptions abort generation and preserve the previous output instead of becoming rejections (9.062708ms)
+✔ portable JSON and gzip JSONL exports retain provenance and completed replayable scenarios (99.9085ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 870.574083

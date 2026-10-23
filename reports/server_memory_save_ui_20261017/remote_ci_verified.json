@@ -1,0 +1,25 @@
+{
+  "scope": "exact prior memory-save commit062caf8, not the later held-part UI work",
+  "runs": [
+    {
+      "conclusion": "success",
+      "databaseId": 39017041570,
+      "event": "pull_request",
+      "headSha": "062caf89782fdd6fda9d7e0c317a06483fb67ce5",
+      "startedAt": "2026-10-17T08:21:15Z",
+      "status": "completed",
+      "updatedAt": "2026-10-17T08:38:36Z",
+      "url": "https://github.com/choijunhuk/memory-forge-rpg/actions/runs/39017041570"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 39017038249,
+      "event": "push",
+      "headSha": "062caf89782fdd6fda9d7e0c317a06483fb67ce5",
+      "startedAt": "2026-10-17T08:21:12Z",
+      "status": "completed",
+      "updatedAt": "2026-10-17T08:41:36Z",
+      "url": "https://github.com/choijunhuk/memory-forge-rpg/actions/runs/39017038249"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "task_id": "P1-CSHARP-RUN-CREATE-CLAUDE-CORE-REVIEW",
+  "run_id": "P1-CSHARP-RUN-CREATE-CLAUDE-CORE-REVIEW-20261015T084522979234Z",
+  "status": "RECEIVED_UNVERIFIED",
+  "requestedEffort": "xhigh",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "changes_verified": false,
+  "raw_output": "ops/ai/local/P1-CSHARP-RUN-CREATE-CLAUDE-CORE-REVIEW-20261015T084522979234Z*",
+  "billing_verified_at": "2026-10-14T21:44:57.439760+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "codex/csharp-battle-opening",
+  "base_commit": "2ffc29ecdbdeee5027258ad6f73302b98820fc35",
+  "worktree": "/Users/choi/.codex/worktrees/csharp-battle-opening/Memory_forge",
+  "allowed_files": [],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "263d4afb-87a0-4fa7-8801-718ad05053de",
+  "subtype": "success",
+  "is_error": false,
+  "result": "**판정: APPROVE_R0_CURRENT_CREATION_SOURCE**\n\n네 파일(`RunDefinitions.cs`, `RunState.cs`, `Run.cs`, `RunDataLoader.cs`)을 `rules-core.js` 1522–1634, 1919–1929, 2018–2034행과 `Stats`/`Rng`/`clone`, `memory_v2.cjs` 소스와 한 줄씩 대조했습니다. 현재 생성 경로를 막는 결함은 찾지 못했습니다.\n\n**확인한 일치 항목**\n- **seed와 RNG**\n  - `seed ?? 1`이 같고, 0도 그대로 유지됩니다.\n  - `(uint)seed ^ 0x5eed`는 JS의 `ToInt32` → `>>>0` 결과와 비트 단위로 같습니다.\n  - `GenMap`은 매 추첨마다 `s.Rng`를 갱신하며, 추첨 순서가 JS와 같습니다.\n    - 층 폭 6회, 1층 i0의 `below(3)` 단락 평가, 3~5층 표 가중치, 엘리트 3번째부터 battle 강등, 3층 rest 보장\n    - 간선의 `below(2)`와 `b[j+1]` 검사 순서, 그다음 `j>0`과 `below(3)`, 부모 보정과 중복 제거, 연속 엘리트 제거, boss f7·i0에 next 없음\n  - `Round`는 `Math.round`의 floor(x+0.5)를 음수까지 정확히 재현합니다.\n- **상태 필드**\n  - 필드의 존재와 null/undefined 처리가 JS와 같습니다. 대상은 `stageLevel`·`pos`·`battle`·`pending`·`result`의 null, `bosses` falsy→null, `zone`과 `map.zone` 생략(zones 비었을 때), `startMemory` falsy→{}, v2 필드, `hpRef`입니다.\n- **난이도**\n  - stageLevel이 없으면 입력값을 깊은 복사로 그대로 보존합니다.\n  - stageLevel이 있으면 `combine`처럼 `{hp, dmg}`만 남기고, `||100`과 같은 `Fallback`를 씁니다.\n- **Stats.derive**\n  - level null이면 reference 값을 쓰고, 0이면 1로 clamp합니다.\n  - `weaponLevel`/`skillLv`/`ultLv`의 `||1`, armor/accessory의 null 검사, 무기를 못 찾으면 무기 파워 0이 JS와 같습니다.\n  - `Object.assign`의 5개 필드와 `maxHp` 합산도 같습니다.\n- **v2 검증 순서**\n  - INVALID_SNAPSHOT(파티) → RUN_ID_REQUIRED → INVALID_SNAPSHOT(memoryVersion) → baseline/before → inspect → 파티별 cost와 capacity 비교(OVER_CAPACITY) 순서가 같습니다.\n  - inspect는 값을 바꾸지 않으므로, 검증된 스냅샷을 저장해도 JS의 원본 clone과 내용이 같습니다.\n- **카드 key**\n  - legacy는 `k{n}`입니다.\n  - v2는 `run:{runId}:{n}`이며, deck과 memoryBefore 전체를 대상으로 충돌을 검사합니다.\n  - `useMemory:false`이면 key+id가 같고 from이 없는 경우만 `base:` key를 유지하고, 나머지는 새 key를 받습니다. 이후 `playBefore`를 만드는 흐름도 같습니다.\n  - deck 카드의 필드 순서(spread → key → owner → assigned), 무기 카드, `defaultWeapon` 단락 평가도 같습니다.\n- **legacy 경로**\n  - 빈 파티, 중복 캐릭터, 4명 이상 파티를 JS처럼 검증 없이 그대로 받습니다.\n  - 잘못된 카드 행은 양쪽 모두 TypeError 계열입니다.\n- **별칭 공유와 순수 조회**\n  - setup에서 넘어온 모든 입력을 깊은 복사합니다. JS는 difficulty·zones·bosses를 참조로 공유하지만, 생성 과정에서는 관찰되지 않습니다.\n  - `State`, `NodeById`, `Available`은 복사본을 반환하므로 순수 조회입니다.\n- **로더**\n  - `BattleDataLoader.Fields`가 엄격해서, 데이터가 조용히 버려지지 않고 알 수 없는 필드가 있으면 즉시 실패합니다.\n  - 숫자 키는 안전 정수만 long으로 바꾸고, 나머지 값은 M0 그래프 경로로 그대로 보존합니다.\n\n**명시된 경계 (현재 생성 경로의 결함 아님)**\n- boss 위치에서 `available()`이 JS는 undefined, C#는 `[]`를 반환합니다(`Run.cs:199`). 실제 진행 전에 R1에서 처리할 항목입니다.\n- 알 수 없는 무기 타입이면 `DefaultWeapon`이 TypeError를 던집니다(`Run.cs:133`). 미래 데이터에만 해당합니다.\n- memoryVersion이 2^53 이상이면 INVALID_SNAPSHOT입니다. 정수 산술은 signedInt32, seed는 안전 정수 범위로 제한합니다.\n\n**범위가 정해진 후속 확인 (비차단, 모두 현재 데이터로는 도달 불가이거나 계약 밖)**\n1. `Run.cs:35`: JS `combine`의 `(b.hp||100)` 대체값이 C#에는 없습니다. 현재 데이터의 stageScale 최솟값이 hp 53, dmg 75라서 도달하지 않습니다.\n2. `Run.cs:62-63`: reference 경로(level 없음)에서도 armor/accessory/weaponLevel을 바로 타입 검사합니다. 그래서 비정수 값이면 C#는 RUN_NUMBER_OUT_OF_RANGE를 던지고, JS는 그 값을 무시합니다. 타입 경계 범주이며 parity로 세면 안 됩니다.\n3. `RunDataLoader.cs:74`: useMemory가 boolean이 아니면 `GetBoolean()`이 InvalidOperationException을 던집니다. JS는 엄격한 `false`만 의미 있게 취급합니다. 호스트 쪽 타입 경계입니다.\n4. `RunDefinitions.cs:39`: charId가 없으면 C#는 `\"\"`로 매핑하고, JS는 `\"undefined\"` 키로 강제 변환합니다. JS 고유 동작이라 계약 밖입니다.\n5. `Run.cs:24`: `Create`를 호출할 때마다 공유 `RunData`를 다시 인덱싱합니다. 참조를 통째로 교체하므로 결과는 같지만, Unity와 서버에서 동시에 쓰는 경우에 대비해 기록해 둡니다.\n6. 네 파일 밖이지만 참고로: JS `Stats.REFERENCE`(160/81)는 하드코딩이고 C#는 데이터 값(40/81)을 읽습니다. 현재 데이터에서는 같습니다.\n\n**검토 한계**\n- 소스만 읽었습니다. 빌드, 런타임 실행, 벡터 실행, sha256 비교는 하지 않았습니다.\n- 그래서 manifest의 해시와 제가 읽은 파일 바이트가 같은지는 확인하지 못했습니다. 상위 작업에서 대조해야 합니다.\n- M0 의존성, phase2 checker, 명령/저장/복원 경로는 이번 범위에서 제외했습니다.\n- 편집한 파일과 호출한 에이전트는 없습니다.\n- 제 쪽에서는 session_id가 보이지 않으므로, Codex가 CLI 메타데이터에서 수집해야 합니다.",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ]
+}

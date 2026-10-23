@@ -1,0 +1,27 @@
+{
+  "task_id": "P1-EXPEDITION-BATTLE-FORECAST-CORE",
+  "run_id": "P1-EXPEDITION-BATTLE-FORECAST-CORE-20261015T233715504048Z",
+  "status": "TIMED_OUT",
+  "requestedEffort": "max",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": null,
+  "changes_verified": false,
+  "raw_output": "ops/ai/local/P1-EXPEDITION-BATTLE-FORECAST-CORE-20261015T233715504048Z*",
+  "billing_verified_at": "2026-10-15T21:22:01.277612+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "codex/csharp-memory-v2",
+  "base_commit": "3d33c4cb2e0c7cee14ced2c67c33b8fb55cef267",
+  "worktree": "/Users/choi/.codex/worktrees/csharp-memory-v2/Memory_forge",
+  "allowed_files": [
+    "core/MemoryForge.Core/Battle.Preview.cs",
+    "core/MemoryForge.Core/Run.BattleQueries.cs",
+    "core/MemoryForge.CoreChecks/BattlePreviewChecks.cs",
+    "engine/tests/battle_preview_vectors.test.mjs",
+    "reports/battle_preview_20261016/author_report.md",
+    "tools/gen_battle_preview_vectors.mjs"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "blocking_reason": "CLI timeout; local checkpoint saved; no retry"
+}

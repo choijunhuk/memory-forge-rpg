@@ -1,0 +1,19 @@
+{
+  "status": "PASS",
+  "checks": [
+    "genuine completed battle reward loaded from current server state",
+    "reward content has a vertical viewport with no fixed three-evolution truncation",
+    "actual reward raycast reaches RewardCard",
+    "rapid duplicate reward click refused while request is busy",
+    "one actual take adds one deck card and removes offers only from committed state",
+    "claimed or absent card choices cannot generate another request",
+    "unpublished relic part and evolution choices refused before transmission",
+    "all duplicate invalid choices preserve entire server envelope and journal",
+    "actual reward raycast reaches Proceed",
+    "explicit proceed returns to authoritative next map exactly once",
+    "proceed cannot be replayed as a new reward action from map"
+  ],
+  "start_version": 9,
+  "final_version": 11,
+  "scope": "actual Editor uGUI and genuine Core-earned card reward; positive relic/part/evolution and four-row data are not claimed runtime acceptance"
+}

@@ -1,0 +1,182 @@
+[
+  {
+    "c": "sera",
+    "k": "fig_bond_listen",
+    "detail": "Seated on the exact original pale stone bench, legs crossed as source, little closed notebook resting across lap, both gloved hands relaxed, amber eyes attentively listening to player. Preserve the stone bench geometry.",
+    "cleanup": false
+  },
+  {
+    "c": "sera",
+    "k": "fig_bond_offer",
+    "detail": "Seated on SAME pale stone bench as original, crossed legs and coat unchanged; presents open little notebook at chest showing the TWO CUP SKETCHES as source, restrained dry warm smile to player. No new props.",
+    "cleanup": false
+  },
+  {
+    "c": "ravien",
+    "k": "fig_bond_turn",
+    "detail": "Keep EXACT foreground oval writing desk/chair/paper/closed folder/pen positions from master. Change to a small clever but less guarded smile toward player, gloved fingers gently turning only the cream paper corner, pen loosely supported. Remain seated at SAME desk; never replace it with side table.",
+    "cleanup": false
+  },
+  {
+    "c": "ravien",
+    "k": "fig_soft",
+    "detail": "Keep EXACT foreground oval writing desk/chair, folder/paper/pen from master. Softer vulnerable eye contact, shoulders relaxed, gloved hands at rest near lap/desktop edge, pen rests on same desktop. SAME foreground desk remains between her and viewer; do not move it to her side.",
+    "cleanup": false
+  },
+  {
+    "c": "ravien",
+    "k": "fig_bond_end",
+    "detail": "After rising, she stands just to SCREEN RIGHT of the now empty SAME burgundy chair, both gloved hands empty and lowered, head gently tilted waiting for player. Keep SAME oval foreground desk in its EXACT location, cream sheet and closed folder left on desktop. Maintain same perspective/scale/geometry, no new little side table. Fit feet, chair and original desk legs.",
+    "cleanup": false
+  },
+  {
+    "c": "harin",
+    "k": "fig_cat",
+    "detail": "Keep EXACT shield SCREEN LEFT, SAME ladder-back chair, rectangular desk SCREEN RIGHT with navy gold-star runner, folded cream cloth, glass and tool. NOW the SAME small round white/gray stitched cat plush is out of pouch, held above cloth in gloved palm, other gloved fingertips straighten its one folded ear. Blue stitched eyes, fabric seam, smooth stuffed body, no fur or living kitten. Serious focused face softening at eyes; source costume unchanged.",
+    "cleanup": false
+  },
+  {
+    "c": "harin",
+    "k": "fig_cat_placed",
+    "detail": "Keep EXACT shield/chair/table/runner/cloth/glass/tool from master. SAME small round white/gray stitched blue-eyed plush with one folded ear now SITS ON FOLDED CREAM CLOTH at table center. She has released it; gloved hands rest on thighs or near cloth edge, shy caught smile toward player. No second cat, no cat in pouch, no kitten.",
+    "cleanup": false
+  },
+  {
+    "c": "harin",
+    "k": "fig_soft",
+    "detail": "Keep EXACT shield/chair/table/runner/cloth/glass/tool from master. SAME small round white/gray stitched cat plush with blue stitched eyes and one folded ear sits on cloth on SCREEN-RIGHT table, not in pouch or hands. Seated shoulders relaxed, gloved hands on lap, small open sincere smile and steady eye contact. Do not change furniture or shield side.",
+    "cleanup": false
+  },
+  {
+    "c": "harin",
+    "k": "fig_rest",
+    "detail": "Keep EXACT shield/chair/table/runner/cloth/glass/tool from master and SAME plush sitting on cloth on SCREEN RIGHT. Final unguarded seated rest: both black gloves have been REMOVED and lie neatly overlapped across her lap, both BARE hands rest gently on them. Preserve armor/bracers, strong adult build, navy cape and white trousers; no costume redesign. Brief unmistakable relaxed smile.",
+    "cleanup": false
+  },
+  {
+    "c": "aila",
+    "k": "fig_surprised",
+    "detail": "Keep EXACT desk/drawer/braid/outfit and SILVER lantern resting upright at DESK CENTER from master. Lift matching teapot by handle with one hand, other steadies lid; pour a little water into the two matching teacups, cups/saucers stay on desk. Small surprised amused smile after strong tea. Pen and paper remain on same desktop. Never hold lantern.",
+    "cleanup": false
+  },
+  {
+    "c": "aila",
+    "k": "fig_determined",
+    "detail": "Keep EXACT desk/drawer, two cups, pot and SILVER lantern resting at DESK CENTER from master. Same adult Aila turns slightly over shoulder toward player, one hand near closed ledger/page on desk, other relaxed; calm violet-eyed resolve. Fine pen and cream sheet present on desktop. No weapon. No held lantern.",
+    "cleanup": false
+  },
+  {
+    "c": "aila",
+    "k": "fig_soft",
+    "detail": "Keep EXACT desk and SILVER lantern resting upright at DESK CENTER, same cups, pot, pen, closed drawer and approved gown. Warm end-of-evening seated/standing-near-chair ease, one hand on empty cream/gold neighbouring chair back, other hand relaxed near teacup on desk; inviting soft violet eye contact. No lantern held. Paper has been stored; drawer closed. Keep source chair motif without changing desk.",
+    "cleanup": false
+  },
+  {
+    "c": "aila",
+    "k": "fig_bond_table",
+    "detail": "Keep EXACT desk and SILVER lantern resting at DESK CENTER, two matching teacups with saucers, teapot, pen and cream sheet in same places, empty lower drawer slightly open. Same Aila gives player a warm self-directed invitation, empty hand toward neighbouring place/chair, other hand rests desk edge. Neither hand holds lantern.",
+    "cleanup": false
+  },
+  {
+    "c": "aila",
+    "k": "fig_bond_paper",
+    "detail": "Keep EXACT desk/lantern/cups/pot/drawer layout. Aila pulls the blank cream sheet toward HERSELF by its near edge with fingertips, other hand resting beside fine pen, small grateful slightly uncertain smile. No cup held, no lantern held. Sheet must visibly move toward her writing space.",
+    "cleanup": false
+  },
+  {
+    "c": "aila",
+    "k": "fig_bond_hover",
+    "detail": "Keep EXACT desk/lantern/cups/pot/drawer layout. Right hand holds fine dark PEN with nib clearly HOVERING just above cream blank sheet; left hand gently TUCKS a loose hair strand behind ear. Violet eyes toward player, calm requesting resolve. Lantern stays planted at desk center. No cup/saucer held.",
+    "cleanup": false
+  },
+  {
+    "c": "aila",
+    "k": "fig_bond_write",
+    "detail": "Keep EXACT desk/lantern/cups/pot/drawer layout. Aila is actually WRITING: right-hand fingers grip fine dark pen, nib VISIBLY TOUCHES cream paper flat on desktop; left hand holds sheet edge steady. A few small ink handwriting strokes on sheet, no large readable words. Slight relieved shy smile, gaze to paper. Hands must be free of cup/lantern; keep lantern fixed on desk.",
+    "cleanup": false
+  },
+  {
+    "c": "aila",
+    "k": "fig_bond_present",
+    "detail": "Keep EXACT desk/lantern/cups/pot/drawer layout. Aila actually PRESENTS the written cream PAGE toward player at mid-torso height, one hand holds page edge and the other supports opposite corner with pen loosely held, page face turned toward viewer. Small ink handwriting strokes on page, no large readable words. Violet eyes wait shyly for response. Lantern remains on desk, no cup held.",
+    "cleanup": false
+  },
+  {
+    "c": "aila",
+    "k": "fig_bond_return",
+    "detail": "Keep EXACT desk/lantern/cups/pot/drawer layout. Aila RECEIVES and carefully holds the same written page just above desktop by its corner, looks at the page edge with a small relieved warm smile; other hand near pen resting on desk. Same faint handwriting strokes. No other person's hand in frame. No lantern held.",
+    "cleanup": false
+  },
+  {
+    "c": "aila",
+    "k": "fig_bond_store",
+    "detail": "Keep EXACT desk/lantern/cups/pot layout. Aila slides the SAME written cream page into the open EMPTY lower desk drawer with one hand; other hand steadies drawer edge, small satisfied self-directed smile toward player. Show paper halfway entering drawer, no other paper stacks inside. Lantern fixed at desk center, never held.",
+    "cleanup": false
+  },
+  {
+    "c": "sion",
+    "k": "fig_surprised",
+    "detail": "Keep EXACT SCREEN-RIGHT lectern from master, SAME open purple book atop it, personal cream memo. Restrained surprise: brows lift slightly, one hand reaches down catching two small slipped memo sheets, other hand near book. No sword, no new furniture, no floating page storm.",
+    "cleanup": false
+  },
+  {
+    "c": "sion",
+    "k": "fig_determined",
+    "detail": "Keep EXACT SCREEN-RIGHT lectern from master. SAME purple book is CLOSED atop lectern with small personal memo corner protruding as bookmark; one hand rests over book cover, other relaxed, calm firm resolved direct gaze. No sword. Lectern must not disappear.",
+    "cleanup": false
+  },
+  {
+    "c": "sion",
+    "k": "fig_bond_neutral",
+    "detail": "Keep EXACT SCREEN-RIGHT lectern and memo from master even while Sion HOLDS same open purple book at chest, fingertips paused before page turn, cool composed gaze toward player. Preserve fine glasses, black hair and same coat. No sword, no other furniture.",
+    "cleanup": false
+  },
+  {
+    "c": "sion",
+    "k": "fig_bond_adjust",
+    "detail": "Keep EXACT SCREEN-RIGHT lectern, memo and book design from master. One hand supports same open purple book at chest, other EMPTY fingers touch glasses temple in a subtly unsettled adjustment; no pen, no sword. Lectern stays in frame same position.",
+    "cleanup": false
+  },
+  {
+    "c": "sion",
+    "k": "fig_bond_soft",
+    "detail": "Keep EXACT SCREEN-RIGHT lectern from master; same book and personal note have been set DOWN on its top, book partly closed with note visible. Hands relaxed near lectern/side, rare softened small smile and player eye contact. Never add sword or hide/remove lectern.",
+    "cleanup": false
+  },
+  {
+    "c": "sion",
+    "k": "fig_bond_page",
+    "detail": "Keep EXACT SCREEN-RIGHT lectern from master; same open book rests atop it, she gently SLIDES the small personal cream memo BETWEEN PAGES leaving corner visible, fingertips contacting page/note edge. Calm personal gaze toward player; no sword, no other objects.",
+    "cleanup": false
+  },
+  {
+    "c": "sion",
+    "k": "fig_bond_hidden",
+    "detail": "Keep EXACT SCREEN-RIGHT lectern with cream memo from master. Sion raises SAME purple book to conceal MOUTH ONLY, eyes clearly visible above its top edge and looking toward player; both hands hold book, subtle embarrassed emotional crack. No sword. Lectern remains unchanged.",
+    "cleanup": false
+  },
+  {
+    "c": "lumi",
+    "k": "fig_worried",
+    "detail": "Same 22-year-old Lumi, preserve original worried checking-her-pace pose, slight forward foot adjustment, small uncertain frown and lowered gaze to player foot level, SAME helmet held to side. Approved athletic adult outfit/hair unchanged, no dagger.",
+    "cleanup": false
+  },
+  {
+    "c": "lumi",
+    "k": "fig_surprised",
+    "detail": "Same 22-year-old Lumi, preserve original open free-hand gesture and surprised excited face, widened blue eyes and slightly open short mouth, SAME helmet tucked under other arm. Original athletic stance and outfit, no dagger.",
+    "cleanup": false
+  },
+  {
+    "c": "ravien",
+    "k": "fig_waver",
+    "cleanup": true,
+    "detail": "Change ONLY exterior transparency. Preserve entire existing drawing including every face, hand, pose, table/chair, prop and costume contour. Remove all faint background alpha residue from ALL empty canvas and especially bottom corners; empty corners must be alpha exactly zero. Do not redraw or move subject/furniture, do not add floor or halo."
+  },
+  {
+    "c": "harin",
+    "k": "fig_worry",
+    "cleanup": true,
+    "detail": "Change ONLY exterior transparency. Preserve entire existing drawing including every face, hand, pose, table/chair, prop and costume contour. Remove all faint background alpha residue from ALL empty canvas and especially bottom corners; empty corners must be alpha exactly zero. Do not redraw or move subject/furniture, do not add floor or halo."
+  }
+]

@@ -1,0 +1,24 @@
+{
+  "at": "2026-10-16T05:43:58.797485+00:00",
+  "app_path": "/Users/choi/Documents/Memory_forge/ops/ai/local/builds/MemoryForgeExpedition-Pacing-20261016.app",
+  "process": {
+    "pid": 3546,
+    "binary": "/Users/choi/Documents/Memory_forge/ops/ai/local/builds/MemoryForgeExpedition-Pacing-20261016.app/Contents/MacOS/2D_URP"
+  },
+  "managed_sha256": "b1b34eca5fa1b1e56ef875dbbceaca012ad9100228e7451c30d777d5420441ef",
+  "pacing_metadata": true,
+  "status": "FRESH_NATIVE_KOREAN_MAP_PASS",
+  "observed_at": "2026-10-16T05:44:50.367251+00:00",
+  "source_head": "d008eed",
+  "observed": {
+    "hp": "243/243",
+    "coins": 60,
+    "deck": 18,
+    "phase": "initial expedition map"
+  },
+  "not_checked": [
+    "new native physical battle/pace flow",
+    "native fault/recovery injection",
+    "Android/IL2CPP/device/server"
+  ]
+}

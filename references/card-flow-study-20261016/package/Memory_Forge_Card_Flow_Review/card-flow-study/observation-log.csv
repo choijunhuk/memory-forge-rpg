@@ -1,0 +1,2 @@
+﻿test_id,date,game_version,platform,mode,speed,setup,action,t0_ms,t1_ms,t2_ms,tc_ms,tl_ms,t3_ms,observed,interpretation,repeats,video_file
+T-05,2026-10-17,(예시),PC,카오스 일반 전투,1x,"AP 3, 적A 카운트 4, 손패 5장",다단 히트 카드 사용 직후 두 번째 카드 드래그,0,,,,,,(예시 행 - 실제 관찰로 바꿔 쓰기),,,

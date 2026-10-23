@@ -1,0 +1,54 @@
+[
+  {
+    "task": "P1-EXPEDITION-NATIVE-INPUT-DIAGNOSIS",
+    "sessionId": "ec8f9e67-4bc1-408b-90fb-8c8adc09592c",
+    "requestedEffort": "xhigh",
+    "actualModels": {
+      "claude-opus-5-5": 50
+    },
+    "actualPerTurnEffort": {
+      "xhigh": 50
+    },
+    "billingAccountMatched": true,
+    "rawReasoningCopied": false
+  },
+  {
+    "task": "P1-EXPEDITION-TOAST-INPUT-SAFETY",
+    "sessionId": "ec8f9e67-4bc1-408b-90fb-8c8adc09592c",
+    "requestedEffort": "high",
+    "actualModels": {
+      "claude-opus-5-5": 38
+    },
+    "actualPerTurnEffort": {
+      "high": 38
+    },
+    "billingAccountMatched": true,
+    "rawReasoningCopied": false
+  },
+  {
+    "task": "P1-NATIVE-INPUT-OBSERVATION-REVIEW",
+    "sessionId": "ec8f9e67-4bc1-408b-90fb-8c8adc09592c",
+    "requestedEffort": "high",
+    "actualModels": {
+      "claude-opus-5-5": 8
+    },
+    "actualPerTurnEffort": {
+      "high": 8
+    },
+    "billingAccountMatched": true,
+    "rawReasoningCopied": false
+  },
+  {
+    "task": "P1-NATIVE-INPUT-RECEIPT-RECHECK",
+    "sessionId": "ec8f9e67-4bc1-408b-90fb-8c8adc09592c",
+    "requestedEffort": "high",
+    "actualModels": {
+      "claude-opus-5-5": 6
+    },
+    "actualPerTurnEffort": {
+      "high": 6
+    },
+    "billingAccountMatched": true,
+    "rawReasoningCopied": false
+  }
+]

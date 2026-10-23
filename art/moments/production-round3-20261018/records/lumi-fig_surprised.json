@@ -1,0 +1,28 @@
+{
+  "c": "lumi",
+  "key": "fig_surprised",
+  "path": "lumi/images/char_lumi_moment_surprised_v01.png",
+  "refs": [
+    "/Users/choi/Documents/Memory_forge/art/moments/lumi/images/char_lumi_moment_neutral_v01.png"
+  ],
+  "pose": "Lumi age22, one blue/charcoal helmet safely cradled in left forearm at waist, both feet planted. Her head turns toward a nearby destination off image left then eyes toward viewer, bright blue eyes widened in pleasant realization, lips opening into delighted laugh, NOT wink or caricature. Right hand makes small open-palm 'that close?' gesture near waist. No dagger/weapon. Exact adult athletic proportions, blond spiky hair with blue streak, offshoulder black/yellow circuit jacket, white cropped sport top, black bike shorts/sneakers. Full body inside canvas.",
+  "prompt": "Use case: identity-preserve. Locked character design reference. Make ONE new non-explicit narrative RPG key-pose, 1024x1536 full length transparent PNG. Preserve adult identity, age, hairstyle, face, exact costume/colors and painterly anime cel style. All head, fingers, shoes and important props inside canvas. No scene background, haze, labels, panels, other people or erotic posing. Character acting and prop contact are the focus. Acting: Lumi age22, one blue/charcoal helmet safely cradled in left forearm at waist, both feet planted. Her head turns toward a nearby destination off image left then eyes toward viewer, bright blue eyes widened in pleasant realization, lips opening into delighted laugh, NOT wink or caricature. Right hand makes small open-palm 'that close?' gesture near waist. No dagger/weapon. Exact adult athletic proportions, blond spiky hair with blue streak, offshoulder black/yellow circuit jacket, white cropped sport top, black bike shorts/sneakers. Full body inside canvas.",
+  "source": "/Users/choi/.codex/generated_images/01a14d20-ffd5-7e81-9e47-85c1c8415e11/exec-5d503fa2-1ce9-4123-9d65-fb62233b7aaa.png",
+  "tool": "Codex built-in image_gen; subscription-included; no API fallback",
+  "review": "pass",
+  "previous_attempt": null,
+  "score": 92,
+  "review_notes": "Inspected rendered output: approved adult design; safe settled weapon/lantern grip, head/hands and footwear visible, no accidental book/cup/helmet in victory. Source key-pose only.",
+  "backend_model": "not exposed by tool",
+  "selected": true,
+  "sha256": "f5f6f7d5e8e198db5c179cbbbafcb67ce33229a195c023e5e548d2491619b988",
+  "size": [
+    1024,
+    1536
+  ],
+  "mode": "RGBA",
+  "alpha_extrema": [
+    0,
+    254
+  ]
+}

@@ -1,0 +1,11 @@
+  복원할 프로젝트를 확인하는 중...
+  /Users/choi/Documents/Memory_forge/ops/ai/local/run-content-head-compat/tools/UnityContentExport/UnityContentExport.csproj을(를) 51밀리초 동안 복원했습니다.
+  /Users/choi/Documents/Memory_forge/ops/ai/local/run-content-head-compat/core/MemoryForge.Core/MemoryForge.Core.csproj을(를) 85밀리초 동안 복원했습니다.
+  MemoryForge.Core -> /Users/choi/Documents/Memory_forge/ops/ai/local/run-content-head-compat/export-artifacts/bin/MemoryForge.Core/debug/MemoryForge.Core.dll
+  UnityContentExport -> /Users/choi/Documents/Memory_forge/ops/ai/local/run-content-head-compat/export-artifacts/bin/UnityContentExport/debug/UnityContentExport.dll
+
+빌드했습니다.
+    경고 0개
+    오류 0개
+
+경과 시간: 00:00:02.08

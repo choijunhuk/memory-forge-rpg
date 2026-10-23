@@ -1,0 +1,113 @@
+{
+  "transcript": "/Users/choi/.claude/projects/-Users-choi-Documents-Memory-forge--claude-worktrees-strange-wilson-588773/ea31d835-ab46-4165-969b-c4dfda5c3bbf.jsonl",
+  "session_id": "ea31d835-ab46-4165-969b-c4dfda5c3bbf",
+  "models": {
+    "claude-opus-5-5": 285
+  },
+  "permission_modes": [
+    "bypassPermissions"
+  ],
+  "mcp_servers_used": [
+    "ccd_turn",
+    "ccd_session_mgmt"
+  ],
+  "codex_calls": 3,
+  "lock_events": [],
+  "start_check": {
+    "checks": {
+      "auth": true,
+      "codex_chatgpt_login": true,
+      "project_settings_pinned": true,
+      "provider_env_clean": true,
+      "provider_env_names": [],
+      "proxy_env_names": [],
+      "root_denied_tools_enforced": true
+    },
+    "pass": true
+  },
+  "start_check_current": true,
+  "violations": [],
+  "waived": [
+    {
+      "kind": "protected_before_start_check",
+      "id": "toolu_012oND2thZvhVbX1W2vUMJ2b",
+      "detail": "Bash",
+      "reason": "Local-only WIP git commit (e849da3, rebased to 61675c5 and squashed into the final commit) made before this session ran its first ROOT_START_CHECK; no push, no Codex call, no settings or credential access. ROOT_START_CHECK then passed with every check true before all three Codex calls and every later commit."
+    }
+  ],
+  "warnings": [
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "1a59c906-04da-521d-bda7-7f71b9f9e01c"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "235d7bf9-b249-4a03-bfee-2a5e3bd4902a"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "6f616b42-0ed8-571e-823f-ee4aca6b7ce9"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "Claude_Code_iOS_Simulator"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "b3252c20-133f-46ee-8eeb-6280c4679458"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "lazyweb"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "mcp-registry"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "plugin_bio-research_biorxiv"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "plugin_bio-research_c-trials"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "plugin_bio-research_chembl"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "plugin_bio-research_consensus"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "plugin_bio-research_pubmed"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "scheduled-tasks"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "plugin_bio-research_ot"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "plugin_desktop-commander_desktop-commander"
+    },
+    {
+      "kind": "exposed_server_not_allowed",
+      "detail": "plugin_greptile_greptile"
+    }
+  ],
+  "missing_evidence": [],
+  "unverified": [
+    "initial tool list",
+    "MCP subprocess environments",
+    "live inference environment versus the checked shell environment",
+    "interpreter code semantics (python -c, python heredocs, node -e)",
+    "Usage credits/Extra usage OFF (account UI)"
+  ],
+  "pass": true
+}

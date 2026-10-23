@@ -1,0 +1,254 @@
+[
+  {
+    "task": "P1-R1C-RUN-MEMORY",
+    "sessionId": "55c3a4d0-c6ce-4e57-9e2b-1b01a1520fe1",
+    "requestedEffort": "max",
+    "actualModels": {
+      "claude-opus-5-5": 84
+    },
+    "actualPerTurnEffort": {
+      "max": 84
+    },
+    "runnerOutcome": "RECEIVED_UNVERIFIED",
+    "billingAccountMatched": true,
+    "rawReasoningCopied": false
+  },
+  {
+    "task": "P1-R1C-UNITY-NUMBER-FIX",
+    "sessionId": "083875e9-7bf8-49ed-8179-41bae9320b96",
+    "requestedEffort": "max",
+    "actualModels": {
+      "claude-opus-5-5": 49
+    },
+    "actualPerTurnEffort": {
+      "max": 49
+    },
+    "runnerOutcome": "RECEIVED_UNVERIFIED",
+    "billingAccountMatched": true,
+    "rawReasoningCopied": false
+  },
+  {
+    "task": "P1-R1C-COMPLETION-HOST-REVIEW",
+    "sessionId": "c1b34a4b-d227-4de8-9504-bb76ae06d41a",
+    "requestedEffort": "xhigh",
+    "actualModels": {
+      "claude-opus-5-5": 55
+    },
+    "actualPerTurnEffort": {
+      "xhigh": 55
+    },
+    "runnerOutcome": "RECEIVED_UNVERIFIED",
+    "billingAccountMatched": true,
+    "rawReasoningCopied": false
+  },
+  {
+    "task": "P1-R1C-HOST-RECHECK",
+    "sessionId": "c1b34a4b-d227-4de8-9504-bb76ae06d41a",
+    "requestedEffort": "xhigh",
+    "actualModels": {
+      "claude-opus-5-5": 28
+    },
+    "actualPerTurnEffort": {
+      "xhigh": 28
+    },
+    "runnerOutcome": "RECEIVED_UNVERIFIED",
+    "billingAccountMatched": true,
+    "rawReasoningCopied": false
+  },
+  {
+    "task": "P1-RUN-MEMORY-BOUNDARY-ORACLE",
+    "sessionId": "b7ef27c8-a134-40c7-9008-af5f7d57f189",
+    "requestedEffort": "xhigh",
+    "actualModels": {
+      "claude-opus-5-5": 70
+    },
+    "actualPerTurnEffort": {
+      "xhigh": 70
+    },
+    "runnerOutcome": "RECEIVED_UNVERIFIED",
+    "billingAccountMatched": true,
+    "rawReasoningCopied": false
+  },
+  {
+    "task": "P1-RUN-MEMORY-CONSUMER",
+    "sessionId": "093b92b9-ebc4-4fd3-9ba3-7bc3343848d0",
+    "requestedEffort": "xhigh",
+    "actualModels": {
+      "claude-opus-5-5": 101
+    },
+    "actualPerTurnEffort": {
+      "xhigh": 101
+    },
+    "runnerOutcome": "TIMED_OUT",
+    "billingAccountMatched": true,
+    "rawReasoningCopied": false
+  },
+  {
+    "task": "P1-RUN-MEMORY-CONSUMER-FINISH",
+    "sessionId": "093b92b9-ebc4-4fd3-9ba3-7bc3343848d0",
+    "requestedEffort": "high",
+    "actualModels": {
+      "claude-opus-5-5": 4
+    },
+    "actualPerTurnEffort": {
+      "high": 4
+    },
+    "runnerOutcome": "RECEIVED_UNVERIFIED",
+    "billingAccountMatched": true,
+    "rawReasoningCopied": false
+  },
+  {
+    "task": "P1-R1C-NUMERIC-TESTS-REVIEW",
+    "sessionId": "f07b50c4-dc39-4bca-8a9b-88a9335355db",
+    "requestedEffort": "high",
+    "actualModels": {
+      "claude-opus-5-5": 33
+    },
+    "actualPerTurnEffort": {
+      "high": 33
+    },
+    "runnerOutcome": "RECEIVED_UNVERIFIED",
+    "billingAccountMatched": true,
+    "rawReasoningCopied": false
+  },
+  {
+    "task": "P1-R1C-UNITY-FLOW-REVIEW",
+    "sessionId": "b296970c-01d0-4c95-a02e-29b6cf259989",
+    "requestedEffort": "high",
+    "actualModels": {
+      "claude-opus-5-5": 33
+    },
+    "actualPerTurnEffort": {
+      "high": 33
+    },
+    "runnerOutcome": "RECEIVED_UNVERIFIED",
+    "billingAccountMatched": true,
+    "rawReasoningCopied": false
+  },
+  {
+    "task": "P1-UNITY-EXPEDITION-CLIENT",
+    "sessionId": "bfe66cef-0386-493f-b72c-068c07751c01",
+    "requestedEffort": "xhigh",
+    "actualModels": {
+      "claude-opus-5-5": 131
+    },
+    "actualPerTurnEffort": {
+      "xhigh": 131
+    },
+    "runnerOutcome": "RECEIVED_UNVERIFIED",
+    "billingAccountMatched": true,
+    "rawReasoningCopied": false
+  },
+  {
+    "task": "P1-EXPEDITION-PATCH-REVIEW",
+    "sessionId": "1029db70-3ac8-4b7e-aee8-a554aa467400",
+    "requestedEffort": "high",
+    "actualModels": {
+      "claude-opus-5-5": 42
+    },
+    "actualPerTurnEffort": {
+      "high": 42
+    },
+    "runnerOutcome": "RECEIVED_UNVERIFIED",
+    "billingAccountMatched": true,
+    "rawReasoningCopied": false
+  },
+  {
+    "task": "P1-EXPEDITION-PATCH-RECHECK",
+    "sessionId": "1029db70-3ac8-4b7e-aee8-a554aa467400",
+    "requestedEffort": "high",
+    "actualModels": {
+      "claude-opus-5-5": 9
+    },
+    "actualPerTurnEffort": {
+      "high": 9
+    },
+    "runnerOutcome": "RECEIVED_UNVERIFIED",
+    "billingAccountMatched": true,
+    "rawReasoningCopied": false
+  },
+  {
+    "task": "P1-CARD-TEXT-AND-FLOW-RECHECK",
+    "sessionId": "d1a33205-d4d8-4add-bff3-8c4bbe8b25a8",
+    "requestedEffort": "high",
+    "actualModels": {
+      "claude-opus-5-5": 44
+    },
+    "actualPerTurnEffort": {
+      "high": 44
+    },
+    "runnerOutcome": "RECEIVED_UNVERIFIED",
+    "billingAccountMatched": true,
+    "rawReasoningCopied": false
+  },
+  {
+    "task": "P1-UNITY-FLOW-NULL-GUARD-RECHECK",
+    "sessionId": "d1a33205-d4d8-4add-bff3-8c4bbe8b25a8",
+    "requestedEffort": "high",
+    "actualModels": {
+      "claude-opus-5-5": 8
+    },
+    "actualPerTurnEffort": {
+      "high": 8
+    },
+    "runnerOutcome": "RECEIVED_UNVERIFIED",
+    "billingAccountMatched": true,
+    "rawReasoningCopied": false
+  },
+  {
+    "task": "P1-EXPEDITION-CARD-INFORMATION",
+    "sessionId": "07239d8e-ba66-467d-b498-a906d6a99664",
+    "requestedEffort": "high",
+    "actualModels": {
+      "claude-opus-5-5": 80
+    },
+    "actualPerTurnEffort": {
+      "high": 80
+    },
+    "runnerOutcome": "RECEIVED_UNVERIFIED",
+    "billingAccountMatched": true,
+    "rawReasoningCopied": false
+  },
+  {
+    "task": "P1-CARD-TEXT-ORACLE-AND-COVERAGE-REVIEW",
+    "sessionId": "e4c31e74-f1e0-4a0c-8b67-bd645be1b4e3",
+    "requestedEffort": "high",
+    "actualModels": {
+      "claude-opus-5-5": 30
+    },
+    "actualPerTurnEffort": {
+      "high": 30
+    },
+    "runnerOutcome": "RECEIVED_UNVERIFIED",
+    "billingAccountMatched": true,
+    "rawReasoningCopied": false
+  },
+  {
+    "task": "P1-CARD-TEXT-SEED-ROUTE-RECHECK",
+    "sessionId": "e4c31e74-f1e0-4a0c-8b67-bd645be1b4e3",
+    "requestedEffort": "high",
+    "actualModels": {
+      "claude-opus-5-5": 17
+    },
+    "actualPerTurnEffort": {
+      "high": 17
+    },
+    "runnerOutcome": "RECEIVED_UNVERIFIED",
+    "billingAccountMatched": true,
+    "rawReasoningCopied": false
+  },
+  {
+    "task": "P1-EXPEDITION-BUILD-CONFIG-RECHECK",
+    "sessionId": "e4c31e74-f1e0-4a0c-8b67-bd645be1b4e3",
+    "requestedEffort": "high",
+    "actualModels": {
+      "claude-opus-5-5": 30
+    },
+    "actualPerTurnEffort": {
+      "high": 30
+    },
+    "runnerOutcome": "RECEIVED_UNVERIFIED",
+    "billingAccountMatched": true,
+    "rawReasoningCopied": false
+  }
+]

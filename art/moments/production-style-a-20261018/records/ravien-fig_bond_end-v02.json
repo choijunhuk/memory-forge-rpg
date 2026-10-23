@@ -1,0 +1,17 @@
+{
+  "character": "ravien",
+  "key": "fig_bond_end",
+  "target": "ravien/images/char_ravien_fig_bond_end_styleA_v02.png",
+  "args": {
+    "prompt": "Use case: precise-object-edit. FIRST image is the canonical B room furniture layout and A rendering of adult Ravien28. SECOND image is ONLY the desired standing/empty-hands character pose. Create her final standing ending with SAME foreground oval dark-wood writing desk, same burgundy/gold chair and same desk props (closed burgundy folder, cream paper, pen). Keep desk design/perspective/location from FIRST image; she has risen and now stands next to chair on SCREEN RIGHT, both gloved hands empty lowered, soft waiting eye contact. CRITICAL physical depth: chair is BEHIND the writing desk. Chair seat must sit behind and be partially occluded by desk tabletop/apron, NEVER overlap IN FRONT of table apron/legs. Preserve four readable desk legs and coherent furniture support. No fused chair/table, no side-table replacement. Same adult face/red hair/green eyes/black vest dress/red tie/gloves/stockings/slit/hair ornaments and clear cel rendering, full 1024x1536 composition including heels and furniture legs, true alpha transparent empty margins/corners=0, no floor/halo/background/text.",
+    "referenced_image_paths": [
+      "/Users/choi/Documents/Memory_forge/art/moments/ravien/images/char_ravien_fig_waver_styleA_v01.png",
+      "/Users/choi/Documents/Memory_forge/art/moments/ravien/images/char_ravien_fig_bond_end_styleA_v01.png"
+    ],
+    "transparent_background": true
+  },
+  "cache_path": "/Users/choi/.codex/generated_images/01a14db0-4150-7f01-9240-82aaa185dd28/exec-be75dbfc-6262-4d58-9674-14b649cb533a.png",
+  "status": "history_unselected",
+  "generation_status": "generated_pending_review",
+  "selected": false
+}

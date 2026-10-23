@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="10" result="Passed" total="10" passed="10" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-21 11:03:09Z" end-time="2026-10-21 11:03:09Z" duration="0.0551049">
+  <test-suite type="TestSuite" id="1000" name="Memory Forge" fullname="Memory Forge" runstate="Runnable" testcasecount="10" result="Passed" start-time="2026-10-21 11:03:09Z" end-time="2026-10-21 11:03:09Z" duration="0.055105" total="10" passed="10" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="1016" name="MemoryForge.EditorTests.dll" fullname="/Users/choi/.codex/worktrees/memoryforge-followup/Memory_forge/client/MemoryForgeUnity/Library/ScriptAssemblies/MemoryForge.EditorTests.dll" runstate="Runnable" testcasecount="10" result="Passed" start-time="2026-10-21 11:03:09Z" end-time="2026-10-21 11:03:09Z" duration="0.051938" total="10" passed="10" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="94510" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="1017" name="MemoryForge" fullname="MemoryForge" runstate="Runnable" testcasecount="10" result="Passed" start-time="2026-10-21 11:03:09Z" end-time="2026-10-21 11:03:09Z" duration="0.051641" total="10" passed="10" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1018" name="EditorTests" fullname="MemoryForge.EditorTests" runstate="Runnable" testcasecount="10" result="Passed" start-time="2026-10-21 11:03:09Z" end-time="2026-10-21 11:03:09Z" duration="0.051413" total="10" passed="10" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestFixture" id="1003" name="AndroidApkIntegrityEditorTests" fullname="MemoryForge.EditorTests.AndroidApkIntegrityEditorTests" classname="MemoryForge.EditorTests.AndroidApkIntegrityEditorTests" runstate="Runnable" testcasecount="7" result="Passed" start-time="2026-10-21 11:03:09Z" end-time="2026-10-21 11:03:09Z" duration="0.027049" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1005" name="ConsecutiveSplitDataIsAcceptedInAnyZipOrder" fullname="MemoryForge.EditorTests.AndroidApkIntegrityEditorTests.ConsecutiveSplitDataIsAcceptedInAnyZipOrder" methodname="ConsecutiveSplitDataIsAcceptedInAnyZipOrder" classname="MemoryForge.EditorTests.AndroidApkIntegrityEditorTests" runstate="Runnable" seed="340544712" result="Passed" start-time="2026-10-21 11:03:09Z" end-time="2026-10-21 11:03:09Z" duration="0.010793" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1006" name="DifferentFilesCanUseDifferentRepresentations" fullname="MemoryForge.EditorTests.AndroidApkIntegrityEditorTests.DifferentFilesCanUseDifferentRepresentations" methodname="DifferentFilesCanUseDifferentRepresentations" classname="MemoryForge.EditorTests.AndroidApkIntegrityEditorTests" runstate="Runnable" seed="1766496507" result="Passed" start-time="2026-10-21 11:03:09Z" end-time="2026-10-21 11:03:09Z" duration="0.000453" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-suite type="ParameterizedMethod" id="1011" name="IncompleteSplitSequenceIsRejected" fullname="MemoryForge.EditorTests.AndroidApkIntegrityEditorTests.IncompleteSplitSequenceIsRejected" classname="MemoryForge.EditorTests.AndroidApkIntegrityEditorTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-10-21 11:03:09Z" end-time="2026-10-21 11:03:09Z" duration="0.009060" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1009" name="IncompleteSplitSequenceIsRejected(1,2)" fullname="MemoryForge.EditorTests.AndroidApkIntegrityEditorTests.IncompleteSplitSequenceIsRejected(1,2)" methodname="IncompleteSplitSequenceIsRejected" classname="MemoryForge.EditorTests.AndroidApkIntegrityEditorTests" runstate="Runnable" seed="1085675554" result="Passed" start-time="2026-10-21 11:03:09Z" end-time="2026-10-21 11:03:09Z" duration="0.001925" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1010" name="IncompleteSplitSequenceIsRejected(0,2)" fullname="MemoryForge.EditorTests.AndroidApkIntegrityEditorTests.IncompleteSplitSequenceIsRejected(0,2)" methodname="IncompleteSplitSequenceIsRejected" classname="MemoryForge.EditorTests.AndroidApkIntegrityEditorTests" runstate="Runnable" seed="342240283" result="Passed" start-time="2026-10-21 11:03:09Z" end-time="2026-10-21 11:03:09Z" duration="0.000350" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-case id="1007" name="NonUnityDataEntriesAreIgnored" fullname="MemoryForge.EditorTests.AndroidApkIntegrityEditorTests.NonUnityDataEntriesAreIgnored" methodname="NonUnityDataEntriesAreIgnored" classname="MemoryForge.EditorTests.AndroidApkIntegrityEditorTests" runstate="Runnable" seed="1223869654" result="Passed" start-time="2026-10-21 11:03:09Z" end-time="2026-10-21 11:03:09Z" duration="0.000342" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1008" name="WholeAndSplitReflectionDataIsRejected" fullname="MemoryForge.EditorTests.AndroidApkIntegrityEditorTests.WholeAndSplitReflectionDataIsRejected" methodname="WholeAndSplitReflectionDataIsRejected" classname="MemoryForge.EditorTests.AndroidApkIntegrityEditorTests" runstate="Runnable" seed="1011922667" result="Passed" start-time="2026-10-21 11:03:09Z" end-time="2026-10-21 11:03:09Z" duration="0.000439" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1004" name="WholeReflectionDataIsAccepted" fullname="MemoryForge.EditorTests.AndroidApkIntegrityEditorTests.WholeReflectionDataIsAccepted" methodname="WholeReflectionDataIsAccepted" classname="MemoryForge.EditorTests.AndroidApkIntegrityEditorTests" runstate="Runnable" seed="915580761" result="Passed" start-time="2026-10-21 11:03:09Z" end-time="2026-10-21 11:03:09Z" duration="0.000291" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1012" name="EditorBridgeTests" fullname="MemoryForge.EditorTests.EditorBridgeTests" classname="MemoryForge.EditorTests.EditorBridgeTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-10-21 11:03:09Z" end-time="2026-10-21 11:03:09Z" duration="0.023830" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1015" name="SavedSceneKeepsItsLinkedCanvasAndCamera" fullname="MemoryForge.EditorTests.EditorBridgeTests.SavedSceneKeepsItsLinkedCanvasAndCamera" methodname="SavedSceneKeepsItsLinkedCanvasAndCamera" classname="MemoryForge.EditorTests.EditorBridgeTests" runstate="Runnable" seed="1392100438" result="Passed" start-time="2026-10-21 11:03:09Z" end-time="2026-10-21 11:03:09Z" duration="0.016623" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1014" name="SerializedConnectionPrefabCanRenderAnOverlay" fullname="MemoryForge.EditorTests.EditorBridgeTests.SerializedConnectionPrefabCanRenderAnOverlay" methodname="SerializedConnectionPrefabCanRenderAnOverlay" classname="MemoryForge.EditorTests.EditorBridgeTests" runstate="Runnable" seed="2107464836" result="Passed" start-time="2026-10-21 11:03:09Z" end-time="2026-10-21 11:03:09Z" duration="0.004805" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1013" name="UniversalPipelineIncludesTheTwoDimensionalRenderer" fullname="MemoryForge.EditorTests.EditorBridgeTests.UniversalPipelineIncludesTheTwoDimensionalRenderer" methodname="UniversalPipelineIncludesTheTwoDimensionalRenderer" classname="MemoryForge.EditorTests.EditorBridgeTests" runstate="Runnable" seed="1323405087" result="Passed" start-time="2026-10-21 11:03:09Z" end-time="2026-10-21 11:03:09Z" duration="0.001712" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: [TestRunnerNoThrottle] Restored Interaction Mode after test run.
+Saving results to: /Users/choi/Library/Application Support/DefaultCompany/Memory Forge/TestResults.xml
+]]></output>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

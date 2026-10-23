@@ -1,0 +1,26 @@
+{
+  "c": "ravien",
+  "key": "fig_lobby_end",
+  "path": "ravien/images/char_ravien_chair_wait_emptyhands_v01.png",
+  "refs": [
+    "/Users/choi/Documents/Memory_forge/art/moments/ravien/images/char_ravien_chair_offer_happy_v01.png"
+  ],
+  "pose": "Same standing position at image right and SAME COMPLETE EMPTY red/gold chair at left. Her hands BOTH relaxed down, completely EMPTY. The closed red folder has been put DOWN horizontally on a small narrow dark wood side table just to her right; its spine and closed cover clearly visible, separated from her hands. Direct eye contact, soft restrained smile, no wink. Keep chair empty and show backrest, seat and feet. Full head and heels. This is the final still invitation after work; she no longer touches the folder.",
+  "prompt": "Use case: identity-preserve. Reference is the locked existing character design, NOT the new acting pose. Produce ONE polished anime RPG full-length production key-pose on actual transparent alpha, portrait 1024x1536. Preserve adult age, face, hair, outfit, skin tone, color motifs and painterly cel shading; no new layers of clothing. Keep all hair, fingers, footwear and scene-relevant props fully within 4% transparent margin. Face and gesture both readable, no panel, caption, background haze or extra person. Acting: Same standing position at image right and SAME COMPLETE EMPTY red/gold chair at left. Her hands BOTH relaxed down, completely EMPTY. The closed red folder has been put DOWN horizontally on a small narrow dark wood side table just to her right; its spine and closed cover clearly visible, separated from her hands. Direct eye contact, soft restrained smile, no wink. Keep chair empty and show backrest, seat and feet. Full head and heels. This is the final still invitation after work; she no longer touches the folder.",
+  "source": "/Users/choi/.codex/generated_images/01a14d20-ffd5-7e81-9e47-85c1c8415e11/exec-8279318e-c5ec-4995-b6aa-202243a08b4b.png",
+  "review": "pass",
+  "score": 95,
+  "tool": "Codex built-in image_gen; subscription-included; no API fallback",
+  "backend_model": "not exposed by tool",
+  "selected": true,
+  "sha256": "e6ef23c39f58a1b9ab7224a624156e0146a9e46275aa74e7d08ea60d43fdf00b",
+  "size": [
+    1024,
+    1536
+  ],
+  "mode": "RGBA",
+  "alpha_extrema": [
+    0,
+    254
+  ]
+}

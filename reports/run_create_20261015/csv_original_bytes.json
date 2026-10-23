@@ -1,0 +1,41 @@
+{
+  "manifestRegenerated": false,
+  "files": [
+    {
+      "path": "docs/archive/v0.6_materials/pass_rewards.csv",
+      "manifestSha": "e8eeb03b6d0958f3b55755474bac8032ff1e7fb69773c1726a65a11a1eb857c9",
+      "workingSha": "e8eeb03b6d0958f3b55755474bac8032ff1e7fb69773c1726a65a11a1eb857c9",
+      "headSha": "c47a42bd0e848fc3a4b437942b9d90b2a39f46f9557bc5819e37b5dda75f021d",
+      "workingMatchesOriginal": true,
+      "headDiffersOnlyCRLF": true,
+      "originalCrlfCount": 211
+    },
+    {
+      "path": "reports/audit_v081/preservation_by_chapter.csv",
+      "manifestSha": "72966b20d598fabc56bb264983bb080dc44f2dfe5004b5be38ef6d9cbe04080b",
+      "workingSha": "72966b20d598fabc56bb264983bb080dc44f2dfe5004b5be38ef6d9cbe04080b",
+      "headSha": "98c7d0e5efe90e12d008ed0b385ab6a50cf83fe8dfc2afc9dbecc9597598d802",
+      "workingMatchesOriginal": true,
+      "headDiffersOnlyCRLF": true,
+      "originalCrlfCount": 25
+    },
+    {
+      "path": "reports/daily_income_42d.csv",
+      "manifestSha": "2702608943546654c0c43f1c0046f7996f96c081f5805ee5ff79101be5c2619b",
+      "workingSha": "2702608943546654c0c43f1c0046f7996f96c081f5805ee5ff79101be5c2619b",
+      "headSha": "8e8df2a8a3203c369b3e3bcc6a58f8841a79e713ab8a6643e7fda2ad54c9c17c",
+      "workingMatchesOriginal": true,
+      "headDiffersOnlyCRLF": true,
+      "originalCrlfCount": 43
+    },
+    {
+      "path": "reports/upstream_v070/daily_income_42d.csv",
+      "manifestSha": "2702608943546654c0c43f1c0046f7996f96c081f5805ee5ff79101be5c2619b",
+      "workingSha": "2702608943546654c0c43f1c0046f7996f96c081f5805ee5ff79101be5c2619b",
+      "headSha": "8e8df2a8a3203c369b3e3bcc6a58f8841a79e713ab8a6643e7fda2ad54c9c17c",
+      "workingMatchesOriginal": true,
+      "headDiffersOnlyCRLF": true,
+      "originalCrlfCount": 43
+    }
+  ]
+}

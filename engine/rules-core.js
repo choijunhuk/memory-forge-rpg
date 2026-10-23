@@ -11,7 +11,25 @@
   // ───────────────────────── basics ─────────────────────────
   class RuleError extends Error { constructor(code, detail) { super(code); this.code = code; this.detail = detail; } }
   const clone = (o) => JSON.parse(JSON.stringify(o));
+  const MemoryV2 = typeof module !== 'undefined' && module.exports ? require('../proposals/memory_v2.cjs') : root.MFMemoryV2;
   const BPS = 10000;
+  const SUPPORT_GAUGE_COST = 100;
+  function supportNumber(value, lo = -0x80000000, hi = 0x7fffffff) {
+    if (!Number.isSafeInteger(value) || value < lo || value > hi) throw new RuleError('BATTLE_NUMBER_OUT_OF_RANGE');
+    return value;
+  }
+  // S4 mirrors typed Core numbers only on support-bearing candidates/sources; legacy JS numeric behavior stays unchanged.
+  function supportNumbers(node, wide = false, context = 'value') {
+    if (typeof node === 'number') supportNumber(node, wide ? Number.MIN_SAFE_INTEGER : -0x80000000, wide ? Number.MAX_SAFE_INTEGER : 0x7fffffff);
+    else if (Array.isArray(node)) for (const value of node) supportNumbers(value, wide, context === 'actors' ? 'actor' : 'value');
+    else if (node && typeof node === 'object') for (const [key, value] of Object.entries(node)) {
+      if (context === 'state' && key === 'rng') { for (const n of value) supportNumber(n, 0, 0xffffffff); continue; }
+      const child = context === 'state' && key === 'actors' ? 'actors' : context === 'state' && key === 'support' ? 'support'
+        : context === 'support' && key === 'source' ? 'source' : 'value';
+      const rank = (context === 'actor' || context === 'source') && (key === 'skillLv' || key === 'ultLv');
+      supportNumbers(value, wide || context === 'state' && key === 'runFlags' || rank, child);
+    }
+  }
 
   // xoshiro128** seeded through splitmix32 (128-bit state; seed is chosen by the server, never the client)
   function splitmix32(seed) {
@@ -103,7 +121,7 @@
   const TGT_NAME = { one: '', same: '그 적에게 ', all: '모든 적에게 ', rand: '무작위 적에게 ', fixed: '표식 적에게 ' };
   const COND_TEXT = (c) => ({
     marked: '대상에게 표식이 있으면', burning: '대상이 화상 상태면', broken: '대상이 균열 상태면', debt: '부채가 있으면',
-    modded: '이 카드에 개조가 있으면', reserved: '예약으로 해결되면', intentAttack: '대상이 공격할 예정이면',
+    modded: '이 카드에 개조가 있으면', reserved: '보존했던 카드면', held: '보존했던 카드면', intentAttack: '대상이 공격할 예정이면',
     echo: `잔향 ${c.n} 이상이면`, hpBelow: `파티 체력 ${c.pct}% 이하면`, targetHpBelow: `대상 체력 ${c.pct}% 이하면`,
     growthInHand: `손에 성장 카드가 ${c.n}장 이상이면`, exhaustedAtLeast: `소멸한 카드가 ${c.n}장 이상이면`, killedThis: '이 카드로 적을 처치하면',
   }[c.c] || c.c);
@@ -117,7 +135,7 @@
     echochamber: () => '이번 전투 동안 잔향이 3이 되면 카드 1장 뽑기(턴당 1회)',
   };
   const BUFF_TEXT = {
-    charge: (o) => `다음 공격 카드 피해 +${o.n / 100}%`, seraLock: (o) => `세라의 예약 공격 피해 +${o.n / 100}%`,
+    charge: (o) => `다음 공격 카드 피해 +${o.n / 100}%`, seraLock: (o) => `세라의 카드 공격 피해 +${o.n / 100}%`,
     healUp: (o) => `다음 회복 +${o.n / 100}%`, lumiRush: (o) => `이번 턴 루미의 공격 피해 +${o.n / 100}%`,
     counterDouble: () => '반격 피해 2배', overloadFree: () => '이번 턴 과부하 체력 대가 0',
   };
@@ -163,8 +181,8 @@
       case 'growAll': return '모든 성장 카드 성장 +1';
       case 'loan': return `행동력 +${op.n}, 다음 턴 행동력 -${op.n}(부채 ${op.n})`;
       case 'defer': return '다음 턴 부채 1개를 1턴 미루고 금액 +1(재유예 불가)';
-      case 'restraint': return '이번 턴 카드를 3장 이하로 쓰면 다음 턴 첫 예약 피해·방어 +30%. 4장째에 위약: 다음 턴 드로우 -1';
-      case 'collateral': return `다음 턴 예약 칸 1개 봉인(다음 내 턴 종료까지), 방어 ${op.v}`;
+      case 'restraint': return '이번 턴 카드를 3장 이하로 쓰면 다음 턴 첫 피해·방어 카드 +30%. 4장째에 위약: 다음 턴 드로우 -1';
+      case 'collateral': return `방어 ${op.v}, 다음 턴 행동력 -1(부채 1)`;
       case 'selfdmg': return `과부하 ${op.v}`;
       case 'cleanse': return '해로운 효과 모두 제거';
       case 'cleanseOne': return `${ST_NAME[op.s] || op.s} 제거`;
@@ -188,8 +206,7 @@
   function cardText(def, ix) {
     const parts = def.eff.map((op) => opText(op, ix)).filter(Boolean);
     const kw = [];
-    if (def.res === 'o') kw.push('예약 전용'); else if (def.res === 'after') kw.push('다다음 턴 예약 전용');
-    else if (def.res === 'n' && !(def.kw || []).includes('contract')) kw.push('즉시 전용');
+    if ((def.kw || []).includes('retain')) kw.push('보존'); // RULES_NOW_PLAY: every card is played now, so no mode label
     if ((def.kw || []).includes('contract')) kw.push('계약');
     if (def.growth) kw.push('성장');
     if ((def.kw || []).includes('exhaust')) kw.push('소멸');
@@ -236,11 +253,34 @@
     const uid = `c${state.seq}`;
     state.cards[uid] = {
       uid, id: spec.id, owner: def.owner, wielder: spec.wielder || null, plus: !!spec.plus,
-      mods: { c: spec.mods?.c || null, e: spec.mods?.e || null }, temp: [], growth: spec.growth || 0, grown: false,
+      mods: { c: spec.mods?.c || null, e: spec.mods?.e || null }, temp: [], growth: spec.growth || 0, grown: false, held: false,
       used: 0, costMod: 0, token: !!extra.token, free: !!extra.free, assigned: spec.assigned || null, from: spec.from || null,
     };
+    // S4 provenance: only a token of the frozen support partner's own card carries it; the member is absent on every other card.
+    if (extra.supportSourceId !== undefined && extra.supportSourceId !== null) state.cards[uid].supportSourceId = extra.supportSourceId;
     return uid;
   }
+  // the accepted practice-view hidden-outcome rule: a random target or pick, or a draw, anywhere in if/then/else
+  const hiddenOps = (ops) => (ops || []).some((op) => op.tgt === 'rand' || op.pick === 'random' || op.op === 'draw' || hiddenOps(op.then) || hiddenOps(op.else));
+  // S4 support target need over its whole effect list: "fixed" anywhere wins, else "one" (tgt one or untargeted damage), nested branches included
+  function effectTarget(ops) {
+    let need = null;
+    for (const op of ops || []) {
+      if (op.tgt === 'fixed') return 'fixed';
+      if (op.tgt === 'one' || (op.op === 'dmg' && !op.tgt)) need = 'one';
+      for (const branch of [op.then, op.else]) { const nested = branch ? effectTarget(branch) : null; if (nested === 'fixed') return nested; if (nested) need = nested; }
+    }
+    return need;
+  }
+  // support picks are copied, never retained: a list, a string (characters, as the C# reader), or absent; anything else is malformed
+  function supportPicks(picks) {
+    if (!picks) return [];
+    if (Array.isArray(picks)) return [...picks];
+    if (typeof picks === 'string') return [...picks];
+    throw new RuleError('INVALID_COMMAND_ARGS');
+  }
+  const supportForecastResult = (error = null) => ({ error, mode: 'now', cost: 0, due: null, hidden: false, enemyHpLoss: 0, blockDelta: 0, hpDelta: 0,
+    defeat: false, enemyDamage: 0, newlyBroken: 0, enemyHpLosses: [] });
 
   class Battle {
     constructor(data, state) { this.ix = indexData(data); this.s = state; this.receipts = {}; }
@@ -252,7 +292,7 @@
       if (!setup.party || setup.party.length < 1 || setup.party.length > 3) throw new RuleError('PARTY_SIZE');
       const s = {
         schema: 'mf-battle-0.7', v: 0, turn: 0, phase: 'CREATED', rng: Rng.seed(setup.seed ?? 20261014), seq: 0,
-        hp: setup.hp, maxHp: setup.maxHp, block: 0, counter: 0, ap: 0, apNext: setup.nextApBonus || 0, breakApTurn: 0,
+        hp: setup.hp, maxHp: setup.maxHp, block: 0, counter: 0, ap: 0, apNext: setup.nextApBonus || 0, apDrainNext: 0, silenceUntil: 0, breakApTurn: 0,
         pst: { weak: 0 }, buffs: [], debts: [], debtCap: R.debtCap, restraint: { active: false, usedTurn: 0 }, bonus: { turn: 0, avail: false },
         drawPenalty: 0, sealedUntil: 0, slotsBase: { next: R.slots.next, after: R.slots.after }, slotsTemp: { next: 0, after: 0 },
         growthCount: 0, growthCap: R.growthCapPerBattle, played: 0, lastOwner: null, ownersThisTurn: [],
@@ -275,12 +315,12 @@
         for (const node of ch.resonance.slice(0, res)) Battle.applyResonance(s, actor, node.fx);
         s.actors.push(actor);
       }
+      // S4: one optional owned non-party partner frozen as a detached effect source; no actor, HP, card, passive, start effect or rule
+      if (setup.support !== undefined && setup.support !== null) s.support = Battle.makeSupport(ix, setup.support, s.actors.map((a) => a.id));
       if (s.actors.some((a) => a.id === 'rien')) { s.echoActive = true; s.echoMax = s.actors.find((a) => a.id === 'rien').passive.params.max; }
       if (s.relics.includes('tuning_fork')) { s.echoMax += 1; s.echoStart = Math.max(s.echoStart, 1); }
       if (s.relics.includes('contract_seal')) s.debtCap += 1;
-      if (s.relics.includes('cracked_hourglass')) s.slotsBase.after = Math.min(R.slots.afterMax, s.slotsBase.after + 1);
-      if (s.relics.includes('twin_pendulum')) { s.slotsBase.next = Math.min(R.slots.nextMax, s.slotsBase.next + 1); s.handMax = 9; }
-      if (s.relics.includes('infinite_circuit')) s.slotsBase.next = Math.min(R.slots.nextMax, s.slotsBase.next + 1);
+      if (s.relics.includes('twin_pendulum')) s.handMax = 9; // RULES_NOW_PLAY: its slot became a draw (startTurn)
       // deck
       for (const spec of setup.deck) {
         const uid = makeInst(s, ix, spec);
@@ -318,6 +358,37 @@
       }
     }
 
+    // S4: trusted derived support build {charId, res, weaponId, refine, power4, hp, gearBps, skillLv (base), ultLv (base)} → {source, used}.
+    // Source-only resonance: ranks, card modifiers, ult replace/extra and the partner's own hooks; passiveParam, capacity, battleStart
+    // and party rules belong to a deployed actor and are never applied. No reference-stat or default-weapon fallback.
+    static makeSupport(ix, sp, party) {
+      const known = (obj, id) => typeof id === 'string' && Object.hasOwn(obj, id);
+      const charId = sp && typeof sp === 'object' ? sp.charId : undefined;
+      if (party.includes(charId)) throw new RuleError('SUPPORT_IN_PARTY', charId);
+      if (!known(ix.chars, charId)) throw new RuleError('UNKNOWN_CHARACTER', charId);
+      const int = (v, lo, hi = 0x7fffffff) => Number.isInteger(v) && v >= lo && v <= hi;
+      if (!int(sp.res, 0, 6) || !int(sp.refine, 1, 5) || !int(sp.power4, 1) || !int(sp.hp, 1) || !int(sp.gearBps, 0) || !int(sp.skillLv, 1) || !int(sp.ultLv, 1)
+        || !known(ix.weapons, sp.weaponId)) throw new RuleError('INVALID_SNAPSHOT', charId);
+      const ch = ix.chars[charId];
+      const source = { id: ch.id, name: ch.name, attr: ch.attr, res: sp.res, power4: sp.power4, vit: sp.hp, gearBps: sp.gearBps, skillLv: sp.skillLv, ultLv: sp.ultLv,
+        weapon: { id: sp.weaponId, refine: sp.refine }, cardMods: [], ultExtra: [], ultReplace: null, hooks: [] };
+      for (const node of ch.resonance.slice(0, sp.res)) Battle.applySourceResonance(source, clone(node.fx));
+      return { source, used: false };
+    }
+    static applySourceResonance(src, fx) {
+      switch (fx.type) {
+        case 'multi': for (const f of fx.list) Battle.applySourceResonance(src, f); break;
+        case 'cardMod': src.cardMods.push(fx); break;
+        case 'skillLv': src.skillLv += fx.delta; break;
+        case 'ultLv': src.ultLv += fx.delta; break;
+        case 'ultExtra': src.ultExtra.push({ eff: fx.eff, once: !!fx.once }); break;
+        case 'ultReplace': src.ultReplace = fx.eff; break;
+        case 'hook': src.hooks.push(fx); break;
+        case 'passiveParam': case 'capacity': case 'battleStart': case 'rule': break;
+        default: throw new RuleError('BATTLE_RESONANCE_NOT_IMPLEMENTED');
+      }
+    }
+
     static addEnemy(s, ix, eid) {
       const d = ix.enemies[eid];
       if (!d) throw new RuleError('UNKNOWN_ENEMY', eid);
@@ -336,19 +407,31 @@
     has(rel) { return this.s.relics.includes(rel); }
     alive() { return this.s.enemies.filter((e) => e.alive); }
     enemy(uid) { return this.s.enemies.find((e) => e.uid === uid) || null; }
-    ownerChar(inst) { if (this.ix.chars[inst.owner]) return inst.owner; if (inst.owner === 'weapon') return inst.wielder; return null; }
+    // party bookkeeping owner (lastOwner/ownersThisTurn/echo/score/rift chain/gauge); a support-provenanced token has none
+    ownerChar(inst) { if (inst.supportSourceId !== undefined) return null; if (this.ix.chars[inst.owner]) return inst.owner; if (inst.owner === 'weapon') return inst.wielder; return null; }
+    // S4 combat-effect source of a card: its deployed owner actor as before or, only for a token carrying supportSourceId, this battle's
+    // frozen support source. Arithmetic, modifiers, attribute, weapon and NextBoost read it; forged provenance is INVALID_SNAPSHOT.
+    cardSource(inst) {
+      if (inst.supportSourceId === undefined) { const oc = this.ownerChar(inst); return oc ? this.actor(oc) : null; }
+      const src = this.s.support ? this.s.support.source : null;
+      if (!src || src.id !== inst.supportSourceId || !inst.token || inst.key !== undefined || inst.owner !== src.id) throw new RuleError('INVALID_SNAPSHOT', 'supportSourceId');
+      return src;
+    }
     attrOf(inst) {
       const d = this.ix.cards[inst.id];
-      if (d.attr === 'wielder') return this.actor(inst.wielder)?.attr || 'none';
+      if (d.attr === 'wielder') return (inst.supportSourceId === undefined ? this.actor(inst.wielder) : this.cardSource(inst))?.attr || 'none';
       return d.attr || 'none';
     }
     debtTotal() { return this.s.debts.reduce((a, d) => a + d.n, 0); }
     ev(e, data = {}) { this.s.ev.push({ e, ...data }); this.s.log.push({ t: this.s.turn, e, ...data }); if (this.s.log.length > 400) this.s.log.shift(); }
-    weaponPassive(actorId, pid) {
-      const a = this.actor(actorId); if (!a || !a.weapon) return null;
+    weaponPassive(actorId, pid) { return this.sourceWeapon(this.actor(actorId), pid); }
+    // one passive of an effect source's own equipped weapon (deployed actor or frozen support source)
+    sourceWeapon(a, pid) {
+      if (!a || !a.weapon) return null;
       const w = this.ix.weapons[a.weapon.id]; if (!w || w.passive.id !== pid) return null;
       return { value: w.passive.values[a.weapon.refine - 1], alt: w.passive.refineAlt ? w.passive.refineAlt[a.weapon.refine - 1] : 0, scope: w.passive.scope };
     }
+    sourceHook(src, hookId) { return !!src && src.hooks.some((h) => h.id === hookId); }
     partyWeapon(pid) { // party-scope passive (strongest instance)
       let best = null;
       for (const a of this.s.actors) { const p = this.weaponPassive(a.id, pid); if (p && (!best || p.value > best.value)) best = p; }
@@ -362,7 +445,7 @@
     scaleAtk(n) { return Math.floor(n * this.partyP4() / 160); }
     scaleVit(n) { return Math.floor(n * this.partyVit() / 81); }
     scaleEnemy(n) { return Math.round(n * ((this.s.diff && this.s.diff.dmg) || 100) / 100); }
-    hasHook(actorId, hookId) { const a = this.actor(actorId); return !!a && a.hooks.some((h) => h.id === hookId); }
+    hasHook(actorId, hookId) { return this.sourceHook(this.actor(actorId), hookId); }
     buff(s) { return this.s.buffs.find((b) => b.s === s && b.until >= this.s.turn) || null; }
 
     // effective definition for an instance: upgrade, resonance mods, evolutions handled by id
@@ -370,17 +453,20 @@
       const base = this.ix.cards[inst.id];
       let eff = base.eff;
       if (inst.plus) eff = base.plus?.eff || upgradeOps(eff, this.ix.rules.upgradeMult);
-      const oc = this.ownerChar(inst);
-      const actor = oc ? this.actor(oc) : null;
-      if (actor && actor.cardMods.length && inst.owner === oc) {
+      const actor = this.cardSource(inst);
+      if (actor && actor.cardMods.length && inst.owner === actor.id) {
         const mods = actor.cardMods.filter((m) => m.cards.includes(inst.id) || m.cards.includes(base.id));
         if (mods.length) eff = applyCardMods(eff, mods);
       }
       let uses = base.uses;
       if (actor) for (const m of actor.cardMods) if (m.prop === 'uses' && m.cards.includes(base.id)) uses = (uses || 0) + m.add;
-      return { ...base, eff, uses };
+      const definition = { ...base, eff, uses };
+      if (inst.supportSourceId !== undefined) supportNumbers(definition);
+      return definition;
     }
     partsOf(inst) { return [inst.mods.c, inst.mods.e, ...inst.temp].filter(Boolean).map((p) => this.ix.parts[p]).filter(Boolean); }
+    // RULES_NOW_PLAY: a card with the 보존 keyword, or a part granting it, stays in hand at the end of the turn.
+    retains(inst) { return (this.effDef(inst).kw || []).includes('retain') || this.partsOf(inst).some((p) => p.fx.retain); }
     isModded(inst) { return this.partsOf(inst).length > 0; }
 
     costOf(uid, mode) {
@@ -389,7 +475,8 @@
       let cost = def.cost + inst.costMod;
       for (const p of this.partsOf(inst)) if (p.fx.cost) cost += p.fx.cost;
       if (def.costIf && this.cond(def.costIf.cond, { inst })) cost += def.costIf.delta;
-      if (mode !== 'now' && this.has('empty_clock') && !s.battleFlags.emptyClockUsed) cost -= 1;
+      if (this.has('empty_clock') && !s.battleFlags.emptyClockUsed) cost -= 1;
+      if (mode !== 'now' && s.silenceUntil > 0 && s.silenceUntil >= s.turn) cost += 1;
       if (s.freeNext > 0) cost = 0;
       return Math.max(0, cost);
     }
@@ -418,11 +505,39 @@
     }
     slotsUsed(kind) { const due = this.s.turn + (kind === 'next' ? 1 : 2); return this.s.res.filter((r) => r.due === due).length; }
     freeSlots(kind) { return this.slotCapacity(kind) - this.slotsUsed(kind); }
+    nextPlayerSlotCapacity(due) {
+      const s = this.s; const turn = s.turn + 1; const R = this.ix.rules.slots;
+      // Temporary slots expire before the affected player turn.
+      if (due === turn + 1) return Math.max(0, Math.min(R.nextMax, s.slotsBase.next) - (s.sealedUntil >= turn ? 1 : 0));
+      return due === turn + 2 ? Math.min(R.afterMax, s.slotsBase.after) : 0;
+    }
+    previewDelay() {
+      const s = this.s; const r = s.res.slice().sort((a, b) => b.order - a.order)[0];
+      if (!r) return null;
+      const to = r.due + 1;
+      return { uid: r.uid, from: r.due, to, kind: r.kind,
+        discarded: s.res.filter(x => x !== r && x.due === to).length >= this.nextPlayerSlotCapacity(to) };
+    }
+    nextTurnDrain() {
+      const s = this.s;
+      const pending = s.phase === 'PLAYER' ? this.alive().reduce((n, e) => {
+        const pat = e.pattern || this.ix.enemies[e.id].pattern; const mv = pat[e.pi % pat.length];
+        return n + (!e.stunned && mv.t === 'apDrain' ? mv.n : 0);
+      }, 0) : 0;
+      return (s.apDrainNext || 0) + pending;
+    }
+    nextTurnAp() {
+      const s = this.s; const R = this.ix.rules;
+      const due = s.debts.filter(d => d.due <= s.turn + 1).reduce((total, d) => total + d.n, 0);
+      const ap = R.apPerTurn + s.apNext + (this.has('chrono_crown') ? 1 : 0)
+        - (s.turn === 0 && this.has('cracked_hourglass') ? 1 : 0) - due - this.nextTurnDrain();
+      return Math.max(0, Math.min(R.apMax, ap));
+    }
 
     // ───── commands (atomic + idempotent) ─────
     command(req) {
       const digest = JSON.stringify({ v: req.v, kind: req.kind, args: req.args || {} });
-      if (req.rid && this.receipts[req.rid]) {
+      if (req.rid && Object.hasOwn(this.receipts, req.rid)) {
         if (this.receipts[req.rid].digest !== digest) throw new RuleError('IDEMPOTENCY_CONFLICT');
         return clone(this.receipts[req.rid].resp);
       }
@@ -434,14 +549,16 @@
         case 'begin': cand.begin(); break;
         case 'play': cand.play(a.uid, a.mode || 'now', a.target || null, a.picks || []); break;
         case 'ult': cand.ult(a.actor, a.target || null, a.picks || []); break;
+        case 'support': cand.support(a.caller, a.target || null, a.picks || []); break;
         case 'end': cand.endTurn(); break;
         default: throw new RuleError('UNKNOWN_COMMAND');
       }
       cand.s.v += 1;
       cand.checkInvariants();
+      cand.checkSupportNumbers();
       const resp = { v: cand.s.v, phase: cand.s.phase, ev: cand.s.ev };
       this.s = cand.s;
-      if (req.rid) this.receipts[req.rid] = { digest, resp: clone(resp) };
+      if (req.rid) Object.defineProperty(this.receipts, req.rid, { value: { digest, resp: clone(resp) }, enumerable: true, writable: true, configurable: true });
       return resp;
     }
     // convenience for UIs and bots
@@ -468,7 +585,10 @@
 
     startTurn(first = false) {
       const s = this.s; const R = this.ix.rules;
+      const ap = this.nextTurnAp();
       s.turn += 1; s.phase = 'RESOLVING';
+      // Sera r6: the turn after her ultimate is boosted as a whole; a second ultimate that turn only sets up the next one.
+      if (s.battleFlags.seraR6Turn === s.turn) s.battleFlags.seraR6Active = s.turn;
       // v0.7.1: battle-start effects belong to turn 1; clear only at subsequent turn boundaries.
       if (!first) {
         const keep = s.powers.filter((p) => p.id === 'bulwark').reduce((m, p) => Math.max(m, p.keep), 0);
@@ -482,13 +602,11 @@
       for (const a of s.actors) a.gaugeTurn = 0;
       for (const c of Object.values(s.cards)) c.costMod = 0;
       // action points: base + carried bonus (+relics) - due debts
-      let ap = R.apPerTurn + s.apNext;
-      if (this.has('chrono_crown')) ap += 1;
-      if (first && this.has('cracked_hourglass')) ap -= 1;
       s.apNext = 0;
       const due = s.debts.filter((d) => d.due <= s.turn).reduce((a, d) => a + d.n, 0);
       s.debts = s.debts.filter((d) => d.due > s.turn);
-      s.ap = Math.max(0, Math.min(R.apMax, ap - due));
+      s.apDrainNext = 0;
+      s.ap = ap;
       if (due) this.ev('repay', { n: due });
       if (this.has('infinite_circuit')) { this.loseHp(this.scaleVit(2), 'relic'); if (this.checkEnd()) return; }
       // due reservations resolve in (due, order)
@@ -497,15 +615,17 @@
       for (let i = 0; i < dueRes.length; i++) {
         const r = dueRes[i];
         this.resolveCard(r.uid, { reserved: r.kind, target: r.target, picks: [] });
-        if (this.isOver()) { for (const rest of dueRes.slice(i + 1)) s.zones.discard.push(rest.uid); this.finish(); return; }
+        if (this.isOver() || this.checkEnd()) { for (const rest of dueRes.slice(i + 1)) s.zones.discard.push(rest.uid); return; }
       }
-      s.battleFlags.seraR6Turn = 0;
       // turn-start effects
       for (const p of s.powers) if (p.id === 'rebirth') this.healParty(p.heal, null);
       // draw
       let n = R.handDraw - s.drawPenalty; s.drawPenalty = 0;
+      if (this.has('twin_pendulum')) n += 1;
+      if (this.has('infinite_circuit')) n += 1;
       if (first) {
         if (this.has('quick_hands')) n += 2;
+        if (this.has('cracked_hourglass')) n += 2;
         const sd = this.partyWeapon('w_startDraw'); if (sd) n += sd.value;
       }
       this.draw(Math.max(0, n));
@@ -521,7 +641,7 @@
 
     setIntents() {
       for (const e of this.alive()) {
-        const pat = this.ix.enemies[e.id].pattern;
+        const pat = e.pattern || this.ix.enemies[e.id].pattern;
         if (e.stunned) { e.intent = { t: 'stun', label: '균열: 행동 불가' }; e.next = pat[(e.pi + 1) % pat.length]; }
         else { e.intent = pat[e.pi % pat.length]; e.next = pat[(e.pi + 1) % pat.length]; }
       }
@@ -536,14 +656,18 @@
       s.restraint.active = false;
       // hand cleanup
       for (const uid of [...s.zones.hand]) if (s.cards[uid].id === 'smudge') this.loseHp(this.scaleEnemy(2), 'smudge');
-      s.zones.discard.push(...s.zones.hand); s.zones.hand = [];
+      // RULES_NOW_PLAY: 보존 cards stay in hand and become held; the rest are discarded
+      const kept = s.zones.hand.filter((u) => this.retains(s.cards[u]));
+      for (const u of s.zones.hand) s.cards[u].held = kept.includes(u);
+      s.zones.discard.push(...s.zones.hand.filter((u) => !kept.includes(u))); s.zones.hand = kept;
       if (this.checkEnd()) return;
       if (s.pst.weak > 0) s.pst.weak -= 1;
+      if (s.silenceUntil <= s.turn) s.silenceUntil = 0;
       // enemy phase
       for (const e of [...s.enemies]) {
         if (!e.alive) continue;
         e.block = 0; e.st.reflect = 0;
-        const pat = this.ix.enemies[e.id].pattern;
+        const pat = e.pattern || this.ix.enemies[e.id].pattern;
         if (e.stunned) { e.stunned = false; e.pi = (e.pi + 1) % pat.length; this.ev('stunSkip', { uid: e.uid }); continue; }
         const mv = pat[e.pi % pat.length];
         e.pi = (e.pi + 1) % pat.length;
@@ -574,11 +698,11 @@
     enemyMove(e, mv) {
       const s = this.s;
       switch (mv.t) {
-        case 'atk': for (let h = 0; h < (mv.h || 1); h++) { this.enemyHit(e, mv.d); if (this.isOver()) return; } break;
+        case 'atk': { const phase = e.phaseIndex; for (let h = 0; h < (mv.h || 1); h++) { this.enemyHit(e, mv.d); if (this.checkEnd() || !e.alive || e.phaseIndex !== phase) return; } break; }
         case 'def': e.block += mv.b; if (mv.str) e.st.str += mv.str; break;
         case 'buff': e.st.str += mv.str; break;
         case 'debuff': s.pst[mv.s] = (s.pst[mv.s] || 0) + mv.n; this.ev('partyDebuff', { s: mv.s, n: mv.n }); break;
-        case 'atkdebuff': for (let h = 0; h < (mv.h || 1); h++) { this.enemyHit(e, mv.d); if (this.isOver()) return; } s.pst[mv.s] = (s.pst[mv.s] || 0) + mv.n; break;
+        case 'atkdebuff': { const phase = e.phaseIndex; for (let h = 0; h < (mv.h || 1); h++) { this.enemyHit(e, mv.d); if (this.checkEnd() || !e.alive || e.phaseIndex !== phase) return; } s.pst[mv.s] = (s.pst[mv.s] || 0) + mv.n; break; }
         case 'charge': this.ev('charge', { uid: e.uid }); break;
         case 'summon': for (let k = 0; k < mv.n; k++) if (this.alive().length < 5) { const m = Battle.addEnemy(s, this.ix, mv.e); this.setIntentsFor(m); } break;
         case 'heal': { const tgt = this.alive().sort((a, b) => a.hp / a.maxHp - b.hp / b.maxHp)[0]; if (tgt) { tgt.hp = Math.min(tgt.maxHp, tgt.hp + mv.n); this.ev('enemyHeal', { uid: tgt.uid, n: mv.n }); } break; }
@@ -586,10 +710,49 @@
         case 'reflect': e.st.reflect = mv.n; break;
         case 'expose': e.st.vul += mv.n; this.ev('expose', { uid: e.uid }); if (mv.then) this.enemyMove(e, mv.then); break;
         case 'blockAll': for (const x of this.alive()) x.block += mv.b; break;
+        case 'apDrain':
+          if (!Number.isInteger(mv.n) || mv.n < 0) throw new RuleError('INVALID_ENEMY_MOVE');
+          s.apDrainNext = (s.apDrainNext || 0) + mv.n;
+          this.ev('apDrain', { uid: e.uid, n: mv.n }); break;
+        case 'sealSlot': {
+          const due = s.turn + 2;
+          const fallback = s.sealedUntil >= s.turn + 1 || s.res.filter(r => r.due === due).length >= this.nextPlayerSlotCapacity(due);
+          if (fallback) e.block += 10; else s.sealedUntil = s.turn + 1;
+          this.ev('sealSlot', { uid: e.uid, until: s.sealedUntil, fallback }); break;
+        }
+        case 'delayRes': {
+          const preview = this.previewDelay();
+          if (!preview) { this.ev('delayRes', { uid: null, discarded: false }); break; }
+          const r = s.res.find(x => x.uid === preview.uid);
+          if (preview.discarded) { s.res.splice(s.res.indexOf(r), 1); s.zones.discard.push(r.uid); }
+          else { r.due = preview.to; r.delayed = true; }
+          this.ev('delayRes', preview); break;
+        }
+        case 'silence':
+          if (mv.n !== undefined && mv.n !== 1) throw new RuleError('INVALID_ENEMY_MOVE');
+          s.silenceUntil = Math.max(s.silenceUntil || 0, s.turn + 1);
+          this.ev('silence', { uid: e.uid, until: s.silenceUntil }); break;
+        case 'eatName': {
+          const tokens = s.zones.discard.filter(uid => s.cards[uid].token);
+          const pool = tokens.length ? tokens : s.zones.discard;
+          const uid = pool.length ? Rng.pick(s.rng, pool) : null;
+          if (uid) this.exhaustCard(uid);
+          this.ev('eatName', { uid }); break;
+        }
+        case 'phase': {
+          if (e.tier !== 'boss' || e.hp !== 0 || e.phaseIndex) throw new RuleError('WRONG_PHASE');
+          if (!Number.isInteger(mv.hp) || mv.hp <= 0 || !Number.isInteger(mv.brk) || mv.brk <= 0 ||
+              !Array.isArray(mv.weak) || !mv.weak.length || new Set(mv.weak).size !== mv.weak.length || !mv.weak.every(a => this.ix.raw.attributes.some(x => x.id === a)) ||
+              !Array.isArray(mv.pattern) || !mv.pattern.length || mv.pattern.some(m => !m || typeof m.t !== 'string' || m.t === 'phase')) throw new RuleError('INVALID_ENEMY_MOVE');
+          e.phaseIndex = 1; e.maxHp = Math.max(1, Math.round(mv.hp * ((s.diff && s.diff.hp) || 100) / 100)); e.hp = e.maxHp;
+          e.brkMax = mv.brk; e.brk = mv.brk; e.weak = [...mv.weak]; e.pattern = clone(mv.pattern); e.pi = 0;
+          e.block = 0; e.st = { vul: 0, weak: 0, mark: 0, burn: 0, str: 0, reflect: 0 }; e.stunned = false; e.brokenUntil = 0;
+          this.setIntentsFor(e); this.ev('phase', { uid: e.uid, index: 1, hp: e.hp, brk: e.brk }); break;
+        }
         default: throw new RuleError('UNSUPPORTED_EFFECT', { enemyMove: mv.t });
       }
     }
-    setIntentsFor(e) { const pat = this.ix.enemies[e.id].pattern; e.intent = pat[e.pi % pat.length]; e.next = pat[(e.pi + 1) % pat.length]; }
+    setIntentsFor(e) { const pat = e.pattern || this.ix.enemies[e.id].pattern; e.intent = pat[e.pi % pat.length]; e.next = pat[(e.pi + 1) % pat.length]; }
 
     enemyHit(e, base) {
       const s = this.s;
@@ -673,8 +836,9 @@
       // commit
       s.ap -= cost;
       if (s.freeNext > 0) s.freeNext -= 1;
-      if (mode !== 'now' && this.has('empty_clock') && !s.battleFlags.emptyClockUsed) s.battleFlags.emptyClockUsed = true;
+      if (this.has('empty_clock') && !s.battleFlags.emptyClockUsed) s.battleFlags.emptyClockUsed = true;
       s.zones.hand.splice(s.zones.hand.indexOf(uid), 1);
+      const held = inst.held; inst.held = false;
       s.played += 1;
       const oc = this.ownerChar(inst);
       if (oc) {
@@ -687,7 +851,7 @@
       if (s.restraint.active && s.played >= 4) { s.restraint.active = false; s.drawPenalty += 1; this.ev('restraintBroken'); }
       this.ev('play', { uid, id: inst.id, mode, cost, target });
       if (mode === 'now') {
-        this.resolveCard(uid, { reserved: null, target, picks });
+        this.resolveCard(uid, { reserved: null, held, target, picks });
       } else {
         s.resSeq += 1;
         s.res.push({ uid, due: s.turn + (mode === 'next' ? 1 : 2), order: s.resSeq, target, kind: mode });
@@ -701,11 +865,11 @@
       for (const op of ops) {
         if (op.op === 'loan') {
           if (this.debtTotal() + op.n > s.debtCap) throw new RuleError('DEBT_CAP');
-          if (s.ap - this.costOf(inst.uid, mode) + op.n > this.ix.rules.apMax) throw new RuleError('LOAN_OVERFLOW');
+          if (s.ap - (inst ? this.costOf(inst.uid, mode) : 0) + op.n > this.ix.rules.apMax) throw new RuleError('LOAN_OVERFLOW');
         }
         if (op.op === 'defer') { if (!s.debts.some((d) => d.due === s.turn + 1 && !d.deferred)) throw new RuleError('NOT_DEFERRABLE'); if (this.debtTotal() + 1 > s.debtCap) throw new RuleError('DEBT_CAP'); }
         if (op.op === 'restraint' && (s.played >= 3 || s.restraint.usedTurn === s.turn)) throw new RuleError('RESTRAINT_UNAVAILABLE');
-        if (op.op === 'collateral' && (s.sealedUntil >= s.turn || this.freeSlots('next') <= 0)) throw new RuleError('NO_EMPTY_SLOT');
+        if (op.op === 'collateral' && this.debtTotal() + 1 > s.debtCap) throw new RuleError('DEBT_CAP');
         if (op.op === 'pull' && !s.res.length) throw new RuleError('RESERVATION_REQUIRED');
         if (op.op === 'pull') {
           const r = this.pickReservation(picks);
@@ -737,24 +901,162 @@
       const a = this.actor(actorId);
       if (!a) throw new RuleError('UNKNOWN_ACTOR');
       if (a.gauge < this.ix.rules.gaugeMax) throw new RuleError('ULT_NOT_READY');
-      const ch = this.ix.chars[a.id];
-      const eff = a.ultReplace || ch.ult.eff;
+      const eff = this.ultEffects(a);
       const needs = eff.some((o) => o.tgt === 'one' || (o.op === 'dmg' && !o.tgt));
       if (needs) { const alive = this.alive(); if (!target && alive.length === 1) target = alive[0].uid; const t = this.enemy(target); if (!t || !t.alive) throw new RuleError('BAD_TARGET'); }
       a.gauge -= this.ix.rules.gaugeMax;
-      const ctx = { inst: null, def: null, actor: a, attr: a.attr, reserved: null, target, lastTarget: target, picks: picks || [], isUlt: true, killed: false, lastCount: 0 };
+      const ctx = { inst: null, def: null, actor: a, source: a, attr: a.attr, reserved: null, target, lastTarget: target, picks: picks || [], isUlt: true, killed: false, lastCount: 0 };
       this.ev('ult', { actor: a.id });
-      for (const op of eff) { this.execOp(op, ctx); if (this.checkEnd()) return; }
-      for (const x of a.ultExtra) {
-        if (x.once) { if (s.battleFlags[`ultOnce_${a.id}`]) continue; s.battleFlags[`ultOnce_${a.id}`] = true; }
+      this.resolveUlt(a, ctx);
+    }
+    ultEffects(src) { return src.ultReplace || this.ix.chars[src.id].ult.eff; }
+    // authored ult effects, resonance extras (a once-extra spends its battle flag) and ult-local hooks in source order with the existing
+    // terminal short-circuit. ctx.source supplies arithmetic; ctx.actor is the deployed gauge holder (none for a support).
+    resolveUlt(src, ctx) {
+      const s = this.s;
+      for (const op of this.ultEffects(src)) { this.execOp(op, ctx); if (this.checkEnd()) return; }
+      for (const x of src.ultExtra) {
+        if (x.once) { if (s.battleFlags[`ultOnce_${src.id}`]) continue; s.battleFlags[`ultOnce_${src.id}`] = true; }
         for (const op of x.eff) { this.execOp(op, ctx); if (this.checkEnd()) return; }
       }
-      if (this.hasHook(a.id, 'sera_r6')) s.battleFlags.seraR6Turn = s.turn + 1;
-      if (this.hasHook(a.id, 'kaya_r6') && ctx.killed) a.gauge = Math.min(this.ix.rules.gaugeMax, a.gauge + 50);
+      if (this.sourceHook(src, 'sera_r6')) s.battleFlags.seraR6Turn = s.turn + 1;
+      // Kaya r6 refunds her own gauge; a support partner has none and never refunds its caller
+      if (ctx.actor && this.sourceHook(src, 'kaya_r6') && ctx.killed) ctx.actor.gauge = Math.min(this.ix.rules.gaugeMax, ctx.actor.gauge + 50);
       this.checkEnd();
     }
 
-    pseudoCtx(actor) { return { inst: null, def: null, actor, attr: actor.attr, reserved: null, target: null, lastTarget: null, picks: [], isUlt: false, killed: false, lastCount: 0, pseudo: true }; }
+    // ───── S4 support: a deployed caller spends its full gauge to fire the frozen non-party partner's authored ultimate, once per Battle ─────
+    supportEffects() {
+      const sp = this.s.support; if (!sp) throw new RuleError('SUPPORT_NOT_SELECTED');
+      return [...this.ultEffects(sp.source), ...sp.source.ultExtra.flatMap((x) => x.eff)];
+    }
+    supportNeedsTarget() { return effectTarget(this.supportEffects()); }
+    supportCaller(callerId) {
+      const s = this.s;
+      if (!s.support) throw new RuleError('SUPPORT_NOT_SELECTED');
+      if (s.support.used) throw new RuleError('SUPPORT_ALREADY_USED');
+      if (s.phase !== 'PLAYER') throw new RuleError('WRONG_PHASE');
+      const a = this.actor(callerId);
+      if (!a) throw new RuleError('UNKNOWN_ACTOR');
+      if (a.gauge < SUPPORT_GAUGE_COST) throw new RuleError('ULT_NOT_READY');
+      return a;
+    }
+    // pure: every rule the support must meet before anything is paid; returns the resolved target
+    supportPrecheck(callerId, target, picks) {
+      this.supportCaller(callerId);
+      const need = this.supportNeedsTarget();
+      if (need) {
+        const eligible = this.alive().filter((e) => need !== 'fixed' || e.st.mark > 0);
+        if (!target && eligible.length === 1) target = eligible[0].uid;
+        if (!eligible.some((e) => e.uid === target)) throw new RuleError('BAD_TARGET');
+      } else target = null;
+      const choices = this.supportChoices(callerId, picks);
+      if (choices.error) throw new RuleError(choices.error);
+      this.validateOps(this.supportEffects(), null, 'now', picks || []);
+      return target;
+    }
+    support(callerId, target, picks) {
+      const s = this.s; const chosen = supportPicks(picks);
+      target = this.supportPrecheck(callerId, target, chosen);
+      const a = this.actor(callerId); const src = s.support.source;
+      // cost and use are spent before the first effect, so a lethal first effect still pays exactly once
+      a.gauge -= SUPPORT_GAUGE_COST; s.support.used = true;
+      this.ev('support', { actor: src.id, caller: a.id });
+      this.resolveUlt(src, { inst: null, def: null, actor: null, source: src, attr: src.attr, reserved: null, target, lastTarget: target, picks: chosen, isUlt: true, killed: false, lastCount: 0 });
+    }
+    supportText(src) {
+      let text = this.supportEffects().map((op) => opText(op, this.ix)).filter(Boolean).join('. ') + '.';
+      if (this.sourceHook(src, 'aila_r6')) text += ' 필살기의 초과 회복은 100% 방어로 전환.';
+      if (this.sourceHook(src, 'sera_r6')) text += ' 필살기를 쓴 다음 턴, 세라의 카드 공격 피해 +50%.';
+      return text;
+    }
+    // pure source info for one caller/target/picks; SUPPORT_NOT_SELECTED when no partner is frozen into this battle
+    supportInfo(callerId, target = null, picks = []) {
+      const sp = this.s.support; if (!sp) throw new RuleError('SUPPORT_NOT_SELECTED');
+      const src = sp.source; const chosen = supportPicks(picks);
+      const view = { kind: 'support', caller: callerId, charId: src.id, name: src.name, ultName: this.ix.chars[src.id].ult.name, text: this.supportText(src),
+        attr: src.attr, gaugeCost: SUPPORT_GAUGE_COST, used: sp.used, ready: false, code: null, needsTarget: this.supportNeedsTarget(), target, picks: chosen };
+      try { view.target = this.supportPrecheck(callerId, target, chosen); view.ready = true; } catch (e) { if (!(e instanceof RuleError)) throw e; view.code = e.code; }
+      return view;
+    }
+    // pure pick sheet of the support's effect list (prototype choiceRequests/pickerOptions, C# BattleChoicePolicy): no hand card is its
+    // source and it spends no FreeNext charge, so a leading costdown is priced by costOf. Current authored ultimates request no picks.
+    supportChoices(callerId, picks = []) {
+      const s = this.s;
+      const view = { error: null, uid: '', mode: 'now', requests: [], accepted: 0, index: 0, left: 0, blocked: null, candidates: [] };
+      try {
+        const chosen = supportPicks(picks);
+        this.supportCaller(callerId);
+        const requests = [];
+        this.supportEffects().forEach((op, i) => {
+          const n = Math.max(1, op.n ?? 1); let r = null;
+          if (op.op === 'exhaustPick') r = [op.from === 'discard' ? '버린 카드에서 소멸할 카드' : '손에서 소멸할 카드', op.from === 'discard' ? 'discard' : 'hand', n, false];
+          else if (op.op === 'discard') r = ['버릴 카드', 'hand', n, false];
+          else if (op.op === 'tune' && op.pick === 'one') r = [`「${this.ix.parts[op.part]?.name ?? '부품'}」을 붙일 카드`, 'hand', 1, false];
+          else if (op.op === 'costdown' && op.pick === 'one') r = ['비용을 낮출 카드', 'hand', 1, false];
+          else if (op.op === 'recall') r = ['손으로 가져올 카드', 'discard', 1, false];
+          else if (op.op === 'growPick') r = ['성장시킬 카드', 'hand', 1, true];
+          else if (op.op === 'copyPick') r = ['사본을 만들 성장 카드', 'hand', 1, true];
+          else if (op.op === 'pull') r = ['앞당길 예약', 'res', 1, false];
+          if (r) requests.push({ label: r[0], from: r[1], count: r[2], growthOnly: r[3], op: op.op, part: op.op === 'tune' ? op.part : null, leading: i === 0 });
+        });
+        const blocked = (req) => (req.op === 'growPick' && s.growthCount >= s.growthCap ? 'PICK_GROWTH_CAP' : null);
+        const eligible = (req, u) => {
+          const c = s.cards[u]; const d = c && this.ix.cards[c.id];
+          if (!d) return null;
+          switch (req.op) {
+            case 'tune': return (req.part == null || !c.temp.includes(req.part)) && d.rar !== 'C';
+            case 'recall': return d.rar !== 'C';
+            case 'growPick': return !!d.growth && c.growth < 3;
+            case 'copyPick': return this.isGrowthInst(c);
+            case 'costdown': if (d.costIf) return null; try { return this.costOf(u, 'now') > 0; } catch (e) { if (e instanceof RuleError) return null; throw e; }
+            default: return true;
+          }
+        };
+        const narrowed = (req) => ['tune', 'recall', 'growPick', 'copyPick'].includes(req.op) || (req.op === 'costdown' && req.leading);
+        const candidates = (req, made) => {
+          const list = (req.from === 'hand' ? s.zones.hand : req.from === 'discard' ? s.zones.discard : s.res.map((r) => r.uid)).filter((u) => !made.includes(u));
+          if (!narrowed(req)) return req.growthOnly ? list.filter((u) => !!(s.cards[u] && this.ix.cards[s.cards[u].id]?.growth)) : list;
+          if (blocked(req)) return [];
+          return list.filter((u) => eligible(req, u) !== false);
+        };
+        const made = []; let index = 0; let left = requests.length ? requests[0].count : 0;
+        for (const u of chosen) {
+          if (index >= requests.length || !candidates(requests[index], made).includes(u)) break;
+          made.push(u);
+          if (--left <= 0 && ++index < requests.length) left = requests[index].count;
+        }
+        Object.assign(view, { requests, accepted: made.length, index, left });
+        if (made.length < chosen.length) view.error = 'PICK_INVALID';
+        if (index < requests.length) { view.blocked = blocked(requests[index]); view.candidates = candidates(requests[index], made); }
+        return view;
+      } catch (e) { if (e instanceof RuleError) return { ...view, error: e.code }; throw e; }
+    }
+    // pure forecast of the support command: the SAME command on a private copy; a random/draw definition or a moved RNG/draw pile hides
+    // every outcome number and per-enemy split. Rule rejections are returned, never thrown.
+    supportForecast(callerId, target = null, picks = []) {
+      const before = this.s;
+      try {
+        const candidate = new this.constructor(this.ix, clone(before));
+        candidate.command({ rid: null, v: before.v, kind: 'support', args: { caller: callerId, target, picks: supportPicks(picks) } });
+        const after = candidate.s; const out = supportForecastResult(); out.cost = SUPPORT_GAUGE_COST;
+        if (hiddenOps(this.supportEffects()) || JSON.stringify(after.rng) !== JSON.stringify(before.rng) || JSON.stringify(after.zones.draw) !== JSON.stringify(before.zones.draw)) {
+          out.hidden = true; return out;
+        }
+        for (const e of before.enemies) {
+          const now = after.enemies.find((x) => x.uid === e.uid);
+          const lost = Math.max(0, e.hp - (now ? now.hp : 0));
+          out.enemyHpLoss += lost; if (lost > 0) out.enemyHpLosses.push({ uid: e.uid, hpLoss: lost });
+          if (now) out.enemyDamage += Math.max(0, e.hp + e.block - (now.hp + now.block));
+        }
+        out.newlyBroken = after.enemies.filter((e) => e.brokenUntil && before.enemies.some((x) => x.uid === e.uid && !x.brokenUntil)).length;
+        out.blockDelta = after.block - before.block; out.hpDelta = after.hp - before.hp; out.defeat = after.phase === 'DEFEAT';
+        supportNumbers(out);
+        return out;
+      } catch (e) { if (e instanceof RuleError) return supportForecastResult(e.code); throw e; }
+    }
+
+    pseudoCtx(actor) { return { inst: null, def: null, actor, source: actor, attr: actor.attr, reserved: null, target: null, lastTarget: null, picks: [], isUlt: false, killed: false, lastCount: 0, pseudo: true }; }
 
     // ───── card resolution ─────
     resolveCard(uid, opts) {
@@ -762,7 +1064,7 @@
       const inst = s.cards[uid]; const def = this.effDef(inst);
       const oc = this.ownerChar(inst);
       const actor = oc ? this.actor(oc) : null;
-      const ctx = { inst, def, actor, attr: this.attrOf(inst), reserved: opts.reserved, target: opts.target, lastTarget: opts.target,
+      const ctx = { inst, def, actor, source: this.cardSource(inst), attr: this.attrOf(inst), reserved: opts.reserved, held: !!opts.held, target: opts.target, lastTarget: opts.target,
         picks: [...(opts.picks || [])], isUlt: false, killed: false, lastCount: 0, restraintBps: 0, boostBps: 0, chargeTaken: false, firstDmg: true };
       // fixed-target validation at resolution: dead or unmarked target fizzles (no refund)
       const hasFixed = JSON.stringify(def.eff).includes('"tgt":"fixed"');
@@ -773,14 +1075,22 @@
         const t = this.enemy(opts.target);
         if (!t || !t.alive) { const alt = this.alive()[0]; ctx.target = alt ? alt.uid : null; ctx.lastTarget = ctx.target; }
       }
-      // restraint bonus: first reserved damage/block card on the bonus turn
-      if (opts.reserved && s.bonus.avail && s.bonus.turn === s.turn && def.eff.some((o) => o.op === 'dmg' || o.op === 'blk')) { ctx.restraintBps = 3000; s.bonus.avail = false; }
+      // restraint bonus: first damage/block card on the bonus turn
+      if (s.bonus.avail && s.bonus.turn === s.turn && def.eff.some((o) => o.op === 'dmg' || o.op === 'blk')) { ctx.restraintBps = 3000; s.bonus.avail = false; }
       // rien duet boost: next card of a different character
-      if (s.nextBoost && oc && oc !== s.nextBoost.from && !opts.reserved) { ctx.boostBps = s.nextBoost.bps; s.nextBoost = null; }
+      const boostBy = inst.supportSourceId === undefined ? oc : (ctx.source ? ctx.source.id : null);
+      if (s.nextBoost && boostBy && boostBy !== s.nextBoost.from) { ctx.boostBps = s.nextBoost.bps; s.nextBoost = null; }
       // ultimate gauge
       if (actor) this.gainGauge(actor, this.ix.rules.gaugePerCard);
-      if (actor && opts.reserved && this.has('time_stamp')) this.gainGauge(actor, 5, true);
-      for (const op of def.eff) { this.execOp(op, ctx); if (this.isOver() || this.checkEnd()) break; }
+      if (actor && ctx.held && this.has('time_stamp')) this.gainGauge(actor, 5, true);
+      for (let i = 0; i < def.eff.length; i++) {
+        this.execOp(def.eff[i], ctx);
+        if (this.isOver() || this.checkEnd()) {
+          // RULES_NOW_PLAY: growth comes with every resolution, so a winning blow still grows its card.
+          if (s.phase === 'VICTORY') for (const rest of def.eff.slice(i + 1)) if (rest.op === 'grow') this.execOp(rest, ctx);
+          break;
+        }
+      }
       if (!this.isOver()) {
         // engraving / circuit after-effects
         for (const p of this.partsOf(inst)) {
@@ -789,11 +1099,16 @@
           if (p.fx.gauge && actor) this.gainGauge(actor, p.fx.gauge, true);
           // echo circuit: the copy is created at the start of the NEXT turn (no card instance exists until then,
           // so it can never be shuffled into the draw pile)
-          if (p.fx.echoCopy && opts.reserved) { s.pendingCopies = s.pendingCopies || []; s.pendingCopies.push({ id: inst.id, wielder: inst.wielder, from: inst.from, due: s.turn + 1 }); }
+          if (p.fx.echoCopy && !inst.echoCopy) {
+            s.pendingCopies = s.pendingCopies || [];
+            const copy = { id: inst.id, wielder: inst.wielder, from: inst.from, due: s.turn + 1 };
+            if (inst.supportSourceId !== undefined) copy.supportSourceId = inst.supportSourceId;
+            s.pendingCopies.push(copy);
+          }
         }
         // character passives tied to resolution
         if (this.isGrowthInst(inst)) this.onGrowthCardResolved(inst);
-        if (opts.reserved && inst.id === 'sera_round' && this.hasHook('sera', 'sera_r1') && !s.turnFlags.seraR1) { s.turnFlags.seraR1 = true; this.draw(1); }
+        if (inst.id === 'sera_round' && this.hasHook('sera', 'sera_r1') && !s.turnFlags.seraR1) { s.turnFlags.seraR1 = true; this.draw(1); }
       }
       this.afterResolve(inst, def, ctx, false);
     }
@@ -849,7 +1164,7 @@
     exhaustCard(uid) {
       const s = this.s;
       for (const z of ['hand', 'discard', 'draw']) { const i = s.zones[z].indexOf(uid); if (i >= 0) s.zones[z].splice(i, 1); }
-      s.zones.exhaust.push(uid);
+      s.zones.exhaust.push(uid); s.cards[uid].held = false;
       s.exhausted += 1;
       this.ev('exhaust', { uid });
       for (const p of s.powers) if (p.id === 'oblivion') this.gainBlockRaw(p.blk, 'oblivion');
@@ -894,7 +1209,7 @@
         case 'broken': return !!t && t.brokenUntil > 0;
         case 'debt': return this.debtTotal() > 0;
         case 'modded': return !!ctx.inst && this.isModded(ctx.inst);
-        case 'reserved': return !!ctx.reserved;
+        case 'reserved': case 'held': return !!ctx.held;
         case 'intentAttack': return !!t && t.intent && ENEMY_ATTACK_MOVES.has(t.intent.t);
         case 'echo': return s.echo >= c.n;
         case 'hpBelow': return s.hp * 100 <= s.maxHp * c.pct;
@@ -920,7 +1235,7 @@
     // additive damage bonus (bps) for a hit
     dmgBonusBps(ctx, enemy) {
       const s = this.s; let add = 0;
-      const inst = ctx.inst; const oc = ctx.actor ? ctx.actor.id : null;
+      const inst = ctx.inst; const src = ctx.source; const oc = src ? src.id : null;
       if (inst) {
         for (const p of this.partsOf(inst)) {
           if (p.fx.addBps) add += p.fx.addBps;
@@ -935,26 +1250,25 @@
           for (const p of s.powers) if (p.id === 'blueprint') add += p.bps;
           if (this.has('golden_quill')) add += 1500;
         }
-        if (inst.from && this.hasHook('yuri', 'yuri_r4') && inst.owner === 'yuri') add += 1500;
-        // weapon (wielder-scope) bonuses
-        const wid = oc;
-        if (wid) {
-          const rd = this.weaponPassive(wid, 'w_reservedDmg'); if (rd && ctx.reserved) add += rd.value;
-          const md = this.weaponPassive(wid, 'w_markedDmg'); if (md && enemy && enemy.st.mark > 0) add += md.value;
-          const lh = this.weaponPassive(wid, 'w_lowHpDmg'); if (lh && s.hp * 2 <= s.maxHp) add += lh.value;
-          const bd = this.weaponPassive(wid, 'w_brokenDmg') || this.weaponPassive(wid, 'w_breakDmg'); if (bd && enemy && enemy.brokenUntil) add += bd.value;
-          const na = this.weaponPassive(wid, 'w_none'); if (na) add += na.alt;
-          const fa = this.weaponPassive(wid, 'w_firstAtk'); if (fa && !s.firstAtkDone) add += fa.value;
+        if (inst.from && this.sourceHook(src, 'yuri_r4') && inst.owner === 'yuri') add += 1500;
+        // weapon (wielder-scope) bonuses of the effect source's own weapon
+        if (src) {
+          const rd = this.sourceWeapon(src, 'w_reservedDmg'); if (rd && ctx.held) add += rd.value;
+          const md = this.sourceWeapon(src, 'w_markedDmg'); if (md && enemy && enemy.st.mark > 0) add += md.value;
+          const lh = this.sourceWeapon(src, 'w_lowHpDmg'); if (lh && s.hp * 2 <= s.maxHp) add += lh.value;
+          const bd = this.sourceWeapon(src, 'w_brokenDmg') || this.sourceWeapon(src, 'w_breakDmg'); if (bd && enemy && enemy.brokenUntil) add += bd.value;
+          const na = this.sourceWeapon(src, 'w_none'); if (na) add += na.alt;
+          const fa = this.sourceWeapon(src, 'w_firstAtk'); if (fa && !s.firstAtkDone) add += fa.value;
         }
       }
       const dd = this.partyWeapon('w_debtDmg'); if (dd && this.debtTotal() > 0) add += dd.value;
-      if (ctx.actor && ctx.actor.gearBps) add += ctx.actor.gearBps; // accessory (장신구)
+      if (src && src.gearBps) add += src.gearBps; // accessory (장신구)
       add += (ctx.restraintBps || 0) + (ctx.boostBps || 0);
       if (ctx.chargeBps) add += ctx.chargeBps;
-      if (oc === 'sera' && ctx.reserved) {
+      if (oc === 'sera' && ctx.inst) {
         const p = this.passiveOf('sera_foresight'); if (p && enemy && enemy.brokenUntil) add += p.bps;
         const lock = this.buff('seraLock'); if (lock) add += lock.n;
-        if (s.battleFlags.seraR6Turn && s.battleFlags.seraR6Turn === s.turn && s.phase === 'RESOLVING') add += 5000;
+        if (s.battleFlags.seraR6Active === s.turn) add += 5000;
       }
       if (oc === 'ravien') { const p = this.passiveOf('ravien_credit'); if (p && this.debtTotal() > 0) add += p.bps; }
       if (oc === 'sion') { const p = this.passiveOf('sion_shelf'); if (p) add += Math.min(p.maxBps, p.perBps * (s.exhausted + s.exhaustStart)); }
@@ -973,7 +1287,7 @@
       let base = baseOverride !== undefined ? baseOverride : this.scaled(this.value(op, ctx), op.scale, ctx);
       if (ctx.flatBonus) base += ctx.flatBonus;
       if (base <= 0) return 0;
-      const actor = ctx.actor;
+      const actor = ctx.source;
       let num = BigInt(base);
       let den = 1n;
       // power factor (reference power 40 => power4 160)
@@ -996,7 +1310,7 @@
       const s = this.s;
       let base = rawBase !== undefined ? rawBase : this.scaled(this.value(op, ctx), op.scale, ctx);
       if (base <= 0) return 0;
-      const actor = ctx.actor; let num = BigInt(base); let den = 1n;
+      const actor = ctx.source; let num = BigInt(base); let den = 1n;
       // defence scales with vitality (character HP / 81), so block keeps pace with stage-scaled enemy damage
       const vit = actor ? actor.vit : this.partyVit(); num *= BigInt(vit); den *= 81n;
       let lv = 1; if (ctx.isUlt && actor) lv = actor.ultLv; else if (actor && ctx.inst && ctx.inst.owner === actor.id) lv = actor.skillLv;
@@ -1018,8 +1332,8 @@
           for (const p of s.powers) if (p.id === 'blueprint') add += p.bps;
           if (this.has('golden_quill')) add += 1500;
         }
-        if (inst.from && this.hasHook('yuri', 'yuri_r4') && inst.owner === 'yuri') add += 1500;
-        if (actor) { const bu = this.weaponPassive(actor.id, 'w_blockUp'); if (bu) add += bu.value; const na = this.weaponPassive(actor.id, 'w_none'); if (na) add += na.alt; }
+        if (inst.from && this.sourceHook(actor, 'yuri_r4') && inst.owner === 'yuri') add += 1500;
+        if (actor) { const bu = this.sourceWeapon(actor, 'w_blockUp'); if (bu) add += bu.value; const na = this.sourceWeapon(actor, 'w_none'); if (na) add += na.alt; }
       }
       num *= BigInt(Math.max(0, BPS + add)); den *= BigInt(BPS);
       return Number(num / den);
@@ -1041,6 +1355,7 @@
     }
     healParty(n, op, fromWeapon) {
       const s = this.s;
+      if (s.hp <= 0) return 0;
       let amt = (op && op.preScaled) ? n : this.scaleVit(n); // flat heals from powers/relics/weapons scale with party vitality
       const hu = this.partyWeapon('w_healUp'); if (hu && !fromWeapon) amt = Math.floor(amt * (BPS + hu.value) / BPS);
       const before = s.hp; s.hp = Math.min(s.maxHp, s.hp + amt);
@@ -1066,6 +1381,11 @@
     }
     killEnemy(e, ctx) {
       const s = this.s;
+      const phase = this.ix.enemies[e.id].phase;
+      if (phase && !e.phaseIndex) {
+        if (phase.t !== 'phase') throw new RuleError('INVALID_ENEMY_MOVE');
+        this.enemyMove(e, phase); return;
+      }
       e.alive = false; this.ev('kill', { uid: e.uid, id: e.id });
       if (ctx) ctx.killed = true;
       if (e.st.mark > 0) {
@@ -1096,7 +1416,7 @@
       e.hp = Math.max(0, e.hp - (amount - blocked));
       this.ev('dmg', { uid: e.uid, n: amount, blocked, src: ctx.isUlt ? 'ult' : 'card', card: ctx.inst ? ctx.inst.id : null });
       // reflect
-      if (e.st.reflect > 0) { const r = this.scaleEnemy(e.st.reflect); const b = Math.min(s.block, r); s.block -= b; if (r - b > 0) this.loseHp(r - b, 'reflect'); }
+      if (!ctx.isUlt && e.st.reflect > 0) { const r = this.scaleEnemy(e.st.reflect); const b = Math.min(s.block, r); s.block -= b; if (r - b > 0) this.loseHp(r - b, 'reflect'); }
       // break gauge
       if (!e.brokenUntil) {
         const reduce = (e.weak.includes(ctx.attr) ? (opts.brk || 0) : 0) + (opts.shock || 0);
@@ -1114,7 +1434,7 @@
     brkFor(op, ctx, enemy) {
       let brk = op.brk ?? 1;
       if (ctx.inst) for (const p of this.partsOf(ctx.inst)) if (p.fx.brk) brk += p.fx.brk;
-      if (ctx.reserved && this.has('precision_lens')) brk += 1;
+      if (ctx.held && this.has('precision_lens')) brk += 1;
       if (this.has('eye_of_rift')) brk += 1;
       if (ctx.attr === 'frost' && this.has('frost_crystal') && !this.s.turnFlags.frostCrystal && enemy && enemy.weak.includes('frost')) { this.s.turnFlags.frostCrystal = true; brk += 1; }
       return brk;
@@ -1131,7 +1451,7 @@
             if (ch && !ctx.isUlt) { ctx.chargeBps = ch.n; s.buffs = s.buffs.filter((b) => b !== ch); }
             if (this.has('credit_ledger') && this.debtTotal() > 0 && !s.turnFlags.ledger && !ctx.isUlt) { s.turnFlags.ledger = true; ctx.creditLedger = true; }
             if (ctx.attr === 'volt' && this.has('volt_coil') && !s.turnFlags.voltCoil) { s.turnFlags.voltCoil = true; ctx.flatBonus = 4; }
-            if (ctx.inst && ctx.actor) { const ba = this.weaponPassive(ctx.actor.id, 'w_blockOnAtk'); if (ba) this.gainBlockRaw(ba.value, 'weapon'); }
+            if (ctx.inst && ctx.source) { const ba = this.sourceWeapon(ctx.source, 'w_blockOnAtk'); if (ba) this.gainBlockRaw(ba.value, 'weapon'); }
           }
           let hits = op.hits ?? 1;
           if (op.hitsScale) hits = this.scaled(hits, op.hitsScale, ctx);
@@ -1141,14 +1461,14 @@
             for (const e of targets) {
               if (!e.alive) continue;
               let amount = this.calcDamage(op, ctx, e);
-              if (h === 0 && hits >= 2 && ctx.actor) { const mh = this.weaponPassive(ctx.actor.id, 'w_multiHit'); if (mh) amount += mh.value; }
+              if (h === 0 && hits >= 2 && ctx.source) { const mh = this.sourceWeapon(ctx.source, 'w_multiHit'); if (mh) amount += mh.value; }
               ctx.lastTarget = e.uid;
               let pierce = op.pierce || 0;
               if (ctx.inst) for (const p of this.partsOf(ctx.inst)) if (p.fx.pierce) pierce = Math.max(pierce, p.fx.pierce);
               this.hitEnemy(e, amount, { pierce, brk: this.brkFor(op, ctx, e), shock: op.shock || 0 }, ctx);
-              if (this.isOver()) break;
+              if (this.checkEnd()) break;
             }
-            if (this.alive().length === 0) break;
+            if (this.isOver() || this.alive().length === 0) break;
           }
           ctx.flatBonus = 0;
           if (ctx.inst && !s.firstAtkDone && this.ix.cards[ctx.inst.id].type === 'atk') s.firstAtkDone = true;
@@ -1165,11 +1485,12 @@
         case 'heal': {
           let n = this.scaled(this.value(op, ctx), op.scale, ctx);
           // heals scale like block: vitality (owner or party average) and skill / ultimate level
-          const vit = ctx.actor ? ctx.actor.vit : this.partyVit();
-          let lv = 1; if (ctx.isUlt && ctx.actor) lv = ctx.actor.ultLv; else if (ctx.actor && ctx.inst && ctx.inst.owner === ctx.actor.id) lv = ctx.actor.skillLv;
+          const src = ctx.source;
+          const vit = src ? src.vit : this.partyVit();
+          let lv = 1; if (ctx.isUlt && src) lv = src.ultLv; else if (src && ctx.inst && ctx.inst.owner === src.id) lv = src.skillLv;
           n = Number((BigInt(Math.max(0, n)) * BigInt(vit) * BigInt(BPS + 400 * (lv - 1))) / (81n * BigInt(BPS)));
           const hu = this.buff('healUp'); if (hu) { n = Math.floor(n * (BPS + hu.n) / BPS); s.buffs = s.buffs.filter((b) => b !== hu); }
-          const o2 = { ...op, preScaled: true, ultAila: !!(ctx.isUlt && ctx.actor && this.hasHook(ctx.actor.id, 'aila_r6')) };
+          const o2 = { ...op, preScaled: true, ultAila: !!(ctx.isUlt && this.sourceHook(src, 'aila_r6')) };
           this.healParty(n, o2);
           break;
         }
@@ -1197,7 +1518,7 @@
           for (let k = 0; k < op.n && s.zones.hand.length; k++) {
             const uid = this.takePick(ctx, s.zones.hand, (u) => true, 'lowestValue');
             if (!uid) break;
-            s.zones.hand.splice(s.zones.hand.indexOf(uid), 1); s.zones.discard.push(uid);
+            s.zones.hand.splice(s.zones.hand.indexOf(uid), 1); s.zones.discard.push(uid); s.cards[uid].held = false;
           }
           break;
         }
@@ -1209,8 +1530,11 @@
           break;
         }
         case 'create': {
+          // S4: the support partner's own card created in its effect context (its ult or its provenanced token) keeps that provenance
+          const sp = s.support; const created = this.ix.cards[op.card];
+          const supportSourceId = sp && ctx.source && ctx.source.id === sp.source.id && created && created.owner === ctx.source.id ? ctx.source.id : undefined;
           for (let k = 0; k < op.n; k++) {
-            const uid = makeInst(s, this.ix, { id: op.card, wielder: ctx.inst ? ctx.inst.wielder : null }, { token: true });
+            const uid = makeInst(s, this.ix, { id: op.card, wielder: ctx.inst ? ctx.inst.wielder : null }, { token: true, supportSourceId });
             if (op.zone === 'hand' && s.zones.hand.length < s.handMax) s.zones.hand.push(uid); else s.zones.discard.push(uid);
           }
           break;
@@ -1220,7 +1544,7 @@
           if (!r) break;
           if (r.due > s.turn + 1) {
             if (this.freeSlots('next') <= 0) throw new RuleError('PULL_DESTINATION_FULL');
-            r.due -= 1; r.kind = 'next'; this.ev('pull', { uid: r.uid, due: r.due });
+            r.due -= 1; r.kind = 'next'; delete r.delayed; this.ev('pull', { uid: r.uid, due: r.due });
           } else {
             s.res = s.res.filter((x) => x !== r);
             this.ev('pull', { uid: r.uid, due: s.turn });
@@ -1236,7 +1560,7 @@
         }
         case 'grow': {
           const inst = ctx.inst;
-          if (ctx.reserved) this.applyGrowth(inst, 1, { source: 'reserve', capped: true, once: true });
+          if (inst) this.applyGrowth(inst, 1, { source: 'resolve', capped: true, once: true });
           break;
         }
         case 'growPick': {
@@ -1266,7 +1590,11 @@
           break;
         }
         case 'restraint': s.restraint = { active: true, usedTurn: s.turn }; break;
-        case 'collateral': s.sealedUntil = s.turn + 1; this.gainBlockRaw(op.v, 'collateral'); break;
+        case 'collateral': {
+          this.gainBlockRaw(op.v, 'collateral'); s.resSeq += 1;
+          s.debts.push({ id: `d${s.resSeq}`, n: 1, due: s.turn + 1, deferred: false });
+          this.ev('loan', { n: 1 }); break;
+        }
         case 'selfdmg': {
           const cost = this.overloadCost(op.v, false);
           if (cost > 0) {
@@ -1305,14 +1633,14 @@
         case 'recall': {
           if (s.zones.hand.length >= s.handMax) break;
           const uid = this.takePick(ctx, s.zones.discard, (u) => this.ix.cards[s.cards[u].id].rar !== 'C', 'highestCost');
-          if (uid) { s.zones.discard.splice(s.zones.discard.indexOf(uid), 1); s.zones.hand.push(uid); }
+          if (uid) { s.zones.discard.splice(s.zones.discard.indexOf(uid), 1); s.cards[uid].held = false; s.zones.hand.push(uid); }
           break;
         }
         case 'copyPick': {
           const uid = this.takePick(ctx, s.zones.hand, (u) => this.isGrowthInst(s.cards[u]), 'first');
           if (uid && s.zones.hand.length < s.handMax) {
             const src = s.cards[uid];
-            const cu = makeInst(s, this.ix, { id: src.id, plus: src.plus, mods: src.mods, from: src.from }, { token: true, free: true });
+            const cu = makeInst(s, this.ix, { id: src.id, plus: src.plus, mods: src.mods, from: src.from }, { token: true, free: true, supportSourceId: src.supportSourceId });
             s.cards[cu].growth = src.growth; s.cards[cu].echoCopy = true;
             s.zones.hand.push(cu);
           }
@@ -1327,7 +1655,7 @@
           break;
         }
         case 'echo': if (s.echoActive) { s.echo = Math.min(s.echoMax, s.echo + op.n); this.echoCheck(); } break;
-        case 'nextBoost': s.nextBoost = { bps: op.bps, from: ctx.actor ? ctx.actor.id : null }; break;
+        case 'nextBoost': s.nextBoost = { bps: op.bps, from: ctx.source ? ctx.source.id : null }; break;
         case 'freeNext': s.freeNext = Math.max(s.freeNext, op.n); break;
         case 'clearDebt': ctx.lastCount = this.debtTotal(); s.debts = []; break;
         case 'breakBonus': {
@@ -1348,6 +1676,7 @@
         }
         default: throw new RuleError('UNSUPPORTED_EFFECT', op.op);
       }
+      if (ctx.source && ctx.source === s.support?.source) this.checkSupportNumbers();
     }
 
     echoCheck() {
@@ -1384,7 +1713,7 @@
           Rng.shuffle(s.rng, s.zones.draw);
           this.ev('reshuffle');
         }
-        const uid = s.zones.draw.shift();
+        const uid = s.zones.draw.shift(); s.cards[uid].held = false;
         if (s.zones.hand.length < s.handMax) s.zones.hand.push(uid); else { s.zones.discard.push(uid); this.ev('burnCard', { uid }); }
       }
     }
@@ -1395,7 +1724,7 @@
       const due = s.pendingCopies.filter((x) => x.due <= s.turn);
       s.pendingCopies = s.pendingCopies.filter((x) => x.due > s.turn);
       for (const x of due) {
-        const cu = makeInst(s, this.ix, { id: x.id, wielder: x.wielder, from: x.from }, { token: true, free: true });
+        const cu = makeInst(s, this.ix, { id: x.id, wielder: x.wielder, from: x.from }, { token: true, free: true, supportSourceId: x.supportSourceId });
         s.cards[cu].temp.push('echoHalf'); s.cards[cu].echoCopy = true;
         if (s.zones.hand.length < s.handMax) s.zones.hand.push(cu); else s.zones.discard.push(cu);
         this.ev('echoCopy', { uid: cu, id: x.id });
@@ -1403,6 +1732,7 @@
     }
 
     // ───── invariants ─────
+    checkSupportNumbers() { if (this.s.support) supportNumbers(this.s, false, 'state'); }
     checkInvariants() {
       const s = this.s; const R = this.ix.rules;
       if (!(s.hp >= 0 && s.hp <= s.maxHp)) throw new RuleError('STATE_RANGE', 'hp');
@@ -1415,6 +1745,9 @@
       const all = Object.keys(s.cards);
       if (seen.length !== all.length || new Set(seen).size !== seen.length || !all.every((u) => seen.includes(u))) throw new RuleError('CARD_ZONE_CONSERVATION');
       for (const a of s.actors) if (a.gauge < 0 || a.gauge > R.gaugeMax) throw new RuleError('GAUGE_RANGE');
+      // S4: present support is a non-party source with a boolean use; provenance only on that partner's own keyless tokens
+      if (s.support !== undefined && (!s.support || !s.support.source || typeof s.support.used !== 'boolean' || s.actors.some((a) => a.id === s.support.source.id))) throw new RuleError('INVALID_SNAPSHOT', 'support');
+      for (const c of Object.values(s.cards)) if (c.supportSourceId !== undefined) this.cardSource(c);
       for (const e of s.enemies) if (e.hp < 0 || e.block < 0 || e.brk < 0) throw new RuleError('ENEMY_RANGE');
       for (const kind of ['next', 'after']) {
         const due = s.turn + (kind === 'next' ? 1 : 2);
@@ -1427,12 +1760,15 @@
     // public view: never includes draw order or RNG state
     publicView() {
       const s = this.s;
-      return {
+      const view = {
         v: s.v, turn: s.turn, phase: s.phase, hp: s.hp, maxHp: s.maxHp, block: s.block, counter: s.counter, ap: s.ap,
+        apNext: s.apNext, apDrainNext: s.apDrainNext || 0, silenceUntil: s.silenceUntil || 0,
         debt: this.debtTotal(), drawCount: s.zones.draw.length, discard: [...s.zones.discard], exhaustCount: s.zones.exhaust.length,
         hand: s.zones.hand.map((u) => ({ ...s.cards[u] })), res: s.res.map((r) => ({ ...r })),
         enemies: s.enemies.map((e) => ({ ...e, st: { ...e.st } })), actors: s.actors.map((a) => ({ id: a.id, gauge: a.gauge })),
       };
+      if (s.support) view.support = { charId: s.support.source.id, used: s.support.used, gaugeCost: SUPPORT_GAUGE_COST };
+      return view;
     }
   }
 
@@ -1456,27 +1792,69 @@
         runFlags: { envelopeUsed: false, refusals: 0, nextApBonus: 0 }, offered: {}, result: null, startMemory: clone(setup.memory || {}),
         seqCard: 0,
       };
+      if (setup.memoryPolicy === 'v2') {
+        if (!s.party.length || new Set(s.party.map(p => p.charId)).size !== s.party.length || s.party.some(p => !ix.chars[p.charId])) throw new RuleError('INVALID_SNAPSHOT');
+        if (typeof setup.runId !== 'string' || !setup.runId) throw new RuleError('RUN_ID_REQUIRED');
+        if (!Number.isInteger(setup.memoryVersion ?? 0) || (setup.memoryVersion ?? 0) < 0) throw new RuleError('INVALID_SNAPSHOT');
+        s.schema = 'mf-run-memory-v2'; s.memoryPolicy = 'v2'; s.runId = setup.runId; s.memoryVersion = setup.memoryVersion ?? 0;
+        s.memoryBaseline = {}; s.memoryBefore = {};
+        for (const p of s.party) {
+          s.memoryBaseline[p.charId] = MemoryV2.baseline(data, p.charId);
+          s.memoryBefore[p.charId] = clone(setup.memory?.[p.charId] || s.memoryBaseline[p.charId]);
+        }
+        MemoryV2.inspect(data, s.memoryBefore);
+        for (const p of s.party) if (MemoryV2.cost(data, p.charId, s.memoryBefore[p.charId], s.memoryBaseline[p.charId]) > Run.capacityOf(ix, p)) throw new RuleError('OVER_CAPACITY');
+      }
       // party max HP = sum of character HP (60 + Lv + armour); reference battle = 81 per character
       for (const p of s.party) { const d = Stats.derive(ix, p); Object.assign(p, { power4: d.power4, hp: d.hp, gearBps: d.gearBps, skillLv: d.skillLv, ultLv: d.ultLv }); }
+      // S4: one optional owned non-party support partner, frozen with its own derived build; never in the party, deck, HP or memory
+      if (setup.support !== undefined && setup.support !== null) s.support = Run.supportEntry(ix, setup.support, s.party);
       s.maxHp = s.party.reduce((a, p) => a + p.hp, 0); s.hp = s.maxHp; s.hpRef = s.maxHp;
       // deck = each character's memory deck (or base kit) + weapon card
       for (const p of s.party) {
-        const specs = (setup.memory && setup.memory[p.charId]) || Run.baseKit(ix, p.charId);
-        for (const sp of specs) s.deck.push({ ...clone(sp), key: `k${++s.seqCard}`, owner: ix.cards[sp.id].owner, assigned: sp.assigned || (ix.cards[sp.id].owner === 'common' ? p.charId : null) });
+        const specs = s.memoryPolicy === 'v2' ? clone(setup.useMemory === false ? s.memoryBaseline[p.charId] : s.memoryBefore[p.charId]) : ((setup.memory && setup.memory[p.charId]) || Run.baseKit(ix, p.charId));
+        if (s.memoryPolicy === 'v2' && setup.useMemory === false) for (const sp of specs) {
+          if (!s.memoryBefore[p.charId].some(old => old.key === sp.key && old.id === sp.id && !old.from)) sp.key = Run.nextCardKey(s);
+        }
+        for (const sp of specs) s.deck.push({ ...clone(sp), key: s.memoryPolicy === 'v2' ? sp.key : Run.nextCardKey(s), owner: ix.cards[sp.id].owner, assigned: sp.assigned || (ix.cards[sp.id].owner === 'common' ? p.charId : null) });
         const w = ix.weapons[p.weaponId] || ix.weapons[Run.defaultWeapon(ix, p.charId)];
-        s.deck.push({ id: w.card, key: `k${++s.seqCard}`, owner: 'weapon', wielder: p.charId, weapon: true });
+        s.deck.push({ id: w.card, key: Run.nextCardKey(s), owner: 'weapon', wielder: p.charId, weapon: true });
       }
       for (const p of s.party) s.offered[p.charId] = 0;
       for (const z of s.zones) if (!data.encounters[String(z)]) throw new RuleError('ZONE_NOT_AUTHORED', { zone: z });
       s.zone = s.zones[0];
       s.map = Run.genMap(s, s.zone);
-      return new Run(data, s);
+      const run = new Run(data, s);
+      if (s.memoryPolicy === 'v2' && setup.useMemory === false) s.playBefore = run.deckMemorySnapshot();
+      return run;
+    }
+    static nextCardKey(s) {
+      if (s.memoryPolicy !== 'v2') return `k${++s.seqCard}`;
+      let key;
+      do { key = `run:${s.runId}:${++s.seqCard}`; } while (s.deck.some(c => c.key === key) || Object.values(s.memoryBefore).some(rows => rows.some(c => c.key === key)));
+      return key;
     }
     static baseKit(ix, charId) {
       const ch = ix.chars[charId];
       const starts = ix.raw.cards.filter((c) => c.owner === charId && c.start).map((c) => ({ id: c.id }));
       starts.push({ id: ix.raw.startingCommon[charId], assigned: charId });
       return starts;
+    }
+    // S4: validate and derive the explicit owned support build (C# Run.PrepareSupport). Real level/asc/res/ranks and an equipped weapon of
+    // the partner's own type are required: no reference stats, default weapon or shared weapon instance. Returns a detached derived copy.
+    static supportEntry(ix, entry, party) {
+      const p = entry && typeof entry === 'object' && !Array.isArray(entry) ? clone(entry) : {};
+      if (party.some((a) => a && a.charId === p.charId)) throw new RuleError('SUPPORT_IN_PARTY', p.charId);
+      if (typeof p.charId !== 'string' || !Object.hasOwn(ix.chars, p.charId)) throw new RuleError('UNKNOWN_CHARACTER', p.charId);
+      const st = ix.raw.progression && ix.raw.progression.stats; const ch = ix.chars[p.charId];
+      const w = typeof p.weaponId === 'string' && Object.hasOwn(ix.weapons, p.weaponId) ? ix.weapons[p.weaponId] : null;
+      const int = (v, lo, hi) => Number.isInteger(v) && v >= lo && v <= hi;
+      const gear = (v) => v === undefined || v === null || int(v, 0, st.gear.maxEnhance);
+      if (!st || !w || w.type !== ch.weapon || !int(p.level, 1, st.levelCap) || !int(p.asc, 0, 0x7fffffff) || !int(p.res, 0, 6) || !int(p.refine, 1, 5)
+        || !int(p.weaponLevel, 1, st.levelCap) || !int(p.skillLv, 1, st.skill.maxLevel) || !int(p.ultLv, 1, st.skill.maxLevel) || !gear(p.armor) || !gear(p.accessory)) throw new RuleError('INVALID_SNAPSHOT', p.charId);
+      if (typeof p.weaponInstanceId === 'string' && party.some((a) => a && a.weaponInstanceId === p.weaponInstanceId)) throw new RuleError('INVALID_SNAPSHOT', 'weaponInstanceId');
+      const d = Stats.derive(ix, p);
+      return Object.assign(p, { power4: d.power4, hp: d.hp, gearBps: d.gearBps, skillLv: d.skillLv, ultLv: d.ultLv });
     }
     static defaultWeapon(ix, charId) { const t = ix.chars[charId].weapon; return { ranged: 'w_basic_ranged', melee: 'w_basic_melee', device: 'w_basic_device', ritual: 'w_basic_ritual' }[t]; }
 
@@ -1547,6 +1925,7 @@
         default: break;
       }
       this.log(`${NODE_NAME[n.type]} 진입`);
+      if (this.battle && this.battle.isOver()) this.afterBattle(); // begin may end the battle before any player command
     }
     has(r) { return this.s.relics.includes(r); }
 
@@ -1561,9 +1940,9 @@
       const s = this.s;
       const deck = s.deck.map((c) => ({ id: c.id, plus: c.plus, mods: c.mods, growth: c.growth || 0, wielder: c.wielder, assigned: c.assigned, from: c.from, key: c.key }));
       const seed = Rng.next(s.rng);
-      const b = Battle.create(this.data, { party: s.party, deck, relics: s.relics, hp: s.hp, maxHp: s.maxHp, seed, runFlags: s.runFlags, difficulty: s.difficulty,
-        enemies: this.encounterFor(type), nextApBonus: s.runFlags.nextApBonus || 0 });
-      s.runFlags.nextApBonus = 0;
+      const b = Battle.create(this.data, { party: s.party, deck, relics: s.relics, hp: s.hp, maxHp: s.maxHp, seed, runFlags: { ...s.runFlags, nextApBonus: 0 }, difficulty: s.difficulty,
+        enemies: this.encounterFor(type), nextApBonus: s.runFlags.nextApBonus || 0, support: s.support });
+      s.runFlags.nextApBonus = 0; // one-shot: only this battle's first turn; its runFlags copy carries 0 so afterBattle cannot refund it
       // map battle instances back to deck keys for growth/evolution persistence
       const uids = Object.keys(b.s.cards);
       deck.forEach((d, i) => { b.s.cards[uids[i]].key = d.key; });
@@ -1577,12 +1956,18 @@
       if (this.battle.isOver()) this.afterBattle();
       return r;
     }
+    // S4 pure support queries over the live battle (NO_BATTLE outside battle; the forecast reports it like a play forecast)
+    liveBattle() { if (!this.battle) throw new RuleError('NO_BATTLE'); return this.battle; }
+    battleSupportInfo(caller, target, picks) { return this.liveBattle().supportInfo(caller, target ?? null, picks); }
+    battleSupportNeedsTarget() { return this.liveBattle().supportNeedsTarget(); }
+    battleSupportChoices(caller, picks) { return this.liveBattle().supportChoices(caller, picks); }
+    battleSupportForecast(caller, target, picks) { return this.battle ? this.battle.supportForecast(caller, target ?? null, picks) : supportForecastResult('NO_BATTLE'); }
     afterBattle() {
       const s = this.s; const bs = this.battle.s;
       s.hp = bs.hp; s.runFlags = { ...s.runFlags, ...bs.runFlags };
       // persist growth from battle instances back to the run deck
       for (const c of Object.values(bs.cards)) if (c.key) { const d = s.deck.find((x) => x.key === c.key); if (d) d.growth = c.growth; }
-      if (bs.phase === 'DEFEAT') { s.phase = 'DEFEAT'; s.result = { outcome: 'defeat', floor: s.floor }; this.log('패배'); s.pending = { type: 'save', defeat: true }; this.battle = null; s.battle = null; return; }
+      if (bs.phase === 'DEFEAT') { s.phase = 'DEFEAT'; s.result = { outcome: 'defeat', floor: s.floor }; this.log('패배'); s.pending = { type: 'save', defeat: true }; this.captureMemory(); this.battle = null; s.battle = null; return; }
       s.stats.battles += 1; s.stats.kills += bs.enemies.filter((e) => !e.alive).length;
       const type = s.battleType;
       if (type === 'elite') s.stats.elites += 1;
@@ -1652,7 +2037,7 @@
       const s = this.s; const p = s.pending;
       if (!p || p.type !== 'reward' || !p.cards.includes(cardId)) throw new RuleError('BAD_REWARD');
       const def = this.ix.cards[cardId];
-      s.deck.push({ id: cardId, key: `k${++s.seqCard}`, owner: def.owner, assigned: def.owner === 'common' ? s.party[0].charId : null, gained: true });
+      s.deck.push({ id: cardId, key: Run.nextCardKey(s), owner: def.owner, assigned: def.owner === 'common' ? s.party[0].charId : null, gained: true });
       p.cards = []; this.log(`카드 획득: ${def.name}`);
     }
     skipCard() {
@@ -1687,21 +2072,23 @@
       s.pending = null;
       if (n && n.type === 'boss') {
         if (s.zoneIdx < s.zones.length - 1) { s.phase = 'ARCHIVE'; s.pending = { type: 'archive' }; return; }
-        s.phase = 'VICTORY'; s.result = { outcome: 'clear', floor: s.floor }; s.pending = { type: 'save', defeat: false }; return;
+        s.phase = 'VICTORY'; s.result = { outcome: 'clear', floor: s.floor }; s.pending = { type: 'save', defeat: false }; this.captureMemory(); return;
       }
       s.phase = 'MAP';
     }
     archive(choice) {
       const s = this.s;
       if (s.phase !== 'ARCHIVE') throw new RuleError('WRONG_PHASE');
-      if (choice === 'return') { s.phase = 'VICTORY'; s.result = { outcome: 'return', floor: s.floor }; s.pending = { type: 'save', defeat: false }; return; }
+      if (choice === 'return') { s.phase = 'VICTORY'; s.result = { outcome: 'return', floor: s.floor }; s.pending = { type: 'save', defeat: false }; this.captureMemory(); return; }
       s.hp = Math.min(s.maxHp, s.hp + Math.floor(s.maxHp * 0.15));
       s.zoneIdx += 1; s.zone = s.zones[s.zoneIdx]; s.pos = null; s.floor = 0; s.map = Run.genMap(s, s.zone); s.phase = 'MAP'; s.pending = null;
     }
     assign(key, charId) {
       const d = this.s.deck.find((c) => c.key === key);
       if (!d || d.owner !== 'common' || !this.s.party.some((p) => p.charId === charId)) throw new RuleError('BAD_ASSIGN');
+      if (this.s.memoryPolicy === 'v2' && Object.values(this.s.memoryBefore).some(rows => rows.some(c => c.key === key))) throw new RuleError('REASSIGNMENT_REQUIRES_SEPARATE_FLOW');
       d.assigned = charId;
+      if (this.s.pending?.type === 'save') this.captureMemory();
     }
     // rest
     rest(choice, key) {
@@ -1744,8 +2131,10 @@
       const s = this.s; const i = s.partsFound.indexOf(partId); if (i < 0) throw new RuleError('NO_PART');
       const d = s.deck.find((c) => c.key === key); if (!d || d.weapon) throw new RuleError('BAD_CARD');
       const part = this.ix.parts[partId];
+      if (s.memoryPolicy === 'v2' && (!part || !['circuit', 'engraving'].includes(part.slot))) throw new RuleError('INVALID_PART');
       d.mods = { ...(d.mods || {}), [part.slot === 'circuit' ? 'c' : 'e']: partId };
       s.partsFound.splice(i, 1);
+      if (s.pending?.type === 'save') this.captureMemory();
     }
     // shop
     makeShop() {
@@ -1761,7 +2150,7 @@
       const s = this.s; const p = s.pending;
       if (s.phase !== 'SHOP') throw new RuleError('WRONG_PHASE');
       if (kind === 'remove') {
-        if (s.coins < p.removeCost) throw new RuleError('COINS_LOW');
+        if (p.removeCost === null) throw new RuleError('NOT_FOR_SALE'); if (s.coins < p.removeCost) throw new RuleError('COINS_LOW'); // one removal per shop
         const i = s.deck.findIndex((c) => c.key === key); if (i < 0 || s.deck[i].weapon) throw new RuleError('BAD_CARD');
         s.coins -= p.removeCost; s.deck.splice(i, 1); s.runFlags.removals = (s.runFlags.removals || 0) + 1; p.removeCost = null; return;
       }
@@ -1769,7 +2158,7 @@
       if (!item) throw new RuleError('NOT_FOR_SALE');
       if (s.coins < item.price) throw new RuleError('COINS_LOW');
       s.coins -= item.price; item.sold = true;
-      if (kind === 'cards') { const def = this.ix.cards[id]; s.deck.push({ id, key: `k${++s.seqCard}`, owner: def.owner, assigned: def.owner === 'common' ? s.party[0].charId : null, gained: true }); }
+      if (kind === 'cards') { const def = this.ix.cards[id]; s.deck.push({ id, key: Run.nextCardKey(s), owner: def.owner, assigned: def.owner === 'common' ? s.party[0].charId : null, gained: true }); }
       if (kind === 'parts') s.partsFound.push(id);
       if (kind === 'relics') s.relics.push(id);
     }
@@ -1777,7 +2166,7 @@
     eventChoose(idx, key) {
       const s = this.s; const p = s.pending;
       if (s.phase !== 'EVENT') throw new RuleError('WRONG_PHASE');
-      const ev = this.ix.events[p.id]; const ch = ev.choices[idx]; if (!ch) throw new RuleError('BAD_CHOICE');
+      const ev = this.ix.events[p.id]; const ch = ev.choices[idx]; if (!ch || p.done) throw new RuleError('BAD_CHOICE'); // an event resolves once
       const fx = ch.fx;
       if (ch.need && ch.need.coins && s.coins < ch.need.coins) throw new RuleError('COINS_LOW');
       const hpk = (v) => Math.round(v * (s.hpRef || 81 * s.party.length) / (81 * s.party.length)); // flat event HP numbers scale with party HP
@@ -1788,9 +2177,9 @@
       if (fx.maxHp) { s.maxHp += hpk(fx.maxHp); s.hp = Math.min(s.hp, s.maxHp); }
       if (fx.maxHpPct) { s.maxHp = Math.max(1, Math.floor(s.maxHp * (100 + fx.maxHpPct) / 100)); s.hp = Math.min(s.hp, s.maxHp); }
       if (fx.nextApBonus) s.runFlags.nextApBonus = (s.runFlags.nextApBonus || 0) + fx.nextApBonus;
-      if (fx.curse) s.deck.push({ id: fx.curse, key: `k${++s.seqCard}`, owner: 'curse', gained: true });
+      if (fx.curse) s.deck.push({ id: fx.curse, key: Run.nextCardKey(s), owner: 'curse', gained: true });
       if (fx.relic) { const r = this.relicChoices(fx.relic === 'common' ? 'common' : 'elite')[0]; if (r) s.relics.push(r); }
-      if (fx.card) { const chs = s.party.map((x) => x.charId); const pool = this.data.cards.filter((c) => chs.includes(c.owner) && c.rar === fx.card && c.pool !== false); const c = Rng.pick(s.rng, pool); s.deck.push({ id: c.id, key: `k${++s.seqCard}`, owner: c.owner, gained: true }); }
+      if (fx.card) { const chs = s.party.map((x) => x.charId); const pool = this.data.cards.filter((c) => chs.includes(c.owner) && c.rar === fx.card && c.pool !== false); const c = Rng.pick(s.rng, pool); s.deck.push({ id: c.id, key: Run.nextCardKey(s), owner: c.owner, gained: true }); }
       if (fx.part) s.partsFound.push(...this.partChoices(false, fx.part, true).slice(0, 1));
       if (fx.partRare) s.partsFound.push(...this.partChoices(true, 1));
       if (fx.variation) { s.phase = 'FORGE'; s.pending = { type: 'forge', uses: fx.variation, offers: null, fromEvent: true }; return; }
@@ -1798,7 +2187,7 @@
       // card choices: key may be one deck key or an array (one per copied/removed card). Missing picks fall back to
       // curses first, then the first non-weapon card (used by bots and by the prototype's auto-pick).
       const keys = Array.isArray(key) ? key : (key ? [key] : []);
-      if (fx.cardCopy) { const d = s.deck.find((c) => c.key === keys[0] && !c.weapon) || s.deck.find((c) => !c.weapon); s.deck.push({ ...clone(d), key: `k${++s.seqCard}`, gained: true }); }
+      if (fx.cardCopy) { const d = s.deck.find((c) => c.key === keys[0] && !c.weapon) || s.deck.find((c) => !c.weapon); s.deck.push({ ...clone(d), key: Run.nextCardKey(s), gained: true }); }
       if (fx.cardRemove) {
         for (let k = 0; k < fx.cardRemove; k++) {
           let i = keys[k] ? s.deck.findIndex((c) => c.key === keys[k] && !c.weapon) : -1;
@@ -1824,6 +2213,23 @@
       return cap;
     }
     memoryChanges() {
+      if (this.s.memoryPolicy === 'v2') {
+        const s = this.s; const after = s.memoryAfter || this.memorySnapshot();
+        const changes = MemoryV2.listChanges(this.data, s.memoryBefore, after);
+        const out = {};
+        for (const p of s.party) {
+          const cid = p.charId;
+          out[cid] = { capacity: Run.capacityOf(this.ix, p), before: clone(s.memoryBefore[cid]), after: clone(after[cid]),
+            usedBefore: MemoryV2.cost(this.data, cid, s.memoryBefore[cid], s.memoryBaseline[cid]),
+            changes: changes.filter(ch => ch.cid === cid).map(ch => {
+              const card = [...after[cid], ...s.memoryBefore[cid]].find(c => c.key === ch.key);
+              const name = this.ix.cards[card.id].name;
+              const label = ch.kind === 'add' ? `${name} 추가` : ch.kind === 'remove' ? `${name} 제거` : ch.kind === 'evolve' ? `${name} 진화` : ch.kind === 'upgrade' ? `${name} 강화 변경` : `${name} ${ch.value.slot === 'c' ? '회로' : '각인'} ${ch.value.part ? '교체' : '제거'}`;
+              return { ...ch, label };
+            }) };
+        }
+        return out;
+      }
       const s = this.s; const ix = this.ix; const C = ix.rules.memoryCost; const out = {};
       for (const p of s.party) {
         const base = Run.baseKit(ix, p.charId);
@@ -1852,7 +2258,8 @@
       return out;
     }
     // selection: {charId: [indices of changes to keep]} → returns new memory {charId:[spec]}
-    commitMemory(selection) {
+    commitMemory(selection, currentMemory) {
+      if (this.s.memoryPolicy === 'v2') return this.commitMemoryV2(selection, currentMemory);
       const s = this.s; const ix = this.ix;
       if (!s.pending || s.pending.type !== 'save') throw new RuleError('WRONG_PHASE');
       const all = this.memoryChanges();
@@ -1891,6 +2298,71 @@
       }
       s.savedMemory = memory; s.pending = { type: 'done' }; s.phase = 'DONE';
       return memory;
+    }
+
+    deckMemorySnapshot() {
+      const out = Object.fromEntries(this.s.party.map(p => [p.charId, []]));
+      for (const c of this.s.deck) {
+        const def = this.ix.cards[c.id];
+        if (!def || c.weapon || c.token || ![...this.s.party.map(p => p.charId), 'common'].includes(def.owner)) continue;
+        const cid = def.owner === 'common' ? c.assigned : def.owner;
+        if (!out[cid]) throw new RuleError('INVALID_ASSIGNMENT');
+        const sp = { key: c.key, id: c.id };
+        if (c.plus) sp.plus = true;
+        if (c.from) sp.from = c.from;
+        if (c.mods) sp.mods = clone(c.mods);
+        if (def.owner === 'common') sp.assigned = cid;
+        out[cid].push(sp);
+      }
+      MemoryV2.inspect(this.data, out);
+      return out;
+    }
+    memorySnapshot() {
+      const after = this.deckMemorySnapshot(); const s = this.s;
+      if (!s.playBefore) return after;
+      // Playing the base kit does not itself remove or revert persistent cards.
+      const changes = MemoryV2.listChanges(this.data, s.playBefore, after);
+      const savedKeys = new Set(Object.values(s.memoryBefore).flatMap(rows => rows.map(c => c.key)));
+      const additions = new Map();
+      for (const ch of changes) if (!savedKeys.has(ch.key) && ch.kind !== 'remove') additions.set(ch.key, { ...ch, kind: 'add', value: after[ch.cid].find(c => c.key === ch.key) });
+      const result = MemoryV2.applyChanges(s.memoryBefore, [...changes.filter(ch => savedKeys.has(ch.key)), ...additions.values()]);
+      MemoryV2.inspect(this.data, result);
+      return result;
+    }
+    captureMemory() { if (this.s.memoryPolicy === 'v2') this.s.memoryAfter = this.memorySnapshot(); }
+    previewMemory(selectedIds) {
+      const s = this.s;
+      if (s.memoryPolicy !== 'v2' || s.pending?.type !== 'save') throw new RuleError('WRONG_PHASE');
+      const capacities = Object.fromEntries(s.party.map(p => [p.charId, Run.capacityOf(this.ix, p)]));
+      return { ...MemoryV2.apply(this.data, s.memoryBefore, s.memoryAfter || this.memorySnapshot(), selectedIds, capacities,
+        { defeat: !!s.pending.defeat, baseline: s.memoryBaseline, preview: true }), capacities };
+    }
+    commitMemoryV2(request, current) {
+      const s = this.s;
+      if (!request || typeof request.requestId !== 'string' || !request.requestId || !Number.isInteger(request.expectedMemoryVersion) || request.expectedMemoryVersion < 0 ||
+          !Array.isArray(request.selectedChangeIds) || request.selectedChangeIds.some(id => typeof id !== 'string') || new Set(request.selectedChangeIds).size !== request.selectedChangeIds.length) throw new RuleError('INVALID_SELECTION');
+      if (request.runId !== s.runId) throw new RuleError('RUN_MISMATCH');
+      if (!current || current.schema !== 'mf-memory-v2' || !Number.isInteger(current.version) || current.version < 0 || !Array.isArray(current.history) || !current.receipts || typeof current.receipts !== 'object' || Array.isArray(current.receipts)) throw new RuleError('INVALID_SNAPSHOT');
+      MemoryV2.inspect(this.data, current.memory);
+      const body = JSON.stringify({ runId: request.runId, expectedMemoryVersion: request.expectedMemoryVersion, selectedChangeIds: [...request.selectedChangeIds].sort() });
+      const finish = response => { s.savedMemory = clone(response.memory); s.pending = { type: 'done' }; s.phase = 'DONE'; };
+      if (Object.hasOwn(current.receipts, request.requestId)) {
+        const receipt = current.receipts[request.requestId];
+        if (receipt.body !== body) throw new RuleError('REQUEST_CONFLICT');
+        const response = clone(receipt.response); finish(response); return { state: clone(current), response };
+      }
+      if (s.pending?.type !== 'save' || !['VICTORY', 'DEFEAT'].includes(s.phase)) throw new RuleError('WRONG_PHASE');
+      if (request.expectedMemoryVersion !== s.memoryVersion || current.version !== request.expectedMemoryVersion) throw new RuleError('VERSION_CONFLICT');
+      for (const p of s.party) if (JSON.stringify(current.memory[p.charId] || s.memoryBaseline[p.charId]) !== JSON.stringify(s.memoryBefore[p.charId])) throw new RuleError('VERSION_CONFLICT');
+      const result = this.previewMemory(request.selectedChangeIds);
+      if (result.error) throw new RuleError(result.error);
+      const state = clone(current); state.memory = { ...state.memory, ...result.memory }; state.version += 1;
+      MemoryV2.inspect(this.data, state.memory);
+      state.history.push({ runId: s.runId, requestId: request.requestId, version: state.version, before: clone(s.memoryBefore), memory: clone(result.memory), selectedChangeIds: [...request.selectedChangeIds] });
+      const response = { memory: clone(result.memory), used: result.used, version: state.version };
+      state.receipts = { ...state.receipts, [request.requestId]: { body, response: clone(response) } };
+      finish(response);
+      return { state, response };
     }
   }
 
@@ -2010,7 +2482,7 @@
     },
   };
 
-  const MFCore = { RuleError, Rng, indexData, cardText, opText, Battle, Run, Gacha, Stats, NODE_NAME, upgradeOps };
+  const MFCore = { RuleError, Rng, indexData, cardText, opText, Battle, Run, Gacha, Stats, MemoryV2, NODE_NAME, upgradeOps };
   if (typeof module !== 'undefined' && module.exports) module.exports = MFCore;
   root.MFCore = MFCore;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

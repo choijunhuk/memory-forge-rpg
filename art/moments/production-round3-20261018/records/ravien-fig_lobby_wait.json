@@ -1,0 +1,25 @@
+{
+  "c": "ravien",
+  "key": "fig_lobby_wait",
+  "path": "ravien/images/char_ravien_chair_wait_folder_v01.png",
+  "refs": [
+    "/Users/choi/Documents/Memory_forge/art/moments/ravien/images/char_ravien_chair_offer_happy_v01.png"
+  ],
+  "prompt": "Edit target: the referenced Ravien chair-offer sprite. Create ONE new full-length 1024x1536 transparent PNG key pose, same framing, character at right, same ornate red upholstered EMPTY chair at left. Preserve her age 28, face, green eyes, wine-red hair, scales pendant, deep neckline black tailored vest, loose red tie, slit skirt, garter stockings, long black gloves, heels, adult proportions and detailed anime RPG linework/painting. ONLY acting change: her pointing right hand has now LOWERED naturally beside her thigh, fingers relaxed; left forearm still supports the CLOSED red folder at her left hip. Shoulders settle, a small expectant private smile, direct eye contact, no wink. Chair stays exactly where it was, complete seat/backrest/legs visible, full head and heels inside canvas. Actual transparent background, remove colored haze/backdrop outside the character and props. No text, no panels, no extra people. This is the pause after offering the chair, before she puts the folder down.",
+  "source": "/Users/choi/.codex/generated_images/01a14d20-ffd5-7e81-9e47-85c1c8415e11/exec-f3ec6838-887b-474b-b8e3-a19d167356c3.png",
+  "review": "pass",
+  "score": 96,
+  "tool": "Codex built-in image_gen; subscription-included; no API fallback",
+  "backend_model": "not exposed by tool",
+  "selected": true,
+  "sha256": "29baa157e38cdfaa3a9515dcd7dd146a9c403f4eb4b436a9a0b2c78771ba9778",
+  "size": [
+    1024,
+    1536
+  ],
+  "mode": "RGBA",
+  "alpha_extrema": [
+    0,
+    254
+  ]
+}

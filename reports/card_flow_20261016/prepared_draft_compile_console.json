@@ -1,0 +1,22 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Retrieved 1 log entries.\",\"data\":[{\"type\":\"Warning\",\"message\":\"Assets/Tests/PlayMode/ActionPresentationPlayModeTests.cs(436,75): warning CS8600: Converting null literal or possible null value to non-nullable type.\\n\",\"file\":\"Assets/Tests/PlayMode/ActionPresentationPlayModeTests.cs\",\"line\":436,\"stackTrace\":null}]}"
+    }
+  ],
+  "structuredContent": {
+    "success": true,
+    "message": "Retrieved 1 log entries.",
+    "data": [
+      {
+        "type": "Warning",
+        "message": "Assets/Tests/PlayMode/ActionPresentationPlayModeTests.cs(436,75): warning CS8600: Converting null literal or possible null value to non-nullable type.\n",
+        "file": "Assets/Tests/PlayMode/ActionPresentationPlayModeTests.cs",
+        "line": 436,
+        "stackTrace": null
+      }
+    ]
+  },
+  "isError": false
+}

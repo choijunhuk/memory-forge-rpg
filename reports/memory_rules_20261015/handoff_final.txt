@@ -1,0 +1,27 @@
+
+> memory-forge-rpg@0.8.1-aio.2 test:handoff
+> python3 tools/ai/test_handoff.py
+
+test_active_entrypoints_contain_billing_and_owner (__main__.HandoffTests.test_active_entrypoints_contain_billing_and_owner) ... ok
+test_auth_precedes_model_call (__main__.HandoffTests.test_auth_precedes_model_call) ... ok
+test_full_pdf_build_entrypoint (__main__.HandoffTests.test_full_pdf_build_entrypoint) ... ok
+test_game_document_contract (__main__.HandoffTests.test_game_document_contract) ... ok
+test_game_inventory (__main__.HandoffTests.test_game_inventory) ... ok
+test_no_font_binaries_or_credentials_shipped (__main__.HandoffTests.test_no_font_binaries_or_credentials_shipped) ... ok
+test_pdf_contains_full_base_text (__main__.HandoffTests.test_pdf_contains_full_base_text) ... <frozen importlib._bootstrap>:491: DeprecationWarning: builtin type SwigPyPacked has no __module__ attribute
+<frozen importlib._bootstrap>:491: DeprecationWarning: builtin type SwigPyObject has no __module__ attribute
+<frozen importlib._bootstrap>:491: DeprecationWarning: builtin type swigvarlink has no __module__ attribute
+warning: The `fitz` API is deprecated and will be removed in future. Use `import pymupdf` instead.
+ok
+test_pdf_internal_links_shift (__main__.HandoffTests.test_pdf_internal_links_shift) ... ok
+test_pdf_named_destinations (__main__.HandoffTests.test_pdf_named_destinations) ... ok
+test_reference_and_targets_remain_distinct (__main__.HandoffTests.test_reference_and_targets_remain_distinct) ... ok
+test_root_files (__main__.HandoffTests.test_root_files) ... ok
+test_shared_policy (__main__.HandoffTests.test_shared_policy) ... ok
+test_starter_is_same_as_codex_instructions (__main__.HandoffTests.test_starter_is_same_as_codex_instructions) ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 3.352s
+
+OK
+<sys>:0: DeprecationWarning: builtin type swigvarlink has no __module__ attribute

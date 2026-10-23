@@ -1,0 +1,11 @@
+{
+  "status": "CODE_WRITTEN_TIMEOUT_BEFORE_FINAL_REVIEW",
+  "timeLimitSeconds": 1800,
+  "notSubscriptionLimit": true,
+  "sourceLines": 888,
+  "sourceSHA": "1245099fcd573c1d8b1b2c01654851a9f885bebd7bdf3f9762d9e9d593a1f6a7",
+  "CoreReviewVerdict": "NOT_RECEIVED",
+  "acceptance": "PENDING_BUILD_RUNTIME_AND_REVIEW",
+  "checkpoint": "private A-worktree ops/ai/local/r0-guards-timeout-code.cs",
+  "at": "2026-10-15T08:38:48.180359+00:00"
+}

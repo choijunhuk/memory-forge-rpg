@@ -1,0 +1,10 @@
+{
+  "originalSerializedSettingsRestoredByteForByte": true,
+  "files": [
+    "client/MemoryForgeUnity/ProjectSettings/EditorSettings.asset",
+    "client/MemoryForgeUnity/ProjectSettings/ProjectSettings.asset"
+  ],
+  "effectiveRuntimePolicy": "Full domain and scene reload, runInBackground false",
+  "unity6000ApiLimitation": "The API normalizes enabled/None to false/None or true/3, so the original serialized enabled1/options0 pair cannot be asserted through getters. Full reload selected via API, then original bytes restored.",
+  "sourceImport": "Forced scope=all refresh; Run.Enter and BattleCommand reflection positive controls before actual27Play/3Edit"
+}

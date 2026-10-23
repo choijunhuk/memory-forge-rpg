@@ -1,0 +1,89 @@
+[
+  {
+    "step": "node",
+    "receipt": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"requested\":\"Node:z1f0n0\",\"topHit\":\"Node:z1f0n0\",\"phase\":\"BATTLE\",\"pickerOpen\":false,\"selectedCard\":\"c7\",\"mode\":null,\"target\":null,\"version\":1,\"ap\":4,\"completeJsonGraphUnchanged\":false,\"pickerOptions\":[],\"expectedStateInjected\":false},\"compiler\":\"codedom\"}}"
+        }
+      ],
+      "structuredContent": {
+        "success": true,
+        "message": "Code executed successfully.",
+        "data": {
+          "result": {
+            "requested": "Node:z1f0n0",
+            "topHit": "Node:z1f0n0",
+            "phase": "BATTLE",
+            "pickerOpen": false,
+            "selectedCard": "c7",
+            "mode": null,
+            "target": null,
+            "version": 1,
+            "ap": 4,
+            "completeJsonGraphUnchanged": false,
+            "pickerOptions": [],
+            "expectedStateInjected": false
+          },
+          "compiler": "codedom"
+        }
+      },
+      "isError": false
+    }
+  },
+  {
+    "step": "enemy",
+    "receipt": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"requested\":\"Enemy:e19\",\"topHit\":\"Enemy:e19\",\"phase\":\"BATTLE\",\"pickerOpen\":false,\"selectedCard\":\"c7\",\"mode\":null,\"target\":\"e19\",\"version\":1,\"ap\":4,\"completeJsonGraphUnchanged\":true,\"pickerOptions\":[],\"expectedStateInjected\":false},\"compiler\":\"codedom\"}}"
+        }
+      ],
+      "structuredContent": {
+        "success": true,
+        "message": "Code executed successfully.",
+        "data": {
+          "result": {
+            "requested": "Enemy:e19",
+            "topHit": "Enemy:e19",
+            "phase": "BATTLE",
+            "pickerOpen": false,
+            "selectedCard": "c7",
+            "mode": null,
+            "target": "e19",
+            "version": 1,
+            "ap": 4,
+            "completeJsonGraphUnchanged": true,
+            "pickerOptions": [],
+            "expectedStateInjected": false
+          },
+          "compiler": "codedom"
+        }
+      },
+      "isError": false
+    }
+  },
+  {
+    "step": "hand",
+    "receipt": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"success\":false,\"message\":\"Runtime error: Current button is not top ray hit: Hand:c15\",\"data\":{\"exceptionType\":\"Exception\",\"stackTrace\":\"  at MCPDynamicCode.Execute () [0x00152] in <ec246514e0284a84bb0c28479137eccd>:0 \\n  at (wrapper managed-to-native) System.Reflection.RuntimeMethodInfo.InternalInvoke(System.Reflection.RuntimeMethodInfo,object,object[],System.Exception&)\\n  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x0006a] in <27bd554a9f0e46179afd19da1336e638>:0 \",\"compiler\":\"codedom\"}}"
+        }
+      ],
+      "structuredContent": {
+        "success": false,
+        "message": "Runtime error: Current button is not top ray hit: Hand:c15",
+        "data": {
+          "exceptionType": "Exception",
+          "stackTrace": "  at MCPDynamicCode.Execute () [0x00152] in <ec246514e0284a84bb0c28479137eccd>:0 \n  at (wrapper managed-to-native) System.Reflection.RuntimeMethodInfo.InternalInvoke(System.Reflection.RuntimeMethodInfo,object,object[],System.Exception&)\n  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x0006a] in <27bd554a9f0e46179afd19da1336e638>:0 ",
+          "compiler": "codedom"
+        }
+      },
+      "isError": false
+    }
+  }
+]

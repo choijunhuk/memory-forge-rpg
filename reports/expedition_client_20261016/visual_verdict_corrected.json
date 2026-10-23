@@ -1,0 +1,8 @@
+{
+  "score": 94,
+  "verdict": "pass",
+  "category_match": true,
+  "differences": [],
+  "suggestions": [],
+  "reasoning": "기존 전투 연습과 색·서체가 일관되고 새 지도에서 실제 상태·갈 수 있는 칸·경로가 읽힌다. 불필요한 내부 버전 표시를 제거했으며 현재 지도 화면의 주요 잘림이나 겹침은 보이지 않는다."
+}

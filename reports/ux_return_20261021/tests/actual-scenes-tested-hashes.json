@@ -1,0 +1,7 @@
+{
+  "client/MemoryForgeUnity/Assets/Scripts/MemoryForgeLobbyClient.cs": "c5946c3c94ea9ea1df221e772aeac3338b484482f3b235c94b27eab79175ccc6",
+  "client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs": "700986949d60fcf489ef5faf3f4190d1df29041f2bbef196dc63f3b9ed860036",
+  "client/MemoryForgeUnity/Assets/Scripts/MemoryForgePracticeSession.cs": "78b3354ceaeeee1595c9afa5717c9ed57206b0d5a83aaaf3725979e69f518b39",
+  "client/MemoryForgeUnity/Assets/Tests/PlayMode/HomeReturnAcceptancePlayModeTests.cs": "3e211d49722aac9bc2d4d1acb42f7ddfcd2308e243b852c6392f356b1c31ff74",
+  "client/MemoryForgeUnity/Assets/Tests/PlayMode/LobbyOverviewPlayModeTests.cs": "1954c88df23d836ec563ecf1b8f5646ded70e9d1fcb87913dc9b8aeae6fe4870"
+}

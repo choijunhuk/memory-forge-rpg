@@ -1,0 +1,31 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"entered\":true,\"playing\":true,\"phase\":\"BATTLE\",\"ap\":4,\"version\":1,\"selectedCard\":\"c7\",\"selectedMode\":\"next\",\"pureSelection\":true,\"hasPrepared\":false,\"hasPresentation\":false,\"nextEditorOptions\":0,\"pendingRestore\":false,\"note\":\"Left actual Editor battle open for user; selected next-mode forecast only, no card command sent\"},\"compiler\":\"codedom\"}}"
+    }
+  ],
+  "structuredContent": {
+    "success": true,
+    "message": "Code executed successfully.",
+    "data": {
+      "result": {
+        "entered": true,
+        "playing": true,
+        "phase": "BATTLE",
+        "ap": 4,
+        "version": 1,
+        "selectedCard": "c7",
+        "selectedMode": "next",
+        "pureSelection": true,
+        "hasPrepared": false,
+        "hasPresentation": false,
+        "nextEditorOptions": 0,
+        "pendingRestore": false,
+        "note": "Left actual Editor battle open for user; selected next-mode forecast only, no card command sent"
+      },
+      "compiler": "codedom"
+    }
+  },
+  "isError": false
+}

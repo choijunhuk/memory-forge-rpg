@@ -1,0 +1,31 @@
+{
+  "task_id": "P1-RESERVED-FORECAST-UI",
+  "run_id": "P1-RESERVED-FORECAST-UI-20261016T022917896364Z",
+  "status": "VERIFIED",
+  "requestedEffort": "xhigh",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "changes_verified": true,
+  "raw_output": "ops/ai/local/P1-RESERVED-FORECAST-UI-20261016T022917896364Z*",
+  "billing_verified_at": "2026-10-15T21:22:01.277612+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "codex/csharp-memory-v2",
+  "base_commit": "3d33c4cb2e0c7cee14ced2c67c33b8fb55cef267",
+  "worktree": "/Users/choi/.codex/worktrees/csharp-memory-v2/Memory_forge",
+  "allowed_files": [
+    "client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs",
+    "client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionClientPlayModeTests.cs",
+    "reports/battle_preview_20261016/reserved_ui_author_report.md"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "b0545ad4-ddb1-421f-8c73-4b7511e293bd",
+  "subtype": "success",
+  "is_error": false,
+  "result": "The expedition action line now shows the reservation forecast, and the tests and report are written. Compile, tests, the Editor, screenshots, the native build and the device were not run by me. All my earlier edits survived the host restart; this session added one test assertion and the report.\n\n**What the player now sees**\n- **Reservations (next/after):** the actual cost and absolute due turn, then Core's estimate labelled as such. Example: `행동력 2 · 2턴 시작(다음 턴)에 해결 · 현재 상태 기준 예상: 적 피해 22 · 새 균열 1체`.\n- **Defeat in an estimate:** reads \"지금 해결되면 패배해요\", so it never says committing the reservation defeats the party. Immediate plays keep \"이 행동으로 패배해요\".\n- **Hidden reservations:** cost and due only, then \"드로우·무작위 결과는 해결된 뒤에 알 수 있어요\". No number, break or defeat is shown.\n- **Enemy damage:** includes enemy block. HP loss is named only when it differs: `적 피해 8 (체력 -2)`, or `적 피해 4 (체력 그대로)` when block absorbed everything.\n- **Newly broken enemies:** `새 균열 N체`.\n- **Removed:** the old reservation note \"예약의 실제 해결 결과는 그때 확인해요\". The card-info note's \"나중 위력\" phrase is replaced by a sentence explaining that reservation numbers assume resolving now, and one saying enemy damage includes block.\n\nLayout, input, render timing, notices, overlays and the pick-sheet seams are unchanged. Text fit is my estimate only; the untruncated-label checks in the tests will confirm it.\n\n**Tests (14 → 16)**\n- **Updated:**\n  - Reservation assertions now check the current-state estimate instead of zeros. Rejected and hidden requests must leave all fields at default, including the two new ones.\n  - The confirmed play must match the shown forecast, including damage and newly broken counts.\n  - The nia_scan reservation must be hidden, with no forecast wording anywhere on screen.\n  - The card-info note check covers the new sentences.\n  - The reflect-reservation defeat estimate is checked. All checks now compare all 11 forecast fields.\n- **New, actual expedition (real clicks, mirror Run):** select a visible reservation; selecting spends nothing. Confirming produces exactly one command: AP minus cost, scheduled on the due turn, and no HP/block/enemy change now.\n  - It assumes seed 1234's opening hand has a visible reservation. If the only reservable cards are draw cards, it fails loudly.\n- **New, supplement (standalone Core through the view's formatter, labelled in code as separate from view-path acceptance):**\n  - shield reservation +11, and the real reservation gains no block;\n  - sera_timed 22 next / 30 after;\n  - zero estimate, newly broken vs already broken, and block absorbing all damage (HP loss 0);\n  - three hidden reservations.\n- **Preserved:** your three nullability annotations, the reference party, the notice fix and the 2.6 s held-press test.\n- **Conditional check:** the shield +11 check inside the expedition loop runs only if harin_shield is in the opening hand. The guaranteed +11 check is in the supplement.\n\n**Next steps for Root**\n1. Compile, then run the 16 tests and the other suites in the actual Editor.\n2. Check the live screen: a visible reservation, the hidden nia_scan reservation, an absorbed hit, a defeat estimate if reachable, and the pick-sheet captions. Take screenshots.\n3. Review, then build and PR.\n\nNothing is blocked. The report is `reports/battle_preview_20261016/reserved_ui_author_report.md`.\n\nsession_id: b0545ad4-ddb1-421f-8c73-4b7511e293bd",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ],
+  "root_verification": "reports/card_flow_20261016/root_acceptance.md"
+}

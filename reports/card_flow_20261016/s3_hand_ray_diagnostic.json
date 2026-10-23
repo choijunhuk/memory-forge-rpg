@@ -1,0 +1,49 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"client\":\"MemoryForgeExpedition\",\"focused\":true,\"screen\":[2363,1423],\"point\":[375.9656,84.55499],\"rect\":[180.0,172.0],\"hits\":[{\"name\":\"Hand:c15\",\"button\":\"Hand:c15\"},{\"name\":\"Hand\",\"button\":null}],\"hand\":[\"c7\",\"c1\",\"c15\",\"c13\",\"c2\"]},\"compiler\":\"codedom\"}}"
+    }
+  ],
+  "structuredContent": {
+    "success": true,
+    "message": "Code executed successfully.",
+    "data": {
+      "result": {
+        "client": "MemoryForgeExpedition",
+        "focused": true,
+        "screen": [
+          2363,
+          1423
+        ],
+        "point": [
+          375.9656,
+          84.55499
+        ],
+        "rect": [
+          180.0,
+          172.0
+        ],
+        "hits": [
+          {
+            "name": "Hand:c15",
+            "button": "Hand:c15"
+          },
+          {
+            "name": "Hand",
+            "button": null
+          }
+        ],
+        "hand": [
+          "c7",
+          "c1",
+          "c15",
+          "c13",
+          "c2"
+        ]
+      },
+      "compiler": "codedom"
+    }
+  },
+  "isError": false
+}

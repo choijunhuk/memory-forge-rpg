@@ -1,0 +1,160 @@
+{
+  "P1-RESERVED-FORECAST-CORE": {
+    "session_id": "b0545ad4-ddb1-421f-8c73-4b7511e293bd",
+    "positive_output_messages": 145,
+    "actual_model": "claude-opus-5-5",
+    "actual_per_turn_effort": "max"
+  },
+  "P1-RESERVED-FORECAST-WITNESS-FIX": {
+    "session_id": "b0545ad4-ddb1-421f-8c73-4b7511e293bd",
+    "positive_output_messages": 24,
+    "actual_model": "claude-opus-5-5",
+    "actual_per_turn_effort": "high"
+  },
+  "P1-RESERVED-FORECAST-UI": {
+    "session_id": "b0545ad4-ddb1-421f-8c73-4b7511e293bd",
+    "positive_output_messages": 60,
+    "actual_model": "claude-opus-5-5",
+    "actual_per_turn_effort": "xhigh"
+  },
+  "P1-ROOT-UNIT-INTEGRATION-REVIEW": {
+    "session_id": "b0545ad4-ddb1-421f-8c73-4b7511e293bd",
+    "positive_output_messages": 18,
+    "actual_model": "claude-opus-5-5",
+    "actual_per_turn_effort": "high"
+  },
+  "P1-CSHARP-LATE-ENEMY-ACTIONS": {
+    "session_id": "3037701a-550b-4a17-a764-107680bf5b79",
+    "positive_output_messages": 177,
+    "actual_model": "claude-opus-5-5",
+    "actual_per_turn_effort": "max"
+  },
+  "P1-CSHARP-LATE-ACTIONS-ORACLE-FINISH": {
+    "session_id": "3037701a-550b-4a17-a764-107680bf5b79",
+    "positive_output_messages": 26,
+    "actual_model": "claude-opus-5-5",
+    "actual_per_turn_effort": "xhigh"
+  },
+  "P1-LATE-CHECKER-ASSIGNED-INPUT-FIX": {
+    "session_id": "3037701a-550b-4a17-a764-107680bf5b79",
+    "positive_output_messages": 12,
+    "actual_model": "claude-opus-5-5",
+    "actual_per_turn_effort": "high"
+  },
+  "P1-LATE-ACTIONS-MONO-PARITY": {
+    "session_id": "3037701a-550b-4a17-a764-107680bf5b79",
+    "positive_output_messages": 26,
+    "actual_model": "claude-opus-5-5",
+    "actual_per_turn_effort": "xhigh"
+  },
+  "P1-CARD-FLOW-REFERENCE-INDEPENDENT-REVIEW": {
+    "session_id": "d2bda3e6-a0ab-4f84-82e6-c15d5d12127f",
+    "positive_output_messages": 92,
+    "actual_model": "claude-opus-5-5",
+    "actual_per_turn_effort": "max"
+  },
+  "P1-CARD-FLOW-TURN-DIGEST": {
+    "session_id": "d2bda3e6-a0ab-4f84-82e6-c15d5d12127f",
+    "positive_output_messages": 53,
+    "actual_model": "claude-opus-5-5",
+    "actual_per_turn_effort": "xhigh"
+  },
+  "P1-CARD-FLOW-TURN-BARRIER-UI": {
+    "session_id": "d2bda3e6-a0ab-4f84-82e6-c15d5d12127f",
+    "positive_output_messages": 91,
+    "actual_model": "claude-opus-5-5",
+    "actual_per_turn_effort": "xhigh"
+  },
+  "P1-CARD-FLOW-FAIL-CLOSED": {
+    "session_id": "d2bda3e6-a0ab-4f84-82e6-c15d5d12127f",
+    "positive_output_messages": 105,
+    "actual_model": "claude-opus-5-5",
+    "actual_per_turn_effort": "xhigh"
+  },
+  "P1-CARD-FLOW-FAILURE-RESTART-FIX": {
+    "session_id": "d2bda3e6-a0ab-4f84-82e6-c15d5d12127f",
+    "positive_output_messages": 19,
+    "actual_model": "claude-opus-5-5",
+    "actual_per_turn_effort": "high"
+  },
+  "P1-CARD-FLOW-EXACT-COMPARISON-FIX": {
+    "session_id": "d2bda3e6-a0ab-4f84-82e6-c15d5d12127f",
+    "positive_output_messages": 14,
+    "actual_model": "claude-opus-5-5",
+    "actual_per_turn_effort": "high"
+  },
+  "P1-CARD-FLOW-UNKNOWN-STORE-REVIEW": {
+    "session_id": "d2bda3e6-a0ab-4f84-82e6-c15d5d12127f",
+    "positive_output_messages": 7,
+    "actual_model": "claude-opus-5-5",
+    "actual_per_turn_effort": "high"
+  },
+  "P1-CARD-FLOW-PICKER-GUARD": {
+    "session_id": "d2bda3e6-a0ab-4f84-82e6-c15d5d12127f",
+    "positive_output_messages": 154,
+    "actual_model": "claude-opus-5-5",
+    "actual_per_turn_effort": "xhigh"
+  },
+  "P1-CARD-FLOW-PICKER-FINISH": {
+    "session_id": "d2bda3e6-a0ab-4f84-82e6-c15d5d12127f",
+    "positive_output_messages": 15,
+    "actual_model": "claude-opus-5-5",
+    "actual_per_turn_effort": "high"
+  },
+  "P1-CARD-FLOW-ACTION-PRESENTATION": {
+    "session_id": "3783efa8-31f2-4332-b2cb-3d352bdc19c7",
+    "actual_model": "claude-opus-5-5",
+    "actual_per_turn_effort": "high",
+    "positive_output_messages": 121
+  },
+  "P1-CARD-FLOW-ONE-UNSENT-INTENT": {
+    "session_id": "9e72e086-dd3f-4efa-8840-28d42f883c9b",
+    "actual_model": "claude-opus-5-5",
+    "actual_per_turn_effort": "xhigh",
+    "positive_output_messages": 151
+  },
+  "P1-CARD-FLOW-FINAL-REVIEW": {
+    "session_id": "291d1676-60e8-4699-b338-d676a274153b",
+    "actual_model": "claude-opus-5-5",
+    "actual_per_turn_effort": "max",
+    "positive_output_messages": 82,
+    "verdict": "CHANGES_REQUESTED; P2-1 repair required"
+  },
+  "P1-CARD-FLOW-CANCEL-TAP-FIX": {
+    "session_id": "9e72e086-dd3f-4efa-8840-28d42f883c9b",
+    "actual_model": "claude-opus-5-5",
+    "actual_per_turn_effort": "high",
+    "positive_output_messages": 24
+  },
+  "P1-CARD-FLOW-TAP-ASSERT-FIX": {
+    "session_id": "9e72e086-dd3f-4efa-8840-28d42f883c9b",
+    "actual_model": "claude-opus-5-5",
+    "actual_per_turn_effort": "high",
+    "positive_output_messages": 9
+  },
+  "P1-CARD-FLOW-EFFECT-CANDIDATES": {
+    "session_id": "9e72e086-dd3f-4efa-8840-28d42f883c9b",
+    "actual_model": "claude-opus-5-5",
+    "actual_per_turn_effort": "xhigh",
+    "positive_output_messages": 158,
+    "root_review": "changes required; FreeNext1 manual choice must be preserved"
+  },
+  "P1-CARD-FLOW-CANDIDATE-COST-QUERY": {
+    "session_id": "9e72e086-dd3f-4efa-8840-28d42f883c9b",
+    "actual_model": "claude-opus-5-5",
+    "actual_per_turn_effort": "max",
+    "positive_output_messages": 89,
+    "status": "FAILED_INCLUDED_SUBSCRIPTION_SESSION_LIMIT",
+    "reset_display": "19:00 Asia/Seoul 2026-10-16",
+    "first_positive_message": "2026-10-16T07:42:07.973Z",
+    "last_positive_message": "2026-10-16T07:52:55.534Z",
+    "source_components_received": 6,
+    "missing_outputs": [
+      "pure witness split file",
+      "corrected author report"
+    ],
+    "followup_inference_after_limit": false,
+    "fallback_api_extra_or_credits": false,
+    "root_independent_validation": "new10 QA witnesses and actual .NET/Unity validation; completion not attributed to failed Claude task"
+  }
+}

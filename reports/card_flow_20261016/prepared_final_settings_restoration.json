@@ -1,0 +1,32 @@
+{
+  "future_editor_options": 0,
+  "pending_restore": false,
+  "editor_left_in_actual_play": true,
+  "files": [
+    {
+      "path": "client/MemoryForgeUnity/ProjectSettings/EditorSettings.asset",
+      "exact_head_bytes": true,
+      "only_whitespace_before_restore": true
+    },
+    {
+      "path": "client/MemoryForgeUnity/ProjectSettings/ProjectSettings.asset",
+      "exact_head_bytes": true,
+      "only_whitespace_before_restore": true
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/Settings/UniversalRP.asset",
+      "exact_head_bytes": true,
+      "only_whitespace_before_restore": true
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/UniversalRenderPipelineGlobalSettings.asset",
+      "exact_head_bytes": true,
+      "only_whitespace_before_restore": true
+    },
+    {
+      "path": "client/MemoryForgeUnity/ProjectSettings/UnityConnectSettings.asset",
+      "exact_head_bytes": true,
+      "only_whitespace_before_restore": true
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "score": 92,
+  "verdict": "pass",
+  "category_match": true,
+  "differences": [
+    "Minor ornament-line variation and less rifle micro-mechanical detail than the pose source.",
+    "RGBA visualization initially exposes hidden RGB haze; actual white/dark alpha composites are clean at review scale."
+  ],
+  "suggestions": [
+    "Use these six redraws as character/style references, retaining each original pose source for subsequent poses.",
+    "Continue full-size alpha and edge inspection for each sprite."
+  ],
+  "reasoning": "All six preserve adult identity, current outfit silhouette and signature prop states; faces and hair follow direction A. White/dark composites confirm working transparent silhouettes, distinct from a raw RGB display."
+}

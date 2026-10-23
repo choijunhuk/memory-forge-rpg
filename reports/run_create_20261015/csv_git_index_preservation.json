@@ -1,0 +1,34 @@
+{
+  "usedTemporaryIndex": true,
+  "realStagingUnchanged": true,
+  "requiresRenormalizeWhenStaging": true,
+  "allOriginalBytesMatch": true,
+  "onlyCRLFStorageDiff": true,
+  "whitespaceCheck": "PASS",
+  "files": [
+    {
+      "path": "docs/archive/v0.6_materials/pass_rewards.csv",
+      "gitIndexSha256": "e8eeb03b6d0958f3b55755474bac8032ff1e7fb69773c1726a65a11a1eb857c9",
+      "matchesOriginalManifest": true,
+      "crlfCount": 211
+    },
+    {
+      "path": "reports/audit_v081/preservation_by_chapter.csv",
+      "gitIndexSha256": "72966b20d598fabc56bb264983bb080dc44f2dfe5004b5be38ef6d9cbe04080b",
+      "matchesOriginalManifest": true,
+      "crlfCount": 25
+    },
+    {
+      "path": "reports/daily_income_42d.csv",
+      "gitIndexSha256": "2702608943546654c0c43f1c0046f7996f96c081f5805ee5ff79101be5c2619b",
+      "matchesOriginalManifest": true,
+      "crlfCount": 43
+    },
+    {
+      "path": "reports/upstream_v070/daily_income_42d.csv",
+      "gitIndexSha256": "2702608943546654c0c43f1c0046f7996f96c081f5805ee5ff79101be5c2619b",
+      "matchesOriginalManifest": true,
+      "crlfCount": 43
+    }
+  ]
+}

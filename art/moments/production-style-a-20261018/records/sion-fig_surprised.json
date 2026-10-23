@@ -1,0 +1,16 @@
+{
+  "character": "sion",
+  "key": "fig_surprised",
+  "target": "sion/images/char_sion_fig_surprised_styleA_v01.png",
+  "args": {
+    "prompt": "Use case: identity-preserve. Edit the FIRST canonical B master sprite, same clearly adult character, EXACT same identity/age/face/hair/costume design/palette and clear-cel A rendering. Preserve all furniture perspective, shape, scale, screen coordinates and prop design across this sequence. Modify ONLY the specified acting/hand state/expression. Direction A: crisp controlled line, emphatic upper eyelid, small symbolic nose and mouth, matte large one-step cel shadows, grouped hair and broad highlight bands, limited metal highlights. Full body/equipment/furniture completely inside same 1024x1536 portrait with clear margins. TRUE RGBA transparent empty canvas, every empty corner alpha=0; remove all haze, background residue, halo, floor, cast shadows, checkerboard, text and watermark. Keep opaque clothing/skin solid and clean hair edges. Character: sion, age 27. Keep EXACT SCREEN-RIGHT lectern from master, SAME open purple book atop it, personal cream memo. Restrained surprise: brows lift slightly, one hand reaches down catching two small slipped memo sheets, other hand near book. No sword, no new furniture, no floating page storm.",
+    "referenced_image_paths": [
+      "/Users/choi/Documents/Memory_forge/art/moments/sion/images/char_sion_fig_worried_styleA_v01.png"
+    ],
+    "transparent_background": true
+  },
+  "cache_path": "/Users/choi/.codex/generated_images/01a14db0-4150-7f01-9240-82aaa185dd28/exec-dbfffdd6-16d4-46aa-8ec0-5b84aae42210.png",
+  "status": "ready",
+  "generation_status": "generated_pending_review",
+  "selected": true
+}

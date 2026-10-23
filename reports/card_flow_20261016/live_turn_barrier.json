@@ -1,0 +1,27 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"actualOverlayRayHit\":\"TurnSummaryInputBlocker\",\"directEndRejected\":true,\"statePure\":true,\"turn\":2,\"version\":3,\"currentBattleHp\":229,\"outsideBattleRunHp\":243,\"rows\":12,\"error\":\"TURN_SUMMARY_OPEN\"},\"compiler\":\"codedom\"}}"
+    }
+  ],
+  "structuredContent": {
+    "success": true,
+    "message": "Code executed successfully.",
+    "data": {
+      "result": {
+        "actualOverlayRayHit": "TurnSummaryInputBlocker",
+        "directEndRejected": true,
+        "statePure": true,
+        "turn": 2,
+        "version": 3,
+        "currentBattleHp": 229,
+        "outsideBattleRunHp": 243,
+        "rows": 12,
+        "error": "TURN_SUMMARY_OPEN"
+      },
+      "compiler": "codedom"
+    }
+  },
+  "isError": false
+}

@@ -1,0 +1,34 @@
+{
+  "effective_editor_options": 0,
+  "pending_test_guard": false,
+  "live_enabled_accessor_observed": false,
+  "serialized_legacy_enabled_flag_preserved": 1,
+  "runtime_observation": "In installed Unity6000.0.46f1, setting enabled=true selected option3; setting options=None/0 returned enabled=false. No claim that true/0 was applied via the API. Original files retain legacy1/0 bytes.",
+  "files": [
+    {
+      "path": "client/MemoryForgeUnity/ProjectSettings/EditorSettings.asset",
+      "semantics_match_head": true,
+      "restored_whitespace_only": true
+    },
+    {
+      "path": "client/MemoryForgeUnity/ProjectSettings/ProjectSettings.asset",
+      "semantics_match_head": true,
+      "restored_whitespace_only": true
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/Settings/UniversalRP.asset",
+      "semantics_match_head": true,
+      "restored_whitespace_only": true
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/UniversalRenderPipelineGlobalSettings.asset",
+      "semantics_match_head": true,
+      "restored_whitespace_only": true
+    },
+    {
+      "path": "client/MemoryForgeUnity/ProjectSettings/UnityConnectSettings.asset",
+      "semantics_match_head": true,
+      "restored_whitespace_only": false
+    }
+  ]
+}

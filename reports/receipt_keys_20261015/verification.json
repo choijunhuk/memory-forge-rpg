@@ -1,0 +1,47 @@
+{
+  "verifiedAt": "2026-10-14T23:39:24.318457+00:00",
+  "status": "VERIFIED_FOR_INTEGRATION",
+  "requirement": "originalv0.8.1§5.15 only storedrequestIDs replay",
+  "scope": "Battle own receipt lookup/write and generated HTML; source-pinned fixtures regenerated",
+  "engineSha256": "1de10fff56242ebfe711d0f8165adf69fd418c423b810c340a9ba0c2400fab0c",
+  "oppositeReview": "APPROVE",
+  "requestedModel": "claude-opus-5-5",
+  "requestedEffort": "max",
+  "sessionId": "4f90a3bc-f540-472f-9f55-08a4b75d143e",
+  "checks": {
+    "receiptRegression": 26,
+    "focusedReceiptOpening": 36,
+    "node": 204,
+    "proposals": 14,
+    "python": 48,
+    "docs": 9,
+    "handoff": 13,
+    "memoryUI": 13,
+    "lateUI": 10,
+    "Core": 202,
+    "canonical": 87,
+    "snapshotHashes": 2000,
+    "traceFixture": 13,
+    "openingChecks": 2220,
+    "openingCommands": 267,
+    "JSRunScenarios": 1000,
+    "JSRunCommands": 273748,
+    "JSHashChecks": 275748,
+    "pairedBalanceTrials": 1320,
+    "pairedBalanceMisses": 32
+  },
+  "unchanged": {
+    "originalOpening267FullRecords": true,
+    "originalRun1000FullRecords": true,
+    "pairedBalanceAllRecords": true,
+    "difference": "engine source provenance only"
+  },
+  "limits": [
+    "No new Unity/game/device acceptance for this JS-only fix",
+    "C#nextend implementation remains in isolatedWT, not included",
+    "FullC#Run command parity remains unimplemented"
+  ],
+  "protectedFileCount": 39,
+  "subscriptionOnly": true,
+  "paidCreditsAndAutoReload": false
+}

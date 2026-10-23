@@ -1,0 +1,230 @@
+{
+  "change": "Trailing horizontal whitespace only in newly generated Unity YAML; scalar values, GUIDs, objects, and original game inputs preserved",
+  "files": [
+    {
+      "path": "client/MemoryForgeUnity/Assets/DefaultVolumeProfile.asset",
+      "original_sha256": "cb88ac788e6f2ac42dda3d6bc1593cefaba460e96aeae1b1c8fa7bef3e90e1e7",
+      "normalized_sha256": "603842f1bfa4c05ed7436655e9aa85ed2a42b32538c9e1855abdfe4de4f503fe"
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/DefaultVolumeProfile.asset.meta",
+      "original_sha256": "037700fc76ee8e15bf57a6608bf0229b50b9ba78a1095a943fe0add01a6bf5c5",
+      "normalized_sha256": "8509b2f05a9e4a092c3a2a919451271bd84d16d6102c8a10f1d0e7db49eeb96f"
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/InputSystem_Actions.inputactions.meta",
+      "original_sha256": "e2df3de96691137dc24b37bd9009e7be17040f3e5cd6d5401b2cd9d8ae2c9c1d",
+      "normalized_sha256": "8cd7919c5b8eb616f298e5780adbc29eb99aef1f61b94b78dc0de168cae5120c"
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/Prefabs.meta",
+      "original_sha256": "7f453ce8134f98bb28978e0348556a024d86e2169d962813fca9b57b1acb550c",
+      "normalized_sha256": "bbb18e6ae15ef2bb96337273d10f0710e35e0cd759559b39906a3f190528f10b"
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/Prefabs/MemoryForgeConnectionCanvas.prefab",
+      "original_sha256": "50ccd5a7818b00fdddcc490dce85b2efdc32bf17e7ffb66b710fad41a977959e",
+      "normalized_sha256": "cde6e5ea5611406a1f8ba069973c0ac669500c6ff9c666952c399011ee981045"
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/Prefabs/MemoryForgeConnectionCanvas.prefab.meta",
+      "original_sha256": "57d9eb6d0004887e31d9d1d715b98813b289e5474ea839c5675e026106262c0c",
+      "normalized_sha256": "50d5fa18a84bbb50bff8a808809789b4ba3c118636ad574d37d55e16ecb050a7"
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/Scenes.meta",
+      "original_sha256": "a80a7b316e7d7ce80c8a01ecb374702a04e91228a0729629c894c70250baea5d",
+      "normalized_sha256": "45e0865bc6db0945b6f8f6c1665455ba42b60bb86c4dd06e41fddf37758c3070"
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/Scenes/MemoryForgeMcpSmoke.unity",
+      "original_sha256": "c469fe012b853b5746e9e18c5756de2660446796de7f8b3c047789012a8d39b5",
+      "normalized_sha256": "686369b638b5f369ca20699a599068ff52aba8bf1880152cb6d77db9148e55e2"
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/Scenes/MemoryForgeMcpSmoke.unity.meta",
+      "original_sha256": "813b563db78b69550009099955c65c2752589f4209114668f58dc0466d292a1b",
+      "normalized_sha256": "9f2c65f1969458e2643e2bea8dd83ed7335f0973820e7357e5b1d287a763efb7"
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/Scenes/SampleScene.unity",
+      "original_sha256": "387d8216a517be775b6ecc2ab55b97ece687c3372322da2ba027a96908014912",
+      "normalized_sha256": "c6be69fce5eb25bc0c5f49142f78ab4dcd0857f62b8f87880cb4c0b306ea5fbf"
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/Scenes/SampleScene.unity.meta",
+      "original_sha256": "204f446bc13539151c15af875550a7fa6f791662e967572a1b4b06fd0005dad1",
+      "normalized_sha256": "161691676d699fc2f39bc94977603ab623a75226e4da9c05ca299ed210e1b50d"
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/Screenshots.meta",
+      "original_sha256": "bf81d50f0ca301fde34dc9e1cd5820178c5f53b7e47491c070f5da0ad1a74f1d",
+      "normalized_sha256": "5f93d0f82eefcfe6c03c5f300f021b868414078248b85878cf94a22b420f3da3"
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/Screenshots/MemoryForgeMcpSmokeBefore.png.meta",
+      "original_sha256": "8215d1b97286582c619901cfdb501e79cbd80c5316bf23ddc0152d044317ddc2",
+      "normalized_sha256": "1b82a0206a70185337e9376ae1bfff59dff61a332f8f5bffe0434dfa62f4248d"
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/Settings.meta",
+      "original_sha256": "0b5ba35daae66cbfcfa17bf61091aeab7f3bed07681f8db7bed3fb72d178c2d4",
+      "normalized_sha256": "d912e223280812dc98aa74ed2dcc6365627bee0be9ec358be146cda348232b7f"
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/Settings/Lit2DSceneTemplate.scenetemplate.meta",
+      "original_sha256": "d4cc0f73332c3228945aa64f9c5019f1c1950d77703728c5e9674a0367c5e4d1",
+      "normalized_sha256": "a87b55812ff1d1fa04edf4abb0930c7581f22327b9a7647024d8d8eb7edb75dc"
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/Settings/Renderer2D.asset",
+      "original_sha256": "900455794d0d788504847c3aa54e03a0374fd3635afa295ed05c2f646f974705",
+      "normalized_sha256": "745cea882dca1b9c2f222df998a51d3594c2c72ef963038fc4790b3e29cc1215"
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/Settings/Renderer2D.asset.meta",
+      "original_sha256": "9689252004910cfad653e8a8d09b8c96befb560e1fb583033630db0f5bb76420",
+      "normalized_sha256": "d4029b7cb741bdee31a451fb24e62ff8e6a3dee0baf3763449b15be0656271c0"
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/Settings/Scenes.meta",
+      "original_sha256": "705b24f629af6836450c9fd2085f781fe11d8633bcaa0c7b3197058b93a766e5",
+      "normalized_sha256": "f1d03f9895e66ba5b812e38739ea9f03fd4b74354895eabe0c5cb261c5696935"
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/Settings/Scenes/URP2DSceneTemplate.unity",
+      "original_sha256": "f6fb3e91aaa90417e2920b7f903066833b3b9aea72ddcb5e46b91afa729c2e90",
+      "normalized_sha256": "ab537276bdbc48b7a0c686ee19c10bbd72e7edcfd1eef4cefdad1a330ee7ac6a"
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/Settings/Scenes/URP2DSceneTemplate.unity.meta",
+      "original_sha256": "e7391ff924b7defdf30e0b0b235f8113618481c93f567e0c699c8895a9534579",
+      "normalized_sha256": "0edb96e01866199677a7c9adbe93e31b079f184b0872d67b39465e54bf6f9a29"
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/Settings/UniversalRP.asset",
+      "original_sha256": "38a71ac4457c5fd100c29356c62b5edbb574350db4f5fca4111ea2091ea1356e",
+      "normalized_sha256": "9fb41b6fbeaab7b09b56821d2afa77ce7b56e6dad38b9ccb7b5057b03cee91a5"
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/Settings/UniversalRP.asset.meta",
+      "original_sha256": "8b7653265c1a9a054461264fc7b03bdbafc030149949fce5bf9e85924fb565a5",
+      "normalized_sha256": "01d36c5f0a0aca52e4043879ddf6381918022d4c13400a91089d11e3b1fb1173"
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/Tests.meta",
+      "original_sha256": "7b18b7fc2defc76c6ecf2fa43f411c5fb1e2f3093a61f23fcfff4e92be298bdc",
+      "normalized_sha256": "a0d029c93e60e4f3297edf40bbdd38bf0f4d3e3b81dd6d8e735fc0ccca1e237b"
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/Tests/Editor.meta",
+      "original_sha256": "0b30e30abf1596e9ab33b35f39c3863cb0bc033812cb89411b6d2cc353dd1d94",
+      "normalized_sha256": "82190e58073cfe8ce6e9e69ad802f63bdbf4d4e9b09a8c6c29e43b07a4b5f417"
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/Tests/Editor/MemoryForge.EditorTests.asmdef.meta",
+      "original_sha256": "f718d684dc5e33843babdf91aaac79f393bb650cedde036ec994867e351907fd",
+      "normalized_sha256": "c15312cea4018e8953bae026b28befba730208f81440716db3e3ae3ff848b4e5"
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/Tests/PlayMode.meta",
+      "original_sha256": "22937e05bc0804cac0ce43f41c8ee1d2bd0cb44d8fe202aadf11b30296a677e3",
+      "normalized_sha256": "8eba258fc57ce15b8d0c4b96fa520db7a1392f4e15849dda53a1bf15bb6dbca0"
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/Tests/PlayMode/MemoryForge.PlayModeTests.asmdef.meta",
+      "original_sha256": "2fd7abe7cc272762f394323ab5f02a1e8264c1813ef17ab0a1e0414111e5c833",
+      "normalized_sha256": "8854655d4c6a12a0c5f4615bbd0e585c1cd7d0ff734bbba8fd3b80e8a5b16d6f"
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/UniversalRenderPipelineGlobalSettings.asset",
+      "original_sha256": "a8cd3cb6934de9102431839e0e4ed5ce246ec0a79b7e6c3daf7ec8085b471b4d",
+      "normalized_sha256": "31878add831fa42bcbe51c0050823cb817930f80d97a0b7bb7d77847b6e4a8cf"
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/UniversalRenderPipelineGlobalSettings.asset.meta",
+      "original_sha256": "746a38b93f8f49b644ff6893456cf24db401e5c342aaae3864e91560d37c5422",
+      "normalized_sha256": "0383b4a1447b7e92ea74137be5905896c8acb7998dd5731b03fadb79b6241f81"
+    },
+    {
+      "path": "client/MemoryForgeUnity/ProjectSettings/AudioManager.asset",
+      "original_sha256": "aeedeb3243f07b61dbbe854aa08b5ef6f0b5274dd9852ad9f6129dde3e105a31",
+      "normalized_sha256": "f24ba6a9fd5364e2a22ea016bb3b623f482ccd9d6cc7236da19b04013c2a18b5"
+    },
+    {
+      "path": "client/MemoryForgeUnity/ProjectSettings/EditorSettings.asset",
+      "original_sha256": "e3f3f549737729661a6ec16abc819a78d088ea98efa0b279f15956a675e5f925",
+      "normalized_sha256": "691af7b61d75e5dce6b6e923c8f83c6e32d73959bdfa5fa42ff51b6dba97561a"
+    },
+    {
+      "path": "client/MemoryForgeUnity/ProjectSettings/InputManager.asset",
+      "original_sha256": "7a1bb836a1008d26d0860d143e9d9df7ca41731d30a72901b518063819c62df2",
+      "normalized_sha256": "dedbea6f2ce5ab882db559471470b5d3cab307fa68eb9e4521a24d02a251bdee"
+    },
+    {
+      "path": "client/MemoryForgeUnity/ProjectSettings/NavMeshAreas.asset",
+      "original_sha256": "80106cfa7e6181a1928b142c075f3e510d527441e3d79bc83590e4ac91e7cd66",
+      "normalized_sha256": "911835858fc2cb16787302965b4df24e4d30940bf76ec16852d0eda39c78cda5"
+    },
+    {
+      "path": "client/MemoryForgeUnity/ProjectSettings/PackageManagerSettings.asset",
+      "original_sha256": "500b153cdd23c1bd0dbc9b672564b9fe764afa55713295b8d0df16350a68ce3e",
+      "normalized_sha256": "0058dc290b138b448b497efa5b2d3d319ccbf379c14d1337077d2bf43554f630"
+    },
+    {
+      "path": "client/MemoryForgeUnity/ProjectSettings/ProjectSettings.asset",
+      "original_sha256": "589d38efc141ffc12a32558f0fe2d99e8f499687699ac50b9277c7511e674f76",
+      "normalized_sha256": "21b8b9135d5f4c87ae2b49a14309719557cdd7f1977badd5d5f0bd07c12f6a83"
+    },
+    {
+      "path": "client/MemoryForgeUnity/ProjectSettings/ShaderGraphSettings.asset",
+      "original_sha256": "3593fe2681c549dc2476e02c686c96f2a61f1d2808bdac380b08262f3f2e0add",
+      "normalized_sha256": "e37f1980d3de447f5b4c1a7e2f5b629c2b3141fbf44bc0e6927228f9f207a44b"
+    },
+    {
+      "path": "client/MemoryForgeUnity/ProjectSettings/TagManager.asset",
+      "original_sha256": "8e18b1c820e9c09e16bbd1f1b7842e9fb3b0158a0921b0964e0b8fa12c6e2c01",
+      "normalized_sha256": "df48c19726c2653a8041b3fd11cae352d0acf7ddd0a679cfa19eba2743a6871b"
+    },
+    {
+      "path": "client/MemoryForgeUnity/ProjectSettings/URPProjectSettings.asset",
+      "original_sha256": "a3a626cb529ccfc0a82e388b8cd32bc60888f7226c33412fad3bc50aba802cd7",
+      "normalized_sha256": "c4b1b89e4e77efcae31c00eabea065efe54051cf6d412cd8b6e20a1b7f6c211e"
+    },
+    {
+      "path": "client/MemoryForgeUnity/ProjectSettings/UnityConnectSettings.asset",
+      "original_sha256": "1e06370b3d2256d4dbc8892f59a8467d9f9785f034a4836a6790380252eb4916",
+      "normalized_sha256": "91a1feab5703108babeec96d61300b38d6d00544868457391038e605615ad750"
+    },
+    {
+      "path": "client/MemoryForgeUnity/ProjectSettings/VFXManager.asset",
+      "original_sha256": "f066c6483919961332415ee64204f74fe52f38c02e82892eb02b7a5b2e381f0e",
+      "normalized_sha256": "fe23993cd891114c6a6a309725889be6776380e3db7e8e41517adebf9ce0a4f5"
+    },
+    {
+      "path": "core/MemoryForge.Core/MemoryForge.Core.asmdef.meta",
+      "original_sha256": "6c807681d1deb65763bc955ab95bff80a3c14b705d61f0014478a55b8285035d",
+      "normalized_sha256": "70d467ef884891f8801cc247b5c80a424372387ecd870eabe2864b42de53be58"
+    },
+    {
+      "path": "core/MemoryForge.Core/MemoryForge.Core.csproj.meta",
+      "original_sha256": "c2c781c3b7cb55c9f5f7ee308057df4e9493a7710ec3085f4907499c38e515ae",
+      "normalized_sha256": "4e1238a040a9c4e42517a1c889163b0c45658186b635792f5c1448eaadb361a0"
+    },
+    {
+      "path": "core/MemoryForge.Core/csc.rsp.meta",
+      "original_sha256": "f91376a09f7e92f004ee5c5547cfe08cd8de9a449b27b63487b4e1967df9d88e",
+      "normalized_sha256": "73a232b008c4cfa3687fdb6fa1b06228bf6e8728f066e6df82900593eed0527a"
+    },
+    {
+      "path": "core/MemoryForge.Core/package.json.meta",
+      "original_sha256": "6fcc004d335991c53a69d1653ac0eb8251462aca0f71586aeec40161a9bdf4a6",
+      "normalized_sha256": "8384673da4779bbf5c5d0d7182d00c551b80bc05c55a22682738cc4d8fba512b"
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/Settings/Lit2DSceneTemplate.scenetemplate",
+      "original_sha256": "ca928761bf976c878d54df524a3742c5f1bca53a013b4061abd2c752c8a212aa",
+      "normalized_sha256": "0801ca84cf64912f227bd15679be70d87d5be8298c7282b837f79d6f63f9485a"
+    }
+  ]
+}

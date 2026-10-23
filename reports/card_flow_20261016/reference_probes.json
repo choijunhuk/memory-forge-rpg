@@ -1,0 +1,60 @@
+{
+  "kind": "independent_diagnostic_observations",
+  "observations": [
+    {
+      "id": "CF-01",
+      "classification": "SPEC_IMPLEMENTATION_ORDER_MISMATCH",
+      "scenario": "TurnEnding reaction draws 1; new-turn draw=1; no retain cards",
+      "expectedFromSpec": "Reaction draws before hand cleanup; new turn should end with 1 card",
+      "actual": {
+        "discardIndex": 1,
+        "reactionIndex": 2,
+        "handCount": 2,
+        "events": [
+          "TurnEnding",
+          "CardMoved",
+          "ReactionTriggered",
+          "CardMoved",
+          "CardDrawn",
+          "TurnStarted",
+          "CardMoved",
+          "CardDrawn",
+          "HandDealt"
+        ]
+      },
+      "limitation": "Synthetic valid reaction exercises a supported generic hook, not an existing sample card."
+    },
+    {
+      "id": "CF-02",
+      "classification": "INTENTIONAL_REFERENCE_POLICY_NOT_FOR_PRODUCTION",
+      "before": {
+        "ap": 3,
+        "block": 0,
+        "fuse": 98
+      },
+      "after": {
+        "ap": 2,
+        "block": 105,
+        "fuse": 98,
+        "phase": "playerMain"
+      },
+      "actual": "Abort retains gained block and paid AP, skips remaining tempo tick, and returns player input.",
+      "recommendation": "Do not copy R-15 into authoritative gameplay. Reject/rollback the logical action or require authoritative recovery before further play or rewards."
+    },
+    {
+      "id": "CF-03",
+      "classification": "DOCUMENTED_RULE_CHOICE",
+      "initial": {
+        "hp": 50,
+        "fuse": 1
+      },
+      "after": {
+        "hp": 50,
+        "fuse": 1,
+        "turn": 11
+      },
+      "enemyStarts": 0,
+      "recommendation": "Do not transplant this model to Memory Forge: future-turn reservations could advance without normal enemy pressure."
+    }
+  ]
+}

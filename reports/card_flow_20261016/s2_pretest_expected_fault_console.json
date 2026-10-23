@@ -1,0 +1,50 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Retrieved 5 log entries.\",\"data\":[{\"type\":\"Warning\",\"message\":\"<b><color=#cc7a00>MCP-FOR-UNITY</color></b>: [WebSocket] Unexpected receive error: WebSocket is not initialised\",\"file\":\"./Library/PackageCache/com.coplaydev.unity-mcp@da7b9ae4aeeb/Editor/Helpers/McpLog.cs\",\"line\":45,\"stackTrace\":null},{\"type\":\"Warning\",\"message\":\"<b><color=#cc7a00>MCP-FOR-UNITY</color></b>: [WebSocket] Keep-alive failed: The remote party closed the WebSocket connection without completing the close handshake.\",\"file\":\"./Library/PackageCache/com.coplaydev.unity-mcp@da7b9ae4aeeb/Editor/Helpers/McpLog.cs\",\"line\":45,\"stackTrace\":null},{\"type\":\"Warning\",\"message\":\"<b><color=#cc7a00>MCP-FOR-UNITY</color></b>: [WebSocket] Connection closed: The remote party closed the WebSocket connection without completing the close handshake.\",\"file\":\"./Library/PackageCache/com.coplaydev.unity-mcp@da7b9ae4aeeb/Editor/Helpers/McpLog.cs\",\"line\":45,\"stackTrace\":null},{\"type\":\"Error\",\"message\":\"[MemoryForge] Practice expedition quarantined after a failed local Run calculation (BATTLE_ENEMY_PASSIVE_NOT_IMPLEMENTED); the Run may be partly changed, so it will be discarded unsaved. Session memory version 0 is kept.\",\"file\":\"Assets/Scripts/MemoryForgeExpeditionClient.cs\",\"line\":532,\"stackTrace\":null},{\"type\":\"Error\",\"message\":\"[MemoryForge] Practice expedition quarantined after a failed local Run calculation (InvalidOperationException); the Run may be partly changed, so it will be discarded unsaved. Session memory version 0 is kept.\",\"file\":\"Assets/Scripts/MemoryForgeExpeditionClient.cs\",\"line\":532,\"stackTrace\":null}]}"
+    }
+  ],
+  "structuredContent": {
+    "success": true,
+    "message": "Retrieved 5 log entries.",
+    "data": [
+      {
+        "type": "Warning",
+        "message": "<b><color=#cc7a00>MCP-FOR-UNITY</color></b>: [WebSocket] Unexpected receive error: WebSocket is not initialised",
+        "file": "./Library/PackageCache/com.coplaydev.unity-mcp@da7b9ae4aeeb/Editor/Helpers/McpLog.cs",
+        "line": 45,
+        "stackTrace": null
+      },
+      {
+        "type": "Warning",
+        "message": "<b><color=#cc7a00>MCP-FOR-UNITY</color></b>: [WebSocket] Keep-alive failed: The remote party closed the WebSocket connection without completing the close handshake.",
+        "file": "./Library/PackageCache/com.coplaydev.unity-mcp@da7b9ae4aeeb/Editor/Helpers/McpLog.cs",
+        "line": 45,
+        "stackTrace": null
+      },
+      {
+        "type": "Warning",
+        "message": "<b><color=#cc7a00>MCP-FOR-UNITY</color></b>: [WebSocket] Connection closed: The remote party closed the WebSocket connection without completing the close handshake.",
+        "file": "./Library/PackageCache/com.coplaydev.unity-mcp@da7b9ae4aeeb/Editor/Helpers/McpLog.cs",
+        "line": 45,
+        "stackTrace": null
+      },
+      {
+        "type": "Error",
+        "message": "[MemoryForge] Practice expedition quarantined after a failed local Run calculation (BATTLE_ENEMY_PASSIVE_NOT_IMPLEMENTED); the Run may be partly changed, so it will be discarded unsaved. Session memory version 0 is kept.",
+        "file": "Assets/Scripts/MemoryForgeExpeditionClient.cs",
+        "line": 532,
+        "stackTrace": null
+      },
+      {
+        "type": "Error",
+        "message": "[MemoryForge] Practice expedition quarantined after a failed local Run calculation (InvalidOperationException); the Run may be partly changed, so it will be discarded unsaved. Session memory version 0 is kept.",
+        "file": "Assets/Scripts/MemoryForgeExpeditionClient.cs",
+        "line": 532,
+        "stackTrace": null
+      }
+    ]
+  },
+  "isError": false
+}

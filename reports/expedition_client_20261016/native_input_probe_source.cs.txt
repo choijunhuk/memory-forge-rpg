@@ -1,0 +1,36 @@
+// Temporary Root-owned verification probe; excluded from Editor and removed after the diagnostic build.
+#if DEVELOPMENT_BUILD && UNITY_STANDALONE_OSX && !UNITY_EDITOR
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
+
+sealed class MemoryForgeNativeInputProbe : MonoBehaviour
+{
+    float next;
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+    static void Open() { new GameObject("MFNativeInputProbe").AddComponent<MemoryForgeNativeInputProbe>(); }
+    void Start() { Probe("start"); }
+    void OnApplicationFocus(bool focus) { Debug.Log("MF_INPUT focus=" + focus); }
+    void Update()
+    {
+        if (Input.GetMouseButtonDown(0)) Probe("down");
+        if (Input.GetMouseButtonUp(0)) Probe("up");
+        if (Time.unscaledTime >= next) { next = Time.unscaledTime + 5; Probe("heartbeat"); }
+    }
+    void Probe(string kind)
+    {
+        var system = EventSystem.current; var mouse = Input.mousePosition;
+        var hits = new List<RaycastResult>();
+        if (system != null) system.RaycastAll(new PointerEventData(system) { position = mouse }, hits);
+        var top = hits.Count == 0 ? null : hits[0].gameObject;
+        var button = top == null ? null : top.GetComponentInParent<Button>();
+        Debug.Log("MF_INPUT " + kind + " frame=" + Time.frameCount + " focused=" + Application.isFocused
+            + " screen=" + Screen.width + "x" + Screen.height + " mouse=" + mouse + " held=" + Input.GetMouseButton(0)
+            + " event=" + (system == null ? "none" : system.name)
+            + " module=" + (system == null || system.currentInputModule == null ? "none" : system.currentInputModule.GetType().Name)
+            + " hits=" + hits.Count + " top=" + (top == null ? "none" : top.name)
+            + " button=" + (button == null ? "none" : button.name));
+    }
+}
+#endif

@@ -1,0 +1,35 @@
+TAP version 13
+# Subtest: five fixed gen_traces inputs replay from a fresh Create through actual commands to DONE with complete states, returns and pure queries
+ok 1 - five fixed gen_traces inputs replay from a fresh Create through actual commands to DONE with complete states, returns and pure queries
+  ---
+  duration_ms: 1629.745792
+  ...
+# Subtest: a newly earned AP bonus reaches only the next battle first turn, and begin-defeat closes through the normal finalizer
+ok 2 - a newly earned AP bonus reaches only the next battle first turn, and begin-defeat closes through the normal finalizer
+  ---
+  duration_ms: 1.21775
+  ...
+# Subtest: strict checks reject stale provenance, case identity, omission, forged outcomes, hashes, returns, coverage and query data
+ok 3 - strict checks reject stale provenance, case identity, omission, forged outcomes, hashes, returns, coverage and query data
+  ---
+  duration_ms: 8714.987541
+  ...
+# Subtest: gzip export is deterministic, rejects damaged containers, accepts other valid DEFLATE encodings and preserves output on unexpected execution
+ok 4 - gzip export is deterministic, rejects damaged containers, accepts other valid DEFLATE encodings and preserves output on unexpected execution
+  ---
+  duration_ms: 6519.107291
+  ...
+# Subtest: checked-in artifact matches fresh actual JS execution and claims only the JS oracle scope
+ok 5 - checked-in artifact matches fresh actual JS execution and claims only the JS oracle scope
+  ---
+  duration_ms: 4746.773334
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 25585.947334

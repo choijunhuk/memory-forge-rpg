@@ -1,0 +1,33 @@
+**REQUEST CHANGES — six round-1 defects are fixed; #7 remains partially unresolved because the new HP preview misrepresents area damage.** No files were edited.
+
+All client references below are to `Assets/Scripts/MemoryForgeExpeditionClient.cs`.
+
+| Round-1 item | Result | Current-source evidence |
+|---|---|---|
+| **1. HP artwork obscures fill** | **FIXED** | [1608–1612](/Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:1608): frame created first; track/fill occupy the scaled inner rectangle. |
+| **2. Out-of-frame drops spend cards** | **FIXED** | [2594–2599](/Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:2594): fallback bounds both axes; single-enemy fallback checks masked visibility. |
+| **3. Drag also triggers click** | **FIXED** | [2646](/Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:2646): `OnBeginDrag` clears `eligibleForClick`. |
+| **4. Phone header overlaps reservation scroll** | **FIXED** | [1407](/Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:1407): rail uses an inert `Box`. [1373–1375](/Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:1373): strip touch band and stage begin below the header band. |
+| **5. Fan clips mode labels** | **FIXED** | [1680](/Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:1680), [1706](/Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:1706), [1731](/Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:1731): revised card height, drop and tilt preserve the mode-label bounds. |
+| **6. Right/middle drag plays cards** | **FIXED** | [2649](/Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:2649): only left-button drags enter aiming. |
+| **7. Missing drag forecasts** | **NOT_FIXED — partial** | [2560–2571](/Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:2560): Core forecast text and HP overlay now exist, but the overlay is incorrect for multi-enemy damage. |
+
+**New concrete defect — MEDIUM: aggregate damage appears on one enemy’s HP bar.**
+
+[MemoryForgeExpeditionClient.cs:2570](/Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:2570) subtracts `f.EnemyHpLoss` from the hovered enemy’s HP. That field is explicitly the **sum across all enemies**, calculated in [Battle.Preview.cs:70–77](/Users/choi/Documents/Memory_forge/core/MemoryForge.Core/Battle.Preview.cs:70).
+
+Failure scenario: drag `sera_flash` (“섬광 탄막”, an all-enemy attack) over one of multiple living enemies. Damage to the other enemies is included in that enemy’s white loss segment, potentially showing a lethal hit that will not occur. Use per-enemy forecast losses; keep combat calculations in Core.
+
+The round-1 importer integration issue is **FIXED**: [MemoryForgeArtImport.cs:32](/Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Editor/MemoryForgeArtImport.cs:32) selects no mipmaps/bilinear filtering, and both current HP-frame `.meta` files contain `enableMipMap: 0` and `filterMode: 1`.
+
+Existing **spec gaps**, separate from implementation defects, remain:
+
+- Stage occupies less than the proposed majority-height layout: [1373–1379](/Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:1373).
+- Rail omits “now” and aligned future enemy threats: [1399](/Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:1399).
+- Ultimate gauge remains linear rather than a portrait ring: [1480](/Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:1480).
+
+Folder texture caching and the post-redraw reveal-clock reset are present; no concrete regression found in either. A minor residual remains: an outer 300-wide card with seven-plus cards can clip approximately 3.1 units of decorative frame, while its mode label stays inside.
+
+Validation: both independent review lanes completed; supplied diff matched **1,024 current source/context lines**, and scoped `git diff --check` passed. **341 passed / 0 failed / 2 skips is user-reported; PlayMode rerun, visual playback and physical-phone acceptance: NOT_RUN.**
+
+

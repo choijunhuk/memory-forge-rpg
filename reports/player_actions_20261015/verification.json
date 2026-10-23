@@ -1,0 +1,69 @@
+{
+  "status": "VERIFIED_PENDING_COMMIT_CI",
+  "baseCommit": "3d33c4cb2e0c7cee14ced2c67c33b8fb55cef267",
+  "scope": "Current authored Battle.Create/begin/end/play/ult and produced lifecycle; actual full Run commands0",
+  "metrics": {
+    "Core": 202,
+    "canonical": 87,
+    "snapshots": 2000,
+    "traceFixture": 13,
+    "openingAssertions": 2221,
+    "openingCommands": 267,
+    "turnAssertions": 29232,
+    "turnRequests": 1740,
+    "queryAssertions": 128244,
+    "queryRows": 8340,
+    "playerCases": 992,
+    "playerRequests": 3870,
+    "playerAssertions": 87991,
+    "playerCheckProbes": 1430,
+    "playerReceiptProbes": 5645,
+    "Node": 257,
+    "proposals": 14,
+    "python": 48,
+    "docs": 9,
+    "handoff": 13,
+    "UnityPlayMode": 12,
+    "UnityEditMode": 3
+  },
+  "oppositeAI": {
+    "verdict": "APPROVE_A1_CURRENT_AUTHORED_SOURCE",
+    "model": "claude-opus-5-5",
+    "effort": "max",
+    "actualEffortMetadataRecords": 108,
+    "sessionId": "4f90a3bc-f540-472f-9f55-08a4b75d143e",
+    "rootVerifiedExactSourceFiles": 16,
+    "reviewerExecutedTests": false,
+    "reviewerRecomputedHashes": false,
+    "scope": "Current authored Battle play/ult/produced lifecycle; FullRun remains0",
+    "nonBlockingNotes": [
+      "Buff lookup lacks until filter but reachable authored turns1–2 are equivalent; revisit with future negative-duration data",
+      "No current ultimate reaches a choice op; raw ultimate choices are source-reviewed, not an authored-positive gameplay denominator"
+    ]
+  },
+  "nativeReview": "Initial P1/P2 corrected; source-only patch review APPROVE",
+  "sourcePreservation": {
+    "files": 47,
+    "byteIdenticalToBase": true,
+    "inputManifestRegenerated": false,
+    "entries": 423,
+    "knownDevelopmentChanges": 28,
+    "missing": 0
+  },
+  "macOS": {
+    "build": "build-ef4590be2e succeeded;0errors/0warnings",
+    "startup": "Metal scene loaded without runtime error; only owned test process stopped with SIGKILL; graceful shutdown not verified",
+    "headlessInitial": "nographics attempt timed out60s and produced Null device shader errors; retained as unaccepted probe"
+  },
+  "remaining": [
+    "Full legacy/v2 Run command replay and restoration",
+    "Generic base0 source conflict, livebase5 preserved",
+    "Proposal-only late enemy activation and positive silence",
+    "Full-content Unity import/gameUI/human balance",
+    "Android/IL2CPP/device/server/real payments",
+    "Commit/push/PR2 exact-head CI"
+  ],
+  "at": "2026-10-15T05:41:43.626193+00:00",
+  "unityConnectionFollowup": "unity_connection_followup.json; bridge disconnected after actual test/build receipts; recovery pending",
+  "latestDocsAndHandoff": "docs_final.txt9PASS/handoff_final.txt13PASS after Claude-primary policy update"
+}

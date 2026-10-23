@@ -1,0 +1,40 @@
+✔ immutable witnesses: frozen original data, three real full runs, self-consistent recorded outcomes (1.935834ms)
+✔ seed1036: ev_rift AP+2 reaches only the next battle first turn and afterBattle no longer refunds it (45.286542ms)
+✔ seed1020: a shop sells its single card removal once; a second public removal is NOT_FOR_SALE with no mutation (34.469833ms)
+✔ seed1000: a resolved ev_archive rejects reselection with BAD_CHOICE before effects or RNG; phase order kept (10.067334ms)
+✔ seed1000: a key-array first ev_archive choice removes exactly the chosen cards, once (9.447458ms)
+✔ every witnessed event resolves once; rejected reselections leave all later recorded commands reproducible (81.239084ms)
+✔ continuation witnesses: separate real full runs recorded on engine 3ad, self-consistent outcomes (0.167125ms)
+✖ seed1102: a battle that ends inside begin finishes the run once through the defeat save, after the node entry (24.321292ms)
+✔ seed1000 continuation: repeats of a done ev_archive change nothing, and the next ev_promise still commits once (36.326708ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 8
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 354.190916
+
+✖ failing tests:
+
+test at engine/tests/run_node_contracts.test.mjs:227:1
+✖ seed1102: a battle that ends inside begin finishes the run once through the defeat save, after the node entry (24.321292ms)
+  AssertionError [ERR_ASSERTION]: a battle that ended inside begin left the run in BATTLE
+
+  'BATTLE' !== 'DEFEAT'
+
+      at TestContext.<anonymous> (file:///Users/choi/Documents/Memory_forge/engine/tests/run_node_contracts.test.mjs:247:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'BATTLE',
+    expected: 'DEFEAT',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

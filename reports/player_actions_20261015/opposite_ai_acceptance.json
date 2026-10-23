@@ -1,0 +1,15 @@
+{
+  "verdict": "APPROVE_A1_CURRENT_AUTHORED_SOURCE",
+  "model": "claude-opus-5-5",
+  "effort": "max",
+  "actualEffortMetadataRecords": 108,
+  "sessionId": "4f90a3bc-f540-472f-9f55-08a4b75d143e",
+  "rootVerifiedExactSourceFiles": 16,
+  "reviewerExecutedTests": false,
+  "reviewerRecomputedHashes": false,
+  "scope": "Current authored Battle play/ult/produced lifecycle; FullRun remains0",
+  "nonBlockingNotes": [
+    "Buff lookup lacks until filter but reachable authored turns1\u20132 are equivalent; revisit with future negative-duration data",
+    "No current ultimate reaches a choice op; raw ultimate choices are source-reviewed, not an authored-positive gameplay denominator"
+  ]
+}

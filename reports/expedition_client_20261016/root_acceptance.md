@@ -1,0 +1,39 @@
+# Actual Unity expedition practice — current acceptance
+
+Original v0.8.1 §§7–8, 14.2–14.3 and16.2. Role: expose the actual shared C# Run and original full content in a playable client view, preserving existing practice scenes and original numbers. This is an incremental practice client, not final-art/account/server/device acceptance.
+
+## Actual implemented path
+
+`MemoryForgeExpeditionClient` owns one generated uGUI canvas and the actual fresh `Run.Create`/v2 session store. Reachable map nodes, battle hand/mode/target/confirmation/picks/ultimate/end, reward/evolution/relic/part, rest/forge/shop/event/archive, memory changes/preview/cost/capacity/commit/result/next departure call real Core commands and queries. It never assigns an expected state to the Run. The session store starts through actual `MemoryV2.Migrate`; the next departure uses actual commit-returned memory. No account, disk, PlayerPrefs or server write is present; the app-close loss warning stays visible.
+
+The expedition is the first persisted `EditorBuildSettings.globalScenes` entry. Original Battle and Sample path/GUID/enabled values remain, as does the MCP smoke scene asset. New scene/component `.meta` GUIDs must be committed with the source. B's initial build-scene review saw an intentionally partial review copy without script metadata; Root's complete integration includes and checks those exact original/generated `.meta` files rather than generating replacements.
+
+## Card information and UI scope
+
+Hand details show `BattleText.Card` of the actual current effective card plus current Core costs and attached-part text. Reward/evolution/shop/deck offer a separate read action. The exact original JS formatter is independently checked over173 authored/173 actualplus/173 actualresonance6 definitions; details do not invent damage forecasts. Outside battle upgraded deck entries explicitly show original pre-upgrade text because no public effective-card query for that context exists yet. This limitation does not redefine the final design.
+
+## Fresh evidence
+
+- `playmode87_pass.json`: **87/87 actual PlayMode**,0skips, including all9 expedition tests; `editmode3_final_pass.json`: **3/3 actual EditMode**. Earlier86/3 receipts are retained before the toast repair. Prior battle, content, numeric and memory/full-flow tests retained.
+- UI tests use actual fresh public Create plus an independent mirror Run, full fingerprints including log/events/RNG, real EventSystem raycasts and public handlers. They cover reachable/unreachable node behavior, selection without spending, overlay interception with a positive control, explicit one-use confirmation, detached queries, real bounded terminal commit/redeparture, every opening-hand/reward/deck description and actual shop reading without payment.
+- First new shop test correctly failed7/8 because real seed1234 has no shop. Root retained the RED (`card_info_shop_route_red.json`) and used real seed1235 only in that test. The strict SHOP guard and all assertions remain; final full86/86 passed. No map/data override was introduced. Opposite Opus source recheck approved this seed correction.
+- `actual_interaction.json`: actual Editor pointer enters `Node:z1f0n0`→BATTLE withHP243; card detail text is `방어 8 (예약 11).`; opening/closing detail and mode selection preserveAP4; only actual confirmation yieldsAP3/block8/V2, no error.
+- `map_card_info_ready.png` and `card_information.png`: actual Editor Play screenshots. Current visual verdict94/pass is limited to the observed layout. Native/130%-text/10-card/5-enemy/accessibility acceptance is not implied.
+- `native_build.json`: fresh macOSDevelopment build of the real expedition-first three-scene list: **Succeeded,0errors,0warnings,267430167bytes,12.3528583s**. Actual native launch shows the Korean map/HP243/coins60/deck18. Normal quit was followed by the owned process disappearing; no force kill. Native mouse transition to battle is **NOT_CONFIRMED**, currently under a separate diagnostic.
+- Actual .NET full check and Node320/Python57 are in `../run_memory_core_20261016/`; proposals14/docs9/handoff13 outputs are beside this report. These are distinct gates, not substitutes for native input.
+
+## Reviews, discoveries and current follow-up
+
+Official subscription-only Opus xhigh authored the initial view/tests; High authored card details. Codex reviewed full diffs against the original design and real Core, corrected the same-frame overlay probe, source-created session-store startup, complete parts scrolling, forge leave path and technical-version labels. Opposite Opus reviews/rechecks are preserved beside this report. Core card-description oracle/checker and strict-shop correction also received opposite review. Exact actual CLI model/effort metadata is in `../run_memory_core_20261016/actual_cli_task_models.json`; no raw reasoning or billing identifiers are committed.
+
+`native_input_review.md` is read-only Opus xhigh analysis: no source defect explains repeated idle-map misses; it identifies a narrower notice-expiry full-canvas rebuild weakness. The temporary Root-owned input probe is a separate diagnostic build, not production feature or proof of native success. The follow-up repairs notice expiry in place and adds a real2.6s held-press regression: actual old-code1/1RED in `toast_old_red.json`, then all87/87GREEN. An initial run that timed out before starting and had a source copy while initializing is explicitly excluded (`toast_initialization_invalidated.json`); the clean RED/GREEN were performed afterwards without source mutations during a run.
+
+Editor MCP later stalled in `EditorSceneManager::HandleOpenScenesChangeOnDisk`/`NSAlert runModal` after formatting the newly created open scene file. Root preserved exact scene/source files, normally terminated only its owned Editor (no force kill), restarted and reconnected the existing free local MCP server; fresh Console then showed0errors/0warnings. Do not normalize an open scene externally while relying on a still-bound main-window UI handle; reacquire the current dialog/window or reload through the Editor first. The existing86/3 receipts remain valid historical execution, not a claim that the interrupted diagnostic ran.
+
+## Remaining scope
+
+Physical native input confirmation, expedition damage/block forecast, draw/pattern detail, full lobby/party selection, durable account/unfinished-run restoration, server/DB/auth/economy, Android/IL2CPP/physical devices, final art/audio/accessibility remain separate. Normal native shutdown printed prematurely-finalized-thread/ComputeBuffer/development-memory-leak diagnostics, also seen in the earlier practice build; performance acceptance is not claimed. The original32balance misses and all source stats/costs/capacities/probabilities remain unchanged. No dependency or image generation was added.
+
+Latest post-repair native build: `native_final_build.json`, **0errors/0warnings,267430850bytes,14.6281623s**, no temporary probe in Assets/build. The actual final app was launched and its Korean map/243HP/60coins/18deck visually confirmed. It is left open for optional physical-mouse acceptance; automation coordinate observations and physical behavior stay distinct. The queued delay callback was confirmed still pending and only that Root-owned callback was removed before executing this completed build directly.
+
+Final actual Editor Play screenshot: `map_final_87.png`, visual93/pass. Console after this real Play read **0errors/2known memoryless-depth load/store warnings**, distinct from the build’s0/0. The complete native input receipt was recovered from Unity’s automatic previous log (49lines, actual clickframes2193/2218 and same-frame drag edges5015) and opposite-provider re-review APPROVE is in `native_observation_recheck.md`; no owner of the coordinate gap or physical-mouse success is inferred.

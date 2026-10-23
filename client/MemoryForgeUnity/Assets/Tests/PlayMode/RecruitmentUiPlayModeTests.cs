@@ -1,0 +1,109 @@
+#nullable enable
+using System.Collections;
+using System.Linq;
+using NUnit.Framework;
+using UnityEngine;
+using UnityEngine.TestTools;
+using UnityEngine.UI;
+using Object = UnityEngine.Object;
+
+namespace MemoryForge.Client.Tests
+{
+    public class RecruitmentUiPlayModeTests
+    {
+        [UnityTest]
+        public IEnumerator InvalidConnectionReportsOnlyTheFailureKindAndClearsTheCredential()
+        {
+            const string secret = "hidden-key";
+            var host = new GameObject("RecruitmentInvalidConnection");
+            host.AddComponent<MemoryForgeLobbyClient>();
+            try
+            {
+                yield return null;
+                host.GetComponentsInChildren<Button>().Single(b => b.name == "OpenRecruitment").onClick.Invoke();
+                var inputs = host.GetComponentsInChildren<InputField>();
+                inputs.Single(f => f.name == "RecruitmentEndpoint").text = "http://127.0.0.1:5287";
+                inputs.Single(f => f.name == "RecruitmentAccount").text = "dev-local";
+                inputs.Single(f => f.name == "RecruitmentCredential").text = secret;
+                LogAssert.Expect(LogType.Warning, "MF_ACCOUNT_CONNECT_OWNER type=ArgumentException param=credential keyLength=" + secret.Length);
+                host.GetComponentsInChildren<Button>().Single(b => b.name == "ConnectRecruitment").onClick.Invoke();
+                yield return null;
+                Assert.That(host.GetComponentsInChildren<InputField>().Single(f => f.name == "RecruitmentCredential").text, Is.Empty);
+                Assert.That(host.GetComponentsInChildren<Text>().Any(t => t.text.Contains(secret)), Is.False);
+                Assert.That(host.GetComponentsInChildren<Button>().Any(b => b.name == "RecruitOne"), Is.False);
+            }
+            finally { Object.Destroy(host); }
+        }
+
+        [UnityTest]
+        public IEnumerator DisconnectedRecruitmentAsksForConnectionAndDoesNotInventBalances()
+        {
+            var host = new GameObject("RecruitmentUiTest");
+            var lobby = host.AddComponent<MemoryForgeLobbyClient>();
+            try
+            {
+                yield return null; lobby.Player!.Stop(); yield return null;
+                host.GetComponentsInChildren<Button>().Single(b => b.name == "OpenRecruitment").onClick.Invoke();
+                yield return null;
+                var inputs = host.GetComponentsInChildren<InputField>();
+                Assert.That(inputs.Single(x => x.name == "RecruitmentCredential").contentType, Is.EqualTo(InputField.ContentType.Password));
+                Assert.That(host.GetComponentsInChildren<Button>().Any(b => b.name == "ConnectRecruitment"), Is.True);
+                Assert.That(host.GetComponentsInChildren<Button>().Any(b => b.name == "RecruitOne" || b.name == "RecruitTen"), Is.False);
+                Assert.That(host.GetComponentsInChildren<Text>().Any(t => t.text.Contains("서버")), Is.True);
+                Assert.That(host.GetComponentsInChildren<CanvasGroup>().Single(g => g.name == "LobbySide").interactable, Is.False);
+            }
+            finally { Object.Destroy(host); }
+        }
+
+        [UnityTest]
+        public IEnumerator LargeTouchHomeDockFitsAndDoesNotOverlapExpedition()
+        {
+            MemoryForgeExpeditionClient.TouchOverride = 144;
+            var host = new GameObject("RecruitmentLargeTouchTest");
+            var lobby = host.AddComponent<MemoryForgeLobbyClient>();
+            try
+            {
+                yield return null; lobby.Player!.Stop(); yield return null;
+                var frame = host.GetComponentsInChildren<RectTransform>().Single(r => r.name == "LobbyFrame");
+                var dock = host.GetComponentsInChildren<RectTransform>().Single(r => r.name == "HomeDock");
+                Canvas.ForceUpdateCanvases();
+                var corners = new Vector3[4];
+                foreach (var button in dock.GetComponentsInChildren<Button>())
+                {
+                    ((RectTransform)button.transform).GetWorldCorners(corners);
+                    var local = corners.Select(v => frame.InverseTransformPoint(v)).ToArray();
+                    Assert.That(local.Min(v => v.y), Is.GreaterThanOrEqualTo(frame.rect.yMin - 0.05f), button.name + " remains inside the actual safe frame bottom");
+                    Assert.That(local.Max(v => v.y), Is.LessThanOrEqualTo(frame.rect.yMax + 0.05f), button.name + " remains inside the actual safe frame top");
+                    Assert.That(local.Min(v => v.x), Is.GreaterThanOrEqualTo(frame.rect.xMin - 0.05f), button.name + " remains inside the actual safe frame left");
+                    Assert.That(local.Max(v => v.x), Is.LessThanOrEqualTo(frame.rect.xMax + 0.05f), button.name + " remains inside the actual safe frame right");
+                }
+                dock.GetWorldCorners(corners);
+                float dockTop = corners.Max(v => frame.InverseTransformPoint(v).y);
+                var sortie = (RectTransform)host.GetComponentsInChildren<Button>().Single(b => b.name == "StartExpedition").transform;
+                sortie.GetWorldCorners(corners);
+                Assert.That(corners.Min(v => frame.InverseTransformPoint(v).y), Is.GreaterThan(dockTop), "expedition and dock touch areas stay separate");
+            }
+            finally { MemoryForgeExpeditionClient.TouchOverride = null; Object.Destroy(host); }
+        }
+
+        [UnityTest]
+        public IEnumerator OwnedFilterDoesNotTurnThePracticeFixtureIntoOwnedCharacters()
+        {
+            var host = new GameObject("RecruitmentOwnedTest");
+            var lobby = host.AddComponent<MemoryForgeLobbyClient>();
+            try
+            {
+                yield return null; lobby.Player!.Stop(); yield return null;
+                host.GetComponentsInChildren<Button>().Single(b => b.name == "OpenCompanions").onClick.Invoke();
+                host.GetComponentsInChildren<Button>().Single(b => b.name == "FilterOwned").onClick.Invoke();
+                yield return null;
+                Assert.That(host.GetComponentsInChildren<Button>().Any(b => b.name.StartsWith("Companion:")), Is.False);
+                Assert.That(host.GetComponentsInChildren<Button>().Single(b => b.name == "RecruitFromRoster").interactable, Is.True);
+                host.GetComponentsInChildren<Button>().Single(b => b.name == "RecruitFromRoster").onClick.Invoke();
+                yield return null;
+                Assert.That(host.GetComponentsInChildren<InputField>().Single(x => x.name == "RecruitmentCredential").text, Is.Empty);
+            }
+            finally { Object.Destroy(host); }
+        }
+    }
+}

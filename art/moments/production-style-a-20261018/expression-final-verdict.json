@@ -1,0 +1,13 @@
+{
+  "score": 94,
+  "verdict": "pass",
+  "category_match": true,
+  "differences": [
+    "Reserved characters intentionally use restrained annoyed/determined expressions; posture, hair and costume remain stable."
+  ],
+  "suggestions": [
+    "Use the six per-character expression contact sheets for future style matching.",
+    "Treat portrait lower-corner costume pixels as intentional crop, while all actual empty areas remain transparent."
+  ],
+  "reasoning": "All 36 faces preserve adult character identity, A rendering, head framing and accessories including Harin's scar and Sion's glasses. Happy/surprised states are clearly readable and the quieter emotions differ through eyelids/brows/mouth; all deliverables are 512x512 RGBA with six distinct hashes per character."
+}

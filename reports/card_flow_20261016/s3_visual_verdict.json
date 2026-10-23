@@ -1,0 +1,18 @@
+{
+  "score": 94,
+  "verdict": "pass",
+  "scope": "Actual S3 original-content picker screen, one-pick nia_tune",
+  "evidence": "reports/card_flow_20261016/s3_live_picker.png",
+  "checks": [
+    "Clear last-pick commits and explicit Auto wording",
+    "Only four actual current hand options; source card excluded",
+    "Source card/mode/target selection via actual EventSystem rays preserved AP4/V1",
+    "Actual unrelated End and invalid pick refused with complete JSON Run/store unchanged",
+    "Original forecast, modal/backdrop and cancel remain readable"
+  ],
+  "limits": [
+    "Initial same-loop hand ray attempted before stable layout; corrected without source changes and retained as QA evidence",
+    "Two-pick branch variant is a separate explicit test-local fixture, not authored-game measurement",
+    "Worst density/130percent/device/final art not accepted"
+  ]
+}

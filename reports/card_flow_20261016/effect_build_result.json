@@ -1,0 +1,25 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Build Succeeded.\",\"data\":{\"job_id\":\"build-af94fe1f4d\",\"result\":\"succeeded\",\"platform\":\"StandaloneOSX\",\"output_path\":\"/Users/choi/Documents/Memory_forge/ops/ai/local/builds/MemoryForgeExpedition-Candidates-20261016.app\",\"started_at\":\"2026-10-16T08:27:55.843736Z\",\"duration_seconds\":12.187446999999999,\"completed_at\":\"2026-10-16T08:28:08.031183Z\",\"total_size_mb\":255.11,\"errors\":0,\"warnings\":0}}"
+    }
+  ],
+  "structuredContent": {
+    "success": true,
+    "message": "Build Succeeded.",
+    "data": {
+      "job_id": "build-af94fe1f4d",
+      "result": "succeeded",
+      "platform": "StandaloneOSX",
+      "output_path": "/Users/choi/Documents/Memory_forge/ops/ai/local/builds/MemoryForgeExpedition-Candidates-20261016.app",
+      "started_at": "2026-10-16T08:27:55.843736Z",
+      "duration_seconds": 12.187446999999999,
+      "completed_at": "2026-10-16T08:28:08.031183Z",
+      "total_size_mb": 255.11,
+      "errors": 0,
+      "warnings": 0
+    }
+  },
+  "isError": false
+}

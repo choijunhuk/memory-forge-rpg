@@ -1,0 +1,23 @@
+{
+  "scope": "owned loopback real Core proxy; request hashes only, no credentials",
+  "faults": 1,
+  "mutations_forwarded": 3,
+  "mutation_attempts": [
+    {
+      "path": "/dev/practice/runs/pr-1f2248f645912718f8b35cdfb5a9d987/memory-commit",
+      "body_sha256": "e2b5cc308ce0f2648ad7788d6392aa7328bde9e13e86f315d66fd331b20085ce",
+      "upstream_status": 200
+    },
+    {
+      "path": "/dev/practice/runs/pr-1f2248f645912718f8b35cdfb5a9d987/memory-commit",
+      "body_sha256": "e2b5cc308ce0f2648ad7788d6392aa7328bde9e13e86f315d66fd331b20085ce",
+      "upstream_status": 200
+    },
+    {
+      "path": "/dev/practice/runs",
+      "body_sha256": "d4a34b7e4d10394053950a0930878952c58b925bb8d5f7e1ad7acac4c0ef040a",
+      "upstream_status": 200
+    }
+  ],
+  "same_commit_bytes": true
+}

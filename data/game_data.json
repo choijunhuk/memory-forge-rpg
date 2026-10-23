@@ -20,8 +20,8 @@
   "debtCap": 4,
   "growthCapPerBattle": 3,
   "gaugeMax": 100,
-  "gaugePerCard": 10,
-  "gaugeTurnCap": 30,
+  "gaugePerCard": 20,
+  "gaugeTurnCap": 50,
   "breakApBonus": 1,
   "breakApBonusMaxPerTurn": 2,
   "brokenDamageBps": 2500,
@@ -164,19 +164,9 @@
    "text": "n회 사용하면 소멸."
   },
   {
-   "id": "reserve",
-   "name": "예약",
-   "text": "비용을 지금 내고 다음 턴(또는 다다음 턴) 시작에 해결. 예약 수치가 따로 적힌 카드는 그 수치를 쓴다."
-  },
-  {
-   "id": "reserveOnly",
-   "name": "예약 전용",
-   "text": "즉시 사용할 수 없다."
-  },
-  {
-   "id": "afterOnly",
-   "name": "다다음 턴 전용",
-   "text": "다다음 턴 예약만 가능."
+   "id": "retain",
+   "name": "보존",
+   "text": "턴이 끝나도 손에 남는다."
   },
   {
    "id": "fixed",
@@ -186,7 +176,7 @@
   {
    "id": "growth",
    "name": "성장",
-   "text": "예약으로 해결될 때 성장 +1(카드당 전투 1회, 파티 전투당 3회). 성장 3이면 전투 보상 화면에서 진화 분기 선택."
+   "text": "해결될 때 성장 +1(카드당 전투 1회, 파티 전투당 3회). 성장 3이면 전투 보상 화면에서 진화 분기 선택."
   },
   {
    "id": "overload",
@@ -221,7 +211,7 @@
     "params": {
      "bps": 2500
     },
-    "text": "세라의 예약 공격이 균열 상태인 적에게 명중하면 피해 +25%."
+    "text": "세라의 카드 공격이 균열 상태인 적에게 명중하면 피해 +25%."
    },
    "ult": {
     "name": "시간 관통탄",
@@ -233,17 +223,16 @@
       "pierce": 3000
      },
      {
-      "op": "slot",
-      "next": 1,
-      "after": 0
+      "op": "draw",
+      "n": 1
      }
     ],
-    "text": "적 1명에게 피해 28(관통 30%, 균열 4). 이번 턴 다음 턴 예약 칸 +1."
+    "text": "적 1명에게 피해 28(관통 30%, 균열 4). 카드 1장 뽑기."
    },
    "resonance": [
     {
      "n": 1,
-     "text": "유리탄이 예약으로 해결되면 카드 1장 뽑기(턴당 1회).",
+     "text": "유리탄을 쓰면 카드 1장 뽑기(턴당 1회).",
      "fx": {
       "type": "hook",
       "id": "sera_r1"
@@ -297,7 +286,7 @@
     },
     {
      "n": 6,
-     "text": "필살기를 쓴 다음 턴 시작에 해결되는 세라의 예약 공격 피해 +50%.",
+     "text": "필살기를 쓴 다음 턴, 세라의 카드 공격 피해 +50%.",
      "fx": {
       "type": "hook",
       "id": "sera_r6"
@@ -1552,12 +1541,11 @@
    "rar": "B",
    "cost": 1,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
-     "v": 8,
-     "rv": 12
+     "v": 8
     }
    ],
    "kw": [],
@@ -1572,17 +1560,15 @@
    "rar": "B",
    "cost": 1,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "blk",
-     "v": 5,
-     "rv": 7
+     "v": 5
     },
     {
      "op": "dmg",
-     "v": 4,
-     "rv": 6
+     "v": 4
     }
    ],
    "kw": [],
@@ -1596,7 +1582,7 @@
    "rar": "B",
    "cost": 1,
    "type": "skl",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "buff",
@@ -1637,17 +1623,17 @@
    "rar": "A",
    "cost": 2,
    "type": "atk",
-   "res": "o",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
-     "v": 16,
-     "rv": 22,
-     "ra": 30,
+     "v": 20,
      "brk": 3
     }
    ],
-   "kw": [],
+   "kw": [
+    "retain"
+   ],
    "flavor": "기다린 만큼 무거워지는 탄.",
    "start": true,
    "attr": "volt"
@@ -1662,9 +1648,10 @@
    "res": "n",
    "eff": [
     {
-     "op": "slot",
-     "next": 1,
-     "after": 0
+     "op": "buff",
+     "s": "charge",
+     "n": 3000,
+     "turns": 1
     },
     {
      "op": "draw",
@@ -1684,7 +1671,7 @@
    "res": "n",
    "eff": [
     {
-     "op": "pull"
+     "op": "recall"
     }
    ],
    "kw": [],
@@ -1698,12 +1685,11 @@
    "rar": "A",
    "cost": 1,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
      "v": 4,
-     "rv": 6,
      "hits": 2
     },
     {
@@ -1714,8 +1700,7 @@
      "then": [
       {
        "op": "dmg",
-       "v": 4,
-       "rv": 6
+       "v": 4
       }
      ],
      "else": []
@@ -1731,12 +1716,11 @@
    "rar": "S",
    "cost": 2,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
      "v": 16,
-     "rv": 24,
      "brk": 2,
      "pierce": 5000
     }
@@ -1770,12 +1754,11 @@
    "rar": "S",
    "cost": 2,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
      "v": 7,
-     "rv": 10,
      "tgt": "all"
     }
    ],
@@ -1789,16 +1772,16 @@
    "rar": "S",
    "cost": 3,
    "type": "atk",
-   "res": "after",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
      "v": 45,
-     "ra": 45,
      "brk": 5
     }
    ],
    "kw": [
+    "retain",
     "exhaust"
    ],
    "attr": "volt"
@@ -1810,12 +1793,11 @@
    "rar": "B",
    "cost": 1,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
-     "v": 7,
-     "rv": 10
+     "v": 7
     }
    ],
    "kw": [],
@@ -1829,12 +1811,11 @@
    "rar": "B",
    "cost": 1,
    "type": "skl",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "blk",
-     "v": 7,
-     "rv": 10
+     "v": 7
     }
    ],
    "kw": [],
@@ -1868,7 +1849,7 @@
    "rar": "B",
    "cost": 1,
    "type": "skl",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "st",
@@ -1892,7 +1873,7 @@
    "rar": "A",
    "cost": 1,
    "type": "skl",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "create",
@@ -1954,12 +1935,11 @@
    "rar": "A",
    "cost": 2,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
      "v": 14,
-     "rv": 20,
      "brk": 2
     },
     {
@@ -2026,12 +2006,11 @@
    "rar": "S",
    "cost": 1,
    "type": "skl",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "draw",
-     "n": 2,
-     "rn": 3
+     "n": 2
     }
    ],
    "kw": [],
@@ -2044,12 +2023,11 @@
    "rar": "S",
    "cost": 3,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
      "v": 24,
-     "rv": 34,
      "brk": 3,
      "scale": {
       "per": "tempParts",
@@ -2088,12 +2066,11 @@
    "rar": "B",
    "cost": 1,
    "type": "skl",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "blk",
-     "v": 6,
-     "rv": 8
+     "v": 6
     },
     {
      "op": "grow"
@@ -2115,12 +2092,11 @@
    "rar": "B",
    "cost": 1,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
-     "v": 6,
-     "rv": 8
+     "v": 6
     },
     {
      "op": "grow"
@@ -2142,12 +2118,11 @@
    "rar": "B",
    "cost": 1,
    "type": "skl",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "blk",
-     "v": 4,
-     "rv": 6
+     "v": 4
     },
     {
      "op": "draw",
@@ -2213,12 +2188,11 @@
    "rar": "A",
    "cost": 2,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
      "v": 10,
-     "rv": 14,
      "tgt": "all"
     },
     {
@@ -2240,12 +2214,11 @@
    "rar": "A",
    "cost": 1,
    "type": "skl",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "heal",
-     "v": 6,
-     "rv": 8
+     "v": 6
     },
     {
      "op": "if",
@@ -2272,12 +2245,11 @@
    "rar": "A",
    "cost": 1,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
      "v": 7,
-     "rv": 10,
      "scale": {
       "per": "growthSum",
       "k": 1,
@@ -2312,12 +2284,11 @@
    "rar": "S",
    "cost": 2,
    "type": "skl",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "blk",
      "v": 14,
-     "rv": 20,
      "scale": {
       "per": "growthCards",
       "k": 2,
@@ -2335,12 +2306,11 @@
    "rar": "S",
    "cost": 1,
    "type": "skl",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "draw",
-     "n": 1,
-     "rn": 2
+     "n": 1
     },
     {
      "op": "grow"
@@ -2383,12 +2353,11 @@
    "rar": "S",
    "cost": 1,
    "type": "skl",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "blk",
-     "v": 9,
-     "rv": 13
+     "v": 9
     }
    ],
    "kw": [],
@@ -2403,12 +2372,11 @@
    "rar": "S",
    "cost": 1,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
      "v": 9,
-     "rv": 12,
      "brk": 2
     },
     {
@@ -2437,12 +2405,11 @@
    "rar": "S",
    "cost": 1,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
      "v": 5,
-     "rv": 7,
      "hits": 2
     }
    ],
@@ -2457,12 +2424,11 @@
    "rar": "S",
    "cost": 1,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
-     "v": 7,
-     "rv": 10
+     "v": 7
     },
     {
      "op": "st",
@@ -2482,12 +2448,11 @@
    "rar": "S",
    "cost": 1,
    "type": "skl",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "blk",
-     "v": 8,
-     "rv": 11
+     "v": 8
     },
     {
      "op": "draw",
@@ -2505,7 +2470,7 @@
    "rar": "S",
    "cost": 1,
    "type": "skl",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "draw",
@@ -2529,12 +2494,11 @@
    "rar": "S",
    "cost": 2,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
      "v": 13,
-     "rv": 18,
      "tgt": "all"
     }
    ],
@@ -2549,12 +2513,11 @@
    "rar": "S",
    "cost": 2,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
      "v": 10,
-     "rv": 14,
      "tgt": "all"
     },
     {
@@ -2575,12 +2538,11 @@
    "rar": "S",
    "cost": 1,
    "type": "skl",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "draw",
-     "n": 2,
-     "rn": 3
+     "n": 2
     }
    ],
    "kw": [],
@@ -2594,12 +2556,11 @@
    "rar": "S",
    "cost": 1,
    "type": "skl",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "draw",
-     "n": 1,
-     "rn": 2
+     "n": 1
     },
     {
      "op": "ap",
@@ -2638,12 +2599,11 @@
    "rar": "B",
    "cost": 1,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
-     "v": 8,
-     "rv": 11
+     "v": 8
     },
     {
      "op": "if",
@@ -2729,12 +2689,11 @@
    "rar": "A",
    "cost": 1,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
      "v": 6,
-     "rv": 9,
      "scale": {
       "per": "debt",
       "k": 4,
@@ -2752,13 +2711,12 @@
    "rar": "A",
    "cost": 1,
    "type": "skl",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "st",
      "s": "burn",
      "n": 4,
-     "rn": 6,
      "tgt": "one"
     }
    ],
@@ -2772,12 +2730,11 @@
    "rar": "A",
    "cost": 1,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
      "v": 10,
-     "rv": 14,
      "brk": 2
     },
     {
@@ -2824,12 +2781,11 @@
    "rar": "S",
    "cost": 2,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
      "v": 18,
-     "rv": 25,
      "brk": 2,
      "scale": {
       "per": "targetBurn",
@@ -2870,12 +2826,11 @@
    "rar": "S",
    "cost": 3,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
      "v": 14,
-     "rv": 20,
      "tgt": "all",
      "brk": 2
     },
@@ -2898,12 +2853,11 @@
    "rar": "B",
    "cost": 1,
    "type": "skl",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "blk",
-     "v": 8,
-     "rv": 11
+     "v": 8
     }
    ],
    "kw": [],
@@ -2917,12 +2871,11 @@
    "rar": "B",
    "cost": 1,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
      "v": 6,
-     "rv": 9,
      "brk": 2
     }
    ],
@@ -2937,12 +2890,11 @@
    "rar": "B",
    "cost": 1,
    "type": "skl",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "blk",
-     "v": 5,
-     "rv": 7
+     "v": 5
     },
     {
      "op": "counter",
@@ -2993,12 +2945,11 @@
    "rar": "A",
    "cost": 2,
    "type": "skl",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "blk",
-     "v": 14,
-     "rv": 20
+     "v": 14
     }
    ],
    "kw": [],
@@ -3033,12 +2984,11 @@
    "rar": "A",
    "cost": 1,
    "type": "skl",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "blk",
-     "v": 6,
-     "rv": 13
+     "v": 6
     }
    ],
    "kw": [],
@@ -3051,12 +3001,11 @@
    "rar": "A",
    "cost": 1,
    "type": "skl",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "blk",
-     "v": 7,
-     "rv": 10
+     "v": 7
     },
     {
      "op": "st",
@@ -3095,12 +3044,11 @@
    "rar": "S",
    "cost": 2,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
      "v": 10,
-     "rv": 14,
      "brk": 2,
      "scale": {
       "per": "counter",
@@ -3119,12 +3067,11 @@
    "rar": "S",
    "cost": 1,
    "type": "skl",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "blk",
-     "v": 10,
-     "rv": 14
+     "v": 10
     },
     {
      "op": "counter",
@@ -3141,12 +3088,11 @@
    "rar": "S",
    "cost": 3,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
      "v": 12,
-     "rv": 16,
      "tgt": "all",
      "brk": 2
     },
@@ -3187,12 +3133,11 @@
    "rar": "B",
    "cost": 1,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
      "v": 6,
-     "rv": 8,
      "scale": {
       "per": "echo",
       "k": 3,
@@ -3211,12 +3156,11 @@
    "rar": "B",
    "cost": 1,
    "type": "skl",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "blk",
-     "v": 6,
-     "rv": 8
+     "v": 6
     },
     {
      "op": "if",
@@ -3307,12 +3251,11 @@
    "rar": "A",
    "cost": 1,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
      "v": 5,
-     "rv": 7,
      "tgt": "all"
     },
     {
@@ -3457,12 +3400,11 @@
    "rar": "B",
    "cost": 1,
    "type": "skl",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "heal",
-     "v": 5,
-     "rv": 7
+     "v": 5
     }
    ],
    "kw": [],
@@ -3476,12 +3418,11 @@
    "rar": "B",
    "cost": 1,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
-     "v": 7,
-     "rv": 10
+     "v": 7
     }
    ],
    "kw": [],
@@ -3495,12 +3436,11 @@
    "rar": "B",
    "cost": 1,
    "type": "skl",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "blk",
-     "v": 7,
-     "rv": 10
+     "v": 7
     },
     {
      "op": "cleanseOne",
@@ -3567,12 +3507,11 @@
    "rar": "A",
    "cost": 1,
    "type": "skl",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "heal",
-     "v": 8,
-     "rv": 12
+     "v": 8
     }
    ],
    "kw": [],
@@ -3585,12 +3524,11 @@
    "rar": "A",
    "cost": 1,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
      "v": 4,
-     "rv": 6,
      "tgt": "all"
     },
     {
@@ -3610,12 +3548,11 @@
    "rar": "A",
    "cost": 2,
    "type": "skl",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "blk",
-     "v": 12,
-     "rv": 17
+     "v": 12
     },
     {
      "op": "heal",
@@ -3675,12 +3612,11 @@
    "rar": "S",
    "cost": 1,
    "type": "skl",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "heal",
      "v": 10,
-     "rv": 14,
      "overflowBlock": 100
     }
    ],
@@ -3722,12 +3658,11 @@
    "rar": "B",
    "cost": 1,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
-     "v": 8,
-     "rv": 11
+     "v": 8
     }
    ],
    "kw": [],
@@ -3764,12 +3699,11 @@
    "rar": "B",
    "cost": 1,
    "type": "skl",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "blk",
-     "v": 7,
-     "rv": 10
+     "v": 7
     }
    ],
    "kw": [],
@@ -3783,12 +3717,11 @@
    "rar": "B",
    "cost": 1,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
      "v": 12,
-     "rv": 16,
      "brk": 2
     }
    ],
@@ -3833,12 +3766,11 @@
    "rar": "A",
    "cost": 1,
    "type": "skl",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "draw",
-     "n": 2,
-     "rn": 3
+     "n": 2
     }
    ],
    "kw": [],
@@ -3851,12 +3783,11 @@
    "rar": "A",
    "cost": 1,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
      "v": 5,
-     "rv": 7,
      "scale": {
       "per": "exhausted",
       "k": 2,
@@ -3899,12 +3830,11 @@
    "rar": "S",
    "cost": 2,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
      "v": 16,
-     "rv": 22,
      "brk": 3
     }
    ],
@@ -3965,12 +3895,11 @@
    "rar": "S",
    "cost": 3,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
      "v": 30,
-     "rv": 40,
      "brk": 4
     }
    ],
@@ -3986,12 +3915,11 @@
    "rar": "B",
    "cost": 1,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
-     "v": 8,
-     "rv": 11
+     "v": 8
     }
    ],
    "kw": [],
@@ -4025,12 +3953,11 @@
    "rar": "B",
    "cost": 1,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
      "v": 12,
-     "rv": 16,
      "brk": 2,
      "tgt": "fixed"
     }
@@ -4046,12 +3973,11 @@
    "rar": "B",
    "cost": 1,
    "type": "skl",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "blk",
-     "v": 7,
-     "rv": 10
+     "v": 7
     }
    ],
    "kw": [],
@@ -4065,7 +3991,7 @@
    "rar": "A",
    "cost": 1,
    "type": "skl",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "st",
@@ -4090,12 +4016,11 @@
    "rar": "A",
    "cost": 2,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
      "v": 7,
-     "rv": 10,
      "hits": 2
     },
     {
@@ -4106,8 +4031,7 @@
      "then": [
       {
        "op": "dmg",
-       "v": 7,
-       "rv": 10
+       "v": 7
       }
      ],
      "else": []
@@ -4146,12 +4070,11 @@
    "rar": "A",
    "cost": 1,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
-     "v": 6,
-     "rv": 9
+     "v": 6
     },
     {
      "op": "st",
@@ -4185,12 +4108,11 @@
    "rar": "S",
    "cost": 2,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
      "v": 20,
-     "rv": 28,
      "brk": 3,
      "tgt": "fixed",
      "mult": [
@@ -4257,12 +4179,11 @@
    "rar": "S",
    "cost": 3,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
      "v": 36,
-     "rv": 48,
      "brk": 5,
      "tgt": "fixed"
     },
@@ -4292,12 +4213,11 @@
    "rar": "B",
    "cost": 1,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
-     "v": 8,
-     "rv": 11
+     "v": 8
     }
    ],
    "kw": [],
@@ -4337,12 +4257,11 @@
    "rar": "B",
    "cost": 1,
    "type": "skl",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "blk",
-     "v": 7,
-     "rv": 10
+     "v": 7
     }
    ],
    "kw": [],
@@ -4356,12 +4275,11 @@
    "rar": "B",
    "cost": 1,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
      "v": 4,
-     "rv": 6,
      "hits": 2
     }
    ],
@@ -4398,12 +4316,11 @@
    "rar": "A",
    "cost": 2,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
      "v": 7,
-     "rv": 10,
      "tgt": "all"
     }
    ],
@@ -4484,12 +4401,11 @@
    "rar": "S",
    "cost": 2,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
      "v": 22,
-     "rv": 30,
      "brk": 3
     }
    ],
@@ -4551,12 +4467,11 @@
    "rar": "B",
    "cost": 1,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
      "v": 6,
-     "rv": 9,
      "shock": 1
     }
    ],
@@ -4570,12 +4485,11 @@
    "rar": "B",
    "cost": 1,
    "type": "skl",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "blk",
-     "v": 6,
-     "rv": 9
+     "v": 6
     }
    ],
    "kw": [],
@@ -4610,12 +4524,11 @@
    "rar": "B",
    "cost": 1,
    "type": "skl",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "heal",
-     "v": 6,
-     "rv": 8
+     "v": 6
     }
    ],
    "kw": [
@@ -4630,14 +4543,16 @@
    "rar": "A",
    "cost": 1,
    "type": "skl",
-   "res": "o",
+   "res": "n",
    "eff": [
     {
      "op": "ap",
      "n": 2
     }
    ],
-   "kw": [],
+   "kw": [
+    "retain"
+   ],
    "attr": "none"
   },
   {
@@ -4668,12 +4583,11 @@
    "rar": "A",
    "cost": 2,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
      "v": 5,
-     "rv": 7,
      "tgt": "all",
      "shock": 1
     }
@@ -4688,12 +4602,11 @@
    "rar": "A",
    "cost": 2,
    "type": "skl",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "blk",
-     "v": 12,
-     "rv": 17
+     "v": 12
     }
    ],
    "kw": [],
@@ -4743,13 +4656,12 @@
    "rar": "B",
    "cost": 1,
    "type": "skl",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "st",
      "s": "vul",
      "n": 2,
-     "rn": 3,
      "tgt": "one"
     }
    ],
@@ -4803,12 +4715,11 @@
    "rar": "B",
    "cost": 1,
    "type": "atk",
-   "res": "o",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
-     "v": 11,
-     "rv": 11,
+     "v": 9,
      "shock": 1
     }
    ],
@@ -4861,13 +4772,8 @@
    "res": "n",
    "eff": [
     {
-     "op": "slot",
-     "next": 0,
-     "after": 1
-    },
-    {
      "op": "draw",
-     "n": 1
+     "n": 2
     }
    ],
    "kw": [],
@@ -4880,12 +4786,11 @@
    "rar": "S",
    "cost": 1,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
      "v": 4,
-     "rv": 6,
      "shock": 3
     }
    ],
@@ -4934,15 +4839,14 @@
    "res": "n",
    "eff": [
     {
-     "op": "slot",
-     "next": 1,
-     "after": 0
-    },
-    {
      "op": "buff",
      "s": "charge",
      "n": 3000,
      "turns": 2
+    },
+    {
+     "op": "draw",
+     "n": 1
     }
    ],
    "kw": [],
@@ -4955,12 +4859,11 @@
    "rar": "S",
    "cost": 1,
    "type": "skl",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "blk",
-     "v": 6,
-     "rv": 9
+     "v": 6
     },
     {
      "op": "growPick",
@@ -5005,12 +4908,11 @@
    "rar": "S",
    "cost": 1,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
-     "v": 7,
-     "rv": 10
+     "v": 7
     },
     {
      "op": "exhaustPick",
@@ -5028,12 +4930,11 @@
    "rar": "S",
    "cost": 1,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
-     "v": 7,
-     "rv": 10
+     "v": 7
     },
     {
      "op": "st",
@@ -5074,12 +4975,11 @@
    "rar": "A",
    "cost": 1,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
-     "v": 9,
-     "rv": 13
+     "v": 9
     }
    ],
    "kw": [],
@@ -5092,12 +4992,11 @@
    "rar": "A",
    "cost": 1,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
      "v": 10,
-     "rv": 13,
      "brk": 2
     }
    ],
@@ -5128,17 +5027,15 @@
    "rar": "A",
    "cost": 1,
    "type": "skl",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "heal",
-     "v": 4,
-     "rv": 6
+     "v": 4
     },
     {
      "op": "blk",
-     "v": 4,
-     "rv": 6
+     "v": 4
     }
    ],
    "kw": [],
@@ -5151,12 +5048,11 @@
    "rar": "A",
    "cost": 1,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
-     "v": 8,
-     "rv": 11
+     "v": 8
     }
    ],
    "kw": [],
@@ -5169,12 +5065,11 @@
    "rar": "A",
    "cost": 1,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
      "v": 4,
-     "rv": 6,
      "hits": 2
     }
    ],
@@ -5188,12 +5083,11 @@
    "rar": "A",
    "cost": 1,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
-     "v": 9,
-     "rv": 12
+     "v": 9
     }
    ],
    "kw": [],
@@ -5206,12 +5100,11 @@
    "rar": "A",
    "cost": 1,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
-     "v": 6,
-     "rv": 8
+     "v": 6
     },
     {
      "op": "blk",
@@ -5228,7 +5121,7 @@
    "rar": "A",
    "cost": 1,
    "type": "skl",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "draw",
@@ -5250,12 +5143,11 @@
    "rar": "A",
    "cost": 1,
    "type": "skl",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "blk",
-     "v": 8,
-     "rv": 11
+     "v": 8
     }
    ],
    "kw": [],
@@ -5268,12 +5160,11 @@
    "rar": "A",
    "cost": 1,
    "type": "skl",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "heal",
-     "v": 4,
-     "rv": 6
+     "v": 4
     }
    ],
    "kw": [],
@@ -5286,17 +5177,15 @@
    "rar": "A",
    "cost": 1,
    "type": "skl",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "blk",
-     "v": 5,
-     "rv": 7
+     "v": 5
     },
     {
      "op": "dmg",
-     "v": 4,
-     "rv": 5
+     "v": 4
     }
    ],
    "kw": [],
@@ -5309,12 +5198,11 @@
    "rar": "B",
    "cost": 1,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
-     "v": 7,
-     "rv": 10
+     "v": 7
     }
    ],
    "kw": [],
@@ -5327,12 +5215,11 @@
    "rar": "B",
    "cost": 1,
    "type": "atk",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "dmg",
-     "v": 7,
-     "rv": 9
+     "v": 7
     }
    ],
    "kw": [],
@@ -5345,12 +5232,11 @@
    "rar": "B",
    "cost": 1,
    "type": "skl",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "blk",
-     "v": 6,
-     "rv": 8
+     "v": 6
     }
    ],
    "kw": [],
@@ -5363,17 +5249,15 @@
    "rar": "B",
    "cost": 1,
    "type": "skl",
-   "res": "y",
+   "res": "n",
    "eff": [
     {
      "op": "heal",
-     "v": 3,
-     "rv": 4
+     "v": 3
     },
     {
      "op": "blk",
-     "v": 3,
-     "rv": 4
+     "v": 3
     }
    ],
    "kw": [],
@@ -5399,7 +5283,7 @@
      2400
     ],
     "scope": "wielder",
-    "text": "장착자의 예약 공격 피해 +{v}%."
+    "text": "장착자가 보존했던 카드로 공격하면 피해 +{v}%."
    },
    "card": "wc_sera"
   },
@@ -5530,7 +5414,7 @@
      2000
     ],
     "scope": "wielder",
-    "text": "장착자의 예약 공격 피해 +{v}%."
+    "text": "장착자가 보존했던 카드로 공격하면 피해 +{v}%."
    },
    "card": "wc_star_bow"
   },
@@ -5905,10 +5789,9 @@
    "slot": "circuit",
    "name": "지연 증폭",
    "rarity": "common",
-   "text": "예약 해결 시 피해·방어 +40%, 즉시 사용 시 -10%.",
+   "text": "보존: 턴이 끝나도 손에 남는다.",
    "fx": {
-    "resBps": 4000,
-    "immBps": -1000
+    "retain": true
    }
   },
   {
@@ -5916,10 +5799,9 @@
    "slot": "circuit",
    "name": "즉발 회로",
    "rarity": "common",
-   "text": "즉시 사용 시 피해·방어 +20%. 예약 불가.",
+   "text": "피해·방어 +20%.",
    "fx": {
-    "immBps": 2000,
-    "noReserve": true
+    "immBps": 2000
    }
   },
   {
@@ -5937,7 +5819,7 @@
    "slot": "circuit",
    "name": "메아리 회로",
    "rarity": "rare",
-   "text": "예약으로 해결되면 다음 턴 손에 50% 위력의 소멸 사본(비용 0) 추가.",
+   "text": "해결되면 다음 턴 손에 50% 위력의 소멸 사본(비용 0) 추가.",
    "fx": {
     "echoCopy": 5000
    }
@@ -5947,9 +5829,10 @@
    "slot": "circuit",
    "name": "원거리 전송",
    "rarity": "rare",
-   "text": "다다음 턴 예약 시 피해·방어 +70%.",
+   "text": "피해·방어 +40%. 비용 +1.",
    "fx": {
-    "afterBps": 7000
+    "allBps": 4000,
+    "cost": 1
    }
   },
   {
@@ -6050,7 +5933,7 @@
    "id": "empty_clock",
    "name": "빈 시계",
    "rarity": "common",
-   "text": "전투마다 첫 예약 카드 비용 -1(최소 0)."
+   "text": "전투마다 첫 카드 비용 -1(최소 0)."
   },
   {
    "id": "memory_envelope",
@@ -6122,7 +6005,7 @@
    "id": "time_stamp",
    "name": "타임 스탬프",
    "rarity": "common",
-   "text": "예약 카드가 해결될 때 소유자 필살기 게이지 +5."
+   "text": "보존했던 카드를 쓰면 소유자 필살기 게이지 +5."
   },
   {
    "id": "frost_crystal",
@@ -6158,19 +6041,19 @@
    "id": "cracked_hourglass",
    "name": "금 간 모래시계",
    "rarity": "rare",
-   "text": "다다음 턴 예약 칸 +1. 매 전투 첫 턴 행동력 -1."
+   "text": "매 전투 첫 턴 카드 2장 더 뽑기. 첫 턴 행동력 -1."
   },
   {
    "id": "twin_pendulum",
    "name": "쌍둥이 시계추",
    "rarity": "rare",
-   "text": "다음 턴 예약 칸 +1. 손패 최대 9장."
+   "text": "턴 시작 뽑기 +1. 손패 최대 9장."
   },
   {
    "id": "precision_lens",
    "name": "정밀 렌즈",
    "rarity": "rare",
-   "text": "예약으로 해결되는 공격의 균열 +1."
+   "text": "보존했던 공격 카드의 균열 +1."
   },
   {
    "id": "golden_quill",
@@ -6224,7 +6107,7 @@
    "id": "infinite_circuit",
    "name": "무한 회로",
    "rarity": "boss",
-   "text": "다음 턴 예약 칸 +1. 턴 시작 시 파티 체력 2를 잃는다."
+   "text": "턴 시작 뽑기 +1. 턴 시작 시 파티 체력 2를 잃는다."
   },
   {
    "id": "memory_anvil",
@@ -8140,7 +8023,7 @@
     {
      "id": "rift_reserve",
      "name": "시간의 틈",
-     "text": "예약으로 해결되는 피해 +30%, 즉시 피해 -10%."
+     "text": "보존했던 카드의 피해 +30%, 그 밖의 피해 -10%."
     },
     {
      "id": "rift_break",

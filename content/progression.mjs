@@ -97,7 +97,7 @@ export const recordRift = { unlock: 20, cycleDays: 14, cyclesPerSeason: 3,
   ],
   battlesPerFloor: 3, rule: '층마다 3연전. 1·3전은 1파티, 2전은 2파티(서로 다른 6명). 파티별 체력은 층 안에서 이어진다. 저장된 기억 덱만 사용(탐사 보상 없음). 층마다 균열 규칙 1개(14일마다 교체).',
   modifiers: [
-    { id: 'rift_reserve', name: '시간의 틈', text: '예약으로 해결되는 피해 +30%, 즉시 피해 -10%.' },
+    { id: 'rift_reserve', name: '시간의 틈', text: '보존했던 카드의 피해 +30%, 그 밖의 피해 -10%.' },
     { id: 'rift_break', name: '금 간 거울', text: '균열 게이지 +50%, 균열 시 받는 피해 +50%(기본 +25% 대신).' },
     { id: 'rift_ink', name: '번지는 잉크', text: '매 턴 시작 시 얼룩 1장이 버린 더미에 섞인다. 소멸시킨 카드 1장당 피해 +3%.' },
     { id: 'rift_debt', name: '이자의 밤', text: '부채 상한 +2, 부채가 있으면 모든 피해 +15%.' },

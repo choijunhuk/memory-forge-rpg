@@ -1,0 +1,49 @@
+{
+  "realSSHUsed": false,
+  "checks": [
+    {
+      "case": "valid",
+      "status": "PASS"
+    },
+    {
+      "case": "empty",
+      "status": "PASS"
+    },
+    {
+      "case": "remote-fail",
+      "status": "PASS"
+    },
+    {
+      "case": "truncated",
+      "status": "PASS"
+    },
+    {
+      "case": "crc",
+      "status": "PASS"
+    },
+    {
+      "case": "trailing",
+      "status": "PASS"
+    },
+    {
+      "case": "no-python",
+      "status": "PASS"
+    },
+    {
+      "case": "link-fail",
+      "status": "PASS"
+    },
+    {
+      "case": "file-collision",
+      "status": "PASS"
+    },
+    {
+      "case": "directory-collision",
+      "status": "PASS"
+    },
+    {
+      "case": "symlink-collision",
+      "status": "PASS"
+    }
+  ]
+}

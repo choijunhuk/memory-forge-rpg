@@ -1,0 +1,32 @@
+{
+  "task_id": "P1-LICENSED-UNITY-FONT-GUARD",
+  "run_id": "P1-LICENSED-UNITY-FONT-GUARD-20261015T153444199365Z",
+  "status": "RECEIVED_UNVERIFIED",
+  "requestedEffort": "high",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "changes_verified": false,
+  "raw_output": "ops/ai/local/P1-LICENSED-UNITY-FONT-GUARD-20261015T153444199365Z*",
+  "billing_verified_at": "2026-10-14T21:44:57.439760+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "codex/csharp-battle-opening",
+  "base_commit": "2ffc29ecdbdeee5027258ad6f73302b98820fc35",
+  "worktree": "/Users/choi/.codex/worktrees/csharp-battle-opening/Memory_forge",
+  "allowed_files": [
+    "ops/ai/tasks/P1-LICENSED-UNITY-FONT-GUARD.md",
+    "tests/test_delivery_files.py",
+    "tools/ai/build_manifest.py",
+    "tools/ai/delivery_files.py",
+    "tools/ai/test_handoff.py"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "7a49789d-3c03-4210-b36d-45e31e76fbe8",
+  "subtype": "success",
+  "is_error": false,
+  "result": "The font guard is written, but none of it has been run. This task gave me no shell, so all tests are NOT_RUN for Root to execute. The real manifests were not run or modified, and I edited only the five allowed files.\n\n**What changed**\n- **`tools/ai/delivery_files.py`**: added one fixed allowlist entry for `client/MemoryForgeUnity/Assets/Resources/Fonts/IBMPlexSansKR-Regular.ttf`, with its SHA and its sibling `IBMPlexSansKR-OFL.txt` license from `UNITY-FONT-PROVENANCE.json`. A new function, `font_errors(root, paths)`, checks every delivered `.ttf`, `.otf`, `.ttc`, `.woff` and `.woff2` file:\n  - Any font at another path fails.\n  - The approved font must match its recorded bytes exactly.\n  - The license must be in the same delivered set (being on disk isn't enough) and must match its recorded hash.\n  - Errors are capped at 20 plus a \"… N more\" line.\n\n  `private_path`, `handoff_files` and `delivery_files` are unchanged, and no font is hidden from any inventory.\n- **License line endings**: the license file in the worktree uses CRLF on all 93 lines (checked with Grep only). The recorded hash is therefore of the CRLF bytes, while `.gitattributes` will check the file out as LF. Before hashing, the check converts CRLF to LF and then back to CRLF. So both forms match the recorded hash without any new constant, and any text change or stray CR still fails. If Root prefers an LF-based SHA constant, only that one value needs replacing.\n- **`tools/ai/test_handoff.py`**: I renamed the failing test to `test_only_approved_licensed_font_and_no_credentials_shipped`. It now requires `font_errors == []`, and the private-path check still runs on every file, including the font.\n- **`tools/ai/build_manifest.py`**: the existing private-file refusal runs first, then the font check. Both happen before any manifest is written.\n- **`tests/test_delivery_files.py`**: existing tests are untouched. The new tests read the real font and license bytes from the repo and use only temporary roots. They cover:\n  - the approved font with the license in either CRLF or LF form passes;\n  - unapproved font paths fail: a moved copy, a `.OTF` and a `.woff2`;\n  - an altered font binary fails;\n  - a missing, altered or gitignored (not delivered) license fails;\n  - the error cap works;\n  - a successful manifest records the font's exact SHA;\n  - an unapproved font is refused and the previous manifests are kept;\n  - private files are still refused next to the approved font.\n\n**Blocked / notes for Root**\n- The font and license files are still untracked. The new success tests read them from the repo and will fail, not skip, if they are missing.\n- After committing, confirm Git treats the `.ttf` as binary. An explicit `*.ttf binary` line in `.gitattributes` would be safer, but that file was outside my allowed edits.\n- Hahmlet and Orbit are not allowed yet. Each would need its own provenance entry.\n\n**Next**: Root runs `tests/test_delivery_files.py`, `npm run test:handoff`, `npm run test:docs` and the export safety checks, then does the clean-checkout check and an independent review.\n\nThe full report is in `ops/ai/tasks/P1-LICENSED-UNITY-FONT-GUARD.md`. I can't see my session_id from inside this session; Root needs to take it from the CLI metadata.",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ]
+}

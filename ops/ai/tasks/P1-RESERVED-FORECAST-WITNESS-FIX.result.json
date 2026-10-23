@@ -1,0 +1,32 @@
+{
+  "task_id": "P1-RESERVED-FORECAST-WITNESS-FIX",
+  "run_id": "P1-RESERVED-FORECAST-WITNESS-FIX-20261016T020420538553Z",
+  "status": "VERIFIED",
+  "requestedEffort": "high",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "changes_verified": true,
+  "raw_output": "ops/ai/local/P1-RESERVED-FORECAST-WITNESS-FIX-20261016T020420538553Z*",
+  "billing_verified_at": "2026-10-15T21:22:01.277612+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "codex/csharp-memory-v2",
+  "base_commit": "3d33c4cb2e0c7cee14ced2c67c33b8fb55cef267",
+  "worktree": "/Users/choi/.codex/worktrees/csharp-memory-v2/Memory_forge",
+  "allowed_files": [
+    "core/MemoryForge.CoreChecks/BattlePreviewChecks.cs",
+    "engine/tests/battle_preview_vectors.test.mjs",
+    "reports/battle_preview_20261016/reserved_witness_fix_report.md",
+    "tools/gen_battle_preview_vectors.mjs"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "b0545ad4-ddb1-421f-8c73-4b7511e293bd",
+  "subtype": "success",
+  "is_error": false,
+  "result": "The next/after coverage check now counts only when both forecasts come from the same case and step and have the same uid, target and picks. One must be `next`, the other `after`, and their estimates must differ. Build, tests and fixture regeneration were not run by me.\n\n**Changes:**\n- **`tools/gen_battle_preview_vectors.mjs`:** a new exported function, `nextAfterDiffers(cases)`, checks each step's own forecasts. It replaces the old comparison across all cases and steps. Estimates count as different if any of the six outcome fields differ (enemy HP loss, damage, block, HP, defeat, newly broken).\n- **`core/MemoryForge.CoreChecks/BattlePreviewChecks.cs`:**\n  - A counter now advances once per case step, in both the battle and expedition validators, and each stored estimate records which step it came from, plus its picks and outcome.\n  - The coverage tag `reserved:next-after-differ` now uses the same rule as the generator.\n  - One new tamper test, 29 in total: it makes the timed keeper next/after pair at reserved-estimates step 1 equal. The fixture must then be rejected, and the error message must name that tag.\n- **`engine/tests/battle_preview_vectors.test.mjs`** (added inside the existing structure test, so still 6 tests):\n  - Only one step in the corpus satisfies the check: reserved-estimates step 1, the \"timed next keeper\" / \"timed after keeper\" pair (22 vs 30).\n  - Control: once that pair is made equal, the old cross-case comparison still finds a pair from two different steps (step 5's next, 18, against step 1's after, now 22). The new check rejects it.\n- **`reports/battle_preview_20261016/reserved_witness_fix_report.md`** is written.\n\nAll other counts and checks are unchanged: 12 cases, 91 forecasts, 52 commands, 131 receipt probes, the v1 queries and commands, the expected values, source pins, schema, decoder and failure checks. The only fixture change is the generator's own source hash.\n\n**Next steps (Root):**\n1. Regenerate the fixture, since the generator's hash changed: `node tools/gen_battle_preview_vectors.mjs`, then run it again with `--check`.\n2. Run `node --test engine/tests/battle_preview_vectors.test.mjs` and `npm test` on Node 22 and 25.\n3. Run `dotnet build`, then CoreChecks. BattlePreview should still report 91 forecasts / 52 commands / 131 receipt probes, with one more passing check from the new tamper test.\n\nNothing is blocked. session_id: b0545ad4-ddb1-421f-8c73-4b7511e293bd",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ],
+  "root_verification": "reports/card_flow_20261016/root_acceptance.md"
+}

@@ -1,0 +1,24 @@
+[
+  {
+    "task": "P1-R1C-RUN-MEMORY",
+    "sessionId": "55c3a4d0-c6ce-4e57-9e2b-1b01a1520fe1",
+    "actualModels": {
+      "claude-opus-5-5": 84
+    },
+    "actualPerTurnEffort": {
+      "max": 84
+    },
+    "rawReasoningCopied": false
+  },
+  {
+    "task": "P1-R1C-UNITY-NUMBER-FIX",
+    "sessionId": "083875e9-7bf8-49ed-8179-41bae9320b96",
+    "actualModels": {
+      "claude-opus-5-5": 49
+    },
+    "actualPerTurnEffort": {
+      "max": 49
+    },
+    "rawReasoningCopied": false
+  }
+]

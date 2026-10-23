@@ -1,0 +1,11 @@
+{
+  "version": "expedition-balance-20261023-v1",
+  "mainContentSha256": "b6d3543a1d87f0a28e4824e0c1ae45a1eabc676d7abefcd2e57e23b4abc0054a",
+  "modes": [
+    "story"
+  ],
+  "difficulty": {
+    "hp": 130,
+    "dmg": 110
+  }
+}

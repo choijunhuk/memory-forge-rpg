@@ -1,0 +1,75 @@
+✖ atk stops later hits and effects after the fatal hit (4.779208ms)
+✖ atkdebuff stops later hits and effects after the fatal hit (1.780833ms)
+✔ a surviving party still receives every hit and the attack debuff (1.26ms)
+✖ memory envelope survival permits the next hit before actual defeat stops the rest (1.12825ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 1
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 95.140042
+
+✖ failing tests:
+
+test at engine/tests/enemy_lethal_multihit.test.mjs:19:42
+✖ atk stops later hits and effects after the fatal hit (4.779208ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  3 !== 1
+
+      at TestContext.<anonymous> (file:///Users/choi/Documents/Memory_forge/engine/tests/enemy_lethal_multihit.test.mjs:22:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.start (node:internal/test_runner/test:1096:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 3,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at engine/tests/enemy_lethal_multihit.test.mjs:19:42
+✖ atkdebuff stops later hits and effects after the fatal hit (1.780833ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  3 !== 1
+
+      at TestContext.<anonymous> (file:///Users/choi/Documents/Memory_forge/engine/tests/enemy_lethal_multihit.test.mjs:22:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 3,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at engine/tests/enemy_lethal_multihit.test.mjs:37:1
+✖ memory envelope survival permits the next hit before actual defeat stops the rest (1.12825ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  3 !== 2
+
+      at TestContext.<anonymous> (file:///Users/choi/Documents/Memory_forge/engine/tests/enemy_lethal_multihit.test.mjs:41:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 3,
+    expected: 2,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

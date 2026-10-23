@@ -1,0 +1,15 @@
+# Second/final bounded opposite-author check of corrected completion host
+
+Official Opus5.5 xhigh, includedsubscriptiononly/noAPI/credits/extra/fallback. NoBash/MCP/agents. Youare notalone. Resume c1b34a4b-d227-4de8-9504-bb76ae06d41a. Own ONLY reports/run_memory_core_20261016/host_recheck.md. Allcode/oldreview/data/diff/receipts readonly. Root soleEditorwriter. This is followup to your exact P1/P2 findings, no wholeprojectredesign.
+
+Roothad independently found the SAMEv2aritybug in actualinitialrun (2683/2684,4/5), fixed it BEFORE receivingyourreview; yourindependentanalysis exactlypredictedactualoutput. InitialhostreportpreservedRootinitial_host_opposite_review.md; doesnotbecomeapproval. Actualcorrectedbuild0warnings0errors, fullrun21024/21024 PASS:2684/2684commands1370commit1314reject,1074queries,5/5actualcomplete+5/5actualsave-derivedfreshreloads;legacy273504/273504all1000actualDONE,182528commit90976reject,6657battles275archives,567offers+1000save-returnownershipprobes. TheseareRootfreshreceiptcounts, not yourexecution.
+
+P1fix: RunCallchoosesarityusingACTUALrun.State.MemoryPolicy v2(2args)/legacy(1),comparesrecordedargs[1]toindependentactualcurrentMemory,passesACTUALcurrentMemory(notargs1)toCore. Thisisexactagreedpolicybranch, neitherinferredfromnullnorJSsaveinjection.
+
+P2fix: scopeoutputnow'Assign0attemptsinthishost(separateUnityevidence);RuleErrorname/message/detailunclaimed(codeonly)'. ActualRootUnityassignmenttest+29PlayreceiptcopiedreadonlytoA; priorAwasknownstale(notRoot). Also RootcurrentRunCreateChecks/TraceHashChecks copied soyoucanconfirm strictcallbackkeepsfinalState.
+
+P3followupsimplemented: captureFulldump ofcallerstorebeforev2commit,CheckunchangedAFTERcallbeforehostreassignsnewstore;twoconcretecompletionforgeriesattheexistingseam (lastcommitresult.value+recomputedjsonhash, and reload.createdstate.coins+recomputedhashes) mustpassstructuralvalidationthenberejectedbyactualCore. Execute nowletsvalidprobecasesreachReloadActualwhileCOUNThelperskeepallcompletion/reloadcountersprobe-isolated; anyearliermismatchstopsfirst. Existing22probesuntouched(nowexpected24), no newdecoder/framework. Noexpectedstateinjection. Theseadditionalcontrols arecurrentlybeing rebuilt/run, NOTyetPASS; Rootwillprovideactualreceiptseparately.
+
+OtherP3cleanup: oldheader/scopegrammar/beforeDONEstatements corrected;ReturncommentexplicitvalueparityvsC#strongerdetachment;legacy finalcanonicalnormalizationdescribedascanonical;legacyoutcome/battle/archivecountsareOBSERVEDfromper-attemptmatchedJS,notassertedindependentliterals. Commandtotals/methodsarestillindependentliterals. No goalpost/fixture/datachanges.
+
+Reviewcurrenthost + focusedrecheckdiff. ReturnAPPROVEorremainingconcreteblocker/file/line/repro/fix. Thisis2ndreviewofsameunit; ifunresolveddocumentevidence/optionsandRootwillwithholdintegration, continueindependentwork. YourenvironmentNOT_RUN, no inventedactualexecution. Onlyreportfileedited.

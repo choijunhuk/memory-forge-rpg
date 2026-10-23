@@ -1,0 +1,229 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:memory-forge:telemetry:events:1",
+  "title": "Memory Forge telemetry event dictionary (§16.6)",
+  "description": "원문 docs/source_v0.8.1/16_chapter.md §16.6의 이벤트 8행(9개 이름)을 이벤트 1건 = JSON 객체 1개로 옮긴 명세다. 수집·전송·저장 코드는 없다(승인 경계). 해석과 결정 대기는 ops/telemetry/EVENTS.md에 있다.",
+  "x-status": "SPEC_ONLY",
+  "x-source": "docs/source_v0.8.1/16_chapter.md#16.6",
+  "x-retentionMonths": 13,
+  "oneOf": [
+    { "$ref": "#/$defs/run_start" },
+    { "$ref": "#/$defs/run_end" },
+    { "$ref": "#/$defs/battle_end" },
+    { "$ref": "#/$defs/card_play" },
+    { "$ref": "#/$defs/memory_commit" },
+    { "$ref": "#/$defs/gacha_pull" },
+    { "$ref": "#/$defs/purchase" },
+    { "$ref": "#/$defs/tutorial_step" },
+    { "$ref": "#/$defs/error_shown" }
+  ],
+  "$defs": {
+    "id": {
+      "description": "콘텐츠·화면·결과 식별자. 영숫자와 _ . : - 만, 64자 이하. 자유 문장·이메일·공백을 담을 수 없다.",
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,63}$"
+    },
+    "errorCode": {
+      "description": "서버·클라이언트 오류 코드(예: STALE_VERSION). 대문자·숫자·_ 만.",
+      "type": "string",
+      "pattern": "^[A-Z0-9][A-Z0-9_]{0,63}$"
+    },
+    "accountHash": {
+      "description": "계정 ID의 해시(원문: 계정 ID는 해시). 256비트 소문자 16진수. 해시 방식·키·필수 여부는 결정 대기.",
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "count": { "type": "integer", "minimum": 0 },
+    "run_start": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["event", "runId", "mode", "chapter", "party", "difficulty"],
+      "properties": {
+        "event": { "const": "run_start" },
+        "accountHash": { "$ref": "#/$defs/accountHash" },
+        "runId": { "$ref": "#/$defs/id" },
+        "mode": { "$ref": "#/$defs/id" },
+        "chapter": { "$ref": "#/$defs/count" },
+        "party": { "$ref": "#/$defs/party" },
+        "difficulty": { "$ref": "#/$defs/id" }
+      },
+      "x-omittedSourceFields": {
+        "result": "시작 시점에는 값이 없다. run_end에만 둔다.",
+        "floorsCleared": "시작 시점에는 값이 없다. run_end에만 둔다.",
+        "turns": "시작 시점에는 값이 없다. run_end에만 둔다.",
+        "durationSec": "시작 시점에는 값이 없다. run_end에만 둔다."
+      }
+    },
+    "run_end": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["event", "runId", "mode", "chapter", "party", "difficulty", "result", "floorsCleared", "turns", "durationSec"],
+      "properties": {
+        "event": { "const": "run_end" },
+        "accountHash": { "$ref": "#/$defs/accountHash" },
+        "runId": { "$ref": "#/$defs/id" },
+        "mode": { "$ref": "#/$defs/id" },
+        "chapter": { "$ref": "#/$defs/count" },
+        "party": { "$ref": "#/$defs/party" },
+        "difficulty": { "$ref": "#/$defs/id" },
+        "result": { "$ref": "#/$defs/id" },
+        "floorsCleared": { "$ref": "#/$defs/count" },
+        "turns": { "$ref": "#/$defs/count" },
+        "durationSec": { "$ref": "#/$defs/count" }
+      }
+    },
+    "party": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 6,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["charId", "res", "level", "weaponId"],
+        "properties": {
+          "charId": { "$ref": "#/$defs/id" },
+          "res": { "type": "integer", "minimum": 0, "maximum": 6 },
+          "level": { "type": "integer", "minimum": 1 },
+          "weaponId": { "type": ["string", "null"], "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,63}$" }
+        }
+      }
+    },
+    "battle_end": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["event", "battleId", "runId", "encounter", "result", "turns", "hpLost", "breaks", "reservesMade", "ultsUsed"],
+      "properties": {
+        "event": { "const": "battle_end" },
+        "accountHash": { "$ref": "#/$defs/accountHash" },
+        "battleId": { "$ref": "#/$defs/id" },
+        "runId": { "$ref": "#/$defs/id" },
+        "encounter": { "$ref": "#/$defs/id" },
+        "result": { "$ref": "#/$defs/id" },
+        "turns": { "$ref": "#/$defs/count" },
+        "hpLost": { "$ref": "#/$defs/count" },
+        "breaks": { "$ref": "#/$defs/count" },
+        "reservesMade": { "$ref": "#/$defs/count" },
+        "ultsUsed": { "$ref": "#/$defs/count" }
+      }
+    },
+    "card_play": {
+      "type": "object",
+      "additionalProperties": false,
+      "x-sampleRate": 0.1,
+      "required": ["event", "cardId", "mode", "cost", "apLeft", "targetTier", "previewDmg", "actualDmg"],
+      "properties": {
+        "event": { "const": "card_play" },
+        "accountHash": { "$ref": "#/$defs/accountHash" },
+        "cardId": { "$ref": "#/$defs/id" },
+        "mode": { "enum": ["now", "next", "after"] },
+        "cost": { "$ref": "#/$defs/count" },
+        "apLeft": { "description": "계약 부채로 음수가 될 수 있다.", "type": "integer" },
+        "targetTier": { "description": "대상이 없으면 null.", "enum": ["normal", "elite", "boss", "minion", null] },
+        "previewDmg": { "$ref": "#/$defs/count" },
+        "actualDmg": { "$ref": "#/$defs/count" }
+      }
+    },
+    "memory_commit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["event", "charId", "capacity", "used", "changes", "defeat"],
+      "properties": {
+        "event": { "const": "memory_commit" },
+        "accountHash": { "$ref": "#/$defs/accountHash" },
+        "charId": { "$ref": "#/$defs/id" },
+        "capacity": { "$ref": "#/$defs/count" },
+        "used": { "$ref": "#/$defs/count" },
+        "changes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["type", "cost"],
+            "properties": {
+              "type": { "$ref": "#/$defs/id" },
+              "cost": { "$ref": "#/$defs/count" }
+            }
+          }
+        },
+        "defeat": { "type": "boolean" }
+      }
+    },
+    "gacha_pull": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["event", "bannerId", "count", "results", "pityBefore", "currencyMix"],
+      "properties": {
+        "event": { "const": "gacha_pull" },
+        "accountHash": { "$ref": "#/$defs/accountHash" },
+        "bannerId": { "$ref": "#/$defs/id" },
+        "count": { "type": "integer", "enum": [1, 10] },
+        "results": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 10,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["rarity", "id", "featured", "lost"],
+            "properties": {
+              "rarity": { "enum": ["R", "SR", "SSR"] },
+              "id": { "$ref": "#/$defs/id" },
+              "featured": { "type": "boolean" },
+              "lost": { "type": "boolean" }
+            }
+          }
+        },
+        "pityBefore": { "$ref": "#/$defs/count" },
+        "currencyMix": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["currency", "amount"],
+            "properties": {
+              "currency": { "$ref": "#/$defs/id" },
+              "amount": { "$ref": "#/$defs/count" }
+            }
+          }
+        }
+      }
+    },
+    "purchase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["event", "productId", "priceKrw", "firstBonus", "result"],
+      "properties": {
+        "event": { "const": "purchase" },
+        "accountHash": { "$ref": "#/$defs/accountHash" },
+        "productId": { "$ref": "#/$defs/id" },
+        "priceKrw": { "$ref": "#/$defs/count" },
+        "firstBonus": { "description": "지급된 첫 구매 보너스 수량, 없으면 0(data products.firstBonus와 같은 단위).", "type": "integer", "minimum": 0 },
+        "result": { "$ref": "#/$defs/id" }
+      }
+    },
+    "tutorial_step": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["event", "step", "durationSec", "skipped"],
+      "properties": {
+        "event": { "const": "tutorial_step" },
+        "accountHash": { "$ref": "#/$defs/accountHash" },
+        "step": { "$ref": "#/$defs/id" },
+        "durationSec": { "$ref": "#/$defs/count" },
+        "skipped": { "type": "boolean" }
+      }
+    },
+    "error_shown": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["event", "code", "screen"],
+      "properties": {
+        "event": { "const": "error_shown" },
+        "accountHash": { "$ref": "#/$defs/accountHash" },
+        "code": { "$ref": "#/$defs/errorCode" },
+        "screen": { "$ref": "#/$defs/id" }
+      }
+    }
+  }
+}

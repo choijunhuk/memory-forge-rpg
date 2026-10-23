@@ -1,0 +1,32 @@
+{
+  "task_id": "P1-CSHARP-LATE-ACTIONS-ORACLE-FINISH",
+  "run_id": "P1-CSHARP-LATE-ACTIONS-ORACLE-FINISH-20261016T022917896687Z",
+  "status": "VERIFIED",
+  "requestedEffort": "xhigh",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "changes_verified": true,
+  "raw_output": "ops/ai/local/P1-CSHARP-LATE-ACTIONS-ORACLE-FINISH-20261016T022917896687Z*",
+  "billing_verified_at": "2026-10-15T21:22:01.277612+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "codex/csharp-battle-opening",
+  "base_commit": "2ffc29ecdbdeee5027258ad6f73302b98820fc35",
+  "worktree": "/Users/choi/.codex/worktrees/csharp-battle-opening/Memory_forge",
+  "allowed_files": [
+    "core/MemoryForge.CoreChecks/BattleLateActionsChecks.cs",
+    "engine/tests/battle_late_actions_vectors.test.mjs",
+    "reports/csharp_late_actions_20261016/author_report.md",
+    "tools/gen_battle_late_actions_vectors.mjs"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "3037701a-550b-4a17-a764-107680bf5b79",
+  "subtype": "success",
+  "is_error": false,
+  "result": "I've written the C# consumer, the Node test and the author report. None of it has been run: I had no shell, so the build, the C# replay and the Node tests are all NOT_RUN on my side. The only executions so far are yours: the Core build and the private export of 81 cases / 473 commands / 445 committed / 2 replayed / 26 rejected.\n\n**Changed files** (the producer is unchanged from the Max session):\n- **`core/MemoryForge.CoreChecks/BattleLateActionsChecks.cs`:** entry point `static int Run(string root)`.\n  - It checks the fixture with the shared strict decoder, the six pinned sources and its own copy of the 23 candidates, encounters and test-local enemies.\n  - It loads data only through `LoadWithEnemies` and confirms `Load(root)` is still the live 20.\n  - It replays all 81 cases and 473 requests through the public `Command` against the recorded JS states. Rejections must be atomic, receipts must replay, and every returned snapshot or public graph must stay detached when mutated.\n  - It also includes hand-derived expected values for every boundary case, C#-only local probes, and 26 tamper cases.\n  - The expected totals are hardcoded to your measured counts: 81 / 473 / 445 / 2 / 26.\n- **`engine/tests/battle_late_actions_vectors.test.mjs`:**\n  - Confirms the candidate overlay is unchanged and live content is not activated.\n  - Checks that all 23 candidates run two full pattern cycles alive and all 23 encounter groups run.\n  - Replays all 473 requests independently and checks the six behaviors at their boundaries.\n  - Includes tamper tests and strict-decoder controls using the existing `decodeVectors`, plus deterministic export and preservation of the old fixture on failure.\n- **`reports/csharp_late_actions_20261016/author_report.md`:** semantics, the corpus table, named limits, and the integration steps for you.\n\n**Limits stated in the report:**\n- **No Unity bridge.** The phase descriptor and attribute IDs are stored through methods and private fields, so exported Unity content carries none of it. Candidate export, loading and activation in Unity are not implemented. A candidate-only probe has to call `SetPhaseDescriptor` and `SetAttributeIds` itself.\n- **C#-only rejection codes.** These cases are outside the shared JS oracle and covered only by local C# probes:\n\n  | Input | C# rejects with | Original JS |\n  |---|---|---|\n  | `phase` move inside a pattern | `BATTLE_ENEMY_MOVE_NOT_IMPLEMENTED` | `WRONG_PHASE` |\n  | Unknown move in the second body's pattern | `BATTLE_ENEMY_MOVE_NOT_IMPLEMENTED` | `UNSUPPORTED_EFFECT` |\n  | Extra members on a late move | `BATTLE_ENEMY_MOVE_NOT_IMPLEMENTED` | ignored |\n  | Accumulated drain past Int32 | `BATTLE_NUMBER_OUT_OF_RANGE` | keeps a larger number |\n\n- **`zone` is not typed.** The typed-definition comparison strips only `zone`; every other member and every absence is compared exactly.\n- **Forecast on a phase boss.** B's `Battle.Forecast` on a lethal hit against a phase boss reports the HP difference to the second body. I left that to B and you.\n\n**What you need to do before integration:**\n1. Register `BattleLateActionsChecks.Run(root)` in `Program.cs` and add its result to the final pass/fail aggregate.\n2. Export the checked-in fixture with `node tools/gen_battle_late_actions_vectors.mjs`, then run it again with `--check`.\n3. Run the Node test on Node 22 and 25, then the full CoreChecks suite. The existing BattleTurnChecks probes for eatName, phase and the loader must still get their expected codes.\n4. Recompile Unity. `battle-content.json` should not need a re-export, since no public member was added to exported types.\n\nIf the replay shows a C#/JS mismatch, send me the exact diagnostic rather than changing expected values. I don't have this session's ID; take it from the CLI metadata.",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ],
+  "root_verification": "reports/card_flow_20261016/root_acceptance.md"
+}

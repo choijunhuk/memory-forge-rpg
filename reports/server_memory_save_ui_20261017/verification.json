@@ -1,0 +1,46 @@
+{
+  "source_base": "fafed59efd4c0dbe043bab2d4990178bd8fa1ee8",
+  "source_sha256": {
+    "client/MemoryForgeUnity/Assets/Scripts/PracticePublicSnapshot.cs": "1009f6b3b8b4541c43ae29b5d1b7243be290914a79ac7acd6e5fee42a71b4aff",
+    "client/MemoryForgeUnity/Assets/Scripts/PracticeServerSession.cs": "8db29821411cb72c22ed97a745dcb3a678724e1506ebad0497dd1714088ce000",
+    "client/MemoryForgeUnity/Assets/Scripts/MemoryForgeServerPracticeClient.cs": "921e111dd9f17b8e9bceef0015f42b468ef623070fe9a63b50bf17dea66c922e",
+    "client/MemoryForgeUnity/Assets/Tests/PlayMode/PracticeServerSessionPlayModeTests.cs": "5c9ea49dbd690a6a727c53178bdc0fe1ae96ee3992353881021b2a8452edb31f",
+    "client/MemoryForgeUnity/Assets/Tests/PlayMode/PracticeServerSavePlayModeTests.cs": "7144ba9b53fbfa57c261e598d97e6abe29586d35f1bfb8fa89fcab15a57ee1ee",
+    "client/MemoryForgeUnity/Assets/Tests/PlayMode/PracticeServerSavePlayModeTests.cs.meta": "257c4f556767009c857cf4ab018acd13557a8672451d1991d22f099c17142b33"
+  },
+  "unity_play": {
+    "total": 304,
+    "passed": 304,
+    "failed": 0,
+    "skipped": 0,
+    "durationSeconds": 55.5202873,
+    "resultState": "Passed"
+  },
+  "unity_server_class_within_full": {
+    "total": 122,
+    "passed": 122
+  },
+  "unity_edit": {
+    "total": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "durationSeconds": 0.7546677,
+    "resultState": "Passed"
+  },
+  "dotnet_transport": {
+    "passed": 120,
+    "failed": 0,
+    "target": "same current BCL source/NUnit assertions via .NET10, fixture only"
+  },
+  "real_core_ugui_checks": 62,
+  "original_settings_restored": true,
+  "immutable_gate_sha256": "34f4b54447d4fdf6a1ced5cc3cb9076b505e81d4b292c78151ac91f79d4f7257",
+  "core_server_original_rules_changes": [],
+  "image_generation": false,
+  "remaining": [
+    "save-time held-part UI (Core/API already exist)",
+    "physical mouse, Android/IL2CPP, standalone build, production auth/deployment",
+    "real positive common-card assignment and winning memory commit"
+  ]
+}

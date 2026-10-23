@@ -1,0 +1,19 @@
+{
+  "at": "2026-10-15T05:52:11.454708+00:00",
+  "status": "ROOT_AUTOMATED_VERIFIED_PENDING_OPUS_AND_UNITY_MEMORY_RUNTIME",
+  "Node": 269,
+  "focusedMemoryTests": 12,
+  "proposals": 14,
+  "Python": 48,
+  "docs": 9,
+  "handoff": 13,
+  "MemoryOracleCalls": 1072,
+  "MemoryAssertions": 5441,
+  "priorPlayerAssertionsRetained": 87991,
+  "corpusComparison": "corpus_comparison.json",
+  "browserMemoryTests": 13,
+  "browserLateTests": 10,
+  "sourceReview": "native patch source-only APPROVE; official Opus M0 pending",
+  "Unity": "new shared Core compiles with no Console error/warning; actual memory PlayMode subset pending",
+  "RunCommands": 0
+}

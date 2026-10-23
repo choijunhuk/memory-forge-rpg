@@ -1,0 +1,6 @@
+{
+  "production_head": "dec7688fe022d7d41cac6a9f212184222cda460b",
+  "production_main_unchanged": true,
+  "integration_test_sha256": "dbf1bae4bf6d09ac0ef4bbaf790a78f954ba8f0ecd4d8356a2db9c108a1c5270",
+  "test_only_projection": "Initial author explicitly allowed dropping the separate pure new-API class for old-Main RED; integration methods/driver copied unchanged, three tests, no new production API."
+}

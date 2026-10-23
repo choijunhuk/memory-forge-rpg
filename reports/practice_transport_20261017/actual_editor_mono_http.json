@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "actual_editor_mono": true,
+  "actual_http_core_server": true,
+  "public_query_no_pending": true,
+  "truncated_real200_retained": true,
+  "exact_body_id_retry": true,
+  "one_reservation_one_ap_cost": true,
+  "whole_server_envelope_unchanged_on_retry": true,
+  "no_old_event_replay": true,
+  "before_server_version": 4,
+  "after_server_version": 5
+}

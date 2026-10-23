@@ -1,0 +1,37 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"scene\":\"MemoryForgeExpedition\",\"pickViaRealEventSystemRay\":true,\"chosen\":\"c7\",\"actuallyTuned\":[\"c7\"],\"fullRunIncludingLogEventsMatchesIndependentCore\":true,\"wholeStoreUnchanged\":true,\"picker\":false,\"repeatRejected\":true,\"repeatError\":null,\"repeatPure\":true,\"skipPresentationOnly\":true,\"ap\":4,\"version\":2,\"turn\":1,\"authoredDataChanged\":false,\"expectedStateInjected\":false,\"physicalMouseTest\":false},\"compiler\":\"codedom\"}}"
+    }
+  ],
+  "structuredContent": {
+    "success": true,
+    "message": "Code executed successfully.",
+    "data": {
+      "result": {
+        "scene": "MemoryForgeExpedition",
+        "pickViaRealEventSystemRay": true,
+        "chosen": "c7",
+        "actuallyTuned": [
+          "c7"
+        ],
+        "fullRunIncludingLogEventsMatchesIndependentCore": true,
+        "wholeStoreUnchanged": true,
+        "picker": false,
+        "repeatRejected": true,
+        "repeatError": null,
+        "repeatPure": true,
+        "skipPresentationOnly": true,
+        "ap": 4,
+        "version": 2,
+        "turn": 1,
+        "authoredDataChanged": false,
+        "expectedStateInjected": false,
+        "physicalMouseTest": false
+      },
+      "compiler": "codedom"
+    }
+  },
+  "isError": false
+}

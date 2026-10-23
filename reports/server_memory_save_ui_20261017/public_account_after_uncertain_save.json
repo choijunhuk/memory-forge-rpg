@@ -1,0 +1,93 @@
+{
+  "run": {
+    "runId": "pr-1f2248f645912718f8b35cdfb5a9d987",
+    "version": 236,
+    "phase": "DONE"
+  },
+  "memoryVersion": 1,
+  "history": [
+    {
+      "runId": "pr-1f2248f645912718f8b35cdfb5a9d987",
+      "version": 1,
+      "selectedChangeIds": [
+        "delta:nia:run%3Apr-1f2248f645912718f8b35cdfb5a9d987%3A7:add"
+      ]
+    }
+  ],
+  "memory": {
+    "sera": [
+      {
+        "key": "base:sera:0",
+        "id": "sera_round"
+      },
+      {
+        "key": "base:sera:1",
+        "id": "sera_cover"
+      },
+      {
+        "key": "base:sera:2",
+        "id": "sera_aim"
+      },
+      {
+        "key": "base:sera:3",
+        "id": "sera_timed"
+      },
+      {
+        "key": "base:sera:4",
+        "id": "com_guard",
+        "assigned": "sera"
+      }
+    ],
+    "harin": [
+      {
+        "key": "base:harin:0",
+        "id": "harin_shield"
+      },
+      {
+        "key": "base:harin:1",
+        "id": "harin_bash"
+      },
+      {
+        "key": "base:harin:2",
+        "id": "harin_counter"
+      },
+      {
+        "key": "base:harin:3",
+        "id": "harin_taunt"
+      },
+      {
+        "key": "base:harin:4",
+        "id": "com_slash",
+        "assigned": "harin"
+      }
+    ],
+    "nia": [
+      {
+        "key": "base:nia:0",
+        "id": "nia_wrench"
+      },
+      {
+        "key": "base:nia:1",
+        "id": "nia_barrier"
+      },
+      {
+        "key": "base:nia:2",
+        "id": "nia_tune"
+      },
+      {
+        "key": "base:nia:3",
+        "id": "nia_scan"
+      },
+      {
+        "key": "base:nia:4",
+        "id": "com_slash",
+        "assigned": "nia"
+      },
+      {
+        "key": "run:pr-1f2248f645912718f8b35cdfb5a9d987:7",
+        "id": "nia_overclock"
+      }
+    ]
+  },
+  "scope": "actual authoritative public account after the truncated successful save reply; pending client request unresolved"
+}

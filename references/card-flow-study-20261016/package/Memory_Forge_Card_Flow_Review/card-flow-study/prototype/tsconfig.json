@@ -1,0 +1,14 @@
+{
+  "//": "에디터 타입 검사용(실행에는 불필요). 검사하려면: npm i -D typescript @types/node && npx tsc",
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "erasableSyntaxOnly": true
+  },
+  "include": ["src", "test"]
+}

@@ -1,0 +1,53 @@
+{
+  "schema": "mf-ops-file-restore-rehearsal-2",
+  "scope": "Development file store only; not PostgreSQL, PITR or production",
+  "server_dll_sha256": "977cb32270d225cbb871e6fa6aa7f610e508bcaaec509bc1232514695be54be9",
+  "store_files_in_backup": [
+    "account-<alias>.json",
+    "account-<alias>.lock"
+  ],
+  "gate": {
+    "create_status": 200,
+    "enter_status": 200,
+    "restored_bytes_equal_backup": true,
+    "restored_store_mode": "0o700",
+    "restored_envelope_modes": [
+      "0o600"
+    ],
+    "account_status_after_restore": 200,
+    "run_status_after_restore": 200,
+    "account_view_equals_backup_time": true,
+    "run_view_equals_backup_time": true,
+    "pre_backup_receipt_replays_same_bytes": true,
+    "post_backup_command_status": 200,
+    "post_backup_command_same_bytes_as_original": true,
+    "damaged_restore_refused": [
+      500,
+      "STORE_CORRUPT"
+    ],
+    "damaged_restore_preserved_bytes": true
+  },
+  "checks": {
+    "create_status": 200,
+    "enter_status": 200,
+    "restored_bytes_equal_backup": true,
+    "restored_store_mode": "0o700",
+    "restored_envelope_modes": [
+      "0o600"
+    ],
+    "account_status_after_restore": 200,
+    "run_status_after_restore": 200,
+    "account_view_equals_backup_time": true,
+    "run_view_equals_backup_time": true,
+    "pre_backup_receipt_replays_same_bytes": true,
+    "post_backup_command_status": 200,
+    "post_backup_command_same_bytes_as_original": true,
+    "damaged_restore_refused": [
+      500,
+      "STORE_CORRUPT"
+    ],
+    "damaged_restore_preserved_bytes": true
+  },
+  "failed": [],
+  "pass": true
+}

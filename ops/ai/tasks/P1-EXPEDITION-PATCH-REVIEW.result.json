@@ -1,0 +1,28 @@
+{
+  "task_id": "P1-EXPEDITION-PATCH-REVIEW",
+  "run_id": "P1-EXPEDITION-PATCH-REVIEW-20261015T215121240417Z",
+  "status": "RECEIVED_UNVERIFIED",
+  "requestedEffort": "high",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "changes_verified": false,
+  "raw_output": "ops/ai/local/P1-EXPEDITION-PATCH-REVIEW-20261015T215121240417Z*",
+  "billing_verified_at": "2026-10-15T21:22:01.277612+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "codex/csharp-battle-opening",
+  "base_commit": "2ffc29ecdbdeee5027258ad6f73302b98820fc35",
+  "worktree": "/Users/choi/.codex/worktrees/csharp-battle-opening/Memory_forge",
+  "allowed_files": [
+    "reports/expedition_client_20261016/root_patch_opposite_review.md"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "1029db70-3ac8-4b7e-aee8-a554aa467400",
+  "subtype": "success",
+  "is_error": false,
+  "result": "**Verdict: changes requested. One bug blocks approval; the four code changes are fine once it's fixed.**\n\n**The bug:** `client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionClientPlayModeTests.cs:357` still checks that the result screen shows `\"기억 버전 1\"`. Your change 4 removed that text from the result line (`MemoryForgeExpeditionClient.cs:~764`). Your test diff only touched lines 174–175, so `ActualCommandsReach…SavedVersion` will fail at line 357 in the rerun that's going now.\n- **Fix:** change the check to `t => t.StartsWith(savedLine, StringComparison.Ordinal)`. The test doesn't get weaker: lines 351, 363 and 364 still check the version against the real state. The design doc (line 1270) treats the version as a server-side lock value and doesn't require showing it to players.\n\n**The four changes:**\n1. **`yield return null` before the overlay raycast:** approved. It only fixes timing. Every assertion is still there: the positive control, non-empty hits, the overlay on top, and nothing spent.\n2. **`MemoryV2.Migrate` in `StartPractice`:** approved. With an empty input it produces the same 7 fields as the old hand-built store. The only difference is `version` is `int 0` instead of `0L`. That's harmless because both the client's `Integer()` and `CommitMemoryV2` handle int, and nothing new is saved to disk or an account.\n3. **Scrolling `FoundParts` list:** approved. The 7th and later parts can now be reached. The list fits inside the 720-high panel with no overlap, and Core state isn't touched.\n4. **Forge \"변주하지 않고 떠나기\" button and removing the \"기억 버전\" text:** approved. Core allows `Proceed` in FORGE, offers don't spend a use, and nothing is refunded or changed in the numbers. The button doesn't overlap the part cards.\n   - **Note, not a blocker:** the HTML reference (`prototype/index.html:3358–3361`) has no leave button in this view. Also, after the paid 60-coin \"변주를 산다\" event, leaving gives up the variation with no refund. That's a wording choice, not a bug.\n\nThe features you listed as partial (card text, forecast, lobby, durable store) are still partial; this patch doesn't remove or shrink any of them.\n\n**Verification:** I didn't build or run any tests (NOT_RUN). Once line 357 is fixed, the 6 PlayMode tests and the .NET build need a fresh run with the real PASS/FAIL recorded.\n\n**Changed file:** `reports/expedition_client_20261016/root_patch_opposite_review.md` (the only file I edited). I don't have a session_id visible inside this session, so it needs to come from your CLI metadata.",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ]
+}

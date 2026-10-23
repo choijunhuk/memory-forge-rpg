@@ -1,0 +1,16 @@
+{
+  "success": true,
+  "message": "Build Succeeded.",
+  "data": {
+    "job_id": "build-9f15561028",
+    "result": "succeeded",
+    "platform": "StandaloneOSX",
+    "output_path": "/Users/choi/Documents/Memory_forge/ops/ai/local/builds/MemoryForgeExpedition-CardFlow-20261016.app",
+    "started_at": "2026-10-16T03:42:11.800581Z",
+    "duration_seconds": 11.624198,
+    "completed_at": "2026-10-16T03:42:23.424779Z",
+    "total_size_mb": 255.08,
+    "errors": 0,
+    "warnings": 0
+  }
+}

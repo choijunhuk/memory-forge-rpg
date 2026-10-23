@@ -1,0 +1,32 @@
+{
+  "files": [
+    {
+      "path": "core/MemoryForge.Core/Battle.cs",
+      "sha256": "b7ef94c9186f1d48578cdd0e3850a3787799ce8628fc7aed1bfa79ea588d3394"
+    },
+    {
+      "path": "core/MemoryForge.Core/Run.BattleQueries.cs",
+      "sha256": "e6ed5d13e0f311519277b3645e5aa55e5aca48176a2a7ec96ea33491f287cbc0"
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs",
+      "sha256": "82c3ad8a7826d271000a967e971b9b1b1a41ea678e90cb2d867b8fa6174d96fa"
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/Tests/PlayMode/EffectCandidatePlayModeTests.cs",
+      "sha256": "78ae4219f1f4f03128ca542af61404da6d90c3f79e5ac927585196f0137bb197"
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/Tests/PlayMode/EffectCandidateCoreWitnessTests.cs",
+      "sha256": "27b491b5900b0ab691cc0696985582025017084f7052600a1bd38d94a253dc69"
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionPickerGuardPlayModeTests.cs",
+      "sha256": "e57c1f3feb945af8d9d7d8bb64f71d7604a2b746e02a2853fab7a700dc0a1e42"
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/Tests/PlayMode/PreparedIntentPlayModeTests.cs",
+      "sha256": "2d806c43c16221f9c3cb973b8a19bfb12540c9a4f01c714073f18a92aa554e33"
+    }
+  ]
+}

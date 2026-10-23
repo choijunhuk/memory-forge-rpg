@@ -1,0 +1,10 @@
+**FIXED — APPROVE** for this scoped source review.
+
+- [MemoryForgeExpeditionClient.cs:2569](/Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:2569) suppresses the white HP preview unless exactly one enemy is alive, preventing aggregate loss from appearing on one enemy’s bar.
+- [Line 2564](/Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs:2564) retains Core-based `ForecastText`.
+
+No new concrete defect found. Multi-enemy per-enemy previews remain deferred work.
+
+`git diff --check`: PASS. Unity/runtime tests and compiler diagnostics: NOT_RUN. No files edited.
+
+

@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- P1-LOCAL-AUTHORITATIVE-PERSISTENCE: process/HTTP checks of server/MemoryForge.Server. BCL only: no test framework, package or mock.
+       The Core reference and the linked reviewed loaders exist only for the check-side oracle (independent Core replay of a stored journal
+       and the direct partial-mutation probe); the host under test is always the separately built server process. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <RollForward>Major</RollForward>
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../core/MemoryForge.Core/MemoryForge.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="../../core/MemoryForge.CoreChecks/BattleDataLoader.cs" Link="Linked/BattleDataLoader.cs" />
+    <Compile Include="../../core/MemoryForge.CoreChecks/MemoryV2DataLoader.cs" Link="Linked/MemoryV2DataLoader.cs" />
+    <Compile Include="../../core/MemoryForge.CoreChecks/RunDataLoader.cs" Link="Linked/RunDataLoader.cs" />
+    <Compile Include="../../core/MemoryForge.CoreChecks/StatsDataLoader.cs" Link="Linked/StatsDataLoader.cs" />
+    <Compile Include="../../core/MemoryForge.CoreChecks/JsonGraphComparison.cs" Link="Linked/JsonGraphComparison.cs" />
+  </ItemGroup>
+</Project>

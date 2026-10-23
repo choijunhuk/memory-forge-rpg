@@ -1,0 +1,38 @@
+{
+  "status": "PASS_REAL_JS_LITERALS_FOR_CLAUDE_UNITY_TESTS",
+  "baseline": [
+    {
+      "id": "sera_round",
+      "key": "base:sera:0"
+    },
+    {
+      "id": "sera_cover",
+      "key": "base:sera:1"
+    },
+    {
+      "id": "sera_aim",
+      "key": "base:sera:2"
+    },
+    {
+      "id": "sera_timed",
+      "key": "base:sera:3"
+    },
+    {
+      "id": "com_guard",
+      "assigned": "sera",
+      "key": "base:sera:4"
+    }
+  ],
+  "ids": [
+    "delta:sera:base%3Asera%3A0:upgrade",
+    "delta:sera:run%3Aphase:add"
+  ],
+  "cost": 6,
+  "committed": "{\"sera\":[{\"id\":\"sera_round\",\"key\":\"base:sera:0\",\"plus\":true},{\"id\":\"sera_cover\",\"key\":\"base:sera:1\"},{\"id\":\"sera_aim\",\"key\":\"base:sera:2\"},{\"id\":\"sera_timed\",\"key\":\"base:sera:3\"},{\"assigned\":\"sera\",\"id\":\"com_guard\",\"key\":\"base:sera:4\"},{\"id\":\"sera_phase\",\"key\":\"run:phase\",\"mods\":{\"c\":\"c_echo\"}}]}",
+  "migration": "{\"history\":[],\"legacyBackup\":{\"__proto__\":[{\"id\":\"legacy_unknown\",\"note\":\"keep complete original\"}],\"sera\":[\"sera_round\",\"sera_cover\",\"sera_aim\",\"sera_timed\",\"com_guard\"]},\"memory\":{\"sera\":[{\"id\":\"sera_round\",\"key\":\"base:sera:0\"},{\"id\":\"sera_cover\",\"key\":\"base:sera:1\"},{\"id\":\"sera_aim\",\"key\":\"base:sera:2\"},{\"id\":\"sera_timed\",\"key\":\"base:sera:3\"},{\"assigned\":\"sera\",\"id\":\"com_guard\",\"key\":\"base:sera:4\"}]},\"quarantine\":{\"__proto__\":{\"code\":\"INVALID_SNAPSHOT\",\"original\":[{\"id\":\"legacy_unknown\",\"note\":\"keep complete original\"}]}},\"receipts\":{},\"schema\":\"mf-memory-v2\",\"version\":0}",
+  "failureCodes": [
+    "OVER_CAPACITY",
+    "DEFEAT_KEEP_ONE"
+  ],
+  "scope": "Actual current JS behavior for selected authored test fixture; not Unity execution"
+}

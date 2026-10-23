@@ -1,0 +1,40 @@
+{
+  "c": "ravien",
+  "key": "fig_bond_turn",
+  "path": "ravien/images/char_ravien_seated_playful_v01.png",
+  "refs": [
+    "/Users/choi/Documents/Memory_forge/art/moments/ravien/images/char_ravien_seated_surprised_v01.png"
+  ],
+  "common": "Use case: precise-object-edit. Edit this approved narrative key-pose of Ravien, an adult age28. Preserve the full seated composition, face/identity, exact outfit, chair/table, body proportions and transparent alpha. ",
+  "pose": "Only change her acting: slightly more self-possessed closed-mouth smile, gaze meets viewer, one eyebrow relaxes. The gloved hand already at the paper lightly turns its BLANK corner inward, and her other gloved hand loosely holds the pen at tabletop level. The scene is a quiet invitation to take a walk. No other composition or clothing changes.",
+  "prompt": "Use case: precise-object-edit. Edit this approved narrative key-pose of Ravien, an adult age28. Preserve the full seated composition, face/identity, exact outfit, chair/table, body proportions and transparent alpha. Only change her acting: slightly more self-possessed closed-mouth smile, gaze meets viewer, one eyebrow relaxes. The gloved hand already at the paper lightly turns its BLANK corner inward, and her other gloved hand loosely holds the pen at tabletop level. The scene is a quiet invitation to take a walk. No other composition or clothing changes.",
+  "source": "/Users/choi/.codex/generated_images/01a14d20-ffd5-7e81-9e47-85c1c8415e11/exec-e4291106-280b-4389-83ef-5cbf1e8e6603.png",
+  "tool": "Codex built-in image_gen; subscription-included; no API fallback",
+  "review": "pass",
+  "previous_attempt": {
+    "c": "ravien",
+    "key": "fig_bond_turn",
+    "path": "ravien/images/char_ravien_seated_playful_v01.png",
+    "refs": [
+      "/Users/choi/Documents/Memory_forge/art/moments/ravien/images/char_ravien_stand_neutral_v01.png"
+    ],
+    "pose": "Age28 Ravien seated at a small writing table on a red upholstered wooden chair, full seated body and heels visible. Her right gloved thumb/index gently turn the corner of one BLANK cream paper, left hand loosely holding a slender pen just above table. Closed red folder lies aside. Green eyes toward viewer, one eyebrow slightly lifted, clever private half smile, not wink. Warm personal invitation hidden within her usual poise. Wine red long waves, scales pendant and entire exact tailored black/red outfit unchanged.",
+    "prompt": "Use case: identity-preserve. Locked character design reference. Make ONE new non-explicit narrative RPG key-pose, 1024x1536 full length transparent PNG. Preserve adult identity, age, hairstyle, face, exact costume/colors and painterly anime cel style. All head, fingers, shoes and important props inside canvas. No scene background, haze, labels, panels, other people or erotic posing. Character acting and prop contact are the focus. Acting: Age28 Ravien seated at a small writing table on a red upholstered wooden chair, full seated body and heels visible. Her right gloved thumb/index gently turn the corner of one BLANK cream paper, left hand loosely holding a slender pen just above table. Closed red folder lies aside. Green eyes toward viewer, one eyebrow slightly lifted, clever private half smile, not wink. Warm personal invitation hidden within her usual poise. Wine red long waves, scales pendant and entire exact tailored black/red outfit unchanged.",
+    "error": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID 62358752-49a8-4957-85f9-27ec9a35fe2c. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
+    "review": "real_constraint"
+  },
+  "score": 93,
+  "review_notes": "Rendered output inspected against design/source narrative. Face, age, outfit, primary hand/prop state and grounded support match the key-pose. No rig or live playback acceptance.",
+  "backend_model": "not exposed by tool",
+  "selected": true,
+  "sha256": "c122b1f2f87462dbda48660bbb682c1e9c9a9b3ed016aaefd7c8fed6b1f88cbb",
+  "size": [
+    1024,
+    1536
+  ],
+  "mode": "RGBA",
+  "alpha_extrema": [
+    0,
+    254
+  ]
+}

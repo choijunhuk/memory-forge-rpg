@@ -1,0 +1,12 @@
+{
+  "unresolved": [],
+  "failed_attempts": [
+    {
+      "record": "records/aila-fig_bond_return-failure.json",
+      "resolved_by": "aila/images/char_aila_fig_bond_return_styleA_v01.png",
+      "error": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID a94ab0cf-25d0-4320-afeb-d739346d8ee4. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")"
+    }
+  ],
+  "route": "built-in subscription only",
+  "paid_api_or_other_providers_used": false
+}

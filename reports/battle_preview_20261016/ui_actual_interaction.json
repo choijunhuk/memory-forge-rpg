@@ -1,0 +1,209 @@
+{
+  "scope": "Actual Unity Editor/EventSystem/public-view handlers, not physical native input",
+  "now": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"Mode\":\"now\",\"AP\":4,\"Forecast\":{\"Error\":null,\"Mode\":\"now\",\"Cost\":1,\"Due\":null,\"Hidden\":false,\"EnemyHpLoss\":0,\"BlockDelta\":8,\"HpDelta\":0,\"Defeat\":false},\"RunStateUnchanged\":true,\"Hand\":[{\"Uid\":\"c7\",\"Id\":\"harin_shield\"},{\"Uid\":\"c1\",\"Id\":\"sera_round\"},{\"Uid\":\"c15\",\"Id\":\"nia_tune\"},{\"Uid\":\"c13\",\"Id\":\"nia_wrench\"},{\"Uid\":\"c2\",\"Id\":\"sera_cover\"}]},\"compiler\":\"codedom\"}}"
+      }
+    ],
+    "structuredContent": {
+      "success": true,
+      "message": "Code executed successfully.",
+      "data": {
+        "result": {
+          "Mode": "now",
+          "AP": 4,
+          "Forecast": {
+            "Error": null,
+            "Mode": "now",
+            "Cost": 1,
+            "Due": null,
+            "Hidden": false,
+            "EnemyHpLoss": 0,
+            "BlockDelta": 8,
+            "HpDelta": 0,
+            "Defeat": false
+          },
+          "RunStateUnchanged": true,
+          "Hand": [
+            {
+              "Uid": "c7",
+              "Id": "harin_shield"
+            },
+            {
+              "Uid": "c1",
+              "Id": "sera_round"
+            },
+            {
+              "Uid": "c15",
+              "Id": "nia_tune"
+            },
+            {
+              "Uid": "c13",
+              "Id": "nia_wrench"
+            },
+            {
+              "Uid": "c2",
+              "Id": "sera_cover"
+            }
+          ]
+        },
+        "compiler": "codedom"
+      }
+    },
+    "isError": false
+  },
+  "reservation": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"Mode\":\"next\",\"AP\":4,\"Forecast\":{\"Error\":null,\"Mode\":\"next\",\"Cost\":1,\"Due\":2,\"Hidden\":false,\"EnemyHpLoss\":0,\"BlockDelta\":0,\"HpDelta\":0,\"Defeat\":false},\"RunStateUnchanged\":true,\"Hand\":[{\"Uid\":\"c7\",\"Id\":\"harin_shield\"},{\"Uid\":\"c1\",\"Id\":\"sera_round\"},{\"Uid\":\"c15\",\"Id\":\"nia_tune\"},{\"Uid\":\"c13\",\"Id\":\"nia_wrench\"},{\"Uid\":\"c2\",\"Id\":\"sera_cover\"}]},\"compiler\":\"codedom\"}}"
+      }
+    ],
+    "structuredContent": {
+      "success": true,
+      "message": "Code executed successfully.",
+      "data": {
+        "result": {
+          "Mode": "next",
+          "AP": 4,
+          "Forecast": {
+            "Error": null,
+            "Mode": "next",
+            "Cost": 1,
+            "Due": 2,
+            "Hidden": false,
+            "EnemyHpLoss": 0,
+            "BlockDelta": 0,
+            "HpDelta": 0,
+            "Defeat": false
+          },
+          "RunStateUnchanged": true,
+          "Hand": [
+            {
+              "Uid": "c7",
+              "Id": "harin_shield"
+            },
+            {
+              "Uid": "c1",
+              "Id": "sera_round"
+            },
+            {
+              "Uid": "c15",
+              "Id": "nia_tune"
+            },
+            {
+              "Uid": "c13",
+              "Id": "nia_wrench"
+            },
+            {
+              "Uid": "c2",
+              "Id": "sera_cover"
+            }
+          ]
+        },
+        "compiler": "codedom"
+      }
+    },
+    "isError": false
+  },
+  "rapidFollowupCurrentError": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"ActualConfirm\":true,\"PreviousToast\":\"경계 방패 사용\",\"CurrentNotice\":\"\",\"AP\":3,\"Block\":8,\"Version\":2,\"Forecast\":{\"Error\":\"BAD_TARGET\",\"Mode\":\"now\",\"Cost\":0,\"Due\":null,\"Hidden\":false,\"EnemyHpLoss\":0,\"BlockDelta\":0,\"HpDelta\":0,\"Defeat\":false},\"SelectionStateUnchanged\":true},\"compiler\":\"codedom\"}}"
+      }
+    ],
+    "structuredContent": {
+      "success": true,
+      "message": "Code executed successfully.",
+      "data": {
+        "result": {
+          "ActualConfirm": true,
+          "PreviousToast": "경계 방패 사용",
+          "CurrentNotice": "",
+          "AP": 3,
+          "Block": 8,
+          "Version": 2,
+          "Forecast": {
+            "Error": "BAD_TARGET",
+            "Mode": "now",
+            "Cost": 0,
+            "Due": null,
+            "Hidden": false,
+            "EnemyHpLoss": 0,
+            "BlockDelta": 0,
+            "HpDelta": 0,
+            "Defeat": false
+          },
+          "SelectionStateUnchanged": true
+        },
+        "compiler": "codedom"
+      }
+    },
+    "isError": false
+  },
+  "hiddenAfterSelectingRequiredEnemy": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"Target\":\"e19\",\"AP\":4,\"Forecast\":{\"Error\":null,\"Mode\":\"now\",\"Cost\":1,\"Due\":null,\"Hidden\":true,\"EnemyHpLoss\":0,\"BlockDelta\":0,\"HpDelta\":0,\"Defeat\":false},\"RunStateUnchanged\":true},\"compiler\":\"codedom\"}}"
+      }
+    ],
+    "structuredContent": {
+      "success": true,
+      "message": "Code executed successfully.",
+      "data": {
+        "result": {
+          "Target": "e19",
+          "AP": 4,
+          "Forecast": {
+            "Error": null,
+            "Mode": "now",
+            "Cost": 1,
+            "Due": null,
+            "Hidden": true,
+            "EnemyHpLoss": 0,
+            "BlockDelta": 0,
+            "HpDelta": 0,
+            "Defeat": false
+          },
+          "RunStateUnchanged": true
+        },
+        "compiler": "codedom"
+      }
+    },
+    "isError": false
+  },
+  "build": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"result\":\"Succeeded\",\"errors\":0,\"warnings\":0,\"bytes\":267436986,\"seconds\":13.6311562,\"scenePaths\":[\"Assets/Scenes/MemoryForgeExpedition.unity\",\"Assets/Scenes/MemoryForgeBattle.unity\",\"Assets/Scenes/SampleScene.unity\"],\"outputPath\":\"/Users/choi/Documents/Memory_forge/ops/ai/local/builds/MemoryForgeExpedition-Forecast-20261016.app\",\"temporaryProbeIncluded\":false},\"compiler\":\"codedom\"}}"
+      }
+    ],
+    "structuredContent": {
+      "success": true,
+      "message": "Code executed successfully.",
+      "data": {
+        "result": {
+          "result": "Succeeded",
+          "errors": 0,
+          "warnings": 0,
+          "bytes": 267436986,
+          "seconds": 13.6311562,
+          "scenePaths": [
+            "Assets/Scenes/MemoryForgeExpedition.unity",
+            "Assets/Scenes/MemoryForgeBattle.unity",
+            "Assets/Scenes/SampleScene.unity"
+          ],
+          "outputPath": "/Users/choi/Documents/Memory_forge/ops/ai/local/builds/MemoryForgeExpedition-Forecast-20261016.app",
+          "temporaryProbeIncluded": false
+        },
+        "compiler": "codedom"
+      }
+    },
+    "isError": false
+  }
+}

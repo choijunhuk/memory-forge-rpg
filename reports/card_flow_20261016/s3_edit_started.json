@@ -1,0 +1,29 @@
+{
+  "_meta": {
+    "fastmcp": {
+      "wrap_result": true
+    }
+  },
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Test job started.\",\"error\":null,\"data\":{\"job_id\":\"d8fac602db994a5699a4e8b1300aeb4a\",\"status\":\"running\",\"mode\":\"EditMode\",\"include_details\":true,\"include_failed_tests\":true},\"hint\":null}"
+    }
+  ],
+  "structuredContent": {
+    "result": {
+      "success": true,
+      "message": "Test job started.",
+      "error": null,
+      "data": {
+        "job_id": "d8fac602db994a5699a4e8b1300aeb4a",
+        "status": "running",
+        "mode": "EditMode",
+        "include_details": true,
+        "include_failed_tests": true
+      },
+      "hint": null
+    }
+  },
+  "isError": false
+}

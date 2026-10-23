@@ -1,0 +1,29 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Retrieved 2 log entries.\",\"data\":[{\"type\":\"Error\",\"message\":\"Assets/Tests/PlayMode/EffectCandidateCoreWitnessTests.cs(213,26): error CS1061: 'BattleState' does not contain a definition for 'CardOrder' and no accessible extension method 'CardOrder' accepting a first argument of type 'BattleState' could be found (are you missing a using directive or an assembly reference?)\\n\",\"file\":\"Assets/Tests/PlayMode/EffectCandidateCoreWitnessTests.cs\",\"line\":213,\"stackTrace\":null},{\"type\":\"Error\",\"message\":\"Assets/Tests/PlayMode/EffectCandidateCoreWitnessTests.cs(375,58): error CS1061: 'BattleState' does not contain a definition for 'CardOrder' and no accessible extension method 'CardOrder' accepting a first argument of type 'BattleState' could be found (are you missing a using directive or an assembly reference?)\\n\",\"file\":\"Assets/Tests/PlayMode/EffectCandidateCoreWitnessTests.cs\",\"line\":375,\"stackTrace\":null}]}"
+    }
+  ],
+  "structuredContent": {
+    "success": true,
+    "message": "Retrieved 2 log entries.",
+    "data": [
+      {
+        "type": "Error",
+        "message": "Assets/Tests/PlayMode/EffectCandidateCoreWitnessTests.cs(213,26): error CS1061: 'BattleState' does not contain a definition for 'CardOrder' and no accessible extension method 'CardOrder' accepting a first argument of type 'BattleState' could be found (are you missing a using directive or an assembly reference?)\n",
+        "file": "Assets/Tests/PlayMode/EffectCandidateCoreWitnessTests.cs",
+        "line": 213,
+        "stackTrace": null
+      },
+      {
+        "type": "Error",
+        "message": "Assets/Tests/PlayMode/EffectCandidateCoreWitnessTests.cs(375,58): error CS1061: 'BattleState' does not contain a definition for 'CardOrder' and no accessible extension method 'CardOrder' accepting a first argument of type 'BattleState' could be found (are you missing a using directive or an assembly reference?)\n",
+        "file": "Assets/Tests/PlayMode/EffectCandidateCoreWitnessTests.cs",
+        "line": 375,
+        "stackTrace": null
+      }
+    ]
+  },
+  "isError": false
+}

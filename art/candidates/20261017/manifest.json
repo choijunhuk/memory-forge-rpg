@@ -1,0 +1,304 @@
+{
+  "status": "development-art-candidates-not-release-masters",
+  "design": "v0.8.1 sections 9 and 15; unchanged ages and runtime values",
+  "selected_count": 9,
+  "assets": [
+    {
+      "id": "sera",
+      "kind": "sheet",
+      "version": "v01",
+      "selected": false,
+      "filename": "char_sera_sheet_default_v01.png",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGB",
+      "alpha_extrema": null,
+      "bytes": 2111601,
+      "sha256": "38fb989c97eb1c8973772227b2b1981c614785ab87fed5c7a7ba3c6bf8c8ba27",
+      "candidate": "art/candidates/20261017/codex/char_sera_sheet_default_v01.png",
+      "tool": "Codex built-in image_gen; backend model not exposed",
+      "source_execution_file": "exec-2c3af001-cde6-4435-a405-729e801ab3d0.png",
+      "reference_candidates": [],
+      "review": "superseded candidate; preserved"
+    },
+    {
+      "id": "sera",
+      "kind": "cutin",
+      "version": "v01",
+      "selected": true,
+      "filename": "char_sera_cutin_default_v01.png",
+      "width": 1086,
+      "height": 1448,
+      "mode": "RGB",
+      "alpha_extrema": null,
+      "bytes": 2785199,
+      "sha256": "5705d9152e21db67b4e2abda04ef77f97e7d404ea6ff713421e3e69ab681cfc1",
+      "candidate": "art/candidates/20261017/codex/char_sera_cutin_default_v01.png",
+      "tool": "Codex built-in image_gen; backend model not exposed",
+      "source_execution_file": "exec-ad0f691d-4d5a-48bb-bdb5-d286bcfda5b0.png",
+      "reference_candidates": [
+        "char_sera_sheet_default_v02.png"
+      ],
+      "review": "internal development selection; Claude art cross-review pending"
+    },
+    {
+      "id": "sera",
+      "kind": "sd",
+      "version": "v01",
+      "selected": false,
+      "filename": "char_sera_sd_default_v01.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bytes": 1280838,
+      "sha256": "18eda94ad941d82cb40c8e769768c2f67625f3bec06a4d2618e84d01bac0065f",
+      "candidate": "art/candidates/20261017/codex/char_sera_sd_default_v01.png",
+      "tool": "Codex built-in image_gen; backend model not exposed",
+      "source_execution_file": "exec-a575e887-41e6-43e2-bca9-3c52c05c10e6.png",
+      "reference_candidates": [
+        "char_sera_sheet_default_v02.png"
+      ],
+      "review": "superseded candidate; preserved"
+    },
+    {
+      "id": "sera",
+      "kind": "sd",
+      "version": "v02",
+      "selected": true,
+      "filename": "char_sera_sd_default_v02.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bytes": 1720591,
+      "sha256": "6c0fb935031e3fce1a9039d7c6771e2cbd3f41526ef3313e17f865bd9ee9cced",
+      "candidate": "art/candidates/20261017/codex/char_sera_sd_default_v02.png",
+      "tool": "Codex built-in image_gen; backend model not exposed",
+      "source_execution_file": "exec-0030913a-cb0b-4a34-9850-7bbe21c8218f.png",
+      "reference_candidates": [
+        "char_sera_sd_default_v01.png"
+      ],
+      "review": "internal development selection; Claude art cross-review pending"
+    },
+    {
+      "id": "harin",
+      "kind": "sheet",
+      "version": "v01",
+      "selected": true,
+      "filename": "char_harin_sheet_default_v01.png",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGB",
+      "alpha_extrema": null,
+      "bytes": 2416115,
+      "sha256": "2c736b1ef79868dfa8dd8150750f9339469f54df25ccea7f5358edbd7ddefce1",
+      "candidate": "art/candidates/20261017/codex/char_harin_sheet_default_v01.png",
+      "tool": "Codex built-in image_gen; backend model not exposed",
+      "source_execution_file": "exec-d615e2be-052f-492c-b4b8-ee90838852e8.png",
+      "reference_candidates": [],
+      "review": "internal development selection; Claude art cross-review pending"
+    },
+    {
+      "id": "harin",
+      "kind": "cutin",
+      "version": "v01",
+      "selected": true,
+      "filename": "char_harin_cutin_default_v01.png",
+      "width": 1086,
+      "height": 1448,
+      "mode": "RGB",
+      "alpha_extrema": null,
+      "bytes": 2872767,
+      "sha256": "1ef0e9dc0ff40f8817eaa83abd4d1d758dc6391e13ceddecef11a834285ef381",
+      "candidate": "art/candidates/20261017/codex/char_harin_cutin_default_v01.png",
+      "tool": "Codex built-in image_gen; backend model not exposed",
+      "source_execution_file": "exec-ace8c7a0-77f0-43f4-9778-31e5333a1323.png",
+      "reference_candidates": [
+        "char_harin_sheet_default_v01.png"
+      ],
+      "review": "internal development selection; Claude art cross-review pending"
+    },
+    {
+      "id": "harin",
+      "kind": "sd",
+      "version": "v01",
+      "selected": false,
+      "filename": "char_harin_sd_default_v01.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bytes": 1538604,
+      "sha256": "ca0b24f02926cbf3e41dedcf0c60a371f4bd4c9fe3f4e2a7851cd853c0283fce",
+      "candidate": "art/candidates/20261017/codex/char_harin_sd_default_v01.png",
+      "tool": "Codex built-in image_gen; backend model not exposed",
+      "source_execution_file": "exec-9a96512e-33e6-48b8-8219-ebeb1ba97495.png",
+      "reference_candidates": [
+        "char_harin_sheet_default_v01.png"
+      ],
+      "review": "superseded candidate; preserved"
+    },
+    {
+      "id": "harin",
+      "kind": "sd",
+      "version": "v02",
+      "selected": true,
+      "filename": "char_harin_sd_default_v02.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bytes": 1674653,
+      "sha256": "a36236fa000ee8c6d169c3c0264f8f9c2728d69e4fa76cdd8f588843a0b98745",
+      "candidate": "art/candidates/20261017/codex/char_harin_sd_default_v02.png",
+      "tool": "Codex built-in image_gen; backend model not exposed",
+      "source_execution_file": "exec-9a3f0333-a8a8-48c5-9e33-786d7127cd9a.png",
+      "reference_candidates": [
+        "char_harin_sd_default_v01.png"
+      ],
+      "review": "internal development selection; Claude art cross-review pending"
+    },
+    {
+      "id": "nia",
+      "kind": "sheet",
+      "version": "v01",
+      "selected": true,
+      "filename": "char_nia_sheet_default_v01.png",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGB",
+      "alpha_extrema": null,
+      "bytes": 2075228,
+      "sha256": "571e4204be0630e902f27c573596ae038810dc24510e2f5749d9a2330b6b63f2",
+      "candidate": "art/candidates/20261017/codex/char_nia_sheet_default_v01.png",
+      "tool": "Codex built-in image_gen; backend model not exposed",
+      "source_execution_file": "exec-669f2af9-7c6e-466d-ac05-12a99c4726af.png",
+      "reference_candidates": [],
+      "review": "internal development selection; Claude art cross-review pending"
+    },
+    {
+      "id": "nia",
+      "kind": "cutin",
+      "version": "v01",
+      "selected": true,
+      "filename": "char_nia_cutin_default_v01.png",
+      "width": 1086,
+      "height": 1448,
+      "mode": "RGB",
+      "alpha_extrema": null,
+      "bytes": 2602313,
+      "sha256": "42b023d250ddd25a7915161c47cdae9835837f0810cf453e1db01dd7db865a1b",
+      "candidate": "art/candidates/20261017/codex/char_nia_cutin_default_v01.png",
+      "tool": "Codex built-in image_gen; backend model not exposed",
+      "source_execution_file": "exec-9b274773-5efb-476a-99c9-b9356ff08941.png",
+      "reference_candidates": [
+        "char_nia_sheet_default_v01.png"
+      ],
+      "review": "internal development selection; Claude art cross-review pending"
+    },
+    {
+      "id": "nia",
+      "kind": "sd",
+      "version": "v01",
+      "selected": false,
+      "filename": "char_nia_sd_default_v01.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bytes": 1259618,
+      "sha256": "c406f660d708a0ba7bfbba5ab802dac56382f7255dac0ffb90e36638bf51c70e",
+      "candidate": "art/candidates/20261017/codex/char_nia_sd_default_v01.png",
+      "tool": "Codex built-in image_gen; backend model not exposed",
+      "source_execution_file": "exec-0882a964-d283-444c-a1ab-11727437529e.png",
+      "reference_candidates": [
+        "char_nia_sheet_default_v01.png"
+      ],
+      "review": "superseded candidate; preserved"
+    },
+    {
+      "id": "nia",
+      "kind": "sd",
+      "version": "v02",
+      "selected": true,
+      "filename": "char_nia_sd_default_v02.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bytes": 1635541,
+      "sha256": "f92e9e99cb089c68e251dffa58d2bae50f0480edb7f09fed494dedd601862ca5",
+      "candidate": "art/candidates/20261017/codex/char_nia_sd_default_v02.png",
+      "tool": "Codex built-in image_gen; backend model not exposed",
+      "source_execution_file": "exec-7da72734-4b2d-4e9b-b274-72cb2ad19488.png",
+      "reference_candidates": [
+        "char_nia_sd_default_v01.png"
+      ],
+      "review": "internal development selection; Claude art cross-review pending"
+    },
+    {
+      "id": "sera",
+      "kind": "sheet",
+      "version": "v02",
+      "selected": true,
+      "filename": "char_sera_sheet_default_v02.png",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGB",
+      "alpha_extrema": null,
+      "bytes": 2045429,
+      "sha256": "d895e00377ed5b56f7dca20be23adda59b0de186eae2fd02e720039d1b0f4477",
+      "candidate": "art/candidates/20261017/codex/char_sera_sheet_default_v02.png",
+      "tool": "Codex built-in image_gen; backend model not exposed",
+      "source_execution_file": "exec-a4b21235-d4c4-438f-b001-c5a813fa265e.png",
+      "reference_candidates": [
+        "char_sera_sheet_default_v01.png"
+      ],
+      "review": "internal development selection; Claude art cross-review pending"
+    }
+  ],
+  "not_complete": [
+    "10-character full art set",
+    "layered PSD",
+    "rigs",
+    "animation",
+    "all 12 unique card illustrations per character"
+  ],
+  "comfyui_trial": {
+    "selected": false,
+    "candidate": "art/candidates/20261017/comfyui/char_sera_sheet_default_v01.png",
+    "width": 768,
+    "height": 768,
+    "bytes": 615922,
+    "sha256": "282c3380575323828dfc5e5aa5913cda92a6d60097f5670ff56ca0e6f18e9d2b",
+    "tool": "Codex-operated SSH to user local ComfyUI",
+    "weights": "flux-2-klein-4b-fp8.safetensors; qwen_3_4b.safetensors; flux2-vae.safetensors",
+    "reason": "Sniper rifle/hourglass chamber missing; exaggerated iris markings; text-only wrapper has no reference-image input."
+  },
+  "verification": {
+    "png_decode_and_chunk_crc": "PASS",
+    "sd_real_alpha": "PASS",
+    "gui_unity_editor_play_nine_images": "PASS",
+    "final_battle_art_integration": "NOT_RUN",
+    "independent_claude_art_review": "NOT_RUN"
+  }
+}

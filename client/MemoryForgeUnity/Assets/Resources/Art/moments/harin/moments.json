@@ -1,0 +1,1359 @@
+{
+  "format": "memory-forge-moments/1",
+  "character": "harin",
+  "status": "draft",
+  "images": {
+    "fig_default": "moments/harin/images/char_harin_fig_default_styleA_v01.png",
+    "fig_glove": "moments/harin/images/char_harin_fig_glove_styleA_v01.png",
+    "fig_lobby_cat": "moments/harin/images/char_harin_fig_lobby_cat_styleA_v01.png",
+    "fig_guard": "moments/harin/images/char_harin_fig_guard_styleA_v01.png",
+    "fig_hide": "moments/harin/images/char_harin_fig_hide_styleA_v01.png",
+    "fig_cough": "moments/harin/images/char_harin_fig_cough_styleA_v01.png",
+    "fig_worry": "moments/harin/images/char_harin_fig_worry_styleA_v02.png",
+    "fig_cat": "moments/harin/images/char_harin_fig_cat_styleA_v02.png",
+    "fig_soft": "moments/harin/images/char_harin_fig_soft_styleA_v02.png",
+    "fig_lobby_soft": "moments/harin/images/char_harin_fig_lobby_soft_styleA_v01.png",
+    "fig_rest": "moments/harin/images/char_harin_fig_rest_styleA_v03.png",
+    "fig_resolve": "moments/harin/images/char_harin_fig_resolve_styleA_v01.png",
+    "fig_victory": "moments/harin/images/char_harin_fig_victory_styleA_v01.png",
+    "bg_room": "moments/harin/images/char_harin_bg_room_styleA_v01.png",
+    "bg_victory": "moments/harin/images/char_harin_bg_victory_styleA_v01.png",
+    "expr_neutral": "moments/harin/images/char_harin_expr_neutral_styleA_v01.png",
+    "expr_happy": "moments/harin/images/char_harin_expr_happy_styleA_v01.png",
+    "expr_annoyed": "moments/harin/images/char_harin_expr_annoyed_styleA_v01.png",
+    "expr_surprised": "moments/harin/images/char_harin_expr_surprised_styleA_v01.png",
+    "expr_worried": "moments/harin/images/char_harin_expr_worried_styleA_v01.png",
+    "expr_determined": "moments/harin/images/char_harin_expr_determined_styleA_v01.png",
+    "fig_cat_placed": "moments/harin/images/char_harin_fig_cat_placed_styleA_v02.png"
+  },
+  "anchors": {
+    "fig_default": {
+      "face": [
+        0.51,
+        0.085
+      ],
+      "hands": [
+        0.62,
+        0.46
+      ],
+      "body": [
+        0.51,
+        0.5
+      ]
+    },
+    "fig_glove": {
+      "face": [
+        0.51,
+        0.085
+      ],
+      "hands": [
+        0.57,
+        0.22
+      ],
+      "body": [
+        0.51,
+        0.5
+      ]
+    },
+    "fig_lobby_cat": {
+      "face": [
+        0.51,
+        0.085
+      ],
+      "hands": [
+        0.61,
+        0.32
+      ],
+      "body": [
+        0.51,
+        0.5
+      ]
+    },
+    "fig_guard": {
+      "face": [
+        0.51,
+        0.1
+      ],
+      "hands": [
+        0.49,
+        0.51
+      ],
+      "body": [
+        0.51,
+        0.5
+      ]
+    },
+    "fig_hide": {
+      "face": [
+        0.51,
+        0.085
+      ],
+      "hands": [
+        0.59,
+        0.32
+      ],
+      "body": [
+        0.51,
+        0.5
+      ]
+    },
+    "fig_cough": {
+      "face": [
+        0.51,
+        0.085
+      ],
+      "hands": [
+        0.46,
+        0.12
+      ],
+      "body": [
+        0.51,
+        0.5
+      ]
+    },
+    "fig_worry": {
+      "face": [
+        0.51,
+        0.105
+      ],
+      "hands": [
+        0.66,
+        0.415
+      ],
+      "body": [
+        0.51,
+        0.53
+      ]
+    },
+    "fig_cat": {
+      "face": [
+        0.51,
+        0.105
+      ],
+      "hands": [
+        0.61,
+        0.325
+      ],
+      "body": [
+        0.51,
+        0.53
+      ]
+    },
+    "fig_soft": {
+      "face": [
+        0.51,
+        0.105
+      ],
+      "hands": [
+        0.53,
+        0.485
+      ],
+      "body": [
+        0.51,
+        0.53
+      ]
+    },
+    "fig_lobby_soft": {
+      "face": [
+        0.51,
+        0.085
+      ],
+      "hands": [
+        0.62,
+        0.46
+      ],
+      "body": [
+        0.51,
+        0.5
+      ]
+    },
+    "fig_rest": {
+      "face": [
+        0.51,
+        0.105
+      ],
+      "hands": [
+        0.58,
+        0.46
+      ],
+      "body": [
+        0.51,
+        0.53
+      ]
+    },
+    "fig_resolve": {
+      "face": [
+        0.51,
+        0.085
+      ],
+      "hands": [
+        0.62,
+        0.46
+      ],
+      "body": [
+        0.51,
+        0.5
+      ]
+    },
+    "fig_victory": {
+      "face": [
+        0.51,
+        0.1
+      ],
+      "hands": [
+        0.49,
+        0.51
+      ],
+      "body": [
+        0.51,
+        0.5
+      ]
+    },
+    "expr_neutral": {
+      "face": [
+        0.51,
+        0.44
+      ]
+    },
+    "expr_happy": {
+      "face": [
+        0.51,
+        0.44
+      ]
+    },
+    "expr_annoyed": {
+      "face": [
+        0.51,
+        0.44
+      ]
+    },
+    "expr_surprised": {
+      "face": [
+        0.51,
+        0.44
+      ]
+    },
+    "expr_worried": {
+      "face": [
+        0.51,
+        0.44
+      ]
+    },
+    "expr_determined": {
+      "face": [
+        0.51,
+        0.44
+      ]
+    },
+    "fig_cat_placed": {
+      "face": [
+        0.51,
+        0.105
+      ],
+      "hands": [
+        0.53,
+        0.485
+      ],
+      "body": [
+        0.51,
+        0.53
+      ]
+    }
+  },
+  "motions": {
+    "settle": {
+      "tracks": {
+        "figure": [
+          {
+            "t": 0,
+            "x": 0,
+            "y": 0,
+            "rot": 0,
+            "scale": 1,
+            "alpha": 1
+          },
+          {
+            "t": 0.35,
+            "x": 0,
+            "y": -5,
+            "rot": -0.35,
+            "scale": 1,
+            "alpha": 1
+          },
+          {
+            "t": 0.8,
+            "x": 0,
+            "y": 0,
+            "rot": 0,
+            "scale": 1,
+            "alpha": 1
+          }
+        ]
+      },
+      "loop": false,
+      "ease": "inOut"
+    },
+    "turn_to_player": {
+      "tracks": {
+        "figure": [
+          {
+            "t": 0,
+            "x": 0,
+            "y": 0,
+            "rot": 0,
+            "scale": 1,
+            "alpha": 1
+          },
+          {
+            "t": 0.65,
+            "x": -20,
+            "y": 0,
+            "rot": -0.7,
+            "scale": 1.015,
+            "alpha": 1
+          },
+          {
+            "t": 1.25,
+            "x": 0,
+            "y": 0,
+            "rot": 0,
+            "scale": 1,
+            "alpha": 1
+          }
+        ]
+      },
+      "loop": false,
+      "ease": "inOut"
+    },
+    "pause_near": {
+      "tracks": {
+        "figure": [
+          {
+            "t": 0,
+            "x": 0,
+            "y": 0,
+            "rot": 0,
+            "scale": 1,
+            "alpha": 1
+          },
+          {
+            "t": 0.55,
+            "x": -14,
+            "y": 0,
+            "rot": 0,
+            "scale": 1.02,
+            "alpha": 1
+          },
+          {
+            "t": 1.55,
+            "x": -14,
+            "y": 0,
+            "rot": 0,
+            "scale": 1.02,
+            "alpha": 1
+          },
+          {
+            "t": 2.1,
+            "x": 0,
+            "y": 0,
+            "rot": 0,
+            "scale": 1,
+            "alpha": 1
+          }
+        ]
+      },
+      "loop": false,
+      "ease": "inOut"
+    },
+    "step_clear": {
+      "tracks": {
+        "figure": [
+          {
+            "t": 0,
+            "x": 0,
+            "y": 0,
+            "rot": 0,
+            "scale": 1,
+            "alpha": 1
+          },
+          {
+            "t": 0.65,
+            "x": 38,
+            "y": 0,
+            "rot": 0.4,
+            "scale": 1,
+            "alpha": 1
+          },
+          {
+            "t": 1.1,
+            "x": 38,
+            "y": 0,
+            "rot": 0,
+            "scale": 1,
+            "alpha": 1
+          },
+          {
+            "t": 1.6,
+            "x": 0,
+            "y": 0,
+            "rot": 0,
+            "scale": 1,
+            "alpha": 1
+          }
+        ]
+      },
+      "loop": false,
+      "ease": "inOut"
+    }
+  },
+  "scenes": [
+    {
+      "id": "harin_lobby_01",
+      "kind": "lobby",
+      "title": "확인해도 되는 주머니",
+      "trigger": {
+        "on": "tap",
+        "note": "로비 캐릭터 탭. 반복 입력은 현재 대사 완성/다음 박자만 진행하며 새 장면을 겹쳐 시작하지 않는다."
+      },
+      "why": "작은 인형을 숨기는 익숙한 습관을 스스로 되돌려, 공방장에게는 취향과 빈 시간을 보여 주고 싶다는 뜻을 행동으로 남긴다.",
+      "intent": "26세 하린의 강인한 전위 실루엣과 무뚝뚝한 반말, 칭찬과 사적인 초대 앞에서만 망설이는 배려를 보존한다. 180cm 탄탄한 체형·짧은 남색 머리·회청색 눈·왼쪽 눈썹 위 흉터·어깨와 허리선이 드러나는 서리빛 경량 갑주·한쪽 긴 망토·하이웨이스트 전투 바지·대형 방패를 바꾸지 않는다. 귀여운 취향은 유아화 장치가 아니며 상사처럼 명령하거나 일방적인 보호로 관계를 끝내지 않는다. 얼굴·손·방패를 연결하고 노출 부위만 잘라 보여 주지 않는다.",
+      "assets": [
+        {
+          "key": "bg_room",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_cough",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_glove",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_hide",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_lobby_cat",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_lobby_soft",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_resolve",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "pause_near",
+          "type": "motion",
+          "status": "ready"
+        },
+        {
+          "key": "settle",
+          "type": "motion",
+          "status": "ready"
+        },
+        {
+          "key": "turn_to_player",
+          "type": "motion",
+          "status": "ready"
+        },
+        {
+          "key": "voice_harin_lobby_01",
+          "type": "voice",
+          "status": "todo"
+        },
+        {
+          "key": "fig_default",
+          "type": "image",
+          "status": "ready"
+        }
+      ],
+      "input": {
+        "skippable": true,
+        "advance": "tap",
+        "repeatable": true,
+        "cooldown_s": 0
+      },
+      "stage": {
+        "background": "bg_room",
+        "music": "silence"
+      },
+      "beats": [
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": null,
+            "text": "하린이 방패를 세워 둔 채 장갑 손목끈을 두 번 고른다. 한쪽 망토가 들리며 주머니에서 고양이 인형 귀가 드러난다.",
+            "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
+          },
+          "figure": "fig_glove",
+          "gaze": "down",
+          "camera": {
+            "shot": "full",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          },
+          "motion": "settle"
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": "harin",
+            "text": "순찰 끝. ……그쪽은 확인 안 해도 된다.",
+            "tone": "보고는 짧고 단단하게, 두 번째 문장은 너무 빨리 말한 것을 스스로 안다."
+          },
+          "figure": "fig_hide",
+          "gaze": "side",
+          "camera": {
+            "shot": "medium",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": null,
+            "text": "인형을 손으로 덮었다가 급히 주머니 안으로 밀어 넣는다. 공방장의 눈길을 피한 채 손을 떼고 낮게 헛기침한다.",
+            "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
+          },
+          "figure": "fig_cough",
+          "gaze": "away",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          },
+          "motion": "turn_to_player"
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": "harin",
+            "text": "아니. 봐도 된다. 네가 보는 건…… 괜찮다.",
+            "tone": "핑계를 취소하고 정면으로 말한다. 좋아한다는 말 대신 허락의 범위를 개인적으로 좁힌다."
+          },
+          "figure": "fig_lobby_cat",
+          "gaze": "player",
+          "camera": {
+            "shot": "medium",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.9,
+          "line": {
+            "speaker": null,
+            "text": "인형 귀를 다시 조금 내놓고 손을 내린다. 굳은 입매가 아주 짧게 풀린다.",
+            "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
+          },
+          "figure": "fig_lobby_soft",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          },
+          "motion": "pause_near"
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": "harin",
+            "text": "다음 순찰 전까진 여기 있다. 할 얘기 있으면…… 내 옆에 와서 해라.",
+            "tone": "명령이 되지 않도록 첫말보다 끝말의 힘을 낮춘다. 기다린다는 뜻을 남긴다."
+          },
+          "figure": "fig_lobby_soft",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": null,
+            "text": "하린은 방패를 확인하고 편한 정면 자세로 돌아온다. 주머니를 다시 가리지 않고 공방장을 향한 자리를 남겨 둔다.",
+            "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
+          },
+          "figure": "fig_resolve",
+          "gaze": "player",
+          "camera": {
+            "shot": "full",
+            "focus": "face",
+            "move": "pull_out",
+            "duration": 0.6
+          }
+        }
+      ]
+    },
+    {
+      "id": "harin_bond_01",
+      "kind": "bond",
+      "title": "귀여운 것에 약한 이유",
+      "trigger": {
+        "on": "event",
+        "note": "기존 인연 에피소드 목록에서 해당 제목을 선택. 새 해금 수치·정책은 정하지 않는다."
+      },
+      "why": "기존 인연 에피소드의 제목 아래, 개인적 호의가 부담이나 담보 없이 받아들여지는 저녁 한 장면을 끝까지 경험한다.",
+      "intent": "26세 하린의 강인한 전위 실루엣과 무뚝뚝한 반말, 칭찬과 사적인 초대 앞에서만 망설이는 배려를 보존한다. 180cm 탄탄한 체형·짧은 남색 머리·회청색 눈·왼쪽 눈썹 위 흉터·어깨와 허리선이 드러나는 서리빛 경량 갑주·한쪽 긴 망토·하이웨이스트 전투 바지·대형 방패를 바꾸지 않는다. 귀여운 취향은 유아화 장치가 아니며 상사처럼 명령하거나 일방적인 보호로 관계를 끝내지 않는다. 얼굴·손·방패를 연결하고 노출 부위만 잘라 보여 주지 않는다.",
+      "assets": [
+        {
+          "key": "bg_room",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_cat",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_hide",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_rest",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_soft",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_worry",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "pause_near",
+          "type": "motion",
+          "status": "ready"
+        },
+        {
+          "key": "voice_harin_bond_01",
+          "type": "voice",
+          "status": "todo"
+        },
+        {
+          "key": "fig_cat_placed",
+          "type": "image",
+          "status": "ready"
+        }
+      ],
+      "input": {
+        "skippable": true,
+        "advance": "tap",
+        "repeatable": true,
+        "cooldown_s": 0
+      },
+      "stage": {
+        "background": "bg_room",
+        "music": "silence"
+      },
+      "beats": [
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": null,
+            "text": "순찰을 마친 하린은 공방 입구에 방패를 세우고 장갑의 손목끈을 푼다. 한쪽 어깨의 망토가 접히며 허리 주머니에서 작은 고양이 인형의 귀가 보인다. 공방장이 그쪽을 보자 손이 먼저 주머니를 덮는다.",
+            "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
+          },
+          "figure": "fig_hide",
+          "gaze": "down",
+          "camera": {
+            "shot": "full",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": "harin",
+            "text": "보고할 건 없다. 이상 없음. ……그건 보고 항목도 아니고.",
+            "tone": "낮고 단단한 반말. 소리를 아기처럼 높이지 않고 말 사이에 생각할 숨을 둔다."
+          },
+          "figure": "fig_hide",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": null,
+            "text": "공방장은 아직 아무것도 묻지 않았다고 답한다. 하린은 손을 떼려다가 인형 귀를 조금 더 밖으로 밀어 버린다. 방패를 들 때는 한 치도 흔들리지 않는 손이 작은 천 조각 앞에서 두 번 망설인다.",
+            "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
+          },
+          "figure": "fig_hide",
+          "gaze": "side",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": "harin",
+            "text": "알고 있다. 그런데 네 표정이 물어보고 있었다. 아니, 그런 표정이 있다는 뜻은 아니고…… 됐다.",
+            "tone": "낮고 단단한 반말. 소리를 아기처럼 높이지 않고 말 사이에 생각할 숨을 둔다."
+          },
+          "figure": "fig_hide",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": null,
+            "text": "그녀는 낮게 헛기침한다. 공방장이 인형을 꺼내도 되겠다는 뜻으로 테이블을 가리키자 하린은 그 자리를 확인한다. 물잔과 도구 사이, 작은 물건 하나가 앉을 만한 빈칸이 있다. 하린은 그 앞의 의자에 앉는다.",
+            "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
+          },
+          "figure": "fig_hide",
+          "gaze": "side",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": "harin",
+            "text": "먼지 묻을 텐데. 거기는 안 된다. 잠깐, 천부터.",
+            "tone": "낮고 단단한 반말. 소리를 아기처럼 높이지 않고 말 사이에 생각할 숨을 둔다."
+          },
+          "figure": "fig_worry",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": null,
+            "text": "하린은 마른 천을 접어 빈칸에 놓는다. 그러고도 인형을 바로 꺼내지는 않는다. 공방장은 그 모습을 지켜보다가 다른 쪽 의자를 당긴다. 기다리겠다는 움직임에 하린의 어깨가 조금 내려간다.",
+            "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
+          },
+          "figure": "fig_worry",
+          "gaze": "down",
+          "camera": {
+            "shot": "medium",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": "harin",
+            "text": "네가 웃을 것 같아서 숨긴 건 아니다. ……조금은 그렇다. 이런 걸 좋아한다고 하면, 내가 방패를 들고 서 있는 모습까지 달라 보일까 봐.",
+            "tone": "낮고 단단한 반말. 소리를 아기처럼 높이지 않고 말 사이에 생각할 숨을 둔다."
+          },
+          "figure": "fig_worry",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": null,
+            "text": "공방장은 방패가 가벼워지는 것도 아니고 하린이 달라지는 것도 아니라고 답한다. 하린은 문 옆에 세워 둔 방패를 한 번 본다. 묵직한 방패와 주머니 속 작은 귀 사이에서, 시선이 천천히 돌아온다.",
+            "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
+          },
+          "figure": "fig_worry",
+          "gaze": "side",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": "harin",
+            "text": "같은 사람이라고? 그건 아는데. 막상 네 앞에선 잘 안 된다. 무슨 말을 해야 할지도 모르겠고.",
+            "tone": "낮고 단단한 반말. 소리를 아기처럼 높이지 않고 말 사이에 생각할 숨을 둔다."
+          },
+          "figure": "fig_worry",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": null,
+            "text": "그녀가 마침내 인형을 꺼낸다. 손바닥 안에 들어가는 고양이는 한쪽 귀가 접혀 있다. 하린은 손가락 두 개로 귀를 펴다가, 다시 접힌 것을 보고 짧게 숨을 내쉰다. 얼굴은 어느 때보다 진지하다.",
+            "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
+          },
+          "figure": "fig_cat",
+          "gaze": "side",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": "harin",
+            "text": "이 귀가 자꾸 이렇다. 똑바로 해 놓으면 되돌아가. 억지로 누르면 모양만 망가지고.",
+            "tone": "낮고 단단한 반말. 소리를 아기처럼 높이지 않고 말 사이에 생각할 숨을 둔다."
+          },
+          "figure": "fig_cat",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": null,
+            "text": "공방장이 원래 그런 모양도 괜찮겠다고 하자 하린은 인형을 조금 기울여 본다. 접힌 귀 쪽이 공방장을 향한다. 그녀는 웃음을 참는 듯 입술을 다물지만, 눈가의 힘부터 먼저 풀린다.",
+            "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
+          },
+          "figure": "fig_cat",
+          "gaze": "down",
+          "camera": {
+            "shot": "medium",
+            "focus": "face",
+            "move": "push_in",
+            "duration": 0.6
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": "harin",
+            "text": "……그렇게 보니 꼭 네 말을 못 알아들은 것 같군. 내가 방금 그랬나.",
+            "tone": "낮고 단단한 반말. 소리를 아기처럼 높이지 않고 말 사이에 생각할 숨을 둔다."
+          },
+          "figure": "fig_cat",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": null,
+            "text": "공방장이 고개를 젓고 웃는다. 놀리는 기색보다 함께 보고 있다는 기색이 짙다. 하린은 인형을 천 위에 앉힌 뒤 두 손을 무릎에 놓는다. 숨길 물건이 사라졌는데도 손을 주머니로 옮기는 버릇이 한 번 남는다.",
+            "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
+          },
+          "figure": "fig_cat_placed",
+          "gaze": "side",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          },
+          "motion": "pause_near"
+        },
+        {
+          "hold": 0.8,
+          "line": {
+            "speaker": "harin",
+            "text": "귀엽다는 말은 이런 데 쓰는 거다. 작고, 둥글고, 어딘가 조금 엉성한 것. ……왜 나를 보고 있지? 인형은 여기 있다.",
+            "tone": "낮고 단단한 반말. 소리를 아기처럼 높이지 않고 말 사이에 생각할 숨을 둔다."
+          },
+          "figure": "fig_cat_placed",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": null,
+            "text": "공방장이 하린이 웃는 모습을 보고 있었다고 말한다. 그녀는 즉시 입매를 곧게 편다. 하지만 이미 늦었다는 것을 아는지, 회청색 눈이 잠깐 아래로 향한다. 왼쪽 눈썹 위 흉터가 굳은 표정과 함께 느슨해진다.",
+            "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
+          },
+          "figure": "fig_cat_placed",
+          "gaze": "side",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": "harin",
+            "text": "웃는 걸 그렇게 오래 볼 일인가. ……싫다는 건 아니다. 다만 준비가 안 돼서.",
+            "tone": "낮고 단단한 반말. 소리를 아기처럼 높이지 않고 말 사이에 생각할 숨을 둔다."
+          },
+          "figure": "fig_cat_placed",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": null,
+            "text": "하린은 몸을 일으키려다 의자에 다시 앉는다. 순찰은 끝났고 방패도 내려놓았다. 지금 나가야 하는 이유가 없다는 사실을 확인하는 사이, 공방장이 인형 옆에 자기 손을 편 채 놓는다.",
+            "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
+          },
+          "figure": "fig_cat_placed",
+          "gaze": "down",
+          "camera": {
+            "shot": "medium",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": "harin",
+            "text": "만져 봐도 된다. 귀는 잡아당기지 말고. 아니, 너무 자세히 알려 줬나. 이런 말은 왜 이렇게 잘 나오지.",
+            "tone": "낮고 단단한 반말. 소리를 아기처럼 높이지 않고 말 사이에 생각할 숨을 둔다."
+          },
+          "figure": "fig_cat_placed",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": null,
+            "text": "공방장은 부드러운 등을 한 번 가볍게 쓸고 손을 거둔다. 하린의 시선이 그 손을 따라오다가 공방장의 얼굴에 닿는다. 이번에는 먼저 피하지 않는다. 테이블 너머의 거리가 유난히 짧아 보인다.",
+            "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
+          },
+          "figure": "fig_soft",
+          "gaze": "side",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "push_in",
+            "duration": 0.6
+          }
+        },
+        {
+          "hold": 0.8,
+          "line": {
+            "speaker": "harin",
+            "text": "네 앞에서 이러고 있어도 괜찮구나. 누가 급히 부를 때까지 기다리는 게 아니라, 그냥 앉아 있는 거.",
+            "tone": "낮고 단단한 반말. 소리를 아기처럼 높이지 않고 말 사이에 생각할 숨을 둔다."
+          },
+          "figure": "fig_soft",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": null,
+            "text": "공방장이 조금 더 쉬고 가도 된다고 답한다. 하린은 망토가 의자 모서리에 걸리지 않도록 한쪽으로 정리한다. 어깨와 허리의 갑주선은 그대로인데도, 등을 기대는 동작 하나로 긴장이 눈에 띄게 줄어든다.",
+            "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
+          },
+          "figure": "fig_soft",
+          "gaze": "side",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": "harin",
+            "text": "그럼 잠깐만. 네가 바쁘면 말해라. 내가 기다리는 건 잘한다. ……지금 말은, 같이 있어도 좋겠다는 뜻이다.",
+            "tone": "낮고 단단한 반말. 소리를 아기처럼 높이지 않고 말 사이에 생각할 숨을 둔다."
+          },
+          "figure": "fig_soft",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": null,
+            "text": "창가로 기운 빛이 인형의 접힌 귀에 닿는다. 하린은 그것을 가리지 않도록 손을 옮긴다. 공방장이 여기 두고 싶으냐고 묻자 곧바로 답하던 그녀가 이번에는 잠시 말을 고른다.",
+            "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
+          },
+          "figure": "fig_soft",
+          "gaze": "down",
+          "camera": {
+            "shot": "medium",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": "harin",
+            "text": "여기 두면 네가 볼 텐데. 그게 싫어서가 아니라…… 내가 없는 동안에도 네가 이걸 보고 내 생각을 할까 싶어서.",
+            "tone": "낮고 단단한 반말. 소리를 아기처럼 높이지 않고 말 사이에 생각할 숨을 둔다."
+          },
+          "figure": "fig_soft",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": null,
+            "text": "공방장은 그럴 것 같다고 답한다. 하린은 고개를 숙인 채 짧게 웃는다. 숨기려고 내린 얼굴에서 오히려 웃음이 오래 남는다. 손끝은 인형 대신 천의 모서리를 한 번 반듯하게 편다.",
+            "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
+          },
+          "figure": "fig_soft",
+          "gaze": "side",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          },
+          "motion": "pause_near"
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": "harin",
+            "text": "그럼 여기 두자. 대신 돌아오면 나한테도 말해라. 오늘은 귀가 또 접혔다든가. 그런 사소한 얘기도 듣고 싶다.",
+            "tone": "낮고 단단한 반말. 소리를 아기처럼 높이지 않고 말 사이에 생각할 숨을 둔다."
+          },
+          "figure": "fig_soft",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": null,
+            "text": "공방장이 매일 확인해야 하는 새 순찰 지점이냐고 가볍게 묻는다. 하린은 이번에는 굳지 않는다. 인형을 천 한가운데 앉히고, 공방장 쪽으로 턱을 아주 조금 돌린다.",
+            "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
+          },
+          "figure": "fig_soft",
+          "gaze": "side",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.8,
+          "line": {
+            "speaker": "harin",
+            "text": "아니다. 순찰은 혼자서도 할 수 있다. 여기는…… 네가 있어야 오고 싶으니까.",
+            "tone": "낮고 단단한 반말. 소리를 아기처럼 높이지 않고 말 사이에 생각할 숨을 둔다."
+          },
+          "figure": "fig_soft",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": null,
+            "text": "말을 마친 하린이 잠깐 입을 다문다. 얼버무릴 보고서도 손에 쥘 방패도 없는 자리다. 공방장이 여기에 있겠다고 대답하자, 그녀는 한 번 천천히 고개를 끄덕인다.",
+            "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
+          },
+          "figure": "fig_soft",
+          "gaze": "down",
+          "camera": {
+            "shot": "medium",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.8,
+          "line": {
+            "speaker": "harin",
+            "text": "알았다. 그럼 다음에는 처음부터 꺼내 놓겠다. 네 앞에서 매번 숨기는 것도, 나답지 않으니까.",
+            "tone": "낮고 단단한 반말. 소리를 아기처럼 높이지 않고 말 사이에 생각할 숨을 둔다."
+          },
+          "figure": "fig_soft",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": null,
+            "text": "하린은 두 장갑을 벗어 무릎 위에 포갠다. 문 옆에는 방패가, 테이블 위에는 고양이가 놓여 있다. 그녀는 둘 중 어느 쪽도 감추지 않고, 공방장과 마주 앉은 채 짧지만 분명한 미소를 짓는다.",
+            "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
+          },
+          "figure": "fig_rest",
+          "gaze": "side",
+          "camera": {
+            "shot": "full",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "harin_victory_01",
+      "kind": "victory",
+      "title": "방패가 열어 주는 옆자리",
+      "trigger": {
+        "on": "event",
+        "note": "기존 승리 이벤트에서 재생하는 연출 초안. 전투 판정·보상·시간 수치는 변경하지 않는다."
+      },
+      "why": "전투를 끝낸 유능한 동료가 공방장을 정면으로 돌아보고, 보호나 정산 이후에도 함께 서고 싶은 마음을 드러낸다.",
+      "intent": "26세 하린의 강인한 전위 실루엣과 무뚝뚝한 반말, 칭찬과 사적인 초대 앞에서만 망설이는 배려를 보존한다. 180cm 탄탄한 체형·짧은 남색 머리·회청색 눈·왼쪽 눈썹 위 흉터·어깨와 허리선이 드러나는 서리빛 경량 갑주·한쪽 긴 망토·하이웨이스트 전투 바지·대형 방패를 바꾸지 않는다. 귀여운 취향은 유아화 장치가 아니며 상사처럼 명령하거나 일방적인 보호로 관계를 끝내지 않는다. 얼굴·손·방패를 연결하고 노출 부위만 잘라 보여 주지 않는다.",
+      "assets": [
+        {
+          "key": "bg_victory",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_guard",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_lobby_soft",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_resolve",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "fig_victory",
+          "type": "image",
+          "status": "ready"
+        },
+        {
+          "key": "settle",
+          "type": "motion",
+          "status": "ready"
+        },
+        {
+          "key": "step_clear",
+          "type": "motion",
+          "status": "ready"
+        },
+        {
+          "key": "voice_harin_victory_01",
+          "type": "voice",
+          "status": "todo"
+        }
+      ],
+      "input": {
+        "skippable": true,
+        "advance": "tap",
+        "repeatable": true,
+        "cooldown_s": 0
+      },
+      "stage": {
+        "background": "bg_victory",
+        "music": "silence"
+      },
+      "beats": [
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": null,
+            "text": "하린은 방패로 전방을 가리고 서 있다. 마지막 충격 뒤 발을 옮기지 않고 먼저 어깨의 힘을 풀며 공방장 쪽을 확인한다.",
+            "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
+          },
+          "figure": "fig_guard",
+          "gaze": "side",
+          "camera": {
+            "shot": "full",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          },
+          "motion": "settle"
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": "harin",
+            "text": "경계 유지.",
+            "tone": "기존 승리 대사. 끝난 전투와 남은 경계를 구별하는 안정된 저음."
+          },
+          "figure": "fig_victory",
+          "gaze": "player",
+          "camera": {
+            "shot": "medium",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": null,
+            "text": "방패를 바깥쪽으로 치워 자기 옆의 길을 연다. 다른 손은 허리 높이에서 멈춘 채 공방장을 향해 열린다.",
+            "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
+          },
+          "figure": "fig_victory",
+          "gaze": "player",
+          "camera": {
+            "shot": "medium",
+            "focus": "hands",
+            "move": "none",
+            "duration": 0
+          },
+          "motion": "step_clear"
+        },
+        {
+          "hold": 0.25,
+          "line": {
+            "speaker": "harin",
+            "text": "이제 와도 된다. ……내 뒤 말고, 옆으로.",
+            "tone": "첫 문장은 전위의 확신. 짧은 침묵 뒤 사적인 바람을 조금 조심스럽게."
+          },
+          "figure": "fig_lobby_soft",
+          "gaze": "player",
+          "camera": {
+            "shot": "bust",
+            "focus": "face",
+            "move": "none",
+            "duration": 0
+          }
+        },
+        {
+          "hold": 1.0,
+          "line": {
+            "speaker": null,
+            "text": "하린은 손을 천천히 거두고 나란히 걸을 자세로 발끝을 돌린다. 어깨와 허리가 드러나는 갑주 위로 긴 망토가 가라앉고, 탄탄한 팔의 긴장이 풀린다.",
+            "tone": "지문: 낭독을 강제하지 않는다. 동작과 침묵의 순서를 보존한다."
+          },
+          "figure": "fig_resolve",
+          "gaze": "player",
+          "camera": {
+            "shot": "full",
+            "focus": "face",
+            "move": "pull_out",
+            "duration": 0.6
+          }
+        }
+      ]
+    }
+  ],
+  "idle_figure": "fig_lobby_soft"
+}

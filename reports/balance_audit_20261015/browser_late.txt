@@ -1,0 +1,22 @@
+
+> memory-forge-rpg@0.8.1-aio.2 test:late-ui
+> node --test prototype/tests/late_enemy_actions.mjs
+
+✔ candidate five-enemy end turn shows AP drain, silence, seal and eat effects (466.094625ms)
+✔ candidate collector previews AP after its pending drain and a due debt (258.708959ms)
+✔ stunned candidate collector is excluded from the pre-action AP drain preview (199.962416ms)
+✔ candidate prompter with no reservation logs a harmless empty delay (215.966208ms)
+✔ candidate Nameless phase two displays its new weakness and pattern in detail (380.812792ms)
+✔ candidate delayed reservation is labeled from its explicit delayed flag (180.629583ms)
+✔ ordinary after reservation entering the next column has no false delay marker (173.705541ms)
+✔ candidate overfilled delay shows discard and no AP refund in battle log (190.1735ms)
+✔ candidate overfilled delay warns before end turn that the card will be discarded without refund (246.218917ms)
+✔ crowded candidate battle stays usable at desktop, mobile, and 130 percent text (1903.302708ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4666.924625

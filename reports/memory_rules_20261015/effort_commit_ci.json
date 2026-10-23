@@ -1,0 +1,18 @@
+{
+  "status": "BOTH_EXACT_HEAD_CI_SUCCESS",
+  "head": "ec121ff9569e2c3dcd87c51bad4108ae5cfa69ae",
+  "runs": [
+    {
+      "id": 38696722743,
+      "event": "pull_request",
+      "conclusion": "success"
+    },
+    {
+      "id": 38696716334,
+      "event": "push",
+      "conclusion": "success"
+    }
+  ],
+  "scope": "Approved autonomous effort configuration only; uncommitted M0 excluded",
+  "at": "2026-10-15T07:31:50.005835+00:00"
+}

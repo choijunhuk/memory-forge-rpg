@@ -31,34 +31,32 @@ export const keywords = [
   { id: 'exhaust', name: '소멸', text: '사용 후 이번 전투에서 제외(소멸 더미).' },
   { id: 'contract', name: '계약', text: '즉시 사용 전용. 부채·봉인 등 미래 비용이 있다.' },
   { id: 'uses', name: '전투당 n회', text: 'n회 사용하면 소멸.' },
-  { id: 'reserve', name: '예약', text: '비용을 지금 내고 다음 턴(또는 다다음 턴) 시작에 해결. 예약 수치가 따로 적힌 카드는 그 수치를 쓴다.' },
-  { id: 'reserveOnly', name: '예약 전용', text: '즉시 사용할 수 없다.' },
-  { id: 'afterOnly', name: '다다음 턴 전용', text: '다다음 턴 예약만 가능.' },
+  { id: 'retain', name: '보존', text: '턴이 끝나도 손에 남는다.' },
   { id: 'fixed', name: '고정 대상', text: '표식이 있는 적만 지정 가능. 해결 시 대상이 죽었거나 표식이 없으면 불발(비용 환급 없음).' },
-  { id: 'growth', name: '성장', text: '예약으로 해결될 때 성장 +1(카드당 전투 1회, 파티 전투당 3회). 성장 3이면 전투 보상 화면에서 진화 분기 선택.' },
+  { id: 'growth', name: '성장', text: '해결될 때 성장 +1(카드당 전투 1회, 파티 전투당 3회). 성장 3이면 전투 보상 화면에서 진화 분기 선택.' },
   { id: 'overload', name: '과부하 n', text: '사용 시 파티 체력 n을 잃는다(방어 무시).' },
   { id: 'shock', name: '충격 n', text: '속성과 관계없이 적의 균열 게이지를 n 깎는다.' },
 ];
 
 // ───────────── common cards (18), 무속성 ─────────────
-card('com_slash', '기본 공격', 'common', { rar: 'B', cost: 1, type: 'atk', attr: 'none', eff: [D(6, { rv: 9, shock: 1 })] });
-card('com_guard', '기본 방어', 'common', { rar: 'B', cost: 1, type: 'skl', attr: 'none', eff: [B(6, { rv: 9 })] });
+card('com_slash', '기본 공격', 'common', { rar: 'B', cost: 1, type: 'atk', attr: 'none', eff: [D(6, { shock: 1 })] });
+card('com_guard', '기본 방어', 'common', { rar: 'B', cost: 1, type: 'skl', attr: 'none', eff: [B(6)] });
 card('com_sort', '정리', 'common', { rar: 'B', cost: 0, type: 'skl', attr: 'none', res: 'n', uses: 2, eff: [DRAW(1), DISCARD(1)] });
-card('com_patch', '응급 수리', 'common', { rar: 'B', cost: 1, type: 'skl', attr: 'none', kw: ['exhaust'], eff: [H(6, { rv: 8 })] });
-card('com_capacitor', '시간 축전기', 'common', { rar: 'A', cost: 1, type: 'skl', attr: 'none', res: 'o', eff: [AP(2)] });
+card('com_patch', '응급 수리', 'common', { rar: 'B', cost: 1, type: 'skl', attr: 'none', kw: ['exhaust'], eff: [H(6)] });
+card('com_capacitor', '시간 축전기', 'common', { rar: 'A', cost: 1, type: 'skl', attr: 'none', kw: ['retain'], eff: [AP(2)] });
 card('com_focus', '집중', 'common', { rar: 'B', cost: 0, type: 'skl', attr: 'none', res: 'n', kw: ['exhaust'], eff: [BUFF('charge', 2500, { turns: 1 })] });
-card('com_shockwave', '충격파', 'common', { rar: 'A', cost: 2, type: 'atk', attr: 'none', eff: [D(5, { rv: 7, tgt: 'all', shock: 1 })] });
-card('com_barrier', '공용 차폐', 'common', { rar: 'A', cost: 2, type: 'skl', attr: 'none', eff: [B(12, { rv: 17 })] });
+card('com_shockwave', '충격파', 'common', { rar: 'A', cost: 2, type: 'atk', attr: 'none', eff: [D(5, { tgt: 'all', shock: 1 })] });
+card('com_barrier', '공용 차폐', 'common', { rar: 'A', cost: 2, type: 'skl', attr: 'none', eff: [B(12)] });
 card('com_recall', '회상', 'common', { rar: 'A', cost: 1, type: 'skl', attr: 'none', res: 'n', eff: [RECALL()] });
 card('com_flash', '섬광탄', 'common', { rar: 'A', cost: 0, type: 'skl', attr: 'none', res: 'n', kw: ['exhaust'], eff: [ST('weak', 1, { tgt: 'all' })] });
-card('com_pin', '고정핀', 'common', { rar: 'B', cost: 1, type: 'skl', attr: 'none', eff: [ST('vul', 2, { rn: 3, tgt: 'one' })] });
+card('com_pin', '고정핀', 'common', { rar: 'B', cost: 1, type: 'skl', attr: 'none', eff: [ST('vul', 2, { tgt: 'one' })] });
 card('com_rally', '사기 진작', 'common', { rar: 'A', cost: 1, type: 'skl', attr: 'none', res: 'n', eff: [GAUGE(15, 'all')] });
 card('com_salvage', '재활용', 'common', { rar: 'A', cost: 0, type: 'skl', attr: 'none', res: 'n', eff: [EXPICK('hand', 1), AP(1)] });
-card('com_overwatch', '경계 사격', 'common', { rar: 'B', cost: 1, type: 'atk', attr: 'none', res: 'o', eff: [D(11, { rv: 11, shock: 1 })] });
+card('com_overwatch', '경계 사격', 'common', { rar: 'B', cost: 1, type: 'atk', attr: 'none', eff: [D(9, { shock: 1 })] });
 card('com_bandage', '붕대', 'common', { rar: 'B', cost: 0, type: 'skl', attr: 'none', res: 'n', kw: ['exhaust'], eff: [H(3)] });
 card('com_tactics', '전술 노트', 'common', { rar: 'A', cost: 1, type: 'skl', attr: 'none', res: 'n', eff: [DRAW(2)] });
-card('com_anchor', '시간 닻', 'common', { rar: 'A', cost: 1, type: 'skl', attr: 'none', res: 'n', eff: [SLOT(0, 1), DRAW(1)] });
-card('com_breaker', '균열 쐐기', 'common', { rar: 'S', cost: 1, type: 'atk', attr: 'none', eff: [D(4, { rv: 6, shock: 3 })] });
+card('com_anchor', '시간 닻', 'common', { rar: 'A', cost: 1, type: 'skl', attr: 'none', res: 'n', eff: [DRAW(2)] });
+card('com_breaker', '균열 쐐기', 'common', { rar: 'S', cost: 1, type: 'atk', attr: 'none', eff: [D(4, { shock: 3 })] });
 // tokens / curses
 card('smudge', '얼룩', 'curse', { rar: 'C', cost: 1, type: 'skl', attr: 'none', res: 'n', kw: ['exhaust'], pool: false, eff: [], flavor: '턴 종료 시 손에 있으면 파티 체력 2를 잃는다.' });
 card('penalty_note', '위약금', 'curse', { rar: 'C', cost: 2, type: 'skl', attr: 'none', res: 'n', kw: ['exhaust'], pool: false, eff: [], flavor: '사용하면 사라지는 빚 문서.' });
@@ -69,13 +67,13 @@ export const weapons = [];
 const w = (o) => { weapons.push(o); return o; };
 // Signature SSR (limited/standard character signatures)
 w({ id: 'w_sera', name: '영겁의 조준경', type: 'ranged', rarity: 'SSR', signature: 'sera', pool: 'standard',
-  passive: { id: 'w_reservedDmg', name: '먼 미래의 표적', values: [1200, 1500, 1800, 2100, 2400], scope: 'wielder', text: '장착자의 예약 공격 피해 +{v}%.' },
+  passive: { id: 'w_reservedDmg', name: '먼 미래의 표적', values: [1200, 1500, 1800, 2100, 2400], scope: 'wielder', text: '장착자가 보존했던 카드로 공격하면 피해 +{v}%.' },
   card: 'wc_sera' });
-card('wc_sera', '조준경 고정', 'weapon', { rar: 'S', cost: 1, type: 'skl', attr: 'volt', res: 'n', eff: [SLOT(1, 0), BUFF('charge', 3000, { turns: 2 })] });
+card('wc_sera', '조준경 고정', 'weapon', { rar: 'S', cost: 1, type: 'skl', attr: 'volt', res: 'n', eff: [BUFF('charge', 3000, { turns: 2 }), DRAW(1)] });
 w({ id: 'w_yuri', name: '온실 등불', type: 'ritual', rarity: 'SSR', signature: 'yuri', pool: 'standard',
   passive: { id: 'w_growthHeal', name: '생장의 빛', values: [2, 2, 3, 3, 4], scope: 'party', text: '성장 카드가 해결될 때 파티 회복 {v}.' },
   card: 'wc_yuri' });
-card('wc_yuri', '등불 빛', 'weapon', { rar: 'S', cost: 1, type: 'skl', attr: 'frost', eff: [B(6, { rv: 9 }), { op: 'growPick', n: 1 }] });
+card('wc_yuri', '등불 빛', 'weapon', { rar: 'S', cost: 1, type: 'skl', attr: 'frost', eff: [B(6), { op: 'growPick', n: 1 }] });
 w({ id: 'w_ravien', name: '황금 저울', type: 'device', rarity: 'SSR', signature: 'ravien', pool: 'standard',
   passive: { id: 'w_debtDmg', name: '균형 감각', values: [800, 1000, 1200, 1400, 1600], scope: 'party', text: '부채가 있을 때 파티 공격 피해 +{v}%.' },
   card: 'wc_ravien' });
@@ -83,38 +81,38 @@ card('wc_ravien', '저울질', 'weapon', { rar: 'S', cost: 0, type: 'skl', attr:
 w({ id: 'w_sion', name: '망각의 책갈피', type: 'melee', rarity: 'SSR', signature: 'sion', pool: 'standard',
   passive: { id: 'w_exhaustGuard', name: '접힌 페이지', values: [2, 2, 3, 3, 4], scope: 'party', text: '카드가 소멸할 때 방어 {v}.' },
   card: 'wc_sion' });
-card('wc_sion', '책장 넘기기', 'weapon', { rar: 'S', cost: 1, type: 'atk', attr: 'void', eff: [D(7, { rv: 10 }), EXPICK('hand', 1)] });
+card('wc_sion', '책장 넘기기', 'weapon', { rar: 'S', cost: 1, type: 'atk', attr: 'void', eff: [D(7), EXPICK('hand', 1)] });
 w({ id: 'w_kaya', name: '추적자의 석궁', type: 'ranged', rarity: 'SSR', signature: 'kaya', pool: 'limited',
   passive: { id: 'w_markedDmg', name: '빗나가지 않는 화살', values: [1200, 1500, 1800, 2100, 2400], scope: 'wielder', text: '장착자가 표식 적에게 주는 피해 +{v}%.' },
   card: 'wc_kaya' });
-card('wc_kaya', '추적 화살', 'weapon', { rar: 'S', cost: 1, type: 'atk', attr: 'flame', eff: [D(7, { rv: 10 }), ST('mark', 2, { tgt: 'same' })] });
+card('wc_kaya', '추적 화살', 'weapon', { rar: 'S', cost: 1, type: 'atk', attr: 'flame', eff: [D(7), ST('mark', 2, { tgt: 'same' })] });
 w({ id: 'w_lumi', name: '섬전 쌍인', type: 'melee', rarity: 'SSR', signature: 'lumi', pool: 'limited',
   passive: { id: 'w_lowHpDmg', name: '한계선', values: [1200, 1500, 1800, 2100, 2400], scope: 'wielder', text: '파티 체력 50% 이하일 때 장착자 피해 +{v}%.' },
   card: 'wc_lumi' });
 card('wc_lumi', '섬전', 'weapon', { rar: 'S', cost: 0, type: 'atk', attr: 'volt', res: 'n', eff: [{ op: 'selfdmg', v: 2 }, D(9, { brk: 2 })] });
 // Standard SSR (generic, one per type) — pulled from weapon banners when the 75% is lost
 w({ id: 'w_star_bow', name: '별자리 장궁', type: 'ranged', rarity: 'SSR', pool: 'standard',
-  passive: { id: 'w_reservedDmg', name: '별의 궤도', values: [1000, 1250, 1500, 1750, 2000], scope: 'wielder', text: '장착자의 예약 공격 피해 +{v}%.' }, card: 'wc_star_bow' });
-card('wc_star_bow', '별빛 화살', 'weapon', { rar: 'A', cost: 1, type: 'atk', eff: [D(9, { rv: 13 })] });
+  passive: { id: 'w_reservedDmg', name: '별의 궤도', values: [1000, 1250, 1500, 1750, 2000], scope: 'wielder', text: '장착자가 보존했던 카드로 공격하면 피해 +{v}%.' }, card: 'wc_star_bow' });
+card('wc_star_bow', '별빛 화살', 'weapon', { rar: 'A', cost: 1, type: 'atk', eff: [D(9)] });
 w({ id: 'w_frost_blade', name: '서리 결정검', type: 'melee', rarity: 'SSR', pool: 'standard',
   passive: { id: 'w_brokenDmg', name: '결정 파쇄', values: [1000, 1250, 1500, 1750, 2000], scope: 'wielder', text: '장착자가 균열 상태 적에게 주는 피해 +{v}%.' }, card: 'wc_frost_blade' });
-card('wc_frost_blade', '결정 베기', 'weapon', { rar: 'A', cost: 1, type: 'atk', eff: [D(10, { rv: 13, brk: 2 })] });
+card('wc_frost_blade', '결정 베기', 'weapon', { rar: 'A', cost: 1, type: 'atk', eff: [D(10, { brk: 2 })] });
 w({ id: 'w_clock_core', name: '태엽 핵심', type: 'device', rarity: 'SSR', pool: 'standard',
   passive: { id: 'w_startDraw', name: '첫 태엽', values: [1, 1, 1, 2, 2], scope: 'party', text: '전투 첫 턴에 카드 {v}장 추가로 뽑기.' }, card: 'wc_clock_core' });
 card('wc_clock_core', '태엽 감기', 'weapon', { rar: 'A', cost: 1, type: 'skl', res: 'n', eff: [DRAW(2)] });
 w({ id: 'w_silver_hymnal', name: '은빛 성가집', type: 'ritual', rarity: 'SSR', pool: 'standard',
   passive: { id: 'w_healUp', name: '은빛 선율', values: [1000, 1250, 1500, 1750, 2000], scope: 'party', text: '파티 회복량 +{v}%.' }, card: 'wc_silver_hymnal' });
-card('wc_silver_hymnal', '성가', 'weapon', { rar: 'A', cost: 1, type: 'skl', eff: [H(4, { rv: 6 }), B(4, { rv: 6 })] });
+card('wc_silver_hymnal', '성가', 'weapon', { rar: 'A', cost: 1, type: 'skl', eff: [H(4), B(4)] });
 // SR weapons (2 per type)
 const srw = [
-  ['w_hunter_rifle', '사냥용 소총', 'ranged', 'w_firstAtk', '첫 사격', [1500, 1875, 2250, 2625, 3000], '전투 첫 공격 카드 피해 +{v}%.', 'wc_hunter_rifle', '조준 사격', [D(8, { rv: 11 })]],
-  ['w_mech_bow', '기계 활', 'ranged', 'w_multiHit', '연사 기구', [1, 1, 2, 2, 3], '다중 타격 카드의 첫 타격 피해 +{v}.', 'wc_mech_bow', '연발 화살', [D(4, { rv: 6, hits: 2 })]],
-  ['w_guard_saber', '경비대 세이버', 'melee', 'w_breakDmg', '돌파 훈련', [800, 1000, 1200, 1400, 1600], '균열 상태 적에게 피해 +{v}%.', 'wc_guard_saber', '세이버 일격', [D(9, { rv: 12 })]],
-  ['w_iron_tonfa', '강철 톤파', 'melee', 'w_blockOnAtk', '막고 친다', [2, 2, 3, 3, 4], '장착자의 공격 카드 사용 시 방어 {v}.', 'wc_iron_tonfa', '톤파 연타', [D(6, { rv: 8 }), B(4)]],
+  ['w_hunter_rifle', '사냥용 소총', 'ranged', 'w_firstAtk', '첫 사격', [1500, 1875, 2250, 2625, 3000], '전투 첫 공격 카드 피해 +{v}%.', 'wc_hunter_rifle', '조준 사격', [D(8)]],
+  ['w_mech_bow', '기계 활', 'ranged', 'w_multiHit', '연사 기구', [1, 1, 2, 2, 3], '다중 타격 카드의 첫 타격 피해 +{v}.', 'wc_mech_bow', '연발 화살', [D(4, { hits: 2 })]],
+  ['w_guard_saber', '경비대 세이버', 'melee', 'w_breakDmg', '돌파 훈련', [800, 1000, 1200, 1400, 1600], '균열 상태 적에게 피해 +{v}%.', 'wc_guard_saber', '세이버 일격', [D(9)]],
+  ['w_iron_tonfa', '강철 톤파', 'melee', 'w_blockOnAtk', '막고 친다', [2, 2, 3, 3, 4], '장착자의 공격 카드 사용 시 방어 {v}.', 'wc_iron_tonfa', '톤파 연타', [D(6), B(4)]],
   ['w_pocket_engine', '포켓 엔진', 'device', 'w_gaugeUp', '예열', [1000, 1250, 1500, 1750, 2000], '장착자 필살기 게이지 획득 +{v}%.', 'wc_pocket_engine', '엔진 점화', [DRAW(1), GAUGE(10)]],
-  ['w_ledger_lock', '장부 자물쇠', 'device', 'w_startBlock', '잠금 장치', [4, 5, 6, 7, 8], '전투 시작 시 방어 {v}.', 'wc_ledger_lock', '잠금', [B(8, { rv: 11 })]],
-  ['w_choir_bell', '성가대 종', 'ritual', 'w_healUp', '합창', [800, 1000, 1200, 1400, 1600], '파티 회복량 +{v}%.', 'wc_choir_bell', '종소리', [H(4, { rv: 6 })]],
-  ['w_glass_rod', '유리 지팡이', 'ritual', 'w_blockUp', '굴절', [800, 1000, 1200, 1400, 1600], '장착자 방어 +{v}%.', 'wc_glass_rod', '굴절막', [B(5, { rv: 7 }), D(4, { rv: 5 })]],
+  ['w_ledger_lock', '장부 자물쇠', 'device', 'w_startBlock', '잠금 장치', [4, 5, 6, 7, 8], '전투 시작 시 방어 {v}.', 'wc_ledger_lock', '잠금', [B(8)]],
+  ['w_choir_bell', '성가대 종', 'ritual', 'w_healUp', '합창', [800, 1000, 1200, 1400, 1600], '파티 회복량 +{v}%.', 'wc_choir_bell', '종소리', [H(4)]],
+  ['w_glass_rod', '유리 지팡이', 'ritual', 'w_blockUp', '굴절', [800, 1000, 1200, 1400, 1600], '장착자 방어 +{v}%.', 'wc_glass_rod', '굴절막', [B(5), D(4)]],
 ];
 for (const [id, name, type, pid, pname, vals, ptext, cid, cname, eff] of srw) {
   w({ id, name, type, rarity: 'SR', pool: 'standard', passive: { id: pid, name: pname, values: vals, scope: pid === 'w_healUp' ? 'party' : 'wielder', text: ptext }, card: cid });
@@ -122,10 +120,10 @@ for (const [id, name, type, pid, pname, vals, ptext, cid, cname, eff] of srw) {
 }
 // R weapons (지급/제작, refined with 제련핵 instead of duplicates)
 const rw = [
-  ['w_basic_ranged', '훈련용 권총', 'ranged', 'wc_basic_ranged', '권총 사격', [D(7, { rv: 10 })]],
-  ['w_basic_melee', '훈련용 단검', 'melee', 'wc_basic_melee', '단검 찌르기', [D(7, { rv: 9 })]],
-  ['w_basic_device', '기본 공구', 'device', 'wc_basic_device', '공구 방벽', [B(6, { rv: 8 })]],
-  ['w_basic_ritual', '기본 성구', 'ritual', 'wc_basic_ritual', '작은 기도', [H(3, { rv: 4 }), B(3, { rv: 4 })]],
+  ['w_basic_ranged', '훈련용 권총', 'ranged', 'wc_basic_ranged', '권총 사격', [D(7)]],
+  ['w_basic_melee', '훈련용 단검', 'melee', 'wc_basic_melee', '단검 찌르기', [D(7)]],
+  ['w_basic_device', '기본 공구', 'device', 'wc_basic_device', '공구 방벽', [B(6)]],
+  ['w_basic_ritual', '기본 성구', 'ritual', 'wc_basic_ritual', '작은 기도', [H(3), B(3)]],
 ];
 for (const [id, name, type, cid, cname, eff] of rw) {
   w({ id, name, type, rarity: 'R', pool: 'craft', passive: { id: 'w_none', name: '-', values: [0, 0, 0, 0, 0], scope: 'wielder', text: '패시브 없음(제련핵으로 정련 시 피해·방어 +{v}%).', refineAlt: [0, 300, 600, 900, 1200] }, card: cid });
@@ -137,11 +135,11 @@ for (const [id, name, type, cid, cname, eff] of rw) {
 export const parts = [
   { id: 'amp', slot: 'temp', name: '증폭', rarity: 'temp', text: '이번 전투 동안 피해·방어 +30%.', fx: { addBps: 3000 } },
   { id: 'overheat', slot: 'temp', name: '과열', rarity: 'temp', text: '이번 전투 동안 피해 +50%, 사용 후 소멸.', fx: { addBps: 5000, exhaust: true } },
-  { id: 'c_delay', slot: 'circuit', name: '지연 증폭', rarity: 'common', text: '예약 해결 시 피해·방어 +40%, 즉시 사용 시 -10%.', fx: { resBps: 4000, immBps: -1000 } },
-  { id: 'c_quick', slot: 'circuit', name: '즉발 회로', rarity: 'common', text: '즉시 사용 시 피해·방어 +20%. 예약 불가.', fx: { immBps: 2000, noReserve: true } },
+  { id: 'c_delay', slot: 'circuit', name: '지연 증폭', rarity: 'common', text: '보존: 턴이 끝나도 손에 남는다.', fx: { retain: true } },
+  { id: 'c_quick', slot: 'circuit', name: '즉발 회로', rarity: 'common', text: '피해·방어 +20%.', fx: { immBps: 2000 } },
   { id: 'c_precise', slot: 'circuit', name: '정밀 회로', rarity: 'common', text: '균열 수치 +1.', fx: { brk: 1 } },
-  { id: 'c_echo', slot: 'circuit', name: '메아리 회로', rarity: 'rare', text: '예약으로 해결되면 다음 턴 손에 50% 위력의 소멸 사본(비용 0) 추가.', fx: { echoCopy: 5000 } },
-  { id: 'c_far', slot: 'circuit', name: '원거리 전송', rarity: 'rare', text: '다다음 턴 예약 시 피해·방어 +70%.', fx: { afterBps: 7000 } },
+  { id: 'c_echo', slot: 'circuit', name: '메아리 회로', rarity: 'rare', text: '해결되면 다음 턴 손에 50% 위력의 소멸 사본(비용 0) 추가.', fx: { echoCopy: 5000 } },
+  { id: 'c_far', slot: 'circuit', name: '원거리 전송', rarity: 'rare', text: '피해·방어 +40%. 비용 +1.', fx: { allBps: 4000, cost: 1 } },
   { id: 'c_lite', slot: 'circuit', name: '경량 회로', rarity: 'rare', text: '비용 -1(최소 0), 피해·방어 -25%.', fx: { cost: -1, allBps: -2500 } },
   { id: 'e_pierce', slot: 'engraving', name: '관통', rarity: 'common', text: '피해의 50%가 방어를 무시.', fx: { pierce: 5000 } },
   { id: 'e_guard', slot: 'engraving', name: '보호', rarity: 'common', text: '해결 시 방어 4.', fx: { extraBlock: 4 } },
@@ -156,7 +154,7 @@ export const parts = [
 // ───────────── relics (32) ─────────────
 export const relics = [
   // common 18
-  { id: 'empty_clock', name: '빈 시계', rarity: 'common', text: '전투마다 첫 예약 카드 비용 -1(최소 0).' },
+  { id: 'empty_clock', name: '빈 시계', rarity: 'common', text: '전투마다 첫 카드 비용 -1(최소 0).' },
   { id: 'memory_envelope', name: '기억의 봉투', rarity: 'common', text: '이번 탐사에서 처음 받는 치명 피해를 체력 1로 버틴다(1회).' },
   { id: 'unfinished_score', name: '미완성 악보', rarity: 'common', text: '한 턴에 세 캐릭터의 카드를 모두 쓰면 카드 1장 뽑기(턴당 1회).' },
   { id: 'symbiotic_moss', name: '공생 이끼', rarity: 'common', text: '성장이 일어날 때마다 방어 3.' },
@@ -168,16 +166,16 @@ export const relics = [
   { id: 'silver_needle', name: '은빛 바늘', rarity: 'common', text: '적이 균열 상태가 될 때마다 파티 회복 3.' },
   { id: 'old_compass', name: '낡은 나침반', rarity: 'common', text: '휴식 노드의 회복량 +10%p.' },
   { id: 'lucky_coin', name: '행운의 동전', rarity: 'common', text: '전투 보상 동전 +10.' },
-  { id: 'time_stamp', name: '타임 스탬프', rarity: 'common', text: '예약 카드가 해결될 때 소유자 필살기 게이지 +5.' },
+  { id: 'time_stamp', name: '타임 스탬프', rarity: 'common', text: '보존했던 카드를 쓰면 소유자 필살기 게이지 +5.' },
   { id: 'frost_crystal', name: '서리 결정', rarity: 'common', text: '매 턴 첫 빙결 피해의 균열 +1.' },
   { id: 'volt_coil', name: '전류 코일', rarity: 'common', text: '매 턴 첫 전격 카드 피해 +4.' },
   { id: 'void_shard', name: '공허의 조각', rarity: 'common', text: '카드가 소멸할 때 무작위 적에게 피해 3.' },
   { id: 'ember_ring', name: '불씨 반지', rarity: 'common', text: '화상 상태인 적에게 주는 피해 +10%.' },
   { id: 'quick_hands', name: '재빠른 손', rarity: 'common', text: '전투 첫 턴에 카드 2장 추가로 뽑기.' },
   // rare 10
-  { id: 'cracked_hourglass', name: '금 간 모래시계', rarity: 'rare', text: '다다음 턴 예약 칸 +1. 매 전투 첫 턴 행동력 -1.' },
-  { id: 'twin_pendulum', name: '쌍둥이 시계추', rarity: 'rare', text: '다음 턴 예약 칸 +1. 손패 최대 9장.' },
-  { id: 'precision_lens', name: '정밀 렌즈', rarity: 'rare', text: '예약으로 해결되는 공격의 균열 +1.' },
+  { id: 'cracked_hourglass', name: '금 간 모래시계', rarity: 'rare', text: '매 전투 첫 턴 카드 2장 더 뽑기. 첫 턴 행동력 -1.' },
+  { id: 'twin_pendulum', name: '쌍둥이 시계추', rarity: 'rare', text: '턴 시작 뽑기 +1. 손패 최대 9장.' },
+  { id: 'precision_lens', name: '정밀 렌즈', rarity: 'rare', text: '보존했던 공격 카드의 균열 +1.' },
   { id: 'golden_quill', name: '황금 깃펜', rarity: 'rare', text: '개조된 카드의 피해·방어 +15%.' },
   { id: 'eternal_seed', name: '영원의 씨앗', rarity: 'rare', text: '전투 시작 시 무작위 성장 카드 1장 성장 +1.' },
   { id: 'contract_seal', name: '계약 인장', rarity: 'rare', text: '부채 상한 +1.' },
@@ -187,7 +185,7 @@ export const relics = [
   { id: 'lightning_rod', name: '피뢰침', rarity: 'rare', text: '과부하로 잃은 체력의 50%만큼 방어를 얻는다.' },
   // boss 4
   { id: 'chrono_crown', name: '시간술사의 왕관', rarity: 'boss', text: '매 턴 행동력 +1. 카드 보상 선택지가 3장에서 2장으로 줄어든다.' },
-  { id: 'infinite_circuit', name: '무한 회로', rarity: 'boss', text: '다음 턴 예약 칸 +1. 턴 시작 시 파티 체력 2를 잃는다.' },
+  { id: 'infinite_circuit', name: '무한 회로', rarity: 'boss', text: '턴 시작 뽑기 +1. 턴 시작 시 파티 체력 2를 잃는다.' },
   { id: 'memory_anvil', name: '기억의 모루', rarity: 'boss', text: '전투 시작 시 손패의 카드 2장에 "증폭" 부착. 휴식 노드에서 회복할 수 없다.' },
   { id: 'eye_of_rift', name: '균열의 눈', rarity: 'boss', text: '모든 카드 피해의 균열 +1. 전투 시작 시 덱에 얼룩 1장 추가.' },
 ];

@@ -1,0 +1,20 @@
+{
+  "character": "harin",
+  "key": "bg_room",
+  "old_path": "moments/harin/images/char_harin_background_workshop_evening_v01.png",
+  "target": "harin/images/char_harin_bg_room_styleA_v01.png",
+  "master": "harin/images/char_harin_fig_glove_styleA_v01.png",
+  "background": true,
+  "beats": [],
+  "args": {
+    "prompt": "Use case: style-transfer. Redraw the supplied Memory Forge environment background in clear cel illustration direction A. Preserve exact environment, layout, major architecture, furniture, viewpoint, evening/lamplight time, palette and scene intent from reference. Crisp controlled line drawing and large hard-edged color/shadow planes, selectively simplified material detail; no photorealistic CGI, glossy wet plastic, painterly airbrush or random ornaments. Widescreen 16:9 landscape, around 1536x864 or larger. It is an OPAQUE stage background with full scenery to every edge. NO CHARACTERS, no people, no faces, no human silhouettes, no text, logos or watermark. Do not turn this into a portrait. Keep clear center stage for overlaid character sprites.",
+    "referenced_image_paths": [
+      "/Users/choi/Documents/Memory_forge/art/moments/harin/images/char_harin_background_workshop_evening_v01.png"
+    ],
+    "transparent_background": false
+  },
+  "cache_path": "/Users/choi/.codex/generated_images/01a14db0-4150-7f01-9240-82aaa185dd28/exec-f5b278c2-a80f-47e6-9fe5-dc2a984ef220.png",
+  "status": "ready",
+  "generation_status": "generated_pending_review",
+  "selected": true
+}

@@ -1,0 +1,15 @@
+{
+  "operation": "wrong-auth",
+  "owner_verified": true,
+  "before_server_version": 3,
+  "before_battle_version": 3,
+  "code": "UNAUTHORIZED",
+  "status": "NotSent",
+  "refresh_code": null,
+  "request_id": null,
+  "request_body_sha256": null,
+  "presentable_event_count": null,
+  "pending": false,
+  "needs_refresh": false,
+  "after_server_version": 3
+}

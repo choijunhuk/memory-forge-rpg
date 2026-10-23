@@ -1,0 +1,80 @@
+{
+  "editor_pointer": {
+    "mapNode": "Node:z1f0n0",
+    "enteredPhase": "BATTLE",
+    "hp": 243,
+    "cardInfoOpenedByRaycast": true,
+    "exactText": "방어 8 (예약 11).",
+    "openingAndClosingStateUnchanged": true,
+    "modeSelectionAp": 4,
+    "confirmedCard": {
+      "ap": 3,
+      "block": 8,
+      "version": 2,
+      "error": null
+    }
+  },
+  "native_primary_build": {
+    "buildResult": "Succeeded",
+    "errors": 0,
+    "warnings": 0,
+    "bytes": 267430167,
+    "seconds": 12.3528583,
+    "actualLaunchAndMapKoreanText": "PASS",
+    "actualNativeMouseBattleTransition": "NOT_CONFIRMED",
+    "forcedKillUsed": false,
+    "normalQuitThenOwnedProcessGone": true,
+    "shutdownDiagnostics": [
+      "prematurely finalized threads",
+      "ComputeBuffer disposal",
+      "development memory-leak report"
+    ],
+    "notWholeGameOrPerformanceAcceptance": true
+  },
+  "diagnostic_build": {
+    "completed": true,
+    "observerReviewed": true,
+    "evidence": "native_input_probe.txt",
+    "observedLegacyMouse": [
+      869,
+      1031
+    ],
+    "clickFrames": [
+      2193,
+      2218
+    ],
+    "sameFrameDragEdges": [
+      5015,
+      5015
+    ],
+    "nativeBattleTransition": "NOT_CONFIRMED",
+    "faultOwner": "NOT_DETERMINED",
+    "physicalMouse": "NOT_RUN",
+    "ownedDiagnosticPlayerNormalTerminated": true,
+    "temporaryProbeRemovedFromAssets": true
+  },
+  "sourceAndNumbersRetuned": false,
+  "editor_final_console": {
+    "errors": 0,
+    "warnings": 2,
+    "knownWarnings": [
+      "memoryless depth load ignored",
+      "memoryless depth store ignored"
+    ]
+  },
+  "final_build": "native_final_build.json",
+  "toast_regression": {
+    "oldCodeFailed": true,
+    "finalFullPlayPassed": 87,
+    "finalEditPassed": 3,
+    "invalidInitialAttemptExcluded": "toast_initialization_invalidated.json"
+  },
+  "final_native_actual_launch": {
+    "mapVisible": true,
+    "koreanVisible": true,
+    "hp": 243,
+    "coins": 60,
+    "deck": 18,
+    "leftOpenForPhysicalMouseAcceptance": true
+  }
+}

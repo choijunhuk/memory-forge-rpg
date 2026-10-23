@@ -1,0 +1,21 @@
+{
+  "approval": "direct user Npgsql approval in this chat",
+  "resolved_direct_version": "10.0.3",
+  "verified_tls_official_signed_archive_equals_cache": true,
+  "full_signed_archive_sha512": "9wZYlR6r1uLGnAxBuUPOCmgbS6SDtVKyGkZ0tDGPaBHYbbdEDEajD0VErq+W/dn3gHfJ3WvOdZaNNNybnFCupA==",
+  "nuget_package_content_hash_matches_sdk_cache_and_lock": true,
+  "nuget_content_hash": "7nb5YzXuvWWJxB0J8DiyL3we+X4FOctZrt0fIBnucOIaIevFEEwGQVZKtiu9olXdlNAK1eNgqSral6r/jlhI4w==",
+  "hash_layers": "Full signed archive SHA512 and NuGet package-content fingerprint are distinct values; neither was rewritten to match the other.",
+  "actual_net10_package_lock_packages": [
+    "Npgsql"
+  ],
+  "additional_package_entries": [],
+  "source": "https://api.nuget.org/v3-flatcontainer/npgsql/10.0.3/npgsql.10.0.3.nupkg",
+  "scope": "restore/integrity only, server DB acceptance pending",
+  "tls_verification": "System curl with default certificate verification; Python3.14 trust store failed; no TLS bypass",
+  "signature_verify": "dotnet nuget verify --all exit0; NuGet.org repository signature valid",
+  "content_hash_primary_sources": [
+    "https://github.com/NuGet/NuGet.Client/blob/dev/src/NuGet.Core/NuGet.Packaging/PackageArchiveReader.cs",
+    "https://github.com/NuGet/NuGet.Client/blob/dev/src/NuGet.Core/NuGet.Packaging/PackageExtractor.cs"
+  ]
+}

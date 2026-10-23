@@ -1,0 +1,17 @@
+✔ immutable witnesses: frozen original data, three real full runs, self-consistent recorded outcomes (1.671125ms)
+✔ seed1036: ev_rift AP+2 reaches only the next battle first turn and afterBattle no longer refunds it (46.241208ms)
+✔ seed1020: a shop sells its single card removal once; a second public removal is NOT_FOR_SALE with no mutation (59.87175ms)
+✔ seed1000: a resolved ev_archive rejects reselection with BAD_CHOICE before effects or RNG; phase order kept (15.019167ms)
+✔ seed1000: a key-array first ev_archive choice removes exactly the chosen cards, once (13.990458ms)
+✔ every witnessed event resolves once; rejected reselections leave all later recorded commands reproducible (93.332625ms)
+✔ continuation witnesses: separate real full runs recorded on engine 3ad, self-consistent outcomes (0.191375ms)
+✔ seed1102: a battle that ends inside begin finishes the run once through the defeat save, after the node entry (26.591666ms)
+✔ seed1000 continuation: repeats of a done ev_archive change nothing, and the next ev_promise still commits once (26.037375ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 383.03775

@@ -1,0 +1,43 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Retrieved 4 log entries.\",\"data\":[{\"type\":\"Log\",\"message\":\"<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: [TestRunnerNoThrottle] Applied No Throttling for test run.\",\"file\":\"./Library/PackageCache/com.coplaydev.unity-mcp@da7b9ae4aeeb/Editor/Helpers/McpLog.cs\",\"line\":40,\"stackTrace\":null},{\"type\":\"Log\",\"message\":\"<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: [TestRunnerNoThrottle] Restored Interaction Mode after test run.\",\"file\":\"./Library/PackageCache/com.coplaydev.unity-mcp@da7b9ae4aeeb/Editor/Helpers/McpLog.cs\",\"line\":40,\"stackTrace\":null},{\"type\":\"Log\",\"message\":\"Saving results to: /Users/choi/Library/Application Support/DefaultCompany/2D_URP/TestResults.xml\\n\",\"file\":\"./Runtime/Export/Debug/Debug.bindings.h\",\"line\":40,\"stackTrace\":null},{\"type\":\"Log\",\"message\":\"Executing IPostBuildCleanup for: Unity.PerformanceTesting.Editor.TestRunBuilder.\",\"file\":\"./Library/PackageCache/com.unity.test-framework@388540dd9ce6/UnityEditor.TestRunner/TestRun/Tasks/BuildActionTaskBase.cs\",\"line\":51,\"stackTrace\":null}]}"
+    }
+  ],
+  "structuredContent": {
+    "success": true,
+    "message": "Retrieved 4 log entries.",
+    "data": [
+      {
+        "type": "Log",
+        "message": "<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: [TestRunnerNoThrottle] Applied No Throttling for test run.",
+        "file": "./Library/PackageCache/com.coplaydev.unity-mcp@da7b9ae4aeeb/Editor/Helpers/McpLog.cs",
+        "line": 40,
+        "stackTrace": null
+      },
+      {
+        "type": "Log",
+        "message": "<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: [TestRunnerNoThrottle] Restored Interaction Mode after test run.",
+        "file": "./Library/PackageCache/com.coplaydev.unity-mcp@da7b9ae4aeeb/Editor/Helpers/McpLog.cs",
+        "line": 40,
+        "stackTrace": null
+      },
+      {
+        "type": "Log",
+        "message": "Saving results to: /Users/choi/Library/Application Support/DefaultCompany/2D_URP/TestResults.xml\n",
+        "file": "./Runtime/Export/Debug/Debug.bindings.h",
+        "line": 40,
+        "stackTrace": null
+      },
+      {
+        "type": "Log",
+        "message": "Executing IPostBuildCleanup for: Unity.PerformanceTesting.Editor.TestRunBuilder.",
+        "file": "./Library/PackageCache/com.unity.test-framework@388540dd9ce6/UnityEditor.TestRunner/TestRun/Tasks/BuildActionTaskBase.cs",
+        "line": 51,
+        "stackTrace": null
+      }
+    ]
+  },
+  "isError": false
+}

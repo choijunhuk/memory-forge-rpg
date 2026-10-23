@@ -1,0 +1,60 @@
+{
+  "calls": [
+    {
+      "task_id": "SERVER-ENEMY-PREVIEW-20261021",
+      "session_id": "9715a7c4-a627-4d10-a079-6beea8753788",
+      "requestedModel": "claude-opus-5-5",
+      "requestedEffort": "xhigh",
+      "process_exit": 0,
+      "billing_account_matched": true
+    },
+    {
+      "task_id": "SERVER-ENEMY-PREVIEW-TESTS-20261021",
+      "session_id": "9715a7c4-a627-4d10-a079-6beea8753788",
+      "requestedModel": "claude-opus-5-5",
+      "requestedEffort": "high",
+      "process_exit": 0,
+      "billing_account_matched": true
+    },
+    {
+      "task_id": "HOME-INDEPENDENT-REVIEW-20261021",
+      "session_id": "9ad28090-625b-40df-89de-09839f15faac",
+      "requestedModel": "claude-opus-5-5",
+      "requestedEffort": "xhigh",
+      "process_exit": 0,
+      "billing_account_matched": true
+    },
+    {
+      "task_id": "HOME-REREVIEW-20261021",
+      "session_id": "9ad28090-625b-40df-89de-09839f15faac",
+      "requestedModel": "claude-opus-5-5",
+      "requestedEffort": "high",
+      "process_exit": 0,
+      "billing_account_matched": true
+    },
+    {
+      "task_id": "HOME-LOAD-ERROR-RECHECK-20261021",
+      "session_id": "9ad28090-625b-40df-89de-09839f15faac",
+      "requestedModel": "claude-opus-5-5",
+      "requestedEffort": "high",
+      "process_exit": 0,
+      "billing_account_matched": true
+    },
+    {
+      "task_id": "UTILITY-BUTTON-REVIEW-20261021",
+      "session_id": "9ad28090-625b-40df-89de-09839f15faac",
+      "requestedModel": "claude-opus-5-5",
+      "requestedEffort": "high",
+      "process_exit": 0,
+      "billing_account_matched": true
+    }
+  ],
+  "review_sequence": [
+    "REQUEST_CHANGES: modal/selection/localization/non-vacuous tests",
+    "REQUEST_CHANGES: load failure path",
+    "APPROVE: actual Start-loader failure and disabled recovery shield verified"
+  ],
+  "actual_unity_lifecycle_regression": "PASS19/19 including real Start-loader fault and final two capture tests",
+  "native_codex_audit": "Claude JSONL root auditor does not audit Codex native actions; no such claim",
+  "utility_review": "APPROVE; optional arc-sign issue aligned and recaptured"
+}

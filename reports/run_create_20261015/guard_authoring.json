@@ -1,0 +1,10 @@
+{
+  "status": "CODE_RECEIVED_PENDING_ACTUAL_BUILD_RUNTIME_REVIEW",
+  "model": "claude-opus-5-5",
+  "effort": "high",
+  "sessionId": "0fa41ef3-c168-42ca-8f1e-7ebe78db607b",
+  "sourceSHA": "896a471266b6878d5f2e6b684a61c1636fe2407edb7702142d0a16adff2b8146",
+  "sourceLines": 1248,
+  "CoreFinalReview": "PENDING_SEPARATE_CALL",
+  "at": "2026-10-15T08:43:49.545329+00:00"
+}

@@ -1,0 +1,26 @@
+{
+  "integration": "EXACT_REPAIR_VERIFIED_PENDING_FULL_UNIT_INTEGRATION",
+  "originalJsCases": 2088,
+  "unityMismatches": 41,
+  "publicApiExpected": {
+    "code": null,
+    "phase": "DONE"
+  },
+  "publicApiActual": {
+    "code": "REQUEST_CONFLICT",
+    "phase": "MAP"
+  },
+  "privateRunStateInjected": false,
+  "accountStateTouched": false,
+  "fixedNumbersOrPolicy": false,
+  "repair": "Actual Opus Max exact BigInteger IEEE interval repair received and independently reviewed by Codex; actual Mono0/2088, expanded2176vector tests +publicpositive/twoexactconflicts pass in77Play; fullRun21029/.NETnumeric2189 pass",
+  "sourceReference": "https://tc39.es/ecma262/multipage/ecmascript-data-types-and-values.html#sec-numeric-types-number-tostring",
+  "expandedPermanentCases": 2176,
+  "actualUnityPlayAfterFix": 77,
+  "actualUnityFullFlows": {
+    "runs": 3,
+    "commands": 592,
+    "memoryQueries": 4,
+    "actualSaveDerivedRestarts": 3
+  }
+}

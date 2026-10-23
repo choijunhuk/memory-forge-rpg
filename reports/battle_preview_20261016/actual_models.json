@@ -1,0 +1,24 @@
+[
+  {
+    "task": "P1-EXPEDITION-BATTLE-FORECAST-CORE",
+    "sessionId": "b0545ad4-ddb1-421f-8c73-4b7511e293bd",
+    "actualModels": {
+      "claude-opus-5-5": 162
+    },
+    "actualPerTurnEffort": {
+      "max": 162
+    },
+    "rawReasoningCopied": false
+  },
+  {
+    "task": "P1-BATTLE-FORECAST-CHECKERS-FINISH",
+    "sessionId": "b0545ad4-ddb1-421f-8c73-4b7511e293bd",
+    "actualModels": {
+      "claude-opus-5-5": 47
+    },
+    "actualPerTurnEffort": {
+      "xhigh": 47
+    },
+    "rawReasoningCopied": false
+  }
+]

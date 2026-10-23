@@ -1,0 +1,16 @@
+{
+  "changed_metadata": [
+    "inputManifestAudit",
+    "nativeDiagnosticsRuntime"
+  ],
+  "old_node": {
+    "node": "25.9.0"
+  },
+  "new_node": {
+    "node": "26.12.0"
+  },
+  "old_audit_changed_paths": 39,
+  "new_audit_changed_paths": 40,
+  "game_cases_counts_source_pins_unchanged": true,
+  "cases_sha256": "6d2cc4cbc32121042872c5557505153ca9ad0d11dc05c21f5eb943838110854c"
+}

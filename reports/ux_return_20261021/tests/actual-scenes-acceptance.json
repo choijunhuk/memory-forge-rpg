@@ -1,0 +1,15 @@
+{
+  "evidence": "shipped scenes loaded with SceneManager.LoadSceneAsync(Additive), actual uGUI Button.onClick and public Run commands",
+  "sceneRequests": [
+    "MemoryForgeExpedition",
+    "MemoryForgeLobby",
+    "MemoryForgeExpedition",
+    "MemoryForgeLobby"
+  ],
+  "savedMemoryVersion": 1,
+  "heldMemoryVersionAfterAbandon": 1,
+  "doubleDepartureCreatedOneRun": true,
+  "doubleResultReturnLoadedOneHome": true,
+  "doubleAbandonLoadedOneHome": true,
+  "automaticDepartureAfterReturn": false
+}

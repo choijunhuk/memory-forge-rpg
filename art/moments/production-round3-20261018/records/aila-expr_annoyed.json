@@ -1,0 +1,30 @@
+{
+  "c": "aila",
+  "key": "expr_annoyed",
+  "path": "aila/images/char_aila_expression_annoyed_v01.png",
+  "refs": [
+    "/Users/choi/Documents/Memory_forge/art/moments/aila/images/char_aila_expression_neutral_v01.png"
+  ],
+  "common": "Use case: identity-preserve. Edit target is the supplied NEUTRAL master portrait, one adult dialogue expression. Keep EXACT same square canvas/framing, head angle/tilt, face proportions, iris colors, hairstyle, glasses/scar/ornaments, costume, lighting and true transparent alpha. Intended final 512x512. Change ONLY eyes/eyebrows/mouth and natural cheek muscles. No hands, props, extra face, text or panels. ",
+  "pose": "Aila, adult age23. Long lavender-SILVER braided hair and frost ornaments, VIOLET eyes, lavender white frost-embroidered robe neckline and detached sleeves. Kind but self-directed young adult presence. Expression ANNOYED: Warm smile gone, violet gaze clear and eyebrows lowered with calm displeasure, mature firm mouth.",
+  "prompt": "Use case: identity-preserve. Edit target is the supplied NEUTRAL master portrait, one adult dialogue expression. Keep EXACT same square canvas/framing, head angle/tilt, face proportions, iris colors, hairstyle, glasses/scar/ornaments, costume, lighting and true transparent alpha. Intended final 512x512. Change ONLY eyes/eyebrows/mouth and natural cheek muscles. No hands, props, extra face, text or panels. Aila, adult age23. Long lavender-SILVER braided hair and frost ornaments, VIOLET eyes, lavender white frost-embroidered robe neckline and detached sleeves. Kind but self-directed young adult presence. Expression ANNOYED: Warm smile gone, violet gaze clear and eyebrows lowered with calm displeasure, mature firm mouth.",
+  "source": "/Users/choi/.codex/generated_images/01a14d20-ffd5-7e81-9e47-85c1c8415e11/exec-cd7b981b-dfd9-44e1-82f8-e6a5d04043a4.png",
+  "tool": "Codex built-in image_gen; subscription-included; no API fallback",
+  "review": "pass",
+  "previous_attempt": null,
+  "score": 94,
+  "review_notes": "Rendered output inspected beside its neutral master. Six readable adult expressions, stable face/eye/hair/glasses/scar/costume identity and framing. Only non-generative final resize remains.",
+  "backend_model": "not exposed by tool",
+  "selected": true,
+  "sha256": "b33a622f673e0ed1d091df982abe99bb95279305f169eec6881bf7400b146ede",
+  "size": [
+    512,
+    512
+  ],
+  "mode": "RGBA",
+  "alpha_extrema": [
+    0,
+    255
+  ],
+  "postprocess": "sips -z 512 512; non-generative downsample only, alpha retained"
+}

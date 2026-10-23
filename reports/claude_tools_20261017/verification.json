@@ -1,0 +1,43 @@
+{
+  "scope": "current unit validation; prior original failures and raw local logs remain intact",
+  "checks": {
+    "JS": "333/333",
+    "Python": "57/57",
+    "proposals": "14/14",
+    "docs": "9/9",
+    "handoff": "31/31",
+    "CoreChecks": "all named suites passed; RunCreate215677/215677; source-only/unsupported boundaries explicit in logs",
+    "sameTransportNUnitNet10": "83/83",
+    "UnityFullJob": "258 completed, succeeded, no failures observed; leaf counts not persisted across domain reload",
+    "UnityFocusedView": "76/76, skipped0",
+    "UnityEdit": "3/3, skipped0",
+    "aiimgMockFault": "11/11; realSSHUsed false in this hardening pass",
+    "builderActualEditorGuards": "5/5 and9 texture metas unchanged",
+    "ciDiagnosticFaultChecks": "3/3",
+    "realCoreRestUi": "v38->39, hp210->243, uses1->0; uGUI callbacks, not physical mouse"
+  },
+  "sourceHashes": {
+    "docs/AI_WORKFLOW.md": "6b161a8fb6c466bfaa3115120f99bdb482722d7d540004f4edc2604f10c51266",
+    "docs/AI_ENVIRONMENT.md": "7eb66883d1e328cb8d15135687f71fead30a647edf63695d08ec664a29c371b3",
+    "AGENTS.md": "96c94d23bcf83f9d90484d292553326cf178b6fff46e2b3386cab8bd9bab21d9",
+    "CLAUDE.md": "8da5d031c98c6e9b0dfbd524b002a5c2b5afe3669ef456aec16274eeb3b6d15f",
+    "ops/ai/runtime-policy.json": "034a744d163ae5d6845704b21b2eba4496769745ebff1dad5efa71af975693d8",
+    "tools/ai/run_claude.py": "91b1cf7a9cc15036d175643db1fcdefb74929114166f8a70f496ef377e0c5613",
+    "tools/ai/test_handoff.py": "72416507dd27d7239b86376db4c483f7b2d4fc6df8045081d7480db673049982",
+    "tools/ai/aiimg.zsh": "a131d292642e896aa9a1dbaf6363f91f4652ffddad1253b8343fd47e72afe184",
+    "tools/ai/build_art_review_scene.cs": "1dbe889cc017b1cee271de27d3d3061cdfaad3d30fec2c5d4f1ef976c723ce19",
+    "client/MemoryForgeUnity/Assets/Scripts/MemoryForgeServerPracticeClient.cs": "8243adee56530e01b028923296eb2569b1b29f8ae5e4c5332867f8c039dc2d04",
+    "client/MemoryForgeUnity/Assets/Tests/PlayMode/PracticeServerSessionPlayModeTests.cs": "13418f3421728bade81a79e1591e3abd133b70c648eb06a99d565c2f5231335c"
+  },
+  "protectedRunnerSha256": "34f4b54447d4fdf6a1ced5cc3cb9076b505e81d4b292c78151ac91f79d4f7257",
+  "releaseManifestsRegenerated": false,
+  "nativePointer": "UNVERIFIED due runtime-host result error; no typing performed",
+  "notRun": [
+    "Android/physical-device acceptance",
+    "new standalone build",
+    "production deployment",
+    "all real-server event/shop/forge/archive branches",
+    "final character masters/rigs/animation/combat-art integration",
+    "new balance approval"
+  ]
+}

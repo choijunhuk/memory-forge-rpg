@@ -1,0 +1,29 @@
+{
+  "task_id": "P1-SERVER-SAVE-PARTS-TESTS",
+  "run_id": "P1-SERVER-SAVE-PARTS-TESTS-20261017T082400100822Z",
+  "status": "RECEIVED_UNVERIFIED",
+  "requestedEffort": "high",
+  "requestedModel": "claude-opus-5-5",
+  "mcp_profile": "none",
+  "process_exit": 0,
+  "changes_verified": false,
+  "raw_output": "ops/ai/local/P1-SERVER-SAVE-PARTS-TESTS-20261017T082400100822Z*",
+  "billing_verified_at": "2026-10-17T05:01:40.332532+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "codex/claude-save-parts-tests-20261017",
+  "base_commit": "062caf89782fdd6fda9d7e0c317a06483fb67ce5",
+  "worktree": "/Users/choi/.codex/worktrees/claude-save-parts-tests/Memory_forge",
+  "allowed_files": [
+    "client/MemoryForgeUnity/Assets/Tests/PlayMode/PracticeServerSavePartsPlayModeTests.cs"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "0195f194-56db-453b-b50c-2f43e5c12a96",
+  "subtype": "success",
+  "is_error": false,
+  "result": "I've written 5 PlayMode tests for attaching held parts on the save screen. **None were run (NOT_RUN):** this job had no Bash or Unity access, so the file hasn't even been compiled. It also can't pass yet: there are no matches for `SavePartsOpen`, `OpenSaveParts`, `CloseSaveParts` or `ApplySavePartAsync` anywhere in `client/`, so the other lane's production code isn't in this worktree. You'll need to compile and run them in Unity once both branches are merged.\n\n**Changed file (only this one):** `client/MemoryForgeUnity/Assets/Tests/PlayMode/PracticeServerSavePartsPlayModeTests.cs`. It's a `partial class PracticeServerSessionPlayModeTests` under `UNITY_5_3_OR_NEWER` that reuses the existing fixture and save helpers. Nothing is copied, inherited or edited elsewhere. It adds a few small helpers of its own (`PartsRun`, `Applied`, `PartPreview`, `Owned`, `ShownCard`, `Buttons`, `ButtonText`, plus the `Pierce`/`Precise` constants); none of these names exist in the other test files.\n\n**Tests:**\n1. `AnOwnedPartGoesOntoAPublishedCardOnceAndOnlyTheServersRebuiltSaveIsShown`: opening the sheet blocks change selection, assignment and save; closing it keeps the selection and preview. One `SavePart:` button per distinct ID with its count, and target buttons only for non-weapon cards. Clicking `SavePartTarget:g1` clears the selection and preview before sending `applyPart{partId,key}` once at expectedVersion 3. While the reply is held, the old button and the second copy are refused. Afterwards exactly one copy is used, mods come from the server, the memory version stays 2 and the phase stays VICTORY. A new preview at v4 shows the part in the preview deck, then the save sends expectedVersion 4 and memory version 2.\n2. `UnownedMissingOrWeaponChoicesAreRefusedLocally…`: refuses an unowned part, an unknown ID, a weapon card or a key the deck doesn't publish, without sending or dropping anything. Covers 12 copies of one part and 17 target cards that must all sit inside a scroll. The chosen part is dropped on cancel, refresh into a new context and leave/return.\n3. `ACoreRefusalOfAPartChangesNothingShown…`: a 422 `NO_PART` changes nothing shown. Saving reopens only after a fresh preview, and the copy can still be applied later.\n4. `EachApplicationUsesOneCopyReplacesOnlyItsSlotAndRefundsNothing`: engraving, then circuit, then the second engraving at versions 3/4/5. The circuit stays, the replaced engraving isn't refunded, and an empty inventory blocks the sheet.\n5. `AnUncertainPartSendLocksTheSave…`: a lost reply blocks everything and asks for no preview. After reconnect the server shows one copy left but the remaining copy is still blocked. Retry sends the same bytes, the fixture server ends up having used only one copy, and the remaining copy can then be applied.\n\n**Assumptions the other lane needs to match:**\n- `OpenSaveParts()` returns false while busy, while a send is unresolved, or with an empty inventory.\n- `CanCommitSave` is false while the sheet is open.\n- Opening or cancelling the sheet keeps the save selection and the current preview.\n- Clicking `SavePartTarget:<key>` after `SavePart:<id>` sends right away, with no extra confirm step.\n- The sheet is closed after a successful apply, because the context has changed.\n- The part button text contains the part name and its count.\n- Target buttons sit inside a `ScrollRect`.\n- Local refusals return an already-completed false task.\n- A refused not-committed send reuses the existing message \"반영되지 않았어요\".\n\n**Limits:**\n- The `applyPart` and preview replies are protocol fixture data standing in for Core, not Core itself. The change-row label text and the c/e slot mapping are written into the fixture.\n- No temp-slot part (e.g. `amp`, which Core rejects with `INVALID_PART`) is tested. The brief only allowed e_pierce and c_precise, and whether the client should filter temp parts itself isn't agreed.\n\n**Next:** Root merges the other lane's UI, compiles, runs these tests and the existing save tests in Unity, then checks the real owned VICTORY run with `e_pierce` through the actual UI.",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ]
+}

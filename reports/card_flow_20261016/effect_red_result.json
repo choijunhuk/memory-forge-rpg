@@ -1,0 +1,101 @@
+{
+  "_meta": {
+    "fastmcp": {
+      "wrap_result": true
+    }
+  },
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Test job status retrieved.\",\"error\":null,\"data\":{\"job_id\":\"5c1412cc9778482894f5995e5e9d07dc\",\"status\":\"failed\",\"mode\":\"PlayMode\",\"started_unix_ms\":1792137017227,\"finished_unix_ms\":1792137023684,\"last_update_unix_ms\":1792137023684,\"progress\":{\"completed\":3,\"total\":3,\"current_test_full_name\":null,\"current_test_started_unix_ms\":null,\"last_finished_test_full_name\":\"MemoryForge.Client.Tests.EffectCandidatePlayModeTests.TuneSheetOffersAndAcceptsOnlyCardsItsCoreEffectTakes\",\"last_finished_unix_ms\":1792137023668,\"stuck_suspected\":false,\"editor_is_focused\":false,\"run_in_background\":false,\"focus_nudge_attempts\":null,\"focus_nudge_limit\":null,\"focus_nudge_status\":null,\"blocked_reason\":null,\"failures_so_far\":[{\"full_name\":\"MemoryForge.Client.Tests.EffectCandidatePlayModeTests.APreparedTunePickUsesTheSameEligibleList\",\"message\":\"  the prepared path offers exactly the same eligible cards\\n  Expected is <System.Collections.Generic.List`1[System.String]> with 2 elements, actual is <System.Collections.Generic.List`1[System.String]> with 3 elements\\n  Values differ at index [0]\\n  Expected string length 3 but was 2. Strings differ at index 2.\\n  Expected: \\\"c13\\\"\\n  But was:  \\\"c1\\\"\\n  -------------^\\n\"},{\"full_name\":\"MemoryForge.Client.Tests.EffectCandidatePlayModeTests.ExplicitAutoStillSendsCoresOwnChoiceAndNeverAHiddenCard\",\"message\":\"  the sheet lists only the eligible cards\\n  Expected is <System.Collections.Generic.List`1[System.String]> with 3 elements, actual is <System.Collections.Generic.List`1[System.String]> with 4 elements\\n  Values differ at index [0]\\n  String lengths are both 2. Strings differ at index 1.\\n  Expected: \\\"c1\\\"\\n  But was:  \\\"c7\\\"\\n  ------------^\\n\"},{\"full_name\":\"MemoryForge.Client.Tests.EffectCandidatePlayModeTests.TuneSheetOffersAndAcceptsOnlyCardsItsCoreEffectTakes\",\"message\":\"  the sheet offers exactly the hand cards the tune effect takes\\n  Expected is <System.Collections.Generic.List`1[System.String]> with 3 elements, actual is <System.Collections.Generic.List`1[System.String]> with 4 elements\\n  Values differ at index [0]\\n  String lengths are both 2. Strings differ at index 1.\\n  Expected: \\\"c1\\\"\\n  But was:  \\\"c7\\\"\\n  ------------^\\n\"}],\"failures_capped\":false},\"error\":null,\"result\":{\"mode\":\"PlayMode\",\"summary\":{\"total\":3,\"passed\":0,\"failed\":3,\"skipped\":0,\"durationSeconds\":0.4715852,\"resultState\":\"Failed(Child)\"},\"results\":[{\"name\":\"APreparedTunePickUsesTheSameEligibleList\",\"fullName\":\"MemoryForge.Client.Tests.EffectCandidatePlayModeTests.APreparedTunePickUsesTheSameEligibleList\",\"state\":\"Failed\",\"durationSeconds\":0.2768323,\"message\":\"  the prepared path offers exactly the same eligible cards\\n  Expected is <System.Collections.Generic.List`1[System.String]> with 2 elements, actual is <System.Collections.Generic.List`1[System.String]> with 3 elements\\n  Values differ at index [0]\\n  Expected string length 3 but was 2. Strings differ at index 2.\\n  Expected: \\\"c13\\\"\\n  But was:  \\\"c1\\\"\\n  -------------^\\n\",\"stackTrace\":\"at MemoryForge.Client.Tests.EffectCandidatePlayModeTests+<APreparedTunePickUsesTheSameEligibleList>d__16.MoveNext () [0x0027e] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Tests/PlayMode/EffectCandidatePlayModeTests.cs:238\\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@388540dd9ce6/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:44\\n\",\"output\":\"\"},{\"name\":\"ExplicitAutoStillSendsCoresOwnChoiceAndNeverAHiddenCard\",\"fullName\":\"MemoryForge.Client.Tests.EffectCandidatePlayModeTests.ExplicitAutoStillSendsCoresOwnChoiceAndNeverAHiddenCard\",\"state\":\"Failed\",\"durationSeconds\":0.0823638,\"message\":\"  the sheet lists only the eligible cards\\n  Expected is <System.Collections.Generic.List`1[System.String]> with 3 elements, actual is <System.Collections.Generic.List`1[System.String]> with 4 elements\\n  Values differ at index [0]\\n  String lengths are both 2. Strings differ at index 1.\\n  Expected: \\\"c1\\\"\\n  But was:  \\\"c7\\\"\\n  ------------^\\n\",\"stackTrace\":\"at MemoryForge.Client.Tests.EffectCandidatePlayModeTests+<ExplicitAutoStillSendsCoresOwnChoiceAndNeverAHiddenCard>d__15.MoveNext () [0x00193] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Tests/PlayMode/EffectCandidatePlayModeTests.cs:207\\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@388540dd9ce6/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:44\\n\",\"output\":\"\"},{\"name\":\"TuneSheetOffersAndAcceptsOnlyCardsItsCoreEffectTakes\",\"fullName\":\"MemoryForge.Client.Tests.EffectCandidatePlayModeTests.TuneSheetOffersAndAcceptsOnlyCardsItsCoreEffectTakes\",\"state\":\"Failed\",\"durationSeconds\":0.0885234,\"message\":\"  the sheet offers exactly the hand cards the tune effect takes\\n  Expected is <System.Collections.Generic.List`1[System.String]> with 3 elements, actual is <System.Collections.Generic.List`1[System.String]> with 4 elements\\n  Values differ at index [0]\\n  String lengths are both 2. Strings differ at index 1.\\n  Expected: \\\"c1\\\"\\n  But was:  \\\"c7\\\"\\n  ------------^\\n\",\"stackTrace\":\"at MemoryForge.Client.Tests.EffectCandidatePlayModeTests+<TuneSheetOffersAndAcceptsOnlyCardsItsCoreEffectTakes>d__14.MoveNext () [0x002cf] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Tests/PlayMode/EffectCandidatePlayModeTests.cs:166\\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@388540dd9ce6/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:44\\n\",\"output\":\"\"}]}},\"hint\":null}"
+    }
+  ],
+  "structuredContent": {
+    "result": {
+      "success": true,
+      "message": "Test job status retrieved.",
+      "error": null,
+      "data": {
+        "job_id": "5c1412cc9778482894f5995e5e9d07dc",
+        "status": "failed",
+        "mode": "PlayMode",
+        "started_unix_ms": 1792137017227,
+        "finished_unix_ms": 1792137023684,
+        "last_update_unix_ms": 1792137023684,
+        "progress": {
+          "completed": 3,
+          "total": 3,
+          "current_test_full_name": null,
+          "current_test_started_unix_ms": null,
+          "last_finished_test_full_name": "MemoryForge.Client.Tests.EffectCandidatePlayModeTests.TuneSheetOffersAndAcceptsOnlyCardsItsCoreEffectTakes",
+          "last_finished_unix_ms": 1792137023668,
+          "stuck_suspected": false,
+          "editor_is_focused": false,
+          "run_in_background": false,
+          "focus_nudge_attempts": null,
+          "focus_nudge_limit": null,
+          "focus_nudge_status": null,
+          "blocked_reason": null,
+          "failures_so_far": [
+            {
+              "full_name": "MemoryForge.Client.Tests.EffectCandidatePlayModeTests.APreparedTunePickUsesTheSameEligibleList",
+              "message": "  the prepared path offers exactly the same eligible cards\n  Expected is <System.Collections.Generic.List`1[System.String]> with 2 elements, actual is <System.Collections.Generic.List`1[System.String]> with 3 elements\n  Values differ at index [0]\n  Expected string length 3 but was 2. Strings differ at index 2.\n  Expected: \"c13\"\n  But was:  \"c1\"\n  -------------^\n"
+            },
+            {
+              "full_name": "MemoryForge.Client.Tests.EffectCandidatePlayModeTests.ExplicitAutoStillSendsCoresOwnChoiceAndNeverAHiddenCard",
+              "message": "  the sheet lists only the eligible cards\n  Expected is <System.Collections.Generic.List`1[System.String]> with 3 elements, actual is <System.Collections.Generic.List`1[System.String]> with 4 elements\n  Values differ at index [0]\n  String lengths are both 2. Strings differ at index 1.\n  Expected: \"c1\"\n  But was:  \"c7\"\n  ------------^\n"
+            },
+            {
+              "full_name": "MemoryForge.Client.Tests.EffectCandidatePlayModeTests.TuneSheetOffersAndAcceptsOnlyCardsItsCoreEffectTakes",
+              "message": "  the sheet offers exactly the hand cards the tune effect takes\n  Expected is <System.Collections.Generic.List`1[System.String]> with 3 elements, actual is <System.Collections.Generic.List`1[System.String]> with 4 elements\n  Values differ at index [0]\n  String lengths are both 2. Strings differ at index 1.\n  Expected: \"c1\"\n  But was:  \"c7\"\n  ------------^\n"
+            }
+          ],
+          "failures_capped": false
+        },
+        "error": null,
+        "result": {
+          "mode": "PlayMode",
+          "summary": {
+            "total": 3,
+            "passed": 0,
+            "failed": 3,
+            "skipped": 0,
+            "durationSeconds": 0.4715852,
+            "resultState": "Failed(Child)"
+          },
+          "results": [
+            {
+              "name": "APreparedTunePickUsesTheSameEligibleList",
+              "fullName": "MemoryForge.Client.Tests.EffectCandidatePlayModeTests.APreparedTunePickUsesTheSameEligibleList",
+              "state": "Failed",
+              "durationSeconds": 0.2768323,
+              "message": "  the prepared path offers exactly the same eligible cards\n  Expected is <System.Collections.Generic.List`1[System.String]> with 2 elements, actual is <System.Collections.Generic.List`1[System.String]> with 3 elements\n  Values differ at index [0]\n  Expected string length 3 but was 2. Strings differ at index 2.\n  Expected: \"c13\"\n  But was:  \"c1\"\n  -------------^\n",
+              "stackTrace": "at MemoryForge.Client.Tests.EffectCandidatePlayModeTests+<APreparedTunePickUsesTheSameEligibleList>d__16.MoveNext () [0x0027e] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Tests/PlayMode/EffectCandidatePlayModeTests.cs:238\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@388540dd9ce6/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:44\n",
+              "output": ""
+            },
+            {
+              "name": "ExplicitAutoStillSendsCoresOwnChoiceAndNeverAHiddenCard",
+              "fullName": "MemoryForge.Client.Tests.EffectCandidatePlayModeTests.ExplicitAutoStillSendsCoresOwnChoiceAndNeverAHiddenCard",
+              "state": "Failed",
+              "durationSeconds": 0.0823638,
+              "message": "  the sheet lists only the eligible cards\n  Expected is <System.Collections.Generic.List`1[System.String]> with 3 elements, actual is <System.Collections.Generic.List`1[System.String]> with 4 elements\n  Values differ at index [0]\n  String lengths are both 2. Strings differ at index 1.\n  Expected: \"c1\"\n  But was:  \"c7\"\n  ------------^\n",
+              "stackTrace": "at MemoryForge.Client.Tests.EffectCandidatePlayModeTests+<ExplicitAutoStillSendsCoresOwnChoiceAndNeverAHiddenCard>d__15.MoveNext () [0x00193] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Tests/PlayMode/EffectCandidatePlayModeTests.cs:207\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@388540dd9ce6/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:44\n",
+              "output": ""
+            },
+            {
+              "name": "TuneSheetOffersAndAcceptsOnlyCardsItsCoreEffectTakes",
+              "fullName": "MemoryForge.Client.Tests.EffectCandidatePlayModeTests.TuneSheetOffersAndAcceptsOnlyCardsItsCoreEffectTakes",
+              "state": "Failed",
+              "durationSeconds": 0.0885234,
+              "message": "  the sheet offers exactly the hand cards the tune effect takes\n  Expected is <System.Collections.Generic.List`1[System.String]> with 3 elements, actual is <System.Collections.Generic.List`1[System.String]> with 4 elements\n  Values differ at index [0]\n  String lengths are both 2. Strings differ at index 1.\n  Expected: \"c1\"\n  But was:  \"c7\"\n  ------------^\n",
+              "stackTrace": "at MemoryForge.Client.Tests.EffectCandidatePlayModeTests+<TuneSheetOffersAndAcceptsOnlyCardsItsCoreEffectTakes>d__14.MoveNext () [0x002cf] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Tests/PlayMode/EffectCandidatePlayModeTests.cs:166\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@388540dd9ce6/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:44\n",
+              "output": ""
+            }
+          ]
+        }
+      },
+      "hint": null
+    }
+  },
+  "isError": false
+}

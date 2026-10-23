@@ -1,0 +1,2 @@
+SERVER CHECKS PASS [postgres]: 859 assertions
+File-backend suite: NOT_RUN in this invocation (run without the PostgreSQL arguments)

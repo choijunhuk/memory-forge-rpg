@@ -1,0 +1,16 @@
+{
+  "server/MemoryForge.Server/PracticeRunStore.cs": "9c008d308b6b1ff00c04fdc9aec60dcb2d2857e2beec2ed0dc29295669a78087",
+  "server/MemoryForge.Server/Program.cs": "9a24f314b299b298ac3e87f4bf311c4e6a1faeae173edb79db257174ef887b82",
+  "server/MemoryForge.Server/Contracts.cs": "115cc42fb1ec5bfe797764a4bb7f714b676451c158e2c89269f654185ab4d321",
+  "server/MemoryForge.Server/README.md": "896be969ddd3ece892a0e098074b5565abe302328e9a073db218b660c7b19dd3",
+  "server/MemoryForge.ServerChecks/Program.cs": "58dd73bfc39e7a5e55cbab4bfff2c99ad941e414beeb891b62571f7932cb268b",
+  "server/MemoryForge.Server/PracticePostgresStore.cs": "8daa083edfb9a63f57425ca82e5a5f77aed2110e26feca416196444f92d8c61d",
+  "server/dev_practice_schema.sql": "73bcad986ab8c656ad7d9861bc12b7dd255595f52ab4a5fcd1c6785def292aac",
+  "server/MemoryForge.ServerChecks/PostgresChecks.cs": "243f9a1167cc64cea2c624bcc9f939e3446ba3c610d979bbd7542f38a34a9399",
+  "reports/postgres_persistence_20261016/author_report.md": "26d042f887d474c480a6d89f524a2b9874580ddb031b52b9e8994e44a45a5f61",
+  "server/MemoryForge.Server/MemoryForge.Server.csproj": "3dbd2b6e59b4b1d82b9342b11980f92bc1dd3890810e3804981ac5f6ea68c833",
+  "server/MemoryForge.Server/packages.lock.json": "180c219e7f5360c2db26d6d11c4d4c65cdf1a80ec29d452f41df6cda59ef30cd",
+  "ops/ai/local/postgres-root-artifacts/bin/MemoryForge.Server/debug/MemoryForge.Server.dll": "92ce482ac63678faf13658e8bb2b6639cf1842d5bffb03f4f9666867945f861e",
+  "ops/ai/local/postgres-root-artifacts/bin/MemoryForge.ServerChecks/debug/MemoryForge.ServerChecks.dll": "b9209107bc98893b797c06e638523a190a68a04097d47754d410bb981894efc7",
+  "ops/ai/local/postgres-root-artifacts/bin/MemoryForge.Core/debug/MemoryForge.Core.dll": "bf23d4bfd58b4082c310bf83898220b5a7e7bc7e685d98866b43106b07113c85"
+}

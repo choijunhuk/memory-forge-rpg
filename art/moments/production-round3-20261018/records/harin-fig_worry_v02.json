@@ -1,0 +1,29 @@
+{
+  "c": "harin",
+  "key": "fig_worry_v02",
+  "path": "harin/images/char_harin_seated_worried_v02.png",
+  "refs": [
+    "/Users/choi/Documents/Memory_forge/art/moments/harin/images/char_harin_cat_offer_happy_v01.png"
+  ],
+  "common": "Use case: identity-preserve. Edit this Harin adult26 seated workshop key-pose. Keep full body, exact face/scar/armor/trousers/cape, seated support, shield at same place and actual transparency. ",
+  "pose": "Keep the SAME small cloth toy CAT on tabletop cloth, clearly plush with stitched seam and button eyes, one folded ear. Her two gloved hands now rest flat on the cloth on either side of the toy rather than adjusting its ear. Shoulders slightly tense and inner eyebrows drawn with shy serious concern, eyes toward viewer, lips neutral. No live animal. Do not move table, chair or shield.",
+  "prompt": "Use case: identity-preserve. Edit this Harin adult26 seated workshop key-pose. Keep full body, exact face/scar/armor/trousers/cape, seated support, shield at same place and actual transparency. Keep the SAME small cloth toy CAT on tabletop cloth, clearly plush with stitched seam and button eyes, one folded ear. Her two gloved hands now rest flat on the cloth on either side of the toy rather than adjusting its ear. Shoulders slightly tense and inner eyebrows drawn with shy serious concern, eyes toward viewer, lips neutral. No live animal. Do not move table, chair or shield.",
+  "source": "/Users/choi/.codex/generated_images/01a14d20-ffd5-7e81-9e47-85c1c8415e11/exec-0d0f8fab-8b57-41d0-a689-5813df00adea.png",
+  "tool": "Codex built-in image_gen; subscription-included; no API fallback",
+  "review": "pass",
+  "previous_attempt": null,
+  "score": 93,
+  "review_notes": "Rendered output inspected against design/source narrative. Face, age, outfit, primary hand/prop state and grounded support match the key-pose. No rig or live playback acceptance.",
+  "backend_model": "not exposed by tool",
+  "selected": true,
+  "sha256": "c3941e89c6885c5bec2fcdcedd3620be76648a8ff36914bd9f62302438278760",
+  "size": [
+    1024,
+    1536
+  ],
+  "mode": "RGBA",
+  "alpha_extrema": [
+    0,
+    254
+  ]
+}

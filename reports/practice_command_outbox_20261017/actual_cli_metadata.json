@@ -1,0 +1,87 @@
+[
+  {
+    "task": "P1-PRACTICE-COMMAND-OUTBOX-20261017",
+    "session_id": "82687d1f-cd97-479c-87fa-ed21193a6961",
+    "requested_model": "claude-opus-5-5",
+    "requested_effort": "max",
+    "actual_model": "claude-opus-5-5",
+    "positive_effort_records": {
+      "max": 31
+    },
+    "positive_per_turn_effort_records": {
+      "max": 31
+    },
+    "runner_status": "FAILED",
+    "process_exit": 0,
+    "billing_account_matched": true,
+    "author_runtime": "NOT_RUN"
+  },
+  {
+    "task": "P1-PRACTICE-OUTBOX-BOUNDARY-FIX-20261017",
+    "session_id": "82687d1f-cd97-479c-87fa-ed21193a6961",
+    "requested_model": "claude-opus-5-5",
+    "requested_effort": "xhigh",
+    "actual_model": "claude-opus-5-5",
+    "positive_effort_records": {
+      "xhigh": 21
+    },
+    "positive_per_turn_effort_records": {
+      "xhigh": 21
+    },
+    "runner_status": "RECEIVED_UNVERIFIED",
+    "process_exit": 0,
+    "billing_account_matched": true,
+    "author_runtime": "NOT_RUN"
+  },
+  {
+    "task": "P1-PRACTICE-OUTBOX-RACE-GATE-20261017",
+    "session_id": "82687d1f-cd97-479c-87fa-ed21193a6961",
+    "requested_model": "claude-opus-5-5",
+    "requested_effort": "high",
+    "actual_model": "claude-opus-5-5",
+    "positive_effort_records": {
+      "high": 3
+    },
+    "positive_per_turn_effort_records": {
+      "high": 3
+    },
+    "runner_status": "RECEIVED_UNVERIFIED",
+    "process_exit": 0,
+    "billing_account_matched": true,
+    "author_runtime": "NOT_RUN"
+  },
+  {
+    "task": "P1-PRACTICE-OUTBOX-SOURCE-20261017",
+    "session_id": "82687d1f-cd97-479c-87fa-ed21193a6961",
+    "requested_model": "claude-opus-5-5",
+    "requested_effort": "xhigh",
+    "actual_model": "claude-opus-5-5",
+    "positive_effort_records": {
+      "xhigh": 18
+    },
+    "positive_per_turn_effort_records": {
+      "xhigh": 18
+    },
+    "runner_status": "RECEIVED_UNVERIFIED",
+    "process_exit": 0,
+    "billing_account_matched": true,
+    "author_runtime": "NOT_RUN"
+  },
+  {
+    "task": "P1-PRACTICE-OUTBOX-TESTS-20261017",
+    "session_id": "82687d1f-cd97-479c-87fa-ed21193a6961",
+    "requested_model": "claude-opus-5-5",
+    "requested_effort": "xhigh",
+    "actual_model": "claude-opus-5-5",
+    "positive_effort_records": {
+      "xhigh": 19
+    },
+    "positive_per_turn_effort_records": {
+      "xhigh": 19
+    },
+    "runner_status": "RECEIVED_UNVERIFIED",
+    "process_exit": 0,
+    "billing_account_matched": true,
+    "author_runtime": "NOT_RUN"
+  }
+]

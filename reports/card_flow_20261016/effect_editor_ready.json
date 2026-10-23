@@ -1,0 +1,31 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"playing\":true,\"scene\":\"MemoryForgeExpedition\",\"selected\":\"c7\",\"mode\":\"now\",\"picker\":false,\"prepared\":false,\"ap\":4,\"version\":2,\"turn\":1,\"pure\":true,\"qaComparisonObjectsCleared\":true,\"futurePlayOptions\":0,\"testRestorePending\":false},\"compiler\":\"codedom\"}}"
+    }
+  ],
+  "structuredContent": {
+    "success": true,
+    "message": "Code executed successfully.",
+    "data": {
+      "result": {
+        "playing": true,
+        "scene": "MemoryForgeExpedition",
+        "selected": "c7",
+        "mode": "now",
+        "picker": false,
+        "prepared": false,
+        "ap": 4,
+        "version": 2,
+        "turn": 1,
+        "pure": true,
+        "qaComparisonObjectsCleared": true,
+        "futurePlayOptions": 0,
+        "testRestorePending": false
+      },
+      "compiler": "codedom"
+    }
+  },
+  "isError": false
+}

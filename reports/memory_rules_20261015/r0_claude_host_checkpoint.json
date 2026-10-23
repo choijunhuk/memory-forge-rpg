@@ -1,0 +1,23 @@
+{
+  "status": "TIMED_OUT_NO_IMPLEMENTATION",
+  "reason": "Local official CLI execution timeout1800s, not a subscription-limit result",
+  "task": "ops/ai/tasks/P1-CSHARP-RUN-CREATE-CLAUDE-HOST.md",
+  "model_counts": {
+    "claude-opus-5-5": 80
+  },
+  "file_tool_calls": {
+    "Read": 33,
+    "Glob": 4,
+    "Grep": 13
+  },
+  "effort_metadata": {
+    "effort:max": 80,
+    "perTurnEffort:max": 80
+  },
+  "actualSessionId": "0fa41ef3-c168-42ca-8f1e-7ebe78db607b",
+  "all_four_Core_and_placeholder_hashes_unchanged": true,
+  "host_lines": 1,
+  "acceptance": "NOT_IMPLEMENTED_NOT_INTEGRATED",
+  "next": "Preserve session; split checker implementation into actual execution then corruption/detachment guards; independent M0 work continues",
+  "at": "2026-10-15T06:11:20.796364+00:00"
+}

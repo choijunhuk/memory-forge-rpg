@@ -1,0 +1,13 @@
+{
+  "score": 94,
+  "verdict": "pass",
+  "category_match": true,
+  "differences": [
+    "Small embroidery/ornament line variation remains inherent to independent redraws; source-art acceptance does not establish continuous motion or Unity framing."
+  ],
+  "suggestions": [
+    "Use corrected Harin plush variants and single-book Sion pose, not the rejected v01 candidates.",
+    "Replay the new sources in Unity after byte-preserving import and review new furnished-pose focus anchors."
+  ],
+  "reasoning": "All six A/B/C source sequences now follow direction A. Harin's hidden/revealed/placed/rest toy state and shield/table sides, Aila's writing/page/lantern, Ravien's foreground table and Sion's persistent lectern are coherent; C weapon/lantern states and final Sion sword width are preserved."
+}

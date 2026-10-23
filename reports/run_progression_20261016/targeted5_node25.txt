@@ -1,0 +1,13 @@
+✔ five fixed gen_traces inputs replay from a fresh Create through actual commands to DONE with complete states, returns and pure queries (1434.603291ms)
+✔ a newly earned AP bonus reaches only the next battle first turn, and begin-defeat closes through the normal finalizer (1.11375ms)
+✔ strict checks reject stale provenance, case identity, omission, forged outcomes, hashes, returns, coverage and query data (7202.163542ms)
+✔ gzip export is deterministic, rejects damaged containers, accepts other valid DEFLATE encodings and preserves output on unexpected execution (6249.849458ms)
+✔ checked-in artifact matches fresh actual JS execution and claims only the JS oracle scope (3959.268833ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 22236.313583

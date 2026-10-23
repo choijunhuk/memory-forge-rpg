@@ -1,0 +1,27 @@
+{
+  "c": "ravien",
+  "key": "fig_soft",
+  "path": "ravien/images/char_ravien_seated_worried_v01.png",
+  "refs": [
+    "/Users/choi/Documents/Memory_forge/art/moments/ravien/images/char_ravien_stand_neutral_v01.png"
+  ],
+  "pose": "Age28 Ravien seated at the same small writing table/red-upholstered wooden chair. Both long-gloved EMPTY hands rest softly on her lap, clearly no pen held, fingers relaxed. Blank paper, laid-down pen and CLOSED red folder remain on tabletop at her side. Her shoulders have softened, eye contact honest and vulnerable, tiny uncertain smile, no crying or wink. Whole seated figure incl heels inside canvas; face x.50 y.16. Preserve exact design.",
+  "prompt": "Use case: identity-preserve. Locked character design reference. Make ONE new non-explicit narrative RPG key-pose, 1024x1536 full length transparent PNG. Preserve adult identity, age, hairstyle, face, exact costume/colors and painterly anime cel style. All head, fingers, shoes and important props inside canvas. No scene background, haze, labels, panels, other people or erotic posing. Character acting and prop contact are the focus. Acting: Age28 Ravien seated at the same small writing table/red-upholstered wooden chair. Both long-gloved EMPTY hands rest softly on her lap, clearly no pen held, fingers relaxed. Blank paper, laid-down pen and CLOSED red folder remain on tabletop at her side. Her shoulders have softened, eye contact honest and vulnerable, tiny uncertain smile, no crying or wink. Whole seated figure incl heels inside canvas; face x.50 y.16. Preserve exact design.",
+  "source": "/Users/choi/.codex/generated_images/01a14d20-ffd5-7e81-9e47-85c1c8415e11/exec-19092688-b5e6-40d5-a9a9-2313fa659824.png",
+  "tool": "Codex built-in image_gen; subscription-included; no API fallback",
+  "review": "pass",
+  "score": 93,
+  "review_notes": "Rendered output inspected: adult identity and costume match; seated support, empty/resting hands or toy-cat contact are clear. Static key-pose only. Furniture and toy styling vary between standalone poses and require screen review.",
+  "backend_model": "not exposed by tool",
+  "selected": true,
+  "sha256": "a28da9ee45461da02ba2fe6a6770be953a329f90b3481e38de35b6cb3de41801",
+  "size": [
+    1024,
+    1536
+  ],
+  "mode": "RGBA",
+  "alpha_extrema": [
+    0,
+    254
+  ]
+}

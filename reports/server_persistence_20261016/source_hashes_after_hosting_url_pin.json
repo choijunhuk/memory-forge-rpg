@@ -1,0 +1,12 @@
+{
+  "server/MemoryForge.Server/MemoryForge.Server.csproj": "70fcfc6e158a18d2f4ed0453fbdeaeb7170f87b82f77b4a3aab8d7d869f6fe59",
+  "server/MemoryForge.Server/Program.cs": "17691e06f25da6bacb5db58f8222674d147fdb8224e124415df7d6d148110454",
+  "server/MemoryForge.Server/Content.cs": "16a73f796609454ce6b75bd16cb9277e0726b77ce6d86cbbf1d15d8c2d6a0f00",
+  "server/MemoryForge.Server/PracticeRunStore.cs": "f4cd8c0a260e0ce4f1b751a21f809210d143e3e8de79750ef36daa16c6398fab",
+  "server/MemoryForge.Server/PublicView.cs": "b759b0db21dd248b719cdb04bc81073ff7a6c6cefb0ea35e1990a7d29add0639",
+  "server/MemoryForge.Server/Contracts.cs": "e21a9093503d1f1ab9070322c295813b09a900759bfdbc4a316c0a0bac808ada",
+  "server/MemoryForge.Server/README.md": "21cde9f4d98b40ca9cac71035b3a053045f9276be42fe6ba4d8cb2afe1950792",
+  "server/MemoryForge.ServerChecks/MemoryForge.ServerChecks.csproj": "51acf9eb47b9accf3686de708a3a3f93c5bc2a4ad584653e6073bf83957c3a5c",
+  "server/MemoryForge.ServerChecks/Program.cs": "a550af1f9170820deffbe5c254b25d92b513bfbb47fee1dfcdff6f1d0d1a9ce2",
+  "reports/server_persistence_20261016/author_report.md": "0dc4af11726cd3a27788142ef42187a1446b5da7f253604c5e40bf75a3cd1a90"
+}

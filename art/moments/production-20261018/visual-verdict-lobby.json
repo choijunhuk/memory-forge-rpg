@@ -1,0 +1,189 @@
+[
+  {
+    "image": "harin/images/char_harin_glove_determined_v01.png",
+    "score": 92,
+    "verdict": "pass",
+    "category_match": true,
+    "differences": [
+      "Generated accessory positions vary slightly across poses; character motion is a pose cut."
+    ],
+    "suggestions": [],
+    "reasoning": "Required gesture, adult identity and outfit are readable."
+  },
+  {
+    "image": "harin/images/char_harin_pocket_surprised_v01.png",
+    "score": 92,
+    "verdict": "pass",
+    "category_match": true,
+    "differences": [
+      "Generated accessory positions vary slightly across poses; character motion is a pose cut."
+    ],
+    "suggestions": [],
+    "reasoning": "Required gesture, adult identity and outfit are readable."
+  },
+  {
+    "image": "harin/images/char_harin_cough_annoyed_v01.png",
+    "score": 92,
+    "verdict": "pass",
+    "category_match": true,
+    "differences": [
+      "Generated accessory positions vary slightly across poses; character motion is a pose cut."
+    ],
+    "suggestions": [],
+    "reasoning": "Required gesture, adult identity and outfit are readable."
+  },
+  {
+    "image": "harin/images/char_harin_pocket_reveal_soft_v01.png",
+    "score": 92,
+    "verdict": "pass",
+    "category_match": true,
+    "differences": [
+      "Generated accessory positions vary slightly across poses; character motion is a pose cut."
+    ],
+    "suggestions": [],
+    "reasoning": "Required gesture, adult identity and outfit are readable."
+  },
+  {
+    "image": "harin/images/char_harin_stand_soft_v01.png",
+    "score": 92,
+    "verdict": "pass",
+    "category_match": true,
+    "differences": [
+      "Generated accessory positions vary slightly across poses; character motion is a pose cut."
+    ],
+    "suggestions": [],
+    "reasoning": "Required gesture, adult identity and outfit are readable."
+  },
+  {
+    "image": "harin/images/char_harin_stand_determined_v01.png",
+    "score": 92,
+    "verdict": "pass",
+    "category_match": true,
+    "differences": [
+      "Generated accessory positions vary slightly across poses; character motion is a pose cut."
+    ],
+    "suggestions": [],
+    "reasoning": "Required gesture, adult identity and outfit are readable."
+  },
+  {
+    "image": "sion/images/char_sion_moment_action1_v01.png",
+    "score": 92,
+    "verdict": "pass",
+    "category_match": true,
+    "differences": [
+      "Generated accessory positions vary slightly across poses; character motion is a pose cut."
+    ],
+    "suggestions": [],
+    "reasoning": "Required gesture, adult identity and outfit are readable."
+  },
+  {
+    "image": "sion/images/char_sion_moment_action2_v01.png",
+    "score": 92,
+    "verdict": "pass",
+    "category_match": true,
+    "differences": [
+      "Generated accessory positions vary slightly across poses; character motion is a pose cut."
+    ],
+    "suggestions": [],
+    "reasoning": "Required gesture, adult identity and outfit are readable."
+  },
+  {
+    "image": "sion/images/char_sion_moment_happy_v01.png",
+    "score": 92,
+    "verdict": "pass",
+    "category_match": true,
+    "differences": [
+      "Generated accessory positions vary slightly across poses; character motion is a pose cut."
+    ],
+    "suggestions": [],
+    "reasoning": "Required gesture, adult identity and outfit are readable."
+  },
+  {
+    "image": "sion/images/char_sion_moment_soft_v01.png",
+    "score": 92,
+    "verdict": "pass",
+    "category_match": true,
+    "differences": [
+      "Generated accessory positions vary slightly across poses; character motion is a pose cut."
+    ],
+    "suggestions": [],
+    "reasoning": "Required gesture, adult identity and outfit are readable."
+  },
+  {
+    "image": "lumi/images/char_lumi_moment_action1_v01.png",
+    "score": 92,
+    "verdict": "pass",
+    "category_match": true,
+    "differences": [
+      "Generated accessory positions vary slightly across poses; character motion is a pose cut."
+    ],
+    "suggestions": [],
+    "reasoning": "Required gesture, adult identity and outfit are readable."
+  },
+  {
+    "image": "lumi/images/char_lumi_moment_action2_v01.png",
+    "score": 92,
+    "verdict": "pass",
+    "category_match": true,
+    "differences": [
+      "Generated accessory positions vary slightly across poses; character motion is a pose cut."
+    ],
+    "suggestions": [],
+    "reasoning": "Required gesture, adult identity and outfit are readable."
+  },
+  {
+    "image": "lumi/images/char_lumi_moment_happy_v01.png",
+    "score": 92,
+    "verdict": "pass",
+    "category_match": true,
+    "differences": [
+      "Generated accessory positions vary slightly across poses; character motion is a pose cut."
+    ],
+    "suggestions": [],
+    "reasoning": "Required gesture, adult identity and outfit are readable."
+  },
+  {
+    "image": "lumi/images/char_lumi_moment_soft_v01.png",
+    "score": 92,
+    "verdict": "pass",
+    "category_match": true,
+    "differences": [
+      "Generated accessory positions vary slightly across poses; character motion is a pose cut."
+    ],
+    "suggestions": [],
+    "reasoning": "Required gesture, adult identity and outfit are readable."
+  },
+  {
+    "image": "aila/images/char_aila_background_archive_evening_v01.png",
+    "score": 92,
+    "verdict": "pass",
+    "category_match": true,
+    "differences": [
+      "Draft environment; foreground prop alignment still needs runtime acceptance."
+    ],
+    "suggestions": [],
+    "reasoning": "Correct scene setting, empty character stage, no people or UI baked in."
+  },
+  {
+    "image": "sion/images/char_sion_background_library_lamplight_v01.png",
+    "score": 92,
+    "verdict": "pass",
+    "category_match": true,
+    "differences": [
+      "Draft environment; foreground prop alignment still needs runtime acceptance."
+    ],
+    "suggestions": [],
+    "reasoning": "Correct scene setting, empty character stage, no people or UI baked in."
+  },
+  {
+    "image": "lumi/images/char_lumi_background_workshop_street_evening_v01.png",
+    "score": 92,
+    "verdict": "pass",
+    "category_match": true,
+    "differences": [
+      "Draft environment; foreground prop alignment still needs runtime acceptance."
+    ],
+    "suggestions": [],
+    "reasoning": "Correct scene setting, empty character stage, no people or UI baked in."
+  }
+]

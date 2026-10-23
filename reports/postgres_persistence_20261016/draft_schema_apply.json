@@ -1,0 +1,12 @@
+{
+  "scope": "draft additive development schema applied only in the owned disposable DB; not production migration",
+  "schema_sha256": "73bcad986ab8c656ad7d9861bc12b7dd255595f52ab4a5fcd1c6785def292aac",
+  "original_schema_unchanged": true,
+  "app_role": "mf_runtime",
+  "grants": [
+    "USAGE dev_practice",
+    "SELECT schema_marker",
+    "SELECT/INSERT/UPDATE account_state"
+  ],
+  "exit": 0
+}

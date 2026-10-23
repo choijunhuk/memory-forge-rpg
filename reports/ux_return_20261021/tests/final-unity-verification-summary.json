@@ -1,0 +1,130 @@
+{
+  "tests": {
+    "fullPlayMode": {
+      "total": "419",
+      "passed": "408",
+      "failed": "0",
+      "skipped": "11",
+      "duration": "285.7776523",
+      "start-time": "2026-10-21 10:57:53Z",
+      "end-time": "2026-10-21 11:02:39Z"
+    },
+    "fullEditMode": {
+      "total": "10",
+      "passed": "10",
+      "failed": "0",
+      "skipped": "0",
+      "duration": "0.0551049",
+      "start-time": "2026-10-21 11:03:09Z",
+      "end-time": "2026-10-21 11:03:09Z"
+    },
+    "actualScenesAndPolishAndCaptures": {
+      "total": "6",
+      "passed": "6",
+      "failed": "0",
+      "skipped": "0",
+      "duration": "11.7088616",
+      "start-time": "2026-10-21 11:03:53Z",
+      "end-time": "2026-10-21 11:04:05Z"
+    }
+  },
+  "fullPlayModeSkipped": [
+    {
+      "test": "CaptureCardHoldBackView",
+      "label": "Explicit",
+      "reason": "writes a report screenshot; run by name with MF_EXPEDITION_SHOTS"
+    },
+    {
+      "test": "CaptureExpeditionScreens",
+      "label": "Explicit",
+      "reason": "writes report screenshots; run by name with MF_EXPEDITION_SHOTS"
+    },
+    {
+      "test": "ActualHomeAndExpeditionScenesPreserveSavedMemoryAndRequireEveryDeparture",
+      "label": "Explicit",
+      "reason": "loads the shipped home and expedition scenes; writes MF_HOME_RETURN_SHOTS"
+    },
+    {
+      "test": "CaptureHomeAndSortie",
+      "label": "Explicit",
+      "reason": "writes report screenshots; run by name with MF_EXPEDITION_SHOTS"
+    },
+    {
+      "test": "CaptureHomeCatalogueAndDetails",
+      "label": "Explicit",
+      "reason": "writes report screenshots; run by name with MF_EXPEDITION_SHOTS"
+    },
+    {
+      "test": "CaptureMomentScenes",
+      "label": "Explicit",
+      "reason": "writes report screenshots; run by name with Temp/moment_shots.txt"
+    },
+    {
+      "test": "CaptureCoachScreens",
+      "label": "Explicit",
+      "reason": "writes report screenshots; run by name with MF_ONBOARDING_SHOTS"
+    },
+    {
+      "test": "CaptureRecruitmentFlow",
+      "label": "Explicit",
+      "reason": "writes protocol-fixture screenshots with MF_EXPEDITION_SHOTS"
+    },
+    {
+      "test": "CaptureTenRecruitmentFlow",
+      "label": "Explicit",
+      "reason": "writes ten-pull protocol screenshots with MF_EXPEDITION_SHOTS"
+    },
+    {
+      "test": "ExistingLocalAccountPullPersistsAcrossLobbyRecreation",
+      "label": "Ignored",
+      "reason": "MF_RECRUITMENT_LIVE_METADATA is not set; no live account is changed"
+    },
+    {
+      "test": "SpentLocalAccountReconnectsToItsPersistedResultAndOwnedRoster",
+      "label": "Ignored",
+      "reason": "MF_RECRUITMENT_LIVE_METADATA is not set; no live account is accessed"
+    }
+  ],
+  "build": {
+    "result": "Succeeded",
+    "reportedBytes": "568347819",
+    "seconds": "16.1",
+    "errors": "0",
+    "warnings": "12"
+  },
+  "appPath": "/Users/choi/Documents/Memory_forge/ops/ai/local/ux-return-20261021/MemoryForge-PC-ux-return-20261021.app",
+  "actualAppBytes": 568347819,
+  "binarySha256": {
+    "Contents/MacOS/Memory Forge": "6f9cdb2d258104829088a0a9db8c1f2cb0cc3fdf9f8664b0b32a67e0c7d538ed",
+    "Contents/Resources/Data/Managed/MemoryForge.Client.dll": "15b0512dc52f816184c0b105399325bc18e2d1ccbf7821550026bff59cad7abe"
+  },
+  "uniqueCompilerWarnings": [
+    "Assets/Scripts/MemoryForgeLobbyClient.cs(452,29): warning CS8604: Possible null reference argument for parameter 'parent' in 'RectTransform MemoryForgeLobbyClient.Box(Transform parent, string name, float x, float y, float width, float height, Color color)'.",
+    "Assets/Scripts/MemoryForgeLobbyClient.cs(586,141): warning CS8602: Dereference of a possibly null reference.",
+    "Assets/Scripts/MemoryForgeLobbyClient.cs(590,81): warning CS8602: Dereference of a possibly null reference.",
+    "Assets/Scripts/MemoryForgeLobbyClient.cs(599,47): warning CS8602: Dereference of a possibly null reference.",
+    "Assets/Scripts/MemoryForgeLobbyClient.cs(604,63): warning CS8602: Dereference of a possibly null reference.",
+    "Assets/Scripts/MemoryForgeLobbyClient.cs(609,67): warning CS8602: Dereference of a possibly null reference.",
+    "Assets/Scripts/MemoryForgeLobbyClient.cs(90,244): warning CS8602: Dereference of a possibly null reference."
+  ],
+  "frozenCSharpInputs": 90,
+  "sourceHashManifestSha256": "35905befea4411e8316801a04dc943975a4ed06ec756dc950f78a4cb7f452cbf",
+  "sourceHashesUnchangedAcrossAllPhases": true,
+  "generatedFilesRestoredToHead": [
+    "client/MemoryForgeUnity/Assets/Settings/UniversalRP.asset",
+    "client/MemoryForgeUnity/Assets/UniversalRenderPipelineGlobalSettings.asset",
+    "client/MemoryForgeUnity/ProjectSettings/ProjectSettings.asset",
+    "client/MemoryForgeUnity/ProjectSettings/ShaderGraphSettings.asset",
+    "client/MemoryForgeUnity/ProjectSettings/UnityConnectSettings.asset",
+    "client/MemoryForgeUnity/Assets/Resources/Art/UI/home-nav-20261021.png.meta"
+  ],
+  "globalUnityLockReleased": true,
+  "actualSceneEvidence": "/Users/choi/Documents/Memory_forge/ops/ai/local/ux-return-20261021/actual-scene-final/actual-scenes-acceptance.json",
+  "ordinaryFinalScreens": "/Users/choi/Documents/Memory_forge/ops/ai/local/ux-return-20261021/after5",
+  "notRun": [
+    "native app launch (Root-owned)",
+    "phone (excluded)",
+    "live recruitment spending (excluded)",
+    "full14-seed visual capture (not needed)"
+  ]
+}

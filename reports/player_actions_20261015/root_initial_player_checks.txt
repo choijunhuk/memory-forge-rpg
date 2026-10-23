@@ -1,0 +1,21 @@
+CoreChecks: 202/202 passed
+CanonicalJsonChecks: 87/87 passed
+CanonicalSnapshotChecks: 2000/2000 hashes verified; scenarios=1000/1000 (700 short, 300 full); sourceFiles=5; commandEnvelopes=273748
+TraceFixtureValidationChecks: 13/13 passed
+BattleRunCommandReplay: NOT_IMPLEMENTED (0 full Run replay commands executed in C#; opening commands are checked separately)
+BattleOpeningChecks: 2221/2221 passed; 267 actual C# begin commands (267 expected)
+BattleOpeningScope: fresh Battle.Create + begin; integer JSON args with JS receipt ordering; int32 state outputs except widened actor levels; fractional/oversized numbers explicitly unsupported
+OpeningVectorScope: begin only; end/later-turn and player commands are covered separately; full Run/restoration remains unported
+BattleTurnChecks: 29232/29232 passed; 1740 oracle requests, 1673 committed, 14 replayed, 53 rejected; 136 additional black-box receipt probes
+BattleTurnScope: real fresh Create + begin/end, all 267 openings, 20 live two-cycle duels, 21 authored encounters and targeted boundaries
+BattleRunCommandReplay: NOT_IMPLEMENTED (full Run/restoration remains separate from Battle command checks and Unity/device/server acceptance)
+BattlePlayerQueryChecks: 128244/128244 passed; 702 actual begin commands, 8340 oracle query rows, 702 begin receipt probes
+BattlePlayerQueryScope: A0 authored definitions and pure effective-card/mode/cost/target queries on actual Create/begin instances
+A0QueryExclusion: play/ult and producing command paths are checked separately; base0 generic conformance UNRESOLVED
+FAIL BattlePlayerAction fixture/execution: System.IO.InvalidDataException: Action source membership mismatch
+   at BattlePlayerActionChecks.Require(Boolean ok, String label) in /Users/choi/Documents/Memory_forge/core/MemoryForge.CoreChecks/BattlePlayerActionChecks.cs:line 68
+   at BattlePlayerActionChecks.ValidateFixture(JsonElement fixture, JsonElement source, String root) in /Users/choi/Documents/Memory_forge/core/MemoryForge.CoreChecks/BattlePlayerActionChecks.cs:line 171
+   at BattlePlayerActionChecks.Run(String root) in /Users/choi/Documents/Memory_forge/core/MemoryForge.CoreChecks/BattlePlayerActionChecks.cs:line 78
+BattlePlayerActionChecks: 0/1 passed; 0 oracle requests, 0 committed, 0 replayed, 0 rejected; 0 pure Check probes and 0 receipt probes
+BattlePlayerActionScope: real fresh Create/begin/play/ult/end; full authored card/mode/effect closure is separately validated by mandatory observable witnesses
+BattleRunCommandReplay: NOT_IMPLEMENTED (actual Run/memory replay and server/device acceptance remain separate; generic base0 conformance UNRESOLVED)

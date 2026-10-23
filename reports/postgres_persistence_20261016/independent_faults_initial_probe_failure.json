@@ -1,0 +1,24 @@
+{
+  "scope": "Root independent real PostgreSQL/HTTP faults; owned disposable DB only",
+  "assembly_sha256": "839a8ad7f3bd48ecbf9b173314d7a040c9efd4aad84413a34bdf0740329a441d",
+  "hardware_power_loss": "NOT_RUN",
+  "production_auth": "NOT_IMPLEMENTED",
+  "unity_transport": "NOT_IMPLEMENTED",
+  "status": "FAIL",
+  "failure": "second process returns that exact durable post-recovery receipt",
+  "passed": [
+    "two actual PostgreSQL hosts start on loopback",
+    "all independent aliases start with no DB row",
+    "concurrent first creates with one ID return exact one receipt",
+    "one account row revision and receipt exist after the initially absent-row race",
+    "concurrent distinct first creates commit one run and refuse the other as active",
+    "losing first-create request consumes no ID or extra revision",
+    "fault account starts through actual Core Run.Create",
+    "real UPDATE privilege revocation returns fixed unavailable error",
+    "permission failure leaves exact prior envelope and request receipts unchanged",
+    "same rejected ID executes once after privilege restoration",
+    "real database outage returns unavailable without a file fallback",
+    "the same DB volume recovers with the pre-outage bytes and no outage receipt",
+    "same request resumes once against the recovered DB"
+  ]
+}

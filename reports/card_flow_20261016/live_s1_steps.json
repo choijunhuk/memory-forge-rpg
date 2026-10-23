@@ -1,0 +1,141 @@
+[
+  {
+    "step": "enter",
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"phase\":\"BATTLE\"},\"compiler\":\"codedom\"}}"
+        }
+      ],
+      "structuredContent": {
+        "success": true,
+        "message": "Code executed successfully.",
+        "data": {
+          "result": {
+            "phase": "BATTLE"
+          },
+          "compiler": "codedom"
+        }
+      },
+      "isError": false
+    }
+  },
+  {
+    "step": "target",
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"target\":\"e19\"},\"compiler\":\"codedom\"}}"
+        }
+      ],
+      "structuredContent": {
+        "success": true,
+        "message": "Code executed successfully.",
+        "data": {
+          "result": {
+            "target": "e19"
+          },
+          "compiler": "codedom"
+        }
+      },
+      "isError": false
+    }
+  },
+  {
+    "step": "card",
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"card\":\"c7\"},\"compiler\":\"codedom\"}}"
+        }
+      ],
+      "structuredContent": {
+        "success": true,
+        "message": "Code executed successfully.",
+        "data": {
+          "result": {
+            "card": "c7"
+          },
+          "compiler": "codedom"
+        }
+      },
+      "isError": false
+    }
+  },
+  {
+    "step": "mode",
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"mode\":\"next\",\"ap\":4},\"compiler\":\"codedom\"}}"
+        }
+      ],
+      "structuredContent": {
+        "success": true,
+        "message": "Code executed successfully.",
+        "data": {
+          "result": {
+            "mode": "next",
+            "ap": 4
+          },
+          "compiler": "codedom"
+        }
+      },
+      "isError": false
+    }
+  },
+  {
+    "step": "confirm",
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"reservations\":1,\"ap\":3},\"compiler\":\"codedom\"}}"
+        }
+      ],
+      "structuredContent": {
+        "success": true,
+        "message": "Code executed successfully.",
+        "data": {
+          "result": {
+            "reservations": 1,
+            "ap": 3
+          },
+          "compiler": "codedom"
+        }
+      },
+      "isError": false
+    }
+  },
+  {
+    "step": "end",
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"summary\":true,\"turn\":2,\"version\":3,\"hp\":243,\"reservations\":0,\"rows\":12},\"compiler\":\"codedom\"}}"
+        }
+      ],
+      "structuredContent": {
+        "success": true,
+        "message": "Code executed successfully.",
+        "data": {
+          "result": {
+            "summary": true,
+            "turn": 2,
+            "version": 3,
+            "hp": 243,
+            "reservations": 0,
+            "rows": 12
+          },
+          "compiler": "codedom"
+        }
+      },
+      "isError": false
+    }
+  }
+]

@@ -1,0 +1,30 @@
+✔ atk stops later hits and effects after the fatal hit (3.843625ms)
+✔ atkdebuff stops later hits and effects after the fatal hit (1.711208ms)
+✔ a surviving party still receives every hit and the attack debuff (1.344375ms)
+✔ memory envelope survival permits the next hit before actual defeat stops the rest (1.1675ms)
+✔ fatal reflect stops the next card hit before it kills a marked enemy for coins (5.4605ms)
+✔ reserved fatal reflect stops later hits and returns every pending reservation once (0.918875ms)
+✔ fatal reflect stops the next area target and later card block (0.429125ms)
+✔ surviving reflect keeps every card hit and its marked kill reward (0.383125ms)
+✔ surviving area reflect keeps the next target and later card block (0.834958ms)
+✔ memory envelope permits another scaled hit before actual defeat stops the rest (0.38075ms)
+✔ the fatal reflecting hit retains its own kill and reward ordering (0.28275ms)
+✔ post-resolution void shard victory stops turn startup before drawing (5.132333ms)
+✔ post-resolution victory discards queued reservations without using them or granting gauge (0.760583ms)
+✔ a reservation that already ended the battle emits one end event (0.380125ms)
+✔ post-resolution victory cannot become a smudge defeat on a spurious extra turn (0.931584ms)
+✔ silver needle cannot revive fatal reflect when the same hit leaves enemy HP 44 (0.950875ms)
+✔ silver needle cannot revive fatal reflect when the same hit leaves enemy HP 0 (0.304334ms)
+✔ silver needle still heals a party that survives reflect (0.29825ms)
+✔ memory envelope survival still permits silver needle healing at HP one (0.268917ms)
+✔ sera ultimate damage does not trigger card-only reflect (3.824459ms)
+✔ lumi ultimate damage does not trigger card-only reflect (0.483375ms)
+✔ immediate and reserved card hits still trigger the unchanged reflect value (1.143459ms)
+ℹ tests 22
+ℹ suites 0
+ℹ pass 22
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 97.48925

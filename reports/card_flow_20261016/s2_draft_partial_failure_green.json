@@ -1,0 +1,34 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"baselineHead\":\"0024ae3 + preliminary S2 draft\",\"actualPlay\":true,\"firstAccepted\":false,\"firstError\":\"BATTLE_ENEMY_PASSIVE_NOT_IMPLEMENTED\",\"beforePosition\":null,\"afterPosition\":\"z1f0n0\",\"beforeFloor\":0,\"afterFloor\":0,\"rngChanged\":true,\"recoveryRequired\":true,\"recoveryGateExists\":true,\"nextNodeAccepted\":false,\"finalPhase\":\"MAP\",\"finalFloor\":0,\"sessionMemoryVersion\":0,\"expectedStateInjected\":false},\"compiler\":\"codedom\"}}"
+    }
+  ],
+  "structuredContent": {
+    "success": true,
+    "message": "Code executed successfully.",
+    "data": {
+      "result": {
+        "baselineHead": "0024ae3 + preliminary S2 draft",
+        "actualPlay": true,
+        "firstAccepted": false,
+        "firstError": "BATTLE_ENEMY_PASSIVE_NOT_IMPLEMENTED",
+        "beforePosition": null,
+        "afterPosition": "z1f0n0",
+        "beforeFloor": 0,
+        "afterFloor": 0,
+        "rngChanged": true,
+        "recoveryRequired": true,
+        "recoveryGateExists": true,
+        "nextNodeAccepted": false,
+        "finalPhase": "MAP",
+        "finalFloor": 0,
+        "sessionMemoryVersion": 0,
+        "expectedStateInjected": false
+      },
+      "compiler": "codedom"
+    }
+  },
+  "isError": false
+}

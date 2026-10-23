@@ -1,0 +1,52 @@
+{
+  "source_base": "062caf89782fdd6fda9d7e0c317a06483fb67ce5",
+  "source_sha256": {
+    "client/MemoryForgeUnity/Assets/Scripts/MemoryForgeServerPracticeClient.cs": "51c38f553e883fc443f830f3b67eacb4bba0b9fa64f5af27e12fb737b22a86ce",
+    "client/MemoryForgeUnity/Assets/Tests/PlayMode/PracticeServerSavePartsPlayModeTests.cs": "c65de4b08109eba8e6cd5beb6cf1e374b67163d7492e8547b6cbf94a474fb832",
+    "client/MemoryForgeUnity/Assets/Tests/PlayMode/PracticeServerSavePartsPlayModeTests.cs.meta": "2a98ee5c06e0f5c3e6d45e3c2bc33ce6763b700d03a0e79e06a5195ed0d880fa"
+  },
+  "unity_play": {
+    "total": 309,
+    "passed": 309,
+    "failed": 0,
+    "skipped": 0,
+    "durationSeconds": 56.7511937,
+    "resultState": "Passed"
+  },
+  "unity_server_class": {
+    "total": 127,
+    "passed": 127,
+    "failed": 0,
+    "skipped": 0,
+    "durationSeconds": 4.260313,
+    "resultState": "Passed"
+  },
+  "unity_edit": {
+    "total": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "durationSeconds": 0.8334094,
+    "resultState": "Passed"
+  },
+  "same_bcl_transport": {
+    "passed": 120,
+    "failed": 0
+  },
+  "docs": 9,
+  "handoff": 31,
+  "real_core_ugui": {
+    "passed": 28,
+    "failed": 0,
+    "run_version_before": 142,
+    "run_version_after": 144,
+    "memory_version_before": 1,
+    "memory_version_after": 2
+  },
+  "core_server_rules_data_dependencies_scene_changes": [],
+  "remaining": [
+    "actual two-identical-copy case and nonempty-slot replacement (fixture tested)",
+    "owned temp-slot/unknown part rendering fixture gap",
+    "Android/IL2CPP, physical mouse, standalone, production, 130 percent text"
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Screenshot requested to 'Captures/CardFlowRecovery-20261016.png'.\",\"data\":{\"path\":\"Captures/CardFlowRecovery-20261016.png\",\"fullPath\":\"/Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Captures/CardFlowRecovery-20261016.png\",\"superSize\":1,\"isAsync\":true,\"captureSource\":\"game_view\"}}"
+    }
+  ],
+  "structuredContent": {
+    "success": true,
+    "message": "Screenshot requested to 'Captures/CardFlowRecovery-20261016.png'.",
+    "data": {
+      "path": "Captures/CardFlowRecovery-20261016.png",
+      "fullPath": "/Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Captures/CardFlowRecovery-20261016.png",
+      "superSize": 1,
+      "isAsync": true,
+      "captureSource": "game_view"
+    }
+  },
+  "isError": false
+}

@@ -1,0 +1,27 @@
+{
+  "participant": "P01",
+  "date": "2026-10-18",
+  "build": "MemoryForge-PC-20261017 (development UI, no art)",
+  "platform": "macOS",
+  "run": {
+    "outcome": "completed",
+    "floor_reached": "boss",
+    "minutes": 24,
+    "seconds_to_first_card": 40,
+    "used_reservation": true,
+    "first_reservation_turn": 2,
+    "aimed_weakness": "yes",
+    "hints_given": 0,
+    "stuck_points": ["Did not see where the enemy's next intent is shown"]
+  },
+  "survey": {
+    "fun": 4,
+    "difficulty": 3,
+    "q_reservation": "b",
+    "q_crack": ["a", "b", "c"],
+    "replay": true,
+    "confusing": "",
+    "enjoyed": ""
+  },
+  "observer_notes": ""
+}

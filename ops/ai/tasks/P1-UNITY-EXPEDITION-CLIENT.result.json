@@ -1,0 +1,31 @@
+{
+  "task_id": "P1-UNITY-EXPEDITION-CLIENT",
+  "run_id": "P1-UNITY-EXPEDITION-CLIENT-20261015T211014959426Z",
+  "status": "RECEIVED_UNVERIFIED",
+  "requestedEffort": "xhigh",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "changes_verified": false,
+  "raw_output": "ops/ai/local/P1-UNITY-EXPEDITION-CLIENT-20261015T211014959426Z*",
+  "billing_verified_at": "2026-10-14T21:44:57.439760+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "codex/csharp-battle-opening",
+  "base_commit": "2ffc29ecdbdeee5027258ad6f73302b98820fc35",
+  "worktree": "/Users/choi/.codex/worktrees/csharp-battle-opening/Memory_forge",
+  "allowed_files": [
+    "client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs",
+    "client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionClientPlayModeTests.cs",
+    "core/MemoryForge.Core/Run.BattleQueries.cs",
+    "reports/expedition_client_20261016/author_report.md"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "bfe66cef-0386-493f-b72c-068c07751c01",
+  "subtype": "success",
+  "is_error": false,
+  "result": "You asked for the separate expedition practice slice. I wrote the four owned files, but nothing has been compiled or run yet. This CLI has no execution tools, so every check below is NOT_RUN and nothing here is claimed as passing.\n\n**Done**\n- **`core/MemoryForge.Core/Run.BattleQueries.cs`:** adds five battle queries to `Run`: `BattleAllowedModes`, `BattleCostOf`, `BattleNeedsTarget`, `BattleEffectiveCard` and `BattleCheck`. Each one only forwards to the existing public `Battle` query, so no rule is copied, no state is injected and the live battle never leaves the `Run`. Outside a battle the first four throw `NO_BATTLE`, the same as `BattleCommand`; `BattleCheck` returns the `\"NO_BATTLE\"` code instead.\n- **`MemoryForgeExpeditionClient.cs`:** a new component with its own uGUI Canvas. It reuses the battle practice's font, palette, safe-area layout and public display helpers, and goes from a fresh `Run` to the next departure:\n  - **Map:** only reachable nodes can be clicked.\n  - **Battle:** hand → mode → target → confirm, with the pick overlay where a card needs picks, plus ultimate and end turn.\n  - **Between fights:** rewards (card/relic/part/evolution), rest, forge, shop, events (copy/remove choices make you pick cards first) and the archive.\n  - **v2 memory save:** uses the real `MemoryChanges` and `PreviewMemory`, blocks the save button with a Korean reason when the preview has an error, then calls `CommitMemory`. The result screen leads to the next departure from the saved memory and version.\n  - **Session-only memory:** nothing is written to PlayerPrefs, files, an account or a server. The status bar, save screen and result screen all say that closing the app discards the practice.\n- **`ExpeditionClientPlayModeTests.cs`:** six tests. Each one keeps a second, independent `Run` that receives the same Core commands and must stay identical after every step. The last test drives up to 4000 commands to the terminal save, commits, and checks the next departure.\n- **Author report:** `reports/expedition_client_20261016/author_report.md` has the API, setup steps, the per-test list and the gap list.\n\n**Verification:** Core build (`TreatWarningsAsErrors`), Unity compile/import, all six PlayMode tests, real pointer flow and Console in the new scene, Android device, and the 130% text / layout stress check are all NOT_RUN. I only checked the code by reading it.\n\n**Not done in this slice (listed in the report, not removed from the roadmap)**\n- **No card effect text:** there is no C# port of the prototype's `cardText`, so reward, shop and deck entries show only name, owner, rarity, cost and reservation type.\n- **No damage forecast in battle:** `Run` doesn't expose the battle setup or command history, so this needs a new Core query. The existing battle practice and its forecast are untouched.\n- **Fixed departure setup:** the reference party at normal difficulty; short/full can only be picked on the result screen.\n- **Missing UI pieces:** pile viewers, enemy/reservation detail sheets, a separate ultimate target mode, and the save screen's fill/clear helpers.\n- **Not applicable to a session-only store:** the connection-failure/retry/pending-request screens.\n- **Korean texts for memory error codes** are fallbacks inside the component. `error-messages.json` isn't in my ownership; its owner should add them there.\n\n**Next (Root)**\n1. Unity import (generates `.meta` files) and compile.\n2. Create a new scene with a GameObject, `MemoryForgeExpeditionClient` and a camera.\n3. Run the six PlayMode tests and check the real pointer flow and Console.\n4. Cross-review `Run.BattleQueries.cs`.\n5. Fix anything those steps turn up.",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ]
+}

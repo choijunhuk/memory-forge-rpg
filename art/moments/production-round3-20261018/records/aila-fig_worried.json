@@ -1,0 +1,40 @@
+{
+  "c": "aila",
+  "key": "fig_worried",
+  "path": "aila/images/char_aila_moment_worried_v01.png",
+  "refs": [
+    "/Users/choi/Documents/Memory_forge/art/moments/aila/images/char_aila_moment_surprised_v01.png"
+  ],
+  "common": "Use case: identity-preserve. Edit the supplied archive-tea narrative sprite of Aila, adult age23. Keep the complete figure, exact face/design/outfit, desk, empty open drawer, silver bell lantern and actual transparent alpha. ",
+  "pose": "She has put down the teapot beside the two cups. Both hands are empty: one rests by the drawer pull and the other rests lightly on desktop beside the cream paper. Her eyes meet viewer with quiet uncertainty, inner eyebrows slightly drawn, lips closed softly. A private vulnerable pause while discussing an empty drawer. Keep all other details and full-body composition unchanged.",
+  "prompt": "Use case: identity-preserve. Edit the supplied archive-tea narrative sprite of Aila, adult age23. Keep the complete figure, exact face/design/outfit, desk, empty open drawer, silver bell lantern and actual transparent alpha. She has put down the teapot beside the two cups. Both hands are empty: one rests by the drawer pull and the other rests lightly on desktop beside the cream paper. Her eyes meet viewer with quiet uncertainty, inner eyebrows slightly drawn, lips closed softly. A private vulnerable pause while discussing an empty drawer. Keep all other details and full-body composition unchanged.",
+  "source": "/Users/choi/.codex/generated_images/01a14d20-ffd5-7e81-9e47-85c1c8415e11/exec-22ab9d86-1572-4a7c-a649-1d65e568fe19.png",
+  "tool": "Codex built-in image_gen; subscription-included; no API fallback",
+  "review": "pass",
+  "previous_attempt": {
+    "c": "aila",
+    "key": "fig_worried",
+    "path": "aila/images/char_aila_moment_worried_v01.png",
+    "refs": [
+      "/Users/choi/Documents/Memory_forge/art/moments/aila/images/char_aila_moment_soft_v02.png"
+    ],
+    "pose": "Aila age23, full standing three-quarter pose beside a narrow archive desk with one open EMPTY lower drawer. One hand just withdrawn from drawer pull, other resting beside a small tea cup on desktop. Fine pen and blank cream sheet on desk; SILVER bell lantern hangs motionless from a hook on the desk side, not in her hand. Violet eyes toward viewer, inner brows slightly drawn, vulnerable but composed mouth. Maintain lavender silver long braid, open-back frost-embroidered lavender-white robe, detached draping sleeves, slit and heels. Silver lantern frame/bells stay silver, never gold. Full figure and drawer/desk fit inside transparent margins.",
+    "prompt": "Use case: identity-preserve. Locked character design reference. Make ONE new non-explicit narrative RPG key-pose, 1024x1536 full length transparent PNG. Preserve adult identity, age, hairstyle, face, exact costume/colors and painterly anime cel style. All head, fingers, shoes and important props inside canvas. No scene background, haze, labels, panels, other people or erotic posing. Character acting and prop contact are the focus. Acting: Aila age23, full standing three-quarter pose beside a narrow archive desk with one open EMPTY lower drawer. One hand just withdrawn from drawer pull, other resting beside a small tea cup on desktop. Fine pen and blank cream sheet on desk; SILVER bell lantern hangs motionless from a hook on the desk side, not in her hand. Violet eyes toward viewer, inner brows slightly drawn, vulnerable but composed mouth. Maintain lavender silver long braid, open-back frost-embroidered lavender-white robe, detached draping sleeves, slit and heels. Silver lantern frame/bells stay silver, never gold. Full figure and drawer/desk fit inside transparent margins.",
+    "error": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID db227ead-e8fa-4270-a7dc-b26cc3924894. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
+    "review": "real_constraint"
+  },
+  "score": 93,
+  "review_notes": "Rendered output inspected against design/source narrative. Face, age, outfit, primary hand/prop state and grounded support match the key-pose. No rig or live playback acceptance.",
+  "backend_model": "not exposed by tool",
+  "selected": true,
+  "sha256": "482ceb968a8fdc986a5f8e62cac97bbe99b0449d6f526255be778221f6df7773",
+  "size": [
+    1024,
+    1536
+  ],
+  "mode": "RGBA",
+  "alpha_extrema": [
+    0,
+    254
+  ]
+}

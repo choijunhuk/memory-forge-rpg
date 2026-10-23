@@ -1,0 +1,62 @@
+[
+  {
+    "character": "ravien",
+    "image": "ravien/images/char_ravien_stand_neutral_v01.png",
+    "score": 91,
+    "verdict": "pass",
+    "category_match": true,
+    "differences": [
+      "Minor generated accessory detail and fixed anchor alignment need Unity acceptance."
+    ],
+    "suggestions": [],
+    "reasoning": "Adult age direction, approved outfit silhouette, distinct character appeal and complete full figure are readable."
+  },
+  {
+    "character": "harin",
+    "image": "harin/images/char_harin_stand_neutral_v01.png",
+    "score": 91,
+    "verdict": "pass",
+    "category_match": true,
+    "differences": [
+      "Minor generated accessory detail and fixed anchor alignment need Unity acceptance."
+    ],
+    "suggestions": [],
+    "reasoning": "Adult age direction, approved outfit silhouette, distinct character appeal and complete full figure are readable."
+  },
+  {
+    "character": "aila",
+    "image": "aila/images/char_aila_moment_neutral_v01.png",
+    "score": 91,
+    "verdict": "pass",
+    "category_match": true,
+    "differences": [
+      "Minor generated accessory detail and fixed anchor alignment need Unity acceptance."
+    ],
+    "suggestions": [],
+    "reasoning": "Adult age direction, approved outfit silhouette, distinct character appeal and complete full figure are readable."
+  },
+  {
+    "character": "sion",
+    "image": "sion/images/char_sion_moment_neutral_v01.png",
+    "score": 91,
+    "verdict": "pass",
+    "category_match": true,
+    "differences": [
+      "Minor generated accessory detail and fixed anchor alignment need Unity acceptance."
+    ],
+    "suggestions": [],
+    "reasoning": "Adult age direction, approved outfit silhouette, distinct character appeal and complete full figure are readable."
+  },
+  {
+    "character": "lumi",
+    "image": "lumi/images/char_lumi_moment_neutral_v01.png",
+    "score": 91,
+    "verdict": "pass",
+    "category_match": true,
+    "differences": [
+      "Minor generated accessory detail and fixed anchor alignment need Unity acceptance."
+    ],
+    "suggestions": [],
+    "reasoning": "Adult age direction, approved outfit silhouette, distinct character appeal and complete full figure are readable."
+  }
+]

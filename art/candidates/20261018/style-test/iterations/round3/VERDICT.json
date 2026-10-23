@@ -1,0 +1,63 @@
+{
+  "score": 91,
+  "verdict": "pass",
+  "category_match": true,
+  "differences": [
+    "A는 큰 셀 명암, B는 좁은 부드러운 전이, C는 각진 붓면으로 스타일 차이를 보인다.",
+    "기존 나이·머리/눈 색·코트/갑주 재단·주요 장식 위치·장총/방패·고양이 소품과 기준 포즈를 보존했다. 작은 장식 선은 생성 과정에서 달라진다.",
+    "B는 기존 그림과 가장 가까워 강한 그림체 전환을 원하는 경우 변화량이 부족할 수 있다. C는 붓결이 소품 세부 가독성을 일부 낮춘다."
+  ],
+  "suggestions": [
+    "선택 비교의 기본안으로 A를 추천한다.",
+    "전체 제작 전에 선택 방향의 정면/측면 얼굴과 장식·손/무기 접촉을 고정하는 별도 제작 검수를 한다.",
+    "현재 6장은 스타일 선택용 초안이며 사용자 승인·게임용 원본/리그 수용으로 승격하지 않는다."
+  ],
+  "reasoning": "요청한 두 성인 캐릭터의 세 그림체 방향을 고정된 의상/소품과 유사한 구도로 비교할 수 있다. 점수는 자체 시각 검수의 주관적 선택 비교 적합도이며 최종 제작 품질 보증이 아니다.",
+  "selected": true,
+  "files": [
+    {
+      "id": "a_sera_v03",
+      "direction": "A — 선명한 셀",
+      "character": "sera",
+      "cache_source": "/Users/choi/.codex/generated_images/01a14d94-27ff-7e11-b654-a9d6ecdd5cd1/exec-decf60b7-5237-4b47-b2be-80a42bf41025.png",
+      "selected_file": "individuals/a_sera_v03.png"
+    },
+    {
+      "id": "a_harin_v03",
+      "direction": "A — 선명한 셀",
+      "character": "harin",
+      "cache_source": "/Users/choi/.codex/generated_images/01a14d94-27ff-7e11-b654-a9d6ecdd5cd1/exec-6c499b5c-ac5c-42be-9e79-cb29bb44d4b4.png",
+      "selected_file": "individuals/a_harin_v03.png"
+    },
+    {
+      "id": "b_sera_v03",
+      "direction": "B — 절제된 반셀",
+      "character": "sera",
+      "cache_source": "/Users/choi/.codex/generated_images/01a14d94-27ff-7e11-b654-a9d6ecdd5cd1/exec-5a86ae67-1097-4007-be84-ab887274f69b.png",
+      "selected_file": "individuals/b_sera_v03.png"
+    },
+    {
+      "id": "b_harin_v03",
+      "direction": "B — 절제된 반셀",
+      "character": "harin",
+      "cache_source": "/Users/choi/.codex/generated_images/01a14d94-27ff-7e11-b654-a9d6ecdd5cd1/exec-6e5be2ae-942e-40e5-91ed-71fc3116c914.png",
+      "selected_file": "individuals/b_harin_v03.png"
+    },
+    {
+      "id": "c_sera_v03",
+      "direction": "C — 그래픽 페인터리",
+      "character": "sera",
+      "cache_source": "/Users/choi/.codex/generated_images/01a14d94-27ff-7e11-b654-a9d6ecdd5cd1/exec-a3bda00b-754f-4d14-93c7-4456e979e9f3.png",
+      "selected_file": "individuals/c_sera_v03.png"
+    },
+    {
+      "id": "c_harin_v03",
+      "direction": "C — 그래픽 페인터리",
+      "character": "harin",
+      "cache_source": "/Users/choi/.codex/generated_images/01a14d94-27ff-7e11-b654-a9d6ecdd5cd1/exec-b187cae5-0c4a-4c52-8275-8998dd5647f1.png",
+      "selected_file": "individuals/c_harin_v03.png"
+    }
+  ],
+  "acceptance_scope": "style comparison candidates only",
+  "user_approval": "pending"
+}

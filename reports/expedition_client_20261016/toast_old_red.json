@@ -1,0 +1,70 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Test job status retrieved.\",\"error\":null,\"data\":{\"job_id\":\"8e84c754f6d54b2cbdd3be642cfa4657\",\"status\":\"failed\",\"mode\":\"PlayMode\",\"started_unix_ms\":1792106066442,\"finished_unix_ms\":1792106075018,\"last_update_unix_ms\":1792106075018,\"progress\":{\"completed\":1,\"total\":1,\"current_test_full_name\":null,\"current_test_started_unix_ms\":null,\"last_finished_test_full_name\":\"MemoryForge.Client.Tests.ExpeditionClientPlayModeTests.NoticeExpiryDuringAHeldPressKeepsTheViewAndTheReleaseEntersTheBattleOnce\",\"last_finished_unix_ms\":1792106075001,\"stuck_suspected\":false,\"editor_is_focused\":false,\"run_in_background\":false,\"focus_nudge_attempts\":null,\"focus_nudge_limit\":null,\"focus_nudge_status\":null,\"blocked_reason\":null,\"failures_so_far\":[{\"full_name\":\"MemoryForge.Client.Tests.ExpeditionClientPlayModeTests.NoticeExpiryDuringAHeldPressKeepsTheViewAndTheReleaseEntersTheBattleOnce\",\"message\":\"  toast expiry must not rebuild the view under a held press\\n  Expected is <UnityEngine.GameObject[1]>, actual is <System.Collections.Generic.List`1[UnityEngine.GameObject]> with 1 elements\\n  Values differ at index [0]\\n  Expected: <null>\\n  But was:  <MemoryForgeExpeditionView (UnityEngine.GameObject)>\\n\"}],\"failures_capped\":false},\"error\":null,\"result\":{\"mode\":\"PlayMode\",\"summary\":{\"total\":1,\"passed\":0,\"failed\":1,\"skipped\":0,\"durationSeconds\":2.6586467,\"resultState\":\"Failed(Child)\"},\"results\":[{\"name\":\"NoticeExpiryDuringAHeldPressKeepsTheViewAndTheReleaseEntersTheBattleOnce\",\"fullName\":\"MemoryForge.Client.Tests.ExpeditionClientPlayModeTests.NoticeExpiryDuringAHeldPressKeepsTheViewAndTheReleaseEntersTheBattleOnce\",\"state\":\"Failed\",\"durationSeconds\":2.6395873,\"message\":\"  toast expiry must not rebuild the view under a held press\\n  Expected is <UnityEngine.GameObject[1]>, actual is <System.Collections.Generic.List`1[UnityEngine.GameObject]> with 1 elements\\n  Values differ at index [0]\\n  Expected: <null>\\n  But was:  <MemoryForgeExpeditionView (UnityEngine.GameObject)>\\n\",\"stackTrace\":\"at MemoryForge.Client.Tests.ExpeditionClientPlayModeTests+<NoticeExpiryDuringAHeldPressKeepsTheViewAndTheReleaseEntersTheBattleOnce>d__7.MoveNext () [0x00424] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionClientPlayModeTests.cs:182\\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@388540dd9ce6/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:44\\n\",\"output\":\"\"}]}},\"hint\":null}"
+    }
+  ],
+  "structuredContent": {
+    "result": {
+      "success": true,
+      "message": "Test job status retrieved.",
+      "error": null,
+      "data": {
+        "job_id": "8e84c754f6d54b2cbdd3be642cfa4657",
+        "status": "failed",
+        "mode": "PlayMode",
+        "started_unix_ms": 1792106066442,
+        "finished_unix_ms": 1792106075018,
+        "last_update_unix_ms": 1792106075018,
+        "progress": {
+          "completed": 1,
+          "total": 1,
+          "current_test_full_name": null,
+          "current_test_started_unix_ms": null,
+          "last_finished_test_full_name": "MemoryForge.Client.Tests.ExpeditionClientPlayModeTests.NoticeExpiryDuringAHeldPressKeepsTheViewAndTheReleaseEntersTheBattleOnce",
+          "last_finished_unix_ms": 1792106075001,
+          "stuck_suspected": false,
+          "editor_is_focused": false,
+          "run_in_background": false,
+          "focus_nudge_attempts": null,
+          "focus_nudge_limit": null,
+          "focus_nudge_status": null,
+          "blocked_reason": null,
+          "failures_so_far": [
+            {
+              "full_name": "MemoryForge.Client.Tests.ExpeditionClientPlayModeTests.NoticeExpiryDuringAHeldPressKeepsTheViewAndTheReleaseEntersTheBattleOnce",
+              "message": "  toast expiry must not rebuild the view under a held press\n  Expected is <UnityEngine.GameObject[1]>, actual is <System.Collections.Generic.List`1[UnityEngine.GameObject]> with 1 elements\n  Values differ at index [0]\n  Expected: <null>\n  But was:  <MemoryForgeExpeditionView (UnityEngine.GameObject)>\n"
+            }
+          ],
+          "failures_capped": false
+        },
+        "error": null,
+        "result": {
+          "mode": "PlayMode",
+          "summary": {
+            "total": 1,
+            "passed": 0,
+            "failed": 1,
+            "skipped": 0,
+            "durationSeconds": 2.6586467,
+            "resultState": "Failed(Child)"
+          },
+          "results": [
+            {
+              "name": "NoticeExpiryDuringAHeldPressKeepsTheViewAndTheReleaseEntersTheBattleOnce",
+              "fullName": "MemoryForge.Client.Tests.ExpeditionClientPlayModeTests.NoticeExpiryDuringAHeldPressKeepsTheViewAndTheReleaseEntersTheBattleOnce",
+              "state": "Failed",
+              "durationSeconds": 2.6395873,
+              "message": "  toast expiry must not rebuild the view under a held press\n  Expected is <UnityEngine.GameObject[1]>, actual is <System.Collections.Generic.List`1[UnityEngine.GameObject]> with 1 elements\n  Values differ at index [0]\n  Expected: <null>\n  But was:  <MemoryForgeExpeditionView (UnityEngine.GameObject)>\n",
+              "stackTrace": "at MemoryForge.Client.Tests.ExpeditionClientPlayModeTests+<NoticeExpiryDuringAHeldPressKeepsTheViewAndTheReleaseEntersTheBattleOnce>d__7.MoveNext () [0x00424] in /Users/choi/Documents/Memory_forge/client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionClientPlayModeTests.cs:182\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@388540dd9ce6/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:44\n",
+              "output": ""
+            }
+          ]
+        }
+      },
+      "hint": null
+    }
+  },
+  "isError": false
+}

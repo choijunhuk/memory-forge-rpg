@@ -1,0 +1,90 @@
+{
+  "verifiedAt": "2026-10-14T23:59:20.081217+00:00",
+  "baseCommit": "9dc5c77f7878f8c9fc4d94bfc2091d5357e646ad",
+  "status": "VERIFIED_FOR_INTEGRATION",
+  "requirement": "original§5.2-3/5.7-9/5.13-16,§6.3/10.2/16.2/20.9",
+  "role": "Real enemy phase and next player turns after passing, preserving source live20 and reachable hooks",
+  "models": {
+    "Codex": "gpt-6.1-sol",
+    "CodexEffort": "max",
+    "Claude": "claude-opus-5-5",
+    "ClaudeEffort": "max",
+    "subscriptionOnly": true,
+    "extraPaidCreditsOrAutoReloadUsed": false
+  },
+  "reviews": {
+    "nativeSource": "APPROVE",
+    "oppositeAI": "APPROVE",
+    "cliReceipt": "../../ops/ai/tasks/P1-CSHARP-TURNS-CROSS-REVIEW.result.json",
+    "reviewerDidNotExecuteTests": true
+  },
+  "checks": {
+    "core": 202,
+    "canonical": 87,
+    "traceSnapshots": 2000,
+    "traceFixture": 13,
+    "openingAssertions": 2221,
+    "openingActualBeginCommands": 267,
+    "turnAssertions": 29232,
+    "turnOracleCases": 356,
+    "turnOracleRequests": 1740,
+    "committedTurnRequests": 1673,
+    "replayedTurnRequests": 14,
+    "rejectedTurnRequests": 53,
+    "extraReceiptProbes": 136,
+    "fixtureTamperVariants": 15,
+    "node": 222,
+    "proposals": 14,
+    "python": 48,
+    "docs": 9,
+    "handoff": 13,
+    "UnityPlayMode": 7,
+    "UnityEditMode": 3,
+    "UnityConsoleErrors": 0,
+    "UnityConsoleWarningsAtFinalQuery": 0
+  },
+  "scope": {
+    "actualCommands": [
+      "begin",
+      "end"
+    ],
+    "cases": {
+      "opening": 267,
+      "enemyTwoCycles": 20,
+      "authoredEncounters": 21,
+      "edges": 34,
+      "protocol": 14
+    },
+    "fullRunCsharpReplayCommands": 0,
+    "protectedFilesUnchanged": 40,
+    "inputManifestRegenerated": false
+  },
+  "limits": [
+    "play/ult/Run/restoration/full1000RunC#commandparity unimplemented",
+    "powers/bulwark/debts/reservations/break and lateproposalproducers unimplemented; unsupportedstates explicitlyreject",
+    "int32combatoutputlimit exceptlonglevels; safeflags/RNGuint32 preserved; unsupportednonnumericcoinobjects reject",
+    "Unitytypedruntimefixture is not all-content import/gameUI/macOSgamebuild/Android/IL2CPP/device/server acceptance"
+  ],
+  "environmentIncident": "WTfirstattempt globalSDK9 couldnotcompile net10; isolatedofficialSDK10 fullrun passed; bothlogs preserved; rootfreshsuccessseparate",
+  "sourceSnapshot": {
+    "core/MemoryForge.Core/Battle.cs": "01c562ba2557908e89f041113e65d613c8261dbdc8adc36def3008d4ee612501",
+    "core/MemoryForge.Core/BattleDefinitions.cs": "f60ad897f98dfc5b89d743b3969b3bb6623ab79aa2de0a9b0d2def8126d09137",
+    "core/MemoryForge.Core/BattleState.cs": "0f0632e2be8ce02ad9edb3e80606454606561ed67d908f95d67d3cc7a7ab1b33",
+    "core/MemoryForge.CoreChecks/BattleDataLoader.cs": "435efa820c7a41af96528a52a45581b808d3c9832390fe4a3f95aa3086089dec",
+    "core/MemoryForge.CoreChecks/BattleOpeningChecks.cs": "038e51b50cb02f678d68e73e49aaac8f3b909533addd8ddb04588b6793697bc7",
+    "core/MemoryForge.CoreChecks/BattleTurnChecks.cs": "c2274455a6e6197681bf592dbb57b431a769b3ccafc7986c0fec9c57912d67f2",
+    "core/MemoryForge.CoreChecks/JsonGraphComparison.cs": "023a0941b9cb48fb109680ee2ddbf76acc216f22aad2aea8f421c17a40b2cd39",
+    "core/MemoryForge.CoreChecks/Program.cs": "f36bd5d69548f72423f4584bd4d462225d4f4f1c9fbddb2773ef93fd800250d9",
+    "tools/gen_battle_turn_vectors.mjs": "d269560c70107b8155f9467d816151abdb39c619209d81627d8259badb7dd5cf",
+    "engine/tests/battle_turn_vectors.test.mjs": "7ebd22cc2bb6544a43ec0602ad93512de6d3933ae87fdae2277c08a08c11e8a6",
+    "engine/tests/vectors/battle_turn_vectors.json.gz": "6245b37e8e6c20bd07f102bd272bb0c2d443e5c2232c1f2f8b7caaa6790d57fe",
+    "client/MemoryForgeUnity/Assets/Tests/PlayMode/BattleOpeningPlayModeTests.cs": "f3fb224326a19d14e794e86d897c1e7d53f714dd5448faea0627975821833003"
+  },
+  "inputManifest": {
+    "entries": 423,
+    "status": "EXPECTED_DEVELOPMENT_DIFFERENCES",
+    "changed": 27,
+    "missing": 0,
+    "regenerated": false
+  }
+}

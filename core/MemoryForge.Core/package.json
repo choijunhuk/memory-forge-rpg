@@ -1,0 +1,7 @@
+{
+  "name": "com.memoryforge.core",
+  "version": "0.7.0",
+  "displayName": "Memory Forge Shared Core",
+  "description": "Shared deterministic rule primitives; Battle and Run port remains in progress.",
+  "unity": "6000.0"
+}

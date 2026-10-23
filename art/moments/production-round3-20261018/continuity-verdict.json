@@ -1,0 +1,14 @@
+{
+  "score": 95,
+  "verdict": "pass",
+  "category_match": true,
+  "differences": [
+    "Folder is laid on a small side table in the ending; both hands are visibly empty.",
+    "The settled pause lowers the pointing hand while retaining the same empty chair."
+  ],
+  "suggestions": [],
+  "reasoning": "Adult identity, approved outfit, offered chair and final prop states match the source story.",
+  "next_actions": [
+    "Assign wait to beats 5 and 6, ending to beat 7 and idle; reuse Aila chair pose for ending."
+  ]
+}

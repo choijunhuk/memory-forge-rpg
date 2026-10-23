@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="3" result="Passed" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-18 08:45:56Z" end-time="2026-10-18 08:45:56Z" duration="0.0813289">
+  <test-suite type="TestSuite" id="1000" name="Memory Forge" fullname="Memory Forge" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-10-18 08:45:56Z" end-time="2026-10-18 08:45:56Z" duration="0.081329" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="1007" name="MemoryForge.EditorTests.dll" fullname="/Users/choi/Documents/Memory_forge/.claude/worktrees/expedition-ui-40eff0/client/MemoryForgeUnity/Library/ScriptAssemblies/MemoryForge.EditorTests.dll" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-10-18 08:45:56Z" end-time="2026-10-18 08:45:56Z" duration="0.077644" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="48519" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="1008" name="MemoryForge" fullname="MemoryForge" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-10-18 08:45:56Z" end-time="2026-10-18 08:45:56Z" duration="0.077259" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1009" name="EditorTests" fullname="MemoryForge.EditorTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-10-18 08:45:56Z" end-time="2026-10-18 08:45:56Z" duration="0.077007" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestFixture" id="1003" name="EditorBridgeTests" fullname="MemoryForge.EditorTests.EditorBridgeTests" classname="MemoryForge.EditorTests.EditorBridgeTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-10-18 08:45:56Z" end-time="2026-10-18 08:45:56Z" duration="0.076252" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1006" name="SavedSceneKeepsItsLinkedCanvasAndCamera" fullname="MemoryForge.EditorTests.EditorBridgeTests.SavedSceneKeepsItsLinkedCanvasAndCamera" methodname="SavedSceneKeepsItsLinkedCanvasAndCamera" classname="MemoryForge.EditorTests.EditorBridgeTests" runstate="Runnable" seed="140076256" result="Passed" start-time="2026-10-18 08:45:56Z" end-time="2026-10-18 08:45:56Z" duration="0.049093" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1005" name="SerializedConnectionPrefabCanRenderAnOverlay" fullname="MemoryForge.EditorTests.EditorBridgeTests.SerializedConnectionPrefabCanRenderAnOverlay" methodname="SerializedConnectionPrefabCanRenderAnOverlay" classname="MemoryForge.EditorTests.EditorBridgeTests" runstate="Runnable" seed="1267618845" result="Passed" start-time="2026-10-18 08:45:56Z" end-time="2026-10-18 08:45:56Z" duration="0.016366" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1004" name="UniversalPipelineIncludesTheTwoDimensionalRenderer" fullname="MemoryForge.EditorTests.EditorBridgeTests.UniversalPipelineIncludesTheTwoDimensionalRenderer" methodname="UniversalPipelineIncludesTheTwoDimensionalRenderer" classname="MemoryForge.EditorTests.EditorBridgeTests" runstate="Runnable" seed="1822089465" result="Passed" start-time="2026-10-18 08:45:56Z" end-time="2026-10-18 08:45:56Z" duration="0.003375" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: [TestRunnerNoThrottle] Restored Interaction Mode after test run.
+Saving results to: /Users/choi/Library/Application Support/DefaultCompany/Memory Forge/TestResults.xml
+]]></output>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

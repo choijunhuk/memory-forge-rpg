@@ -1,0 +1,16 @@
+{
+  "character": "aila",
+  "key": "fig_bond_table",
+  "target": "aila/images/char_aila_fig_bond_table_styleA_v01.png",
+  "args": {
+    "prompt": "Use case: identity-preserve. Edit the FIRST canonical B master sprite, same clearly adult character, EXACT same identity/age/face/hair/costume design/palette and clear-cel A rendering. Preserve all furniture perspective, shape, scale, screen coordinates and prop design across this sequence. Modify ONLY the specified acting/hand state/expression. Direction A: crisp controlled line, emphatic upper eyelid, small symbolic nose and mouth, matte large one-step cel shadows, grouped hair and broad highlight bands, limited metal highlights. Full body/equipment/furniture completely inside same 1024x1536 portrait with clear margins. TRUE RGBA transparent empty canvas, every empty corner alpha=0; remove all haze, background residue, halo, floor, cast shadows, checkerboard, text and watermark. Keep opaque clothing/skin solid and clean hair edges. Character: aila, age 23. Keep EXACT desk and SILVER lantern resting at DESK CENTER, two matching teacups with saucers, teapot, pen and cream sheet in same places, empty lower drawer slightly open. Same Aila gives player a warm self-directed invitation, empty hand toward neighbouring place/chair, other hand rests desk edge. Neither hand holds lantern.",
+    "referenced_image_paths": [
+      "/Users/choi/Documents/Memory_forge/art/moments/aila/images/char_aila_fig_worried_styleA_v01.png"
+    ],
+    "transparent_background": true
+  },
+  "cache_path": "/Users/choi/.codex/generated_images/01a14db0-4150-7f01-9240-82aaa185dd28/exec-2105822b-3d53-499a-ae7f-f53a469c48a5.png",
+  "status": "ready",
+  "generation_status": "generated_pending_review",
+  "selected": true
+}

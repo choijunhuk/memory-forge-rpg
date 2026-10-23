@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net10.0</TargetFramework><Nullable>enable</Nullable><ImplicitUsings>disable</ImplicitUsings><TreatWarningsAsErrors>true</TreatWarningsAsErrors><EnableNETAnalyzers>false</EnableNETAnalyzers></PropertyGroup>
+  <ItemGroup>
+    <Reference Include="MemoryForge.Core"><HintPath>$(CoreDll)</HintPath><Private>true</Private></Reference>
+    <Compile Include="$(BaselineDir)/source/core/MemoryForge.CoreChecks/BattleDataLoader.cs" Link="BattleDataLoader.cs" />
+    <Compile Include="$(BaselineDir)/source/core/MemoryForge.CoreChecks/JsonGraphComparison.cs" Link="JsonGraphComparison.cs" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,12 @@
+{
+  "name": "MemoryForge.Client",
+  "references": [
+    "MemoryForge.Core",
+    "UnityEngine.UI"
+  ],
+  "autoReferenced": true,
+  "overrideReferences": true,
+  "precompiledReferences": [
+    "Newtonsoft.Json.dll"
+  ]
+}

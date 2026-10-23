@@ -1,0 +1,9 @@
+{
+  "app": "/Users/choi/Documents/Memory_forge/ops/ai/local/builds/MemoryForgeExpedition-DirectJson-20261016.app",
+  "pid": 77596,
+  "binary_sha256": "b94b08b62cd95f010737c9943435562df1945094393147d23f654b8065a1835d",
+  "runtime_assembly_sha256": "095ef0a7e060da49437b42987ffb7fd499798e8e0a5be4e6e707bdb67faae511",
+  "json_assembly_sha256": "a56146202232958f46bd6a28b5a7da166aea123ee0d646735a46e5c341dfbf1f",
+  "actual_korean_map_observed_via_cua": true,
+  "native_battle_or_physical_or_android": "NOT_RUN"
+}

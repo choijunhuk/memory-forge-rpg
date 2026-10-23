@@ -1,0 +1,11 @@
+{
+  "version": "account-progression-20261021-v1",
+  "accountXp": { "per": 20, "base": 80, "cap": 60 },
+  "starters": ["nia", "harin", "rien"],
+  "basics": ["w_basic_ranged", "w_basic_melee", "w_basic_device", "w_basic_ritual"],
+  "initialBuild": { "level": 1, "asc": 0, "res": 0, "skillLv": 1, "ultLv": 1, "weaponLevel": 1, "refine": 1 },
+  "chapters": [
+    { "id": 0, "stageLevel": 1, "unlockLevel": 1, "zones": [1], "bosses": ["b_bell"], "accountXp": 320, "freeCrystals": 300, "standardTicket": 5 },
+    { "id": 1, "stageLevel": 8, "unlockLevel": 3, "zones": [1], "bosses": ["b_bell"], "accountXp": 200, "freeCrystals": 600, "standardTicket": 2 }
+  ]
+}

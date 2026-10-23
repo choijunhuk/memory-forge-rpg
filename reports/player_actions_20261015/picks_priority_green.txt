@@ -1,0 +1,30 @@
+created-play/step1: PASS
+created-play/step2: PASS
+{"Phase":"PLAYER","Block":0,"Draw":[],"Hand":["c1"],"Discard":[],"Exhaust":[],"KilledMarked":0}
+created-ult/step3: PASS
+created-ult/step4: PASS
+{"Phase":"PLAYER","Block":0,"Draw":[],"Hand":["c1"],"Discard":[],"Exhaust":[],"KilledMarked":0}
+invalid-mode/step5: PASS
+invalid-mode/step6: PASS
+invalid-mode/step7: PASS
+{"Phase":"PLAYER","Block":8,"Draw":[],"Hand":[],"Discard":["c1"],"Exhaust":[],"KilledMarked":0}
+missing-card/step8: PASS
+missing-card/step9: PASS
+missing-card/step10: PASS
+{"Phase":"PLAYER","Block":8,"Draw":[],"Hand":[],"Discard":["c1"],"Exhaust":[],"KilledMarked":0}
+unknown-actor/step11: PASS
+unknown-actor/step12: PASS
+unknown-actor/step13: PASS
+{"Phase":"PLAYER","Block":8,"Draw":[],"Hand":[],"Discard":["c1"],"Exhaust":[],"KilledMarked":0}
+not-ready/step14: PASS
+not-ready/step15: PASS
+not-ready/step16: PASS
+{"Phase":"PLAYER","Block":8,"Draw":[],"Hand":[],"Discard":["c1"],"Exhaust":[],"KilledMarked":0}
+reserved-unused-picks/step17: PASS
+reserved-unused-picks/step18: PASS
+reserved-unused-picks/step19: PASS
+{"Phase":"PLAYER","Block":11,"Draw":[],"Hand":["c1"],"Discard":[],"Exhaust":[],"KilledMarked":0}
+ult-unused-picks/step20: PASS
+ult-unused-picks/step21: PASS
+{"Phase":"PLAYER","Block":30,"Draw":[],"Hand":["c1"],"Discard":[],"Exhaust":[],"KilledMarked":0}
+Actual C# requests 21; full state/response mismatches 0; no restore/injection

@@ -1,0 +1,69 @@
+{
+  "verifiedAt": "2026-10-14T23:22:49.886426+00:00",
+  "scope": "Fresh typed C# Battle.Create and atomic begin only",
+  "status": "VERIFIED_FOR_INTEGRATION",
+  "baseCommit": "2ffc29ecdbdeee5027258ad6f73302b98820fc35",
+  "models": {
+    "Codex": "gpt-6.1-sol",
+    "CodexEffort": "max",
+    "Claude": "claude-opus-5-5",
+    "ClaudeEffort": "max",
+    "claudeEffortEvidence": "opus_effort_metadata.json",
+    "subscriptionOnly": true,
+    "creditsOrAutoReloadEnabled": false,
+    "billingBoundary": "fresh local account UI evidence + matching CLI subscription identity; not server enforcement"
+  },
+  "reviews": {
+    "nativeSol": "APPROVE_AFTER_REPAIR",
+    "oppositeAI": "APPROVE",
+    "receipt": "../../ops/ai/tasks/P1-CSHARP-OPENING-CROSS-REVIEW.result.json",
+    "sessionId": "4f90a3bc-f540-472f-9f55-08a4b75d143e",
+    "readOnly": true,
+    "reviewerDidNotExecuteTests": true
+  },
+  "checks": {
+    "core": 202,
+    "canonical": 87,
+    "traceSnapshots": 2000,
+    "traceFixtureValidation": 13,
+    "openingAssertions": 2220,
+    "openingActualBeginCommands": 267,
+    "wholeRunCsharpCommands": 0,
+    "node": 178,
+    "proposals": 14,
+    "python": 48,
+    "docs": 9,
+    "handoff": 13,
+    "UnityPlayMode": {
+      "passed": 5,
+      "newBattleCases": 3,
+      "job": "1ccd4ed812244bffbf28c985d68d4a8c"
+    },
+    "UnityEditMode": {
+      "passed": 3,
+      "job": "6f604aaa9c0045f09fcdc726e4f6aade"
+    },
+    "UnityErrors": 0,
+    "UnityTransportWarnings": 1,
+    "sourceSnapshotMatchesOpus": true
+  },
+  "preservation": {
+    "protectedFilesUnchangedFromBase": 36,
+    "inputEntriesChecked": 423,
+    "historicalDevelopmentHashDifferences": 27,
+    "missingInputFiles": 0,
+    "inputManifestsRegenerated": false
+  },
+  "limitations": [
+    "play/ult/end/later turns/full enemy actions/Run/memory/restoration not implemented",
+    "Int32 combat outputs except widened actor levels; fractional request arguments unsupported; not universal JS safeinteger parity",
+    "Unity typed runtime fixture is not all-content import, full game UI, Android/IL2CPP/device/human acceptance",
+    "No new macOS game build for opening unit; prior connection build is separate",
+    "Inherited JS receipt IDs remain a separate next fix; C# safe Dictionary does not replicate bug"
+  ],
+  "next": [
+    "Fix proven JS inherited receipt-key lookup/write and regenerate affected source-pinned corpora",
+    "Implement actual end/enemy phase/next turns against all live20 patterns and reachable hooks",
+    "Continue through remaining fullBattle/Run port and original roadmap; do notstop atphasecompletion"
+  ]
+}

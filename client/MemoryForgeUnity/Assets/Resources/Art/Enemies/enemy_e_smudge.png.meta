@@ -1,0 +1,754 @@
+fileFormatVersion: 2
+guid: ebffee12295ef4f80817a7d407cd3a95
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -8080315268278822205
+    second: enemy_e_smudge_0
+  - first:
+      213: 5436106507427673667
+    second: enemy_e_smudge_1
+  - first:
+      213: 8911560094115965041
+    second: enemy_e_smudge_2
+  - first:
+      213: 46276255623878895
+    second: enemy_e_smudge_3
+  - first:
+      213: 3915184700122653453
+    second: enemy_e_smudge_4
+  - first:
+      213: 3832769649997993857
+    second: enemy_e_smudge_5
+  - first:
+      213: -1569656078042219718
+    second: enemy_e_smudge_6
+  - first:
+      213: 1378779650211359924
+    second: enemy_e_smudge_7
+  - first:
+      213: -1585013171213918902
+    second: enemy_e_smudge_8
+  - first:
+      213: -7421296148027266041
+    second: enemy_e_smudge_9
+  - first:
+      213: 7207733724724650122
+    second: enemy_e_smudge_10
+  - first:
+      213: -3575092924380698823
+    second: enemy_e_smudge_11
+  - first:
+      213: -2365499421555877635
+    second: enemy_e_smudge_12
+  - first:
+      213: 8896696195449559558
+    second: enemy_e_smudge_13
+  - first:
+      213: 7280119392884192158
+    second: enemy_e_smudge_14
+  - first:
+      213: 5621353964533028861
+    second: enemy_e_smudge_15
+  - first:
+      213: 3565435656851744977
+    second: enemy_e_smudge_16
+  - first:
+      213: -653013753257628216
+    second: enemy_e_smudge_17
+  - first:
+      213: -7005523127102702523
+    second: enemy_e_smudge_18
+  - first:
+      213: -8578651451182146179
+    second: enemy_e_smudge_19
+  - first:
+      213: -9161729875057467494
+    second: enemy_e_smudge_20
+  - first:
+      213: -2909470838033243636
+    second: enemy_e_smudge_21
+  - first:
+      213: -7541652451494528691
+    second: enemy_e_smudge_22
+  - first:
+      213: 3319961143342142069
+    second: enemy_e_smudge_23
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 1
+    enableMipMap: 1
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 2
+    aniso: 1
+    mipBias: -0.5
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 1
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 0
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 2
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: 50
+    textureCompression: 1
+    compressionQuality: 100
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 1
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: enemy_e_smudge_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 11
+        width: 1235
+        height: 1211
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3ca53192314fcdf80800000000000000
+      internalID: -8080315268278822205
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_smudge_1
+      rect:
+        serializedVersion: 2
+        x: 352
+        y: 1207
+        width: 49
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3467a68111ee07b40800000000000000
+      internalID: 5436106507427673667
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_smudge_2
+      rect:
+        serializedVersion: 2
+        x: 428
+        y: 1221
+        width: 55
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 178245ca0b83cab70800000000000000
+      internalID: 8911560094115965041
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_smudge_3
+      rect:
+        serializedVersion: 2
+        x: 295
+        y: 1179
+        width: 10
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fe81ff1620864a000800000000000000
+      internalID: 46276255623878895
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_smudge_4
+      rect:
+        serializedVersion: 2
+        x: 167
+        y: 165
+        width: 13
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d03ead0cdb7855630800000000000000
+      internalID: 3915184700122653453
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_smudge_5
+      rect:
+        serializedVersion: 2
+        x: 627
+        y: 154
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 187570690bbb03530800000000000000
+      internalID: 3832769649997993857
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_smudge_6
+      rect:
+        serializedVersion: 2
+        x: 1053
+        y: 146
+        width: 11
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a3bb2c80d16773ae0800000000000000
+      internalID: -1569656078042219718
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_smudge_7
+      rect:
+        serializedVersion: 2
+        x: 155
+        y: 111
+        width: 21
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4bca26a69c8622310800000000000000
+      internalID: 1378779650211359924
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_smudge_8
+      rect:
+        serializedVersion: 2
+        x: 641
+        y: 130
+        width: 19
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a4d9a752be6e00ae0800000000000000
+      internalID: -1585013171213918902
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_smudge_9
+      rect:
+        serializedVersion: 2
+        x: 742
+        y: 119
+        width: 9
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 70c2cdb1972420990800000000000000
+      internalID: -7421296148027266041
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_smudge_10
+      rect:
+        serializedVersion: 2
+        x: 452
+        y: 97
+        width: 7
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a80e0d962a3070460800000000000000
+      internalID: 7207733724724650122
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_smudge_11
+      rect:
+        serializedVersion: 2
+        x: 504
+        y: 101
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 937a64b4de7b26ec0800000000000000
+      internalID: -3575092924380698823
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_smudge_12
+      rect:
+        serializedVersion: 2
+        x: 508
+        y: 107
+        width: 10
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: df815cd1fce0c2fd0800000000000000
+      internalID: -2365499421555877635
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_smudge_13
+      rect:
+        serializedVersion: 2
+        x: 595
+        y: 95
+        width: 17
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 60a17549d0a677b70800000000000000
+      internalID: 8896696195449559558
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_smudge_14
+      rect:
+        serializedVersion: 2
+        x: 613
+        y: 99
+        width: 9
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e937b4f140e280560800000000000000
+      internalID: 7280119392884192158
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_smudge_15
+      rect:
+        serializedVersion: 2
+        x: 625
+        y: 94
+        width: 15
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: df799b4c5af030e40800000000000000
+      internalID: 5621353964533028861
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_smudge_16
+      rect:
+        serializedVersion: 2
+        x: 528
+        y: 95
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1d8e824e6d8fa7130800000000000000
+      internalID: 3565435656851744977
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_smudge_17
+      rect:
+        serializedVersion: 2
+        x: 681
+        y: 95
+        width: 9
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8cd62a3837700f6f0800000000000000
+      internalID: -653013753257628216
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_smudge_18
+      rect:
+        serializedVersion: 2
+        x: 291
+        y: 83
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 54c724f25d167ce90800000000000000
+      internalID: -7005523127102702523
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_smudge_19
+      rect:
+        serializedVersion: 2
+        x: 295
+        y: 81
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d7d1660f4f182f880800000000000000
+      internalID: -8578651451182146179
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_smudge_20
+      rect:
+        serializedVersion: 2
+        x: 561
+        y: 79
+        width: 9
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a9f9d15383ffad080800000000000000
+      internalID: -9161729875057467494
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_smudge_21
+      rect:
+        serializedVersion: 2
+        x: 691
+        y: 64
+        width: 9
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c02aba610bb7f97d0800000000000000
+      internalID: -2909470838033243636
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_smudge_22
+      rect:
+        serializedVersion: 2
+        x: 633
+        y: 49
+        width: 11
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d49f6318d0ba65790800000000000000
+      internalID: -7541652451494528691
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_e_smudge_23
+      rect:
+        serializedVersion: 2
+        x: 474
+        y: 38
+        width: 9
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5721209e11fd21e20800000000000000
+      internalID: 3319961143342142069
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      enemy_e_smudge_0: -8080315268278822205
+      enemy_e_smudge_1: 5436106507427673667
+      enemy_e_smudge_10: 7207733724724650122
+      enemy_e_smudge_11: -3575092924380698823
+      enemy_e_smudge_12: -2365499421555877635
+      enemy_e_smudge_13: 8896696195449559558
+      enemy_e_smudge_14: 7280119392884192158
+      enemy_e_smudge_15: 5621353964533028861
+      enemy_e_smudge_16: 3565435656851744977
+      enemy_e_smudge_17: -653013753257628216
+      enemy_e_smudge_18: -7005523127102702523
+      enemy_e_smudge_19: -8578651451182146179
+      enemy_e_smudge_2: 8911560094115965041
+      enemy_e_smudge_20: -9161729875057467494
+      enemy_e_smudge_21: -2909470838033243636
+      enemy_e_smudge_22: -7541652451494528691
+      enemy_e_smudge_23: 3319961143342142069
+      enemy_e_smudge_3: 46276255623878895
+      enemy_e_smudge_4: 3915184700122653453
+      enemy_e_smudge_5: 3832769649997993857
+      enemy_e_smudge_6: -1569656078042219718
+      enemy_e_smudge_7: 1378779650211359924
+      enemy_e_smudge_8: -1585013171213918902
+      enemy_e_smudge_9: -7421296148027266041
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

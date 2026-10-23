@@ -1,0 +1,15 @@
+{
+  "score": 94,
+  "verdict": "pass",
+  "category_match": true,
+  "differences": [],
+  "suggestions": [],
+  "reasoning": "실제 Play Mode 카드 설명에서 현재 정의·비용·효과·범위 안내가 겹침 없이 읽히고 닫기 버튼이 분리된다. 지도는 원래 전투 연습의 색과 서체를 유지하며 실제 연결과 도달 가능 노드를 표시한다. 임시 도형 UI이며 최종 아트 수용은 아니다.",
+  "threshold": 90,
+  "threshold_pass": true,
+  "generated_screenshot": "reports/expedition_client_20261016/card_information.png",
+  "reference_screenshot": "reports/expedition_client_20261016/map_corrected.png",
+  "next_actions": [
+    "새 macOS 빌드 및 실제 실행 확인"
+  ]
+}

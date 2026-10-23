@@ -1,0 +1,88 @@
+{
+  "_meta": {
+    "fastmcp": {
+      "wrap_result": true
+    }
+  },
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Test job status retrieved.\",\"error\":null,\"data\":{\"job_id\":\"dacba6169c924785a895b0fb0f82da1e\",\"status\":\"succeeded\",\"mode\":\"EditMode\",\"started_unix_ms\":1792131246439,\"finished_unix_ms\":1792131246985,\"last_update_unix_ms\":1792131246985,\"progress\":{\"completed\":3,\"total\":3,\"current_test_full_name\":null,\"current_test_started_unix_ms\":null,\"last_finished_test_full_name\":\"MemoryForge.EditorTests.EditorBridgeTests.UniversalPipelineIncludesTheTwoDimensionalRenderer\",\"last_finished_unix_ms\":1792131246961,\"stuck_suspected\":false,\"editor_is_focused\":true,\"run_in_background\":false,\"focus_nudge_attempts\":null,\"focus_nudge_limit\":null,\"focus_nudge_status\":null,\"blocked_reason\":null,\"failures_so_far\":[],\"failures_capped\":false},\"error\":null,\"result\":{\"mode\":\"EditMode\",\"summary\":{\"total\":3,\"passed\":3,\"failed\":0,\"skipped\":0,\"durationSeconds\":0.047187,\"resultState\":\"Passed\"},\"results\":[{\"name\":\"SavedSceneKeepsItsLinkedCanvasAndCamera\",\"fullName\":\"MemoryForge.EditorTests.EditorBridgeTests.SavedSceneKeepsItsLinkedCanvasAndCamera\",\"state\":\"Passed\",\"durationSeconds\":0.024879,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"SerializedConnectionPrefabCanRenderAnOverlay\",\"fullName\":\"MemoryForge.EditorTests.EditorBridgeTests.SerializedConnectionPrefabCanRenderAnOverlay\",\"state\":\"Passed\",\"durationSeconds\":0.004723,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"UniversalPipelineIncludesTheTwoDimensionalRenderer\",\"fullName\":\"MemoryForge.EditorTests.EditorBridgeTests.UniversalPipelineIncludesTheTwoDimensionalRenderer\",\"state\":\"Passed\",\"durationSeconds\":0.0016984,\"message\":null,\"stackTrace\":null,\"output\":\"\"}]}},\"hint\":null}"
+    }
+  ],
+  "structuredContent": {
+    "result": {
+      "success": true,
+      "message": "Test job status retrieved.",
+      "error": null,
+      "data": {
+        "job_id": "dacba6169c924785a895b0fb0f82da1e",
+        "status": "succeeded",
+        "mode": "EditMode",
+        "started_unix_ms": 1792131246439,
+        "finished_unix_ms": 1792131246985,
+        "last_update_unix_ms": 1792131246985,
+        "progress": {
+          "completed": 3,
+          "total": 3,
+          "current_test_full_name": null,
+          "current_test_started_unix_ms": null,
+          "last_finished_test_full_name": "MemoryForge.EditorTests.EditorBridgeTests.UniversalPipelineIncludesTheTwoDimensionalRenderer",
+          "last_finished_unix_ms": 1792131246961,
+          "stuck_suspected": false,
+          "editor_is_focused": true,
+          "run_in_background": false,
+          "focus_nudge_attempts": null,
+          "focus_nudge_limit": null,
+          "focus_nudge_status": null,
+          "blocked_reason": null,
+          "failures_so_far": [],
+          "failures_capped": false
+        },
+        "error": null,
+        "result": {
+          "mode": "EditMode",
+          "summary": {
+            "total": 3,
+            "passed": 3,
+            "failed": 0,
+            "skipped": 0,
+            "durationSeconds": 0.047187,
+            "resultState": "Passed"
+          },
+          "results": [
+            {
+              "name": "SavedSceneKeepsItsLinkedCanvasAndCamera",
+              "fullName": "MemoryForge.EditorTests.EditorBridgeTests.SavedSceneKeepsItsLinkedCanvasAndCamera",
+              "state": "Passed",
+              "durationSeconds": 0.024879,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "SerializedConnectionPrefabCanRenderAnOverlay",
+              "fullName": "MemoryForge.EditorTests.EditorBridgeTests.SerializedConnectionPrefabCanRenderAnOverlay",
+              "state": "Passed",
+              "durationSeconds": 0.004723,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "UniversalPipelineIncludesTheTwoDimensionalRenderer",
+              "fullName": "MemoryForge.EditorTests.EditorBridgeTests.UniversalPipelineIncludesTheTwoDimensionalRenderer",
+              "state": "Passed",
+              "durationSeconds": 0.0016984,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            }
+          ]
+        }
+      },
+      "hint": null
+    }
+  },
+  "isError": false
+}

@@ -1,0 +1,57 @@
+{
+  "at": "2026-10-15T05:48:22.958130+00:00",
+  "status": "ALL_FIVE_CORPORA_EQUAL_EXCEPT_EXPLICIT_MEMORY_SOURCE_PROVENANCE",
+  "comparisons": [
+    {
+      "path": "engine/tests/vectors/battle_opening_vectors.json.gz",
+      "cases": 267,
+      "old_sha256": "50ef232d9c2d2466fbe41082436eebd795e58a6b3632e308caf0306c9fb4b546",
+      "new_sha256": "5f80b907c712095e176d2953c8acc6f36fe27752041d568047bc43ef8a3e3f1f",
+      "only_differing_value": "$.sources.memory.sha256",
+      "all_other_records_equal": true
+    },
+    {
+      "path": "engine/tests/vectors/battle_turn_vectors.json.gz",
+      "cases": 356,
+      "old_sha256": "6245b37e8e6c20bd07f102bd272bb0c2d443e5c2232c1f2f8b7caaa6790d57fe",
+      "new_sha256": "40e8a2c283d4d008cba2ac9dcea9f1cc6f4ed7492aeb1b2aa3f6da30e0197176",
+      "only_differing_value": "$.sources.memory.sha256",
+      "all_other_records_equal": true
+    },
+    {
+      "path": "engine/tests/vectors/battle_player_query_vectors.json.gz",
+      "cases": 702,
+      "old_sha256": "213f32925513d69f6912bb51a72d46c7268dd76e452ac611050502389d33625c",
+      "new_sha256": "57298b55636470085dac168d59360cab189a389f961e615f47b8b1591b21a046",
+      "only_differing_value": "$.sources.memory.sha256",
+      "all_other_records_equal": true
+    },
+    {
+      "path": "engine/tests/vectors/battle_player_action_vectors.json.gz",
+      "cases": 992,
+      "old_sha256": "e0a805f66926c4cfcfdf13c0040ea13bb73aed95c834e346a2df83bb3709db1f",
+      "new_sha256": "ad5d4a1784b84fb9dade612372effa20f011016be10fa04a21c3dba49fe6c9b4",
+      "only_differing_value": "$.sources.memory.sha256",
+      "all_other_records_equal": true
+    },
+    {
+      "path": "engine/tests/vectors/traces.jsonl.gz",
+      "scenarios": 1000,
+      "commands": 273748,
+      "hashes": 275748,
+      "old_sha256": "56b4dc849de1d0c36c411ad78551ef7264b1a9a7ddc09ffe69e20e1c7c27df66",
+      "new_sha256": "14c9f07d2940fe4e073e74aa386f3ad5c09a9f1aff32ead2602fda11bf56568e",
+      "only_differing_values": [
+        "manifest.sources.memory.sha256",
+        "scenario.trace.sources.memory.sha256"
+      ],
+      "all_other_records_equal": true
+    }
+  ],
+  "initial_comparison_attempt": {
+    "status": "REJECTED_AT_FIRST_TRACE",
+    "reason": "First comparator allowed only manifest provenance; exact nested per-trace provenance also changes",
+    "specific_changed_path": "$.trace.sources.memory.sha256",
+    "no_generic_sources_fields_removed": true
+  }
+}

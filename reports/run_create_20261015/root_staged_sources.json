@@ -1,0 +1,45 @@
+{
+  "files": [
+    {
+      "path": "core/MemoryForge.Core/RunDefinitions.cs",
+      "sha256": "060e6375bb9f80bc54451f2a9360409ee4732e7ae926cb7d3d7730e278c9e590"
+    },
+    {
+      "path": "core/MemoryForge.Core/RunState.cs",
+      "sha256": "ab24161c296800f52b4758ccb66718ef9651cbe46ff46b1ee635246b72550fe4"
+    },
+    {
+      "path": "core/MemoryForge.Core/Run.cs",
+      "sha256": "c36da9076265ed0327cf8a4a3890349c6c4fa9abd7f26ed5a91151b07598dc4c"
+    },
+    {
+      "path": "core/MemoryForge.CoreChecks/RunDataLoader.cs",
+      "sha256": "07a5a2ac7f505d77d7be3cbc9548aea1c83c5979b3b474e2905926341724c8b6"
+    },
+    {
+      "path": "core/MemoryForge.CoreChecks/RunCreateChecks.cs",
+      "sha256": "896a471266b6878d5f2e6b684a61c1636fe2407edb7702142d0a16adff2b8146"
+    },
+    {
+      "path": "tools/gen_run_create_vectors.mjs",
+      "sha256": "d26c4b3d7def9536a09c7524055e4bf63958baeb340d570591e04764702ce0d8"
+    },
+    {
+      "path": "engine/tests/run_create_vectors.test.mjs",
+      "sha256": "36fb5f9b9d44ca545ea949e73e056612e6f58efad111f64fafd48ac903bae60b"
+    },
+    {
+      "path": "engine/tests/vectors/run_create_vectors.json.gz",
+      "sha256": "c164388511553b367e32531aa4e2ab77292a0a63216bec0ce6b10e6da0289b63"
+    },
+    {
+      "path": "core/MemoryForge.CoreChecks/Program.cs",
+      "sha256": "5f86b99a4e1130bbf7de28c6724b16d712acbd4a79e6a6867c2d06755232ac0f"
+    },
+    {
+      "path": "core/MemoryForge.CoreChecks/BattleDataLoader.cs",
+      "sha256": "03dfb92da37fb7f8068f312028295adad118569951577b9580178635de16fa89"
+    }
+  ],
+  "pending": "fresh Root suites/Unity selected runtime/opposite checker independent verification/integration"
+}

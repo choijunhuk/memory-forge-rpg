@@ -1,0 +1,30 @@
+TAP version 13
+# Subtest: actual JS numeric strings pin the reproduced Unity receipt failure and IEEE edges
+ok 1 - actual JS numeric strings pin the reproduced Unity receipt failure and IEEE edges
+  ---
+  duration_ms: 7.26125
+  ...
+# Subtest: strict numeric export regenerates every exact-bit input and expected string
+ok 2 - strict numeric export regenerates every exact-bit input and expected string
+  ---
+  duration_ms: 24.083541
+  ...
+# Subtest: actual JS public numeric receipt replay keeps exact strings and rejects both nearby conflicts
+ok 3 - actual JS public numeric receipt replay keeps exact strings and rejects both nearby conflicts
+  ---
+  duration_ms: 11.246209
+  ...
+# Subtest: numeric evidence rejects substituted sources, a changed value and omitted coverage
+ok 4 - numeric evidence rejects substituted sources, a changed value and omitted coverage
+  ---
+  duration_ms: 10.293375
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 4
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 176.657583

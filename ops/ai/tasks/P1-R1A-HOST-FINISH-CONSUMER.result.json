@@ -1,0 +1,29 @@
+{
+  "task_id": "P1-R1A-HOST-FINISH-CONSUMER",
+  "run_id": "P1-R1A-HOST-FINISH-CONSUMER-20261015T185928300478Z",
+  "status": "RECEIVED_UNVERIFIED",
+  "requestedEffort": "high",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "changes_verified": false,
+  "raw_output": "ops/ai/local/P1-R1A-HOST-FINISH-CONSUMER-20261015T185928300478Z*",
+  "billing_verified_at": "2026-10-14T21:44:57.439760+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "codex/csharp-memory-v2",
+  "base_commit": "3d33c4cb2e0c7cee14ced2c67c33b8fb55cef267",
+  "worktree": "/Users/choi/.codex/worktrees/csharp-memory-v2/Memory_forge",
+  "allowed_files": [
+    "core/MemoryForge.CoreChecks/RunProgressionChecks.cs",
+    "reports/run_progression_core_20261016/host_author_report.md"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "fe696f3e-4bba-44b8-bc8c-778f7c764dfe",
+  "subtype": "success",
+  "is_error": false,
+  "result": "I wrote the missing consumer in `RunProgressionChecks.cs` and the host report. None of it has been run (NOT_RUN): I had no way to execute anything, so I haven't compiled or tested it. That includes the checks I wrote and the old-reader RED / new-reader GREEN step. Nothing is stubbed. The legacy prefix part is implemented in full.\n\n**What `RunProgressionChecks.cs` does**\n- **Five-case oracle, integrity only:** it reads the fixture through the strict `RunCreateChecks.Decode` and `UniqueKeys`. Before any file is hashed, it checks the header against fixed values:\n  - top-level field order\n  - schema, `JS_ORACLE_ONLY` and scope\n  - the 8 contract strings and the denominators\n  - the 7 source paths, checked against the allowlist before hashing; only the allowlisted paths are ever hashed\n  - the five case identities\n\n  It then checks all 2684 records, including everything after where C# stops:\n  - every saved state's canonical and source-JSON hashes, and that undefined members are absent\n  - each step's reference to the state before it\n  - committed and rejected step envelopes, return kinds and query boundaries\n  - battle request version and request id\n  - setup, reload setup, final hash and trace summary\n  - the whole coverage summary, recomputed from the records (totals 5 / 2684 / 1370 / 1314 / 1074 / 0)\n- **Five-case oracle, actual C#:** each case starts from a fresh `Run.Create`; the v2 store is the real `MemoryV2.Migrate` result. Commands go through the nine Run methods and `BattleCommand(kind, BattleDataLoader.Request(...).Args)`, after checking the live C# battle version and request id. For every attempt it compares:\n  - the outcome and RuleError code\n  - the full run+memory state, path by path, plus the canonical hash\n  - the battle response, or \"undefined\" for void methods\n  - the recorded `Available` / `NodeById` / `BattlePublicView` queries, and that they leave state unchanged\n\n  A case stops at its first mismatch or at its first unimplemented command. It never skips a failure and carries on.\n- **Detached-copy probes:** at the first active battle and the first pending dictionary, it mutates the returned State (hp, rng, log, deck, party/map/flags, pending, battle fields), the public view and the battle response. Each mutation must change the copy and must not change the live Run. It also checks that setup and data definitions are unchanged.\n- **Hard-coded expected counts:** per case 96/85, 96/85, 42/31, 42/31, 78/74 with the expected stop command. Totals are 354 attempts, 306 battle attempts, 210 battle commits and 223 queries.\n- **Corruption probes:** 13 header probes. One uses a substituted path that doesn't exist, so the allowlist must reject it before any read. There are 7 probes on the shortest case, run after a round-trip control. One forgery changes a committed state and recomputes every hash and reference; the structural checks should accept it, and only the actual C# replay should reject it.\n- **Legacy 1000 traces:** it reuses `ReadSnapshots` through the callback, pins seed 1000 + index and the legacy policy, and counts the per-method expected attempts. It then runs C# from a fresh Create and compares outcome, code and hash on every attempt, expecting 112822 attempts in total. It also checks fixture case `seed1000-short-legacy` against corpus scenario 1000, command by command. Full completions are reported as 0.\n- **Not executed:** the reload Create (its memory input comes from the JS `commitMemory` result) and the 2330 JS-only suffix attempts.\n\n**Risks to check when you compile and run**\n- The project treats warnings as errors with nullable checking on, so any nullable or pattern warning will break the build.\n- I took the fixture key orders from the generator source rather than the file. If they differ, the structural checks will fail; please report the actual order rather than loosening the check.\n- The round-trip control assumes `CanonicalState` escapes strings exactly like `JSON.stringify`.\n- The legacy replay copies and hashes the full state about 112k times, so it will be slow.\n\nNext step: you compile, run all the suites and the old-reader RED test, then send me any concrete failures to fix.\n\nFiles changed in this call:\n- `core/MemoryForge.CoreChecks/RunProgressionChecks.cs`\n- `reports/run_progression_core_20261016/host_author_report.md`",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ]
+}

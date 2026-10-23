@@ -1,0 +1,26 @@
+{
+  "task_id": "P1-CSHARP-OPENING-CROSS-REVIEW",
+  "run_id": "P1-CSHARP-OPENING-CROSS-REVIEW-20261014T231014820162Z",
+  "status": "RECEIVED_UNVERIFIED",
+  "requestedEffort": "max",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "changes_verified": false,
+  "raw_output": "ops/ai/local/P1-CSHARP-OPENING-CROSS-REVIEW-20261014T231014820162Z*",
+  "billing_verified_at": "2026-10-14T21:44:57.439760+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "claude/balance-audit",
+  "base_commit": "9be537f4c5ef59e890322cb2d1de914fb49bfed6",
+  "worktree": "/Users/choi/.codex/worktrees/claude-balance-audit/Memory_forge",
+  "allowed_files": [],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "4f90a3bc-f540-472f-9f55-08a4b75d143e",
+  "subtype": "success",
+  "is_error": false,
+  "result": "**판정: APPROVE.** 통합을 막을 중요 결함은 찾지 못했습니다.\n\n## 근거 (JS 원본과 코드 대조)\n\n- **생성:** 아래 항목이 `rules-core.js:250-331`과 일치합니다.\n  - 상태 키 59개 · 캐릭터 19개 · 카드 15개 · 적 18개\n  - `||`/`??` 기본값 처리\n  - 공명 태그 11종을 재귀로 적용하는 방식\n  - 유물별 초기 설정의 순서\n  - 카드 다음 적으로 `seq`를 매기는 순서\n- **begin과 첫 턴:** 실행 순서와 RNG 소비 위치가 `:481-549`와 같습니다.\n  - 순서: 셔플 → 청동 톱니 → 휴대용 화로 → 캐릭터마다 (무기 시작 방어 → 튜닝이 아닌 시작 효과) → 영원의 씨앗 → 턴 증가 전에 AP 계산 → 첫 턴 방어·반격 유지 → 무한 회로·봉투·조기 종료 → `seraR6Turn` → 뽑기(재빠른 손, 가장 강한 startDraw 무기 1회) → 기억 모루 → 튜닝 → 의도 확정\n  - 방어·회복은 BigInteger로 계산하고 마지막에 한 번만 내림합니다. 평균 체력과 적 HP 반올림은 `Math.round`와 같은 결과를 냅니다.\n- **명령 처리:** 순서가 `:453-475`와 같습니다.\n  - 순서: 영수증 조회 → 충돌 판정 → STALE → 후보 상태 복사 → 실행 → `v+1` → 불변식 → 상태 교체 → 영수증 저장\n  - 실패하면 RNG·이벤트·영수증이 남지 않습니다. 응답과 영수증은 서로 분리된 복사본입니다.\n  - 영수증 식별은 JS `JSON.stringify` 규칙(정수 인덱스 키 우선, `args||{}`)을 따르며, 상태 해시와는 별개입니다.\n- **데이터 어댑터:** 모델에 쓰는 하위 객체마다 허용 필드 목록이 있어, 모르는 필드가 오면 버리지 않고 실패합니다. 실제 데이터에는 `phase` 필드가 없고, `passiveParam` 값은 모두 정수입니다.\n- **시험의 독립성:** 267건 모두 C#이 setup에서 직접 만들고 실행합니다.\n  - 59키 상태, log/ev를 포함한 이벤트, 응답, PublicView를 엄격하게 비교합니다(키 개수, null과 부재 구분, 배열 순서).\n  - 이와 별도로 손으로 계산한 기대값 단언(블록 26/반격 2, 씨앗+이끼, 아일라 17/8/9 등)과, 실패 시 상태가 그대로인지 보는 음성 시험이 있습니다.\n- **Unity 픽스처:** 규칙, 하린, 니아, 장부 자물쇠, `e_shelf`, `harin_shield`의 값이 실제 데이터와 같고, 기대값 26/2도 이 규칙에서 그대로 나옵니다.\n\n## 비차단 참고 (스타일 또는 기존 문제)\n\n1. **`Battle.cs:13,20`:** 실제 Battle 객체가 가진 `rng`는 생성 시점 값이고, 명령이 성공한 뒤에도 갱신되지 않습니다. 모든 실행이 후보 객체 안에서 일어나므로 지금은 정확합니다. 다만 나중에 실제 객체에서 `Below()`를 부르면 생성 시점 RNG로 `state.Rng`를 덮어씁니다. 다음 이식 때도 실행을 후보 객체에서만 하거나, 매번 `state.Rng`에서 새로 만드는 편이 안전합니다.\n2. **기존 JS 문제:** `rules-core.js:455`의 `this.receipts`가 일반 객체 `{}`라서, rid가 `__proto__`·`constructor`·`toString`이면 이미 있는 영수증으로 취급됩니다. C#이 이를 따라 하지 않은 것이 맞고, JS 쪽 수정 과제로 남기면 됩니다.\n3. **범위 메모:** 적 패턴은 앞의 두 칸(intent/next)만 상태 비교에 들어갑니다. 나머지 칸은 허용 필드 목록 덕분에 손실은 막히지만 값은 비교되지 않으므로, 적 행동을 이식할 때 비교 대상이 됩니다.\n4. **출력 표시:** CoreChecks 출력에 `BattleRunCommandReplay: NOT_IMPLEMENTED` 줄이 문구만 다르게 두 번 나옵니다.\n\n## 실행 구분\n- **NOT_RUN:** 저는 아무것도 실행하지 않았습니다. gzip 픽스처는 열지 않았고, 생성기 소스와 Codex 실행 로그(2220/2220, 202+87+2000+13, JS 10/10)를 근거로 판단했습니다.\n- **Unity `BattleOpeningPlayModeTests`:** 준비만 된 상태이며, 통합 전이라 NOT_RUN입니다.\n- **범위 밖:** 전체 Battle/Run, Android, 서버, 사람 플레이\n- **변경 파일:** 없음\n- **session_id:** 세션 안에서는 확인할 수 없습니다.",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "success": true,
+  "message": "Test job status retrieved.",
+  "error": null,
+  "data": {
+    "job_id": "56aad612b09543e3b0d8a5576441a2fe",
+    "status": "failed",
+    "mode": "EditMode",
+    "started_unix_ms": 1792013575981,
+    "finished_unix_ms": 1792013582795,
+    "last_update_unix_ms": 1792013582795,
+    "progress": {
+      "completed": 3,
+      "total": 3,
+      "current_test_full_name": null,
+      "current_test_started_unix_ms": null,
+      "last_finished_test_full_name": "MemoryForge.EditorTests.EditorBridgeTests.UniversalPipelineIncludesTheTwoDimensionalRenderer",
+      "last_finished_unix_ms": 1792013582546,
+      "stuck_suspected": false,
+      "editor_is_focused": false,
+      "run_in_background": false,
+      "focus_nudge_attempts": null,
+      "focus_nudge_limit": null,
+      "focus_nudge_status": null,
+      "blocked_reason": null,
+      "failures_so_far": [
+        {
+          "full_name": "MemoryForge.EditorTests.EditorBridgeTests.SavedSceneKeepsItsLinkedCanvasAndCamera",
+          "message": "System.ArgumentException : Invalid SceneManagerSetup:\n No loaded scene found.\n One active scene is required. Number of active scenes: 0"
+        }
+      ],
+      "failures_capped": false
+    },
+    "error": null,
+    "result": null
+  },
+  "hint": null
+}

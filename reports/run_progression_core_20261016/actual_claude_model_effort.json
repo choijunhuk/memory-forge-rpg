@@ -1,0 +1,67 @@
+[
+  {
+    "task": "P1-R1A-CSHARP-PROGRESSION",
+    "sessionId": "6ff516e0-5d81-4de3-849f-50b47b32b445",
+    "promptTimestamp": "2026-10-15T18:14:33.408Z",
+    "scope": "Only this actual task prompt segment; resumed sessions have distinct efforts",
+    "actualModels": {
+      "claude-opus-5-5": 150
+    },
+    "actualPerTurnEffort": {
+      "max": 150
+    },
+    "rawReasoningCopied": false
+  },
+  {
+    "task": "P1-R1A-CSHARP-FINISH-STATE-LINK",
+    "sessionId": "6ff516e0-5d81-4de3-849f-50b47b32b445",
+    "promptTimestamp": "2026-10-15T18:46:59.652Z",
+    "scope": "Only this actual task prompt segment; resumed sessions have distinct efforts",
+    "actualModels": {
+      "claude-opus-5-5": 7
+    },
+    "actualPerTurnEffort": {
+      "high": 7
+    },
+    "rawReasoningCopied": false
+  },
+  {
+    "task": "P1-R1A-CSHARP-HOST-CHECKS",
+    "sessionId": "fe696f3e-4bba-44b8-bc8c-778f7c764dfe",
+    "promptTimestamp": "2026-10-15T18:26:43.545Z",
+    "scope": "Only this actual task prompt segment; resumed sessions have distinct efforts",
+    "actualModels": {
+      "claude-opus-5-5": 90
+    },
+    "actualPerTurnEffort": {
+      "xhigh": 90
+    },
+    "rawReasoningCopied": false
+  },
+  {
+    "task": "P1-R1A-HOST-FINISH-CONSUMER",
+    "sessionId": "fe696f3e-4bba-44b8-bc8c-778f7c764dfe",
+    "promptTimestamp": "2026-10-15T18:59:29.445Z",
+    "scope": "Only this actual task prompt segment; resumed sessions have distinct efforts",
+    "actualModels": {
+      "claude-opus-5-5": 14
+    },
+    "actualPerTurnEffort": {
+      "high": 14
+    },
+    "rawReasoningCopied": false
+  },
+  {
+    "task": "P1-R1A-UNITY-TEST-REVIEW",
+    "sessionId": "75a653c3-1d0e-4276-aab2-0fdfd987fc34",
+    "promptTimestamp": "2026-10-15T19:21:43.484Z",
+    "scope": "Only this actual task prompt segment; resumed sessions have distinct efforts",
+    "actualModels": {
+      "claude-opus-5-5": 36
+    },
+    "actualPerTurnEffort": {
+      "high": 36
+    },
+    "rawReasoningCopied": false
+  }
+]

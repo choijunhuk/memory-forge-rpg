@@ -1,0 +1,28 @@
+{
+  "task_id": "P1-FORECAST-ROOT-CHECK-INTEGRATION-REVIEW",
+  "run_id": "P1-FORECAST-ROOT-CHECK-INTEGRATION-REVIEW-20261016T004057305376Z",
+  "status": "RECEIVED_UNVERIFIED",
+  "requestedEffort": "high",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "changes_verified": false,
+  "raw_output": "ops/ai/local/P1-FORECAST-ROOT-CHECK-INTEGRATION-REVIEW-20261016T004057305376Z*",
+  "billing_verified_at": "2026-10-15T21:22:01.277612+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "codex/csharp-battle-opening",
+  "base_commit": "2ffc29ecdbdeee5027258ad6f73302b98820fc35",
+  "worktree": "/Users/choi/.codex/worktrees/csharp-battle-opening/Memory_forge",
+  "allowed_files": [
+    "reports/battle_preview_20261016/root_patch_review.md"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "3037701a-550b-4a17-a764-107680bf5b79",
+  "subtype": "success",
+  "is_error": false,
+  "result": "**APPROVE.** I found no concrete defect in any of Root's three changes. The full review is in `reports/battle_preview_20261016/root_patch_review.md`, which is the only file I edited.\n\n**What I checked (by reading the code; I ran nothing):**\n1. **`Program.cs:127-129`:** the preview checker's failure count is part of the final pass/fail result, so a preview failure makes the run fail. All ten earlier suites are still in the result in the same order. I couldn't compare against HEAD without Bash, so \"unchanged\" rests on the current file and Root's 0-error build.\n2. **`BattlePreviewChecks.cs:52-59`:** the new snapshot really covers the data the Run case uses. `Run.Progression.cs:72` builds the battle from `data.Memory.Battle`, and rewards and services read that same instance. The snapshot is taken before any case runs and compared once at the end. It only adds a check and loosens nothing. Its label claims only the five lists it actually covers.\n3. **`ExpeditionClientPlayModeTests.cs:187/189`:** the two `!` marks only silence the compiler warning and change nothing at runtime. The runtime null checks come first (`:183`, `:186`). No assertion, timer or pointer step was removed.\n\n**Not verified:** Root's 0-error build, the Node 6/6 results and the full C# runtime are all Root's claims; I saw none of them. The full runtime is still running, so don't record it as PASS yet. I also haven't seen a fresh Unity compile without the warnings or the PlayMode rerun; Root still has to run both.\n\n**Session ID:** this session can't see its own ID. Codex should take it from the CLI invocation metadata.",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ]
+}

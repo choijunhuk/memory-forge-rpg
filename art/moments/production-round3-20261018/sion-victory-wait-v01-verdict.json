@@ -1,0 +1,15 @@
+{
+  "score": 83,
+  "verdict": "revise",
+  "category_match": true,
+  "differences": [
+    "Sion final sword is noticeably narrower than the preceding blade."
+  ],
+  "suggestions": [
+    "Derive final pose from accepted glasses frame, keeping the sword unchanged while lowering the left hand."
+  ],
+  "reasoning": "The scene output is readable, but the final sword shape should stay consistent.",
+  "next_actions": [
+    "Generate Sion wait v02."
+  ]
+}

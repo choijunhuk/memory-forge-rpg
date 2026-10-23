@@ -1,0 +1,28 @@
+{
+  "c": "lumi",
+  "key": "fig_victory_wait",
+  "path": "lumi/images/char_lumi_moment_victory_wait_v01.png",
+  "refs": [
+    "/Users/choi/Documents/Memory_forge/art/moments/lumi/images/char_lumi_moment_neutral_v01.png"
+  ],
+  "pose": "Lumi age22, exact athletic adult face/build, spiky blond hair/electric-blue streak, sky blue eyes, offshoulder black yellow circuit jacket, white cropped sports top, black bike shorts and luminous sneakers. Victory-only props: TWO matching short electric daggers, one per hand securely gripped, blade tips LOW to each outside side away from body, hands fully visible. No helmet, no extra weapon, no long electrical trails or background. Full-body one sneaker half-step ahead then STOPPED, weight balanced on both grounded feet. Stand at image right leaving room beside her at left, looking directly at viewer with confident warm expectant half-grin. Arms relaxed DOWN, each hand still firmly holds its lowered outward dagger. No outstretched hand, no running or jumping, no helmet.",
+  "prompt": "Use case: identity-preserve. Locked character design reference. Make ONE new non-explicit narrative RPG key-pose, 1024x1536 full length transparent PNG. Preserve adult identity, age, hairstyle, face, exact costume/colors and painterly anime cel style. All head, fingers, shoes and important props inside canvas. No scene background, haze, labels, panels, other people or erotic posing. Character acting and prop contact are the focus. Acting: Lumi age22, exact athletic adult face/build, spiky blond hair/electric-blue streak, sky blue eyes, offshoulder black yellow circuit jacket, white cropped sports top, black bike shorts and luminous sneakers. Victory-only props: TWO matching short electric daggers, one per hand securely gripped, blade tips LOW to each outside side away from body, hands fully visible. No helmet, no extra weapon, no long electrical trails or background. Full-body one sneaker half-step ahead then STOPPED, weight balanced on both grounded feet. Stand at image right leaving room beside her at left, looking directly at viewer with confident warm expectant half-grin. Arms relaxed DOWN, each hand still firmly holds its lowered outward dagger. No outstretched hand, no running or jumping, no helmet.",
+  "source": "/Users/choi/.codex/generated_images/01a14d20-ffd5-7e81-9e47-85c1c8415e11/exec-eb4032eb-c261-4a9b-9cd1-cebcc21d0a4d.png",
+  "tool": "Codex built-in image_gen; subscription-included; no API fallback",
+  "review": "pass",
+  "previous_attempt": null,
+  "score": 93,
+  "review_notes": "Rendered output inspected against design/source narrative. Face, age, outfit, primary hand/prop state and grounded support match the key-pose. No rig or live playback acceptance.",
+  "backend_model": "not exposed by tool",
+  "selected": true,
+  "sha256": "a7b60c3d935234f63894c0dca41e399241f8ed0d15439d8fb27144dc20c500b5",
+  "size": [
+    1024,
+    1536
+  ],
+  "mode": "RGBA",
+  "alpha_extrema": [
+    0,
+    254
+  ]
+}

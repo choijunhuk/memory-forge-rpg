@@ -1,0 +1,28 @@
+{
+  "task_id": "P1-CSHARP-MEMORY-CLAUDE-UNITY-TESTS",
+  "run_id": "P1-CSHARP-MEMORY-CLAUDE-UNITY-TESTS-20261015T062553588137Z",
+  "status": "RECEIVED_UNVERIFIED",
+  "requestedEffort": "high",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "changes_verified": false,
+  "raw_output": "ops/ai/local/P1-CSHARP-MEMORY-CLAUDE-UNITY-TESTS-20261015T062553588137Z*",
+  "billing_verified_at": "2026-10-14T21:44:57.439760+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "claude/balance-audit",
+  "base_commit": "9be537f4c5ef59e890322cb2d1de914fb49bfed6",
+  "worktree": "/Users/choi/.codex/worktrees/claude-balance-audit/Memory_forge",
+  "allowed_files": [
+    "client/MemoryForgeUnity/Assets/Tests/PlayMode/MemoryRulesPlayModeTests.cs"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "0189a4bb-b798-494e-8878-ab0db85b2912",
+  "subtype": "success",
+  "is_error": false,
+  "result": "I replaced the placeholder in `client/MemoryForgeUnity/Assets/Tests/PlayMode/MemoryRulesPlayModeTests.cs` with two PlayMode tests of the shared MemoryV2 Core. Nothing has been compiled or run (NOT_RUN): I had no Bash, Unity or .NET access, and that is the only file I changed.\n\n**Fixture.** It is labeled in the file as a small subset, not a full content import and not a Run/account test. It takes these from `data/game_data.json` with their current values:\n- Sera's four starter cards in source order (`sera_round`, `sera_cover`, `sera_aim`, `sera_timed`) and her starting common card `com_guard`.\n- `sera_phase` (S) and `c_echo` (rare circuit part).\n- The current memory costs, base capacity 6, and the ascension capacity bonuses.\n\nOnly the fields MemoryV2 actually reads are filled in.\n\n**Test 1 — `CompleteResultCostDecidesSelectedChangesWithDetachedGraphs`**\n- Checks that the code is running in Play mode (`Application.isPlaying`).\n- Sera's starting deck has the exact five cards and keys `base:sera:0`–`4`, with `com_guard` assigned to Sera, and costs 0.\n- Two changes: upgrade card 0, and add `sera_phase` with `c_echo`. Their change IDs match the escaped JS form exactly.\n- The complete result costs 6 (upgrade 1 + S card 3 + rare part 2).\n- With capacity 5, committing throws `OVER_CAPACITY` and preview reports the same error with 6 used.\n- With capacity 6 it commits, and the saved deck matches a literal expected string with stable keys.\n- Defeat recovery with two changes throws `DEFEAT_KEEP_ONE`. Recovery with one change saves only the upgrade (cost 1, 5 cards).\n- The inputs are unchanged after the failed calls. Changing the input or the returned graph afterwards does not change the saved result.\n\n**Test 2 — `MigrationQuarantinesAnOwnProtoOwnerWithItsCompleteOriginal`**\n- An old save with an unknown own key `__proto__` plus Sera's card-ID list migrates as follows:\n  - The `__proto__` entry is quarantined with `INVALID_SNAPSHOT` and its full original contents.\n  - Sera gets her five cards with keys `base:sera:0`–`4`.\n  - The whole migration result matches one exact expected string, including the backup of the old save.\n- Changing the input, or clearing the copies the result hands back, leaves the stored quarantine and backup unchanged.\n- With capacity -1, Sera is quarantined as `OVER_CAPACITY`.\n\n**Limits.** Whole graphs are compared with `CanonicalState.Serialize`, which sorts keys and rejects decimal values. So these tests don't check property order or fractional metadata; the existing host checks cover those. No other systems were explored.\n\n**Still pending:**\n- Codex reviews these tests and runs them in the real Editor.\n- The separate Max critical review of the M0 source; integration stays blocked until it approves.",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ]
+}

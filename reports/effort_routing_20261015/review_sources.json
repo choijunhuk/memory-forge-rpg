@@ -1,0 +1,16 @@
+{
+  "files": [
+    {
+      "path": "tools/ai/run_claude.py",
+      "sha256": "26c94edd83820d4321e7a3b47961f70fabbfdcb5ce86e127d74170c1b2e4a065"
+    },
+    {
+      "path": "tests/test_ai_runner.py",
+      "sha256": "8ff1cbfc95d9acbb7e03aadf6ebb2f16083a64ad30efa9907febaf530d2b9784"
+    },
+    {
+      "path": "ops/ai/runtime-policy.json",
+      "sha256": "3de04e53e3cd60d83d9e22873df0e749f40a9ccc92bdbcea1b012c382eb998b9"
+    }
+  ]
+}

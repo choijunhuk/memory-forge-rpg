@@ -1,0 +1,94 @@
+{
+  "scope": "checked native flock across actual Editor Mono / bundled Mono6.13 / .NET10; primitive only, not outbox acceptance",
+  "pass": true,
+  "baseline": {
+    "mono_native": {
+      "exit": 0,
+      "stdout": "ACQUIRED",
+      "stderr": ""
+    },
+    "dotnet_share_none": {
+      "exit": 0,
+      "stdout": "ACQUIRED",
+      "stderr": ""
+    },
+    "dotnet_native": {
+      "exit": 0,
+      "stdout": "ACQUIRED",
+      "stderr": ""
+    }
+  },
+  "editor_native_hold": {
+    "held": true,
+    "errno": 0
+  },
+  "while_editor_held": {
+    "mono_native": {
+      "exit": 75,
+      "stdout": "BUSY_OR_ERROR:35",
+      "stderr": ""
+    },
+    "dotnet_share_none": {
+      "exit": 75,
+      "stdout": "BUSY",
+      "stderr": ""
+    },
+    "dotnet_native": {
+      "exit": 75,
+      "stdout": "IO_REFUSAL",
+      "stderr": ""
+    }
+  },
+  "after_editor_release": {
+    "mono_native": {
+      "exit": 0,
+      "stdout": "ACQUIRED",
+      "stderr": ""
+    },
+    "dotnet_share_none": {
+      "exit": 0,
+      "stdout": "ACQUIRED",
+      "stderr": ""
+    },
+    "dotnet_native": {
+      "exit": 0,
+      "stdout": "ACQUIRED",
+      "stderr": ""
+    }
+  },
+  "while_child_held": {
+    "mono_native": {
+      "exit": 75,
+      "stdout": "BUSY_OR_ERROR:35",
+      "stderr": ""
+    },
+    "dotnet_share_none": {
+      "exit": 75,
+      "stdout": "BUSY",
+      "stderr": ""
+    },
+    "dotnet_native": {
+      "exit": 75,
+      "stdout": "IO_REFUSAL",
+      "stderr": ""
+    }
+  },
+  "after_sigkill": {
+    "mono_native": {
+      "exit": 0,
+      "stdout": "ACQUIRED",
+      "stderr": ""
+    },
+    "dotnet_share_none": {
+      "exit": 0,
+      "stdout": "ACQUIRED",
+      "stderr": ""
+    },
+    "dotnet_native": {
+      "exit": 0,
+      "stdout": "ACQUIRED",
+      "stderr": ""
+    }
+  },
+  "same_lock_inode": true
+}

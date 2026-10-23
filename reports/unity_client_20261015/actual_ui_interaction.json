@@ -1,0 +1,94 @@
+{
+  "reservation": {
+    "beforeVersion": 1,
+    "afterVersion": 2,
+    "beforeAp": 4,
+    "afterAp": 2,
+    "reservations": 1,
+    "actualRaycastMatched": true
+  },
+  "turn2": {
+    "success": true,
+    "message": "Code executed successfully.",
+    "data": {
+      "result": {
+        "beforeVersion": 2,
+        "afterVersion": 3,
+        "beforeTurn": 1,
+        "afterTurn": 2,
+        "beforeHp": 243,
+        "afterHp": 219,
+        "beforeReservations": 1,
+        "afterReservations": 0,
+        "beforeEnemyHp": [
+          18,
+          18
+        ],
+        "afterEnemyHp": [
+          0,
+          18
+        ],
+        "afterAp": 4,
+        "lastError": null,
+        "phase": "PLAYER"
+      },
+      "compiler": "codedom"
+    }
+  },
+  "result": {
+    "success": true,
+    "message": "Code executed successfully.",
+    "data": {
+      "result": {
+        "phase": "VICTORY",
+        "hp": 219,
+        "turn": 2,
+        "actions": [
+          {
+            "card": "harin_shield",
+            "before": 3,
+            "after": 4,
+            "ap": 3,
+            "phase": "PLAYER"
+          },
+          {
+            "card": "sera_aim",
+            "before": 4,
+            "after": 5,
+            "ap": 2,
+            "phase": "PLAYER"
+          },
+          {
+            "card": "wc_basic_melee",
+            "before": 5,
+            "after": 6,
+            "ap": 1,
+            "phase": "PLAYER"
+          },
+          {
+            "card": "sera_round",
+            "before": 6,
+            "after": 7,
+            "ap": 0,
+            "phase": "PLAYER"
+          },
+          {
+            "card": "nia_tune",
+            "before": 7,
+            "after": 8,
+            "ap": 0,
+            "phase": "PLAYER"
+          },
+          {
+            "kind": "end",
+            "turn": 2,
+            "hp": 219
+          }
+        ],
+        "errors": null
+      },
+      "compiler": "codedom"
+    }
+  },
+  "scope": "Actual Unity UI event handlers and shared core; no saved account, full Run or device acceptance"
+}

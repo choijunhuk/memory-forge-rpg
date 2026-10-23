@@ -1,0 +1,16 @@
+{
+  "task_id": "LOBBY-OVERVIEW-REVIEW-20261021",
+  "run_id": "LOBBY-OVERVIEW-REVIEW-20261021-20261021T101841769790Z",
+  "status": "RECEIVED_UNVERIFIED",
+  "requestedEffort": "high",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "base_commit": "58ab4990125653ce83ef2a31cfde583db74c5f14",
+  "billing_account_matched": true,
+  "session_id": "2ddcbfd9-8a10-45d4-940f-afd8bb89c176",
+  "subtype": "success",
+  "is_error": false,
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ]
+}

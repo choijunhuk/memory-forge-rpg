@@ -1,0 +1,8 @@
+{
+  "observed_at": "2026-10-16T05:50:10.458340+00:00",
+  "archive_sha256": "9f1baeea83f7cf5cc02f2b51499eef68e73b6362b92d5ced71e84c07127b1c42",
+  "manifest_entries": 27,
+  "all_original_package_hashes_match": true,
+  "runtime_example_installed": false,
+  "root_overwritten": false
+}

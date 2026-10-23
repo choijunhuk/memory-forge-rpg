@@ -1,0 +1,65 @@
+var c = UnityEngine.Object.FindObjectOfType<MemoryForge.Client.MemoryForgeServerPracticeClient>();
+var checks = new Newtonsoft.Json.Linq.JArray();
+System.Action<bool, string> check = (ok, name) => { if (!ok) throw new System.Exception(name); checks.Add(name); };
+System.Func<System.Func<bool>, System.Threading.Tasks.Task> until = async ready => {
+    for (int n = 0; n < 1500; n++) { if (ready()) return; await System.Threading.Tasks.Task.Delay(10); }
+    throw new System.Exception("Bounded reward wait expired");
+};
+System.Action<string> click = name => {
+    UnityEngine.UI.Button button = null;
+    foreach (var b in c.GetComponentsInChildren<UnityEngine.UI.Button>()) if (b.name == name) { button = b; break; }
+    if (button == null || !button.interactable) throw new System.Exception("Reward button unavailable: " + name);
+    var r = (UnityEngine.RectTransform)button.transform;
+    var data = new UnityEngine.EventSystems.PointerEventData(UnityEngine.EventSystems.EventSystem.current) { position = UnityEngine.RectTransformUtility.WorldToScreenPoint(null, r.TransformPoint(r.rect.center)) };
+    var hits = new System.Collections.Generic.List<UnityEngine.EventSystems.RaycastResult>();
+    UnityEngine.EventSystems.EventSystem.current.RaycastAll(data, hits);
+    check(hits.Count > 0 && hits[0].gameObject.GetComponentInParent<UnityEngine.UI.Button>() == button, "actual reward raycast reaches " + name.Split(':')[0]);
+    UnityEngine.EventSystems.ExecuteEvents.Execute(button.gameObject, data, UnityEngine.EventSystems.ExecuteEvents.pointerDownHandler);
+    UnityEngine.EventSystems.ExecuteEvents.Execute(button.gameObject, data, UnityEngine.EventSystems.ExecuteEvents.pointerUpHandler);
+    UnityEngine.EventSystems.ExecuteEvents.Execute(button.gameObject, data, UnityEngine.EventSystems.ExecuteEvents.pointerClickHandler);
+};
+System.Func<System.Threading.Tasks.Task<string>> run = async () => {
+    try {
+        await until(() => c.CanCommand && c.ShowingReward);
+        int before = c.Snapshot.Run.ServerVersion;
+        var state = c.Snapshot.Run.StateJObject();
+        var offers = (Newtonsoft.Json.Linq.JArray)state["pending"]["cards"];
+        check(offers.Count > 0 && c.Snapshot.Run.Phase == "REWARD", "genuine completed battle reward loaded from current server state");
+        var scroll = c.GetComponentInChildren<UnityEngine.UI.ScrollRect>();
+        check(scroll != null && scroll.content != null && scroll.viewport != null && !scroll.horizontal && scroll.content.rect.height >= scroll.viewport.rect.height && (scroll.content.rect.height <= scroll.viewport.rect.height || scroll.vertical),
+            "reward content has a vertical viewport with no fixed three-evolution truncation");
+        string id = (string)offers[0];
+        int deckBefore = ((Newtonsoft.Json.Linq.JArray)state["deck"]).Count;
+        UnityEngine.ScreenCapture.CaptureScreenshot("/Users/choi/Documents/Memory_forge/reports/practice_server_reward_ui_20261017/reward_before.png");
+        await System.Threading.Tasks.Task.Delay(40);
+        click("RewardCard:" + id);
+        bool rapidDuplicate = await c.TakeCardAsync(id);
+        check(!rapidDuplicate, "rapid duplicate reward click refused while request is busy");
+        await until(() => !c.Busy && c.Snapshot.Run.ServerVersion == before + 1);
+        var after = c.Snapshot.Run.StateJObject();
+        check(((Newtonsoft.Json.Linq.JArray)after["deck"]).Count == deckBefore + 1 && ((Newtonsoft.Json.Linq.JArray)after["pending"]["cards"]).Count == 0 && c.SessionState.Pending == null,
+            "one actual take adds one deck card and removes offers only from committed state");
+        var host = Newtonsoft.Json.Linq.JObject.Parse(System.IO.File.ReadAllText("/Users/choi/Documents/Memory_forge/ops/ai/local/ui-map-host.json"));
+        string file = System.IO.Path.Combine((string)host["store_directory"], "account-" + (string)host["account"] + ".json");
+        string digest;
+        using (var hash = System.Security.Cryptography.SHA256.Create()) digest = System.Convert.ToBase64String(hash.ComputeHash(System.IO.File.ReadAllBytes(file)));
+        check(!await c.TakeCardAsync(id) && !await c.TakeCardAsync("not-an-offer") && !await c.SkipCardAsync(), "claimed or absent card choices cannot generate another request");
+        check(!await c.TakeRelicAsync("not-an-offer") && !await c.TakePartAsync() && !await c.EvolveAsync("not-a-key", "not-a-branch"),
+            "unpublished relic part and evolution choices refused before transmission");
+        string afterRefusals;
+        using (var hash = System.Security.Cryptography.SHA256.Create()) afterRefusals = System.Convert.ToBase64String(hash.ComputeHash(System.IO.File.ReadAllBytes(file)));
+        check(afterRefusals == digest && c.Snapshot.Run.ServerVersion == before + 1 && c.SessionState.Pending == null, "all duplicate invalid choices preserve entire server envelope and journal");
+        UnityEngine.ScreenCapture.CaptureScreenshot("/Users/choi/Documents/Memory_forge/reports/practice_server_reward_ui_20261017/reward_claimed.png");
+        await System.Threading.Tasks.Task.Delay(40);
+        click("Proceed");
+        await until(() => !c.Busy && c.Snapshot.Run.Phase == "MAP");
+        check(c.Snapshot.Run.ServerVersion == before + 2 && c.SessionState.Pending == null && c.CanCommand && !c.ShowingReward,
+            "explicit proceed returns to authoritative next map exactly once");
+        check(!await c.ProceedAsync() && c.Snapshot.Run.ServerVersion == before + 2, "proceed cannot be replayed as a new reward action from map");
+        UnityEngine.ScreenCapture.CaptureScreenshot("/Users/choi/Documents/Memory_forge/reports/practice_server_reward_ui_20261017/map_after_reward.png");
+        return new Newtonsoft.Json.Linq.JObject { ["status"] = "PASS", ["checks"] = checks, ["start_version"] = before, ["final_version"] = c.Snapshot.Run.ServerVersion,
+            ["scope"] = "actual Editor uGUI and genuine Core-earned card reward; positive relic/part/evolution and four-row data are not claimed runtime acceptance" }.ToString(Newtonsoft.Json.Formatting.None);
+    } catch (System.Exception error) { return new Newtonsoft.Json.Linq.JObject { ["status"] = "FAIL", ["checks"] = checks, ["safe_error"] = error.GetType().Name + ": " + error.Message }.ToString(Newtonsoft.Json.Formatting.None); }
+};
+System.AppDomain.CurrentDomain.SetData("MemoryForge.Codex.ServerUI.Reward.20261017", run());
+return "Started actual earned-reward pointer, duplicate-refusal and proceed assertions";

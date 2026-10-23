@@ -1,0 +1,21 @@
+{
+  "files": [
+    {
+      "path": "client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs",
+      "sha256": "4c90081ee4a825de46c32f6065bad73da73aa462fe8ef15dd06166a86e4b5e44",
+      "matches_received_opus_source": true
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/Tests/PlayMode/ActionPresentationPlayModeTests.cs",
+      "sha256": "6d6c91c32610ff1c76c596ac95553eafaa3e5753e04525c843934a6a0ddbe0b8",
+      "matches_received_opus_source": true
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/Tests/PlayMode/PreparedIntentPlayModeTests.cs",
+      "sha256": "21cb0b16aed94692973dd998311bdc14cb8ad0e0ef3e78b24c922c59ac13f5bd",
+      "matches_received_opus_source": true
+    }
+  ],
+  "supersedes": "prepared_source_hashes.json, which binds the pre-P2 145-test source",
+  "root_independent_fix_review": "Two UI rects/comment, two mandatory ray tests/helper, runtime-identical nullable split; active-owner assertion is before the callback that retires it. No Core/rule/dispatch change."
+}

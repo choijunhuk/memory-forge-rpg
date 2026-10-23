@@ -1,0 +1,23 @@
+{
+  "character": "aila",
+  "key": "fig_action2",
+  "old_path": "moments/aila/images/char_aila_moment_action2_v02.png",
+  "target": "aila/images/char_aila_fig_action2_styleA_v01.png",
+  "master": "aila/images/char_aila_fig_neutral_styleA_v01.png",
+  "background": false,
+  "beats": [
+    "찻잔을 빈 옆자리 앞으로 옮긴다. 손을 거둔 뒤에도 기다리고, 어깨보다 먼저 눈이 공방장에게 돌아간다."
+  ],
+  "args": {
+    "prompt": "Use case: style-transfer. Production transparent full-body sprite for Memory Forge. REDRAW rather than merely recolor. Direction A CLEAR CEL, exactly the rendering grammar of the last reference: crisp controlled ink contours, emphatic upper eyelids, tiny symbolic nose and short mouth, matte skin with large flat light areas and one hard-edged shadow step, large grouped hair locks with broad flat highlight bands, costume tailoring and flat color planes before details, restrained gold/metal highlights. NO photoreal/3D nose, glossy lips, airbrush skin, tiny sparkling hair strands or painterly gradients. First reference controls exact character identity, adult age, outfit structure, props, pose, composition and framing; last reference is STYLE ONLY and must not transfer its clothing/face. Preserve all outfit cutouts and existing adult silhouette. Keep original full body and equipment inside a 1024x1536 portrait with a little clear margin. GENUINELY TRANSPARENT empty canvas alpha=0 around the subject including corners, no colored backdrop, vignette, aura, halo, floor, cast shadow, checkerboard, text or watermark. Remove ALL inherited background haze.\nThe SECOND reference is this SAME character already redrawn in A: match its face and rendering while using FIRST reference for pose/furniture/props. 23-year-old Aila moves a teacup and saucer toward the empty neighbouring place, both hands contact the cup/saucer as source. This is the lobby tea gesture, no writing/pen pose here.\nPreserve intent of these authored beats without putting text into the image: 찻잔을 빈 옆자리 앞으로 옮긴다. 손을 거둔 뒤에도 기다리고, 어깨보다 먼저 눈이 공방장에게 돌아간다.",
+    "referenced_image_paths": [
+      "/Users/choi/Documents/Memory_forge/art/moments/aila/images/char_aila_moment_action2_v02.png",
+      "/Users/choi/Documents/Memory_forge/art/moments/aila/images/char_aila_fig_neutral_styleA_v01.png"
+    ],
+    "transparent_background": true
+  },
+  "cache_path": "/Users/choi/.codex/generated_images/01a14db0-4150-7f01-9240-82aaa185dd28/exec-ada26a03-ab06-46c1-82e5-2e8172558935.png",
+  "status": "ready",
+  "generation_status": "generated_pending_review",
+  "selected": true
+}

@@ -1,0 +1,17 @@
+{
+  "score": 94,
+  "verdict": "pass",
+  "scope": "Actual S2 recovery screen, 1180x665 Game View",
+  "evidence": "reports/card_flow_20261016/live_failure_recovery.png",
+  "checks": [
+    "Failure title and explicit unsaved-progress warning readable",
+    "Known actual store version0 is shown, missing-store case separately covered by mandatory test",
+    "Single explicit discard/depart action; no failed map, rewards or normal controls leak",
+    "Session-only practice limitation visible",
+    "Actual recovery ray and full fresh Create/store parity recorded separately"
+  ],
+  "limits": [
+    "Text-only practice UI, final art/accessibility/device not accepted",
+    "No backend/server reconnect or persistent account memory"
+  ]
+}

@@ -1,0 +1,782 @@
+[
+  {
+    "character": "sera",
+    "key": "fig_scope",
+    "path": "moments/sera/images/char_sera_fig_scope_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "sera",
+    "key": "fig_watch",
+    "path": "moments/sera/images/char_sera_fig_watch_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "sera",
+    "key": "fig_smile",
+    "path": "moments/sera/images/char_sera_fig_smile_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "sera",
+    "key": "fig_bond_notes",
+    "path": "moments/sera/images/char_sera_fig_bond_notes_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "sera",
+    "key": "fig_bond_listen",
+    "path": "moments/sera/images/char_sera_fig_bond_listen_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "sera",
+    "key": "fig_bond_offer",
+    "path": "moments/sera/images/char_sera_fig_bond_offer_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "sera",
+    "key": "fig_victory_scope",
+    "path": "moments/sera/images/char_sera_fig_victory_scope_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "sera",
+    "key": "fig_victory_turn",
+    "path": "moments/sera/images/char_sera_fig_victory_turn_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "sera",
+    "key": "bg_tower",
+    "path": "moments/sera/images/char_sera_bg_tower_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "sera",
+    "key": "expr_neutral",
+    "path": "moments/sera/images/char_sera_expr_neutral_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "sera",
+    "key": "expr_happy",
+    "path": "moments/sera/images/char_sera_expr_happy_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "sera",
+    "key": "expr_annoyed",
+    "path": "moments/sera/images/char_sera_expr_annoyed_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "sera",
+    "key": "expr_surprised",
+    "path": "moments/sera/images/char_sera_expr_surprised_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "sera",
+    "key": "expr_worried",
+    "path": "moments/sera/images/char_sera_expr_worried_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "sera",
+    "key": "expr_determined",
+    "path": "moments/sera/images/char_sera_expr_determined_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "ravien",
+    "key": "fig_default",
+    "path": "moments/ravien/images/char_ravien_fig_default_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "ravien",
+    "key": "fig_stamp",
+    "path": "moments/ravien/images/char_ravien_fig_stamp_styleA_v02.png",
+    "status": "ready"
+  },
+  {
+    "character": "ravien",
+    "key": "fig_turn",
+    "path": "moments/ravien/images/char_ravien_fig_turn_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "ravien",
+    "key": "fig_offer",
+    "path": "moments/ravien/images/char_ravien_fig_offer_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "ravien",
+    "key": "fig_lobby_soft",
+    "path": "moments/ravien/images/char_ravien_fig_lobby_soft_styleA_v02.png",
+    "status": "ready"
+  },
+  {
+    "character": "ravien",
+    "key": "fig_bond_turn",
+    "path": "moments/ravien/images/char_ravien_fig_bond_turn_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "ravien",
+    "key": "fig_waver",
+    "path": "moments/ravien/images/char_ravien_fig_waver_styleA_v02.png",
+    "status": "ready"
+  },
+  {
+    "character": "ravien",
+    "key": "fig_soft",
+    "path": "moments/ravien/images/char_ravien_fig_soft_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "ravien",
+    "key": "fig_resolve",
+    "path": "moments/ravien/images/char_ravien_fig_resolve_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "ravien",
+    "key": "fig_annoyed",
+    "path": "moments/ravien/images/char_ravien_fig_annoyed_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "ravien",
+    "key": "fig_seal",
+    "path": "moments/ravien/images/char_ravien_fig_seal_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "ravien",
+    "key": "fig_victory",
+    "path": "moments/ravien/images/char_ravien_fig_victory_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "ravien",
+    "key": "bg_room",
+    "path": "moments/ravien/images/char_ravien_bg_room_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "ravien",
+    "key": "bg_victory",
+    "path": "moments/ravien/images/char_ravien_bg_victory_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "ravien",
+    "key": "fig_lobby_wait",
+    "path": "moments/ravien/images/char_ravien_fig_lobby_wait_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "ravien",
+    "key": "fig_lobby_end",
+    "path": "moments/ravien/images/char_ravien_fig_lobby_end_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "ravien",
+    "key": "fig_bond_resolve",
+    "path": "moments/ravien/images/char_ravien_fig_lobby_end_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "ravien",
+    "key": "expr_neutral",
+    "path": "moments/ravien/images/char_ravien_expr_neutral_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "ravien",
+    "key": "expr_happy",
+    "path": "moments/ravien/images/char_ravien_expr_happy_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "ravien",
+    "key": "expr_annoyed",
+    "path": "moments/ravien/images/char_ravien_expr_annoyed_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "ravien",
+    "key": "expr_surprised",
+    "path": "moments/ravien/images/char_ravien_expr_surprised_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "ravien",
+    "key": "expr_worried",
+    "path": "moments/ravien/images/char_ravien_expr_worried_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "ravien",
+    "key": "expr_determined",
+    "path": "moments/ravien/images/char_ravien_expr_determined_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "ravien",
+    "key": "fig_bond_end",
+    "path": "moments/ravien/images/char_ravien_fig_bond_end_styleA_v03.png",
+    "status": "ready"
+  },
+  {
+    "character": "harin",
+    "key": "fig_default",
+    "path": "moments/harin/images/char_harin_fig_default_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "harin",
+    "key": "fig_glove",
+    "path": "moments/harin/images/char_harin_fig_glove_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "harin",
+    "key": "fig_lobby_cat",
+    "path": "moments/harin/images/char_harin_fig_lobby_cat_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "harin",
+    "key": "fig_guard",
+    "path": "moments/harin/images/char_harin_fig_guard_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "harin",
+    "key": "fig_hide",
+    "path": "moments/harin/images/char_harin_fig_hide_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "harin",
+    "key": "fig_cough",
+    "path": "moments/harin/images/char_harin_fig_cough_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "harin",
+    "key": "fig_worry",
+    "path": "moments/harin/images/char_harin_fig_worry_styleA_v02.png",
+    "status": "ready"
+  },
+  {
+    "character": "harin",
+    "key": "fig_cat",
+    "path": "moments/harin/images/char_harin_fig_cat_styleA_v02.png",
+    "status": "ready"
+  },
+  {
+    "character": "harin",
+    "key": "fig_soft",
+    "path": "moments/harin/images/char_harin_fig_soft_styleA_v02.png",
+    "status": "ready"
+  },
+  {
+    "character": "harin",
+    "key": "fig_lobby_soft",
+    "path": "moments/harin/images/char_harin_fig_lobby_soft_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "harin",
+    "key": "fig_rest",
+    "path": "moments/harin/images/char_harin_fig_rest_styleA_v03.png",
+    "status": "ready"
+  },
+  {
+    "character": "harin",
+    "key": "fig_resolve",
+    "path": "moments/harin/images/char_harin_fig_resolve_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "harin",
+    "key": "fig_victory",
+    "path": "moments/harin/images/char_harin_fig_victory_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "harin",
+    "key": "bg_room",
+    "path": "moments/harin/images/char_harin_bg_room_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "harin",
+    "key": "bg_victory",
+    "path": "moments/harin/images/char_harin_bg_victory_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "harin",
+    "key": "expr_neutral",
+    "path": "moments/harin/images/char_harin_expr_neutral_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "harin",
+    "key": "expr_happy",
+    "path": "moments/harin/images/char_harin_expr_happy_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "harin",
+    "key": "expr_annoyed",
+    "path": "moments/harin/images/char_harin_expr_annoyed_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "harin",
+    "key": "expr_surprised",
+    "path": "moments/harin/images/char_harin_expr_surprised_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "harin",
+    "key": "expr_worried",
+    "path": "moments/harin/images/char_harin_expr_worried_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "harin",
+    "key": "expr_determined",
+    "path": "moments/harin/images/char_harin_expr_determined_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "harin",
+    "key": "fig_cat_placed",
+    "path": "moments/harin/images/char_harin_fig_cat_placed_styleA_v02.png",
+    "status": "ready"
+  },
+  {
+    "character": "aila",
+    "key": "fig_neutral",
+    "path": "moments/aila/images/char_aila_fig_neutral_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "aila",
+    "key": "fig_action1",
+    "path": "moments/aila/images/char_aila_fig_action1_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "aila",
+    "key": "fig_action2",
+    "path": "moments/aila/images/char_aila_fig_action2_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "aila",
+    "key": "fig_happy",
+    "path": "moments/aila/images/char_aila_fig_happy_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "aila",
+    "key": "fig_worried",
+    "path": "moments/aila/images/char_aila_fig_worried_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "aila",
+    "key": "fig_surprised",
+    "path": "moments/aila/images/char_aila_fig_surprised_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "aila",
+    "key": "fig_determined",
+    "path": "moments/aila/images/char_aila_fig_determined_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "aila",
+    "key": "fig_soft",
+    "path": "moments/aila/images/char_aila_fig_soft_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "aila",
+    "key": "expr_neutral",
+    "path": "moments/aila/images/char_aila_expr_neutral_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "aila",
+    "key": "expr_happy",
+    "path": "moments/aila/images/char_aila_expr_happy_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "aila",
+    "key": "expr_annoyed",
+    "path": "moments/aila/images/char_aila_expr_annoyed_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "aila",
+    "key": "expr_surprised",
+    "path": "moments/aila/images/char_aila_expr_surprised_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "aila",
+    "key": "expr_worried",
+    "path": "moments/aila/images/char_aila_expr_worried_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "aila",
+    "key": "expr_determined",
+    "path": "moments/aila/images/char_aila_expr_determined_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "aila",
+    "key": "bg",
+    "path": "moments/aila/images/char_aila_bg_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "aila",
+    "key": "fig_victory_check",
+    "path": "moments/aila/images/char_aila_fig_victory_check_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "aila",
+    "key": "fig_victory_turn",
+    "path": "moments/aila/images/char_aila_fig_victory_turn_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "aila",
+    "key": "fig_victory_notice",
+    "path": "moments/aila/images/char_aila_fig_victory_notice_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "aila",
+    "key": "fig_victory_wait",
+    "path": "moments/aila/images/char_aila_fig_victory_turn_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "aila",
+    "key": "fig_bond_table",
+    "path": "moments/aila/images/char_aila_fig_bond_table_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "aila",
+    "key": "fig_bond_paper",
+    "path": "moments/aila/images/char_aila_fig_bond_paper_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "aila",
+    "key": "fig_bond_hover",
+    "path": "moments/aila/images/char_aila_fig_bond_hover_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "aila",
+    "key": "fig_bond_write",
+    "path": "moments/aila/images/char_aila_fig_bond_write_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "aila",
+    "key": "fig_bond_present",
+    "path": "moments/aila/images/char_aila_fig_bond_present_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "aila",
+    "key": "fig_bond_return",
+    "path": "moments/aila/images/char_aila_fig_bond_return_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "aila",
+    "key": "fig_bond_store",
+    "path": "moments/aila/images/char_aila_fig_bond_store_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "sion",
+    "key": "fig_neutral",
+    "path": "moments/sion/images/char_sion_fig_neutral_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "sion",
+    "key": "fig_action1",
+    "path": "moments/sion/images/char_sion_fig_action1_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "sion",
+    "key": "fig_action2",
+    "path": "moments/sion/images/char_sion_fig_action2_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "sion",
+    "key": "fig_happy",
+    "path": "moments/sion/images/char_sion_fig_happy_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "sion",
+    "key": "fig_worried",
+    "path": "moments/sion/images/char_sion_fig_worried_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "sion",
+    "key": "fig_surprised",
+    "path": "moments/sion/images/char_sion_fig_surprised_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "sion",
+    "key": "fig_determined",
+    "path": "moments/sion/images/char_sion_fig_determined_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "sion",
+    "key": "fig_soft",
+    "path": "moments/sion/images/char_sion_fig_soft_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "sion",
+    "key": "expr_neutral",
+    "path": "moments/sion/images/char_sion_expr_neutral_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "sion",
+    "key": "expr_happy",
+    "path": "moments/sion/images/char_sion_expr_happy_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "sion",
+    "key": "expr_annoyed",
+    "path": "moments/sion/images/char_sion_expr_annoyed_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "sion",
+    "key": "expr_surprised",
+    "path": "moments/sion/images/char_sion_expr_surprised_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "sion",
+    "key": "expr_worried",
+    "path": "moments/sion/images/char_sion_expr_worried_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "sion",
+    "key": "expr_determined",
+    "path": "moments/sion/images/char_sion_expr_determined_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "sion",
+    "key": "bg",
+    "path": "moments/sion/images/char_sion_bg_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "sion",
+    "key": "fig_victory_check",
+    "path": "moments/sion/images/char_sion_fig_victory_check_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "sion",
+    "key": "fig_victory_turn",
+    "path": "moments/sion/images/char_sion_fig_victory_turn_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "sion",
+    "key": "fig_victory_glasses",
+    "path": "moments/sion/images/char_sion_fig_victory_glasses_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "sion",
+    "key": "fig_victory_wait",
+    "path": "moments/sion/images/char_sion_fig_victory_wait_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "sion",
+    "key": "fig_bond_neutral",
+    "path": "moments/sion/images/char_sion_fig_bond_neutral_styleA_v02.png",
+    "status": "ready"
+  },
+  {
+    "character": "sion",
+    "key": "fig_bond_adjust",
+    "path": "moments/sion/images/char_sion_fig_bond_adjust_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "sion",
+    "key": "fig_bond_soft",
+    "path": "moments/sion/images/char_sion_fig_bond_soft_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "sion",
+    "key": "fig_bond_page",
+    "path": "moments/sion/images/char_sion_fig_bond_page_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "sion",
+    "key": "fig_bond_hidden",
+    "path": "moments/sion/images/char_sion_fig_bond_hidden_styleA_v02.png",
+    "status": "ready"
+  },
+  {
+    "character": "lumi",
+    "key": "fig_neutral",
+    "path": "moments/lumi/images/char_lumi_fig_neutral_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "lumi",
+    "key": "fig_action1",
+    "path": "moments/lumi/images/char_lumi_fig_action1_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "lumi",
+    "key": "fig_action2",
+    "path": "moments/lumi/images/char_lumi_fig_action2_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "lumi",
+    "key": "fig_happy",
+    "path": "moments/lumi/images/char_lumi_fig_happy_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "lumi",
+    "key": "fig_worried",
+    "path": "moments/lumi/images/char_lumi_fig_worried_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "lumi",
+    "key": "fig_surprised",
+    "path": "moments/lumi/images/char_lumi_fig_surprised_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "lumi",
+    "key": "fig_determined",
+    "path": "moments/lumi/images/char_lumi_fig_determined_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "lumi",
+    "key": "fig_soft",
+    "path": "moments/lumi/images/char_lumi_fig_soft_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "lumi",
+    "key": "expr_neutral",
+    "path": "moments/lumi/images/char_lumi_expr_neutral_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "lumi",
+    "key": "expr_happy",
+    "path": "moments/lumi/images/char_lumi_expr_happy_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "lumi",
+    "key": "expr_annoyed",
+    "path": "moments/lumi/images/char_lumi_expr_annoyed_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "lumi",
+    "key": "expr_surprised",
+    "path": "moments/lumi/images/char_lumi_expr_surprised_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "lumi",
+    "key": "expr_worried",
+    "path": "moments/lumi/images/char_lumi_expr_worried_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "lumi",
+    "key": "expr_determined",
+    "path": "moments/lumi/images/char_lumi_expr_determined_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "lumi",
+    "key": "bg",
+    "path": "moments/lumi/images/char_lumi_bg_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "lumi",
+    "key": "fig_victory_land",
+    "path": "moments/lumi/images/char_lumi_fig_victory_land_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "lumi",
+    "key": "fig_victory_turn",
+    "path": "moments/lumi/images/char_lumi_fig_victory_turn_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "lumi",
+    "key": "fig_victory_grin",
+    "path": "moments/lumi/images/char_lumi_fig_victory_grin_styleA_v01.png",
+    "status": "ready"
+  },
+  {
+    "character": "lumi",
+    "key": "fig_victory_wait",
+    "path": "moments/lumi/images/char_lumi_fig_victory_wait_styleA_v02.png",
+    "status": "ready"
+  }
+]

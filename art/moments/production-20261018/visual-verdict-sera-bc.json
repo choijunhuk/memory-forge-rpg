@@ -1,0 +1,68 @@
+[
+  {
+    "image": "sera/images/char_sera_bond_notes_v01.png",
+    "score": 92,
+    "verdict": "pass",
+    "category_match": true,
+    "differences": [
+      "Minor generated hair clip, notebook, bench and weapon-detail variation remains between key-poses."
+    ],
+    "suggestions": [],
+    "reasoning": "Preserves adult Sera, navy coat/bodysuit and distinct notebook/listening/offering or low-rifle eye-contact beat."
+  },
+  {
+    "image": "sera/images/char_sera_bond_listen_v01.png",
+    "score": 92,
+    "verdict": "pass",
+    "category_match": true,
+    "differences": [
+      "Minor generated hair clip, notebook, bench and weapon-detail variation remains between key-poses."
+    ],
+    "suggestions": [],
+    "reasoning": "Preserves adult Sera, navy coat/bodysuit and distinct notebook/listening/offering or low-rifle eye-contact beat."
+  },
+  {
+    "image": "sera/images/char_sera_bond_offer_v01.png",
+    "score": 92,
+    "verdict": "pass",
+    "category_match": true,
+    "differences": [
+      "Minor generated hair clip, notebook, bench and weapon-detail variation remains between key-poses."
+    ],
+    "suggestions": [],
+    "reasoning": "Preserves adult Sera, navy coat/bodysuit and distinct notebook/listening/offering or low-rifle eye-contact beat."
+  },
+  {
+    "image": "sera/images/char_sera_victory_scope_v01.png",
+    "score": 92,
+    "verdict": "pass",
+    "category_match": true,
+    "differences": [
+      "Minor generated hair clip, notebook, bench and weapon-detail variation remains between key-poses."
+    ],
+    "suggestions": [],
+    "reasoning": "Preserves adult Sera, navy coat/bodysuit and distinct notebook/listening/offering or low-rifle eye-contact beat."
+  },
+  {
+    "image": "sera/images/char_sera_victory_turn_v01.png",
+    "score": 92,
+    "verdict": "pass",
+    "category_match": true,
+    "differences": [
+      "Minor generated hair clip, notebook, bench and weapon-detail variation remains between key-poses."
+    ],
+    "suggestions": [],
+    "reasoning": "Preserves adult Sera, navy coat/bodysuit and distinct notebook/listening/offering or low-rifle eye-contact beat."
+  },
+  {
+    "image": "sera/images/bg_sera_clocktower_evening_v01.png",
+    "score": 92,
+    "verdict": "pass",
+    "category_match": true,
+    "differences": [
+      "Background rack/bench props are painted scenery; exact foreground alignment is unverified."
+    ],
+    "suggestions": [],
+    "reasoning": "Clocktower rooftop, harbor evening, low ledge and two cups support the bond scene."
+  }
+]

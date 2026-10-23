@@ -1,0 +1,20 @@
+{
+  "files": [
+    {
+      "path": "client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs",
+      "sha256": "20589657188fd6bd25f0e2942795abe6a526510db8e270e2b71f0c888282db50",
+      "matches_frozen_opus_final_review_input": true
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/Tests/PlayMode/ActionPresentationPlayModeTests.cs",
+      "sha256": "6d6c91c32610ff1c76c596ac95553eafaa3e5753e04525c843934a6a0ddbe0b8",
+      "matches_frozen_opus_final_review_input": true
+    },
+    {
+      "path": "client/MemoryForgeUnity/Assets/Tests/PlayMode/PreparedIntentPlayModeTests.cs",
+      "sha256": "cfa1e8c1923108c74134f0ef01a55fa5b3220ebf0b420c656cb5655ff5944ba9",
+      "matches_frozen_opus_final_review_input": true
+    }
+  ],
+  "source_changed_since_final145_or_native_build": false
+}

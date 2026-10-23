@@ -1,0 +1,998 @@
+{
+  "scope": "All five source-backed combat fixes plus canonical diagnostic target and full-probe input guards; historical fix_effects.json remains an earlier checkpoint.",
+  "sources": {
+    "originalReport": {
+      "path": "reports/late_actions_20261015/paired_balance.json",
+      "sha256": "abbf43f1c7024ae3a0cefb66ae5548bd08bd140e364283f91210bf87617ba136"
+    },
+    "pairedAfter": {
+      "path": "reports/balance_audit_20261015/paired_after.json",
+      "sha256": "2fb691c785f5b8fb0842a41795a7fbc5b174a764fed28625a890ca97095c0ce1"
+    },
+    "causesAfter": {
+      "path": "reports/balance_audit_20261015/causes_after.json",
+      "sha256": "22b58ddf575504992c92f85c8a4d41eed93a5942d752e57fa44981fef91ac80e"
+    },
+    "originalExpanded": {
+      "archive": "expanded40.json.gz",
+      "rawSha256": "fa6e3f62d95297adc7bfa6d0f7fdf287464da39bc3cfc281e745c96433e3408d"
+    },
+    "finalExpanded": {
+      "archive": "expanded40_final.json.gz",
+      "archiveSha256": "2b8bb336afcd40e0f8206946449092af39248ad67d529a41d419652037b32a50",
+      "rawSha256": "67803a3c53947c1a2f56c5951a6804b31b98ed3c717a541ecd207b094ed17dc9"
+    }
+  },
+  "sourceHashesBefore": {
+    "baseContent": "6a09e6dd2d81055738c84951ea5b5ae50c25fd8c9732c8443e81ec1498625688",
+    "content": "7e676aef384aacb0927235bc3bd969a788d0751e56468d45e15ae3ccb5e4a9df",
+    "candidate": "73011d741040271a6da513979e585e9817a71811d24d473de9dc828ff3805ccd",
+    "engine": "027c22df5f7763da4e137723e3d24a5abc3dff948e5175a3ba9b92c8e5c21fab",
+    "runner": "44126e4bef3c89646d1d4fd63f2cbbf28948bf783d970f403f4e98f49d8e8410"
+  },
+  "sourceHashesAfter": {
+    "baseContent": "6a09e6dd2d81055738c84951ea5b5ae50c25fd8c9732c8443e81ec1498625688",
+    "content": "7e676aef384aacb0927235bc3bd969a788d0751e56468d45e15ae3ccb5e4a9df",
+    "candidate": "73011d741040271a6da513979e585e9817a71811d24d473de9dc828ff3805ccd",
+    "engine": "b1ba35f433197072200825ffa85cac49cf3d4812c4bf02032793fef8491d63eb",
+    "runner": "44126e4bef3c89646d1d4fd63f2cbbf28948bf783d970f403f4e98f49d8e8410"
+  },
+  "checkerSha256": "54189384e106ef7de25cc6dc43fb9e65335ed1c39963c6650ce7be52ba569d32",
+  "paired1320": {
+    "allSetupAndInitialStateHashesIdentical": true,
+    "trialsCompared": 1320,
+    "changedTrials": 8,
+    "changedOutcomes": 0,
+    "changedTurns": 0,
+    "changedHpLoss": 8,
+    "totalNetHpLossChange": -81,
+    "sameFailedMetricKeys": true,
+    "failedMetricsBefore": 32,
+    "failedMetricsAfter": 32,
+    "changes": [
+      {
+        "scenarioKey": "1/boss/b_notary/5",
+        "policy": "planner",
+        "before": {
+          "outcome": "win",
+          "turns": 12,
+          "processedPlayerTurns": 12,
+          "hpLoss": 59,
+          "hpLossPct": 24.279835390946502
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 12,
+          "processedPlayerTurns": 12,
+          "hpLoss": 51,
+          "hpLossPct": 20.987654320987655
+        }
+      },
+      {
+        "scenarioKey": "3/elite/e_notarytwin+e_notarytwin/1",
+        "policy": "greedy",
+        "before": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 91,
+          "hpLossPct": 37.44855967078189
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 79,
+          "hpLossPct": 32.510288065843625
+        }
+      },
+      {
+        "scenarioKey": "3/elite/e_notarytwin+e_notarytwin/7",
+        "policy": "greedy",
+        "before": {
+          "outcome": "win",
+          "turns": 11,
+          "processedPlayerTurns": 11,
+          "hpLoss": 120,
+          "hpLossPct": 49.382716049382715
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 11,
+          "processedPlayerTurns": 11,
+          "hpLoss": 112,
+          "hpLossPct": 46.09053497942387
+        }
+      },
+      {
+        "scenarioKey": "3/elite/e_notarytwin+e_notarytwin/8",
+        "policy": "greedy",
+        "before": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 100,
+          "hpLossPct": 41.1522633744856
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 92,
+          "hpLossPct": 37.86008230452675
+        }
+      },
+      {
+        "scenarioKey": "4/elite/e_primadonna/0",
+        "policy": "random",
+        "before": {
+          "outcome": "win",
+          "turns": 11,
+          "processedPlayerTurns": 11,
+          "hpLoss": 55,
+          "hpLossPct": 22.633744855967077
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 11,
+          "processedPlayerTurns": 11,
+          "hpLoss": 50,
+          "hpLossPct": 20.5761316872428
+        }
+      },
+      {
+        "scenarioKey": "4/elite/e_primadonna/1",
+        "policy": "greedy",
+        "before": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 92,
+          "hpLossPct": 37.86008230452675
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 77,
+          "hpLossPct": 31.68724279835391
+        }
+      },
+      {
+        "scenarioKey": "4/elite/e_primadonna/3",
+        "policy": "greedy",
+        "before": {
+          "outcome": "win",
+          "turns": 9,
+          "processedPlayerTurns": 9,
+          "hpLoss": 87,
+          "hpLossPct": 35.80246913580247
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 9,
+          "processedPlayerTurns": 9,
+          "hpLoss": 77,
+          "hpLossPct": 31.68724279835391
+        }
+      },
+      {
+        "scenarioKey": "4/elite/e_primadonna/5",
+        "policy": "random",
+        "before": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 73,
+          "hpLossPct": 30.041152263374485
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 58,
+          "hpLossPct": 23.868312757201647
+        }
+      }
+    ]
+  },
+  "expanded5280": {
+    "allSetupAndInitialStateHashesIdentical": true,
+    "trialsCompared": 5280,
+    "changedTrials": 42,
+    "changedOutcomes": 0,
+    "changedTurns": 0,
+    "changedHpLoss": 42,
+    "totalNetHpLossChange": -447,
+    "sameFailedMetricKeys": true,
+    "failedMetricsBefore": 21,
+    "failedMetricsAfter": 21,
+    "changes": [
+      {
+        "scenarioKey": "1/boss/b_notary/5",
+        "policy": "planner",
+        "before": {
+          "outcome": "win",
+          "turns": 12,
+          "processedPlayerTurns": 12,
+          "hpLoss": 59,
+          "hpLossPct": 24.279835390946502
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 12,
+          "processedPlayerTurns": 12,
+          "hpLoss": 51,
+          "hpLossPct": 20.987654320987655
+        }
+      },
+      {
+        "scenarioKey": "1/boss/b_notary/14",
+        "policy": "greedy",
+        "before": {
+          "outcome": "win",
+          "turns": 7,
+          "processedPlayerTurns": 7,
+          "hpLoss": 65,
+          "hpLossPct": 26.74897119341564
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 7,
+          "processedPlayerTurns": 7,
+          "hpLoss": 53,
+          "hpLossPct": 21.810699588477366
+        }
+      },
+      {
+        "scenarioKey": "1/boss/b_notary/20",
+        "policy": "random",
+        "before": {
+          "outcome": "win",
+          "turns": 7,
+          "processedPlayerTurns": 7,
+          "hpLoss": 59,
+          "hpLossPct": 24.279835390946502
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 7,
+          "processedPlayerTurns": 7,
+          "hpLoss": 51,
+          "hpLossPct": 20.987654320987655
+        }
+      },
+      {
+        "scenarioKey": "1/boss/b_notary/26",
+        "policy": "random",
+        "before": {
+          "outcome": "win",
+          "turns": 7,
+          "processedPlayerTurns": 7,
+          "hpLoss": 91,
+          "hpLossPct": 37.44855967078189
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 7,
+          "processedPlayerTurns": 7,
+          "hpLoss": 71,
+          "hpLossPct": 29.218106995884774
+        }
+      },
+      {
+        "scenarioKey": "2/elite/e_twinink/26",
+        "policy": "planner",
+        "before": {
+          "outcome": "win",
+          "turns": 9,
+          "processedPlayerTurns": 9,
+          "hpLoss": 79,
+          "hpLossPct": 32.510288065843625
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 9,
+          "processedPlayerTurns": 9,
+          "hpLoss": 75,
+          "hpLossPct": 30.864197530864196
+        }
+      },
+      {
+        "scenarioKey": "3/elite/e_notarytwin+e_notarytwin/1",
+        "policy": "greedy",
+        "before": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 91,
+          "hpLossPct": 37.44855967078189
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 79,
+          "hpLossPct": 32.510288065843625
+        }
+      },
+      {
+        "scenarioKey": "3/elite/e_notarytwin+e_notarytwin/7",
+        "policy": "greedy",
+        "before": {
+          "outcome": "win",
+          "turns": 11,
+          "processedPlayerTurns": 11,
+          "hpLoss": 120,
+          "hpLossPct": 49.382716049382715
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 11,
+          "processedPlayerTurns": 11,
+          "hpLoss": 112,
+          "hpLossPct": 46.09053497942387
+        }
+      },
+      {
+        "scenarioKey": "3/elite/e_notarytwin+e_notarytwin/8",
+        "policy": "greedy",
+        "before": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 100,
+          "hpLossPct": 41.1522633744856
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 92,
+          "hpLossPct": 37.86008230452675
+        }
+      },
+      {
+        "scenarioKey": "3/elite/e_notarytwin+e_notarytwin/11",
+        "policy": "greedy",
+        "before": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 84,
+          "hpLossPct": 34.5679012345679
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 80,
+          "hpLossPct": 32.92181069958848
+        }
+      },
+      {
+        "scenarioKey": "3/elite/e_notarytwin+e_notarytwin/17",
+        "policy": "greedy",
+        "before": {
+          "outcome": "win",
+          "turns": 11,
+          "processedPlayerTurns": 11,
+          "hpLoss": 100,
+          "hpLossPct": 41.1522633744856
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 11,
+          "processedPlayerTurns": 11,
+          "hpLoss": 84,
+          "hpLossPct": 34.5679012345679
+        }
+      },
+      {
+        "scenarioKey": "3/elite/e_notarytwin+e_notarytwin/17",
+        "policy": "planner",
+        "before": {
+          "outcome": "win",
+          "turns": 11,
+          "processedPlayerTurns": 11,
+          "hpLoss": 67,
+          "hpLossPct": 27.57201646090535
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 11,
+          "processedPlayerTurns": 11,
+          "hpLoss": 63,
+          "hpLossPct": 25.925925925925927
+        }
+      },
+      {
+        "scenarioKey": "3/elite/e_notarytwin+e_notarytwin/19",
+        "policy": "greedy",
+        "before": {
+          "outcome": "win",
+          "turns": 11,
+          "processedPlayerTurns": 11,
+          "hpLoss": 102,
+          "hpLossPct": 41.97530864197531
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 11,
+          "processedPlayerTurns": 11,
+          "hpLoss": 86,
+          "hpLossPct": 35.390946502057616
+        }
+      },
+      {
+        "scenarioKey": "3/elite/e_notarytwin+e_notarytwin/24",
+        "policy": "greedy",
+        "before": {
+          "outcome": "win",
+          "turns": 10,
+          "processedPlayerTurns": 10,
+          "hpLoss": 74,
+          "hpLossPct": 30.45267489711934
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 10,
+          "processedPlayerTurns": 10,
+          "hpLoss": 70,
+          "hpLossPct": 28.80658436213992
+        }
+      },
+      {
+        "scenarioKey": "3/elite/e_notarytwin+e_notarytwin/27",
+        "policy": "random",
+        "before": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 59,
+          "hpLossPct": 24.279835390946502
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 57,
+          "hpLossPct": 23.45679012345679
+        }
+      },
+      {
+        "scenarioKey": "3/elite/e_notarytwin+e_notarytwin/27",
+        "policy": "greedy",
+        "before": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 62,
+          "hpLossPct": 25.51440329218107
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 56,
+          "hpLossPct": 23.045267489711936
+        }
+      },
+      {
+        "scenarioKey": "3/elite/e_notarytwin+e_notarytwin/31",
+        "policy": "greedy",
+        "before": {
+          "outcome": "win",
+          "turns": 9,
+          "processedPlayerTurns": 9,
+          "hpLoss": 80,
+          "hpLossPct": 32.92181069958848
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 9,
+          "processedPlayerTurns": 9,
+          "hpLoss": 56,
+          "hpLossPct": 23.045267489711936
+        }
+      },
+      {
+        "scenarioKey": "4/elite/e_primadonna/0",
+        "policy": "random",
+        "before": {
+          "outcome": "win",
+          "turns": 11,
+          "processedPlayerTurns": 11,
+          "hpLoss": 55,
+          "hpLossPct": 22.633744855967077
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 11,
+          "processedPlayerTurns": 11,
+          "hpLoss": 50,
+          "hpLossPct": 20.5761316872428
+        }
+      },
+      {
+        "scenarioKey": "4/elite/e_primadonna/1",
+        "policy": "greedy",
+        "before": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 92,
+          "hpLossPct": 37.86008230452675
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 77,
+          "hpLossPct": 31.68724279835391
+        }
+      },
+      {
+        "scenarioKey": "4/elite/e_primadonna/3",
+        "policy": "greedy",
+        "before": {
+          "outcome": "win",
+          "turns": 9,
+          "processedPlayerTurns": 9,
+          "hpLoss": 87,
+          "hpLossPct": 35.80246913580247
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 9,
+          "processedPlayerTurns": 9,
+          "hpLoss": 77,
+          "hpLossPct": 31.68724279835391
+        }
+      },
+      {
+        "scenarioKey": "4/elite/e_primadonna/5",
+        "policy": "random",
+        "before": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 73,
+          "hpLossPct": 30.041152263374485
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 58,
+          "hpLossPct": 23.868312757201647
+        }
+      },
+      {
+        "scenarioKey": "4/elite/e_primadonna/11",
+        "policy": "greedy",
+        "before": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 75,
+          "hpLossPct": 30.864197530864196
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 55,
+          "hpLossPct": 22.633744855967077
+        }
+      },
+      {
+        "scenarioKey": "4/elite/e_primadonna/11",
+        "policy": "planner",
+        "before": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 95,
+          "hpLossPct": 39.09465020576132
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 80,
+          "hpLossPct": 32.92181069958848
+        }
+      },
+      {
+        "scenarioKey": "4/elite/e_primadonna/13",
+        "policy": "random",
+        "before": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 85,
+          "hpLossPct": 34.97942386831276
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 60,
+          "hpLossPct": 24.691358024691358
+        }
+      },
+      {
+        "scenarioKey": "4/elite/e_primadonna/13",
+        "policy": "greedy",
+        "before": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 71,
+          "hpLossPct": 29.218106995884774
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 46,
+          "hpLossPct": 18.930041152263374
+        }
+      },
+      {
+        "scenarioKey": "4/elite/e_primadonna/14",
+        "policy": "greedy",
+        "before": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 62,
+          "hpLossPct": 25.51440329218107
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 57,
+          "hpLossPct": 23.45679012345679
+        }
+      },
+      {
+        "scenarioKey": "4/elite/e_primadonna/15",
+        "policy": "random",
+        "before": {
+          "outcome": "win",
+          "turns": 12,
+          "processedPlayerTurns": 11,
+          "hpLoss": 113,
+          "hpLossPct": 46.50205761316872
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 12,
+          "processedPlayerTurns": 11,
+          "hpLoss": 103,
+          "hpLossPct": 42.38683127572016
+        }
+      },
+      {
+        "scenarioKey": "4/elite/e_primadonna/15",
+        "policy": "greedy",
+        "before": {
+          "outcome": "win",
+          "turns": 12,
+          "processedPlayerTurns": 12,
+          "hpLoss": 100,
+          "hpLossPct": 41.1522633744856
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 12,
+          "processedPlayerTurns": 12,
+          "hpLoss": 85,
+          "hpLossPct": 34.97942386831276
+        }
+      },
+      {
+        "scenarioKey": "4/elite/e_primadonna/15",
+        "policy": "planner",
+        "before": {
+          "outcome": "win",
+          "turns": 11,
+          "processedPlayerTurns": 11,
+          "hpLoss": 61,
+          "hpLossPct": 25.102880658436213
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 11,
+          "processedPlayerTurns": 11,
+          "hpLoss": 51,
+          "hpLossPct": 20.987654320987655
+        }
+      },
+      {
+        "scenarioKey": "4/elite/e_primadonna/16",
+        "policy": "greedy",
+        "before": {
+          "outcome": "win",
+          "turns": 9,
+          "processedPlayerTurns": 9,
+          "hpLoss": 99,
+          "hpLossPct": 40.74074074074074
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 9,
+          "processedPlayerTurns": 9,
+          "hpLoss": 94,
+          "hpLossPct": 38.68312757201646
+        }
+      },
+      {
+        "scenarioKey": "4/elite/e_primadonna/16",
+        "policy": "planner",
+        "before": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 43,
+          "hpLossPct": 17.695473251028808
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 38,
+          "hpLossPct": 15.637860082304528
+        }
+      },
+      {
+        "scenarioKey": "4/elite/e_primadonna/17",
+        "policy": "greedy",
+        "before": {
+          "outcome": "win",
+          "turns": 14,
+          "processedPlayerTurns": 14,
+          "hpLoss": 61,
+          "hpLossPct": 25.102880658436213
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 14,
+          "processedPlayerTurns": 14,
+          "hpLoss": 46,
+          "hpLossPct": 18.930041152263374
+        }
+      },
+      {
+        "scenarioKey": "4/elite/e_primadonna/17",
+        "policy": "planner",
+        "before": {
+          "outcome": "win",
+          "turns": 12,
+          "processedPlayerTurns": 12,
+          "hpLoss": 86,
+          "hpLossPct": 35.390946502057616
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 12,
+          "processedPlayerTurns": 12,
+          "hpLoss": 76,
+          "hpLossPct": 31.275720164609055
+        }
+      },
+      {
+        "scenarioKey": "4/elite/e_primadonna/19",
+        "policy": "greedy",
+        "before": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 57,
+          "hpLossPct": 23.45679012345679
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 52,
+          "hpLossPct": 21.39917695473251
+        }
+      },
+      {
+        "scenarioKey": "4/elite/e_primadonna/21",
+        "policy": "planner",
+        "before": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 47,
+          "hpLossPct": 19.34156378600823
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 42,
+          "hpLossPct": 17.28395061728395
+        }
+      },
+      {
+        "scenarioKey": "4/elite/e_primadonna/26",
+        "policy": "greedy",
+        "before": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 42,
+          "hpLossPct": 17.28395061728395
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 37,
+          "hpLossPct": 15.22633744855967
+        }
+      },
+      {
+        "scenarioKey": "4/elite/e_primadonna/26",
+        "policy": "planner",
+        "before": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 9,
+          "hpLossPct": 3.7037037037037037
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 4,
+          "hpLossPct": 1.646090534979424
+        }
+      },
+      {
+        "scenarioKey": "4/elite/e_primadonna/29",
+        "policy": "random",
+        "before": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 34,
+          "hpLossPct": 13.991769547325102
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 28,
+          "hpLossPct": 11.522633744855968
+        }
+      },
+      {
+        "scenarioKey": "4/elite/e_primadonna/30",
+        "policy": "greedy",
+        "before": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 57,
+          "hpLossPct": 23.45679012345679
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 47,
+          "hpLossPct": 19.34156378600823
+        }
+      },
+      {
+        "scenarioKey": "4/elite/e_primadonna/31",
+        "policy": "greedy",
+        "before": {
+          "outcome": "win",
+          "turns": 9,
+          "processedPlayerTurns": 9,
+          "hpLoss": 78,
+          "hpLossPct": 32.098765432098766
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 9,
+          "processedPlayerTurns": 9,
+          "hpLoss": 53,
+          "hpLossPct": 21.810699588477366
+        }
+      },
+      {
+        "scenarioKey": "4/elite/e_primadonna/35",
+        "policy": "planner",
+        "before": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 81,
+          "hpLossPct": 33.333333333333336
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 69,
+          "hpLossPct": 28.395061728395063
+        }
+      },
+      {
+        "scenarioKey": "4/elite/e_primadonna/37",
+        "policy": "planner",
+        "before": {
+          "outcome": "win",
+          "turns": 11,
+          "processedPlayerTurns": 11,
+          "hpLoss": 12,
+          "hpLossPct": 4.938271604938271
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 11,
+          "processedPlayerTurns": 11,
+          "hpLoss": 4,
+          "hpLossPct": 1.646090534979424
+        }
+      },
+      {
+        "scenarioKey": "4/elite/e_primadonna/38",
+        "policy": "greedy",
+        "before": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 85,
+          "hpLossPct": 34.97942386831276
+        },
+        "after": {
+          "outcome": "win",
+          "turns": 8,
+          "processedPlayerTurns": 8,
+          "hpLoss": 80,
+          "hpLossPct": 32.92181069958848
+        }
+      }
+    ]
+  },
+  "expandedContainsAllOriginal1320TrialsUnchanged": true,
+  "preservedBaselineFiles": {
+    "engine/tests/balance_probe.mjs": true,
+    "proposals/late_enemies.cjs": true,
+    "data/game_data.json": true,
+    "docs/design_v0.8.1.md": true,
+    "MANIFEST_AIO.json": true,
+    "MANIFEST.sha256": true
+  },
+  "consistencyChecks": {
+    "status": "PASS",
+    "reportsIndependentlyReaggregated": 4,
+    "aggregateRowsChecked": 708,
+    "failedRowsChecked": 32,
+    "hpAccounting": "all contributor group gross losses minus actual heals match report net HP loss",
+    "allFinalUltimateReflectionLossZero": true,
+    "candidateHpBudgetMismatches": 6,
+    "expandedArchiveRoundTripIdentical": true
+  },
+  "limits": [
+    "Weighted contributors are an arithmetic decomposition, not isolated causal effects.",
+    "No target, candidate number, scenario, policy, or source design was changed.",
+    "This report does not approve integration or certify human, C#, Unity, server, DB, device, or payment acceptance."
+  ],
+  "diagnosticInputContract": {
+    "targetBounds": "Recomputed from assessTargets; values, statuses, metric names, failure count and overall are verified.",
+    "officialCli": "Regenerates a complete canonical runProbe for requestedN and mode, then requires exact hashes, method and scenarios; never trusts a self-consistent subset as the full probe.",
+    "analyzeFunction": "Still supports explicit smaller exploratory reports; this does not certify canonical full-probe coverage."
+  }
+}

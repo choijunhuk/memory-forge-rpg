@@ -1,0 +1,9 @@
+{
+  "client/MemoryForgeUnity/Assets/Scripts/MemoryForgeLobbyClient.cs": "c7d51eae082b1e3cb198dac2fd10e3ef03e6407adaf40bbcd3ca5204c328b81e",
+  "client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs": "700986949d60fcf489ef5faf3f4190d1df29041f2bbef196dc63f3b9ed860036",
+  "client/MemoryForgeUnity/Assets/Scripts/MemoryForgePracticeSession.cs": "457c2abba777d84560e4a360b232c984981a8dd645f3a148e045737d58a14dd8",
+  "client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionResumeFailurePlayModeTests.cs": "c19a4373044224dada2d6eff7d45531e732a56ca5bce7e8057b76882a7ef7a1b",
+  "client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionReturnPlayModeTests.cs": "ccefdade52d119342b61961cda9f88b89d2bf3953c56b089d65670b0213d9649",
+  "client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionReturnNavigationPlayModeTests.cs": "eebe583711d28c5c6aa356768fbf49c8ecf3595a96017db03dcc1f71cb45dcec",
+  "client/MemoryForgeUnity/Assets/Tests/PlayMode/LobbyOverviewPlayModeTests.cs": "17cc50499a296147b2b85e1c6f1868cd5da55b4b6099667afd2f4cb70caf480f"
+}

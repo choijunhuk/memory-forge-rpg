@@ -1,0 +1,21 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"temporaryManualQaOptions\":1,\"restoreTo\":0,\"reason\":\"same domain-reload option used by installed MCP test runner; avoid websocket teardown during this manual UI probe only\"},\"compiler\":\"codedom\"}}"
+    }
+  ],
+  "structuredContent": {
+    "success": true,
+    "message": "Code executed successfully.",
+    "data": {
+      "result": {
+        "temporaryManualQaOptions": 1,
+        "restoreTo": 0,
+        "reason": "same domain-reload option used by installed MCP test runner; avoid websocket teardown during this manual UI probe only"
+      },
+      "compiler": "codedom"
+    }
+  },
+  "isError": false
+}

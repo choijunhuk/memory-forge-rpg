@@ -1,0 +1,11 @@
+{
+  "files": [
+    "client/MemoryForgeUnity/ProjectSettings/EditorSettings.asset",
+    "client/MemoryForgeUnity/ProjectSettings/ProjectSettings.asset",
+    "client/MemoryForgeUnity/Assets/Settings/UniversalRP.asset",
+    "client/MemoryForgeUnity/Assets/UniversalRenderPipelineGlobalSettings.asset",
+    "client/MemoryForgeUnity/ProjectSettings/UnityConnectSettings.asset"
+  ],
+  "exact_head_bytes": true,
+  "owned_test_option_and_whitespace_only": true
+}

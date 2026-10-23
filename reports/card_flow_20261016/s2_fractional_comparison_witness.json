@@ -1,0 +1,22 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":{\"defaultDeepEquals\":true,\"serializedA\":\"{\\\"note\\\":0.1}\",\"serializedB\":\"{\\\"note\\\":0.10000000000000002}\",\"exactDoubleEquals\":false},\"compiler\":\"codedom\"}}"
+    }
+  ],
+  "structuredContent": {
+    "success": true,
+    "message": "Code executed successfully.",
+    "data": {
+      "result": {
+        "defaultDeepEquals": true,
+        "serializedA": "{\"note\":0.1}",
+        "serializedB": "{\"note\":0.10000000000000002}",
+        "exactDoubleEquals": false
+      },
+      "compiler": "codedom"
+    }
+  },
+  "isError": false
+}

@@ -1,0 +1,16 @@
+{
+  "character": "sion",
+  "key": "fig_victory_wait",
+  "target": "sion/images/char_sion_fig_victory_wait_styleA_v01.png",
+  "args": {
+    "prompt": "Use case: identity-preserve. Final waiting beat of adult Sion27's victory. Edit ONLY the EMPTY hand touching glasses on SCREEN RIGHT: lower that empty hand naturally to her side, relaxed fingers. Keep sword hand on SCREEN LEFT, EXACT same WIDE bookmark longsword blade width/length/hilt/angle and gold motifs, feet/hips/torso/head pose, thin glasses on nose, face/black hair, purple coat/white blouse/corset/shorts/boots, and clear-cel A rendering. Remove any remaining loose cream paper scraps as they have settled out of frame. No book, no lectern, no new props. Preserve original full portrait framing. GENUINE alpha transparent empty canvas, margins and four corners exactly0, no haze or rectangular residue, no floor/cast shadow/checkerboard or text.",
+    "referenced_image_paths": [
+      "/Users/choi/Documents/Memory_forge/art/moments/sion/images/char_sion_fig_victory_glasses_styleA_v01.png"
+    ],
+    "transparent_background": true
+  },
+  "cache_path": "/Users/choi/.codex/generated_images/01a14db0-4150-7f01-9240-82aaa185dd28/exec-3f0ff6db-2e9d-44ca-a4f5-facc989cbfd6.png",
+  "status": "ready",
+  "generation_status": "generated_pending_review",
+  "selected": true
+}

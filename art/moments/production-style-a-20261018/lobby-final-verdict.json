@@ -1,0 +1,12 @@
+{
+  "score": 94,
+  "verdict": "pass",
+  "category_match": true,
+  "differences": [
+    "Minor generated ornament/line variation remains; source chair-edge crop is retained for Aila without obscuring hand or usable seat."
+  ],
+  "suggestions": [
+    "Carry the selected character master into B/C and expressions; measure anchors of new furnished B poses."
+  ],
+  "reasoning": "All six A sequences preserve character identity, clothing and intended gestures. Ravien's folder/chair ending and Aila's hand-on-backrest invitation remain readable; selected sprite corners are zero alpha and white/dark composites are clean."
+}

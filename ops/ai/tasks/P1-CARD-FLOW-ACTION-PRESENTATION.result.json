@@ -1,0 +1,35 @@
+{
+  "task_id": "P1-CARD-FLOW-ACTION-PRESENTATION",
+  "run_id": "P1-CARD-FLOW-ACTION-PRESENTATION-20261016T050920549927Z",
+  "status": "VERIFIED",
+  "requestedEffort": "high",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "changes_verified": true,
+  "raw_output": "ops/ai/local/P1-CARD-FLOW-ACTION-PRESENTATION-20261016T050920549927Z*",
+  "billing_verified_at": "2026-10-15T21:22:01.277612+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "claude/balance-audit",
+  "base_commit": "9be537f4c5ef59e890322cb2d1de914fb49bfed6",
+  "worktree": "/Users/choi/.codex/worktrees/claude-balance-audit/Memory_forge",
+  "allowed_files": [
+    "client/MemoryForgeUnity/Assets/Scripts/MemoryForgeExpeditionClient.cs",
+    "client/MemoryForgeUnity/Assets/Tests/PlayMode/ActionPresentationPlayModeTests.cs",
+    "client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionClientPlayModeTests.cs",
+    "client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionFailurePlayModeTests.cs",
+    "client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionPickerGuardPlayModeTests.cs",
+    "client/MemoryForgeUnity/Assets/Tests/PlayMode/ExpeditionTurnFlowPlayModeTests.cs",
+    "reports/card_flow_20261016/action_presentation_author_report.md"
+  ],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "3783efa8-31f2-4332-b2cb-3d352bdc19c7",
+  "subtype": "success",
+  "is_error": false,
+  "result": "I've implemented the player-action display for P1-CARD-FLOW-ACTION-PRESENTATION, but none of it has been compiled or run. I had no Bash, Unity or MCP access, so Root's actual Unity run and visual check is the first real verification.\n\n**What changed**\n- **Main client (`MemoryForgeExpeditionClient.cs`):** after a successful play or ultimate, its committed events (the same rows already sent to the 40-line battle log) appear one at a time:\n  - **Battle continues:** they show in a new 44 px strip between the timeline and the action panel. The forecast/toast line stays separate and is never covered.\n  - **Battle ended:** a full-screen sheet covers the reward or save screen. Its buttons sit over that screen's text areas, not its buttons, so a repeated tap after it closes can't take a reward or save.\n  - Each row gets a text label: 사용, 예약, 해결, 메아리, 유물, 반격 or 필살기.\n- **Timing** is my own local prototype timing, not a measured or approved value:\n\n  | Pace | Ordinary row | Reservation-resolution row | Hold at end |\n  |---|---|---|---|\n  | Normal (default) | 0.2 s | 0.3 s (original) | 0.6 s |\n  | 2x | 0.1 s | 0.15 s | 0.3 s |\n  | Reduced motion | all rows at once | all rows at once | 0.6 s |\n\n  There is also an explicit skip. Everything runs on real time; `Time.timeScale` is never touched.\n- **Gating:**\n  - While a display is open, only choosing the next card, mode and target is allowed. Every other command, including the confirm button and the private `Do`, is refused with a new `ACTION_SHOWING` code.\n  - The end-of-battle display also refuses the next selection.\n  - Recovery, turn-summary and pick-sheet codes still come first.\n  - `true` still means an actual Core commit.\n- **In-place updates:** each step, finish or skip only rewrites labels and the confirm/end/ultimate buttons' availability. The view is never rebuilt, so a held press on the next card survives.\n- **Focus loss, pause and disable** drop the display. On resume the actual current view is redrawn, with no command replayed or restarted. New departures and recovery also drop it.\n- **Layout:** to fit the strip, the timeline panel is 22 px shorter and the action panel moved down 14 px and is 4 px shorter. Nothing else moved.\n\n**Tests**\n- **New file:** 8 Play Mode tests in `ActionPresentationPlayModeTests.cs`, all checked against an independent mirror Run. They cover:\n  - identical state across normal, 2x, reduced, skip and a mid-display pace switch\n  - the next selection staying pure with its forecast visible\n  - every other command being refused during a display\n  - the end-of-battle sheet\n  - an ultimate\n  - focus loss, pause and disable\n  - a held press across completion\n  - the pick-sheet and turn-summary codes still applying\n  - recovery still taking precedence\n- **Old tests:** in the client, turn-flow and pick-sheet test files, I only inserted a step that ends the display (skip, then check nothing in the Run changed) before the next command. No old assertion was removed. The failure tests needed no change.\n\n**Risks for the Unity run**\n- **Not guaranteed to reach their setups:** three tests depend on the existing driver reaching a battle that ends on a play or ultimate, an ultimate becoming ready, and `nia_tune` together with an affordable card. If it doesn't, those tests fail rather than skip.\n- **Editor focus:** a real Editor focus change mid-run now drops an open display by design, which could disturb the timing tests.\n- **Readability:** the two-row strip text and the shorter timeline need a visual check at the worst case (5 reservations, 5 enemies, 10 hand cards).\n\n**Still not done:** no final VFX, audio or art; the strip buttons (36 px) are not checked against 48 dp; Android device NOT_RUN; no server or reconnect state; no queue for a confirmed next card (that is the next unit).\n\n**Next:** Root runs the full Play Mode and Edit Mode suites, inspects the new strip and sheet, then dispatches the confirmed-intent queue unit.\n\nCodex collects the session ID from the CLI metadata. The full write-up is in `reports/card_flow_20261016/action_presentation_author_report.md`.",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ],
+  "root_verification": "reports/card_flow_20261016/action_root_acceptance.md"
+}

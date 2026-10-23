@@ -1,0 +1,26 @@
+{
+  "task_id": "P1-CSHARP-TURNS-CROSS-REVIEW",
+  "run_id": "P1-CSHARP-TURNS-CROSS-REVIEW-20261014T234843396226Z",
+  "status": "RECEIVED_UNVERIFIED",
+  "requestedEffort": "max",
+  "requestedModel": "claude-opus-5-5",
+  "process_exit": 0,
+  "changes_verified": false,
+  "raw_output": "ops/ai/local/P1-CSHARP-TURNS-CROSS-REVIEW-20261014T234843396226Z*",
+  "billing_verified_at": "2026-10-14T21:44:57.439760+00:00",
+  "billing_evidence_kind": "account UI attestation; not server enforcement",
+  "access_controls": "Restricted CLI built-in file tools; not an OS sandbox; managed policy still applies",
+  "branch": "claude/balance-audit",
+  "base_commit": "9be537f4c5ef59e890322cb2d1de914fb49bfed6",
+  "worktree": "/Users/choi/.codex/worktrees/claude-balance-audit/Memory_forge",
+  "allowed_files": [],
+  "cli_version": "2.1.285 (Claude Code)",
+  "billing_account_matched": true,
+  "session_id": "4f90a3bc-f540-472f-9f55-08a4b75d143e",
+  "subtype": "success",
+  "is_error": false,
+  "result": "**판정: APPROVE.** 통합을 막을 중요 결함은 찾지 못했습니다.\n\n## 근거 (JS 원본과 C# 차이분 대조)\n\n- **턴 종료 (`Battle.cs:350-407` ↔ `rules-core.js:559-601`):** 순서가 같습니다.\n  - PLAYER 확인 → RESOLVING → 절제/보너스 만료\n  - 손패 스냅샷의 얼룩을 **끝까지** 처리한 뒤 손패 전체를 버리고 종료 판정. 중간에 끊는 분기가 없습니다.\n  - 파티 약화 −1, 침묵 만료\n  - 적 목록 스냅샷을 등장 순서대로 돌며, 행동하는 적만 방어·반사를 0으로 하고 `pi`를 행동 전에 올림. 행동마다 종료 판정\n  - 화상(죽은 적도 감소) → 씨앗 회복(살아 있는 씨앗 수 기준) → 취약·약화·표식 감소 → 종료 판정 → 다음 턴\n- **적 행동 12종 (`:416-475` ↔ `:604-618`):** 효과와 이벤트가 일치합니다.\n  - `atk`/`atkdebuff`는 한 타씩 처리하고 즉시 종료 판정. 반격으로 공격한 적이 죽으면 남은 타와 약화를 중단합니다.\n  - `atkdebuff`에는 이벤트가 없고, 단독 `debuff`만 `partyDebuff`를 냅니다.\n  - `expose`는 취약을 올리고 `expose` 이벤트를 낸 뒤 이어지는 공격을 실행합니다.\n  - 소환은 같은 `AddEnemy`·`seq`를 쓰고, 살아 있는 적이 5 미만일 때만 추가하며 즉시 의도를 정합니다.\n  - `heal`은 요청값 `n`을 이벤트로 보고하고, `insert`는 기본값을 갖춘 토큰을 버린 더미에 만듭니다.\n  - 그 밖의 태그·형태는 `RequireMoveShape`가 명시적으로 거부합니다.\n- **피해·처치 (`:499-528` ↔ `:663-675`, `:1129-1153`):**\n  - 적 공격: 반올림 피해 + 힘 → 약화(`weakBps` 로드) → 방어 → hit 이벤트 → 체력 손실 → 반격 순서\n  - 반사·카드 배율·균열은 원시 피해에 적용되지 않습니다. 화상만 방어를 무시하고, 피해가 0 이하이거나 대상이 죽었으면 이벤트 없이 반환합니다.\n  - 처치 시 `kill {uid,id}` → 표식이면 `killedMarked` 증가 → 수첩 뽑기와 동전 순서입니다.\n  - 같은 타격에서 체력 0과 반격 처치·보상이 함께 일어나면, 보상을 남긴 뒤 **DEFEAT가 우선**합니다.\n  - 카야 추리는 PLAYER 단계에서만 동작한다는 원래 조건을 지키고, 그 경로는 명시적으로 거부합니다.\n- **다음 턴 (`:292-323` ↔ `:499-549`):** 기존 첫 턴 코드를 공유해 `StartTurn(first)` 하나로 만들었습니다.\n  - AP는 턴 증가 전에 계산하며, 모래시계는 0턴에만, 왕관은 매 턴, `apNext`는 한 번만 소비합니다.\n  - 2턴부터 방어를 `min(block,0)`, 반격을 0으로 정리합니다. 보루가 없으므로 JS의 keep 0과 같습니다.\n  - 무한 회로로 쓰러지면 뽑기·의도·turn 이벤트 전에 끝납니다. 첫 턴 전용 보상은 반복되지 않습니다.\n- **회복 대상 비율 (`:477-498`):** JS 정렬 비교식(double 비율의 차)과 결과가 같습니다.\n  - `RoundedHealthRatio`는 hp/maxHp를 IEEE 방식(가장 가까운 값, 동률이면 짝수)으로 반올림한 값을 2^-83 격자의 정수로 정확히 표현합니다.\n  - Int32 양수 HP 범위에서는 비율이 2^-31 이상이라 정규 double이고, 이동 폭도 83 이하로 유효합니다.\n  - 엄격한 `<` 비교로 동률일 때 등장 순서를 유지하므로, 실제 end6에서 moth를 회복합니다.\n- **지원하지 않는 상태 차단:** 예약·부채·파워·버프·균열·봉인·침묵·AP 흡수, 알 수 없는 적 패시브, 적 `phase` 메타데이터(로더의 적 전체 필드 허용 목록)가 들어오면 실행 전에 명시적으로 거부합니다.\n  - 모든 실행은 후보 상태에서만 일어나고, 실패하면 RNG·`v`·log·ev·영수증이 남지 않습니다.\n- **시험의 독립성과 범위:**\n  - C# 쪽은 setup과 요청만 입력으로 받습니다.\n  - 모든 체크포인트에서 59키 상태, PublicView, 그리고 상태·RNG·이벤트·log·PublicView 해시를 각각 비교합니다.\n  - 적 20종은 **패턴 길이 × 2**만큼 end를 실행한 뒤에도 PLAYER 상태여야 합니다(앞 두 칸만이 아님). 조우 21건은 가장 긴 패턴 × 2, opening 267건은 end 2회입니다.\n  - 사례 구성은 현재 데이터에서 직접 유도하며, 손으로 계산한 기대값 단언과 픽스처 변조 15종 거부, 원자성 음성 시험이 따로 있습니다.\n- **Unity 픽스처:** 타입 정의 값이 실제 데이터와 같습니다. 기대값(2턴 방어 0/반격 0·서가 방어 10·atk, 3턴 HP 175, block 로그 3, 2턴 회로 패배)도 규칙에서 그대로 나옵니다.\n\n## 비차단 참고 (스타일, 결함 아님)\n- `AddEnemy`가 이제 알 수 없는 적 패시브를 생성 시점에 거부합니다. JS보다 엄격하지만 정책상 명시적 거부이고, 실제 데이터에는 `seedHeal` 두 건뿐이라 영향이 없습니다.\n- `CompareReceipts`의 digest 재구성은 System.Text.Json을 써서 ASCII·정수 인자에만 맞습니다. 주석에 이 제한이 적혀 있는 시험 측 코드라 제품 동작에는 영향이 없습니다.\n\n## 실행 구분\n- **NOT_RUN:** 저는 시험을 실행하지 않았고 gzip 픽스처도 열지 않았습니다. 판단 근거는 Codex 로그입니다.\n  - C#: Core 202, canonical 87, 스냅샷 2000, 픽스처 13, opening 2221, BattleTurn 29232/29232(요청 1740: 커밋 1673·재사용 14·거절 53), 영수증 탐침 136\n  - JS 222, Unity PlayMode 7/7\n- **범위 밖:** play·ult·Run·복원, §5.16 보루 기준, C# 전체 1000건 Run 명령 재생, Android·기기·서버·전체 게임 수용\n- **변경 파일:** 없음\n- **session_id:** 세션 안에서는 확인할 수 없습니다.",
+  "model_usage_keys": [
+    "claude-opus-5-5"
+  ]
+}

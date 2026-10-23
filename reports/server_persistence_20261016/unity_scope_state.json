@@ -1,0 +1,35 @@
+{
+  "scope": "read-only actual Editor connection and console; no server Play Mode/Unity transport acceptance",
+  "mcp_session_reinitialized_after_stale_404": true,
+  "state": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Code executed successfully.\",\"data\":{\"result\":\"{\\\"playing\\\":false,\\\"compiling\\\":false,\\\"scene\\\":\\\"Assets/Scenes/MemoryForgeExpedition.unity\\\",\\\"futureOptions\\\":0}\",\"compiler\":\"codedom\"}}"
+      }
+    ],
+    "structuredContent": {
+      "success": true,
+      "message": "Code executed successfully.",
+      "data": {
+        "result": "{\"playing\":false,\"compiling\":false,\"scene\":\"Assets/Scenes/MemoryForgeExpedition.unity\",\"futureOptions\":0}",
+        "compiler": "codedom"
+      }
+    },
+    "isError": false
+  },
+  "console": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Retrieved 0 log entries.\",\"data\":[]}"
+      }
+    ],
+    "structuredContent": {
+      "success": true,
+      "message": "Retrieved 0 log entries.",
+      "data": []
+    },
+    "isError": false
+  }
+}

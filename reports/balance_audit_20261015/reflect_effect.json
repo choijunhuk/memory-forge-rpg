@@ -1,0 +1,130 @@
+{
+  "fix": "card-only reflect excludes ultimates",
+  "source_before": "027c22df5f7763da4e137723e3d24a5abc3dff948e5175a3ba9b92c8e5c21fab",
+  "source_reflect_only": "f7e99359b140895c59126b81b8132715faeea090c3b91d8816c8425a5252bc74",
+  "paired_initials_identical": true,
+  "changedTrials": 8,
+  "changes": [
+    {
+      "scenarioKey": "1/boss/b_notary/5",
+      "policy": "planner",
+      "encounter": "b_notary",
+      "before": {
+        "outcome": "win",
+        "turns": 12,
+        "hpLoss": 59
+      },
+      "after": {
+        "outcome": "win",
+        "turns": 12,
+        "hpLoss": 51
+      }
+    },
+    {
+      "scenarioKey": "3/elite/e_notarytwin+e_notarytwin/1",
+      "policy": "greedy",
+      "encounter": "e_notarytwin+e_notarytwin",
+      "before": {
+        "outcome": "win",
+        "turns": 8,
+        "hpLoss": 91
+      },
+      "after": {
+        "outcome": "win",
+        "turns": 8,
+        "hpLoss": 79
+      }
+    },
+    {
+      "scenarioKey": "3/elite/e_notarytwin+e_notarytwin/7",
+      "policy": "greedy",
+      "encounter": "e_notarytwin+e_notarytwin",
+      "before": {
+        "outcome": "win",
+        "turns": 11,
+        "hpLoss": 120
+      },
+      "after": {
+        "outcome": "win",
+        "turns": 11,
+        "hpLoss": 112
+      }
+    },
+    {
+      "scenarioKey": "3/elite/e_notarytwin+e_notarytwin/8",
+      "policy": "greedy",
+      "encounter": "e_notarytwin+e_notarytwin",
+      "before": {
+        "outcome": "win",
+        "turns": 8,
+        "hpLoss": 100
+      },
+      "after": {
+        "outcome": "win",
+        "turns": 8,
+        "hpLoss": 92
+      }
+    },
+    {
+      "scenarioKey": "4/elite/e_primadonna/0",
+      "policy": "random",
+      "encounter": "e_primadonna",
+      "before": {
+        "outcome": "win",
+        "turns": 11,
+        "hpLoss": 55
+      },
+      "after": {
+        "outcome": "win",
+        "turns": 11,
+        "hpLoss": 50
+      }
+    },
+    {
+      "scenarioKey": "4/elite/e_primadonna/1",
+      "policy": "greedy",
+      "encounter": "e_primadonna",
+      "before": {
+        "outcome": "win",
+        "turns": 8,
+        "hpLoss": 92
+      },
+      "after": {
+        "outcome": "win",
+        "turns": 8,
+        "hpLoss": 77
+      }
+    },
+    {
+      "scenarioKey": "4/elite/e_primadonna/3",
+      "policy": "greedy",
+      "encounter": "e_primadonna",
+      "before": {
+        "outcome": "win",
+        "turns": 9,
+        "hpLoss": 87
+      },
+      "after": {
+        "outcome": "win",
+        "turns": 9,
+        "hpLoss": 77
+      }
+    },
+    {
+      "scenarioKey": "4/elite/e_primadonna/5",
+      "policy": "random",
+      "encounter": "e_primadonna",
+      "before": {
+        "outcome": "win",
+        "turns": 8,
+        "hpLoss": 73
+      },
+      "after": {
+        "outcome": "win",
+        "turns": 8,
+        "hpLoss": 58
+      }
+    }
+  ],
+  "note": "No card/enemy values, scenario setup, policy or target changed."
+}

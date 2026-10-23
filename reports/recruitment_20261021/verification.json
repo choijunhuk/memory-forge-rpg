@@ -1,0 +1,194 @@
+{
+  "date": "2026-10-21",
+  "source_base": "6f2d11c5fc0a0d137d882eea0bf95748e102f823",
+  "checks": {
+    "server_file": {
+      "passed": 1916,
+      "failed": 0
+    },
+    "server_postgresql": {
+      "passed": 1776,
+      "failed": 0,
+      "database": "isolated disposable PostgreSQL16, not user or production database"
+    },
+    "core": "All suites passed; GachaRandomChecks89/89; full log exit0",
+    "client_bcl": {
+      "passed": 148,
+      "failed": 0
+    },
+    "engine": {
+      "passed": 358,
+      "failed": 0
+    },
+    "proposals": {
+      "passed": 14,
+      "failed": 0
+    },
+    "docs": {
+      "passed": 9,
+      "failed": 0
+    },
+    "handoff": {
+      "passed": 33,
+      "failed": 0
+    },
+    "python": {
+      "passed": 64,
+      "failed": 0
+    },
+    "unity_playmode": {
+      "total": 402,
+      "passed": 392,
+      "failed": 0,
+      "skipped": 10,
+      "skip_scope": "8 explicit capture tests plus2 actual-live opt-in tests without credential metadata in ordinary full suite",
+      "duration_seconds": 257.98
+    },
+    "live_ui_targeted": {
+      "passed": 2,
+      "failed": 0,
+      "scope": "corrected latest-history regression plus read-only reconnect on the already committed actual pull"
+    },
+    "unity_editor": {
+      "passed": 10,
+      "failed": 0,
+      "skipped": 0
+    },
+    "art_copies": {
+      "checked": 298,
+      "without_matching_original": 0
+    }
+  },
+  "log_sha256": {
+    "server-file-final.log": "fa01eb6bb6018b3ae983cfe4ba48eee21bbd95a0f168beed9aa368bcf5406f72",
+    "server-postgres-final.log": "8af11cb7c1f7d85c4924df81a0ae03537583c2e3f6ece9a87a68e3b7c870bc02",
+    "core-final.log": "1ee7f18b5671cb1e723ece7da8c296607165a05caa11e055ec2c817c3d9a7162",
+    "client-bcl-final.log": "0a128c108e4de3338cc587daf1e63f227f03d592d9a37eb9950f8f5bcbf0c7b5",
+    "final-engine.log": "80271e5db6793e1bbe2efa6a271ed3f60a978ec45d9b8467a8768049d2dea059",
+    "final-proposals.log": "273343ad3eea72f39d376da8b9dbeeba1374d53abdfad52569b641ee6c6e4038",
+    "final-docs.log": "e54bf4fbd5d45586bc139f8ccb8969d0de691cfa377a3b9feeba774ed95037ef",
+    "final-handoff.log": "9669951aacd0eb10cc151d38309144a9cae224d746fc1c85e7e1f4cfc61e813c",
+    "final-python.log": "60529f59847cdc68dcf903328bddca8a69779dc64aeffc97d019d3b2cdf0cb5a",
+    "pc-input-build.log": "3ad8dd3cd6935e7e59a11ca8a37f585baf7e355edb60a420b87899f74e3bd3cb",
+    "unity-live-acceptance.log": "af809a3c92dcbbe5504430b90b24d43729d15c184b5bd0c3588f17197f057783",
+    "unity-live-reconnect.log": "4a414698349fa6667a4a303c67aaf5dd44a488926b7af7759639a0cac656529e",
+    "pc-final-build.log": "bf1e5e7dc9aa58e3ac1b8819361a5b57d27228cc929d60d2d5c6b83f545a8548",
+    "unity-full-playmode.xml": "14cb67f1c23015516610fa26ff1f56379ec804cb5977241cbe0ab3b68cf4bf82",
+    "unity-full-editmode.xml": "7a8ed14fcac31336b5fc0a2f547ca232b6bbf879ca72c8fb7a6a6ccff51626f8",
+    "unity-live-reconnect.xml": "4b94f4c98c78a7a5028bf5383c39367eb91c8ca240303c532a0c0b664c64b17c"
+  },
+  "live_ui": {
+    "revision": 5,
+    "freeCrystals": 0,
+    "paidCrystals": 0,
+    "totalPulls": 22,
+    "ownedChars": {
+      "harin": 2,
+      "rien": 1
+    },
+    "historyRequestId": "28619ab2-fca0-44d2-8402-61ef2b4b8117",
+    "reauthentications": 2,
+    "mutationsInContinuation": 0,
+    "insufficientBalanceConfirmationDisabled": true
+  },
+  "pc": {
+    "platform": "macOS Development player",
+    "build_bytes": 568327855,
+    "build_errors": 0,
+    "build_warnings": 2,
+    "render": "Home visibly rendered in native window and fullscreen",
+    "native_pointer": "NOT_ACCEPTED: native synthetic mousebutton events arrive but Unity Input.mousePosition stays outside window; actual manual recruitment input is not claimed",
+    "build_seconds": 14.5,
+    "warning_scope": "C# nullable warnings at LobbyClient.cs82/379; no build errors",
+    "native_render_final": "Final artifact native fullscreen home visibly verified again after all source changes"
+  },
+  "not_run": [
+    "Phone/device work excluded by user",
+    "Commercial authentication/payment/deployment",
+    "Server positive paid balance, successful selector and beginner50 cap on actual HTTP; Core and protocol tests cover these rules"
+  ],
+  "auditor_scope": "Claude root-session start-check is not a Codex App validator (WORK_ALLOCATION_20261021.md). Explicit Codex-context probe returned root_denied_tools_enforced=false; not reported as a passing Claude audit. Official called jobs separately verified subscription/model/credit-off/tool allowlists.",
+  "official_claude_jobs": [
+    {
+      "task_id": "RECRUIT-SERVER-20261021",
+      "session_id": null,
+      "requestedModel": "claude-opus-5-5",
+      "requestedEffort": "max",
+      "status": "TIMED_OUT",
+      "process_exit": null,
+      "billing_account_matched": true
+    },
+    {
+      "task_id": "RECRUIT-SERVER-REVISION-20261021",
+      "session_id": "dec32dce-d422-4ea5-8ade-ba2bc0bdb69d",
+      "requestedModel": "claude-opus-5-5",
+      "requestedEffort": "xhigh",
+      "status": "RECEIVED_UNVERIFIED",
+      "process_exit": 0,
+      "billing_account_matched": true
+    },
+    {
+      "task_id": "RECRUIT-SERVER-INTEGRITY-FINAL-20261021",
+      "session_id": "dec32dce-d422-4ea5-8ade-ba2bc0bdb69d",
+      "requestedModel": "claude-opus-5-5",
+      "requestedEffort": "xhigh",
+      "status": "RECEIVED_UNVERIFIED",
+      "process_exit": 0,
+      "billing_account_matched": true
+    },
+    {
+      "task_id": "RECRUIT-CLIENT-REVIEW-20261021",
+      "session_id": "12f18c53-8d4d-45f9-86cb-1d2f469e1ff7",
+      "requestedModel": "claude-opus-5-5",
+      "requestedEffort": "xhigh",
+      "status": "RECEIVED_UNVERIFIED",
+      "process_exit": 0,
+      "billing_account_matched": true
+    },
+    {
+      "task_id": "RECRUIT-CLIENT-REREVIEW-20261021",
+      "session_id": "12f18c53-8d4d-45f9-86cb-1d2f469e1ff7",
+      "requestedModel": "claude-opus-5-5",
+      "requestedEffort": "high",
+      "status": "RECEIVED_UNVERIFIED",
+      "process_exit": 0,
+      "billing_account_matched": true
+    },
+    {
+      "task_id": "RECRUIT-CLIENT-FINAL-REVIEW-20261021",
+      "session_id": "12f18c53-8d4d-45f9-86cb-1d2f469e1ff7",
+      "requestedModel": "claude-opus-5-5",
+      "requestedEffort": "high",
+      "status": "RECEIVED_UNVERIFIED",
+      "process_exit": 0,
+      "billing_account_matched": true
+    },
+    {
+      "task_id": "PC-DESKTOP-REVIEW-20261021",
+      "session_id": "12f18c53-8d4d-45f9-86cb-1d2f469e1ff7",
+      "requestedModel": "claude-opus-5-5",
+      "requestedEffort": "high",
+      "status": "RECEIVED_UNVERIFIED",
+      "process_exit": 0,
+      "billing_account_matched": true
+    },
+    {
+      "task_id": "RECRUIT-PC-LIVE-REVIEW-20261021",
+      "session_id": "12f18c53-8d4d-45f9-86cb-1d2f469e1ff7",
+      "requestedModel": "claude-opus-5-5",
+      "requestedEffort": "high",
+      "status": "RECEIVED_UNVERIFIED",
+      "process_exit": 0,
+      "billing_account_matched": true
+    },
+    {
+      "task_id": "RECRUIT-PC-LIVE-REREVIEW-20261021",
+      "session_id": "12f18c53-8d4d-45f9-86cb-1d2f469e1ff7",
+      "requestedModel": "claude-opus-5-5",
+      "requestedEffort": "high",
+      "status": "RECEIVED_UNVERIFIED",
+      "process_exit": 0,
+      "billing_account_matched": true
+    }
+  ]
+}

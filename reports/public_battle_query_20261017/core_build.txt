@@ -1,0 +1,11 @@
+  복원할 프로젝트를 확인하는 중...
+  /Users/choi/.codex/worktrees/claude-balance-audit/Memory_forge/core/MemoryForge.CoreChecks/MemoryForge.CoreChecks.csproj을(를) 54밀리초 동안 복원했습니다.
+  /Users/choi/.codex/worktrees/claude-balance-audit/Memory_forge/core/MemoryForge.Core/MemoryForge.Core.csproj을(를) 1.34초 동안 복원했습니다.
+  MemoryForge.Core -> /Users/choi/Documents/Memory_forge/ops/ai/local/public-query-core-tests-preview/bin/MemoryForge.Core/debug/MemoryForge.Core.dll
+  MemoryForge.CoreChecks -> /Users/choi/Documents/Memory_forge/ops/ai/local/public-query-core-tests-preview/bin/MemoryForge.CoreChecks/debug/MemoryForge.CoreChecks.dll
+
+빌드했습니다.
+    경고 0개
+    오류 0개
+
+경과 시간: 00:00:03.79
